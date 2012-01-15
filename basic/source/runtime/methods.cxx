@@ -776,7 +776,7 @@ RTLFUNC(RmDir)
                         StarBASIC::Error( SbERR_PATH_NOT_FOUND );
                         return;
                     }
-                    SbiInstance* pInst = pINST;
+                    SbiInstance* pInst = GetSbData()->pInst;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     if( bCompatibility )
                     {
@@ -894,10 +894,10 @@ RTLFUNC(FuncCaller)
 {
     (void)pBasic;
     (void)bWrite;
-    if ( SbiRuntime::isVBAEnabled() &&  pINST && pINST->pRun )
+    if ( SbiRuntime::isVBAEnabled() &&  GetSbData()->pInst && GetSbData()->pInst->pRun )
     {
-        if ( pINST->pRun->GetExternalCaller() )
-            *rPar.Get(0) =  *pINST->pRun->GetExternalCaller();
+        if ( GetSbData()->pInst->pRun->GetExternalCaller() )
+            *rPar.Get(0) =  *GetSbData()->pInst->pRun->GetExternalCaller();
         else
         {
             SbxVariableRef pVar = new SbxVariable(SbxVARIANT);
@@ -937,7 +937,7 @@ RTLFUNC(InStr)
             nFirstStringPos++;
         }
 
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         int bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
@@ -1018,7 +1018,7 @@ RTLFUNC(InStrRev)
             }
         }
 
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         int bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
@@ -1243,7 +1243,7 @@ RTLFUNC(Mid)
             String aResultStr;
             if ( bWrite )
             {
-                SbiInstance* pInst = pINST;
+                SbiInstance* pInst = GetSbData()->pInst;
                 bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                 if( bCompatibility )
                 {
@@ -1354,7 +1354,7 @@ RTLFUNC(Replace)
             }
         }
 
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         int bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
@@ -1539,7 +1539,7 @@ RTLFUNC(Str)
             // replace commas by points so that it's symmetric to Val!
             aStr.SearchAndReplace( ',', '.' );
 
-            SbiInstance* pInst = pINST;
+            SbiInstance* pInst = GetSbData()->pInst;
             bool bCompatibility = ( pInst && pInst->IsCompatibility() );
             if( bCompatibility )
             {
@@ -1582,7 +1582,7 @@ RTLFUNC(StrComp)
     const String& rStr1 = rPar.Get(1)->GetString();
     const String& rStr2 = rPar.Get(2)->GetString();
 
-    SbiInstance* pInst = pINST;
+    SbiInstance* pInst = GetSbData()->pInst;
     sal_Int16 nTextCompare;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
     if( bCompatibility )
@@ -1930,10 +1930,10 @@ RTLFUNC(DateValue)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #39629 check pINST, can be called from the URL line
+        // #39629 check GetSbData()->pInst, can be called from the URL line
         SvNumberFormatter* pFormatter = NULL;
-        if( pINST )
-            pFormatter = pINST->GetNumberFormatter();
+        if( GetSbData()->pInst )
+            pFormatter = GetSbData()->pInst->GetNumberFormatter();
         else
         {
             sal_uInt32 n;   // Dummy
@@ -1977,7 +1977,7 @@ RTLFUNC(DateValue)
             StarBASIC::Error( SbERR_CONVERSION );
 
         // #39629 pFormatter can be requested itself
-        if( !pINST )
+        if( !GetSbData()->pInst )
             delete pFormatter;
     }
 }
@@ -1992,8 +1992,8 @@ RTLFUNC(TimeValue)
     else
     {
         SvNumberFormatter* pFormatter = NULL;
-        if( pINST )
-            pFormatter = pINST->GetNumberFormatter();
+        if( GetSbData()->pInst )
+            pFormatter = GetSbData()->pInst->GetNumberFormatter();
         else
         {
             sal_uInt32 n;
@@ -2015,7 +2015,7 @@ RTLFUNC(TimeValue)
         else
             StarBASIC::Error( SbERR_CONVERSION );
 
-        if( !pINST )
+        if( !GetSbData()->pInst )
             delete pFormatter;
     }
 }
@@ -2203,10 +2203,10 @@ RTLFUNC(Time)
 
             SvNumberFormatter* pFormatter = NULL;
             sal_uInt32 nIndex;
-            if( pINST )
+            if( GetSbData()->pInst )
             {
-                pFormatter = pINST->GetNumberFormatter();
-                nIndex = pINST->GetStdTimeIdx();
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+                nIndex = GetSbData()->pInst->GetStdTimeIdx();
             }
             else
             {
@@ -2216,7 +2216,7 @@ RTLFUNC(Time)
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
 
-            if( !pINST )
+            if( !GetSbData()->pInst )
                 delete pFormatter;
         }
         pMeth->PutString( aRes );
@@ -2258,10 +2258,10 @@ RTLFUNC(Date)
 
             SvNumberFormatter* pFormatter = NULL;
             sal_uInt32 nIndex;
-            if( pINST )
+            if( GetSbData()->pInst )
             {
-                pFormatter = pINST->GetNumberFormatter();
-                nIndex = pINST->GetStdDateIdx();
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+                nIndex = GetSbData()->pInst->GetStdDateIdx();
             }
             else
             {
@@ -2272,7 +2272,7 @@ RTLFUNC(Date)
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
             pMeth->PutString( aRes );
 
-            if( !pINST )
+            if( !GetSbData()->pInst )
                 delete pFormatter;
         }
         else
@@ -2571,7 +2571,7 @@ RTLFUNC(Dir)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        SbiRTLData* pRTLData = pINST->GetRTLData();
+        SbiRTLData* pRTLData = GetSbData()->pInst->GetRTLData();
 
         // #34645: can also be called from the URL line via 'macro: Dir'
         // there's no pRTLDate existing in that case and the method must be left
@@ -2656,7 +2656,7 @@ RTLFUNC(Dir)
                 {
                     sal_Bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
 
-                    SbiInstance* pInst = pINST;
+                    SbiInstance* pInst = GetSbData()->pInst;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     for( ;; )
                     {
@@ -2967,10 +2967,10 @@ RTLFUNC(FileDateTime)
 
         SvNumberFormatter* pFormatter = NULL;
         sal_uInt32 nIndex;
-        if( pINST )
+        if( GetSbData()->pInst )
         {
-            pFormatter = pINST->GetNumberFormatter();
-            nIndex = pINST->GetStdDateTimeIdx();
+            pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            nIndex = GetSbData()->pInst->GetStdDateTimeIdx();
         }
         else
         {
@@ -2982,7 +2982,7 @@ RTLFUNC(FileDateTime)
         pFormatter->GetOutputString( fSerial, nIndex, aRes, &pCol );
         rPar.Get(0)->PutString( aRes );
 
-        if( !pINST )
+        if( !GetSbData()->pInst )
             delete pFormatter;
     }
 }
@@ -2999,7 +2999,7 @@ RTLFUNC(EOF)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = pINST->GetIoSystem();
+        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
         {
@@ -3037,7 +3037,7 @@ RTLFUNC(FileAttr)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = pINST->GetIoSystem();
+        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
         {
@@ -3064,7 +3064,7 @@ RTLFUNC(Loc)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = pINST->GetIoSystem();
+        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
         {
@@ -3102,7 +3102,7 @@ RTLFUNC(Lof)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = pINST->GetIoSystem();
+        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
         {
@@ -3131,7 +3131,7 @@ RTLFUNC(Seek)
         return;
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-    SbiIoSystem* pIO = pINST->GetIoSystem();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nChannel );
     if ( !pSbStrm )
     {
@@ -3583,7 +3583,7 @@ RTLFUNC(DDEInitiate)
     const String& rApp = rPar.Get(1)->GetString();
     const String& rTopic = rPar.Get(2)->GetString();
 
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     sal_Int16 nChannel;
     SbError nDdeErr = pDDE->Initiate( rApp, rTopic, nChannel );
     if( nDdeErr )
@@ -3612,7 +3612,7 @@ RTLFUNC(DDETerminate)
         return;
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Terminate( nChannel );
     if( nDdeErr )
         StarBASIC::Error( nDdeErr );
@@ -3638,7 +3638,7 @@ RTLFUNC(DDETerminateAll)
         return;
     }
 
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->TerminateAll();
     if( nDdeErr )
         StarBASIC::Error( nDdeErr );
@@ -3665,7 +3665,7 @@ RTLFUNC(DDERequest)
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
     const String& rItem = rPar.Get(2)->GetString();
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     String aResult;
     SbError nDdeErr = pDDE->Request( nChannel, rItem, aResult );
     if( nDdeErr )
@@ -3695,7 +3695,7 @@ RTLFUNC(DDEExecute)
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
     const String& rCommand = rPar.Get(2)->GetString();
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Execute( nChannel, rCommand );
     if( nDdeErr )
         StarBASIC::Error( nDdeErr );
@@ -3723,7 +3723,7 @@ RTLFUNC(DDEPoke)
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
     const String& rItem = rPar.Get(2)->GetString();
     const String& rData = rPar.Get(3)->GetString();
-    SbiDdeControl* pDDE = pINST->GetDdeControl();
+    SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Poke( nChannel, rItem, rData );
     if( nDdeErr )
         StarBASIC::Error( nDdeErr );
@@ -3740,7 +3740,7 @@ RTLFUNC(FreeFile)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    SbiIoSystem* pIO = pINST->GetIoSystem();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
     short nChannel = 1;
     while( nChannel < CHANNELS )
     {
@@ -3824,7 +3824,7 @@ RTLFUNC(RGB)
     sal_uIntPtr nBlue  = rPar.Get(3)->GetInteger() & 0xFF;
     sal_uIntPtr nRGB;
 
-    SbiInstance* pInst = pINST;
+    SbiInstance* pInst = GetSbData()->pInst;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
     if( bCompatibility )
     {
@@ -4282,7 +4282,7 @@ RTLFUNC(Reset)
     (void)bWrite;
     (void)rPar;
 
-    SbiIoSystem* pIO = pINST->GetIoSystem();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
     if (pIO)
         pIO->CloseAll();
 }

@@ -186,7 +186,7 @@ RTLFUNC(CallByName)
                 else
                 {
                     SbxVariableRef rFindVar = pFindVar;
-                    SbiInstance* pInst = pINST;
+                    SbiInstance* pInst = GetSbData()->pInst;
                     SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
                     if( pRT != NULL )
                         pRT->StepSET_Impl( pValVar, rFindVar, false );
@@ -740,14 +740,14 @@ RTLFUNC(FreeLibrary)
 
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    pINST->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
+    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
 }
 bool IsBaseIndexOne()
 {
     bool result = false;
-    if ( pINST && pINST->pRun )
+    if ( GetSbData()->pInst && GetSbData()->pInst->pRun )
     {
-        sal_uInt16 res = pINST->pRun->GetBase();
+        sal_uInt16 res = GetSbData()->pInst->pRun->GetBase();
         if ( res )
             result = true;
     }
@@ -1168,7 +1168,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
         return;
     }
     nRecordNo--;
-    SbiIoSystem* pIO = pINST->GetIoSystem();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nFileNo );
 
     if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_RANDOM)) )
@@ -1324,8 +1324,8 @@ RTLFUNC(EnableReschedule)
     rPar.Get(0)->PutEmpty();
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    if( pINST )
-        pINST->EnableReschedule( rPar.Get(1)->GetBool() );
+    if( GetSbData()->pInst )
+        GetSbData()->pInst->EnableReschedule( rPar.Get(1)->GetBool() );
 }
 
 RTLFUNC(GetSystemTicks)
@@ -2481,8 +2481,8 @@ RTLFUNC(FormatDateTime)
         case 1:
         {
             SvNumberFormatter* pFormatter = NULL;
-            if( pINST )
-                pFormatter = pINST->GetNumberFormatter();
+            if( GetSbData()->pInst )
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
             else
             {
                 sal_uInt32 n;   // Dummy
@@ -2494,7 +2494,7 @@ RTLFUNC(FormatDateTime)
             Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
 
-            if( !pINST )
+            if( !GetSbData()->pInst )
                 delete pFormatter;
 
             break;
@@ -3175,7 +3175,7 @@ RTLFUNC(CompatibilityMode)
     if ( nCount != 1 && nCount != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 
-    SbiInstance* pInst = pINST;
+    SbiInstance* pInst = GetSbData()->pInst;
     if( pInst )
     {
         if ( nCount == 2 )
@@ -3201,7 +3201,7 @@ RTLFUNC(Input)
     sal_uInt16 nByteCount  = rPar.Get(1)->GetUShort();
     sal_Int16  nFileNumber = rPar.Get(2)->GetInteger();
 
-    SbiIoSystem* pIosys = pINST->GetIoSystem();
+    SbiIoSystem* pIosys = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIosys->GetStream( nFileNumber );
     if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_INPUT)) )
     {
@@ -3227,7 +3227,7 @@ RTLFUNC(Me)
     (void)pBasic;
     (void)bWrite;
 
-    SbModule* pActiveModule = pINST->GetActiveModule();
+    SbModule* pActiveModule = GetSbData()->pInst->GetActiveModule();
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
     SbxVariableRef refVar = rPar.Get(0);
     if( pClassModuleObject == NULL )

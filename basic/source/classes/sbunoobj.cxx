@@ -766,7 +766,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                 }
                 else
                 {
-                    SbiInstance* pInst = pINST;
+                    SbiInstance* pInst = GetSbData()->pInst;
                     if( pInst && pInst->IsCompatibility() )
                     {
                         oleautomation::Date aDate;
@@ -914,7 +914,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxCURRENCY:   aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
         case SbxDECIMAL:    aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
         case SbxDATE:       {
-                            SbiInstance* pInst = pINST;
+                            SbiInstance* pInst = GetSbData()->pInst;
                             if( pInst && pInst->IsCompatibility() )
                                 aRetType = ::getCppuType( (double*)0 );
                             else
@@ -1304,7 +1304,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 // #112368 Special conversion for Decimal, Currency and Date
                 if( eType == TypeClass_STRUCT )
                 {
-                    SbiInstance* pInst = pINST;
+                    SbiInstance* pInst = GetSbData()->pInst;
                     if( pInst && pInst->IsCompatibility() )
                     {
                         if( rType == ::getCppuType( (oleautomation::Decimal*)0 ) )
@@ -1557,7 +1557,7 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOL
 
     args.realloc( nParamCount );
     Any* pAnyArgs = args.getArray();
-    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
+    bool bBlockConversionToSmallestType = GetSbData()->pInst->IsCompatibility();
     sal_uInt32 i = 0;
     if( pArgNamesArray )
     {
@@ -2237,7 +2237,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     }
                     else if( nParamCount < nUnoParamCount )
                     {
-                        SbiInstance* pInst = pINST;
+                        SbiInstance* pInst = GetSbData()->pInst;
                         if( pInst && pInst->IsCompatibility() )
                         {
                             // Check types
@@ -2579,7 +2579,7 @@ SbxInfo* SbUnoMethod::GetInfo()
 {
     if( !pInfo && m_xUnoMethod.is() )
     {
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         if( pInst && pInst->IsCompatibility() )
         {
             pInfo = new SbxInfo();
@@ -4467,7 +4467,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
 
     sal_Bool bSetRescheduleBack = sal_False;
     sal_Bool bOldReschedule = sal_True;
-    SbiInstance* pInst = pINST;
+    SbiInstance* pInst = GetSbData()->pInst;
     if( pInst && pInst->IsCompatibility() )
     {
         bOldReschedule = pInst->IsReschedule();

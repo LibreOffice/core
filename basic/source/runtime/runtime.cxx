@@ -53,8 +53,8 @@ using namespace ::com::sun::star;
 bool SbiRuntime::isVBAEnabled()
 {
     bool result = false;
-    SbiInstance* pInst = pINST;
-    if ( pInst && pINST->pRun )
+    SbiInstance* pInst = GetSbData()->pInst;
+    if ( pInst && GetSbData()->pInst->pRun )
         result = pInst->pRun->bVBAEnabled;
     return result;
 }
@@ -519,7 +519,7 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 // Attention: pMeth can also be NULL (on a call of the init-code)
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
-         : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
+         : rBasic( *(StarBASIC*)pm->pParent ), pInst( GetSbData()->pInst ),
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;

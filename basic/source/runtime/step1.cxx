@@ -445,7 +445,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
         if( !bRet )
         {
             String aObjClass = pObj->GetClassName();
-            SbModule* pClassMod = pCLASSFAC->FindClass( aObjClass );
+            SbModule* pClassMod = GetSbData()->pClassFac->FindClass( aObjClass );
             SbClassData* pClassData;
             if( pClassMod && (pClassData=pClassMod->pClassData) != NULL )
             {

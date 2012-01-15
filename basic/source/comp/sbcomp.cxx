@@ -898,8 +898,8 @@ sal_Bool SbModule::Compile()
         return sal_False;
     SbxBase::ResetError();
 
-    SbModule* pOld = pCMOD;
-    pCMOD = this;
+    SbModule* pOld = GetSbData()->pCompMod;
+    GetSbData()->pCompMod = this;
 
     SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
     while( pParser->Parse() ) {}
@@ -910,7 +910,7 @@ sal_Bool SbModule::Compile()
     if( pImage )
         pImage->aOUSource = aOUSource;
 
-    pCMOD = pOld;
+    GetSbData()->pCompMod = pOld;
 
     // compiling a module, the module-global
     // variables of all modules become invalid
@@ -929,7 +929,7 @@ sal_Bool SbModule::Compile()
         }
 
         // #i31510 Init other libs only if Basic isn't running
-        if( pINST == NULL )
+        if( GetSbData()->pInst == NULL )
         {
             SbxObject* pParent_ = pBasic->GetParent();
             if( pParent_ )

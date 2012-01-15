@@ -278,7 +278,7 @@ void SbiRuntime::StepLIKE()
     aSearchOpt.searchString = pattern;
 
     int bTextMode(1);
-    bool bCompatibility = ( pINST && pINST->IsCompatibility() );
+    bool bCompatibility = ( GetSbData()->pInst && GetSbData()->pInst->IsCompatibility() );
     if( bCompatibility )
         bTextMode = GetImageFlag( SBIMG_COMPARETEXT );
 

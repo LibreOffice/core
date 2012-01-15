@@ -488,7 +488,7 @@ SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
 
 SbxObject* SbFormFactory::CreateObject( const String& rClassName )
 {
-    if( SbModule* pMod = pMOD )
+    if( SbModule* pMod = GetSbData()->pMod )
     {
         if( SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT ) )
         {
@@ -592,7 +592,7 @@ SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
 SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
 {
     SbxObject* pRet = NULL;
-    SbModule* pMod = pMOD;
+    SbModule* pMod = GetSbData()->pMod;
     if( pMod )
     {
         const SbxObject* pObj = pMod->FindType( rClassName );
@@ -604,7 +604,7 @@ SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
 
 SbxObject* createUserTypeImpl( const String& rClassName )
 {
-    SbxObject* pRetObj = pTYPEFAC->CreateObject( rClassName );
+    SbxObject* pRetObj = GetSbData()->pTypeFac->CreateObject( rClassName );
     return pRetObj;
 }
 
@@ -876,7 +876,7 @@ SbxObject* SbClassFactory::CreateObject( const String& rClassName )
 {
     SbxObjectRef xToUseClassModules = xClassModules;
 
-    if( SbModule* pMod = pMOD )
+    if( SbModule* pMod = GetSbData()->pMod )
         if( StarBASIC* pDocBasic = lclGetDocBasicForModule( pMod ) )
             if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
                 xToUseClassModules = pDocBasicItem->getClassModules();
@@ -909,18 +909,18 @@ StarBASIC::StarBASIC( StarBASIC* p, sal_Bool bIsDocBasic  )
 
     if( !GetSbData()->nInst++ )
     {
-        pSBFAC = new SbiFactory;
-        AddFactory( pSBFAC );
-        pTYPEFAC = new SbTypeFactory;
-        AddFactory( pTYPEFAC );
-        pCLASSFAC = new SbClassFactory;
-        AddFactory( pCLASSFAC );
-        pOLEFAC = new SbOLEFactory;
-        AddFactory( pOLEFAC );
-        pFORMFAC = new SbFormFactory;
-        AddFactory( pFORMFAC );
-        pUNOFAC = new SbUnoFactory;
-        AddFactory( pUNOFAC );
+        GetSbData()->pSbFac = new SbiFactory;
+        AddFactory( GetSbData()->pSbFac );
+        GetSbData()->pTypeFac = new SbTypeFactory;
+        AddFactory( GetSbData()->pTypeFac );
+        GetSbData()->pClassFac = new SbClassFactory;
+        AddFactory( GetSbData()->pClassFac );
+        GetSbData()->pOLEFac = new SbOLEFactory;
+        AddFactory( GetSbData()->pOLEFac );
+        GetSbData()->pFormFac = new SbFormFactory;
+        AddFactory( GetSbData()->pFormFac );
+        GetSbData()->pUnoFac = new SbUnoFactory;
+        AddFactory( GetSbData()->pUnoFac );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
@@ -952,18 +952,18 @@ StarBASIC::~StarBASIC()
 
     if( !--GetSbData()->nInst )
     {
-        RemoveFactory( pSBFAC );
-        delete pSBFAC; pSBFAC = NULL;
-        RemoveFactory( pUNOFAC );
-        delete pUNOFAC; pUNOFAC = NULL;
-        RemoveFactory( pTYPEFAC );
-        delete pTYPEFAC; pTYPEFAC = NULL;
-        RemoveFactory( pCLASSFAC );
-        delete pCLASSFAC; pCLASSFAC = NULL;
-        RemoveFactory( pOLEFAC );
-        delete pOLEFAC; pOLEFAC = NULL;
-        RemoveFactory( pFORMFAC );
-        delete pFORMFAC; pFORMFAC = NULL;
+        RemoveFactory( GetSbData()->pSbFac );
+        delete GetSbData()->pSbFac; GetSbData()->pSbFac = NULL;
+        RemoveFactory( GetSbData()->pUnoFac );
+        delete GetSbData()->pUnoFac; GetSbData()->pUnoFac = NULL;
+        RemoveFactory( GetSbData()->pTypeFac );
+        delete GetSbData()->pTypeFac; GetSbData()->pTypeFac = NULL;
+        RemoveFactory( GetSbData()->pClassFac );
+        delete GetSbData()->pClassFac; GetSbData()->pClassFac = NULL;
+        RemoveFactory( GetSbData()->pOLEFac );
+        delete GetSbData()->pOLEFac; GetSbData()->pOLEFac = NULL;
+        RemoveFactory( GetSbData()->pFormFac );
+        delete GetSbData()->pFormFac; GetSbData()->pFormFac = NULL;
 
 #ifdef DBG_UTIL
     // There is no need to clean SbiData at program end,
@@ -1361,11 +1361,11 @@ sal_Bool StarBASIC::Call( const String& rName, SbxArray* pParam )
 // Find method via name (e.g. query via BASIC IDE)
 SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
 {
-    if( !pINST )
+    if( !GetSbData()->pInst )
         return NULL;
-    if( !pINST->pRun )
+    if( !GetSbData()->pInst->pRun )
         return NULL;
-    return pINST->pRun->FindElementExtern( rName );
+    return GetSbData()->pInst->pRun->FindElementExtern( rName );
 }
 
 void StarBASIC::QuitAndExitApplication()
@@ -1376,7 +1376,7 @@ void StarBASIC::QuitAndExitApplication()
 
 void StarBASIC::Stop()
 {
-    SbiInstance* p = pINST;
+    SbiInstance* p = GetSbData()->pInst;
     while( p )
     {
         p->Stop();
@@ -1386,7 +1386,7 @@ void StarBASIC::Stop()
 
 sal_Bool StarBASIC::IsRunning()
 {
-    return sal_Bool( pINST != NULL );
+    return sal_Bool( GetSbData()->pInst != NULL );
 }
 
 /**************************************************************************
@@ -1397,18 +1397,18 @@ sal_Bool StarBASIC::IsRunning()
 
 SbMethod* StarBASIC::GetActiveMethod( sal_uInt16 nLevel )
 {
-    if( pINST )
-        return pINST->GetCaller( nLevel );
+    if( GetSbData()->pInst )
+        return GetSbData()->pInst->GetCaller( nLevel );
     else
         return NULL;
 }
 
 SbModule* StarBASIC::GetActiveModule()
 {
-    if( pINST && !IsCompilerError() )
-        return pINST->GetActiveModule();
+    if( GetSbData()->pInst && !IsCompilerError() )
+        return GetSbData()->pInst->GetActiveModule();
     else
-        return pCMOD;
+        return GetSbData()->pCompMod;
 }
 
 sal_uInt16 StarBASIC::BreakPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
@@ -1620,7 +1620,7 @@ sal_Bool StarBASIC::CError
     if( IsRunning() )
     {
         // #109018 Check if running Basic is affected
-        StarBASIC* pStartedBasic = pINST->GetBasic();
+        StarBASIC* pStartedBasic = GetSbData()->pInst->GetBasic();
         if( pStartedBasic != this )
             return sal_False;
 
@@ -1696,26 +1696,26 @@ void StarBASIC::Error( SbError n )
 
 void StarBASIC::Error( SbError n, const String& rMsg )
 {
-    if( pINST )
-        pINST->Error( n, rMsg );
+    if( GetSbData()->pInst )
+        GetSbData()->pInst->Error( n, rMsg );
 }
 
 void StarBASIC::FatalError( SbError n )
 {
-    if( pINST )
-        pINST->FatalError( n );
+    if( GetSbData()->pInst )
+        GetSbData()->pInst->FatalError( n );
 }
 
 void StarBASIC::FatalError( SbError _errCode, const String& _details )
 {
-    if( pINST )
-        pINST->FatalError( _errCode, _details );
+    if( GetSbData()->pInst )
+        GetSbData()->pInst->FatalError( _errCode, _details );
 }
 
 SbError StarBASIC::GetErrBasic()
 {
-    if( pINST )
-        return pINST->GetErr();
+    if( GetSbData()->pInst )
+        return GetSbData()->pInst->GetErr();
     else
         return 0;
 }
@@ -1723,16 +1723,16 @@ SbError StarBASIC::GetErrBasic()
 // make the additional message for the RTL function error accessible
 String StarBASIC::GetErrorMsg()
 {
-    if( pINST )
-        return pINST->GetErrorMsg();
+    if( GetSbData()->pInst )
+        return GetSbData()->pInst->GetErrorMsg();
     else
         return String();
 }
 
 sal_uInt16 StarBASIC::GetErl()
 {
-    if( pINST )
-        return pINST->GetErl();
+    if( GetSbData()->pInst )
+        return GetSbData()->pInst->GetErl();
     else
         return 0;
 }
@@ -2162,7 +2162,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
         xItemArray->Remove32( nIndex );
 
         // Correct for stack if necessary
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
         if( pRT )
         {

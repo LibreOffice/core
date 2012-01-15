@@ -90,8 +90,8 @@ ErrObject::getNumber() throw (uno::RuntimeException)
 void SAL_CALL
 ErrObject::setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException)
 {
-    pINST->setErrorVB( _number, String() );
-    ::rtl::OUString _description = pINST->GetErrorMsg();
+    GetSbData()->pInst->setErrorVB( _number, String() );
+    ::rtl::OUString _description = GetSbData()->pInst->GetErrorMsg();
     setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
 }
 
@@ -158,7 +158,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 {
     setData( Number, Source, Description, HelpFile, HelpContext );
     if ( m_nNumber )
-        pINST->ErrorVB( m_nNumber, m_sDescription );
+        GetSbData()->pInst->ErrorVB( m_nNumber, m_sDescription );
 }
 
 // XDefaultProperty

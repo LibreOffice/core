@@ -113,7 +113,7 @@ SbxVariable* SbiRuntime::FindElement
             {
                 if( pElem->IsSet( SBX_PRIVATE ) )
                 {
-                    SbiInstance* pInst_ = pINST;
+                    SbiInstance* pInst_ = GetSbData()->pInst;
                     if( pInst_ && pInst_->IsCompatibility() && pObj != pElem->GetParent() )
                         pElem = NULL;   // Found but in wrong module!
 

@@ -135,7 +135,7 @@ void SbiCodeGen::Save()
                 OSL_TRACE("COdeGen::save() classmodule processing");
         rMod.bIsProxyModule = true;
         p->SetFlag( SBIMG_CLASSMODULE );
-        pCLASSFAC->AddClassModule( &rMod );
+        GetSbData()->pClassFac->AddClassModule( &rMod );
 
         nIfaceCount = pParser->aIfaceVector.size();
         if( !rMod.pClassData )
@@ -156,7 +156,7 @@ void SbiCodeGen::Save()
     }
     else
     {
-        pCLASSFAC->RemoveClassModule( &rMod );
+        GetSbData()->pClassFac->RemoveClassModule( &rMod );
         // Only a ClassModule can revert to Normal
                 if ( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
             rMod.mnType = com::sun::star::script::ModuleType::NORMAL;

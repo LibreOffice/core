@@ -787,7 +787,7 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
              && ( p->nHash == nHash_ )
              && ( rName.EqualsIgnoreCaseAscii( p->pName ) ) )
             {
-                SbiInstance* pInst = pINST;
+                SbiInstance* pInst = GetSbData()->pInst;
                 bFound = sal_True;
                 if( p->nArgs & _COMPTMASK )
                 {

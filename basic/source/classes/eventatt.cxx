@@ -513,8 +513,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     bool bDocDialog = false;
     StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
-    Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( pINST->GetBasic() ) ;
-    aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
+    Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( GetSbData()->pInst->GetBasic() ) ;
+    aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )
     {
@@ -550,7 +550,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
     if ( pFoundBasic )
         bDocDialog = pFoundBasic->IsDocBasic();
-    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( GetSbData()->pInst->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
     if( bDocDialog )
@@ -568,7 +568,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
        // Add dialog model to dispose vector
        Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
-       pINST->getComponentVector().push_back( xDlgComponent );
+       GetSbData()->pInst->getComponentVector().push_back( xDlgComponent );
        // need ThisCompoent from calling script
     }
     // preserve existing bad behaviour, it's possible... but probably

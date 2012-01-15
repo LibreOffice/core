@@ -187,16 +187,6 @@ struct SbiGlobals
 
 BASIC_DLLPUBLIC SbiGlobals* GetSbData();
 
-#define pINST       GetSbData()->pInst
-#define pMOD        GetSbData()->pMod
-#define pCMOD       GetSbData()->pCompMod
-#define pSBFAC      GetSbData()->pSbFac
-#define pUNOFAC     GetSbData()->pUnoFac
-#define pTYPEFAC    GetSbData()->pTypeFac
-#define pCLASSFAC   GetSbData()->pClassFac
-#define pOLEFAC     GetSbData()->pOLEFac
-#define pFORMFAC    GetSbData()->pFormFac
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

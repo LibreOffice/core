@@ -737,7 +737,7 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
 
 SbiIoSystem* SbGetIoSystem()
 {
-    SbiInstance* pInst = pINST;
+    SbiInstance* pInst = GetSbData()->pInst;
     return pInst ? pInst->GetIoSystem() : NULL;
 }
 

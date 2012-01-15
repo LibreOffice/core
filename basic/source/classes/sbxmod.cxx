@@ -728,7 +728,7 @@ SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
         return NULL;
     if( !pRes && pImage )
     {
-        SbiInstance* pInst = pINST;
+        SbiInstance* pInst = GetSbData()->pInst;
         if( pInst && pInst->IsCompatibility() )
         {
             // Put enum types as objects into module,
@@ -876,10 +876,10 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 else
                 {
                     // Call of a subprogram
-                    SbModule* pOld = pMOD;
-                    pMOD = this;
+                    SbModule* pOld = GetSbData()->pMod;
+                    GetSbData()->pMod = this;
                     Run( (SbMethod*) pVar );
-                    pMOD = pOld;
+                    GetSbData()->pMod = pOld;
                 }
             }
         }
@@ -1103,7 +1103,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     static String aMSOMacroRuntimeAppSymbol = String::CreateFromAscii( "Application" );
 
     sal_uInt16 nRes = 0;
-    sal_Bool bDelInst = sal_Bool( pINST == NULL );
+    sal_Bool bDelInst = sal_Bool( GetSbData()->pInst == NULL );
         bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
@@ -1113,7 +1113,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         // #32779: Hold Basic during the execution
         xBasic = (StarBASIC*) GetParent();
 
-        pINST = new SbiInstance( (StarBASIC*) GetParent() );
+        GetSbData()->pInst = new SbiInstance( (StarBASIC*) GetParent() );
 
         /*  If a VBA script in a document is started, get the VBA compatibility
             interface from the document Basic library container, and notify all
@@ -1183,7 +1183,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     }
 
     // Recursion to deep?
-    if( ++pINST->nCallLvl <= nMaxCallLevel )
+    if( ++GetSbData()->pInst->nCallLvl <= nMaxCallLevel )
     {
         // Define a globale variable in all Mods
         GlobalRunInit( /* bBasicStart = */ bDelInst );
@@ -1198,20 +1198,20 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 // 1996-10-16: #31460 New concept for StepInto/Over/Out
                 // For an explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
                 // Identify the BreakCallLevel
-                pINST->CalcBreakCallLevel( pMeth->GetDebugFlags() );
+                GetSbData()->pInst->CalcBreakCallLevel( pMeth->GetDebugFlags() );
             }
 
-            SbModule* pOldMod = pMOD;
-            pMOD = this;
+            SbModule* pOldMod = GetSbData()->pMod;
+            GetSbData()->pMod = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
 
-            pRt->pNext = pINST->pRun;
+            pRt->pNext = GetSbData()->pInst->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
-            pINST->pRun = pRt;
+            GetSbData()->pInst->pRun = pRt;
             if ( mbVBACompat )
             {
-                pINST->EnableCompatibility( sal_True );
+                GetSbData()->pInst->EnableCompatibility( sal_True );
             }
             while( pRt->Step() ) {}
             if( pRt->pNext )
@@ -1227,13 +1227,13 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             if( bDelInst )
             {
                 // Compare here with 1 instead of 0, because before nCallLvl--
-                while( pINST->nCallLvl != 1 )
+                while( GetSbData()->pInst->nCallLvl != 1 )
                     GetpApp()->Yield();
             }
 
             nRes = sal_True;
-            pINST->pRun = pRt->pNext;
-            pINST->nCallLvl--;          // Call-Level down again
+            GetSbData()->pInst->pRun = pRt->pNext;
+            GetSbData()->pInst->nCallLvl--;          // Call-Level down again
 
             // Exist an higher-ranking runtime instance?
             // Then take over SbDEBUG_BREAK, if set
@@ -1242,7 +1242,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 pRtNext->SetDebugFlags( SbDEBUG_BREAK );
 
             delete pRt;
-            pMOD = pOldMod;
+            GetSbData()->pMod = pOldMod;
             if( bDelInst )
             {
                 // #57841 Clear Uno-Objects, which were helt in RTL functions,
@@ -1251,8 +1251,8 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
                 clearNativeObjectWrapperVector();
 
-                DBG_ASSERT(pINST->nCallLvl==0,"BASIC-Call-Level > 0");
-                delete pINST, pINST = NULL, bDelInst = sal_False;
+                DBG_ASSERT(GetSbData()->pInst->nCallLvl==0,"BASIC-Call-Level > 0");
+                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = sal_False;
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
@@ -1285,11 +1285,11 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             }
         }
         else
-               pINST->nCallLvl--;           // Call-Level down again
+               GetSbData()->pInst->nCallLvl--;           // Call-Level down again
     }
     else
     {
-        pINST->nCallLvl--;          // Call-Level down again
+        GetSbData()->pInst->nCallLvl--;          // Call-Level down again
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
@@ -1300,10 +1300,10 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
        // the end of the program, so that nothing were helt.
         ClearUnoObjectsInRTL_Impl( xBasic );
 
-        delete pINST;
-        pINST = NULL;
+        delete GetSbData()->pInst;
+        GetSbData()->pInst = NULL;
     }
-    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pINST )
+    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !GetSbData()->pInst )
             bQuit = true;
         if ( bQuit )
     {
@@ -1325,18 +1325,18 @@ void SbModule::RunInit()
         // Set flag, so that RunInit get activ (Testtool)
         GetSbData()->bRunInit = sal_True;
 
-        SbModule* pOldMod = pMOD;
-        pMOD = this;
+        SbModule* pOldMod = GetSbData()->pMod;
+        GetSbData()->pMod = this;
         // The init code starts always here
         SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
 
-        pRt->pNext = pINST->pRun;
-        pINST->pRun = pRt;
+        pRt->pNext = GetSbData()->pInst->pRun;
+        GetSbData()->pInst->pRun = pRt;
         while( pRt->Step() ) {}
 
-        pINST->pRun = pRt->pNext;
+        GetSbData()->pInst->pRun = pRt->pNext;
         delete pRt;
-        pMOD = pOldMod;
+        GetSbData()->pMod = pOldMod;
         pImage->bInit = sal_True;
         pImage->bFirstInit = sal_False;
 
@@ -1632,8 +1632,8 @@ sal_Bool SbModule::SetBP( sal_uInt16 nLine )
     pBreaks->insert( pBreaks->begin() + i, nLine );
 
     // #38568: Set during runtime as well here SbDEBUG_BREAK
-    if( pINST && pINST->pRun )
-        pINST->pRun->SetDebugFlags( SbDEBUG_BREAK );
+    if( GetSbData()->pInst && GetSbData()->pInst->pRun )
+        GetSbData()->pInst->pRun->SetDebugFlags( SbDEBUG_BREAK );
 
     return IsBreakable( nLine );
 }
@@ -2746,7 +2746,7 @@ void SbUserFormModule::InitObject()
 SbxVariable*
 SbUserFormModule::Find( const XubString& rName, SbxClassType t )
 {
-    if ( !pDocObject && !GetSbData()->bRunInit && pINST )
+    if ( !pDocObject && !GetSbData()->bRunInit && GetSbData()->pInst )
         InitObject();
     return SbObjModule::Find( rName, t );
 }
