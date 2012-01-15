@@ -152,7 +152,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             sal_Int32 rowHeaderWidth( -1 );
             aValue >>= rowHeaderWidth;
-            ENSURE_OR_BREAK( rowHeaderWidth > 0, "SVTXGridControl::setProperty: illegal row header width!" );
+            if ( rowHeaderWidth <= 0 )
+            {
+                SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty: illegal row header width!" );
+                break;
+            }
+
             m_pTableModel->setRowHeaderWidth( rowHeaderWidth );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
@@ -170,7 +175,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             {
                 aValue >>= columnHeaderHeight;
             }
-            ENSURE_OR_BREAK( columnHeaderHeight > 0, "SVTXGridControl::setProperty: illegal column header height!" );
+            if ( columnHeaderHeight <= 0 )
+            {
+                SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty: illegal column header width!" );
+                break;
+            }
+
             m_pTableModel->setColumnHeaderHeight( columnHeaderHeight );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
@@ -181,7 +191,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
                 m_pTableModel->getRenderer().get() );
-            ENSURE_OR_BREAK( pGridRenderer != NULL, "SVTXGridControl::setProperty(UseGridLines): invalid renderer!" );
+            if ( !pGridRenderer )
+            {
+                SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty(UseGridLines): invalid renderer!" );
+                break;
+            }
+
             sal_Bool bUseGridLines = sal_False;
             OSL_VERIFY( aValue >>= bUseGridLines );
             pGridRenderer->useGridLines( bUseGridLines );
@@ -201,7 +216,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 aValue >>= rowHeight;
             }
             m_pTableModel->setRowHeight( rowHeight );
-            ENSURE_OR_BREAK( rowHeight > 0, "SVTXGridControl::setProperty: illegal row height!" );
+            if ( rowHeight <= 0 )
+            {
+                SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty: illegal row height!" );
+                break;
+            }
+
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
         }
@@ -444,7 +464,12 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
     {
         GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
             m_pTableModel->getRenderer().get() );
-        ENSURE_OR_BREAK( pGridRenderer != NULL, "SVTXGridControl::getProperty(UseGridLines): invalid renderer!" );
+        if ( !pGridRenderer )
+        {
+            SAL_WARN( "svtools.uno", "SVTXGridControl::getProperty(UseGridLines): invalid renderer!" );
+            break;
+        }
+
         aPropertyValue <<= pGridRenderer->useGridLines();
     }
     break;
@@ -675,7 +700,12 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
         case VCLEVENT_TABLEROW_SELECT:
         {
             TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-            ENSURE_OR_BREAK( pTable, "SVTXGridControl::ProcessWindowEvent: no control (anymore)!" );
+            if ( !pTable )
+            {
+                SAL_WARN( "svtools.uno", "SVTXGridControl::ProcessWindowEvent: no control (anymore)!" );
+                break;
+            }
+
             if ( m_aSelectionListeners.getLength() )
                 ImplCallItemListeners();
         }

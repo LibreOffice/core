@@ -2209,7 +2209,12 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry
         case LISTACTION_INSERTED:
         {
             SvLBoxEntry* pEntry( dynamic_cast< SvLBoxEntry* >( pEntry1 ) );
-            ENSURE_OR_BREAK( pEntry, "SvTreeListBox::ModelNotification: invalid entry!" );
+            if ( !pEntry )
+            {
+                SAL_WARN( "svtools.contnr", "SvTreeListBox::ModelNotification: invalid entry!" );
+                break;
+            }
+
             SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
             if ( !pBmpItem )
                 break;

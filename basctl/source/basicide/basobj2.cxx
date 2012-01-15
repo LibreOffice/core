@@ -305,13 +305,25 @@ namespace
                 break;
 
             SbModule* pModule = pMethod->GetModule();
-            ENSURE_OR_BREAK( pModule, "BasicIDE::ChooseMacro: No Module found!" );
+            if ( !pModule )
+            {
+                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No Module found!" );
+                break;
+            }
 
             StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
-            ENSURE_OR_BREAK( pBasic, "BasicIDE::ChooseMacro: No Basic found!" );
+            if ( !pBasic )
+            {
+                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No Basic found!" );
+                break;
+            }
 
             BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-            ENSURE_OR_BREAK( pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!" );
+            if ( !pBasMgr )
+            {
+                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No BasicManager found!" );
+                break;
+            }
 
             // name
             String aName;

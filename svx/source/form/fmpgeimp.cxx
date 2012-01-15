@@ -204,8 +204,12 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
             bool bForeignIsForm = pForeignObj && ( pForeignObj->GetObjInventor() == FmFormInventor );
             bool bOwnIsForm = pOwnObj && ( pOwnObj->GetObjInventor() == FmFormInventor );
 
-            ENSURE_OR_BREAK( bForeignIsForm == bOwnIsForm, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+            if ( bForeignIsForm != bOwnIsForm )
+            {
                 // if this fires, don't attempt to do further assignments, something's completely messed up
+                SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                break;
+            }
 
             if ( !bForeignIsForm )
                 // no form control -> next round

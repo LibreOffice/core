@@ -574,9 +574,18 @@ namespace xmloff
             {
                 const PropertyDescriptionList& rProperties( *pos );
                 const PropertyDescription* first = *rProperties.begin();
-                ENSURE_OR_BREAK( first != NULL, "OElementImport::handleAttribute: invalid property description!" );
+                if ( !first )
+                {
+                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property description!" );
+                    break;
+                }
+
                 const PPropertyHandler handler = (*first->factory)( first->propertyId );
-                ENSURE_OR_BREAK( handler.get() != NULL, "OElementImport::handleAttribute: invalid property handler!" );
+                if ( !handler.get() )
+                {
+                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property handler!" );
+                    break;
+                }
 
                 PropertyValues aValues;
                 for (   PropertyDescriptionList::const_iterator propDesc = rProperties.begin();
@@ -894,13 +903,25 @@ namespace xmloff
                         if (!bRetrievedValues)
                         {
                             getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
-                            ENSURE_OR_BREAK( pCurrentValueProperty || pValueProperty, "OControlImport::StartElement: illegal value property names!" );
+                            if ( !pCurrentValueProperty && !pValueProperty )
+                            {
+                                SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value property names!" );
+                                break;
+                            }
+
                             bRetrievedValues = sal_True;
                         }
-                        ENSURE_OR_BREAK((PROPID_VALUE != aValueProps->Handle) || pValueProperty,
-                            "OControlImport::StartElement: the control does not have a value property!");
-                        ENSURE_OR_BREAK((PROPID_CURRENT_VALUE != aValueProps->Handle) || pCurrentValueProperty,
-                            "OControlImport::StartElement: the control does not have a current-value property!");
+                        if ( PROPID_VALUE == aValueProps->Handle && !pValueProperty )
+                        {
+                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a value property!");
+                            break;
+                        }
+
+                        if ( PROPID_CURRENT_VALUE == aValueProps->Handle && !pCurrentValueProperty )
+                        {
+                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a current-value property!");
+                            break;
+                        }
 
                         // transfer the name
                         if (PROPID_VALUE == aValueProps->Handle)
@@ -917,7 +938,12 @@ namespace xmloff
                         if (!bRetrievedValueLimits)
                         {
                             getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
-                            ENSURE_OR_BREAK( pMinValueProperty && pMaxValueProperty, "OControlImport::StartElement: illegal value limit property names!" );
+                            if ( !pMinValueProperty || !pMaxValueProperty )
+                            {
+                                SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value limit property names!" );
+                                break;
+                            }
+
                             bRetrievedValueLimits = sal_True;
                         }
                         OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,

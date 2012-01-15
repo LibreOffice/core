@@ -359,16 +359,31 @@ namespace ucb { namespace ucp { namespace ext
             const ::rtl::OUString sURL = m_xIdentifier->getContentIdentifier();
 
             // cut the root URL
-            ENSURE_OR_BREAK( sURL.match( sRootURL, 0 ), "illegal URL structure - no root" );
+            if ( !sURL.match( sRootURL, 0 ) )
+            {
+                SAL_INFO( "ucb.ucp", "illegal URL structure - no root" );
+                break;
+            }
+
             ::rtl::OUString sRelativeURL( sURL.copy( sRootURL.getLength() ) );
 
             // cut the extension ID
             const ::rtl::OUString sSeparatedExtensionId( encodeIdentifier( m_sExtensionId ) + ::rtl::OUString( sal_Unicode( '/' ) ) );
-            ENSURE_OR_BREAK( sRelativeURL.match( sSeparatedExtensionId ), "illegal URL structure - no extension ID" );
+            if ( !sRelativeURL.match( sSeparatedExtensionId ) )
+            {
+                SAL_INFO( "ucb.ucp", "illegal URL structure - no extension ID" );
+                break;
+            }
+
             sRelativeURL = sRelativeURL.copy( sSeparatedExtensionId.getLength() );
 
             // cut the final slash (if any)
-            ENSURE_OR_BREAK( !sRelativeURL.isEmpty(), "illegal URL structure - ExtensionContent should have a level below the extension ID" );
+            if ( sRelativeURL.isEmpty() )
+            {
+                SAL_INFO( "ucb.ucp", "illegal URL structure - ExtensionContent should have a level below the extension ID" );
+                break;
+            }
+
             if ( sRelativeURL.getStr()[ sRelativeURL.getLength() - 1 ] == '/' )
                 sRelativeURL = sRelativeURL.copy( 0, sRelativeURL.getLength() - 1 );
 
