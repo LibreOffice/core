@@ -57,15 +57,15 @@ static const SvxMSDffTextRect TextRect[] =
 };
 static const mso_CustomShape mso =
 {
-    (SvxMSDffVertPair*)mso_sptVert, sizeof( mso_sptVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptVert, SAL_N_ELEMENTS( mso_sptVert ),
     (sal_uInt16*)mso_sptSegm, sizeof( mso_sptSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalc, sizeof( mso_sptCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalc, SAL_N_ELEMENTS( mso_sptCalc ),
     (sal_Int32*)mso_sptDefault,
-    (SvxMSDffTextRectangles*)mso_sptTextRect, sizeof( mso_sptTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptTextRect, SAL_N_ELEMENTS( mso_sptTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptVert, sizeof( mso_sptVert ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandles*)mso_sptHandles, sizeof( mso_sptHandles ) / sizeof( SvxMSDffHandles )
+    (SvxMSDffVertPair*)mso_sptVert, SAL_N_ELEMENTS( mso_sptVert ),
+    (SvxMSDffHandles*)mso_sptHandles, SAL_N_ELEMENTS( mso_sptHandles )
 };
 */
 
@@ -172,15 +172,15 @@ static const SvxMSDffHandle mso_sptArcHandle[] =
 };
 static const mso_CustomShape msoArc =
 {
-    (SvxMSDffVertPair*)mso_sptArcVert, sizeof( mso_sptArcVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptArcVert, SAL_N_ELEMENTS( mso_sptArcVert ),
     (sal_uInt16*)mso_sptArcSegm, sizeof( mso_sptArcSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptArcCalc, sizeof( mso_sptArcCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptArcCalc, SAL_N_ELEMENTS( mso_sptArcCalc ),
     (sal_Int32*)mso_sptArcDefault,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptArcHandle, sizeof( mso_sptArcHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptArcHandle, SAL_N_ELEMENTS( mso_sptArcHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptTextSimpleVert[] =
@@ -189,7 +189,7 @@ static const SvxMSDffVertPair mso_sptTextSimpleVert[] =
 };
 static const mso_CustomShape msoTextSimple =
 {
-    (SvxMSDffVertPair*)mso_sptTextSimpleVert, sizeof( mso_sptTextSimpleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextSimpleVert, SAL_N_ELEMENTS( mso_sptTextSimpleVert ),
     NULL, 0,
     NULL, 0,
     NULL,
@@ -206,7 +206,7 @@ static const SvxMSDffVertPair mso_sptRectangleVert[] =
 };
 static const mso_CustomShape msoRectangle =
 {
-    (SvxMSDffVertPair*)mso_sptRectangleVert, sizeof( mso_sptRectangleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRectangleVert, SAL_N_ELEMENTS( mso_sptRectangleVert ),
     NULL, 0,
     NULL, 0,
     NULL,
@@ -251,15 +251,15 @@ static const SvxMSDffHandle mso_sptRoundRectangleHandle[] =
 };
 static const mso_CustomShape msoRoundRectangle =
 {
-    (SvxMSDffVertPair*)mso_sptRoundRectangleVert, sizeof( mso_sptRoundRectangleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRoundRectangleVert, SAL_N_ELEMENTS( mso_sptRoundRectangleVert ),
     (sal_uInt16*)mso_sptRoundRectangleSegm, sizeof( mso_sptRoundRectangleSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptRoundRectangleCalc, sizeof( mso_sptRoundRectangleCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptRoundRectangleCalc, SAL_N_ELEMENTS( mso_sptRoundRectangleCalc ),
     (sal_Int32*)mso_sptDefault3600,
-    (SvxMSDffTextRectangles*)mso_sptRoundRectangleTextRect, sizeof( mso_sptRoundRectangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRoundRectangleTextRect, SAL_N_ELEMENTS( mso_sptRoundRectangleTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptRoundRectangleHandle, sizeof( mso_sptRoundRectangleHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptRoundRectangleHandle, SAL_N_ELEMENTS( mso_sptRoundRectangleHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
@@ -276,14 +276,14 @@ static const SvxMSDffVertPair mso_sptRightTriangleGluePoints[] =
 };
 static const mso_CustomShape msoRightTriangle =
 {
-    (SvxMSDffVertPair*)mso_sptRightTriangleVert, sizeof( mso_sptRightTriangleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRightTriangleVert, SAL_N_ELEMENTS( mso_sptRightTriangleVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptRightTriangleTextRect, sizeof( mso_sptRightTriangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRightTriangleTextRect, SAL_N_ELEMENTS( mso_sptRightTriangleTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptRightTriangleGluePoints, sizeof( mso_sptRightTriangleGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRightTriangleGluePoints, SAL_N_ELEMENTS( mso_sptRightTriangleGluePoints ),
     NULL, 0     // handles
 };
 
@@ -305,14 +305,14 @@ static const SvxMSDffVertPair mso_sptEllipseGluePoints[] =
 };
 static const mso_CustomShape msoEllipse =
 {
-    (SvxMSDffVertPair*)mso_sptEllipseVert, sizeof( mso_sptEllipseVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptEllipseVert, SAL_N_ELEMENTS( mso_sptEllipseVert ),
     (sal_uInt16*)mso_sptEllipseSegm, sizeof( mso_sptEllipseSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
     NULL, 0     // handles
 };
 
@@ -356,15 +356,15 @@ static const SvxMSDffHandle mso_sptParallelogramHandle[] =
 };
 static const mso_CustomShape msoParallelogram =
 {
-    (SvxMSDffVertPair*)mso_sptParallelogramVert, sizeof( mso_sptParallelogramVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptParallelogramVert, SAL_N_ELEMENTS( mso_sptParallelogramVert ),
     (sal_uInt16*)mso_sptParallelogramSegm, sizeof( mso_sptParallelogramSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptParallelogramCalc, sizeof( mso_sptParallelogramCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptParallelogramCalc, SAL_N_ELEMENTS( mso_sptParallelogramCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptParallelogramTextRect, sizeof( mso_sptParallelogramTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptParallelogramTextRect, SAL_N_ELEMENTS( mso_sptParallelogramTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptParallelogramGluePoints, sizeof( mso_sptParallelogramGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptParallelogramHandle, sizeof( mso_sptParallelogramHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptParallelogramGluePoints, SAL_N_ELEMENTS( mso_sptParallelogramGluePoints ),
+    (SvxMSDffHandle*)mso_sptParallelogramHandle, SAL_N_ELEMENTS( mso_sptParallelogramHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptDiamondVert[] =
@@ -377,14 +377,14 @@ static const SvxMSDffTextRectangles mso_sptDiamondTextRect[] =
 };
 static const mso_CustomShape msoDiamond =
 {
-    (SvxMSDffVertPair*)mso_sptDiamondVert, sizeof( mso_sptDiamondVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptDiamondVert, SAL_N_ELEMENTS( mso_sptDiamondVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptDiamondTextRect, sizeof( mso_sptDiamondTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDiamondTextRect, SAL_N_ELEMENTS( mso_sptDiamondTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -421,15 +421,15 @@ static const SvxMSDffHandle mso_sptTrapezoidHandle[] =
 };
 static const mso_CustomShape msoTrapezoid =
 {
-    (SvxMSDffVertPair*)mso_sptTrapezoidVert, sizeof( mso_sptTrapezoidVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTrapezoidVert, SAL_N_ELEMENTS( mso_sptTrapezoidVert ),
     (sal_uInt16*)mso_sptTrapezoidSegm, sizeof( mso_sptTrapezoidSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTrapezoidCalc, sizeof( mso_sptTrapezoidCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTrapezoidCalc, SAL_N_ELEMENTS( mso_sptTrapezoidCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptTrapezoidTextRect, sizeof( mso_sptTrapezoidTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptTrapezoidTextRect, SAL_N_ELEMENTS( mso_sptTrapezoidTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptTrapezoidGluePoints, sizeof( mso_sptTrapezoidGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptTrapezoidHandle, sizeof( mso_sptTrapezoidHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptTrapezoidGluePoints, SAL_N_ELEMENTS( mso_sptTrapezoidGluePoints ),
+    (SvxMSDffHandle*)mso_sptTrapezoidHandle, SAL_N_ELEMENTS( mso_sptTrapezoidHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
@@ -468,15 +468,15 @@ static const SvxMSDffHandle mso_sptOctagonHandle[] =
 };
 static const mso_CustomShape msoOctagon =
 {
-    (SvxMSDffVertPair*)mso_sptOctagonVert, sizeof( mso_sptOctagonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptOctagonVert, SAL_N_ELEMENTS( mso_sptOctagonVert ),
     (sal_uInt16*)mso_sptOctagonSegm, sizeof( mso_sptOctagonSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptOctagonCalc, sizeof( mso_sptOctagonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptOctagonCalc, SAL_N_ELEMENTS( mso_sptOctagonCalc ),
     (sal_Int32*)mso_sptOctagonDefault,
-    (SvxMSDffTextRectangles*)mso_sptOctagonTextRect, sizeof( mso_sptOctagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptOctagonTextRect, SAL_N_ELEMENTS( mso_sptOctagonTextRect ),
     21600, 21600,
     10800, 10800,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptOctagonHandle, sizeof( mso_sptOctagonHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptOctagonHandle, SAL_N_ELEMENTS( mso_sptOctagonHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   // adjustment1 : 0 - 21600
@@ -514,15 +514,15 @@ static const SvxMSDffHandle mso_sptIsocelesTriangleHandle[] =
 };
 static const mso_CustomShape msoIsocelesTriangle =
 {
-    (SvxMSDffVertPair*)mso_sptIsocelesTriangleVert, sizeof( mso_sptIsocelesTriangleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptIsocelesTriangleVert, SAL_N_ELEMENTS( mso_sptIsocelesTriangleVert ),
     (sal_uInt16*)mso_sptIsocelesTriangleSegm, sizeof( mso_sptIsocelesTriangleSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptIsocelesTriangleCalc, sizeof( mso_sptIsocelesTriangleCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptIsocelesTriangleCalc, SAL_N_ELEMENTS( mso_sptIsocelesTriangleCalc ),
     (sal_Int32*)mso_sptDefault10800,
-    (SvxMSDffTextRectangles*)mso_sptIsocelesTriangleTextRect, sizeof( mso_sptIsocelesTriangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptIsocelesTriangleTextRect, SAL_N_ELEMENTS( mso_sptIsocelesTriangleTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptIsocelesTriangleGluePoints, sizeof( mso_sptIsocelesTriangleGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptIsocelesTriangleHandle, sizeof( mso_sptIsocelesTriangleHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptIsocelesTriangleGluePoints, SAL_N_ELEMENTS( mso_sptIsocelesTriangleGluePoints ),
+    (SvxMSDffHandle*)mso_sptIsocelesTriangleHandle, SAL_N_ELEMENTS( mso_sptIsocelesTriangleHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptHexagonVert[] =                // adjustment1 : 0 - 10800
@@ -553,15 +553,15 @@ static const SvxMSDffHandle mso_sptHexagonHandle[] =
 };
 static const mso_CustomShape msoHexagon =
 {
-    (SvxMSDffVertPair*)mso_sptHexagonVert, sizeof( mso_sptHexagonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptHexagonVert, SAL_N_ELEMENTS( mso_sptHexagonVert ),
     (sal_uInt16*)mso_sptHexagonSegm, sizeof( mso_sptHexagonSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptHexagonCalc, sizeof( mso_sptHexagonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptHexagonCalc, SAL_N_ELEMENTS( mso_sptHexagonCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptHexagonTextRect, sizeof( mso_sptHexagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptHexagonTextRect, SAL_N_ELEMENTS( mso_sptHexagonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptHexagonHandle, sizeof( mso_sptHexagonHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptHexagonHandle, SAL_N_ELEMENTS( mso_sptHexagonHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptPentagonVert[] =
@@ -580,14 +580,14 @@ static const SvxMSDffVertPair mso_sptPentagonGluePoints[] =
 };
 static const mso_CustomShape msoPentagon =
 {
-    (SvxMSDffVertPair*)mso_sptPentagonVert, sizeof( mso_sptPentagonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptPentagonVert, SAL_N_ELEMENTS( mso_sptPentagonVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptPentagonTextRect, sizeof( mso_sptPentagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptPentagonTextRect, SAL_N_ELEMENTS( mso_sptPentagonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptPentagonGluePoints, sizeof( mso_sptPentagonGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptPentagonGluePoints, SAL_N_ELEMENTS( mso_sptPentagonGluePoints ),
     NULL, 0     // handles
 };
 
@@ -615,15 +615,15 @@ static const SvxMSDffHandle mso_sptPlusHandle[] =
 };
 static const mso_CustomShape msoPlus =
 {
-    (SvxMSDffVertPair*)mso_sptPlusVert, sizeof( mso_sptPlusVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptPlusVert, SAL_N_ELEMENTS( mso_sptPlusVert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptPlusCalc, sizeof( mso_sptPlusCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptPlusCalc, SAL_N_ELEMENTS( mso_sptPlusCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptPlusTextRect, sizeof( mso_sptPlusTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptPlusTextRect, SAL_N_ELEMENTS( mso_sptPlusTextRect ),
     21600, 21600,
     10800, 10800,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptPlusHandle, sizeof( mso_sptPlusHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptPlusHandle, SAL_N_ELEMENTS( mso_sptPlusHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 10800
@@ -672,15 +672,15 @@ static const SvxMSDffHandle mso_sptCanHandle[] =
 };
 static const mso_CustomShape msoCan =
 {
-    (SvxMSDffVertPair*)mso_sptCanVert, sizeof( mso_sptCanVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCanVert, SAL_N_ELEMENTS( mso_sptCanVert ),
     (sal_uInt16*)mso_sptCanSegm, sizeof( mso_sptCanSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCanCalc, sizeof( mso_sptCanCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCanCalc, SAL_N_ELEMENTS( mso_sptCanCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptCanTextRect, sizeof( mso_sptCanTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCanTextRect, SAL_N_ELEMENTS( mso_sptCanTextRect ),
     88, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptCanGluePoints, sizeof( mso_sptCanGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCanHandle, sizeof( mso_sptCanHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptCanGluePoints, SAL_N_ELEMENTS( mso_sptCanGluePoints ),
+    (SvxMSDffHandle*)mso_sptCanHandle, SAL_N_ELEMENTS( mso_sptCanHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptArrowVert[] =  // adjustment1: x 0 - 21600
@@ -714,15 +714,15 @@ static const SvxMSDffHandle mso_sptArrowHandle[] =
 };
 static const mso_CustomShape msoArrow =
 {
-    (SvxMSDffVertPair*)mso_sptArrowVert, sizeof( mso_sptArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptArrowVert, SAL_N_ELEMENTS( mso_sptArrowVert ),
     (sal_uInt16*)mso_sptArrowSegm, sizeof( mso_sptArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptArrowCalc, SAL_N_ELEMENTS( mso_sptArrowCalc ),
     (sal_Int32*)mso_sptDefault16200and5400,
-    (SvxMSDffTextRectangles*)mso_sptArrowTextRect, sizeof( mso_sptArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptArrowTextRect, SAL_N_ELEMENTS( mso_sptArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptArrowHandle, sizeof( mso_sptArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptArrowHandle, SAL_N_ELEMENTS( mso_sptArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptLeftArrowVert[] =  // adjustment1: x 0 - 21600
@@ -749,15 +749,15 @@ static const SvxMSDffHandle mso_sptLeftArrowHandle[] =
 };
 static const mso_CustomShape msoLeftArrow =
 {
-    (SvxMSDffVertPair*)mso_sptLeftArrowVert, sizeof( mso_sptLeftArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftArrowVert, SAL_N_ELEMENTS( mso_sptLeftArrowVert ),
     (sal_uInt16*)mso_sptLeftArrowSegm, sizeof( mso_sptLeftArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptArrowCalc, SAL_N_ELEMENTS( mso_sptArrowCalc ),
     (sal_Int32*)mso_sptLeftArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftArrowTextRect, sizeof( mso_sptLeftArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftArrowTextRect, SAL_N_ELEMENTS( mso_sptLeftArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftArrowHandle, sizeof( mso_sptLeftArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftArrowHandle, SAL_N_ELEMENTS( mso_sptLeftArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptDownArrowVert[] =  // adjustment1: x 0 - 21600
@@ -780,15 +780,15 @@ static const SvxMSDffHandle mso_sptDownArrowHandle[] =
 };
 static const mso_CustomShape msoDownArrow =
 {
-    (SvxMSDffVertPair*)mso_sptDownArrowVert, sizeof( mso_sptDownArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptDownArrowVert, SAL_N_ELEMENTS( mso_sptDownArrowVert ),
     (sal_uInt16*)mso_sptDownArrowSegm, sizeof( mso_sptDownArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptArrowCalc, SAL_N_ELEMENTS( mso_sptArrowCalc ),
     (sal_Int32*)mso_sptDefault16200and5400,
-    (SvxMSDffTextRectangles*)mso_sptDownArrowTextRect, sizeof( mso_sptDownArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDownArrowTextRect, SAL_N_ELEMENTS( mso_sptDownArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptDownArrowHandle, sizeof( mso_sptDownArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptDownArrowHandle, SAL_N_ELEMENTS( mso_sptDownArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptUpArrowVert[] =    // adjustment1: x 0 - 21600
@@ -815,15 +815,15 @@ static const SvxMSDffHandle mso_sptUpArrowHandle[] =
 };
 static const mso_CustomShape msoUpArrow =
 {
-    (SvxMSDffVertPair*)mso_sptUpArrowVert, sizeof( mso_sptUpArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptUpArrowVert, SAL_N_ELEMENTS( mso_sptUpArrowVert ),
     (sal_uInt16*)mso_sptUpArrowSegm, sizeof( mso_sptUpArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptArrowCalc, SAL_N_ELEMENTS( mso_sptArrowCalc ),
     (sal_Int32*)mso_sptUpArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptUpArrowTextRect, sizeof( mso_sptUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptUpArrowTextRect, SAL_N_ELEMENTS( mso_sptUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpArrowHandle, sizeof( mso_sptUpArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptUpArrowHandle, SAL_N_ELEMENTS( mso_sptUpArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = // adjustment1: x 0 - 10800
@@ -864,15 +864,15 @@ static const SvxMSDffHandle mso_sptLeftRightArrowHandle[] =
 };
 static const mso_CustomShape msoLeftRightArrow =
 {
-    (SvxMSDffVertPair*)mso_sptLeftRightArrowVert, sizeof( mso_sptLeftRightArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftRightArrowVert, SAL_N_ELEMENTS( mso_sptLeftRightArrowVert ),
     (sal_uInt16*)mso_sptLeftRightArrowSegm, sizeof( mso_sptLeftRightArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDoubleArrowCalc, sizeof( mso_sptDoubleArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDoubleArrowCalc, SAL_N_ELEMENTS( mso_sptDoubleArrowCalc ),
     (sal_Int32*)mso_sptLeftRightArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftRightArrowTextRect, sizeof( mso_sptLeftRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftRightArrowTextRect, SAL_N_ELEMENTS( mso_sptLeftRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftRightArrowHandle, sizeof( mso_sptLeftRightArrowHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptLeftRightArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightArrowHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    // adjustment1: x 0 - 10800
@@ -900,15 +900,15 @@ static const SvxMSDffHandle mso_sptUpDownArrowHandle[] =
 };
 static const mso_CustomShape msoUpDownArrow =
 {
-    (SvxMSDffVertPair*)mso_sptUpDownArrowVert, sizeof( mso_sptUpDownArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptUpDownArrowVert, SAL_N_ELEMENTS( mso_sptUpDownArrowVert ),
     (sal_uInt16*)mso_sptUpDownArrowSegm, sizeof( mso_sptUpDownArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDoubleArrowCalc, sizeof( mso_sptDoubleArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDoubleArrowCalc, SAL_N_ELEMENTS( mso_sptDoubleArrowCalc ),
     (sal_Int32*)mso_sptUpDownArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptUpDownArrowTextRect, sizeof( mso_sptUpDownArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptUpDownArrowTextRect, SAL_N_ELEMENTS( mso_sptUpDownArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpDownArrowHandle, sizeof( mso_sptUpDownArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptUpDownArrowHandle, SAL_N_ELEMENTS( mso_sptUpDownArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
@@ -950,15 +950,15 @@ static const SvxMSDffHandle mso_sptQuadArrowHandle[] =
 };
 static const mso_CustomShape msoQuadArrow =
 {
-    (SvxMSDffVertPair*)mso_sptQuadArrowVert, sizeof( mso_sptQuadArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptQuadArrowVert, SAL_N_ELEMENTS( mso_sptQuadArrowVert ),
     (sal_uInt16*)mso_sptQuadArrowSegm, sizeof( mso_sptQuadArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptQuadArrowCalc, sizeof( mso_sptQuadArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptQuadArrowCalc, SAL_N_ELEMENTS( mso_sptQuadArrowCalc ),
     (sal_Int32*)mso_sptQuadArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptQuadArrowTextRect, sizeof( mso_sptQuadArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptQuadArrowTextRect, SAL_N_ELEMENTS( mso_sptQuadArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptQuadArrowHandle, sizeof( mso_sptQuadArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptQuadArrowHandle, SAL_N_ELEMENTS( mso_sptQuadArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
@@ -999,15 +999,15 @@ static const SvxMSDffHandle mso_sptLeftRightUpArrowHandle[] =
 };
 static const mso_CustomShape msoLeftRightUpArrow =
 {
-    (SvxMSDffVertPair*)mso_sptLeftRightUpArrowVert, sizeof( mso_sptLeftRightUpArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftRightUpArrowVert, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowVert ),
     (sal_uInt16*)mso_sptLeftRightUpArrowSegm, sizeof( mso_sptLeftRightUpArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptLeftRightUpArrowCalc, sizeof( mso_sptLeftRightUpArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptLeftRightUpArrowCalc, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowCalc ),
     (sal_Int32*)mso_sptLeftRightUpArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftRightUpArrowTextRect, sizeof( mso_sptLeftRightUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftRightUpArrowTextRect, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftRightUpArrowHandle, sizeof( mso_sptLeftRightUpArrowHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptLeftRightUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptBentArrowVert[] =  // adjustment1 : x 12427 - 21600
@@ -1043,15 +1043,15 @@ static const SvxMSDffHandle mso_sptBentArrowHandle[] =
 };
 static const mso_CustomShape msoBentArrow =
 {
-    (SvxMSDffVertPair*)mso_sptBentArrowVert, sizeof( mso_sptBentArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentArrowVert, SAL_N_ELEMENTS( mso_sptBentArrowVert ),
     (sal_uInt16*)mso_sptBentArrowSegm, sizeof( mso_sptBentArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBentArrowCalc, sizeof( mso_sptBentArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBentArrowCalc, SAL_N_ELEMENTS( mso_sptBentArrowCalc ),
     (sal_Int32*)mso_sptBentArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptBentArrowTextRect, sizeof( mso_sptBentArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBentArrowTextRect, SAL_N_ELEMENTS( mso_sptBentArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentArrowHandle, sizeof( mso_sptBentArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBentArrowHandle, SAL_N_ELEMENTS( mso_sptBentArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptUturnArrowVert[] =
@@ -1074,11 +1074,11 @@ static const SvxMSDffTextRectangles mso_sptUturnArrowTextRect[] =
 };
 static const mso_CustomShape msoUturnArrow =
 {
-    (SvxMSDffVertPair*)mso_sptUturnArrowVert, sizeof( mso_sptUturnArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptUturnArrowVert, SAL_N_ELEMENTS( mso_sptUturnArrowVert ),
     (sal_uInt16*)mso_sptUturnArrowSegm, sizeof( mso_sptUturnArrowSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptUturnArrowTextRect, sizeof( mso_sptUturnArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptUturnArrowTextRect, SAL_N_ELEMENTS( mso_sptUturnArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -1126,15 +1126,15 @@ static const SvxMSDffHandle mso_sptLeftUpArrowHandle[] =
 };
 static const mso_CustomShape msoLeftUpArrow =
 {
-    (SvxMSDffVertPair*)mso_sptLeftUpArrowVert, sizeof( mso_sptLeftUpArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftUpArrowVert, SAL_N_ELEMENTS( mso_sptLeftUpArrowVert ),
     (sal_uInt16*)mso_sptLeftUpArrowSegm, sizeof( mso_sptLeftUpArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptLeftUpArrowCalc, sizeof( mso_sptLeftUpArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptLeftUpArrowCalc, SAL_N_ELEMENTS( mso_sptLeftUpArrowCalc ),
     (sal_Int32*)mso_sptLeftUpArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftUpArrowTextRect, sizeof( mso_sptLeftUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftUpArrowTextRect, SAL_N_ELEMENTS( mso_sptLeftUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftUpArrowHandle, sizeof( mso_sptLeftUpArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftUpArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
@@ -1179,15 +1179,15 @@ static const SvxMSDffHandle mso_sptBentUpArrowHandle[] =
 };
 static const mso_CustomShape msoBentUpArrow =
 {
-    (SvxMSDffVertPair*)mso_sptBentUpArrowVert, sizeof( mso_sptBentUpArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentUpArrowVert, SAL_N_ELEMENTS( mso_sptBentUpArrowVert ),
     (sal_uInt16*)mso_sptBentUpArrowSegm, sizeof( mso_sptBentUpArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBentUpArrowCalc, sizeof( mso_sptBentUpArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBentUpArrowCalc, SAL_N_ELEMENTS( mso_sptBentUpArrowCalc ),
     (sal_Int32*)mso_sptBentUpArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptBentUpArrowTextRect, sizeof( mso_sptBentUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBentUpArrowTextRect, SAL_N_ELEMENTS( mso_sptBentUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentUpArrowHandle, sizeof( mso_sptBentUpArrowHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptBentUpArrowHandle, SAL_N_ELEMENTS( mso_sptBentUpArrowHandle )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedRightVert[] =
@@ -1287,15 +1287,15 @@ static const SvxMSDffHandle mso_sptCurvedRightHandles[] =
 };
 static const mso_CustomShape msoCurvedRightArrow =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedRightVert, sizeof( mso_sptCurvedRightVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedRightVert, SAL_N_ELEMENTS( mso_sptCurvedRightVert ),
     (sal_uInt16*)mso_sptCurvedRightSegm, sizeof( mso_sptCurvedRightSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedRightCalc, sizeof( mso_sptCurvedRightCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCurvedRightCalc, SAL_N_ELEMENTS( mso_sptCurvedRightCalc ),
     (sal_Int32*)mso_sptCurvedRightDefault,
-    (SvxMSDffTextRectangles*)mso_sptCurvedRightTextRect, sizeof( mso_sptCurvedRightTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCurvedRightTextRect, SAL_N_ELEMENTS( mso_sptCurvedRightTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptCurvedRightGluePoints, sizeof( mso_sptCurvedRightGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCurvedRightHandles, sizeof( mso_sptCurvedRightHandles ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptCurvedRightGluePoints, SAL_N_ELEMENTS( mso_sptCurvedRightGluePoints ),
+    (SvxMSDffHandle*)mso_sptCurvedRightHandles, SAL_N_ELEMENTS( mso_sptCurvedRightHandles )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedDownVert[] =
@@ -1342,15 +1342,15 @@ static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
 
 static const mso_CustomShape msoCurvedDownArrow =
 {
-   (SvxMSDffVertPair*)mso_sptCurvedDownVert, sizeof( mso_sptCurvedDownVert ) / sizeof( SvxMSDffVertPair ),
+   (SvxMSDffVertPair*)mso_sptCurvedDownVert, SAL_N_ELEMENTS( mso_sptCurvedDownVert ),
    (sal_uInt16*)mso_sptCurvedDownSegm, sizeof( mso_sptCurvedDownSegm ) >> 1,
-   (SvxMSDffCalculationData*)mso_sptCurvedRightCalc, sizeof( mso_sptCurvedRightCalc ) / sizeof( SvxMSDffCalculationData ),
+   (SvxMSDffCalculationData*)mso_sptCurvedRightCalc, SAL_N_ELEMENTS( mso_sptCurvedRightCalc ),
    (sal_Int32*)mso_sptCurvedRightDefault,
-   (SvxMSDffTextRectangles*)mso_sptCurvedDownTextRect, sizeof( mso_sptCurvedDownTextRect ) / sizeof( SvxMSDffTextRectangles ),
+   (SvxMSDffTextRectangles*)mso_sptCurvedDownTextRect, SAL_N_ELEMENTS( mso_sptCurvedDownTextRect ),
    21600, 21600,
    MIN_INT32, MIN_INT32,
-   (SvxMSDffVertPair*)mso_sptCurvedDownGluePoints, sizeof( mso_sptCurvedDownGluePoints ) / sizeof( SvxMSDffVertPair ),
-   (SvxMSDffHandle*)mso_sptCurvedDownHandles, sizeof( mso_sptCurvedDownHandles ) / sizeof( SvxMSDffHandle )
+   (SvxMSDffVertPair*)mso_sptCurvedDownGluePoints, SAL_N_ELEMENTS( mso_sptCurvedDownGluePoints ),
+   (SvxMSDffHandle*)mso_sptCurvedDownHandles, SAL_N_ELEMENTS( mso_sptCurvedDownHandles )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedUpVert[] =
@@ -1448,15 +1448,15 @@ static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
 };
 static const mso_CustomShape msoCurvedUpArrow =
 {
-   (SvxMSDffVertPair*)mso_sptCurvedUpVert, sizeof( mso_sptCurvedUpVert ) / sizeof( SvxMSDffVertPair ),
+   (SvxMSDffVertPair*)mso_sptCurvedUpVert, SAL_N_ELEMENTS( mso_sptCurvedUpVert ),
    (sal_uInt16*)mso_sptCurvedUpSegm, sizeof( mso_sptCurvedUpSegm ) >> 1,
-   (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, sizeof( mso_sptCurvedUpCalc ) / sizeof( SvxMSDffCalculationData ),
+   (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, SAL_N_ELEMENTS( mso_sptCurvedUpCalc ),
    (sal_Int32*)mso_sptCurvedUpDefault,
-   (SvxMSDffTextRectangles*)mso_sptCurvedUpTextRect, sizeof( mso_sptCurvedUpTextRect ) / sizeof( SvxMSDffTextRectangles ),
+   (SvxMSDffTextRectangles*)mso_sptCurvedUpTextRect, SAL_N_ELEMENTS( mso_sptCurvedUpTextRect ),
    21600, 21600,
    MIN_INT32, MIN_INT32,
-   (SvxMSDffVertPair*)mso_sptCurvedUpGluePoints, sizeof( mso_sptCurvedUpGluePoints ) / sizeof( SvxMSDffVertPair ),
-   (SvxMSDffHandle*)mso_sptCurvedUpHandles, sizeof( mso_sptCurvedUpHandles ) / sizeof( SvxMSDffHandle )
+   (SvxMSDffVertPair*)mso_sptCurvedUpGluePoints, SAL_N_ELEMENTS( mso_sptCurvedUpGluePoints ),
+   (SvxMSDffHandle*)mso_sptCurvedUpHandles, SAL_N_ELEMENTS( mso_sptCurvedUpHandles )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
@@ -1501,15 +1501,15 @@ static const SvxMSDffHandle mso_sptCurvedLeftHandles[] =
 };
 static const mso_CustomShape msoCurvedLeftArrow =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedLeftVert, sizeof( mso_sptCurvedLeftVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedLeftVert, SAL_N_ELEMENTS( mso_sptCurvedLeftVert ),
     (sal_uInt16*)mso_sptCurvedLeftSegm, sizeof( mso_sptCurvedLeftSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, sizeof( mso_sptCurvedUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, SAL_N_ELEMENTS( mso_sptCurvedUpCalc ),
     (sal_Int32*)mso_sptCurvedUpDefault,
-    (SvxMSDffTextRectangles*)mso_sptCurvedLeftTextRect, sizeof( mso_sptCurvedLeftTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCurvedLeftTextRect, SAL_N_ELEMENTS( mso_sptCurvedLeftTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptCurvedLeftGluePoints, sizeof( mso_sptCurvedLeftGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCurvedLeftHandles, sizeof( mso_sptCurvedLeftHandles ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptCurvedLeftGluePoints, SAL_N_ELEMENTS( mso_sptCurvedLeftGluePoints ),
+    (SvxMSDffHandle*)mso_sptCurvedLeftHandles, SAL_N_ELEMENTS( mso_sptCurvedLeftHandles )
 };
 
 static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
@@ -1545,15 +1545,15 @@ static const SvxMSDffHandle mso_sptStripedRightArrowHandle[] =
 };
 static const mso_CustomShape msoStripedRightArrow =
 {
-    (SvxMSDffVertPair*)mso_sptStripedRightArrowVert, sizeof( mso_sptStripedRightArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStripedRightArrowVert, SAL_N_ELEMENTS( mso_sptStripedRightArrowVert ),
     (sal_uInt16*)mso_sptStripedRightArrowSegm, sizeof( mso_sptStripedRightArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptStripedRightArrowCalc, sizeof( mso_sptStripedRightArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptStripedRightArrowCalc, SAL_N_ELEMENTS( mso_sptStripedRightArrowCalc ),
     (sal_Int32*)mso_sptDefault16200and5400,
-    (SvxMSDffTextRectangles*)mso_sptStripedRightArrowTextRect, sizeof( mso_sptStripedRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptStripedRightArrowTextRect, SAL_N_ELEMENTS( mso_sptStripedRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptStripedRightArrowHandle, sizeof( mso_sptStripedRightArrowHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptStripedRightArrowHandle, SAL_N_ELEMENTS( mso_sptStripedRightArrowHandle )
 };
 
 static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
@@ -1581,15 +1581,15 @@ static const SvxMSDffHandle mso_sptNotchedRightArrowHandle[] =
 };
 static const mso_CustomShape msoNotchedRightArrow =
 {
-    (SvxMSDffVertPair*)mso_sptNotchedRightArrowVert, sizeof( mso_sptNotchedRightArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptNotchedRightArrowVert, SAL_N_ELEMENTS( mso_sptNotchedRightArrowVert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptNotchedRightArrowCalc, sizeof( mso_sptNotchedRightArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptNotchedRightArrowCalc, SAL_N_ELEMENTS( mso_sptNotchedRightArrowCalc ),
     (sal_Int32*)mso_sptDefault16200and5400,
-    (SvxMSDffTextRectangles*)mso_sptNotchedRightArrowTextRect, sizeof( mso_sptNotchedRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptNotchedRightArrowTextRect, SAL_N_ELEMENTS( mso_sptNotchedRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptNotchedRightArrowHandle, sizeof( mso_sptNotchedRightArrowHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptNotchedRightArrowHandle, SAL_N_ELEMENTS( mso_sptNotchedRightArrowHandle )
 };
 
 static const SvxMSDffVertPair mso_sptHomePlateVert[] =  // adjustment1 : x 0 - 21600
@@ -1620,15 +1620,15 @@ static const SvxMSDffHandle mso_sptHomePlateHandle[] =
 };
 static const mso_CustomShape msoHomePlate =
 {
-    (SvxMSDffVertPair*)mso_sptHomePlateVert, sizeof( mso_sptHomePlateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptHomePlateVert, SAL_N_ELEMENTS( mso_sptHomePlateVert ),
     (sal_uInt16*)mso_sptHomePlateSegm, sizeof( mso_sptHomePlateSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptHomePlateCalc, sizeof( mso_sptHomePlateCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptHomePlateCalc, SAL_N_ELEMENTS( mso_sptHomePlateCalc ),
     (sal_Int32*)mso_sptHomePlateDefault,
-    (SvxMSDffTextRectangles*)mso_sptHomePlateTextRect, sizeof( mso_sptHomePlateTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptHomePlateTextRect, SAL_N_ELEMENTS( mso_sptHomePlateTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptHomePlateHandle, sizeof( mso_sptHomePlateHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptHomePlateHandle, SAL_N_ELEMENTS( mso_sptHomePlateHandle )
 };
 
 static const SvxMSDffVertPair mso_sptChevronVert[] =    // adjustment1 : x 0 - 21600
@@ -1660,15 +1660,15 @@ static const SvxMSDffHandle mso_sptChevronHandle[] =
 };
 static const mso_CustomShape msoChevron =
 {
-    (SvxMSDffVertPair*)mso_sptChevronVert, sizeof( mso_sptChevronVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptChevronVert, SAL_N_ELEMENTS( mso_sptChevronVert ),
     (sal_uInt16*)mso_sptChevronSegm, sizeof( mso_sptChevronSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptChevronCalc, sizeof( mso_sptChevronCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptChevronCalc, SAL_N_ELEMENTS( mso_sptChevronCalc ),
     (sal_Int32*)mso_sptChevronDefault,
-    (SvxMSDffTextRectangles*)mso_sptChevronTextRect, sizeof( mso_sptChevronTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptChevronTextRect, SAL_N_ELEMENTS( mso_sptChevronTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptChevronHandle, sizeof( mso_sptChevronHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptChevronHandle, SAL_N_ELEMENTS( mso_sptChevronHandle )
 };
 
 static const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  // adjustment1 : x 0 - 21000
@@ -1709,15 +1709,15 @@ static const SvxMSDffHandle mso_sptRightArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoRightArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptRightArrowCalloutVert, sizeof( mso_sptRightArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRightArrowCalloutVert, SAL_N_ELEMENTS( mso_sptRightArrowCalloutVert ),
     (sal_uInt16*)mso_sptRightArrowCalloutSegm, sizeof( mso_sptRightArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptRightArrowCalloutCalc, sizeof( mso_sptRightArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptRightArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptRightArrowCalloutCalc ),
     (sal_Int32*)mso_sptRightArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptRightArrowCalloutTextRect, sizeof( mso_sptRightArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRightArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptRightArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptRightArrowCalloutHandle, sizeof( mso_sptRightArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptRightArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptRightArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   // adjustment1 : x 0 - 21600, adjustment2 : y 0 - 10800
@@ -1758,15 +1758,15 @@ static const SvxMSDffHandle mso_sptLeftArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoLeftArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptLeftArrowCalloutVert, sizeof( mso_sptLeftArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftArrowCalloutVert, SAL_N_ELEMENTS( mso_sptLeftArrowCalloutVert ),
     (sal_uInt16*)mso_sptLeftArrowCalloutSegm, sizeof( mso_sptLeftArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptLeftArrowCalloutCalc, sizeof( mso_sptLeftArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptLeftArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptLeftArrowCalloutCalc ),
     (sal_Int32*)mso_sptLeftArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftArrowCalloutTextRect, sizeof( mso_sptLeftArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptLeftArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftArrowCalloutHandle, sizeof( mso_sptLeftArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptLeftArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptLeftArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptUpArrowCalloutVert[] =
@@ -1807,15 +1807,15 @@ static const SvxMSDffHandle mso_sptUpArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoUpArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptUpArrowCalloutVert, sizeof( mso_sptUpArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptUpArrowCalloutVert, SAL_N_ELEMENTS( mso_sptUpArrowCalloutVert ),
     (sal_uInt16*)mso_sptUpArrowCalloutSegm, sizeof( mso_sptUpArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptUpArrowCalloutCalc, sizeof( mso_sptUpArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptUpArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptUpArrowCalloutCalc ),
     (sal_Int32*)mso_sptUpArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptUpArrowCalloutTextRect, sizeof( mso_sptUpArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptUpArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptUpArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpArrowCalloutHandle, sizeof( mso_sptUpArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptUpArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptUpArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptDownArrowCalloutVert[] =
@@ -1856,15 +1856,15 @@ static const SvxMSDffHandle mso_sptDownArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoDownArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptDownArrowCalloutVert, sizeof( mso_sptDownArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptDownArrowCalloutVert, SAL_N_ELEMENTS( mso_sptDownArrowCalloutVert ),
     (sal_uInt16*)mso_sptDownArrowCalloutSegm, sizeof( mso_sptDownArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDownArrowCalloutCalc, sizeof( mso_sptDownArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDownArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptDownArrowCalloutCalc ),
     (sal_Int32*)mso_sptDownArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptDownArrowCalloutTextRect, sizeof( mso_sptDownArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDownArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptDownArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptDownArrowCalloutHandle, sizeof( mso_sptDownArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptDownArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptDownArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightArrowCalloutVert[] =
@@ -1909,15 +1909,15 @@ static const SvxMSDffHandle mso_sptLeftRightArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoLeftRightArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptLeftRightArrowCalloutVert, sizeof( mso_sptLeftRightArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftRightArrowCalloutVert, SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutVert ),
     (sal_uInt16*)mso_sptLeftRightArrowCalloutSegm, sizeof( mso_sptLeftRightArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptLeftRightArrowCalloutCalc, sizeof( mso_sptLeftRightArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptLeftRightArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutCalc ),
     (sal_Int32*)mso_sptLeftRightArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftRightArrowCalloutTextRect, sizeof( mso_sptLeftRightArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftRightArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftRightArrowCalloutHandle, sizeof( mso_sptLeftRightArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptLeftRightArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptUpDownArrowCalloutVert[] =
@@ -1962,15 +1962,15 @@ static const SvxMSDffHandle mso_sptUpDownArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoUpDownArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptUpDownArrowCalloutVert, sizeof( mso_sptUpDownArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptUpDownArrowCalloutVert, SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutVert ),
     (sal_uInt16*)mso_sptUpDownArrowCalloutSegm, sizeof( mso_sptUpDownArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptUpDownArrowCalloutCalc, sizeof( mso_sptUpDownArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptUpDownArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutCalc ),
     (sal_Int32*)mso_sptUpDownArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptUpDownArrowCalloutTextRect, sizeof( mso_sptUpDownArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptUpDownArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpDownArrowCalloutHandle, sizeof( mso_sptUpDownArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptUpDownArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptQuadArrowCalloutVert[] =
@@ -2018,15 +2018,15 @@ static const SvxMSDffHandle mso_sptQuadArrowCalloutHandle[] =
 };
 static const mso_CustomShape msoQuadArrowCallout =
 {
-    (SvxMSDffVertPair*)mso_sptQuadArrowCalloutVert, sizeof( mso_sptQuadArrowCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptQuadArrowCalloutVert, SAL_N_ELEMENTS( mso_sptQuadArrowCalloutVert ),
     (sal_uInt16*)mso_sptQuadArrowCalloutSegm, sizeof( mso_sptQuadArrowCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptQuadArrowCalloutCalc, sizeof( mso_sptQuadArrowCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptQuadArrowCalloutCalc, SAL_N_ELEMENTS( mso_sptQuadArrowCalloutCalc ),
     (sal_Int32*)mso_sptQuadArrowCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptQuadArrowCalloutTextRect, sizeof( mso_sptQuadArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptQuadArrowCalloutTextRect, SAL_N_ELEMENTS( mso_sptQuadArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptQuadArrowCalloutHandle, sizeof( mso_sptQuadArrowCalloutHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptQuadArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptQuadArrowCalloutHandle )
 };
 
 static const SvxMSDffVertPair mso_sptCircularArrowVert[] =
@@ -2114,15 +2114,15 @@ static const SvxMSDffHandle mso_sptCircularArrowHandle[] =
 };
 static const mso_CustomShape msoCircularArrow =
 {
-    (SvxMSDffVertPair*)mso_sptCircularArrowVert, sizeof( mso_sptCircularArrowVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCircularArrowVert, SAL_N_ELEMENTS( mso_sptCircularArrowVert ),
     (sal_uInt16*)mso_sptCircularArrowSegm, sizeof( mso_sptCircularArrowSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCircularArrowCalc, sizeof( mso_sptCircularArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCircularArrowCalc, SAL_N_ELEMENTS( mso_sptCircularArrowCalc ),
     (sal_Int32*)mso_sptCircularArrowDefault,
-    (SvxMSDffTextRectangles*)mso_sptCircularArrowTextRect, sizeof( mso_sptCircularArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCircularArrowTextRect, SAL_N_ELEMENTS( mso_sptCircularArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCircularArrowHandle, sizeof( mso_sptCircularArrowHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCircularArrowHandle, SAL_N_ELEMENTS( mso_sptCircularArrowHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptCubeVert[] =
@@ -2168,15 +2168,15 @@ static const SvxMSDffVertPair mso_sptCubeGluePoints[] =
 };
 static const mso_CustomShape msoCube =
 {
-    (SvxMSDffVertPair*)mso_sptCubeVert, sizeof( mso_sptCubeVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCubeVert, SAL_N_ELEMENTS( mso_sptCubeVert ),
     (sal_uInt16*)mso_sptCubeSegm, sizeof( mso_sptCubeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCubeCalc, sizeof( mso_sptCubeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCubeCalc, SAL_N_ELEMENTS( mso_sptCubeCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptCubeTextRect, sizeof( mso_sptCubeTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCubeTextRect, SAL_N_ELEMENTS( mso_sptCubeTextRect ),
     21600, 21600,
     10800, 10800,
-    (SvxMSDffVertPair*)mso_sptCubeGluePoints, sizeof( mso_sptCubeGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCubeHandle, sizeof( mso_sptCubeHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptCubeGluePoints, SAL_N_ELEMENTS( mso_sptCubeGluePoints ),
+    (SvxMSDffHandle*)mso_sptCubeHandle, SAL_N_ELEMENTS( mso_sptCubeHandle )
 };
 
 static const SvxMSDffVertPair mso_sptBevelVert[] =
@@ -2213,15 +2213,15 @@ static const SvxMSDffHandle mso_sptBevelHandle[] =
 };
 static const mso_CustomShape msoBevel =
 {
-    (SvxMSDffVertPair*)mso_sptBevelVert, sizeof( mso_sptBevelVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBevelVert, SAL_N_ELEMENTS( mso_sptBevelVert ),
     (sal_uInt16*)mso_sptBevelSegm, sizeof( mso_sptBevelSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBevelCalc, sizeof( mso_sptBevelCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBevelCalc, SAL_N_ELEMENTS( mso_sptBevelCalc ),
     (sal_Int32*)mso_sptDefault2700,
-    (SvxMSDffTextRectangles*)mso_sptBevelTextRect, sizeof( mso_sptBevelTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBevelTextRect, SAL_N_ELEMENTS( mso_sptBevelTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBevelHandle, sizeof( mso_sptBevelHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptBevelHandle, SAL_N_ELEMENTS( mso_sptBevelHandle )
 };
 
 static const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   // adjustment1 : x 10800 - 21600
@@ -2265,15 +2265,15 @@ static const SvxMSDffHandle mso_sptFoldedCornerHandle[] =
 };
 static const mso_CustomShape msoFoldedCorner =
 {
-    (SvxMSDffVertPair*)mso_sptFoldedCornerVert, sizeof( mso_sptFoldedCornerVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFoldedCornerVert, SAL_N_ELEMENTS( mso_sptFoldedCornerVert ),
     (sal_uInt16*)mso_sptFoldedCornerSegm, sizeof( mso_sptFoldedCornerSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptFoldedCornerCalc, sizeof( mso_sptFoldedCornerCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptFoldedCornerCalc, SAL_N_ELEMENTS( mso_sptFoldedCornerCalc ),
     (sal_Int32*)mso_sptFoldedCornerDefault,
-    (SvxMSDffTextRectangles*)mso_sptFoldedCornerTextRect, sizeof( mso_sptFoldedCornerTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFoldedCornerTextRect, SAL_N_ELEMENTS( mso_sptFoldedCornerTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptFoldedCornerHandle, sizeof( mso_sptFoldedCornerHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptFoldedCornerHandle, SAL_N_ELEMENTS( mso_sptFoldedCornerHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
@@ -2309,15 +2309,15 @@ static const SvxMSDffHandle mso_sptButtonHandle[] =
 };
 static const mso_CustomShape msoActionButtonBlank =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonBlankVert, sizeof( mso_sptActionButtonBlankVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonBlankVert, SAL_N_ELEMENTS( mso_sptActionButtonBlankVert ),
     (sal_uInt16*)mso_sptActionButtonBlankSegm, sizeof( mso_sptActionButtonBlankSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonBlankCalc, sizeof( mso_sptActionButtonBlankCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonBlankCalc, SAL_N_ELEMENTS( mso_sptActionButtonBlankCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonBlankTextRect, sizeof( mso_sptActionButtonBlankTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonBlankTextRect, SAL_N_ELEMENTS( mso_sptActionButtonBlankTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffTextRectangles mso_sptActionButtonTextRect[] =
@@ -2397,15 +2397,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj v
 };
 static const mso_CustomShape msoActionButtonHome =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonHomeVert, sizeof( mso_sptActionButtonHomeVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonHomeVert, SAL_N_ELEMENTS( mso_sptActionButtonHomeVert ),
     (sal_uInt16*)mso_sptActionButtonHomeSegm, sizeof( mso_sptActionButtonHomeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonHomeCalc, sizeof( mso_sptActionButtonHomeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonHomeCalc, SAL_N_ELEMENTS( mso_sptActionButtonHomeCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
@@ -2507,15 +2507,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj v
 };
 static const mso_CustomShape msoActionButtonHelp =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonHelpVert, sizeof( mso_sptActionButtonHelpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonHelpVert, SAL_N_ELEMENTS( mso_sptActionButtonHelpVert ),
     (sal_uInt16*)mso_sptActionButtonHelpSegm, sizeof( mso_sptActionButtonHelpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonHelpCalc, sizeof( mso_sptActionButtonHelpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonHelpCalc, SAL_N_ELEMENTS( mso_sptActionButtonHelpCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonInformationVert[] =
@@ -2595,15 +2595,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // a
 };
 static const mso_CustomShape msoActionButtonInformation =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonInformationVert, sizeof( mso_sptActionButtonInformationVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonInformationVert, SAL_N_ELEMENTS( mso_sptActionButtonInformationVert ),
     (sal_uInt16*)mso_sptActionButtonInformationSegm, sizeof( mso_sptActionButtonInformationSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonInformationCalc, sizeof( mso_sptActionButtonInformationCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonInformationCalc, SAL_N_ELEMENTS( mso_sptActionButtonInformationCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
@@ -2648,15 +2648,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // a
 };
 static const mso_CustomShape msoActionButtonBackPrevious =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonBackPreviousVert, sizeof( mso_sptActionButtonBackPreviousVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonBackPreviousVert, SAL_N_ELEMENTS( mso_sptActionButtonBackPreviousVert ),
     (sal_uInt16*)mso_sptActionButtonForwardBackSegm, sizeof( mso_sptActionButtonForwardBackSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonForwardBackCalc, sizeof( mso_sptActionButtonForwardBackCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonForwardBackCalc, SAL_N_ELEMENTS( mso_sptActionButtonForwardBackCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
@@ -2671,15 +2671,15 @@ static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
 };
 static const mso_CustomShape msoActionButtonForwardNext =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonForwardNextVert, sizeof( mso_sptActionButtonForwardNextVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonForwardNextVert, SAL_N_ELEMENTS( mso_sptActionButtonForwardNextVert ),
     (sal_uInt16*)mso_sptActionButtonForwardBackSegm, sizeof( mso_sptActionButtonForwardBackSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonForwardBackCalc, sizeof( mso_sptActionButtonForwardBackCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonForwardBackCalc, SAL_N_ELEMENTS( mso_sptActionButtonForwardBackCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
@@ -2738,15 +2738,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    
 };
 static const mso_CustomShape msoActionButtonBeginning =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonBeginningVert, sizeof( mso_sptActionButtonBeginningVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonBeginningVert, SAL_N_ELEMENTS( mso_sptActionButtonBeginningVert ),
     (sal_uInt16*)mso_sptActionButtonBeginningEndSegm, sizeof( mso_sptActionButtonBeginningEndSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonBeginningEndCalc, sizeof( mso_sptActionButtonBeginningEndCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonBeginningEndCalc, SAL_N_ELEMENTS( mso_sptActionButtonBeginningEndCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
@@ -2763,15 +2763,15 @@ static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
 };
 static const mso_CustomShape msoActionButtonEnd =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonEndVert, sizeof( mso_sptActionButtonEndVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonEndVert, SAL_N_ELEMENTS( mso_sptActionButtonEndVert ),
     (sal_uInt16*)mso_sptActionButtonBeginningEndSegm, sizeof( mso_sptActionButtonBeginningEndSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonBeginningEndCalc, sizeof( mso_sptActionButtonBeginningEndCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonBeginningEndCalc, SAL_N_ELEMENTS( mso_sptActionButtonBeginningEndCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
@@ -2852,15 +2852,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj v
 };
 static const mso_CustomShape msoActionButtonReturn =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonReturnVert, sizeof( mso_sptActionButtonReturnVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonReturnVert, SAL_N_ELEMENTS( mso_sptActionButtonReturnVert ),
     (sal_uInt16*)mso_sptActionButtonReturnSegm, sizeof( mso_sptActionButtonReturnSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonReturnCalc, sizeof( mso_sptActionButtonReturnCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonReturnCalc, SAL_N_ELEMENTS( mso_sptActionButtonReturnCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonDocumentVert[] =
@@ -2912,15 +2912,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // a
 };
 static const mso_CustomShape msoActionButtonDocument =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonDocumentVert, sizeof( mso_sptActionButtonDocumentVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonDocumentVert, SAL_N_ELEMENTS( mso_sptActionButtonDocumentVert ),
     (sal_uInt16*)mso_sptActionButtonDocumentSegm, sizeof( mso_sptActionButtonDocumentSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonDocumentCalc, sizeof( mso_sptActionButtonDocumentCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonDocumentCalc, SAL_N_ELEMENTS( mso_sptActionButtonDocumentCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
@@ -2988,15 +2988,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj v
 };
 static const mso_CustomShape msoActionButtonSound =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonSoundVert, sizeof( mso_sptActionButtonSoundVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonSoundVert, SAL_N_ELEMENTS( mso_sptActionButtonSoundVert ),
     (sal_uInt16*)mso_sptActionButtonSoundSegm, sizeof( mso_sptActionButtonSoundSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonSoundCalc, sizeof( mso_sptActionButtonSoundCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonSoundCalc, SAL_N_ELEMENTS( mso_sptActionButtonSoundCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonMovieVert[] =
@@ -3073,15 +3073,15 @@ static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj v
 };
 static const mso_CustomShape msoActionButtonMovie =
 {
-    (SvxMSDffVertPair*)mso_sptActionButtonMovieVert, sizeof( mso_sptActionButtonMovieVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptActionButtonMovieVert, SAL_N_ELEMENTS( mso_sptActionButtonMovieVert ),
     (sal_uInt16*)mso_sptActionButtonMovieSegm, sizeof( mso_sptActionButtonMovieSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptActionButtonMovieCalc, sizeof( mso_sptActionButtonMovieCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptActionButtonMovieCalc, SAL_N_ELEMENTS( mso_sptActionButtonMovieCalc ),
     (sal_Int32*)mso_sptDefault1400,
-    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
@@ -3120,15 +3120,15 @@ static const SvxMSDffHandle mso_sptSmileyHandle[] =
 };
 static const mso_CustomShape msoSmileyFace =
 {
-    (SvxMSDffVertPair*)mso_sptSmileyFaceVert, sizeof( mso_sptSmileyFaceVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSmileyFaceVert, SAL_N_ELEMENTS( mso_sptSmileyFaceVert ),
     (sal_uInt16*)mso_sptSmileyFaceSegm, sizeof( mso_sptSmileyFaceSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptSmileyFaceCalc, sizeof( mso_sptSmileyFaceCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSmileyFaceCalc, SAL_N_ELEMENTS( mso_sptSmileyFaceCalc ),
     (sal_Int32*)mso_sptSmileyFaceDefault,
-    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptSmileyHandle, sizeof( mso_sptSmileyHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    (SvxMSDffHandle*)mso_sptSmileyHandle, SAL_N_ELEMENTS( mso_sptSmileyHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
@@ -3152,15 +3152,15 @@ static const SvxMSDffHandle mso_sptDonutHandle[] =
 };
 static const mso_CustomShape msoDonut =
 {
-    (SvxMSDffVertPair*)mso_sptDonutVert, sizeof( mso_sptDonutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptDonutVert, SAL_N_ELEMENTS( mso_sptDonutVert ),
     (sal_uInt16*)mso_sptDonutSegm, sizeof( mso_sptDonutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDonutCalc, sizeof( mso_sptDonutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDonutCalc, SAL_N_ELEMENTS( mso_sptDonutCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptDonutHandle, sizeof( mso_sptDonutHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    (SvxMSDffHandle*)mso_sptDonutHandle, SAL_N_ELEMENTS( mso_sptDonutHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
@@ -3201,15 +3201,15 @@ static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 };
 static const mso_CustomShape msoNoSmoking =
 {
-    (SvxMSDffVertPair*)mso_sptNoSmokingVert, sizeof( mso_sptNoSmokingVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptNoSmokingVert, SAL_N_ELEMENTS( mso_sptNoSmokingVert ),
     (sal_uInt16*)mso_sptNoSmokingSegm, sizeof( mso_sptNoSmokingSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptNoSmokingCalc, sizeof( mso_sptNoSmokingCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptNoSmokingCalc, SAL_N_ELEMENTS( mso_sptNoSmokingCalc ),
     (sal_Int32*)mso_sptDefault2700,
-    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptNoSmokingHandle, sizeof( mso_sptNoSmokingHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    (SvxMSDffHandle*)mso_sptNoSmokingHandle, SAL_N_ELEMENTS( mso_sptNoSmokingHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptBlockArcVert[] =   // adj value 0 (degrees)
@@ -3244,15 +3244,15 @@ static const SvxMSDffHandle mso_sptBlockArcHandle[] =
 };
 static const mso_CustomShape msoBlockArc =
 {
-    (SvxMSDffVertPair*)mso_sptBlockArcVert, sizeof( mso_sptBlockArcVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBlockArcVert, SAL_N_ELEMENTS( mso_sptBlockArcVert ),
     (sal_uInt16*)mso_sptBlockArcSegm, sizeof( mso_sptBlockArcSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBlockArcCalc, sizeof( mso_sptBlockArcCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBlockArcCalc, SAL_N_ELEMENTS( mso_sptBlockArcCalc ),
     (sal_Int32*)mso_sptBlockArcDefault,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBlockArcHandle, sizeof( mso_sptBlockArcHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptBlockArcHandle, SAL_N_ELEMENTS( mso_sptBlockArcHandle )      // handles
 };
 
 // aware : control points are always part of the bounding box
@@ -3308,14 +3308,14 @@ static const SvxMSDffVertPair mso_sptHeartGluePoints[] =
 };
 static const mso_CustomShape msoHeart =
 {
-    (SvxMSDffVertPair*)mso_sptHeartVert, sizeof( mso_sptHeartVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptHeartVert, SAL_N_ELEMENTS( mso_sptHeartVert ),
     (sal_uInt16*)mso_sptHeartSegm, sizeof( mso_sptHeartSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptHeartTextRect, sizeof( mso_sptHeartTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptHeartTextRect, SAL_N_ELEMENTS( mso_sptHeartTextRect ),
     21615, 21602,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptHeartGluePoints, sizeof( mso_sptHeartGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptHeartGluePoints, SAL_N_ELEMENTS( mso_sptHeartGluePoints ),
     NULL, 0     // handles
 };
 
@@ -3336,14 +3336,14 @@ static const SvxMSDffVertPair mso_sptLightningBoldGluePoints[] =
 };
 static const mso_CustomShape msoLightningBold =
 {
-    (SvxMSDffVertPair*)mso_sptLightningBoldVert, sizeof( mso_sptLightningBoldVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLightningBoldVert, SAL_N_ELEMENTS( mso_sptLightningBoldVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptLightningBoldTextRect, sizeof( mso_sptLightningBoldTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLightningBoldTextRect, SAL_N_ELEMENTS( mso_sptLightningBoldTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptLightningBoldGluePoints, sizeof( mso_sptLightningBoldGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLightningBoldGluePoints, SAL_N_ELEMENTS( mso_sptLightningBoldGluePoints ),
     NULL, 0     // handles
 };
 
@@ -3440,15 +3440,15 @@ static const SvxMSDffHandle mso_sptSunHandle[] =
 };
 static const mso_CustomShape msoSun =
 {
-    (SvxMSDffVertPair*)mso_sptSunVert, sizeof( mso_sptSunVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSunVert, SAL_N_ELEMENTS( mso_sptSunVert ),
     (sal_uInt16*)mso_sptSunSegm, sizeof( mso_sptSunSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptSunCalc, sizeof( mso_sptSunCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSunCalc, SAL_N_ELEMENTS( mso_sptSunCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptSunTextRect, sizeof( mso_sptSunTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSunTextRect, SAL_N_ELEMENTS( mso_sptSunTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptSunHandle, sizeof( mso_sptSunHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptSunHandle, SAL_N_ELEMENTS( mso_sptSunHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
@@ -3492,15 +3492,15 @@ static const SvxMSDffHandle mso_sptMoonHandle[] =
 };
 static const mso_CustomShape msoMoon =
 {
-    (SvxMSDffVertPair*)mso_sptMoonVert, sizeof( mso_sptMoonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptMoonVert, SAL_N_ELEMENTS( mso_sptMoonVert ),
     (sal_uInt16*)mso_sptMoonSegm, sizeof( mso_sptMoonSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptMoonCalc, sizeof( mso_sptMoonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptMoonCalc, SAL_N_ELEMENTS( mso_sptMoonCalc ),
     (sal_Int32*)mso_sptDefault10800,
-    (SvxMSDffTextRectangles*)mso_sptMoonTextRect, sizeof( mso_sptMoonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptMoonTextRect, SAL_N_ELEMENTS( mso_sptMoonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptMoonGluePoints, sizeof( mso_sptMoonGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptMoonHandle, sizeof( mso_sptMoonHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptMoonGluePoints, SAL_N_ELEMENTS( mso_sptMoonGluePoints ),
+    (SvxMSDffHandle*)mso_sptMoonHandle, SAL_N_ELEMENTS( mso_sptMoonHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10800
@@ -3545,15 +3545,15 @@ static const SvxMSDffHandle mso_sptBracketPairHandle[] =
 };
 static const mso_CustomShape msoBracketPair =
 {
-    (SvxMSDffVertPair*)mso_sptBracketPairVert, sizeof( mso_sptBracketPairVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBracketPairVert, SAL_N_ELEMENTS( mso_sptBracketPairVert ),
     (sal_uInt16*)mso_sptBracketPairSegm, sizeof( mso_sptBracketPairSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, sizeof( mso_sptBracketPairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, SAL_N_ELEMENTS( mso_sptBracketPairCalc ),
     (sal_Int32*)mso_sptDefault3700,
-    (SvxMSDffTextRectangles*)mso_sptBracketPairTextRect, sizeof( mso_sptBracketPairTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBracketPairTextRect, SAL_N_ELEMENTS( mso_sptBracketPairTextRect ),
     21600, 21600,
     10800, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptBracketPairHandle, sizeof( mso_sptBracketPairHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptBracketPairHandle, SAL_N_ELEMENTS( mso_sptBracketPairHandle )        // handles
 };
 
 static const sal_uInt16 mso_sptPlaqueSegm[] =
@@ -3571,15 +3571,15 @@ static const SvxMSDffHandle mso_sptPlaqueHandle[] =
 };
 static const mso_CustomShape msoPlaque =
 {
-    (SvxMSDffVertPair*)mso_sptBracketPairVert, sizeof( mso_sptBracketPairVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBracketPairVert, SAL_N_ELEMENTS( mso_sptBracketPairVert ),
     (sal_uInt16*)mso_sptPlaqueSegm, sizeof( mso_sptPlaqueSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, sizeof( mso_sptBracketPairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, SAL_N_ELEMENTS( mso_sptBracketPairCalc ),
     (sal_Int32*)mso_sptDefault3600,
-    (SvxMSDffTextRectangles*)mso_sptPlaqueTextRect, sizeof( mso_sptPlaqueTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptPlaqueTextRect, SAL_N_ELEMENTS( mso_sptPlaqueTextRect ),
     21600, 21600,
     10800, 10800,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptPlaqueHandle, sizeof( mso_sptPlaqueHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptPlaqueHandle, SAL_N_ELEMENTS( mso_sptPlaqueHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
@@ -3623,15 +3623,15 @@ static const SvxMSDffHandle mso_sptBracePairHandle[] =
 };
 static const mso_CustomShape msoBracePair =
 {
-    (SvxMSDffVertPair*)mso_sptBracePairVert, sizeof( mso_sptBracePairVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBracePairVert, SAL_N_ELEMENTS( mso_sptBracePairVert ),
     (sal_uInt16*)mso_sptBracePairSegm, sizeof( mso_sptBracePairSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBracePairCalc, sizeof( mso_sptBracePairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBracePairCalc, SAL_N_ELEMENTS( mso_sptBracePairCalc ),
     (sal_Int32*)mso_sptDefault1800,
-    (SvxMSDffTextRectangles*)mso_sptBracePairTextRect, sizeof( mso_sptBracePairTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBracePairTextRect, SAL_N_ELEMENTS( mso_sptBracePairTextRect ),
     21600, 21600,
     10800, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptBracePairHandle, sizeof( mso_sptBracePairHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    (SvxMSDffHandle*)mso_sptBracePairHandle, SAL_N_ELEMENTS( mso_sptBracePairHandle )        // handles
 };
 
 static const SvxMSDffCalculationData mso_sptBracketCalc[] =
@@ -3666,15 +3666,15 @@ static const SvxMSDffHandle mso_sptLeftBracketHandle[] =
 };
 static const mso_CustomShape msoLeftBracket =
 {
-    (SvxMSDffVertPair*)mso_sptLeftBracketVert, sizeof( mso_sptLeftBracketVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftBracketVert, SAL_N_ELEMENTS( mso_sptLeftBracketVert ),
     (sal_uInt16*)mso_sptBracketSegm, sizeof( mso_sptBracketSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBracketCalc, sizeof( mso_sptBracketCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBracketCalc, SAL_N_ELEMENTS( mso_sptBracketCalc ),
     (sal_Int32*)mso_sptDefault1800,
-    (SvxMSDffTextRectangles*)mso_sptLeftBracketTextRect, sizeof( mso_sptLeftBracketTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftBracketTextRect, SAL_N_ELEMENTS( mso_sptLeftBracketTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, sizeof( mso_sptLeftBracketGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptLeftBracketHandle, sizeof( mso_sptLeftBracketHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
+    (SvxMSDffHandle*)mso_sptLeftBracketHandle, SAL_N_ELEMENTS( mso_sptLeftBracketHandle )        // handles
 };
 static const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
 {
@@ -3696,15 +3696,15 @@ static const SvxMSDffHandle mso_sptRightBracketHandle[] =
 };
 static const mso_CustomShape msoRightBracket =
 {
-    (SvxMSDffVertPair*)mso_sptRightBracketVert, sizeof( mso_sptRightBracketVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRightBracketVert, SAL_N_ELEMENTS( mso_sptRightBracketVert ),
     (sal_uInt16*)mso_sptBracketSegm, sizeof( mso_sptBracketSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBracketCalc, sizeof( mso_sptBracketCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBracketCalc, SAL_N_ELEMENTS( mso_sptBracketCalc ),
     (sal_Int32*)mso_sptDefault1800,
-    (SvxMSDffTextRectangles*)mso_sptRightBracketTextRect, sizeof( mso_sptRightBracketTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRightBracketTextRect, SAL_N_ELEMENTS( mso_sptRightBracketTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, sizeof( mso_sptRightBracketGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptRightBracketHandle, sizeof( mso_sptRightBracketHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
+    (SvxMSDffHandle*)mso_sptRightBracketHandle, SAL_N_ELEMENTS( mso_sptRightBracketHandle )      // handles
 };
 
 static const SvxMSDffCalculationData mso_sptBraceCalc[] =
@@ -3752,15 +3752,15 @@ static const SvxMSDffHandle mso_sptLeftBraceHandle[] =
 };
 static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
 {                                               // adj value1 0 -> 21600
-    (SvxMSDffVertPair*)mso_sptLeftBraceVert, sizeof( mso_sptLeftBraceVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptLeftBraceVert, SAL_N_ELEMENTS( mso_sptLeftBraceVert ),
     (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBraceCalc, sizeof( mso_sptBraceCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBraceCalc, SAL_N_ELEMENTS( mso_sptBraceCalc ),
     (sal_Int32*)mso_sptBraceDefault,
-    (SvxMSDffTextRectangles*)mso_sptLeftBraceTextRect, sizeof( mso_sptLeftBraceTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptLeftBraceTextRect, SAL_N_ELEMENTS( mso_sptLeftBraceTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, sizeof( mso_sptLeftBracketGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptLeftBraceHandle, sizeof( mso_sptLeftBraceHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
+    (SvxMSDffHandle*)mso_sptLeftBraceHandle, SAL_N_ELEMENTS( mso_sptLeftBraceHandle )        // handles
 };
 static const SvxMSDffVertPair mso_sptRightBraceVert[] =
 {
@@ -3785,15 +3785,15 @@ static const SvxMSDffHandle mso_sptRightBraceHandle[] =
 };
 static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
 {                                               // adj value1 0 -> 21600
-    (SvxMSDffVertPair*)mso_sptRightBraceVert, sizeof( mso_sptRightBraceVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRightBraceVert, SAL_N_ELEMENTS( mso_sptRightBraceVert ),
     (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBraceCalc, sizeof( mso_sptBraceCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBraceCalc, SAL_N_ELEMENTS( mso_sptBraceCalc ),
     (sal_Int32*)mso_sptBraceDefault,
-    (SvxMSDffTextRectangles*)mso_sptRightBraceTextRect, sizeof( mso_sptRightBraceTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRightBraceTextRect, SAL_N_ELEMENTS( mso_sptRightBraceTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, sizeof( mso_sptRightBracketGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptRightBraceHandle, sizeof( mso_sptRightBraceHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
+    (SvxMSDffHandle*)mso_sptRightBraceHandle, SAL_N_ELEMENTS( mso_sptRightBraceHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
@@ -3815,14 +3815,14 @@ static const SvxMSDffVertPair mso_sptIrregularSeal1GluePoints[] =
 };
 static const mso_CustomShape msoIrregularSeal1 =
 {
-    (SvxMSDffVertPair*)mso_sptIrregularSeal1Vert, sizeof( mso_sptIrregularSeal1Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptIrregularSeal1Vert, SAL_N_ELEMENTS( mso_sptIrregularSeal1Vert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptIrregularSeal1TextRect, sizeof( mso_sptIrregularSeal1TextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptIrregularSeal1TextRect, SAL_N_ELEMENTS( mso_sptIrregularSeal1TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptIrregularSeal1GluePoints, sizeof( mso_sptIrregularSeal1GluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptIrregularSeal1GluePoints, SAL_N_ELEMENTS( mso_sptIrregularSeal1GluePoints ),
     NULL, 0     // handles
 };
 
@@ -3847,14 +3847,14 @@ static const SvxMSDffVertPair mso_sptIrregularSeal2GluePoints[] =
 };
 static const mso_CustomShape msoIrregularSeal2 =
 {
-    (SvxMSDffVertPair*)mso_sptIrregularSeal2Vert, sizeof( mso_sptIrregularSeal2Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptIrregularSeal2Vert, SAL_N_ELEMENTS( mso_sptIrregularSeal2Vert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptIrregularSeal2TextRect, sizeof( mso_sptIrregularSeal2TextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptIrregularSeal2TextRect, SAL_N_ELEMENTS( mso_sptIrregularSeal2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptIrregularSeal2GluePoints, sizeof( mso_sptIrregularSeal2GluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptIrregularSeal2GluePoints, SAL_N_ELEMENTS( mso_sptIrregularSeal2GluePoints ),
     NULL, 0     // handles
 };
 
@@ -3883,15 +3883,15 @@ static const SvxMSDffHandle mso_sptSealHandle[] =
 };
 static const mso_CustomShape msoSeal4 =
 {
-    (SvxMSDffVertPair*)mso_sptSeal4Vert, sizeof( mso_sptSeal4Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSeal4Vert, SAL_N_ELEMENTS( mso_sptSeal4Vert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptSeal4Calc, sizeof( mso_sptSeal4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSeal4Calc, SAL_N_ELEMENTS( mso_sptSeal4Calc ),
     (sal_Int32*)mso_sptDefault8100,
-    (SvxMSDffTextRectangles*)mso_sptSeal4TextRect, sizeof( mso_sptSeal4TextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSeal4TextRect, SAL_N_ELEMENTS( mso_sptSeal4TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, sizeof( mso_sptSealHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptStarVert[] =
@@ -3906,11 +3906,11 @@ static const SvxMSDffTextRectangles mso_sptStarTextRect[] =
 };
 static const mso_CustomShape msoStar =
 {
-    (SvxMSDffVertPair*)mso_sptStarVert, sizeof( mso_sptStarVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStarVert, SAL_N_ELEMENTS( mso_sptStarVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptStarTextRect, sizeof( mso_sptStarTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptStarTextRect, SAL_N_ELEMENTS( mso_sptStarTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -4035,15 +4035,15 @@ static const SvxMSDffTextRectangles mso_sptSealTextRect[] =
 };
 static const mso_CustomShape msoSeal8 =
 {
-    (SvxMSDffVertPair*)mso_sptSeal8Vert, sizeof( mso_sptSeal8Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSeal8Vert, SAL_N_ELEMENTS( mso_sptSeal8Vert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptSeal24Calc, sizeof( mso_sptSeal24Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSeal24Calc, SAL_N_ELEMENTS( mso_sptSeal24Calc ),
     (sal_Int32*)mso_sptDefault2500,
-    (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSealTextRect, SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, sizeof( mso_sptSealHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 {
@@ -4131,15 +4131,15 @@ static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
 };
 static const mso_CustomShape msoSeal16 =
 {
-    (SvxMSDffVertPair*)mso_sptSeal16Vert, sizeof( mso_sptSeal16Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSeal16Vert, SAL_N_ELEMENTS( mso_sptSeal16Vert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptSeal16Calc, sizeof( mso_sptSeal16Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSeal16Calc, SAL_N_ELEMENTS( mso_sptSeal16Calc ),
     (sal_Int32*)mso_sptDefault2500,
-    (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSealTextRect, SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, sizeof( mso_sptSealHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 static const SvxMSDffVertPair mso_sptSeal24Vert[] =
 {
@@ -4159,15 +4159,15 @@ static const SvxMSDffVertPair mso_sptSeal24Vert[] =
 };
 static const mso_CustomShape msoSeal24 =
 {
-    (SvxMSDffVertPair*)mso_sptSeal24Vert, sizeof( mso_sptSeal24Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSeal24Vert, SAL_N_ELEMENTS( mso_sptSeal24Vert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptSeal24Calc, sizeof( mso_sptSeal24Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSeal24Calc, SAL_N_ELEMENTS( mso_sptSeal24Calc ),
     (sal_Int32*)mso_sptDefault2500,
-    (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSealTextRect, SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, sizeof( mso_sptSealHandle ) / sizeof( SvxMSDffHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
@@ -4327,15 +4327,15 @@ static const SvxMSDffVertPair mso_sptSeal32Vert[] =
 };
 static const mso_CustomShape msoSeal32 =
 {
-    (SvxMSDffVertPair*)mso_sptSeal32Vert, sizeof( mso_sptSeal32Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptSeal32Vert, SAL_N_ELEMENTS( mso_sptSeal32Vert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptSeal32Calc, sizeof( mso_sptSeal32Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptSeal32Calc, SAL_N_ELEMENTS( mso_sptSeal32Calc ),
     (sal_Int32*)mso_sptDefault2500,
-    (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptSealTextRect, SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, sizeof( mso_sptSealHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )
 };
 
 static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700  - 8100     def 5400
@@ -4424,15 +4424,15 @@ static const SvxMSDffHandle mso_sptRibbon2Handle[] =
 };
 static const mso_CustomShape msoRibbon2 =
 {
-    (SvxMSDffVertPair*)mso_sptRibbon2Vert, sizeof( mso_sptRibbon2Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRibbon2Vert, SAL_N_ELEMENTS( mso_sptRibbon2Vert ),
     (sal_uInt16*)mso_sptRibbon2Segm, sizeof( mso_sptRibbon2Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptRibbon2Calc, sizeof( mso_sptRibbon2Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptRibbon2Calc, SAL_N_ELEMENTS( mso_sptRibbon2Calc ),
     (sal_Int32*)mso_sptRibbon2Default,
-    (SvxMSDffTextRectangles*)mso_sptRibbon2TextRect, sizeof( mso_sptRibbon2TextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRibbon2TextRect, SAL_N_ELEMENTS( mso_sptRibbon2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptRibbon2Handle, sizeof( mso_sptRibbon2Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptRibbon2Handle, SAL_N_ELEMENTS( mso_sptRibbon2Handle )
 };
 
 static const SvxMSDffVertPair mso_sptRibbonVert[] =
@@ -4505,15 +4505,15 @@ static const SvxMSDffHandle mso_sptRibbonHandle[] =
 };
 static const mso_CustomShape msoRibbon =
 {
-    (SvxMSDffVertPair*)mso_sptRibbonVert, sizeof( mso_sptRibbonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptRibbonVert, SAL_N_ELEMENTS( mso_sptRibbonVert ),
     (sal_uInt16*)mso_sptRibbonSegm, sizeof( mso_sptRibbonSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptRibbonCalc, sizeof( mso_sptRibbonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptRibbonCalc, SAL_N_ELEMENTS( mso_sptRibbonCalc ),
     (sal_Int32*)mso_sptRibbonDefault,
-    (SvxMSDffTextRectangles*)mso_sptRibbonTextRect, sizeof( mso_sptRibbonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptRibbonTextRect, SAL_N_ELEMENTS( mso_sptRibbonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptRibbonGluePoints, sizeof( mso_sptRibbonGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptRibbonHandle, sizeof( mso_sptRibbonHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptRibbonGluePoints, SAL_N_ELEMENTS( mso_sptRibbonGluePoints ),
+    (SvxMSDffHandle*)mso_sptRibbonHandle, SAL_N_ELEMENTS( mso_sptRibbonHandle )
 };
 
 static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
@@ -4571,15 +4571,15 @@ static const SvxMSDffHandle mso_sptVerticalScrollHandle[] =
 };
 static const mso_CustomShape msoVerticalScroll =
 {
-    (SvxMSDffVertPair*)mso_sptVerticalScrollVert, sizeof( mso_sptVerticalScrollVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptVerticalScrollVert, SAL_N_ELEMENTS( mso_sptVerticalScrollVert ),
     (sal_uInt16*)mso_sptVerticalScrollSegm, sizeof( mso_sptVerticalScrollSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptScrollCalc, sizeof( mso_sptScrollCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptScrollCalc, SAL_N_ELEMENTS( mso_sptScrollCalc ),
     (sal_Int32*)mso_sptDefault2700,
-    (SvxMSDffTextRectangles*)mso_sptScrollTextRect, sizeof( mso_sptScrollTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptScrollTextRect, SAL_N_ELEMENTS( mso_sptScrollTextRect ),
     21600, 21600,
     11000, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptVerticalScrollHandle, sizeof( mso_sptVerticalScrollHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptVerticalScrollHandle, SAL_N_ELEMENTS( mso_sptVerticalScrollHandle )
 };
 static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
 {
@@ -4617,15 +4617,15 @@ static const SvxMSDffHandle mso_sptHorizontalScrollHandle[] =
 };
 static const mso_CustomShape msoHorizontalScroll =
 {
-    (SvxMSDffVertPair*)mso_sptHorizontalScrollVert, sizeof( mso_sptHorizontalScrollVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptHorizontalScrollVert, SAL_N_ELEMENTS( mso_sptHorizontalScrollVert ),
     (sal_uInt16*)mso_sptHorizontalScrollSegm, sizeof( mso_sptHorizontalScrollSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptScrollCalc, sizeof( mso_sptScrollCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptScrollCalc, SAL_N_ELEMENTS( mso_sptScrollCalc ),
     (sal_Int32*)mso_sptDefault2700,
-    (SvxMSDffTextRectangles*)mso_sptScrollTextRect, sizeof( mso_sptScrollTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptScrollTextRect, SAL_N_ELEMENTS( mso_sptScrollTextRect ),
     21600, 21600,
     10800, 11000,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptHorizontalScrollHandle, sizeof( mso_sptHorizontalScrollHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptHorizontalScrollHandle, SAL_N_ELEMENTS( mso_sptHorizontalScrollHandle )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
@@ -4634,14 +4634,14 @@ static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
 };
 static const mso_CustomShape msoFlowChartProcess =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartProcessVert, sizeof( mso_sptFlowChartProcessVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartProcessVert, SAL_N_ELEMENTS( mso_sptFlowChartProcessVert ),
     NULL, 0,
     NULL, 0,
     NULL,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4671,14 +4671,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartAlternateProcessTextRect[] =
 };
 static const mso_CustomShape msoFlowChartAlternateProcess =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartAlternateProcessVert, sizeof( mso_sptFlowChartAlternateProcessVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartAlternateProcessVert, SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessVert ),
     (sal_uInt16*)mso_sptFlowChartAlternateProcessSegm, sizeof( mso_sptFlowChartAlternateProcessSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptFlowChartAlternateProcessCalc, sizeof( mso_sptFlowChartAlternateProcessCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptFlowChartAlternateProcessCalc, SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessCalc ),
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartAlternateProcessTextRect, sizeof( mso_sptFlowChartAlternateProcessTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartAlternateProcessTextRect, SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4692,14 +4692,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartDecisionTextRect[] =
 };
 static const mso_CustomShape msoFlowChartDecision =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartDecisionVert, sizeof( mso_sptFlowChartDecisionVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartDecisionVert, SAL_N_ELEMENTS( mso_sptFlowChartDecisionVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartDecisionTextRect, sizeof( mso_sptFlowChartDecisionTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartDecisionTextRect, SAL_N_ELEMENTS( mso_sptFlowChartDecisionTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4717,14 +4717,14 @@ static const SvxMSDffVertPair mso_sptFlowChartInputOutputGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartInputOutput =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartInputOutputVert, sizeof( mso_sptFlowChartInputOutputVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartInputOutputVert, SAL_N_ELEMENTS( mso_sptFlowChartInputOutputVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartInputOutputTextRect, sizeof( mso_sptFlowChartInputOutputTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartInputOutputTextRect, SAL_N_ELEMENTS( mso_sptFlowChartInputOutputTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartInputOutputGluePoints, sizeof( mso_sptFlowChartInputOutputGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartInputOutputGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartInputOutputGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4748,11 +4748,11 @@ static const SvxMSDffTextRectangles mso_sptFlowChartPredefinedProcessTextRect[] 
 };
 static const mso_CustomShape msoFlowChartPredefinedProcess =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartPredefinedProcessVert, sizeof( mso_sptFlowChartPredefinedProcessVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartPredefinedProcessVert, SAL_N_ELEMENTS( mso_sptFlowChartPredefinedProcessVert ),
     (sal_uInt16*)mso_sptFlowChartPredefinedProcessSegm, sizeof( mso_sptFlowChartPredefinedProcessSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartPredefinedProcessTextRect, sizeof( mso_sptFlowChartPredefinedProcessTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartPredefinedProcessTextRect, SAL_N_ELEMENTS( mso_sptFlowChartPredefinedProcessTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -4779,11 +4779,11 @@ static const SvxMSDffTextRectangles mso_sptFlowChartInternalStorageTextRect[] =
 };
 static const mso_CustomShape msoFlowChartInternalStorage =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartInternalStorageVert, sizeof( mso_sptFlowChartInternalStorageVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartInternalStorageVert, SAL_N_ELEMENTS( mso_sptFlowChartInternalStorageVert ),
     (sal_uInt16*)mso_sptFlowChartInternalStorageSegm, sizeof( mso_sptFlowChartInternalStorageSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartInternalStorageTextRect, sizeof( mso_sptFlowChartInternalStorageTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartInternalStorageTextRect, SAL_N_ELEMENTS( mso_sptFlowChartInternalStorageTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -4810,14 +4810,14 @@ static const SvxMSDffVertPair mso_sptFlowChartDocumentGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartDocument =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartDocumentVert, sizeof( mso_sptFlowChartDocumentVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartDocumentVert, SAL_N_ELEMENTS( mso_sptFlowChartDocumentVert ),
     (sal_uInt16*)mso_sptFlowChartDocumentSegm, sizeof( mso_sptFlowChartDocumentSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartDocumentTextRect, sizeof( mso_sptFlowChartDocumentTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartDocumentTextRect, SAL_N_ELEMENTS( mso_sptFlowChartDocumentTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartDocumentGluePoints, sizeof( mso_sptFlowChartDocumentGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartDocumentGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartDocumentGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4849,14 +4849,14 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartMultidocument =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentVert, sizeof( mso_sptFlowChartMultidocumentVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentVert, SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentVert ),
     (sal_uInt16*)mso_sptFlowChartMultidocumentSegm, sizeof( mso_sptFlowChartMultidocumentSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartMultidocumentTextRect, sizeof( mso_sptFlowChartMultidocumentTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartMultidocumentTextRect, SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentGluePoints, sizeof( mso_sptFlowChartMultidocumentGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4875,14 +4875,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartTerminatorTextRect[] =
 };
 static const mso_CustomShape msoFlowChartTerminator =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartTerminatorVert, sizeof( mso_sptFlowChartTerminatorVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartTerminatorVert, SAL_N_ELEMENTS( mso_sptFlowChartTerminatorVert ),
     (sal_uInt16*)mso_sptFlowChartTerminatorSegm, sizeof( mso_sptFlowChartTerminatorSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartTerminatorTextRect, sizeof( mso_sptFlowChartTerminatorTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartTerminatorTextRect, SAL_N_ELEMENTS( mso_sptFlowChartTerminatorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4897,14 +4897,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartPreparationTextRect[] =
 };
 static const mso_CustomShape msoFlowChartPreparation =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartPreparationVert, sizeof( mso_sptFlowChartPreparationVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartPreparationVert, SAL_N_ELEMENTS( mso_sptFlowChartPreparationVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartPreparationTextRect, sizeof( mso_sptFlowChartPreparationTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartPreparationTextRect, SAL_N_ELEMENTS( mso_sptFlowChartPreparationTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4922,14 +4922,14 @@ static const SvxMSDffVertPair mso_sptFlowChartManualInputGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartManualInput =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartManualInputVert, sizeof( mso_sptFlowChartManualInputVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartManualInputVert, SAL_N_ELEMENTS( mso_sptFlowChartManualInputVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartManualInputTextRect, sizeof( mso_sptFlowChartManualInputTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartManualInputTextRect, SAL_N_ELEMENTS( mso_sptFlowChartManualInputTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartManualInputGluePoints, sizeof( mso_sptFlowChartManualInputGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartManualInputGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartManualInputGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4947,14 +4947,14 @@ static const SvxMSDffVertPair mso_sptFlowChartManualOperationGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartManualOperation =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartManualOperationVert, sizeof( mso_sptFlowChartManualOperationVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartManualOperationVert, SAL_N_ELEMENTS( mso_sptFlowChartManualOperationVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartManualOperationTextRect, sizeof( mso_sptFlowChartManualOperationTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartManualOperationTextRect, SAL_N_ELEMENTS( mso_sptFlowChartManualOperationTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartManualOperationGluePoints, sizeof( mso_sptFlowChartManualOperationGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartManualOperationGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartManualOperationGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4972,14 +4972,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartConnectorTextRect[] =
 };
 static const mso_CustomShape msoFlowChartConnector =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartConnectorVert, sizeof( mso_sptFlowChartConnectorVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartConnectorVert, SAL_N_ELEMENTS( mso_sptFlowChartConnectorVert ),
     (sal_uInt16*)mso_sptFlowChartConnectorSegm, sizeof( mso_sptFlowChartConnectorSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartConnectorTextRect, sizeof( mso_sptFlowChartConnectorTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartConnectorTextRect, SAL_N_ELEMENTS( mso_sptFlowChartConnectorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
     NULL, 0     // handles
 };
 
@@ -4994,14 +4994,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartOffpageConnectorTextRect[] =
 };
 static const mso_CustomShape msoFlowChartOffpageConnector =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartOffpageConnectorVert, sizeof( mso_sptFlowChartOffpageConnectorVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartOffpageConnectorVert, SAL_N_ELEMENTS( mso_sptFlowChartOffpageConnectorVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartOffpageConnectorTextRect, sizeof( mso_sptFlowChartOffpageConnectorTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartOffpageConnectorTextRect, SAL_N_ELEMENTS( mso_sptFlowChartOffpageConnectorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5016,14 +5016,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartPunchedCardTextRect[] =
 };
 static const mso_CustomShape msoFlowChartPunchedCard =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartPunchedCardVert, sizeof( mso_sptFlowChartPunchedCardVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartPunchedCardVert, SAL_N_ELEMENTS( mso_sptFlowChartPunchedCardVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedCardTextRect, sizeof( mso_sptFlowChartPunchedCardTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedCardTextRect, SAL_N_ELEMENTS( mso_sptFlowChartPunchedCardTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5054,14 +5054,14 @@ static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartPunchedTape =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeVert, sizeof( mso_sptFlowChartPunchedTapeVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeVert, SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeVert ),
     (sal_uInt16*)mso_sptFlowChartPunchedTapeSegm, sizeof( mso_sptFlowChartPunchedTapeSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedTapeTextRect, sizeof( mso_sptFlowChartPunchedTapeTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedTapeTextRect, SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeGluePoints, sizeof( mso_sptFlowChartPunchedTapeGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5087,14 +5087,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartSummingJunctionTextRect[] =
 };
 static const mso_CustomShape msoFlowChartSummingJunction =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartSummingJunctionVert, sizeof( mso_sptFlowChartSummingJunctionVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartSummingJunctionVert, SAL_N_ELEMENTS( mso_sptFlowChartSummingJunctionVert ),
     (sal_uInt16*)mso_sptFlowChartSummingJunctionSegm, sizeof( mso_sptFlowChartSummingJunctionSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartSummingJunctionTextRect, sizeof( mso_sptFlowChartSummingJunctionTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartSummingJunctionTextRect, SAL_N_ELEMENTS( mso_sptFlowChartSummingJunctionTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5118,14 +5118,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartOrTextRect[] =
 };
 static const mso_CustomShape msoFlowChartOr =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartOrVert, sizeof( mso_sptFlowChartOrVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartOrVert, SAL_N_ELEMENTS( mso_sptFlowChartOrVert ),
     (sal_uInt16*)mso_sptFlowChartOrSegm, sizeof( mso_sptFlowChartOrSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartOrTextRect, sizeof( mso_sptFlowChartOrTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartOrTextRect, SAL_N_ELEMENTS( mso_sptFlowChartOrTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5143,14 +5143,14 @@ static const SvxMSDffVertPair mso_sptFlowChartCollateGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartCollate =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartCollateVert, sizeof( mso_sptFlowChartCollateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartCollateVert, SAL_N_ELEMENTS( mso_sptFlowChartCollateVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartCollateTextRect, sizeof( mso_sptFlowChartCollateTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartCollateTextRect, SAL_N_ELEMENTS( mso_sptFlowChartCollateTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartCollateGluePoints, sizeof( mso_sptFlowChartCollateGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartCollateGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartCollateGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5171,11 +5171,11 @@ static const SvxMSDffTextRectangles mso_sptFlowChartSortTextRect[] =
 };
 static const mso_CustomShape msoFlowChartSort =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartSortVert, sizeof( mso_sptFlowChartSortVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartSortVert, SAL_N_ELEMENTS( mso_sptFlowChartSortVert ),
     (sal_uInt16*)mso_sptFlowChartSortSegm, sizeof( mso_sptFlowChartSortSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartSortTextRect, sizeof( mso_sptFlowChartSortTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartSortTextRect, SAL_N_ELEMENTS( mso_sptFlowChartSortTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -5196,14 +5196,14 @@ static const SvxMSDffVertPair mso_sptFlowChartExtractGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartExtract =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartExtractVert, sizeof( mso_sptFlowChartExtractVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartExtractVert, SAL_N_ELEMENTS( mso_sptFlowChartExtractVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartExtractTextRect, sizeof( mso_sptFlowChartExtractTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartExtractTextRect, SAL_N_ELEMENTS( mso_sptFlowChartExtractTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, sizeof( mso_sptFlowChartExtractGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5217,14 +5217,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartMergeTextRect[] =
 };
 static const mso_CustomShape msoFlowChartMerge =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartMergeVert, sizeof( mso_sptFlowChartMergeVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMergeVert, SAL_N_ELEMENTS( mso_sptFlowChartMergeVert ),
     NULL, 0,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartMergeTextRect, sizeof( mso_sptFlowChartMergeTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartMergeTextRect, SAL_N_ELEMENTS( mso_sptFlowChartMergeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, sizeof( mso_sptFlowChartExtractGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5247,14 +5247,14 @@ static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartOnlineStorage =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageVert, sizeof( mso_sptFlowChartOnlineStorageVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageVert, SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageVert ),
     (sal_uInt16*)mso_sptFlowChartOnlineStorageSegm, sizeof( mso_sptFlowChartOnlineStorageSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartOnlineStorageTextRect, sizeof( mso_sptFlowChartOnlineStorageTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartOnlineStorageTextRect, SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageGluePoints, sizeof( mso_sptFlowChartOnlineStorageGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5273,14 +5273,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartDelayTextRect[] =
 };
 static const mso_CustomShape msoFlowChartDelay =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartDelayVert, sizeof( mso_sptFlowChartDelayVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartDelayVert, SAL_N_ELEMENTS( mso_sptFlowChartDelayVert ),
     (sal_uInt16*)mso_sptFlowChartDelaySegm, sizeof( mso_sptFlowChartDelaySegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartDelayTextRect, sizeof( mso_sptFlowChartDelayTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartDelayTextRect, SAL_N_ELEMENTS( mso_sptFlowChartDelayTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5302,14 +5302,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartMagneticTapeTextRect[] =
 };
 static const mso_CustomShape msoFlowChartMagneticTape =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartMagneticTapeVert, sizeof( mso_sptFlowChartMagneticTapeVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticTapeVert, SAL_N_ELEMENTS( mso_sptFlowChartMagneticTapeVert ),
     (sal_uInt16*)mso_sptFlowChartMagneticTapeSegm, sizeof( mso_sptFlowChartMagneticTapeSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticTapeTextRect, sizeof( mso_sptFlowChartMagneticTapeTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticTapeTextRect, SAL_N_ELEMENTS( mso_sptFlowChartMagneticTapeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5335,14 +5335,14 @@ static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartMagneticDisk =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskVert, sizeof( mso_sptFlowChartMagneticDiskVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskVert, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskVert ),
     (sal_uInt16*)mso_sptFlowChartMagneticDiskSegm, sizeof( mso_sptFlowChartMagneticDiskSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDiskTextRect, sizeof( mso_sptFlowChartMagneticDiskTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDiskTextRect, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskGluePoints, sizeof( mso_sptFlowChartMagneticDiskGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5368,14 +5368,14 @@ static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumGluePoints[] =
 };
 static const mso_CustomShape msoFlowChartMagneticDrum =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumVert, sizeof( mso_sptFlowChartMagneticDrumVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumVert, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumVert ),
     (sal_uInt16*)mso_sptFlowChartMagneticDrumSegm, sizeof( mso_sptFlowChartMagneticDrumSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDrumTextRect, sizeof( mso_sptFlowChartMagneticDrumTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDrumTextRect, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumGluePoints, sizeof( mso_sptFlowChartMagneticDrumGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5394,14 +5394,14 @@ static const SvxMSDffTextRectangles mso_sptFlowChartDisplayTextRect[] =
 };
 static const mso_CustomShape msoFlowChartDisplay =
 {
-    (SvxMSDffVertPair*)mso_sptFlowChartDisplayVert, sizeof( mso_sptFlowChartDisplayVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFlowChartDisplayVert, SAL_N_ELEMENTS( mso_sptFlowChartDisplayVert ),
     (sal_uInt16*)mso_sptFlowChartDisplaySegm, sizeof( mso_sptFlowChartDisplaySegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFlowChartDisplayTextRect, sizeof( mso_sptFlowChartDisplayTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFlowChartDisplayTextRect, SAL_N_ELEMENTS( mso_sptFlowChartDisplayTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     NULL, 0     // handles
 };
 
@@ -5487,15 +5487,15 @@ static const SvxMSDffHandle mso_sptCalloutHandle[] =
 };
 static const mso_CustomShape msoWedgeRectCallout =
 {
-    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutVert, sizeof( mso_sptWedgeRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutVert, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutVert ),
     NULL, 0,
-    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutCalc ),
     (sal_Int32*)mso_sptWedgeRectCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptWedgeRectCalloutTextRect, sizeof( mso_sptWedgeRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptWedgeRectCalloutTextRect, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutGluePoints, sizeof( mso_sptWedgeRectCalloutGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCalloutHandle, sizeof( mso_sptCalloutHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutGluePoints, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutGluePoints ),
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
 {
@@ -5523,15 +5523,15 @@ static const SvxMSDffTextRectangles mso_sptWedgeRRectCalloutTextRect[] =
 };
 static const mso_CustomShape msoWedgeRRectCallout =
 {
-    (SvxMSDffVertPair*)mso_sptWedgeRRectCalloutVert, sizeof( mso_sptWedgeRRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptWedgeRRectCalloutVert, SAL_N_ELEMENTS( mso_sptWedgeRRectCalloutVert ),
     (sal_uInt16*)mso_sptWedgeRRectCalloutSegm, sizeof( mso_sptWedgeRRectCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutCalc ),
     (sal_Int32*)mso_sptWedgeRectCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptWedgeRRectCalloutTextRect, sizeof( mso_sptWedgeRRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptWedgeRRectCalloutTextRect, SAL_N_ELEMENTS( mso_sptWedgeRRectCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle, sizeof( mso_sptCalloutHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 static const SvxMSDffVertPair mso_sptBalloonVert[] =
 {
@@ -5562,15 +5562,15 @@ static const SvxMSDffTextRectangles mso_sptBalloonTextRect[] =
 };
 static const mso_CustomShape msoBalloon =
 {
-    (SvxMSDffVertPair*)mso_sptBalloonVert, sizeof( mso_sptBalloonVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBalloonVert, SAL_N_ELEMENTS( mso_sptBalloonVert ),
     (sal_uInt16*)mso_sptBalloonSegm, sizeof( mso_sptBalloonSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutCalc ),
     (sal_Int32*)mso_sptWedgeRectCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptBalloonTextRect, sizeof( mso_sptBalloonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptBalloonTextRect, SAL_N_ELEMENTS( mso_sptBalloonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBalloonHandle, sizeof( mso_sptBalloonHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBalloonHandle, SAL_N_ELEMENTS( mso_sptBalloonHandle )        // handles
 };
 static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
 {
@@ -5621,15 +5621,15 @@ static const SvxMSDffTextRectangles mso_sptWedgeEllipseCalloutTextRect[] =
 };
 static const mso_CustomShape msoWedgeEllipseCallout =
 {
-    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutVert, sizeof( mso_sptWedgeEllipseCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutVert, SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutVert ),
     (sal_uInt16*)mso_sptWedgeEllipseCalloutSegm, sizeof( mso_sptWedgeEllipseCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWedgeEllipseCalloutCalc, sizeof( mso_sptWedgeEllipseCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWedgeEllipseCalloutCalc, SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutCalc ),
     (sal_Int32*)mso_sptWedgeEllipseCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptWedgeEllipseCalloutTextRect, sizeof( mso_sptWedgeEllipseCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptWedgeEllipseCalloutTextRect, SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutGluePoints, sizeof( mso_sptWedgeEllipseCalloutGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCalloutHandle, sizeof( mso_sptCalloutHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutGluePoints, SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutGluePoints ),
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
@@ -5726,15 +5726,15 @@ static const SvxMSDffTextRectangles mso_sptCloudCalloutTextRect[] =
 };
 static const mso_CustomShape msoCloudCallout =
 {
-    (SvxMSDffVertPair*)mso_sptCloudCalloutVert, sizeof( mso_sptCloudCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCloudCalloutVert, SAL_N_ELEMENTS( mso_sptCloudCalloutVert ),
     (sal_uInt16*)mso_sptCloudCalloutSegm, sizeof( mso_sptCloudCalloutSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCloudCalloutCalc, sizeof( mso_sptCloudCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCloudCalloutCalc, SAL_N_ELEMENTS( mso_sptCloudCalloutCalc ),
     (sal_Int32*)mso_sptCloudCalloutDefault,
-    (SvxMSDffTextRectangles*)mso_sptCloudCalloutTextRect, sizeof( mso_sptCloudCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptCloudCalloutTextRect, SAL_N_ELEMENTS( mso_sptCloudCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle, sizeof( mso_sptCalloutHandle ) / sizeof( SvxMSDffHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
 static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
@@ -5804,15 +5804,15 @@ static const SvxMSDffTextRectangles mso_sptWaveTextRect[] =
 };
 static const mso_CustomShape msoWave =
 {
-    (SvxMSDffVertPair*)mso_sptWaveVert, sizeof( mso_sptWaveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptWaveVert, SAL_N_ELEMENTS( mso_sptWaveVert ),
     (sal_uInt16*)mso_sptWaveSegm, sizeof( mso_sptWaveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWaveCalc, SAL_N_ELEMENTS( mso_sptWaveCalc ),
     (sal_Int32*)mso_sptWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptWaveTextRect, sizeof( mso_sptWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptWaveTextRect, SAL_N_ELEMENTS( mso_sptWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptWaveGluePoints, sizeof( mso_sptWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptWaveHandle, sizeof( mso_sptWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptWaveGluePoints, SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 2230
@@ -5886,15 +5886,15 @@ static const SvxMSDffTextRectangles mso_sptDoubleWaveTextRect[] =
 };
 static const mso_CustomShape msoDoubleWave =
 {
-    (SvxMSDffVertPair*)mso_sptDoubleWaveVert, sizeof( mso_sptDoubleWaveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptDoubleWaveVert, SAL_N_ELEMENTS( mso_sptDoubleWaveVert ),
     (sal_uInt16*)mso_sptDoubleWaveSegm, sizeof( mso_sptDoubleWaveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, sizeof( mso_sptDoubleWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, SAL_N_ELEMENTS( mso_sptDoubleWaveCalc ),
     (sal_Int32*)mso_sptDoubleWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, sizeof( mso_sptDoubleWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, sizeof( mso_sptDoubleWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, sizeof( mso_sptDoubleWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
 // for each shapetype a bit of 1 is indicating that the shape is NOT filled by default
@@ -5984,11 +5984,11 @@ static const SvxMSDffTextRectangles mso_sptFontWorkTextRect[] =
 };
 static const mso_CustomShape msoFontWork =
 {
-    (SvxMSDffVertPair*)mso_sptFontWorkVert, sizeof( mso_sptFontWorkVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptFontWorkVert, SAL_N_ELEMENTS( mso_sptFontWorkVert ),
     (sal_uInt16*)mso_sptFontWorkSegm, sizeof( mso_sptFontWorkSegm ) >> 1,
     NULL, 0,
     NULL,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
@@ -6022,15 +6022,15 @@ static const SvxMSDffHandle mso_sptTextPlainTextHandle[] =
 };
 static const mso_CustomShape msoTextPlainText =
 {
-    (SvxMSDffVertPair*)mso_sptTextPlainTextVert, sizeof( mso_sptTextPlainTextVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextPlainTextVert, SAL_N_ELEMENTS( mso_sptTextPlainTextVert ),
     (sal_uInt16*)mso_sptTextPlainTextSegm, sizeof( mso_sptTextPlainTextSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextPlainTextCalc, sizeof( mso_sptTextPlainTextCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextPlainTextCalc, SAL_N_ELEMENTS( mso_sptTextPlainTextCalc ),
     (sal_Int32*)mso_sptDefault10800,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextPlainTextHandle, sizeof( mso_sptTextPlainTextHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextPlainTextHandle, SAL_N_ELEMENTS( mso_sptTextPlainTextHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextStopVert[] =
@@ -6059,15 +6059,15 @@ static const SvxMSDffHandle mso_sptTextStopHandle[] =
 };
 static const mso_CustomShape msoTextStop =
 {
-    (SvxMSDffVertPair*)mso_sptTextStopVert, sizeof( mso_sptTextStopVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextStopVert, SAL_N_ELEMENTS( mso_sptTextStopVert ),
     (sal_uInt16*)mso_sptTextStopSegm, sizeof( mso_sptTextStopSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextStopCalc, sizeof( mso_sptTextStopCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextStopCalc, SAL_N_ELEMENTS( mso_sptTextStopCalc ),
     (sal_Int32*)mso_sptTextStopDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextStopHandle, sizeof( mso_sptTextStopHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextStopHandle, SAL_N_ELEMENTS( mso_sptTextStopHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextTriangleVert[] =
@@ -6090,15 +6090,15 @@ static const SvxMSDffHandle mso_sptTextTriangleHandle[] =
 };
 static const mso_CustomShape msoTextTriangle =
 {
-    (SvxMSDffVertPair*)mso_sptTextTriangleVert, sizeof( mso_sptTextTriangleVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextTriangleVert, SAL_N_ELEMENTS( mso_sptTextTriangleVert ),
     (sal_uInt16*)mso_sptTextTriangleSegm, sizeof( mso_sptTextTriangleSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextTriangleCalc, sizeof( mso_sptTextTriangleCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextTriangleCalc, SAL_N_ELEMENTS( mso_sptTextTriangleCalc ),
     (sal_Int32*)mso_sptDefault10800,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextTriangleHandle, sizeof( mso_sptTextTriangleHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextTriangleHandle, SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
 static const SvxMSDffVertPair mso_sptTextTriangleInvertedVert[] =
 {
@@ -6111,15 +6111,15 @@ static const sal_uInt16 mso_sptTextTriangleInvertedSegm[] =
 };
 static const mso_CustomShape msoTextTriangleInverted =
 {
-    (SvxMSDffVertPair*)mso_sptTextTriangleInvertedVert, sizeof( mso_sptTextTriangleInvertedVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextTriangleInvertedVert, SAL_N_ELEMENTS( mso_sptTextTriangleInvertedVert ),
     (sal_uInt16*)mso_sptTextTriangleInvertedSegm, sizeof( mso_sptTextTriangleInvertedSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextTriangleCalc, sizeof( mso_sptTextTriangleCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextTriangleCalc, SAL_N_ELEMENTS( mso_sptTextTriangleCalc ),
     (sal_Int32*)mso_sptDefault10800,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextTriangleHandle, sizeof( mso_sptTextTriangleHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextTriangleHandle, SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextChevronVert[] =
@@ -6143,15 +6143,15 @@ static const SvxMSDffHandle mso_sptTextChevronHandle[] =
 };
 static const mso_CustomShape msoTextChevron =
 {
-    (SvxMSDffVertPair*)mso_sptTextChevronVert, sizeof( mso_sptTextChevronVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextChevronVert, SAL_N_ELEMENTS( mso_sptTextChevronVert ),
     (sal_uInt16*)mso_sptTextChevronSegm, sizeof( mso_sptTextChevronSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextChevronCalc, sizeof( mso_sptTextChevronCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextChevronCalc, SAL_N_ELEMENTS( mso_sptTextChevronCalc ),
     (sal_Int32*)mso_sptDefault5400,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextChevronHandle, sizeof( mso_sptTextChevronHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextChevronHandle, SAL_N_ELEMENTS( mso_sptTextChevronHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextChevronInvertedVert[] =
@@ -6175,15 +6175,15 @@ static const SvxMSDffHandle mso_sptTextChevronInvertedHandle[] =
 };
 static const mso_CustomShape msoTextChevronInverted =
 {
-    (SvxMSDffVertPair*)mso_sptTextChevronInvertedVert, sizeof( mso_sptTextChevronInvertedVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextChevronInvertedVert, SAL_N_ELEMENTS( mso_sptTextChevronInvertedVert ),
     (sal_uInt16*)mso_sptTextChevronInvertedSegm, sizeof( mso_sptTextChevronInvertedSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextChevronInvertedCalc, sizeof( mso_sptTextChevronInvertedCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextChevronInvertedCalc, SAL_N_ELEMENTS( mso_sptTextChevronInvertedCalc ),
     (sal_Int32*)mso_sptDefault16200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextChevronInvertedHandle, sizeof( mso_sptTextChevronInvertedHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextChevronInvertedHandle, SAL_N_ELEMENTS( mso_sptTextChevronInvertedHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
@@ -6208,15 +6208,15 @@ static const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
 };
 static const mso_CustomShape msoTextRingOutside =
 {
-    (SvxMSDffVertPair*)mso_sptTextRingOutsideVert, sizeof( mso_sptTextRingOutsideVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextRingOutsideVert, SAL_N_ELEMENTS( mso_sptTextRingOutsideVert ),
     (sal_uInt16*)mso_sptTextRingOutsideSegm, sizeof( mso_sptTextRingOutsideSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextRingOutsideCalc, sizeof( mso_sptTextRingOutsideCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextRingOutsideCalc, SAL_N_ELEMENTS( mso_sptTextRingOutsideCalc ),
     (sal_Int32*)mso_sptDefault16200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextRingOutsideHandle, sizeof( mso_sptTextRingOutsideHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextRingOutsideHandle, SAL_N_ELEMENTS( mso_sptTextRingOutsideHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextFadeRightVert[] =
@@ -6240,15 +6240,15 @@ static const SvxMSDffHandle mso_sptTextFadeRightHandle[] =
 };
 static const mso_CustomShape msoTextFadeRight =
 {
-    (SvxMSDffVertPair*)mso_sptTextFadeRightVert, sizeof( mso_sptTextFadeRightVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextFadeRightVert, SAL_N_ELEMENTS( mso_sptTextFadeRightVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault7200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextFadeRightHandle, sizeof( mso_sptTextFadeRightHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextFadeRightHandle, SAL_N_ELEMENTS( mso_sptTextFadeRightHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextFadeLeftVert[] =
@@ -6262,15 +6262,15 @@ static const SvxMSDffHandle mso_sptTextFadeLeftHandle[] =
 };
 static const mso_CustomShape msoTextFadeLeft =
 {
-    (SvxMSDffVertPair*)mso_sptTextFadeLeftVert, sizeof( mso_sptTextFadeLeftVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextFadeLeftVert, SAL_N_ELEMENTS( mso_sptTextFadeLeftVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault7200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextFadeLeftHandle, sizeof( mso_sptTextFadeLeftHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextFadeLeftHandle, SAL_N_ELEMENTS( mso_sptTextFadeLeftHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextFadeUpVert[] =
@@ -6284,15 +6284,15 @@ static const SvxMSDffHandle mso_sptTextFadeUpHandle[] =
 };
 static const mso_CustomShape msoTextFadeUp =
 {
-    (SvxMSDffVertPair*)mso_sptTextFadeUpVert, sizeof( mso_sptTextFadeUpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextFadeUpVert, SAL_N_ELEMENTS( mso_sptTextFadeUpVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault7200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextFadeUpHandle, sizeof( mso_sptTextFadeUpHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextFadeUpHandle, SAL_N_ELEMENTS( mso_sptTextFadeUpHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextFadeDownVert[] =
@@ -6306,15 +6306,15 @@ static const SvxMSDffHandle mso_sptTextFadeDownHandle[] =
 };
 static const mso_CustomShape msoTextFadeDown =
 {
-    (SvxMSDffVertPair*)mso_sptTextFadeDownVert, sizeof( mso_sptTextFadeDownVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextFadeDownVert, SAL_N_ELEMENTS( mso_sptTextFadeDownVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault7200,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextFadeDownHandle, sizeof( mso_sptTextFadeDownHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextFadeDownHandle, SAL_N_ELEMENTS( mso_sptTextFadeDownHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextSlantUpVert[] =
@@ -6328,15 +6328,15 @@ static const SvxMSDffHandle mso_sptTextSlantUpHandle[] =
 };
 static const mso_CustomShape msoTextSlantUp =
 {
-    (SvxMSDffVertPair*)mso_sptTextSlantUpVert, sizeof( mso_sptTextSlantUpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextSlantUpVert, SAL_N_ELEMENTS( mso_sptTextSlantUpVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault12000,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextSlantUpHandle, sizeof( mso_sptTextSlantUpHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextSlantUpHandle, SAL_N_ELEMENTS( mso_sptTextSlantUpHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextSlantDownVert[] =
@@ -6350,15 +6350,15 @@ static const SvxMSDffHandle mso_sptTextSlantDownHandle[] =
 };
 static const mso_CustomShape msoTextSlantDown =
 {
-    (SvxMSDffVertPair*)mso_sptTextSlantDownVert, sizeof( mso_sptTextSlantDownVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextSlantDownVert, SAL_N_ELEMENTS( mso_sptTextSlantDownVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, sizeof( mso_sptTextFadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextFadeCalc, SAL_N_ELEMENTS( mso_sptTextFadeCalc ),
     (sal_Int32*)mso_sptDefault12000,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextSlantDownHandle, sizeof( mso_sptTextSlantDownHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextSlantDownHandle, SAL_N_ELEMENTS( mso_sptTextSlantDownHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCascadeUpVert[] =
@@ -6378,15 +6378,15 @@ static const SvxMSDffHandle mso_sptTextCascadeUpHandle[] =
 };
 static const mso_CustomShape msoTextCascadeUp =
 {
-    (SvxMSDffVertPair*)mso_sptTextCascadeUpVert, sizeof( mso_sptTextCascadeUpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCascadeUpVert, SAL_N_ELEMENTS( mso_sptTextCascadeUpVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCascadeCalc, sizeof( mso_sptTextCascadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCascadeCalc, SAL_N_ELEMENTS( mso_sptTextCascadeCalc ),
     (sal_Int32*)mso_sptDefault9600,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCascadeUpHandle, sizeof( mso_sptTextCascadeUpHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCascadeUpHandle, SAL_N_ELEMENTS( mso_sptTextCascadeUpHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCascadeDownVert[] =
@@ -6400,15 +6400,15 @@ static const SvxMSDffHandle mso_sptTextCascadeDownHandle[] =
 };
 static const mso_CustomShape msoTextCascadeDown =
 {
-    (SvxMSDffVertPair*)mso_sptTextCascadeDownVert, sizeof( mso_sptTextCascadeDownVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCascadeDownVert, SAL_N_ELEMENTS( mso_sptTextCascadeDownVert ),
     (sal_uInt16*)mso_sptTextFadeSegm, sizeof( mso_sptTextFadeSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCascadeCalc, sizeof( mso_sptTextCascadeCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCascadeCalc, SAL_N_ELEMENTS( mso_sptTextCascadeCalc ),
     (sal_Int32*)mso_sptDefault9600,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCascadeDownHandle, sizeof( mso_sptTextCascadeDownHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCascadeDownHandle, SAL_N_ELEMENTS( mso_sptTextCascadeDownHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextArchUpCurveVert[] =
@@ -6438,15 +6438,15 @@ static const sal_Int32 mso_sptTextArchUpCurveDefault[] =
 };
 static const mso_CustomShape msoTextArchUpCurve =
 {
-    (SvxMSDffVertPair*)mso_sptTextArchUpCurveVert, sizeof( mso_sptTextArchUpCurveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextArchUpCurveVert, SAL_N_ELEMENTS( mso_sptTextArchUpCurveVert ),
     (sal_uInt16*)mso_sptTextArchUpCurveSegm, sizeof( mso_sptTextArchUpCurveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextArchCurveCalc, sizeof( mso_sptTextArchCurveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextArchCurveCalc, SAL_N_ELEMENTS( mso_sptTextArchCurveCalc ),
     (sal_Int32*)mso_sptTextArchUpCurveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextArchUpCurveHandle, sizeof( mso_sptTextArchUpCurveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextArchUpCurveHandle, SAL_N_ELEMENTS( mso_sptTextArchUpCurveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextArchDownCurveVert[] =
@@ -6468,15 +6468,15 @@ static const sal_Int32 mso_sptTextArchDownCurveDefault[] =
 };
 static const mso_CustomShape msoTextArchDownCurve =
 {
-    (SvxMSDffVertPair*)mso_sptTextArchDownCurveVert, sizeof( mso_sptTextArchDownCurveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextArchDownCurveVert, SAL_N_ELEMENTS( mso_sptTextArchDownCurveVert ),
     (sal_uInt16*)mso_sptTextArchDownCurveSegm, sizeof( mso_sptTextArchDownCurveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextArchCurveCalc, sizeof( mso_sptTextArchCurveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextArchCurveCalc, SAL_N_ELEMENTS( mso_sptTextArchCurveCalc ),
     (sal_Int32*)mso_sptTextArchDownCurveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextArchDownCurveHandle, sizeof( mso_sptTextArchDownCurveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextArchDownCurveHandle, SAL_N_ELEMENTS( mso_sptTextArchDownCurveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCircleCurveVert[] =
@@ -6506,15 +6506,15 @@ static const sal_Int32 mso_sptTextCircleCurveDefault[] =
 };
 static const mso_CustomShape msoTextCircleCurve =
 {
-    (SvxMSDffVertPair*)mso_sptTextCircleCurveVert, sizeof( mso_sptTextCircleCurveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCircleCurveVert, SAL_N_ELEMENTS( mso_sptTextCircleCurveVert ),
     (sal_uInt16*)mso_sptTextCircleCurveSegm, sizeof( mso_sptTextCircleCurveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCircleCurveCalc, sizeof( mso_sptTextCircleCurveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCircleCurveCalc, SAL_N_ELEMENTS( mso_sptTextCircleCurveCalc ),
     (sal_Int32*)mso_sptTextCircleCurveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCircleCurveHandle, sizeof( mso_sptTextCircleCurveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCircleCurveHandle, SAL_N_ELEMENTS( mso_sptTextCircleCurveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextButtonCurveVert[] =
@@ -6549,15 +6549,15 @@ static const sal_Int32 mso_sptTextButtonCurveDefault[] =
 };
 static const mso_CustomShape msoTextButtonCurve =
 {
-    (SvxMSDffVertPair*)mso_sptTextButtonCurveVert, sizeof( mso_sptTextButtonCurveVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextButtonCurveVert, SAL_N_ELEMENTS( mso_sptTextButtonCurveVert ),
     (sal_uInt16*)mso_sptTextButtonCurveSegm, sizeof( mso_sptTextButtonCurveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextButtonCurveCalc, sizeof( mso_sptTextButtonCurveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextButtonCurveCalc, SAL_N_ELEMENTS( mso_sptTextButtonCurveCalc ),
     (sal_Int32*)mso_sptTextButtonCurveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextButtonCurveHandle, sizeof( mso_sptTextButtonCurveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextButtonCurveHandle, SAL_N_ELEMENTS( mso_sptTextButtonCurveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextArchUpPourVert[] =
@@ -6595,15 +6595,15 @@ static const sal_Int32 mso_sptTextArchUpPourDefault[] =
 };
 static const mso_CustomShape msoTextArchUpPour =
 {
-    (SvxMSDffVertPair*)mso_sptTextArchUpPourVert, sizeof( mso_sptTextArchUpPourVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextArchUpPourVert, SAL_N_ELEMENTS( mso_sptTextArchUpPourVert ),
     (sal_uInt16*)mso_sptTextArchUpPourSegm, sizeof( mso_sptTextArchUpPourSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextArchPourCalc, sizeof( mso_sptTextArchPourCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextArchPourCalc, SAL_N_ELEMENTS( mso_sptTextArchPourCalc ),
     (sal_Int32*)mso_sptTextArchUpPourDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextArchPourHandle, sizeof( mso_sptTextArchPourHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextArchPourHandle, SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextArchDownPourVert[] =
@@ -6621,15 +6621,15 @@ static const sal_Int32 mso_sptTextArchDownPourDefault[] =
 };
 static const mso_CustomShape msoTextArchDownPour =
 {
-    (SvxMSDffVertPair*)mso_sptTextArchDownPourVert, sizeof( mso_sptTextArchDownPourVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextArchDownPourVert, SAL_N_ELEMENTS( mso_sptTextArchDownPourVert ),
     (sal_uInt16*)mso_sptTextArchDownPourSegm, sizeof( mso_sptTextArchDownPourSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextArchPourCalc, sizeof( mso_sptTextArchPourCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextArchPourCalc, SAL_N_ELEMENTS( mso_sptTextArchPourCalc ),
     (sal_Int32*)mso_sptTextArchDownPourDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextArchPourHandle, sizeof( mso_sptTextArchPourHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextArchPourHandle, SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCirclePourVert[] =
@@ -6668,15 +6668,15 @@ static const sal_Int32 mso_sptTextCirclePourDefault[] =
 };
 static const mso_CustomShape msoTextCirclePour =
 {
-    (SvxMSDffVertPair*)mso_sptTextCirclePourVert, sizeof( mso_sptTextCirclePourVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCirclePourVert, SAL_N_ELEMENTS( mso_sptTextCirclePourVert ),
     (sal_uInt16*)mso_sptTextCirclePourSegm, sizeof( mso_sptTextCirclePourSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCirclePourCalc, sizeof( mso_sptTextCirclePourCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCirclePourCalc, SAL_N_ELEMENTS( mso_sptTextCirclePourCalc ),
     (sal_Int32*)mso_sptTextCirclePourDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCirclePourHandle, sizeof( mso_sptTextCirclePourHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCirclePourHandle, SAL_N_ELEMENTS( mso_sptTextCirclePourHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
@@ -6736,15 +6736,15 @@ static const sal_Int32 mso_sptTextButtonPourDefault[] =
 };
 static const mso_CustomShape msoTextButtonPour =
 {
-    (SvxMSDffVertPair*)mso_sptTextButtonPourVert, sizeof( mso_sptTextButtonPourVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextButtonPourVert, SAL_N_ELEMENTS( mso_sptTextButtonPourVert ),
     (sal_uInt16*)mso_sptTextButtonPourSegm, sizeof( mso_sptTextButtonPourSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextButtonPourCalc, sizeof( mso_sptTextButtonPourCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextButtonPourCalc, SAL_N_ELEMENTS( mso_sptTextButtonPourCalc ),
     (sal_Int32*)mso_sptTextButtonPourDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextButtonPourHandle, sizeof( mso_sptTextButtonPourHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextButtonPourHandle, SAL_N_ELEMENTS( mso_sptTextButtonPourHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCurveUpVert[] =
@@ -6776,15 +6776,15 @@ static const sal_Int32 mso_sptTextCurveUpDefault[] =
 };
 static const mso_CustomShape msoTextCurveUp =
 {
-    (SvxMSDffVertPair*)mso_sptTextCurveUpVert, sizeof( mso_sptTextCurveUpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCurveUpVert, SAL_N_ELEMENTS( mso_sptTextCurveUpVert ),
     (sal_uInt16*)mso_sptTextCurveUpSegm, sizeof( mso_sptTextCurveUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCurveUpCalc, sizeof( mso_sptTextCurveUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCurveUpCalc, SAL_N_ELEMENTS( mso_sptTextCurveUpCalc ),
     (sal_Int32*)mso_sptTextCurveUpDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCurveUpHandle, sizeof( mso_sptTextCurveUpHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCurveUpHandle, SAL_N_ELEMENTS( mso_sptTextCurveUpHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
@@ -6802,15 +6802,15 @@ static const SvxMSDffHandle mso_sptTextCurveDownHandle[] =
 };
 static const mso_CustomShape msoTextCurveDown =
 {
-    (SvxMSDffVertPair*)mso_sptTextCurveDownVert, sizeof( mso_sptTextCurveDownVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCurveDownVert, SAL_N_ELEMENTS( mso_sptTextCurveDownVert ),
     (sal_uInt16*)mso_sptTextCurveUpSegm, sizeof( mso_sptTextCurveUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCurveUpCalc, sizeof( mso_sptTextCurveUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCurveUpCalc, SAL_N_ELEMENTS( mso_sptTextCurveUpCalc ),
     (sal_Int32*)mso_sptTextCurveUpDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCurveDownHandle, sizeof( mso_sptTextCurveDownHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCurveDownHandle, SAL_N_ELEMENTS( mso_sptTextCurveDownHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCanUpVert[] =
@@ -6842,15 +6842,15 @@ static const sal_Int32 mso_sptTextCanUpDefault[] =
 };
 static const mso_CustomShape msoTextCanUp =
 {
-    (SvxMSDffVertPair*)mso_sptTextCanUpVert, sizeof( mso_sptTextCanUpVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCanUpVert, SAL_N_ELEMENTS( mso_sptTextCanUpVert ),
     (sal_uInt16*)mso_sptTextCanUpSegm, sizeof( mso_sptTextCanUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCanUpCalc, sizeof( mso_sptTextCanUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCanUpCalc, SAL_N_ELEMENTS( mso_sptTextCanUpCalc ),
     (sal_Int32*)mso_sptTextCanUpDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCanUpHandle, sizeof( mso_sptTextCanUpHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCanUpHandle, SAL_N_ELEMENTS( mso_sptTextCanUpHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextCanDownVert[] =
@@ -6875,15 +6875,15 @@ static const sal_Int32 mso_sptTextCanDownDefault[] =
 };
 static const mso_CustomShape msoTextCanDown =
 {
-    (SvxMSDffVertPair*)mso_sptTextCanDownVert, sizeof( mso_sptTextCanDownVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextCanDownVert, SAL_N_ELEMENTS( mso_sptTextCanDownVert ),
     (sal_uInt16*)mso_sptTextCanUpSegm, sizeof( mso_sptTextCanUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextCanDownCalc, sizeof( mso_sptTextCanDownCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextCanDownCalc, SAL_N_ELEMENTS( mso_sptTextCanDownCalc ),
     (sal_Int32*)mso_sptTextCanDownDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextCanDownHandle, sizeof( mso_sptTextCanDownHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextCanDownHandle, SAL_N_ELEMENTS( mso_sptTextCanDownHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextInflateVert[] =
@@ -6909,15 +6909,15 @@ static const sal_Int32 mso_sptTextInflateDefault[] =
 };
 static const mso_CustomShape msoTextInflate =
 {
-    (SvxMSDffVertPair*)mso_sptTextInflateVert, sizeof( mso_sptTextInflateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextInflateVert, SAL_N_ELEMENTS( mso_sptTextInflateVert ),
     (sal_uInt16*)mso_sptTextCanUpSegm, sizeof( mso_sptTextCanUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextInflateCalc, sizeof( mso_sptTextInflateCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextInflateCalc, SAL_N_ELEMENTS( mso_sptTextInflateCalc ),
     (sal_Int32*)mso_sptTextInflateDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextInflateHandle, sizeof( mso_sptTextInflateHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextInflateHandle, SAL_N_ELEMENTS( mso_sptTextInflateHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextDeflateVert[] =
@@ -6939,15 +6939,15 @@ static const SvxMSDffHandle mso_sptTextDeflateHandle[] =
 };
 static const mso_CustomShape msoTextDeflate =
 {
-    (SvxMSDffVertPair*)mso_sptTextDeflateVert, sizeof( mso_sptTextDeflateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextDeflateVert, SAL_N_ELEMENTS( mso_sptTextDeflateVert ),
     (sal_uInt16*)mso_sptTextCanUpSegm, sizeof( mso_sptTextCanUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextDeflateCalc, sizeof( mso_sptTextDeflateCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextDeflateCalc, SAL_N_ELEMENTS( mso_sptTextDeflateCalc ),
     (sal_Int32*)mso_sptDefault8100,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextDeflateHandle, sizeof( mso_sptTextDeflateHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextDeflateHandle, SAL_N_ELEMENTS( mso_sptTextDeflateHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextInflateBottomVert[] =
@@ -6978,15 +6978,15 @@ static const sal_Int32 mso_sptTextInflateBottomDefault[] =
 };
 static const mso_CustomShape msoTextInflateBottom =
 {
-    (SvxMSDffVertPair*)mso_sptTextInflateBottomVert, sizeof( mso_sptTextInflateBottomVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextInflateBottomVert, SAL_N_ELEMENTS( mso_sptTextInflateBottomVert ),
     (sal_uInt16*)mso_sptTextInflateBottomSegm, sizeof( mso_sptTextInflateBottomSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextInflateBottomCalc, sizeof( mso_sptTextInflateBottomCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextInflateBottomCalc, SAL_N_ELEMENTS( mso_sptTextInflateBottomCalc ),
     (sal_Int32*)mso_sptTextInflateBottomDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextInflateBottomHandle, sizeof( mso_sptTextInflateBottomHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextInflateBottomHandle, SAL_N_ELEMENTS( mso_sptTextInflateBottomHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextDeflateBottomVert[] =
@@ -7017,15 +7017,15 @@ static const sal_Int32 mso_sptTextDeflateBottomDefault[] =
 };
 static const mso_CustomShape msoTextDeflateBottom =
 {
-    (SvxMSDffVertPair*)mso_sptTextDeflateBottomVert, sizeof( mso_sptTextDeflateBottomVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextDeflateBottomVert, SAL_N_ELEMENTS( mso_sptTextDeflateBottomVert ),
     (sal_uInt16*)mso_sptTextDeflateBottomSegm, sizeof( mso_sptTextDeflateBottomSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextDeflateBottomCalc, sizeof( mso_sptTextDeflateBottomCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextDeflateBottomCalc, SAL_N_ELEMENTS( mso_sptTextDeflateBottomCalc ),
     (sal_Int32*)mso_sptTextDeflateBottomDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextDeflateBottomHandle, sizeof( mso_sptTextDeflateBottomHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextDeflateBottomHandle, SAL_N_ELEMENTS( mso_sptTextDeflateBottomHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextInflateTopVert[] =
@@ -7054,15 +7054,15 @@ static const sal_Int32 mso_sptTextInflateTopDefault[] =
 };
 static const mso_CustomShape msoTextInflateTop =
 {
-    (SvxMSDffVertPair*)mso_sptTextInflateTopVert, sizeof( mso_sptTextInflateTopVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextInflateTopVert, SAL_N_ELEMENTS( mso_sptTextInflateTopVert ),
     (sal_uInt16*)mso_sptTextInflateTopSegm, sizeof( mso_sptTextInflateTopSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextInflateTopCalc, sizeof( mso_sptTextInflateTopCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextInflateTopCalc, SAL_N_ELEMENTS( mso_sptTextInflateTopCalc ),
     (sal_Int32*)mso_sptTextInflateTopDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextInflateTopHandle, sizeof( mso_sptTextInflateTopHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextInflateTopHandle, SAL_N_ELEMENTS( mso_sptTextInflateTopHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextDeflateTopVert[] =
@@ -7091,15 +7091,15 @@ static const sal_Int32 mso_sptTextDeflateTopDefault[] =
 };
 static const mso_CustomShape msoTextDeflateTop =
 {
-    (SvxMSDffVertPair*)mso_sptTextDeflateTopVert, sizeof( mso_sptTextDeflateTopVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextDeflateTopVert, SAL_N_ELEMENTS( mso_sptTextDeflateTopVert ),
     (sal_uInt16*)mso_sptTextDeflateTopSegm, sizeof( mso_sptTextDeflateTopSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextDeflateTopCalc, sizeof( mso_sptTextDeflateTopCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextDeflateTopCalc, SAL_N_ELEMENTS( mso_sptTextDeflateTopCalc ),
     (sal_Int32*)mso_sptTextDeflateTopDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextDeflateTopHandle, sizeof( mso_sptTextDeflateTopHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextDeflateTopHandle, SAL_N_ELEMENTS( mso_sptTextDeflateTopHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextDeflateInflateVert[] =
@@ -7137,15 +7137,15 @@ static const sal_Int32 mso_sptTextDeflateInflateDefault[] =
 };
 static const mso_CustomShape msoTextDeflateInflate =
 {
-    (SvxMSDffVertPair*)mso_sptTextDeflateInflateVert, sizeof( mso_sptTextDeflateInflateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextDeflateInflateVert, SAL_N_ELEMENTS( mso_sptTextDeflateInflateVert ),
     (sal_uInt16*)mso_sptTextDeflateInflateSegm, sizeof( mso_sptTextDeflateInflateSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextDeflateInflateCalc, sizeof( mso_sptTextDeflateInflateCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextDeflateInflateCalc, SAL_N_ELEMENTS( mso_sptTextDeflateInflateCalc ),
     (sal_Int32*)mso_sptTextDeflateInflateDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextDeflateInflateHandle, sizeof( mso_sptTextDeflateInflateHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextDeflateInflateHandle, SAL_N_ELEMENTS( mso_sptTextDeflateInflateHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
@@ -7191,15 +7191,15 @@ static const sal_Int32 mso_sptTextDeflateInflateDeflateDefault[] =
 };
 static const mso_CustomShape msoTextDeflateInflateDeflate =
 {
-    (SvxMSDffVertPair*)mso_sptTextDeflateInflateDeflateVert, sizeof( mso_sptTextDeflateInflateDeflateVert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextDeflateInflateDeflateVert, SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateVert ),
     (sal_uInt16*)mso_sptTextDeflateInflateDeflateSegm, sizeof( mso_sptTextDeflateInflateDeflateSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptTextDeflateInflateDeflateCalc, sizeof( mso_sptTextDeflateInflateDeflateCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptTextDeflateInflateDeflateCalc, SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateCalc ),
     (sal_Int32*)mso_sptTextDeflateInflateDeflateDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTextDeflateInflateDeflateHandle, sizeof( mso_sptTextDeflateInflateDeflateHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptTextDeflateInflateDeflateHandle, SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextWave1Vert[] =  // adjustment1 : 0 - 4459
@@ -7214,15 +7214,15 @@ static const sal_uInt16 mso_sptTextWave1Segm[] =
 };
 static const mso_CustomShape msoTextWave1 =
 {
-    (SvxMSDffVertPair*)mso_sptTextWave1Vert, sizeof( mso_sptTextWave1Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextWave1Vert, SAL_N_ELEMENTS( mso_sptTextWave1Vert ),
     (sal_uInt16*)mso_sptTextWave1Segm, sizeof( mso_sptTextWave1Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWaveCalc, SAL_N_ELEMENTS( mso_sptWaveCalc ),
     (sal_Int32*)mso_sptWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptWaveGluePoints, sizeof( mso_sptWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptWaveHandle, sizeof( mso_sptWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptWaveGluePoints, SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextWave2Vert[] =  // adjustment1 : 0 - 4459
@@ -7232,15 +7232,15 @@ static const SvxMSDffVertPair mso_sptTextWave2Vert[] =  // adjustment1 : 0 - 445
 };
 static const mso_CustomShape msoTextWave2 =
 {
-    (SvxMSDffVertPair*)mso_sptTextWave2Vert, sizeof( mso_sptTextWave2Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextWave2Vert, SAL_N_ELEMENTS( mso_sptTextWave2Vert ),
     (sal_uInt16*)mso_sptTextWave1Segm, sizeof( mso_sptTextWave1Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptWaveCalc, SAL_N_ELEMENTS( mso_sptWaveCalc ),
     (sal_Int32*)mso_sptWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptWaveGluePoints, sizeof( mso_sptWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptWaveHandle, sizeof( mso_sptWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptWaveGluePoints, SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextWave3Vert[] =  // adjustment1 : 0 - 2230
@@ -7255,15 +7255,15 @@ static const sal_uInt16 mso_sptTextWave3Segm[] =
 };
 static const mso_CustomShape msoTextWave3 =
 {
-    (SvxMSDffVertPair*)mso_sptTextWave3Vert, sizeof( mso_sptTextWave3Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextWave3Vert, SAL_N_ELEMENTS( mso_sptTextWave3Vert ),
     (sal_uInt16*)mso_sptTextWave3Segm, sizeof( mso_sptTextWave3Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, sizeof( mso_sptDoubleWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, SAL_N_ELEMENTS( mso_sptDoubleWaveCalc ),
     (sal_Int32*)mso_sptDoubleWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, sizeof( mso_sptDoubleWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, sizeof( mso_sptDoubleWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, sizeof( mso_sptDoubleWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
 static const SvxMSDffVertPair mso_sptTextWave4Vert[] =  // adjustment1 : 0 - 2230
@@ -7273,15 +7273,15 @@ static const SvxMSDffVertPair mso_sptTextWave4Vert[] =  // adjustment1 : 0 - 223
 };
 static const mso_CustomShape msoTextWave4 =
 {
-    (SvxMSDffVertPair*)mso_sptTextWave4Vert, sizeof( mso_sptTextWave4Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptTextWave4Vert, SAL_N_ELEMENTS( mso_sptTextWave4Vert ),
     (sal_uInt16*)mso_sptTextWave3Segm, sizeof( mso_sptTextWave3Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, sizeof( mso_sptDoubleWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, SAL_N_ELEMENTS( mso_sptDoubleWaveCalc ),
     (sal_Int32*)mso_sptDoubleWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, sizeof( mso_sptDoubleWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, sizeof( mso_sptDoubleWaveGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, sizeof( mso_sptDoubleWaveHandle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    (SvxMSDffHandle*)mso_sptDoubleWaveHandle, SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
 static const sal_Int32 mso_sptCalloutDefault1[] =
@@ -7440,195 +7440,195 @@ static const SvxMSDffCalculationData mso_sptCalloutCalc[] =
 
 static const mso_CustomShape msoCallout90 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1b, sizeof( mso_sptCalloutSegm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault1,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoCallout1 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1b, sizeof( mso_sptCalloutSegm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault2,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoCallout2 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout2Verta, sizeof( mso_sptCallout2Verta ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout2Verta, SAL_N_ELEMENTS( mso_sptCallout2Verta ),
     (sal_uInt16*)mso_sptCallout2Segm1b, sizeof( mso_sptCallout2Segm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault3,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle2, sizeof( mso_sptCalloutHandle2 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle2, SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 static const mso_CustomShape msoCallout3 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout3Verta, sizeof( mso_sptCallout3Verta ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout3Verta, SAL_N_ELEMENTS( mso_sptCallout3Verta ),
     (sal_uInt16*)mso_sptCallout3Segm1b, sizeof( mso_sptCallout3Segm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault4,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle3, sizeof( mso_sptCalloutHandle3 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle3, SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 static const mso_CustomShape msoAccentCallout90 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1b, sizeof( mso_sptCalloutSegm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault1,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoAccentCallout1 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout1Vert, sizeof( mso_sptCallout1Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout1Vert, SAL_N_ELEMENTS( mso_sptCallout1Vert ),
     (sal_uInt16*)mso_sptCallout1Segm1b, sizeof( mso_sptCallout1Segm1b ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault2,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoAccentCallout2 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout2Vertb, sizeof( mso_sptCallout2Vertb ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout2Vertb, SAL_N_ELEMENTS( mso_sptCallout2Vertb ),
     (sal_uInt16*)mso_sptCallout2Segm1d, sizeof( mso_sptCallout2Segm1d ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault3,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle2, sizeof( mso_sptCalloutHandle2 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle2, SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 static const mso_CustomShape msoAccentCallout3 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout3Vertb, sizeof( mso_sptCallout3Vertb ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout3Vertb, SAL_N_ELEMENTS( mso_sptCallout3Vertb ),
     (sal_uInt16*)mso_sptCallout3Segm1d, sizeof( mso_sptCallout3Segm1d ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault4,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle3, sizeof( mso_sptCalloutHandle3 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle3, SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 static const mso_CustomShape msoBorderCallout90 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1a, sizeof( mso_sptCalloutSegm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault1,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoBorderCallout1 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1a, sizeof( mso_sptCalloutSegm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault2,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoBorderCallout2 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout2Verta, sizeof( mso_sptCallout2Verta ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout2Verta, SAL_N_ELEMENTS( mso_sptCallout2Verta ),
     (sal_uInt16*)mso_sptCallout2Segm1a, sizeof( mso_sptCallout2Segm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault3,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle2, sizeof( mso_sptCalloutHandle2 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle2, SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 static const mso_CustomShape msoBorderCallout3 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout3Verta, sizeof( mso_sptCallout3Verta ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout3Verta, SAL_N_ELEMENTS( mso_sptCallout3Verta ),
     (sal_uInt16*)mso_sptCallout3Segm1a, sizeof( mso_sptCallout3Segm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault4,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle3, sizeof( mso_sptCalloutHandle3 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle3, SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 static const mso_CustomShape msoAccentBorderCallout90 =
 {
-    (SvxMSDffVertPair*)mso_sptCalloutVert1, sizeof( mso_sptCalloutVert1 ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCalloutVert1, SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     (sal_uInt16*)mso_sptCalloutSegm1a, sizeof( mso_sptCalloutSegm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault1,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoAccentBorderCallout1 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout1Vert, sizeof( mso_sptCallout1Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout1Vert, SAL_N_ELEMENTS( mso_sptCallout1Vert ),
     (sal_uInt16*)mso_sptCallout1Segm1a, sizeof( mso_sptCallout1Segm1a ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault2,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle1, sizeof( mso_sptCalloutHandle1 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle1, SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 static const mso_CustomShape msoAccentBorderCallout2 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout2Vertb, sizeof( mso_sptCallout2Vertb ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout2Vertb, SAL_N_ELEMENTS( mso_sptCallout2Vertb ),
     (sal_uInt16*)mso_sptCallout2Segm1c, sizeof( mso_sptCallout2Segm1c ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault3,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle2, sizeof( mso_sptCalloutHandle2 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle2, SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 static const mso_CustomShape msoAccentBorderCallout3 =
 {
-    (SvxMSDffVertPair*)mso_sptCallout3Vertb, sizeof( mso_sptCallout3Vertb ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCallout3Vertb, SAL_N_ELEMENTS( mso_sptCallout3Vertb ),
     (sal_uInt16*)mso_sptCallout3Segm1c, sizeof( mso_sptCallout3Segm1c ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalloutCalc, sizeof( mso_sptCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCalloutCalc, SAL_N_ELEMENTS( mso_sptCalloutCalc ),
     (sal_Int32*)mso_sptCalloutDefault4,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle3, sizeof( mso_sptCalloutHandle3 ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCalloutHandle3, SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 
 static const SvxMSDffVertPair mso_sptStraightConnector1Vert[] =
@@ -7641,7 +7641,7 @@ static const sal_uInt16 mso_sptStraightConnector1Segm[] =
 };
 static const mso_CustomShape msoStraightConnector1 =
 {
-    (SvxMSDffVertPair*)mso_sptStraightConnector1Vert, sizeof( mso_sptStraightConnector1Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptStraightConnector1Vert, SAL_N_ELEMENTS( mso_sptStraightConnector1Vert ),
     (sal_uInt16*)mso_sptStraightConnector1Segm, sizeof( mso_sptStraightConnector1Segm ) >> 1,
     (SvxMSDffCalculationData*)NULL, 0,
     (sal_Int32*)NULL,
@@ -7662,7 +7662,7 @@ static const sal_uInt16 mso_sptBentConnector2Segm[] =
 };
 static const mso_CustomShape msoBentConnector2 =
 {
-    (SvxMSDffVertPair*)mso_sptBentConnector2Vert, sizeof( mso_sptBentConnector2Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentConnector2Vert, SAL_N_ELEMENTS( mso_sptBentConnector2Vert ),
     (sal_uInt16*)mso_sptBentConnector2Segm, sizeof( mso_sptBentConnector2Segm ) >> 1,
     (SvxMSDffCalculationData*)NULL, 0,
     (sal_Int32*)NULL,
@@ -7696,15 +7696,15 @@ static const SvxMSDffHandle mso_sptBentConnector3Handle[] =
 };
 static const mso_CustomShape msoBentConnector3 =
 {
-    (SvxMSDffVertPair*)mso_sptBentConnector3Vert, sizeof( mso_sptBentConnector3Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentConnector3Vert, SAL_N_ELEMENTS( mso_sptBentConnector3Vert ),
     (sal_uInt16*)mso_sptBentConnector3Segm, sizeof( mso_sptBentConnector3Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBentConnector3Calc, sizeof( mso_sptBentConnector3Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBentConnector3Calc, SAL_N_ELEMENTS( mso_sptBentConnector3Calc ),
     (sal_Int32*)mso_sptBentConnector3Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentConnector3Handle, sizeof( mso_sptBentConnector3Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptBentConnector3Handle, SAL_N_ELEMENTS( mso_sptBentConnector3Handle )
 };
 
 static const SvxMSDffVertPair mso_sptBentConnector4Vert[] =
@@ -7736,15 +7736,15 @@ static const SvxMSDffHandle mso_sptBentConnector4Handle[] =
 };
 static const mso_CustomShape msoBentConnector4 =
 {
-    (SvxMSDffVertPair*)mso_sptBentConnector4Vert, sizeof( mso_sptBentConnector4Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentConnector4Vert, SAL_N_ELEMENTS( mso_sptBentConnector4Vert ),
     (sal_uInt16*)mso_sptBentConnector4Segm, sizeof( mso_sptBentConnector4Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBentConnector4Calc, sizeof( mso_sptBentConnector4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBentConnector4Calc, SAL_N_ELEMENTS( mso_sptBentConnector4Calc ),
     (sal_Int32*)mso_sptBentConnector4Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentConnector4Handle, sizeof( mso_sptBentConnector4Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptBentConnector4Handle, SAL_N_ELEMENTS( mso_sptBentConnector4Handle )
 };
 
 static const SvxMSDffVertPair mso_sptBentConnector5Vert[] =
@@ -7781,15 +7781,15 @@ static const SvxMSDffHandle mso_sptBentConnector5Handle[] =
 };
 static const mso_CustomShape msoBentConnector5 =
 {
-    (SvxMSDffVertPair*)mso_sptBentConnector5Vert, sizeof( mso_sptBentConnector5Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptBentConnector5Vert, SAL_N_ELEMENTS( mso_sptBentConnector5Vert ),
     (sal_uInt16*)mso_sptBentConnector5Segm, sizeof( mso_sptBentConnector5Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptBentConnector5Calc, sizeof( mso_sptBentConnector5Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptBentConnector5Calc, SAL_N_ELEMENTS( mso_sptBentConnector5Calc ),
     (sal_Int32*)mso_sptBentConnector5Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentConnector5Handle, sizeof( mso_sptBentConnector5Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptBentConnector5Handle, SAL_N_ELEMENTS( mso_sptBentConnector5Handle )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedConnector2Vert[] =
@@ -7802,7 +7802,7 @@ static const sal_uInt16 mso_sptCurvedConnector2Segm[] =
 };
 static const mso_CustomShape msoCurvedConnector2 =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedConnector2Vert, sizeof( mso_sptCurvedConnector2Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedConnector2Vert, SAL_N_ELEMENTS( mso_sptCurvedConnector2Vert ),
     (sal_uInt16*)mso_sptCurvedConnector2Segm, sizeof( mso_sptCurvedConnector2Segm ) >> 1,
     (SvxMSDffCalculationData*)NULL, 0,
     (sal_Int32*)NULL,
@@ -7839,15 +7839,15 @@ static const SvxMSDffHandle mso_sptCurvedConnector3Handle[] =
 };
 static const mso_CustomShape msoCurvedConnector3 =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedConnector3Vert, sizeof( mso_sptCurvedConnector3Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedConnector3Vert, SAL_N_ELEMENTS( mso_sptCurvedConnector3Vert ),
     (sal_uInt16*)mso_sptCurvedConnector3Segm, sizeof( mso_sptCurvedConnector3Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedConnector3Calc, sizeof( mso_sptCurvedConnector3Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector3Calc, SAL_N_ELEMENTS( mso_sptCurvedConnector3Calc ),
     (sal_Int32*)mso_sptCurvedConnector3Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCurvedConnector3Handle, sizeof( mso_sptCurvedConnector3Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCurvedConnector3Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector3Handle )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedConnector4Vert[] =
@@ -7892,15 +7892,15 @@ static const SvxMSDffHandle mso_sptCurvedConnector4Handle[] =
 };
 static const mso_CustomShape msoCurvedConnector4 =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedConnector4Vert, sizeof( mso_sptCurvedConnector4Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedConnector4Vert, SAL_N_ELEMENTS( mso_sptCurvedConnector4Vert ),
     (sal_uInt16*)mso_sptCurvedConnector4Segm, sizeof( mso_sptCurvedConnector4Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedConnector4Calc, sizeof( mso_sptCurvedConnector4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector4Calc, SAL_N_ELEMENTS( mso_sptCurvedConnector4Calc ),
     (sal_Int32*)mso_sptCurvedConnector4Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCurvedConnector4Handle, sizeof( mso_sptCurvedConnector4Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCurvedConnector4Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector4Handle )
 };
 
 static const SvxMSDffVertPair mso_sptCurvedConnector5Vert[] =
@@ -7955,15 +7955,15 @@ static const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
 };
 static const mso_CustomShape msoCurvedConnector5 =
 {
-    (SvxMSDffVertPair*)mso_sptCurvedConnector5Vert, sizeof( mso_sptCurvedConnector5Vert ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffVertPair*)mso_sptCurvedConnector5Vert, SAL_N_ELEMENTS( mso_sptCurvedConnector5Vert ),
     (sal_uInt16*)mso_sptCurvedConnector5Segm, sizeof( mso_sptCurvedConnector5Segm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedConnector5Calc, sizeof( mso_sptCurvedConnector5Calc ) / sizeof( SvxMSDffCalculationData ),
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector5Calc, SAL_N_ELEMENTS( mso_sptCurvedConnector5Calc ),
     (sal_Int32*)mso_sptCurvedConnector5Default,
     NULL, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, sizeof( mso_sptCurvedConnector5Handle ) / sizeof( SvxMSDffHandle )
+    (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector5Handle )
 };
 
 const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
