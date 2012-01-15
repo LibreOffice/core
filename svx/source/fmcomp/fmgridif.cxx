@@ -1033,6 +1033,7 @@ protected:
 
 public:
     GridListenerDelegator( FmXGridPeer* _pPeer );
+    virtual ~GridListenerDelegator();
 
 protected:
     virtual void selectionChanged();
@@ -1044,6 +1045,10 @@ FmXGridPeer::GridListenerDelegator::GridListenerDelegator(FmXGridPeer* _pPeer)
     :m_pPeer(_pPeer)
 {
     DBG_ASSERT(m_pPeer, "GridListenerDelegator::GridListenerDelegator");
+}
+
+FmXGridPeer::GridListenerDelegator::~GridListenerDelegator()
+{
 }
 
 //------------------------------------------------------------------
