@@ -106,6 +106,9 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
     sfx2/util/sfx \
     sot/util/sot \
     toolkit/util/tk \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    ucb/source/ucp/tdoc/ucptdoc1 \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
@@ -115,9 +118,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
 
 $(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
     embobj \
-    ucb1 \
-    ucpfile1 \
-    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_filters_test,\

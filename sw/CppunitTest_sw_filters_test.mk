@@ -79,24 +79,24 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
-    configmgr/source/configmgr \
-    sw/util/sw \
-    sw/util/msword \
-    forms/util/frm \
-    dbaccess/util/dba \
-    sfx2/util/sfx \
-    framework/util/fwk \
-    toolkit/util/tk \
-    unoxml/source/service/unoxml \
-    fileaccess/source/fileacc \
     comphelper/util/comphelp \
+    configmgr/source/configmgr \
+    dbaccess/util/dba \
+    fileaccess/source/fileacc \
+    forms/util/frm \
+    framework/util/fwk \
     i18npool/util/i18npool \
-	package/util/package2 \
+    package/util/package2 \
+    sfx2/util/sfx \
+    sw/util/msword \
+    sw/util/sw \
+    toolkit/util/tk \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
-    ucb1 \
-    ucpfile1 \
     ucpchelp1 \
 ))
 

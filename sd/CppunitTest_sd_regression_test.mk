@@ -110,6 +110,12 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     sot/util/sot \
     svl/source/fsstor/fsstorage \
     toolkit/util/tk \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/expand/ucpexpand1 \
+    ucb/source/ucp/file/ucpfile1 \
+    ucb/source/ucp/gio/ucpgio \
+    ucb/source/ucp/package/ucppkg1 \
+    ucb/source/ucp/tdoc/ucptdoc1 \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
@@ -119,12 +125,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
 
 $(eval $(call gb_CppunitTest_add_old_components,sd_regression_test,\
     embobj \
-    ucb1 \
-    ucpexpand1 \
-    ucpfile1 \
-    ucpgio \
-    ucppkg1 \
-    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_regression_test,\

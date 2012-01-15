@@ -64,11 +64,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,lotuswordpro_test_lotuswordpro,\
 $(eval $(call gb_CppunitTest_add_components,lotuswordpro_test_lotuswordpro,\
     configmgr/source/configmgr \
     lotuswordpro/util/lwpfilter \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,lotuswordpro_test_lotuswordpro,\
-    ucb1 \
-    ucpfile1 \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\

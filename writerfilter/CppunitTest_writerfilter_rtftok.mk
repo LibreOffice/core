@@ -59,13 +59,10 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,writerfilter_rtftok,\
-    configmgr/source/configmgr \
+	configmgr/source/configmgr \
+	ucb/source/core/ucb1 \
+	ucb/source/ucp/file/ucpfile1 \
 	writerfilter/util/writerfilter \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,writerfilter_rtftok,\
-	ucb1 \
-	ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\

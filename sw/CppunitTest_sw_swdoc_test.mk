@@ -94,18 +94,15 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_swdoc_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sw_swdoc_test,\
-    configmgr/source/configmgr \
-    sfx2/util/sfx \
-    framework/util/fwk \
-    unoxml/source/service/unoxml \
-    fileaccess/source/fileacc \
     comphelper/util/comphelp \
+    configmgr/source/configmgr \
+    fileaccess/source/fileacc \
+    framework/util/fwk \
     i18npool/util/i18npool \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sw_swdoc_test,\
-    ucb1 \
-    ucpfile1 \
+    sfx2/util/sfx \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\

@@ -71,12 +71,9 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,extensions_test_update,\
 $(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
     configmgr/source/configmgr \
     extensions/source/update/feed/updatefeed \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
-    ucb1 \
-    ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,extensions_test_update,\

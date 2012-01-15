@@ -100,12 +100,9 @@ $(eval $(call gb_CppunitTest_add_components,sc_ucalc,\
     framework/util/fwk \
     i18npool/util/i18npool \
     sfx2/util/sfx \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sc_ucalc,\
-    ucb1 \
-    ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\

@@ -64,10 +64,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,hwpfilter_test_hwpfilter,\
 $(eval $(call gb_CppunitTest_add_components,hwpfilter_test_hwpfilter,\
     configmgr/source/configmgr \
     hwpfilter/source/hwp \
-))
-$(eval $(call gb_CppunitTest_add_old_components,hwpfilter_test_hwpfilter,\
-    ucb1 \
-    ucpfile1 \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\

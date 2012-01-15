@@ -110,6 +110,9 @@ $(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
     sot/util/sot \
     svl/util/svl \
     toolkit/util/tk \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    ucb/source/ucp/tdoc/ucptdoc1 \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
@@ -131,9 +134,6 @@ endif
 
 $(eval $(call gb_CppunitTest_add_old_components,sc_subsequent_filters_test,\
 	embobj \
-    ucb1 \
-    ucpfile1 \
-    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_subsequent_filters_test,\
