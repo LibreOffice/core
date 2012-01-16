@@ -171,7 +171,7 @@ extern "C" int LockEntrySequence_endelement_callback(
             break;
 
         case STATE_LOCKENTRY:
-            if ( !pCtx->hasType || !pCtx->hasType )
+            if ( !pCtx->hasType || !pCtx->hasScope )
                 return 1; // abort
             break;
 
