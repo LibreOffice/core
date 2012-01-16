@@ -387,20 +387,6 @@ const AllSettings& FormatterBase::GetFieldSettings() const
 
 // -----------------------------------------------------------------------
 
-void FormatterBase::SetFieldText( const XubString& rText, sal_Bool bKeepSelection )
-{
-    if ( mpField )
-    {
-        Selection aNewSelection( 0xFFFF, 0xFFFF );
-        if ( bKeepSelection )
-            aNewSelection = mpField->GetSelection();
-
-        ImplSetText( rText, &aNewSelection );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void FormatterBase::ImplSetText( const XubString& rText, Selection* pNewSelection )
 {
     if ( mpField )

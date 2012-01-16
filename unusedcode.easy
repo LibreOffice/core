@@ -94,7 +94,6 @@ FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, in
 FontSizeBox::SetUserValue(long, FieldUnit)
 FontStyleBox::FontStyleBox(Window*, long)
 FormattedField::SetValidateText(String const&, String const*)
-FormatterBase::SetFieldText(String const&, unsigned char)
 GraphCtrl::GraphCtrl(Window*, long)
 GtkSalFrame::popIgnoreDamage()
 GtkSalFrame::pushIgnoreDamage()
