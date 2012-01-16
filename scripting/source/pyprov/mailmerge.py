@@ -59,7 +59,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
-		self.notify = EventObject()
+		self.notify = EventObject(self)
 		if dbg:
 			print("PyMailSMTPService init", file=dbgout)
 	def addConnectionListener(self, xListener):
@@ -94,7 +94,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
 			print(connectiontype, file=dbgout)
-		if connectiontype == 'Ssl':
+		if connectiontype.upper() == 'SSL':
 			self.server.ehlo()
 			self.server.starttls()
 			self.server.ehlo()
@@ -194,7 +194,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 
 		mailerstring = "LibreOffice via Caolan's mailmerge component"
 		try:
-			ctx = uno.getComponentContext() 
+			ctx = uno.getComponentContext()
 			aConfigProvider = ctx.ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider")
 			prop = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
 			prop.Name = "nodepath"
@@ -205,7 +205,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				aSettings.getByName("ooSetupVersion") + " via Caolan's mailmerge component"
 		except:
 			pass
-		
+
 		msg['X-Mailer'] = mailerstring
 		msg['Date'] = formatdate(localtime=True)
 
@@ -220,8 +220,9 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			msgattachment.set_payload(data)
 			encode_base64(msgattachment)
 			msgattachment.add_header('Content-Disposition', 'attachment', \
-				filename=attachment.ReadableName)
+				filename=('utf-8','',attachment.ReadableName.encode('utf-8')))
 			msg.attach(msgattachment)
+
 
 		uniquer = {}
 		for key in recipients:
@@ -246,7 +247,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
-		self.notify = EventObject()
+		self.notify = EventObject(self)
 		if dbg:
 			print("PyMailIMAPService init", file=dbgout)
 	def addConnectionListener(self, xListener):
@@ -276,12 +277,12 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		if dbg:
 			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
-		if connectiontype == 'Ssl':
+		if connectiontype.upper() == 'SSL':
 			self.server = imaplib.IMAP4_SSL(server, port)
 		else:
 			self.server = imaplib.IMAP4(server, port)
 		print("AFTER", file=dbgout)
-			
+
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
 		if user != '':
@@ -318,7 +319,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
-		self.notify = EventObject()
+		self.notify = EventObject(self)
 		if dbg:
 			print("PyMailPOP3Service init", file=dbgout)
 	def addConnectionListener(self, xListener):
@@ -348,7 +349,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		if dbg:
 			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
-		if connectiontype == 'Ssl':
+		if connectiontype.upper() == 'SSL':
 			self.server = poplib.POP3_SSL(server, port)
 		else:
 			self.server = poplib.POP3(server, port)
@@ -362,7 +363,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		if dbg:
 			print("Logging in, username of", user, file=dbgout)
 		self.server.user(user)
-		self.server.pass_(user, password)
+		self.server.pass_(password)
 
 		for listener in self.listeners:
 			listener.connected(self.notify)
@@ -406,12 +407,12 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 			print("PyMailMessage init", file=dbgout)
 		self.ctx = ctx
 
-		self.recipients = (sTo,)
-		self.ccrecipients = ()
-		self.bccrecipients = ()
-		self.aMailAttachments = ()
+		self.recipients = [sTo]
+		self.ccrecipients = []
+		self.bccrecipients = []
+		self.aMailAttachments = []
 		if aMailAttachment != None:
-			self.aMailAttachments = (aMailAttachment,)
+			self.aMailAttachments.append(aMailAttachment)
 
 		self.SenderName, self.SenderAddress = parseaddr(sFrom)
 		self.ReplyToAddress = sFrom
@@ -422,35 +423,35 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 	def addRecipient( self, recipient ):
 		if dbg:
 			print("PyMailMessage.addRecipient " + recipient, file=dbgout)
-		self.recipients = self.recipients + (recipient,)
+		self.recipients.append(recipient)
 	def addCcRecipient( self, ccrecipient ):
 		if dbg:
 			print("PyMailMessage.addCcRecipient " + ccrecipient, file=dbgout)
-		self.ccrecipients = self.ccrecipients + (ccrecipient,)
+		self.ccrecipients.append(ccrecipient)
 	def addBccRecipient( self, bccrecipient ):
 		if dbg:
 			print("PyMailMessage.addBccRecipient " + bccrecipient, file=dbgout)
-		self.bccrecipients = self.bccrecipients + (bccrecipient,)
+		self.bccrecipients.append(bccrecipient)
 	def getRecipients( self ):
 		if dbg:
 			print("PyMailMessage.getRecipients " + self.recipients, file=dbgout)
-		return self.recipients
+		return tuple(self.recipients)
 	def getCcRecipients( self ):
 		if dbg:
 			print("PyMailMessage.getCcRecipients " + self.ccrecipients, file=dbgout)
-		return self.ccrecipients
+		return tuple(self.ccrecipients)
 	def getBccRecipients( self ):
 		if dbg:
 			print("PyMailMessage.getBccRecipients " + self.bccrecipients, file=dbgout)
-		return self.bccrecipients
+		return tuple(self.bccrecipients)
 	def addAttachment( self, aMailAttachment ):
 		if dbg:
 			print("PyMailMessage.addAttachment", file=dbgout)
-		self.aMailAttachments = self.aMailAttachments + (aMailAttachment,)
+		self.aMailAttachments.append(aMailAttachment)
 	def getAttachments( self ):
 		if dbg:
 			print("PyMailMessage.getAttachments", file=dbgout)
-		return self.aMailAttachments
+		return tuple(self.aMailAttachments)
 
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()
