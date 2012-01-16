@@ -832,8 +832,6 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize (
 
     if (mxWindow.is())
     {
-        const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-
         // Calculate the summed width of all elements.
         ElementContainerPart::const_iterator iElement;
         for (iElement=rpPart->begin(); iElement!=rpPart->end(); ++iElement)

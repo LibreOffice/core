@@ -375,8 +375,6 @@ void PresenterHelpView::ProcessString (
     PresenterConfigurationAccess::GetProperty(rsProperties, A2S("Left")) >>= sLeftText;
     OUString sRightText;
     PresenterConfigurationAccess::GetProperty(rsProperties, A2S("Right")) >>= sRightText;
-
-    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     mpTextContainer->push_back(
         ::boost::shared_ptr<Block>(
             new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
