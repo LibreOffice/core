@@ -266,7 +266,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             pImp->bSize = sal_False;
         else
         {
-            SAL_INFO( "svx","unknown slot id");
+            SAL_WARN( "svx.stbcrtls","unknown slot id");
         }
     }
     else if ( pState->ISA( SfxPointItem ) )
@@ -293,7 +293,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
     else
     {
-        SAL_INFO( "svx", "invalid item type" );
+        SAL_WARN( "svx.stbcrtls", "invalid item type" );
         pImp->bPos = sal_False;
         pImp->bSize = sal_False;
         pImp->bTable = sal_False;

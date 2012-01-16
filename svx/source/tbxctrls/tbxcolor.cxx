@@ -68,7 +68,7 @@ namespace svx
             }
             catch ( Exception& )
             {
-                SAL_INFO( "svx", "ToolboxAccess::Ctor(): exception" );
+                SAL_WARN( "svx.tbxcrtls", "ToolboxAccess::Ctor(): exception" );
             }
         }
     }

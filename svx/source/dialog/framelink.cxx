@@ -560,7 +560,7 @@ void lclLinkLeftEnd(
     }
     else
     {
-        SAL_INFO( "svx", "lclLinkLeftEnd - called for invisible frame style" );
+        SAL_WARN( "svx.dialog", "lclLinkLeftEnd - called for invisible frame style" );
     }
 }
 

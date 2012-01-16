@@ -164,7 +164,7 @@ void FrameBorder::SetState( FrameBorderState eState )
     switch( meState )
     {
         case FRAMESTATE_SHOW:
-            SAL_INFO( "svx", "svx::FrameBorder::SetState - use SetCoreStyle to make border visible" );
+            SAL_WARN( "svx.dialog", "svx::FrameBorder::SetState - use SetCoreStyle to make border visible" );
         break;
         case FRAMESTATE_HIDE:
             maCoreStyle = SvxBorderLine();
@@ -220,7 +220,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
         case KEY_RIGHT: eBorder = meKeyRight;     break;
         case KEY_UP:    eBorder = meKeyTop;       break;
         case KEY_DOWN:  eBorder = meKeyBottom;    break;
-        default:        SAL_INFO( "svx", "svx::FrameBorder::GetKeyboardNeighbor - unknown key code" );
+        default:        SAL_WARN( "svx.dialog", "svx::FrameBorder::GetKeyboardNeighbor - unknown key code" );
     }
     return eBorder;
 }
@@ -515,7 +515,7 @@ const FrameBorder& FrameSelectorImpl::GetBorder( FrameBorderType eBorder ) const
     size_t nIndex = GetIndexFromFrameBorderType( eBorder );
     if( nIndex < maAllBorders.size() )
         return *maAllBorders[ nIndex ];
-    SAL_INFO( "svx", "svx::FrameSelectorImpl::GetBorder - unknown border type" );
+    SAL_WARN( "svx.dialog", "svx::FrameSelectorImpl::GetBorder - unknown border type" );
     return maTop;
 }
 

@@ -79,7 +79,7 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
             }
             else
             {
-                SAL_INFO( "svx", "GetApplyCharUnit(): no module found" );
+                SAL_WARN( "svx.dialog", "GetApplyCharUnit(): no module found" );
             }
         }
     }

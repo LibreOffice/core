@@ -91,7 +91,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     }
     else
     {
-        SAL_INFO( "svx", "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
+        SAL_WARN( "svx.stbcrtls", "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
         mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
     }
 

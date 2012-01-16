@@ -207,7 +207,7 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo*, pInfo )
         case RTFIMP_INSERTPARA:
             break;
         default:
-            SAL_INFO( "svx","unknown ImportInfo.eState");
+            SAL_WARN( "svx.table","unknown ImportInfo.eState");
     }
     return 0;
 }
