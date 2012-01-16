@@ -247,11 +247,12 @@ gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
+$(subst //,/, \
 $(subst $(REPODIR),$(gb_Helper_REPODIR_NATIVE), \
 $(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
 $(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
 $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
-$(1)))))
+$(1))))))
 endef
 
 # YaccTarget class
