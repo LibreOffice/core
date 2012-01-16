@@ -55,13 +55,6 @@ enum SbLanguageMode
     SB_LANG_JAVASCRIPT   // JavaScript
 };
 
-struct SbTextPortion
-{ // Syntax Highlighting: a text portion
-    xub_StrLen nLine;        // Line number
-    xub_StrLen nStart, nEnd; // 1st and last column
-    SbTextType eType;        // Type of the portion
-};
-
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
 BASIC_DLLPUBLIC String getBasicTypeName( SbxDataType eType );
