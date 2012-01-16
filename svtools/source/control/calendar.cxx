@@ -217,10 +217,10 @@ void Calendar::ImplInit( WinBits nWinStyle )
     {
 #ifdef SAL_LOG_INFO
         lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale() );
-#endif
         SAL_INFO( "svtools", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
             << aLoc.Language << "-" << aLoc.Country
             << "'' and other calendars aren't supported. Using en-US fallback." );
+#endif
 
         /* If we ever wanted to support other calendars than Gregorian a lot of
          * rewrite would be necessary to internally replace use of class Date
