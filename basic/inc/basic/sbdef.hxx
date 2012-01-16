@@ -34,15 +34,6 @@
 #include <rtl/ustring.hxx>
 #include "basicdllapi.h"
 
-// Active language
-enum SbLanguageMode
-{
-    SB_LANG_GLOBAL,      // As in SbiGlobals struct
-    SB_LANG_BASIC,       // StarBasic (Default)
-    SB_LANG_VBSCRIPT,    // Visual-Basic-Script
-    SB_LANG_JAVASCRIPT   // JavaScript
-};
-
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
 BASIC_DLLPUBLIC String getBasicTypeName( SbxDataType eType );

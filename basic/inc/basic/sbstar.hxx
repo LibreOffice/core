@@ -74,7 +74,6 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     sal_Bool            bDocBasic;
     sal_Bool            bVBAEnabled;
     BasicLibInfo*   pLibInfo;           // Info block for basic manager
-    SbLanguageMode  eLanguageMode;      // LanguageMode of the basic object
     sal_Bool            bQuit;
 
     SbxObjectRef pVBAGlobals;
@@ -161,11 +160,6 @@ public:
     static sal_Bool     IsCompilerError();
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
-    // Local settings
-    void SetLanguageMode( SbLanguageMode eLangMode )
-        { eLanguageMode = eLangMode; }
-
-    // Specific for break handler
     sal_Bool            IsBreak() const             { return bBreak; }
 
     static Link     GetGlobalErrorHdl();

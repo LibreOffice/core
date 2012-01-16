@@ -63,7 +63,6 @@ SbiGlobals::SbiGlobals()
     bCompiler = sal_False;
     bGlobalInitErr = sal_False;
     bRunInit = sal_False;
-    eLanguageMode = SB_LANG_BASIC;
     pErrStack = NULL;
     pTransliterationWrapper = NULL;
     bBlockCompilerError = sal_False;

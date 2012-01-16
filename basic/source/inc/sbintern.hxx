@@ -172,7 +172,6 @@ struct SbiGlobals
     sal_Bool            bGlobalInitErr;
     sal_Bool            bRunInit;       // sal_True, if RunInit active from the Basic
     String          aErrMsg;        // buffer for GetErrorText()
-    SbLanguageMode  eLanguageMode;  // flag for Visual-Basic-Script-Modus
     SbErrorStack*   pErrStack;      // for the SbiRuntime chain
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     sal_Bool            bBlockCompilerError;
