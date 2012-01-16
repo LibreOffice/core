@@ -1857,7 +1857,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
             m_bOldCtl = bCheck;
     }
     else
-        SAL_INFO( "cui", "OfaLanguagesTabPage::SupportHdl(): wrong pBox" );
+        SAL_WARN( "cui.options", "OfaLanguagesTabPage::SupportHdl(): wrong pBox" );
 
     return 0;
 }

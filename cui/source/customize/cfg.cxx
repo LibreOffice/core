@@ -1921,7 +1921,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         if ( !_inout_rxFrame.is() )
         {
-            SAL_INFO( "cui", "SvxConfigPage::GetFrameWithDefaultAndIdentify(): no frame found!" );
+            SAL_WARN( "cui.customize", "SvxConfigPage::GetFrameWithDefaultAndIdentify(): no frame found!" );
             return sModuleID;
         }
 
@@ -3293,7 +3293,7 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
         ((ToolbarSaveInData*)GetSaveInData())->ApplyToolbar( pToolbar );
     else
     {
-        SAL_INFO( "cui", "SvxToolbarConfigPage::MoveEntry(): no entry" );
+        SAL_WARN( "cui.customize", "SvxToolbarConfigPage::MoveEntry(): no entry" );
         UpdateButtonStates();
     }
 }

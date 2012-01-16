@@ -189,7 +189,7 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
 {
     if ( pDlg != m_pDlg )
     {
-        SAL_INFO( "cui", "VclAbstractDialog2_Impl::EndDialogHdl(): wrong dialog" );
+        SAL_WARN( "cui.factory", "VclAbstractDialog2_Impl::EndDialogHdl(): wrong dialog" );
     }
 
     m_aEndDlgHdl.Call( this );

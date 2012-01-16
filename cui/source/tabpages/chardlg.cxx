@@ -657,7 +657,7 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
         pStyleBox = m_pCTLFontStyleLB;
     else
     {
-        SAL_INFO( "cui", "invalid font name box" );
+        SAL_WARN( "cui.tabpages", "invalid font name box" );
         return;
     }
 
@@ -704,7 +704,7 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
     }
     else
     {
-        SAL_INFO( "cui", "invalid font name box" );
+        SAL_WARN( "cui.tabpages", "invalid font name box" );
         return;
     }
 

@@ -187,12 +187,12 @@ sal_Bool KillFile_Impl( const String& rURL )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        SAL_INFO( "cui", "KillFile: CommandAbortedException" );
+        SAL_WARN( "cui.options", "KillFile: CommandAbortedException" );
         bRet = sal_False;
     }
     catch( ... )
     {
-        SAL_INFO( "cui", "KillFile: Any other exception" );
+        SAL_WARN( "cui.options", "KillFile: Any other exception" );
         bRet = sal_False;
     }
 

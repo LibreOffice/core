@@ -875,7 +875,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( pSet )
     {
-        SAL_INFO( "cui", "Set does already exist!" );
+        SAL_WARN( "cui.dialogs", "Set does already exist!" );
         return pSet->GetRanges();
     }
 
@@ -945,7 +945,7 @@ void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*
 
 SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
-    SAL_INFO( "cui", "CreateInputItemSet not implemented" );
+    SAL_INFO( "cui.dialogs", "CreateInputItemSet not implemented" );
 
     return 0;
 }
@@ -1041,7 +1041,7 @@ void IconChoiceDialog::Start_Impl()
 
 const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 {
-    SAL_INFO( "cui", "GetRefreshedSet not implemented" );
+    SAL_WARN( "cui.dialogs", "GetRefreshedSet not implemented" );
     return 0;
 }
 

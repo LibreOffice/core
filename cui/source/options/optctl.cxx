@@ -148,7 +148,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
             break;
 
         default:
-            SAL_INFO( "cui", "SvxCTLOptionsPage::Reset(): invalid movement enum" );
+            SAL_WARN( "cui.options", "SvxCTLOptionsPage::Reset(): invalid movement enum" );
     }
 
     sal_uInt16 nPos = (sal_uInt16)aCTLOptions.GetCTLTextNumerals();

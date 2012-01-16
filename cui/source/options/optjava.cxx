@@ -259,7 +259,7 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
     }
     catch ( Exception& )
     {
-        SAL_INFO( "cui", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
     }
 
     return 0;
@@ -379,7 +379,7 @@ IMPL_LINK( SvxJavaOptionsPage, StartFolderPickerHdl, void*, EMPTYARG )
     }
     catch ( Exception& )
     {
-        SAL_INFO( "cui", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
     }
 
     return 0L;
