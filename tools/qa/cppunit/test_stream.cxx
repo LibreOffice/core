@@ -264,16 +264,14 @@ namespace
         aMemStream.Seek(0);
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
-        //This is the weird current behavior where an embedded null is read but
-        //discarded
-        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar"))); //<--diff A
+        CPPUNIT_ASSERT(aFoo.getLength() == 7 && aFoo[3] == 0);
         CPPUNIT_ASSERT(aMemStream.good());
 
         std::string sStr(RTL_CONSTASCII_STRINGPARAM(foo));
         std::istringstream iss(sStr, std::istringstream::in);
         std::getline(iss, sStr, '\n');
         //embedded null read as expected
-        CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);                   //<--diff A
+        CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);
         CPPUNIT_ASSERT(iss.good());
 
         bRet = aMemStream.ReadLine(aFoo);
@@ -299,12 +297,12 @@ namespace
         bRet = aMemStreamB.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
         CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
-        CPPUNIT_ASSERT(!aMemStreamB.eof()); //<-- diff B
+        CPPUNIT_ASSERT(!aMemStreamB.eof()); //<-- diff A
 
         std::istringstream issB(bar, std::istringstream::in);
         std::getline(issB, sStr, '\n');
         CPPUNIT_ASSERT(sStr == "foo");
-        CPPUNIT_ASSERT(issB.eof());         //<-- diff B
+        CPPUNIT_ASSERT(issB.eof());         //<-- diff A
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);

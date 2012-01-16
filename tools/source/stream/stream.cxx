@@ -643,7 +643,7 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
     sal_Char    c           = 0;
     sal_Size       nTotalLen   = 0;
 
-    rStr.Erase();
+    rtl::OStringBuffer aBuf;
     while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
                                     // !!! weil wir blockweise
                                     // !!! lesen
@@ -651,10 +651,11 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
         sal_uInt16 nLen = (sal_uInt16)Read( buf, sizeof(buf)-1 );
         if ( !nLen )
         {
-            if ( rStr.Len() == 0 )
+            if ( aBuf.getLength() == 0 )
             {
                 // der allererste Blockread hat fehlgeschlagen -> Abflug
                 bIsEof = sal_True;
+                rStr = rtl::OString();
                 return sal_False;
             }
             else
@@ -670,23 +671,15 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
                 bEnd = sal_True;
                 break;
             }
-            // erAck 26.02.01: Old behavior was no special treatment of '\0'
-            // character here, but a following rStr+=c did ignore it. Is this
-            // really intended? Or should a '\0' better terminate a line?
-            // The nOldFilePos stuff wasn't correct then anyways.
-            if ( c )
-            {
-                if ( n < j )
-                    buf[n] = c;
-                ++n;
-            }
+            if ( n < j )
+                buf[n] = c;
+            ++n;
         }
-        if ( n )
-            rStr.Append( buf, n );
+        aBuf.append(buf, n);
         nTotalLen += j;
     }
 
-    if ( !bEnd && !GetError() && rStr.Len() )
+    if ( !bEnd && !GetError() && aBuf.getLength() )
         bEnd = sal_True;
 
     nOldFilePos += nTotalLen;
@@ -706,6 +699,7 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
 
     if ( bEnd )
         bIsEof = sal_False;
+    rStr = aBuf.makeStringAndClear();
     return bEnd;
 }
 
