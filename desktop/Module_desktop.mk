@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
     Executable_soffice.bin \
+    Library_deployment \
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
@@ -56,7 +57,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_unopkg.bin \
-    Library_deployment \
     Library_deploymentgui \
     Library_migrationoo2 \
     Library_migrationoo3 \
