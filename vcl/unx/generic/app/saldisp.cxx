@@ -228,6 +228,9 @@ static sal_Bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI
 
 // ---------------------------------------------------------------------------
 
+/* this stuff is used in SalDisplay::GetKeyboardName for SOLARIS */
+#if defined(SOLARIS)
+
 // check wether displaystring is in format N.M or N. or just N
 // with N and M beeing natural numbers
 static sal_Bool
@@ -341,6 +344,8 @@ sal_Bool SalDisplay::IsLocal()
     }
     return (sal_Bool)bLocal_;
 }
+
+#endif //SOLARIS
 
 // ---------------------------------------------------------------------------
 extern "C" srv_vendor_t
@@ -817,9 +822,11 @@ void SalDisplay::Init()
     SetServerVendor();
     X11SalBitmap::ImplCreateCache();
 
+#if defined(SOLARIS)
     bLocal_         = sal_False; /* dont care, initialize later by
                                 calling SalDisplay::IsLocal() */
     mbLocalIsValid  = sal_False; /* bLocal_ is not yet initialized */
+#endif
 
     // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
     if( getenv( "SAL_SYNCHRONIZE" ) )
