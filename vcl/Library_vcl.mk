@@ -458,7 +458,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/fontmanager/fontmanager \
     vcl/generic/fontmanager/helper \
     vcl/generic/fontmanager/parseAFM \
-    vcl/unx/generic/plugadapt/salplug \
+    vcl/android/androidinst \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \

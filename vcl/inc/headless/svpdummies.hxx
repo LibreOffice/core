@@ -29,7 +29,7 @@
 #ifndef _SVP_SVPDUMMIES_HXX
 
 #include <vcl/sysdata.hxx>
-
+#include <generic/gensys.h>
 #include <salobj.hxx>
 #include <salimestatus.hxx>
 #include <salsys.hxx>
@@ -74,9 +74,9 @@ class SvpImeStatus : public SalI18NImeStatus
         virtual void toggle();
 };
 
-class SvpSalSystem : public SalSystem
+class SvpSalSystem : public SalGenericSystem
 {
-    public:
+public:
     SvpSalSystem() {}
     virtual ~SvpSalSystem();
     // get info about the display
@@ -85,11 +85,10 @@ class SvpSalSystem : public SalSystem
     virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );
 
-
-    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                      const rtl::OUString& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton);
+    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
+                                  const rtl::OUString& rMessage,
+                                  const std::list< rtl::OUString >& rButtons,
+                                  int nDefButton );
 };
 
 
