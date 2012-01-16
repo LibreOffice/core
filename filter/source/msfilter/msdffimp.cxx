@@ -4443,22 +4443,27 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     rSt >> aRecHd;
     if ( aRecHd.nRecType == DFF_msofbtSpContainer )
     {
+        sal_Int32 nGroupRotateAngle = 0;
+        sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
         if (!aRecHd.SeekToBegOfRecord(rSt))
             return pRet;
-
         pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
+            nSpFlags = nGroupShapeFlags;
+            nGroupRotateAngle = mnFix16Angle;
+
             Rectangle aClientRect( rClientRect );
+
             Rectangle aGlobalChildRect;
             if ( !nCalledByGroup || rGlobalChildRect.IsEmpty() )
                 aGlobalChildRect = GetGlobalChildAnchor( rHd, rSt, aClientRect );
             else
                 aGlobalChildRect = rGlobalChildRect;
 
-            if ( ( mnFix16Angle > 4500 && mnFix16Angle <= 13500 )
-                || ( mnFix16Angle > 22500 && mnFix16Angle <= 31500 ) )
+            if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
+                || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
             {
                 sal_Int32 nHalfWidth = ( aClientRect.GetWidth() + 1 ) >> 1;
                 sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
@@ -4509,18 +4514,18 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     return pRet;
             }
 
-            if ( mnFix16Angle )
+            if ( nGroupRotateAngle )
             {
-                double a = mnFix16Angle * nPi180;
-                pRet->NbcRotate( aClientRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
+                double a = nGroupRotateAngle * nPi180;
+                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
             }
-            if ( nGroupShapeFlags & SP_FFLIPV )     // Vertical flip?
+            if ( nSpFlags & SP_FFLIPV )     // Vertical flip?
             {   // BoundRect in aBoundRect
                 Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );
                 pRet->NbcMirror( aLeft, aRight );
             }
-            if ( nGroupShapeFlags & SP_FFLIPH )     // Horizontal flip?
+            if ( nSpFlags & SP_FFLIPH )     // Horizontal flip?
             {   // BoundRect in aBoundRect
                 Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
