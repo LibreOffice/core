@@ -39,7 +39,9 @@
 #include "svl/inettype.hxx"
 #include "unotools/pathoptions.hxx"
 
+#if !defined(ANDROID) && !defined(IOS)
 #include <l10ntools/compilehelp.hxx>
+#endif
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -397,6 +399,7 @@ void BackendImpl::implProcessHelp(
             data.dataUrl = xPackage->getURL();
             if (!package->extensionContainsCompiledHelp())
             {
+#if !defined(ANDROID) && !defined(IOS)
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 
@@ -593,6 +596,9 @@ void BackendImpl::implProcessHelp(
                         }
                     }
                 }
+#else
+                (void) xCmdEnv;
+#endif
             }
                 //Writing the data entry replaces writing the flag file. If we got to this
                 //point the registration was successful.

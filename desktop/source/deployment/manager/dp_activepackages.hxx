@@ -34,7 +34,9 @@
 #include <utility>
 #include <vector>
 
+#if !defined(ANDROID) && !defined(IOS)
 #include "dp_persmap.h"
+#endif
 
 namespace rtl { class OUString; }
 
@@ -91,8 +93,9 @@ public:
 private:
     ActivePackages(ActivePackages &); // not defined
     void operator =(ActivePackages &); // not defined
-
+#if !defined(ANDROID) && !defined(IOS)
     ::dp_misc::PersistentMap m_map;
+#endif
 };
 
 }

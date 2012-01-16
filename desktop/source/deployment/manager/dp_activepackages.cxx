@@ -43,8 +43,6 @@
 #include <boost/unordered_map.hpp>
 
 #include "dp_identifier.hxx"
-#include "dp_persmap.h"
-
 #include "dp_activepackages.hxx"
 
 // Old format of database entry:
@@ -126,7 +124,15 @@ namespace dp_manager {
 
 ActivePackages::ActivePackages() {}
 
-ActivePackages::ActivePackages(::rtl::OUString const & url) : m_map(url) {}
+ActivePackages::ActivePackages(::rtl::OUString const & url)
+#if !defined(ANDROID) && !defined(IOS)
+    : m_map(url)
+#endif
+{
+#if defined(ANDROID) || defined(IOS)
+    (void)url;
+#endif
+}
 
 ActivePackages::~ActivePackages() {}
 
@@ -140,6 +146,7 @@ bool ActivePackages::get(
     Data * data, ::rtl::OUString const & id, ::rtl::OUString const & fileName)
     const
 {
+#if !defined(ANDROID) && !defined(IOS)
     ::rtl::OString v;
     if (m_map.get(&v, newKey(id))) {
         if (data != NULL) {
@@ -154,10 +161,17 @@ bool ActivePackages::get(
     } else {
         return false;
     }
+#else
+    (void) data;
+    (void) id;
+    (void) fileName;
+    return false;
+#endif
 }
 
 ActivePackages::Entries ActivePackages::getEntries() const {
     Entries es;
+#if !defined(ANDROID) && !defined(IOS)
     ::dp_misc::t_string2string_map m(m_map.getEntries());
     for (::dp_misc::t_string2string_map::const_iterator i(m.begin());
          i != m.end(); ++i)
@@ -178,10 +192,12 @@ ActivePackages::Entries ActivePackages::getEntries() const {
                     decodeOldData(fn, i->second)));
         }
     }
+#endif
     return es;
 }
 
 void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
+#if !defined(ANDROID) && !defined(IOS)
     ::rtl::OStringBuffer b;
     b.append(
         ::rtl::OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
@@ -194,12 +210,21 @@ void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
     b.append(separator);
     b.append(::rtl::OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8));
     m_map.put(newKey(id), b.makeStringAndClear());
+#else
+    (void) id;
+    (void) data;
+#endif
 }
 
 void ActivePackages::erase(
     ::rtl::OUString const & id, ::rtl::OUString const & fileName)
 {
+#if !defined(ANDROID) && !defined(IOS)
     m_map.erase(newKey(id), true) || m_map.erase(oldKey(fileName), true);
+#else
+    (void) id;
+    (void) fileName;
+#endif
 }
 
 }

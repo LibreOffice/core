@@ -32,7 +32,9 @@
 
 #include "dp_configuration.hrc"
 #include "dp_backend.h"
+#if !defined(ANDROID) && !defined(IOS)
 #include "dp_persmap.h"
+#endif
 #include "dp_ucb.h"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -118,10 +120,10 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
-
+#if !defined(ANDROID) && !defined(IOS)
     // for backwards compatibility - nil if no (compatible) back-compat db present
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
-
+#endif
     virtual void SAL_CALL disposing();
 
     const Reference<deployment::XPackageTypeInfo> m_xConfDataTypeInfo;
@@ -224,6 +226,8 @@ BackendImpl::BackendImpl(
         deleteUnusedFolders(OUString(), folders);
 
         configmgrini_verify_init( xCmdEnv );
+
+#if !defined(ANDROID) && !defined(IOS)
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -247,6 +251,7 @@ BackendImpl::BackendImpl(
             }
         }
         m_registeredPackages = pMap;
+#endif
      }
 }
 
@@ -566,13 +571,14 @@ BackendImpl::PackageImpl::isRegistered_(
     bool bReg = false;
     if (that->hasActiveEntry(getURL()))
         bReg = true;
+#if !defined(ANDROID) && !defined(IOS)
     if (!bReg && that->m_registeredPackages.get())
     {
         // fallback for user extension registered in berkeley DB
         bReg = that->m_registeredPackages->has(
             rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ));
     }
-
+#endif
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true, beans::Ambiguous<sal_Bool>( bReg, false ) );
 }
@@ -754,6 +760,7 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else // revoke
     {
+#if !defined(ANDROID) && !defined(IOS)
         if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv) &&
             that->m_registeredPackages.get()) {
             // Obsolete package database handling - should be removed for LibreOffice 4.0
@@ -803,7 +810,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 OSL_ASSERT(0);
             }
         }
-
+#endif
         ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
         //If an xcu file was life deployed then always a data entry is written.
         //If the xcu file was already in the configmr.ini then there is also

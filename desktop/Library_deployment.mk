@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_linked_libs,deployment,\
     cppu \
     cppuhelper \
     deploymentmisc \
-    helplinker \
     sal \
     svl \
     tl \
@@ -54,15 +53,16 @@ $(eval $(call gb_Library_add_linked_libs,deployment,\
     $(gb_STDLIBS) \
 ))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_externals,deployment,\
     berkeleydb \
 ))
+endif
 
 $(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment))
 
 $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/dp_log \
-    desktop/source/deployment/dp_persmap \
     desktop/source/deployment/dp_services \
     desktop/source/deployment/dp_xml \
     desktop/source/deployment/manager/dp_activepackages \
@@ -91,5 +91,17 @@ $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/registry/sfwk/dp_parceldesc \
     desktop/source/deployment/registry/sfwk/dp_sfwk \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
+$(eval $(call gb_Library_add_linked_libs,deployment,\
+    helplinker \
+))
+
+$(eval $(call gb_Library_add_exception_objects,deployment,\
+    desktop/source/deployment/dp_persmap \
+))
+
+endif
 
 # vim: set ts=4 sw=4 et:

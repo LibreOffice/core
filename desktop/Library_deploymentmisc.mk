@@ -54,12 +54,19 @@ $(eval $(call gb_Library_add_linked_libs,deploymentmisc,\
     $(gb_STDLIBS) \
 ))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_externals,deploymentmisc,\
     berkeleydb \
 ))
+endif
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,deploymentmisc,\
     desktop/source/deployment/misc/db \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,deploymentmisc,\
     desktop/source/deployment/misc/dp_dependencies \
     desktop/source/deployment/misc/dp_descriptioninfoset \
     desktop/source/deployment/misc/dp_identifier \

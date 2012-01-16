@@ -5819,10 +5819,12 @@ or install the Berkeley db development package.])
 
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libdb-4.8.dll"
-else
+elif test $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([internal])
     SYSTEM_DB=NO
     BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
+else
+   AC_MSG_RESULT([none])
 fi
 AC_SUBST(SYSTEM_DB)
 AC_SUBST(SYSTEM_DB_CFLAGS)

@@ -32,6 +32,7 @@
 #include "cppuhelper/compbase1.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include <boost/unordered_map.hpp>
 
 
 using namespace ::dp_misc;

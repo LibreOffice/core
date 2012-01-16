@@ -60,7 +60,6 @@ copy-stuff:
 		  bootstrap.uno \
 		  comphelpgcc3 \
 		  configmgr.uno \
-		  db-4.7 \
 		  fontconfig \
 		  forlo \
 		  foruilo \

@@ -40,6 +40,7 @@
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "osl/mutex.hxx"
 #include <list>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 

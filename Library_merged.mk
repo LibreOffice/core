@@ -49,10 +49,15 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
-	berkeleydb \
 	icuuc \
 	zlib \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Library_use_externals,merged,\
+	berkeleydb \
+))
+endif
 
 # gb_MERGEDLIBS is defined in solenv/gbuild/extensions/pre_MergedLibsList.mk
 $(eval $(call gb_Library_add_library_objects,merged,\
