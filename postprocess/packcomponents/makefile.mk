@@ -242,8 +242,11 @@ my_components += component/framework/util/lomenubar
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \
-    LuceneHelpWrapper \
+    LuceneHelpWrapper
+.ENDIF
+my_components += \
     component/xmerge/source/bridge/XMergeBridge \
     component/filter/source/xsltfilter/XSLTFilter.jar \
     component/filter/source/xsltvalidate/XSLTValidate \
