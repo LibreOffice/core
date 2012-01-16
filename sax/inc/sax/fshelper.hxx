@@ -90,7 +90,6 @@ public:
     FastSerializerHelper* write(const rtl::OUString& value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);
-    FastSerializerHelper* write(float value);
     FastSerializerHelper* write(double value);
 
     FastSerializerHelper* writeEscaped(const char* value);
