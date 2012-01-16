@@ -34,8 +34,6 @@
 #include <rtl/ustring.hxx>
 #include "basicdllapi.h"
 
-using rtl::OUString;
-
 // Type of a text token (syntax highlighting)
 enum SbTextType
 {
