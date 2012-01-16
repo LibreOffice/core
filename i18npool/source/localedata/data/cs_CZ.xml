@@ -35,26 +35,31 @@
     <MeasurementSystem>Metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
+    <DateAcceptancePattern>D.M.</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M.</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M. Y</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M.</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M. Y</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey0" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>D.M.YYYY</FormatCode>
+      <FormatCode>D. M. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>NNNNDD. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>D.M.YYYY</FormatCode>
+      <FormatCode>DD.MM.YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>D.M.YYYY</FormatCode>
+      <FormatCode>DD.MM.YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D. MMM YY</FormatCode>
+      <FormatCode>D. MMM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D. MMM YYYY</FormatCode>
+      <FormatCode>D. MMM. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D. MMM YYYY</FormatCode>
+      <FormatCode>D. MMM. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>D. MMMM YYYY</FormatCode>
@@ -63,10 +68,10 @@
       <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN, D. MMM YY</FormatCode>
+      <FormatCode>NN, D. MMM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>NN, DD. MMM YY</FormatCode>
+      <FormatCode>NN, DD. MMM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="29">
       <FormatCode>NN, D. MMMM YYYY</FormatCode>
@@ -75,7 +80,7 @@
       <FormatCode>NNNND. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>DD-MM</FormatCode>
+      <FormatCode>MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
@@ -85,10 +90,10 @@
       <DefaultName>ISO 8601 (EN 28601)</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM YY</FormatCode>
+      <FormatCode>MM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>MMM DD</FormatCode>
+      <FormatCode>DD. MMM.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
@@ -286,6 +291,68 @@
           <DefaultFullName>prosinec</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <PartitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>I</DefaultAbbrvName>
+          <DefaultFullName>ledna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>II</DefaultAbbrvName>
+          <DefaultFullName>února</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>III</DefaultAbbrvName>
+          <DefaultFullName>března</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>IV</DefaultAbbrvName>
+          <DefaultFullName>dubna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultFullName>května</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>VI</DefaultAbbrvName>
+          <DefaultFullName>června</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>VII</DefaultAbbrvName>
+          <DefaultFullName>července</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>VIII</DefaultAbbrvName>
+          <DefaultFullName>srpna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>IX</DefaultAbbrvName>
+          <DefaultFullName>září</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>X</DefaultAbbrvName>
+          <DefaultFullName>října</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>XI</DefaultAbbrvName>
+          <DefaultFullName>listopadu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>XII</DefaultAbbrvName>
+          <DefaultFullName>prosince</DefaultFullName>
+        </Month>
+      </PartitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
