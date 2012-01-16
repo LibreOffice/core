@@ -725,7 +725,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
                         {
                             if ( aColIter->second.sTableName == aSqlIter->first )
                             {
-                                io_aRow[aColIter->second.nPosition].fill(i++,aColIter->second.nType,aColIter->second.bNullable,xRow);
+                                io_aRow[aColIter->second.nPosition].fill(i++, aColIter->second.nType, xRow);
                                 io_aRow[aColIter->second.nPosition].setModified();
                             }
                         }
