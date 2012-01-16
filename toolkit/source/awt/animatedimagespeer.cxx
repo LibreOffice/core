@@ -219,7 +219,7 @@ namespace toolkit
                             ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
                             )
                         {
-                            aImageSizes[ nImageSet ] = Size( ::std::numeric_limits< long >::max(), ::std::numeric_limits< long >::max() );
+                            aImageSizes[ nImageSet ] = Size( SAL_MAX_INT32, SAL_MAX_INT32 );
                         }
                         else
                         {
