@@ -56,12 +56,6 @@
 #include <list>
 #include <set>
 
-#ifdef UNX
-#define SEARCH_PATH_DELIMITER ':'
-#else
-#define SEARCH_PATH_DELIMITER ';'
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OUStringBuffer;
@@ -209,7 +203,7 @@ void ResMgrContainer::init()
         nIndex = 0;
         while( nIndex >= 0 )
         {
-            OUString aPathElement( aEnvPath.getToken( 0, SEARCH_PATH_DELIMITER, nIndex ) );
+            OUString aPathElement( aEnvPath.getToken( 0, SAL_PATHSEPARATOR, nIndex ) );
             if( aPathElement.getLength() )
             {
                 OUString aFileURL;
