@@ -34,18 +34,6 @@
 #include <rtl/ustring.hxx>
 #include "basicdllapi.h"
 
-// Type of a text token (syntax highlighting)
-enum SbTextType
-{
-    SB_KEYWORD = 1,      // Keywords
-    SB_SYMBOL,           // Symbols
-    SB_STRING,           // Strings
-    SB_NUMBER,           // Numbers
-    SB_PUNCTUATION,      // Brackets, points, etc.
-    SB_COMMENT,          // Comments
-    SB_DUMMY = 255       // workaround for #i31479
-};
-
 // Active language
 enum SbLanguageMode
 {
