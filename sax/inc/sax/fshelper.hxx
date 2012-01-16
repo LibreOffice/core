@@ -56,10 +56,6 @@ public:
 
     ~FastSerializerHelper();
 
-    void startElement(const char* elementName, ...);
-    void singleElement(const char* elementName, ...);
-    void endElement(const char* elementName);
-
     void startElementV(sal_Int32 elementTokenId, va_list args);
     void singleElementV(sal_Int32 elementTokenId, va_list args);
 
@@ -75,7 +71,6 @@ public:
     inline void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
 
-    void singleElement(const char* elementName, XFastAttributeListRef xAttrList);
     inline void singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
         { singleElementV(elementTokenId, xAttrList); }
     void singleElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList);
