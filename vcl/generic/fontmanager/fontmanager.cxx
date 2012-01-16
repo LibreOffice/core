@@ -2587,30 +2587,6 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
 
 // -------------------------------------------------------------------------
 
-static bool createWriteablePath( const ByteString& rPath )
-{
-    bool bSuccess = false;
-
-    if( access( rPath.GetBuffer(), W_OK ) )
-    {
-        int nPos = rPath.SearchBackward( '/' );
-        if( nPos != STRING_NOTFOUND )
-            while( nPos > 0 && rPath.GetChar( nPos ) == '/' )
-                nPos--;
-
-        if( nPos != STRING_NOTFOUND && nPos != 0 && createWriteablePath( rPath.Copy( 0, nPos+1 ) ) )
-        {
-            bSuccess = mkdir( rPath.GetBuffer(), 0777 ) ? false : true;
-        }
-    }
-    else
-        bSuccess = true;
-
-    return bSuccess;
-}
-
-// -------------------------------------------------------------------------
-
 // TODO: move most of this stuff into the central font-subsetting code
 bool PrintFontManager::createFontSubset(
                                         FontSubsetInfo& rInfo,
