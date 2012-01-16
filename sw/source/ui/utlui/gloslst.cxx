@@ -62,10 +62,6 @@ struct TripleString
     String sShort;
 };
 
-typedef TripleString* TripleStringPtr;
-SV_DECL_PTRARR_DEL( TripleStrings, TripleStringPtr, 0, 4 )
-SV_IMPL_PTRARR( TripleStrings, TripleStringPtr )
-
 class SwGlossDecideDlg : public ModalDialog
 {
     OKButton        aOk;
@@ -107,11 +103,6 @@ IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
     return 0;
 }
 
-/********************************************************************
-
-********************************************************************/
-
-
 SwGlossaryList::SwGlossaryList() :
     bFilled(sal_False)
 {
@@ -119,11 +110,6 @@ SwGlossaryList::SwGlossaryList() :
     sPath = aPathOpt.GetAutoTextPath();
     SetTimeout(GLOS_TIMEOUT);
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 SwGlossaryList::~SwGlossaryList()
 {
@@ -136,42 +122,44 @@ SwGlossaryList::~SwGlossaryList()
  * bei Bedarf nach der richtigen Gruppe gefragt
 ********************************************************************/
 
-
 sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
                                 String& rShortName, String& rGroupName )
 {
     if(!bFilled)
         Update();
 
-    TripleStrings aTripleStrings;
+    std::vector<TripleString> aTripleStrings;
 
     sal_uInt16 nCount = aGroupArr.Count();
     sal_uInt16 nFound = 0;
     for(sal_uInt16 i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(i);
-        if(!rGroupName.Len() || rGroupName == pGroup->sName)
-            for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
-            {
-                String sLong = pGroup->sLongNames.GetToken(j, STRING_DELIM);
-                if((rLongName == sLong))
-                {
-                    TripleString* pTriple = new TripleString;
-                    pTriple->sGroup = pGroup->sName;
-                    pTriple->sBlock = sLong;
-                    pTriple->sShort = pGroup->sShortNames.GetToken(j, STRING_DELIM);
-                    aTripleStrings.Insert(pTriple, nFound++);
-                }
-            }
+        if(rGroupName.Len() && rGroupName != pGroup->sName)
+            continue;
+
+        for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
+        {
+            String sLong = pGroup->sLongNames.GetToken(j, STRING_DELIM);
+            if(rLongName != sLong)
+                continue;
+
+            TripleString pTriple;
+            pTriple.sGroup = pGroup->sName;
+            pTriple.sBlock = sLong;
+            pTriple.sShort = pGroup->sShortNames.GetToken(j, STRING_DELIM);
+            aTripleStrings.push_back(pTriple);
+            ++nFound;
+        }
     }
 
     sal_Bool bRet = sal_False;
-    nCount = aTripleStrings.Count();
-    if(1 == nCount )
+    nCount = aTripleStrings.size();
+    if(1 == nCount)
     {
-        TripleString* pTriple = aTripleStrings[0];
-        rShortName = pTriple->sShort;
-        rGroupName = pTriple->sGroup;
+        const TripleString& pTriple(aTripleStrings.front());
+        rShortName = pTriple.sShort;
+        rGroupName = pTriple.sGroup;
         bRet = sal_True;
     }
     else if(1 < nCount)
@@ -179,20 +167,20 @@ sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
         SwGlossDecideDlg aDlg(0);
         String sTitle = aDlg.GetText();
         sTitle += ' ';
-        sTitle += aTripleStrings[0]->sBlock;
+        sTitle += aTripleStrings.front().sBlock;
         aDlg.SetText(sTitle);
 
         ListBox& rLB = aDlg.GetListBox();
-        for(sal_uInt16 i = 0; i < nCount; i++ )
-            rLB.InsertEntry(aTripleStrings[i]->sGroup.GetToken(0, GLOS_DELIM));
+        for(std::vector<TripleString>::const_iterator i = aTripleStrings.begin(); i != aTripleStrings.end(); ++i)
+            rLB.InsertEntry(i->sGroup.GetToken(0, GLOS_DELIM));
 
         rLB.SelectEntryPos(0);
         if(RET_OK == aDlg.Execute() &&
             LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectEntryPos())
         {
-            TripleString* pTriple = aTripleStrings[rLB.GetSelectEntryPos()];
-            rShortName = pTriple->sShort;
-            rGroupName = pTriple->sGroup;
+            const TripleString& pTriple(aTripleStrings[rLB.GetSelectEntryPos()]);
+            rShortName = pTriple.sShort;
+            rGroupName = pTriple.sGroup;
             bRet = sal_True;
         }
         else
@@ -200,11 +188,6 @@ sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
     }
     return bRet;
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 sal_uInt16  SwGlossaryList::GetGroupCount()
 {
