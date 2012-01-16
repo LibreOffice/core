@@ -1371,10 +1371,27 @@ void OdgGenerator::startTextObject(const WPXPropertyList &propList, const WPXPro
     pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill", "none");
     pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill-color", "#ffffff");
 
+    double x = 0.0;
+    double y = 0.0;
+    double height = 0.0;
+    double width = 0.0;
     if (propList["svg:x"])
-        pDrawFrameOpenElement->addAttribute("svg:x", propList["svg:x"]->getStr());
+        x = propList["svg:x"]->getDouble();
     if (propList["svg:y"])
-        pDrawFrameOpenElement->addAttribute("svg:y", propList["svg:y"]->getStr());
+        y = propList["svg:y"]->getDouble();
+    if (propList["svg:width"])
+        width = propList["svg:width"]->getDouble();
+    if (propList["svg:height"])
+        height = propList["svg:height"]->getDouble();
+
+    double angle(propList["libwpg:rotate"] ? - M_PI * propList["libwpg:rotate"]->getDouble() / 180.0 : 0.0);
+    if (angle != 0.0)
+    {
+        double deltax((width*cos(angle)+height*sin(angle)-width)/2.0);
+        double deltay((-width*sin(angle)+height*cos(angle)-height)/2.0);
+        x -= deltax;
+        y -= deltay;
+    }
 
     if (!propList["svg:width"] && !propList["svg:height"])
     {
@@ -1452,6 +1469,28 @@ void OdgGenerator::startTextObject(const WPXPropertyList &propList, const WPXPro
         pDrawFrameOpenElement->addAttribute("draw:opacity", propList["draw:opacity"]->getStr());
         pStyleGraphicPropertiesOpenElement->addAttribute("draw:opacity", propList["draw:opacity"]->getStr());
     }
+
+    WPXProperty *svg_x = WPXPropertyFactory::newInchProp(x);
+    WPXProperty *svg_y = WPXPropertyFactory::newInchProp(y);
+    if (angle != 0.0)
+    {
+        WPXProperty *libwpg_rotate = WPXPropertyFactory::newDoubleProp(angle);
+        sValue.sprintf("rotate (%s) translate(%s, %s)",
+                       libwpg_rotate->getStr().cstr(),
+                       svg_x->getStr().cstr(),
+                       svg_y->getStr().cstr());
+        delete libwpg_rotate;
+        pDrawFrameOpenElement->addAttribute("draw:transform", sValue);
+    }
+    else
+    {
+        if (propList["svg:x"])
+            pDrawFrameOpenElement->addAttribute("svg:x", svg_x->getStr());
+        if (propList["svg:y"])
+            pDrawFrameOpenElement->addAttribute("svg:y", svg_y->getStr());
+    }
+    delete svg_x;
+    delete svg_y;
     mpImpl->mBodyElements.push_back(pDrawFrameOpenElement);
     mpImpl->mBodyElements.push_back(new TagOpenElement("draw:text-box"));
     mpImpl->mGraphicsAutomaticStyles.push_back(pStyleGraphicPropertiesOpenElement);
