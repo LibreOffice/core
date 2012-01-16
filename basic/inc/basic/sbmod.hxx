@@ -55,7 +55,6 @@ class SbModuleImpl;
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
-    friend class    TestToolObj;    // allows module initialisation at runtime
     friend class    SbiCodeGen;
     friend class    SbMethod;
     friend class    SbiRuntime;
