@@ -2129,7 +2129,7 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
             Show( sal_True );
         maGeometry.nDisplayScreenNumber = nNewScreen;
     }
-    else if( sal_Int32(nNewScreen) < GetDisplay()->GetXScreenCount() )
+    else if( nNewScreen < GetDisplay()->GetXScreenCount() )
     {
         bool bVisible = bMapped_;
         if( bVisible )
