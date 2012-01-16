@@ -365,7 +365,7 @@ short PrinterSetupDialog::Execute()
 {
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
-        SAL_INFO( "svtools", "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
+        SAL_WARN( "svtools.dialogs", "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return sal_False;
     }
 

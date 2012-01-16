@@ -215,9 +215,9 @@ void Calendar::ImplInit( WinBits nWinStyle )
             Application::GetAppLocaleDataWrapper().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
     {
-#ifdef SAL_LOG_INFO
+#ifdef SAL_LOG_WARN
         lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale() );
-        SAL_INFO( "svtools", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
+        SAL_WARN( "svtools.control", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
             << aLoc.Language << "-" << aLoc.Country
             << "'' and other calendars aren't supported. Using en-US fallback." );
 #endif
@@ -327,7 +327,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
             eDay = SATURDAY;
             break;
         default:
-            SAL_INFO( "svtools", "Calendar::ImplGetWeekStart: broken i18n Gregorian calendar (getFirstDayOfWeek())");
+            SAL_WARN( "svtools.control", "Calendar::ImplGetWeekStart: broken i18n Gregorian calendar (getFirstDayOfWeek())");
             eDay = SUNDAY;
     }
     return eDay;

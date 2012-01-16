@@ -133,15 +133,15 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     }
     catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
-        SAL_INFO( "svtools", "CommandAbortedException" );
+        SAL_WARN( "svtools.filter", "CommandAbortedException" );
     }
     catch(const ::com::sun::star::ucb::ContentCreationException&)
     {
-        SAL_INFO( "svtools", "ContentCreationException" );
+        SAL_WARN( "svtools.filter", "ContentCreationException" );
     }
     catch( ... )
     {
-        SAL_INFO( "svtools", "Any other exception" );
+        SAL_WARN( "svtools.filter", "Any other exception" );
     }
     return bExists;
 }
@@ -160,11 +160,11 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
     }
     catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
-        SAL_INFO( "svtools", "CommandAbortedException" );
+        SAL_WARN( "svtools.filter", "CommandAbortedException" );
     }
     catch( ... )
     {
-        SAL_INFO( "svtools", "Any other exception" );
+        SAL_WARN( "svtools.filter", "Any other exception" );
     }
 }
 

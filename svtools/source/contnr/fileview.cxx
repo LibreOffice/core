@@ -1942,7 +1942,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         return eStillRunning;
     }
 
-    SAL_INFO( "svtools", "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
+    SAL_WARN( "svtools.contnr", "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
     return eFailure;
 }
 
@@ -2303,7 +2303,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 
             if ( !aDate.isEmpty() )
             {
-                SAL_INFO( "svtools", "Don't know, how to convert date" );
+                SAL_WARN( "svtools.contnr", "Don't know, how to convert date" );
                 ;// convert date string to date
             }
         }

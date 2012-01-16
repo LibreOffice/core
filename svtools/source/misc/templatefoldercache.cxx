@@ -306,7 +306,7 @@ namespace svt
 
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
-            SAL_INFO( "svtools", "This method must not be used, the whole URL must be stored!" );
+            SAL_WARN( "svtools.misc", "This method must not be used, the whole URL must be stored!" );
 
             // use the base class operator with the local name of the content
             StoreString::operator() ( _rxContent->getName() );
@@ -629,7 +629,7 @@ namespace svt
             }
             catch( CommandAbortedException& )
             {
-                SAL_INFO( "svtools", "TemplateFolderCacheImpl::implReadFolder: caught a CommandAbortedException!" );
+                SAL_WARN( "svtools.misc", "TemplateFolderCacheImpl::implReadFolder: caught a CommandAbortedException!" );
                 return sal_False;
             }
             catch( ::com::sun::star::uno::Exception& )

@@ -214,7 +214,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                             bHelpAgentEnabled = bTmp;
                             break;
                         default:
-                            SAL_INFO( "svtools", "Wrong Member!" );
+                            SAL_WARN( "svtools.config", "Wrong Member!" );
                             break;
                     }
                 }
@@ -233,7 +233,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                             sHelpStyleSheet = aTmpStr;
                         break;
                         default:
-                            SAL_INFO( "svtools", "Wrong Member!" );
+                            SAL_WARN( "svtools.config", "Wrong Member!" );
                             break;
                     }
                 }
@@ -250,13 +250,13 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                             break;
 
                         default:
-                            SAL_INFO( "svtools", "Wrong Member!" );
+                            SAL_WARN( "svtools.config", "Wrong Member!" );
                             break;
                     }
                 }
                 else
                 {
-                    SAL_INFO( "svtools", "Wrong Type!" );
+                    SAL_WARN( "svtools.config", "Wrong Type!" );
                 }
             }
         }
@@ -431,7 +431,7 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
             sNewNodeName = sNodeNameBase;
             if (!getUniqueSetElementName(sIgnoreListNodePath, sNewNodeName))
             {
-                SAL_INFO( "svtools", "SvtHelpOptions_Impl::implSaveURLCounters: could not get a free name!" );
+                SAL_WARN( "svtools.config", "SvtHelpOptions_Impl::implSaveURLCounters: could not get a free name!" );
                 continue;
             }
             AddNode(sIgnoreListNodePath, sNewNodeName);

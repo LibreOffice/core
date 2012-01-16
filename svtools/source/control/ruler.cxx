@@ -2728,7 +2728,7 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
                 mnUnitIndex = RULER_UNIT_LINE;
                 break;
             default:
-                SAL_INFO( "svtools", "Ruler::SetUnit() - Wrong Unit" );
+                SAL_WARN( "svtools.control", "Ruler::SetUnit() - Wrong Unit" );
                 break;
         }
 

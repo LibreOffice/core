@@ -230,7 +230,7 @@ namespace svt
             }
             catch( CommandAbortedException& )
             {
-                SAL_INFO( "svtools", "createCursor: CommandAbortedException" );
+                SAL_WARN( "svtools.contnr", "createCursor: CommandAbortedException" );
             }
             catch( Exception& )
             {
@@ -353,21 +353,21 @@ namespace svt
                 }
                 catch( CommandAbortedException& )
                 {
-                    SAL_INFO( "svtools", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException while enumerating!" );
+                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException while enumerating!" );
                 }
                 catch( Exception& )
                 {
-                    SAL_INFO( "svtools", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException while enumerating!" );
+                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException while enumerating!" );
                 }
             }
         }
         catch( CommandAbortedException& )
         {
-            SAL_INFO( "svtools", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException!" );
+            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException!" );
         }
         catch( Exception& )
         {
-            SAL_INFO( "svtools", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException!" );
+            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException!" );
         }
 
         IEnumerationResultHandler* pHandler = NULL;

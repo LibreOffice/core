@@ -118,7 +118,7 @@ static sal_uInt16 aWndFunc(
 
         default:
         {
-            SAL_INFO( "svtools", "no MessBox type");
+            SAL_WARN( "svtools.misc", "no MessBox type");
             pBox = NULL;
             return ERRCODE_BUTTON_OK;
         }
@@ -143,7 +143,7 @@ static sal_uInt16 aWndFunc(
             nRet = ERRCODE_BUTTON_NO;
             break;
         default:
-            SAL_INFO( "svtools", "Unknown MessBox return value" );
+            SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
             break;
     }
     delete pBox;
@@ -458,7 +458,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
         }
         else
         {
-            SAL_INFO( "svtools", "ErrorContext cannot find the resource" );
+            SAL_WARN( "svtools.misc", "ErrorContext cannot find the resource" );
             bRet = false;
         }
 

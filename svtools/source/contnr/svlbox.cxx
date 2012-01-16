@@ -1681,14 +1681,14 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     else if( !nDragDropMode )
     {
-        SAL_INFO( "svtools", "SvLBox::QueryDrop(): no target" );
+        SAL_WARN( "svtools.contnr", "SvLBox::QueryDrop(): no target" );
     }
     else
     {
         SvLBoxEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
         if( !IsDropFormatSupported( SOT_FORMATSTR_ID_TREELISTBOX ) )
         {
-            SAL_INFO( "svtools", "SvLBox::QueryDrop(): no format" );
+            SAL_WARN( "svtools.contnr", "SvLBox::QueryDrop(): no format" );
         }
         else
         {
