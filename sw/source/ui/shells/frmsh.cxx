@@ -513,8 +513,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem))
             {
                 aMgr.SetAttrSet( *pArgs );
-                if(SID_ATTR_ULSPACE == nSlot && SID_ATTR_ULSPACE == nSlot)
-                    bCopyToFmt = sal_True;
+                bCopyToFmt = sal_True;
             }
         }
         break;
