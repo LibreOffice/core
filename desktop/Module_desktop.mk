@@ -41,11 +41,11 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    Executable_soffice.bin \
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
     Library_spl \
-    Library_unopkgapp \
     Package_branding \
     Package_intro \
     Zip_brand \
@@ -55,12 +55,12 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_soffice.bin \
     Executable_unopkg.bin \
     Library_deployment \
     Library_deploymentgui \
     Library_migrationoo2 \
     Library_migrationoo3 \
+    Library_unopkgapp \
     Package_scripts \
     Pagein_calc \
     Pagein_common \
