@@ -376,8 +376,6 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
             // now check for a fillstyle
             Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
-            awt::Size aLogicalSize( xShape->getSize() );
-
             FillStyle eFillStyle;
             if ( xShapePropertySet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
             {
