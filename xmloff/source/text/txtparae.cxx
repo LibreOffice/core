@@ -273,10 +273,6 @@ namespace xmloff
     };
 }
 
-typedef OUString *OUStringPtr;
-SV_DECL_PTRARR_DEL( OUStrings_Impl, OUStringPtr, 20, 10 )
-SV_IMPL_PTRARR( OUStrings_Impl, OUStringPtr )
-
 #ifdef DBG_UTIL
 static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif
@@ -860,17 +856,14 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeClosed > 0 &&
              pListElements &&
-             pListElements->Count() >= ( 2 * nListLevelsToBeClosed ) )
+             pListElements->size() >= ( 2 * nListLevelsToBeClosed ) )
         {
             do {
-                for( sal_uInt16 j = 0; j < 2; ++j )
+                for(size_t j = 0; j < 2; ++j)
                 {
-                    OUString *pElem = (*pListElements)[pListElements->Count()-1];
-                    pListElements->Remove( pListElements->Count()-1 );
-
-                    GetExport().EndElement( *pElem, sal_True );
-
-                    delete pElem;
+                    rtl::OUString aElem(pListElements->back());
+                    pListElements->pop_back();
+                    GetExport().EndElement(aElem, sal_True);
                 }
 
                 // remove closed list from list stack
@@ -1021,16 +1014,15 @@ void XMLTextParagraphExport::exportListChange(
 
                 enum XMLTokenEnum eLName = XML_LIST;
 
-                OUString *pElem = new OUString(
-                        GetExport().GetNamespaceMap().GetQNameByKey(
+                rtl::OUString aElem(GetExport().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
-                GetExport().StartElement( *pElem, sal_False );
+                GetExport().StartElement(aElem, sal_False);
 
-                if( !pListElements )
-                    pListElements = new OUStrings_Impl;
-                pListElements->Insert( pElem, pListElements->Count() );
+                if(!pListElements)
+                    pListElements = new std::vector<rtl::OUString>;
+                pListElements->push_back(aElem);
 
                 mpTextListsHelper->PushListOnStack( sListId,
                                                     sListStyleName );
@@ -1064,13 +1056,12 @@ void XMLTextParagraphExport::exportListChange(
                 eLName = ( rNextInfo.IsNumbered() || nListLevelsToBeOpened > 1 )
                          ? XML_LIST_ITEM
                          : XML_LIST_HEADER;
-                pElem = new OUString(  GetExport().GetNamespaceMap().GetQNameByKey(
+                aElem = rtl::OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
-                GetExport().StartElement( *pElem, sal_False );
-
-                pListElements->Insert( pElem, pListElements->Count() );
+                GetExport().StartElement(aElem, sal_False);
+                pListElements->push_back(aElem);
 
                 // export of <text:number> element for last opened <text:list-item>, if requested
                 if ( GetExport().exportTextNumberElement() &&
@@ -1097,24 +1088,20 @@ void XMLTextParagraphExport::exportListChange(
          rPrevInfo.GetLevel() >= rNextInfo.GetLevel() )
     {
         // close previous list-item
-        DBG_ASSERT( pListElements && pListElements->Count() >= 2,
+        DBG_ASSERT( pListElements && pListElements->size() >= 2,
                 "SwXMLExport::ExportListChange: list elements missing" );
 
-        OUString *pElem = (*pListElements)[pListElements->Count()-1];
-        GetExport().EndElement( *pElem, sal_True );
-
-        pListElements->Remove( pListElements->Count()-1 );
-        delete pElem;
+        GetExport().EndElement(pListElements->back(), sal_True );
+        pListElements->pop_back();
 
         // Only for sub lists (#i103745#)
         if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
              rNextInfo.GetLevel() != 1 )
         {
             // start new sub list respectively list on same list level
-            pElem = (*pListElements)[pListElements->Count()-1];
-            GetExport().EndElement( *pElem, sal_True );
+            GetExport().EndElement(pListElements->back(), sal_True );
             GetExport().IgnorableWhitespace();
-            GetExport().StartElement( *pElem, sal_False );
+            GetExport().StartElement(pListElements->back(), sal_False);
         }
 
         // open new list-item
@@ -1146,13 +1133,12 @@ void XMLTextParagraphExport::exportListChange(
                                           GetExport().EncodeStyleName( sListStyleName ) );
             }
         }
-        pElem = new OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+        rtl::OUString aElem( GetExport().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT,
                                 GetXMLToken(XML_LIST_ITEM) ) );
         GetExport().IgnorableWhitespace();
-        GetExport().StartElement( *pElem, sal_False );
-
-        pListElements->Insert( pElem, pListElements->Count() );
+        GetExport().StartElement(aElem, sal_False );
+        pListElements->push_back(aElem);
 
         // export of <text:number> element for <text:list-item>, if requested
         if ( GetExport().exportTextNumberElement() &&

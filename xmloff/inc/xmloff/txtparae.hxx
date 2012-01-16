@@ -49,7 +49,6 @@ class XMLTextListsHelper;
 class SvXMLExport;
 class SvXMLAutoStylePoolP;
 class XMLTextFieldExport;
-class OUStrings_Impl;
 class XMLTextNumRuleInfo;
 class XMLTextListAutoStylePool;
 class XMLSectionExport;
@@ -89,7 +88,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
-    OUStrings_Impl              *pListElements;
+    std::vector<rtl::OUString>  *pListElements;
     XMLTextListAutoStylePool    *pListAutoPool;
     XMLSectionExport            *pSectionExport;
     XMLIndexMarkExport          *pIndexMarkExport;
