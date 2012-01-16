@@ -2795,7 +2795,7 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
       m_nWhitePixel( SALCOLOR_NONE ),
       m_nBlackPixel( SALCOLOR_NONE ),
       m_nUsed( rPalette.GetEntryCount() ),
-      m_nScreen( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() )
+      m_nXScreen( m_pDisplay ? m_pDisplay->GetDefaultXScreen() : SalX11Screen( 0 ) )
 {
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
@@ -2925,7 +2925,7 @@ SalColormap::~SalColormap()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
-    if( this != &GetGenericData()->GetSalDisplay()->GetColormap(m_nScreen) )
+    if( this != &GetGenericData()->GetSalDisplay()->GetColormap(m_nXScreen) )
     {
         m_nBlackPixel = SALCOLOR_NONE;
         m_nWhitePixel = SALCOLOR_NONE;
