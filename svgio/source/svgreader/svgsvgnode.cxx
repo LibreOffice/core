@@ -29,6 +29,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -332,18 +334,37 @@ namespace svgio
                         if(bDoCorrectCanvasClipping)
                         {
                             // different from Svg we have the possibility with primitives to get
-                            // a correct bounding box for the geometry, thhus I will allow to
-                            // only clip if necessary. This will make Svg images evtl. smaller
-                            // than wanted from Svg (the free space which may be around it is
-                            // conform to the Svg spec), but avoids an expensive and unneccessary
-                            // clip.
+                            // a correct bounding box for the geometry. Get it for evtl. taking action
                             const basegfx::B2DRange aContentRange(
                                 drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
                                     aSequence,
                                     drawinglayer::geometry::ViewInformation2D()));
 
-                            if(!aSvgCanvasRange.isInside(aContentRange))
+                            if(aSvgCanvasRange.isInside(aContentRange))
                             {
+                                // no clip needed, but an invisible HiddenGeometryPrimitive2D
+                                // to allow getting the full Svg range using the primitive mechanisms.
+                                // This is needed since e.g. an SdrObject using this as graphic will
+                                // create a mapping transformation to exactly map the content to it's
+                                // real life size
+                                const drawinglayer::primitive2d::Primitive2DReference xLine(
+                                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                        basegfx::tools::createPolygonFromRect(
+                                            aSvgCanvasRange),
+                                        basegfx::BColor(0.0, 0.0, 0.0)));
+                                const drawinglayer::primitive2d::Primitive2DReference xHidden(
+                                    new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                                        drawinglayer::primitive2d::Primitive2DSequence(&xLine, 1)));
+
+                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xHidden);
+                            }
+                            else if(aSvgCanvasRange.overlaps(aContentRange))
+                            {
+                                // Clip is necessary. This will make Svg images evtl. smaller
+                                // than wanted from Svg (the free space which may be around it is
+                                // conform to the Svg spec), but avoids an expensive and unneccessary
+                                // clip. Keep the full Svg range here to get the correct mappings
+                                // to objects using this. Optimizations can be done in the processors
                                 const drawinglayer::primitive2d::Primitive2DReference xMask(
                                     new drawinglayer::primitive2d::MaskPrimitive2D(
                                         basegfx::B2DPolyPolygon(
@@ -353,8 +374,14 @@ namespace svgio
 
                                 aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
                             }
+                            else
+                            {
+                                // not inside, no overlap. Empty Svg
+                                aSequence.realloc(0);
+                            }
                         }
 
+                        if(aSequence.hasElements())
                         {
                             // embed in transform primitive to scale to 1/100th mm
                             // where 1 mm == 3.543307 px to get from Svg coordinates to
@@ -371,10 +398,10 @@ namespace svgio
                                     aSequence));
 
                             aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
-                        }
 
-                        // append
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
+                            // append to result
+                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
+                        }
                     }
                 }
             }
