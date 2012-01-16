@@ -3881,6 +3881,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
                                                     throw(uno::RuntimeException)
 {
+    SolarMutexGuard aGuard;
     //  Wenn nichts gefunden wird, soll Null zurueckgegeben werden (?)
     uno::Reference<container::XIndexAccess> xRet;
     if ( pDocShell && xDesc.is() )
