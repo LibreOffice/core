@@ -2966,7 +2966,7 @@ if test "$cross_compiling" = "yes"; then
     done
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
-    test -f config_build.mk || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
+    test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
     test -f Env.Build.sh || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
     perl -pi -e 's,/CONF-FOR-BUILD,,g' Env.Build.sh
     perl -pi -e 's,/CONF-FOR-BUILD,,g' config_build.mk
