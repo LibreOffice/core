@@ -171,7 +171,7 @@ void SourceViewConfig_Impl::Commit()
             case 1:  pValues[nProp] <<= m_nFontHeight;      break;
             case 2:  pValues[nProp] <<= m_bProportionalFontOnly;     break;
             default:
-                SAL_INFO( "unotools.config", "invalid index to save a user token" );
+                SAL_WARN( "unotools.config", "invalid index to save a user token" );
         }
     }
     PutProperties( aNames, aValues );

@@ -253,7 +253,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                             aFullPath = aPathOpt.SubstituteVariable( aTempStr );
                         else
                         {
-                            SAL_INFO( "unotools.config", "any operator >>= failed" );
+                            SAL_WARN( "unotools.config", "any operator >>= failed" );
                         }
                         break;
                     }
@@ -276,14 +276,14 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                         }
                         else
                         {
-                            SAL_INFO( "unotools.config", "any operator >>= failed" );
+                            SAL_WARN( "unotools.config", "any operator >>= failed" );
                         }
                         break;
                     }
 
                     default:
                     {
-                        SAL_INFO( "unotools.config", "Wrong any type" );
+                        SAL_WARN( "unotools.config", "Wrong any type" );
                     }
                 }
 
@@ -313,7 +313,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                     case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
 
                     default:
-                        SAL_INFO( "unotools.config", "invalid index to load a default path" );
+                        SAL_WARN( "unotools.config", "invalid index to load a default path" );
                 }
             }
         }

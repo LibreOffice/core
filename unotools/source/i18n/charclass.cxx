@@ -131,7 +131,7 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isAlpha: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isAlpha: Exception caught!" );
         return sal_False;
     }
 }
@@ -154,7 +154,7 @@ sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isLetter: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
         return sal_False;
     }
 }
@@ -171,7 +171,7 @@ sal_Bool CharClass::isLetter( const String& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isLetter: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
         return sal_False;
     }
 }
@@ -193,7 +193,7 @@ sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isDigit: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isDigit: Exception caught!" );
         return sal_False;
     }
 }
@@ -210,7 +210,7 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isNumeric: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isNumeric: Exception caught!" );
         return sal_False;
     }
 }
@@ -232,7 +232,7 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isAlphaNumeric: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isAlphaNumeric: Exception caught!" );
         return sal_False;
     }
 }
@@ -254,7 +254,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isLetterNumeric: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
         return sal_False;
     }
 }
@@ -271,7 +271,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "isLetterNumeric: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
         return sal_False;
     }
 }
@@ -287,7 +287,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "titlecase: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "titlecase: Exception caught!" );
         return rStr.copy( nPos, nCount );
     }
 }
@@ -303,7 +303,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "uppercase: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "uppercase: Exception caught!" );
         return rStr.copy( nPos, nCount );
     }
 }
@@ -319,7 +319,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "lowercase: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "lowercase: Exception caught!" );
         return rStr.copy( nPos, nCount );
     }
 }
@@ -335,7 +335,7 @@ sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "getType: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "getType: Exception caught!" );
         return 0;
     }
 }
@@ -352,7 +352,7 @@ sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos 
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "getCharacterDirection: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "getCharacterDirection: Exception caught!" );
         return 0;
     }
 }
@@ -369,7 +369,7 @@ sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "getScript: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "getScript: Exception caught!" );
         return 0;
     }
 }
@@ -386,7 +386,7 @@ sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) con
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "getCharacterType: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "getCharacterType: Exception caught!" );
         return 0;
     }
 }
@@ -403,7 +403,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( const Exception& )
     {
-        SAL_INFO( "unotools", "getStringType: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "getStringType: Exception caught!" );
         return 0;
     }
 }
@@ -428,7 +428,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( const Exception& e )
     {
-        SAL_INFO( "unotools.l18n", "parseAnyToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.l18n", "parseAnyToken: Exception caught " << e.Message );
         return ParseResult();
     }
 }
@@ -454,7 +454,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( const Exception& e )
     {
-        SAL_INFO( "unotools.l18n", "parsePredefinedToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.l18n", "parsePredefinedToken: Exception caught " << e.Message );
         return ParseResult();
     }
 }

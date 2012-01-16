@@ -85,7 +85,7 @@ void SvtUndoOptions_Impl::Commit()
                 pValues[nProp] <<= nUndoCount;
                 break;
             default:
-                SAL_INFO( "unotools.config", "invalid index to save a path" );
+                SAL_WARN( "unotools.config", "invalid index to save a path" );
         }
     }
 

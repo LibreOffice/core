@@ -901,7 +901,7 @@ sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
                 break;
             }
         default:
-            SAL_INFO( "unotools.config", "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
+            SAL_WARN( "unotools.config", "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
     }
 
     return bRet;
@@ -931,7 +931,7 @@ sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
         case USER_OPT_FATHERSNAME:    pRet = GetFathersName();   break;
         case USER_OPT_APARTMENT:      pRet = GetApartment();     break;
         default:
-            SAL_INFO( "unotools.config", "SvtUserOptions_Impl::GetToken(): invalid token" );
+            SAL_WARN( "unotools.config", "SvtUserOptions_Impl::GetToken(): invalid token" );
     }
     return pRet;
 }

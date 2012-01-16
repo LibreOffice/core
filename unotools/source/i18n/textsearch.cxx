@@ -132,7 +132,7 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
     }
     catch ( Exception& )
     {
-        SAL_INFO( "unotools", "TextSearch ctor: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "TextSearch ctor: Exception caught!" );
     }
     return rCache.xTextSearch;
 }
@@ -252,7 +252,7 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
     }
     catch ( Exception& )
     {
-        SAL_INFO( "unotools", "SearchForward: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "SearchForward: Exception caught!" );
     }
     return nRet;
 }
@@ -283,7 +283,7 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     }
     catch ( Exception& )
     {
-        SAL_INFO( "unotools", "SearchBackward: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "SearchBackward: Exception caught!" );
     }
     return nRet;
 }

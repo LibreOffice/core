@@ -284,7 +284,7 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
                 aHashMap.insert( ExtensionHashMap::value_type( aValue.toAsciiLowerCase(), 1 ) );
             else
             {
-                SAL_INFO( "unotools.config", "SvtExtendedSecurityOptions_Impl::FillExtensionHashMap(): not string value?" );
+                SAL_WARN( "unotools.config", "SvtExtendedSecurityOptions_Impl::FillExtensionHashMap(): not string value?" );
             }
         }
     }

@@ -871,7 +871,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
     // check parameter: empty inifile name?
     if ( !rIniFile.Len() )
     {
-        SAL_INFO( "unotools.config", "SvtPathOptions::SearchFile(): invalid parameter" );
+        SAL_WARN( "unotools.config", "SvtPathOptions::SearchFile(): invalid parameter" );
         return sal_False;
     }
 

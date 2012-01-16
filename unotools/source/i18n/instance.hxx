@@ -53,7 +53,7 @@ inline css::uno::Reference<css::uno::XInterface>
     }
     catch (const css::uno::Exception &e)
     {
-        SAL_INFO( "unotools.l18n", context << "ctor:Exception caught " << e.Message );
+        SAL_WARN( "unotools.l18n", context << "ctor:Exception caught " << e.Message );
         xRet = css::uno::Reference<css::uno::XInterface>();
     }
     return xRet;
