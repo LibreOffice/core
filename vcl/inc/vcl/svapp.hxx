@@ -531,32 +531,13 @@ protected:
 class SolarMutexReleaser
 {
     sal_uLong mnReleased;
-    const bool  mbRescheduleDuringAcquire;
+
 public:
-    enum
-    {
-        RescheduleDuringAcquire = true
-    };
-    SolarMutexReleaser( const bool i_rescheduleDuringAcquire = false )
-        : mnReleased( Application::ReleaseSolarMutex())
-        , mbRescheduleDuringAcquire( i_rescheduleDuringAcquire )
-    {
-    }
+    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
 
     ~SolarMutexReleaser()
     {
-        if ( mnReleased > 0 )
-        {
-            if ( mbRescheduleDuringAcquire )
-            {
-                while ( !Application::GetSolarMutex().tryToAcquire() )
-                {
-                    Application::Reschedule();
-                }
-                --mnReleased;
-            }
-            Application::AcquireSolarMutex( mnReleased );
-        }
+        Application::AcquireSolarMutex( mnReleased );
     }
 };
 
