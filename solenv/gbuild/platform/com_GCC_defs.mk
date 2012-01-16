@@ -40,7 +40,7 @@ define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) -d -o $(3) $(1) && mv $(3).h $(4) )
+	$(gb_YACC) $(T_YACCFLAGS) -d -o $(5) $(1) && mv $(5).h $(4) && touch $(3) )
 
 endef
 
@@ -49,7 +49,7 @@ define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(5) $(1) && touch $(3) )
 
 endef
 endif

@@ -185,18 +185,28 @@ endif
 gb_GenCxxObject_GenCxxObject =
 
 # YaccTarget class
+
+# XXX: This is more complicated than necessary, but we cannot just use
+# the generated C++ file as the main target, because we need to let the
+# header depend on that to ensure the header is present before anything
+# tries to use it.
+
 gb_YaccTarget_get_source = $(1)/$(2).y
 
 .PHONY : $(call gb_YaccTarget_get_clean_target,%)
 $(call gb_YaccTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$(2),$(false),YAC,3)
 	$(call gb_Helper_abbreviate_dirs,\
-	    rm -f $(call gb_YaccTarget_get_header_target,$*) $(call gb_YaccTarget_get_target,$*))
+	    rm -f $(call gb_YaccTarget_get_grammar_target,$*) $(call gb_YaccTarget_get_header_target,$*) $(call gb_YaccTarget_get_target,$*))
 
 $(call gb_YaccTarget_get_target,%) : $(call gb_YaccTarget_get_source,$(SRCDIR),%)
-	$(call gb_YaccTarget__command,$<,$*,$@,$(call gb_YaccTarget_get_header_target,$*))
+	$(call gb_YaccTarget__command,$<,$*,$@,$(call gb_YaccTarget_get_header_target,$*),$(call gb_YaccTarget_get_grammar_target,$*))
 
-gb_YaccTarget_YaccTarget =
+define gb_YaccTarget_YaccTarget
+$(call gb_YaccTarget_get_grammar_target,$(1)) :| $(call gb_YaccTarget_get_target,$(1))
+$(call gb_YaccTarget_get_header_target,$(1)) :| $(call gb_YaccTarget_get_target,$(1))
+
+endef
 
 gb_YACC := bison
 
@@ -791,13 +801,12 @@ endef
 # Add a bison grammar to the build.
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
+$(call gb_YaccTarget_YaccTarget,$(2))
 $(call gb_LinkTarget_add_generated_cxx_object,$(1),YaccTarget/$(2))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccTarget_get_header_target,$(2)))
 
-
 endef
-#$(call gb_YaccTarget_YaccTarget,$(2))
 
 # Add bison grammars to the build.
 # gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
