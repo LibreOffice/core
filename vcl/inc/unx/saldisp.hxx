@@ -375,13 +375,14 @@ public:
                                XIC = NULL ) const;
 
     XLIB_Cursor           GetPointer( int ePointerStyle );
+    sal_Bool              IsLocal();
     virtual int           CaptureMouse( SalFrame *pCapture );
 
     void                  Remove( XEvent   *pEvent );
     virtual ScreenData   *initScreen( SalX11Screen nXScreen ) const;
     const ScreenData&     getDataForScreen( SalX11Screen nXScreen ) const
     {
-        if( nXScreen.getXScreen() >= static_cast<int>(m_aScreens.size()) )
+        if( nXScreen.getXScreen() >= static_cast<unsigned int>(m_aScreens.size()) )
             return m_aInvalidScreenData;
         if( ! m_aScreens[nXScreen.getXScreen()].m_bInit )
             initScreen( nXScreen );
