@@ -1762,9 +1762,47 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     rIStm >> aMtf;
 
                     if( !rIStm.GetError() )
+                    {
                         rImpGraphic = aMtf;
+                    }
                     else
-                        rIStm.Seek( nStmPos1 );
+                    {
+                        // try to stream in Svg defining data (length, byte array and evtl. path)
+                        // See below (operator<<) for more information
+                        const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+                        sal_uInt32 nMagic;
+                        rIStm.Seek(nStmPos1);
+                        rIStm.ResetError();
+                        rIStm >> nMagic;
+
+                        if(nSvgMagic == nMagic)
+                        {
+                            sal_uInt32 mnSvgDataArrayLength(0);
+                            rIStm >> mnSvgDataArrayLength;
+
+                            if(mnSvgDataArrayLength)
+                            {
+                                SvgDataArray aNewData(new sal_uInt8[mnSvgDataArrayLength]);
+                                UniString aPath;
+
+                                rIStm.Read(aNewData.get(), mnSvgDataArrayLength);
+                                rIStm.ReadByteString(aPath);
+
+                                if(!rIStm.GetError())
+                                {
+                                    SvgDataPtr aSvgDataPtr(
+                                        new SvgData(
+                                            aNewData,
+                                            mnSvgDataArrayLength,
+                                            rtl::OUString(aPath)));
+
+                                    rImpGraphic = aSvgDataPtr;
+                                }
+                            }
+                        }
+
+                        rIStm.Seek(nStmPos1);
+                    }
                 }
 
                 rIStm.SetNumberFormatInt( nOldFormat );
@@ -1816,7 +1854,16 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                     {
                         if(rImpGraphic.getSvgData().get())
                         {
-                            rOStm << rImpGraphic.getSvgData()->getReplacement();
+                            // stream out Svg defining data (length, byte array and evtl. path)
+                            // this is used e.g. in swapping out graphic data and in transporting it over UNO API
+                            // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
+                            // no problem to extend it; only used at runtime
+                            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+
+                            rOStm << nSvgMagic;
+                            rOStm << rImpGraphic.getSvgData()->getSvgDataArrayLength();
+                            rOStm.Write(rImpGraphic.getSvgData()->getSvgDataArray().get(), rImpGraphic.getSvgData()->getSvgDataArrayLength());
+                            rOStm.WriteByteString(rImpGraphic.getSvgData()->getPath());
                         }
                         else if( rImpGraphic.ImplIsAnimated())
                         {
