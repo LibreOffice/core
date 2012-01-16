@@ -344,7 +344,7 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
     }
 
     if (it == maItemList.end())
-        SAL_INFO( "vcl", "ButtonDialog::RemoveButton(): ButtonId invalid" );
+        SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
 }
 
 void ButtonDialog::Clear()

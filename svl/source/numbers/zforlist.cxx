@@ -616,7 +616,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
                     nKey, eLnge, SvtSysLocale().GetLanguage());
             if (rCheckPos > 0)
             {
-                SAL_INFO( "svl", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
                 nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
             }
         }
@@ -629,7 +629,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
             rNewInserted = PutEntry( rString, rCheckPos, rType, nKey, eLnge);
             if (rCheckPos > 0)
             {
-                SAL_INFO( "svl", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for specified locale");
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for specified locale");
                 nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
             }
         }
@@ -2646,7 +2646,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         (SvNumberformat*) aFTable.Get( CLOffset + ZF_STANDARD );
     if ( !pStdFormat )
     {
-        SAL_INFO( "svl", "ImpGenerateAdditionalFormats: no GENERAL format" );
+        SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: no GENERAL format" );
         return ;
     }
     sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
@@ -2664,7 +2664,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     {
         if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {
-            SAL_INFO( "svl", "ImpGenerateAdditionalFormats: too many formats" );
+            SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
             break;  // for
         }
         if ( pFormatArr[j].Index < NF_INDEX_TABLE_ENTRIES &&
@@ -2700,7 +2700,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         {
             if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
             {
-                SAL_INFO( "svl", "ImpGenerateAdditionalFormats: too many formats" );
+                SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
                 break;  // for
             }
             if ( pFormatArr[j].Index >= NF_INDEX_TABLE_ENTRIES )

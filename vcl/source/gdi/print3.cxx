@@ -248,7 +248,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
             }
             catch (const lang::IllegalArgumentException&)
             {
-                SAL_INFO( "vcl", "caught IllegalArgumentException when registering filter\n" );
+                SAL_WARN( "vcl.gdi", "caught IllegalArgumentException when registering filter" );
             }
 
             if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )

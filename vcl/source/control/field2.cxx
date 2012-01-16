@@ -168,7 +168,7 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
     }
     catch ( ::com::sun::star::uno::Exception& )
     {
-        SAL_INFO( "vcl", "ImplIsPatternChar: Exception caught!" );
+        SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
         return sal_False;
     }
 

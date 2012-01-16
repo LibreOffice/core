@@ -1096,7 +1096,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
         }
         else if( !nDragDropMode )
         {
-            SAL_INFO( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
+            SAL_WARN( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
         }
         else if (IsDropAllowed(pEntry))
         {

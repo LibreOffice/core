@@ -436,7 +436,7 @@ OutputDevice::~OutputDevice()
     ImplObjStack* pData = mpObjStack;
     if ( pData )
     {
-        SAL_INFO( "vcl", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
+        SAL_WARN( "vcl.gdi", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
         while ( pData )
         {
             ImplObjStack* pTemp = pData;
@@ -2461,7 +2461,7 @@ void OutputDevice::Pop()
 
     if ( !pData )
     {
-        SAL_INFO( "vcl", "OutputDevice::Pop() without OutputDevice::Push()" );
+        SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
 

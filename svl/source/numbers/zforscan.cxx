@@ -140,7 +140,7 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
                 pFormatter->GetLocaleData()->getTrueWord() );
             if ( !sKeyword[NF_KEY_TRUE].Len() )
             {
-                SAL_INFO( "svl", "InitSpecialKeyword: TRUE_WORD?" );
+                SAL_WARN( "svl.numbers", "InitSpecialKeyword: TRUE_WORD?" );
                 ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TRUE" ) );
             }
         break;
@@ -150,12 +150,12 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
                 pFormatter->GetLocaleData()->getFalseWord() );
             if ( !sKeyword[NF_KEY_FALSE].Len() )
             {
-                SAL_INFO( "svl", "InitSpecialKeyword: FALSE_WORD?" );
+                SAL_WARN( "svl.numbers", "InitSpecialKeyword: FALSE_WORD?" );
                 ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
             }
         break;
         default:
-            SAL_INFO( "svl", "InitSpecialKeyword: unknown request" );
+            SAL_WARN( "svl.numbers", "InitSpecialKeyword: unknown request" );
     }
 }
 
@@ -2010,7 +2010,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                 }                                   // of else Del
                 else
                 {
-                    SAL_INFO( "svl", "unknown NF_SYMBOLTYPE_..." );
+                    SAL_WARN( "svl.numbers", "unknown NF_SYMBOLTYPE_..." );
                     nPos = nPos + sStrArray[i].Len();
                     i++;
                 }

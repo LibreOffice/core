@@ -871,11 +871,11 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     {
         if ( eOld > MAP_PIXEL )
         {
-            SAL_INFO( "vcl", "Not implemented MapUnit" );
+            SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
         }
         else if ( eNew > MAP_PIXEL )
         {
-            SAL_INFO( "vcl", "Not implemented MapUnit" );
+            SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
         }
         else
         {

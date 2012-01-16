@@ -1685,7 +1685,7 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
     if ( nFlags & SETTINGS_INTERNATIONAL )
     {
         // Nothing, class International is gone.
-        SAL_INFO( "vcl","AllSettings::Update: who calls with SETTINGS_INTERNATIONAL and why? You're flogging a dead horse.");
+        SAL_WARN( "vcl.app","AllSettings::Update: who calls with SETTINGS_INTERNATIONAL and why? You're flogging a dead horse.");
     }
 
     if ( nFlags & SETTINGS_LOCALE )

@@ -322,7 +322,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             }
             catch( const beans::UnknownPropertyException & )
             {
-                SAL_INFO( "vcl", "Properties missing" );
+                SAL_WARN( "xmloff.chart", "Properties missing" );
             }
         }
     }
