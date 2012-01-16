@@ -152,7 +152,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     //Note: see fdo#41556 if you feel compelled to cache the results here,
     //remember that fontconfig can return e.g. an italic font for a non-italic
     //input and/or different fonts depending on fontsize, bold, etc settings so
-    //don't cache just on the name, cache on all the input and be don't just
+    //don't cache just on the name, cache on all the input and don't just
     //return the original selection data with the fontname updated
     rtl::OUString aDummy;
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
