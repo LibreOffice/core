@@ -359,19 +359,19 @@ Any Adapter::invoke( const OUString &aFunctionName,
 void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     throw( UnknownPropertyException, CannotConvertException, InvocationTargetException,RuntimeException)
 {
+    if( !hasProperty( aPropertyName ) )
+    {
+        OUStringBuffer buf;
+        buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
+        buf.appendAscii( " is unknown." );
+        throw UnknownPropertyException( buf.makeStringAndClear(), Reference< XInterface > () );
+    }
+
     PyThreadAttach guard( mInterpreter );
     try
     {
         Runtime runtime;
         PyRef obj = runtime.any2PyObject( value );
-
-        if( !hasProperty( aPropertyName ) )
-        {
-            OUStringBuffer buf;
-            buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
-            buf.appendAscii( " is unknown." );
-            throw UnknownPropertyException( buf.makeStringAndClear(), Reference< XInterface > () );
-        }
 
         PyObject_SetAttrString(
             mWrappedObject.get(), (char*)TO_ASCII(aPropertyName), obj.get() );
