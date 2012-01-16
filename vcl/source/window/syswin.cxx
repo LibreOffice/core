@@ -1019,23 +1019,19 @@ sal_Bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 unsigned int SystemWindow::GetScreenNumber() const
 {
-    return mpWindowImpl->mpFrame->maGeometry.nScreenNumber;
+    return mpWindowImpl->mpFrame->maGeometry.nDisplayScreenNumber;
 }
 
-// -----------------------------------------------------------------------
-
-void SystemWindow::SetScreenNumber(unsigned int nScreen)
+void SystemWindow::SetScreenNumber(unsigned int nDisplayScreen)
 {
-    mpWindowImpl->mpFrame->SetScreenNumber( nScreen );
+    mpWindowImpl->mpFrame->SetScreenNumber( nDisplayScreen );
 }
 
 void SystemWindow::SetApplicationID(const rtl::OUString &rApplicationID)
 {
-    mpWindowImpl->mpFrame->SetApplicationID(rApplicationID);
+    mpWindowImpl->mpFrame->SetApplicationID( rApplicationID );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

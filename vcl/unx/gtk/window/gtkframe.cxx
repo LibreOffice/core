@@ -453,8 +453,8 @@ GtkSalFrame::GraphicsHolder::~GraphicsHolder()
 }
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
+    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
 {
-    m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
     m_nDuringRender     = 0;
     m_bDefaultPos       = true;
@@ -464,8 +464,8 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
 }
 
 GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
+    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
 {
-    m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...
     GetGenericData()->ErrorTrapPush();
@@ -481,7 +481,7 @@ GtkSalFrame::~GtkSalFrame()
         if( !m_aGraphics[i].pGraphics )
             continue;
 #if !GTK_CHECK_VERSION(3,0,0)
-        m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+        m_aGraphics[i].pGraphics->SetDrawable( None, m_nXScreen );
 #endif
         m_aGraphics[i].bInUse = false;
     }
@@ -586,7 +586,7 @@ void GtkSalFrame::updateScreenNumber()
     GdkScreen *pScreen = gtk_widget_get_screen( m_pWindow );
     if( pScreen )
         nScreen = GtkSalSystem::getScreenMonitorIdx( getGdkDisplay(), pScreen, maGeometry.nX, maGeometry.nY );
-    maGeometry.nScreenNumber = nScreen;
+    maGeometry.nDisplayScreenNumber = nScreen;
 }
 
 void GtkSalFrame::InitCommon()
@@ -658,9 +658,9 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(3,0,0)
     GtkSalDisplay* pDisp = GetGtkSalData()->GetGtkDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
-    m_aSystemData.pVisual		= pDisp->GetVisual( m_nScreen ).GetVisual();
-    m_aSystemData.nDepth		= pDisp->GetVisual( m_nScreen ).GetDepth();
-    m_aSystemData.aColormap		= pDisp->GetColormap( m_nScreen ).GetXColormap();
+    m_aSystemData.pVisual		= pDisp->GetVisual( m_nXScreen ).GetVisual();
+    m_aSystemData.nDepth		= pDisp->GetVisual( m_nXScreen ).GetDepth();
+    m_aSystemData.aColormap		= pDisp->GetColormap( m_nXScreen ).GetXColormap();
     m_aSystemData.aWindow       = widget_get_xid(m_pWindow);
 #else
     static int nWindow = 0;
@@ -668,7 +668,7 @@ void GtkSalFrame::InitCommon()
 #endif
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
-    m_aSystemData.nScreen       = m_nScreen;
+    m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pAppContext   = NULL;
     m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
@@ -1102,7 +1102,8 @@ SalGraphics* GtkSalFrame::GetGraphics()
                         AllocateFrame();
                     m_aGraphics[i].pGraphics->setDevice( m_aFrame );
 #else // common case:
-                    m_aGraphics[i].pGraphics->Init( this, widget_get_xid(m_pWindow), m_nScreen );
+                    m_aGraphics[i].pGraphics->Init( this, widget_get_xid(m_pWindow),
+                                                    m_nXScreen );
 #endif
                 }
                 return m_aGraphics[i].pGraphics;
@@ -1319,7 +1320,7 @@ void GtkSalFrame::Center()
 
 Size GtkSalFrame::calcDefaultSize()
 {
-    Size aScreenSize = GetGtkSalData()->GetGtkDisplay()->GetScreenSize( m_nScreen );
+    Size aScreenSize = getDisplay()->GetScreenSize( GetDisplayScreen() );
     long w = aScreenSize.Width();
     long h = aScreenSize.Height();
 
@@ -1645,7 +1646,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 #if GTK_CHECK_VERSION(3,0,0)
         // adjust position to avoid off screen windows
         // but allow toolbars to be positioned partly off screen by the user
-        Size aScreenSize = GetGtkSalData()->GetGtkDisplay()->GetScreenSize( m_nScreen );
+        Size aScreenSize = getDisplay()->GetScreenSize( GetDisplayScreen() );
         if( ! (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
             if( nX < (long)maGeometry.nLeftDecoration )
@@ -1844,6 +1845,9 @@ typedef enum {
 void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize )
 {
     if( !m_pWindow )
+        return;
+
+    if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SET_RETAIN_SIZE)
         return;
 
     gint nMonitor;
@@ -2531,21 +2535,21 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 #if !GTK_CHECK_VERSION(3,0,0)
 
-void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nScreen )
+void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11Screen nXScreen )
 {
     bool bWasVisible = IS_WIDGET_MAPPED(m_pWindow);
     if( bWasVisible )
         Show( sal_False );
 
-    if( nScreen < 0 || nScreen >= getDisplay()->GetScreenCount() )
-        nScreen = m_nScreen;
+    if( (int)nXScreen.getXScreen() >= getDisplay()->GetXScreenCount() )
+        nXScreen = m_nXScreen;
 
     SystemParentData aParentData;
     aParentData.aWindow = aNewParent;
     aParentData.bXEmbedSupport = bXEmbed;
     if( aNewParent == None )
     {
-        aNewParent = getDisplay()->GetRootWindow(nScreen);
+        aNewParent = getDisplay()->GetRootWindow(nXScreen);
         aParentData.aWindow = None;
         aParentData.bXEmbedSupport = false;
     }
@@ -2553,12 +2557,12 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     {
         // is new parent a root window ?
         Display* pDisp = getDisplay()->GetDisplay();
-        int nScreens = getDisplay()->GetScreenCount();
+        int nScreens = getDisplay()->GetXScreenCount();
         for( int i = 0; i < nScreens; i++ )
         {
             if( aNewParent == RootWindow( pDisp, i ) )
             {
-                nScreen = i;
+                nXScreen = SalX11Screen( i );
                 aParentData.aWindow = None;
                 aParentData.bXEmbedSupport = false;
                 break;
@@ -2566,12 +2570,10 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         }
     }
 
-#if !GTK_CHECK_VERSION(3,0,0)
     // free xrender resources
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
-#endif
+            m_aGraphics[i].pGraphics->SetDrawable( None, m_nXScreen );
 
     // first deinit frame
     if( m_pIMHandler )
@@ -2580,13 +2582,13 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         m_pIMHandler = NULL;
     }
     if( m_pRegion )
-{
+    {
 #if GTK_CHECK_VERSION(3,0,0)
         cairo_region_destroy( m_pRegion );
 #else
         gdk_region_destroy( m_pRegion );
 #endif
-}
+    }
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pWindow )
@@ -2606,20 +2608,18 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     else
     {
         m_nStyle &= ~SAL_FRAME_STYLE_PLUG;
-        Init( (m_pParent && m_pParent->m_nScreen == m_nScreen) ? m_pParent : NULL, m_nStyle );
+        Init( (m_pParent && m_pParent->m_nXScreen == m_nXScreen) ? m_pParent : NULL, m_nStyle );
     }
 
-#if !GTK_CHECK_VERSION(3,0,0)
     // update graphics
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
     {
         if( m_aGraphics[i].bInUse )
         {
-            m_aGraphics[i].pGraphics->SetDrawable( widget_get_xid(m_pWindow), m_nScreen );
+            m_aGraphics[i].pGraphics->SetDrawable( widget_get_xid(m_pWindow), m_nXScreen );
             m_aGraphics[i].pGraphics->SetWindow( m_pWindow );
         }
     }
-#endif
 
     if( ! m_aTitle.isEmpty() )
         SetTitle( m_aTitle );
@@ -2630,7 +2630,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     m_aChildren.clear();
     for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->createNewWindow( None, false, m_nScreen );
+        (*it)->createNewWindow( None, false, m_nXScreen );
 
     // FIXME: SalObjects
 }
@@ -2641,7 +2641,7 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 #if !GTK_CHECK_VERSION(3,0,0)
     if( pSysParent ) // this may be the first system child frame now
         GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
-    createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nScreen );
+    createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nXScreen );
     return true;
 #else
     (void)pSysParent;
@@ -2733,7 +2733,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             XLIB_Window aChild;
             XTranslateCoordinates( getDisplay()->GetDisplay(),
                                    widget_get_xid(m_pWindow),
-                                   getDisplay()->GetRootWindow( getDisplay()->GetDefaultScreenNumber() ),
+                                   getDisplay()->GetRootWindow( getDisplay()->GetDefaultXScreen() ),
                                    0, 0,
                                    &x, &y,
                                    &aChild );
@@ -2792,7 +2792,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
                                widget_get_xid(m_pWindow),
                                aSize.Width(),
                                aSize.Height(),
-                               getDisplay()->GetVisual(m_nScreen).GetDepth() );
+                               getDisplay()->GetVisual(m_nXScreen).GetDepth() );
             if( m_hBackgroundPixmap )
             {
                 SalTwoRect aTwoRect;
@@ -2800,10 +2800,10 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
                 aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
                 aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
                 pBM->ImplDraw( m_hBackgroundPixmap,
-                               m_nScreen,
-                               getDisplay()->GetVisual(m_nScreen).GetDepth(),
+                               m_nXScreen,
+                               getDisplay()->GetVisual(m_nXScreen).GetDepth(),
                                aTwoRect,
-                               getDisplay()->GetCopyGC(m_nScreen) );
+                               getDisplay()->GetCopyGC(m_nXScreen) );
                 XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
                                             widget_get_xid(m_pWindow),
                                             m_hBackgroundPixmap );
@@ -4160,12 +4160,10 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     return sal_False;
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
-Size GtkSalDisplay::GetScreenSize( int nScreen )
+Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 {
-    Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nScreen );
+    Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

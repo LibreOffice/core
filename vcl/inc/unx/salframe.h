@@ -31,6 +31,7 @@
 // -=-= #includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #include <unx/salstd.hxx>
 #include <unx/salunx.h>
+#include <unx/saltype.h>
 
 #include <salframe.hxx>
 #include <salwtype.hxx>
@@ -40,7 +41,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
 #include <vclpluginapi.h>
-
 
 #include <list>
 
@@ -66,13 +66,13 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     static X11SalFrame* s_pSaveYourselfFrame;
 
-    X11SalFrame*    mpParent;            // pointer to parent frame
-                                    // which should never obscur this frame
+    X11SalFrame*    mpParent;             // pointer to parent frame
+                                          // which should never obscur this frame
     bool            mbTransientForRoot;
-    std::list< X11SalFrame* > maChildren;         // List of child frames
+    std::list< X11SalFrame* > maChildren; // List of child frames
 
     SalDisplay     *pDisplay_;
-    int             m_nScreen;
+    SalX11Screen    m_nXScreen;
     XLIB_Window     mhWindow;
     XLIB_Window     mhShellWindow;
     XLIB_Window     mhForeignParent;
@@ -89,11 +89,11 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
 
     XLIB_Time       nReleaseTime_;      // timestamp of last key release
-    sal_uInt16          nKeyCode_;          // last key code
-    sal_uInt16          nKeyState_;         // last key state
+    sal_uInt16      nKeyCode_;          // last key code
+    sal_uInt16      nKeyState_;         // last key state
     int             nCompose_;          // compose state
     bool            mbSendExtKeyModChange;
-    sal_uInt16          mnExtKeyMod;
+    sal_uInt16      mnExtKeyMod;
 
     int             nShowState_;        // show state
     int             nWidth_;            // client width
@@ -169,7 +169,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     void            passOnSaveYourSelf();
 
-    void            createNewWindow( XLIB_Window aParent, int nScreen = -1 );
+    void            createNewWindow( XLIB_Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
     void            updateScreenNumber();
 
     void            setXEmbedInfo();
@@ -181,13 +181,13 @@ public:
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( sal_uIntPtr nSalFrameStyle, int nScreen = -1,
+    void            Init( sal_uIntPtr nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
                           SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay*             GetDisplay() const { return pDisplay_; }
     Display*                GetXDisplay() const;
     XLIB_Window             GetDrawable() const;
-    int                     GetScreenNumber() const { return m_nScreen; }
+    SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
     XLIB_Window             GetWindow() const { return mhWindow; }
     XLIB_Window             GetShellWindow() const { return mhShellWindow; }
     XLIB_Window             GetForeignParent() const { return mhForeignParent; }

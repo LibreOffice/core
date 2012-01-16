@@ -39,13 +39,13 @@ typedef struct _SalFrameGeometry {
                         nTopDecoration,
                         nRightDecoration,
                         nBottomDecoration;
-    unsigned int        nScreenNumber;
+    unsigned int        nDisplayScreenNumber;
 
     _SalFrameGeometry() :
     nX( 0 ), nY( 0 ), nWidth( 1 ), nHeight( 1 ),
     nLeftDecoration( 0 ), nTopDecoration( 0 ),
     nRightDecoration( 0 ), nBottomDecoration( 0 ),
-    nScreenNumber( 0 )
+    nDisplayScreenNumber( 0 )
     {}
 } SalFrameGeometry;
 

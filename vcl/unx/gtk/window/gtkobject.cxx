@@ -66,10 +66,10 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
         m_aSystemData.pSalFrame     = NULL;
         m_aSystemData.pWidget       = m_pSocket;
-        m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getScreenNumber()).GetVisual();
-        m_aSystemData.nScreen       = pParent->getScreenNumber();
-        m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getScreenNumber()).GetDepth();
-        m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getScreenNumber()).GetXColormap();
+        m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getXScreenNumber()).GetVisual();
+        m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
+        m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getXScreenNumber()).GetDepth();
+        m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getXScreenNumber()).GetXColormap();
         m_aSystemData.pAppContext   = NULL;
         m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pParent->getWindow())));
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());

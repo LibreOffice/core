@@ -255,7 +255,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     // default desktops
     m_nDesktops = 1;
     m_aWMWorkAreas = ::std::vector< Rectangle >
-        ( 1, Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultScreenNumber() ) ) );
+        ( 1, Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
     m_bEqualWorkAreas = true;
 
     memset( m_aWMAtoms, 0, sizeof( m_aWMAtoms ) );
@@ -270,7 +270,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
         if( aRwmRunning != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 aRwmRunning,
                                 0, 32,
                                 False,
@@ -287,7 +287,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         }
         else if( (aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True )) != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 aRwmRunning,
                                 0, 32,
                                 False,
@@ -308,7 +308,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
         if( aTTAPlatform != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 aTTAPlatform,
                                 0, 32,
                                 False,
@@ -367,7 +367,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
     bNetWM = getNetWmName();
     if( bNetWM
         && XGetWindowProperty( m_pDisplay,
-                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                m_aWMAtoms[ NET_SUPPORTED ],
                                0, 0,
                                False,
@@ -388,7 +388,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_SUPPORTED ],
                                 0, nBytesLeft/4,
                                 False,
@@ -446,7 +446,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         // get number of desktops
         if( m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ]
             && XGetWindowProperty( m_pDisplay,
-                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                    m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ],
                                    0, 1,
                                    False,
@@ -465,7 +465,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             // get work areas
             if( m_aWMAtoms[ NET_WORKAREA ]
                 && XGetWindowProperty( m_pDisplay,
-                                       m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                       m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                        m_aWMAtoms[ NET_WORKAREA ],
                                        0, 4*m_nDesktops,
                                        False,
@@ -558,7 +558,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     {
         XLIB_Window         aWMChild    = None;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
                                 0, 1,
                                 False,
@@ -625,7 +625,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     }
     if( m_bValid
         && XGetWindowProperty( m_pDisplay,
-                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                m_aWMAtoms[ WIN_PROTOCOLS ],
                                0, 0,
                                False,
@@ -646,7 +646,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ WIN_PROTOCOLS ],
                                 0, nBytesLeft/4,
                                 False,
@@ -710,7 +710,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         // get number of desktops
         if( m_aWMAtoms[ WIN_WORKSPACE_COUNT ]
             && XGetWindowProperty( m_pDisplay,
-                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                    m_aWMAtoms[ WIN_WORKSPACE_COUNT ],
                                    0, 1,
                                    False,
@@ -763,7 +763,7 @@ bool WMAdaptor::getNetWmName()
     {
         XLIB_Window         aWMChild = None;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
                                 0, 1,
                                 False,
@@ -2182,7 +2182,7 @@ int WMAdaptor::getCurrentWorkArea() const
         unsigned long       nBytesLeft  = 0;
         unsigned char*  pProperty   = NULL;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_CURRENT_DESKTOP ],
                                 0, 1,
                                 False,
@@ -2260,7 +2260,7 @@ void WMAdaptor::switchToWorkArea( int nWorkArea, bool bConsiderWM ) const
         XEvent aEvent;
         aEvent.type                 = ClientMessage;
         aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() );
+        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() );
         aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
         aEvent.xclient.format       = 32;
         aEvent.xclient.data.l[0]    = nWorkArea;
@@ -2269,7 +2269,7 @@ void WMAdaptor::switchToWorkArea( int nWorkArea, bool bConsiderWM ) const
         aEvent.xclient.data.l[3]    = 0;
         aEvent.xclient.data.l[4]    = 0;
         XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
+                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                     False,
                     SubstructureNotifyMask | SubstructureRedirectMask,
                     &aEvent

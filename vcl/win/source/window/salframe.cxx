@@ -932,7 +932,7 @@ void WinSalFrame::updateScreenNumber()
             if( rMonitors[i].m_aArea.IsInside( aPoint ) )
             {
                 mnDisplay = static_cast<sal_Int32>(i);
-                maGeometry.nScreenNumber = static_cast<unsigned int>(i);
+                maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
             }
         }
     }
@@ -1900,7 +1900,7 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
                 }
             }
             mnDisplay = nNewScreen;
-            maGeometry.nScreenNumber = nNewScreen;
+            maGeometry.nDisplayScreenNumber = nNewScreen;
             SetPosSize( aNewMonPos.X() + (maGeometry.nX - aOldMonPos.X()),
                         aNewMonPos.Y() + (maGeometry.nY - aOldMonPos.Y()),
                         0, 0,

@@ -68,7 +68,8 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         }
         nDX = (long)w;
         nDY = (long)h;
-        if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable,
+        if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount,
+                          SalX11Screen( nScreen ), pData->hDrawable,
                 static_cast< XRenderPictFormat* >( pData->pXRenderFormat )) )
         {
             delete pVDev;
@@ -77,7 +78,7 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     }
     else if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount,
                            pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
-                                       GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() ) )
+                                       GetGenericData()->GetSalDisplay()->GetDefaultXScreen() ) )
     {
         delete pVDev;
         return NULL;
@@ -94,14 +95,15 @@ void X11SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap )
+void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
+                           bool bDeleteColormap )
 {
     SalColormap *pOrigDeleteColormap = m_pDeleteColormap;
 
     SalDisplay *pDisplay  = pDevice->GetDisplay();
-    m_nScreen = pDevice->GetScreenNumber();
+    m_nXScreen = pDevice->GetXScreenNumber();
 
-    int nVisualDepth = pDisplay->GetColormap( m_nScreen ).GetVisual().GetDepth();
+    int nVisualDepth = pDisplay->GetColormap( m_nXScreen ).GetVisual().GetDepth();
     int nDeviceDepth = pDevice->GetDepth();
 
     if( pColormap )
@@ -112,7 +114,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     }
     else
     if( nDeviceDepth == nVisualDepth )
-        m_pColormap = &pDisplay->GetColormap( m_nScreen );
+        m_pColormap = &pDisplay->GetColormap( m_nXScreen );
     else
     if( nDeviceDepth == 1 )
         m_pColormap = m_pDeleteColormap = new SalColormap();
@@ -121,7 +123,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
         delete pOrigDeleteColormap;
 
     const Drawable aVdevDrawable = pDevice->GetDrawable();
-    SetDrawable( aVdevDrawable, m_nScreen );
+    SetDrawable( aVdevDrawable, m_nXScreen );
 
     m_pVDev      = pDevice;
     m_pFrame     = NULL;
@@ -133,27 +135,27 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 // -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
-                                long nDX, long nDY,
-                                sal_uInt16 nBitCount,
-                                int nScreen,
-                                Pixmap hDrawable,
-                                XRenderPictFormat* pXRenderFormat )
+                                    long nDX, long nDY,
+                                    sal_uInt16 nBitCount,
+                                    SalX11Screen nXScreen,
+                                    Pixmap hDrawable,
+                                    XRenderPictFormat* pXRenderFormat )
 {
     SalColormap* pColormap = NULL;
     bool bDeleteColormap = false;
 
     pDisplay_               = pDisplay;
     pGraphics_              = new X11SalGraphics();
-    m_nScreen               = nScreen;
+    m_nXScreen              = nXScreen;
     if( pXRenderFormat ) {
         pGraphics_->SetXRenderFormat( pXRenderFormat );
         if( pXRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay, pXRenderFormat->colormap, m_nScreen );
+            pColormap = new SalColormap( pDisplay, pXRenderFormat->colormap, m_nXScreen );
         else
             pColormap = new SalColormap( nBitCount );
          bDeleteColormap = true;
     }
-    else if( nBitCount != pDisplay->GetVisual( m_nScreen ).GetDepth() )
+    else if( nBitCount != pDisplay->GetVisual( m_nXScreen ).GetDepth() )
     {
         pColormap = new SalColormap( nBitCount );
         bDeleteColormap = true;
@@ -165,7 +167,7 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 
     if( hDrawable == None )
         hDrawable_          = XCreatePixmap( GetXDisplay(),
-                                             pDisplay_->GetDrawable( m_nScreen ),
+                                             pDisplay_->GetDrawable( m_nXScreen ),
                                              nDX_, nDY_,
                                              GetDepth() );
     else
@@ -180,7 +182,8 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-X11SalVirtualDevice::X11SalVirtualDevice()
+X11SalVirtualDevice::X11SalVirtualDevice() :
+    m_nXScreen( 0 )
 {
     pDisplay_               = (SalDisplay*)ILLEGAL_POINTER;
     pGraphics_              = NULL;
@@ -236,7 +239,7 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( !nDY ) nDY = 1;
 
     Pixmap h = XCreatePixmap( GetXDisplay(),
-                              pDisplay_->GetDrawable( m_nScreen ),
+                              pDisplay_->GetDrawable( m_nXScreen ),
                               nDX, nDY, nDepth_ );
 
     if( !h )
@@ -244,7 +247,7 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
         if( !GetDrawable() )
         {
             hDrawable_ = XCreatePixmap( GetXDisplay(),
-                                        pDisplay_->GetDrawable( m_nScreen ),
+                                        pDisplay_->GetDrawable( m_nXScreen ),
                                         1, 1, nDepth_ );
             nDX_ = 1;
             nDY_ = 1;

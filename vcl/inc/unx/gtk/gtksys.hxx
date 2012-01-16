@@ -32,6 +32,7 @@
 
 #include "generic/gensys.h"
 #include <gtk/gtk.h>
+#include <unx/saltype.h>
 
 class GtkSalSystem : public SalGenericSystem
 {
@@ -51,7 +52,10 @@ public:
                                             const rtl::OUString&              rMessage,
                                             const std::list< rtl::OUString >& rButtons,
                                             int                        nDefButton);
-
+    SalX11Screen      GetDisplayDefaultXScreen()
+            { return getXScreenFromDisplayScreen( GetDisplayDefaultScreen() ); }
+    int               GetDisplayXScreenCount();
+    SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);
     // We have a 'screen' number that is combined from screen-idx + monitor-idx
     static int        getScreenIdxFromPtr     (GdkDisplay *pDisplay, GdkScreen *pScreen);
     static int        getScreenMonitorIdx     (GdkDisplay *pDisplay, GdkScreen *pScreen, int nX, int nY);

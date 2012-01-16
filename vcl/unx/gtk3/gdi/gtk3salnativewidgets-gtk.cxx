@@ -264,6 +264,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     ControlPart nPart,
                                     const ImplControlValue& aValue )
 {
+    (void)nType;
     OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
     const ScrollbarValue* pScrollbarVal = static_cast<const ScrollbarValue *>(&aValue);
     Rectangle        scrollbarRect;
@@ -550,6 +551,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
                                          Rectangle aAreaRect,
                                          ControlState nState )
 {
+    (void)nType;
     Rectangle            buttonRect;
     GtkStateFlags        stateFlags;
     GtkShadowType        shadowType;
@@ -595,6 +597,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      ControlPart nPart,
                                      const ImplControlValue& aValue )
 {
+    (void)nPart;
     Rectangle            areaRect;
     GtkShadowType        shadowType;
     const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
@@ -651,6 +654,8 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
                                                    ControlPart nPart,
                                                    Rectangle aAreaRect )
 {
+    (void)nType;
+    (void)nPart;
     Rectangle    aButtonRect;
     gint        nArrowWidth;
     gint        nButtonWidth;
@@ -696,6 +701,7 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
                                     ControlPart nPart,
                                     const ImplControlValue& aValue )
 {
+    (void)aValue;
     Rectangle        areaRect;
     Rectangle        buttonRect;
     Rectangle        arrowRect;

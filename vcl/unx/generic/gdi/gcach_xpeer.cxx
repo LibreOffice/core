@@ -54,12 +54,12 @@ X11GlyphPeer::~X11GlyphPeer()
     //Why do this here, move into dtor/shutdown of display?
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display* const pX11Disp = pSalDisp->GetDisplay();
-    int nMaxScreens = pSalDisp->GetScreenCount();
+    int nMaxScreens = pSalDisp->GetXScreenCount();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
 
     for( int i = 0; i < nMaxScreens; i++ )
     {
-        SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( i );
+        SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( SalX11Screen (i) );
         for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
         {
             if( it->second.m_aPixmap )

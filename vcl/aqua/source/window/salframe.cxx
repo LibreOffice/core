@@ -1665,7 +1665,7 @@ void AquaSalFrame::UpdateFrameGeometry()
         maScreenRect = [pScreen frame];
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
-            maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
+            maGeometry.nDisplayScreenNumber = [pScreens indexOfObject: pScreen];
     }
 
     NSRect aFrameRect = [mpWindow frame];

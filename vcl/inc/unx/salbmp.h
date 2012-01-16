@@ -60,7 +60,7 @@ private:
 
     static BitmapBuffer*        ImplCreateDIB(
                                     Drawable aDrawable,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     long nDrawableDepth,
                                     long nX,
                                     long nY,
@@ -82,7 +82,7 @@ public:
     bool                        ImplCreateFromXImage(
                                     Display* pDisplay,
                                     XLIB_Window hWindow,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     XImage* pImage
                                 );
 private:
@@ -95,7 +95,7 @@ public:
 
     SAL_DLLPRIVATE bool         ImplCreateFromDrawable(
                                     Drawable aDrawable,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     long nDrawableDepth,
                                     long nX,
                                     long nY,
@@ -105,21 +105,21 @@ public:
 
     SAL_DLLPRIVATE XImage*      ImplCreateXImage(
                                     SalDisplay* pSalDisp,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     long nDepth,
                                     const SalTwoRect& rTwoRect
                                 ) const;
 
     SAL_DLLPRIVATE ImplSalDDB*  ImplGetDDB(
                                     Drawable,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     long nDrawableDepth,
                                     const SalTwoRect&
                                 ) const;
 
     void                        ImplDraw(
                                     Drawable aDrawable,
-                                    int nScreen,
+                                    SalX11Screen nXScreen,
                                     long nDrawableDepth,
                                     const SalTwoRect& rTwoRect,
                                     const GC& rGC
@@ -177,9 +177,9 @@ private:
     Pixmap          maPixmap;
     SalTwoRect      maTwoRect;
     long            mnDepth;
-    int             mnScreen;
+    SalX11Screen    mnXScreen;
 
-                    ImplSalDDB() {}
+                    ImplSalDDB() : mnXScreen(0) {}
 
     static void     ImplDraw(
                         Drawable aSrcDrawable,
@@ -200,13 +200,13 @@ public:
                     ImplSalDDB(
                         XImage* pImage,
                         Drawable aDrawable,
-                        int nScreen,
+                        SalX11Screen nXScreen,
                         const SalTwoRect& rTwoRect
                     );
 
                     ImplSalDDB(
                         Drawable aDrawable,
-                        int nScreen,
+                        SalX11Screen nXScreen,
                         long nDrawableDepth,
                         long nX,
                         long nY,
@@ -217,7 +217,7 @@ public:
                     ImplSalDDB(
                         Display* pDisplay,
                         XLIB_Window hWindow,
-                        int nScreen,
+                        SalX11Screen nXScreen,
                         XImage* pImage
                     );
 
@@ -231,9 +231,9 @@ public:
                     {
                         return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 );
                     }
-    int             ImplGetScreen() const { return mnScreen; }
+    SalX11Screen    ImplGetScreen() const { return mnXScreen; }
 
-    bool            ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
+    bool            ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
 
     void            ImplDraw(
                         Drawable aDrawable,

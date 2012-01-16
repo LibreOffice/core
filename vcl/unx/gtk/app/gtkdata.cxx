@@ -218,49 +218,41 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
         emitDisplayChanged();
 }
 
-void GtkSalDisplay::initScreen( int nScreen ) const
+#if !GTK_CHECK_VERSION(3,0,0)
+SalDisplay::ScreenData *
+GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    // No implementation needed for gt3k: no colormaps handling
-    // or need to init screens ...
-    (void)nScreen;
-#else
-    if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
-        nScreen = m_nDefaultScreen;
-    ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
-    if( rSD.m_bInit )
-        return;
-
     // choose visual for screen
-    SalDisplay::initScreen( nScreen );
+    ScreenData *pSD;
+    if (!(pSD = SalDisplay::initScreen( nXScreen )))
+        return NULL;
 
     // now set a gdk default colormap matching the chosen visual to the screen
-    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, nScreen );
+    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, nXScreen.getXScreen() );
 //  should really use this:
-//  GdkVisual* pVis = gdk_x11_screen_lookup_visual_get( screen, rSD.m_aVisual.visualid );
+//  GdkVisual* pVis = gdk_x11_screen_lookup_visual_get( screen, pSD->m_aVisual.visualid );
 //  and not this:
-    GdkVisual* pVis = gdkx_visual_get( rSD.m_aVisual.visualid );
+    GdkVisual* pVis = gdkx_visual_get( pSD->m_aVisual.visualid );
     if( pVis )
     {
         GdkColormap* pDefCol = gdk_screen_get_default_colormap( pScreen );
         GdkVisual* pDefVis = gdk_colormap_get_visual( pDefCol );
         if( pDefVis != pVis )
         {
-           pDefCol = gdk_x11_colormap_foreign_new( pVis, rSD.m_aColormap.GetXColormap() );
+           pDefCol = gdk_x11_colormap_foreign_new( pVis, pSD->m_aColormap.GetXColormap() );
            gdk_screen_set_default_colormap( pScreen, pDefCol );
            #if OSL_DEBUG_LEVEL > 1
-           fprintf( stderr, "set new gdk color map for screen %d\n", nScreen );
+           fprintf( stderr, "set new gdk color map for screen %d\n", nXScreen.getXScreen() );
            #endif
         }
     }
     #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "not GdkVisual for visual id %d\n", (int)rSD.m_aVisual.visualid );
+        fprintf( stderr, "not GdkVisual for visual id %d\n", (int)pSD->m_aVisual.visualid );
     #endif
-#endif
+    return pSD;
 }
 
-#if !GTK_CHECK_VERSION(3,0,0)
 long GtkSalDisplay::Dispatch( XEvent* pEvent )
 {
     if( GetDisplay() == pEvent->xany.display )

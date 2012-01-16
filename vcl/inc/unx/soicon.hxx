@@ -28,13 +28,15 @@
 #ifndef _SV_SOICON_HXX
 #define _SV_SOICON_HXX
 
+#include <unx/saltype.h>
+
 class SalDisplay;
 class SalBitmap;
 class Bitmap;
 
-sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
-                          sal_uInt16 nIcon, sal_uInt16 iconSize,
-                          Pixmap& icon_pixmap, Pixmap& icon_mask );
+sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nScreen,
+                              sal_uInt16 nIcon, sal_uInt16 iconSize,
+                              Pixmap& icon_pixmap, Pixmap& icon_mask );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
