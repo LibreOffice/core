@@ -64,14 +64,12 @@ private:
     static int nTest;
     static uno::Reference< lang::XComponent > xComponent;
 
-    static uno::Reference< table::XCell > xCellForChange;
-    static uno::Reference< table::XCell > xCellForCheck;
+    uno::Reference< table::XCell > xCellForChange;
+    uno::Reference< table::XCell > xCellForCheck;
 };
 
 int ScXDataPilotTable::nTest = 0;
 uno::Reference< lang::XComponent > ScXDataPilotTable::xComponent;
-uno::Reference< table::XCell > ScXDataPilotTable::xCellForChange;
-uno::Reference< table::XCell > ScXDataPilotTable::xCellForCheck;
 
 void ScXDataPilotTable::testGetOutputRange()
 {
