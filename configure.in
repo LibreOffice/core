@@ -2941,7 +2941,7 @@ if test "$cross_compiling" = "yes"; then
     test -f ./Env.Host.sh 2>/dev/null || exit
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
-    cp Env.Host.sh ../Env.Build.sh
+    sed -e 's/config_host.mk/config_build.mk/' <Env.Host.sh >../Env.Build.sh
     cp config.log ../config.Build.log
     . ./config_host.mk
     . ./Env.Host.sh
