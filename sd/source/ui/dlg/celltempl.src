@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "enumdlg.hrc"
 #include "celltempl.hrc"
 #include <svx/dialogs.hrc>
 

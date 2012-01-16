@@ -63,7 +63,6 @@
 ../../sd/source/ui/app/strings.src
 ../../sd/source/ui/app/menuids_tmpl.src
 ../../sd/source/ui/app/accel_tmpl.src
-../../sd/source/ui/app/tbx_ww.src
 ../../sd/source/ui/app/menuids3_tmpl.src
 ../../sd/source/ui/app/app.src
 ../../sd/source/ui/app/res_bmp.src

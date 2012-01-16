@@ -52,7 +52,6 @@
 #include "sdresid.hxx"
 #include "prltempl.hxx"
 #include "prltempl.hrc"
-#include "enumdlg.hrc"
 #include "bulmaper.hxx"
 #include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>

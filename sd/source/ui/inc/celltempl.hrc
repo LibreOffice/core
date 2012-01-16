@@ -26,4 +26,3 @@
  ************************************************************************/
 #include <sfx2/sfx.hrc>
 #define TAB_CELL_TEMPLATE       910
-#define TAB_CONTROL 1

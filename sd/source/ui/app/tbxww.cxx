@@ -47,7 +47,6 @@
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "tbx_ww.hxx"
-#include "tbx_ww.hrc"
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 

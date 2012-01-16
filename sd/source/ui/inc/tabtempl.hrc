@@ -27,4 +27,3 @@
 #include <sfx2/sfx.hrc>
 /* #define TAB_TEMPLATE     RID_APP_START+??? */
 #define TAB_TEMPLATE        637
-#define TAB_CONTROL 1

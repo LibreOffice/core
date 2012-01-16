@@ -32,40 +32,6 @@
 // -----------
 
 #define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
-#define IMAGE_MASK_STDCOLOR_HC IMAGE_MASK_STDCOLOR
-#define IMAGE_STDBTN_COLOR_HC COL_LIGHTMAGENTA
-
-#define RID_ALIGNMENT             RID_APP_START+1
-#define RID_ZOOM                  RID_APP_START+2
-#define RID_CONTROLS              RID_APP_START+3
-#define RID_IMPRESS_DOCWINDOWICON RID_APP_START+4
-
-#define RID_ALIGNMENT_TBX       RID_APP_START+5
-#define RID_ZOOM_TBX            RID_APP_START+6
-#define RID_CHOOSE_MODE         RID_APP_START+7
-#define RID_CHOOSE_MODE_TBX     RID_APP_START+8
-
-#define RID_TEXT                RID_APP_START+10
-#define RID_TEXT_TBX            RID_APP_START+11
-#define RID_RECTANGLES          RID_APP_START+12
-#define RID_RECTANGLES_TBX      RID_APP_START+13
-#define RID_ELLIPSES            RID_APP_START+14
-#define RID_ELLIPSES_TBX        RID_APP_START+15
-#define RID_LINES               RID_APP_START+16
-#define RID_LINES_TBX           RID_APP_START+17
-#define RID_3D_OBJECTS          RID_APP_START+18
-#define RID_3D_OBJECTS_TBX      RID_APP_START+19
-#define RID_INSERT              RID_APP_START+20
-#define RID_INSERT_TBX          RID_APP_START+21
-#define RID_POSITION            RID_APP_START+22
-#define RID_POSITION_TBX        RID_APP_START+23
-#define RID_CONNECTORS          RID_APP_START+24
-#define RID_CONNECTORS_TBX      RID_APP_START+25
-#define RID_ARROWS              RID_APP_START+26
-#define RID_ARROWS_TBX          RID_APP_START+27
-#define RID_DRAW_DOCWINDOWICON  RID_APP_START+28
-#define RID_GRAFFILTERS         RID_APP_START+29
-#define RID_GRAFFILTERS_TBX     RID_APP_START+30
 
 // Bitmaps fuer Tree-ListBox im Effekte-TabDialog
 #define BMP_PAGE                RID_APP_START+42
@@ -96,50 +62,6 @@
 
 // -----------------------------------------------------------------------------
 // additional effects
-#define BMP_EFFECT_DISCARD_FROM_UL          RID_APP_START+130
-#define BMP_EFFECT_DISCARD_FROM_UR          RID_APP_START+131
-#define BMP_EFFECT_DISCARD_FROM_LR          RID_APP_START+132
-#define BMP_EFFECT_DISCARD_FROM_LL          RID_APP_START+133
-#define BMP_EFFECT_DISCARD_S_FROM_L         RID_APP_START+134
-#define BMP_EFFECT_DISCARD_S_FROM_UL        RID_APP_START+135
-#define BMP_EFFECT_DISCARD_S_FROM_T         RID_APP_START+136
-#define BMP_EFFECT_DISCARD_S_FROM_UR        RID_APP_START+137
-#define BMP_EFFECT_DISCARD_S_FROM_R         RID_APP_START+138
-#define BMP_EFFECT_DISCARD_S_FROM_LR        RID_APP_START+139
-#define BMP_EFFECT_DISCARD_S_FROM_B         RID_APP_START+140
-#define BMP_EFFECT_DISCARD_S_FROM_LL        RID_APP_START+141
-#define BMP_EFFECT_VERTICAL_CHECKERBOARD    RID_APP_START+142
-#define BMP_EFFECT_HORIZONTAL_CHECKERBOARD  RID_APP_START+143
-#define BMP_EFFECT_STRTCH_FROM_L            RID_APP_START+144
-#define BMP_EFFECT_STRTCH_FROM_UL           RID_APP_START+145
-#define BMP_EFFECT_STRTCH_FROM_T            RID_APP_START+146
-#define BMP_EFFECT_STRTCH_FROM_UR           RID_APP_START+147
-#define BMP_EFFECT_STRTCH_FROM_R            RID_APP_START+148
-#define BMP_EFFECT_STRTCH_FROM_LR           RID_APP_START+149
-#define BMP_EFFECT_STRTCH_FROM_B            RID_APP_START+150
-#define BMP_EFFECT_STRTCH_FROM_LL           RID_APP_START+151
-
-#define BMP_EFFECT_STRTCH_HORIZONTAL        RID_APP_START+152
-#define BMP_EFFECT_STRTCH_VERTICAL          RID_APP_START+153
-#define BMP_EFFECT_ROTATE_HORIZONTAL        RID_APP_START+154
-#define BMP_EFFECT_ROTATE_VERTICAL          RID_APP_START+155
-
-#define BMP_FOIL_21                         RID_APP_START+156
-#define BMP_FOIL_22                         RID_APP_START+157
-#define BMP_FOIL_23                         RID_APP_START+158
-#define BMP_FOIL_24                         RID_APP_START+159
-
-#define BMP_EFFECT_UNCOVER_TO_L             RID_APP_START+165
-#define BMP_EFFECT_UNCOVER_TO_UL            RID_APP_START+166
-#define BMP_EFFECT_UNCOVER_TO_T             RID_APP_START+167
-#define BMP_EFFECT_UNCOVER_TO_UR            RID_APP_START+168
-#define BMP_EFFECT_UNCOVER_TO_R             RID_APP_START+169
-#define BMP_EFFECT_UNCOVER_TO_LR            RID_APP_START+170
-#define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
-#define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
-
-#define BMP_FOIL_NONE_H                     RID_SD_START+225
-#define BMP_WAIT_ICON_H                     RID_SD_START+229
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
 
@@ -258,37 +180,12 @@
 #define RID_DRAW_OUTLINETEXTOBJ_POPUP       RID_APP_START+95
 #define RID_GRAPHIC_OUTLINETEXTOBJ_POPUP    RID_APP_START+96
 
-/*
- * Pointer (Mauszeiger)
- */
-#define PTR_WATERCAN            RID_APP_START+100
-#define PTR_PENCIL              RID_APP_START+101
-
-
-/*
- * Globale Dialog-IDs
- */
-#define DLG_FONTWORK            RID_APP_START+150
 
 /*
  *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
  *  strings.hrc auf die selben IDs zu setzen (eine Toolbox und sein
  *  Konfigurationsstring muessen dieselbe ResourceID haben!).
  */
-
-// --> Jetzt in cfgids.hxx
-/*
-#define _RID_DRAW_TOOLBOX           RID_APP_START+200
-#define _RID_SLIDE_TOOLBOX          RID_APP_START+201
-#define _RID_DRAW_OBJ_TOOLBOX       RID_APP_START+202
-#define _RID_SLIDE_OBJ_TOOLBOX      RID_APP_START+203
-#define _RID_BEZIER_TOOLBOX         RID_APP_START+204
-#define _RID_TEXT_TOOLBOX           RID_APP_START+205
-#define _RID_OUTLINE_TOOLBOX        RID_APP_START+206
-#define _RID_DRAW_POLYLINEOBJ_POPUP RID_APP_START+207
-#define _RID_GLUEPOINTS_TOOLBOX     RID_APP_START+208
-*/
-
 
 #define RID_DRAW_SNAPOBJECT_POPUP           RID_APP_START+390
 #define RID_DRAW_GLUEPOINT_POPUP            RID_APP_START+392
@@ -297,5 +194,3 @@
 
 #define RID_GRAPHICSTYLEFAMILY      RID_APP_START+395
 #define RID_PRESENTATIONSTYLEFAMILY RID_APP_START+396
-#define RID_GRAPHICSCELLFAMILY      RID_APP_START+397
-

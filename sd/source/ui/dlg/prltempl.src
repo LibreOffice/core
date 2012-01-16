@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "enumdlg.hrc"
 #include "prltempl.hrc"
 #include <svx/dialogs.hrc>
 TabDialog TAB_PRES_LAYOUT_TEMPLATE
