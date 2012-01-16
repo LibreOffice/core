@@ -229,7 +229,24 @@
         $deliver_env{'L10N_framework'}++;
     };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
-    my $source_config = SourceConfig -> new($workspace_path);
+    my @additional_repositories = ();
+
+    # Collect additional repository directories from the ADDITIONAL_REPOSITORIES
+    # environment variable (typically set by configure).
+    foreach my $additional_repository (split(";", $ENV{ADDITIONAL_REPOSITORIES}))
+    {
+        next if $additional_repository eq "";
+        # The repository path is expected to be relative to the workspace_path.
+        # For support of absolute paths we need functionality to distinguish between
+        # relative and absolute paths (provided by File::Spec).
+        my $path = Cwd::realpath(correct_path($workspace_path . "/" . $additional_repository));
+        if ( -d $path)
+        {
+            push @additional_repositories, $path;
+        }
+    }
+
+    my $source_config = SourceConfig -> new($workspace_path, @additional_repositories);
     check_partial_gnumake_build($initial_module);
 
     if ($html) {

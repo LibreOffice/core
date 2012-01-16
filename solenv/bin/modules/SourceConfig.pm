@@ -56,6 +56,8 @@ sub new {
     my $proto = shift;
     my $class = ref($proto) || $proto;
     my $source_root = shift;
+    my @additional_repositories = @_;
+
     my $self = {};
     $self->{USER_SOURCE_ROOT} = undef;
     $self->{SOURCE_CONFIG_FILE} = undef;
@@ -104,6 +106,11 @@ sub new {
     if (defined $self->{USER_SOURCE_ROOT}) {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
     };
+    foreach my $additional_repository (@additional_repositories)
+    {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($additional_repository)} = $additional_repository;
+    }
+
     read_config_file($self);
        get_module_paths($self);
     bless($self, $class);

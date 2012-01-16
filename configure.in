@@ -873,6 +873,7 @@ AC_ARG_WITH(arm-target,
 ],with_arm_target=$withval,with_arm_target=4)
 
 BUILD_TYPE="OOo"
+ADDITIONAL_REPOSITORIES=""
 
 dnl ===================================================================
 dnl Message.
@@ -7038,6 +7039,7 @@ if test -z "$WITH_LANG"; then
    AC_MSG_RESULT([en-US])
 else
    AC_MSG_RESULT([$WITH_LANG])
+   ADDITIONAL_REPOSITORIES="$ADDITIONAL_REPOSITORIES;../extras"
 fi
 AC_SUBST(WITH_LANG)
 
@@ -7194,6 +7196,7 @@ fi
 AC_SUBST(LOCAL_SOLVER)
 
 AC_SUBST(BUILD_TYPE)
+AC_SUBST(ADDITIONAL_REPOSITORIES)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
 chmod +x ./config.guess
