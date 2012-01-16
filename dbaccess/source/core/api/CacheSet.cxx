@@ -427,7 +427,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     for(sal_Int32 i=1;aIter != aEnd;++aIter,++i)
     {
         aIter->setSigned(m_aSignedFlags[i-1]);
-        aIter->fill(i,m_aColumnTypes[i-1],m_aNullable[i-1],this);
+        aIter->fill(i, m_aColumnTypes[i-1], this);
     }
 }
 

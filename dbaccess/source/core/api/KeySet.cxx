@@ -762,7 +762,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
 #endif
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != m_pKeyColumnNames->end() )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,aFind->second.bNullable,xRow);
+                            (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
                     }
                     bAutoValuesFetched = sal_True;
                 }
@@ -822,7 +822,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
                         // we will only fetch values which are keycolumns
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != aEnd )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,aFind->second.bNullable,xRow);
+                            (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
@@ -1376,13 +1376,13 @@ sal_Bool OKeySet::fetchRow()
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
-        // first fetch the values needed for the key column
+        // first fetch the values needed for the key columns
         SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition,rColDesc.nType,rColDesc.bNullable,m_xDriverRow);
+            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xDriverRow);
         }
         // now fetch the values from the missing columns from other tables
         aPosIter = (*m_pForeignColumnNames).begin();
@@ -1390,7 +1390,7 @@ sal_Bool OKeySet::fetchRow()
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition,rColDesc.nType,rColDesc.bNullable,m_xDriverRow);
+            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xDriverRow);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(0,NULL)))).first;
     }
