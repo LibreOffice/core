@@ -2404,11 +2404,6 @@ void SwTabFrm::MakeAll()
                         ++nMinNumOfLines;
                         pTmpRow = static_cast<const SwRowFrm*>(pTmpRow->GetNext());
                     }
-                    // Check if all lines want to keep together and we
-                    // have a pIndPrev. In this case we set nDeadLine
-                    // to 0, forcing the table to move forward.
-                    if ( !pTmpRow && pIndPrev )
-                        nDeadLine = 0;
                 }
 
                 if ( !bTryToSplit )
