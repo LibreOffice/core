@@ -324,7 +324,7 @@ inline void ScFormulaResult::SetToken( const formula::FormulaToken* p )
                 dynamic_cast<const ScMatrixFormulaCellToken*>(pMatResult);
             if (pNewMatFormula)
             {
-                SAL_INFO( "sc", "ScFormulaResult::SetToken: pNewMatFormula and pMatFormula, overriding matrix formula dimension; intended?");
+                SAL_WARN( "sc", "ScFormulaResult::SetToken: pNewMatFormula and pMatFormula, overriding matrix formula dimension; intended?");
                 pMatFormula->SetMatColsRows( pNewMatFormula->GetMatCols(),
                         pNewMatFormula->GetMatRows());
             }

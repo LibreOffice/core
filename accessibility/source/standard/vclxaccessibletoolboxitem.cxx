@@ -116,7 +116,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
         default:
         {
-            SAL_INFO( "accessibility", "unsupported toolbox itemtype" );
+            SAL_WARN( "accessibility", "unsupported toolbox itemtype" );
         }
     }
 }

@@ -1281,7 +1281,7 @@ namespace
             }
             else
             {
-                SAL_INFO( "dbaccess", "Property 'AnchorName' is missing" );
+                SAL_WARN( "dbaccess.ui", "Property 'AnchorName' is missing" );
             }
         }
         catch( Exception& )

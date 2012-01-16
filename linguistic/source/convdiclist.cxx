@@ -319,11 +319,11 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
-            SAL_INFO( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): CommandAbortedException" );
+            SAL_WARN( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): CommandAbortedException" );
         }
         catch( ... )
         {
-            SAL_INFO( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): Any other exception" );
+            SAL_WARN( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): Any other exception" );
         }
     }
 

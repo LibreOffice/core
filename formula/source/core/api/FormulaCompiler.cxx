@@ -606,7 +606,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
                 xMap->putExternal( pArr2->Name, aExternalName);
             else
             {
-                SAL_INFO( "xmlsecurity", "FormulaCompiler::CreateOpCodeMap: no Token.Data external name");
+                SAL_WARN( "formula.core", "FormulaCompiler::CreateOpCodeMap: no Token.Data external name");
             }
         }
     }
@@ -1661,7 +1661,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
         rBuffer.append(mxSymbols->getSymbol(eOp));
     else
     {
-        SAL_INFO( "xmlsecurity","unknown OpCode");
+        SAL_WARN( "formula.core","unknown OpCode");
         rBuffer.append(GetNativeSymbol( ocErrName ));
     }
     if( bNext )

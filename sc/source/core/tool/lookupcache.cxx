@@ -47,7 +47,7 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
             break;
         default:
             meOp = UNKNOWN;
-            SAL_INFO( "sc.core", "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
+            SAL_WARN( "sc.core", "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
     }
 
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();

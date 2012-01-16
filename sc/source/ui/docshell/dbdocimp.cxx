@@ -293,7 +293,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 xLocate.set( xRowSet, uno::UNO_QUERY );
                 if ( !xLocate.is() )
                 {
-                    SAL_INFO( "sc.ui","can't get XRowLocate");
+                    SAL_WARN( "sc.ui","can't get XRowLocate");
                     bDoSelection = bRealSelection = bBookmarkSelection = sal_False;
                 }
             }

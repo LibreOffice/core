@@ -165,7 +165,7 @@ sal_uInt8 FormulaToken::GetByte() const
 
 void FormulaToken::SetByte( sal_uInt8 )
 {
-    SAL_INFO( "formula", "FormulaToken::SetByte: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetByte: virtual dummy called" );
 }
 
 bool FormulaToken::HasForceArray() const
@@ -176,80 +176,80 @@ bool FormulaToken::HasForceArray() const
 
 void FormulaToken::SetForceArray( bool )
 {
-    SAL_INFO( "formula", "FormulaToken::SetForceArray: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetForceArray: virtual dummy called" );
 }
 
 double FormulaToken::GetDouble() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetDouble: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
     return 0.0;
 }
 
 double & FormulaToken::GetDoubleAsReference()
 {
-    SAL_INFO( "formula", "FormulaToken::GetDouble: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
     static double fVal = 0.0;
     return fVal;
 }
 
 const String& FormulaToken::GetString() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetString: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetString: virtual dummy called" );
     static  String              aDummyString;
     return aDummyString;
 }
 
 sal_uInt16 FormulaToken::GetIndex() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetIndex: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetIndex: virtual dummy called" );
     return 0;
 }
 
 void FormulaToken::SetIndex( sal_uInt16 )
 {
-    SAL_INFO( "formula", "FormulaToken::SetIndex: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetIndex: virtual dummy called" );
 }
 
 bool FormulaToken::IsGlobal() const
 {
-    SAL_INFO( "formula", "FormulaToken::IsGlobal: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::IsGlobal: virtual dummy called" );
     return true;
 }
 
 void FormulaToken::SetGlobal( bool )
 {
-    SAL_INFO( "formula", "FormulaToken::SetGlobal: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetGlobal: virtual dummy called" );
 }
 
 short* FormulaToken::GetJump() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetJump: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetJump: virtual dummy called" );
     return NULL;
 }
 
 
 const String& FormulaToken::GetExternal() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetExternal: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetExternal: virtual dummy called" );
     static  String              aDummyString;
     return aDummyString;
 }
 
 FormulaToken* FormulaToken::GetFAPOrigToken() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetFAPOrigToken: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetFAPOrigToken: virtual dummy called" );
     return NULL;
 }
 
 sal_uInt16 FormulaToken::GetError() const
 {
-    SAL_INFO( "formula", "FormulaToken::GetError: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::GetError: virtual dummy called" );
     return 0;
 }
 
 void FormulaToken::SetError( sal_uInt16 )
 {
-    SAL_INFO( "formula", "FormulaToken::SetError: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetError: virtual dummy called" );
 }
 
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const

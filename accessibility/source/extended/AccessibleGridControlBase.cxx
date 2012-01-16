@@ -368,7 +368,7 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
     Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
-        SAL_INFO( "accessibility", "rectangle doesn't exist" );
+        SAL_WARN( "accessibility", "rectangle doesn't exist" );
     }
     return aRect;
 }
@@ -382,7 +382,7 @@ Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
     Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
-        SAL_INFO( "accessibility", "rectangle doesn't exist" );
+        SAL_WARN( "accessibility", "rectangle doesn't exist" );
     }
     return aRect;
 }

@@ -349,7 +349,7 @@ void SvtFilePicker::notify( sal_Int16 _nEventId, sal_Int16 _nControlId )
             m_xListener->dialogSizeChanged();
             break;
         default:
-            SAL_INFO( "fpicker", "SvtFilePicker::notify(): Unknown event id!" );
+            SAL_WARN( "fpicker.office", "SvtFilePicker::notify(): Unknown event id!" );
             break;
     }
 }
