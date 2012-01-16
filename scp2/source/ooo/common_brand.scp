@@ -63,8 +63,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
              gid_Brand_File_Bin_Libxml2,
-             gid_Brand_File_Bmp_Shell,
-             gid_Brand_File_Bmp_IntroAbout,
+             gid_Brand_File_Bmp_IntroAboutShell,
              gid_Brand_File_C05_Zip_Faq,
              gid_Brand_File_C05_Zip_Register,
              gid_Brand_File_C05_Htm_Faq,
@@ -652,7 +651,7 @@ File gid_Brand_File_Lib_Npsoplugin
 End
 #endif
 
-File gid_Brand_File_Bmp_IntroAbout
+File gid_Brand_File_Bmp_IntroAboutShell
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = "intro.zip";
@@ -664,13 +663,6 @@ File gid_Brand_File_Images_Brand_Zip
     Dir = gid_Brand_Dir_Share_Config;
     Name = "images_brand.zip";
     Styles = (PACKED);
-End
-
-File gid_Brand_File_Bmp_Shell
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program_Shell;
-    Name = "shell.zip";
-    Styles = (ARCHIVE);
 End
 
 File gid_Brand_File_Txt_Package

@@ -45,11 +45,9 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_sofficeapp \
     Library_spl \
     Library_unopkgapp \
-    Package_branding \
     Package_intro \
     Zip_brand \
     Zip_brand_dev \
-    Zip_shell \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
