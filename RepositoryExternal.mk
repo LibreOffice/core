@@ -217,8 +217,8 @@ ifeq ($(SYSTEM_LIBCMIS),YES)
 
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
-	$(LIBCMIS_CFLAGS) \
 	$$(INCLUDE) \
+	$(LIBCMIS_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBCMIS_LIBS))
 
@@ -348,8 +348,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(NEON_CFLAGS) \
 	$$(INCLUDE) \
+	$(NEON_CFLAGS) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),$(NEON_LIBS))
@@ -807,8 +807,8 @@ endif # SYSTEM_LPSOLVE
 
 define gb_LinkTarget__use_gio
 $(call gb_LinkTarget_set_include,$(1),\
-	$(GIO_CFLAGS) \
 	$$(INCLUDE) \
+	$(GIO_CFLAGS) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
