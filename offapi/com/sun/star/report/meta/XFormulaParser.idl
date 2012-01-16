@@ -55,7 +55,7 @@ interface XFormulaParser
 
         Names and symbols not defined here lead to a parser/print error.
      */
-    [attribute] sequence< sheet::FormulaOpCodeMapEntry > OpCodeMap;
+    [attribute] sequence< com::sun::star::sheet::FormulaOpCodeMapEntry > OpCodeMap;
 
     /** return the mapper for op codes.
     */
