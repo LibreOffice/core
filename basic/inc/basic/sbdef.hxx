@@ -30,13 +30,12 @@
 #define _SB_SBDEF_HXX
 
 #include <basic/sbxdef.hxx>
-#include <svl/svarray.hxx>
 #include <rtl/ustring.hxx>
 #include "basicdllapi.h"
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
-BASIC_DLLPUBLIC String getBasicTypeName( SbxDataType eType );
+BASIC_DLLPUBLIC ::rtl::OUString getBasicTypeName( SbxDataType eType );
 
 // Returns type name for Basic objects, especially
 // important for SbUnoObj instances

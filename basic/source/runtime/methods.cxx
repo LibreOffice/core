@@ -3414,7 +3414,7 @@ RTLFUNC(VarType)
 }
 
 // Exported function
-String getBasicTypeName( SbxDataType eType )
+rtl::OUString getBasicTypeName( SbxDataType eType )
 {
     static const char* pTypeNames[] =
     {
@@ -3462,8 +3462,7 @@ String getBasicTypeName( SbxDataType eType )
     sal_uInt16 nTypeNameCount = sizeof( pTypeNames ) / sizeof( char* );
     if ( nPos < 0 || nPos >= nTypeNameCount )
         nPos = nTypeNameCount - 1;
-    String aRetStr = String::CreateFromAscii( pTypeNames[nPos] );
-    return aRetStr;
+    return rtl::OUString::createFromAscii(pTypeNames[nPos]);
 }
 
 String getObjectTypeName( SbxVariable* pVar )
