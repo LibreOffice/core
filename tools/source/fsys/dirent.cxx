@@ -521,7 +521,7 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
     }
 
     // wird damit ein Volume beschrieben?
-    if ( !pParent && eFlag == FSYS_FLAG_RELROOT && aName.getLength() )
+    if ( !pParent && eFlag == FSYS_FLAG_RELROOT && !aName.isEmpty() )
         eFlag = FSYS_FLAG_VOLUME;
 
     // bei gesetztem ErrorCode den Namen komplett "ubernehmen
@@ -717,7 +717,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
-    if ( !rInitName.getLength() )
+    if ( rInitName.isEmpty() )
     {
         eFlag                   = FSYS_FLAG_CURRENT;
         nError                  = FSYS_ERR_OK;
@@ -832,7 +832,7 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 
     DirEntry *pTemp = pParent;
     if ( bNormalize && pNewParent &&
-         pNewParent->eFlag == FSYS_FLAG_RELROOT && !pNewParent->aName.getLength() )
+         pNewParent->eFlag == FSYS_FLAG_RELROOT && pNewParent->aName.isEmpty() )
     {
         pParent = 0;
         delete pNewParent;
@@ -1078,7 +1078,7 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
         }
 
         case FSYS_FLAG_RELROOT:
-            if ( !aName.getLength() )
+            if ( aName.isEmpty() )
             {
                 aRet.append(ACTCURRENT(eStyle));
                 break;
@@ -1106,7 +1106,7 @@ bool DirEntry::IsAbs() const
 #ifdef UNX
     return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT );
 #else
-    return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT && aName.getLength() > 0 );
+    return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT && !aName.isEmpty() );
 #endif
 }
 
@@ -1250,9 +1250,9 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 */
 
     if (
-        (eFlag == FSYS_FLAG_RELROOT && !aName.getLength()) ||
+        (eFlag == FSYS_FLAG_RELROOT && aName.isEmpty()) ||
         (
-         (pEntryTop->aName.getLength()  ||
+         (!pEntryTop->aName.isEmpty()  ||
           ((rEntry.Level()>1)?(rEntry[rEntry.Level()-2].aName.equalsIgnoreAsciiCase(RFS_IDENTIFIER)):sal_False))
           &&
          (pEntryTop->eFlag == FSYS_FLAG_ABSROOT ||
@@ -1265,7 +1265,7 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
     }
 
     // irgendwas + "." (=> pEntryTop == &rEntry)
-    if (pEntryTop->eFlag == FSYS_FLAG_RELROOT && !pEntryTop->aName.getLength())
+    if (pEntryTop->eFlag == FSYS_FLAG_RELROOT && pEntryTop->aName.isEmpty())
     {
         DBG_ASSERT( pEntryTop == &rEntry, "DirEntry::op+ buggy" );
         return *this;
@@ -1283,7 +1283,7 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
                 if ( pThisTop->eFlag == FSYS_FLAG_ABSROOT )
                     aDevice = pThisTop->aName;
                 DirEntry aRet = rEntry;
-                if ( aDevice.getLength() )
+                if ( !aDevice.isEmpty() )
                     aRet.ImpGetTopPtr()->aName = aDevice;
                 return aRet;
         }
@@ -1463,7 +1463,7 @@ DirEntry DirEntry::GetDevice() const
         const DirEntry *pTop = ImpGetTopPtr();
 
         if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT || pTop->eFlag == FSYS_FLAG_RELROOT ) &&
-                 pTop->aName.getLength() )
+                 !pTop->aName.isEmpty() )
                 return DirEntry( pTop->aName, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
         else
                 return DirEntry( rtl::OString(), FSYS_FLAG_INVALID, FSYS_STYLE_HOST );
@@ -1743,7 +1743,7 @@ FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle e
             /* do nothing */;
 
             // ist der Name die Root des aktuellen Drives?
-        if ( nPos == 0 && aPfad.getLength() > 0 && ( aPfad[0] == '/' ) )
+        if ( nPos == 0 && !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
         {
             // Root-Directory des aktuellen Drives
             aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
@@ -1805,10 +1805,10 @@ FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle e
         // den Restpfad bestimmen
         aPfad = nPos < aPfad.getLength()
             ? aPfad.copy(nPos + 1) : rtl::OString();
-        while ( aPfad.getLength() && ( aPfad[0] == '/' ) )
+        while ( !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
             aPfad = aPfad.copy(1);
     }
-    while (aPfad.getLength());
+    while (!aPfad.isEmpty());
 
     // Haupt-Entry (selbst) zuweisen
     if ( aStack.Empty() )

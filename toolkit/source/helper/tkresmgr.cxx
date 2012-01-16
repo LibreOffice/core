@@ -104,7 +104,7 @@ Image TkResMgr::loadImage( sal_uInt16 nResId )
 // -----------------------------------------------------------------------------
 Image TkResMgr::getImageFromURL( const ::rtl::OUString& i_rImageURL )
 {
-    if ( !i_rImageURL.getLength() )
+    if ( i_rImageURL.isEmpty() )
         return Image();
 
     try

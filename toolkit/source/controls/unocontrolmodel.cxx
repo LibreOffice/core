@@ -409,7 +409,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 }
 
                 LocaleDataWrapper aLocaleInfo( maContext.getLegacyServiceFactory(), aLocale );
-                if ( !sBankSymbol.getLength() )
+                if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
                 // look for the currency entry (for this language) which has the given bank symbol
@@ -418,7 +418,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 const Currency2* pAllCurrenciesEnd  =   pAllCurrencies  +   aAllCurrencies.getLength();
 
                 ::rtl::OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
-                if ( !sBankSymbol.getLength() )
+                if ( sBankSymbol.isEmpty() )
                 {
                     DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: no currencies at all!" );
                     if ( pAllCurrencies != pAllCurrenciesEnd )
@@ -428,7 +428,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     }
                 }
 
-                if ( sBankSymbol.getLength() )
+                if ( !sBankSymbol.isEmpty() )
                 {
                     bool bLegacy = false;
                     for ( ;pAllCurrencies != pAllCurrenciesEnd; ++pAllCurrencies )
@@ -1048,7 +1048,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     {
         for ( i = 0; i < (sal_uInt32)aProps.getLength(); i++ )
         {
-            if ( !aProps.getConstArray()[i].getLength() )
+            if ( aProps.getConstArray()[i].isEmpty() )
             {
                 ::comphelper::removeElementAt( aProps, i );
                 ::comphelper::removeElementAt( aValues, i );

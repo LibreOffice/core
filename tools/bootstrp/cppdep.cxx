@@ -97,7 +97,7 @@ sal_Bool CppDep::Search(const rtl::OString &rFileName)
 
             rtl::OString aNewFile;
             if (!aResult.isEmpty())
-            if ( (aNewFile = Exists( aResult )).getLength() )
+            if ( !(aNewFile = Exists( aResult )).isEmpty() )
             {
                 sal_Bool bFound = sal_False;
                 size_t nCount = m_aFileList.size();

@@ -258,7 +258,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
 {
     if  (   !mpData->bLocalizationSupport
-        ||  ( _rPossiblyLocalizable.getLength() == 0 )
+        ||  ( _rPossiblyLocalizable.isEmpty() )
         ||  ( _rPossiblyLocalizable[0] != '&' )
             // TODO: make this reasonable. At the moment, everything which by accident starts with a & is considered
             // localizable, which is probably wrong.

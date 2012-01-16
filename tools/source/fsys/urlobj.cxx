@@ -843,7 +843,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
         if (m_eScheme == INET_PROT_NOT_VALID) {
             sal_Unicode const * p1 = pPos;
             aSynScheme = parseScheme(&p1, pEnd, nFragmentDelimiter);
-            if (aSynScheme.getLength() > 0)
+            if (!aSynScheme.isEmpty())
             {
                 m_eScheme = INET_PROT_GENERIC;
                 pPos = p1;
@@ -1509,7 +1509,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     bool hasScheme = pPrefix != 0;
     if (!hasScheme) {
         pPrefixBegin = p;
-        hasScheme = parseScheme(&pPrefixBegin, pEnd, '#').getLength() > 0;
+        hasScheme = !parseScheme(&pPrefixBegin, pEnd, '#').isEmpty();
     }
 
     sal_uInt32 nSegmentDelimiter = '/';
@@ -2299,7 +2299,7 @@ bool INetURLObject::setUser(rtl::OUString const & rTheUser,
 {
     if (
          !getSchemeInfo().m_bUser ||
-         (m_eScheme == INET_PROT_IMAP && rTheUser.getLength() == 0)
+         (m_eScheme == INET_PROT_IMAP && rTheUser.isEmpty())
        )
     {
         return false;
@@ -4112,12 +4112,12 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         bool bUserInfo = false;
         if (getSchemeInfo().m_bUser)
         {
-            if (m_eScheme == INET_PROT_IMAP && rTheUser.getLength() == 0)
+            if (m_eScheme == INET_PROT_IMAP && rTheUser.isEmpty())
             {
                 setInvalid();
                 return false;
             }
-            if (rTheUser.getLength() != 0)
+            if (!rTheUser.isEmpty())
             {
                 m_aUser.set(m_aAbsURIRef,
                             encodeText(rTheUser, false,
@@ -4132,12 +4132,12 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 bUserInfo = true;
             }
         }
-        else if (rTheUser.getLength() != 0)
+        else if (!rTheUser.isEmpty())
         {
             setInvalid();
             return false;
         }
-        if (rThePassword.getLength() != 0)
+        if (!rThePassword.isEmpty())
         {
             if (getSchemeInfo().m_bPassword)
             {
@@ -4218,7 +4218,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 }
             }
         }
-        else if (rTheHost.getLength() != 0 || nThePort != 0)
+        else if (!rTheHost.isEmpty() || nThePort != 0)
         {
             setInvalid();
             return false;
@@ -4250,7 +4250,7 @@ rtl::OUString INetURLObject::GetAbsURL(rtl::OUString const & rTheBaseURIRef,
                                        FSysStyle eStyle)
 {
     // Backwards compatibility:
-    if (rTheRelURIRef.getLength() == 0 || rTheRelURIRef[0] == '#')
+    if (rTheRelURIRef.isEmpty() || rTheRelURIRef[0] == '#')
         return rTheRelURIRef;
 
     INetURLObject aTheAbsURIRef;

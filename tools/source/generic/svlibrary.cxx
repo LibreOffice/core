@@ -83,7 +83,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl()
             {
                 const bool bAddUser     = (&rPathSeq == &aUserPaths);
                 const bool bAddInternal = (&rPathSeq == &aInternalPaths);
-                if ((bAddUser || bAddInternal) && pPathSeq[k].getLength() > 0)
+                if ((bAddUser || bAddInternal) && !pPathSeq[k].isEmpty())
                     pRes[ nCount++ ] = pPathSeq[k];
             }
         }

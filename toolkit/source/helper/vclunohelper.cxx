@@ -355,9 +355,9 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
 Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont )
 {
     Font aFont( rInitFont );
-    if ( rDescr.Name.getLength() )
+    if ( !rDescr.Name.isEmpty() )
         aFont.SetName( rDescr.Name );
-    if ( rDescr.StyleName.getLength() )
+    if ( !rDescr.StyleName.isEmpty() )
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )
         aFont.SetSize( Size( rDescr.Width, rDescr.Height ) );

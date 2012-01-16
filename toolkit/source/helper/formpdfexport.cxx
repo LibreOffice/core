@@ -495,7 +495,7 @@ namespace toolkitform
                 {
                     ::rtl::OUString sURL;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= sURL );
-                    const bool bDocumentLocalTarget = ( sURL.getLength() > 0 ) && ( sURL.getStr()[0] == '#' );
+                    const bool bDocumentLocalTarget = !sURL.isEmpty() && ( sURL.getStr()[0] == '#' );
                     if ( bDocumentLocalTarget )
                     {
                         const ::rtl::OUString sDestinationName( sURL.copy(1) );

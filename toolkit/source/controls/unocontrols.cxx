@@ -553,7 +553,7 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         else // linked
             mxGrfObj = NULL; // release the GraphicObject
 
-        if ( !_rURL.getLength() )
+        if ( _rURL.isEmpty() )
             return xGraphic;
 
         try

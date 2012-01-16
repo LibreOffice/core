@@ -1545,7 +1545,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     case WINDOW_CANCELBUTTON:
                     case WINDOW_HELPBUTTON:
                         // Standard Button: overwrite only if not empty.
-                        if (aText.getLength())
+                        if (!aText.isEmpty())
                             pWindow->SetText( aText );
                         break;
 

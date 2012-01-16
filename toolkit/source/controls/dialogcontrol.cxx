@@ -336,7 +336,7 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     ::rtl::OUString aImageURL;
     Reference< graphic::XGraphic > xGraphic;
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
-        ( aImageURL.getLength() > 0 ))
+        ( !aImageURL.isEmpty() ))
     {
         ::rtl::OUString absoluteUrl =
             getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
@@ -564,7 +564,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             ::rtl::OUString aImageURL;
             Reference< graphic::XGraphic > xGraphic;
             if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
-                ( aImageURL.getLength() > 0 ))
+                ( !aImageURL.isEmpty() ))
             {
                 ::rtl::OUString absoluteUrl =
                     getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
@@ -1018,7 +1018,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 
     ControlContainerBase::ImplSetPosSize( rxCtrl );
     Reference < XWindow > xW( rxCtrl, UNO_QUERY );
-    if ( !bOwnCtrl && xW.is() && sTitle.getLength() )
+    if ( !bOwnCtrl && xW.is() && !sTitle.isEmpty() )
     {
         awt::Rectangle aSizePos = xW->getPosSize();
 
@@ -1027,7 +1027,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
         OutputDevice*pOutDev = Application::GetDefaultDevice();
         if ( pOutDev )
         {
-            if ( !bOwnCtrl && sTitle.getLength() )
+            if ( !bOwnCtrl && !sTitle.isEmpty() )
             {
                 // Adjust Y based on height of Title
                 ::Rectangle aRect;
@@ -1044,7 +1044,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
             FontDescriptor aFD;
             Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
             aVal >>= aFD;
-            if ( aFD.StyleName.getLength() )
+            if ( !aFD.StyleName.isEmpty() )
             {
                 Reference< XFont > xFont = xD->getFont( aFD );
                 aFM = xFont->getFontMetric();
@@ -1056,7 +1056,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
             }
 
             sal_Int16 nH = aFM.Ascent + aFM.Descent;
-            if ( !bOwnCtrl && sTitle.getLength() )
+            if ( !bOwnCtrl && !sTitle.isEmpty() )
                 // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
                 nY = nY + ( nH / 8); // how do I test this
         }

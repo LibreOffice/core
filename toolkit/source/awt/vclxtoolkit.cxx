@@ -366,7 +366,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 
     ComponentInfo aSearch;
     rtl::OString aServiceName(rtl::OUStringToOString(rServiceName, osl_getThreadTextEncoding()).toAsciiLowerCase());
-    if ( aServiceName.getLength() )
+    if ( !aServiceName.isEmpty() )
         aSearch.pName = aServiceName.getStr();
     else
         aSearch.pName = "window";
@@ -1353,7 +1353,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const ::rtl::OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( clipboardName.getLength() == 0 )
+    if( clipboardName.isEmpty() )
     {
         if( !mxClipboard.is() )
         {

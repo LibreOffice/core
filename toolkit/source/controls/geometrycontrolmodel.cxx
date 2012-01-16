@@ -635,7 +635,7 @@
             sal_Int16 nAttributes(0);
             static_cast< OPropertyArrayAggregationHelper* >( getArrayHelper( m_nPropertyMapId ) )->fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
 
-            if ( m_xAggregateSet.is() && sPropName.getLength() )
+            if ( m_xAggregateSet.is() && !sPropName.isEmpty() )
                 m_xAggregateSet->setPropertyValue( sPropName, _rValue );
         }
     }

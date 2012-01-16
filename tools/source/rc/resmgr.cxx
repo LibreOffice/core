@@ -203,8 +203,8 @@ void ResMgrContainer::init()
         nIndex = 0;
         while( nIndex >= 0 )
         {
-            OUString aPathElement( aEnvPath.getToken( 0, SAL_PATHSEPARATOR, nIndex ) );
-            if( aPathElement.getLength() )
+            OUString aPathElement( aEnvPath.getToken( 0, SEARCH_PATH_DELIMITER, nIndex ) );
+            if( !aPathElement.isEmpty() )
             {
                 OUString aFileURL;
                 File::getFileURLFromSystemPath( aPathElement, aFileURL );
@@ -269,7 +269,7 @@ namespace
         return (
                  rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en")) &&
                  rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("US")) &&
-                 rLocale.Variant.getLength() == 0
+                 rLocale.Variant.isEmpty()
                );
     }
 }
@@ -284,11 +284,11 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
     int nTries = 0;
-    if( aLocale.Language.getLength() > 0 )
+    if( !aLocale.Language.isEmpty() )
         nTries = 1;
-    if( aLocale.Country.getLength() > 0 )
+    if( !aLocale.Country.isEmpty() )
         nTries = 2;
-    if( aLocale.Variant.getLength() > 0 )
+    if( !aLocale.Variant.isEmpty() )
         nTries = 3;
     while( nTries-- )
     {
@@ -377,16 +377,16 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     {
         OUStringBuffer sKey = rPrefix;
         sKey.append( rLocale.Language );
-        if( rLocale.Country.getLength() )
+        if( !rLocale.Country.isEmpty() )
         {
             sKey.append( sal_Unicode('-') );
             sKey.append( rLocale.Country );
         }
-        if( rLocale.Variant.getLength() )
+        if( !rLocale.Variant.isEmpty() )
         {
             sKey.append( sal_Unicode('-') );
             sKey.append( rLocale.Variant );
-        } // if( aLocale.Variant.getLength() )
+        } // if( !aLocale.Variant.isEmpty() )
         ::rtl::OUString sURL = sKey.makeStringAndClear();
         sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".res"));
         if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
@@ -437,9 +437,9 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
 {
     com::sun::star::lang::Locale aLocale = pMgr->aLocale;
-    if( aLocale.Variant.getLength() )
+    if( !aLocale.Variant.isEmpty() )
         aLocale.Variant = OUString();
-    else if( aLocale.Country.getLength() )
+    else if( !aLocale.Country.isEmpty() )
         aLocale.Country = OUString();
     else if( !isAlreadyPureenUS(aLocale) )
     {
@@ -1663,7 +1663,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
-    if( ! aLocale.Language.getLength() )
+    if( aLocale.Language.isEmpty() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
@@ -1680,7 +1680,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
-    if( ! rLocale.Language.getLength() )
+    if( rLocale.Language.isEmpty() )
         rLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, rLocale );
@@ -1907,7 +1907,7 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
     com::sun::star::lang::Locale aLocale( rLocale );
 
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    if( ! aLocale.Language.getLength() )
+    if( aLocale.Language.isEmpty() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
     m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );

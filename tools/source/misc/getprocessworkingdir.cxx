@@ -45,7 +45,7 @@ bool getProcessWorkingDir(rtl::OUString &rUrl)
     rUrl = rtl::OUString();
     rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("$OOO_CWD"));
     rtl::Bootstrap::expandMacros(s);
-    if (s.getLength() == 0)
+    if (s.isEmpty())
     {
         if (osl_getProcessWorkingDir(&rUrl.pData) == osl_Process_E_None)
             return true;

@@ -100,7 +100,7 @@ static bool check( bool b , char const * message )
 namespace {
 
 bool checkEmpty(rtl::OUString const & string, char const * message) {
-    bool ok = string.getLength() == 0;
+    bool ok = string.isEmpty();
     if (!ok) {
         fprintf(
             stderr, "%s failed: %s\n", message,
@@ -593,7 +593,7 @@ static sal_Bool performTest(
                 bRet &= check(
                     xLBT->getNullPolyLong().member == 0, "getNullPolyLong");
                 bRet &= check(
-                    xLBT->getNullPolyString().member.getLength() == 0,
+                    xLBT->getNullPolyString().member.isEmpty(),
                     "getNullPolyString");
                 bRet &= check(
                     xLBT->getNullPolyType().member == Type(),

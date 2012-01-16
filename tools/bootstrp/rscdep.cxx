@@ -125,7 +125,7 @@ int main( int argc, char** argv )
             rtl::OString aToken;
             String aRespName( &aBuf[1], osl_getThreadTextEncoding());
             SimpleConfig aConfig( aRespName );
-            while ((aToken = aConfig.getNext()).getLength())
+            while (!(aToken = aConfig.getNext()).isEmpty())
             {
                 char aBuf2[255];
                 strcpy( aBuf2, aToken.getStr());

@@ -163,7 +163,7 @@ namespace
         CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("bar")));
 
         rtl::OString aThree = read_uInt8s_ToOString(aMemStream, 3);
-        CPPUNIT_ASSERT(!aThree.getLength());
+        CPPUNIT_ASSERT(aThree.isEmpty());
 
         aMemStream.Seek(0);
 

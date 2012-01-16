@@ -595,7 +595,7 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
 
 
 
-    if ( !aName.getLength() || !xM.is() )
+    if ( aName.isEmpty() || !xM.is() )
         lcl_throwIllegalArgumentException();
 
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
@@ -1454,7 +1454,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
         FontDescriptor aFD;
         Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
         aVal >>= aFD;
-        if ( aFD.StyleName.getLength() )
+        if ( !aFD.StyleName.isEmpty() )
         {
             Reference< XFont > xFont = xD->getFont( aFD );
             aFM = xFont->getFontMetric();
@@ -1860,7 +1860,7 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
-    if ( !_rURL.getLength() )
+    if ( _rURL.isEmpty() )
         return xGraphic;
 
     try
@@ -1895,7 +1895,7 @@ uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL
     rUrl  >>= url;
 
     ::rtl::OUString absoluteURL( url );
-    if ( url.getLength() > 0 )
+    if ( !url.isEmpty() )
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();

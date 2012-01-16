@@ -45,7 +45,7 @@ void appendUnixShellWord(
     rtl::OStringBuffer * accumulator, rtl::OString const & text)
 {
     OSL_ASSERT(accumulator != NULL);
-    if (text.getLength() == 0) {
+    if (text.isEmpty()) {
         accumulator->append(RTL_CONSTASCII_STRINGPARAM("''"));
     } else {
         bool quoted = false;

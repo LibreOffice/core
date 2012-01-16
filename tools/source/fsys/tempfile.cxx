@@ -92,7 +92,7 @@ String ConstructTempDir_Impl( const String* pParent )
     {
         // if no parent or invalid parent : use system directory
     ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
-        if ( !rTempNameBase_Impl.getLength() )
+        if ( rTempNameBase_Impl.isEmpty() )
             rTempNameBase_Impl = GetSystemTempDir_Impl();
         aName = rTempNameBase_Impl;
     }

@@ -2067,7 +2067,7 @@ namespace
 {
      Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
      {
-         if ( !i_rImageURL.getLength() )
+         if ( i_rImageURL.isEmpty() )
              return Image();
 
         try
@@ -2174,7 +2174,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
         ::rtl::OUString aLocalizationKey( aItems[i].First );
-        if ( xStringResourceResolver.is() && aLocalizationKey.getLength() != 0 && aLocalizationKey[0] == '&' )
+        if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }
@@ -2973,7 +2973,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), uno::UNO_QUERY );
-                if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
+                if ( !sURL.isEmpty() && xSystemShellExecute.is() )
                 {
                     try
                     {
@@ -4680,7 +4680,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
         ::rtl::OUString aLocalizationKey( aItems[i].First );
-        if ( xStringResourceResolver.is() && aLocalizationKey.getLength() != 0 && aLocalizationKey[0] == '&' )
+        if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }

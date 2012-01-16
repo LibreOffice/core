@@ -310,7 +310,7 @@ bool parseParameters(ParameterList const & rInput,
     if (pOutput)
         for (Parameter * p = rInput.m_pList; p;)
         {
-            bool bCharset = p->m_aCharset.getLength() != 0;
+            bool bCharset = !p->m_aCharset.isEmpty();
             rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bCharset)
                 eEncoding

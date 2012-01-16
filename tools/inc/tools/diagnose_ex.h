@@ -64,7 +64,7 @@
         sMessage += ::rtl::OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() ); \
         ::com::sun::star::uno::Exception exception; \
         caught >>= exception; \
-        if ( exception.Message.getLength() ) \
+        if ( !exception.Message.isEmpty() ) \
         { \
             sMessage += "\nmessage: "; \
             sMessage += ::rtl::OUStringToOString( exception.Message, osl_getThreadTextEncoding() ); \
