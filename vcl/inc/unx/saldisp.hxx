@@ -375,7 +375,7 @@ public:
     virtual ScreenData   *initScreen( SalX11Screen nXScreen ) const;
     const ScreenData&     getDataForScreen( SalX11Screen nXScreen ) const
     {
-        if( nXScreen.getXScreen() >= static_cast<int>(m_aScreens.size()) )
+        if( nXScreen.getXScreen() >= static_cast<unsigned int>(m_aScreens.size()) )
             return m_aInvalidScreenData;
         if( ! m_aScreens[nXScreen.getXScreen()].m_bInit )
             initScreen( nXScreen );

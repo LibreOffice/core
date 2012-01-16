@@ -525,7 +525,7 @@ void SalX11Display::PostUserEvent()
 SalDisplay::ScreenData *
 SalDisplay::initScreen( SalX11Screen nXScreen ) const
 {
-    if( nXScreen.getXScreen() >= static_cast<int>(m_aScreens.size()) )
+    if( nXScreen.getXScreen() >= static_cast<unsigned int>(m_aScreens.size()) )
         nXScreen = m_nXDefaultScreen;
     ScreenData* pSD = const_cast<ScreenData *>(&m_aScreens[nXScreen.getXScreen()]);
     if( pSD->m_bInit )
