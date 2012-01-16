@@ -331,6 +331,68 @@
 <DefaultFullName>prosinec</DefaultFullName>
 </Month>
 </MonthsOfYear>
+      <PartitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>I</DefaultAbbrvName>
+          <DefaultFullName>ledna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>II</DefaultAbbrvName>
+          <DefaultFullName>února</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>III</DefaultAbbrvName>
+          <DefaultFullName>března</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>IV</DefaultAbbrvName>
+          <DefaultFullName>dubna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultFullName>května</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>VI</DefaultAbbrvName>
+          <DefaultFullName>června</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>VII</DefaultAbbrvName>
+          <DefaultFullName>července</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>VIII</DefaultAbbrvName>
+          <DefaultFullName>srpna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>IX</DefaultAbbrvName>
+          <DefaultFullName>září</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>X</DefaultAbbrvName>
+          <DefaultFullName>října</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>XI</DefaultAbbrvName>
+          <DefaultFullName>listopadu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>XII</DefaultAbbrvName>
+          <DefaultFullName>prosince</DefaultFullName>
+        </Month>
+      </PartitiveMonths>
 <Eras>
 <Era>
 <EraID>bc</EraID>
