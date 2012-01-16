@@ -32,10 +32,6 @@
 #include <sfx2/minarray.hxx>
 #include <vector>
 
-struct CntUpdateResult;
-
-SV_DECL_PTRARR_DEL(CntUpdateResults_Impl, CntUpdateResult*, 4, 4)
-
 class SfxObjectShell;
 SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4, 4 )
 
