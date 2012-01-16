@@ -93,7 +93,7 @@ if (-d "$StartDir") {
              "images/sdk_line-1.gif", "images/sdk_line-2.gif",
              "common/ref/idl.css", "images/nada.gif",
              "images/arrow-2.gif", "images/bluball.gif",
-             "images/orc-main-app_32.png", "images/ooo-main-app_32.png");
+             "images/ooo-main-app_32.png");
 
     foreach $i (@filelist)
     {

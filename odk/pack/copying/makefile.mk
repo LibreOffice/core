@@ -132,7 +132,6 @@ DOCUFILES= \
     $(DESTDIRDOCUIMAGES)/nada.gif \
     $(DESTDIRDOCUIMAGES)/arrow-2.gif \
     $(DESTDIRDOCUIMAGES)/bluball.gif \
-    $(DESTDIRDOCUIMAGES)/orc-main-app_32.png \
     $(DESTDIRDOCUIMAGES)/ooo-main-app_32.png \
     $(DESTDIRDOCUIMAGES)/odk-footer-logo.gif \
     $(DESTDIRDOCUIMAGES)/arrow-1.gif \
