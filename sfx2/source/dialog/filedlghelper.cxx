@@ -274,7 +274,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
             break;
 
         default:
-            SAL_INFO( "sfx2", "invalid element id" );
+            SAL_WARN( "sfx2.dialog", "invalid element id" );
     }
 
     OUString aHelpText;
@@ -511,7 +511,7 @@ void FileDialogHelper_Impl::updateExportButton()
             }
             catch( const IllegalArgumentException& )
             {
-                SAL_INFO( "sfx2", "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
+                SAL_WARN( "sfx2.dialog", "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
             }
         }
     }
@@ -621,7 +621,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
             }
             catch( const Exception& )
             {
-                SAL_INFO( "sfx2", "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
+                SAL_WARN( "sfx2.dialog", "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
             }
         }
     }
@@ -1048,7 +1048,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 break;
 
             default:
-                SAL_INFO( "sfx2", "FileDialogHelper::ctor with unknown type" );
+                SAL_WARN( "sfx2.dialog", "FileDialogHelper::ctor with unknown type" );
                 break;
         }
 
@@ -1188,7 +1188,7 @@ void SAL_CALL PickerThread_Impl::run()
     catch( const RuntimeException& )
     {
         SetReturnValue( ExecutableDialogResults::CANCEL );
-        SAL_INFO( "sfx2", "RuntimeException caught" );
+        SAL_WARN( "sfx2.dialog", "RuntimeException caught" );
     }
 }
 
@@ -1332,7 +1332,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         }
         catch( const Exception& )
         {
-            SAL_INFO( "sfx2", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            SAL_WARN( "sfx2.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
         }
     }
 
@@ -1361,7 +1361,7 @@ void FileDialogHelper_Impl::implStartExecute()
         }
         catch( const Exception& )
         {
-            SAL_INFO( "sfx2", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            SAL_WARN( "sfx2.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
         }
     }
 }
@@ -1757,7 +1757,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
     }
     catch( const uno::Exception& )
     {
-        SAL_INFO( "sfx2", "Could not get filters from the configuration!" );
+        SAL_WARN( "sfx2.dialog", "Could not get filters from the configuration!" );
     }
 
     TSortedFilterList         aIter   (xResult);
@@ -1797,7 +1797,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     }
     catch( const IllegalArgumentException& )
     {
-        SAL_INFO( "sfx2", "Could not append Filter" << rFilterName );
+        SAL_WARN( "sfx2.dialog", "Could not append Filter" << rFilterName );
     }
 }
 
@@ -1850,7 +1850,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     }
     catch( const IllegalArgumentException& )
     {
-        SAL_INFO( "sfx2", "Could not append Filter" );
+        SAL_WARN( "sfx2.dialog", "Could not append Filter" );
     }
 
     // Now add the filter
@@ -1879,7 +1879,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         }
         catch( const IllegalArgumentException& )
         {
-            SAL_INFO( "sfx2", "Could not append Filter" );
+            SAL_WARN( "sfx2.dialog", "Could not append Filter" );
         }
     }
 }

@@ -2897,7 +2897,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
         }
         default:
         {
-            SAL_INFO( "sfx2", "SfxObjectShell::DetectHiddenInformation(): what fact?" );
+            SAL_WARN( "sfx2.doc", "SfxObjectShell::DetectHiddenInformation(): what fact?" );
         }
     }
 

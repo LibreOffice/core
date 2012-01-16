@@ -489,7 +489,7 @@ void SfxDocTplService_Impl::init_Impl()
     }
     else
     {
-        SAL_INFO( "sfx2", "init_Impl(): Could not create root" );
+        SAL_WARN( "sfx2.doc", "init_Impl(): Could not create root" );
     }
 
     mbIsInitialized = bIsInitialized;
@@ -839,11 +839,11 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         }
         catch( RuntimeException& )
         {
-            SAL_INFO( "sfx2", "createFolder(): got runtime exception" );
+            SAL_WARN( "sfx2.doc", "createFolder(): got runtime exception" );
         }
         catch( Exception& )
         {
-            SAL_INFO( "sfx2", "createFolder(): Could not create new folder" );
+            SAL_WARN( "sfx2.doc", "createFolder(): Could not create new folder" );
         }
     }
     else if ( bCreateParent )
@@ -1042,8 +1042,12 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                     xProperties->addProperty( rPropName, PropertyAttribute::MAYBEVOID, rPropValue );
                 }
                 catch( PropertyExistException& ) {}
-                catch( IllegalTypeException& ) { SAL_INFO( "sfx2", "IllegalTypeException" ); }
-                catch( IllegalArgumentException& ) { SAL_INFO( "sfx2", "IllegalArgumentException" ); }
+                catch( IllegalTypeException& ) {
+                    SAL_WARN( "sfx2.doc", "IllegalTypeException" );
+                }
+                catch( IllegalArgumentException& ) {
+                    SAL_WARN( "sfx2.doc", "IllegalArgumentException" );
+                }
             }
         }
 
@@ -2466,7 +2470,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
     catch ( ContentCreationException& )
     {
-        SAL_INFO( "sfx2", "addHierGroup: ContentCreationException" );
+        SAL_WARN( "sfx2.doc", "addHierGroup: ContentCreationException" );
     }
     catch ( Exception& ) {}
 
@@ -2499,7 +2503,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                     sal_Bool bDocHasTitle = sal_False;
                     if( !getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle ) )
                     {
-                        SAL_INFO( "sfx2", "addHierGroup(): template of alien format" );
+                        SAL_WARN( "sfx2.doc", "addHierGroup(): template of alien format" );
                         continue;
                     }
 

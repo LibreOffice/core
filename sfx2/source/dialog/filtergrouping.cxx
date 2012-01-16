@@ -977,7 +977,7 @@ namespace sfx2
         }
         catch( const IllegalArgumentException& )
         {
-            SAL_INFO( "sfx2", "Could not append DefaultFilter" << sUIName );
+            SAL_WARN( "sfx2.dialog", "Could not append DefaultFilter" << sUIName );
         }
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
@@ -997,7 +997,7 @@ namespace sfx2
             }
             catch( const IllegalArgumentException& )
             {
-                SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
+                SAL_WARN( "sfx2.dialog", "Could not append Filter" << sUIName );
             }
         }
     }
@@ -1147,7 +1147,7 @@ namespace sfx2
                 }
                 catch( const IllegalArgumentException& )
                 {
-                    SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
+                    SAL_WARN( "sfx2.dialog", "Could not append Filter" << sUIName );
                 }
             }
 
@@ -1165,7 +1165,7 @@ namespace sfx2
                 }
                 catch( const IllegalArgumentException& )
                 {
-                    SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
+                    SAL_WARN( "sfx2.dialog", "Could not append Filter" << sUIName );
                 }
             }
         }

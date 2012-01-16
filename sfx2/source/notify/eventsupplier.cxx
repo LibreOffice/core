@@ -290,7 +290,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
         }
         else
         {
-            SAL_INFO( "sfx2", "notifyEvent(): Unsupported event type" );
+            SAL_WARN( "sfx2.notify", "notifyEvent(): Unsupported event type" );
         }
     }
 }
@@ -413,7 +413,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
         else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
             eType = JAVASCRIPT;
         else {
-            SAL_INFO( "sfx2", "ConvertToMacro: Unknown macro type" );
+            SAL_WARN( "sfx2.notify", "ConvertToMacro: Unknown macro type" );
         }
 
         if ( !aMacroName.isEmpty() )
@@ -479,7 +479,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                 }
                 else
                 {
-                    SAL_INFO( "sfx2", "ConvertToMacro: Unknown macro url format" );
+                    SAL_WARN( "sfx2.notify", "ConvertToMacro: Unknown macro url format" );
                 }
             }
         }

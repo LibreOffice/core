@@ -961,7 +961,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
-                SAL_INFO( "sfx2", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
+                SAL_WARN( "sfx2.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
             }
             break;
         }

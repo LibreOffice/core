@@ -2230,7 +2230,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             }
             catch( Exception& )
             {
-                SAL_INFO( "sfx2", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception" );
+                SAL_WARN( "sfx2.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception" );
             }
             sModuleName = String( sTemp );
         }
@@ -2515,7 +2515,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
         }
         catch( Exception& )
         {
-            SAL_INFO( "sfx2", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
+            SAL_WARN( "sfx2.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
         }
     }
 
@@ -2678,7 +2678,7 @@ void SfxHelpTextWindow_Impl::GetFocus()
         }
         catch( Exception& )
         {
-            SAL_INFO( "sfx2", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
+            SAL_WARN( "sfx2.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
         }
     }
 }
@@ -2775,13 +2775,13 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
     }
     catch( Exception& )
     {
-        SAL_INFO( "sfx2", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
+        SAL_WARN( "sfx2.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
     }
 
 #ifdef DBG_UTIL
     if ( !bSetOff )
     {
-        SAL_INFO( "sfx2", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
+        SAL_WARN( "sfx2.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
     }
 #endif
 }
@@ -3402,7 +3402,7 @@ void SfxHelpWindow_Impl::CloseWindow()
     }
     catch( Exception& )
     {
-        SAL_INFO( "sfx2", "SfxHelpWindow_Impl::CloseWindow(): caught an exception" );
+        SAL_WARN( "sfx2.appl", "SfxHelpWindow_Impl::CloseWindow(): caught an exception" );
     }
 }
 

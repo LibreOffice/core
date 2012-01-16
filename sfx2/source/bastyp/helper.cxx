@@ -108,11 +108,11 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         }
         catch( const ucb::CommandAbortedException& )
         {
-            SAL_INFO( "sfx2", "createCursor: CommandAbortedException" );
+            SAL_WARN( "sfx2.bastyp", "createCursor: CommandAbortedException" );
         }
         catch( const uno::Exception& )
         {
-            SAL_INFO( "sfx2", "createCursor: Any other exception" );
+            SAL_WARN( "sfx2.bastyp", "createCursor: Any other exception" );
         }
 
         if ( xResultSet.is() )
@@ -138,17 +138,17 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             }
             catch( const ucb::CommandAbortedException& )
             {
-                SAL_INFO( "sfx2", "XContentAccess::next(): CommandAbortedException" );
+                SAL_WARN( "sfx2.bastyp", "XContentAccess::next(): CommandAbortedException" );
             }
             catch( const uno::Exception& )
             {
-                SAL_INFO( "sfx2", "XContentAccess::next(): Any other exception" );
+                SAL_WARN( "sfx2.bastyp", "XContentAccess::next(): Any other exception" );
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        SAL_INFO( "sfx2", "GetResultSet: Any other exception: " << e.Message );
+        SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception: " << e.Message );
     }
 
     if ( pList )
@@ -299,7 +299,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
                       uno::Reference< ucb::XCommandEnvironment > () );
         if ( !( aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsErrorDocument")) ) >>= bRet ) )
         {
-            SAL_INFO( "sfx2", "Property 'IsErrorDocument' is missing" );
+            SAL_WARN( "sfx2.bastyp", "Property 'IsErrorDocument' is missing" );
         }
     }
     catch( const uno::Exception& )
@@ -324,11 +324,11 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
     }
     catch( const ucb::CommandAbortedException& )
     {
-        SAL_INFO( "sfx2", "CommandAbortedException" );
+        SAL_WARN( "sfx2.bastyp", "CommandAbortedException" );
     }
     catch( const uno::Exception& )
     {
-        SAL_INFO( "sfx2", "Any other exception" );
+        SAL_WARN( "sfx2.bastyp", "Any other exception" );
     }
     nSize = (sal_uInt32)nTemp;
     return nSize;

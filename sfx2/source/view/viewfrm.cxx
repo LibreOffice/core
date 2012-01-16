@@ -2734,7 +2734,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 
         if(!xLibCont.is())
         {
-            SAL_INFO( "sfx2", "couldn't get access to the basic lib container. Adding of macro isn't possible." );
+            SAL_WARN( "sfx2.view", "couldn't get access to the basic lib container. Adding of macro isn't possible." );
             return;
         }
 

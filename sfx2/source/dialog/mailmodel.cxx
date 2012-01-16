@@ -774,7 +774,7 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         }
         else
         {
-            SAL_INFO( "sfx2", "invalid address role" );
+            SAL_WARN( "sfx2.dialog", "invalid address role" );
         }
 
         if ( pList )
