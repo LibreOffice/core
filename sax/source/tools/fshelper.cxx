@@ -29,49 +29,6 @@ FastSerializerHelper::~FastSerializerHelper()
     delete mpSerializer;
 }
 
-void FastSerializerHelper::startElement(const char* elementName, ...)
-{
-    FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
-    va_list args;
-    va_start(args, elementName);
-    while (true)
-    {
-        const char* pName = va_arg(args, const char*);
-        if (!pName)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if (pValue)
-            pAttrList->addUnknown(pName, pValue);
-    }
-    va_end(args);
-    const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
-    mpSerializer->startUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);
-}
-
-void FastSerializerHelper::singleElement(const char* elementName, ...)
-{
-    FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
-    va_list args;
-    va_start(args, elementName);
-    while (true)
-    {
-        const char* pName = va_arg(args, const char*);
-        if (!pName)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if (pValue)
-            pAttrList->addUnknown(pName, pValue);
-    }
-    va_end(args);
-    const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
-    mpSerializer->singleUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);
-}
-
-void FastSerializerHelper::endElement(const char* elementName)
-{
-    mpSerializer->endUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName));
-}
-
 void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, va_list args)
 {
     FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
@@ -118,11 +75,6 @@ void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, XFastAttribut
     mpSerializer->startFastElement(elementTokenId, xAttrList);
 }
 
-
-void FastSerializerHelper::singleElement(const char* elementName, XFastAttributeListRef xAttrList)
-{
-    mpSerializer->singleUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);
-}
 
 void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
