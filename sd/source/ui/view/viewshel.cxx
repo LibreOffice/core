@@ -83,6 +83,7 @@
 #include "SpellDialogChildWindow.hxx"
 
 #include <svx/zoom_def.hxx>
+#include <rtl/math.hxx>
 
 #include "Window.hxx"
 #include "fupoor.hxx"
@@ -718,9 +719,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         long        nNewZoom;
 
                         if( pData->GetDelta() < 0L )
-                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)round( nOldZoom / ZOOM_FACTOR ));
+                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)::rtl::math::round( nOldZoom / ZOOM_FACTOR ));
                         else
-                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)round( nOldZoom * ZOOM_FACTOR ));
+                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)::rtl::math::round( nOldZoom * ZOOM_FACTOR ));
 
                         SetZoom( nNewZoom );
                         Invalidate( SID_ATTR_ZOOM );

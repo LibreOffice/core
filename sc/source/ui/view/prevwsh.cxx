@@ -76,6 +76,7 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/zoom_def.hxx>
+#include <rtl/math.hxx>
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
@@ -448,9 +449,9 @@ sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         long nOld = pPreview->GetZoom();
         long nNew = nOld;
         if ( pData->GetDelta() < 0 )
-            nNew = Max( (long) MINZOOM, (long)round( nOld / ZOOM_FACTOR ));
+            nNew = Max( (long) MINZOOM, (long)::rtl::math::round( nOld / ZOOM_FACTOR ));
         else
-            nNew = Min( (long) MAXZOOM, (long)round( nOld * ZOOM_FACTOR ));
+            nNew = Min( (long) MAXZOOM, (long)::rtl::math::round( nOld * ZOOM_FACTOR ));
 
         if ( nNew != nOld )
         {

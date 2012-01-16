@@ -150,6 +150,7 @@
 #include <algorithm>
 
 #include <svx/zoom_def.hxx>
+#include <rtl/math.hxx>
 
 #define SPLIT_MARGIN    30
 #define SC_ICONSIZE     36
@@ -1059,9 +1060,9 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
             long nNew = nOld;
             if ( pData->GetDelta() < 0 )
-                nNew = Max( (long) MINZOOM, (long)round( nOld / ZOOM_FACTOR ));
+                nNew = Max( (long) MINZOOM, (long)::rtl::math::round( nOld / ZOOM_FACTOR ));
             else
-                nNew = Min( (long) MAXZOOM, (long)round( nOld * ZOOM_FACTOR ));
+                nNew = Min( (long) MAXZOOM, (long)::rtl::math::round( nOld * ZOOM_FACTOR ));
 
             if ( nNew != nOld )
             {

@@ -37,6 +37,7 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/zoom_def.hxx>
+#include <rtl/math.hxx>
 
 #include <set>
 
@@ -359,11 +360,11 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 
     // click to - button
     if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )
-        mpImpl->mnCurrentZoom = round( mpImpl->mnCurrentZoom / ZOOM_FACTOR );
+        mpImpl->mnCurrentZoom = ::rtl::math::round( mpImpl->mnCurrentZoom / ZOOM_FACTOR );
     // click to + button
     else if ( nXDiff >= aControlRect.GetWidth() - nSliderXOffset + nButtonLeftOffset &&
               nXDiff <= aControlRect.GetWidth() - nSliderXOffset + nButtonRightOffset )
-        mpImpl->mnCurrentZoom = round( mpImpl->mnCurrentZoom * ZOOM_FACTOR );
+        mpImpl->mnCurrentZoom = ::rtl::math::round( mpImpl->mnCurrentZoom * ZOOM_FACTOR );
     // click to slider
     else if( nXDiff >= nSliderXOffset && nXDiff <= aControlRect.GetWidth() - nSliderXOffset )
         mpImpl->mnCurrentZoom = Offset2Zoom( nXDiff );
