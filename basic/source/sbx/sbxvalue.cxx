@@ -1271,8 +1271,10 @@ Lbl_OpIsDouble:
                         default:
                             SetError( SbxERR_NOTIMP );
                     }
-                    // #45465 Date needs with "+" a special handling: forces date type
-                    if( GetType() == SbxDATE || rOp.GetType() == SbxDATE )
+                    // Date with "+" or "-" needs special handling that
+                    // forces the Date type ( except if lhs AND rhs are already
+                    // Date types
+                    if( ( eOp == SbxPLUS || eOp == SbxMINUS )&&  ( ( GetType() == SbxDATE || rOp.GetType() == SbxDATE )&&  ( GetType() != rOp.GetType() ) ) )
                         aL.eType = SbxDATE;
 
                 }
