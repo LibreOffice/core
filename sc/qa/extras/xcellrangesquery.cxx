@@ -34,18 +34,21 @@
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace com::sun::star;
 
 
 namespace ScCellRangeBase {
 
+#define NUMBER_OF_TESTS 5
+
 class ScXCellRangesQuery : public UnoApiTest
 {
 public:
-    ScXCellRangesQuery();
 
-    uno::Reference<sheet::XCellRangesQuery> init();
+    virtual void setUp();
+    virtual void tearDown();
 
     //Testcases
     void testQueryColumnDifference();
@@ -66,12 +69,15 @@ public:
     CPPUNIT_TEST(testQueryRowDifference);
     CPPUNIT_TEST_SUITE_END();
 
+private:
+    uno::Reference<sheet::XCellRangesQuery> init();
+
+    static int nTest;
+    static uno::Reference< lang::XComponent > xComponent;
 };
 
-ScXCellRangesQuery::ScXCellRangesQuery()
-{
-
-}
+int ScXCellRangesQuery::nTest = 0;
+uno::Reference< lang::XComponent > ScXCellRangesQuery::xComponent;
 
 uno::Reference<sheet::XCellRangesQuery> ScXCellRangesQuery::init()
 {
@@ -79,7 +85,6 @@ uno::Reference<sheet::XCellRangesQuery> ScXCellRangesQuery::init()
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    static uno::Reference< lang::XComponent > xComponent;
     if( !xComponent.is())
         xComponent = loadFromDesktop(aFileURL);
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
@@ -162,6 +167,29 @@ void ScXCellRangesQuery::testQueryVisibleCells()
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryVisibleCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
+}
+
+void ScXCellRangesQuery::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScXCellRangesQuery::tearDown()
+{
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
+        xCloseable->close( false );
+    }
+
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        mxDesktop->terminate();
+        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXCellRangesQuery);
