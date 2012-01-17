@@ -63,7 +63,7 @@
 #include "ns_debug.hxx"
 #include <sal/config.h>
 
-#define PLUGIN_NAME         "OpenOffice.org"
+#define PLUGIN_NAME         "LibreOffice"
 
 // Tranform all strings like %20 in pPath to one char like space
 /*int retoreUTF8(char* pPath)
