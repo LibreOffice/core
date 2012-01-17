@@ -418,9 +418,42 @@ namespace basegfx
                     const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
                     const double fEdgeLength(B3DVector(aNextPoint - aCurrentPoint).getLength());
 
-                    while(fTools::less(fDotDashMovingLength, fEdgeLength))
+                    if(!fTools::equalZero(fEdgeLength))
                     {
-                        // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                        while(fTools::less(fDotDashMovingLength, fEdgeLength))
+                        {
+                            // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                            const bool bHandleLine(bIsLine && pLineTarget);
+                            const bool bHandleGap(!bIsLine && pGapTarget);
+
+                            if(bHandleLine || bHandleGap)
+                            {
+                                if(!aSnippet.count())
+                                {
+                                    aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
+                                }
+
+                                aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
+
+                                if(bHandleLine)
+                                {
+                                    pLineTarget->append(aSnippet);
+                                }
+                                else
+                                {
+                                    pGapTarget->append(aSnippet);
+                                }
+
+                                aSnippet.clear();
+                            }
+
+                            // prepare next DotDashArray step and flip line/gap flag
+                            fLastDotDashMovingLength = fDotDashMovingLength;
+                            fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                            bIsLine = !bIsLine;
+                        }
+
+                        // append snippet [fLastDotDashMovingLength, fEdgeLength]
                         const bool bHandleLine(bIsLine && pLineTarget);
                         const bool bHandleGap(!bIsLine && pGapTarget);
 
@@ -431,42 +464,12 @@ namespace basegfx
                                 aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
                             }
 
-                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
-
-                            if(bHandleLine)
-                            {
-                                pLineTarget->append(aSnippet);
-                            }
-                            else
-                            {
-                                pGapTarget->append(aSnippet);
-                            }
-
-                            aSnippet.clear();
+                            aSnippet.append(aNextPoint);
                         }
 
-                        // prepare next DotDashArray step and flip line/gap flag
-                        fLastDotDashMovingLength = fDotDashMovingLength;
-                        fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
-                        bIsLine = !bIsLine;
+                        // prepare move to next edge
+                        fDotDashMovingLength -= fEdgeLength;
                     }
-
-                    // append snippet [fLastDotDashMovingLength, fEdgeLength]
-                    const bool bHandleLine(bIsLine && pLineTarget);
-                    const bool bHandleGap(!bIsLine && pGapTarget);
-
-                    if(bHandleLine || bHandleGap)
-                    {
-                        if(!aSnippet.count())
-                        {
-                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
-                        }
-
-                        aSnippet.append(aNextPoint);
-                    }
-
-                    // prepare move to next edge
-                    fDotDashMovingLength -= fEdgeLength;
 
                     // prepare next edge step (end point gets new start point)
                     aCurrentPoint = aNextPoint;

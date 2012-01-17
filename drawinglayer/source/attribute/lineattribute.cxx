@@ -43,15 +43,18 @@ namespace drawinglayer
             basegfx::BColor                         maColor;                // color
             double                                  mfWidth;                // absolute line width
             basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
+            com::sun::star::drawing::LineCap        meLineCap;              // BUTT, ROUND, or SQUARE
 
             ImpLineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth,
-                basegfx::B2DLineJoin aB2DLineJoin)
+                basegfx::B2DLineJoin aB2DLineJoin,
+                com::sun::star::drawing::LineCap aLineCap)
             :   mnRefCount(0),
                 maColor(rColor),
                 mfWidth(fWidth),
-                meLineJoin(aB2DLineJoin)
+                meLineJoin(aB2DLineJoin),
+                meLineCap(aLineCap)
             {
             }
 
@@ -59,12 +62,14 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             double getWidth() const { return mfWidth; }
             basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
+            com::sun::star::drawing::LineCap getLineCap() const { return meLineCap; }
 
             bool operator==(const ImpLineAttribute& rCandidate) const
             {
                 return (getColor() == rCandidate.getColor()
                     && getWidth() == rCandidate.getWidth()
-                    && getLineJoin() == rCandidate.getLineJoin());
+                    && getLineJoin() == rCandidate.getLineJoin()
+                    && getLineCap() == rCandidate.getLineCap());
             }
 
             static ImpLineAttribute* get_global_default()
@@ -76,7 +81,8 @@ namespace drawinglayer
                     pDefault = new ImpLineAttribute(
                         basegfx::BColor(),
                         0.0,
-                        basegfx::B2DLINEJOIN_ROUND);
+                        basegfx::B2DLINEJOIN_ROUND,
+                        com::sun::star::drawing::LineCap_BUTT);
 
                     // never delete; start with RefCount 1, not 0
                     pDefault->mnRefCount++;
@@ -89,9 +95,14 @@ namespace drawinglayer
         LineAttribute::LineAttribute(
             const basegfx::BColor& rColor,
             double fWidth,
-            basegfx::B2DLineJoin aB2DLineJoin)
-        :   mpLineAttribute(new ImpLineAttribute(
-                rColor, fWidth, aB2DLineJoin))
+            basegfx::B2DLineJoin aB2DLineJoin,
+            com::sun::star::drawing::LineCap aLineCap)
+        :   mpLineAttribute(
+                new ImpLineAttribute(
+                    rColor,
+                    fWidth,
+                    aB2DLineJoin,
+                    aLineCap))
         {
         }
 
@@ -172,6 +183,11 @@ namespace drawinglayer
         basegfx::B2DLineJoin LineAttribute::getLineJoin() const
         {
             return mpLineAttribute->getLineJoin();
+        }
+
+        com::sun::star::drawing::LineCap LineAttribute::getLineCap() const
+        {
+            return mpLineAttribute->getLineCap();
         }
 
     } // end of namespace attribute

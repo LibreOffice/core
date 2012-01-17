@@ -28,6 +28,7 @@
 
 
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/dialogs.hrc>
@@ -307,6 +308,150 @@ sal_uInt16 XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
+}
+
+//-----------------------
+// class XLineCapItem -
+//-----------------------
+
+TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
+
+// -----------------------------------------------------------------------------
+
+XLineCapItem::XLineCapItem(com::sun::star::drawing::LineCap eLineCap)
+:   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
+{
+}
+
+// -----------------------------------------------------------------------------
+
+XLineCapItem::XLineCapItem( SvStream& rIn )
+:   SfxEnumItem(XATTR_LINECAP, rIn)
+{
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
+{
+    return 1;
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+{
+    XLineCapItem* pRet = new XLineCapItem( rIn );
+
+    if(nVer < 1)
+        pRet->SetValue(com::sun::star::drawing::LineCap_BUTT);
+
+    return pRet;
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new XLineCapItem( *this );
+}
+
+// -----------------------------------------------------------------------------
+
+SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+                                                     SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
+{
+    rText.Erase();
+
+    switch( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE: return ePres;
+
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        {
+            sal_uInt16 nId = 0;
+
+            switch( GetValue() )
+            {
+                default: /*com::sun::star::drawing::LineCap_BUTT*/
+                    nId = RID_SVXSTR_LINECAP_BUTT;
+                break;
+
+                case(com::sun::star::drawing::LineCap_ROUND):
+                    nId = RID_SVXSTR_LINECAP_ROUND;
+                break;
+
+                case(com::sun::star::drawing::LineCap_SQUARE):
+                    nId = RID_SVXSTR_LINECAP_SQUARE;
+                break;
+            }
+
+            if( nId )
+                rText = SVX_RESSTR( nId );
+
+            return ePres;
+        }
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool XLineCapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+{
+    const com::sun::star::drawing::LineCap eCap(GetValue());
+    rVal <<= eCap;
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+{
+    com::sun::star::drawing::LineCap eUnoCap;
+
+    if(!(rVal >>= eUnoCap))
+    {
+        // also try an int (for Basic)
+        sal_Int32 nLJ(0);
+
+        if(!(rVal >>= nLJ))
+        {
+            return false;
+        }
+
+        eUnoCap = (com::sun::star::drawing::LineCap)nLJ;
+    }
+
+    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eUnoCap
+        || com::sun::star::drawing::LineCap_ROUND == eUnoCap
+        || com::sun::star::drawing::LineCap_SQUARE == eUnoCap, "Unknown enum value in XATTR_LINECAP (!)");
+
+    SetValue(sal::static_int_cast< sal_uInt16 >(eUnoCap));
+
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uInt16 XLineCapItem::GetValueCount() const
+{
+    // don't forget to update the api interface also
+    return 3;
+}
+
+// -----------------------------------------------------------------------------
+
+com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
+{
+    const com::sun::star::drawing::LineCap eRetval((com::sun::star::drawing::LineCap)SfxEnumItem::GetValue());
+    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eRetval
+        || com::sun::star::drawing::LineCap_ROUND == eRetval
+        || com::sun::star::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");
+
+    return (com::sun::star::drawing::LineCap)SfxEnumItem::GetValue();
 }
 
 //------------------------------

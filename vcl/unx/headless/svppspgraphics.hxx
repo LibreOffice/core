@@ -136,7 +136,12 @@ public:
     virtual void            drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
+    virtual bool            drawPolyLine(
+        const ::basegfx::B2DPolygon&,
+        double fTransparency,
+        const ::basegfx::B2DVector& rLineWidths,
+        basegfx::B2DLineJoin,
+        com::sun::star::drawing::LineCap);
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );

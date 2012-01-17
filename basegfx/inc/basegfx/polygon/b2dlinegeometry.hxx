@@ -28,6 +28,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -101,6 +102,9 @@ namespace basegfx
             The LineJoin if the edges meeting in a point do not have a C1
             or C2 continuity
 
+            @param eCap
+            The kind of cap, which is added to the line.
+
             @param fMaxAllowedAngle
             Allows to hand over the maximum allowed angle between an edge and
             it's control vectors. The smaller, the more subdivisions will be
@@ -128,6 +132,7 @@ namespace basegfx
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin = B2DLINEJOIN_ROUND,
+            com::sun::star::drawing::LineCap eCap = com::sun::star::drawing::LineCap_BUTT,
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
             double fMiterMinimumAngle = (15.0 * F_PI180));

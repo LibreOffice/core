@@ -38,6 +38,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,7 @@ namespace drawinglayer
                 double fWidth,
                 double fTransparence,
                 const basegfx::BColor& rColor,
+                com::sun::star::drawing::LineCap eCap,
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen);
             SdrLineAttribute(const basegfx::BColor& rColor);
@@ -90,6 +92,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             const ::std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
+            com::sun::star::drawing::LineCap getCap() const;
 
             // bool access
             bool isDashed() const;

@@ -285,6 +285,9 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
 
+        /// create half circle centered on (0,0) from [0 .. F_PI]
+        B2DPolygon createHalfUnitCircle();
+
         /** create a polygon which describes the unit circle and close it
 
             @param nStartQuadrant

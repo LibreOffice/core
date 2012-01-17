@@ -82,6 +82,9 @@
 #define GDI_EXTENDEDPOLYGON_ACTION      1034
 #define GDI_LINEDASHDOT_ACTION          1035
 
+// Added LineCap support
+#define GDI_LINECAP_ACTION              1036
+
 // ----------------
 // - SVMConverter -
 // ----------------

@@ -137,20 +137,26 @@ public:
 
 struct SVGShapeDescriptor
 {
-    PolyPolygon                 maShapePolyPoly;
-    Color                       maShapeFillColor;
-    Color                       maShapeLineColor;
-    sal_Int32                   mnStrokeWidth;
-    SvtGraphicStroke::DashArray maDashArray;
-    ::std::auto_ptr< Gradient > mapShapeGradient;
-    ::rtl::OUString             maId;
+    PolyPolygon                         maShapePolyPoly;
+    Color                               maShapeFillColor;
+    Color                               maShapeLineColor;
+    sal_Int32                           mnStrokeWidth;
+    SvtGraphicStroke::DashArray         maDashArray;
+    ::std::auto_ptr< Gradient >         mapShapeGradient;
+    ::rtl::OUString                     maId;
+
+    // added support for LineJoin and LineCap
+    basegfx::B2DLineJoin                maLineJoin;
+    com::sun::star::drawing::LineCap    maLineCap;
 
     // -------------------------------------------------------------------------
 
     SVGShapeDescriptor() :
         maShapeFillColor( Color( COL_TRANSPARENT ) ),
         maShapeLineColor( Color( COL_TRANSPARENT ) ),
-        mnStrokeWidth( 0 )
+        mnStrokeWidth( 0 ),
+        maLineJoin(basegfx::B2DLINEJOIN_MITER), // miter is Svg 'stroke-linejoin' default
+        maLineCap(com::sun::star::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default
     {
     }
 };

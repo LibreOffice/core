@@ -26,6 +26,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -54,7 +55,8 @@ namespace drawinglayer
             LineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth = 0.0,
-                basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND);
+                basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
+                com::sun::star::drawing::LineCap aLineCap = com::sun::star::drawing::LineCap_BUTT);
             LineAttribute();
             LineAttribute(const LineAttribute& rCandidate);
             LineAttribute& operator=(const LineAttribute& rCandidate);
@@ -70,6 +72,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             double getWidth() const;
             basegfx::B2DLineJoin getLineJoin() const;
+            com::sun::star::drawing::LineCap getLineCap() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

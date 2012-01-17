@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -211,6 +212,7 @@
     { MAP_CHAR_LEN(UNO_NAME_SHADOWYDIST),       SDRATTR_SHADOWYDIST,        &::getCppuType((const sal_Int32*)0),    0,      SFX_METRIC_ITEM},
 
 #define LINE_PROPERTIES_DEFAULTS\
+    { MAP_CHAR_LEN(UNO_NAME_LINECAP),           XATTR_LINECAP,          &::getCppuType((const ::com::sun::star::drawing::LineCap*)0),     0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINECOLOR),         XATTR_LINECOLOR,        &::getCppuType((const sal_Int32*)0) ,           0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINEENDCENTER),     XATTR_LINEENDCENTER,    &::getBooleanCppuType() ,           0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINEENDWIDTH),      XATTR_LINEENDWIDTH,     &::getCppuType((const sal_Int32*)0) ,           0,     SFX_METRIC_ITEM}, \

@@ -359,6 +359,19 @@ String RID_SVXSTR_LINEJOINT_ROUND
 {
     Text [ en-US ] = "Line joint round";
 };
+String RID_SVXSTR_LINECAP_BUTT
+{
+    Text [ en-US ] = "Line cap flat";  // string as in Excel
+};
+String RID_SVXSTR_LINECAP_ROUND
+{
+    Text [ en-US ] = "Line cap round";
+};
+String RID_SVXSTR_LINECAP_SQUARE
+{
+    Text [ en-US ] = "Line cap square";
+};
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //

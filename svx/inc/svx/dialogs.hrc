@@ -633,6 +633,11 @@
 #define RID_SVXSTR_TBLAFMT_YELLOW           (RID_SVX_START + 575)
 #define RID_SVXSTR_TBLAFMT_END              (RID_SVX_START + 576)
 
+// string resources for XLineCap item
+#define RID_SVXSTR_LINECAP_BUTT             (RID_SVX_START + 586 )
+#define RID_SVXSTR_LINECAP_ROUND            (RID_SVX_START + 587 )
+#define RID_SVXSTR_LINECAP_SQUARE           (RID_SVX_START + 588 )
+
 // string resources for XLineJoint item
 #define RID_SVXSTR_LINEJOINT_NONE           RID_SVXSTR_NONE
 #define RID_SVXSTR_LINEJOINT_MIDDLE         (RID_SVX_START + 589 )

@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 // ----------------
 // - ImplLineInfo -
@@ -48,6 +49,7 @@ struct ImplLineInfo
     long                    mnDistance;
 
     basegfx::B2DLineJoin    meLineJoin;
+    com::sun::star::drawing::LineCap meLineCap;
 
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
@@ -108,7 +110,10 @@ public:
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
     basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
 
-    sal_Bool            IsDefault() const { return( !mpImplLineInfo->mnWidth && ( LINE_SOLID == mpImplLineInfo->meStyle ) ); }
+    void SetLineCap(com::sun::star::drawing::LineCap eLineCap);
+    com::sun::star::drawing::LineCap GetLineCap() const { return mpImplLineInfo->meLineCap; }
+
+    sal_Bool            IsDefault() const;
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );

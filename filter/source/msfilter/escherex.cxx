@@ -51,6 +51,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/BezierPoint.hpp>
@@ -853,6 +854,35 @@ void EscherPropertyContainer::CreateLineProperties(
         AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
         nLineFlags |= 0x100010;
     }
+
+    // support LineCaps
+    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, String(RTL_CONSTASCII_USTRINGPARAM("LineCap")), sal_False))
+    {
+        ::com::sun::star::drawing::LineCap aLineCap(com::sun::star::drawing::LineCap_BUTT);
+
+        if(aAny >>= aLineCap)
+        {
+            switch (aLineCap)
+            {
+                default: /* com::sun::star::drawing::LineCap_BUTT */
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapFlat);
+                    break;
+                }
+                case com::sun::star::drawing::LineCap_ROUND:
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapRound);
+                    break;
+                }
+                case com::sun::star::drawing::LineCap_SQUARE:
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapSquare);
+                    break;
+                }
+            }
+        }
+    }
+
     if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStyle"  ) ), sal_False ) )
     {

@@ -83,6 +83,10 @@ static const char   aXMLAttrGradientUnits[] = "gradientUnits";
 static const char   aXMLAttrOffset[] = "offset";
 static const char   aXMLAttrStopColor[] = "stop-color";
 
+// added support for LineJoin and LineCap
+static const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
+static const char   aXMLAttrStrokeLinecap[] = "stroke-linecap";
+
 // -----------------------------------------------------------------------------
 
 static const sal_Unicode pBase64[] =
@@ -672,6 +676,51 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
     {
         sal_Int32 nStrokeWidth = ( bApplyMapping ? ImplMap( rShape.mnStrokeWidth ) : rShape.mnStrokeWidth );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, ::rtl::OUString::valueOf( nStrokeWidth ) );
+    }
+
+    // support for LineJoin
+    switch(rShape.maLineJoin)
+    {
+        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+        case basegfx::B2DLINEJOIN_MITER:
+        {
+            // miter is Svg default, so no need to write until the exporter might write styles.
+            // If this happens, activate here
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("miter"));
+            break;
+        }
+        case basegfx::B2DLINEJOIN_BEVEL:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("bevel"));
+            break;
+        }
+        case basegfx::B2DLINEJOIN_ROUND:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("round"));
+            break;
+        }
+    }
+
+    // support for LineCap
+    switch(rShape.maLineCap)
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            // butt is Svg default, so no need to write until the exporter might write styles.
+            // If this happens, activate here
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("butt"));
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("round"));
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("square"));
+            break;
+        }
     }
 
     if( rShape.maDashArray.size() )
@@ -1486,6 +1535,46 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         mapCurShape->maShapeLineColor.SetTransparency( (sal_uInt8) FRound( aStroke.getTransparency() * 255.0 ) );
                         mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
                         aStroke.getDashArray( mapCurShape->maDashArray );
+
+                        // added support for LineJoin
+                        switch(aStroke.getJoinType())
+                        {
+                            default: /* SvtGraphicStroke::joinMiter,  SvtGraphicStroke::joinNone */
+                            {
+                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
+                                break;
+                            }
+                            case SvtGraphicStroke::joinRound:
+                            {
+                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                                break;
+                            }
+                            case SvtGraphicStroke::joinBevel:
+                            {
+                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                                break;
+                            }
+                        }
+
+                        // added support for LineCap
+                        switch(aStroke.getCapType())
+                        {
+                            default: /* SvtGraphicStroke::capButt */
+                            {
+                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
+                                break;
+                            }
+                            case SvtGraphicStroke::capRound:
+                            {
+                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_ROUND;
+                                break;
+                            }
+                            case SvtGraphicStroke::capSquare:
+                            {
+                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_SQUARE;
+                                break;
+                            }
+                        }
                     }
 
                     // write open shape in every case

@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -252,13 +253,17 @@ namespace drawinglayer
                     // create fat line data
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
+                    const com::sun::star::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         // New version of createAreaGeometry; now creates bezier polygons
                         aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
-                            aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin));
+                            aHairLinePolyPolygon.getB2DPolygon(a),
+                            fHalfLineWidth,
+                            aLineJoin,
+                            aLineCap));
                     }
 
                     // prepare return value
@@ -339,10 +344,28 @@ namespace drawinglayer
 
             if(getLineAttribute().getWidth())
             {
+                bool bUseDecomposition(false);
+
                 if(basegfx::B2DLINEJOIN_MITER == getLineAttribute().getLineJoin())
                 {
                     // if line is mitered, use parent call since mitered line
                     // geometry may use more space than the geometry grown by half line width
+                    bUseDecomposition = true;
+                }
+
+                if(!bUseDecomposition && com::sun::star::drawing::LineCap_SQUARE == getLineAttribute().getLineCap())
+                {
+                    // when drawing::LineCap_SQUARE is used the below method to grow the polygon
+                    // range by half line width will not work, so use decomposition. Interestingly,
+                    // the grow method below works perfectly for LineCap_ROUND since the grow is in
+                    // all directions and the rounded cap needs the same grow in all directions independent
+                    // from it's orientation. Unfortunately this is not the case for drawing::LineCap_SQUARE
+                    bUseDecomposition = true;
+                }
+
+                if(bUseDecomposition)
+                {
+                    // get correct range by using the decomposition fallback, reasons see above cases
                     aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
                 }
                 else

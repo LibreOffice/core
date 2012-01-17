@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/fontdefs.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <vector>
 
 struct ImplOutDevData;
@@ -556,7 +556,11 @@ public:
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
+    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(
+        const basegfx::B2DPolygon& rB2DPolygon,
+        double fLineWidth = 0.0,
+        basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+        com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
 
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
@@ -687,7 +691,11 @@ public:
         @see DrawPolyPolygon
      */
     void                DrawPolyLine( const Polygon& rPoly );
-    void                DrawPolyLine( const basegfx::B2DPolygon&, double fLineWidth = 0.0, basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND );
+    void DrawPolyLine(
+        const basegfx::B2DPolygon&,
+        double fLineWidth = 0.0,
+        basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
+        com::sun::star::drawing::LineCap = com::sun::star::drawing::LineCap_BUTT);
 
     /** Render the given polygon as a line stroke
 

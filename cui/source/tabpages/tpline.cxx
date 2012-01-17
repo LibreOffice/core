@@ -129,6 +129,10 @@ SvxLineTabPage::SvxLineTabPage
     maFTEdgeStyle       ( this, CUI_RES( FT_EDGE_STYLE ) ),
     maLBEdgeStyle       ( this, CUI_RES( LB_EDGE_STYLE ) ),
 
+    // LineCaps
+    maFTCapStyle        ( this, CUI_RES( FT_CAP_STYLE ) ),
+    maLBCapStyle        ( this, CUI_RES( LB_CAP_STYLE ) ),
+
     pSymbolList(NULL),
     bNewSize(false),
     nNumMenuGalleryItems(0),
@@ -233,6 +237,10 @@ SvxLineTabPage::SvxLineTabPage
     // #116827#
     Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
+
+    // LineCaps
+    Link aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
+    maLBCapStyle.SetSelectHdl( aCapStyle );
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) , MB-Handler setzen
     aSymbolMB.SetSelectHdl(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
@@ -484,6 +492,10 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         maFLEdgeStyle.Hide();
         maFTEdgeStyle.Hide();
         maLBEdgeStyle.Hide();
+
+        // LineCaps
+        maFTCapStyle.Hide();
+        maLBCapStyle.Hide();
     }
 }
 
@@ -751,6 +763,45 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
 
+    // LineCaps
+    nPos = maLBCapStyle.GetSelectEntryPos();
+    if( LISTBOX_ENTRY_NOTFOUND != nPos && nPos != maLBCapStyle.GetSavedValue() )
+    {
+        XLineCapItem* pNew = 0L;
+
+        switch(nPos)
+        {
+            case 0: // Butt (=Flat), default
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_BUTT);
+                break;
+            }
+            case 1: // Round
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_ROUND);
+                break;
+            }
+            case 2: // Square
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE);
+                break;
+            }
+        }
+
+        if(pNew)
+        {
+            pOld = GetOldItem( rAttrs, XATTR_LINECAP );
+
+            if(!pOld || !(*(const XLineCapItem*)pOld == *pNew))
+            {
+                rAttrs.Put( *pNew );
+                bModified = sal_True;
+            }
+
+            delete pNew;
+        }
+    }
+
     if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
     {
         //wurde also per Auswahl gesetzt oder Gr��e ist anders
@@ -861,6 +912,30 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
             case 3: // Bevel
             {
                 rXLSet.Put(XLineJointItem(XLINEJOINT_BEVEL));
+                break;
+            }
+        }
+    }
+
+    // LineCaps
+    nPos = maLBCapStyle.GetSelectEntryPos();
+    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        switch(nPos)
+        {
+            case 0: // Butt (=Flat), default
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                break;
+            }
+            case 1: // Round
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                break;
+            }
+            case 2: // Square
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -1284,6 +1359,28 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     */
 
+    // fdo#43209
+    if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs.GetItemState(XATTR_LINECAP))
+    {
+        maFTCapStyle.Disable();
+        maLBCapStyle.Disable();
+    }
+    else if(SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_LINECAP))
+    {
+        const com::sun::star::drawing::LineCap eLineCap(((const XLineCapItem&)(rAttrs.Get(XATTR_LINECAP))).GetValue());
+
+        switch(eLineCap)
+        {
+            case com::sun::star::drawing::LineCap_ROUND: maLBCapStyle.SelectEntryPos(1); break;
+            case com::sun::star::drawing::LineCap_SQUARE : maLBCapStyle.SelectEntryPos(2); break;
+            default /*com::sun::star::drawing::LineCap_BUTT*/: maLBCapStyle.SelectEntryPos(0); break;
+        }
+    }
+    else
+    {
+        maLBCapStyle.SetNoSelection();
+    }
+
     // Werte sichern
     aLbLineStyle.SaveValue();
     aMtrLineWidth.SaveValue();
@@ -1298,6 +1395,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
     // #116827#
     maLBEdgeStyle.SaveValue();
+
+    // LineCaps
+    maLBCapStyle.SaveValue();
 
     ClickInvisibleHdl_Impl( this );
     //ClickMeasuringHdl_Impl( this );
@@ -1416,6 +1516,15 @@ IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
+// fdo#43209
+
+IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
+{
+    ChangePreviewHdl_Impl( this );
+
+    return( 0L );
+}
+//------------------------------------------------------------------------
 
 IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
 {
@@ -1442,6 +1551,10 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
             // #116827#
             maFTEdgeStyle.Disable();
             maLBEdgeStyle.Disable();
+
+            // LineCaps
+            maFTCapStyle.Disable();
+            maLBCapStyle.Disable();
         }
     }
     else
@@ -1466,6 +1579,10 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
             // #116827#
             maFTEdgeStyle.Enable();
             maLBEdgeStyle.Enable();
+
+            // LineCaps
+            maFTCapStyle.Enable();
+            maLBCapStyle.Enable();
         }
     }
     ChangePreviewHdl_Impl( NULL );

@@ -920,19 +920,41 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         // Linienattribute
         sal_Int32 nLineWidth = (sal_Int32)GetPropertyValue( DFF_Prop_lineWidth, 9525 );
 
+        // support LineCap
+        const MSO_LineCap eLineCap((MSO_LineCap)GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare));
+
+        switch(eLineCap)
+        {
+            default: /* case mso_lineEndCapFlat */
+            {
+                // no need to set, it is the default. If this changes, this needs to be activated
+                // rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                break;
+            }
+            case mso_lineEndCapRound:
+            {
+                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                break;
+            }
+            case mso_lineEndCapSquare:
+            {
+                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                break;
+            }
+        }
+
         MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
         if ( eLineDashing == mso_lineSolid )
             rSet.Put(XLineStyleItem( XLINE_SOLID ) );
         else
         {
-//          MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare );
 
             XDashStyle  eDash = XDASH_RECT;
             sal_uInt16  nDots = 1;
             sal_uInt32  nDotLen = nLineWidth / 360;
             sal_uInt16  nDashes = 0;
             sal_uInt32  nDashLen = ( 8 * nLineWidth ) / 360;
-            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;;
+            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;
 
             switch ( eLineDashing )
             {
@@ -1049,24 +1071,27 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 rSet.Put( XLineEndItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
                 rSet.Put( XLineEndCenterItem( bArrowCenter ) );
             }
-            if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
-            {
-                MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle );
-                const SfxPoolItem* pPoolItem = NULL;
-                if ( rSet.GetItemState( XATTR_LINEDASH, sal_False, &pPoolItem ) == SFX_ITEM_SET )
-                {
-                    XDashStyle eNewStyle = XDASH_RECT;
-                    if ( eLineCap == mso_lineEndCapRound )
-                        eNewStyle = XDASH_ROUND;
-                    const XDash& rOldDash = ( (const XLineDashItem*)pPoolItem )->GetDashValue();
-                    if ( rOldDash.GetDashStyle() != eNewStyle )
-                    {
-                        XDash aNew( rOldDash );
-                        aNew.SetDashStyle( eNewStyle );
-                        rSet.Put( XLineDashItem( XubString(), aNew ) );
-                    }
-                }
-            }
+
+            // this was used to at least adapt the lineDash to the lineCap before lineCap was
+            // supported, so with supporting lineCap this is no longer needed
+            //if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
+            //{
+            //  MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle );
+            //  const SfxPoolItem* pPoolItem = NULL;
+            //  if ( rSet.GetItemState( XATTR_LINEDASH, sal_False, &pPoolItem ) == SFX_ITEM_SET )
+            //  {
+            //      XDashStyle eNewStyle = XDASH_RECT;
+            //      if ( eLineCap == mso_lineEndCapRound )
+            //          eNewStyle = XDASH_ROUND;
+            //      const XDash& rOldDash = ( (const XLineDashItem*)pPoolItem )->GetDashValue();
+            //      if ( rOldDash.GetDashStyle() != eNewStyle )
+            //      {
+            //          XDash aNew( rOldDash );
+            //          aNew.SetDashStyle( eNewStyle );
+            //          rSet.Put( XLineDashItem( XubString(), aNew ) );
+            //      }
+            //  }
+            //}
         }
     }
     else

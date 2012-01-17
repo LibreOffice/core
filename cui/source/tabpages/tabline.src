@@ -235,13 +235,13 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 124 , 3 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ en-US ] = "Corner style" ;
+        Text [ en-US ] = "Corner and cap styles" ;
     };
     FixedText FT_EDGE_STYLE
     {
         Pos = MAP_APPFONT ( 130 , 14 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ en-US ] = "Sty~le" ;
+        Text [ en-US ] = "~Corner style" ;
     };
     ListBox LB_EDGE_STYLE
     {
@@ -257,6 +257,27 @@ TabPage RID_SVXPAGE_LINE
             < "- none -" ; > ;
             < "Mitered" ; > ;
             < "Beveled" ; > ;
+        };
+    };
+    FixedText FT_CAP_STYLE
+    {
+        Pos = MAP_APPFONT ( 191 , 14 + (16 * 6) - 4 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ en-US ] = "Ca~p style" ;
+    };
+    ListBox LB_CAP_STYLE
+    {
+        HelpID = "cui:ListBox:RID_SVXPAGE_LINE:LB_CAP_STYLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 25 + (16 * 6) - 4 ) ;
+        Size = MAP_APPFONT ( 57 , 99 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Flat" ; Default ; > ; // Same string as in Excel
+            < "Round" ; > ;
+            < "Square" ; > ;
         };
     };
 

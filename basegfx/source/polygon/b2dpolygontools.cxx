@@ -1889,6 +1889,33 @@ namespace basegfx
             return aUnitCircle;
         }
 
+        B2DPolygon createHalfUnitCircle()
+        {
+            static B2DPolygon aUnitHalfCircle;
+
+            if(!aUnitHalfCircle.count())
+            {
+                const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+                const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+                const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
+                B2DPoint aPoint(1.0, 0.0);
+                B2DPoint aForward(1.0, fScaledKappa);
+                B2DPoint aBackward(1.0, -fScaledKappa);
+
+                aUnitHalfCircle.append(aPoint);
+
+                for(sal_uInt32 a(0); a < STEPSPERQUARTER * 2; a++)
+                {
+                    aPoint *= aRotateMatrix;
+                    aBackward *= aRotateMatrix;
+                    aUnitHalfCircle.appendBezierSegment(aForward, aBackward, aPoint);
+                    aForward *= aRotateMatrix;
+                }
+            }
+
+            return aUnitHalfCircle;
+        }
+
         B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
         {
             switch(nStartQuadrant % 4)

@@ -42,12 +42,14 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xlndsit.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // helper to get line, stroke and transparence attributes from SfxItemSet
@@ -114,8 +116,13 @@ namespace
 
         const sal_uInt32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
         const XLineJoint eLineJoint = ((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue();
+        const com::sun::star::drawing::LineCap eLineCap = ((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue();
 
-        return drawinglayer::attribute::LineAttribute(aColorAttribute, (double)nLineWidth, impGetB2DLineJoin(eLineJoint));
+        return drawinglayer::attribute::LineAttribute(
+            aColorAttribute,
+            (double)nLineWidth,
+            impGetB2DLineJoin(eLineJoint),
+            eLineCap);
     }
 
     drawinglayer::attribute::StrokeAttribute impGetStrokeAttribute(const SfxItemSet& rSet)

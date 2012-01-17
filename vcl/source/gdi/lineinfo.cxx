@@ -47,7 +47,8 @@ ImplLineInfo::ImplLineInfo() :
     mnDotCount  ( 0 ),
     mnDotLen    ( 0 ),
     mnDistance  ( 0 ),
-    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND )
+    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND ),
+    meLineCap   ( com::sun::star::drawing::LineCap_BUTT )
 {
 }
 
@@ -62,7 +63,8 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnDotCount  ( rImplLineInfo.mnDotCount ),
     mnDotLen    ( rImplLineInfo.mnDotLen ),
     mnDistance  ( rImplLineInfo.mnDistance ),
-    meLineJoin  ( rImplLineInfo.meLineJoin )
+    meLineJoin  ( rImplLineInfo.meLineJoin ),
+    meLineCap   ( rImplLineInfo.meLineCap )
 {
 }
 
@@ -77,7 +79,8 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && mnDotCount == rB.mnDotCount
         && mnDotLen == rB.mnDotLen
         && mnDistance == rB.mnDistance
-        && meLineJoin == rB.meLineJoin);
+        && meLineJoin == rB.meLineJoin
+        && meLineCap == rB.meLineCap);
 }
 
 // ------------
@@ -229,6 +232,28 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 
 // -----------------------------------------------------------------------
 
+void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
+{
+    DBG_CHKTHIS( LineInfo, NULL );
+
+    if(eLineCap != mpImplLineInfo->meLineCap)
+    {
+        ImplMakeUnique();
+        mpImplLineInfo->meLineCap = eLineCap;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool LineInfo::IsDefault() const
+{
+    return( !mpImplLineInfo->mnWidth
+        && ( LINE_SOLID == mpImplLineInfo->meStyle )
+        && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
+}
+
+// -----------------------------------------------------------------------
+
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
@@ -251,6 +276,12 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
         rIStm >> nTmp16; rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
     }
 
+    if( aCompat.GetVersion() >= 4 )
+    {
+        // version 4
+        rIStm >> nTmp16; rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
+    }
+
     return rIStm;
 }
 
@@ -258,7 +289,7 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
 SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
+    VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
     // version 1
     rOStm << (sal_uInt16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
@@ -270,6 +301,9 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 
     // since version3
     rOStm << (sal_uInt16) rImplLineInfo.meLineJoin;
+
+    // since version4
+    rOStm << (sal_uInt16) rImplLineInfo.meLineCap;
 
     return rOStm;
 }
@@ -354,7 +388,8 @@ void LineInfo::applyToB2DPolyPolygon(
                 o_rFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
                     io_rLinePolyPolygon.getB2DPolygon(a),
                     fHalfLineWidth,
-                    GetLineJoin()));
+                    GetLineJoin(),
+                    GetLineCap()));
             }
 
             io_rLinePolyPolygon.clear();

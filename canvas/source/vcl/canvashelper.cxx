@@ -35,6 +35,7 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 #include <tools/poly.hxx>
 #include <vcl/window.hxx>
@@ -93,6 +94,26 @@ namespace vclcanvas
             }
 
             return basegfx::B2DLINEJOIN_NONE;
+        }
+
+        drawing::LineCap unoCapeFromCap( sal_Int8 nCapType)
+        {
+            switch ( nCapType)
+            {
+                case rendering::PathCapType::BUTT:
+                    return drawing::LineCap_BUTT;
+
+                case rendering::PathCapType::ROUND:
+                    return drawing::LineCap_ROUND;
+
+                case rendering::PathCapType::SQUARE:
+                    return drawing::LineCap_SQUARE;
+
+                default:
+                    ENSURE_OR_THROW( false,
+                                      "unoCapeFromCap(): Unexpected cap type" );
+            }
+            return drawing::LineCap_BUTT;
         }
     }
 
@@ -384,7 +405,10 @@ namespace vclcanvas
 
                     // AW: New interface, will create bezier polygons now
                     aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
-                        aPolyPoly.getB2DPolygon(i), strokeAttributes.StrokeWidth*0.5, b2DJoineFromJoin(strokeAttributes.JoinType)));
+                        aPolyPoly.getB2DPolygon(i),
+                        strokeAttributes.StrokeWidth*0.5,
+                        b2DJoineFromJoin(strokeAttributes.JoinType),
+                        unoCapeFromCap(strokeAttributes.StartCapType)));
                     //aStrokedPolyPoly.append(
                     //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
                     //                                                    strokeAttributes.StrokeWidth*0.5,

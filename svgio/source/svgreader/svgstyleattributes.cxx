@@ -63,6 +63,28 @@ namespace svgio
             return basegfx::B2DLINEJOIN_MITER;
         }
 
+        com::sun::star::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)
+        {
+            switch(aStrokeLinecap)
+            {
+                default: /* StrokeLinecap_notset, StrokeLinecap_butt */
+                {
+                    return com::sun::star::drawing::LineCap_BUTT;
+                    break;
+                }
+                case StrokeLinecap_round:
+                {
+                    return com::sun::star::drawing::LineCap_ROUND;
+                    break;
+                }
+                case StrokeLinecap_square:
+                {
+                    return com::sun::star::drawing::LineCap_SQUARE;
+                    break;
+                }
+            }
+        }
+
         FontStretch getWider(FontStretch aSource)
         {
             switch(aSource)
@@ -658,8 +680,9 @@ namespace svgio
 
                     if(basegfx::fTools::more(fStrokeWidth, 0.0))
                     {
-                        // get LineJoin and stroke array
+                        // get LineJoin, LineCap and stroke array
                         const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
+                        const com::sun::star::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
                         ::std::vector< double > aDashArray;
 
                         if(!getStrokeDasharray().empty())
@@ -668,14 +691,14 @@ namespace svgio
                         }
 
                         // todo: Handle getStrokeDashOffset()
-                        // todo: Handle getStrokeLinecap()
 
                         // prepare line attribute
                         drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
                         const drawinglayer::attribute::LineAttribute aLineAttribute(
                             pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
                             fStrokeWidth,
-                            aB2DLineJoin);
+                            aB2DLineJoin,
+                            aLineCap);
 
                         if(aDashArray.empty())
                         {

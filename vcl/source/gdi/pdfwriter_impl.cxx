@@ -1624,7 +1624,28 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
 
 bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
 {
-    bool bRet = true;
+    if(LINE_DASH == rInfo.GetStyle() && rInfo.GetDashLen() != rInfo.GetDotLen())
+    {
+        // dashed and non-degraded case, check for implementation limits of dash array
+        // in PDF reader apps (e.g. acroread)
+        if(2 * (rInfo.GetDashCount() + rInfo.GetDotCount()) > 10)
+        {
+            return false;
+        }
+    }
+
+    if(basegfx::B2DLINEJOIN_NONE != rInfo.GetLineJoin())
+    {
+        // LineJoin used, ExtLineInfo required
+        return false;
+    }
+
+    if(com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap())
+    {
+        // LineCap used, ExtLineInfo required
+        return false;
+    }
+
     if( rInfo.GetStyle() == LINE_DASH )
     {
         rBuffer.append( "[ " );
@@ -1637,10 +1658,6 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         }
         else
         {
-            // check for implementation limits of dash array
-            // in PDF reader apps (e.g. acroread)
-            if( 2*(rInfo.GetDashCount() + rInfo.GetDotCount()) > 10 )
-                bRet = false;
             for( int n = 0; n < rInfo.GetDashCount(); n++ )
             {
                 appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
@@ -1658,6 +1675,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         }
         rBuffer.append( "] 0 d\n" );
     }
+
     if( rInfo.GetWidth() > 1 )
     {
         appendMappedLength( (sal_Int32)rInfo.GetWidth(), rBuffer );
@@ -1669,7 +1687,8 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         appendDouble( 72.0/double(m_pWriter->getReferenceDevice()->ImplGetDPIX()), rBuffer );
         rBuffer.append( " w\n" );
     }
-    return bRet;
+
+    return true;
 }
 
 void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer ) const
@@ -9045,20 +9064,67 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     rOut.m_fMiterLimit          = 10;
     rOut.m_aDashArray.clear();
 
-    int nDashes     = rIn.GetDashCount();
-    int nDashLen    = rIn.GetDashLen();
-    int nDistance   = rIn.GetDistance();
+    // add DashDot to DashArray
+    const int nDashes     = rIn.GetDashCount();
+    const int nDashLen    = rIn.GetDashLen();
+    const int nDistance   = rIn.GetDistance();
+
     for( int n  = 0; n < nDashes; n++ )
     {
         rOut.m_aDashArray.push_back( nDashLen );
         rOut.m_aDashArray.push_back( nDistance );
     }
-    int nDots       = rIn.GetDotCount();
-    int nDotLen     = rIn.GetDotLen();
+
+    const int nDots       = rIn.GetDotCount();
+    const int nDotLen     = rIn.GetDotLen();
+
     for( int n  = 0; n < nDots; n++ )
     {
         rOut.m_aDashArray.push_back( nDotLen );
         rOut.m_aDashArray.push_back( nDistance );
+    }
+
+    // add LineJoin
+    switch(rIn.GetLineJoin())
+    {
+        case basegfx::B2DLINEJOIN_BEVEL :
+        {
+            rOut.m_eJoin = PDFWriter::joinBevel;
+            break;
+        }
+        default : // basegfx::B2DLINEJOIN_NONE :
+        // Pdf has no 'none' lineJoin, default is miter
+        case basegfx::B2DLINEJOIN_MIDDLE :
+        case basegfx::B2DLINEJOIN_MITER :
+        {
+            rOut.m_eJoin = PDFWriter::joinMiter;
+            break;
+        }
+        case basegfx::B2DLINEJOIN_ROUND :
+        {
+            rOut.m_eJoin = PDFWriter::joinRound;
+            break;
+        }
+    }
+
+    // add LineCap
+    switch(rIn.GetLineCap())
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            rOut.m_eCap = PDFWriter::capButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            rOut.m_eCap = PDFWriter::capRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            rOut.m_eCap = PDFWriter::capSquare;
+            break;
+        }
     }
 }
 

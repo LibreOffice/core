@@ -150,7 +150,7 @@ namespace drawinglayer
             aScaledPolyPolygon.transform(rObjectTransform);
 
             // create line and stroke attribute
-            const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin());
+            const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
 
             // create primitives

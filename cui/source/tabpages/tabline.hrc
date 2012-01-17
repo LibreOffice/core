@@ -97,6 +97,12 @@
 #define FT_EDGE_STYLE 13
 #define LB_EDGE_STYLE 5
 
+// since LO3.6
+#define FT_CAP_STYLE 14
+#define LB_CAP_STYLE 6
+// not sure about IAccessibility2, add it nevertheless
+#define STR_LB_CAP_STYLE 42
+
 //Symbole (fuer StarChart)
 #define FT_SYMBOL_WIDTH     20
 #define FT_SYMBOL_HEIGHT    21

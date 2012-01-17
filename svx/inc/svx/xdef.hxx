@@ -50,7 +50,8 @@
 #define XATTR_LINEENDCENTER     (XATTR_LINE_FIRST + 9)          /* V3: 1009  V2: 1009 */
 #define XATTR_LINETRANSPARENCE  (XATTR_LINE_FIRST + 10)         /* V3: 1010  V2: 1010 */
 #define XATTR_LINEJOINT         (XATTR_LINE_FIRST + 11)         /* V3: 1011  V2: 1011 */
-#define XATTR_LINE_LAST         XATTR_LINEJOINT
+#define XATTR_LINECAP           (XATTR_LINE_FIRST + 12)         /* V3: 1012 */
+#define XATTR_LINE_LAST         XATTR_LINECAP
 #define XATTRSET_LINE           (XATTR_LINE_LAST + 1)           /* V3: 1017  V2: 1017 */
 
 #define XATTR_FILL_FIRST            (XATTRSET_LINE + 1)         /* V3: 1018  V2: 1018 */

@@ -80,6 +80,7 @@ protected:
     Color                       aOldLineColor;
     sal_Int32                   nLineWidth;
     basegfx::B2DLineJoin        maLineJoin;
+    com::sun::star::drawing::LineCap    maLineCap;
     XDash                       maDash;
 
     sal_Bool                    bMov;

@@ -37,6 +37,7 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
@@ -76,6 +77,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     pPage(NULL),pModel(NULL),nLayer(0),
     nLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
+    maLineCap(com::sun::star::drawing::LineCap_BUTT),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
     bFntDirty(sal_True),
     bLastObjWasPolyWithoutLine(sal_False),bNoLine(sal_False),bNoFill(sal_False),bLastObjWasLine(sal_False)
@@ -305,6 +307,9 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
                 break;
         }
 
+        // Add LineCap support
+        pLineAttr->Put(XLineCapItem(maLineCap));
+
         if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
         {
             pLineAttr->Put(XLineDashItem(String(), maDash));
@@ -480,6 +485,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
             nLineWidth = nNewLineWidth;
             maLineJoin = rLineInfo.GetLineJoin();
+            maLineCap = rLineInfo.GetLineCap();
             maDash = XDash(XDASH_RECT,
                 rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
                 rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
@@ -685,6 +691,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
             basegfx::B2DPolyPolygon(aSource));
         nLineWidth = nNewLineWidth;
         maLineJoin = rLineInfo.GetLineJoin();
+        maLineCap = rLineInfo.GetLineCap();
         maDash = XDash(XDASH_RECT,
             rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
             rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),

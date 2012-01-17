@@ -2370,6 +2370,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
         l_aDashArray.push_back( 2 );
     const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
     SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);
+    SvtGraphicStroke::CapType aCapType(SvtGraphicStroke::capButt);
 
     switch(rLineInfo.GetLineJoin())
     {
@@ -2389,7 +2390,26 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
             break;
     }
 
-    ImplWriteLineInfo( fLWidth, fMiterLimit, SvtGraphicStroke::capButt, aJoinType, l_aDashArray );
+    switch(rLineInfo.GetLineCap())
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            aCapType = SvtGraphicStroke::capButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            aCapType = SvtGraphicStroke::capRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            aCapType = SvtGraphicStroke::capSquare;
+            break;
+        }
+    }
+
+    ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
 }
 
 //---------------------------------------------------------------------------------

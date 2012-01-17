@@ -59,6 +59,7 @@ namespace drawinglayer
             double                                      mfDegreeStepWidth;
             double                                      mfMiterMinimumAngle;
             basegfx::B2DLineJoin                        maLineJoin;
+            com::sun::star::drawing::LineCap            maLineCap;
 
         protected:
             /** access methods to maLast3DDecomposition. The usage of this methods may allow
@@ -76,7 +77,9 @@ namespace drawinglayer
             PolygonTubePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
                 const basegfx::BColor& rBColor,
-                double fRadius, basegfx::B2DLineJoin aLineJoin,
+                double fRadius,
+                basegfx::B2DLineJoin aLineJoin,
+                com::sun::star::drawing::LineCap aLineCap,
                 double fDegreeStepWidth = 10.0 * F_PI180,
                 double fMiterMinimumAngle = 15.0 * F_PI180);
 
@@ -85,6 +88,7 @@ namespace drawinglayer
             double getDegreeStepWidth() const { return mfDegreeStepWidth; }
             double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
             basegfx::B2DLineJoin getLineJoin() const { return maLineJoin; }
+            com::sun::star::drawing::LineCap getLineCap() const { return maLineCap; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;

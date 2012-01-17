@@ -57,6 +57,7 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -1750,6 +1751,22 @@ namespace drawinglayer
                             break;
                         case basegfx::B2DLINEJOIN_ROUND:
                             aStrokeAttribute.JoinType = rendering::PathJoinType::ROUND;
+                            break;
+                    }
+
+                    switch(rLineAttribute.getLineCap())
+                    {
+                        case com::sun::star::drawing::LineCap_ROUND:
+                            aStrokeAttribute.StartCapType = rendering::PathCapType::ROUND;
+                            aStrokeAttribute.EndCapType = rendering::PathCapType::ROUND;
+                            break;
+                        case com::sun::star::drawing::LineCap_SQUARE:
+                            aStrokeAttribute.StartCapType = rendering::PathCapType::SQUARE;
+                            aStrokeAttribute.EndCapType = rendering::PathCapType::SQUARE;
+                            break;
+                        default: // com::sun::star::drawing::LineCap_BUTT
+                            aStrokeAttribute.StartCapType = rendering::PathCapType::BUTT;
+                            aStrokeAttribute.EndCapType = rendering::PathCapType::BUTT;
                             break;
                     }
 

@@ -706,7 +706,8 @@ namespace
                 const drawinglayer::attribute::LineAttribute aLineAttribute(
                     rProperties.getLineColor(),
                     bWidthUsed ? rLineInfo.GetWidth() : 0.0,
-                    rLineInfo.GetLineJoin());
+                    rLineInfo.GetLineJoin(),
+                    rLineInfo.GetLineCap());
 
                 if(bDashDotUsed)
                 {

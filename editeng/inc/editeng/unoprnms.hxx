@@ -92,6 +92,7 @@
 #define UNO_NAME_LINESTARTCENTER                "LineStartCenter"
 #define UNO_NAME_LINEENDCENTER                  "LineEndCenter"
 #define UNO_NAME_LINETRANSPARENCE               "LineTransparence"
+#define UNO_NAME_LINECAP                        "LineCap"
 
 #define UNO_NAME_SHADOW                         "Shadow"
 #define UNO_NAME_SHADOWCOLOR                    "ShadowColor"

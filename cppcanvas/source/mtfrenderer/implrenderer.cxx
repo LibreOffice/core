@@ -289,6 +289,28 @@ namespace
                 break;
         }
 
+        switch(rLineInfo.GetLineCap())
+        {
+            default: /* com::sun::star::drawing::LineCap_BUTT */
+            {
+                o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+                o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
+                break;
+            }
+            case com::sun::star::drawing::LineCap_ROUND:
+            {
+                o_rStrokeAttributes.StartCapType = rendering::PathCapType::ROUND;
+                o_rStrokeAttributes.EndCapType   = rendering::PathCapType::ROUND;
+                break;
+            }
+            case com::sun::star::drawing::LineCap_SQUARE:
+            {
+                o_rStrokeAttributes.StartCapType = rendering::PathCapType::SQUARE;
+                o_rStrokeAttributes.EndCapType   = rendering::PathCapType::SQUARE;
+                break;
+            }
+        }
+
         if( LINE_DASH == rLineInfo.GetStyle() )
         {
             const ::cppcanvas::internal::OutDevState& rState( getState( rParms.mrStates ) );

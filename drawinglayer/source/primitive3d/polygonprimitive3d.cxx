@@ -106,11 +106,18 @@ namespace drawinglayer
                     // create fat line data
                     const double fRadius(getLineAttribute().getWidth() / 2.0);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
+                    const com::sun::star::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
 
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
                         // create tube primitives
-                        const Primitive3DReference xRef(new PolygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a), getLineAttribute().getColor(), fRadius, aLineJoin));
+                        const Primitive3DReference xRef(
+                            new PolygonTubePrimitive3D(
+                                aHairLinePolyPolygon.getB3DPolygon(a),
+                                getLineAttribute().getColor(),
+                                fRadius,
+                                aLineJoin,
+                                aLineCap));
                         aRetval[a] = xRef;
                     }
                 }

@@ -599,6 +599,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 }
                 break;
 
+                case (GDI_LINECAP_ACTION) :
+                {
+                    sal_Int16 nLineCap(0);
+                    rIStm >> nLineCap;
+                    aLineInfo.SetLineCap((com::sun::star::drawing::LineCap)nLineCap);
+                }
+                break;
+
                 case (GDI_LINEDASHDOT_ACTION) :
                 {
                     sal_Int16 a(0);
@@ -1457,6 +1465,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
@@ -1471,16 +1480,23 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         rOStm << (sal_Int16) rInfo.GetLineJoin();
                     }
 
-                    if(bLineDashDot)
+                    if(bLineCap)
                     {
-                        rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
-                        rOStm << (sal_Int32) 4 + 16;
-                        rOStm << (sal_Int16)rInfo.GetDashCount();
-                        rOStm << (sal_Int32)rInfo.GetDashLen();
-                        rOStm << (sal_Int16)rInfo.GetDotCount();
-                        rOStm << (sal_Int32)rInfo.GetDotLen();
-                        rOStm << (sal_Int32)rInfo.GetDistance();
+                        rOStm << (sal_Int16) GDI_LINECAP_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineCap();
                     }
+                }
+
+                if(bLineDashDot)
+                {
+                    rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
+                    rOStm << (sal_Int32) 4 + 16;
+                    rOStm << (sal_Int16)rInfo.GetDashCount();
+                    rOStm << (sal_Int32)rInfo.GetDashLen();
+                    rOStm << (sal_Int16)rInfo.GetDotCount();
+                    rOStm << (sal_Int32)rInfo.GetDotLen();
+                    rOStm << (sal_Int32)rInfo.GetDistance();
                 }
 
                 rOStm << (sal_Int16) GDI_LINE_ACTION;
@@ -1499,10 +1515,15 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         nCount += 1;
                     }
 
-                    if(bLineDashDot)
+                    if(bLineCap)
                     {
                         nCount += 1;
                     }
+                }
+
+                if(bLineDashDot)
+                {
+                    nCount += 1;
                 }
             }
             break;
@@ -1600,6 +1621,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                  const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
@@ -1612,6 +1634,13 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         rOStm << (sal_Int16) GDI_LINEJOIN_ACTION;
                         rOStm << (sal_Int32) 6;
                         rOStm << (sal_Int16) rInfo.GetLineJoin();
+                    }
+
+                    if(bLineCap)
+                    {
+                        rOStm << (sal_Int16) GDI_LINECAP_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineCap();
                     }
                 }
 
@@ -1649,6 +1678,11 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     nCount += 3;
 
                     if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
+
+                    if(bLineCap)
                     {
                         nCount += 1;
                     }

@@ -31,6 +31,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -78,6 +79,7 @@
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <svx/sdr/attribute/sdrfilltextattribute.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -237,6 +239,7 @@ namespace drawinglayer
                     const sal_uInt32 nWidth(((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue());
                     const Color aColor(((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetColorValue());
                     const XLineJoint eJoint(((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue());
+                    const com::sun::star::drawing::LineCap eCap(((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
@@ -255,6 +258,7 @@ namespace drawinglayer
                         (double)nWidth,
                         (double)nTransparence * 0.01,
                         aColor.getBColor(),
+                        eCap,
                         aDotDashArray,
                         fFullDotDashLen);
                 }

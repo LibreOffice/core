@@ -84,11 +84,6 @@ public:
     GDIMetaFile*    GetGDIMetaFile() const { return mpMtf; }
     const JobSetup& GetJobSetup() const { return maJobSetup; }
     sal_Bool            IsNewJobSetup() const { return (mbNewJobSetup != 0); }
-
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const PrinterPage& rPage )
-    { rOStm << rPage.mbNewJobSetup; rOStm << rPage.maJobSetup; rPage.mpMtf->Write( rOStm ); return rOStm; }
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, PrinterPage& rPage )
-    { return rIStm >> rPage.mbNewJobSetup >> rPage.maJobSetup >> *rPage.mpMtf; }
 };
 
 

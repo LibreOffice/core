@@ -980,10 +980,12 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
 
 // -----------------------------------------------------------------------
 
-bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+bool AquaSalGraphics::drawPolyLine(
+    const ::basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
     const ::basegfx::B2DVector& rLineWidths,
-    basegfx::B2DLineJoin eLineJoin )
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();

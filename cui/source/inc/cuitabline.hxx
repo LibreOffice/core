@@ -127,6 +127,10 @@ private:
     FixedText           maFTEdgeStyle;
     LineEndLB           maLBEdgeStyle;
 
+     // LineCaps
+     FixedText          maFTCapStyle;
+     LineEndLB          maLBCapStyle;
+
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
     bool                bNewSize;
@@ -196,6 +200,9 @@ private:
 
     // #116827#
     DECL_LINK( ChangeEdgeStyleHdl_Impl, void * );
+
+     // LineCaps
+     DECL_LINK ( ChangeCapStyleHdl_Impl, void * );
 
     sal_Bool FillXLSet_Impl();
 #endif
