@@ -239,6 +239,14 @@ namespace basegfx
 
                         // remember closed state of current polygon
                         bIsClosed = true;
+
+                        // update current point - we're back at the start
+                        if( aCurrPoly.count() )
+                        {
+                            const B2DPoint aFirst( aCurrPoly.getB2DPoint(0) );
+                            nLastX = aFirst.getX();
+                            nLastY = aFirst.getY();
+                        }
                         break;
                     }
 
@@ -1033,6 +1041,8 @@ namespace basegfx
                     if(aPolygon.isClosed())
                     {
                         aResult.append(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                        // return to first point
+                        aCurrentSVGPosition = aPolygon.getB2DPoint(0);
                     }
                 }
             }
