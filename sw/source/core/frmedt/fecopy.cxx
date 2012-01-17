@@ -89,7 +89,6 @@ using namespace ::com::sun::star;
 /*************************************************************************
 |*
 |*  SwFEShell::Copy()   copy for the internal clipboard.
-|*      Kopiert alle Selektionen in das Clipboard.
 |*      Copies all selections to the clipboard.
 |*
 |*************************************************************************/

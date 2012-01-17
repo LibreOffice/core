@@ -774,7 +774,6 @@ void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
  *  Class      :  SwFEShell
  *  Methods    :  SetRowHeight(), GetRowHeight()
  ***********************************************************************/
-
 void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
 {
     SET_CURR_SHELL( this );
