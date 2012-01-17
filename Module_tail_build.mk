@@ -69,6 +69,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sfx2 \
     slideshow \
     starmath \
+    svtools \
     svx \
     sw \
     swext \
