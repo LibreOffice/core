@@ -1268,12 +1268,20 @@ comparison_predicate:
 		}
 	;
 comparison:
-		SQL_LESS
+	    SQL_LESS
 	  | SQL_NOTEQUAL
 	  | SQL_EQUAL
 	  | SQL_GREAT
 	  | SQL_LESSEQ
 	  | SQL_GREATEQ
+	  | SQL_TOKEN_IS sql_not SQL_TOKEN_DISTINCT SQL_TOKEN_FROM
+	  	{
+		  $$ = SQL_NEW_RULE;
+		  $$->append($1);
+		  $$->append($2);
+		  $$->append($3);
+		  $$->append($4);
+		}
 	;
 between_predicate_part_2:
 	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
