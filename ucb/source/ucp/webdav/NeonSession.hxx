@@ -55,7 +55,7 @@ private:
     rtl::OUString     m_aProxyName;
     sal_Int32         m_nPort;
     sal_Int32         m_nProxyPort;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aFlags;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aFlags;
     HttpSession *     m_pHttpSession;
     void *            m_pRequestData;
     const ucbhelper::InternetProxyDecider & m_rProxyDecider;
@@ -76,13 +76,13 @@ protected:
 public:
     NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
                  const rtl::OUString& inUri,
-                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rFlags,
+                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags,
                  const ucbhelper::InternetProxyDecider & rProxyDecider )
         throw ( DAVException );
 
     // DAVSession methods
     virtual sal_Bool CanUse( const ::rtl::OUString & inPath,
-                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rFlags );
+                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags );
 
     virtual sal_Bool UsesProxy();
 

@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 //... namespace comphelper ................................................
 namespace comphelper
@@ -125,6 +126,17 @@ public:
     TPropertyValueEqualFunctor()
     {}
     bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::rtl::OUString& rhs) const
+    {
+        return !!(lhs.Name == rhs);
+    }
+};
+//------------------------------------------------------------------------
+class TNamedValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::NamedValue,::rtl::OUString,bool>
+{
+public:
+    TNamedValueEqualFunctor()
+    {}
+    bool operator() (const ::com::sun::star::beans::NamedValue& lhs, const ::rtl::OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }
