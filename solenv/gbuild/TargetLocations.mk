@@ -33,12 +33,13 @@ gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_outdir_target = $(OUTDIR)/bin/$(1).oxt
 gb_PackagePart_get_destinations = \
-	$(OUTDIR)/xml \
-	$(OUTDIR)/pck \
-	$(OUTDIR)/inc \
-	$(OUTDIR)/idl \
 	$(OUTDIR)/bin \
+	$(OUTDIR)/idl \
+	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
+	$(OUTDIR)/pck \
+	$(OUTDIR)/unittest \
+	$(OUTDIR)/xml \
 
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb

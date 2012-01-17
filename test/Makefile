@@ -1,6 +1,8 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -21,47 +23,18 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-PRJ = ..
-PRJNAME = test
-TARGET = cpp
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-ENABLE_EXCEPTIONS = TRUE
-VISIBILITY_HIDDEN = TRUE
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Files --------------------------------------------------------
-CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-SLOFILES = \
-    $(SLO)/bootstrapfixture.obj \
-    $(SLO)/unoapi_test.obj
-
-.IF "$(CROSS_COMPILING)" == "YES"
-SHL1IMPLIB = $(SHL1TARGET)
-.ELSE
-SHL1IMPLIB = i$(SHL1TARGET)
-.ENDIF
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = \
-    $(UNOTESTLIB) \
-    $(VCLLIB) \
-    $(TOOLSLIB) \
-    $(UCBHELPERLIB) \
-    $(COMPHELPERLIB) \
-    $(CPPUHELPERLIB) \
-    $(UNOTOOLSLIB) \
-    $(CPPULIB) \
-    $(CPPUNITLIB) \
-    $(SALLIB) \
-    $(I18NISOLANGLIB)
-SHL1TARGET = test
-SHL1USE_EXPORTS = name
-DEF1NAME = $(SHL1TARGET)
-
-.INCLUDE: target.mk
+endif
+# vim: set noet sw=4 ts=4:
