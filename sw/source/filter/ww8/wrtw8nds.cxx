@@ -1880,7 +1880,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         rtl::OUString sOleId;
                         uno::Any aValue = it->second;
                         aValue >>= sOleId;
-                        if ( sOleId.getLength( ) > 0 )
+                        if ( !sOleId.isEmpty() )
                             OutputLinkedOLE( sOleId );
                     }
                 }

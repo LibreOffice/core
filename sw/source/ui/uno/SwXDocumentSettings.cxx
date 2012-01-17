@@ -375,7 +375,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             OUString sPrinterName;
             if( rValue >>= sPrinterName  )
             {
-                if( !mpPrinter && sPrinterName.getLength() > 0 && mpDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     SfxPrinter* pPrinter = mpDoc->getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )

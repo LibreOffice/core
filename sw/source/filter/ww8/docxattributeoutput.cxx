@@ -188,7 +188,7 @@ public:
        // #TODO check if this defaulted
        m_pSerializer->startElementNS( XML_w, XML_sizeAuto, FSEND );
        m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
-       if ( rDefault.getLength() )
+       if ( !rDefault.isEmpty() )
        {
            m_pSerializer->singleElementNS( XML_w, XML_default,
                FSNS( XML_w, XML_val ),
@@ -202,7 +202,7 @@ public:
     void WriteFormText(  const rtl::OUString& rName, const rtl::OUString& rDefault )
     {
        writeCommonStart( rName );
-       if ( rDefault.getLength() )
+       if ( !rDefault.isEmpty() )
        {
            m_pSerializer->startElementNS( XML_w, XML_textInput, FSEND );
            m_pSerializer->singleElementNS( XML_w, XML_default,
@@ -798,7 +798,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
 
     // Write the bookmark start if any
     OUString aBkmName( m_sFieldBkm );
-    if ( aBkmName.getLength( ) > 0 )
+    if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
                FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( m_nNextMarkId ) ).getStr( ),
@@ -820,7 +820,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the bookmark end if any
-    if ( aBkmName.getLength( ) > 0 )
+    if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
                FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( m_nNextMarkId ) ).getStr( ),
@@ -1101,7 +1101,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     lang::Locale aLocale( SwBreakIt::Get()->GetLocale(
                 rNode.GetLang( nPos ) ) );
     OUString sLang( aLocale.Language );
-    if ( aLocale.Country.getLength( ) > 0 )
+    if ( !aLocale.Country.isEmpty() )
         sLang += OUString(RTL_CONSTASCII_USTRINGPARAM( "-" )) + OUString( aLocale.Country );
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
@@ -1223,7 +1223,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
                     OUStringToOString( OUString( sMark ), RTL_TEXTENCODING_UTF8 ).getStr( ) );
 
         OUString sTarget( rTarget );
-        if ( sTarget.getLength( ) > 0 )
+        if ( !sTarget.isEmpty() )
         {
             OString soTarget = OUStringToOString( sTarget, RTL_TEXTENCODING_UTF8 );
             m_pHyperlinkAttrList->add(FSNS( XML_w, XML_tgtFrame ), soTarget.getStr());
@@ -2007,7 +2007,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
         nImageType = XML_embed;
     }
 
-    if ( aRelId.getLength() == 0 )
+    if ( aRelId.isEmpty() )
         return;
 
     m_pSerializer->startElementNS( XML_w, XML_drawing,
@@ -2684,7 +2684,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 
 
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions
     OString aFmt( impl_NumberingType( nNumType ) );
-    if ( aFmt.getLength() )
+    if ( !aFmt.isEmpty() )
         pAttr->add( FSNS( XML_w, XML_fmt ), aFmt.getStr() );
 
     XFastAttributeListRef xAttrs( pAttr );
@@ -2850,7 +2850,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     // format
     OString aFmt( impl_NumberingType( nNumberingType ) );
 
-    if ( aFmt.getLength() )
+    if ( !aFmt.isEmpty() )
         m_pSerializer->singleElementNS( XML_w, XML_numFmt,
                 FSNS( XML_w, XML_val ), aFmt.getStr(),
                 FSEND );
@@ -3025,11 +3025,11 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
             sIss = OString( "superscript" );
     }
 
-    if ( sIss.getLength( ) > 0 )
+    if ( !sIss.isEmpty() )
         m_pSerializer->singleElementNS( XML_w, XML_vertAlign,
            FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
 
-    if ( sIss.getLength() == 0 || sIss.match( OString( "baseline" ) ) )
+    if ( sIss.isEmpty() || sIss.match( OString( "baseline" ) ) )
     {
         long nHeight = ((SvxFontHeightItem&)m_rExport.GetItem(
                                     RES_CHRATR_FONTSIZE )).GetHeight();
@@ -4065,7 +4065,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
                 break;
         }
 
-        if ( sAlign.getLength() > 0 )
+        if ( !sAlign.isEmpty() )
             m_pFlyAttrList->add( FSNS( XML_w, XML_yAlign ), sAlign );
         else
             m_pFlyAttrList->add( FSNS( XML_w, XML_y ),
@@ -4121,7 +4121,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
                 break;
         }
 
-        if ( sAlign.getLength() > 0 )
+        if ( !sAlign.isEmpty() )
             m_pFlyAttrList->add( FSNS( XML_w, XML_xAlign ), sAlign );
         else
             m_pFlyAttrList->add( FSNS( XML_w, XML_x ),

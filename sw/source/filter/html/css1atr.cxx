@@ -854,7 +854,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToke
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            OSL_ENSURE( (rRefPoolId != 0) == (rToken.getLength() > 0),
+            OSL_ENSURE( (rRefPoolId != 0) == (!rToken.isEmpty()),
                     "Token missing" );
         }
         else
@@ -1000,11 +1000,11 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToke
 
             // Wenn ein Token gesetzt ist, enthaelt nPoolId die dazugehoerige
             // Vorlage
-            if( rToken.getLength() && !rRefPoolId )
+            if( !rToken.isEmpty() && !rRefPoolId )
                 rRefPoolId = nPoolId;
         }
 
-        if( rToken.getLength() || bStop )
+        if( !rToken.isEmpty() || bStop )
         {
             // Anhalten wenn eine HTML-Tag-Vorlage gefunden wurde
             break;
@@ -1017,7 +1017,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToke
         }
     }
 
-    if( rToken.getLength() )
+    if( !rToken.isEmpty() )
     {
         // Es ist eine HTML-Tag-Vorlage
         if( !nDeep )
@@ -1064,7 +1064,7 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
                                                   rRefPoolId, &aPseudo );
     if( nDeep )
     {
-        if( aToken.getLength() )
+        if( !aToken.isEmpty() )
             rSelector = String( aToken, RTL_TEXTENCODING_ASCII_US );
         else
             rSelector.Erase();

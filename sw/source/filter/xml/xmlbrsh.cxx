@@ -221,7 +221,7 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
             rItem, sURL, MID_GRAPHIC_LINK, rUnitConv ) )
     {
         sValue = GetExport().AddEmbeddedGraphicObject( sURL );
-        if( sValue.getLength() )
+        if( !sValue.isEmpty() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sValue );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -244,7 +244,7 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
                                   sal_True, sal_True );
-        if( sURL.getLength() )
+        if( !sURL.isEmpty() )
         {
             // optional office:binary-data
             GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );

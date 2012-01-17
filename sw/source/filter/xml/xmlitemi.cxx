@@ -208,7 +208,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleNoItem(
 void SwXMLImportTableItemMapper_Impl::finished(
         SfxItemSet & rSet, SvXMLUnitConverter const& rUnitConverter) const
 {
-    if (m_FoMarginValue.getLength())
+    if (!m_FoMarginValue.isEmpty())
     {
         sal_uInt16 const Ids[4][2] = {
             { RES_LR_SPACE, MID_L_MARGIN },

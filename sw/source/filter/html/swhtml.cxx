@@ -855,7 +855,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                     xDPS->getDocumentProperties());
                 OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
                 if ( xDocProps.is() && (xDocProps->getAutoloadSecs() > 0) &&
-                     (xDocProps->getAutoloadURL().getLength() == 0) )
+                     (xDocProps->getAutoloadURL().isEmpty()) )
                 {
                     xDocProps->setAutoloadURL(aPathToFile);
                 }
@@ -5480,10 +5480,10 @@ void SwHTMLParser::AddMetaUserDefined( ::rtl::OUString const & i_rMetaName )
 {
     // unless we already have 4 names, append the argument to m_InfoNames
     ::rtl::OUString* pName // the first empty string in m_InfoNames
-         (!m_InfoNames[0].getLength() ? &m_InfoNames[0] :
-         (!m_InfoNames[1].getLength() ? &m_InfoNames[1] :
-         (!m_InfoNames[2].getLength() ? &m_InfoNames[2] :
-         (!m_InfoNames[3].getLength() ? &m_InfoNames[3] : 0 ))));
+         (m_InfoNames[0].isEmpty() ? &m_InfoNames[0] :
+         (m_InfoNames[1].isEmpty() ? &m_InfoNames[1] :
+         (m_InfoNames[2].isEmpty() ? &m_InfoNames[2] :
+         (m_InfoNames[3].isEmpty() ? &m_InfoNames[3] : 0 ))));
     if (pName)
     {
         (*pName) = i_rMetaName;

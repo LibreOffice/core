@@ -1033,7 +1033,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ::rtl::OUString aStr;
         String aURL;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")) );
-        if( (aAny >>= aStr) && aStr.getLength() )
+        if( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
                       aStr);
@@ -1050,7 +1050,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         ::rtl::OUString aType;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
-        if( (aAny >>= aType) && aType.getLength() )
+        if( (aAny >>= aType) && !aType.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
                 .append("=\"");
@@ -1082,7 +1082,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // CODEBASE
         ::rtl::OUString aCd;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")) );
-        if( (aAny >>= aCd) && aCd.getLength() )
+        if( (aAny >>= aCd) && !aCd.isEmpty() )
         {
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
             if( sCodeBase.Len() )
@@ -1109,7 +1109,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ::rtl::OUString aAppletName;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")) );
         aAny >>= aAppletName;
-        if( aAppletName.getLength() )
+        if( !aAppletName.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
@@ -1248,7 +1248,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, sal_False );
     }
 
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;

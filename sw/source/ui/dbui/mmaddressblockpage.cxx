@@ -430,7 +430,7 @@ void SwSelectAddressBlockDialog::SetSettings(
 {
     if(bIsCountry)
     {
-        rCountry.getLength() ? m_aDependentRB.Check() : m_aAlwaysRB.Check();
+        !rCountry.isEmpty() ? m_aDependentRB.Check() : m_aAlwaysRB.Check();
         m_aCountryED.SetText(rCountry);
     }
     else
@@ -1052,7 +1052,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         FixedInfo* pNewPreview = new FixedInfo(&m_aWindow, ResId( FT_PREVIEW, *rResId.GetResMgr() ));
         //select the ListBox
         //if there is an assignment
-        if(aAssignments.getLength() > i && aAssignments[i].getLength())
+        if(aAssignments.getLength() > i && !aAssignments[i].isEmpty())
             pNewLB->SelectEntry(aAssignments[i]);
         else //otherwise the current column name may match one of the db columns
             pNewLB->SelectEntry(rHeader);

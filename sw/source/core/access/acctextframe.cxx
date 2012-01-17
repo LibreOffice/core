@@ -69,7 +69,7 @@ SwAccessibleTextFrame::SwAccessibleTextFrame(
         msTitle = pFlyFrmFmt->GetObjTitle();
 
         msDesc = pFlyFrmFmt->GetObjDescription();
-        if ( msDesc.getLength() == 0 &&
+        if ( msDesc.isEmpty() &&
              msTitle != GetName() )
         {
             msDesc = msTitle;
@@ -87,7 +87,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     // #i73249# - suppress handling of RES_NAME_CHANGED
     // in case that attribute Title is used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
-         msTitle.getLength() == 0 )
+         msTitle.isEmpty() )
     {
         SwAccessibleFrameBase::Modify( pOld, pNew );
     }
@@ -131,7 +131,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
                                 dynamic_cast<const SwFlyFrmFmt*>( pFlyFrm->GetFmt() );
                 const String& rDesc = pFlyFrmFmt->GetObjDescription();
                 msDesc = rDesc;
-                if ( msDesc.getLength() == 0 &&
+                if ( msDesc.isEmpty() &&
                      msTitle != GetName() )
                 {
                     msDesc = msTitle;
@@ -159,7 +159,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    if ( msTitle.getLength() != 0 )
+    if ( !msTitle.isEmpty() )
     {
         return msTitle;
     }

@@ -130,7 +130,7 @@ LanguageType lcl_CheckLanguage(
 
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
-        if (aLocale.Country.getLength() == 0)
+        if (aLocale.Country.isEmpty())
         {
             lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
             if (aTmpLocale.Language == aLocale.Language)
@@ -247,14 +247,14 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     //4--guessed language
-    if (aGuessedTextLang.getLength() > 0)
+    if (!aGuessedTextLang.isEmpty())
     {
         if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aGuessedTextLang)))
             aLangItems.insert( aGuessedTextLang );
     }
 
     //5--keyboard language
-    if (aKeyboardLang.getLength() > 0)
+    if (!aKeyboardLang.isEmpty())
     {
         if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aKeyboardLang)))
             aLangItems.insert( aKeyboardLang );
@@ -337,7 +337,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
     OUString aLabel;
-    if ( aCmdURL.getLength() )
+    if ( !aCmdURL.isEmpty() )
     {
         try
         {
@@ -421,7 +421,7 @@ SwSpellPopup::SwSpellPopup(
             const String aEntry = aSuggestions[ i ];
             InsertItem( nItemId, aEntry, 0, i );
             SetHelpId( nItemId, HID_LINGU_REPLACE);
-            if (aSuggestionImageUrl.getLength() > 0)
+            if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
 
             pMenu->InsertItem( nAutoCorrItemId, aEntry );
@@ -499,7 +499,7 @@ SwSpellPopup::SwSpellPopup(
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
                             xSvcInfo->getImplementationName() ) );
-                    if (aDictionaryImageUrl.getLength() > 0)
+                    if (!aDictionaryImageUrl.isEmpty())
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
                         pMenu->SetItemImage( nItemId, aImage );
@@ -621,7 +621,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
             const String aEntry = aSuggestions[ i ];
             InsertItem( nItemId, aEntry, 0, nPos++ );
             SetHelpId( nItemId, HID_LINGU_REPLACE );
-            if (aSuggestionImageUrl.getLength() > 0)
+            if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
 
             ++nItemId;

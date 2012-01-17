@@ -118,7 +118,7 @@ void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaPro
         rStyle >>= sStyle;
     }
 
-    if( sStyle.getLength() )
+    if( !sStyle.isEmpty() )
     {
         xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaStyleName") ), uno::makeAny( sStyle ) );
         return;
@@ -196,7 +196,7 @@ uno::Any SAL_CALL SwVbaStyle::getBaseStyle() throw (uno::RuntimeException)
     // ParentStyle
     rtl::OUString sBaseStyle;
     mxStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParentStyle") ) ) >>= sBaseStyle;
-    if( sBaseStyle.getLength() > 0 )
+    if( !sBaseStyle.isEmpty() )
     {
         uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
         return xCol->Item( uno::makeAny( sBaseStyle ), uno::Any() );
@@ -227,7 +227,7 @@ uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle() throw (uno::RuntimeExcepti
     //FollowStyle
     rtl::OUString sFollowStyle;
     mxStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FollowStyle") ) ) >>= sFollowStyle;
-    if( sFollowStyle.getLength() > 0 )
+    if( !sFollowStyle.isEmpty() )
     {
         uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
         return xCol->Item( uno::makeAny( sFollowStyle ), uno::Any() );

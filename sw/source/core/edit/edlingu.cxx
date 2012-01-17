@@ -440,7 +440,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
                     xEmpty, pPageCnt, pPageSt, false, &rArgs ) >>= aConvText;
 
         bGoOn = GetCrsrCnt() > 1;
-        if( aConvText.getLength() )
+        if( !aConvText.isEmpty() )
         {
             bGoOn = sal_False;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
@@ -830,7 +830,7 @@ uno::Any SwEditShell::SpellContinue(
     }
     --nStartAction;
 
-    if( aRet.getLength() || xRet.is() )
+    if( !aRet.isEmpty() || xRet.is() )
     {
         // dann die awt::Selection sichtbar machen
         StartAction();

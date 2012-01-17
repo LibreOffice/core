@@ -242,7 +242,7 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
             {
                 ::rtl::OUString sURL;
                 xTransferableProperties->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= sURL;
-                if(sURL.getLength())
+                if(!sURL.isEmpty())
                     SWUnoHelper::UCB_DeleteFile( sURL );
             }
         }
@@ -579,7 +579,7 @@ void  SwSendMailDialog::IterateMails()
         pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
         pMessage->SetSenderName( m_pConfigItem->GetMailDisplayName() );
         pMessage->SetSenderAddress( m_pConfigItem->GetMailAddress() );
-        if(pCurrentMailDescriptor->sAttachmentURL.getLength())
+        if(!pCurrentMailDescriptor->sAttachmentURL.isEmpty())
         {
             mail::MailAttachment aAttach;
             aAttach.Data =
@@ -598,7 +598,7 @@ void  SwSendMailDialog::IterateMails()
         pMessage->setBody( xBody );
 
         //CC and BCC are tokenized by ';'
-        if(pCurrentMailDescriptor->sCC.getLength())
+        if(!pCurrentMailDescriptor->sCC.isEmpty())
         {
             String sTokens( pCurrentMailDescriptor->sCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
@@ -610,7 +610,7 @@ void  SwSendMailDialog::IterateMails()
                     pMessage->addCcRecipient( sTmp );
             }
         }
-        if(pCurrentMailDescriptor->sBCC.getLength())
+        if(!pCurrentMailDescriptor->sBCC.isEmpty())
         {
             String sTokens( pCurrentMailDescriptor->sBCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');

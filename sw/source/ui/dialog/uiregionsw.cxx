@@ -1458,7 +1458,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
         //if necessary fill the names bookmarks/sections/tables now
 
         rtl::OUString sFileName = aFileNameED.GetText();
-        if(sFileName.getLength())
+        if(!sFileName.isEmpty())
         {
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;

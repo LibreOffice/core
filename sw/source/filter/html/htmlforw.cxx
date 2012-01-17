@@ -204,7 +204,7 @@ void lcl_html_outEvents( SvStream& rStrm,
         rtl::OStringBuffer sOut;
         sOut.append(' ');
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
-                     !pDescs[i].AddListenerParam.getLength()) )
+                     pDescs[i].AddListenerParam.isEmpty()) )
             sOut.append(pOpt);
         else
         {
@@ -220,7 +220,7 @@ void lcl_html_outEvents( SvStream& rStrm,
         HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc, pNonConvertableChars );
         rStrm << '\"';
         if( EXTENDED_STYPE == eScriptType &&
-            pDescs[i].AddListenerParam.getLength() )
+            !pDescs[i].AddListenerParam.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)
                 .append(rtl::OUStringToOString(sListener,
@@ -514,7 +514,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     uno::Any aTmp = xFormPropSet->getPropertyValue(
                                     OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-        ((OUString*)aTmp.getValue())->getLength() )
+        !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
@@ -526,7 +526,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     aTmp = xFormPropSet->getPropertyValue(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")) );
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-        ((OUString*)aTmp.getValue())->getLength() )
+        !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_action).append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
@@ -578,7 +578,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     aTmp = xFormPropSet->getPropertyValue(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")) );
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
-        ((OUString*)aTmp.getValue())->getLength() )
+        !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
@@ -653,7 +653,7 @@ void SwHTMLWriter::OutHiddenControls(
             aTmp = xPropSet->getPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                ((OUString*)aTmp.getValue())->getLength() )
+                !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                     .append("=\"");
@@ -665,7 +665,7 @@ void SwHTMLWriter::OutHiddenControls(
             aTmp = xPropSet->getPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenValue")) );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                ((OUString*)aTmp.getValue())->getLength() )
+                !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value)
                     .append("=\"");
@@ -812,7 +812,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
         {
             const OUString& rVal = *(OUString*)aTmp.getValue();
-            if( !rVal.getLength() )
+            if( rVal.isEmpty() )
                 bEmptyValue = sal_True;
             else if( rVal.compareToAscii( OOO_STRING_SVTOOLS_HTML_on ) != 0 )
                 sValue = rVal;
@@ -844,7 +844,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                ((OUString*)aTmp.getValue())->getLength() )
+                !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sValue = *(OUString*)aTmp.getValue();
             }
@@ -964,7 +964,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 {
                     aTmp = xPropSet->getPropertyValue( sDefaultText );
                     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                        ((OUString*)aTmp.getValue())->getLength() )
+                        !((OUString*)aTmp.getValue())->isEmpty() )
                     {
                         sValue = *(OUString*)aTmp.getValue();
                     }
@@ -1013,7 +1013,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     aTmp = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-        ((OUString*)aTmp.getValue())->getLength() )
+        !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
             append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -1030,7 +1030,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_disabled);
     }
 
-    if( sValue.getLength() || bEmptyValue )
+    if( !sValue.isEmpty() || bEmptyValue )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).append(
             RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -1046,7 +1046,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         aTmp = xPropSet->getPropertyValue(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageURL")) );
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-            ((OUString*)aTmp.getValue())->getLength() )
+            !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).
                 append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -1160,7 +1160,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                ((OUString*)aTmp.getValue())->getLength() )
+                !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
@@ -1297,7 +1297,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
                 rHTMLWrt.OutNewLine(); // jede Option bekommt eine eigene Zeile
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_option);
-                if( sVal.getLength() || bEmptyVal )
+                if( !sVal.isEmpty() || bEmptyVal )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
                         append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -1330,7 +1330,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         aTmp = xPropSet->getPropertyValue(
         OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultText")) );
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
-            ((OUString*)aTmp.getValue())->getLength() )
+            !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sVal = String( *(OUString*)aTmp.getValue() );
         }
@@ -1353,7 +1353,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         aTmp = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Label")));
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-            ((OUString*)aTmp.getValue())->getLength() )
+            !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sValue = *(OUString*)aTmp.getValue();
             HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
@@ -1361,7 +1361,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         }
     }
 
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!

@@ -312,7 +312,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
             if( nIndex == pTable->wdBuiltinStyle )
             {
                 rtl::OUString aStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
-                if( aStyleName.getLength() > 0 )
+                if( !aStyleName.isEmpty() )
                 {
                     rtl::OUString aStyleType;
                     switch( pTable->wdStyleType )

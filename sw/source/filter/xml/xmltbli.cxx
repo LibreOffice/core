@@ -776,7 +776,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
 
     sal_Int32 nWidth = MINLAY;
     sal_Bool bRelWidth = sal_True;
-    if( aStyleName.getLength() )
+    if( !aStyleName.isEmpty() )
     {
         const SfxPoolItem *pItem;
         const SfxItemSet *pAutoItemSet = 0;
@@ -1339,7 +1339,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sTblName;
-    if( aName.getLength() )
+    if( !aName.isEmpty() )
     {
         const SwTableFmt *pTblFmt = pDoc->FindTblFmtByName( aName );
         if( !pTblFmt )
@@ -1533,7 +1533,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
     else if( nWidth2 > USHRT_MAX )
         nWidth2 = USHRT_MAX;
     aColumnWidths.push_back( ColumnWidthInfo(nWidth2, bRelWidth2) );
-    if( (pDfltCellStyleName && pDfltCellStyleName->getLength() > 0) ||
+    if( (pDfltCellStyleName && !pDfltCellStyleName->isEmpty()) ||
         pColumnDefaultCellStyleNames )
     {
         if( !pColumnDefaultCellStyleNames )
@@ -1657,13 +1657,13 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     }
 
     OUString sStyleName( rStyleName );
-    if( !sStyleName.getLength() )
+    if( sStyleName.isEmpty() )
     {
         sStyleName = ((*pRows)[(sal_uInt16)nCurRow])->GetDefaultCellStyleName();
-        if( !sStyleName.getLength() && HasColumnDefaultCellStyleNames() )
+        if( sStyleName.isEmpty() && HasColumnDefaultCellStyleNames() )
         {
             sStyleName = GetColumnDefaultCellStyleName( nCurCol );
-            if( !sStyleName.getLength() )
+            if( sStyleName.isEmpty() )
                 sStyleName = aDfltCellStyleName;
         }
     }
@@ -2062,7 +2062,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     sal_Bool bNew;
     SwTableBoxFmt *pBoxFmt2 = GetSharedBoxFormat(
         pBox, sStyleName, nColWidth, pCell->IsProtected(),
-        pCell->GetStartNode() && pCell->GetFormula().getLength() == 0 &&
+        pCell->GetStartNode() && pCell->GetFormula().isEmpty() &&
             ! pCell->HasValue(),
         bNew, &bModifyLocked  );
 
@@ -2071,7 +2071,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         // set style
         const SfxItemSet *pAutoItemSet = 0;
-        if( pCell->GetStartNode() && sStyleName.getLength() &&
+        if( pCell->GetStartNode() && !sStyleName.isEmpty() &&
             GetSwImport().FindAutomaticStyle(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
         {
@@ -2092,8 +2092,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         // then make it a text cell!
         bool bSuppressNumericContent = false;
         if( pCell->HasValue() && (pCell->GetValue() == 0.0) &&
-            (pCell->GetFormula().getLength() == 0) &&
-            (sStyleName.getLength() != 0) )
+            pCell->GetFormula().isEmpty() &&
+            !sStyleName.isEmpty() )
         {
             // default num format?
             const SfxPoolItem* pItem = NULL;
@@ -2139,7 +2139,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             // the normal case: set formula and value (if available)
 
             const OUString& rFormula = pCell->GetFormula();
-            if (rFormula.getLength() > 0)
+            if (!rFormula.isEmpty())
             {
                 // formula cell: insert formula if valid
                 SwTblBoxFormula aFormulaItem( rFormula );
@@ -2220,7 +2220,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     const SfxItemSet *pAutoItemSet = 0;
     const OUString& rStyleName = (*pRows)[(sal_uInt16)nTopRow]->GetStyleName();
     if( 1UL == (nBottomRow - nTopRow) &&
-        rStyleName.getLength() &&
+        !rStyleName.isEmpty() &&
         GetSwImport().FindAutomaticStyle(
             XML_STYLE_FAMILY_TABLE_ROW, rStyleName, &pAutoItemSet ) )
     {
@@ -2684,7 +2684,7 @@ void SwXMLTableContext::MakeTable()
     pTableNode->GetTable().SetTableModel( !bHasSubTables );
 
     const SfxItemSet *pAutoItemSet = 0;
-    if( aStyleName.getLength() &&
+    if( !aStyleName.isEmpty() &&
         rSwImport.FindAutomaticStyle(
             XML_STYLE_FAMILY_TABLE_TABLE, aStyleName, &pAutoItemSet ) &&
          pAutoItemSet )

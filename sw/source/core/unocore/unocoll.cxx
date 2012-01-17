@@ -114,7 +114,7 @@ public:
     rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         // Initialise the code name
-        if ( msThisDocumentCodeName.getLength() == 0 )
+        if ( msThisDocumentCodeName.isEmpty() )
         {
             try
             {

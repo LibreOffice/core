@@ -885,7 +885,7 @@ throw (uno::RuntimeException)
             m_pImpl->m_rDoc.DeleteAndJoin(aCursor);
         }
 
-        if (rText.getLength())
+        if (!rText.isEmpty())
         {
             SwUnoCursorHelper::DocInsertStringSplitCR(
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
@@ -1727,7 +1727,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     {
         pDoc->DeleteAndJoin(rCursor);
     }
-    if (rString.getLength())
+    if (!rString.isEmpty())
     {
         String aText(rString);
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(

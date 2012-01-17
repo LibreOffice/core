@@ -2822,7 +2822,7 @@ namespace
 //See https://bugs.freedesktop.org/show_bug.cgi?id=34319 for an example
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString)
 {
-    if (!rAddString.getLength())
+    if (rAddString.isEmpty())
         return;
 
     uno::Reference<i18n::XBreakIterator> xBI(pBreakIt->GetBreakIter());
@@ -4233,7 +4233,7 @@ void SwWW8ImplReader::ReadDocInfo()
                     rtl::OUString aName = pMedium->GetName();
                     INetURLObject aURL( aName );
                     sTemplateURL = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-                    if ( sTemplateURL.getLength() > 0 )
+                    if ( !sTemplateURL.isEmpty() )
                         xDocProps->setTemplateURL( sTemplateURL );
                 }
             }
@@ -4253,7 +4253,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 // attempt to convert to url ( won't work for obvious reasons on  linux
                 if ( sPath.Len() )
                     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, aURL );
-                if (!aURL.getLength())
+                if (aURL.isEmpty())
                     xDocProps->setTemplateURL( aURL );
                 else
                     xDocProps->setTemplateURL( sPath );
@@ -4353,7 +4353,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
                 aURL = sGlobalTemplates[ i ];
         else
                 osl::FileBase::getFileURLFromSystemPath( sGlobalTemplates[ i ], aURL );
-        if ( !aURL.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) || ( sCreatedFrom.getLength() && sCreatedFrom.equals( aURL ) ) )
+        if ( !aURL.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
         SotStorageRef rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, STORAGE_TRANSACTED );

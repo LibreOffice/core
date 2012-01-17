@@ -376,7 +376,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     Text >>= sText;
 
     String sFieldName;
-    if( ( nType == word::WdFieldType::wdFieldEmpty ) && ( sText.getLength() > 0 ) )
+    if( ( nType == word::WdFieldType::wdFieldEmpty ) && !sText.isEmpty() )
     {
         _ReadFieldParams aReadParam(sText);
         sFieldName = aReadParam.GetFieldName();
@@ -408,7 +408,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl
 {
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.FileName")) ), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
-    if( _text.getLength() > 0 )
+    if( !_text.isEmpty() )
     {
         long nRet;
         _ReadFieldParams aReadParam( _text );
@@ -517,7 +517,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     {
         sFieldService = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.textfield.docinfo.Custom" ) );
     }
-    else if( sFieldService.getLength() == 0 )
+    else if( sFieldService.isEmpty() )
     {
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
     }

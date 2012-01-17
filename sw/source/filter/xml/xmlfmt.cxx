@@ -119,7 +119,7 @@ inline sal_Bool SwXMLConditionParser_Impl::MatchName( OUString& rName )
         nPos++;
     }
     rName = sBuffer.makeStringAndClear();
-    return rName.getLength() > 0;
+    return !rName.isEmpty();
 }
 
 inline sal_Bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
@@ -132,9 +132,9 @@ inline sal_Bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
     }
 
     OUString sNum( sBuffer.makeStringAndClear() );
-    if( sNum.getLength() )
+    if( !sNum.isEmpty() )
         rNumber = sNum.toInt32();
-    return sNum.getLength() > 0;
+    return !sNum.isEmpty();
 }
 
 SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
@@ -512,7 +512,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
         else if ( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
             // if we have a valid data style name
-            if (rValue.getLength() > 0)
+            if (!rValue.isEmpty())
             {
                 sDataStyleName = rValue;
                 bDataStyleIsResolved = sal_False;   // needs to be resolved

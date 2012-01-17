@@ -264,7 +264,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
         }
     }
     // if not found - generate a unique node name
-    if(!sFoundNode.getLength())
+    if(sFoundNode.isEmpty())
     {
         sal_Int32 nIndex = aLabels.getLength();
         OUString sPrefix(C2U("Label"));

@@ -699,7 +699,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pNd->RestoreMetadata(m_pMetadataUndoStart);
     }
 
-    if (m_sOld.getLength())
+    if (!m_sOld.isEmpty())
     {
         pNd->InsertText( m_sOld, aIdx );
     }

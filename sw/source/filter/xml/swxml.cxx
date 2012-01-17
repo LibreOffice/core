@@ -831,7 +831,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
             StreamPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
         }
 
-        if( StreamPath.getLength() )
+        if( !StreamPath.isEmpty() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
             xInfoSet->setPropertyValue( sPropName, makeAny( StreamPath ) );

@@ -133,7 +133,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                 // written after cell styles)
                 addDataStyle(nFormat);
                 OUString sDataStyleName = getDataStyleName(nFormat);
-                if( sDataStyleName.getLength() > 0 )
+                if( !sDataStyleName.isEmpty() )
                     AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
                                   sDataStyleName );
             }
@@ -316,10 +316,10 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                         OUString sStyleName;
                         aProperty->maValue >>= sStyleName;
                         // #i70748# - export also empty list styles
-                        if( sStyleName.getLength() )
+                        if( !sStyleName.isEmpty() )
                         {
                             OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
-                            if( sTmp.getLength() )
+                            if( !sTmp.isEmpty() )
                                 sStyleName = sTmp;
                         }
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,

@@ -183,7 +183,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     if(hasByName(aGroupName))
         throw container::ElementExistException();
     //check for non-ASCII characters
-    if(!aGroupName.getLength())
+    if(aGroupName.isEmpty())
     {
         lang::IllegalArgumentException aIllegal;
         aIllegal.Message = C2U("group name must not be empty");
@@ -658,7 +658,7 @@ void SwXAutoTextGroup::setPropertyValue(
         {
             OUString sNewTitle;
             aValue >>= sNewTitle;
-            if(!sNewTitle.getLength())
+            if(sNewTitle.isEmpty())
                 throw lang::IllegalArgumentException();
             sal_Bool bChanged = !sNewTitle.equals(pGlosGroup->GetName());
             pGlosGroup->SetName(sNewTitle);

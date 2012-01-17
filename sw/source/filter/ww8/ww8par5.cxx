@@ -731,7 +731,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 break;
             default:
                 rtl::OUString aCode = maFieldStack.back().GetBookmarkCode();
-                if ( aCode.getLength() > 0 )
+                if ( !aCode.isEmpty() )
                 {
                     // Unhandled field with stored code
                     SwPosition aEndPos = *pPaM->GetPoint();
@@ -2326,7 +2326,7 @@ bool CanUseRemoteLink(const String &rGrfName)
 
         aCnt.getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")))
             >>= aTitle;
-        bUseRemote = (aTitle.getLength() > 0);
+        bUseRemote = !aTitle.isEmpty();
     }
     catch ( ... )
     {

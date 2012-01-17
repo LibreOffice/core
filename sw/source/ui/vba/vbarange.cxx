@@ -164,7 +164,7 @@ SwVbaRange::setText( const rtl::OUString& rText ) throw ( uno::RuntimeException 
     }
 
     // insert the bookmark if the bookmark is deleted during setting text string
-    if( sName.getLength() )
+    if( !sName.isEmpty() )
     {
         uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xNameAccess( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );
@@ -267,15 +267,15 @@ SwVbaRange::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& 
 void SwVbaRange::GetStyleInfo(rtl::OUString& aStyleName, rtl::OUString& aStyleType ) throw ( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
-    if( ( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharStyleName") ) ) >>= aStyleName ) && aStyleName.getLength() )
+    if( ( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharStyleName") ) ) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
         aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
     }
-    else if( ( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaStyleName") ) ) >>= aStyleName ) && aStyleName.getLength() )
+    else if( ( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaStyleName") ) ) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
         aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
     }
-    if( aStyleType.getLength() == 0 )
+    if( aStyleType.isEmpty() )
     {
         DebugHelper::exception( SbERR_INTERNAL_ERROR, rtl::OUString() );
     }

@@ -625,7 +625,7 @@ String SwTemplNameFieldType::Expand(sal_uLong nFmt) const
 
         if( FF_UI_NAME == nFmt )
             aRet = xDocProps->getTemplateName();
-        else if( xDocProps->getTemplateURL().getLength() )
+        else if( !xDocProps->getTemplateURL().isEmpty() )
         {
             if( FF_UI_RANGE == nFmt )
             {

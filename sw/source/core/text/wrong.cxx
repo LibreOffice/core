@@ -188,7 +188,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
     {
         // For smart tag lists, we may not use a binary search. We return the
         // position of the first smart tag which coveres nValue
-        if ( 0 != maList[0].maType.getLength() || maList[0].mpSubList )
+        if ( !maList[0].maType.isEmpty() || maList[0].mpSubList )
         {
             std::vector<SwWrongArea>::const_iterator aIter = maList.begin();
             while ( aIter != maList.end() )

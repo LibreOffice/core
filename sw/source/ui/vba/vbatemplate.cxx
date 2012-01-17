@@ -71,7 +71,7 @@ rtl::OUString
 SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
 {
     rtl::OUString sName;
-    if( msFullUrl.getLength() )
+    if( !msFullUrl.isEmpty() )
     {
         INetURLObject aURL( msFullUrl );
         ::osl::File::getSystemPathFromFileURL( aURL.GetLastName(), sName );
@@ -83,7 +83,7 @@ rtl::OUString
 SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
 {
     rtl::OUString sPath;
-    if( msFullUrl.getLength() )
+    if( !msFullUrl.isEmpty() )
     {
         INetURLObject aURL( msFullUrl );
         rtl::OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );

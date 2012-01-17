@@ -255,7 +255,7 @@ void SwXDispatch::dispatch(
         aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
-        aEvent.IsEnabled = rData.sDataSource.getLength() > 0;
+        aEvent.IsEnabled = !rData.sDataSource.isEmpty();
 
         StatusListenerList::iterator aListIter = m_aListenerList.begin();
         for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -301,7 +301,7 @@ void SwXDispatch::addStatusListener(
         aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
-        aEvent.IsEnabled = rData.sDataSource.getLength() > 0;
+        aEvent.IsEnabled = !rData.sDataSource.isEmpty();
     }
 
 

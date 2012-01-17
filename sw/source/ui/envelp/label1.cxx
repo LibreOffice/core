@@ -587,7 +587,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
     aItem.aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
-    if (aTypeBox.GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && aItem.aMake.getLength())
+    if (aTypeBox.GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
         GetParent()->UpdateGroup( aItem.aMake );
     if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {

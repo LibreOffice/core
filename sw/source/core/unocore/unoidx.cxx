@@ -1435,7 +1435,7 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rName.getLength())
+    if (rName.isEmpty())
     {
         throw uno::RuntimeException();
     }
@@ -1805,7 +1805,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         break;
         case TOX_USER:
         {
-            if (!m_pImpl->m_sUserIndexName.getLength())
+            if (m_pImpl->m_sUserIndexName.isEmpty())
             {
                 pTOXType = pDoc->GetTOXType( m_pImpl->m_eTOXType, 0 );
             }
@@ -1845,30 +1845,30 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     //which must now return sal_True
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
-    if (m_pImpl->m_sAltText.getLength())
+    if (!m_pImpl->m_sAltText.isEmpty())
     {
         aMark.SetAlternativeText(m_pImpl->m_sAltText);
     }
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_INDEX:
-            if (m_pImpl->m_sPrimaryKey.getLength())
+            if (!m_pImpl->m_sPrimaryKey.isEmpty())
             {
                 aMark.SetPrimaryKey(m_pImpl->m_sPrimaryKey);
             }
-            if (m_pImpl->m_sSecondaryKey.getLength())
+            if (!m_pImpl->m_sSecondaryKey.isEmpty())
             {
                 aMark.SetSecondaryKey(m_pImpl->m_sSecondaryKey);
             }
-            if (m_pImpl->m_sTextReading.getLength())
+            if (!m_pImpl->m_sTextReading.isEmpty())
             {
                 aMark.SetTextReading(m_pImpl->m_sTextReading);
             }
-            if (m_pImpl->m_sPrimaryKeyReading.getLength())
+            if (!m_pImpl->m_sPrimaryKeyReading.isEmpty())
             {
                 aMark.SetPrimaryKeyReading(m_pImpl->m_sPrimaryKeyReading);
             }
-            if (m_pImpl->m_sSecondaryKeyReading.getLength())
+            if (!m_pImpl->m_sSecondaryKeyReading.isEmpty())
             {
                 aMark.SetSecondaryKeyReading(m_pImpl->m_sSecondaryKeyReading);
             }
@@ -2850,7 +2850,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                     throw lang::IllegalArgumentException();
                 }
                 aToken.cTabFillChar =
-                    (sFillChar.getLength()) ? sFillChar[0] : ' ';
+                    sFillChar.isEmpty() ? ' ' : sFillChar[0];
             }
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("Text")))

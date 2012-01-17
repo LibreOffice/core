@@ -493,7 +493,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
             }
 
             sal_uInt16 nFilter;
-            if ( xFltMgr->getCurrentFilter().getLength() && rGF.GetExportFormatCount() )
+            if ( !xFltMgr->getCurrentFilter().isEmpty() && rGF.GetExportFormatCount() )
                 nFilter = rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter() );
             else
                 nFilter = GRFILTER_FORMAT_DONTKNOW;

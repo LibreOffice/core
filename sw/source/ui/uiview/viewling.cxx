@@ -689,7 +689,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 // we like to use the grammar checking context menu if we either get
                 // some suggestions or at least a comment about the error found...
                 bUseGrammarContext = bCorrectionRes &&
-                        (aSuggestions.getLength() > 0 || aMessageText.getLength() > 0);
+                        (aSuggestions.getLength() > 0 || !aMessageText.isEmpty());
             }
 
             // open respective context menu for spell check or grammar errors with correction suggestions...
@@ -739,7 +739,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                         sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
                         OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
-                        if (aCommand.getLength() == 0 )
+                        if (aCommand.isEmpty() )
                         {
                             if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
                                 pPopup->Execute(nId);

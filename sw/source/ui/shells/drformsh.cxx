@@ -130,7 +130,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                         if( xPropInfoSet->hasPropertyByName( sTargetURL ))
                         {
                             beans::Property aProp = xPropInfoSet->getPropertyByName( sTargetURL );
-                            if( aProp.Name.getLength() )
+                            if( !aProp.Name.isEmpty() )
                             {
                                 uno::Any aTmp;
                                 // Ja!
@@ -214,7 +214,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("Label") );
                                     OUString sTmp;
-                                    if( (aTmp >>= sTmp) && sTmp.getLength())
+                                    if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
                                         aHLinkItem.SetName(sTmp);
                                     }
@@ -225,7 +225,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("TargetURL") );
                                     OUString sTmp;
-                                    if( (aTmp >>= sTmp) && sTmp.getLength())
+                                    if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
                                         aHLinkItem.SetURL(sTmp);
                                     }
@@ -236,7 +236,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("TargetFrame") );
                                     OUString sTmp;
-                                    if( (aTmp >>= sTmp) && sTmp.getLength())
+                                    if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
                                         aHLinkItem.SetTargetFrame(sTmp);
                                     }

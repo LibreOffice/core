@@ -244,7 +244,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     SwUnoInternalPaM aPam(*m_pImpl->m_pDoc);
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(m_pImpl->m_pDoc);
-    if (!m_pImpl->m_sMarkName.getLength())
+    if (m_pImpl->m_sMarkName.isEmpty())
     {
          m_pImpl->m_sMarkName =  OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"));
     }

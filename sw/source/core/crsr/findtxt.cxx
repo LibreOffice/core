@@ -225,7 +225,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
                     SwMoveFn fnMove, const SwPaM * pRegion,
                     sal_Bool bInReadOnly )
 {
-    if( !rSearchOpt.searchString.getLength() )
+    if( rSearchOpt.searchString.isEmpty() )
         return sal_False;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );

@@ -390,7 +390,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
                     ListboxControlActions::GET_SELECTED_ITEM );
                 OUString sTmpl;
                 aTemplateValue >>= sTmpl;
-                if( sTmpl.getLength() )
+                if( !sTmpl.isEmpty() )
                     sGraphicFormat = sTmpl;
                 rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );

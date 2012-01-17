@@ -148,7 +148,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
             uno::Reference< mail::XAuthenticator> xAuthenticator;
             if(rConfigItem.IsAuthentication() &&
                     !rConfigItem.IsSMTPAfterPOP() &&
-                    rConfigItem.GetMailUserName().getLength())
+                    !rConfigItem.GetMailUserName().isEmpty())
             {
                 String sPasswd = rConfigItem.GetMailPassword();
                 if(rOutMailServerPassword.Len())
@@ -479,7 +479,7 @@ String SwAddressPreview::FillData(
 
     sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
     const ::rtl::OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
-    bool bSpecialReplacementForCountry = (!bIncludeCountry || rExcludeCountry.getLength());
+    bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
     String sCountryColumn;
     if( bSpecialReplacementForCountry )
     {
@@ -506,7 +506,7 @@ String SwAddressPreview::FillData(
                                                                                 ++nColumn)
             {
                 if(rDefHeaders.GetString(nColumn) == aItem.sText &&
-                    pAssignment[nColumn].getLength())
+                    !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];
                     break;
@@ -528,7 +528,7 @@ String SwAddressPreview::FillData(
 
                         if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
                         {
-                            if( rExcludeCountry.getLength() && sReplace != rExcludeCountry )
+                            if( !rExcludeCountry.isEmpty() && sReplace != rExcludeCountry )
                                 aItem.sText = sReplace;
                             else
                                 aItem.sText.Erase();
@@ -617,7 +617,7 @@ OUString SwAuthenticator::getUserName( ) throw (RuntimeException)
 
 OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
 {
-    if(m_aUserName.getLength() && !m_aPassword.getLength() && m_pParentWindow)
+    if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
        SfxPasswordDialog* pPasswdDlg =
                 new SfxPasswordDialog( m_pParentWindow );

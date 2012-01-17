@@ -177,7 +177,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         ::rtl::OUString sFemaleColumn = m_aFemaleColumnLB.GetSelectEntry();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pWizard->GetConfigItem().GetResultSet(), UNO_QUERY);
         Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
-        if(sFemaleValue.getLength() && sFemaleColumn.getLength() &&
+        if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
                 xColAccess.is() &&
                 xColAccess->hasByName(sFemaleColumn))
         {
@@ -202,7 +202,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                             aCol = xColAccess->getByName(sLastNameColumn);
                             aCol >>= xColumn;
                             ::rtl::OUString sLastNameColumnValue = xColumn->getString();
-                            bNoValue = !sLastNameColumnValue.getLength();
+                            bNoValue = sLastNameColumnValue.isEmpty();
                         }
                     }
                 }

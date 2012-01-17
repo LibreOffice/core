@@ -841,7 +841,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             if( bOk )
                 pVertOrient->SetVertOrient( nValue );
             //#i8855# text::VertOrientation::NONE is stored as empty string and should be applied here
-            else if(!rValue.getLength())
+            else if(rValue.isEmpty())
             {
                 pVertOrient->SetVertOrient( text::VertOrientation::NONE );
                 bOk = sal_True;

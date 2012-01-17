@@ -818,7 +818,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
     if( pBox == &aLbDbFmtFromUsr )
     {
-        if( aSrch.sColumn.getLength() )
+        if( !aSrch.sColumn.isEmpty() )
         {
             aOldNumFmtLnk.Call( pBox );
             aDBColumns[ nFndPos ]->nUsrNumFmt = aLbDbFmtFromUsr.GetFormat();
@@ -829,7 +829,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
         // set the selected FieldName at the FormatGroupBox, so that
         // it's clear what field is configured by the format!
         String sTxt( aFlFormat.GetText().Copy( 0, nGBFmtLen ));
-        if( !aSrch.sColumn.getLength() )
+        if( aSrch.sColumn.isEmpty() )
         {
             aRbDbFmtFromDb.Enable( sal_False );
             aRbDbFmtFromUsr.Enable( sal_False );

@@ -249,7 +249,7 @@ SwSrcView::~SwSrcView()
     ::rtl::OUString url = xDocProps->getAutoloadURL();
     sal_Int32 delay = xDocProps->getAutoloadSecs();
     pDocShell->SetAutoLoad(INetURLObject(url), delay,
-                            (delay != 0) || url.getLength());
+                            (delay != 0) || !url.isEmpty());
     EndListening(*pDocShell);
     delete pSearchItem;
 }

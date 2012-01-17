@@ -1195,7 +1195,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     rHTMLWrt.Strm() << '>';
 
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     if( rHTMLWrt.aINetFmts.Count() )
@@ -1488,7 +1488,7 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, HTML_FRMOPTS_SPACER );
 
     rWrt.Strm() << '>';
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
@@ -1553,7 +1553,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
 
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
@@ -1733,7 +1733,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Wo ist der Start-Node" );
 
-    if( !bHeader && aSpacer.getLength() )
+    if( !bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), aSpacer.getStr() );
@@ -1754,7 +1754,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
-    if( bHeader && aSpacer.getLength() )
+    if( bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), aSpacer.getStr() );

@@ -257,7 +257,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
                 {
                     m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
                     pUserData->sURL = lcl_getFlatURL( xSourceProperties );
-                    bEnableEdit = pUserData->sURL.getLength() > 0 &&
+                    bEnableEdit = !pUserData->sURL.isEmpty() &&
                         SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                         !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
                 }
@@ -324,7 +324,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
                 ::rtl::OUString sQuery;
                 xRowProperties->getPropertyValue(C2U("ActiveCommand"))>>= sQuery;
                 xComposer->setQuery(sQuery);
-                if(pUserData->sFilter.getLength())
+                if(!pUserData->sFilter.isEmpty())
                     xComposer->setFilter(pUserData->sFilter);
                 aFirst.Value <<= xComposer;
 
@@ -458,7 +458,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 {
     SvLBoxEntry* pEntry = m_aListLB.FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : 0;
-    if(pUserData && pUserData->sURL.getLength())
+    if(pUserData && !pUserData->sURL.isEmpty())
     {
         if(pUserData->xResultSet.is())
         {
@@ -543,7 +543,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
         if(sTable == pThis->m_sConnecting)
            pThis->m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
     }
-    pThis->m_aEditPB.Enable(pUserData && pUserData->sURL.getLength() &&
+    pThis->m_aEditPB.Enable(pUserData && !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
     pThis->m_bInSelectHdl = false;
@@ -622,7 +622,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
                 }
             }
         }
-        if ( m_aDBData.sCommand.getLength() )
+        if ( !m_aDBData.sCommand.isEmpty() )
         {
             uno::Reference<beans::XPropertySet> xSourceProperties;
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;

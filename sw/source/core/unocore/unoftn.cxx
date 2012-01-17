@@ -335,7 +335,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pNewDoc->DeleteAndJoin(aPam);
     aPam.DeleteMark();
     SwFmtFtn aFootNote(m_pImpl->m_bIsEndnote);
-    if (m_pImpl->m_sLabel.getLength())
+    if (!m_pImpl->m_sLabel.isEmpty())
     {
         aFootNote.SetNumStr(m_pImpl->m_sLabel);
     }

@@ -77,7 +77,7 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
     sColumn(rNam),
     nRefCnt(0)
 {
-    if(aDBData.sDataSource.getLength() || aDBData.sCommand.getLength())
+    if(!aDBData.sDataSource.isEmpty() || !aDBData.sCommand.isEmpty())
     {
         sName =  aDBData.sDataSource;
         sName += DB_DELIM;
@@ -497,7 +497,7 @@ SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, s
 SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
 {
     SwDBData aRet;
-    if(aDBData.sDataSource.getLength())
+    if(!aDBData.sDataSource.isEmpty())
         aRet = aDBData;
     else
         aRet = pDoc->GetDBData();
@@ -514,7 +514,7 @@ void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 String SwDBNameInfField::GetFieldName() const
 {
     String sStr( SwField::GetFieldName() );
-    if (aDBData.sDataSource.getLength())
+    if (!aDBData.sDataSource.isEmpty())
     {
         sStr += ':';
         sStr += String(aDBData.sDataSource);

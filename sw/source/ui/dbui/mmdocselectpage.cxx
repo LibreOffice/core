@@ -188,15 +188,15 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageRea
         ::rtl::OUString sReloadDocument;
         bReturn = m_aCurrentDocRB.IsChecked() ||
                 m_aNewDocRB.IsChecked() ||
-                ((sReloadDocument = m_sLoadFileName).getLength() && m_aLoadDocRB.IsChecked() )||
-                ((sReloadDocument = m_sLoadTemplateName).getLength() && m_aLoadTemplateRB.IsChecked())||
-                (m_aRecentDocRB.IsChecked() && (sReloadDocument = m_aRecentDocLB.GetSelectEntry()).getLength());
+                (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_aLoadDocRB.IsChecked() )||
+                (!(sReloadDocument = m_sLoadTemplateName).isEmpty() && m_aLoadTemplateRB.IsChecked())||
+                (m_aRecentDocRB.IsChecked() && !(sReloadDocument = m_aRecentDocLB.GetSelectEntry()).isEmpty());
         if( _eReason == ::svt::WizardTypes::eValidate )
             m_pWizard->SetDocumentLoad(!m_aCurrentDocRB.IsChecked());
 
         if(bNext && !m_aCurrentDocRB.IsChecked())
         {
-            if(sReloadDocument.getLength())
+            if(!sReloadDocument.isEmpty())
                 m_pWizard->SetReloadDocument( sReloadDocument );
             m_pWizard->SetRestartPage(MM_OUTPUTTYPETPAGE);
             m_pWizard->EndDialog(RET_LOAD_DOC);

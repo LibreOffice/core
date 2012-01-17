@@ -1102,7 +1102,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 {
     // String ersetzen ?? (nur wenn Text angegeben oder nicht attributiert
     //                      gesucht wird)
-    sal_Bool bReplaceTxt = pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
+    sal_Bool bReplaceTxt = pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
                                     !pSet->Count() );
     sal_Bool bReplaceAttr = pReplSet && pReplSet->Count();
     sal_Bool bMoveFirst = !bReplaceAttr;
@@ -1245,7 +1245,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
 int SwFindParaAttr::IsReplaceMode() const
 {
-    return ( pSearchOpt && pSearchOpt->replaceString.getLength() ) ||
+    return ( pSearchOpt && !pSearchOpt->replaceString.isEmpty() ) ||
            ( pReplSet && pReplSet->Count() );
 }
 
@@ -1262,7 +1262,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    sal_Bool bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
+    sal_Bool bReplace = ( pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
     bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;

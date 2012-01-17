@@ -321,7 +321,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         ::rtl::OUString aUIName;
                         xInfo->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")) ) >>= aUIName;
-                        if ( aUIName.getLength() )
+                        if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
                     catch (const uno::Exception&)

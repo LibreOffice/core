@@ -344,18 +344,18 @@ void RtfExport::DoFormText(const SwInputField* pFld )
     ::rtl::OUString sStatus = pFld->GetToolTip();
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST "{ FORMTEXT }");
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD " {" OOO_STRING_SVTOOLS_RTF_FFTYPE "0" );
-    if( sHelp.getLength() )
+    if( !sHelp.isEmpty() )
         m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNHELP );
-    if( sStatus.getLength() )
+    if( !sStatus.isEmpty() )
         m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNSTAT );
     m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0" );
 
-    if( sName.getLength() )
+    if( !sName.isEmpty() )
         m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( OutString( sName, eDefaultEncoding )).append( "}" );
-    if( sHelp.getLength() )
+    if( !sHelp.isEmpty() )
         m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append( OutString( sHelp, eDefaultEncoding )).append( "}" );
     m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append( OutString( sResult, eDefaultEncoding )).append( "}" );
-    if( sStatus.getLength() )
+    if( !sStatus.isEmpty() )
         m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append( OutString( sStatus, eDefaultEncoding )).append( "}");
     m_pAttrOutput->RunText().append( "}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " " );
     m_pAttrOutput->RunText().append( OutString( sResult, eDefaultEncoding )).append( "}}" );

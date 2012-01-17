@@ -227,7 +227,7 @@ SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
 {
     ::rtl::OUString sEntry = pEdit->GetText();
-    sal_Bool bFound = sEntry.getLength() ? sal_False : sal_True;
+    sal_Bool bFound = sEntry.isEmpty();
 
     if(!bFound)
     {

@@ -87,7 +87,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 {
     // get the private profile string
     rtl::OUString sValue;
-    if(maFileName.getLength())
+    if(!maFileName.isEmpty())
     {
         // get key/value from a file
         Config aCfg( maFileName );
@@ -133,7 +133,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
     // set the private profile string
     rtl::OUString aValue;
     value >>= aValue;
-    if(maFileName.getLength())
+    if(!maFileName.isEmpty())
     {
         // set value into a file
         Config aCfg( maFileName );
@@ -251,7 +251,7 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
     // FIXME: need to detect whether it is a relative file path
     // we need to detect if this is a URL, if not then assume its a file path
     rtl::OUString sFileUrl;
-    if( rFilename.getLength() )
+    if( !rFilename.isEmpty() )
     {
         INetURLObject aObj;
         aObj.SetURL( rFilename );

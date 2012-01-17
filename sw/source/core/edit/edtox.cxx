@@ -387,7 +387,7 @@ void SwEditShell::ApplyAutoMark()
             // ; -> delimiter between entries ->
             // Format: TextToSearchFor;AlternativeString;PrimaryKey;SecondaryKey;CaseSensitive;WordOnly
             // Leading and trailing blanks are ignored
-            if( aRdLine.getLength() && '#' != aRdLine[0] )
+            if( !aRdLine.isEmpty() && '#' != aRdLine[0] )
             {
                 String sLine( aRdLine, eChrSet );
 

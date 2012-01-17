@@ -1380,7 +1380,7 @@ void SwDoc::CalculatePagesForPrinting(
 
         // please note
     }
-    if (aPageRange.getLength() == 0)    // empty string -> print all
+    if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
         aPageRange = OUString::valueOf( (sal_Int32)1 );
@@ -1552,7 +1552,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
     if (nContent == 1)
         aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
-    if (aPageRange.getLength() == 0)    // empty string -> print all
+    if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
         aPageRange = OUString::valueOf( (sal_Int32)1 );

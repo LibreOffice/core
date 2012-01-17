@@ -248,7 +248,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         else
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ) );
 
-        if( aName.getLength() )
+        if( !aName.isEmpty() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
             xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
@@ -365,7 +365,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if ( xModule.is() )
             {
                 ::rtl::OUString aModuleID = xModule->getIdentifier();
-                bStoreMeta = ( aModuleID.getLength()
+                bStoreMeta = ( !aModuleID.isEmpty()
                   && ( aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FormDesign" ) ) )
                     || aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TextReportDesign" ) ) ) ) );
             }

@@ -380,7 +380,7 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
             bNo = sal_True;                 // Diese(n) Funktion/Typ entfernen
             aTok = aTok.copy(1);
         }
-        if( aTok.getLength() )
+        if( !aTok.isEmpty() )
         {
             sal_uLong nVal;
             sscanf( aTok.getStr(), "%li", &nVal );
@@ -442,14 +442,14 @@ void SwImplProtocol::FileInit()
             if( '\n' == c || '\r' == c )    // Zeilenende
             {
                 aLine = aLine.trim();
-                if( aLine.getLength() )
+                if( !aLine.isEmpty() )
                     CheckLine( aLine );     // Zeile auswerten
                 aLine = rtl::OString();
             }
             else
                 aLine = rtl::OString(c);
         }
-        if( aLine.getLength() )
+        if( !aLine.isEmpty() )
             CheckLine( aLine );     // letzte Zeile auswerten
     }
     aStream.Close();

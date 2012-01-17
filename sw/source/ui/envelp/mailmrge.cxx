@@ -452,7 +452,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                     break;
                 }
             }
-            if( sUIName2.getLength() )
+            if( !sUIName2.isEmpty() )
             {
                 sal_uInt16 nFilter = aFilterLB.InsertEntry( sUIName2 );
                 if( 0 == sFilter.compareToAscii("writer8") )

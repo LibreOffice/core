@@ -287,7 +287,7 @@ bool lcl_getCellRangeAddressFromXMLString(
                                                        sTableSecondName );
         }
         if( bResult &&
-            sTableSecondName.getLength() &&
+            !sTableSecondName.isEmpty() &&
             ! sTableSecondName.equals( rOutRange.aTableName ))
             bResult = false;
     }
@@ -364,7 +364,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 
     ::rtl::OUStringBuffer aBuffer;
 
-    if( (rRange.aTableName).getLength())
+    if( !rRange.aTableName.isEmpty())
     {
         bool bNeedsEscaping = ( rRange.aTableName.indexOf( aQuote ) > -1 );
         bool bNeedsQuoting = bNeedsEscaping || ( rRange.aTableName.indexOf( aSpace ) > -1 );

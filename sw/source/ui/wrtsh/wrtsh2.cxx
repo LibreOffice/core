@@ -153,7 +153,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
-    if(pWindowState && pWindowState->getLength())
+    if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     sal_Bool bRet = RET_CANCEL == pDlg->Execute();
     if(pWindowState)
@@ -171,7 +171,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, rt
 
     AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
-    if(pWindowState && pWindowState->getLength())
+    if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     sal_uInt16 nRet = pDlg->Execute();
     if(pWindowState)

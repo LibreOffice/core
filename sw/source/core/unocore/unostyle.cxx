@@ -380,7 +380,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     sal_Bool    bLoadStyleOverwrite = sal_True;
     sal_Bool    bLoadStyleNumbering = sal_True;
     sal_Bool    bLoadStyleFrame = sal_True;
-    if(IsValid() && rURL.getLength())
+    if(IsValid() && !rURL.isEmpty())
     {
         const uno::Any* pVal;
         int nCount = aOptions.getLength();
@@ -1974,7 +1974,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             OUString sName;
             rValue >>= sName;
-            SwRegisterItem aReg( sName.getLength() != 0);
+            SwRegisterItem aReg( !sName.isEmpty() );
             aReg.SetWhich(SID_SWREGISTER_MODE);
             rBase.GetItemSet().Put(aReg);
             String aString;
@@ -2000,7 +2000,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwStyleNameMapper::FillUIName(sTmp, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                     pRuby->SetCharFmtName( sTmp );
                     pRuby->SetCharFmtId( 0 );
-                    if(sTmp.getLength())
+                    if(!sTmp.isEmpty())
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
                         pRuby->SetCharFmtId(nId);
@@ -2063,7 +2063,7 @@ put_itemset:
                 OUString sNewNumberingRuleName;
                 rValue >>= sNewNumberingRuleName;
                 String sTmp( sNewNumberingRuleName );
-                if ( sNewNumberingRuleName.getLength() == 0 ||
+                if ( sNewNumberingRuleName.isEmpty() ||
                      sTmp != pDoc->GetOutlineNumRule()->GetName() )
                 {
                     rBase.mxNewBase->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();

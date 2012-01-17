@@ -201,10 +201,10 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
     if(!pSh)
         pSh = ::GetActiveWrtShell();
 
-    if (!aData.sDataSource.getLength())
+    if (aData.sDataSource.isEmpty())
         aData = pSh->GetDBData();
 
-    if(aData.sDataSource.getLength())       // without database no new field command
+    if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());

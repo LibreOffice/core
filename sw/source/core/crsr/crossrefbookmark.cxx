@@ -47,7 +47,7 @@ namespace sw { namespace mark
                 "<CrossRefBookmark::CrossRefBookmark(..)>"
                 "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
         SetMarkPos(*rPaM.Start());
-        if(!rName.getLength())
+        if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);
     }
 

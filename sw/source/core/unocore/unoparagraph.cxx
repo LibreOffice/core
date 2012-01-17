@@ -331,7 +331,7 @@ SwXParagraph::attachToText(SwXText & rParent, SwTxtNode & rTxtNode)
         rTxtNode.Add(m_pImpl.get());
         rTxtNode.SetXParagraph(uno::Reference<text::XTextContent>(this));
         m_pImpl->m_xParentText = &rParent;
-        if (m_pImpl->m_sText.getLength())
+        if (!m_pImpl->m_sText.isEmpty())
         {
             try { setString(m_pImpl->m_sText); }
             catch(...){}

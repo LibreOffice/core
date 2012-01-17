@@ -1925,7 +1925,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     {
                         // #i93725#
                         // do not accept "empty" font
-                        if ( pDesc->Name.getLength() > 0 )
+                        if ( !pDesc->Name.isEmpty() )
                         {
                             Font aFont;
                             SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );

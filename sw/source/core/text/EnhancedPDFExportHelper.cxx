@@ -1519,7 +1519,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
       mbSkipEmptyPages( bSkipEmptyPages ),
       mbEditEngineOnly( bEditEngineOnly )
 {
-    if ( rPageRange.getLength() )
+    if ( !rPageRange.isEmpty() )
         mpRangeEnum = new StringRangeEnumerator( rPageRange, 0, mrSh.GetPageCount()-1 );
 
     if ( mbSkipEmptyPages )

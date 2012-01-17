@@ -1524,7 +1524,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     else
         ((SwDBNumSetField&)rDBFld).SetCondValid( bPar1 );
 
-    if( rDBFld.GetRealDBData().sDataSource.getLength() )
+    if( !rDBFld.GetRealDBData().sDataSource.isEmpty() )
     {
         // Edit a certain database
         if( RES_DBNEXTSETFLD == nFldType )
@@ -1606,10 +1606,10 @@ SwDBData SwDoc::GetDBData()
 
 const SwDBData& SwDoc::GetDBDesc()
 {
-    if(!aDBData.sDataSource.getLength())
+    if(aDBData.sDataSource.isEmpty())
     {
         const sal_uInt16 nSize = pFldTypes->Count();
-        for(sal_uInt16 i = 0; i < nSize && !aDBData.sDataSource.getLength(); ++i)
+        for(sal_uInt16 i = 0; i < nSize && aDBData.sDataSource.isEmpty(); ++i)
         {
             SwFieldType& rFldType = *((*pFldTypes)[i]);
             sal_uInt16 nWhich = rFldType.Which();
@@ -1642,7 +1642,7 @@ const SwDBData& SwDoc::GetDBDesc()
             }
         }
     }
-    if(!aDBData.sDataSource.getLength())
+    if(aDBData.sDataSource.isEmpty())
         aDBData = GetNewDBMgr()->GetAddressDBName();
     return aDBData;
 }

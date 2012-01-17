@@ -707,7 +707,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
         if ( bBuiltin )
         {
             rtl::OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
-            if ( sCommand.getLength() > 0 )
+            if ( !sCommand.isEmpty() )
             {
                 beans::PropertyValue aProp;
 

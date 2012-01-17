@@ -1404,7 +1404,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pCursor->MovePara( fnParaCurr, fnParaEnd );
     m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
 
-    if (rText.getLength())
+    if (!rText.isEmpty())
     {
         const xub_StrLen nContentPos = pCursor->GetPoint()->nContent.GetIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(

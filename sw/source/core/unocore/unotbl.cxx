@@ -709,7 +709,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
 double lcl_getValue( SwXCell &rCell )
 {
     double fRet;
-    if(rCell.IsValid() && rCell.getString().getLength()!=0)
+    if(rCell.IsValid() && !rCell.getString().isEmpty())
         fRet = rCell.pBox->GetFrmFmt()->GetTblBoxValue().GetValue();
     else
         ::rtl::math::setNan( &fRet );

@@ -258,12 +258,12 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 
     m_pDocumentFS->singleElementNS( XML_w, XML_enabled, FSEND );
 
-    if ( rHelp.getLength( ) > 0 )
+    if ( !rHelp.isEmpty() )
         m_pDocumentFS->singleElementNS( XML_w, XML_helpText,
             FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
-    if ( rToolTip.getLength( ) > 0 )
+    if ( !rToolTip.isEmpty() )
         m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
             FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );

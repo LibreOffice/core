@@ -833,7 +833,7 @@ namespace sw { namespace mark
 
     ::rtl::OUString MarkManager::getUniqueMarkName(const ::rtl::OUString& rName) const
     {
-        OSL_ENSURE(rName.getLength(),
+        OSL_ENSURE(!rName.isEmpty(),
             "<MarkManager::getUniqueMarkName(..)>"
             " - a name should be proposed");
         if(!hasMark(rName)) return rName;

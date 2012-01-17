@@ -1087,7 +1087,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         m_Text = aOldTxt;
     }
 
-    return rArgs.aConvText.getLength() ? 1 : 0;
+    return rArgs.aConvText.isEmpty() ? 0 : 1;
 }
 
 // Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
@@ -1828,7 +1828,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
     const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
 
-    if ( aExpandText.getLength() <= 0 )
+    if ( aExpandText.isEmpty() )
     {
         OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
         return;

@@ -638,7 +638,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // get sub-ranges and check that they all are from the very same table
     sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
 
-    if (!bOk && pDoc && aChartOleObjectName.getLength() )
+    if (!bOk && pDoc && !aChartOleObjectName.isEmpty() )
     {
         //try to correct the range here
         //work around wrong writer ranges ( see Issue 58464 )
@@ -667,7 +667,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             //thus the first row is missing and an invalid row at the end is added.
             //Therefore we need to shift the range one row up
             SwRangeDescriptor aDesc;
-            if (aRangeRepresentation.getLength() == 0)
+            if (aRangeRepresentation.isEmpty())
                 return xRes;        // we cant handle this thus returning an empty references
             aRangeRepresentation = aRangeRepresentation.copy( 1 );    // get rid of '.' to have only the cell range left
             FillRangeDescriptor( aDesc, aRangeRepresentation );
@@ -1336,7 +1336,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     OUString aSortedCellRanges;
     for (sal_Int32 i = 0;  i < nSortedRanges;  ++i)
     {
-        if (aSortedCellRanges.getLength())
+        if (!aSortedCellRanges.isEmpty())
             aSortedCellRanges += OUString::valueOf( (sal_Unicode) ';');
         aSortedCellRanges += pSortedRanges[i];
     }
@@ -1376,7 +1376,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     if (nLabelSeqLen > 0) // == 0 means no label sequence in use
         bFirstCellIsLabel = sal_True;
     //
-    OSL_ENSURE( aSortedCellRanges.getLength(), "CellRangeRepresentation missing" );
+    OSL_ENSURE( !aSortedCellRanges.isEmpty(), "CellRangeRepresentation missing" );
     OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
     //
     aResult.realloc(5);
@@ -1385,7 +1385,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     aResult[nProps++].Value <<= bFirstCellIsLabel;
     aResult[nProps  ].Name = C2U("CellRangeRepresentation");
     aResult[nProps++].Value <<= aSortedCellRanges;
-    if (0 != aBrokenCellRangeForExport.getLength())
+    if (!aBrokenCellRangeForExport.isEmpty())
     {
         aResult[nProps  ].Name = C2U("BrokenCellRangeForExport");
         aResult[nProps++].Value <<= aBrokenCellRangeForExport;
@@ -1857,7 +1857,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
         XMLRangeHelper::CellRange aCellRange( XMLRangeHelper::getCellRangeFromXMLString( aRange ));
 
         // check that there is only one table used in all ranges
-        if (aFirstFoundTable.getLength() == 0)
+        if (aFirstFoundTable.isEmpty())
             aFirstFoundTable = aCellRange.aTableName;
         if (aCellRange.aTableName != aFirstFoundTable)
             throw lang::IllegalArgumentException();

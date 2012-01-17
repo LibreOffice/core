@@ -271,7 +271,7 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
 sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
    ::rtl::OUString sURL = aURLED.GetText();
-   if(sURL.getLength())
+   if(!sURL.isEmpty())
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
         // #i100683# file URLs should be normalized in the UI

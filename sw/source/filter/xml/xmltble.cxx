@@ -836,7 +836,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                 // if this cell has a formula, export it
                 //     (with value and number format)
-                if (sCellFormula.getLength()>0)
+                if (!sCellFormula.isEmpty())
                 {
                     OUString sQValue =
                         GetNamespaceMap().GetQNameByKey(
@@ -860,7 +860,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                         AddAttribute( XML_NAMESPACE_OFFICE,
                                     XML_VALUE_TYPE, XML_STRING );
                     }
-                    else if ( (-1 != nNumberFormat) && (xText->getString().getLength() > 0) )
+                    else if ( (-1 != nNumberFormat) && !xText->getString().isEmpty() )
                     {
                         // number format key:
                         // (export values only if cell contains text;)

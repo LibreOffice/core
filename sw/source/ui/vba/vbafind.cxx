@@ -84,7 +84,7 @@ void SwVbaFind::SetReplace( sal_Int32 type )
 uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xFoundOne;
-    if( mxTVC->getString().getLength() > 0 )
+    if( !mxTVC->getString().isEmpty() )
     {
         if( getForward() )
         {

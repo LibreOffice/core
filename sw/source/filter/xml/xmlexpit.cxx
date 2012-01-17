@@ -169,7 +169,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
-                if( sPrefix.getLength() )
+                if( !sPrefix.isEmpty() )
                 {
                     OUString sNamespace( pUnknown->GetAttrNamespace( i ) );
 

@@ -503,14 +503,14 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else if (rName.equalsAscii( GetPropName( UNO_NAME_DOCUMENT_URL ) ))
         {
             bOK = rValue >>= aCurDocumentURL;
-            if (aCurDocumentURL.getLength()
+            if (!aCurDocumentURL.isEmpty()
                 && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, sal_False ))
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aCurDocumentURL, static_cast < cppu::OWeakObject * > ( this ) );
         }
         else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_URL ) ))
         {
             bOK = rValue >>= aCurOutputURL;
-            if (aCurOutputURL.getLength())
+            if (!aCurOutputURL.isEmpty())
             {
                 if (!UCB_IsDirectory(aCurOutputURL))
                     throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "URL does not point to a directory: " ) ) + aCurOutputURL, static_cast < cppu::OWeakObject * > ( this ), 0 );
@@ -625,13 +625,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // and thus avoiding the SelectShell call in Writers GetState function
     // while still in Update of Sfx.
     // (GetSelection in Update is not allowed)
-    if (aCurDocumentURL.getLength())
+    if (!aCurDocumentURL.isEmpty())
         pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
     SharedComponent aRowSetDisposeHelper;
     if (!xCurResultSet.is())
     {
-        if (!aCurDataSourceName.getLength() || !aCurDataCommand.getLength() )
+        if (aCurDataSourceName.isEmpty() || aCurDataCommand.isEmpty() )
         {
             OSL_FAIL("PropertyValues missing or unset");
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Either the ResultSet or DataSourceName and DataCommand must be set." ) ), static_cast < cppu::OWeakObject * > ( this ), 0 );
@@ -717,14 +717,14 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         INetURLObject aURLObj;
         aURLObj.SetSmartProtocol( INET_PROT_FILE );
 
-        if (aCurDocumentURL.getLength())
+        if (!aCurDocumentURL.isEmpty())
         {
             // if OutputURL or FileNamePrefix are missing get
             // them from DocumentURL
             aURLObj.SetSmartURL( aCurDocumentURL );
-            if (!aCurFileNamePrefix.getLength())
+            if (aCurFileNamePrefix.isEmpty())
                 aCurFileNamePrefix = aURLObj.GetBase(); // filename without extension
-            if (!aCurOutputURL.getLength())
+            if (aCurOutputURL.isEmpty())
             {
                 aURLObj.removeSegment();
                 aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
@@ -732,7 +732,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
         else    // default empty document without URL
         {
-            if (!aCurOutputURL.getLength())
+            if (aCurOutputURL.isEmpty())
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OutputURL is not set and can not be obtained." ) ), static_cast < cppu::OWeakObject * > ( this ) );
         }
 
@@ -761,7 +761,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else
         {
             pMgr->SetEMailColumn( sAddressFromColumn );
-            if(!sAddressFromColumn.getLength())
+            if(sAddressFromColumn.isEmpty())
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Mail address column not set." ) ), static_cast < cppu::OWeakObject * > ( this ) );
             aMergeDesc.sSaveToFilter     = sAttachmentFilter;
             aMergeDesc.sSubject          = sSubject;
@@ -951,7 +951,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             {
                 OUString aText;
                 bOK = rValue >>= aText;
-                if (aText.getLength()
+                if (!aText.isEmpty()
                     && !LoadFromURL_impl( xModel, xDocSh, aText, sal_True ))
                     throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aText, static_cast < cppu::OWeakObject * > ( this ) );
                 aDocumentURL = aText;
@@ -960,7 +960,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             {
                 OUString aText;
                 bOK = rValue >>= aText;
-                if (aText.getLength())
+                if (!aText.isEmpty())
                 {
                     if (!UCB_IsDirectory(aText))
                         throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "URL does not point to a directory: " ) ) + aText, static_cast < cppu::OWeakObject * > ( this ), 0 );

@@ -786,9 +786,9 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     uno::Reference < io::XStream > xStream;
     uno::Reference < io::XInputStream > xInputStream;
 
-    if( !sFileName.getLength() )
+    if( sFileName.isEmpty() )
         aMediaDescriptor[comphelper::MediaDescriptor::PROP_URL()] >>= sFileName;
-    if( !sFileName.getLength() )
+    if( sFileName.isEmpty() )
         aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILENAME()] >>= sFileName;
     aMediaDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
     aMediaDescriptor[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
@@ -800,7 +800,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     if ( !xInputStream.is() && xStream.is() )
         xInputStream = xStream->getInputStream();
 
-    if(!pDocSh || (!sFileName.getLength() && !xInputStream.is()))
+    if(!pDocSh || (sFileName.isEmpty() && !xInputStream.is()))
         return;
 
     SfxObjectFactory& rFact = pDocSh->GetFactory();
@@ -833,7 +833,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             pMed = xReadStorage.is() ?
                 new SfxMedium(xReadStorage, sBaseURL, 0 ) :
                 new SfxMedium(sFileName, STREAM_READ, sal_True, 0, 0 );
-        if( sBaseURL.getLength() )
+        if( !sBaseURL.isEmpty() )
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
@@ -864,9 +864,9 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
                     pMed = new SfxMedium(sFileName, STREAM_READ, sal_True, pFilter, 0);
             }
         }
-        if(sFilterOptions.getLength())
+        if(!sFilterOptions.isEmpty())
             pMed->GetItemSet()->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );
-        if( sBaseURL.getLength())
+        if(!sBaseURL.isEmpty())
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
     }
 
@@ -883,7 +883,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, sal_True));
-        if(sPassword.getLength())
+        if(!sPassword.isEmpty())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
         Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, 0, pUnoCrsr);
         if( pRead )
@@ -954,7 +954,7 @@ sal_Bool DocInsertStringSplitCR(
     {
         OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
-        if (aTxt.getLength() &&
+        if (!aTxt.isEmpty() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
             OSL_FAIL( "Doc->Insert(Str) failed." );
@@ -969,7 +969,7 @@ sal_Bool DocInsertStringSplitCR(
         nIdx = rText.Search( '\r', nStartIdx );
     }
     aTxt = rText.Copy( nStartIdx );
-    if (aTxt.getLength() &&
+    if (!aTxt.isEmpty() &&
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
         OSL_FAIL( "Doc->Insert(Str) failed." );

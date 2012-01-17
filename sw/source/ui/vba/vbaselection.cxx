@@ -924,7 +924,7 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index ) throw (uno::Runt
     uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
     SwVbaTableHelper aTableHelper( xTextTable );
     nStartRow = aTableHelper.getTabRowIndex( sTLName );
-    if( sBRName.getLength() > 0 )
+    if( !sBRName.isEmpty() )
     {
         nEndRow = aTableHelper.getTabRowIndex( sBRName );
     }
@@ -950,7 +950,7 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index ) throw (uno::R
     uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
     SwVbaTableHelper aTableHelper( xTextTable );
     nStartColumn = aTableHelper.getTabColIndex( sTLName );
-    if( sBRName.getLength() > 0 )
+    if( !sBRName.isEmpty() )
     {
         nEndColumn = aTableHelper.getTabColIndex( sBRName );
     }
@@ -1009,7 +1009,7 @@ void SwVbaSelection::GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString
             sBRName = sRange.GetToken(1, ':');
         }
     }
-    if( !sTLName.getLength() )
+    if( sTLName.isEmpty() )
     {
         uno::Reference< table::XCell > xCell;
         xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cell") ) ) >>= xCell;
@@ -1036,7 +1036,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::Run
     SwVbaTableHelper aTableHelper( xTextTable );
     nLeft = aTableHelper.getTabColIndex( sTLName );
     nTop = aTableHelper.getTabRowIndex( sTLName );
-    if( sBRName.getLength() > 0 )
+    if( !sBRName.isEmpty() )
     {
         nRight = aTableHelper.getTabColIndex( sBRName );
         nBottom = aTableHelper.getTabRowIndex( sBRName );

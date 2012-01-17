@@ -220,14 +220,14 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
                         // Label
                         aTmp = xPropSet->getPropertyValue( C2U("Label") );
                         OUString uTmp;
-                        if( (aTmp >>= uTmp) && uTmp.getLength())
+                        if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
                             rDescr = String(uTmp);
                         }
 
                         // util::URL
                         aTmp = xPropSet->getPropertyValue( C2U("TargetURL") );
-                        if( (aTmp >>= uTmp) && uTmp.getLength())
+                        if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
                             rURL = String(uTmp);
                         }

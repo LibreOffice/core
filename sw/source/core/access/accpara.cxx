@@ -817,7 +817,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
     osl::MutexGuard aGuard2( aMutex );
-    if( !sDesc.getLength() )
+    if( sDesc.isEmpty() )
         sDesc = GetDescription();
 
     return sDesc;

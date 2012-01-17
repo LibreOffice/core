@@ -345,7 +345,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     if ( rMergeDesc.rDescriptor.has(daConnection) )
         rMergeDesc.rDescriptor[daConnection] >>= xConnection;
 
-    if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
+    if(aData.sDataSource.isEmpty() || aData.sCommand.isEmpty() || !xResSet.is())
     {
         return sal_False;
     }
@@ -621,7 +621,7 @@ sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     else
     {
         rtl::OUString sDBName(rDBName);
-        if ( sDBName.getLength() )
+        if ( !sDBName.isEmpty() )
             xConnection = RegisterConnection( sDBName );
     }
     if(xConnection.is())
@@ -2411,7 +2411,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     if ( aDescriptor.has(daConnection) )
         aDescriptor[daConnection] >>= xConnection;
 
-    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
+    if(sDataSource.isEmpty() || sDataTableOrQuery.isEmpty())
     {
         OSL_FAIL("PropertyValues missing or unset");
         return;
@@ -2574,7 +2574,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
             pValues[nPos].Value >>= xConnection;
     }
-    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    if(sDataSource.isEmpty() || sDataTableOrQuery.isEmpty() || !xResSet.is())
     {
         OSL_FAIL("PropertyValues missing or unset");
         return;

@@ -240,7 +240,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     OUString aObjName( rHRef.copy( nPos+1) );
 
-    if( !aObjName.getLength() )
+    if( aObjName.isEmpty() )
         return xPropSet;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
@@ -378,7 +378,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     if( pDoc->GetDrawModel() )
         SwXFrame::GetOrCreateSdrObject(
                 static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
-    if( rTblName.getLength() )
+    if( !rTblName.isEmpty() )
     {
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
@@ -457,7 +457,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     sal_Int64 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
     sal_Bool bHasSizeProps = sal_False;
-    if( rStyleName.getLength() )
+    if( !rStyleName.isEmpty() )
     {
         pStyle = FindAutoFrameStyle( rStyleName );
         if( pStyle )
@@ -569,7 +569,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     // We'll need a (valid) URL. If we don't have do not insert the link and return early.
     // Copy URL into URL oject on the way.
        INetURLObject aURLObj;
-    bool bValidURL = rHRef.getLength() != 0 &&
+    bool bValidURL = !rHRef.isEmpty() &&
                      aURLObj.SetURL( URIHelper::SmartRel2Abs(
                                 INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
     if( !bValidURL )
@@ -654,7 +654,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SwApplet_Impl aAppletImpl ( aItemSet );
 
     String sCodeBase;
-    if( rHRef.getLength() )
+    if( !rHRef.isEmpty() )
         sCodeBase = GetXMLImport().GetAbsoluteReference( rHRef );
 
     aAppletImpl.CreateApplet ( rCode, rName, bMayScript, sCodeBase, GetXMLImport().GetDocumentBase() );
@@ -701,9 +701,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     // on the way.
        INetURLObject aURLObj;
 
-    bool bValidURL = rHRef.getLength() != 0 &&
+    bool bValidURL = !rHRef.isEmpty() &&
                      aURLObj.SetURL( URIHelper::SmartRel2Abs( INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
-    bool bValidMimeType = rMimeType.getLength() != 0;
+    bool bValidMimeType = !rMimeType.isEmpty();
     if( !bValidURL && !bValidMimeType )
         return xPropSet;
 
@@ -783,7 +783,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     sal_Bool bIsBorderSet = sal_False;
     Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
     const XMLPropStyleContext *pStyle = 0;
-    if( rStyleName.getLength() )
+    if( !rStyleName.isEmpty() )
     {
         pStyle = FindAutoFrameStyle( rStyleName );
         if( pStyle )
@@ -1029,7 +1029,7 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     sal_Bool bStart)
 {
     OUString rId = GetOpenRedlineId();
-    if ((NULL != pRedlineHelper) && (rId.getLength() > 0))
+    if ((NULL != pRedlineHelper) && !rId.isEmpty())
     {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
         pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );

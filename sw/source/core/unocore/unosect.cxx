@@ -299,14 +299,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     UnoActionContext aCont(pDoc);
     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
-    if (!m_pImpl->m_sName.getLength())
+    if (m_pImpl->m_sName.isEmpty())
     {
         m_pImpl->m_sName = C2U("TextSection");
     }
     SectionType eType = (m_pImpl->m_pProps->m_bDDE)
         ? DDE_LINK_SECTION
-        : ((m_pImpl->m_pProps->m_sLinkFileName.getLength() ||
-            m_pImpl->m_pProps->m_sSectionRegion.getLength())
+        : ((!m_pImpl->m_pProps->m_sLinkFileName.isEmpty() ||
+            !m_pImpl->m_pProps->m_sSectionRegion.isEmpty())
                 ?  FILE_LINK_SECTION : CONTENT_SECTION);
     // index header section?
     if (m_pImpl->m_bIndexHeader)
@@ -405,7 +405,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     // XML import must hide sections depending on their old
     //         condition status
-    if (m_pImpl->m_pProps->m_sCondition.getLength() != 0)
+    if (!m_pImpl->m_pProps->m_sCondition.isEmpty())
     {
         pRet->SetCondHidden(m_pImpl->m_pProps->m_bCondHidden);
     }
@@ -690,12 +690,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 else
                 {
                     if (pSectionData->GetType() != FILE_LINK_SECTION &&
-                        aLink.FileURL.getLength())
+                        !aLink.FileURL.isEmpty())
                     {
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
                     ::rtl::OUStringBuffer sFileNameBuf;
-                    if (aLink.FileURL.getLength())
+                    if (!aLink.FileURL.isEmpty())
                     {
                         sFileNameBuf.append( URIHelper::SmartRel2Abs(
                             pFmt->GetDoc()->GetDocShell()->GetMedium()
@@ -730,7 +730,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 else
                 {
                     if (pSectionData->GetType() != FILE_LINK_SECTION &&
-                        sLink.getLength())
+                        !sLink.isEmpty())
                     {
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }

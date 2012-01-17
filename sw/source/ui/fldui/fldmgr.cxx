@@ -1087,7 +1087,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                 sPar1 = rData.sPar1.GetToken(3, DB_DELIM);
             }
 
-            if(aDBData.sDataSource.getLength() && pCurShell->GetDBData() != aDBData)
+            if(!aDBData.sDataSource.isEmpty() && pCurShell->GetDBData() != aDBData)
                 pCurShell->ChgDBData(aDBData);
 
             SwDBFieldType* pTyp = (SwDBFieldType*)pCurShell->InsertFldType(
@@ -1146,7 +1146,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                 nPos = 0;
             sPar1 = rData.sPar1.Copy(nPos);
 
-            if (aDBData.sDataSource.getLength() && pCurShell->GetDBData() != aDBData)
+            if (!aDBData.sDataSource.isEmpty() && pCurShell->GetDBData() != aDBData)
                 pCurShell->ChgDBData(aDBData);
 
             switch(rData.nTypeId)
@@ -1671,7 +1671,7 @@ sal_Bool SwFldMgr::ChooseMacro(const String&)
     ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
 
     // the script selector dialog returns a valid script URL
-    if ( aScriptURL.getLength() != 0 )
+    if ( !aScriptURL.isEmpty() )
     {
         SetMacroPath( aScriptURL );
         bRet = sal_True;

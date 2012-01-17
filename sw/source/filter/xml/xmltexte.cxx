@@ -165,7 +165,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     sBuffer.append( GetXMLToken(eFunc) );
                     sBuffer.append( (sal_Unicode)'(' );
                     sBuffer.append( (sal_Unicode)')' );
-                    if( sVal.getLength() )
+                    if( !sVal.isEmpty() )
                     {
                         sBuffer.append( (sal_Unicode)'=' );
                         sBuffer.append( sVal );
@@ -213,7 +213,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     const Reference < XPropertySet >& rPropSet,
     OUString& rURL) const
 {
-    if( !rURL.getLength() )
+    if( rURL.isEmpty() )
         return;
 
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
@@ -473,7 +473,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         pStates++;
     }
 
-    if( sAutoStyle.getLength() )
+    if( !sAutoStyle.isEmpty() )
         rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
     addTextFrameAttributes( rPropSet, sal_False );
 
@@ -561,12 +561,12 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 ::rtl::OUString aStr;
                 Any aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")) );
                 aAny2 >>= aStr;
-                if (aStr.getLength() )
+                if (!aStr.isEmpty() )
                     lcl_addURL(rXMLExport, aStr);
 
                 aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")) );
                 aAny2 >>= aStr;
-                if (aStr.getLength())
+                if (!aStr.isEmpty())
                     rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
                 aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")) );
@@ -612,7 +612,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
                 aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
                 aAny2 >>= aStr;
-                if (aStr.getLength())
+                if (!aStr.isEmpty())
                     rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
                 eElementName = XML_PLUGIN;
             }
@@ -633,7 +633,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
                 aAny2 >>= aStr;
 
-                if (aStr.getLength())
+                if (!aStr.isEmpty())
                     rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
                 eElementName = XML_FLOATING_FRAME;
             }

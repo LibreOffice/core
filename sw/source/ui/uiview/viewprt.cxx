@@ -110,7 +110,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
     {
         if( pIDDA )
             pIDDA->setPrintData( *pAddPrinterAttr );
-        if( pAddPrinterAttr->GetFax().getLength() )
+        if( !pAddPrinterAttr->GetFax().isEmpty() )
             pOpt->SetFaxName(pAddPrinterAttr->GetFax());
     }
 }

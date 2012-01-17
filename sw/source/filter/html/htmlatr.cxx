@@ -341,7 +341,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     // Den Selektor des Formats holen
     sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   nRefPoolId );
-    OSL_ENSURE( nDeep ? aToken.getLength()>0 : aToken.getLength()==0,
+    OSL_ENSURE( nDeep ? !aToken.isEmpty() : aToken.isEmpty(),
             "Hier stimmt doch was mit dem Token nicht!" );
     OSL_ENSURE( nDeep ? nRefPoolId : !nRefPoolId,
             "Hier stimmt doch was mit der Vergleichs-Vorlage nicht!" );
@@ -642,7 +642,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
     sal_uInt16 nToken = 0;          // Token fuer Tag-Wechsel
     sal_Bool bOutNewLine = sal_False;   // nur ein LF ausgeben?
-    if( pFmtInfo->aToken.getLength() )
+    if( !pFmtInfo->aToken.isEmpty() )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
         // solchen abgeleitet
@@ -1117,7 +1117,7 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
     SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
 
     // wenn es kein Token gibt haben wir auch nichts auszugeben
-    if( !rInfo.aToken.getLength() )
+    if( rInfo.aToken.isEmpty() )
     {
         rHWrt.FillNextNumInfo();
         const SwHTMLNumRuleInfo& rNextInfo = *rHWrt.GetNextNumInfo();
@@ -1837,7 +1837,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
 
                 const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
-                if( pFmtInfo->aToken.getLength() )
+                if( !pFmtInfo->aToken.isEmpty() )
                 {
                     // das Zeichenvorlagen-Tag muss vor den harten
                     // Attributen ausgegeben werden
@@ -3230,7 +3230,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     {
         rtl::OStringBuffer sOut;
         sOut.append('<');
-        if( pFmtInfo->aToken.getLength() > 0 )
+        if( !pFmtInfo->aToken.isEmpty() )
             sOut.append(pFmtInfo->aToken);
         else
             sOut.append(OOO_STRING_SVTOOLS_HTML_span);
@@ -3268,7 +3268,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     else
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                pFmtInfo->aToken.getLength() ? pFmtInfo->aToken.getStr()
+                !pFmtInfo->aToken.isEmpty() ? pFmtInfo->aToken.getStr()
                                        : OOO_STRING_SVTOOLS_HTML_span,
                 sal_False );
     }

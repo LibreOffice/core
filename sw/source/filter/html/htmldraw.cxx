@@ -856,7 +856,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_marquee, sal_False );
 
-    if( aEndTags.getLength() )
+    if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;

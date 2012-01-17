@@ -147,7 +147,7 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
     ::rtl::OUStringBuffer buf;
     for (size_t i = 0; i < comments.size(); ++i)
     {
-        OSL_ENSURE(comments[i].getLength(), "no Undo/Redo Text set");
+        OSL_ENSURE(!comments[i].isEmpty(), "no Undo/Redo Text set");
         buf.append(comments[i]);
         buf.append(sal_Unicode('\n'));
     }
@@ -161,7 +161,7 @@ String SwWrtShell::GetRepeatString() const
     ::rtl::OUString str;
     GetRepeatInfo(& str);
 
-    if (str.getLength() == 0)
+    if (str.isEmpty())
     {
         return str;
     }

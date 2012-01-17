@@ -349,7 +349,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
         if ( sName.equals( USER_ENTRY ) )
             sNewEntry = m_sUserEntry;
-        else if ( pObjShell && sName.getLength() > 0 )
+        else if ( pObjShell && !sName.isEmpty() )
         {
             SfxFilterContainer* pFacCont = pObjShell->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter = pFacCont->GetFilter4FilterName( sName );

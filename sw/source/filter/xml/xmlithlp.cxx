@@ -117,7 +117,7 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
     rNamedWidth = USHRT_MAX;
 
     sal_Int32 nTemp;
-    while( aTokens.getNextToken( aToken ) && aToken.getLength() != 0 )
+    while( aTokens.getNextToken( aToken ) && !aToken.isEmpty() )
     {
         if( !rHasWidth &&
             rUnitConverter.convertEnum( rNamedWidth, aToken,

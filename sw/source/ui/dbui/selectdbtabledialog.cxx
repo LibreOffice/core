@@ -165,7 +165,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
             Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
             xPrSet->getPropertyValue(C2U("Name")) >>= sDataSourceName;
         }
-        OSL_ENSURE(sDataSourceName.getLength(), "no data source found");
+        OSL_ENSURE(!sDataSourceName.isEmpty(), "no data source found");
         Sequence<PropertyValue> aProperties(5);
         PropertyValue* pProperties = aProperties.getArray();
         pProperties[0].Name = C2U("DataSourceName");

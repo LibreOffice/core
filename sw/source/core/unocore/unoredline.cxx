@@ -448,7 +448,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     {
         OSL_FAIL("currently not available");
         OUString sTmp; aValue >>= sTmp;
-        if(!sTmp.getLength())
+        if(sTmp.isEmpty())
             throw lang::IllegalArgumentException();
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))

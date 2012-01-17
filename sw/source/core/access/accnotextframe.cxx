@@ -76,7 +76,7 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         msTitle = pNd->GetTitle();
 
         msDesc = pNd->GetDescription();
-        if ( msDesc.getLength() == 0 &&
+        if ( msDesc.isEmpty() &&
              msTitle != GetName() )
         {
             msDesc = msTitle;
@@ -95,7 +95,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     // suppress handling of RES_NAME_CHANGED in case that attribute Title is
     // used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
-         msTitle.getLength() == 0 )
+         msTitle.isEmpty() )
     {
         SwAccessibleFrameBase::Modify( pOld, pNew );
     }
@@ -136,7 +136,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
 
                 const String& rDesc = pNd->GetDescription();
                 msDesc = rDesc;
-                if ( msDesc.getLength() == 0 &&
+                if ( msDesc.isEmpty() &&
                      msTitle != GetName() )
                 {
                     msDesc = msTitle;
@@ -174,7 +174,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    if ( msTitle.getLength() != 0 )
+    if ( !msTitle.isEmpty() )
     {
         return msTitle;
     }

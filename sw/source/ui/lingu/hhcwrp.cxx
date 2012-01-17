@@ -765,7 +765,7 @@ sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     uno::Any  aRet = bProgress ?
         pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConversionArgs ) :
         pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConversionArgs );
-    return pConversionArgs->aConvText.getLength() != 0;
+    return !pConversionArgs->aConvText.isEmpty();
 }
 
 //////////////////////////////////////////////////////////////////////

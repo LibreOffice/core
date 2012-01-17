@@ -574,7 +574,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             String sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
             Sequence< ::rtl::OUString> aAssignment =
                             rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-            if(aAssignment.getLength() > MM_PART_E_MAIL && aAssignment[MM_PART_E_MAIL].getLength())
+            if(aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
                 sEMailColumn = aAssignment[MM_PART_E_MAIL];
             m_aMailToLB.SelectEntry(sEMailColumn);
             // HTML format pre-selected
@@ -1010,7 +1010,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(!pTargetView)
         return 0;
 
-    if(!rConfigItem.GetMailServer().getLength() ||
+    if(rConfigItem.GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
     {
         QueryBox aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
@@ -1279,7 +1279,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 ::rtl::OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
                 ::rtl::OUString sName = lcl_GetColumnValueOf(sNameColumn, xColAccess);
                 String sGreeting;
-                if(sName.getLength() && rConfigItem.IsIndividualGreeting(sal_True))
+                if(!sName.isEmpty() && rConfigItem.IsIndividualGreeting(sal_True))
                 {
                     ::rtl::OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
                     const ::rtl::OUString& sFemaleValue = rConfigItem.GetFemaleGenderValue();

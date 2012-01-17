@@ -601,7 +601,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
         if(aAssignIter->bColumnAssignmentsChanged)
         {
             //create a new node name
-            OUString sNewNode = aAssignIter->sConfigNodeName.getLength() ?
+            OUString sNewNode = !aAssignIter->sConfigNodeName.isEmpty() ?
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = C2U("/");
@@ -896,7 +896,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
 
 Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
 {
-    if(!m_pImpl->xConnection.is() && m_pImpl->aDBData.sDataSource.getLength())
+    if(!m_pImpl->xConnection.is() && !m_pImpl->aDBData.sDataSource.isEmpty())
     {
         m_pImpl->xConnection.reset(
             SwNewDBMgr::GetConnection( m_pImpl->aDBData.sDataSource, m_pImpl->xSource ),
@@ -920,7 +920,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(m_pImpl->xConnection.getTyped()));
                 try
                 {
-                    xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(m_pImpl->sFilter.getLength()>0));
+                    xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(!m_pImpl->sFilter.isEmpty()));
                     xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
                 }
                 catch (const Exception&)
@@ -966,7 +966,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
         {
             try
             {
-                xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(m_pImpl->sFilter.getLength()>0));
+                xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(!m_pImpl->sFilter.isEmpty()));
                 xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
                 uno::Reference<XRowSet> xRowSet( m_pImpl->xResultSet, UNO_QUERY_THROW );
                 xRowSet->execute();
@@ -1260,7 +1260,7 @@ Sequence< ::rtl::OUString> SwMailMergeConfigItem::GetColumnAssignment(
 {
     ::rtl::OUString sRet;
     Sequence< ::rtl::OUString> aAssignment = GetColumnAssignment( m_pImpl->aDBData );
-    if(aAssignment.getLength() > sal::static_int_cast< sal_Int32, sal_uInt32>(nColumn) && aAssignment[nColumn].getLength())
+    if(aAssignment.getLength() > sal::static_int_cast< sal_Int32, sal_uInt32>(nColumn) && !aAssignment[nColumn].isEmpty())
         sRet = aAssignment[nColumn];
     else if(nColumn < m_pImpl->m_AddressHeaderSA.Count())
         sRet = m_pImpl->m_AddressHeaderSA.GetString(nColumn);
@@ -1326,7 +1326,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
                                                                                 ++nColumn)
             {
                 if(rHeaders.GetString(nColumn) == aItem.sText &&
-                    pAssignment[nColumn].getLength())
+                    !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];
                     break;
@@ -1385,7 +1385,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
                                                                                 ++nColumn)
             {
                 if(rHeaders.GetString(nColumn) == aItem.sText &&
-                    pAssignment[nColumn].getLength())
+                    !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];
                     break;

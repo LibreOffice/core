@@ -405,7 +405,7 @@ SwFilterDetect::~SwFilterDetect()
             lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
     }
 
-    if ( aDocumentTitle.getLength() )
+    if ( !aDocumentTitle.isEmpty() )
     {
         // the title was set here
         if ( nIndexOfDocumentTitle == -1 )

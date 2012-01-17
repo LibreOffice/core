@@ -1045,7 +1045,7 @@ void SwHTMLWriter::OutBookmarks()
         // auch nicht eingelesen wird.
 
         // erst die SWG spezifischen Daten:
-        if(dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && pBookmark->GetName().getLength() )
+        if(dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && !pBookmark->GetName().isEmpty() )
             OutAnchor( pBookmark->GetName() );
 
         if( ++nBkmkTabPos >= pMarkAccess->getMarksCount() )
