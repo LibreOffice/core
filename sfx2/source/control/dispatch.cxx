@@ -575,7 +575,7 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = pImp->aToDoStack.rbegin(); i != pImp->aToDoStack.rend(); ++i)
     {
         if(i->bPush)
-            aStack.Push(static_cast<SfxShell*>(i->pCluster));
+            aStack.Push(i->pCluster);
         else
         {
             SfxShell* pPopped(NULL);
