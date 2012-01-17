@@ -991,7 +991,7 @@ bool ImpSvNumberInputScan::MayBeIso8601()
                     (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
                 // Year (nNums[0]) value not checked, may be anything, but
                 // length (number of digits) is checked.
-                nMayBeIso8601 = (nLen >= 4 ? 4 : (nLen == 3 ? 3 : (nLen > 0 ? 2 : 0)));
+                nMayBeIso8601 = (nLen >= 4 ? 4 : (nLen == 3 ? 3 : (nLen > 0 ? 2 : 1)));
         }
     }
     return nMayBeIso8601 > 1;
