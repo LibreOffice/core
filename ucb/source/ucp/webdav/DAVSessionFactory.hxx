@@ -42,6 +42,10 @@
 
 using namespace com::sun::star;
 
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+} } } }
+
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
@@ -58,6 +62,7 @@ public:
 
     rtl::Reference< DAVSession >
         createDAVSession( const ::rtl::OUString & inUri,
+                          const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rFlags,
                           const ::com::sun::star::uno::Reference<
                                ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr )

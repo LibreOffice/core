@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    struct OpenCommandArgument2;
+    struct OpenCommandArgument3;
     struct PostCommandArgument2;
     struct TransferInfo;
 } } } }
@@ -148,7 +148,7 @@ private:
 
     // Command "open"
     com::sun::star::uno::Any open(
-                const com::sun::star::ucb::OpenCommandArgument2 & rArg,
+                const com::sun::star::ucb::OpenCommandArgument3 & rArg,
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );

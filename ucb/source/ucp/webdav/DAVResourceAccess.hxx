@@ -35,6 +35,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include "DAVAuthListener.hxx"
@@ -54,6 +55,7 @@ class DAVResourceAccess
     osl::Mutex    m_aMutex;
     rtl::OUString m_aURL;
     rtl::OUString m_aPath;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aFlags;
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
@@ -70,6 +72,9 @@ public:
     DAVResourceAccess( const DAVResourceAccess & rOther );
 
     DAVResourceAccess & operator=( const DAVResourceAccess & rOther );
+
+    void setFlags( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rFlags )
+        throw ( DAVException );
 
     void setURL( const rtl::OUString & rNewURL )
         throw ( DAVException );

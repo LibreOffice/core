@@ -31,6 +31,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -47,7 +48,7 @@
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument3.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
@@ -481,10 +482,18 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
     uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xContentProvider->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
 
-    ucb::OpenCommandArgument2 aOpenArgument;
+    // Disable KeepAlive in webdav - don't want millions of office
+    // instances phone home & clog up servers
+    uno::Sequence< beans::PropertyValue > aProps( 1 );
+    aProps[ 0 ] = beans::PropertyValue(
+        UNISTRING("KeepAlive"), -1,
+        uno::makeAny(sal_False), beans::PropertyState_DIRECT_VALUE);
+
+    ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;
     aOpenArgument.Priority = 32768;
     aOpenArgument.Sink = *aSink;
+    aOpenArgument.OpeningFlags = aProps;
 
     ucb::Command aCommand;
     aCommand.Name = UNISTRING("open");
