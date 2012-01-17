@@ -19,10 +19,29 @@ win/
 	+ windows backend
 unx/
 	+ unix specific platform backend code and its' sub-platforms
+	plugadapt/
+		+ pluggable framework to select correct unx backend
 	gtk/
+		+ gtk2 support
 	gtk3/
+		+ gtk3.2+ support
 	kde/
-	generic/  - raw X
+		+ kde3 support
+	kde4/
+		+ kde4 support
+	generic/
+		+ raw X support
 
 
+How the platform abstraction works
 
+	+ InitVCL calls 'CreateSalInstance'
+		+ ths is implemented by the compiled-in platform backend
+		+ it stores various bits of global state in the
+		  'SalData' (inc/saldatabasic.hxx) structure but:
+	+ the SalInstance vtable is the primary outward facing gateway
+	  API for platform backends
+		+ It is a factory for:
+		  SalFrames, SalVirtualDevices, SalPrinters,
+		  Timers, the SolarMutexe, Drag&Drop and other
+		  objects, as well as the primary event loop wrapper.
