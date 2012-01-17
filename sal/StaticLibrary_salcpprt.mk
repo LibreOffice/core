@@ -36,12 +36,6 @@ $(eval $(call gb_StaticLibrary_add_defs,salcpprt, \
 	$(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_StaticLibrary_set_include,salcpprt,\
-        $$(INCLUDE) \
-        -I$(realpath $(SRCDIR)/sal/inc) \
-))
-
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,salcpprt, \
 	sal/cpprt/operators_new_delete \
 ))
