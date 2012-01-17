@@ -407,8 +407,8 @@ void SwLayAction::Reset()
 
 sal_Bool SwLayAction::RemoveEmptyBrowserPages()
 {
-    //Beim umschalten vom normalen in den Browsermodus bleiben u.U. einige
-    //unangenehm lange stehen. Diese beseiten wir mal schnell.
+    // switching from the normal to the browser mode, empty pages may be
+    // retained for an annoyingly long time, so delete them here
     sal_Bool bRet = sal_False;
     const ViewShell *pSh = pRoot->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )

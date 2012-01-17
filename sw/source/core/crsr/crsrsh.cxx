@@ -1305,9 +1305,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
     ClearUpCrsrs();
 
-    // es muss innerhalb einer BasicAction der
-    //              Cursor geupdatet werden; um z.B. den TabellenCursor zu
-    //              erzeugen. Im EndAction wird jetzt das UpdateCrsr gerufen!
+    // In a BasicAction the cursor must be updated, e.g. to create the
+    // TableCursor.  EndAction now calls UpdateCrsr!
     if( ActionPend() && BasicActionPend() )
     {
         if ( eFlags & SwCrsrShell::READONLY )
@@ -1342,14 +1341,14 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         eFlags |= SwCrsrShell::READONLY;
     }
 
-    if( eFlags & SwCrsrShell::CHKRANGE )    // alle Cursor-Bewegungen auf
-        CheckRange( pCurCrsr );         // ueberlappende Bereiche testen
+    if( eFlags & SwCrsrShell::CHKRANGE )    // check all cursor moves for
+        CheckRange( pCurCrsr );             // overlapping ranges
 
     if( !bIdleEnd )
         CheckTblBoxCntnt();
 
-    // steht der akt. Crsr in einer Tabelle und in unterschiedlichen Boxen
-    // (oder ist noch TabellenMode), dann gilt der Tabellen Mode
+    // If the current cursor is in a table and point/mark in different boxes,
+    // then the table mode is active (also if it is already active: pTblCrsr)
     SwPaM* pTstCrsr = getShellCrsr( true );
     if( pTstCrsr->HasMark() && !pBlockCrsr &&
         pDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
@@ -1362,8 +1361,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         Point aTmpMk( pITmpCrsr->GetMkPos() );
         SwPosition* pPos = pITmpCrsr->GetPoint();
 
-        // JP 30.04.99: Bug 65475 - falls Point/Mark in versteckten Bereichen
-        //              stehen, so mussen diese daraus verschoben werden
+        // JP 30.04.99: Bug 65475
+        // if Point/Mark in hidden sections, move them out
         lcl_CheckHiddenSection( pPos->nNode );
         lcl_CheckHiddenSection( pITmpCrsr->GetMark()->nNode );
 
@@ -1417,7 +1416,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                                             ? fnSectionStart
                                             : fnSectionEnd;
 
-                // dann nur innerhalb der Box selektieren
+                // then only select inside the Box
                 if( pTblCrsr )
                 {
                     pCurCrsr->SetMark();
@@ -1432,7 +1431,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             }
         }
 
-        // wir wollen wirklich eine Tabellen-Selektion
+        // we really want a table selection
         if( pTab && pTblFrm )
         {
             if( !pTblCrsr )
@@ -1459,8 +1458,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 (void) bResult; // non-debug: unused
             }
 
-            pVisCrsr->Hide();       // sichtbaren Cursor immer verstecken
-            // Curosr in den sichtbaren Bereich scrollen
+            pVisCrsr->Hide();       // always hide visible Cursor
+            // scroll Cursor to visible area
             if( (eFlags & SwCrsrShell::SCROLLWIN) &&
                 (HasSelection() || eFlags & SwCrsrShell::READONLY ||
                  !IsCrsrReadonly()) )
@@ -1474,13 +1473,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                     MakeVisible( aCharRect );
             }
 
-            // lasse vom Layout die Crsr in den Boxen erzeugen
+            // let Layout create the Cursors in the Boxes
             if( pTblCrsr->IsCrsrMovedUpdt() )
                 GetLayout()->MakeTblCrsrs( *pTblCrsr );
             if( bHasFocus && !bBasicHideCrsr )
                 pTblCrsr->Show();
 
-            // Cursor-Points auf die neuen Positionen setzen
+            // set Cursor-Points to the new Positions
             pTblCrsr->GetPtPos().X() = aCharRect.Left();
             pTblCrsr->GetPtPos().Y() = aCharRect.Top();
 
@@ -1489,9 +1488,9 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 aCrsrHeight.X() = 0;
                 aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
                                   -aCharRect.Width() : aCharRect.Height();
-                pVisCrsr->Show();           // wieder anzeigen
+                pVisCrsr->Show();           // show again
             }
-            eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
+            eMvState = MV_NONE;  // state for cursor travelling - GetCrsrOfst
             if( pTblFrm && Imp()->IsAccessible() )
                 Imp()->InvalidateAccessibleCursorPosition( pTblFrm );
             return;
@@ -1500,7 +1499,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
     if( pTblCrsr )
     {
-        // Cursor Ring loeschen
+        // delete Ring
         while( pCurCrsr->GetNext() != pCurCrsr )
             delete pCurCrsr->GetNext();
         pCurCrsr->DeleteMark();
@@ -1509,9 +1508,9 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         delete pTblCrsr, pTblCrsr = 0;
     }
 
-    pVisCrsr->Hide();       // sichtbaren Cursor immer verstecken
+    pVisCrsr->Hide();       // always hide visible Cursor
 
-    // sind wir vielleicht in einer geschuetzten/versteckten Section ?
+    // are we perhaps in a protected / hidden Section ?
     {
         SwShellCrsr* pShellCrsr = getShellCrsr( true );
         sal_Bool bChgState = sal_True;
@@ -1525,18 +1524,18 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             if( !FindValidCntntNode( !HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
             {
-                // alles ist geschuetzt / versteckt -> besonderer Mode
+                // everything protected / hidden -> special Mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
                     pSectNd->GetSection().IsProtectFlag() )
                     bChgState = sal_False;
                 else
                 {
-                    eMvState = MV_NONE;     // Status fuers Crsr-Travelling
+                    eMvState = MV_NONE;     // state for cursor travelling
                     bAllProtect = sal_True;
                     if( GetDoc()->GetDocShell() )
                     {
                         GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
-                        CallChgLnk();       // UI bescheid sagen!
+                        CallChgLnk();       // notify UI!
                     }
                     return;
                 }
@@ -1550,7 +1549,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 GetDoc()->GetDocShell()->IsReadOnlyUI() )
             {
                 GetDoc()->GetDocShell()->SetReadOnlyUI( sal_False );
-                CallChgLnk();       // UI bescheid sagen!
+                CallChgLnk();       // notify UI!
             }
         }
     }
@@ -1603,8 +1602,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             bAgainst = sal_False;
             pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
                         &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
-            // ist der Frm nicht mehr vorhanden, dann muss das gesamte Layout
-            // erzeugt werden, weil ja mal hier einer vorhanden war !!
+            // if the Frm doesn't exist anymore, the complete Layout has to be
+            // created, because there used to be a Frm here!
             if ( !pFrm )
             {
                 do
@@ -1615,32 +1614,32 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
-                //Wir stellen sicher, dass anstaendig Formatiert wurde
+                // Guarantee everything's properly formatted
                 pFrm->PrepareCrsr();
 
-            // im geschuetzten Fly? aber bei Rahmenselektion ignorieren
+            // In protected Fly? but ignore in case of frame selection
             if( !IsReadOnlyAvailable() && pFrm->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
                   !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
                 (!pDoc->GetDocShell() ||
                  !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
-                // dann suche eine gueltige Position
+                // look for a valid position
                 sal_Bool bChgState = sal_True;
                 if( !FindValidCntntNode(!HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
                 {
-                    // alles ist geschuetzt / versteckt -> besonderer Mode
+                    // everything is protected / hidden -> special Mode
                     if( bAllProtect )
                         bChgState = sal_False;
                     else
                     {
-                        eMvState = MV_NONE;     // Status fuers Crsr-Travelling
+                        eMvState = MV_NONE;     // state for crusor travelling
                         bAllProtect = sal_True;
                         if( GetDoc()->GetDocShell() )
                         {
                             GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
-                            CallChgLnk();       // UI bescheid sagen!
+                            CallChgLnk();       // notify UI!
                         }
                         return;
                     }
@@ -1654,10 +1653,10 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                         GetDoc()->GetDocShell()->IsReadOnlyUI() )
                     {
                         GetDoc()->GetDocShell()->SetReadOnlyUI( sal_False );
-                        CallChgLnk();       // UI bescheid sagen!
+                        CallChgLnk();       // notify UI!
                     }
                     bAllProtect = sal_False;
-                    bAgainst = sal_True;        // nochmal den richigen Frm suchen
+                    bAgainst = sal_True;        // look for the right Frm again
                 }
             }
         } while( bAgainst );
@@ -1714,11 +1713,11 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         aOld = aCharRect;
         bFirst = sal_False;
 
-        // Cursor-Points auf die neuen Positionen setzen
+        // update cursor Points to the new Positions
         pShellCrsr->GetPtPos().X() = aCharRect.Left();
         pShellCrsr->GetPtPos().Y() = aCharRect.Top();
 
-        if( !(eFlags & SwCrsrShell::UPDOWN ))   // alte Pos. von Up/Down loeschen
+        if( !(eFlags & SwCrsrShell::UPDOWN ))   // delete old Pos. of Up/Down
         {
             pFrm->Calc();
             nUpDownX = pFrm->IsVertical() ?
@@ -1726,14 +1725,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                        aCharRect.Left() - pFrm->Frm().Left();
         }
 
-        // Curosr in den sichtbaren Bereich scrollen
+        // scroll Cursor to visible area
         if( bHasFocus && eFlags & SwCrsrShell::SCROLLWIN &&
             (HasSelection() || eFlags & SwCrsrShell::READONLY ||
              !IsCrsrReadonly() || GetViewOptions()->IsSelectionInReadonly()) )
         {
-            //JP 30.04.99:  damit das EndAction, beim evtuellen Scrollen, den
-            //      SV-Crsr nicht wieder sichtbar macht, wird hier das Flag
-            //      gesichert und zurueckgesetzt.
+            //JP 30.04.99:  so that EndAction, in case of scrolling, doesn't
+            //      show the SV-Cursor again, save and reset the flag here
             sal_Bool bSav = bSVCrsrVis; bSVCrsrVis = sal_False;
             MakeSelVisible();
             bSVCrsrVis = bSav;
@@ -1763,7 +1761,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
     }
 
-    eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
+    eMvState = MV_NONE;     // state for cursor tavelling - GetCrsrOfst
 
     if( pFrm && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
@@ -1788,7 +1786,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     }
 
     if( bSVCrsrVis )
-        pVisCrsr->Show();           // wieder anzeigen
+        pVisCrsr->Show();           // show again
 }
 
 void SwCrsrShell::RefreshBlockCursor()
