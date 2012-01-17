@@ -34,14 +34,18 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/oustringostreaminserter.hxx>
 
 namespace ScDatabaseRangeObj {
 
+#define NUMBER_OF_TESTS 3
+
 class ScXDatabaseRange : public UnoApiTest
 {
-    uno::Reference< sheet::XDatabaseRange > init(const rtl::OUString& rName);
+    virtual void setUp();
+    virtual void tearDown();
 
     void testDataArea();
     void testGetSortDescriptor();
@@ -52,7 +56,15 @@ class ScXDatabaseRange : public UnoApiTest
     CPPUNIT_TEST(testGetSortDescriptor);
     CPPUNIT_TEST(testGetSubtotalDescriptor);
     CPPUNIT_TEST_SUITE_END();
+private:
+    uno::Reference< sheet::XDatabaseRange > init(const rtl::OUString& rName);
+
+    static int nTest;
+    static uno::Reference< lang::XComponent > xComponent;
 };
+
+int ScXDatabaseRange::nTest = 0;
+uno::Reference< lang::XComponent > ScXDatabaseRange::xComponent;
 
 /**
  * tests setDataArea and getDataArea
@@ -154,7 +166,6 @@ uno::Reference< sheet::XDatabaseRange > ScXDatabaseRange::init(const rtl::OUStri
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xdatabaserange.ods"));
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    static uno::Reference< lang::XComponent > xComponent;
     if( !xComponent.is())
         xComponent = loadFromDesktop(aFileURL);
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
@@ -164,6 +175,29 @@ uno::Reference< sheet::XDatabaseRange > ScXDatabaseRange::init(const rtl::OUStri
     uno::Reference< sheet::XDatabaseRange > xDBRange( xName->getByName(rName), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDBRange.is());
     return xDBRange;
+}
+
+void ScXDatabaseRange::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScXDatabaseRange::tearDown()
+{
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
+        xCloseable->close( false );
+    }
+
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        mxDesktop->terminate();
+        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXDatabaseRange);
