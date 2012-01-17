@@ -123,8 +123,7 @@ namespace basegfx
         /** Read poly-polygon from SVG.
 
             This function imports a poly-polygon from an SVG-D
-            attribute. Currently, elliptical arc elements are not yet
-            supported (and ignored during parsing).
+            attribute.
 
             @param o_rPolyPoly
             The output poly-polygon

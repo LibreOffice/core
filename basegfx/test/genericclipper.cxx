@@ -121,13 +121,13 @@ public:
 
     void validateOr()
     {
-        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm75 10v-50h-50v50z";
+        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm75 100v-50h-50v50z"; 
         validate("validateOr", pValid, &tools::solvePolygonOperationOr);
     }
 
     void validateXor()
     {
-        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 10h20v-10h-20zm75 10v-50h-50v50z";
+        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
         validate("validateXor", pValid, &tools::solvePolygonOperationXor);
     }
 
@@ -139,8 +139,21 @@ public:
 
     void validateDiff()
     {
-        const char* pValid="m0 90v-90h100v150h-75v-50h-5v-10zm55 10v-50h-50v50z";
+        const char* pValid="m0 90v-90h100v150h-75v-50h-5v-10zm75 10v-50h-50v50z";
         validate("validateDiff", pValid, &tools::solvePolygonOperationDiff);
+    }
+
+    void checkCrossoverSolver()
+    {
+        B2DPolyPolygon aPoly;
+        tools::importFromSvgD(
+            aPoly,
+            ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "m0 0 v 5  h 3 h 1 h 1 h 1 v -2 v -3 z"
+                    "m3 7 v -2 h 1 h 1 h 1 v -2 h 1 v 3 z")));
+
+        tools::solveCrossovers(aPoly);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -152,6 +165,7 @@ public:
     CPPUNIT_TEST(validateXor);
     CPPUNIT_TEST(validateAnd);
     CPPUNIT_TEST(validateDiff);
+    CPPUNIT_TEST(checkCrossoverSolver);
     CPPUNIT_TEST_SUITE_END();
 };
 
