@@ -33,12 +33,17 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 namespace ScCellRangeBase {
 
+#define NUMBER_OF_TESTS 2
+
 class ScCellProperties : public UnoApiTest
 {
-    uno::Reference < beans::XPropertySet > init();
+public:
+    virtual void setUp();
+    virtual void tearDown();
 
     void testVertJustify();
     void testRotateReference();
@@ -46,7 +51,17 @@ class ScCellProperties : public UnoApiTest
     CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST(testRotateReference);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    uno::Reference < beans::XPropertySet > init();
+
+    static int nTest;
+    static uno::Reference< lang::XComponent > xComponent;
 };
+
+int ScCellProperties::nTest = 0;
+uno::Reference< lang::XComponent > ScCellProperties::xComponent;
+
 
 void ScCellProperties::testVertJustify()
 {
@@ -89,7 +104,6 @@ uno::Reference< beans::XPropertySet > ScCellProperties::init()
     rtl::OUString aFileURL;
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
     createFileURL(aFileBase, aFileURL);
-    static uno::Reference< lang::XComponent > xComponent;
     if( !xComponent.is())
         xComponent = loadFromDesktop(aFileURL);
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
@@ -107,6 +121,29 @@ uno::Reference< beans::XPropertySet > ScCellProperties::init()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create object of type XPropertySet", xReturn.is());
     return xReturn;
+}
+
+void ScCellProperties::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScCellProperties::tearDown()
+{
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
+        xCloseable->close( false );
+    }
+
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        mxDesktop->terminate();
+        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellProperties);
