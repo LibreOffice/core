@@ -14,7 +14,7 @@ github. I am not interested in that.
 Cross-compilation of LibreOffice completely is not possible yet. Much
 work has been done, "baby steps" for some platforms, much more for
 others, but a lot remains. For iOS and Android this work is highly
-experimental and done mostly in my own spare time just for the hacking
+experimental, originally done in my spare time just for the hacking
 pleasure. No promise, explicit or implied, is given that it will ever
 be finished.
 
@@ -44,7 +44,7 @@ Even though the LibreOffice build mechanism is highly unorthodox, the
 configure script takes the normal --build and --host options like any
 GNU Autoconf -based configure script. To cross-compile, you basically
 need just to specify a suitable --host option and things should work
-out nicely. In practise, some more details might be needed. See
+out nicely. In practise, many details needed to be handled. See
 examples below.
 
 
@@ -122,8 +122,9 @@ for MinGW inside the OOo-originated code in LibreOffice actually
 are. What I have noticed of it seems a bit randomish, with
 copy-pasting having been preferred to factoring out differences.
 
-Most of the configuration settings are maintained in the LibreOfficeMinGW
-distro-config, so in your autogen.lastrun, you can use:
+Most of the configuration settings are maintained in the
+distro-configs/LibreOfficeMinGW.conf file, so in your autogen.lastrun,
+you can use:
 
 CC=ccache i686-w64-mingw32-gcc
 CXX=ccache i686-w64-mingw32-g++
@@ -131,8 +132,8 @@ CC_FOR_BUILD=ccache gcc
 CXX_FOR_BUILD=ccache g++
 --with-distro=LibreOfficeMinGW
 
-Alternatively, you can use something like the following; but the preferred way
-is to keep LibreOfficeMinGW distro up-to-date.
+Alternatively, you can use something like the following; but the
+preferred way is to keep the LibreOfficeMinGW.conf file up-to-date.
 
 CC=ccache i686-w64-mingw32-gcc
 CXX=ccache i686-w64-mingw32-g++
@@ -251,17 +252,15 @@ iOS
 iOS is the operating system of Apple's mobile devices. Clearly for a
 device like the iPad it would be totally unacceptable to run a normal
 LibreOffice application with a overlapping windows and mouse-oriented
-GUI widgets. No work has been done (at least publicly) to design a
-touch GUI for LibreOffice, so the work on cross-compiling LibreOffice
-for iOS is extremely experimental, and of course partly pointless;)
-But it is interesting and fun nonetheless.
+GUI widgets. No work has been done (at least publicly) by others to
+design a touch GUI for LibreOffice, so that is something that needs to
+be done.
 
-Obviously it will make sense to build only a part of LibreOffice's
-code for iOS. Most likely all GUI-oriented code should be left out,
-and some iOS app that eventually wants to use the remaining bits will
-handle all its GUI in a platform-dependent manner. How well it will be
-possible to do such a split remains to be seen. As I said, this is
-highly experimental and just in its baby steps phase.
+Obviously it will make sense to use only a part of LibreOffice's code
+for iOS. Most likely lots of the GUI-oriented code should be left out,
+and some iOS app(s) that eventually wants to use the remaining bits
+will handle all its GUI in a platform-dependent manner. How well it
+will be possible to do such a split remains to be seen.
 
 Technically, one important special aspect of iOS is that apps are not
 allowed to load own dynamic libraries. (System libraries are used in
@@ -310,10 +309,10 @@ or g++ won't find its headers like <bits/c++config.h>
 Android
 -------
 
-I don't know much about Android, but from a technical point of view it
-is a kind of Linux, of course. As far as I know it is allowed for an
-Android app to use shared objects, but if it isn't, then just the same
-approach as used on iOS will need to be used.
+From a technical point of view the core Android OS is Linux, but
+everything else is different. Unlike iOS, an Android app can use
+shared objects just fine, so that aspect of UNO doesn't need special
+handling.
 
 As for the GUI, the same holds as said above for iOS.
 
