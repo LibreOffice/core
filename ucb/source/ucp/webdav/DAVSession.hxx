@@ -40,6 +40,10 @@
 #include "DAVTypes.hxx"
 #include "DAVRequestEnvironment.hxx"
 
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+} } } }
+
 namespace com { namespace sun { namespace star { namespace ucb {
     struct Lock;
 } } } }
@@ -66,7 +70,8 @@ public:
         }
     }
 
-    virtual sal_Bool CanUse( const ::rtl::OUString & inPath ) = 0;
+    virtual sal_Bool CanUse( const ::rtl::OUString & inPath,
+                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rFlags ) = 0;
 
     virtual sal_Bool UsesProxy() = 0;
 

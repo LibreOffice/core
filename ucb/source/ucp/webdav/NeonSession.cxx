@@ -50,6 +50,7 @@ extern "C" {
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
 #include "comphelper/sequence.hxx"
+#include <comphelper/stl_types.hxx>
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
 #include "DAVAuthListener.hxx"
@@ -69,7 +70,10 @@ extern "C" {
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+
+#include <boost/bind.hpp>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
@@ -148,6 +152,26 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
     }
 
     return sal_uInt16( rStatusText.copy( 0, nPos ).toInt32() );
+}
+
+// -------------------------------------------------------------------
+static bool noKeepAlive( const uno::Sequence< beans::PropertyValue >& rFlags )
+{
+    if ( !rFlags.hasElements() )
+        return false;
+
+    // find "KeepAlive" property
+    const beans::PropertyValue* pAry(rFlags.getConstArray());
+    const sal_Int32             nLen(rFlags.getLength());
+    const beans::PropertyValue* pValue(
+        std::find_if(pAry,pAry+nLen,
+                     boost::bind(comphelper::TPropertyValueEqualFunctor(),
+                                 _1,
+                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KeepAlive")))));
+    if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )
+        return true;
+
+    return false;
 }
 
 // -------------------------------------------------------------------
@@ -619,9 +643,11 @@ NeonLockStore NeonSession::m_aNeonLockStore;
 NeonSession::NeonSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const rtl::OUString& inUri,
+        const uno::Sequence< beans::PropertyValue >& rFlags,
         const ucbhelper::InternetProxyDecider & rProxyDecider )
     throw ( DAVException )
 : DAVSession( rSessionFactory ),
+  m_aFlags( rFlags ),
   m_pHttpSession( 0 ),
   m_pRequestData( new RequestDataMap ),
   m_rProxyDecider( rProxyDecider )
@@ -808,6 +834,10 @@ void NeonSession::Init()
                               m_nProxyPort );
         }
 
+        // avoid KeepAlive?
+        if ( noKeepAlive(m_aFlags) )
+            ne_set_session_flag( m_pHttpSession, NE_SESSFLAG_PERSIST, 0 );
+
         // Register for redirects.
         ne_redirect_register( m_pHttpSession );
 
@@ -824,14 +854,16 @@ void NeonSession::Init()
 
 // -------------------------------------------------------------------
 // virtual
-sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
+sal_Bool NeonSession::CanUse( const rtl::OUString & inUri,
+                              const uno::Sequence< beans::PropertyValue >& rFlags )
 {
     try
     {
         NeonUri theUri( inUri );
         if ( ( theUri.GetPort() == m_nPort ) &&
              ( theUri.GetHost() == m_aHostName ) &&
-             ( theUri.GetScheme() == m_aScheme ) )
+             ( theUri.GetScheme() == m_aScheme ) &&
+             ( rFlags == m_aFlags ) )
             return sal_True;
     }
     catch ( DAVException const & )

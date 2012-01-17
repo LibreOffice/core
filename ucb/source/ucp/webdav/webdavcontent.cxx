@@ -68,7 +68,7 @@
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument3.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -493,8 +493,9 @@ uno::Any SAL_CALL Content::execute(
         // open
         //////////////////////////////////////////////////////////////////
 
-        ucb::OpenCommandArgument2 aOpenCommand;
-        if ( !( aCommand.Argument >>= aOpenCommand ) )
+        ucb::OpenCommandArgument3 aOpenCommand;
+        ucb::OpenCommandArgument2 aTmp;
+        if ( !( aCommand.Argument >>= aTmp ) )
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
@@ -504,6 +505,15 @@ uno::Any SAL_CALL Content::execute(
                                     -1 ) ),
                 Environment );
             // Unreachable
+        }
+        if ( !( aCommand.Argument >>= aOpenCommand ) )
+        {
+            // compat mode, extract Arg2 info into newer structure
+            aOpenCommand.Mode = aTmp.Mode;
+            aOpenCommand.Priority = aTmp.Priority;
+            aOpenCommand.Sink = aTmp.Sink;
+            aOpenCommand.Properties = aTmp.Properties;
+            aOpenCommand.SortingInfo = aTmp.SortingInfo;
         }
 
         aRet = open( aOpenCommand, Environment );
@@ -1901,7 +1911,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
 //=========================================================================
 uno::Any Content::open(
-                const ucb::OpenCommandArgument2 & rArg,
+                const ucb::OpenCommandArgument3 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
@@ -1985,6 +1995,7 @@ uno::Any Content::open(
                         new DAVResourceAccess( *m_xResAccess.get() ) );
                 }
 
+                xResAccess->setFlags( rArg.OpeningFlags );
                 DAVResource aResource;
                 std::vector< rtl::OUString > aHeaders;
 
@@ -2030,6 +2041,8 @@ uno::Any Content::open(
                         xResAccess.reset(
                             new DAVResourceAccess( *m_xResAccess.get() ) );
                     }
+
+                    xResAccess->setFlags( rArg.OpeningFlags );
 
                     // fill inputsream sync; return if all data present
                     DAVResource aResource;

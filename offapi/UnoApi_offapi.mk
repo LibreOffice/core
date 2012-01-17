@@ -3815,6 +3815,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	NumberedSortingInfo \
 	OpenCommandArgument \
 	OpenCommandArgument2 \
+	OpenCommandArgument3 \
 	OpenMode \
 	OutgoingMessageState \
 	PostCommandArgument \

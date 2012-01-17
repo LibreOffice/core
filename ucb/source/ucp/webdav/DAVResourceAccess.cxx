@@ -151,6 +151,7 @@ DAVResourceAccess::DAVResourceAccess(
 DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 : m_aURL( rOther.m_aURL ),
   m_aPath( rOther.m_aPath ),
+  m_aFlags( rOther.m_aFlags ),
   m_xSession( rOther.m_xSession ),
   m_xSessionFactory( rOther.m_xSessionFactory ),
   m_xSMgr( rOther.m_xSMgr ),
@@ -164,6 +165,7 @@ DAVResourceAccess & DAVResourceAccess::operator=(
 {
     m_aURL            = rOther.m_aURL;
     m_aPath           = rOther.m_aPath;
+    m_aFlags          = rOther.m_aFlags;
     m_xSession        = rOther.m_xSession;
     m_xSessionFactory = rOther.m_xSessionFactory;
     m_xSMgr           = rOther.m_xSMgr;
@@ -1043,6 +1045,14 @@ void DAVResourceAccess::UNLOCK(
 }
 
 //=========================================================================
+void DAVResourceAccess::setFlags( const uno::Sequence< beans::PropertyValue >& rFlags )
+    throw ( DAVException )
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    m_aFlags = rFlags;
+}
+
+//=========================================================================
 void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
     throw( DAVException )
 {
@@ -1070,13 +1080,13 @@ void DAVResourceAccess::initialize()
         if ( !aURI.GetHost().getLength() )
             throw DAVException( DAVException::DAV_INVALID_ARG );
 
-        if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
+        if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL, m_aFlags ) )
         {
             m_xSession.clear();
 
             // create new webdav session
             m_xSession
-                = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
+                = m_xSessionFactory->createDAVSession( m_aURL, m_aFlags, m_xSMgr );
 
             if ( !m_xSession.is() )
                 return;
