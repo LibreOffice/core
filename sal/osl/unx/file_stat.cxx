@@ -28,6 +28,7 @@
 
 
 #include "osl/file.h"
+#include "osl/detail/file.h"
 
 #include "system.h"
 #include <sys/types.h>
@@ -445,6 +446,28 @@ oslFileError SAL_CALL osl_setFileTime (
 #endif/* MACOSX */
 
     return osl_psz_setFileTime( path, pCreationTime, pLastAccessTime, pLastWriteTime );
+}
+
+oslFileError
+SAL_CALL osl_statFilePath( const char *cpFilePath, struct stat *statb )
+{
+    int rc = stat_c( cpFilePath, statb );
+
+    if (rc == -1)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+    else
+        return osl_File_E_None;
+}
+
+oslFileError
+SAL_CALL osl_lstatFilePath( const char *cpFilePath, struct stat *statb )
+{
+    int rc = lstat_c( cpFilePath, statb );
+
+    if (rc == -1)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+    else
+        return osl_File_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

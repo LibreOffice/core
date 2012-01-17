@@ -72,6 +72,12 @@
      const rtl_uString* pustrFileName,
     rtl_uString** ppustrResolvedName);
 
+ /* @see stat */
+ int stat_c(const char *cpPath, struct stat* buf);
+
+ /* @see lstat */
+ int lstat_c(const char *cpPath, struct stat* buf);
+
  /* @see lstat */
  int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
 

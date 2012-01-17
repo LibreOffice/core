@@ -145,18 +145,38 @@
  }
 
  //#########################
+ //stat_c
+  int stat_c(const char* cpPath, struct stat* buf)
+ {
+#ifdef ANDROID
+    if (strncmp(cpPath, "/assets", sizeof("/assets")-1) == 0 &&
+        (cpPath[sizeof("/assets")-1] == '\0' ||
+         cpPath[sizeof("/assets")-1] == '/'))
+        return lo_apk_lstat(cpPath, buf);
+#endif
+    return stat(cpPath, buf);
+ }
+
+ //#########################
+ //lstat_c
+  int lstat_c(const char* cpPath, struct stat* buf)
+ {
+#ifdef ANDROID
+    if (strncmp(cpPath, "/assets", sizeof("/assets")-1) == 0 &&
+        (cpPath[sizeof("/assets")-1] == '\0' ||
+         cpPath[sizeof("/assets")-1] == '/'))
+        return lo_apk_lstat(cpPath, buf);
+#endif
+    return lstat(cpPath, buf);
+ }
+
+ //#########################
  //lstat_u
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
 #ifndef MACOSX  // not MACOSX
     rtl::OString fn = OUStringToOString(pustrPath);
-#ifdef ANDROID
-    if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
-        (fn.getStr()[sizeof("/assets")-1] == '\0' ||
-         fn.getStr()[sizeof("/assets")-1] == '/'))
-        return lo_apk_lstat(fn.getStr(), buf);
-#endif
-    return lstat(fn.getStr(), buf);
+    return lstat_c(fn.getStr(), buf);
 #else
     return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
 #endif

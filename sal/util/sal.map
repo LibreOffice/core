@@ -645,6 +645,14 @@ PRIVATE_textenc.1 { # LibreOffice 3.6
         _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversion*;
 };
 
+PRIVATE_file.1 { # LibreOffice 3.6
+    global:
+        osl_openFilePath;
+        osl_statFilePath;
+        osl_lstatFilePath;
+        osl_getFileOSHandle;
+};
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

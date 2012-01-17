@@ -28,6 +28,7 @@
 
 
 #include "osl/file.hxx"
+#include "osl/detail/file.h"
 
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
@@ -885,40 +886,27 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
  ***************************************************************************/
 #ifdef HAVE_O_EXLOCK
 #define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
-#define OPEN_CREATE_FLAGS ( O_CREAT | O_EXCL | O_RDWR | O_EXLOCK | O_NONBLOCK )
+#define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR | O_EXLOCK | O_NONBLOCK )
 #else
 #define OPEN_WRITE_FLAGS ( O_RDWR )
-#define OPEN_CREATE_FLAGS ( O_CREAT | O_EXCL | O_RDWR )
+#define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
 oslFileError
-SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags )
+SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
     oslFileError eRet;
-
-    if ((ustrFileURL == 0) || (ustrFileURL->length == 0) || (pHandle == 0))
-        return osl_File_E_INVAL;
-
-    /* convert file URL to system path */
-    char buffer[PATH_MAX];
-    eRet = FileURLToPath (buffer, sizeof(buffer), ustrFileURL);
-    if (eRet != osl_File_E_None)
-        return eRet;
-#ifdef MACOSX
-    if (macxp_resolveAlias (buffer, sizeof(buffer)) != 0)
-        return oslTranslateFileError (OSL_FET_ERROR, errno);
-#endif /* MACOSX */
 
 #ifdef ANDROID
     /* Opening a file from /assets read-only means
      * we should mmap it from the .apk file
      */
     if (!(uFlags & osl_File_OpenFlag_Write) &&
-        strncmp (buffer, "/assets/", sizeof ("/assets/") - 1) == 0)
+        strncmp (cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
     {
         void *address;
         size_t size;
-        address = lo_apkentry(buffer, &size);
+        address = lo_apkentry(cpFilePath, &size);
         return osl_openMemoryAsFile(address, size, pHandle);
     }
 #endif
@@ -936,6 +924,13 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
         mode |= S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_CREATE_FLAGS;
     }
+
+    /* Check for flags passed in from SvFileStream::Open() */
+    if (uFlags & osl_File_OpenFlag_Trunc)
+        flags |= O_TRUNC;
+    if (!(uFlags & osl_File_OpenFlag_NoExcl))
+        flags |= O_EXCL;
+
     if (uFlags & osl_File_OpenFlag_NoLock)
     {
 #ifdef HAVE_O_EXLOCK
@@ -944,11 +939,11 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     }
     else
     {
-        flags = osl_file_adjustLockFlags (buffer, flags);
+        flags = osl_file_adjustLockFlags (cpFilePath, flags);
     }
 
     /* open the file */
-    int fd = open( buffer, flags, mode );
+    int fd = open( cpFilePath, flags, mode );
     if (-1 == fd)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
@@ -1018,7 +1013,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     }
 
     /* allocate memory for impl structure */
-    FileHandle_Impl * pImpl = new FileHandle_Impl (fd, FileHandle_Impl::KIND_FD, buffer);
+    FileHandle_Impl * pImpl = new FileHandle_Impl (fd, FileHandle_Impl::KIND_FD, cpFilePath);
     if (!pImpl)
     {
         eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
@@ -1035,6 +1030,28 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
 
     *pHandle = (oslFileHandle)(pImpl);
     return osl_File_E_None;
+}
+
+oslFileError
+SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags )
+{
+    oslFileError eRet;
+
+    if ((ustrFileURL == 0) || (ustrFileURL->length == 0) || (pHandle == 0))
+        return osl_File_E_INVAL;
+
+    /* convert file URL to system path */
+    char buffer[PATH_MAX];
+    eRet = FileURLToPath (buffer, sizeof(buffer), ustrFileURL);
+    if (eRet != osl_File_E_None)
+        return eRet;
+
+#ifdef MACOSX
+    if (macxp_resolveAlias (buffer, sizeof(buffer)) != 0)
+        return oslTranslateFileError (OSL_FET_ERROR, errno);
+#endif /* MACOSX */
+
+    return osl_openFilePath (buffer, pHandle, uFlags);
 }
 
 /****************************************************************************/
@@ -1100,6 +1117,24 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
         return (result);
     if (-1 == fsync (pImpl->m_fd))
         return oslTranslateFileError (OSL_FET_ERROR, errno);
+
+    return osl_File_E_None;
+}
+
+/************************************************
+ * osl_fileGetOSHandle
+ ***********************************************/
+oslFileError
+SAL_CALL osl_getFileOSHandle(
+    oslFileHandle Handle,
+    sal_IntPtr *piFileHandle )
+{
+    FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
+
+    if (0 == pImpl || pImpl->m_kind != FileHandle_Impl::KIND_FD || -1 == pImpl->m_fd)
+        return osl_File_E_INVAL;
+
+    *piFileHandle = pImpl->m_fd;
 
     return osl_File_E_None;
 }
