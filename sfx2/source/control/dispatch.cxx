@@ -71,6 +71,8 @@
 #include "workwin.hxx"
 #include <rtl/strbuf.hxx>
 
+#include <deque>
+
 namespace css = ::com::sun::star;
 
 //==================================================================
@@ -111,9 +113,6 @@ struct SfxToDo_Impl
     { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
 };
 
-DECL_OBJSTACK(SfxToDoStack_Impl, SfxToDo_Impl, 8, 4);
-IMPL_OBJSTACK(SfxToDoStack_Impl, SfxToDo_Impl);
-
 struct SfxObjectBars_Impl
 {
     sal_uInt32     nResId;  // Resource - and ConfigId of the Toolbox
@@ -135,7 +134,7 @@ struct SfxDispatcher_Impl
     const SfxSlotServer* pCachedServ2;  // penultimate called Message
     SfxShellStack_Impl   aStack;        // active functionality
     Timer                aTimer;        // for Flush
-    SfxToDoStack_Impl    aToDoStack;    // not processed Push/Pop
+    std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
     SfxViewFrame*        pFrame;        // NULL or associated Frame
     SfxDispatcher*       pParent;       // AppDispatcher, NULL if possible
     SfxHintPosterRef     xPoster;       // Execute asynchronous
@@ -481,11 +480,11 @@ void SfxDispatcher::Pop
             << (bUntil ? " (up to)" : ""));
 
     // same shell as on top of the to-do stack?
-    if ( pImp->aToDoStack.Count() && pImp->aToDoStack.Top().pCluster == &rShell )
+    if(pImp->aToDoStack.size() && pImp->aToDoStack.front().pCluster == &rShell)
     {
         // cancel inverse actions
-        if ( pImp->aToDoStack.Top().bPush != bPush )
-            pImp->aToDoStack.Pop();
+        if ( pImp->aToDoStack.front().bPush != bPush )
+            pImp->aToDoStack.pop_front();
         else
         {
             DBG_ASSERT( bPush, "SfxInterface pushed more than once" );
@@ -495,7 +494,7 @@ void SfxDispatcher::Pop
     else
     {
         // Remember ::com::sun::star::chaos::Action
-        pImp->aToDoStack.Push( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
+        pImp->aToDoStack.push_front( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if ( bFlushed )
         {
             OSL_TRACE("Unflushed dispatcher!");
@@ -509,7 +508,7 @@ void SfxDispatcher::Pop
         }
     }
 
-    if ( !pSfxApp->IsDowning() && pImp->aToDoStack.Count() )
+    if(!pSfxApp->IsDowning() && !pImp->aToDoStack.empty())
     {
         // No immediate update is requested
         pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
@@ -522,7 +521,7 @@ void SfxDispatcher::Pop
         pImp->aTimer.Stop();
 
         // Bindings may wake up again
-        if ( !pImp->aToDoStack.Count() )
+        if(pImp->aToDoStack.empty())
         {
             SfxBindings* pBindings = GetBindings();
             if ( pBindings )
@@ -573,21 +572,20 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
     SFX_STACK(SfxDispatcher::CheckVirtualStack);
 
     SfxShellStack_Impl aStack( pImp->aStack );
-    for ( short nToDo = pImp->aToDoStack.Count()-1; nToDo >= 0; --nToDo )
+    for(std::deque<SfxToDo_Impl>::const_reverse_iterator i = pImp->aToDoStack.rbegin(); i != pImp->aToDoStack.rend(); ++i)
     {
-        SfxToDo_Impl aToDo( pImp->aToDoStack.Top(nToDo) );
-        if ( aToDo.bPush )
-            aStack.Push( (SfxShell*) aToDo.pCluster );
+        if(i->bPush)
+            aStack.Push(static_cast<SfxShell*>(i->pCluster));
         else
         {
-            SfxShell* pPopped = 0;
+            SfxShell* pPopped(NULL);
             do
             {
                 DBG_ASSERT( aStack.Count(), "popping from empty stack" );
                 pPopped = aStack.Pop();
             }
-            while ( aToDo.bUntil && pPopped != aToDo.pCluster );
-            DBG_ASSERT( pPopped == aToDo.pCluster, "popping unpushed SfxInterface" );
+            while(i->bUntil && pPopped != i->pCluster);
+            DBG_ASSERT(pPopped == i->pCluster, "popping unpushed SfxInterface");
         }
     }
 
@@ -757,7 +755,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( sal_False, sal_False, 1 );
     }
 
-    if ( pImp->aToDoStack.Count() )
+    if(!pImp->aToDoStack.empty())
     {
         // No immediate update is requested
         pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
@@ -929,7 +927,7 @@ void SfxDispatcher::_Execute
 
 {
     DBG_ASSERT( !pImp->bFlushing, "recursive call to dispatcher" );
-    DBG_ASSERT( !pImp->aToDoStack.Count(), "unprepared InPlace _Execute" );
+    DBG_ASSERT( pImp->aToDoStack.empty(), "unprepared InPlace _Execute" );
 
     if ( IsLocked( rSlot.GetSlotId() ) )
         return;
@@ -1609,24 +1607,22 @@ void SfxDispatcher::FlushImpl()
     SfxApplication *pSfxApp = SFX_APP();
 
     // Re-build the true stack in the first round
-    SfxToDoStack_Impl aToDoCopy;
+    std::deque<SfxToDo_Impl> aToDoCopy;
     sal_Bool bModify = sal_False;
-    short nToDo;
-    for ( nToDo = pImp->aToDoStack.Count()-1; nToDo >= 0; --nToDo )
+    for(std::deque<SfxToDo_Impl>::reverse_iterator i = pImp->aToDoStack.rbegin(); i != pImp->aToDoStack.rend(); ++i)
     {
         bModify = sal_True;
 
-        SfxToDo_Impl aToDo( pImp->aToDoStack.Top(nToDo) );
-        if ( aToDo.bPush )
+        if(i->bPush)
         {
             // Actually push
-            DBG_ASSERT( !pImp->aStack.Contains( aToDo.pCluster ),
-                        "pushed SfxShell already on stack" );
-            pImp->aStack.Push( aToDo.pCluster );
-            aToDo.pCluster->SetDisableFlags( pImp->nDisableFlags );
+            DBG_ASSERT(!pImp->aStack.Contains(i->pCluster),
+                       "pushed SfxShell already on stack" );
+            pImp->aStack.Push(i->pCluster);
+            i->pCluster->SetDisableFlags(pImp->nDisableFlags);
 
             // Mark the moved shell
-            aToDoCopy.Push( aToDo );
+            aToDoCopy.push_front(*i);
         }
         else
         {
@@ -1638,18 +1634,16 @@ void SfxDispatcher::FlushImpl()
                 DBG_ASSERT( pImp->aStack.Count(), "popping from empty stack" );
                 pPopped = pImp->aStack.Pop();
                 pPopped->SetDisableFlags( 0 );
-                bFound = pPopped == aToDo.pCluster;
+                bFound = (pPopped == i->pCluster);
 
                 // Mark the moved Shell
-                aToDoCopy.Push( SfxToDo_Impl( sal_False, aToDo.bDelete, sal_False, *pPopped) );
+                aToDoCopy.push_front(SfxToDo_Impl(sal_False, i->bDelete, sal_False, *pPopped));
             }
-            while ( aToDo.bUntil && !bFound );
+            while(i->bUntil && !bFound);
             DBG_ASSERT( bFound, "wrong SfxShell popped" );
         }
-
-        if ( nToDo == 0 )
-            pImp->aToDoStack.Clear();
     }
+    pImp->aToDoStack.clear();
 
     // Invalidate bindings, if possible
     if ( !pSfxApp->IsDowning() )
@@ -1669,26 +1663,25 @@ void SfxDispatcher::FlushImpl()
     OSL_TRACE("Successfully flushed dispatcher!");
 
     // Activate the Shells and possible delete them in the 2nd round
-    for ( nToDo = aToDoCopy.Count()-1; nToDo >= 0; --nToDo )
+    for(std::deque<SfxToDo_Impl>::reverse_iterator i = aToDoCopy.rbegin(); i != aToDoCopy.rend(); ++i)
     {
-        SfxToDo_Impl aToDo( aToDoCopy.Top(nToDo) );
-        if ( aToDo.bPush )
+        if(i->bPush)
         {
             if ( pImp->bActive )
-                aToDo.pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
+                i->pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
         }
-        else
-            if ( pImp->bActive )
-                aToDo.pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
+        else if ( pImp->bActive )
+                i->pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
     }
-    for ( nToDo = aToDoCopy.Count()-1; nToDo >= 0; --nToDo )
+
+    for(std::deque<SfxToDo_Impl>::reverse_iterator i = aToDoCopy.rbegin(); i != aToDoCopy.rend(); ++i)
     {
-        SfxToDo_Impl aToDo( aToDoCopy.Top(nToDo) );
-        if ( aToDo.bDelete ) delete aToDo.pCluster;
+        if(i->bDelete)
+            delete i->pCluster;
     }
-    sal_Bool bAwakeBindings = aToDoCopy.Count() != 0;
+    sal_Bool bAwakeBindings = !aToDoCopy.empty();
     if( bAwakeBindings )
-        aToDoCopy.Clear();
+        aToDoCopy.clear();
 
     // If more changes have occured on the stach when
     // Activate/Deactivate/Delete:
