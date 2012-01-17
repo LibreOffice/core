@@ -1282,6 +1282,12 @@ comparison:
 		  $$->append($3);
 		  $$->append($4);
 		}
+	  | SQL_TOKEN_IS sql_not
+	  	{
+		  $$ = SQL_NEW_RULE;
+		  $$->append($1);
+		  $$->append($2);
+		}
 	;
 between_predicate_part_2:
 	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
