@@ -951,55 +951,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     if (!pParent)
     {
         pBox->EndSelection();
-
-        OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-
-        if(!pGroupInfo)
-            return;
-
-        switch(pGroupInfo->m_nDialogId)
-        {
-        case SID_GENERAL_OPTIONS:
-            ActivatePage(RID_SFXPAGE_GENERAL);
-            break;
-        case SID_LANGUAGE_OPTIONS:
-            ActivatePage(OFA_TP_LANGUAGES);
-            break;
-        case SID_INET_DLG:
-            ActivatePage(RID_SVXPAGE_INET_PROXY);
-            break;
-        case SID_SW_EDITOPTIONS:
-            ActivatePage(RID_SW_TP_OPTLOAD_PAGE);
-            break;
-        case SID_SW_ONLINEOPTIONS:
-            ActivatePage(RID_SW_TP_HTML_CONTENT_OPT);
-            break;
-        case SID_SC_EDITOPTIONS:
-            ActivatePage(SID_SC_TP_LAYOUT);
-            break;
-        case SID_SD_EDITOPTIONS:
-            ActivatePage(SID_SI_TP_MISC);
-            break;
-        case SID_SD_GRAPHIC_OPTIONS:
-            ActivatePage(SID_SD_TP_MISC);
-            break;
-        case SID_SM_EDITOPTIONS:
-            ActivatePage(SID_SM_TP_PRINTOPTIONS);
-            break;
-        case SID_SCH_EDITOPTIONS:
-            ActivatePage(RID_OPTPAGE_CHART_DEFCOLORS);
-            break;
-        case SID_SB_STARBASEOPTIONS:
-            ActivatePage(SID_SB_CONNECTIONPOOLING);
-            break;
-        case SID_FILTER_DLG:
-            ActivatePage(RID_SFXPAGE_SAVE);
-            break;
-        default:
-            SAL_WARN("cui.options", "Unrecognized options category " << pGroupInfo->m_nDialogId);
-            break;
-        }
-
         return;
     }
 
