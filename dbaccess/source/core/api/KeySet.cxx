@@ -290,16 +290,16 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
 
                 ::dbaccess::getColumnPositions(xQueryColumns,xSelColSup->getColumns()->getElementNames(),sSelectTableName,(*m_pForeignColumnNames));
 
-                SelectColumnsMetaData::iterator aPosEnd = (*m_pForeignColumnNames).end();
+                const SelectColumnsMetaData::iterator aPosEnd = (*m_pForeignColumnNames).end();
                 for(SelectColumnsMetaData::iterator aPosIter = (*m_pForeignColumnNames).begin();aPosIter != aPosEnd;++aPosIter)
                 {
                     // look for columns not in the source columns to use them as filter as well
-                        if ( aFilter.getLength() )
-                            aFilter.append(aAnd);
-                        aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
-                        aFilter.append(s_sDot);
-                        aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
-                        aFilter.append(s_sParam);
+                    if ( aFilter.getLength() )
+                        aFilter.append(aAnd);
+                    aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
+                    aFilter.append(s_sDot);
+                    aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
+                    aFilter.append(s_sParam);
                 }
                 break;
             }
