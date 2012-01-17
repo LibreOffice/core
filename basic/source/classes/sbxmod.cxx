@@ -1155,11 +1155,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             }
         }
 
-        // Delete the Error-Stack
-        SbErrorStack*& rErrStack = GetSbData()->pErrStack;
-        delete rErrStack;
-        rErrStack = NULL;
-
         if( nMaxCallLevel == 0 )
         {
 #ifdef UNX

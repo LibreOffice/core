@@ -397,11 +397,6 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     pInst->nErl = 0;
     nError = 0;
     bInError = sal_False;
-
-
-    SbErrorStack*& rErrStack = GetSbData()->pErrStack;
-    delete rErrStack;
-    rErrStack = NULL;
 }
 
 // close channel (+channel, 0=all)

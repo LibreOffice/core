@@ -794,11 +794,6 @@ sal_Bool SbiRuntime::Step()
 
                 if( pRtErrHdl )
                 {
-                    SbErrorStack*& rErrStack = GetSbData()->pErrStack;
-                    if( rErrStack )
-                        delete rErrStack;
-                    rErrStack = new SbErrorStack();
-
                     // manipulate all the RTs that are below in the call-stack
                     pRt = this;
                     do
@@ -806,14 +801,9 @@ sal_Bool SbiRuntime::Step()
                         pRt->nError = err;
                         if( pRt != pRtErrHdl )
                             pRt->bRun = sal_False;
-
-                        SbErrorStackEntry *pEntry = new SbErrorStackEntry
-                            ( pRt->pMeth, pRt->nLine, pRt->nCol1, pRt->nCol2 );
-                        rErrStack->C40_INSERT(SbErrorStackEntry, pEntry, rErrStack->Count() );
-
-                        if( pRt == pRtErrHdl )
+                        else
                             break;
-                           pRt = pRt->pNext;
+                        pRt = pRt->pNext;
                     }
                     while( pRt );
                 }

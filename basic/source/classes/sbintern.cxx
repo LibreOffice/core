@@ -36,8 +36,6 @@
 #include "codegen.hxx"
 #include <basic/basmgr.hxx>
 
-SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)
-
 SbiGlobals* GetSbData()
 {
     SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
@@ -63,7 +61,6 @@ SbiGlobals::SbiGlobals()
     bCompiler = sal_False;
     bGlobalInitErr = sal_False;
     bRunInit = sal_False;
-    pErrStack = NULL;
     pTransliterationWrapper = NULL;
     bBlockCompilerError = sal_False;
     pAppBasMgr = NULL;
@@ -72,7 +69,6 @@ SbiGlobals::SbiGlobals()
 
 SbiGlobals::~SbiGlobals()
 {
-    delete pErrStack;
     delete pSbFac;
     delete pUnoFac;
     delete pTransliterationWrapper;

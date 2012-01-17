@@ -87,70 +87,6 @@ public:
     SbModule* FindClass( const String& rClassName );
 };
 
-// stack for the SbiRuntime chain which is removed in the case of an error
-class BASIC_DLLPUBLIC SbErrorStackEntry
-{
-public:
-    SbErrorStackEntry(SbMethodRef aM, xub_StrLen nL, xub_StrLen nC1, xub_StrLen nC2)
-        : aMethod(aM), nLine(nL), nCol1(nC1), nCol2(nC2) {}
-    SbMethodRef aMethod;
-    xub_StrLen nLine;
-    xub_StrLen nCol1, nCol2;
-};
-
-typedef sal_Bool (*FnForEach_SbErrorStack)( const SbErrorStackEntry* &, void* );
-class BASIC_DLLPUBLIC SbErrorStack: public SvPtrarr
-{
-public:
-    SbErrorStack( sal_uInt16 nIni=1, sal_uInt8 nG=1 )
-        : SvPtrarr(nIni,nG) {}
-    ~SbErrorStack() { DeleteAndDestroy( 0, Count() ); }
-    void Insert( const SbErrorStack *pI, sal_uInt16 nP,
-            sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {
-        SvPtrarr::Insert((const SvPtrarr*)pI, nP, nS, nE);
-    }
-    void Insert( const SbErrorStackEntry* & aE, sal_uInt16 nP ) {
-        SvPtrarr::Insert((const VoidPtr &)aE, nP );
-    }
-    void Insert( const SbErrorStackEntry* *pE, sal_uInt16 nL, sal_uInt16 nP ) {
-        SvPtrarr::Insert( (const VoidPtr *)pE, nL, nP );
-    }
-    void Replace( const SbErrorStackEntry* & aE, sal_uInt16 nP ) {
-        SvPtrarr::Replace( (const VoidPtr &)aE, nP );
-    }
-    void Replace( const SbErrorStackEntry* *pE, sal_uInt16 nL, sal_uInt16 nP ) {
-        SvPtrarr::Replace( (const VoidPtr*)pE, nL, nP );
-    }
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {
-        SvPtrarr::Remove(nP,nL);
-    }
-    const SbErrorStackEntry** GetData() const {
-        return (const SbErrorStackEntry**)SvPtrarr::GetData();
-    }
-    void ForEach( CONCAT( FnForEach_, SbErrorStack ) fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( 0, nA, (FnForEach_SvPtrarr)fnForEach, pArgs );
-    }
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
-                    CONCAT( FnForEach_, SbErrorStack ) fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( nS, nE, (FnForEach_SvPtrarr)fnForEach, pArgs );
-    }
-    SbErrorStackEntry* operator[]( sal_uInt16 nP )const  {
-        return (SbErrorStackEntry*)SvPtrarr::operator[](nP); }
-    SbErrorStackEntry* GetObject( sal_uInt16 nP )const  {
-        return (SbErrorStackEntry*)SvPtrarr::GetObject(nP); }
-
-    sal_uInt16 GetPos( const SbErrorStackEntry* & aE ) const {
-        return SvPtrarr::GetPos((const VoidPtr &)aE);
-    }
-    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );
-private:
-    BASIC_DLLPRIVATE SbErrorStack( const SbErrorStack& );
-    BASIC_DLLPRIVATE SbErrorStack& operator=( const SbErrorStack& );
-};
-
-
 struct SbiGlobals
 {
     SbiInstance*    pInst;          // all active runtime instances
@@ -172,7 +108,6 @@ struct SbiGlobals
     sal_Bool            bGlobalInitErr;
     sal_Bool            bRunInit;       // sal_True, if RunInit active from the Basic
     String          aErrMsg;        // buffer for GetErrorText()
-    SbErrorStack*   pErrStack;      // for the SbiRuntime chain
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     sal_Bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
