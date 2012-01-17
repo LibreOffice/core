@@ -34,9 +34,14 @@
 
 namespace ScAutoFormatFieldObj {
 
+#define NUMBER_OF_TESTS 2
+
 class ScTableAutoFormatField : public UnoApiTest
 {
 public:
+
+    virtual void setUp();
+    virtual void tearDown();
 
     uno::Reference< beans::XPropertySet > init();    void testRotateReference();
     void testVertJustify();
@@ -46,7 +51,12 @@ public:
     CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST_SUITE_END();
 
+private:
+
+    static int nTest;
 };
+
+int ScTableAutoFormatField::nTest = 0;
 
 uno::Reference< beans::XPropertySet > ScTableAutoFormatField::init()
 {
@@ -93,6 +103,23 @@ void ScTableAutoFormatField::testVertJustify()
     CPPUNIT_ASSERT(aVertJustifyControllValue >>= aValue);
     std::cout << "New VertJustify value: " << aValue << std::endl;
     CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
+}
+
+void ScTableAutoFormatField::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScTableAutoFormatField::tearDown()
+{
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        mxDesktop->terminate();
+        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableAutoFormatField);
