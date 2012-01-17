@@ -111,8 +111,6 @@
 #include <swerror.h>
 
 #define FONTSIZE_MASK           7
-#define FONTCOLOR_MASK          (1<<15)
-#define FONT_MASK               (1<<14)
 
 #define HTML_ESC_PROP 80
 #define HTML_ESC_SUPER DFLT_ESC_SUPER

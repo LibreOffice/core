@@ -67,10 +67,7 @@
 #include <numrule.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
-#define NETSCAPE_DFLT_CELLPADDING 1
 #define NETSCAPE_DFLT_CELLSPACING 2
-
-//#define FIX56334
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1408,15 +1405,11 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
             // Wenn die Zelle ueber mehrere Zeilen geht muss ein evtl.
             // an der Zeile gesetzter Hintergrund an die Zelle uebernommen
             // werden.
-#ifndef FIX56334
             // Wenn es sich um eine Tabelle in der Tabelle handelt und
             // die Zelle ueber die gesamte Heoehe der Tabelle geht muss
             // ebenfalls der Hintergrund der Zeile uebernommen werden, weil
             // die Line von der GC (zu Recht) wegoptimiert wird.
             if( nRowSpan > 1 || (this != pTopTable && nRowSpan==nRows) )
-#else
-            if( nRowSpan > 1 )
-#endif
             {
                 pBGBrushItem = ((*pRows)[nRow])->GetBGBrush();
                 if( !pBGBrushItem && this != pTopTable )
@@ -1691,13 +1684,11 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     HTMLTableRow *pTopRow = (*pRows)[nTopRow];
     sal_uInt16 nRowHeight = pTopRow->GetHeight();
     const SvxBrushItem *pBGBrushItem = 0;
-#ifndef FIX56334
     if( this == pTopTable || nTopRow>0 || nBottomRow<nRows )
     {
         // An der Line eine Frabe zu setzen macht keinen Sinn, wenn sie
         // die auesserste und gleichzeitig einzige Zeile einer Tabelle in
         // der Tabelle ist.
-#endif
         pBGBrushItem = pTopRow->GetBGBrush();
 
         if( !pBGBrushItem && this != pTopTable )
@@ -1709,9 +1700,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             if( !pBGBrushItem )
                 pBGBrushItem = GetInhBGBrush();
         }
-#ifndef FIX56334
     }
-#endif
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
     {
         SwTableLineFmt *pFrmFmt = (SwTableLineFmt*)pLine->ClaimFrmFmt();

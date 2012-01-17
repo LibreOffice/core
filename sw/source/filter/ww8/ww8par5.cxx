@@ -95,8 +95,6 @@
 
 #include <algorithm> // #i24377#
 
-//#define WW_NATIVE_TOC 0
-
 #define MAX_FIELDLEN 64000
 
 #define WW8_TOX_LEVEL_DELIM     ':'

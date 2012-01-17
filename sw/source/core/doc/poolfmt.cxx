@@ -91,10 +91,7 @@ const sal_uInt16 PT_22  = 22 * 20;      // 22 pt
 const sal_uInt16 PT_24  = 24 * 20;      // 22 pt
 
 
-//const sal_uInt16 HTML_PARSPACE = ((CM_05 * 7) / 10);
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
-
-static const sal_Char sKomma[] = ", ";
 
 static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
 //  PT_16, PT_14, PT_14, PT_12, PT_12,          // normal

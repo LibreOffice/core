@@ -150,8 +150,6 @@
 
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
-#define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
-#define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
 using namespace ::com::sun::star;
 using namespace sw::util;

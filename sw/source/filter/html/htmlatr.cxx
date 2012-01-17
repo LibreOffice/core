@@ -108,12 +108,6 @@ using namespace ::com::sun::star;
 
 #endif
 
-#define HTML_BULLETCHAR_DISC    34
-#define HTML_BULLETCHAR_CIRCLE  38
-#define HTML_BULLETCHAR_SQUARE  36
-
-#define COLFUZZY 20
-
 //-----------------------------------------------------------------------
 
 HTMLOutEvent aAnchorEventTable[] =

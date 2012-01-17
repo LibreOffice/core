@@ -71,8 +71,6 @@
 #include <shellres.hxx>
 
 
-#define MAX_FIELDLEN 64000
-
 using namespace com::sun::star;
 
 static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, sal_Bool bNext)

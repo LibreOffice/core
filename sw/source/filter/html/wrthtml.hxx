@@ -64,7 +64,6 @@ class SwHTMLTxtFtns;
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
-//#define HTML_PARSPACE ((MM50 * 7) / 10)
 #define HTML_PARSPACE (MM50)
 
 // Flags fuer die Ausgabe von Rahmen aller Art

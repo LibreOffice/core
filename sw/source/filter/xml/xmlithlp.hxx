@@ -46,16 +46,6 @@ namespace rtl { class OUString; }
 /** Define various helper variables and functions for xmlimpit.cxx and
  * xmlexpit.cxx.  */
 
-
-#define SVX_XML_BORDER_STYLE_NONE 0
-#define SVX_XML_BORDER_STYLE_SOLID 1
-#define SVX_XML_BORDER_STYLE_DOUBLE 2
-
-#define SVX_XML_BORDER_WIDTH_THIN 0
-#define SVX_XML_BORDER_WIDTH_MIDDLE 1
-#define SVX_XML_BORDER_WIDTH_THICK 2
-
-
 sal_Bool lcl_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       sal_Bool& rHasStyle, sal_uInt16& rStyle,
