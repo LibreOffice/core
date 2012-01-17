@@ -147,9 +147,8 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
     if(!pDView)
         return sal_False;
     SET_CURR_SHELL( this );
-    StartAction();          // necessary action, to assure several
-                            // AttrChgdNotify (e.g. due to Unmark->MarkListHasChgd)
-                            // arrive
+    StartAction();    // action is necessary to assure only one AttrChgdNotify
+                      // (e.g. due to Unmark->MarkListHasChgd) arrives
 
     const SdrMarkList &rMrkList = pDView->GetMarkedObjectList();
     const sal_Bool bHadSelection = rMrkList.GetMarkCount() ? sal_True : sal_False;
@@ -174,10 +173,11 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
                     ( pOldSelFly->GetFmt()->GetProtect().IsCntntProtected()
                      && !IsReadOnlyAvailable() ))
                 {
-                    // If a fly is deselected, which contains graphic, OLE or otherwise,
-                    // the cursus should be removed from it.
+                    // If a fly is deselected, which contains graphic, OLE or
+                    // otherwise, the cursor should be removed from it.
                     // Similar if a fly with protected content is deselected.
-                    // For simplicity we put Crsr 'grad next to the upper-left corner.
+                    // For simplicity we put the cursor next to the upper-left
+                    // corner.
                     Point aPt( pOldSelFly->Frm().Pos() );
                     aPt.X() -= 1;
                     sal_Bool bUnLockView = !IsViewLocked();
@@ -217,8 +217,8 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
 
     if ( rMrkList.GetMarkCount() > 1 )
     {
-        // Stupid if a characterobject was selected and only
-        // one fly extra is selected.
+        // It sucks if Drawing objects were selected and now
+        // additionally a fly is selected.
         for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -677,7 +677,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
 
         StartUndo( UNDO_START );
 
-        // #50778# Bug during draging: In StartAction a HideShowXor is called.
+        // #50778# Bug during dragging: In StartAction a HideShowXor is called.
         // In EndDragObj() this is reversed, for no reason and even wrong.
         // To restore consistancy we should bring up the Xor again.
 
@@ -772,11 +772,11 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 
 void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 {
-    // Rules for dodging have changed.
+    // Rules for evasion have changed.
     // 1. The environment of the fly and everything inside should be notified
     // 2. The content of the frame itself has to be notified
-    // 3. Frames dodging inside frames have to be notified
-    // 4. Also characterobjects can displace frames
+    // 3. Frames displaced by the frame have to be notified
+    // 4. Also Drawing objects can displace frames
     for( sal_uInt16 j = 0; j < pLst->GetMarkCount(); ++j )
     {
         SwPageFrm *pPage;
@@ -1382,7 +1382,7 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
 
             // Special case if another object is on same Y.
             if( aCurPos != aPos &&          // only when it is not me
-                aCurPos.Y() == aPos.Y() &&  // is equal to the  Y position
+                aCurPos.Y() == aPos.Y() &&  // Y positions equal
                 (bNext? (aCurPos.X() > aPos.X()) :  // lies next to me
                         (aCurPos.X() < aPos.X())) ) // " reverse
             {
@@ -1418,11 +1418,11 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
             if( (
                 (bNext? (aPos.Y() < aCurPos.Y()) :          // only below me
                         (aPos.Y() > aCurPos.Y())) &&        // " reverse
-                (bNext? (aBestPos.Y() > aCurPos.Y()) :      // next below
+                (bNext? (aBestPos.Y() > aCurPos.Y()) :      // closer below
                         (aBestPos.Y() < aCurPos.Y()))
                     ) ||    // " reverse
                         (aBestPos.Y() == aCurPos.Y() &&
-                (bNext? (aBestPos.X() > aCurPos.X()) :      // continue left
+                (bNext? (aBestPos.X() > aCurPos.X()) :      // further left
                         (aBestPos.X() < aCurPos.X()))))     // " reverse
 
             {
@@ -1433,7 +1433,7 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
             if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // higher as best
                         (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
                         (aTopPos.Y() == aCurPos.Y() &&
-                (bNext? (aTopPos.X() > aCurPos.X()) :       // continue left
+                (bNext? (aTopPos.X() > aCurPos.X()) :       // further left
                         (aTopPos.X() < aCurPos.X()))))      // " reverse
             {
                 aTopPos = aCurPos;
@@ -1632,7 +1632,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
-            // The crsr should not be to far
+            // The crsr should not be too far away
             bCharBound = sal_True;
             Rectangle aRect( aTmp.SVRect() );
             aRect.Left()  -= MM50*2;
@@ -1643,7 +1643,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = sal_False;
 
-            // binding in header/footer lines also not allowed.
+            // anchor in header/footer also not allowed.
             if( bCharBound )
                 bCharBound = !GetDoc()->IsInHeaderFooter( aPos.nNode );
 
@@ -2363,7 +2363,7 @@ void SwFEShell::MirrorSelection( sal_Bool bHorizontal )
     }
 }
 
-// jump to known frame (Graphic/OLE)
+// jump to named frame (Graphic/OLE)
 
 sal_Bool SwFEShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSelFrm )
 {
@@ -2654,7 +2654,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
 {
     rRect.Clear();
 
-    // The source is not allowd to have a follow.
+    // The source is not allowed to have a follow.
     const SwFmtChain &rChain = rSource.GetChain();
     if ( rChain.GetNext() )
         return SW_CHAIN_SOURCE_CHAINED;
