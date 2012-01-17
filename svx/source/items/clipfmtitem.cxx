@@ -112,13 +112,11 @@ int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
         return 0;
 
     int nRet = 1;
-    const String* pStr1, *pStr2;
     for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.size(); n < nEnd; ++n )
     {
         if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
-            ( (0 == ( pStr1 = &(pImpl->aFmtNms[n]) )) ^
-              (0 == ( pStr2 = &(rCmp.pImpl->aFmtNms[n]) ) )) ||
-            ( pStr1 && *pStr1 != *pStr2 ))
+            ( pImpl->aFmtNms.is_null(n) ^ rCmp.pImpl->aFmtNms.is_null(n) ) ||
+            ( !pImpl->aFmtNms.is_null(n) && pImpl->aFmtNms[n] != rCmp.pImpl->aFmtNms[n] ) )
         {
             nRet = 0;
             break;
