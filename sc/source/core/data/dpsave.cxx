@@ -1241,63 +1241,6 @@ bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
     return pDim->HasInvisibleMember();
 }
 
-void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
-{
-    try
-    {
-        std::list<rtl::OUString> deletedDims;
-
-        {
-            boost::ptr_vector<ScDPSaveDimension>::iterator iter = aDimList.end()-1;
-            for (long i = aDimList.size()-1; i >= 0; ++i,--iter)
-            {
-                rtl::OUString aName = iter->GetName();
-                if ( iter->IsDataLayout() )
-                    continue;
-
-                uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
-                uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-                long nIntCount = xIntDims->getCount();
-                bool bFound = false;
-                for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
-                {
-                    uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
-                    uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
-                    if ( xDimName.is() && xDimName->getName() == aName )
-                        bFound = true;
-                }
-
-                if ( !bFound )
-                {
-                    deletedDims.push_back( aName );
-                    iter = aDimList.erase(iter);
-                    OSL_FAIL( "\n Remove dim: \t" );
-                    OSL_TRACE( "%s", aName.getStr() );
-                }
-
-            }
-        }
-
-        {
-            boost::ptr_vector<ScDPSaveDimension>::reverse_iterator iter;
-            for (iter = aDimList.rbegin(); iter != aDimList.rend(); ++iter) //check every dimension ??
-            {
-                rtl::OUString aName = iter->GetName();
-                if ( iter->IsDataLayout() )
-                    continue;
-                iter->Refresh( xSource, deletedDims );
-
-            }
-        }
-
-        mbDimensionMembersBuilt = false; // there may be new members
-    }
-    catch(uno::Exception&)
-    {
-        OSL_FAIL("error in ScDPSaveData::Refresh");
-    }
-}
-
 void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource ,
                                 const std::list<rtl::OUString>& deletedDims)

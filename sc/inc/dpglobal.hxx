@@ -136,23 +136,17 @@ public:
     // case insensitive equality
     static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
-#if OSL_DEBUG_LEVEL > 1
-    void    dump() const;
-#endif
-
 public:
     bool IsHasData() const ;
     bool IsHasErr() const ;
     bool IsValue() const;
     String  GetString() const ;
     double  GetValue() const ;
-    sal_uLong    GetNumFormat() const ;
     bool HasStringData() const ;
     bool IsDate() const;
     bool HasDatePart() const;
     void SetDate( bool b ) ;
 
-    TypedStrData*  CreateTypeString( );
     sal_uInt8    GetType() const;
     sal_uInt8 & GetFlag() throw() { return mbFlag; }
     const sal_uInt8 & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }

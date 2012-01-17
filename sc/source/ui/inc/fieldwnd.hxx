@@ -151,10 +151,6 @@ public:
     size_t GetSelectedField() const;
     void SetSelectedField(size_t nSelected);
 
-    /** Notifies this control that the offset of the first field has been changed.
-        The control has to adjust the selection to keep the same field selected
-        on scrolling with scrollbar. */
-    void            ModifySelectionOffset( long nOffsetDiff );
     /** Selects the next field. Called i.e. after moving a field from SELECT area. */
     void            SelectNext();
     /** Grabs focus and sets new selection. */
@@ -189,8 +185,6 @@ protected:
     /** Draws a field into the specified rectangle. */
     void DrawField(
         OutputDevice& rDev, const Rectangle& rRect, FieldName& rText, bool bFocus );
-
-    ScDPLayoutDlg* GetParentDlg() const;
 
     void AppendPaintable(Window* p);
     void DrawPaintables();

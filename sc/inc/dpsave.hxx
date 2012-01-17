@@ -328,7 +328,6 @@ public:
         { return bDrillDown; }
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
-    void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const

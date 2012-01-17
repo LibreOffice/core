@@ -2597,25 +2597,6 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
     rRefs.swap(aRefs);
 }
 
-void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
-{
-    RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
-    if (it == maRanges.end())
-        // Not cached.  Nothing to do.
-        return;
-
-    size_t nIndex = std::distance(maRanges.begin(), it);
-    CachesType::iterator itCache = maCaches.find(nIndex);
-    if (itCache == maCaches.end())
-    {
-        OSL_FAIL("Cache pool and index pool out-of-sync !!!");
-        return;
-    }
-
-    it->SetInvalid(); // Make this slot available for future caches.
-    maCaches.erase(itCache);
-}
-
 bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
 {
     CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
@@ -2675,13 +2656,6 @@ void ScDPCollection::NameCaches::updateCache(const OUString& rName, const ScRang
     rRefs.swap(aRefs);
 }
 
-void ScDPCollection::NameCaches::removeCache(const OUString& rName)
-{
-    CachesType::iterator itr = maCaches.find(rName);
-    if (itr != maCaches.end())
-        maCaches.erase(itr);
-}
-
 bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
 {
     CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
@@ -2727,11 +2701,6 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
     const ScDPCache* p = pCache.get();
     maCaches.insert(aType, pCache);
     return p;
-}
-
-size_t ScDPCollection::DBCaches::size() const
-{
-    return maCaches.size();
 }
 
 uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
@@ -2830,14 +2799,6 @@ void ScDPCollection::DBCaches::updateCache(
     comphelper::disposeComponent(xRowSet);
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     aRefs.swap(rRefs);
-}
-
-void ScDPCollection::DBCaches::removeCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
-{
-    DBType aType(nSdbType, rDBName, rCommand);
-    CachesType::iterator itr = maCaches.find(aType);
-    if (itr != maCaches.end())
-        maCaches.erase(itr);
 }
 
 bool ScDPCollection::DBCaches::remove(const ScDPCache* p)

@@ -306,24 +306,6 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
         return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void    ScDPItemData::dump() const
-{
-    OSL_TRACE( "Numberformat= %o",  nNumFormat );
-    OSL_TRACE( "%s", aString.GetBuffer() );
-    OSL_TRACE( "fValue= %f", fValue );
-    OSL_TRACE( "mbFlag= %d", mbFlag);
-}
-#endif
-
-TypedStrData* ScDPItemData::CreateTypeString( )
-{
-    if ( IsValue() )
-        return new TypedStrData( aString, fValue, SC_STRTYPE_VALUE );
-    else
-        return new TypedStrData( aString );
-}
-
 sal_uInt8 ScDPItemData::GetType() const
 {
     if ( IsHasErr() )
@@ -359,10 +341,6 @@ String ScDPItemData::GetString() const
 double ScDPItemData::GetValue() const
 {
     return fValue;
-}
-sal_uLong  ScDPItemData::GetNumFormat() const
-{
-    return nNumFormat;
 }
 
 bool ScDPItemData::HasStringData() const
@@ -597,16 +575,6 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
     }
 }
 
-sal_uLong ScDPCache::GetDimNumType( SCCOL nDim) const
-{
-    OSL_ENSURE( IsValid(), "  IsValid() == false " );
-    OSL_ENSURE( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
-    if ( maTableDataValues[nDim].size()==0 )
-        return NUMBERFORMAT_UNDEFINED;
-    else
-        return GetNumType(maTableDataValues[nDim][0].nNumFormat);
-}
-
 bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 {
     if (!rParam.GetEntry(0).bDoQuery)
@@ -805,11 +773,6 @@ bool ScDPCache::IsRowEmpty( SCROW nRow ) const
     return mbEmptyRow[ nRow ];
 }
 
-bool ScDPCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
-{
-    return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, false ) )->IsHasData();
-}
-
 bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 {
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
@@ -926,15 +889,6 @@ const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
     return maTableDataValues[nDim];
 }
 
-SCROW ScDPCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
-{
-    OSL_ENSURE ( IsValid(), "IsValid");
-    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount,  "nDim < mnColumnCount");
-    OSL_ENSURE( nOrder >= 0 && (size_t) nOrder < maGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
-
-    return maGlobalOrder[nDim][nOrder];
-}
-
 sal_uLong ScDPCache::GetNumType(sal_uLong nFormat) const
 {
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
@@ -985,12 +939,6 @@ SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
     return maTableDataValues[nDim].size();
-}
-
-const ScDPItemData* ScDPCache::GetSortedItemData(SCCOL nDim, SCROW nOrder) const
-{
-    SCROW n = GetSortedItemDataId( nDim, nOrder );
-    return GetItemDataById( nDim, n );
 }
 
 SCCOL ScDPCache::GetDimensionIndex(String sName) const
@@ -1050,12 +998,6 @@ SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
         }
     }
     return  GetRowCount() + maAdditionalData.getDataId(rData);
-}
-
-SCROW ScDPCache::GetAdditionalItemID ( const String& sItemData ) const
-{
-    ScDPItemData rData ( sItemData );
-    return GetAdditionalItemID( rData );
 }
 
 SCROW ScDPCache::GetAdditionalItemID( const ScDPItemData& rData ) const

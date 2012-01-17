@@ -560,11 +560,6 @@ void ScDPFieldControlBase::DrawField(
     rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point( 0, 0 ), aDevSize ) );
 }
 
-ScDPLayoutDlg* ScDPFieldControlBase::GetParentDlg() const
-{
-    return mpDlg;
-}
-
 void ScDPFieldControlBase::AppendPaintable(Window* p)
 {
     maPaintables.push_back(p);
@@ -679,12 +674,6 @@ void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     SetSelection( nNewIndex );
-}
-
-void ScDPFieldControlBase::ModifySelectionOffset( long nOffsetDiff )
-{
-    mnFieldSelected -= nOffsetDiff;
-    Redraw();
 }
 
 void ScDPFieldControlBase::SelectNext()

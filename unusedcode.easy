@@ -252,21 +252,7 @@ ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
 ScDLL::Exit()
-ScDPCache::GetAdditionalItemID(String const&) const
-ScDPCache::GetDimNumType(short) const
-ScDPCache::GetSortedItemData(short, int) const
-ScDPCache::IsEmptyMember(int, unsigned short) const
-ScDPCollection::DBCaches::removeCache(int, rtl::OUString const&, rtl::OUString const&)
-ScDPCollection::DBCaches::size() const
-ScDPCollection::NameCaches::removeCache(rtl::OUString const&)
-ScDPCollection::SheetCaches::removeCache(ScRange const&)
-ScDPFieldControlBase::GetParentDlg() const
-ScDPFieldControlBase::ModifySelectionOffset(long)
 ScDPFieldControlBase::SetSelectedField(unsigned long)
-ScDPItemData::CreateTypeString()
-ScDPItemData::GetNumFormat() const
-ScDPItemData::dump() const
-ScDPSaveData::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&)
 ScDdeLink::ResetValue()
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScDocument::SetAllTabRangeNames(std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)

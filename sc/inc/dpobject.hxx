@@ -278,7 +278,6 @@ public:
 
     private:
         void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
-        void removeCache(const ScRange& rRange);
         bool remove(const ScDPCache* p);
     };
 
@@ -298,7 +297,6 @@ public:
         size_t size() const;
     private:
         void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
-        void removeCache(const ::rtl::OUString& rName);
         bool remove(const ScDPCache* p);
     };
 
@@ -331,7 +329,6 @@ public:
     public:
         DBCaches(ScDocument* pDoc);
         const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
-        size_t size() const;
 
     private:
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
@@ -339,7 +336,6 @@ public:
 
         void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
                          std::set<ScDPObject*>& rRefs);
-        void removeCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
         bool remove(const ScDPCache* p);
     };
 
