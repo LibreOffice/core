@@ -107,7 +107,7 @@ public:
 
     void verifyPoly(const char* sName, const char* sSvg, const tools::B2DClipState& toTest)
     {
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 sName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(toTest.getClipPoly()),

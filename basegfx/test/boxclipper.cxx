@@ -310,7 +310,7 @@ public:
                  const ::basegfx::B2DPolyPolygon& rPoly)
     {
         (void)pName; (void)rPoly;
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(rPoly),
@@ -353,7 +353,7 @@ public:
             genericClip.append(aRect);
         }
 
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
@@ -366,7 +366,7 @@ public:
             basegfx::tools::exportToSvgD(
                 normalizePoly(
                     boxClipResult)));
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     boxClipSvg,
@@ -378,7 +378,7 @@ public:
             basegfx::tools::exportToSvgD(
                 normalizePoly(
                     genericClip)));
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     genericClipSvg,

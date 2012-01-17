@@ -90,7 +90,7 @@ public:
             tools::prepareForPolygonOperation(aSelfIntersecting));
         const B2DPolyPolygon aRect(
             tools::prepareForPolygonOperation(aShiftedRectangle));
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
@@ -106,7 +106,7 @@ public:
         const B2DPolyPolygon aRes=
             pFunc(aSelfIntersect, aRect);
 
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(aRes),
