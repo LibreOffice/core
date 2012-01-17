@@ -57,6 +57,10 @@ define gb_UnoApiTarget_UnoApiTarget
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
 $(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
+$(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPS :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 gb_UnoApiTarget_HPPFILES_$(1) :=
 gb_UnoApiTarget_IDLFILES_$(1) :=
 ifeq ($(gb_FULLDEPS),$(true))
