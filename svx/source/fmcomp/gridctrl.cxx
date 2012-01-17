@@ -2470,6 +2470,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         catch(Exception&)
         {
             OSL_FAIL("DbGridControl::SeekCursor : failed ...");
+            DBG_UNHANDLED_EXCEPTION();
             m_nSeekPos = -1;                        // kein Datensatz mehr vorhanden
         }
     }
