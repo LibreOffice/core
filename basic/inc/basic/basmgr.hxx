@@ -35,25 +35,11 @@
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include "basicdllapi.h"
 
-
 // Basic XML Import/Export
 BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
-
-
 class SotStorage;
-
-#define BASERR_ID_STDLIBOPEN            ERRCODE_BASMGR_STDLIBOPEN
-#define BASERR_ID_STDLIBSAVE            ERRCODE_BASMGR_STDLIBSAVE
-#define BASERR_ID_LIBLOAD               ERRCODE_BASMGR_LIBLOAD
-#define BASERR_ID_LIBCREATE             ERRCODE_BASMGR_LIBCREATE
-#define BASERR_ID_LIBSAVE               ERRCODE_BASMGR_LIBSAVE
-#define BASERR_ID_LIBDEL                ERRCODE_BASMGR_LIBDEL
-#define BASERR_ID_MGROPEN               ERRCODE_BASMGR_MGROPEN
-#define BASERR_ID_MGRSAVE               ERRCODE_BASMGR_MGRSAVE
-#define BASERR_ID_REMOVELIB             ERRCODE_BASMGR_REMOVELIB
-#define BASERR_ID_UNLOADLIB             ERRCODE_BASMGR_UNLOADLIB
 
 #define BASERR_REASON_OPENSTORAGE       0x0001
 #define BASERR_REASON_OPENLIBSTORAGE    0x0002
