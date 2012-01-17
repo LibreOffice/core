@@ -1,4 +1,0 @@
-build --genconf --clear
-build --genconf --add `cat $1`
-build --all $2 $3 $4 
-
