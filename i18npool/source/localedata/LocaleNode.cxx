@@ -382,7 +382,8 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
 }
 
 
-OUString aDateSep;
+static OUString aDateSep;
+static OUString aDecSep;
 
 void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
@@ -400,7 +401,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         writeParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
     OUString aThoSep =
         writeParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
-    OUString aDecSep =
+    aDecSep =
         writeParameterCheckLen( of, "DecimalSeparator", "decimalSeparator", 1, 1);
     OUString aTimeSep =
         writeParameterCheckLen( of, "TimeSeparator", "timeSeparator", 1, 1);
@@ -1200,6 +1201,24 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s'\n",
                         OSTR( aPattern2), OSTR( sTheDateEditFormat));
                 theDateAcceptancePatterns.push_back( aPattern2);
+            }
+        }
+
+        // Rudimentary check if a pattern interferes with decimal number.
+        nIndex = 0;
+        sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &nIndex);
+        for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
+                aIt != theDateAcceptancePatterns.end(); ++aIt)
+        {
+            if ((*aIt).getLength() == (cDecSep <= 0xffff ? 3 : 4))
+            {
+                nIndex = 1;
+                if ((*aIt).iterateCodePoints( &nIndex) == cDecSep)
+                {
+                    ++nError;
+                    fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
+                            OSTR( *aIt), OSTR( aDecSep));
+                }
             }
         }
 
