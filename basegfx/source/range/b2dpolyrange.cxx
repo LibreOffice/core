@@ -90,17 +90,6 @@ namespace basegfx
             maBounds.expand(rRange);
         }
 
-        void appendPolyRange(const ImplB2DPolyRange& rPolyRange)
-        {
-            maRanges.insert(maRanges.end(),
-                            rPolyRange.maRanges.begin(),
-                            rPolyRange.maRanges.end());
-            maOrient.insert(maOrient.end(),
-                            rPolyRange.maOrient.begin(),
-                            rPolyRange.maOrient.end());
-            updateBounds();
-        }
-
         void clear()
         {
             std::vector<B2DRange> aTmpRanges;
@@ -179,11 +168,6 @@ namespace basegfx
     void B2DPolyRange::appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
     {
         mpImpl->appendElement(rRange, eOrient, nCount );
-    }
-
-    void B2DPolyRange::appendPolyRange(const B2DPolyRange& rRange)
-    {
-        mpImpl->appendPolyRange(*rRange.mpImpl);
     }
 
     void B2DPolyRange::clear()

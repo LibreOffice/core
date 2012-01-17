@@ -81,9 +81,6 @@ namespace basegfx
         // insert/append a single range
         void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount = 1);
 
-        // insert/append multiple ranges
-        void appendPolyRange(const B2DPolyRange&);
-
         void clear();
 
         /** Test whether given range overlaps one or more of the

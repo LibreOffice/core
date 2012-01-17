@@ -132,26 +132,6 @@ namespace tools
             maPendingPolygons.append(aPoly);
         }
 
-        void addClipState(const ImplB2DClipState& rOther, Operation eOp)
-        {
-            if( rOther.mePendingOps == mePendingOps
-                && !rOther.maClipPoly.count()
-                && !rOther.maPendingPolygons.count() )
-            {
-                maPendingRanges.appendPolyRange( rOther.maPendingRanges );
-            }
-            else
-            {
-                commitPendingRanges();
-                commitPendingPolygons();
-                rOther.commitPendingRanges();
-                rOther.commitPendingPolygons();
-
-                maPendingPolygons = rOther.maClipPoly;
-                mePendingOps = eOp;
-            }
-        }
-
         void unionRange(const B2DRange& rRange)
         {
             if( isCleared() )
