@@ -28,14 +28,10 @@
 #ifndef _SVX_RULRITEM_HXX
 #define _SVX_RULRITEM_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
-
-// class SvxLongLRSpaceItem ----------------------------------------------
+#include <vector>
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
@@ -71,8 +67,6 @@ public:
     void    SetRight(long lArgRight) {lRight=lArgRight;}
 };
 
-// class SvxLongULSpaceItem ----------------------------------------------
-
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
     long    lLeft;         // nLeft or the negative first-line indentation
@@ -107,8 +101,6 @@ public:
     void    SetLower(long lArgRight) {lRight=lArgRight;}
 };
 
-// class SvxPagePosSizeItem ----------------------------------------------
-
 class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
 {
     Point aPos;
@@ -139,8 +131,6 @@ public:
     long    GetWidth() const { return lWidth; }
     long    GetHeight() const { return lHeight; }
 };
-
-// struct SvxColumnDescription -------------------------------------------
 
 struct SvxColumnDescription
 {
@@ -185,21 +175,15 @@ struct SvxColumnDescription
     long GetWidth() const { return nEnd - nStart; }
 };
 
-// class SvxColumnItem ---------------------------------------------------
-
-typedef SvPtrarr SvxColumns;
-
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
-    SvxColumns aColumns;// Column array
+    std::vector<SvxColumnDescription> aColumns;// Column array
     long    nLeft,      // Left edge for the table
            nRight;      // Right edge for the table; for columns always
                                 // equal to the surrounding frame
     sal_uInt16 nActColumn;  // the current column
     sal_uInt8  bTable;      // table?
     sal_uInt8  bOrtho;     // evenly spread columns
-
-    void DeleteAndDestroyColumns();
 
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
@@ -225,14 +209,13 @@ public:
 
     const SvxColumnItem &operator=(const SvxColumnItem &);
 
-    sal_uInt16 Count() const { return aColumns.Count(); }
+    sal_uInt16 Count() const { return aColumns.size(); }
     SvxColumnDescription &operator[](sal_uInt16 i)
-        { return *(SvxColumnDescription*)aColumns[i]; }
+        { return aColumns[i]; }
     const SvxColumnDescription &operator[](sal_uInt16 i) const
-        { return *(SvxColumnDescription*)aColumns[i]; }
+        { return aColumns[i]; }
     void Insert(const SvxColumnDescription &rDesc, sal_uInt16 nPos) {
-        SvxColumnDescription* pDesc = new SvxColumnDescription(rDesc);
-        aColumns.Insert(pDesc, nPos);
+        aColumns.insert(aColumns.begin() + nPos, rDesc);
     }
     void   Append(const SvxColumnDescription &rDesc) { Insert(rDesc, Count()); }
     void   SetLeft(long left) { nLeft = left; }
@@ -251,7 +234,7 @@ public:
     void   SetOrtho(sal_Bool bVal) { bOrtho = bVal; }
     sal_Bool   IsOrtho () const { return sal_False ; }
 
-    sal_Bool IsConsistent() const  { return nActColumn < aColumns.Count(); }
+    sal_Bool IsConsistent() const  { return nActColumn < aColumns.size(); }
     long   GetVisibleRight() const;// right visible edge of the current column
 };
 

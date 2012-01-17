@@ -429,18 +429,6 @@ SvxPagePosSizeItem::SvxPagePosSizeItem()
 
 //------------------------------------------------------------------------
 
-void SvxColumnItem::DeleteAndDestroyColumns()
-{
-    for( sal_uInt16 i = aColumns.Count(); i>0; )
-    {
-        SvxColumnDescription *pTmp = (SvxColumnDescription *)aColumns[--i];
-        aColumns.Remove( i );
-        delete pTmp;
-    }
-}
-
-//------------------------------------------------------------------------
-
 int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 {
     if(!SfxPoolItem::operator==(rCmp) ||
@@ -515,34 +503,22 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 ri
 {
 }
 
-//------------------------------------------------------------------------
-
 SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
-
     SfxPoolItem( rCopy ),
-
       aColumns  ( (sal_uInt8)rCopy.Count() ),
       nLeft     ( rCopy.nLeft ),
       nRight    ( rCopy.nRight ),
       nActColumn( rCopy.nActColumn ),
       bTable    ( rCopy.bTable ),
       bOrtho    ( rCopy.bOrtho )
-
 {
-    const sal_uInt16 nCount = rCopy.Count();
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-        Append( rCopy[i] );
+    for(size_t i = 0; i < rCopy.Count(); ++i)
+        aColumns.push_back(rCopy[i]);
 }
-
-//------------------------------------------------------------------------
 
 SvxColumnItem::~SvxColumnItem()
 {
-    DeleteAndDestroyColumns();
 }
-
-//------------------------------------------------------------------------
 
 const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
 {
@@ -550,14 +526,11 @@ const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
     nRight = rCopy.nRight;
     bTable = rCopy.bTable;
     nActColumn = rCopy.nActColumn;
-    DeleteAndDestroyColumns();
-    const sal_uInt16 nCount = rCopy.Count();
-    for(sal_uInt16 i = 0; i < nCount;++i)
-        Insert(rCopy[i], i);
+    aColumns.clear();
+    for(size_t i = 0; i < rCopy.Count(); ++i)
+        aColumns.push_back(rCopy[i]);
     return *this;
 }
-
-//------------------------------------------------------------------------
 
 sal_Bool SvxColumnItem::CalcOrtho() const
 {
