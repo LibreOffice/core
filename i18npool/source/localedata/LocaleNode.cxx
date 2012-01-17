@@ -601,7 +601,6 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
 static OUString sTheCurrencyReplaceTo;
 static OUString sTheCompatibleCurrency;
 static OUString sTheDateEditFormat;
-static ::std::vector< OUString > theDateAcceptancePatterns;
 
 sal_Int16 LCFormatNode::mnSection = 0;
 sal_Int16 LCFormatNode::mnFormats = 0;
@@ -611,7 +610,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
 
-    theDateAcceptancePatterns.clear();
+    ::std::vector< OUString > theDateAcceptancePatterns;
 
     OUString str;
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
@@ -670,6 +669,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             --formatCount;
             continue;   // for
         }
+        if (!currNode->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FormatElement")))
+        {
+            incErrorStr( "Undefined element in LC_FORMAT", currNode->getName());
+            --formatCount;
+            continue;   // for
+        }
+
         OUString aUsage;
         OUString aType;
         OUString aFormatIndex;
