@@ -188,7 +188,6 @@ public:
     void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;
     SCSIZE GetElementCount() const;
     bool ValidColRow( SCSIZE nC, SCSIZE nR) const;
-    SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const;
     bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     void SetErrorAtInterpreter( sal_uInt16 nError ) const;
@@ -298,11 +297,6 @@ bool ScMatrixImpl::ValidColRow( SCSIZE nC, SCSIZE nR) const
 {
     MatrixImplType::size_pair_type aDims = maMat.size();
     return nR < aDims.first && nC < aDims.second;
-}
-
-SCSIZE ScMatrixImpl::CalcOffset( SCSIZE nC, SCSIZE nR) const
-{
-    return nC * maMat.size().first + nR;
 }
 
 bool ScMatrixImpl::ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
@@ -995,11 +989,6 @@ SCSIZE ScMatrix::GetElementCount() const
 bool ScMatrix::ValidColRow( SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->ValidColRow(nC, nR);
-}
-
-SCSIZE ScMatrix::CalcOffset( SCSIZE nC, SCSIZE nR) const
-{
-    return pImpl->CalcOffset(nC, nR);
 }
 
 bool ScMatrix::ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const

@@ -128,23 +128,6 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
 
 /*************************************************************************
 |*
-|*    DateTime::GetSecFromDateTime()
-|*
-*************************************************************************/
-
-void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
-{
-    long nDays = nSec / (24UL*60*60);
-    ((Date*)this)->operator=( rDate );
-    nSec -= nDays * (24UL*60*60);
-    sal_uInt16 nMin = (sal_uInt16)(nSec / 60);
-    nSec -= nMin * 60;
-    ((Time*)this)->operator=( Time( 0, nMin, (sal_uInt16)nSec ) );
-    operator+=( nDays );
-}
-
-/*************************************************************************
-|*
 |*    DateTime::operator +=()
 |*
 *************************************************************************/

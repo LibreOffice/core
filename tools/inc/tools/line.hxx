@@ -67,10 +67,6 @@ public:
 
     double          GetDistance( const double& rPtX, const double& rPtY ) const;
     double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
-
-    Point           NearestPoint( const Point& rPoint ) const;
-
-    void            Enum( const Link& rEnumLink );
 };
 
 #endif // _SV_LINE_HXX

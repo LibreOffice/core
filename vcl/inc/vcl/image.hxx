@@ -127,11 +127,9 @@ public:
     sal_uInt16          GetImageCount() const;
     Size            GetImageSize() const;
 
-    void            AddImage( sal_uInt16 nNewId, const Image& rImage );
     void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
     void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
-    void            ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId );
 
     void            RemoveImage( sal_uInt16 nId );
 

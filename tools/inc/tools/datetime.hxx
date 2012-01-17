@@ -82,7 +82,6 @@ public:
     sal_Bool            operator <=( const DateTime& rDateTime ) const;
 
     long            GetSecFromDateTime( const Date& rDate ) const;
-    void            MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec );
 
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }

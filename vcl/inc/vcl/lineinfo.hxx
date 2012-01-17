@@ -118,9 +118,6 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );
 
-    // helper to check if line width or DashDot is used
-    bool isDashDotOrFatLineUsed() const;
-
     // helper to get decomposed polygon data with the LineInfo applied. The source
     // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may
     // contain results; e.g. when no fat line but DasDot is defined, the resut will

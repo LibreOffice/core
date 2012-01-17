@@ -454,7 +454,6 @@ public:
     void            UpdateRenameTab(SCTAB nTable, const String& rName);
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
-    bool            IsRangeNameInUse(sal_uInt16 nIndex) const;
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     bool            IsSubTotal() const                      { return bSubTotal; }

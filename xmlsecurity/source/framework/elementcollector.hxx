@@ -89,12 +89,10 @@ public:
     com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const;
     bool getModify() const;
     void notifyListener();
-    bool isAbleToNotify() const;
     void setReferenceResolvedListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
             referenceResolvedListener);
-    void setSecurityId(sal_Int32 nSecurityId);
     void doNotify();
     ElementCollector* clone(
         sal_Int32 nId,

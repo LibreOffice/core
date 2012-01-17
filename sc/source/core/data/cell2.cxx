@@ -1534,32 +1534,6 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument );      // Listener wie vorher
 }
 
-bool lcl_IsRangeNameInUse(size_t nIndex, ScTokenArray* pCode, ScRangeName* pNames)
-{
-    for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
-    {
-        if (p->GetOpCode() == ocName)
-        {
-            if (p->GetIndex() == static_cast<sal_uInt16>(nIndex))
-                return true;
-            else
-            {
-                //  RangeData kann Null sein in bestimmten Excel-Dateien
-                ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
-                if (pSubName && lcl_IsRangeNameInUse(nIndex,
-                                    pSubName->GetCode(), pNames))
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
-bool ScFormulaCell::IsRangeNameInUse(sal_uInt16 nIndex) const
-{
-    return lcl_IsRangeNameInUse( nIndex, pCode, pDocument->GetRangeName() );
-}
-
 void lcl_FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes, ScTokenArray* pCode, ScRangeName* pNames)
 {
     for (FormulaToken* p = pCode->First(); p; p = pCode->Next())

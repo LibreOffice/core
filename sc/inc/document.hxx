@@ -576,7 +576,6 @@ public:
     static SC_DLLPUBLIC bool ValidTabName( const rtl::OUString& rName );
 
     SC_DLLPUBLIC bool           ValidNewTabName( const rtl::OUString& rName ) const;
-    SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<rtl::OUString>& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(rtl::OUString& rName) const;
     SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
 

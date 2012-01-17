@@ -126,11 +126,6 @@ void ElementCollector::notifyListener()
     doNotify();
 }
 
-bool ElementCollector::isAbleToNotify() const
-{
-    return m_bAbleToNotify;
-}
-
 void ElementCollector::setReferenceResolvedListener(
     const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
 /****** ElementCollector/setReferenceResolvedListener *************************
@@ -157,33 +152,6 @@ void ElementCollector::setReferenceResolvedListener(
  ******************************************************************************/
 {
     m_xReferenceResolvedListener = xReferenceResolvedListener;
-    doNotify();
-}
-
-void ElementCollector::setSecurityId(sal_Int32 nSecurityId)
-/****** ElementCollector/setSecurityId ****************************************
- *
- *   NAME
- *  setSecurityId -- configures the security Id of the buffer node
- *
- *   SYNOPSIS
- *  setSecurityId(nSecurityId);
- *
- *   FUNCTION
- *  configures the security Id and try to notify then
- *
- *   INPUTS
- *  nSecurityId - the security Id
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    m_nSecurityId = nSecurityId;
     doNotify();
 }
 

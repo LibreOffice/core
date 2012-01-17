@@ -438,15 +438,6 @@ ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
 
 //--------------------------------------------------------------------------
 
-bool ExtraKernInfo::HasKernPairs() const
-{
-    if( !mbInitialized )
-        Initialize();
-    return !maUnicodeKernPairs.empty();
-}
-
-//--------------------------------------------------------------------------
-
 int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
 {
     if( !mbInitialized )

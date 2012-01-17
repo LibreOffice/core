@@ -302,29 +302,6 @@ bool ScDocument::ValidNewTabName( const rtl::OUString& rName ) const
 }
 
 
-bool ScDocument::ValidNewTabName( const std::vector<rtl::OUString>& rNames ) const//TODO:FIXME what is if there are duplicates in rNames
-{
-    bool bValid = true;
-    std::vector<rtl::OUString>::const_iterator nameIter = rNames.begin();
-    for (;nameIter != rNames.end() && bValid; ++nameIter)
-    {
-        bValid = ValidTabName(*nameIter);
-    }
-    TableContainer::const_iterator it = maTabs.begin();
-    for (; it != maTabs.end() && bValid; ++it)
-        if ( *it )
-        {
-            for (nameIter = rNames.begin(); nameIter != rNames.end(); ++nameIter)
-            {
-                rtl::OUString aOldName;
-                (*it)->GetName(aOldName);
-                bValid = !ScGlobal::GetpTransliteration()->isEqual( *nameIter, aOldName );
-            }
-        }
-    return bValid;
-}
-
-
 void ScDocument::CreateValidTabName(rtl::OUString& rName) const
 {
     if ( !ValidTabName(rName) )

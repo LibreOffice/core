@@ -1061,18 +1061,6 @@ ScVbaChart::isSeriesIndexValid(sal_Int32 _seriesindex) throw( script::BasicError
     return bret;
 }
 
-bool
-ScVbaChart::areIndicesValid( sal_Int32 _seriesindex, sal_Int32 _valindex) throw ( css::script::BasicErrorException )
-{
-    if (isSeriesIndexValid(_seriesindex))
-    {
-        uno::Reference< chart::XChartDataArray > xChartDataArray( mxChartDocument->getData(), uno::UNO_QUERY_THROW );
-        dblValues = xChartDataArray->getData();
-        return (_valindex < dblValues[_seriesindex].getLength() );
-        }
-    return false;
-}
-
 
 uno::Reference< beans::XPropertySet >
 ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( script::BasicErrorException )

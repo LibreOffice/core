@@ -58,7 +58,6 @@ CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int con
 Color::IncreaseContrast(unsigned char)
 CurrencyField::ImplLoadRes(ResId const&)
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
-DateTime::MakeDateTimeFromSec(Date const&, unsigned long)
 DdeGetPutItem::DdeGetPutItem(DdeItem const&)
 DdeService::AddFormat(unsigned long)
 DdeService::AddTopic(DdeTopic const&)
@@ -71,9 +70,6 @@ DirEntry::GetDevice() const
 EditView::GetSelectionMode() const
 EditView::SetCursor(Cursor const&)
 EditView::SetPointer(Pointer const&)
-ElementCollector::isAbleToNotify() const
-ElementCollector::setSecurityId(int)
-ExtraKernInfo::HasKernPairs() const
 FieldEntry::GetBookmarkType()
 FileControl::SetButtonText(String const&)
 FileList::GetFormat()
@@ -104,8 +100,6 @@ HTMLControls::Remove(HTMLControl const*&, unsigned short)
 HTMLControls::Remove(unsigned short, unsigned short)
 Hatch::SetStyle(HatchStyle)
 ImageButton::ImageButton(unsigned short)
-ImageList::AddImage(unsigned short, Image const&)
-ImageList::ReplaceImage(unsigned short, unsigned short)
 ImageMap::GetBoundRect() const
 ImpSvMEdit::SetInsertMode(unsigned char)
 ImpSvtData::~ImpSvtData()
@@ -119,9 +113,6 @@ InsCapOptArr::Remove(InsCaptionOpt* const&, unsigned short)
 InsCapOptArr::Remove(unsigned short, unsigned short)
 ItemList::FindAttrib(unsigned short)
 KeyboardSettings::CopyData()
-Line::Enum(Link const&)
-Line::NearestPoint(Point const&) const
-LineInfo::isDashDotOrFatLineUsed() const
 LineListBox::GetEntryDistance(unsigned short) const
 LineListBox::GetEntryLine1(unsigned short) const
 LineListBox::GetEntryLine2(unsigned short) const
@@ -163,7 +154,6 @@ NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) c
 NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
 NfCurrencyEntry::NfCurrencyEntry()
 NotificationSettings::CopyData()
-NotifyBrokenPackage::isAborted()
 NumberFormatCodeWrapper::getDefault(short, short) const
 NumericBox::GetValue(unsigned short) const
 NumericBox::GetValuePos(long) const
@@ -256,9 +246,7 @@ ScDPFieldControlBase::SetSelectedField(unsigned long)
 ScDdeLink::ResetValue()
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScDocument::SetAllTabRangeNames(std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
-ScDocument::ValidNewTabName(std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> > const&) const
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-ScFormulaCell::IsRangeNameInUse(unsigned short) const
 ScFormulaCell::ScFormulaCell()
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
@@ -270,12 +258,10 @@ ScHTMLColOffset_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(
 ScHorizontalValueIterator::GetCurNumFmtInfo(short&, unsigned long&)
 ScLeftFooterEditPage::GetRanges()
 ScLeftHeaderEditPage::GetRanges()
-ScMatrix::CalcOffset(unsigned long, unsigned long) const
 ScMyCellInfo::ScMyCellInfo()
 ScMyStyleRanges::SetStylesToRanges(ScRangeList*, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScMyStyleRanges::SetStylesToRanges(ScRangeListRef, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScNameDefDlg::LinkStubEdModifyHdl(void*, void*)
-ScNameDlg::CalcCurTableAssign(String&, ScRangeData*)
 ScNamedRangeObj::SetContentWithGrammar(rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScNamedRangeObj::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine*) const
@@ -302,7 +288,6 @@ ScValidationEntries_Impl::Insert(ScValidationEntries_Impl const*, unsigned short
 ScValidationEntries_Impl::Remove(ScValidationData* const&, unsigned short)
 ScValidationEntries_Impl::Remove(unsigned short, unsigned short)
 ScValueCell::ScValueCell()
-ScVbaChart::areIndicesValid(int, int)
 ScVbaColorFormat::setColorFormat(short)
 ScVbaCommandBarControl::ScVbaCommandBarControl(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, boost::shared_ptr<VbaCommandBarHelper>, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, rtl::OUString const&, int, unsigned char)
 ScVbaCommentShape::ScVbaCommentShape(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::uno::Reference<ooo::vba::excel::XComment> const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, int)

@@ -400,7 +400,6 @@ public:
     ExtraKernInfo( sal_IntPtr nFontId );
     virtual ~ExtraKernInfo() {}
 
-    bool    HasKernPairs() const;
     int     GetUnscaledKernPairs( ImplKernPairData** ) const;
     int     GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight ) const;
 

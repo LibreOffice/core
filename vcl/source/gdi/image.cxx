@@ -582,23 +582,6 @@ sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
 
 // -----------------------------------------------------------------------
 
-void ImageList::AddImage( sal_uInt16 nId, const Image& rImage )
-{
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_CHKOBJ( &rImage, Image, NULL );
-    DBG_ASSERT( nId, "ImageList::AddImage(): ImageId == 0" );
-    DBG_ASSERT( GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageId already exists" );
-    DBG_ASSERT( rImage.mpImplData, "ImageList::AddImage(): Wrong Size" );
-    DBG_ASSERT( !mpImplData || (rImage.GetSizePixel() == mpImplData->maImageSize), "ImageList::AddImage(): Wrong Size" );
-
-    if( !mpImplData )
-        ImplInit( 0, rImage.GetSizePixel() );
-
-    mpImplData->AddImage( rtl::OUString(), nId, rImage.GetBitmapEx());
-}
-
-// -----------------------------------------------------------------------
-
 void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
     DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );
@@ -623,24 +606,6 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rI
         if( !mpImplData )
             ImplInit( 0, rImage.GetSizePixel() );
         mpImplData->AddImage( rImageName, nId, rImage.GetBitmapEx());
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ImageList::ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId )
-{
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_ASSERT( GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nId" );
-    DBG_ASSERT( GetImagePos( nReplaceId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nReplaceId" );
-
-    sal_uLong nPosDest = GetImagePos( nId );
-    sal_uLong nPosSrc = GetImagePos( nReplaceId );
-    if( nPosDest != IMAGELIST_IMAGE_NOTFOUND &&
-        nPosSrc != IMAGELIST_IMAGE_NOTFOUND )
-    {
-        ImplMakeUnique();
-        mpImplData->maImages[nPosDest] = mpImplData->maImages[nPosSrc];
     }
 }
 

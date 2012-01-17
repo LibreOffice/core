@@ -106,7 +106,6 @@ private:
     void UpdateChecks(ScRangeData* pData);
     void ShowOptions(const ScRangeNameLine& rLine);
     void UpdateNames();
-    void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
 
     bool IsNameValid();
     bool IsFormulaValid();

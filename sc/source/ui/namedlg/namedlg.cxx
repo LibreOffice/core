@@ -328,20 +328,6 @@ ScRangeName* ScNameDlg::GetRangeName(const rtl::OUString& rScope)
         return maRangeMap.find(rScope)->second;
 }
 
-void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
-{
-    if ( pRangeData )
-    {
-        rtl::OUStringBuffer sBuffer;
-        pRangeData->UpdateSymbol( sBuffer, maCursorPos );
-        aAssign = sBuffer.makeStringAndClear();
-    }
-    else
-    {
-        aAssign.Erase();
-    }
-}
-
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 {
     ScRangeName* pRangeName = GetRangeName(rLine.aScope);

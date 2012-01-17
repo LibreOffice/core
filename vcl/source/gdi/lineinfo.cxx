@@ -294,13 +294,6 @@ SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo )
 
 // -----------------------------------------------------------------------
 
-bool LineInfo::isDashDotOrFatLineUsed() const
-{
-    return (LINE_DASH == GetStyle() || GetWidth() > 1);
-}
-
-// -----------------------------------------------------------------------
-
 void LineInfo::applyToB2DPolyPolygon(
     basegfx::B2DPolyPolygon& io_rLinePolyPolygon,
     basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const

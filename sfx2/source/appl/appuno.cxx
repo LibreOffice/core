@@ -2326,7 +2326,6 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< ::com::sun::sta
 
 public:
     NotifyBrokenPackage_Impl( ::rtl::OUString aName );
-    sal_Bool    isAborted();
     virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -2343,11 +2342,6 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( ::rtl::OUString aName )
     m_pAbort  = new comphelper::OInteractionAbort;
        m_lContinuations.realloc( 1 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
-}
-
-sal_Bool NotifyBrokenPackage_Impl::isAborted()
-{
-    return m_pAbort->wasSelected();
 }
 
 ::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
@@ -2372,11 +2366,6 @@ NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
 NotifyBrokenPackage::~NotifyBrokenPackage()
 {
     pImp->release();
-}
-
-sal_Bool NotifyBrokenPackage::isAborted()
-{
-    return pImp->isAborted();
 }
 
 com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
