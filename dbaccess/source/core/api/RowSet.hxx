@@ -142,7 +142,7 @@ namespace dbaccess
         sal_Bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
         sal_Bool                    m_bModified ;
         sal_Bool                    m_bRebuildConnOnExecute ;
-        sal_Bool                    m_bIsBookmarable ;
+        sal_Bool                    m_bIsBookmarkable ;
         sal_Bool                    m_bNew ;
         sal_Bool                    m_bCanUpdateInsertedRows;
         sal_Bool                    m_bOwnConnection;
@@ -476,7 +476,7 @@ namespace dbaccess
         ORowSet*                    m_pParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
-        sal_Bool                    m_bIsBookmarable;
+        sal_Bool                    m_bIsBookmarkable;
 
     protected:
         // the clone can not insert anything
