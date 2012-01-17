@@ -1215,7 +1215,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
 
                     if (bReport)
                     {
-                        fprintf(stdout, "WARNING: value of key \"%s\" already exists.\n",
+                        fprintf(stderr, "WARNING: value of key \"%s\" already exists.\n",
                                 targetPath.getStr());
                     }
                     return REG_MERGE_CONFLICT;
@@ -1225,7 +1225,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                 rtl_freeMemory(pBuffer);
                 if (bReport)
                 {
-                    fprintf(stdout, "ERROR: values of key \"%s\" contains bad data.\n",
+                    fprintf(stderr, "ERROR: values of key \"%s\" contains bad data.\n",
                             targetPath.getStr());
                 }
                 return REG_MERGE_ERROR;
@@ -1235,7 +1235,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
             rtl_freeMemory(pBuffer);
             if (bReport)
             {
-                fprintf(stdout, "ERROR: values of key \"%s\" has different types.\n",
+                fprintf(stderr, "ERROR: values of key \"%s\" has different types.\n",
                         targetPath.getStr());
             }
             return REG_MERGE_ERROR;
