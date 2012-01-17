@@ -29,7 +29,7 @@
 #define __com_sun_star_ucb_OpenCommandArgument3_idl__
 
 #include <com/sun/star/ucb/OpenCommandArgument2.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/beans/NamedValue.idl>
 
 module com { module sun { module star { module ucb {
 
@@ -46,7 +46,7 @@ published struct OpenCommandArgument3 : OpenCommandArgument2
 
         <p>WebDav e.g. uses "KeepAlive" to enable/disable the respective http feature.
     */
-    sequence< com::sun::star::beans::PropertyValue > OpeningFlags;
+    sequence< com::sun::star::beans::NamedValue > OpeningFlags;
 };
 
 }; }; }; };

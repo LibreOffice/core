@@ -1045,7 +1045,7 @@ void DAVResourceAccess::UNLOCK(
 }
 
 //=========================================================================
-void DAVResourceAccess::setFlags( const uno::Sequence< beans::PropertyValue >& rFlags )
+void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFlags )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );

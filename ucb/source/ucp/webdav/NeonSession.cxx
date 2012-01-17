@@ -70,7 +70,7 @@ extern "C" {
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
 #include <boost/bind.hpp>
@@ -155,17 +155,17 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 }
 
 // -------------------------------------------------------------------
-static bool noKeepAlive( const uno::Sequence< beans::PropertyValue >& rFlags )
+static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
 {
     if ( !rFlags.hasElements() )
         return false;
 
     // find "KeepAlive" property
-    const beans::PropertyValue* pAry(rFlags.getConstArray());
-    const sal_Int32             nLen(rFlags.getLength());
-    const beans::PropertyValue* pValue(
+    const beans::NamedValue* pAry(rFlags.getConstArray());
+    const sal_Int32          nLen(rFlags.getLength());
+    const beans::NamedValue* pValue(
         std::find_if(pAry,pAry+nLen,
-                     boost::bind(comphelper::TPropertyValueEqualFunctor(),
+                     boost::bind(comphelper::TNamedValueEqualFunctor(),
                                  _1,
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KeepAlive")))));
     if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )
@@ -643,7 +643,7 @@ NeonLockStore NeonSession::m_aNeonLockStore;
 NeonSession::NeonSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const rtl::OUString& inUri,
-        const uno::Sequence< beans::PropertyValue >& rFlags,
+        const uno::Sequence< beans::NamedValue >& rFlags,
         const ucbhelper::InternetProxyDecider & rProxyDecider )
     throw ( DAVException )
 : DAVSession( rSessionFactory ),
@@ -855,7 +855,7 @@ void NeonSession::Init()
 // -------------------------------------------------------------------
 // virtual
 sal_Bool NeonSession::CanUse( const rtl::OUString & inUri,
-                              const uno::Sequence< beans::PropertyValue >& rFlags )
+                              const uno::Sequence< beans::NamedValue >& rFlags )
 {
     try
     {

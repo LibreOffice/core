@@ -40,7 +40,7 @@ DAVSessionFactory::~DAVSessionFactory()
 
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const ::rtl::OUString & inUri,
-                const uno::Sequence< beans::PropertyValue >& rFlags,
+                const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
     throw( DAVException )
 {
