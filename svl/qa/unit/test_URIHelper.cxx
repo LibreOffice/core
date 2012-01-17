@@ -29,12 +29,7 @@
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-
+#include <cassert>
 #include <cstddef>
 
 #include "com/sun/star/lang/Locale.hpp"
@@ -59,23 +54,22 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
-#include "osl/diagnose.h"
+#include "cppunit/TestCase.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/TestSuite.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/macros.h"
 #include "sal/types.h"
-#include <sal/macros.h>
+#include "svl/urihelper.hxx"
 #include "tools/solar.h"
 #include "unotools/charclass.hxx"
-
-#include "urihelper.hxx"
-
-// This test needs a UNO component context that supports various services (the
-// UCB, an UriReferenceFactory, ...), so it is best executed within an OOo
-// installation.
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandEnvironment;
@@ -144,7 +138,7 @@ Content::Content(
     css::uno::Reference< css::ucb::XContentIdentifier > const & identifier):
     m_identifier(identifier)
 {
-    OSL_ASSERT(m_identifier.is());
+    assert(m_identifier.is());
     rtl::OUString uri(m_identifier->getContentIdentifier());
     if (!uri.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(m_prefix))
         || uri.indexOf('#', RTL_CONSTASCII_LENGTH(m_prefix)) != -1)
@@ -207,7 +201,7 @@ public:
         css::uno::Reference< css::ucb::XContentIdentifier > const & id2)
         throw (css::uno::RuntimeException)
     {
-        OSL_ASSERT(id1.is() && id2.is());
+        assert(id1.is() && id2.is());
         return
             id1->getContentIdentifier().compareTo(id2->getContentIdentifier());
     }
@@ -263,12 +257,12 @@ void Test::testNormalizedMakeRelative() {
         css::uno::UNO_QUERY_THROW)->registerContentProvider(
             new Provider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
             true);
-    struct Test {
+    struct Data {
         char const * base;
         char const * absolute;
         char const * relative;
     };
-    static Test const tests[] = {
+    static Data const tests[] = {
         { "hierarchical:/", "mailto:def@a.b.c.", "mailto:def@a.b.c." },
         { "hierarchical:/", "a/b/c", "a/b/c" },
         { "hierarchical:/a", "hierarchical:/a/b/c?d#e", "/a/b/c?d#e" },
@@ -329,13 +323,13 @@ void Test::testNormalizedMakeRelative() {
 }
 
 void Test::testFindFirstURLInText() {
-    struct Test {
+    struct Data {
         char const * input;
         char const * result;
         xub_StrLen begin;
         xub_StrLen end;
     };
-    static Test const tests[] = {
+    static Data const tests[] = {
         { "...ftp://bla.bla.bla/blubber/...",
           "ftp://bla.bla.bla/blubber/", 3, 29 },
         { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
