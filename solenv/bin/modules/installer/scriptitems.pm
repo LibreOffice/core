@@ -605,7 +605,7 @@ sub use_patch_hostname
 }
 
 ################################################################################
-# Using different HostName for language packs
+# Using langpack copy action for language packs
 ################################################################################
 
 sub use_langpack_copy_scpaction
@@ -620,7 +620,7 @@ sub use_langpack_copy_scpaction
 }
 
 ################################################################################
-# Using different HostName for language packs
+# Using copy patch action
 ################################################################################
 
 sub use_patch_copy_scpaction
@@ -631,6 +631,21 @@ sub use_patch_copy_scpaction
     {
         my $onescpaction = ${$scpactionsref}[$i];
         if (( $onescpaction->{'PatchCopy'} ) && ( $onescpaction->{'PatchCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'PatchCopy'}; }
+    }
+}
+
+################################################################################
+# Using dev copy patch action for developer snapshot builds
+################################################################################
+
+sub use_dev_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'DevCopy'} ) && ( $onescpaction->{'DevCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'DevCopy'}; }
     }
 }
 

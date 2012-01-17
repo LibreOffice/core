@@ -362,6 +362,7 @@ End
 
 ScpAction scp_Copy_Ds_Store
     Copy = "DS_Store";
+    DevCopy = "DS_Store_Dev";
     LangPackCopy = "DS_Store_Langpack";
     PatchCopy = "DS_Store_Patch";
     Name = ".DS_Store";

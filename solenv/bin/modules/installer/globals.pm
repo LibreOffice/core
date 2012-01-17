@@ -346,6 +346,7 @@ BEGIN
     $patch_user_dir = 0;
     $addchildprojects = 0;
     $languagepack = 0;
+    $devsnapshotbuild = 0;
     $tab = 0;
     $patch = 0;
     $patchincludepath = "";

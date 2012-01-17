@@ -258,7 +258,6 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::overwrite_ooovendor( $allvariableshashref );
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
 
-
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
@@ -340,6 +339,11 @@ if ($installer::globals::languages_defined_in_productlist) { installer::language
 #####################################
 
 if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodinglist($includepatharrayref); }
+
+####################################################################
+# MacOS dmg build requires special DS_Store file to arrange icons
+####################################################################
+if (($installer::globals::ismacdmgbuild) && ($installer::globals::product eq "OpenOffice_Dev")) { $installer::globals::devsnapshotbuild = 1; }
 
 #####################################################################
 # Including additional inc files for variable settings, if defined
@@ -483,6 +487,7 @@ if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isx
 
 if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
+if (($installer::globals::devsnapshotbuild)) { installer::scriptitems::use_dev_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1b.log", $scpactionsinproductarrayref); }
 
 # $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
