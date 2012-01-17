@@ -46,6 +46,7 @@
 
 // class FileBase
 #include <osl/file.hxx>
+#include <osl/detail/file.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -88,7 +89,7 @@ InternalStreamLock::InternalStreamLock(
 {
     rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
         osl_getThreadTextEncoding()));
-    stat( aFileName.getStr(), &m_aStat );
+    osl_statFilePath( aFileName.getStr(), &m_aStat );
     LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.getStr() );
@@ -127,7 +128,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
     rtl::OString aFileName(rtl::OUStringToOString(pStream->GetFileName(),
         osl_getThreadTextEncoding()));
     struct stat aStat;
-    if( stat( aFileName.getStr(), &aStat ) )
+    if( osl_statFilePath( aFileName.getStr(), &aStat ) != osl_File_E_None )
         return sal_False;
 
     if( S_ISDIR( aStat.st_mode ) )
@@ -213,9 +214,9 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
 class StreamData
 {
 public:
-    int     nHandle;
+    oslFileHandle rHandle;
 
-            StreamData() { nHandle = 0; }
+            StreamData() { }
 };
 
 // -----------------------------------------------------------------------
@@ -269,6 +270,46 @@ static sal_uInt32 GetSvError( int nErrno )
         ++i;
     }
     while( errArr[i].nErr != 0xFFFF );
+    return nRetVal;
+}
+
+static sal_uInt32 GetSvError( oslFileError nErrno )
+{
+    static struct { oslFileError nErr; sal_uInt32 sv; } errArr[] =
+    {
+        { osl_File_E_None,        SVSTREAM_OK },
+        { osl_File_E_ACCES,       SVSTREAM_ACCESS_DENIED },
+        { osl_File_E_BADF,        SVSTREAM_INVALID_HANDLE },
+        { osl_File_E_DEADLK,      SVSTREAM_LOCKING_VIOLATION },
+        { osl_File_E_INVAL,       SVSTREAM_INVALID_PARAMETER },
+        { osl_File_E_MFILE,       SVSTREAM_TOO_MANY_OPEN_FILES },
+        { osl_File_E_NFILE,       SVSTREAM_TOO_MANY_OPEN_FILES },
+        { osl_File_E_NOENT,       SVSTREAM_FILE_NOT_FOUND },
+        { osl_File_E_PERM,        SVSTREAM_ACCESS_DENIED },
+        { osl_File_E_ROFS,        SVSTREAM_ACCESS_DENIED },
+        { osl_File_E_AGAIN,       SVSTREAM_LOCKING_VIOLATION },
+        { osl_File_E_ISDIR,       SVSTREAM_PATH_NOT_FOUND },
+        { osl_File_E_LOOP,        SVSTREAM_PATH_NOT_FOUND },
+        { osl_File_E_MULTIHOP,    SVSTREAM_PATH_NOT_FOUND },
+        { osl_File_E_NOLINK,      SVSTREAM_PATH_NOT_FOUND },
+        { osl_File_E_NOTDIR,      SVSTREAM_PATH_NOT_FOUND },
+        { osl_File_E_EXIST,       SVSTREAM_CANNOT_MAKE    },
+        { osl_File_E_NOSPC,       SVSTREAM_DISK_FULL      },
+        { (oslFileError)0xFFFF,   SVSTREAM_GENERALERROR }
+    };
+
+    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    int i=0;
+    do
+    {
+        if ( errArr[i].nErr == nErrno )
+        {
+            nRetVal = errArr[i].sv;
+            break;
+        }
+        ++i;
+    }
+    while( errArr[i].nErr != (oslFileError)0xFFFF );
     return nRetVal;
 }
 
@@ -335,7 +376,11 @@ SvFileStream::~SvFileStream()
 
 sal_uInt32 SvFileStream::GetFileHandle() const
 {
-    return (sal_uInt32)pInstanceData->nHandle;
+    sal_IntPtr handle;
+    if (osl_getFileOSHandle(pInstanceData->rHandle, &handle) == osl_File_E_None)
+        return (sal_uInt32) handle;
+    else
+        return (sal_uInt32) -1;
 }
 
 /*************************************************************************
@@ -367,12 +412,15 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    int nRead = 0;
+    sal_uInt64 nRead = 0;
     if ( IsOpen() )
     {
-        nRead = read(pInstanceData->nHandle,pData,(unsigned)nSize);
-        if ( nRead == -1 )
-            SetError( ::GetSvError( errno ));
+        oslFileError rc = osl_readFile(pInstanceData->rHandle,pData,(sal_uInt64)nSize,&nRead);
+        if ( rc != osl_File_E_None )
+        {
+            SetError( ::GetSvError( rc ));
+            return -1;
+        }
     }
     return (sal_Size)nRead;
 }
@@ -395,14 +443,17 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    int nWrite = 0;
+    sal_uInt64 nWrite = 0;
     if ( IsOpen() )
     {
-        nWrite = write(pInstanceData->nHandle,pData,(unsigned)nSize);
-        if ( nWrite == -1 )
-        SetError( ::GetSvError( errno ) );
+        oslFileError rc = osl_writeFile(pInstanceData->rHandle,pData,(sal_uInt64)nSize,&nWrite);
+        if ( rc != osl_File_E_None )
+        {
+            SetError( ::GetSvError( rc ) );
+            return -1;
+        }
         else if( !nWrite )
-        SetError( SVSTREAM_DISK_FULL );
+            SetError( SVSTREAM_DISK_FULL );
     }
     return (sal_Size)nWrite;
 }
@@ -417,20 +468,20 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
 {
     if ( IsOpen() )
     {
-        long nNewPos;
+        oslFileError rc;
+        sal_uInt64 nNewPos;
         if ( nPos != STREAM_SEEK_TO_END )
-            nNewPos = lseek( pInstanceData->nHandle, (long)nPos, SEEK_SET );
+            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_Absolut, nPos );
         else
-            nNewPos = lseek( pInstanceData->nHandle, 0L, SEEK_END );
+            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_End, 0 );
 
-        if ( nNewPos == -1 )
+        if ( rc != osl_File_E_None )
         {
             SetError( SVSTREAM_SEEK_ERROR );
             return 0L;
         }
-        // langsam aber sicherer als return nNewPos
-        return lseek(pInstanceData->nHandle,0L,SEEK_CUR);
-        // return nNewPos;
+        rc = osl_getFilePos( pInstanceData->rHandle, &nNewPos );
+        return (sal_Size) nNewPos;
     }
     SetError( SVSTREAM_GENERALERROR );
     return 0L;
@@ -520,7 +571,14 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         return sal_True;
 
     aflock.l_type = nLockMode;
-    if (fcntl(pInstanceData->nHandle, F_GETLK, &aflock) == -1)
+    sal_IntPtr iFileHandle;
+    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
+    if (rc != osl_File_E_None)
+    {
+        SetError( ::GetSvError( rc ));
+        return sal_False;
+    }
+    if (fcntl((int)iFileHandle, F_GETLK, &aflock) == -1)
     {
     #if defined SOLARIS
         if (errno == ENOSYS)
@@ -536,7 +594,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     }
 
     aflock.l_type = nLockMode;
-    if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) == -1)
+    if (fcntl((int)iFileHandle, F_SETLK, &aflock) == -1)
     {
         SetError( ::GetSvError( errno ));
         return sal_False;
@@ -572,7 +630,14 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
     if ( ! pFileLockEnvVar )
         return sal_True;
 
-    if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) != -1)
+    sal_IntPtr iFileHandle;
+    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
+    if (rc != osl_File_E_None)
+    {
+        SetError( ::GetSvError( rc ));
+        return sal_False;
+    }
+    if (fcntl((int)iFileHandle, F_SETLK, &aflock) != -1)
         return sal_True;
 
     SetError( ::GetSvError( errno ));
@@ -609,9 +674,8 @@ sal_Bool SvFileStream::UnlockFile()
 
 void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 {
-    int nAccess, nAccessRW;
-    int nMode;
-    int nHandleTmp;
+    sal_uInt32 uFlags;
+    oslFileHandle nHandleTmp;
     struct stat buf;
     sal_Bool bStatValid = sal_False;
 
@@ -636,7 +700,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
 
-    if ( lstat( aLocalFilename.getStr(), &buf ) == 0 )
+    if ( osl_lstatFilePath( aLocalFilename.getStr(), &buf ) == osl_File_E_None )
       {
         bStatValid = sal_True;
         // SvFileStream soll kein Directory oeffnen
@@ -647,27 +711,24 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
           }
       }
 
-
     if ( !( nOpenMode & STREAM_WRITE ) )
-        nAccessRW = O_RDONLY;
+        uFlags = osl_File_OpenFlag_Read;
     else if ( !( nOpenMode & STREAM_READ ) )
-        nAccessRW = O_WRONLY;
+        uFlags = osl_File_OpenFlag_Write;
     else
-        nAccessRW = O_RDWR;
+        uFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
 
-    nAccess = 0;
     // Fix (MDA, 18.01.95): Bei RD_ONLY nicht mit O_CREAT oeffnen
     // Wichtig auf Read-Only-Dateisystemen (wie CDROM)
-    if ( (!( nOpenMode & STREAM_NOCREATE )) && ( nAccessRW != O_RDONLY ) )
-        nAccess |= O_CREAT;
+    if ( (!( nOpenMode & STREAM_NOCREATE )) && ( uFlags != osl_File_OpenFlag_Read ) )
+        uFlags |= osl_File_OpenFlag_Create;
     if ( nOpenMode & STREAM_TRUNC )
-        nAccess |= O_TRUNC;
+        uFlags |= osl_File_OpenFlag_Trunc;
 
-    nMode = S_IRUSR | S_IROTH | S_IRGRP;
+    uFlags |= osl_File_OpenFlag_NoExcl | osl_File_OpenFlag_NoLock;
+
     if ( nOpenMode & STREAM_WRITE)
     {
-      nMode |= (S_IWUSR | S_IWOTH | S_IWGRP);
-
       if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
           {
           if ( bStatValid  &&  S_ISLNK( buf.st_mode ) < 0 )
@@ -694,39 +755,36 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
         }
     }
 
+    oslFileError rc = osl_openFilePath( aLocalFilename.getStr(),&nHandleTmp, uFlags );
 
-    nHandleTmp = open(aLocalFilename.getStr(),nAccessRW|nAccess, nMode );
-
-    if ( nHandleTmp == -1 )
+    if ( rc != osl_File_E_None )
     {
-        if ( nAccessRW != O_RDONLY )
+        if ( uFlags & osl_File_OpenFlag_Write )
         {
             // auf Lesen runterschalten
-            nAccessRW = O_RDONLY;
-            nAccess = 0;
-            nMode = S_IRUSR | S_IROTH | S_IRGRP;
-            nHandleTmp =open( aLocalFilename.getStr(),
-                              nAccessRW|nAccess,
-                              nMode );
+            uFlags &= ~osl_File_OpenFlag_Write;
+            rc = osl_openFilePath( aLocalFilename.getStr(),
+                                   &nHandleTmp,
+                                   uFlags );
             }
     }
-    if ( nHandleTmp != -1 )
+    if ( rc == osl_File_E_None )
     {
-        pInstanceData->nHandle = nHandleTmp;
+        pInstanceData->rHandle = nHandleTmp;
         bIsOpen = sal_True;
-        if ( nAccessRW != O_RDONLY )
+        if ( uFlags & osl_File_OpenFlag_Write )
             bIsWritable = sal_True;
 
         if ( !LockFile() ) // ganze Datei
         {
-            close( nHandleTmp );
+            rc = osl_closeFile( nHandleTmp );
             bIsOpen = sal_False;
             bIsWritable = sal_False;
-            pInstanceData->nHandle = 0;
+            pInstanceData->rHandle = 0;
         }
     }
     else
-        SetError( ::GetSvError( errno ) );
+        SetError( ::GetSvError( rc ) );
 }
 
 /*************************************************************************
@@ -750,8 +808,8 @@ void SvFileStream::Close()
 #endif
 
         Flush();
-        close( pInstanceData->nHandle );
-        pInstanceData->nHandle = 0;
+        osl_closeFile( pInstanceData->rHandle );
+        pInstanceData->rHandle = 0;
     }
 
     bIsOpen     = sal_False;
@@ -786,58 +844,10 @@ void SvFileStream::SetSize (sal_Size nSize)
 {
     if (IsOpen())
     {
-        int fd = pInstanceData->nHandle;
-        if (::ftruncate (fd, (off_t)nSize) < 0)
+        oslFileError rc = osl_setFileSize( pInstanceData->rHandle, nSize );
+        if (rc != osl_File_E_None )
         {
-            // Save original error.
-            sal_uInt32 nErr = ::GetSvError (errno);
-
-            // Check against current size. Fail upon 'shrink'.
-            struct stat aStat;
-            if (::fstat (fd, &aStat) < 0)
-            {
-                SetError (nErr);
-                return;
-            }
-            if ((sal::static_int_cast< sal_sSize >(nSize) <= aStat.st_size))
-            {
-                // Failure upon 'shrink'. Return original error.
-                SetError (nErr);
-                return;
-            }
-
-            // Save current position.
-            sal_Size nCurPos = (sal_Size)::lseek (fd, (off_t)0, SEEK_CUR);
-            if (nCurPos == (sal_Size)(-1))
-            {
-                SetError (nErr);
-                return;
-            }
-
-            // Try 'expand' via 'lseek()' and 'write()'.
-            if (::lseek (fd, (off_t)(nSize - 1), SEEK_SET) < 0)
-            {
-                SetError (nErr);
-                return;
-            }
-            if (::write (fd, (char*)"", (size_t)1) < 0)
-            {
-                // Failure. Restore saved position.
-                if (::lseek (fd, (off_t)nCurPos, SEEK_SET) < 0)
-                {
-                    // Double failure.
-                }
-
-                SetError (nErr);
-                return;
-            }
-
-            // Success. Restore saved position.
-            if (::lseek (fd, (off_t)nCurPos, SEEK_SET) < 0)
-            {
-                SetError (nErr);
-                return;
-            }
+            SetError ( ::GetSvError( rc ));
         }
     }
 }
