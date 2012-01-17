@@ -259,8 +259,6 @@ private:
                                const String& LinkTargetURL );
 };
 
-BASIC_DLLPUBLIC void SetAppBasicManager( BasicManager* pBasMgr );
-
 #endif  //_BASMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
