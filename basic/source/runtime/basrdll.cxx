@@ -46,7 +46,6 @@ BasicDLL::BasicDLL()
 {
      *(BasicDLL**)GetAppData(SHL_BASIC) = this;
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    pSttResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
     pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
     bDebugMode = sal_False;
     bBreakEnabled = sal_True;
@@ -54,7 +53,6 @@ BasicDLL::BasicDLL()
 
 BasicDLL::~BasicDLL()
 {
-    delete pSttResMgr;
     delete pBasResMgr;
 }
 

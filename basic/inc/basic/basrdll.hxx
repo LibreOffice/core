@@ -37,7 +37,6 @@ class ResMgr;
 class BASIC_DLLPUBLIC BasicDLL
 {
 private:
-    ResMgr*     pSttResMgr;
     ResMgr*     pBasResMgr;
 
     sal_Bool        bDebugMode;
@@ -47,7 +46,6 @@ public:
                 BasicDLL();
                 ~BasicDLL();
 
-    ResMgr*     GetSttResMgr() const { return pSttResMgr; }
     ResMgr*     GetBasResMgr() const { return pBasResMgr; }
 
     static void BasicBreak();
