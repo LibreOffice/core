@@ -337,8 +337,7 @@ void Test::testFindFirstURLInText() {
 //Sync with tools/source/fsys/urlobj.cxx and changeScheme
 #ifdef LINUX
           "smb://bla.bla.bla/blubber%2F", 7, 29 },
-#endif
-#ifdef WNT
+#else
           "file://bla.bla.bla/blubber%2F", 7, 29 },
 #endif
         { "http://sun.com", "http://sun.com/", 0, 14 },
