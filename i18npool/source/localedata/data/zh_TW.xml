@@ -35,6 +35,11 @@
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
+    <DateAcceptancePattern>Y.M.D</DateAcceptancePattern>
+    <DateAcceptancePattern>M-D</DateAcceptancePattern>
+    <DateAcceptancePattern>M/D</DateAcceptancePattern>
+    <DateAcceptancePattern>Y年M月D日</DateAcceptancePattern>
+    <DateAcceptancePattern>M月D日</DateAcceptancePattern>
     <!-- Fixed Number formats. Index range is 0-5. -->
     <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>General</FormatCode>
