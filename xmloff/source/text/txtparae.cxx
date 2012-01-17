@@ -856,7 +856,7 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeClosed > 0 &&
              pListElements &&
-             pListElements->size() >= ( 2 * sal::static_int_cast< sal_uInt16 >(nListLevelsToBeClosed) ) )
+             pListElements->size() >= sal::static_int_cast< sal_uInt32 >( 2 * nListLevelsToBeClosed ) )
         {
             do {
                 for(size_t j = 0; j < 2; ++j)
