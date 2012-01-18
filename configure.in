@@ -1934,6 +1934,18 @@ dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
 AC_PROG_EGREP
+
+pathmunge ()
+{
+    if ! echo HOST_PATH | $EGREP -q "(^|:)$1($|:)" ; then
+        if test "$2" = "after" ; then
+            HOST_PATH="$HOST_PATH:$1"
+        else
+            HOST_PATH="$1:$HOST_PATH"
+        fi
+    fi
+}
+
 AC_PROG_AWK
 AC_PATH_PROG( AWK, $AWK)
 if test -z "$AWK"; then
