@@ -45,7 +45,7 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <tabfrm.hxx>
-// OD 2004-05-24 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 
 #include "swfont.hxx"   // new SwFont
@@ -1277,14 +1277,6 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     // wegen folgendem Sonderfall: In der Zeile hat der DummUser durchgaengig
     // einen kleineren Font eingestellt als der vom QuoVadis-Text ...
     CalcAdjustLine( pCurr );
-
-#ifdef DBG_UTIL
-    if( OPTDBG( rInf ) )
-    {
-//        aDbstream << "FormatQuoVadis:" << endl;
-//        pCurr->DebugPortions( aDbstream, rInf.GetTxt(), nStart );
-    }
-#endif
 
     // Uff...
     return nRet;

@@ -143,11 +143,6 @@ const char *GetPrepName( const PrepareHint )
     return 0;
 }
 
-void SwLineLayout::DebugPortions( SvStream &, const XubString &, //$ ostream
-                                                const xub_StrLen  )
-{
-}
-
 #else
 #include <limits.h>
 #include <stdlib.h>
@@ -238,48 +233,6 @@ const char *GetPrepName( const PrepareHint ePrep )
     };
     OSL_ENSURE( ePrep < PREP_END, "GetPrepName: unknown PrepareHint" );
     return( ppNameArr[ePrep] );
-}
-
-/*************************************************************************
- *                    SwLineLayout::DebugPortions()
- *
- * DebugPortion() iteriert ueber alle Portions einer Zeile und deckt die
- * internen Strukturen auf.
- * Im Gegensatz zum Ausgabe-Operator werden auch die Textteile ausgegeben.
- *************************************************************************/
-
-void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ ostream
-                                                const xub_StrLen /*nStart*/ )
-{
-    SwLinePortion *pPortion2 = GetPortion();
-
-    xub_StrLen nPos = 0;
-    MSHORT nNr = 0;
-    KSHORT nPrtWidth, nLastPrt;
-    nPrtWidth = nLastPrt = 0;
-
-    SwLinePortion::operator<<( rOs );
-    rOs << '\"' << endl;
-
-    while( pPortion2 )
-    {
-        SwTxtPortion *pTxtPor = pPortion2->InTxtGrp() ?
-                                (SwTxtPortion *)pPortion2 : NULL ;
-        (void)pTxtPor;
-        ++nNr;
-        nLastPrt = nPrtWidth;
-        nPrtWidth = nPrtWidth + pPortion2->PrtWidth();
-        rOs << "\tNr:"  << nNr
-            << " Pos:" << nPos
-            << " Org:" << nLastPrt
-            << endl;
-
-        rOs << "\t";
-        pPortion2->operator<<( rOs );
-        rOs << endl;
-        nPos = nPos + pPortion2->GetLen();
-        pPortion2 = pPortion2->GetPortion();
-    }
 }
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream

@@ -75,12 +75,8 @@ class SwWrongList;
 #define DIR_TOP2BOTTOM 3
 
 #ifdef DBG_UTIL
-#define OPTCALM( rInf )  (rInf).IsOptCalm()
-#define OPTLOW( rInf )   (rInf).IsOptLow()
 #define OPTDBG( rInf )   (rInf).IsOptDbg()
 #else
-#define OPTCALM( rInf )  sal_True
-#define OPTLOW( rInf )   sal_False
 #define OPTDBG( rInf )   sal_False
 #endif
 
@@ -107,8 +103,6 @@ class SwLineInfo
     SwLineInfo();
     ~SwLineInfo();
 public:
-//        const SvxTabStop *GetTabStop( const SwTwips nLinePos,
-//                                        const SwTwips nLeft,
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
     const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
                                  const SwTwips nRight ) const;
@@ -136,7 +130,6 @@ public:
         return nListTabStopPosition;
     }
 
-//  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
 };
 
@@ -377,17 +370,7 @@ public:
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
 #ifdef DBG_UTIL
-    sal_Bool IsOptCalm() const;
-    sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;
-    sal_Bool IsOptTest1() const;
-    sal_Bool IsOptTest2() const;
-    sal_Bool IsOptTest3() const;
-    sal_Bool IsOptTest4() const;
-    sal_Bool IsOptTest5() const;
-    sal_Bool IsOptTest6() const;
-    sal_Bool IsOptTest7() const;
-    sal_Bool IsOptTest8() const;
 #endif
 };
 
@@ -738,7 +721,6 @@ public:
     // Return: gefundene Position, setzt ggf. cHookChar
     xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd );
 
-//  friend ostream &operator<<( ostream &rOS, const SwTxtFormatInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );
 
     inline void SetTabOverflow( sal_Bool bOverflow ) { bTabOverflow = bOverflow; }

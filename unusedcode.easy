@@ -652,7 +652,6 @@ SwLRects::Insert(SwLRects const*, unsigned short, unsigned short, unsigned short
 SwLRects::Replace(SwLineRect const&, unsigned short)
 SwLRects::Replace(SwLineRect const*, unsigned short, unsigned short)
 SwLRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(SwLineRect const&, void*), void*)
-SwLineLayout::DebugPortions(SvStream&, String const&, unsigned short)
 SwMailMergeChildWindow::GetChildWindowId()
 SwModify::GetClientCount() const
 SwModule::SetCompareMode(SvxCompareMode)
@@ -704,16 +703,6 @@ SwTableSortBoxes::DeleteAndDestroy(unsigned short, unsigned short)
 SwTableSortBoxes::Insert(SwTableBox* const&, unsigned short&)
 SwTableSortBoxes::Insert(SwTableBox* const*, unsigned short)
 SwTxtFly::ShowContour(OutputDevice*)
-SwTxtSizeInfo::IsOptCalm() const
-SwTxtSizeInfo::IsOptLow() const
-SwTxtSizeInfo::IsOptTest1() const
-SwTxtSizeInfo::IsOptTest2() const
-SwTxtSizeInfo::IsOptTest3() const
-SwTxtSizeInfo::IsOptTest4() const
-SwTxtSizeInfo::IsOptTest5() const
-SwTxtSizeInfo::IsOptTest6() const
-SwTxtSizeInfo::IsOptTest7() const
-SwTxtSizeInfo::IsOptTest8() const
 SwVbaColumn::calculateAbsoluteColumnWidth(int, com::sun::star::uno::Sequence<com::sun::star::text::TableColumnSeparator> const&, double*)
 SwVbaColumn::calculateRelativeColumnWidth(double const*, double*, int)
 SwVbaStyle::getOOoStyleTypeFromMSWord(int)

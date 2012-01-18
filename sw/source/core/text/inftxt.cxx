@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/uno/Sequence.h>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
@@ -113,17 +111,7 @@ static bool g_bDbgLow = false;
 #endif
 
 #ifdef DBG_UTIL
-sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
-sal_Bool SwTxtSizeInfo::IsOptLow() const { return g_bDbgLow; }
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
-sal_Bool SwTxtSizeInfo::IsOptTest1() const { return GetOpt().IsTest1(); }
-sal_Bool SwTxtSizeInfo::IsOptTest2() const { return GetOpt().IsTest2(); }
-sal_Bool SwTxtSizeInfo::IsOptTest3() const { return GetOpt().IsTest3(); }
-sal_Bool SwTxtSizeInfo::IsOptTest4() const { return GetOpt().IsTest4(); }
-sal_Bool SwTxtSizeInfo::IsOptTest5() const { return GetOpt().IsTest5(); }
-sal_Bool SwTxtSizeInfo::IsOptTest6() const { return GetOpt().IsTest6(); }
-sal_Bool SwTxtSizeInfo::IsOptTest7() const { return GetOpt().IsTest7(); }
-sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
 #endif
 
 /*************************************************************************

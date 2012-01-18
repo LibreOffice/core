@@ -257,13 +257,6 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-#ifdef DBG_UTIL
-    void DebugPortions( SvStream &rOs, const XubString &rTxt,
-                        const xub_StrLen nStart ); //$ ostream
-
-    void dumpLineAsXml(xmlTextWriter* writer, sal_uInt16& ofs, String& aText);
-#endif
-
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
