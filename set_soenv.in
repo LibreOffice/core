@@ -169,7 +169,6 @@ if ( $platform =~ m/cygwin|mingw32/ )
     $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
     $WINDOWS_SDK_HOME      = PathFormat('@WINDOWS_SDK_HOME@');
     $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
-    $USE_DIRECTX5   = "";
     $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
     $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
 }
@@ -735,7 +734,6 @@ if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "WINDOWS_SDK_HOME",  $WINDOWS_SDK_HOME,  "e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
-   ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
    ToFile( "INCLUDE",           "",                 "e" );

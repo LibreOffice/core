@@ -343,10 +343,6 @@ my_components += \
     component/canvas/source/directx/gdipluscanvas
 .END
 
-.IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != "" && "$(USE_DIRECTX5)" != ""
-my_components += component/canvas/source/directx/directx5canvas
-.END
-
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
     "$(WITH_MOZILLA)" != "NO"
 my_components += mozab

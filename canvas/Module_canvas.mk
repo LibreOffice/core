@@ -46,12 +46,6 @@ endif
 ifeq ($(strip $(OS)),WNT)
 ifneq ($(strip $(ENABLE_DIRECTX)),)
 
-ifneq ($(strip $(USE_DIRECTX5)),)
-$(eval $(call gb_Module_add_targets,canvas,\
-	Library_directx5canvas \
-))
-endif
-
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_directx9canvas \
 	Library_gdipluscanvas \
