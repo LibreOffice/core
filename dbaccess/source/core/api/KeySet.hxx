@@ -143,6 +143,11 @@ namespace dbaccess
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
                                              ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         SAL_WNODEPRECATED_DECLARATIONS_POP
+        void setOneKeyColumnParameter( sal_Int32 &nPos,
+                                       const ::com::sun::star::uno::Reference<  ::com::sun::star::sdbc::XParameters > &_xParameter,
+                                       const connectivity::ORowSetValue &_rValue,
+                                       sal_Int32 _nType,
+                                       sal_Int32 _nScale ) const;
         ::rtl::OUStringBuffer createKeyFilter();
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
