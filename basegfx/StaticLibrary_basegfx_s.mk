@@ -72,6 +72,7 @@ $(WORKDIR)/CustomTarget/basegfx/source/%.cxx : $(SRCDIR)/basegfx/source/%.cxx
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/tools/liangbarsky \
 	CustomTarget/basegfx/source/tools/canvastools \
+	CustomTarget/basegfx/source/tools/zoomtools \
 	CustomTarget/basegfx/source/tools/gradienttools \
 	CustomTarget/basegfx/source/tools/keystoplerp \
 	CustomTarget/basegfx/source/tools/unopolypolygon \

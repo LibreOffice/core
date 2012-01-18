@@ -66,6 +66,7 @@ $(eval $(call gb_Library_add_linked_libs,basegfx,\
 $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/tools/b2dclipstate \
 	basegfx/source/tools/canvastools \
+	basegfx/source/tools/zoomtools \
 	basegfx/source/tools/gradienttools \
 	basegfx/source/tools/keystoplerp \
 	basegfx/source/tools/liangbarsky \

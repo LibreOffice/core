@@ -37,6 +37,7 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/unopolypolygon.h
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/tools.hxx,basegfx/tools/tools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/unotools.hxx,basegfx/tools/unotools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/gradienttools.hxx,basegfx/tools/gradienttools.hxx))
+$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/zoomtools.hxx,basegfx/tools/zoomtools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/numeric/ftools.hxx,basegfx/numeric/ftools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tuple/b3i64tuple.hxx,basegfx/tuple/b3i64tuple.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tuple/b3dtuple.hxx,basegfx/tuple/b3dtuple.hxx))
