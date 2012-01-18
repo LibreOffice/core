@@ -511,7 +511,7 @@ End
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_BARE(n) n ".dll"
-#if defined _MSC
+#if defined _MSC_VER
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"

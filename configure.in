@@ -160,6 +160,10 @@ cygwin*|interix*|mingw32*)
         fi
         ;;
     esac
+
+    if test "$build_os" = "cygwin" ; then
+        SCPDEFS="$SCPDEFS -D_MSC_VER"
+    fi
     ;;
 
 darwin*) # Mac OS X or iOS
