@@ -508,7 +508,9 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
 {
     aFaxLB.InsertEntry(sNone);
     for(size_t i = 0; i < rFaxLst.size(); ++i)
-        aFaxLB.InsertEntry(rFaxLst[0]);
+    {
+        aFaxLB.InsertEntry(rFaxLst[i]);
+    }
     aFaxLB.SelectEntryPos(0);
 }
 
