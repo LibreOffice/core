@@ -2109,6 +2109,32 @@ if test "$COMPATH" = "." ; then
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
 
+dnl ===================================================================
+dnl  Test the Solaris compiler version
+dnl ===================================================================
+if test "$_os" = "SunOS"; then
+    if test "$CC" = "cc"; then
+        AC_PATH_PROGS(_cc, cc)
+        COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
+        AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
+        dnl cc -V outputs to standard error!!!!
+        _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | $SED -e 's/.* C //'`
+        _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
+        _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
+        if test "$_sunstudio_major" != "5"; then
+            AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
+        else
+            _sunstudio_minor=`echo $_sunstudio_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else if ($2 == 9) print "true"; else print "false" }'`
+            if test "$_sunstudio_minor" = "false"; then
+                AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
+            else
+                dnl compiler will do
+                AC_MSG_RESULT([checked])
+            fi
+        fi
+    fi
+fi
+
 
 
 
@@ -3434,32 +3460,6 @@ if test "z$_make_ver_check" = "z"; then
    STALE_MAKE=TRUE
 fi
 AC_SUBST(STALE_MAKE)
-
-dnl ===================================================================
-dnl  Test the Solaris compiler version
-dnl ===================================================================
-if test "$_os" = "SunOS"; then
-    if test "$CC" = "cc"; then
-        AC_PATH_PROGS(_cc, cc)
-        COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-        AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
-        dnl cc -V outputs to standard error!!!!
-        _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | $SED -e 's/.* C //'`
-        _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
-        _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
-        if test "$_sunstudio_major" != "5"; then
-            AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
-        else
-            _sunstudio_minor=`echo $_sunstudio_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else if ($2 == 9) print "true"; else print "false" }'`
-            if test "$_sunstudio_minor" = "false"; then
-                AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
-            else
-                dnl compiler will do
-                AC_MSG_RESULT([checked])
-            fi
-        fi
-    fi
-fi
 
 HAVE_LD_HASH_STYLE=FALSE
 WITH_LINKER_HASH_STYLE=
