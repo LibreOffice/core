@@ -55,8 +55,7 @@ Simstr sIdlRootPath;
 
 
 Index::Index( const char *          i_sOutputDirectory,
-              const char *          i_sIdlRootPath,
-              const List<Simstr> &   )
+              const char *          i_sIdlRootPath )
     :   aService2Module(20),
         aModule2Service(20),
         sOutputDirectory(i_sOutputDirectory),

@@ -228,29 +228,6 @@ int Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     return 0;
 };
 
-int Do_IndexCommandLine(const CommandLine & i_rCommandLine)
-{
-    // Parse files:
-    List<Simstr>    aFiles;
-    Index           aIndex( i_rCommandLine.OutputDirectory(),
-                            i_rCommandLine.IdlRootPath(),
-                            i_rCommandLine.IndexedTags() );
-
-    std::cout << "Gathering xml-files ..." << std::endl;
-    GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
-
-    std::cout << "Creating output ..." << std::endl;
-    aIndex.GatherData(aFiles);
-    aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
-
-    std::cout << "... done." << std::endl;
-
-    return 0;
-};
-
-
-
-
 int
 #ifdef WNT
 _cdecl
@@ -267,11 +244,7 @@ main( int argc, char* argv[] )
         return 1;
     }
 
-    if ( aCommandLine.IsIndexCommand() )
-    {
-        ret = Do_IndexCommandLine(aCommandLine);
-    }
-    else if ( aCommandLine.IsDepCommand() )
+    if ( aCommandLine.IsDepCommand() )
     {
         ret = Do_DepCommandLine(aCommandLine);
     }

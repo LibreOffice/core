@@ -43,9 +43,7 @@ class Index
   public:
                         Index(
                             const char  *       i_sOutputDirectory,
-                            const char *        i_sIdlRootPath,
-                            const List<Simstr> &
-                                                i_rTagList );
+                            const char *        i_sIdlRootPath );
                         ~Index();
 
     void                GatherData(

@@ -40,20 +40,13 @@ char C_sUseText[] = "Use: xml2cmp.exe \n"
                     "        [-html htmlFile] \n"
                     "        [-types typeFile] \n"
                     "        [-idlpath idlPath] \n"
-                    "        Xml_FileName\n"
-                    " or: xml2cmp.exe \n"
-                    "        -ix \n"
-                    "        sourceDirectory \n"
-                    "        outputDirectory \n"
-                    "        [-idlpath idlPath] \n"
-                    "        tagname [tagname ...]";
+                    "        Xml_FileName\n";
 
 
 char C_sCmdFunc[]       = "-func";
 char C_sCmdDep[]       = "-dep";
 char C_sCmdHtml[]       = "-html";
 char C_sCmdType[]       = "-types";
-char C_sCmdIndex[]      = "-ix";
 char C_sCmdIdlPath[]    = "-idlpath";
 
 
@@ -72,8 +65,6 @@ CommandLine::CommandLine( int           argc,
         bDisplayUse = true;
     else if ( argc == 2 && ! isalnum(argv[1][0]) )
         bDisplayUse = true;
-    else if ( strcmp( argv[1], C_sCmdIndex ) == 0 && argc < 5 )
-        bDisplayUse = true;
 
     if (bDisplayUse)
     {
@@ -82,14 +73,7 @@ CommandLine::CommandLine( int           argc,
         exit(0);
     }
 
-    if ( strcmp( argv[1], C_sCmdIndex ) == 0 )
-    {
-        ParseIndexCommand(argc,argv);
-    }
-    else
-    {
-        ParseSingleFileCommand(argc,argv);
-    }
+    ParseSingleFileCommand(argc,argv);
 
     if ( sXmlSourceFile.l() == 0
          && sXmlSourceDirectory.l() == 0 )
@@ -101,15 +85,6 @@ CommandLine::CommandLine( int           argc,
     {
         bIsOk = false;
     }
-    else if ( sIndexFile.l() > 0
-              && ( sXmlSourceDirectory.l() == 0
-                   || aTagsInIndex.size() == 0
-                 )
-            )
-    {
-        bIsOk = false;
-    }
-
 }
 
 CommandLine::~CommandLine()
@@ -128,8 +103,7 @@ CommandLine::ErrorText() const
 bool
 GetParameter( Simstr &      o_pMemory,
               int &         io_pCountArg,
-              int           argc,
-              char *        argv[] )
+              int           argc,              char *        argv[] )
 {
     io_pCountArg++;
     if( io_pCountArg < argc )
@@ -139,45 +113,6 @@ GetParameter( Simstr &      o_pMemory,
     }
     return false;
 }
-
-
-void
-CommandLine::ParseIndexCommand( int                 argc,
-                                char *              argv[] )
-{
-    int nCountArg = 1;
-    bIsOk = GetParameter(
-                sXmlSourceDirectory,
-                nCountArg,
-                argc,
-                argv  );
-    if (bIsOk)
-        bIsOk = GetParameter(
-                    sOutputDirectory,
-                    nCountArg,
-                    argc,
-                    argv  );
-    if (bIsOk && strcmp( argv[nCountArg+1], C_sCmdIdlPath ) == 0 )
-        bIsOk = GetParameter(
-                    sIdlRootPath,
-                    ++nCountArg,
-                    argc,
-                    argv  );
-
-    sIndexFile = sOutputDirectory;
-#if defined(WNT)
-    sIndexFile+= "\\xmlindex.html";
-#elif defined(UNX)
-    sIndexFile+= "/xmlindex.html";
-#endif
-
-    for ( ++nCountArg; nCountArg < argc; ++nCountArg )
-    {
-        Simstr sElementName(argv[nCountArg]);
-        aTagsInIndex.push_back( sElementName );
-    }
-}
-
 
 void
 CommandLine::ParseSingleFileCommand( int                argc,

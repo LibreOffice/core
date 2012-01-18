@@ -30,8 +30,6 @@
 #define X2C_CMDLINE_HXX
 
 #include "sistr.hxx"
-#include "list.hxx"
-
 
 class CommandLine
 {
@@ -50,20 +48,13 @@ class CommandLine
     const char *        TypeInfoFile() const    { return sTypeInfoFile.str(); }
     const char *        DepPath() const         { return sDepPath.str(); }
 
-    bool                IsIndexCommand() const  { return sIndexFile.l() > 0; }
     bool                IsDepCommand() const    { return sDepPath.l() > 0; }
     const char *        XmlSrcDirectory() const { return sXmlSourceDirectory.str(); }
-    const char *        IndexOutputFile() const { return sIndexFile.str(); }
     const char *        OutputDirectory() const { return sOutputDirectory.str(); }
-    const List<Simstr> &
-                        IndexedTags() const     { return aTagsInIndex; }
 
     const char *        IdlRootPath() const     { return sIdlRootPath.str(); }
 
   private:
-    void                ParseIndexCommand(
-                            int                 argc,
-                            char *              argv[] );
     void                ParseSingleFileCommand(
                             int                 argc,
                             char *              argv[] );
@@ -73,9 +64,7 @@ class CommandLine
     Simstr              sTypeInfoFile;
 
     Simstr              sXmlSourceDirectory;
-    Simstr              sIndexFile;
     Simstr              sOutputDirectory;
-    List<Simstr>        aTagsInIndex;
 
     Simstr              sIdlRootPath;
     Simstr              sDepPath;
