@@ -698,8 +698,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     LineInfo    aLineInfo;
                     sal_uInt32      nStyle;
                     Size        aSize;
+                    //#fdo39428 Remove SvStream operator>>(long&)
+                    sal_Int32 nTmpW(0), nTmpH(0);
 
-                    *pWMF >> nStyle >> aSize.Width() >> aSize.Height();
+                    *pWMF >> nStyle >> nTmpW >> nTmpH;
+                    aSize.Width() = nTmpW;
+                    aSize.Height() = nTmpH;
 
                     if ( aSize.Width() )
                         aLineInfo.SetWidth( aSize.Width() );

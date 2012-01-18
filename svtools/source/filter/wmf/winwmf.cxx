@@ -908,9 +908,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 SvMemoryStream aMemoryStream( nEscLen );
                                                 aMemoryStream.Write( pData, nEscLen );
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
-                                                aMemoryStream >> aPt.X()
-                                                              >> aPt.Y()
+                                                //#fdo39428 SvStream no longer supports operator>>(long&)
+                                                sal_Int32 nTmpX(0), nTmpY(0);
+                                                aMemoryStream >> nTmpX
+                                                              >> nTmpY
                                                               >> nStringLen;
+                                                 aPt.X() = nTmpX;
+                                                 aPt.Y() = nTmpY;
 
                                                 if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                                 {

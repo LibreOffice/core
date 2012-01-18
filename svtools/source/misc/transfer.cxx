@@ -88,16 +88,23 @@ using namespace ::com::sun::star::datatransfer::dnd;
 SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
 {
     sal_uInt32  nSize, nViewAspect, nSig1, nSig2;
+    //#fdo39428 Remove SvStream operator>>(long&)
+    sal_Int32 nTmp(0);
 
     rIStm >> nSize;
     rIStm >> rObjDesc.maClassName;
     rIStm >> nViewAspect;
-    rIStm >> rObjDesc.maSize.Width();
-    rIStm >> rObjDesc.maSize.Height();
-    rIStm >> rObjDesc.maDragStartPos.X();
-    rIStm >> rObjDesc.maDragStartPos.Y();
+    rIStm >> nTmp;
+    rObjDesc.maSize.Width() = nTmp;
+    rIStm >> nTmp;
+    rObjDesc.maSize.Height() = nTmp;
+    rIStm >> nTmp;
+    rObjDesc.maDragStartPos.X() = nTmp;
+    rIStm >> nTmp;
+    rObjDesc.maDragStartPos.Y() = nTmp;
     rObjDesc.maTypeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
     rObjDesc.maDisplayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
+
     rIStm >> nSig1 >> nSig2;
 
     rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
@@ -122,10 +129,11 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
     rOStm.SeekRel( 4 );
     rOStm << rObjDesc.maClassName;
     rOStm << nViewAspect;
-    rOStm << rObjDesc.maSize.Width();
-    rOStm << rObjDesc.maSize.Height();
-    rOStm << rObjDesc.maDragStartPos.X();
-    rOStm << rObjDesc.maDragStartPos.Y();
+    //#fdo39428 Remove SvStream operator<<(long)
+    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Width());
+    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Height());
+    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.X());
+    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.Y());
     rOStm.WriteUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
     rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rOStm << nSig1 << nSig2;

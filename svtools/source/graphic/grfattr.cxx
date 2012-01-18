@@ -95,7 +95,13 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 
     if( aCompat.GetVersion() >= 2 )
     {
-        rIStm >> rAttr.mnLeftCrop >> rAttr.mnTopCrop >> rAttr.mnRightCrop >> rAttr.mnBottomCrop;
+        //#fdo39428 SvStream no longer supports operator>>(long&)
+        sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
+        rIStm >> nTmpL >> nTmpT >> nTmpR >> nTmpB;
+        rAttr.mnLeftCrop = nTmpL;
+        rAttr.mnTopCrop = nTmpT;
+        rAttr.mnRightCrop = nTmpR;
+        rAttr.mnBottomCrop = nTmpB;
     }
 
     return rIStm;
@@ -111,7 +117,11 @@ SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
     rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
     rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;
     rOStm << rAttr.mbInvert << rAttr.mcTransparency << (sal_uInt16) rAttr.meDrawMode;
-    rOStm << rAttr.mnLeftCrop << rAttr.mnTopCrop << rAttr.mnRightCrop << rAttr.mnBottomCrop;
+    //#fdo39428 SvStream no longer supports operator<<(long)
+    rOStm << sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop)
+          << sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop)
+          << sal::static_int_cast<sal_Int32>(rAttr.mnRightCrop)
+          << sal::static_int_cast<sal_Int32>(rAttr.mnBottomCrop);
 
     return rOStm;
 }
