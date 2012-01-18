@@ -74,7 +74,21 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuSerifCondensed-It
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondensed-BoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
 #endif 
 
+// Gentium fonts
 
+#ifndef WITHOUT_FONTS
+STD_FONT_FILE( gid_File_Fnt_GentiumBasicRegular, GenBasR.ttf, Gentium Basic)
+STD_FONT_FILE( gid_File_Fnt_GentiumBasicBold, GenBasB.ttf, Gentium Basic Bold)
+STD_FONT_FILE( gid_File_Fnt_GentiumBasicItalic, GenBasI.ttf, Gentium Basic Bold)
+STD_FONT_FILE( gid_File_Fnt_GentiumBasicBoldItalic, GenBasBI.ttf, Gentium Basic Bold Italic)
+#endif
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicRegular, GenBkBasR.ttf, Gentium Book Basic)
+STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBold, GenBkBasB.ttf, Gentium Book Basic Bold)
+STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book Basic Bold)
+STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
+#endif
 
 // fontconfig updates to allow proper use of local fonts
 

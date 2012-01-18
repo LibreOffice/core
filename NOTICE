@@ -108,3 +108,9 @@ Project available under the MPL here:
 Document signing can be provided by Mozilla's Network Security
 Services (NSS). The NSS sources are available here:
     ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_6_RTM/src/
+
+For convenience we optionally include the Gentium Basic fonts,
+available under the SIL OpenFont License (OFL). The source
+code can be downloaded here:
+    http://scripts.sil.org/cms/scripts/page.php?item_id=Gentium_basic
+
