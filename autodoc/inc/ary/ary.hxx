@@ -40,11 +40,6 @@ namespace idl
 {
     class Gate;
 }
-
-namespace cpp
-{
-    class Gate;
-}
 }
 
 
@@ -58,7 +53,6 @@ namespace ary
     Create and destroy the repository and
     give access to the "Gates" for different tasks.
 
-    @collab ::ary::cpp::Gate
     @collab ::ary::idl::Gate
 */
 
@@ -72,13 +66,9 @@ class Repository
     // INQUIRY
     virtual const String &
                         Title() const = 0;
-    virtual const ::ary::cpp::Gate &
-                        Gate_Cpp() const = 0;
     virtual const ::ary::idl::Gate &
                         Gate_Idl() const = 0;
     // ACCESS
-    virtual ::ary::cpp::Gate &
-                        Gate_Cpp() = 0;
     virtual ::ary::idl::Gate &
                         Gate_Idl() = 0;
     virtual void        Set_Title(

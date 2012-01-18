@@ -31,7 +31,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cpp_internalgate.hxx>
 #include <idl_internalgate.hxx>
 
 
@@ -53,22 +52,13 @@ Repository::Create_()
 RepositoryCenter::RepositoryCenter()
     :   sDisplayedName(),
         aLocation(),
-        pCppPartition(0),
         pIdlPartition(0)
 {
-    pCppPartition = & cpp::InternalGate::Create_Partition_(*this);
     pIdlPartition = & idl::InternalGate::Create_Partition_(*this);
 }
 
 RepositoryCenter::~RepositoryCenter()
 {
-}
-
-const ::ary::cpp::Gate &
-RepositoryCenter::Gate_Cpp() const
-{
-    csv_assert(pCppPartition);
-    return *pCppPartition;
 }
 
 const ::ary::idl::Gate &
@@ -82,14 +72,6 @@ const String &
 RepositoryCenter::Title() const
 {
     return sDisplayedName;
-}
-
-
-::ary::cpp::Gate &
-RepositoryCenter::Gate_Cpp()
-{
-    csv_assert(pCppPartition);
-    return *pCppPartition;
 }
 
 ::ary::idl::Gate &
@@ -117,54 +99,11 @@ RepositoryCenter::Set_Title(const String & i_sName)
 /*  ClassType-Ids
     -------------
 
-    cpp                 1000
     idl                 2000
-    corba               3000
-    java                4000
     information         5000
     logic location      6000
     phys location       7000
     sec. prod.          8000
-
-
-    cpp
-    ---
-    Namespace           1000
-    Class               1001
-    Enum                1002
-    Typedef             1003
-    Function            1004
-    Variable            1005
-    EnumValue           1006
-    NamespaceAlias      1007
-
-    BuiltInType         1200
-    CeType_Final        1201
-    CeType_Extern       1202
-    UsedType            1203
-    PtrType             1211
-    RefType             1212
-    ConstType           1221
-    VolatileType        1222
-    ArrayType           1230
-    TemplateInstance    1235
-    FunctionPtr         1240
-    DataMemberPtr       1250
-    OperationMemberPtr  1260
-
-    TplParam_Type       1301
-    TplParam_Value      1302
-
-    OpSignature         1400
-
-    Define              1601
-    Macro               1602
-
-    ProjectGroup        1901
-    FileGroup           1902
-
-    TopProject          1921
-
 
 
     idl
@@ -194,13 +133,6 @@ RepositoryCenter::Set_Title(const String & i_sName)
     ExplicitType        2203
     ExplicitNameRoom    2204
     TemplateParamType   2205
-
-
-    java
-    ----
-    Package             4000
-    Interface           4001
-    Class               4002
 
     physical location
     -----------------

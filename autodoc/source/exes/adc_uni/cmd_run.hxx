@@ -46,7 +46,6 @@ namespace autodoc
 {
     class FileCollector_Ifc;
     class ParseToolsFactory_Ifc;
-    class CodeParser_Ifc;
     class DocumentationParser_Ifc;
     class IdlParser;
 
@@ -73,9 +72,7 @@ class Parser
 
   private:
     // Locals
-    CodeParser_Ifc &    Get_CppParser();
     IdlParser &         Get_IdlParser();
-    void                Create_CppParser();
     void                Create_IdlParser();
     const ParseToolsFactory_Ifc &
                         ParseToolsFactory();
@@ -86,7 +83,6 @@ class Parser
     // DATA
     const Parse &       rCommand;
 
-    Dyn<CodeParser_Ifc> pCppParser;
     Dyn<DocumentationParser_Ifc>
                         pCppDocuInterpreter;
     Dyn<IdlParser>      pIdlParser;

@@ -45,8 +45,6 @@ class DisplayToolsFactory : public autodoc::DisplayToolsFactory_Ifc
 //    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
 //                        Create_TextDisplay_FunctionList() const;
 
-    virtual DYN autodoc::HtmlDisplay_UdkStd *
-                        Create_HtmlDisplay_UdkStd() const;
     virtual DYN autodoc::HtmlDisplay_Idl_Ifc *
                         Create_HtmlDisplay_Idl() const;
 

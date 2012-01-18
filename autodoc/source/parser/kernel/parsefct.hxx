@@ -42,10 +42,6 @@ class ParseToolsFactory : public autodoc::ParseToolsFactory_Ifc
                         ParseToolsFactory();
     virtual             ~ParseToolsFactory();
 
-    virtual DYN autodoc::CodeParser_Ifc *
-                        Create_Parser_Cplusplus() const;
-    virtual DYN autodoc::DocumentationParser_Ifc *
-                        Create_DocuParser_AutodocStyle() const;
     virtual DYN autodoc::FileCollector_Ifc *
                         Create_FileCollector(
                             uintt               i_nEstimatedNrOfFiles ) const;

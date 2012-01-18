@@ -54,9 +54,7 @@ extern const String C_opt_ExtensionsAll("-extg");
 extern const String C_opt_DevmanFile("-dvgfile");
 extern const String C_opt_SinceFile("-sincefile");
 
-extern const String C_arg_Cplusplus("c++");
 extern const String C_arg_Idl("idl");
-extern const String C_arg_Java("java");
 
 extern const String C_opt_Project("-p");
 //extern const String C_opt_Lang;
@@ -118,8 +116,6 @@ CreateHtml::do_Run() const
 {
     if ( CommandLine::Get_().IdlUsed() )
         run_Idl();
-    if ( CommandLine::Get_().CppUsed() )
-        run_Cpp();
     return true;
 }
 
@@ -154,25 +150,6 @@ CreateHtml::run_Idl() const
                    rGate,
                    drFrame );
 }
-
-void
-CreateHtml::run_Cpp() const
-{
-    const ary::Repository &
-        rReposy = CommandLine::Get_().TheRepository();
-    const ary::cpp::Gate &
-        rGate = rReposy.Gate_Cpp();
-
-    const DisplayToolsFactory_Ifc &
-        rToolsFactory = DisplayToolsFactory_Ifc::GetIt_();
-    Dyn< autodoc::HtmlDisplay_UdkStd >
-        pDisplay( rToolsFactory.Create_HtmlDisplay_UdkStd() );
-
-    pDisplay->Run( sOutputRootDirectory,
-                   rGate,
-                   rToolsFactory.Create_StdFrame() );
-}
-
 
 }   // namespace command
 }   // namespace autodoc

@@ -46,10 +46,7 @@ namespace command
 namespace
 {
 
-const String C_FileEnding_hxx("*.hxx");
-const String C_FileEnding_h("*.h");
 const String C_FileEnding_idl("*.idl");
-const String C_FileEnding_java("*.java");
 
 inline void
 CHECK( bool b, const String & text )
@@ -74,20 +71,12 @@ S_LanguageInfo::do_Init( opt_iter &          it,
 {
     ++it;   // Cur is language.
     CHECKOPT(   it != itEnd AND
-              ( *it == C_arg_Cplusplus OR
-                *it == C_arg_Idl OR
-                *it == C_arg_Java ),
+                *it == C_arg_Idl,
               "language",
               C_opt_LangAll );
 
-    if ( *it == C_arg_Cplusplus ) {
-        eLanguage = cpp;
-    }
-    else if ( *it == C_arg_Idl ) {
+    if ( *it == C_arg_Idl ) {
         eLanguage = idl;
-    }
-    else if ( *it == C_arg_Java ) {
-        eLanguage = java;
     }
     else {
          csv_assert(false);
@@ -95,14 +84,8 @@ S_LanguageInfo::do_Init( opt_iter &          it,
 
     switch (eLanguage)
     {
-        case cpp:   aExtensions.push_back( C_FileEnding_hxx );
-                    aExtensions.push_back( C_FileEnding_h );
-                    CommandLine::Get_().Set_CppUsed();
-                    break;
         case idl:   aExtensions.push_back( C_FileEnding_idl );
                     CommandLine::Get_().Set_IdlUsed();
-                    break;
-        case java:  aExtensions.push_back( C_FileEnding_java );
                     break;
         default:    //  do nothing.
                     ;

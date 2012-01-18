@@ -40,7 +40,6 @@ namespace display
 namespace autodoc
 {
 
-class HtmlDisplay_UdkStd;
 class HtmlDisplay_Idl_Ifc;
 
 // class TextDisplay_FunctionList_Ifc;
@@ -59,8 +58,6 @@ class DisplayToolsFactory_Ifc
 //    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
 //                        Create_TextDisplay_FunctionList() const = 0;
 
-    virtual DYN autodoc::HtmlDisplay_UdkStd *
-                        Create_HtmlDisplay_UdkStd() const = 0;
     virtual DYN autodoc::HtmlDisplay_Idl_Ifc *
                         Create_HtmlDisplay_Idl() const = 0;
 

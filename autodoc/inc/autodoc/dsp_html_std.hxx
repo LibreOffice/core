@@ -33,10 +33,6 @@
 
 namespace ary
 {
-    namespace cpp
-    {
-        class Gate;
-    }
     namespace idl
     {
         class Gate;
@@ -51,127 +47,6 @@ namespace display
 
 namespace autodoc
 {
-
-
-class HtmlDisplay_UdkStd
-{
-  public:
-    virtual             ~HtmlDisplay_UdkStd() {}
-
-    /** Displays the names of several C++ code entities within the
-        given namespace (or the global namespace as default). All
-        subnamespaces are included.
-
-        Output has following format:
-
-        =========================================================================
-        OutputDirectory
-            index.html
-            def-all.html
-            prj\
-                sal\
-                    index.html                      // Overview about project
-
-                    f-FileName[1,2,...]             // Overview about file
-                    f-OtherFileName[1,2,...]
-                    ...
-                    def-FileName[1,2,...]           // #defines and macros in file
-                    def-OtherFileName[1,2,...]
-                    ...
-                rtl\
-                    ...
-                cppu\
-                    ...
-                cppuhelper\
-                    ...
-                ...
-            ix\
-                ix-a.html
-                ix-b.html
-                ...
-                ix-z.html
-                ix-_.html
-                ix-other.html
-
-            cpp\
-                index.html                          // Overview about global namespace
-
-                Namespace_A\
-                    Namespace_C\
-                        index.html                  // Overview about namespace C
-                        ...
-                    ...
-
-                    index.html                      // Overview about namespace A
-
-                    c-ClassName_X.html              // Description of class
-                    ...
-                    e-EnumName.html                 // Description of enum
-                    ...
-                    t-TypedefName.html              // Description of typedef
-                    ...
-                    o-Filename.html                 // Descriptions of operations in this file in this namespace
-                    ...
-                    d-Filename.html                 // Descriptions of data in this file in this namespace
-                    ...
-
-                    ClassName_X\
-                        c-ClassName_Y.html
-                        e-EnumName.html
-                        t-TypedefName.html
-                        o.html                      // Descriptions of operations in class X
-                        d.html                      // Descriptions of data in class X
-
-                        ClassName_Y\
-                            ...
-                ...
-
-            idl\
-                ...
-            java\
-                ...
-        =========================================================================
-
-
-        @param i_sOutputDirectory
-            Directory for output. Path must be given in correct
-            syntax for the actual operating system without final
-            path delimiter. If this is 0 or "", the current
-            working directory is chosen.
-        @param i_rAryGate
-            The access to the Autodoc Repository.
-        @param i_rLayout
-            Gives parameters for the appearance of the HTML output.
-        @param i_pProjectList
-            If this is != 0, then only code entities which are declared
-            in this projects are displayed.
-    */
-    void                Run(
-                            const char *        i_sOutputDirectory,
-                            const ary::cpp::Gate &
-                                                i_rAryGate,
-                            const display::CorporateFrame &
-                                                i_rLayout );
-  private:
-    virtual void        do_Run(
-                            const char *        i_sOutputDirectory,
-                            const ary::cpp::Gate &
-                                                i_rAryGate,
-                            const display::CorporateFrame &
-                                                i_rLayout ) = 0;
-};
-
-// IMPLEMENTATION
-
-inline void
-HtmlDisplay_UdkStd::Run( const char *                    i_sOutputDirectory,
-                         const ary::cpp::Gate &          i_rAryGate,
-                         const display::CorporateFrame & i_rLayout )
-{
-    do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout );
-}
-
-
 
 // class HtmlDisplay_Idl_Ifc
 

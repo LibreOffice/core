@@ -53,21 +53,12 @@ const char * const C_sUserGuide =
 "               General Use of Autodoc\n"
 "               ----------------------\n"
 "\n"
-"   Example for C++:\n"
-"\n"
-"   -html <OutputDirectory> -name \"UDK 3.x anything\" -lg c++\n"
-"        -p <ProjName> <ProjectRootDirectory>\n"
-"            -t <SourceDir_relativeToProjectRoot>\n"
-"\n"
-"   There may be several projects specified by -p.\n"
-"\n"
-"\n"
 "   Example for IDL:\n"
 "\n"
 "   -html <OutputDirectory> -name \"UDK 3.x anything\" -lg idl\n"
 "         -t <SourceDir1> <SourceDir2>\n"
 "\n"
-"   For both languages, instead of or in addition to -t may be\n"
+"   Instead of or in addition to -t may be\n"
 "   used -d (no subdirectories) or -f (just one file). There can\n"
 "   be multiple arguments after each of these options (-t -d -f).\n"
 "\n"
@@ -75,7 +66,7 @@ const char * const C_sUserGuide =
 "           Replacing @since Tag Content\n"
 "           ----------------------------\n"
 "\n"
-"   In both languages you can give a transformation file to replace\n"
+"   You can give a transformation file to replace\n"
 "   entries in @since tags by different entries.\n"
 "   This file is given by the option\n"
 "       -sincefile <TransformationFilePath>\n"
@@ -93,7 +84,6 @@ CommandLine::CommandLine()
         bInitOk(false),
         pCommand_CreateHtml(0),
         pReposy( & ary::Repository::Create_() ),
-        bCpp(false),
         bIdl(false)
 {
     csv_assert(pTheInstance_ == 0);

@@ -31,8 +31,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cpp/prs_cpp.hxx>
-#include <adoc/prs_adoc.hxx>
 #include <tools/filecoll.hxx>
 
 
@@ -59,18 +57,6 @@ ParseToolsFactory::ParseToolsFactory()
 
 ParseToolsFactory::~ParseToolsFactory()
 {
-}
-
-DYN autodoc::CodeParser_Ifc *
-ParseToolsFactory::Create_Parser_Cplusplus() const
-{
-    return new cpp::Cpluplus_Parser;
-}
-
-DYN autodoc::DocumentationParser_Ifc *
-ParseToolsFactory::Create_DocuParser_AutodocStyle() const
-{
-    return new adoc::DocuParser_AutodocStyle;
 }
 
 DYN autodoc::FileCollector_Ifc *

@@ -29,19 +29,6 @@
 #ifndef ADC_TOKDEAL_HXX
 #define ADC_TOKDEAL_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-
-namespace cpp
-{
-    class Distributor;
-}
-
-
 class TokenDealer
 
 {
@@ -50,8 +37,6 @@ class TokenDealer
 
     virtual void        Deal_Eol() = 0;
     virtual void        Deal_Eof() = 0;
-    virtual cpp::Distributor *
-                        AsDistributor() = 0;
 };
 
 #endif

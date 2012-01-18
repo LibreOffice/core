@@ -34,14 +34,12 @@
 #include <cosv/file.hxx>
 #include <cosv/x.hxx>
 #include <ary/ary.hxx>
-#include <ary/cpp/c_gate.hxx>
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <autodoc/filecoli.hxx>
 #include <autodoc/parsing.hxx>
-#include <autodoc/prs_code.hxx>
 #include <autodoc/prs_docu.hxx>
 #include <parser/unoidl.hxx>
 #include <adc_cl.hxx>
@@ -57,7 +55,6 @@ namespace run
 
 Parser::Parser( const Parse & i_command )
     :   rCommand(i_command),
-        pCppParser(),
         pCppDocuInterpreter(),
         pIdlParser()
 {
@@ -84,7 +81,6 @@ Parser::Perform()
         pFiles( ParseToolsFactory().Create_FileCollector(6000) );
 
     bool bIDL = false;
-    bool bCpp = false;
 
     command::Parse::ProjectIterator
         itEnd = rCommand.ProjectsEnd();
@@ -106,21 +102,12 @@ Parser::Perform()
                 Get_IdlParser().Run(*pFiles);
                 bIDL = true;
             }   break;
-            case command::S_LanguageInfo::cpp:
-            {
-                Get_CppParser().Run( *pFiles );
-                bCpp = true;
-            }   break;
             default:
                 Cerr() << "Project in yet unimplemented language skipped."
                        << Endl();
         }
     }   // end for
 
-    if (bCpp)
-    {
-        rAry.Gate_Cpp().Calculate_AllSecondaryInformation();
-    }
     if (bIDL)
     {
         rAry.Gate_Idl().Calculate_AllSecondaryInformation(
@@ -157,30 +144,12 @@ Parser::Perform()
   }
 }
 
-CodeParser_Ifc &
-Parser::Get_CppParser()
-{
-    if ( NOT pCppParser )
-        Create_CppParser();
-    return *pCppParser;
-}
-
 IdlParser &
 Parser::Get_IdlParser()
 {
     if ( NOT pIdlParser )
         Create_IdlParser();
     return *pIdlParser;
-}
-
-void
-Parser::Create_CppParser()
-{
-    pCppParser          = ParseToolsFactory().Create_Parser_Cplusplus();
-    pCppDocuInterpreter = ParseToolsFactory().Create_DocuParser_AutodocStyle();
-
-    pCppParser->Setup( CommandLine::Get_().TheRepository(),
-                       *pCppDocuInterpreter );
 }
 
 void

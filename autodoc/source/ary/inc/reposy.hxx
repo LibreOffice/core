@@ -36,10 +36,6 @@
 
 namespace ary
 {
-namespace cpp
-{
-    class InternalGate;
-}
 namespace idl
 {
     class InternalGate;
@@ -67,10 +63,8 @@ class RepositoryCenter : public ::ary::Repository
 
     // INHERITED
         // Interface Repository:
-    virtual const cpp::Gate &   Gate_Cpp() const;
     virtual const idl::Gate &   Gate_Idl() const;
     virtual const String &      Title() const;
-    virtual cpp::Gate &         Gate_Cpp();
     virtual idl::Gate &         Gate_Idl();
     virtual void                Set_Title(const String & i_sName );
 
@@ -79,8 +73,6 @@ class RepositoryCenter : public ::ary::Repository
     String              sDisplayedName;     /// Name to be displayed for human users.
     csv::ploc::Directory
                         aLocation;
-    Dyn<cpp::InternalGate>
-                        pCppPartition;
     Dyn<idl::InternalGate>
                         pIdlPartition;
 };

@@ -84,7 +84,6 @@ class CommandLine : public csv::CommandLine_Ifc
     const String &      ExternRoot() const      { return sExternRoot; }
     const String &      ExternNamespace() const { return sExternNamespace; }
 
-    bool                CppUsed() const         { return bCpp; }
     bool                IdlUsed() const         { return bIdl; }
 
     // ACCESS
@@ -98,7 +97,6 @@ class CommandLine : public csv::CommandLine_Ifc
                                                 { sExternNamespace = i_s; }
     ary::Repository &   TheRepository() const   { csv_assert(pReposy != 0);
                                                   return *pReposy; }
-    void                Set_CppUsed()           { bCpp = true; }
     void                Set_IdlUsed()           { bIdl = true; }
 
   private:
@@ -157,7 +155,6 @@ class CommandLine : public csv::CommandLine_Ifc
 
     mutable Dyn<ary::Repository>
                         pReposy;
-    bool                bCpp;
     bool                bIdl;
 
     static CommandLine *

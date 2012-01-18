@@ -65,7 +65,6 @@ class CreateHtml : public Command
     virtual int         inq_RunningRank() const;
 
     // Locals
-    void                run_Cpp() const;
     void                run_Idl() const;
 
     // DATA
@@ -87,9 +86,7 @@ extern const String C_opt_ExtensionsAll;
 extern const String C_opt_DevmanFile;
 extern const String C_opt_SinceFile;
 
-extern const String C_arg_Cplusplus;
 extern const String C_arg_Idl;
-extern const String C_arg_Java;
 
 extern const String C_opt_Project;
 //extern const String C_opt_Lang;

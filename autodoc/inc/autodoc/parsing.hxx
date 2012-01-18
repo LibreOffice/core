@@ -34,7 +34,6 @@
 namespace autodoc
 {
 
-class CodeParser_Ifc;
 class DocumentationParser_Ifc;
 class FileCollector_Ifc;
 
@@ -48,19 +47,6 @@ class ParseToolsFactory_Ifc
     virtual             ~ParseToolsFactory_Ifc() {}
     static ParseToolsFactory_Ifc &
                         GetIt_();
-
-    virtual DYN autodoc::CodeParser_Ifc *
-                        Create_Parser_Cplusplus() const = 0;
-
-//  virtual DYN autodoc::CodeParser_Ifc *
-//                      CreateParser_UnoIDL() const = 0;
-//  virtual DYN autodoc::CodeParser_Ifc *
-//                      CreateParser_Java() const = 0;
-//  virtual DYN autodoc::CodeParser_Ifc *
-//                      CreateParser_StoredProcedures() const = 0;
-
-    virtual DYN autodoc::DocumentationParser_Ifc *
-                        Create_DocuParser_AutodocStyle() const = 0;
 
 //  virtual DYN autodoc::DocumentationParser_Ifc *
 //                      CreateDocuParser_StarOfficeAPIStyle() const = 0;

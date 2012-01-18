@@ -14,7 +14,7 @@ autodoc [-v <level>]
         Directory where the output will be created.
 
     -lg <ProgrammingLanguage>
-        Allowed values: "c++" or "idl"
+        Allowed values: "idl"
 
     -extroot <externroot>
         Only together with "-lg idl" and -extnsp.
@@ -77,7 +77,7 @@ autodoc [-v <level>]
     -idlref <IdlDocumentationRoot> <Namespace[,Namespace ...]>
         Gives the outputdirectory of an IDL documentation, where
         symbols not found in the currently parsed namespaces of C++
-        or Java can be found.
+        can be found.
 
 
 
@@ -157,8 +157,6 @@ Explanation of the Options
 
     Possible values are:
 
-    c++
-        This parses all files with the endings .hxx and .h .
     idl
         This parses all files with the ending .idl .
 

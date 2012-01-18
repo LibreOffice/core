@@ -58,10 +58,9 @@ OBJFILES= \
 LIB1TARGET=$(LB)$/atdoc.lib
 LIB1FILES= \
             $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
-            $(LB)$/ary_kernel.lib $(LB)$/ary_cpp.lib $(LB)$/ary_idl.lib  \
-            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib \
-            $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
-            $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
+            $(LB)$/ary_kernel.lib $(LB)$/ary_idl.lib  \
+            $(LB)$/ary_info.lib \
+            $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib \
             $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_idl.lib \
             $(LB)$/display_toolkit.lib $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \
@@ -91,10 +90,9 @@ APP1LIBS=$(LB)$/atdoc.lib
 DEPOBJFILES += $(APP1OBJS)
 
 APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
-            $(LB)$/ary_kernel.lib $(LB)$/ary_cpp.lib $(LB)$/ary_idl.lib  \
-            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib \
-            $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
-            $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
+            $(LB)$/ary_kernel.lib $(LB)$/ary_idl.lib  \
+            $(LB)$/ary_info.lib \
+            $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib \
             $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_idl.lib \
             $(LB)$/display_toolkit.lib $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \

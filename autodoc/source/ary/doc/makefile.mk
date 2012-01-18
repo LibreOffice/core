@@ -46,10 +46,8 @@ PRJINC=$(PRJ)$/source
 
 
 OBJFILES= \
-    $(OBJ)$/d_boolean.obj           \
     $(OBJ)$/d_docu.obj              \
     $(OBJ)$/d_node.obj              \
-    $(OBJ)$/d_oldcppdocu.obj        \
     $(OBJ)$/d_oldidldocu.obj
 
 

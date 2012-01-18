@@ -51,9 +51,7 @@ struct S_LanguageInfo : public Context
     enum E_ProgrammingLanguage
     {
         none,
-        cpp,
-        idl,
-        java
+        idl
     };
                         S_LanguageInfo()
                             :   eLanguage(none),

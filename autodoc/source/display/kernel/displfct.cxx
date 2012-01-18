@@ -31,7 +31,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <html/chd_udk2.hxx>
 #include <idl/hi_display.hxx>
 #include <cfrstd.hxx>
 
@@ -67,12 +66,6 @@ DisplayToolsFactory::~DisplayToolsFactory()
 //      return new CppTextDisplay_FunctionList;
 // }
 
-
-DYN autodoc::HtmlDisplay_UdkStd *
-DisplayToolsFactory::Create_HtmlDisplay_UdkStd() const
-{
-    return new CppHtmlDisplay_Udk2;
-}
 
 DYN autodoc::HtmlDisplay_Idl_Ifc *
 DisplayToolsFactory::Create_HtmlDisplay_Idl() const
