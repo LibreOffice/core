@@ -36,6 +36,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -666,6 +667,22 @@ public:
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), -fR));
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), -fR));
+
+        // cover special case of 180 degree rotation
+        B2DHomMatrix aTest=tools::createScaleShearXRotateTranslateB2DHomMatrix(
+            6425,3938,
+            0,
+            180*F_PI180,
+            10482,4921);
+        // decompose that matrix
+        B2DTuple aDScale;
+        B2DTuple aDTrans;
+        double fDRot;
+        double fDShX;
+        aTest.decompose(aDScale, aDTrans, fDRot, fDShX);
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test J1", aDScale.getX() == 6425 && aDScale.getY() == 3938);
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test J1", aDTrans.getX() == 10482 && aDTrans.getY() == 4921);
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test J1", fDRot == 180*F_PI180);
     }
 
     // Change the following lines only, if you add, remove or rename

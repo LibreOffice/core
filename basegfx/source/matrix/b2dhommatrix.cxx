@@ -289,6 +289,14 @@ namespace basegfx
             // no rotation and shear, copy scale values
             rScale.setX(get(0, 0));
             rScale.setY(get(1, 1));
+
+            // or is there?
+            if( rScale.getX() < 0 && rScale.getY() < 0 )
+            {
+                // there is - 180 degree rotated
+                rScale *= -1;
+                rRotate = 180*F_PI180;
+            }
         }
         else
         {
