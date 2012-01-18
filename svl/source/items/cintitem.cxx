@@ -301,9 +301,8 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
     DBG_CTOR(CntInt32Item, 0);
-    long nTheValue = 0;
-    rStream >> nTheValue;
-    m_nValue = nTheValue;
+    //fdo#39428 SvStream no longer supports operator>>(long&)
+    rStream >> m_nValue;
 }
 
 //============================================================================
@@ -380,7 +379,8 @@ SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
 SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
-    rStream << long(m_nValue);
+    //fdo#39428 SvStream no longer supports operator<<(long)
+    rStream << m_nValue;
     return rStream;
 }
 
