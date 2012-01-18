@@ -67,7 +67,7 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
         " * specific language governing permissions and limitations\n"
         " * under the License.\n"
         " * \n"
-        " *************************************************************/\n\n"
+        " *************************************************************/\n\n";
 }
 
 bool getOutputStream(ProgramOptions const & options,
