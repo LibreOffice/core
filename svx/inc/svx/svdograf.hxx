@@ -93,7 +93,7 @@ private:
     friend class sdr::contact::ViewObjectContactOfGraphic;
     friend class SdrGraphicLink;
 
-protected:
+private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
@@ -114,7 +114,7 @@ protected:
     unsigned                    mbInsidePaint : 1;
     unsigned                    mbIsPreview   : 1;
 
-protected:
+private:
 
     void                    ImpLinkAnmeldung();
     void                    ImpLinkAbmeldung();
