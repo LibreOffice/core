@@ -514,8 +514,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
     rIStm >> nSize;                                 // Size
     rIStm >> nVersion;                              // Version
-    rIStm >> aPrefSz.Width();                       // PrefSize.Width()
-    rIStm >> aPrefSz.Height();                      // PrefSize.Height()
+    //#fdo39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmp32(0);
+    rIStm >> nTmp32;
+    aPrefSz.Width() = nTmp32;                       // PrefSize.Width()
+    rIStm >> nTmp32;
+    aPrefSz.Height() = nTmp32;                      // PrefSize.Height()
 
     // check header-magic and version
     if( rIStm.GetError()
@@ -1290,7 +1294,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXTLINE_COMMENT ):
                 {
                     Point   aStartPt;
-                    long    nWidth;
+                    //#fdo39428 SvStream no longer supports operator>>(long&)
+                    sal_Int32  nWidth;
                     sal_uInt32 nStrikeout;
                     sal_uInt32 nUnderline;
                     sal_Int32   nFollowingActionCount;
@@ -2367,7 +2372,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaTextLineAction*   pA = (MetaTextLineAction*) pAction;
                 const Point&                rStartPt = pA->GetStartPoint();
-                const long                  nWidth = pA->GetWidth();
+                const sal_Int32             nWidth = (sal_Int32) pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontUnderline         eUnderline = pA->GetUnderline();
                 sal_uLong                       nOldPos, nNewPos;

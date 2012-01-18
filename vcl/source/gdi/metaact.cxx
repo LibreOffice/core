@@ -1748,8 +1748,9 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
+    //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm << maPos;
-    rOStm << mnWidth;
+    rOStm << sal::static_int_cast<sal_Int32>(mnWidth);
     rOStm << static_cast<sal_uInt32>(meStrikeout);
     rOStm << static_cast<sal_uInt32>(meUnderline);
     // new in version 2
@@ -1762,9 +1763,12 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
+    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_uInt32 nTemp;
+    sal_Int32 nTemp2;
     rIStm >> maPos;
-    rIStm >> mnWidth;
+    rIStm >> nTemp2;
+    mnWidth = nTemp2;
     rIStm >> nTemp;
     meStrikeout = (FontStrikeout)nTemp;
     rIStm >> nTemp;
@@ -3016,7 +3020,8 @@ sal_Bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) cons
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << mnHorzMove << mnVertMove;
+    //#fdo39428 SvStream no longer supports operator<<(long)
+    rOStm << sal::static_int_cast<sal_Int32>(mnHorzMove) << sal::static_int_cast<sal_Int32>(mnVertMove);
 }
 
 // ------------------------------------------------------------------------
@@ -3024,7 +3029,11 @@ void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> mnHorzMove >> mnVertMove;
+    //#fdo39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmpHM(0), nTmpVM(0);
+    rIStm >> nTmpHM >> nTmpVM;
+    mnHorzMove = nTmpHM;
+    mnVertMove = nTmpVM;
 }
 
 // ========================================================================

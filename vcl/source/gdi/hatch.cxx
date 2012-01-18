@@ -184,9 +184,12 @@ SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
+    sal_Int32       nTmp32(0);
 
     rIStm >> nTmp16; rImplHatch.meStyle = (HatchStyle) nTmp16;
-    rIStm >> rImplHatch.maColor >> rImplHatch.mnDistance >> rImplHatch.mnAngle;
+    //#fdo39428 SvStream no longer supports operator>>(long&)
+    rIStm >> rImplHatch.maColor >> nTmp32 >> rImplHatch.mnAngle;
+    rImplHatch.mnDistance = nTmp32;
 
     return rIStm;
 }
@@ -198,7 +201,8 @@ SvStream& operator<<( SvStream& rOStm, const ImplHatch& rImplHatch )
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
     rOStm << (sal_uInt16) rImplHatch.meStyle << rImplHatch.maColor;
-    rOStm << rImplHatch.mnDistance << rImplHatch.mnAngle;
+    //#fdo39428 SvStream no longer supports operator<<(long)
+    rOStm << sal::static_int_cast<sal_Int32>(rImplHatch.mnDistance) << rImplHatch.mnAngle;
 
     return rOStm;
 }

@@ -235,17 +235,23 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    sal_uInt16          nTmp16;
+    sal_uInt16          nTmp16(0);
+    sal_Int32       nTmp32(0);
 
+    //#fdo39428 SvStream no longer supports operator>>(long&)
     rIStm >> nTmp16; rImplLineInfo.meStyle = (LineStyle) nTmp16;
-    rIStm >> rImplLineInfo.mnWidth;
+    rIStm >> nTmp32;
+    rImplLineInfo.mnWidth = nTmp32;
 
     if( aCompat.GetVersion() >= 2 )
     {
         // version 2
-        rIStm >> rImplLineInfo.mnDashCount >> rImplLineInfo.mnDashLen;
-        rIStm >> rImplLineInfo.mnDotCount >> rImplLineInfo.mnDotLen;
-        rIStm >> rImplLineInfo.mnDistance;
+        rIStm >> rImplLineInfo.mnDashCount >> nTmp32;
+        rImplLineInfo.mnDashLen = nTmp32;
+        rIStm >> rImplLineInfo.mnDotCount >> nTmp32;
+        rImplLineInfo.mnDotLen = nTmp32;
+        rIStm >> nTmp32;
+        rImplLineInfo.mnDistance = nTmp32;
     }
 
     if( aCompat.GetVersion() >= 3 )
@@ -263,13 +269,14 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
 
+    //#fdo39428 SvStream no longer supports operator<<(long)
     // version 1
-    rOStm << (sal_uInt16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
+    rOStm << (sal_uInt16) rImplLineInfo.meStyle << sal::static_int_cast<sal_Int32>(rImplLineInfo.mnWidth);
 
     // since version2
-    rOStm << rImplLineInfo.mnDashCount << rImplLineInfo.mnDashLen;
-    rOStm << rImplLineInfo.mnDotCount << rImplLineInfo.mnDotLen;
-    rOStm << rImplLineInfo.mnDistance;
+    rOStm << rImplLineInfo.mnDashCount << sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDashLen);
+    rOStm << rImplLineInfo.mnDotCount << sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDotLen);
+    rOStm << sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDistance);
 
     // since version3
     rOStm << (sal_uInt16) rImplLineInfo.meLineJoin;

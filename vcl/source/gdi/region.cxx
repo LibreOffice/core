@@ -2587,8 +2587,9 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                 // insert new band or new separation?
                 if ( (StreamEntryType)nTmp16 == STREAMENTRY_BANDHEADER )
                 {
-                    long nYTop;
-                    long nYBottom;
+                    //#fdo39428 SvStream no longer supports operator>>(long&)
+                    sal_Int32 nYTop;
+                    sal_Int32 nYBottom;
 
                     rIStrm >> nYTop;
                     rIStrm >> nYBottom;
@@ -2607,8 +2608,9 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                 }
                 else
                 {
-                    long nXLeft;
-                    long nXRight;
+                    //#fdo39428 SvStream no longer supports operator>>(long&)
+                    sal_Int32 nXLeft;
+                    sal_Int32 nXRight;
 
                     rIStrm >> nXLeft;
                     rIStrm >> nXRight;
@@ -2679,18 +2681,20 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         while ( pBand )
         {
             // put boundaries
+            //#fdo39428 SvStream no longer supports operator<<(long)
             rOStrm << (sal_uInt16) STREAMENTRY_BANDHEADER;
-            rOStrm << pBand->mnYTop;
-            rOStrm << pBand->mnYBottom;
+            rOStrm << sal::static_int_cast<sal_Int32>(pBand->mnYTop);
+            rOStrm << sal::static_int_cast<sal_Int32>(pBand->mnYBottom);
 
             // put separations of current band
             ImplRegionBandSep* pSep = pBand->mpFirstSep;
             while ( pSep )
             {
                 // put separation
+                //#fdo39428 SvStream no longer supports operator<<(long)
                 rOStrm << (sal_uInt16) STREAMENTRY_SEPARATION;
-                rOStrm << pSep->mnXLeft;
-                rOStrm << pSep->mnXRight;
+                rOStrm << sal::static_int_cast<sal_Int32>(pSep->mnXLeft);
+                rOStrm << sal::static_int_cast<sal_Int32>(pSep->mnXRight);
 
                 // next separation from current band
                 pSep = pSep->mpNextSep;
