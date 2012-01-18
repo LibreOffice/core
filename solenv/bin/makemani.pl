@@ -69,13 +69,6 @@ my $start_dir = $ARGV[1];
 my $dynamic_dir = $ARGV[2];
 my $out_dir = $ARGV[3];
 
-print "################################################\n";
-print "#                                              #\n";
-print "# just a prototype - for testing purpose only! #\n";
-print "#                                              #\n";
-print "################################################\n\n";
-
-
 # Traverse desired filesystems
 my $work_dir = cwd();
 chdir $start_dir or die "$0: ERROR - cannot change directory to \"$start_dir\"\n";
