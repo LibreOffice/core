@@ -9441,13 +9441,6 @@ uno::Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
     return xSpriteCanvas;
 }
 
-uno::Reference< ::com::sun::star::rendering::XSpriteCanvas > Window::GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const
-{
-    uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas(
-        ImplGetCanvas( rFullscreenSize, true, true ), uno::UNO_QUERY );
-    return xSpriteCanvas;
-}
-
 void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
 {
     sal_Bool bRVisible = mpWindowImpl->mbReallyVisible;

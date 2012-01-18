@@ -1029,9 +1029,6 @@ public:
     /// request XSpriteCanvas render interface for this window
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XSpriteCanvas > GetSpriteCanvas() const;
-    /// request fullscreen XSpriteCanvas render interface for this window
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::rendering::XSpriteCanvas > GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const;
 
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this

@@ -310,16 +310,6 @@ void SvxShape::setMaster( SvxShapeMaster* pMaster )
     mpImpl->mpMaster = pMaster;
 }
 
-SvxShapeMaster* SvxShape::getMaster()
-{
-    return mpImpl->mpMaster;
-}
-
-const SvxShapeMaster* SvxShape::getMaster() const
-{
-    return mpImpl->mpMaster;
-}
-
 //----------------------------------------------------------------------
 
 uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType ) throw (uno::RuntimeException)
@@ -365,12 +355,6 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const ::com::sun::star::uno::Sequence
     {
         return 0;
     }
-}
-
-//----------------------------------------------------------------------
-SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
-{
-    return getImplementation( pObj->getUnoShape() );
 }
 
 //----------------------------------------------------------------------

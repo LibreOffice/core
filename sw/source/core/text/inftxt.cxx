@@ -105,12 +105,6 @@ namespace numfunc
 }
 
 #ifdef DBG_UTIL
-// Test2: WYSIWYG++
-// Test4: WYSIWYG debug
-static bool g_bDbgLow = false;
-#endif
-
-#ifdef DBG_UTIL
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
 #endif
 

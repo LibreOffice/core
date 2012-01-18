@@ -1141,11 +1141,6 @@ String SwPaM::GetTxt() const
     return aResult;
 }
 
-sal_Bool SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
-{
-    return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
-}
-
 void SwPaM::InvalidatePaM()
 {
     const SwNode *_pNd=this->GetNode();
@@ -1158,11 +1153,6 @@ void SwPaM::InvalidatePaM()
         SwModify *_pModify=(SwModify*)_pTxtNd;
         _pModify->ModifyNotification( 0, &aHint);
     }
-}
-
-sal_Bool SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
-{
-    return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -122,7 +122,6 @@ protected:
 public:
 
     SvxRedlinTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    SvxRedlinTable(SvxSimpleTableContainer& rParent, const ResId& rResId);
     ~SvxRedlinTable();
 
     // For FilterPage only {
@@ -141,8 +140,6 @@ public:
     // } For FilterPage only
 
     void            SetCalcView(sal_Bool bFlag=sal_True);
-    sal_Bool            IsValidCalcEntry(const String& ,RedlinData *pUserData);
-    sal_Bool            IsValidWriterEntry(const String& ,RedlinData *pUserData);
 
     // no NULL-pointer checking {
     sal_Bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
@@ -239,7 +236,6 @@ public:
 
     void            ClearAuthors();
     void            InsertAuthor( const String& rString, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          GetSelectedAuthorPos();
     String          GetSelectedAuthor()const;
     void            SelectedAuthorPos(sal_uInt16 nPos);
     sal_uInt16          SelectAuthor(const String& aString);
@@ -251,11 +247,9 @@ public:
     void            SetRange(const String& rString);
     String          GetRange() const;
     void            HideRange(sal_Bool bHide=sal_True);
-    void            DisableRange(sal_Bool bFlag=sal_True);
     void            SetFocusToRange();
     // } Methods for Calc
 
-    void            HideClocks(sal_Bool bHide=sal_True);
     void            DisableRef(sal_Bool bFlag);
 
     sal_Bool            IsDate();

@@ -50,61 +50,6 @@ SwVbaColumn::~SwVbaColumn()
 {
 }
 
-void SwVbaColumn::calculateAbsoluteColumnWidth( sal_Int32 nTableWidth, const css::uno::Sequence< css::text::TableColumnSeparator >& aSeparators, double* pAbsWidth )
-{
-    const text::TableColumnSeparator* pArray = aSeparators.getConstArray();
-    sal_Int32 nSepCount = aSeparators.getLength();
-    for( sal_Int32 i = 0; i <= nSepCount; i++ )
-    {
-        sal_Int32 nRelColWidth = 0;
-        if( i == 0 )
-        {
-            if( nSepCount != 0 )
-            {
-                nRelColWidth = pArray[0].Position;
-            }
-            else
-            {
-                nRelColWidth = RELATIVE_TABLE_WIDTH;
-            }
-        }
-        else
-        {
-            if( i == nSepCount )
-            {
-                nRelColWidth = RELATIVE_TABLE_WIDTH - pArray[i-1].Position;
-            }
-            else
-            {
-                nRelColWidth = pArray[i].Position - pArray[i-1].Position;
-            }
-        }
-        pAbsWidth[i] = ( (double)nRelColWidth / RELATIVE_TABLE_WIDTH ) * (double) nTableWidth;
-    }
-}
-
-void SwVbaColumn::calculateRelativeColumnWidth( const double* pAbsWidth, double* pRelWidth, sal_Int32 nCount )
-{
-    double tableWidth = 0.0;
-    for( sal_Int32 i = 0; i < nCount; i++ )
-    {
-        tableWidth += pAbsWidth[i];
-    }
-
-    pRelWidth[ nCount - 1 ] = tableWidth;
-    for( sal_Int32 i = 0; i < nCount - 1; i++ )
-    {
-        if( i == 0 )
-        {
-            pRelWidth[i] = ( pAbsWidth[i] * RELATIVE_TABLE_WIDTH ) / tableWidth;
-        }
-        else
-        {
-            pRelWidth[i] = pRelWidth[i-1] + ( pAbsWidth[i] * RELATIVE_TABLE_WIDTH ) / tableWidth;
-        }
-    }
-}
-
 sal_Int32 SAL_CALL
 SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException )
 {

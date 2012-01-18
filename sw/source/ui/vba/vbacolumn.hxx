@@ -44,10 +44,6 @@ private:
     css::uno::Reference< css::table::XTableColumns > mxTableColumns;
     sal_Int32 mnIndex;
 
-private:
-    void calculateAbsoluteColumnWidth( sal_Int32 nTableWidth, const css::uno::Sequence< css::text::TableColumnSeparator >& aSeparators, double* pAbsWidth );
-    void calculateRelativeColumnWidth( const double* pAbsWidth, double* pRelWidth, sal_Int32 nCount );
-
 public:
     SwVbaColumn( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaColumn();

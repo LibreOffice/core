@@ -163,22 +163,6 @@ SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
     SetNodeDefaultImages();
 }
 
-SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,const ResId& rResId)
-    : SvxSimpleTable(rParent,rResId),
-    aDaTiFirst( DateTime::EMPTY ),
-    aDaTiLast( DateTime::EMPTY ),
-    aDaTiFilterFirst( DateTime::EMPTY ),
-    aDaTiFilterLast( DateTime::EMPTY )
-{
-    bAuthor=sal_False;
-    bDate=sal_False;
-    bIsCalc=sal_False;
-    bComment=sal_False;
-    nDatePos=WRITER_DATE;
-    pCommentSearcher=NULL;
-    SetNodeDefaultImages();
-}
-
 SvxRedlinTable::~SvxRedlinTable()
 {
     if(pCommentSearcher!=NULL)
@@ -337,50 +321,6 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 
         pCommentSearcher=new utl::TextSearch(*pSearchPara, LANGUAGE_SYSTEM );
     }
-}
-
-sal_Bool SvxRedlinTable::IsValidWriterEntry(const String& rString,RedlinData *pUserData)
-{
-    sal_Bool nTheFlag=sal_True;
-    String aString=rString.GetToken(WRITER_AUTHOR,'\t');
-    if(pUserData==NULL)
-    {
-        if(bAuthor)
-        {
-            if(aAuthor.CompareTo(aString)==COMPARE_EQUAL)
-                nTheFlag=sal_True;
-            else
-                nTheFlag=sal_False;
-        }
-    }
-    else
-    {
-        DateTime aDateTime=pUserData->aDateTime;
-        nTheFlag=IsValidEntry(&aString,&aDateTime);
-    }
-    return nTheFlag;
-}
-
-sal_Bool SvxRedlinTable::IsValidCalcEntry(const String& rString,RedlinData *pUserData)
-{
-    sal_Bool nTheFlag=sal_True;
-    String aString=rString.GetToken(CALC_AUTHOR,'\t');
-    if(pUserData==NULL)
-    {
-        if(bAuthor)
-        {
-            if(aAuthor.CompareTo(aString)==COMPARE_EQUAL)
-                nTheFlag=sal_True;
-            else
-                nTheFlag=sal_False;
-        }
-    }
-    else
-    {
-        DateTime aDateTime=pUserData->aDateTime;
-        nTheFlag=IsValidEntry(&aString,&aDateTime);
-    }
-    return nTheFlag;
 }
 
 sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
@@ -837,22 +777,6 @@ String SvxTPFilter::GetMyName() const
     return aStrMyName;
 }
 
-void SvxTPFilter::DisableRange(sal_Bool bFlag)
-{
-    if(bFlag)
-    {
-        aCbRange.Disable();
-        aEdRange.Disable();
-        aBtnRange.Disable();
-    }
-    else
-    {
-        aCbRange.Enable();
-        aEdRange.Enable();
-        aBtnRange.Enable();
-    }
-}
-
 void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
 {
     String aEmpty;
@@ -991,11 +915,6 @@ String SvxTPFilter::GetSelectedAuthor() const
     return aLbAuthor.GetSelectEntry();
 }
 
-sal_uInt16  SvxTPFilter::GetSelectedAuthorPos()
-{
-    return (sal_uInt16) aLbAuthor.GetSelectEntryPos();
-}
-
 void SvxTPFilter::SelectedAuthorPos(sal_uInt16 nPos)
 {
     aLbAuthor.SelectEntryPos(nPos);
@@ -1037,20 +956,6 @@ void SvxTPFilter::HideRange(sal_Bool bHide)
         aCbRange.Show();
         aEdRange.Show();
         aBtnRange.Show();
-    }
-}
-
-void SvxTPFilter::HideClocks(sal_Bool bHide)
-{
-    if(bHide)
-    {
-        aIbClock. Hide();
-        aIbClock2.Hide();
-    }
-    else
-    {
-        aIbClock. Show();
-        aIbClock2.Show();
     }
 }
 

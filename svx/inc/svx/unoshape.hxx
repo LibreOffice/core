@@ -191,7 +191,6 @@ public:
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const ::rtl::OUString& ShapeType ) { maShapeType = ShapeType; }
     ::com::sun::star::uno::Any GetBitmap( sal_Bool bMetaFile = sal_False ) const throw ();
-    static SvxShape* GetShapeForSdrObj( SdrObject* pObj ) throw ();
 
     ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
@@ -223,8 +222,6 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL _getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     void setMaster( SvxShapeMaster* pMaster );
-    const SvxShapeMaster* getMaster() const;
-    SvxShapeMaster* getMaster();
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();

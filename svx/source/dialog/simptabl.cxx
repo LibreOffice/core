@@ -250,11 +250,6 @@ void SvxSimpleTable::InsertHeaderEntry(const rtl::OUString& rText,
     SetTabs();
 }
 
-void SvxSimpleTable::ClearAll()
-{
-    aHeaderBar.Clear();
-    Clear();
-}
 void SvxSimpleTable::ClearHeader()
 {
     aHeaderBar.Clear();
@@ -288,11 +283,6 @@ void SvxSimpleTable::DisableTable()
 sal_Bool SvxSimpleTable::IsEnabled() const
 {
     return m_rParentTableContainer.IsEnabled();
-}
-
-void SvxSimpleTable::TableToTop()
-{
-    m_rParentTableContainer.ToTop();
 }
 
 sal_uInt16 SvxSimpleTable::GetSelectedCol()

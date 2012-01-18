@@ -299,10 +299,6 @@ public:
     sal_Bool ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }
 
-    static sal_Bool Overlap(const SwPaM & a, const SwPaM & b);
-
-    static sal_Bool LessThan(const SwPaM & a, const SwPaM & b);
-
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
     String GetTxt() const;

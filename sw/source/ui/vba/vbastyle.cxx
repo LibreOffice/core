@@ -127,33 +127,6 @@ void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaPro
     throw uno::RuntimeException();
 }
 
-rtl::OUString SwVbaStyle::getOOoStyleTypeFromMSWord( sal_Int32 _wdStyleType )
-{
-    rtl::OUString aStyleType;
-    switch( _wdStyleType )
-    {
-        case word::WdStyleType::wdStyleTypeParagraph:
-        case word::WdStyleType::wdStyleTypeTable:
-        {
-            aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaStyleName") );
-            break;
-        }
-        case word::WdStyleType::wdStyleTypeCharacter:
-        {
-            aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharStyleName") );
-            break;
-        }
-        case word::WdStyleType::wdStyleTypeList:
-        {
-            aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName") );
-            break;
-        }
-        default:
-            DebugHelper::exception( SbERR_INTERNAL_ERROR, rtl::OUString() );
-    }
-    return aStyleType;
-}
-
 ::rtl::OUString SAL_CALL SwVbaStyle::getNameLocal() throw (uno::RuntimeException)
 {
     rtl::OUString sNameLocal;

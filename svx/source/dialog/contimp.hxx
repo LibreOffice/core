@@ -65,9 +65,6 @@ class SvxSuperContourDlg : public SvxContourDlg
     virtual void        Resize();
     virtual sal_Bool        Close();
 
-    void                DoAutoCreate();
-    void                ReducePoints( const long nTol = 8 );
-
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
                         DECL_LINK( MousePosHdl, ContourWindow* );
                         DECL_LINK( GraphSizeHdl, ContourWindow* );

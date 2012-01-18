@@ -112,7 +112,6 @@ public:
 
     void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
 
-    void            ClearAll();
     void            ClearHeader();
 
     // to be removed all calls of the related methods are redirected to *Table() methods
@@ -137,8 +136,6 @@ public:
     void            EnableTable();
     void            DisableTable();
     sal_Bool            IsEnabled() const;
-
-    void            TableToTop();
 
     sal_uInt16          GetSelectedCol();
     void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);

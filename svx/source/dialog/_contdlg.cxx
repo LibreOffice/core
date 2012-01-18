@@ -501,50 +501,6 @@ sal_Bool SvxSuperContourDlg::IsRedoPossible() const
     return aRedoGraphic.GetType() != GRAPHIC_NONE;
 }
 
-void SvxSuperContourDlg::DoAutoCreate()
-{
-    aCreateTimer.Start();
-}
-
-void SvxSuperContourDlg::ReducePoints( const long nTol )
-{
-    PolyPolygon aPolyPoly( GetPolyPolygon( sal_False ) );
-
-    if ( aPolyPoly.Count() )
-    {
-        const MapMode   aMapMode( MAP_100TH_MM );
-        const long      nTol2 = nTol * nTol;
-        Polygon&        rPoly = aPolyPoly[ 0 ];
-        OutputDevice*   pOutDev = Application::GetDefaultDevice();
-        Point           aPtPix;
-        const sal_uInt16    nSize = rPoly.GetSize();
-        sal_uInt16          nCounter = 0;
-
-        if ( nSize )
-            aPtPix = pOutDev->LogicToPixel( rPoly[ 0 ], aMapMode );
-
-        for( sal_uInt16 i = 1; i < nSize; i++ )
-        {
-            const Point&    rNewPt = rPoly[ i ];
-            const Point     aNewPtPix( pOutDev->LogicToPixel( rNewPt, aMapMode ) );
-
-            const long nDistX = aNewPtPix.X() - aPtPix.X();
-            const long nDistY = aNewPtPix.Y() - aPtPix.Y();
-
-            if( ( nDistX * nDistX + nDistY * nDistY ) >= nTol2 )
-            {
-                rPoly[ ++nCounter ] = rNewPt;
-                aPtPix = aNewPtPix;
-            }
-        }
-
-        rPoly.SetSize( nCounter );
-        aContourWnd.SetPolyPolygon( aPolyPoly );
-        aContourWnd.GetSdrModel()->SetChanged( sal_True );
-    }
-}
-
-
 // Click handler for ToolBox
 
 IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )

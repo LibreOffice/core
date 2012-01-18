@@ -171,9 +171,6 @@ public:
     inline  sal_uInt16      GetLEVLonger() const;
     inline  void            SetLEVLonger(sal_uInt16 nSet);
 
-            void            GetFromDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor > & rDescr );
-            void            SetToDescriptor( ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor > & rDescr );
-
     inline const com::sun::star::util::SearchOptions &
                 GetSearchOptions() const;
     inline void SetSearchOptions( const com::sun::star::util::SearchOptions &rOpt );
