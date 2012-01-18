@@ -428,7 +428,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.l18n", "parseAnyToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "parseAnyToken: Exception caught " << e.Message );
         return ParseResult();
     }
 }
@@ -454,7 +454,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.l18n", "parsePredefinedToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "parsePredefinedToken: Exception caught " << e.Message );
         return ParseResult();
     }
 }

@@ -162,7 +162,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getLocaleItem: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getLocaleItem: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::LocaleDataItem();
 }
@@ -177,7 +177,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getAllCurrencies: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getAllCurrencies: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
 }
@@ -192,7 +192,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getAllFormats: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getAllFormats: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
 }
@@ -207,7 +207,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getCollatorImplementations: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getCollatorImplementations: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
 }
@@ -222,7 +222,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getTransliterations: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getTransliterations: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -237,7 +237,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getForbiddenCharacters: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getForbiddenCharacters: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::ForbiddenCharacters();
 }
@@ -252,7 +252,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.l18n", "getReservedWord: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getReservedWord: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -272,7 +272,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.l18n", "getAllInstalledLocaleNames: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getAllInstalledLocaleNames: Exception caught " << e.Message );
     }
     return rInstalledLocales;
 }
@@ -1885,7 +1885,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.l18n", "getAllCalendars: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
 }
