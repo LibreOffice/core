@@ -92,19 +92,19 @@ Still Apache releases can contain optional support for
 binaries from some accepted weak copyleft code bases.
 
 The Open Source SAXON XSLT processor was developed by Michael
-Kay of Saxonica Limited and is available under the MPL.
-	http://saxon.sourceforge.net/
+Kay of Saxonica Limited and is available under the MPL at:
+    https://sourceforge.net/projects/saxon/files/Saxon-B/
 
 The graphite module is distributed under CPL (Common Public
 License). Silgraphite as used by the program is available
 at:
-    http://sourceforge.net/projects/silgraphite/
+    http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/
 
 Some functionality, in particular the support for
 addressbooks, is available through by Mozilla's Seamonkey
-Project available under the MPL:
-    http://www.seamonkey-project.org/
+Project available under the MPL here:
+    http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/
     
 Document signing can be provided by Mozilla's Network Security
-Services (NSS). More information about NSS is avalable here:
-     http://www.mozilla.org/projects/security/pki/nss/
+Services (NSS). The NSS sources are available here:
+    ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_6_RTM/src/
