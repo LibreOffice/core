@@ -50,6 +50,17 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
         rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
     mpLocalOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
 
+    long nTxtW = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
+    long nCtrlW = aFtNSheets.GetSizePixel().Width();
+    if ( nTxtW >= nCtrlW )
+    {
+        Size aNewSize = aFtNSheets.GetSizePixel();
+        aNewSize.Width() += ( nTxtW - nCtrlW );
+        aFtNSheets.SetSizePixel( aNewSize );
+        Point aNewPoint = aEdNSheets.GetPosPixel();
+        aNewPoint.X() += ( nTxtW - nCtrlW );
+        aEdNSheets.SetPosPixel( aNewPoint );
+    }
     aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
 }
 
