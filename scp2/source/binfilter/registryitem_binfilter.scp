@@ -110,7 +110,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = "soffice.StarWriterDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,27";
+    Value = "<progpath>\program\soffice.bin,1";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell
@@ -166,7 +166,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarWriterGlobalDocument.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "<progpath>\program\soffice.exe,35";
+    Value = "<progpath>\program\soffice.bin,9";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell
@@ -248,7 +248,7 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = "soffice.StarCalcDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,29";
+    Value = "<progpath>\program\soffice.bin,3";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell
@@ -361,7 +361,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = "soffice.StarImpressDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,33";
+    Value = "<progpath>\program\soffice.bin,7";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell
@@ -476,7 +476,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = "soffice.StarDrawDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,31";
+    Value = "<progpath>\program\soffice.bin,5";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell
@@ -573,7 +573,7 @@ RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarChartDocument.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "<progpath>\program\soffice.exe,36";
+    Value = "<progpath>\program\soffice.bin,0";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell
@@ -636,7 +636,7 @@ RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarOfficeTemplate.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "<progpath>\program\soffice.exe,15";
+    Value = "<progpath>\program\soffice.bin,10";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell
@@ -749,7 +749,7 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = "soffice.StarMathDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,38";
+    Value = "<progpath>\program\soffice.bin,12";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell

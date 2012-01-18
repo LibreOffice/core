@@ -39,7 +39,7 @@
                     <value >DbReportWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>

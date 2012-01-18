@@ -30,9 +30,9 @@
 #define SV_ICON_ID_SPREADSHEET                  4
 #define SV_ICON_ID_DRAWING                      6
 #define SV_ICON_ID_PRESENTATION                 8
-#define SV_ICON_ID_DATABASE                    14
-#define SV_ICON_ID_FORMULA                     15
-#define SV_ICON_ID_TEMPLATE                    16
+#define SV_ICON_ID_TEMPLATE                    11
+#define SV_ICON_ID_DATABASE                    12
+#define SV_ICON_ID_FORMULA                     13
 
 using namespace ::rtl;
 using namespace ::osl;

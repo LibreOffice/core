@@ -81,7 +81,7 @@ using ::com::sun::star::beans::PropertyValue;
 #define IDM_UNINSTALL               11
 
 
-#define ICON_SO_DEFAULT                 1
+#define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
 #define ICON_TEXT_TEMPLATE              3
 #define ICON_SPREADSHEET_DOCUMENT       4
@@ -90,15 +90,11 @@ using ::com::sun::star::beans::PropertyValue;
 #define ICON_DRAWING_TEMPLATE           7
 #define ICON_PRESENTATION_DOCUMENT      8
 #define ICON_PRESENTATION_TEMPLATE      9
-#define ICON_PRESENTATION_COMPRESSED    10
-#define ICON_GLOBAL_DOCUMENT            11
-#define ICON_HTML_DOCUMENT              12
-#define ICON_CHART_DOCUMENT             13
-#define ICON_DATABASE_DOCUMENT          14
-#define ICON_MATH_DOCUMENT              15
-#define ICON_TEMPLATE                   16
-#define ICON_MACROLIBRARY               17
-#define ICON_CONFIGURATION              18
+#define ICON_MASTER_DOCUMENT            10
+#define ICON_TEMPLATE                   11
+#define ICON_DATABASE_DOCUMENT          12
+#define ICON_MATH_DOCUMENT              13
+#define ICON_MACROLIBRARY               1
 #define ICON_OPEN                       5   // See index of open folder icon in shell32.dll
 #define ICON_SETUP                      500
 
@@ -289,7 +285,7 @@ static void addTaskbarIcon( HWND hWnd )
 
     // add taskbar icon
     NOTIFYICONDATAA nid;
-    nid.hIcon = (HICON)LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_SO_DEFAULT ),
+    nid.hIcon = (HICON)LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_LO_DEFAULT ),
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
         LR_DEFAULTCOLOR | LR_SHARED );
 

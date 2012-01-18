@@ -603,7 +603,7 @@ RegistryItem gid_Regitem_Office_Extension_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "office.Extension.1\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,39";
+    Value = "<progpath>\program\soffice.bin,13";
     Styles = ();
 End
 
@@ -635,7 +635,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
 	ModuleID = gid_Module_Root;
 	Name = "ApplicationIcon";
-    Value = "<progpath>\program\soffice.exe,0";
+    Value = "<progpath>\program\soffice.bin,0";
 	Styles = ();
 End
 

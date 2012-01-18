@@ -76,7 +76,7 @@ RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Defaultico
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,0";
+    Value = "<progpath>\program\soffice.bin,0";
 End
 
 RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Inprochandler32
@@ -195,7 +195,7 @@ RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Defaultico
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,0";
+    Value = "<progpath>\program\soffice.bin,0";
 End
 
 RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Inprochandler32
@@ -291,7 +291,7 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcDocument.6\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,29";
+    Value = "<progpath>\program\soffice.bin,3";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Insertable
@@ -388,7 +388,7 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarCalcTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "<progpath>\program\soffice.exe,30";
+    Value = "<progpath>\program\soffice.bin,4";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell
@@ -665,7 +665,7 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "opendocument.CalcDocument.1\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,3";
+    Value = "<progpath>\program\soffice.bin,3";
 End
 
 #ifdef _MSC_VER
@@ -858,7 +858,7 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.CalcTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "<progpath>\program\soffice.exe,4";
+    Value = "<progpath>\program\soffice.bin,4";
 End
 
 #ifdef _MSC_VER
@@ -1176,11 +1176,11 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stc )
 
 // registering the mso file types
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 30, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 4, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 

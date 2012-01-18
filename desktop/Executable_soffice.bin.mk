@@ -103,6 +103,6 @@ $(eval $(call gb_Executable_set_ldflags,\
 
 endif
 
-$(eval $(call gb_Executable_add_nativeres,$(sofficebin),soffice/src)) 
+$(eval $(call gb_Executable_add_nativeres,$(sofficebin),sofficebin/src))
 
 # vim: set ts=4 sw=4 et:

@@ -91,7 +91,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DatabaseDocument.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Base_Bin;
-    Value = "<progpath>\program\soffice.exe,13";
+    Value = "<progpath>\program\soffice.bin,11";
 End
 
 #ifdef _MSC_VER

@@ -717,7 +717,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     mbShaded                    = false;
     mbFullScreen                = false;
 
-    mnIconID                    = 1; // ICON_DEFAULT
+    mnIconID                    = 1; // ICON_LO_DEFAULT
 
     m_pClipRectangles           = NULL;
     m_nCurClipRect              = 0;
