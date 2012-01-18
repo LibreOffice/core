@@ -273,32 +273,26 @@ sub get_license_header{
 "#\n".
 "#    DO NOT EDIT! This file will be overwritten by localisation process\n".
 "#\n".
-"#*************************************************************************\n".
-"#\n".
-"# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n".
-"# \n".
-"# Copyright 2000, 2010 Oracle and/or its affiliates.\n".
-"#\n".
-"# OpenOffice.org - a multi-platform office productivity suite\n".
-"#\n".
-"# This file is part of OpenOffice.org.\n".
-"#\n".
-"# OpenOffice.org is free software: you can redistribute it and/or modify\n".
-"# it under the terms of the GNU Lesser General Public License version 3\n".
-"# only, as published by the Free Software Foundation.\n".
-"#\n".
-"# OpenOffice.org is distributed in the hope that it will be useful,\n".
-"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n".
-"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n".
-"# GNU Lesser General Public License version 3 for more details\n".
-"# (a copy is included in the LICENSE file that accompanied this code).\n".
-"#\n".
-"# You should have received a copy of the GNU Lesser General Public License\n".
-"# version 3 along with OpenOffice.org.  If not, see\n".
-"# <http://www.openoffice.org/license.html>\n".
-"# for a copy of the LGPLv3 License.\n".
-"#\n".
-"#*************************************************************************\n";
+"#**************************************************************\n".
+"#  \n".
+"#  Licensed to the Apache Software Foundation (ASF) under one\n".
+"#  or more contributor license agreements.  See the NOTICE file\n".
+"#  distributed with this work for additional information\n".
+"#  regarding copyright ownership.  The ASF licenses this file\n".
+"#  to you under the Apache License, Version 2.0 (the\n".
+"#  "License"); you may not use this file except in compliance\n".
+"#  with the License.  You may obtain a copy of the License at\n".
+"#  \n".
+"#    http://www.apache.org/licenses/LICENSE-2.0\n".
+"#  \n".
+"#  Unless required by applicable law or agreed to in writing,\n".
+"#  software distributed under the License is distributed on an\n".
+"#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n".
+"#  KIND, either express or implied.  See the License for the\n".
+"#  specific language governing permissions and limitations\n".
+"#  under the License.\n".
+"#  \n".
+"#**************************************************************\n";
 }
 ######## Check input sdf file and use only the correct part
 sub merge_gsicheck{
