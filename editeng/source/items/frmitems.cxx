@@ -353,8 +353,9 @@ SfxItemPresentation SvxSizeItem::GetPresentation
 
 SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << aSize.Width();
-    rStrm << aSize.Height();
+    //#fdo39428 SvStream no longer supports operator<<(long)
+    rStrm << sal::static_int_cast<sal_Int32>(aSize.Width());
+    rStrm << sal::static_int_cast<sal_Int32>(aSize.Height());
     return rStrm;
 }
 
@@ -378,7 +379,8 @@ bool SvxSizeItem::HasMetrics() const
 
 SfxPoolItem* SvxSizeItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
-    long nWidth, nHeight;
+    //#fdo39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nWidth(0), nHeight(0);
     rStrm >> nWidth >> nHeight;
 
     SvxSizeItem* pAttr = new SvxSizeItem( Which() );

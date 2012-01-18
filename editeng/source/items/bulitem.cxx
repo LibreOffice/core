@@ -98,7 +98,8 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 
     if( nVer == 1 )
     {
-        long nHeight, nWidth;
+        //#fdo39428 SvStream no longer supports operator>>(long&)
+        sal_Int32 nHeight(0), nWidth(0);
         rStream >> nHeight; rStream >> nWidth; Size aSize( nWidth, nHeight );
         aFont.SetSize( aSize );
     }
@@ -153,7 +154,9 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
             pGraphicObject = new GraphicObject( aBmp );
     }
 
-    rStrm >> nWidth;
+    //#fdo39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmp(0);
+    rStrm >> nTmp; nWidth = nTmp;
     rStrm >> nStart;
     rStrm >> nJustify;
 
