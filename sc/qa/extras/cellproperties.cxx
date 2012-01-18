@@ -139,11 +139,6 @@ void ScCellProperties::tearDown()
 
     UnoApiTest::tearDown();
 
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
-    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellProperties);
