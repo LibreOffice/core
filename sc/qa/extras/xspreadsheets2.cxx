@@ -67,11 +67,6 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    uno::Reference< sheet::XSpreadsheetDocument> getDoc(const rtl::OUString, uno::Reference< lang::XComponent >);
-    uno::Reference< sheet::XNamedRanges> getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument >);
-    void importSheetToCopy();
-    bool isExternalReference(const rtl::OUString aDestContent, const rtl::OUString aSrcContent );
-
     // XSpreadsheets2
     void testImportedSheetNameAndIndex();
     void testImportString();
@@ -99,6 +94,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    uno::Reference< sheet::XSpreadsheetDocument> getDoc(const rtl::OUString, uno::Reference< lang::XComponent >&);
+    uno::Reference< sheet::XNamedRanges> getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument >);
+    void importSheetToCopy();
+    bool isExternalReference(const rtl::OUString aDestContent, const rtl::OUString aSrcContent );
+
     static int nTest;
     static uno::Reference< lang::XComponent > xComponent;
 
@@ -132,7 +132,7 @@ rtl::OUString ScXSpreadsheets2::aSrcSheetName(RTL_CONSTASCII_USTRINGPARAM("Sheet
 rtl::OUString ScXSpreadsheets2::aSrcFileBase(RTL_CONSTASCII_USTRINGPARAM("rangenamessrc.ods"));
 rtl::OUString ScXSpreadsheets2::aDestFileBase(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods"));
 sal_Int32 ScXSpreadsheets2::nDestPos = 0;
-sal_Int32 ScXSpreadsheets2::nDestPosEffective;
+sal_Int32 ScXSpreadsheets2::nDestPosEffective = 0;
 
 void ScXSpreadsheets2::testImportedSheetNameAndIndex()
 {
@@ -352,7 +352,7 @@ void ScXSpreadsheets2::testImportCellStyle()
     CPPUNIT_ASSERT_MESSAGE("New style: VertJustify not set", aVertJustify == table::CellVertJustify_CENTER);
 }
 
-uno::Reference< sheet::XSpreadsheetDocument> ScXSpreadsheets2::getDoc(const rtl::OUString aFileBase, uno::Reference< lang::XComponent > xComp)
+uno::Reference< sheet::XSpreadsheetDocument> ScXSpreadsheets2::getDoc(const rtl::OUString aFileBase, uno::Reference< lang::XComponent >& xComp)
 {
     rtl::OUString aFileURL;
     createFileURL(aFileBase, aFileURL);
@@ -401,11 +401,6 @@ void ScXSpreadsheets2::importSheetToCopy()
         xDestSheet = uno::Reference< sheet::XSpreadsheet > ( xDestSheetNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
 
         bIsSheetImported = true;
-
-        // store destFile
-        //uno::Reference< frame::XStorable > xStore (xDestDoc, UNO_QUERY_THROW);
-        //xStore->store();
-
     }
 }
 
@@ -413,13 +408,7 @@ bool ScXSpreadsheets2::isExternalReference(rtl::OUString aDestContent, rtl::OUSt
 {
     rtl::OUString aStart(RTL_CONSTASCII_USTRINGPARAM("'file://"));
     const sal_Char* sSrcContent = rtl::OUStringToOString( aSrcContent, RTL_TEXTENCODING_UTF8 ).getStr();
-/*
-    std::cout << "aDestContent " << aDestContent << std::endl;
-    std::cout << "aSrcContent " << aSrcContent << std::endl;
-    std::cout << "endsWithIgnoreAsciiCaseAsciiL " << aDestContent.endsWithIgnoreAsciiCaseAsciiL(sSrcContent, aSrcContent.getLength()) << std::endl;
-    std::cout << "indexOf(aStart) " << aDestContent.indexOf(aStart) << std::endl;
-    std::cout << "indexOf(aSrcFileBase) " << aDestContent.indexOf(aSrcFileBase) << std::endl;
-*/
+
     return  (aDestContent.endsWithIgnoreAsciiCaseAsciiL(sSrcContent, aSrcContent.getLength()) // same cell address
             && aDestContent.indexOf(aStart)==0 // starts with 'file://
             && aDestContent.indexOf(aSrcFileBase)>0); // contains source file name
