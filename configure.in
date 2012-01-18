@@ -40,6 +40,14 @@ PathFormat()
     fi
 }
 
+WinPath()
+{
+    formatted_path="$1"
+    if test "$build_os" = "cygwin" ; then
+        formatted_path=`cygpath -d "$formatted_path"`
+    fi
+}
+
 if test -n "$SOLARENV" ; then
     AC_MSG_ERROR([You have sourced Env.Host.sh in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
 fi
