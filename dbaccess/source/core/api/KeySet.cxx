@@ -881,45 +881,9 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
 {
     if ( bRefetch )
     {
-        // we just areassign the base members
         try
         {
-            Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
-            OSL_ENSURE(xParameter.is(),"No Parameter interface!");
-            xParameter->clearParameters();
-
-            sal_Int32 nPos=1;
-            connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaIter;
-            connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaEnd;
-            OUpdatedParameter::iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
-            if ( aUpdateFind == m_aUpdatedParameter.end() )
-            {
-                aParaIter = m_aParameterValueForCache.get().begin();
-                aParaEnd = m_aParameterValueForCache.get().end();
-            }
-            else
-            {
-                aParaIter = aUpdateFind->second.get().begin();
-                aParaEnd = aUpdateFind->second.get().end();
-            }
-
-            for(++aParaIter;aParaIter != aParaEnd;++aParaIter,++nPos)
-            {
-                ::dbtools::setObjectWithInfo( xParameter, nPos, aParaIter->makeAny(), aParaIter->getTypeKind() );
-            }
-            connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter2 = m_aKeyIter->second.first->get().begin();
-            SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-            SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
-            for(;aPosIter != aPosEnd;++aPosIter,++aIter2)
-                setOneKeyColumnParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
-            aPosIter = (*m_pForeignColumnNames).begin();
-            aPosEnd = (*m_pForeignColumnNames).end();
-            for(;aPosIter != aPosEnd;++aPosIter,++aIter2)
-                setOneKeyColumnParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
-
-            m_xSet = m_xStatement->executeQuery();
-            OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
-            bRefetch = m_xSet->next();
+            bRefetch = doTryRefetch_throw();
         }
         catch(const Exception&)
         {
@@ -1318,22 +1282,9 @@ sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
     return previous_checked(sal_True);
 }
 
-// -----------------------------------------------------------------------------
-void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
+bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::refreshRow" );
-    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
-        return;
-
-    m_xRow = NULL;
-    ::comphelper::disposeComponent(m_xSet);
-
-    if ( m_aKeyIter->second.second.second.is() )
-    {
-        m_xRow = m_aKeyIter->second.second.second;
-        return;
-    }
-    // we just areassign the base members
+    // we just reassign the base members
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
     xParameter->clearParameters();
@@ -1370,8 +1321,27 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         setOneKeyColumnParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
 
     m_xSet = m_xStatement->executeQuery();
-    OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
-    sal_Bool bOK = m_xSet->next();
+    OSL_ENSURE(m_xSet.is(),"No resultset from statement!");
+    return m_xSet->next();
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::refreshRow" );
+    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
+        return;
+
+    m_xRow = NULL;
+    ::comphelper::disposeComponent(m_xSet);
+
+    if ( m_aKeyIter->second.second.second.is() )
+    {
+        m_xRow = m_aKeyIter->second.second.second;
+        return;
+    }
+
+    sal_Bool bOK = doTryRefetch_throw();
     if ( !bOK )
     {
         // This row has disappeared; remove it.
@@ -1396,7 +1366,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     else
     {
         m_xRow.set(m_xSet,UNO_QUERY);
-        OSL_ENSURE(m_xRow.is(),"No row form statement!");
+        OSL_ENSURE(m_xRow.is(),"No row from statement!");
     }
 }
 
