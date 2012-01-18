@@ -91,6 +91,25 @@ inline static void SwapUInt64( sal_uInt64& r )
         s.c[1] = SWAPLONG(s.c[1]);
         r = s.n;
     }
+
+inline static void SwapInt64( sal_Int64& r )
+    {
+        union
+        {
+            sal_Int64 n;
+            sal_Int32 c[2];
+        } s;
+
+        s.n = r;
+        s.c[0] ^= s.c[1]; // swap the 32 bit words
+        s.c[1] ^= s.c[0];
+        s.c[0] ^= s.c[1];
+        // swap the bytes in the words
+        s.c[0] = SWAPLONG(s.c[0]);
+        s.c[1] = SWAPLONG(s.c[1]);
+        r = s.n;
+    }
+
 #ifdef UNX
 inline static void SwapFloat( float& r )
     {
@@ -1067,7 +1086,6 @@ SvStream& SvStream::operator>>(sal_uInt32& r)
     return *this;
 }
 
-
 SvStream& SvStream::operator>>(sal_uInt64& r)
 {
     sal_uInt64 n = 0;
@@ -1081,47 +1099,41 @@ SvStream& SvStream::operator>>(sal_uInt64& r)
     return *this;
 }
 
-SvStream& SvStream::operator >>(long& r) //puke!, kill this
+
+SvStream& SvStream::operator>>(sal_Int16& r)
 {
-#if(SAL_TYPES_SIZEOFLONG != 4)
-    int n;
-    *this >> n;
-    if (good())
-        r = n;
-#else
-    long n = 0;
-    READNUMBER_WITHOUT_SWAP(long, n)
+    sal_Int16 n = 0;
+    READNUMBER_WITHOUT_SWAP(sal_Int16, n)
     if (good())
     {
         if (bSwap)
-            SwapLong(n);
-        r = n;
-    }
-#endif
-    return *this;
-}
-
-SvStream& SvStream::operator>>(short& r)
-{
-    short n = 0;
-    READNUMBER_WITHOUT_SWAP(short, n)
-    if (good())
-    {
-        if(bSwap)
             SwapShort(n);
         r = n;
     }
     return *this;
 }
 
-SvStream& SvStream::operator>>(int& r)
+SvStream& SvStream::operator>>(sal_Int32& r)
 {
-    int n = 0;
-    READNUMBER_WITHOUT_SWAP(int, n)
+    sal_Int32 n = 0;
+    READNUMBER_WITHOUT_SWAP(sal_Int32, n)
     if (good())
     {
         if (bSwap)
             SwapLongInt(n);
+        r = n;
+    }
+    return *this;
+}
+
+SvStream& SvStream::operator>>(sal_Int64& r)
+{
+    sal_Int64 n = 0;
+    READNUMBER_WITHOUT_SWAP(sal_Int64, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapInt64(n);
         r = n;
     }
     return *this;
@@ -1249,32 +1261,27 @@ SvStream& SvStream::operator<<  ( sal_uInt64 v )
     return *this;
 }
 
-SvStream& SvStream::operator<< ( long v )
-{
-#if(SAL_TYPES_SIZEOFLONG != 4)
-    int tmp = v;
-    *this << tmp;
-#else
-    if( bSwap )
-        SwapLong(v);
-    WRITENUMBER_WITHOUT_SWAP(long,v)
-#endif
-    return *this;
-}
-
-SvStream& SvStream::operator<<  ( short v )
+SvStream& SvStream::operator<< ( sal_Int16 v )
 {
     if( bSwap )
         SwapShort(v);
-    WRITENUMBER_WITHOUT_SWAP(short,v)
+    WRITENUMBER_WITHOUT_SWAP(sal_Int16,v)
     return *this;
 }
 
-SvStream& SvStream::operator<<( int v )
+SvStream& SvStream::operator<<  ( sal_Int32 v )
 {
     if( bSwap )
-        SwapLongInt( v );
-    WRITENUMBER_WITHOUT_SWAP(int,v)
+        SwapLongInt(v);
+    WRITENUMBER_WITHOUT_SWAP(sal_Int32,v)
+    return *this;
+}
+
+SvStream& SvStream::operator<<  ( sal_Int64 v )
+{
+    if( bSwap )
+        SwapInt64(v);
+    WRITENUMBER_WITHOUT_SWAP(sal_Int64,v)
     return *this;
 }
 
