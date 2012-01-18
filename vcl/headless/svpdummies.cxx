@@ -91,10 +91,8 @@ rtl::OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
    return aBuf.makeStringAndClear();
 }
 
-int SvpSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
-                                    const rtl::OUString& rMessage,
-                                    const std::list< rtl::OUString >& rButtons,
-                                    int nDefButton )
+int SvpSalSystem::ShowNativeDialog( const rtl::OUString&, const rtl::OUString&,
+                                    const std::list< rtl::OUString >&, int )
 {
     return 0;
 }

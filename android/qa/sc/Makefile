@@ -1,3 +1,5 @@
+include ../../../config_host.mk
+
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.qa.sc
 
@@ -9,15 +11,11 @@ BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-NDK_HOME:=$(shell type -p ndk-build)
-NDK_HOME:=$(shell dirname $(NDK_HOME))
-
 SODEST=libs/armeabi-v7a
 OBJLOCAL=obj/local/armeabi-v7a
 
 define COPY
-cp $(1) $(SODEST)$(if $(2),/$(2)) && \
-arm-linux-androideabi-strip --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
+cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
@@ -118,7 +116,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPY,$(NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
+	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic that under solver or workdir for now.
@@ -149,7 +147,7 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
-	cp $(NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
+	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
 

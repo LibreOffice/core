@@ -104,6 +104,7 @@ if test "z$with_android_ndk" != "z"; then
    test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-strip
    test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-gcc --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm  -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a"
    test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-g++ --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti"
+#   PATH="$ANDROID_NDK_HOME/:$PATH"
 fi
 AC_SUBST(ANDROID_NDK_HOME)
 

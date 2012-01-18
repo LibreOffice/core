@@ -1,3 +1,5 @@
+include ../../../config_host.mk
+
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.qa
 
@@ -9,15 +11,11 @@ BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-NDK_HOME:=$(shell type -p ndk-build)
-NDK_HOME:=$(shell dirname $(NDK_HOME))
-
 SODEST=libs/armeabi-v7a
 OBJLOCAL=obj/local/armeabi-v7a
 
 define COPY
-cp $(1) $(SODEST)$(if $(2),/$(2)) && \
-arm-linux-androideabi-strip --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
+cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
@@ -47,17 +45,13 @@ copy-stuff:
 #
 # cppunit "plug-ins", first ones from sal
 #
-	$(call COPY,$(SRCDIR)/sal/$(INPATH)/lib/*.so)
+	$(call COPY,$(OUTDIR)/lib/libuno_sal*.so)
 #
 # and ones from other modules. Note that depending on when you try
 # this, these might not have been built yet.
 #
-	for F in $(SRC_ROOT)/cppu/$(INPATH)/lib/qa_*.so; do \
-	    $(call COPY,$${F},`basename $${F}`); \
-	done
-#
-	for F in i18npool_test_breakiterator; do \
-	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
+	for F in i18npool_test_breakiterator cppu cppuhelper sal; do \
+	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}*.so); \
 	done
 #
 # Other "programs"
@@ -90,7 +84,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPY,$(NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
+	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
 #
 # bridgetest components, not in solver
 	for F in bridgetest constructors cppobj; do \
