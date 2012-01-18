@@ -143,17 +143,54 @@ public:
         validate("validateDiff", pValid, &tools::solvePolygonOperationDiff);
     }
 
+    void validateCrossover(const char* pName,
+                           const char* pInputSvgD,
+                           const char* pValidSvgD)
+    {
+        rtl::OUString aInput=rtl::OUString::createFromAscii(pInputSvgD);
+        rtl::OUString aValid=rtl::OUString::createFromAscii(pValidSvgD);
+        B2DPolyPolygon aInputPoly, aValidPoly;
+
+        tools::importFromSvgD(aInputPoly, aInput);
+        tools::importFromSvgD(aValidPoly, aValid);
+
+        CPPUNIT_ASSERT_MESSAGE(
+            pName,
+            basegfx::tools::exportToSvgD(
+                tools::solveCrossovers(aInputPoly)) == aValid);
+    }
+
     void checkCrossoverSolver()
     {
-        B2DPolyPolygon aPoly;
-        tools::importFromSvgD(
-            aPoly,
-            ::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "m0 0 v 5  h 3 h 1 h 1 h 1 v -2 v -3 z"
-                    "m3 7 v -2 h 1 h 1 h 1 v -2 h 1 v 3 z")));
+        // partially intersecting polygons, with a common subsection
+        validateCrossover(
+            "partially intersecting",
+            "m0 0 v 5  h 3 h 1 h 1 h 1 v -2 v -3 z"
+              "m3 7 v -2 h 1 h 1 h 1 v -2 h 1 v 3 z",
+            "m0 0v5h3 1 1 1v-2-3zm3 7v-2h1 1 1v-2h1v3z");
 
-        tools::solveCrossovers(aPoly);
+        // first polygon is identical to subset of second polygon
+        validateCrossover(
+            "full subset",
+            "m0 0 v 5  h 3 h 1 h 1 v -5 z"
+              "m3 10 v -5 h 1 h 1 v -5 h -5 v 5 h 3 z",
+            "m0 0v5h3 1 1v-5zm3 10v-5zm1-5h1v-5h-5v5h3z");
+
+        // first polygon is identical to subset of second polygon, but
+        // oriented in the opposite direction
+        validateCrossover(
+            "full subset, opposite direction",
+            "m0 0 v 5 h 3 h 1 h 1 v -5 z"
+              "m3 10 v -5 h -1 h -1 h -1 v -5 h 5 v 5 h 2 z",
+            "m0 0v5h1 1 1-1-1-1v-5h5v5-5zm4 5h1 2l-4 5v-5z");
+
+        // first polygon is identical to subset of second polygon, and
+        // has a curve segment (triggers different code path)
+        validateCrossover(
+            "full subset, plus curves",
+            "m0 0 v 5  h 3 h 1 h 1 c 2 0 2 0 0 -5 z"
+              "m3 10 v -5 h 1 h 1 c 2 0 2 0 0 -5 h -5 v 5 h 3 z",
+            "m0 0v5h3 1 1c2 0 2 0 0-5zm3 10v-5zm1-5h1c2 0 2 0 0-5h-5v5h3z");
     }
 
     // Change the following lines only, if you add, remove or rename
