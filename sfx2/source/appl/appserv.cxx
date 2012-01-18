@@ -359,6 +359,22 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_SEND_FEEDBACK:
+        {
+            ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("http://hub.libreoffice.org/file-a-bug/"));
+            try
+            {
+                uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                    ::comphelper::getProcessServiceFactory()->createInstance(
+                        DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
+
         case SID_SHOW_LICENSE:
         {
             ModalDialog aDialog( NULL, SfxResId( DLG_HELP_LICENSING ) );

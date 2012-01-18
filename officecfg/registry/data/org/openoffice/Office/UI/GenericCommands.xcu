@@ -4132,6 +4132,11 @@
                     <value xml:lang="en-US">Optio~n Bar</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SendFeedback" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Send Feedback...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ShowLicense" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">License Information...</value>

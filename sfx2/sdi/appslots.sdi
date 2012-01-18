@@ -167,6 +167,10 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_SEND_FEEDBACK
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_SHOW_LICENSE
     [
         ExecMethod = MiscExec_Impl ;
