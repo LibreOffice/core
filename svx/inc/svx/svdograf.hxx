@@ -100,8 +100,6 @@ protected:
     void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
     GraphicAttr             aGrafInfo;
 
-    Rectangle               aCropRect;          // Wenn aCropRect nicht Empty ist, dann enthaelt es den sichtbaren
-                                                // Ausschnitt der Grafik in logischen Eingeiten der Grafik! Also Bitmap->=Pixel
     String                  aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
     String                  aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
@@ -125,7 +123,6 @@ protected:
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
 
 public:
-
                             TYPEINFO();
 
                             SdrGrafObj();

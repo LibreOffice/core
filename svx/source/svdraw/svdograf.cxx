@@ -818,7 +818,6 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     SdrRectObj::operator=( rObj );
 
     pGraphic->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
-    aCropRect = rObj.aCropRect;
     aFileName = rObj.aFileName;
     aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
