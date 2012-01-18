@@ -63,7 +63,6 @@
 #include <docary.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <ForbiddenCharactersEnum.hxx>
 #include <comphelper/servicehelper.hxx>
 
 // for locking SolarMutex: svapp + mutex

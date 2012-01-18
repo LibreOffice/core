@@ -58,7 +58,6 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <sfx2/printer.hxx>
-#include <ForbiddenCharactersEnum.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
