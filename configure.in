@@ -215,7 +215,8 @@ cygwin*|interix*|mingw32*)
     test_freetype=no
     test_fontconfig=no
     _os=WINNT
-
+    use_shl_version="TRUE"
+    DYNAMIC_CRT="TRUE"
     # If the host OS matches "mingw32*", that means we are using the
     # MinGW cross-compiler, because we don't see the point in building
     # LibreOffice using MinGW on Windows. If you want to build on
@@ -361,6 +362,9 @@ if test "$_os" = "AIX"; then
         AC_MSG_ERROR([gawk not found in \$PATH])
     fi
 fi
+
+AC_SUBST(use_shl_version)
+AC_SUBST(DYNAMIC_CRT)
 
 AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)

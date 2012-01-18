@@ -51,7 +51,6 @@ my ( $SOLAR_JAVA,
 # Platform dependent constant values.
 my (
       $OUTPATH, $INPATH,
-      $DYNAMIC_CRT, $use_shl_versions );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -172,8 +171,6 @@ if ( $platform =~ m/cygwin|mingw32/ )
     $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
     $USE_DIRECTX5   = "";
     $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
-    $DYNAMIC_CRT    = "TRUE";
-    $use_shl_versions = "TRUE";
     $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
 }
 elsif ( $platform =~ m/darwin/ )
@@ -729,8 +726,6 @@ ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform dependent constant values.", $empty, "c" );
 ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
-ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
-ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 
 #
 # Writing the variables to file.
