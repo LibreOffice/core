@@ -78,12 +78,15 @@ if test "$build_os" = "cygwin"; then
     SRC_ROOT=`pwd`
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
+    x_Cygwin=
 else
     EXEEXT_FOR_BUILD=
     SRC_ROOT=`pwd`
+    x_Cygwin=[\#]
 fi
 AC_SUBST(SRC_ROOT)
 AC_SUBST(EXEEXT_FOR_BUILD)
+AC_SUBST(x_Cygwin)
 
 cat /dev/null > warn
 
