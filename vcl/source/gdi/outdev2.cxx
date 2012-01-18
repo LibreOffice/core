@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <tools/debug.hxx>
 
 #include <vcl/bitmap.hxx>
@@ -152,19 +151,69 @@ sal_uLong ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
 
 // =======================================================================
 
+void ImplAdjustTwoRect( TwoRect& rTwoRect, const Rectangle& rValidSrcRect )
+{
+    if( ( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
+        ( rTwoRect.mnSrcY < rValidSrcRect.Top() ) || ( rTwoRect.mnSrcY >= rValidSrcRect.Bottom() ) ||
+        ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rValidSrcRect.Right() ) ||
+        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rValidSrcRect.Bottom() ) )
+    {
+        const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+                                     Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
+        Rectangle       aCropRect( aSourceRect );
+
+        aCropRect.Intersection( rValidSrcRect );
+
+        if( aCropRect.IsEmpty() )
+            rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        else
+        {
+            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+
+            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+
+            rTwoRect.mnSrcX = aCropRect.Left();
+            rTwoRect.mnSrcY = aCropRect.Top();
+            rTwoRect.mnSrcWidth = aCropRect.GetWidth();
+            rTwoRect.mnSrcHeight = aCropRect.GetHeight();
+            rTwoRect.mnDestX = nDstX1;
+            rTwoRect.mnDestY = nDstY1;
+            rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
+            rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
+        }
+    }
+}
+
+// =======================================================================
+
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoidPosAry )
 {
     TwoRect*            pPosAry = (TwoRect*)pVoidPosAry;
     SalGraphics*        pGraphics2;
 
-    if ( pPosAry->mnSrcWidth && pPosAry->mnSrcHeight && pPosAry->mnDestWidth && pPosAry->mnDestHeight )
+    if ( this == pSrcDev )
+        pGraphics2 = NULL;
+    else
     {
-        if ( this == pSrcDev )
-            pGraphics2 = NULL;
+        if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
+             (GetOutDevType() != OUTDEV_WINDOW) )
+        {
+            if ( !pSrcDev->mpGraphics )
+            {
+                if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
+                    return;
+            }
+            pGraphics2 = pSrcDev->mpGraphics;
+        }
         else
         {
-            if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
-                 (GetOutDevType() != OUTDEV_WINDOW) )
+            if ( ((Window*)this)->mpWindowImpl->mpFrameWindow == ((Window*)pSrcDev)->mpWindowImpl->mpFrameWindow )
+                pGraphics2 = NULL;
+            else
             {
                 if ( !pSrcDev->mpGraphics )
                 {
@@ -172,68 +221,38 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
                         return;
                 }
                 pGraphics2 = pSrcDev->mpGraphics;
-            }
-            else
-            {
-                if ( ((Window*)this)->mpWindowImpl->mpFrameWindow == ((Window*)pSrcDev)->mpWindowImpl->mpFrameWindow )
-                    pGraphics2 = NULL;
-                else
+
+                if ( !mpGraphics )
                 {
-                    if ( !pSrcDev->mpGraphics )
-                    {
-                        if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
-                            return;
-                    }
-                    pGraphics2 = pSrcDev->mpGraphics;
-
-                    if ( !mpGraphics )
-                    {
-                        if ( !ImplGetGraphics() )
-                            return;
-                    }
-                    DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
-                                "OutputDevice::DrawOutDev(): We need more than one Graphics" );
+                    if ( !ImplGetGraphics() )
+                        return;
                 }
+                DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
+                            "OutputDevice::DrawOutDev(): We need more than one Graphics" );
             }
         }
+    }
 
-        // #102532# Offset only has to be pseudo window offset
-        Rectangle   aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
+    // #102532# Offset only has to be pseudo window offset
+    const Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
                                  Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
-        Rectangle   aSrcRect( Point( pPosAry->mnSrcX, pPosAry->mnSrcY ),
-                              Size( pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
-        const long  nOldRight = aSrcRect.Right();
-        const long  nOldBottom = aSrcRect.Bottom();
 
-        if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
+    ImplAdjustTwoRect( *pPosAry, aSrcOutRect );
+
+    if ( pPosAry->mnSrcWidth && pPosAry->mnSrcHeight && pPosAry->mnDestWidth && pPosAry->mnDestHeight )
+    {
+        // --- RTL --- if this is no window, but pSrcDev is a window
+        // mirroring may be required
+        // because only windows have a SalGraphicsLayout
+        // mirroring is performed here
+        if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
         {
-            if ( (pPosAry->mnSrcX+pPosAry->mnSrcWidth-1) > aSrcOutRect.Right() )
-            {
-                const long nOldWidth = pPosAry->mnSrcWidth;
-                pPosAry->mnSrcWidth -= (nOldRight - aSrcRect.Right());
-                pPosAry->mnDestWidth = pPosAry->mnDestWidth * pPosAry->mnSrcWidth / nOldWidth;
-            }
-
-            if ( (pPosAry->mnSrcY+pPosAry->mnSrcHeight-1) > aSrcOutRect.Bottom() )
-            {
-                const long nOldHeight = pPosAry->mnSrcHeight;
-                pPosAry->mnSrcHeight -= (nOldBottom - aSrcRect.Bottom());
-                pPosAry->mnDestHeight = pPosAry->mnDestHeight * pPosAry->mnSrcHeight / nOldHeight;
-            }
-
-            // --- RTL --- if this is no window, but pSrcDev is a window
-            // mirroring may be required
-            // because only windows have a SalGraphicsLayout
-            // mirroring is performed here
-            if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
-            {
-                SalTwoRect pPosAry2 = *pPosAry;
-                pGraphics2->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
-                mpGraphics->CopyBits( &pPosAry2, pGraphics2, this, pSrcDev );
-            }
-            else
-                mpGraphics->CopyBits( pPosAry, pGraphics2, this, pSrcDev );
+            SalTwoRect pPosAry2 = *pPosAry;
+            pGraphics2->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
+            mpGraphics->CopyBits( &pPosAry2, pGraphics2, this, pSrcDev );
         }
+        else
+            mpGraphics->CopyBits( pPosAry, pGraphics2, this, pSrcDev );
     }
 }
 
@@ -279,31 +298,13 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
         aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
 
-        Rectangle   aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
-                                 Size( mnOutWidth, mnOutHeight ) );
-        Rectangle   aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                              Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
-        long        nOldRight = aSrcRect.Right();
-        long        nOldBottom = aSrcRect.Bottom();
+        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+                                     Size( mnOutWidth, mnOutHeight ) );
 
-        if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
-        {
-            if ( (aPosAry.mnSrcX+aPosAry.mnSrcWidth-1) > aSrcOutRect.Right() )
-            {
-                long nOldWidth = aPosAry.mnSrcWidth;
-                aPosAry.mnSrcWidth -= nOldRight-aSrcRect.Right();
-                aPosAry.mnDestWidth = aPosAry.mnDestWidth*aPosAry.mnSrcWidth/nOldWidth;
-            }
+        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
 
-            if ( (aPosAry.mnSrcY+aPosAry.mnSrcHeight-1) > aSrcOutRect.Bottom() )
-            {
-                long nOldHeight = aPosAry.mnSrcHeight;
-                aPosAry.mnSrcHeight -= nOldBottom-aSrcRect.Bottom();
-                aPosAry.mnDestHeight = aPosAry.mnDestHeight*aPosAry.mnSrcHeight/nOldHeight;
-            }
-
+        if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits( &aPosAry, NULL, this, NULL );
-        }
     }
 
     if( mpAlphaVDev )
@@ -412,21 +413,15 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
         aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
 
-        Rectangle   aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
-                                 Size( mnOutWidth, mnOutHeight ) );
-        Rectangle   aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                              Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
-        long        nOldRight = aSrcRect.Right();
-        long        nOldBottom = aSrcRect.Bottom();
+        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+                                     Size( mnOutWidth, mnOutHeight ) );
+        const Rectangle aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
+                                  Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
 
-        if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
+        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
+
+        if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
-            if ( (aPosAry.mnSrcX+aPosAry.mnSrcWidth-1) > aSrcOutRect.Right() )
-                aPosAry.mnSrcWidth -= nOldRight-aSrcRect.Right();
-
-            if ( (aPosAry.mnSrcY+aPosAry.mnSrcHeight-1) > aSrcOutRect.Bottom() )
-                aPosAry.mnSrcHeight -= nOldBottom-aSrcRect.Bottom();
-
             if ( (meOutDevType == OUTDEV_WINDOW) && (nFlags & COPYAREA_WINDOWINVALIDATE) )
             {
                 ((Window*)this)->ImplMoveAllInvalidateRegions( aSrcRect,
