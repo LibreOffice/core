@@ -1,4 +1,3 @@
-
 #!/bin/sh
     
 sed "s/0xc601/NS_sprm::LN_PIstdPermute/g" < $1 > $1.out && mv $1.out $1 
