@@ -223,7 +223,7 @@ namespace dbaccess
         void checkUpdateIterator();
         const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
         void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
-        // resizes the parameter vector if nescessary
+        // resizes the parameter vector if necessary
         ::connectivity::ORowSetValue& getParameterStorage( sal_Int32 parameterIndex );
 
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);

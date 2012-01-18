@@ -615,7 +615,7 @@ namespace dbtools
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
                             const ::std::vector<bool, std::allocator<bool> >& _aParametersSet = ::std::vector<bool, std::allocator<bool> >());
 
-    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+    /** call the appropriate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value
         @param  parameterIndex  the index of the parameter, 1 based
         @param  x               the value to set
@@ -629,7 +629,7 @@ namespace dbtools
                             sal_Int32 sqlType,
                             sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+    /** call the appropriate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value
         @param  parameterIndex  the index of the parameter, 1 based
         @param  x               the value to set
