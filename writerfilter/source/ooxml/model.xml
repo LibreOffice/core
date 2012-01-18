@@ -20473,7 +20473,7 @@
       <define name="CT_Charset">
         <optional>
           <attribute name="val">
-            <ref name="CT_UcharHexNumber"/>
+            <ref name="ST_UcharHexNumber"/>
           </attribute>
         </optional>
         <optional>
