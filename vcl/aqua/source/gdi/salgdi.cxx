@@ -1013,6 +1013,28 @@ bool AquaSalGraphics::drawPolyLine(
         case ::basegfx::B2DLINEJOIN_ROUND:      aCGLineJoin = kCGLineJoinRound; break;
     }
 
+    // setup cap attribute
+    CGLineCap aCGLineCap(kCGLineCapButt);
+
+    switch(eLineCap)
+    {
+        default: // com::sun::star::drawing::LineCap_BUTT:
+        {
+            aCGLineCap = kCGLineCapButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            aCGLineCap = kCGLineCapRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            aCGLineCap = kCGLineCapSquare;
+            break;
+        }
+    }
+
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
@@ -1030,6 +1052,7 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextSetShouldAntialias( mrContext, true );
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
+        CGContextSetLineCap( mrContext, aCGLineCap );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );
         CGContextRestoreGState( mrContext );

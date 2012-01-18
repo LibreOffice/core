@@ -451,7 +451,7 @@ com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
         || com::sun::star::drawing::LineCap_ROUND == eRetval
         || com::sun::star::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");
 
-    return (com::sun::star::drawing::LineCap)SfxEnumItem::GetValue();
+    return eRetval;
 }
 
 //------------------------------
