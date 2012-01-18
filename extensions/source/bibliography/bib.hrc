@@ -62,7 +62,6 @@
 #define RID_MAIN_ME_DBSOURCE        (RID_BIB_MENU +10)
 #define RID_MAIN_DELETE_RECORD      (RID_BIB_MENU +11)
 #define RID_MAIN_INSERT_RECORD      (RID_BIB_MENU +12)
-#define MN_TEMPLATES                (RID_BIB_MENU +13)      // to make makro ITEM_FILE_DOCTEMPLATE happy...
 
 #define RID_POPUP_ME_VIEW           (RID_BIB_MENU +50)
 
