@@ -1500,12 +1500,12 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             }
             break;
         }
-        case SbxSALUINT64:
+        //#fdo39428 SvStream no longer supports operator>>(long&)
+        //SvStream now has operator>>(sal_Int64&)
         case SbxSALINT64:
-            // Rather ugly use of the union here because we only
-            // have a SvStream& SvStream::operator>>(sal_uInt64&) available to us
-            // There is no SvStream::operator>>(sal_Int64&) due to conflict with
-            // SvStream::operator>>(long&) ( at least on 64 bit linux )
+            r >> aData.nInt64;
+            break;
+        case SbxSALUINT64:
             r >> aData.uInt64;
             break;
         case SbxCURRENCY:
