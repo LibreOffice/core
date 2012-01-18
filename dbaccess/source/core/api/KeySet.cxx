@@ -223,22 +223,56 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
+namespace
+{
+    void appendOneKeyColumnClause( const ::rtl::OUString &tblName, const ::rtl::OUString &colName, ::rtl::OUStringBuffer &o_buf )
+    {
+        static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
+        static ::rtl::OUString s_sParam0(RTL_CONSTASCII_USTRINGPARAM(" ( TRUE = ? AND "));
+        static ::rtl::OUString s_sParam1(RTL_CONSTASCII_USTRINGPARAM(" = ? OR TRUE = ? AND "));
+        static ::rtl::OUString s_sParam2(RTL_CONSTASCII_USTRINGPARAM(" IS NULL ) "));
+        o_buf.append(s_sParam0);
+        o_buf.append(tblName);
+        o_buf.append(s_sDot);
+        o_buf.append(colName);
+        o_buf.append(s_sParam1);
+        o_buf.append(tblName);
+        o_buf.append(s_sDot);
+        o_buf.append(colName);
+        o_buf.append(s_sParam2);
+    }
+}
+
+void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParameters > &_xParameter, const connectivity::ORowSetValue &_rValue, sal_Int32 _nType, sal_Int32 _nScale ) const
+{
+    if ( _rValue.isNull() )
+    {
+        _xParameter->setBoolean( nPos++, false );
+        // We do the full call so that the right sqlType is passed to setNull
+        setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
+        _xParameter->setBoolean( nPos++, true );
+    }
+    else
+    {
+        _xParameter->setBoolean( nPos++, true );
+        setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
+        _xParameter->setBoolean( nPos++, false );
+    }
+}
+
 ::rtl::OUStringBuffer OKeySet::createKeyFilter()
 {
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     const ::rtl::OUString aQuote    = getIdentifierQuoteString();
     ::rtl::OUStringBuffer aFilter;
-    static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
-    static ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // create the where clause
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     SelectColumnsMetaData::iterator aPosEnd = m_pKeyColumnNames->end();
     for(SelectColumnsMetaData::iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd;)
     {
-        aFilter.append(::dbtools::quoteTableName( xMeta,aPosIter->second.sTableName,::dbtools::eInDataManipulation));
-        aFilter.append(s_sDot);
-        aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
-        aFilter.append(s_sParam);
+        appendOneKeyColumnClause(::dbtools::quoteTableName( xMeta,aPosIter->second.sTableName,::dbtools::eInDataManipulation),
+                                 ::dbtools::quoteName( aQuote,aPosIter->second.sRealName),
+                                 aFilter);
         ++aPosIter;
         if(aPosIter != aPosEnd)
             aFilter.append(aAnd);
@@ -276,8 +310,6 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     {
         static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
         const ::rtl::OUString aQuote    = getIdentifierQuoteString();
-        static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
-        static ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
         const ::rtl::OUString* pIter = aSeq.getConstArray();
         const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
@@ -296,10 +328,9 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
                     // look for columns not in the source columns to use them as filter as well
                     if ( aFilter.getLength() )
                         aFilter.append(aAnd);
-                    aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
-                    aFilter.append(s_sDot);
-                    aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
-                    aFilter.append(s_sParam);
+                    appendOneKeyColumnClause(::dbtools::quoteName( aQuote,sSelectTableName),
+                                             ::dbtools::quoteName( aQuote,aPosIter->second.sRealName),
+                                             aFilter);
                 }
                 break;
             }
@@ -879,12 +910,12 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
             connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter2 = m_aKeyIter->second.first->get().begin();
             SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
             SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
-            for(;aPosIter != aPosEnd;++aPosIter,++aIter2,++nPos)
-                setParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
+            for(;aPosIter != aPosEnd;++aPosIter,++aIter2)
+                setOneKeyColumnParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
             aPosIter = (*m_pForeignColumnNames).begin();
             aPosEnd = (*m_pForeignColumnNames).end();
-            for(;aPosIter != aPosEnd;++aPosIter,++aIter2,++nPos)
-                setParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
+            for(;aPosIter != aPosEnd;++aPosIter,++aIter2)
+                setOneKeyColumnParameter(nPos,xParameter,*aIter2,aPosIter->second.nType,aPosIter->second.nScale);
 
             m_xSet = m_xStatement->executeQuery();
             OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
@@ -1340,12 +1371,12 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
-    for(;aPosIter != aPosEnd;++aPosIter,++aIter,++nPos)
-        setParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
+    for(;aPosIter != aPosEnd;++aPosIter,++aIter)
+        setOneKeyColumnParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
     aPosIter = (*m_pForeignColumnNames).begin();
     aPosEnd = (*m_pForeignColumnNames).end();
-    for(;aPosIter != aPosEnd;++aPosIter,++aIter,++nPos)
-        setParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
+    for(;aPosIter != aPosEnd;++aPosIter,++aIter)
+        setOneKeyColumnParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
