@@ -1331,7 +1331,7 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset from statement!");
-    return m_xSet->next()
+    return m_xSet->next();
 }
 
 // -----------------------------------------------------------------------------
