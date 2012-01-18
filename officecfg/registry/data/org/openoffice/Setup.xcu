@@ -218,7 +218,7 @@
                     <value ></value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >15</value>
+                    <value >13</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
@@ -260,7 +260,7 @@
                     <value ></value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >11</value>
+                    <value >10</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
@@ -454,7 +454,7 @@
                     <value ></value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >12</value>
+                    <value >1</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
@@ -491,7 +491,7 @@
                     <value >DbRelationWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
@@ -516,7 +516,7 @@
                     <value >DbQueryWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
@@ -541,7 +541,7 @@
                     <value >DbQueryWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
@@ -566,7 +566,7 @@
                     <value >DbTableWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
@@ -591,7 +591,7 @@
                     <value >DbBrowserWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
@@ -616,7 +616,7 @@
                     <value>DbTableDataWindowState</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value>14</value>
+                    <value>12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value>GenericCategories</value>
@@ -709,7 +709,7 @@
                     <value ></value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >13</value>
+                    <value >1</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
@@ -751,7 +751,7 @@
                     <value ></value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
+                    <value >12</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>

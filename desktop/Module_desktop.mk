@@ -90,6 +90,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     WinResTarget_sdraw \
     WinResTarget_simpress \
     WinResTarget_soffice \
+    WinResTarget_sofficebin \
     WinResTarget_smath \
     WinResTarget_sweb \
     WinResTarget_swriter \

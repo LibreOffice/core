@@ -20,6 +20,7 @@ RegistrationContextInformation::RegistrationContextInformation(MSIHANDLE hMsi, c
 {
     assert(m_OOExecPath.length());
     ExtractOpenOfficeExecNameFromPath();
+    m_OOIconPath = m_OOExecPath.replace(m_OOExecPath.find(m_OOExecName), m_OOExecName.size(), std::wstring(TEXT("soffice.bin")));
 }
 
 std::wstring RegistrationContextInformation::GetWordDocumentDisplayName() const
@@ -36,7 +37,7 @@ std::wstring RegistrationContextInformation::GetWordDocumentFileExtension() cons
 
 std::wstring RegistrationContextInformation::GetWordDocumentDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",1"));
+    return m_OOIconPath + std::wstring(TEXT(",1"));
 }
 
 std::wstring RegistrationContextInformation::GetWordDocumentDefaultShellCommand() const
@@ -70,7 +71,7 @@ std::wstring RegistrationContextInformation::GetWordTemplateFileExtension() cons
 
 std::wstring RegistrationContextInformation::GetWordTemplateDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",2"));
+    return m_OOIconPath + std::wstring(TEXT(",2"));
 }
 
 std::wstring RegistrationContextInformation::GetWordTemplateDefaultShellCommand() const
@@ -92,7 +93,7 @@ std::wstring RegistrationContextInformation::GetRtfDocumentFileExtension() const
 
 std::wstring RegistrationContextInformation::GetRtfDocumentDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",1"));
+    return m_OOIconPath + std::wstring(TEXT(",1"));
 }
 
 std::wstring RegistrationContextInformation::GetRtfDocumentDefaultShellCommand() const
@@ -114,7 +115,7 @@ std::wstring RegistrationContextInformation::GetExcelSheetFileExtension() const
 
 std::wstring RegistrationContextInformation::GetExcelSheetDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",3"));
+    return m_OOIconPath + std::wstring(TEXT(",3"));
 }
 
 std::wstring RegistrationContextInformation::GetExcelSheetDefaultShellCommand() const
@@ -148,7 +149,7 @@ std::wstring RegistrationContextInformation::GetExcelTemplateFileExtension() con
 
 std::wstring RegistrationContextInformation::GetExcelTemplateDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",4"));
+    return m_OOIconPath + std::wstring(TEXT(",4"));
 }
 
 std::wstring RegistrationContextInformation::GetExcelTemplateDefaultShellCommand() const
@@ -170,7 +171,7 @@ std::wstring RegistrationContextInformation::GetPowerPointDocumentFileExtension(
 
 std::wstring RegistrationContextInformation::GetPowerPointDocumentDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",7"));
+    return m_OOIconPath + std::wstring(TEXT(",7"));
 }
 
 std::wstring RegistrationContextInformation::GetPowerPointDocumentDefaultShellCommand() const
@@ -204,7 +205,7 @@ std::wstring RegistrationContextInformation::GetPowerPointTemplateFileExtension(
 
 std::wstring RegistrationContextInformation::GetPowerPointTemplateDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",8"));
+    return m_OOIconPath + std::wstring(TEXT(",8"));
 }
 
 std::wstring RegistrationContextInformation::GetPowerPointTemplateDefaultShellCommand() const
@@ -226,7 +227,7 @@ std::wstring RegistrationContextInformation::GetPowerPointShowFileExtension() co
 
 std::wstring RegistrationContextInformation::GetPowerPointShowDefaultIconEntry() const
 {
-    return m_OOExecPath + std::wstring(TEXT(",7"));
+    return m_OOIconPath + std::wstring(TEXT(",7"));
 }
 
 std::wstring RegistrationContextInformation::GetPowerPointShowDefaultShellCommand() const

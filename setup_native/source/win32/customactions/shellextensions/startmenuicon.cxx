@@ -84,18 +84,16 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 
     if (osverinfo.dwMajorVersion < 6 /* && osverinfo.dwMinorVersion  */ )
     {
-        // This icon (18) is a Windows folder until XP Version (number is 0 based)
         WritePrivateProfileString(
             TEXT(".ShellClassInfo"),
             TEXT("IconFile"),
             sIconFile.c_str(),
             sDesktopFile.c_str() );
 
-        // FYI: in tool 'ResHack' this icon can be found on position '19' (number is 1 based)
         WritePrivateProfileString(
             TEXT(".ShellClassInfo"),
             TEXT("IconIndex"),
-            TEXT("18"),
+            TEXT("0"),
             sDesktopFile.c_str() );
     }
     // else

@@ -391,7 +391,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(OpenOffice.org.,name,\DefaultIcon)); \
-        Value = "<progpath>\program\soffice.exe," STRING(icon_id); \
+        Value = "<progpath>\program\soffice.bin," STRING(icon_id); \
     End
 
 #define REGISTRY_ENTRY_SHELL(name,default,modid) \

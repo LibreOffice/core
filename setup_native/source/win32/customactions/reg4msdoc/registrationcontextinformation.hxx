@@ -165,6 +165,7 @@ private:
     MSIHANDLE    msihandle_;
     std::wstring m_OOExecPath;
     std::wstring m_OOExecName;
+    std::wstring m_OOIconPath;
 };
 
 #endif
