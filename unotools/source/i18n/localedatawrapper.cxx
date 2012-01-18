@@ -1900,15 +1900,9 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
         if ( xLD.is() )
             return xLD->getDateAcceptancePatterns( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getDateAcceptancePatterns: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
