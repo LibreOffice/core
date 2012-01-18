@@ -1701,8 +1701,11 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                rIStream >> rPoly.mpImplPolygon->mpPointAry[i].X()
-                         >> rPoly.mpImplPolygon->mpPointAry[i].Y();
+                //fdo#39428 SvStream no longer supports operator>>(long&)
+                sal_Int32 nTmpX(0), nTmpY(0);
+                rIStream >> nTmpX >> nTmpY;
+                rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;
+                rPoly.mpImplPolygon->mpPointAry[i].Y() = nTmpY;
             }
         }
         else
@@ -1739,8 +1742,9 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                rOStream << rPoly.mpImplPolygon->mpPointAry[i].X()
-                         << rPoly.mpImplPolygon->mpPointAry[i].Y();
+                //fdo#39428 SvStream no longer supports operator<<(long)
+                rOStream << sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() )
+                         << sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() );
             }
         }
         else

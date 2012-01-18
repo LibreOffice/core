@@ -36,7 +36,11 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
 
-    rIStream >> rPair.nA >> rPair.nB;
+    //39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmpA(0), nTmpB(0);
+    rIStream >> nTmpA >> nTmpB;
+    rPair.nA = nTmpA;
+    rPair.nB = nTmpB;
 
     return rIStream;
 }
@@ -47,7 +51,8 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
 
-    rOStream << rPair.nA << rPair.nB;
+    //39428 SvStream no longer supports operator<<(long)
+    rOStream << sal::static_int_cast<sal_Int32>(rPair.nA) << sal::static_int_cast<sal_Int32>(rPair.nB);
 
     return rOStream;
 }
@@ -227,7 +232,15 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Rectangle::>> - Solar-Version not set on rIStream" );
 
-    rIStream >> rRect.nLeft >> rRect.nTop >> rRect.nRight >> rRect.nBottom;
+    //fdo#39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
+
+    rIStream >> nTmpL >> nTmpT >> nTmpR >> nTmpB;
+
+    rRect.nLeft = nTmpL;
+    rRect.nTop = nTmpT;
+    rRect.nRight = nTmpR;
+    rRect.nBottom = nTmpB;
 
     return rIStream;
 }
@@ -238,7 +251,11 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Rectangle::<< - Solar-Version not set on rOStream" );
 
-    rOStream << rRect.nLeft << rRect.nTop << rRect.nRight << rRect.nBottom;
+    //fdo#39428 SvStream no longer supports operator<<(long)
+    rOStream << sal::static_int_cast<sal_Int32>(rRect.nLeft)
+             << sal::static_int_cast<sal_Int32>(rRect.nTop)
+             << sal::static_int_cast<sal_Int32>(rRect.nRight)
+             << sal::static_int_cast<sal_Int32>(rRect.nBottom);
 
     return rOStream;
 }

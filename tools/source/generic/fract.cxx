@@ -612,8 +612,12 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 *************************************************************************/
 SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 {
-    rIStream >> rFract.nNumerator;
-    rIStream >> rFract.nDenominator;
+    //fdo#39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmp(0);
+    rIStream >> nTmp;
+    rFract.nNumerator = nTmp;
+    rIStream >> nTmp;
+    rFract.nDenominator = nTmp;
     return rIStream;
 }
 
@@ -624,8 +628,9 @@ SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 *************************************************************************/
 SvStream& operator << ( SvStream& rOStream, const Fraction& rFract )
 {
-    rOStream << rFract.nNumerator;
-    rOStream << rFract.nDenominator;
+    //fdo#39428 SvStream no longer supports operator<<(long)
+    rOStream << sal::static_int_cast<sal_Int32>(rFract.nNumerator);
+    rOStream << sal::static_int_cast<sal_Int32>(rFract.nDenominator);
     return rOStream;
 }
 
