@@ -1311,7 +1311,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
 
             (*m_pFileStream) << cTyp;
             if ( nDbaseType == VisualFoxPro )
-                (*m_pFileStream) << (nRecLength-1);
+                (*m_pFileStream) << sal_uInt16(nRecLength-1);
             else
                 m_pFileStream->Write(aBuffer, 4);
 

@@ -343,7 +343,7 @@ SvtGraphicFill::SvtGraphicFill( const PolyPolygon&  rPath,
                                 GradientType        aGradientType,
                                 Color               aGradient1stColor,
                                 Color               aGradient2ndColor,
-                                int                 aGradientStepCount,
+                                sal_Int32           aGradientStepCount,
                                 const Graphic&      aFillGraphic ) :
     maPath( rPath ),
     maFillColor( aFillColor ),

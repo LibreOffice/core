@@ -274,7 +274,7 @@ public:
                     GradientType        aGradientType,          // TODO: Transparent gradients (orthogonal to normal ones)
                     Color               aGradient1stColor,      // TODO: vector of colors and offsets
                     Color               aGradient2ndColor,
-                    int                 aGradientStepCount,     // numbers of steps to render the gradient. gradientStepsInfinite means infinitely many.
+                    sal_Int32           aGradientStepCount,     // numbers of steps to render the gradient. gradientStepsInfinite means infinitely many.
                     const Graphic&      aFillGraphic );
 
     // accessors
@@ -348,7 +348,7 @@ private:
     GradientType    maGradientType;
     Color           maGradient1stColor;
     Color           maGradient2ndColor;
-    int             maGradientStepCount;
+    sal_Int32       maGradientStepCount;
     Graphic         maFillGraphic;
 };
 
