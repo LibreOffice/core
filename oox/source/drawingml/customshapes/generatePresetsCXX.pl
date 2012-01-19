@@ -62,6 +62,7 @@ sub startSource
 #include \"oox/drawingml/customshapeproperties.hxx\"
 #include \"oox/token/tokenmap.hxx\"
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

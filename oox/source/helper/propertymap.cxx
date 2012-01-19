@@ -44,6 +44,7 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -471,6 +472,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     OUString strValue;
     Sequence< OUString > strArray;
     Sequence< Any > anyArray;
+    Sequence< awt::Size > sizeArray;
     Sequence< PropertyValue > propArray;
     Sequence< Sequence< PropertyValue > > propArrayArray;
     Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
@@ -482,6 +484,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     EnhancedCustomShapeParameterPair pp;
     EnhancedCustomShapeParameter par;
     awt::Rectangle rect;
+    awt::Size size;
     sal_Int32 intValue = 0;
     sal_uInt32 uintValue = 0;
     sal_Int16 int16Value = 0;
@@ -523,6 +526,19 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
                 fprintf (stderr, "}\n");
             }
             return "aPropSequence";
+        } else if( value >>= sizeArray ) {
+            printLevel (level);
+            fprintf (stderr, "Sequence< awt::Size > aSizeSequence (%" SAL_PRIdINT32 ");\n", sizeArray.getLength());
+            for( int i=0; i<sizeArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode (makeAny (sizeArray[i]), level + 1);
+                printLevel (level + 1);
+                fprintf (stderr, "aSizeSequence [%d] = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aSizeSequence";
         } else if( value >>= propArrayArray ) {
             printLevel (level);
             fprintf (stderr,"Sequence< Sequence < PropertyValue > > aPropSequenceSequence (%" SAL_PRIdINT32 ");\n", propArrayArray.getLength());
@@ -807,6 +823,14 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr, "aRectangle.Height = %" SAL_PRIdINT32 ";\n", rect.Height);
             return "aRectangle";
+    } else if( value >>= size ) {
+            printLevel (level);
+            fprintf (stderr, "awt::Size aSize;\n");
+            printLevel (level);
+            fprintf (stderr, "aSize.Width = %" SAL_PRIdINT32 ";\n", size.Width);
+            printLevel (level);
+            fprintf (stderr, "aSize.Height = %" SAL_PRIdINT32 ";\n", size.Height);
+            return "aSize";
     } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
         fprintf (stderr,"is extractable to int32\n");
     }
