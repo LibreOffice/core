@@ -1185,7 +1185,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s'\n",
                     OSTR( aPattern), OSTR( sTheDateEditFormat));
-            theDateAcceptancePatterns.push_back( aPattern);
+            // Insert at front so full date pattern is first in checks.
+            theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
         }
         if (aPatternBuf2.getLength() > 0)
         {
@@ -1200,7 +1201,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             {
                 fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s'\n",
                         OSTR( aPattern2), OSTR( sTheDateEditFormat));
-                theDateAcceptancePatterns.push_back( aPattern2);
+                theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern2);
             }
         }
 
@@ -1219,6 +1220,23 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
                             OSTR( *aIt), OSTR( aDecSep));
                 }
+            }
+        }
+
+        // Check for duplicates.
+        for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
+                aIt != theDateAcceptancePatterns.end(); ++aIt)
+        {
+            for (vector<OUString>::iterator aComp = theDateAcceptancePatterns.begin();
+                    aComp != theDateAcceptancePatterns.end(); /*nop*/)
+            {
+                if (aIt != aComp && *aIt == *aComp)
+                {
+                    incErrorStr( "Duplicated DateAcceptancePattern", *aComp);
+                    aComp = theDateAcceptancePatterns.erase( aComp);
+                }
+                else
+                    ++aComp;
             }
         }
 
