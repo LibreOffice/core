@@ -803,7 +803,6 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
     }
     // we have to read one row forward to ensure that we know when we are on last row
     // but only when we don't know it already
-    /*
     if(!m_bRowCountFinal)
     {
         if(!m_pCacheSet->next())
@@ -816,7 +815,6 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
            m_nRowCount = std::max(i,m_nRowCount);
 
     }
-    */
     return bCheck;
 }
 
