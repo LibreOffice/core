@@ -182,8 +182,6 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     pAktGroup = NULL;
     SetAktGroupAndList(NULL, mpPage);
 
-    StartListening(*rNewView.GetModel());
-
     for(sal_uInt32 a(0L); a < rNewView.PaintWindowCount(); a++)
     {
         AddPaintWindowToPageView(*rNewView.GetPaintWindow(a));
@@ -238,11 +236,6 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
         xReturn = pCandidate->GetControlContainer( true );
 
     return xReturn;
-}
-
-void SdrPageView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
-{
-    // not really interested in
 }
 
 void SdrPageView::ModelHasChanged()

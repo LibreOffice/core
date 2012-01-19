@@ -71,7 +71,7 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPageView : public SfxListener
+class SVX_DLLPUBLIC SdrPageView
 {
 protected:
     SdrView& mrView;
@@ -133,8 +133,6 @@ protected:
 protected:
     void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
     sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
-
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     // Nachsehen, ob AktGroup noch Inserted ist.
     void CheckAktGroup();
