@@ -255,7 +255,7 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
                << (sal_uInt32)( EPP_ViewInfoAtom << 16 ) << (sal_uInt32)52
                << (sal_Int32)170 << (sal_Int32)200 << (sal_Int32)170 << (sal_Int32)200  // scaling atom - Keeps the current scale
                << (sal_Int32)170 << (sal_Int32)200 << (sal_Int32)170 << (sal_Int32)200  // scaling atom - Keeps the previous scale
-               << (sal_Int32)0x17ac << 0xdda    // Origin - Keeps the origin in master coordinates
+               << (sal_Int32)0x17ac << (sal_Int32)0xdda    // Origin - Keeps the origin in master coordinates
                << (sal_Int32)-780 << (sal_Int32)-84 // Origin
                << (sal_uInt8)1                  // bool1 varScale - Set if zoom to fit is set
                << (sal_uInt8)0                  // bool1 draftMode - Not used
@@ -1151,7 +1151,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     PPTExParaSheet& rParaSheet = mpStyleSheet->GetParaSheet( nTextInstance );
 
     rOut << (sal_uInt32)( ( EPP_TextHeaderAtom << 16 ) | ( nAtomInstance << 4 ) ) << (sal_uInt32)4
-         << nTextInstance;
+         << sal_Int32(nTextInstance);
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;
