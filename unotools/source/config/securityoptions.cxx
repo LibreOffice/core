@@ -902,7 +902,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
         // Trusted referer given?
         // NO  => bState will be false per default
         // YES => search for it in our internal url list
-        if( sReferer.getLength() > 0 )
+        if( !sReferer.isEmpty() )
         {
             // Search in internal list
             ::rtl::OUString sRef = sReferer.toAsciiLowerCase();

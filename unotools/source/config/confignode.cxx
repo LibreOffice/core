@@ -173,7 +173,7 @@ namespace utl
         if (getEscape())
         {
             Reference< XStringEscape > xEscaper(m_xDirectAccess, UNO_QUERY);
-            if (xEscaper.is() && sName.getLength())
+            if (xEscaper.is() && !sName.isEmpty())
             {
                 try
                 {
@@ -414,7 +414,7 @@ namespace utl
                 // check if the name refers to a indirect descendant
                 else if (m_xHierarchyAccess.is() && m_xHierarchyAccess->hasByHierarchicalName(_rPath))
                 {
-                    OSL_ASSERT(_rPath.getLength());
+                    OSL_ASSERT(!_rPath.isEmpty());
 
                     ::rtl::OUString sParentPath, sLocalName;
 

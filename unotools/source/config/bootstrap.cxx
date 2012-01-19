@@ -185,7 +185,7 @@ PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirI
 
     PathStatus eStatus = Bootstrap::DATA_UNKNOWN;
 
-    if (_sURL.getLength() != 0)
+    if (!_sURL.isEmpty())
     {
         switch( DirectoryItem::get(_sURL, aDirItem) )
         {
@@ -235,7 +235,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     OUString aNormalizedURL = aFileStatus.getFileURL();
 
-    if (aNormalizedURL.getLength() == 0)
+    if (aNormalizedURL.isEmpty())
         return false;
 
     // #109863# sal/osl returns final slash for file URLs contradicting
@@ -337,7 +337,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 
     PathStatus eStatus = Bootstrap::DATA_UNKNOWN;
 
-    if (_sURL.getLength() == 0)
+    if (_sURL.isEmpty())
         eStatus = Bootstrap::DATA_MISSING;
 
     else if ( !implMakeAbsoluteURL(_sURL) )
@@ -372,12 +372,12 @@ PathStatus getDerivedPath(
     OUString sDerivedURL;
 
     OSL_PRECOND(!_rData.getFrom(_sBootstrapParameter,sDerivedURL),"Setting for derived path is already defined");
-    OSL_PRECOND(_sRelativeURL.getLength() != 0 && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
+    OSL_PRECOND(!_sRelativeURL.isEmpty() && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
 
     PathStatus aStatus = _aBaseStatus;
 
     // do we have a base path ?
-    if (_aBaseURL.getLength())
+    if (!_aBaseURL.isEmpty())
     {
         OSL_PRECOND(_aBaseURL[_aBaseURL.getLength()-1] != cURLSeparator,"Unexpected: base URL ends in slash");
 
@@ -649,7 +649,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
     OUString sBuildId;
     // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
     if ( data().getVersionValue( csBuildIdItem, sBuildId, _sDefault ) != sal_True ||
-         sBuildId.getLength() == 0 )
+         sBuildId.isEmpty() )
          // read buildid from bootstrap.ini (bootstraprc)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
     return sBuildId;

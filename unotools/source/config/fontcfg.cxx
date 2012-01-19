@@ -249,17 +249,17 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
 
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
     OUString aRet = tryLocale( aLocale, aType );
-    if( ! aRet.getLength() && aLocale.Variant.getLength() )
+    if( aRet.isEmpty() && !aLocale.Variant.isEmpty() )
     {
         aLocale.Variant = OUString();
         aRet = tryLocale( aLocale, aType );
     }
-    if( ! aRet.getLength() && aLocale.Country.getLength() )
+    if( aRet.isEmpty() && !aLocale.Country.isEmpty() )
     {
         aLocale.Country = OUString();
         aRet = tryLocale( aLocale, aType );
     }
-    if( ! aRet.getLength() )
+    if( aRet.isEmpty() )
     {
         aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         aRet = tryLocale( aLocale, aType );
@@ -270,12 +270,12 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
 OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale ) const
 {
     Locale aLocale = rLocale;
-    if( ! aLocale.Language.getLength() )
+    if( aLocale.Language.isEmpty() )
         aLocale = SvtSysLocale().GetUILocale();
 
     OUString aUIFont = getDefaultFont( aLocale, DEFAULTFONT_UI_SANS );
 
-    if( aUIFont.getLength() )
+    if( !aUIFont.isEmpty() )
         return aUIFont;
 
     // fallback mechanism (either no configuration or no entry in configuration
@@ -978,7 +978,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
                 while( nIndex != -1 )
                 {
                     OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
-                    if( aSubst.getLength() )
+                    if( !aSubst.isEmpty() )
                     {
                         UniqueSubstHash::iterator aEntry = maSubstHash.find( aSubst );
                         if (aEntry != maSubstHash.end())
@@ -1009,7 +1009,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
-            if( pLine->getLength() )
+            if( !pLine->isEmpty() )
             {
                 for( weight=SAL_N_ELEMENTS(pWeightNames)-1; weight >= 0; weight-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
@@ -1041,7 +1041,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
-            if( pLine->getLength() )
+            if( !pLine->isEmpty() )
             {
                 for( width=SAL_N_ELEMENTS(pWidthNames)-1; width >= 0; width-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
@@ -1073,7 +1073,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
-            if( pLine->getLength() )
+            if( !pLine->isEmpty() )
             {
                 sal_Int32 nIndex = 0;
                 while( nIndex != -1 )
@@ -1196,10 +1196,10 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
     aLocale.Country = rLocale.Country.toAsciiUpperCase();
     aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
 
-    if( ! aLocale.Language.getLength() )
+    if( aLocale.Language.isEmpty() )
         aLocale = SvtSysLocale().GetUILocale();
 
-    while( aLocale.Language.getLength() )
+    while( !aLocale.Language.isEmpty() )
     {
         boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
         if( lang != m_aSubst.end() )
@@ -1220,9 +1220,9 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             }
         }
         // gradually become more unspecific
-        if( aLocale.Variant.getLength() )
+        if( !aLocale.Variant.isEmpty() )
             aLocale.Variant = OUString();
-        else if( aLocale.Country.getLength() )
+        else if( !aLocale.Country.isEmpty() )
             aLocale.Country = OUString();
         else if( ! aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
             aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );

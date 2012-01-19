@@ -158,7 +158,7 @@ struct FactoryInfo
             {
                 lProperties[nRealyChanged].Name = sNodeBase + PROPERTYNAME_TEMPLATEFILE;
 
-                if ( sTemplateFile.getLength() > 0 )
+                if ( !sTemplateFile.isEmpty() )
                 {
                     lProperties[nRealyChanged].Value
                         <<= getStringSubstitution()
@@ -235,7 +235,7 @@ struct FactoryInfo
         //---------------------------------------------------------------------------------------------------------
         void initTemplateFile( const ::rtl::OUString& sNewTemplateFile )
         {
-            if ( sNewTemplateFile.getLength() > 0 )
+            if ( !sNewTemplateFile.isEmpty() )
             {
                 sTemplateFile
                     = getStringSubstitution()
@@ -1338,7 +1338,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
 
     // is there already a filter inside the descriptor?
     ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")), ::rtl::OUString());
-    if (sFilterName.getLength())
+    if (!sFilterName.isEmpty())
     {
         try
         {
@@ -1357,7 +1357,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
 
     // is there already a type inside the descriptor?
     ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")), ::rtl::OUString());
-    if (!sTypeName.getLength())
+    if (sTypeName.isEmpty())
     {
         // no :-(
         // start flat detection of URL
@@ -1365,7 +1365,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
         sTypeName = xDetect->queryTypeByURL(sURL);
     }
 
-    if (!sTypeName.getLength())
+    if (sTypeName.isEmpty())
         return E_UNKNOWN_FACTORY;
 
     // yes - there is a type info

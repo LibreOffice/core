@@ -230,7 +230,7 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
 sal_Bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                      OUString const& _sPrefixPath)
 {
-    return _sPrefixPath.getLength() == 0 || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
+    return _sPrefixPath.isEmpty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
 }
 
 //----------------------------------------------------------------------------
@@ -243,7 +243,7 @@ OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
     }
     else
     {
-        OSL_ENSURE(_sPrefixPath.getLength() == 0,  "Path does not start with expected prefix");
+        OSL_ENSURE(_sPrefixPath.isEmpty(),  "Path does not start with expected prefix");
 
         return _sNestedPath;
     }
@@ -256,7 +256,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     const sal_Unicode * const pBeginContent = _sContent.getStr();
     const sal_Unicode * const pEndContent   = pBeginContent + _sContent.getLength();
 
-    OSL_PRECOND(_sType.getLength(), "Unexpected config type name: empty");
+    OSL_PRECOND(!_sType.isEmpty(), "Unexpected config type name: empty");
     OSL_PRECOND(pBeginContent <= pEndContent, "Invalid config name: empty");
 
     if (pBeginContent == pEndContent)

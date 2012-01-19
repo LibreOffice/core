@@ -189,7 +189,7 @@ void GlobalEventConfig_Impl::Commit()
     for(int i=0;it!=it_end;++it,++i)
     {
         //no point in writing out empty bindings!
-        if(it->second.getLength() == 0 )
+        if(it->second.isEmpty() )
             continue;
         sNode = sPrefix + it->first + sPostfix;
         OSL_TRACE("writing binding for: %s",::rtl::OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);

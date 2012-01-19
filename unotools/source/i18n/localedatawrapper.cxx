@@ -314,11 +314,11 @@ void LocaleDataWrapper::invalidateData()
         if (areChecksEnabled())
         {
             aDebugLocale = xLoc[i].Language;
-            if ( xLoc[i].Country.getLength() )
+            if ( !xLoc[i].Country.isEmpty() )
             {
                 aDebugLocale += '_';
                 aDebugLocale += String( xLoc[i].Country);
-                if ( xLoc[i].Variant.getLength() )
+                if ( !xLoc[i].Variant.isEmpty() )
                 {
                     aDebugLocale += '_';
                     aDebugLocale += String( xLoc[i].Variant);
@@ -326,7 +326,7 @@ void LocaleDataWrapper::invalidateData()
             }
         }
 
-        if ( xLoc[i].Variant.getLength() )
+        if ( !xLoc[i].Variant.isEmpty() )
         {
             if (areChecksEnabled())
             {
@@ -379,7 +379,7 @@ void LocaleDataWrapper::invalidateData()
                     aMsg += String::CreateFromInt32( eLang, 16 );
                     aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
                     aMsg += String( aLanguage);
-                    if ( aCountry.getLength() )
+                    if ( !aCountry.isEmpty() )
                     {
                         aMsg += '_';
                         aMsg += String( aCountry);

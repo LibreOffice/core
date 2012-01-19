@@ -51,7 +51,7 @@ sal_Bool getStatusFromAny_Impl( const Any& aAny, ::rtl::OUString& aText, sal_Int
             if( !bNumIsSet && ( aSetList[ind] >>= nNum ) )
                 bNumIsSet = sal_True;
             else
-                !aText.getLength() && ( aSetList[ind] >>= aText );
+                aText.isEmpty() && ( aSetList[ind] >>= aText );
         }
 
     return bNumIsSet;
@@ -81,7 +81,7 @@ void SAL_CALL ProgressHandlerWrap::update( const Any& Status )
 
     if( getStatusFromAny_Impl( Status, aText, nValue ) )
     {
-        if( aText.getLength() ) m_xStatusIndicator->setText( aText );
+        if( !aText.isEmpty() ) m_xStatusIndicator->setText( aText );
         m_xStatusIndicator->setValue( nValue );
     }
 }

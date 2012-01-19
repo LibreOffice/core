@@ -60,7 +60,7 @@ namespace
 com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
 {
     com::sun::star::lang::Locale aRet;
-    if ( rStr.getLength() )
+    if ( !rStr.isEmpty() )
     {
         aRet = com::sun::star::lang::Locale();
         sal_Int32 nSep = rStr.indexOf('-');
@@ -255,7 +255,7 @@ SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
 void SvtSysLocaleOptions_Impl::MakeRealLocale()
 {
     m_aRealLocale = lcl_str_to_locale( m_aLocaleString );
-    if ( m_aRealLocale.Language.getLength() )
+    if ( !m_aRealLocale.Language.isEmpty() )
     {
         m_eRealLanguage = MsLangId::convertLocaleToLanguage( m_aRealLocale );
     }
@@ -270,7 +270,7 @@ void SvtSysLocaleOptions_Impl::MakeRealUILocale()
 {
     // as we can't switch UILocale at runtime, we only store changes in the configuration
     m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
-    if ( m_aRealUILocale.Language.getLength() )
+    if ( !m_aRealUILocale.Language.isEmpty() )
     {
         m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
     }
@@ -380,7 +380,7 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         MsLangId::setConfiguredSystemLanguage( m_eRealLanguage );
         SetModified();
         sal_uLong nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
-        if ( !m_aCurrencyString.getLength() )
+        if ( m_aCurrencyString.isEmpty() )
             nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
         NotifyListeners( nHint );
     }
@@ -434,7 +434,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             seqValues[nProp] >>= m_aLocaleString;
             m_bROLocale = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
-            if ( !m_aCurrencyString.getLength() )
+            if ( m_aCurrencyString.isEmpty() )
                 nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
             MakeRealLocale();
         }

@@ -92,7 +92,7 @@ static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
-    return (aTmp.getLength() == 0) ? LANGUAGE_SYSTEM : MsLangId::convertIsoStringToLanguage( aTmp );
+    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : MsLangId::convertIsoStringToLanguage( aTmp );
 }
 
 SvtLinguOptions::SvtLinguOptions()
@@ -923,7 +923,7 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     const rtl::OUString &rSetEntry,
     uno::Sequence< rtl::OUString > &rFormatList ) const
 {
-    if (rSetName.getLength() == 0 || rSetEntry.getLength() == 0)
+    if (rSetName.isEmpty() || rSetEntry.isEmpty())
         return sal_False;
     bool bSuccess = false;
     try
@@ -974,7 +974,7 @@ static bool lcl_GetFileUrlFromOrigin(
     uno::Reference< util::XMacroExpander > &rxMacroExpander )
 {
     bool bSuccess = false;
-    if (rOrigin.getLength() > 0 && rxMacroExpander.is())
+    if (!rOrigin.isEmpty() && rxMacroExpander.is())
     {
         rtl::OUString aURL( rOrigin );
         if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
@@ -1011,7 +1011,7 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     const rtl::OUString &rNodeName,
     SvtLinguConfigDictionaryEntry &rDicEntry ) const
 {
-    if (rNodeName.getLength() == 0)
+    if (rNodeName.isEmpty())
         return sal_False;
     bool bSuccess = false;
     try
@@ -1029,7 +1029,7 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
                     (xNA->getByName( aG_Format )    >>= aFormatName) &&
                     (xNA->getByName( aG_Locales )   >>= aLocaleNames);
         DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
-        DBG_ASSERT( aFormatName.getLength(), "Dictionary format name not set" );
+        DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
 
         // if sucessful continue
@@ -1078,7 +1078,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     const rtl::OUString &rFormatName )
 {
     std::vector< SvtLinguConfigDictionaryEntry > aRes;
-    if (rFormatName.getLength() == 0)
+    if (rFormatName.isEmpty())
         return aRes;
 
     try
@@ -1106,7 +1106,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
 
                 if (bDicIsActive)
                 {
-                    DBG_ASSERT( aDicEntry.aFormatName.getLength(),
+                    DBG_ASSERT( !aDicEntry.aFormatName.isEmpty(),
                             "FormatName not set" );
                     DBG_ASSERT( aDicEntry.aLocations.getLength(),
                             "Locations not set" );
@@ -1204,7 +1204,7 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
 ) const
 {
     rtl::OUString   aRes;
-    if (rServiceImplName.getLength() > 0)
+    if (!rServiceImplName.isEmpty())
     {
         rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuSuggestionImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
@@ -1219,7 +1219,7 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 ) const
 {
     rtl::OUString   aRes;
-    if (rServiceImplName.getLength() > 0)
+    if (!rServiceImplName.isEmpty())
     {
         rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuDictionaryImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
@@ -1234,7 +1234,7 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 ) const
 {
     rtl::OUString   aRes;
-    if (rServiceImplName.getLength() > 0)
+    if (!rServiceImplName.isEmpty())
     {
         rtl::OUString aImageName( A2OU( "ThesaurusDialogImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
@@ -1249,7 +1249,7 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 ) const
 {
     rtl::OUString   aRes;
-    if (rServiceImplName.getLength() > 0)
+    if (!rServiceImplName.isEmpty())
     {
         rtl::OUString aImageName( A2OU( "SynonymsContextMenuImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );

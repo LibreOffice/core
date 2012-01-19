@@ -432,7 +432,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             OUString sProperty;
 
             ::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
-            if (!sPath.getLength() && !sProperty.getLength())
+            if (sPath.isEmpty() && sProperty.isEmpty())
             {
                 OSL_FAIL("ConfigItem::IsReadonly()\nsplitt failed\n");
                 continue;
@@ -441,7 +441,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             Reference< XInterface >       xNode;
             Reference< XPropertySet >     xSet ;
             Reference< XPropertySetInfo > xInfo;
-            if (sPath.getLength())
+            if (!sPath.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(sPath);
                 if (!(aNode >>= xNode) || !xNode.is())
@@ -746,7 +746,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
         try
         {
             Reference<XNameAccess> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
@@ -775,7 +775,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
         try
         {
             Reference<XNameContainer> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
@@ -814,7 +814,7 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
         try
         {
             Reference<XNameContainer> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
@@ -888,7 +888,7 @@ sal_Bool ConfigItem::SetSetProperties(
         try
         {
             Reference<XNameContainer> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
@@ -930,7 +930,7 @@ sal_Bool ConfigItem::SetSetProperties(
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
 
-                sal_Bool bEmptyNode = rNode.getLength() == 0;
+                sal_Bool bEmptyNode = rNode.isEmpty();
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
                     pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
@@ -987,7 +987,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
         try
         {
             Reference<XNameContainer> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
@@ -1069,7 +1069,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
 
-                sal_Bool bEmptyNode = rNode.getLength() == 0;
+                sal_Bool bEmptyNode = rNode.isEmpty();
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
                     pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
@@ -1162,7 +1162,7 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
         try
         {
             Reference<XNameContainer> xCont;
-            if(rNode.getLength())
+            if(!rNode.isEmpty())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;

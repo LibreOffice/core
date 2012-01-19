@@ -84,7 +84,7 @@ rtl::OUString getParentName( const rtl::OUString& aFileName )
 sal_Bool ensuredir( const rtl::OUString& rUnqPath )
 {
     rtl::OUString aPath;
-    if ( rUnqPath.getLength() < 1 )
+    if ( rUnqPath.isEmpty() )
         return sal_False;
 
     // remove trailing slash
@@ -152,7 +152,7 @@ String ConstructTempDir_Impl( const String* pParent )
             ::osl::FileBase::getFileURLFromSystemPath(
                 ::ucbhelper::getSystemPathFromFileURL( xManager, aTmp ),
                 aRet );
-            if ( aRet.getLength() )
+            if ( !aRet.isEmpty() )
             {
                 ::osl::DirectoryItem aItem;
                 sal_Int32 i = aRet.getLength();
@@ -172,7 +172,7 @@ String ConstructTempDir_Impl( const String* pParent )
     if ( !aName.Len() )
     {
         ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
-        if (rTempNameBase_Impl.getLength() == 0)
+        if (rTempNameBase_Impl.isEmpty())
         {
             ::rtl::OUString ustrTempDirURL;
             ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
@@ -181,7 +181,7 @@ String ConstructTempDir_Impl( const String* pParent )
                 rTempNameBase_Impl = ustrTempDirURL;
         }
         // if no parent or invalid parent : use default directory
-        DBG_ASSERT( rTempNameBase_Impl.getLength(), "No TempDir!" );
+        DBG_ASSERT( !rTempNameBase_Impl.isEmpty(), "No TempDir!" );
         aName = rTempNameBase_Impl;
         ensuredir( aName );
     }
