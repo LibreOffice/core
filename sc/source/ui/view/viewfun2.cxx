@@ -47,6 +47,7 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/svstdarr.hxx>
+#include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
@@ -2466,7 +2467,7 @@ void ScViewFunc::MoveTable(
     sal_Bool bUndo (pDoc->IsUndoEnabled());
     bool bRename = pNewTabName && !pNewTabName->isEmpty();
 
-    sal_Bool bNewDoc = ( nDestDocNo == SC_DOC_NEW );
+    bool bNewDoc = (nDestDocNo == SC_DOC_NEW);
     if ( bNewDoc )
     {
         nDestTab = 0;           // firstly insert
@@ -2646,7 +2647,16 @@ void ScViewFunc::MoveTable(
 
             pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.size()));   // old first table
             if (pDestViewSh)
+            {
+                // Make sure to clear the cached page view after sheet
+                // deletion, which still points to the sdr page belonging to
+                // the deleted sheet.
+                SdrView* pSdrView = pDestViewSh->GetSdrView();
+                if (pSdrView)
+                    pSdrView->ClearPageView();
+
                 pDestViewSh->TabChanged();      // Pages auf dem Drawing-Layer
+            }
             pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                     PAINT_GRID | PAINT_TOP | PAINT_LEFT |
                                     PAINT_EXTRAS | PAINT_SIZE );
