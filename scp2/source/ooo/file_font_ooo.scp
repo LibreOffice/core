@@ -74,6 +74,46 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuSerifCondensed-It
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondensed-BoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
 #endif 
 
+// Google ChromeOS fonts
+
+// Arimo
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_Arimo_Regular, Arimo-Regular.ttf, Arimo Regular) 
+STD_FONT_FILE( gid_File_Fnt_Arimo_Bold, Arimo-Bold.ttf, Arimo Bold) 
+STD_FONT_FILE( gid_File_Fnt_Arimo_Italic, Arimo-Italic.ttf, Arimo Italic) 
+STD_FONT_FILE( gid_File_Fnt_Arimo_BoldItalic, Arimo-BoldItalic.ttf, Arimo Bold Italic) 
+#endif
+
+// Cousine
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Regular, Cousine-Regular.ttf, Liberation Mono Regular) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Bold, Cousine-Bold.ttf, Liberation Mono Bold) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Italic, Cousine-Italic.ttf, Liberation Mono Italic) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_BoldItalic, Cousine-BoldItalic.ttf, Liberation Mono Bold Italic) 
+#endif
+#endif
+
+// Timos
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_Timos_Regular, Timos-Regular.ttf, Liberation Serif Regular) 
+STD_FONT_FILE( gid_File_Fnt_Timos_Bold, Timos-Bold.ttf, Liberation Serif Bold) 
+STD_FONT_FILE( gid_File_Fnt_Timos_Italic, Timos-Italic.ttf, Liberation Serif Italic) 
+STD_FONT_FILE( gid_File_Fnt_Timos_BoldItalic, Timos-BoldItalic.ttf, Liberation Serif Bold Italic) 
+#endif
+#endif
+
+// Symbol Neu
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_SymbolNeu, SymbolNeu.ttf, Symbol Neu) 
+#endif
+#endif
+
+
+
+
 // Gentium fonts
 
 #ifndef WITHOUT_FONTS
