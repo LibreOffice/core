@@ -73,7 +73,7 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 class SVX_DLLPUBLIC SdrPageView
 {
-protected:
+private:
     SdrView& mrView;
     SdrPage* mpPage;
     Point         aPgOrg;   // Nullpunkt der Page
@@ -105,7 +105,7 @@ protected:
     SdrPageWindow* mpPreparedPageWindow;
 
     // interface to SdrPageWindow
-protected:
+private:
     void ClearPageWindows();
     void AppendPageWindow(SdrPageWindow& rNew);
     SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
@@ -124,13 +124,12 @@ public:
     const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
 
     void PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const;
+
 private:
     SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
 
-protected:
     void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 
-protected:
     void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
     sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
 
