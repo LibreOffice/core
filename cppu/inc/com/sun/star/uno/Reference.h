@@ -140,19 +140,16 @@ public:
     inline sal_Bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW( () );
 };
 
-/** Enum defining UNO_QUERY and UNO_REF_QUERY for implicit interface query.
+/** Enum defining UNO_QUERY for implicit interface query.
 */
 enum UnoReference_Query
 {
     /** This enum value can be used for implicit interface query.
     */
     UNO_QUERY,
-    /** This enum value can be used for implicit interface query.
-    */
-    UNO_REF_QUERY
 };
 #ifndef EXCEPTIONS_OFF
-/** Enum defining UNO_QUERY_THROW and UNO_REF_QUERY_THROW for implicit interface query.
+/** Enum defining UNO_QUERY_THROW for implicit interface query.
     If the demanded interface is unavailable, then a RuntimeException is thrown.
 */
 enum UnoReference_QueryThrow
@@ -160,9 +157,6 @@ enum UnoReference_QueryThrow
     /** This enum value can be used for implicit interface query.
     */
     UNO_QUERY_THROW,
-    /** This enum value can be used for implicit interface query.
-    */
-    UNO_REF_QUERY_THROW
 };
 /** Enum defining UNO_SET_THROW for throwing if attempts are made to assign a null
     interface
@@ -176,7 +170,7 @@ enum UnoReference_SetThrow
 #endif
 
 /** Template reference class for interface type derived from BaseReference.
-    A special constructor given the UNO_QUERY or UNO_REF_QUERY identifier queries interfaces
+    A special constructor given the UNO_QUERY identifier queries interfaces
     for reference type.
 */
 template< class interface_type >
@@ -287,7 +281,7 @@ public:
     /** Constructor: Queries given interface for reference interface type (interface_type).
 
         @param rRef another reference
-        @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to other constructors
+        @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
     inline Reference( const BaseReference & rRef, UnoReference_Query ) SAL_THROW( (RuntimeException) );
     /** Constructor: Queries given interface for reference interface type (interface_type).
@@ -307,7 +301,7 @@ public:
         Throws a RuntimeException if the demanded interface cannot be queried.
 
         @param rRef another reference
-        @param dummy UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious distinction
+        @param dummy UNO_QUERY_THROW to force obvious distinction
                      to other constructors
     */
     inline Reference( const BaseReference & rRef, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
@@ -315,7 +309,7 @@ public:
         Throws a RuntimeException if the demanded interface cannot be queried.
 
         @param pInterface an interface pointer
-        @param dummy UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious distinction
+        @param dummy UNO_QUERY_THROW to force obvious distinction
                      to other constructors
     */
     inline Reference( XInterface * pInterface, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
@@ -323,7 +317,7 @@ public:
         Throws a RuntimeException if the demanded interface cannot be queried.
 
         @param rAny an any
-        @param dummy UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious distinction
+        @param dummy UNO_QUERY_THROW to force obvious distinction
                      to other constructors
     */
     inline Reference( const Any & rAny, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
@@ -406,7 +400,7 @@ public:
         An interface already set will be released.
 
         @param pInterface an interface pointer
-        @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to set methods
+        @param dummy UNO_QUERY to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( XInterface * pInterface, UnoReference_Query ) SAL_THROW( (RuntimeException) );
@@ -414,7 +408,7 @@ public:
         An interface already set will be released.
 
         @param rRef another reference
-        @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to set methods
+        @param dummy UNO_QUERY to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const BaseReference & rRef, UnoReference_Query ) SAL_THROW( (RuntimeException) );
@@ -425,7 +419,7 @@ public:
         @param rAny
                an Any containing an interface
         @param dummy
-               UNO_QUERY or UNO_REF_QUERY to force obvious distinction
+               UNO_QUERY to force obvious distinction
                to set methods
         @return
                 true, if non-null interface was set
@@ -438,7 +432,7 @@ public:
         Throws a RuntimeException if the demanded interface cannot be set.
 
         @param pInterface an interface pointer
-        @param dummy UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious distinction
+        @param dummy UNO_QUERY_THROW to force obvious distinction
                      to set methods
     */
     inline void SAL_CALL set( XInterface * pInterface, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
@@ -447,7 +441,7 @@ public:
         Throws a RuntimeException if the demanded interface cannot be set.
 
         @param rRef another reference
-        @param dummy UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious distinction
+        @param dummy UNO_QUERY_THROW to force obvious distinction
                to set methods
     */
     inline void SAL_CALL set( const BaseReference & rRef, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
@@ -459,8 +453,7 @@ public:
         @param rAny
                an Any containing an interface
         @param dummy
-               UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious
-               distinction to set methods
+               UNO_QUERY_THROW to force obvious distinction to set methods
     */
     inline void set( Any const & rAny, UnoReference_QueryThrow );
     /** sets the given interface

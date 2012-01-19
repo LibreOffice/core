@@ -1005,7 +1005,7 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
     Reference< XInvocation > xInvok(
-        xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_REF_QUERY );
+        xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
         xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
