@@ -448,15 +448,31 @@ oslFileError SAL_CALL osl_setFileTime (
     return osl_psz_setFileTime( path, pCreationTime, pLastAccessTime, pLastWriteTime );
 }
 
-oslFileError
-SAL_CALL osl_statFilePath( const char *cpFilePath, struct stat *statb )
+sal_Bool
+SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
+    DirectoryItem_Impl *pA = (DirectoryItem_Impl *) a;
+    DirectoryItem_Impl *pB = (DirectoryItem_Impl *) b;
+    if (a == b)
+        return sal_True;
+    /* same name => same item, unless renaming / moving madness has occurred */
+    if (rtl_ustr_compare_WithLength(
+                pA->m_ustrFilePath->buffer, pA->m_ustrFilePath->length,
+                pB->m_ustrFilePath->buffer, pB->m_ustrFilePath->length ) == 0)
+        return sal_True;
+
+    fprintf (stderr, "We have to do an inode compare !\n");
+
+    /*
     int rc = stat_c( cpFilePath, statb );
 
+        Stat.st_ino == ...
     if (rc == -1)
         return oslTranslateFileError(OSL_FET_ERROR, errno);
     else
         return osl_File_E_None;
+    */
+    return sal_False;
 }
 
 oslFileError

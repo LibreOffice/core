@@ -64,10 +64,10 @@ namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
 
 class InternalStreamLock
 {
-    sal_Size            m_nStartPos;
-    sal_Size            m_nEndPos;
-    SvFileStream*   m_pStream;
-    struct stat     m_aStat;
+    sal_Size           m_nStartPos;
+    sal_Size           m_nEndPos;
+    SvFileStream*      m_pStream;
+    osl::DirectoryItem m_aItem;
 
     InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
@@ -87,11 +87,11 @@ InternalStreamLock::InternalStreamLock(
         m_nEndPos( nEnd ),
         m_pStream( pStream )
 {
-    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
-        osl_getThreadTextEncoding()));
-    osl_statFilePath( aFileName.getStr(), &m_aStat );
+    osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
     LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
+    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
+                                                  osl_getThreadTextEncoding()));
     fprintf( stderr, "locked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
         fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
@@ -112,7 +112,7 @@ InternalStreamLock::~InternalStreamLock()
     }
 #if OSL_DEBUG_LEVEL > 1
     rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
-        osl_getThreadTextEncoding()));
+                                                  osl_getThreadTextEncoding()));
     fprintf( stderr, "unlocked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
         fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
@@ -125,13 +125,20 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 #ifndef BOOTSTRAP
     osl::MutexGuard aGuard( LockMutex::get() );
 #endif
-    rtl::OString aFileName(rtl::OUStringToOString(pStream->GetFileName(),
-        osl_getThreadTextEncoding()));
-    struct stat aStat;
-    if( osl_statFilePath( aFileName.getStr(), &aStat ) != osl_File_E_None )
-        return sal_False;
+    osl::DirectoryItem aItem;
+    if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::RC::E_None )
+    {
+        SAL_INFO("tools", "Failed to lookup stream for locking");
+        return sal_True;
+    }
 
-    if( S_ISDIR( aStat.st_mode ) )
+    osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
+    if ( aItem.getFileStatus( aStatus ) != osl::FileBase::RC::E_None )
+    {
+        SAL_INFO("tools", "Failed to stat stream for locking");
+        return sal_True;
+    }
+    if( aStatus.getFileType() == osl::FileStatus::Type::Directory )
         return sal_True;
 
     InternalStreamLock* pLock = NULL;
@@ -139,7 +146,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
     for( size_t i = 0; i < rLockList.size(); ++i )
     {
         pLock = rLockList[ i ];
-        if( aStat.st_ino == pLock->m_aStat.st_ino )
+        if( osl_identicalDirectoryItem( aItem._pData, pLock->m_aItem._pData) )
         {
             sal_Bool bDenyByOptions = sal_False;
             StreamMode nLockMode = pLock->m_pStream->GetStreamMode();

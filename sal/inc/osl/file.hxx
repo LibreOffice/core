@@ -1389,9 +1389,9 @@ public:
 
 class DirectoryItem: public FileBase
 {
-    oslDirectoryItem _pData;
 
 public:
+    oslDirectoryItem _pData;
 
     /** Constructor.
     */

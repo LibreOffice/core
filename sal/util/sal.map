@@ -648,7 +648,7 @@ PRIVATE_textenc.1 { # LibreOffice 3.6
 PRIVATE_file.1 { # LibreOffice 3.6
     global:
         osl_openFilePath;
-        osl_statFilePath;
+        osl_identicalDirectoryItem;
         osl_lstatFilePath;
         osl_getFileOSHandle;
 };

@@ -58,17 +58,13 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
     oslFileHandle *pHandle,
     sal_uInt32 uFlags );
 
-/* Wrappers for stat() and lstat() with Android-specific hook
-   for files inside the .apk.
-*/
+/* Compare directory items for being the same underlying file
+ * this unwinds unix hard-links and symlinks etc.
+ */
 
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_statFilePath(
-    const char *cpFilePath,
-    struct stat *statb );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(oslDirectory a, oslDirectory b);
 
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_lstatFilePath(
-    const char *cpFilePath,
-    struct stat *statb );
+SAL_DLLPUBLIC oslFileError SAL_CALL osl_lstatFilePath( const char *cpFilePath, struct stat *statb );
 
 /*  Get the OS specific "handle" of an open file. */
 
