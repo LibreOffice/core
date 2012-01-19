@@ -10230,6 +10230,20 @@ AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_REPO_NAMES)
 
+
+PathFormat "$SRC_ROOT/translations"
+L10N_MODULE="$formatted_path"
+WITH_POOR_HELP_LOCALIZATIONS=
+if test -d "./translations" ; then
+    for l in `ls -1 translations/source` ; do
+        if test ! -d translations/source/$l/helpcontent2 ; then
+            WITH_POOR_HELP_LOCALIZATIONS="$WITH_POOR_HELP_LOCALIZATIONS $l"
+        fi
+    done
+fi
+AC_SUBST(L10N_MODULE)
+AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
+
 dnl git-new-workdir
 dnl ===================================================================
 if test -n "${GIT_LINK_SRC}"; then

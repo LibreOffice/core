@@ -288,26 +288,6 @@ $CLASSPATH           .= $wps.'.' if ($CLASSPATH ne '');
 # Why do we need XCLASSPATH when it has the exact same value as CLASSPATH?
 $XCLASSPATH           = $CLASSPATH;
 
-# Location of the translations module
-$L10N_MODULE = PathFormat($SRC_ROOT."/translations");
-
-# Check for poor help localizations, i.e. no help translation at all...
-@languages=();
-if (opendir(DIR,$L10N_MODULE . "/source"))
-{
-    @languages = readdir(DIR);
-    closedir(DIR);
-}
-$WITH_POOR_HELP_LOCALIZATIONS = "";
-
-foreach $language (@languages)
-{
-    if ( ($language ne ".") && ($language ne "..") && (! -d $L10N_MODULE . "/source/" . $language . "/helpcontent2") )
-    {
-        $WITH_POOR_HELP_LOCALIZATIONS = $WITH_POOR_HELP_LOCALIZATIONS . " " . $language;
-    }
-}
-
 
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
@@ -531,8 +511,6 @@ ToFile( "Empty",             $empty,             "n" );
 # Writing the platform independent constant values to file.
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform independent constant values.", $empty, "c" );
-# Languages
-ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 }
 ToFile( "nodep",             "@nodep@",          "e" );
