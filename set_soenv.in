@@ -590,9 +590,6 @@ elsif ( $platform =~ m/mingw32/ )
 
 }
 
-if ("@WITH_VC_REDIST@" eq "TRUE") {
-ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
-}
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
