@@ -4,6 +4,7 @@
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/token/tokenmap.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -3768,7 +3769,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (12);
@@ -4092,7 +4093,30 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (3);
+            {
+                awt::Size aSize;
+                aSize.Width = 1;
+                aSize.Height = 1;
+                aSizeSequence [0] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 8;
+                aSize.Height = 8;
+                aSizeSequence [1] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 1;
+                aSize.Height = 1;
+                aSizeSequence [2] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -4134,7 +4158,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -4142,8 +4166,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 1;
-        aRectangle.Height = 1;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartPredefinedProcess");
@@ -4187,7 +4211,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (10);
@@ -4415,7 +4439,18 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (1);
+            {
+                awt::Size aSize;
+                aSize.Width = 20;
+                aSize.Height = 20;
+                aSizeSequence [0] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -4457,7 +4492,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -4465,8 +4500,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 20;
-        aRectangle.Height = 20;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartPunchedTape");
@@ -5951,7 +5986,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (15);
@@ -6341,7 +6376,30 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (3);
+            {
+                awt::Size aSize;
+                aSize.Width = 6;
+                aSize.Height = 6;
+                aSizeSequence [0] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 6;
+                aSize.Height = 6;
+                aSizeSequence [1] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 6;
+                aSize.Height = 6;
+                aSizeSequence [2] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -6383,7 +6441,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -6391,8 +6449,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 6;
-        aRectangle.Height = 6;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartMagneticDisk");
@@ -9769,7 +9827,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (3);
@@ -9859,7 +9917,18 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (1);
+            {
+                awt::Size aSize;
+                aSize.Width = 2;
+                aSize.Height = 2;
+                aSizeSequence [0] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -9901,7 +9970,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -9909,8 +9978,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 2;
-        aRectangle.Height = 2;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartExtract");
@@ -11993,7 +12062,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (8);
@@ -12233,7 +12302,30 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (3);
+            {
+                awt::Size aSize;
+                aSize.Width = 2;
+                aSize.Height = 2;
+                aSizeSequence [0] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 5;
+                aSize.Height = 5;
+                aSizeSequence [1] = aSize;
+            }
+            {
+                awt::Size aSize;
+                aSize.Width = 2;
+                aSize.Height = 2;
+                aSizeSequence [2] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -12275,7 +12367,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -12283,8 +12375,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 2;
-        aRectangle.Height = 2;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartOfflineStorage");
@@ -12323,7 +12415,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (24);
@@ -12791,7 +12883,18 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (1);
+            {
+                awt::Size aSize;
+                aSize.Width = 21600;
+                aSize.Height = 21600;
+                aSizeSequence [0] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -12833,7 +12936,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -12841,8 +12944,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 21600;
-        aRectangle.Height = 21600;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-irregularSeal1");
@@ -17633,7 +17736,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< PropertyValue > aPropSequence (4);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
@@ -17813,7 +17916,18 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         {
-            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            aPropSequence [2].Name = CREATE_OUSTRING ("SubViewSize");
+            Sequence< awt::Size > aSizeSequence (1);
+            {
+                awt::Size aSize;
+                aSize.Width = 6;
+                aSize.Height = 6;
+                aSizeSequence [0] = aSize;
+            }
+            aPropSequence [2].Value = makeAny (aSizeSequence);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("TextFrames");
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -17855,7 +17969,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+            aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -17863,8 +17977,8 @@ void CustomShapeProperties::initializePresetsMap3()
         awt::Rectangle aRectangle;
         aRectangle.X = 0;
         aRectangle.Y = 0;
-        aRectangle.Width = 6;
-        aRectangle.Height = 6;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
         aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartOnlineStorage");
