@@ -982,14 +982,11 @@ sub create_transforms
 
     my $msitran = "msitran.exe";    # Has to be in the path
     my $msidb = "msidb.exe";    # Has to be in the path
-    my $msiinfo = "msiinfo.exe";    # Has to be in the path
+    my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
 
     my $from = cwd();
 
-    my $architecture = "Intel";
-    if (( $allvariableshashref->{'64BITPRODUCT'} ) && ( $allvariableshashref->{'64BITPRODUCT'} == 1 )) { $architecture = "x64"; }
-
-    my $templatevalue = "\"" . $architecture . ";1033";
+    my $templatevalue = "1033";
 
     $installdir = installer::converter::make_path_conform($installdir);
 
@@ -1124,8 +1121,7 @@ sub create_transforms
         }
     }
 
-    $templatevalue = $templatevalue . "\"";                     # adding ending '"'
-    $systemcall = $msiinfo . " " . $basedbname . " -p " . $templatevalue;
+    $systemcall = "cscript.exe " . $wilangid . " " . $basedbname . " Package " . $templatevalue;
 
     $returnvalue = system($systemcall);
 
@@ -1134,12 +1130,12 @@ sub create_transforms
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $msiinfo!\n";
+        $infoline = "ERROR: Could not execute WiLangId.vbs!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
     {
-        $infoline = "Success: Executed $msiinfo successfully!\n";
+        $infoline = "Success: Executed WiLangId.vbs successfully!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
 }
