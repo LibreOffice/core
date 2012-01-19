@@ -1612,8 +1612,8 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     }
 
     // Zur alten Spalte gehen
-    if (!nCurPos || nCurPos >= ColCount())
-        nCurPos = 1;
+    if (nCurPos == BROWSER_INVALIDID || nCurPos >= ColCount())
+        nCurPos = 0;
 
     // there are rows so go to the selected current column
     if (nRecordCount)
