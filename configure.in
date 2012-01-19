@@ -3163,13 +3163,13 @@ dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
 if test -n "$enable_werror" && test "$enable_werror" != "no"; then
-    ENABLE_WERROR="TRUE"
+    EXTERNAL_WARNINGS_NOT_ERRORS="FALSE"
     AC_MSG_RESULT([yes])
 else
-    ENABLE_WERROR="FALSE"
+    EXTERNAL_WARNINGS_NOT_ERRORS="TRUE"
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_WERROR)
+AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
 
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================

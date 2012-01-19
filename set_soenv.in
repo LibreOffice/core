@@ -710,9 +710,6 @@ ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
-if ("@ENABLE_WERROR@" eq "FALSE") {
-ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
-}
 ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
