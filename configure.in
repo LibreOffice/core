@@ -4989,7 +4989,10 @@ esac
 
 if test -n "$JAVA_ARCH" ; then
     JRE_BASE_DIR="$JAVA_HOME/jre/lib/$JAVA_ARCH"
-    JAVALIB="-L $JAVA_HOME/$LIB64 -L $JRE_BASE_DIR -L $JRE_BASE_DIR/$JAVA_TOOLKIT -L $JRE_BASE_DIR/native_thread"
+    JAVALIB="-L $JAVA_HOME/$LIB64"
+    test -d "$JRE_BASE_DIR" && JAVALIB="$JAVALIB -L $JRE_BASE_DIR"
+    test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L $JRE_BASE_DIR/$JAVA_TOOLKIT"
+    test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L $JRE_BASE_DIR/native_thread"
 fi
 
 AC_SUBST(x_JAVALIB)
