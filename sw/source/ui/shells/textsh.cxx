@@ -32,6 +32,8 @@
 #include <hintids.hxx>
 
 #include <svl/globalnameitem.hxx>
+#include <svl/ownlist.hxx>
+#include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
@@ -100,7 +102,6 @@
 #include <shells.hrc>
 #include <popup.hrc>
 #include <swerror.h>
-#include <SwAppletImpl.hxx>
 #include <unochart.hxx>
 
 #include <chartins.hxx>
