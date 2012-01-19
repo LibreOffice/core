@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-//----------------------------------------------------------------------------
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -113,18 +111,14 @@ namespace formula
         void            FillDialog(sal_Bool nFlag=sal_True);
         void            EditNextFunc( sal_Bool bForward, xub_StrLen nFStart=NOT_FOUND );
         void            EditThisFunc(xub_StrLen nFStart);
-        void            EditFuncParas(xub_StrLen nEditPos);
-
 
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 nInput );
         void            Update();
         void            Update(const String& _sExp);
 
-
         void            SaveArg( sal_uInt16 nEd );
         void            UpdateSelection();
         void            DoEnter( sal_Bool bOk );
-        void            UpdateFunctionDesc();
         void            ResizeArgArr( const IFunctionDescription* pNewFunc );
         void            FillListboxes();
         void            FillControls(sal_Bool &rbNext, sal_Bool &rbPrev);
@@ -142,7 +136,6 @@ namespace formula
         void            PreNotify( NotifyEvent& rNEvt );
 
         RefEdit*        GetCurrRefEdit();
-        rtl::OString    FindFocusWin(Window *pWin);
 
         const FormulaHelper& GetFormulaHelper() const;
         uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
@@ -813,9 +806,6 @@ void FormulaDlg_Impl::FillListboxes()
     }
     FuncSelHdl(NULL);
 
-    //  ResizeArgArr is now already in UpdateFunctionDesc
-
-
     m_pHelper->setDispatcherLock( sal_True );// Activate Modal-Mode
 
     aNewTitle = aTitle1;
@@ -1050,48 +1040,6 @@ void FormulaDlg_Impl::ResizeArgArr( const IFunctionDescription* pNewFunc )
 }
 // -----------------------------------------------------------------------------
 
-void FormulaDlg_Impl::UpdateFunctionDesc()
-{
-    FormEditData* pData = m_pHelper->getFormEditData();
-    if (!pData)
-        return;
-    sal_uInt16 nCat = pFuncPage->GetCategory();
-    if ( nCat == LISTBOX_ENTRY_NOTFOUND )
-        nCat = 0;
-    pData->SetCatSel( nCat );
-    sal_uInt16 nFunc = pFuncPage->GetFunction();
-    if ( nFunc == LISTBOX_ENTRY_NOTFOUND )
-        nFunc = 0;
-    pData->SetFuncSel( nFunc );
-
-    if (   (pFuncPage->GetFunctionEntryCount() > 0)
-        && (pFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
-    {
-        const IFunctionDescription* pDesc = pFuncPage->GetFuncDesc(pFuncPage->GetFunction() );
-        if (pDesc)
-        {
-            pDesc->initArgumentInfo();      // full argument info is needed
-
-            String aSig = pDesc->getSignature();
-
-            aFtFuncName.SetText( aSig );
-            aFtFuncDesc.SetText( pDesc->getDescription() );
-            ResizeArgArr( pDesc );
-
-            if ( !m_aArguments.empty() )        // still arguments there?
-                aSig = pDesc->getFormula( m_aArguments );           // for input line
-        }
-    }
-    else
-    {
-        aFtFuncName.SetText( String() );
-        aFtFuncDesc.SetText( String() );
-
-        m_pHelper->setCurrentFormula( String() );
-    }
-}
-// -----------------------------------------------------------------------------
-
 // Handler for Listboxes
 
 IMPL_LINK( FormulaDlg_Impl, DblClkHdl, FuncPage*, EMPTYARG )
@@ -1228,51 +1176,6 @@ void FormulaDlg_Impl::EditNextFunc( sal_Bool bForward, xub_StrLen nFStart )
         xub_StrLen PrivStart, PrivEnd;
         SetData(nFStart,nNextFStart,nNextFEnd,PrivStart, PrivEnd);
     }
-}
-
-void FormulaDlg_Impl::EditFuncParas(xub_StrLen nEditPos)
-{
-    if(pFuncDesc!=NULL)
-    {
-        FormEditData* pData = m_pHelper->getFormEditData();
-        if (!pData) return;
-
-        String aFormula = m_pHelper->getCurrentFormula();
-        aFormula +=')';
-        xub_StrLen nFStart = pData->GetFStart();
-
-        DeleteArgs();
-
-        nArgs = pFuncDesc->getSuppressedArgumentCount();
-
-        sal_Int32 nArgPos=m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-        m_aFormulaHelper.GetArgStrings(m_aArguments,aFormula, nFStart, nArgs );
-
-        sal_uInt16 nActiv=pParaWin->GetSliderPos();
-        sal_Bool    bFlag=sal_False;
-        ::std::vector< ::rtl::OUString >::iterator aIter = m_aArguments.begin();
-        ::std::vector< ::rtl::OUString >::iterator aEnd = m_aArguments.end();
-        for(sal_uInt16 i=0;aIter != aEnd;i++,++aIter)
-        {
-            sal_Int32 nLength=(*aIter).getLength();
-            pParaWin->SetArgument(i,(*aIter));
-            if(nArgPos<=nEditPos && nEditPos<nArgPos+nLength)
-            {
-                nActiv=i;
-                bFlag=sal_True;
-            }
-            nArgPos+=nLength+1;
-        }
-
-        if(bFlag)
-        {
-            pParaWin->SetSliderPos(nActiv);
-        }
-
-        pParaWin->UpdateParas();
-        UpdateValues();
-    }
-
 }
 
 void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
@@ -1736,38 +1639,6 @@ sal_Bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
     }
     return pTheRefEdit == NULL;
 }
-rtl::OString FormulaDlg_Impl::FindFocusWin(Window *pWin)
-{
-    rtl::OString aUniqueId;
-    if(pWin->HasFocus())
-    {
-        aUniqueId=pWin->GetUniqueId();
-        if(aUniqueId.isEmpty())
-        {
-            Window* pParent=pWin->GetParent();
-            while(pParent!=NULL)
-            {
-                aUniqueId=pParent->GetUniqueId();
-
-                if(!aUniqueId.isEmpty()) break;
-
-                pParent=pParent->GetParent();
-            }
-        }
-    }
-    else
-    {
-        sal_uInt16 nCount=pWin->GetChildCount();
-
-        for(sal_uInt16 i=0;i<nCount;i++)
-        {
-            Window* pChild=pWin->GetChild(i);
-            aUniqueId=FindFocusWin(pChild);
-            if(!aUniqueId.isEmpty()) break;
-        }
-    }
-    return aUniqueId;
-}
 
 void FormulaDlg_Impl::SetEdSelection()
 {
@@ -1955,11 +1826,6 @@ void FormulaDlg::RefInputDoneAfter( sal_Bool bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-rtl::OString FormulaDlg::FindFocusWin(Window *pWin)
-{
-    return m_pImpl->FindFocusWin( pWin );
-}
-
 void FormulaDlg::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
 {
     if(pWin->GetUniqueId()==nUniqueId)
@@ -1983,11 +1849,6 @@ long FormulaDlg::PreNotify( NotifyEvent& rNEvt )
 {
     m_pImpl->PreNotify( rNEvt );
     return SfxModelessDialog::PreNotify(rNEvt);
-}
-
-void FormulaDlg::HighlightFunctionParas(const String& aFormula)
-{
-    m_pImpl->m_pHelper->showReference(aFormula);
 }
 
 void FormulaDlg::disableOk()
@@ -2060,18 +1921,6 @@ void FormEditData::Reset()
     aSelection.Min()=0;
     aSelection.Max()=0;
     aUndoStr.Erase();
-}
-// -----------------------------------------------------------------------------
-void FormEditData::RestoreValues()
-{
-    FormEditData* pTemp = pParent;
-    DBG_ASSERT(pTemp,"RestoreValues ohne Parent");
-    if (pTemp)
-    {
-        *this = *pTemp;
-        pTemp->pParent = NULL;      // otherwise it would be cleared too!
-        delete pTemp;
-    }
 }
 // -----------------------------------------------------------------------------
 const FormEditData& FormEditData::operator=( const FormEditData& r )

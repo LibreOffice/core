@@ -114,7 +114,6 @@ public:
     inline  void                Delete()                { delete this; }
     inline  StackVar            GetType() const         { return eType; }
             bool                IsFunction() const; // pure functions, no operators
-            bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
             bool                IsExternalRef() const;
             sal_uInt8           GetParamCount() const;
     inline  void                IncRef() const          { nRefCnt++; }
@@ -392,7 +391,6 @@ public:
     virtual                     ~FormulaSubroutineToken();
     virtual FormulaToken*       Clone() const { return new FormulaSubroutineToken(*this); }
     virtual bool                operator==( const FormulaToken& rToken ) const;
-    const FormulaTokenArray*    GetTokenArray() const;
 
 private:
     const FormulaTokenArray*    mpArray;

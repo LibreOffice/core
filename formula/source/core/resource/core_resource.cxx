@@ -68,13 +68,6 @@ namespace formula
         return sReturn;
     }
 
-    //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const ::rtl::OUString& _rReplace )
-    {
-        String sString( loadString( _nResId ) );
-        sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
-        return sString;
-    }
     //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {

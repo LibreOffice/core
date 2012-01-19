@@ -116,7 +116,6 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    rtl::OString    FindFocusWin(Window *pWin);
     void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 

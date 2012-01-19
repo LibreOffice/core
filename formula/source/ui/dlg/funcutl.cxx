@@ -307,7 +307,6 @@ String ArgInput::GetArgName()
     return aPrivArgName;
 }
 
-
 /*************************************************************************
 #*  Member:     SetArgName                                  Date:13.01.97
 #*------------------------------------------------------------------------
@@ -363,26 +362,6 @@ Selection ArgInput::GetArgSelection ()
     if(pEdArg !=NULL) aSel=pEdArg ->GetSelection();
     return aSel;
 }
-
-/*************************************************************************
-#*  Member:     SetArgSelection                             Date:13.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Class:      ArgInput
-#*
-#*  Function:   Replaces the Selection in the EditBox.
-#*
-#*  Input:      String
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-void ArgInput::ReplaceSelOfArg(const String& rStr )
-{
-    if(pEdArg !=NULL) pEdArg ->ReplaceSelected(rStr );
-}
-
-
 
 /*************************************************************************
 #*  Member:     SetArgVal                                   Date:13.01.97

@@ -200,26 +200,6 @@ namespace basegfx { namespace tools
         }
     }
 
-    BColor rgb2yiq(const BColor& rRGBColor)
-    {
-        // from Foley, van Dam, Computer Graphics
-        const double r=rRGBColor.getRed(), g=rRGBColor.getGreen(), b=rRGBColor.getBlue();
-        return BColor(
-            0.299*r + 0.587*g + 0.114*b,
-            0.596*r - 0.274*g - 0.322*b,
-            0.211*r - 0.522*g + 0.311*b);
-    }
-
-    BColor yiq2rgb(const BColor& rYIQColor)
-    {
-        // from Foley, van Dam, Computer Graphics
-        const double y=rYIQColor.getRed(), i=rYIQColor.getGreen(), q=rYIQColor.getBlue();
-        return BColor(
-            y + 0.956*i + 0.623*q,
-            y - 0.272*i - 0.648*q,
-            y - 1.105*i + 1.705*q );
-    }
-
     BColor ciexyz2rgb( const BColor& rXYZColor )
     {
         // from Poynton color faq, and SMPTE RP 177-1993, Derivation
@@ -240,24 +220,6 @@ namespace basegfx { namespace tools
             0.412453*r + 0.35758*g  + 0.180423*b,
             0.212671*r + 0.71516*g  + 0.072169*b,
             0.019334*r + 0.119193*g + 0.950227*b);
-    }
-
-    BColor rgb2ypbpr(const BColor& rRGBColor)
-    {
-        const double r=rRGBColor.getRed(), g=rRGBColor.getGreen(), b=rRGBColor.getBlue();
-        return BColor(
-             0.299*r    + 0.587*g    + 0.114*b,
-            -0.168736*r - 0.331264*g + 0.5*b,
-             0.5*r      - 0.418688*g - 0.081312*b);
-    }
-
-    BColor ypbpr2rgb(const BColor& rYPbPrColor)
-    {
-        const double y=rYPbPrColor.getRed(), pb=rYPbPrColor.getGreen(), pr=rYPbPrColor.getBlue();
-        return BColor(
-            1.*y +       0.*pb +    1.402*pr,
-            1.*y - 0.344136*pb - 0.714136*pr,
-            1.*y +    1.772*pb +       0.*pr);
     }
 
 } } // end of namespace basegfx

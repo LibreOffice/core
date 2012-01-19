@@ -117,9 +117,7 @@ public:
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    sal_uLong        FindFocusWin(Window *pWin);
     void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
-    void         HighlightFunctionParas(const String& aFormula);
 
     sal_Bool        IsInputHdl(ScInputHandler* pHdl);
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);

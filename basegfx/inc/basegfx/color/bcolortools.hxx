@@ -50,16 +50,6 @@ namespace basegfx
         /// Transform from HSV to RGB
         BASEGFX_DLLPUBLIC BColor hsv2rgb(const BColor& rHSVColor);
 
-        /// Transform from R'G'B' to YIQ (NTSC color model - Y is used in monochrome mode)
-        BASEGFX_DLLPUBLIC BColor rgb2yiq(const BColor& rRGBColor);
-        /// Transform from YIQ to R'G'B' (NTSC color model - Y is used in monochrome mode)
-        BASEGFX_DLLPUBLIC BColor yiq2rgb(const BColor& rYIQColor);
-
-        /// Transform from R'G'B' to Y'PbPr (the [0,1]x[-.5,.5]x[-.5,.5] equivalent of Y'CbCr (which is scaled into 8bit))
-        BASEGFX_DLLPUBLIC BColor rgb2ypbpr(const BColor& rRGBColor);
-        /// Transform from Y'PbPr (the [0,1]x[-.5,.5]x[-.5,.5] equivalent of Y'CbCr (which is scaled into 8bit)) into R'G'B'
-        BASEGFX_DLLPUBLIC BColor ypbpr2rgb(const BColor& rYPbPrColor);
-
         /// Transform from CIE XYZ into Rec. 709 RGB (D65 white point)
         BASEGFX_DLLPUBLIC BColor ciexyz2rgb( const BColor& rXYZColor );
         /// Transform from Rec. 709 RGB (D65 white point) into CIE XYZ

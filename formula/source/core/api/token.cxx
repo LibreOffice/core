@@ -125,12 +125,6 @@ sal_uInt8 FormulaToken::GetParamCount() const
                             // if so then it should be in cByte
 }
 
-
-bool FormulaToken::IsMatrixFunction() const
-{
-    return formula::FormulaCompiler::IsMatrixFunction(GetOpCode());
-}
-
 bool FormulaToken::IsExternalRef() const
 {
     bool bRet = false;
@@ -440,20 +434,6 @@ FormulaToken* FormulaTokenArray::GetNextName()
                 return t;
         }
     } // if( pCode )
-    return NULL;
-}
-
-FormulaToken* FormulaTokenArray::GetNextDBArea()
-{
-    if( pCode )
-    {
-        while ( nIndex < nLen )
-        {
-            FormulaToken* t = pCode[ nIndex++ ];
-            if( t->GetOpCode() == ocDBArea )
-                return t;
-        } // while ( nIndex < nLen )+
-    }
     return NULL;
 }
 
@@ -780,11 +760,6 @@ FormulaToken* FormulaTokenArray::AddString( const String& rStr )
 FormulaToken* FormulaTokenArray::AddDouble( double fVal )
 {
     return Add( new FormulaDoubleToken( fVal ) );
-}
-
-FormulaToken* FormulaTokenArray::AddName( sal_uInt16 n )
-{
-    return Add( new FormulaIndexToken( ocName, n ) );
 }
 
 FormulaToken* FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
@@ -1408,10 +1383,6 @@ FormulaSubroutineToken::FormulaSubroutineToken( const FormulaSubroutineToken& r 
 FormulaSubroutineToken::~FormulaSubroutineToken()
 {
     delete mpArray;
-}
-const FormulaTokenArray* FormulaSubroutineToken::GetTokenArray() const
-{
-    return mpArray;
 }
 bool FormulaSubroutineToken::operator==( const FormulaToken& r ) const
 {

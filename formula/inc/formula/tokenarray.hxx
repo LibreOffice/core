@@ -111,7 +111,6 @@ public:
     FormulaToken* FirstNoSpaces() { nIndex = 0; return NextNoSpaces(); }
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
-    FormulaToken* GetNextDBArea();
     FormulaToken* GetNextReference();
     FormulaToken* GetNextReferenceRPN();
     FormulaToken* GetNextReferenceOrName();
@@ -207,7 +206,6 @@ public:
     FormulaToken* AddString( const sal_Unicode* pStr );
     FormulaToken* AddString( const String& rStr );
     FormulaToken* AddDouble( double fVal );
-    FormulaToken* AddName( sal_uInt16 n );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */

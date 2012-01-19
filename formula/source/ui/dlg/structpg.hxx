@@ -108,9 +108,6 @@ public:
     virtual String          GetEntryText(SvLBoxEntry* pEntry) const;
     virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const;
 
-    String          GetSelectedEntryText();
-    IFormulaToken*  GetSelectedToken();
-
     void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }
     const Link&     GetSelectionHdl() const { return aSelLink; }
 };

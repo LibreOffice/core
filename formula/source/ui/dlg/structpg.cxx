@@ -203,16 +203,6 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
     return 0;
 }
 
-IFormulaToken* StructPage::GetSelectedToken()
-{
-    return pSelectedToken;
-}
-
-String StructPage::GetSelectedEntryText()
-{
-    return aTlbStruct.GetEntryText(aTlbStruct.GetCurEntry());
-}
-
 } // formula
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

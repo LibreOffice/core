@@ -43,7 +43,6 @@ public:
                         virtual ~FormEditData();
 
     virtual void            SaveValues();
-    void                    RestoreValues();
     sal_Bool                    HasParent() const   { return pParent != NULL; }
 
     inline sal_uInt16           GetMode() const     { return nMode; }

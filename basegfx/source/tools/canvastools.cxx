@@ -363,20 +363,6 @@ namespace basegfx
             return output;
         }
 
-        ::basegfx::B2DHomMatrix homMatrixFromAffineMatrix( const geometry::AffineMatrix2D& input )
-        {
-            ::basegfx::B2DHomMatrix output;
-
-            output.set(0,0, input.m00);
-            output.set(0,1, input.m01);
-            output.set(0,2, input.m02);
-            output.set(1,0, input.m10);
-            output.set(1,1, input.m11);
-            output.set(1,2, input.m12);
-
-            return output;
-        }
-
         ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& input )
         {
             ::basegfx::B3DHomMatrix output;
@@ -482,12 +468,6 @@ namespace basegfx
                                               rRect.getMaxZ());
         }
 
-        ::basegfx::B2DVector b2DSizeFromRealSize2D( const geometry::RealSize2D& rSize )
-        {
-            return ::basegfx::B2DVector( rSize.Width,
-                                         rSize.Height );
-        }
-
         ::basegfx::B2DPoint b2DPointFromRealPoint2D( const geometry::RealPoint2D& rPoint )
         {
             return ::basegfx::B2DPoint( rPoint.X,
@@ -518,28 +498,10 @@ namespace basegfx
                                             rSize.getY() );
         }
 
-        geometry::IntegerPoint2D integerPoint2DFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
-        {
-            return geometry::IntegerPoint2D( rPoint.getX(),
-                                             rPoint.getY() );
-        }
-
-        geometry::IntegerRectangle2D integerRectangle2DFromB2IRectangle( const ::basegfx::B2IRange& rRectangle )
-        {
-            return geometry::IntegerRectangle2D( rRectangle.getMinX(), rRectangle.getMinY(),
-                                                 rRectangle.getMaxX(), rRectangle.getMaxY() );
-        }
-
         ::basegfx::B2IVector b2ISizeFromIntegerSize2D( const geometry::IntegerSize2D& rSize )
         {
             return ::basegfx::B2IVector( rSize.Width,
                                          rSize.Height );
-        }
-
-        ::basegfx::B2IPoint b2IPointFromIntegerPoint2D( const geometry::IntegerPoint2D& rPoint )
-        {
-            return ::basegfx::B2IPoint( rPoint.X,
-                                        rPoint.Y );
         }
 
         ::basegfx::B2IRange b2IRectangleFromIntegerRectangle2D( const geometry::IntegerRectangle2D& rRectangle )
@@ -621,46 +583,6 @@ namespace basegfx
 
         // Geometry comparisons
         // ===================================================================
-
-        bool RealSize2DAreEqual( const ::com::sun::star::geometry::RealSize2D& rA, const ::com::sun::star::geometry::RealSize2D& rB )
-        {
-            return (rA.Width == rB.Width && rA.Height == rB.Height);
-        }
-
-        bool RealPoint2DAreEqual( const ::com::sun::star::geometry::RealPoint2D& rA, const ::com::sun::star::geometry::RealPoint2D& rB )
-        {
-            return (rA.X == rB.X && rA.Y == rB.Y);
-        }
-
-        bool RealRectangle2DAreEqual( const ::com::sun::star::geometry::RealRectangle2D& rA, const ::com::sun::star::geometry::RealRectangle2D& rB )
-        {
-            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2);
-        }
-
-        bool RealRectangle3DAreEqual( const ::com::sun::star::geometry::RealRectangle3D& rA, const ::com::sun::star::geometry::RealRectangle3D& rB )
-        {
-            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.Z1 == rB.Z1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2 && rA.Z2 == rB.Z2);
-        }
-
-        bool AffineMatrix2DAreEqual( const ::com::sun::star::geometry::AffineMatrix2D& rA, const ::com::sun::star::geometry::AffineMatrix2D& rB )
-        {
-            return (rA.m00 == rB.m00 && rA.m01 == rB.m01 && rA.m02 == rB.m02 && rA.m10 == rB.m10 && rA.m11 == rB.m11 && rA.m12 == rB.m12);
-        }
-
-        bool IntegerSize2DAreEqual( const ::com::sun::star::geometry::IntegerSize2D& rA, const ::com::sun::star::geometry::IntegerSize2D& rB )
-        {
-            return (rA.Width == rB.Width && rA.Height == rB.Height);
-        }
-
-        bool IntegerPoint2DAreEqual( const ::com::sun::star::geometry::IntegerPoint2D& rA, const ::com::sun::star::geometry::IntegerPoint2D& rB )
-        {
-            return (rA.X == rB.X && rA.Y == rB.Y);
-        }
-
-        bool IntegerRectangle2DAreEqual( const ::com::sun::star::geometry::IntegerRectangle2D& rA, const ::com::sun::star::geometry::IntegerRectangle2D& rB )
-        {
-            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2);
-        }
 
         bool awtSizeAreEqual( const ::com::sun::star::awt::Size& rA, const ::com::sun::star::awt::Size& rB )
         {

@@ -138,7 +138,6 @@ namespace basegfx
             homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
                                        const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix homMatrixFromAffineMatrix( const ::com::sun::star::geometry::AffineMatrix2D& matrix );
         BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::Matrix2D&
@@ -157,17 +156,13 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealRectangle2D   rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealRectangle3D   rectangle3DFromB3DRectangle( const ::basegfx::B3DRange& );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DVector      b2DSizeFromRealSize2D( const ::com::sun::star::geometry::RealSize2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2DPoint       b2DPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2DRange       b2DRectangleFromRealRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const ::com::sun::star::geometry::RealRectangle3D& );
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::IntegerSize2D         integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::IntegerPoint2D    integerPoint2DFromB2IPoint( const ::basegfx::B2IPoint& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::IntegerRectangle2D    integerRectangle2DFromB2IRectangle( const ::basegfx::B2IRange& );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromIntegerSize2D( const ::com::sun::star::geometry::IntegerSize2D& );
-        BASEGFX_DLLPUBLIC ::basegfx::B2IPoint       b2IPointFromIntegerPoint2D( const ::com::sun::star::geometry::IntegerPoint2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
 
         BASEGFX_DLLPUBLIC ::com::sun::star::awt::Size       awtSizeFromB2ISize( const ::basegfx::B2IVector& );
@@ -180,16 +175,6 @@ namespace basegfx
 
         // Geometry comparisons
         // ===================================================================
-
-        BASEGFX_DLLPUBLIC bool RealSize2DAreEqual( const ::com::sun::star::geometry::RealSize2D& rA, const ::com::sun::star::geometry::RealSize2D& rB );
-        BASEGFX_DLLPUBLIC bool RealPoint2DAreEqual( const ::com::sun::star::geometry::RealPoint2D& rA, const ::com::sun::star::geometry::RealPoint2D& rB );
-        BASEGFX_DLLPUBLIC bool RealRectangle2DAreEqual( const ::com::sun::star::geometry::RealRectangle2D& rA, const ::com::sun::star::geometry::RealRectangle2D& rB );
-        BASEGFX_DLLPUBLIC bool RealRectangle3DAreEqual( const ::com::sun::star::geometry::RealRectangle3D& rA, const ::com::sun::star::geometry::RealRectangle3D& rB );
-        BASEGFX_DLLPUBLIC bool AffineMatrix2DAreEqual( const ::com::sun::star::geometry::AffineMatrix2D& rA, const ::com::sun::star::geometry::AffineMatrix2D& rB );
-
-        BASEGFX_DLLPUBLIC bool IntegerSize2DAreEqual( const ::com::sun::star::geometry::IntegerSize2D& rA, const ::com::sun::star::geometry::IntegerSize2D& rB );
-        BASEGFX_DLLPUBLIC bool IntegerPoint2DAreEqual( const ::com::sun::star::geometry::IntegerPoint2D& rA, const ::com::sun::star::geometry::IntegerPoint2D& rB );
-        BASEGFX_DLLPUBLIC bool IntegerRectangle2DAreEqual( const ::com::sun::star::geometry::IntegerRectangle2D& rA, const ::com::sun::star::geometry::IntegerRectangle2D& rB );
 
         BASEGFX_DLLPUBLIC bool awtSizeAreEqual( const ::com::sun::star::awt::Size& rA, const ::com::sun::star::awt::Size& rB );
         BASEGFX_DLLPUBLIC bool awtPointAreEqual( const ::com::sun::star::awt::Point& rA, const ::com::sun::star::awt::Point& rB );
