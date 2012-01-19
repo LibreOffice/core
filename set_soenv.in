@@ -743,7 +743,6 @@ if ( $platform =~ m/cygwin/ )
    # found the 64-bit (cross-)compiler, then @BUILD_X64@ will be empty.
    ToFile( "BUILD_X64",         "@BUILD_X64@",      "e" );
    if ( "@BUILD_X64@" eq "TRUE" ) {
-       ToFile( "CC_X64_BINARY", "@CC_X64_BINARY@",  "e" );
        ToFile( "CXX_X64_BINARY","@CXX_X64_BINARY@", "e" );
        ToFile( "LINK_X64_BINARY","@LINK_X64_BINARY@","e" );
        ToFile( "LIBMGR_X64_BINARY","@LIBMGR_X64_BINARY@","e" );

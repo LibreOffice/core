@@ -2602,7 +2602,7 @@ if test "$_os" = "WINNT"; then
         # unfished work and highly experimental.
 
         BUILD_X64=
-        CC_X64_BINARY=
+        CXX_X64_BINARY=
         LINK_X64_BINARY=
         LIBMGR_X64_BINARY=
 
@@ -2612,13 +2612,11 @@ if test "$_os" = "WINNT"; then
             # the build on a 64-bit OS.
             if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
-                CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
                 CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
                 LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
                 LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
             elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
-                CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
                 CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
                 LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
                 LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
@@ -2634,7 +2632,6 @@ if test "$_os" = "WINNT"; then
 
         # These are passed to the environment through set_soenv.in as usual, and then
         # used in set_wntx64.mk
-        AC_SUBST(CC_X64_BINARY)
         AC_SUBST(CXX_X64_BINARY)
         AC_SUBST(LINK_X64_BINARY)
         AC_SUBST(LIBMGR_X64_BINARY)
