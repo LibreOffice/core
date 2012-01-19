@@ -65,25 +65,25 @@
   <node oor:name="DefaultFonts">
     <node oor:name="en" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Arimos;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Arimos;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Courier New;Cumberland;Cumberland AMT;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Courier New;Cumberland;Cumberland AMT;Cousine;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Arimos;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Arimos;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Times New Roman;Liberation Serif;Thorndale;Thorndale AMT;Nimbus Roman No9 L;DejaVu Serif;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Times New Roman;Tinos;Liberation Serif;Thorndale;Thorndale AMT;Nimbus Roman No9 L;DejaVu Serif;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -110,22 +110,22 @@
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
-        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Arimos;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;DejaVu Sans;Lucida Sans Unicode;Tahoma;Albany AMT;Albany AMT;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
       </prop>
       <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value>Times New Roman;Thorndale;Thorndale AMT;Liberation Serif;DejaVu Serif;Nimbus Roman No9 L;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Times New Roman;Thorndale;Thorndale AMT;Tinos;Liberation Serif;DejaVu Serif;Nimbus Roman No9 L;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="SYMBOL" oor:type="xs:string" oor:op="replace">
         <value>StarSymbol;OpenSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland;Cumberland AMT;Courier New;Liberation Mono;Nimbus Mono L;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Cumberland AMT;Courier New;Cousine;Liberation Mono;Nimbus Mono L;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland;Cumberland AMT;Courier New;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Cumberland AMT;Courier New;Cousine;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Lucida;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
