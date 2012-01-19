@@ -46,7 +46,7 @@ copy-stuff:
 #
 # The tests we run here
 #
-	for F in sc_ucalc; do \
+	for F in sc_ucalc sc_filters_test; do \
 	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
 	done
 #
@@ -58,6 +58,7 @@ copy-stuff:
 		  bootstrap.uno \
 		  comphelpgcc3 \
 		  configmgr.uno \
+		  fileacc \
 		  fontconfig \
 		  forlo \
 		  foruilo \
@@ -82,9 +83,12 @@ copy-stuff:
 		  localedata_others \
 		  mergedlo \
 		  msfilterlo \
+		  ooxlo \
 		  reg \
 		  saxlo \
 		  sblo \
+		  sclo \
+		  scfilt \
 		  sfxlo \
 		  sotlo \
 		  stocservices.uno \
@@ -163,10 +167,17 @@ install: copy-stuff
 uninstall:
 	adb uninstall $(APP_PACKAGE)
 
-run:
+run_ucalc:
 	echo "STAR_RESOURCEPATH=/assets/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
 	adb push cmdline $(APP_DATA_PATH)/cmdline
 	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+
+run_filters_test:
+	echo "STAR_RESOURCEPATH=/assets/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry module:file:///assets/xml/registry/spool' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
+	adb push cmdline $(APP_DATA_PATH)/cmdline
+	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+
+run: run_ucalc run_filters_test
 
 clean:
 	ant clean
