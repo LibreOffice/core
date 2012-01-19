@@ -613,6 +613,7 @@ LIBO_UDK_3.5 { # symbols available in >= LibO 3.5
 LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
     global:
         osl_unmapMappedFile;
+        osl_identicalDirectoryItem;
 } UDK_3.10;
 
 PRIVATE_1.0 {
@@ -647,7 +648,6 @@ PRIVATE_textenc.1 { # LibreOffice 3.6
 
 PRIVATE_file.1 { # LibreOffice 3.6
     global:
-        osl_identicalDirectoryItem;
         osl_getFileOSHandle;
 };
 

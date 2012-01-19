@@ -316,6 +316,30 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
         oslDirectoryItem Item );
 
+/** Determine if two directory items point the the same underlying file
+
+    The comparison is done first by URL, and then by resolving links to
+    find the target, and finally by comparing inodes on unix.
+
+    @param  pItemA [in]
+    A directory handle to compare with another handle
+
+    @param  pItemB [in]
+    A directory handle to compare with pItemA
+
+    @return
+    sal_True: if the items point to an identical resource<br>
+    sal_False: if the items point to a different resource, or a fatal error occured<br>
+
+    @see osl_getDirectoryItem()
+
+    @since LibreOffice 3.6
+*/
+
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
+                                        oslDirectoryItem pItemA,
+                                        oslDirectoryItem pItemB );
+
 /* File types */
 
 typedef enum {

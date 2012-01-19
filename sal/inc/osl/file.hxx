@@ -1389,9 +1389,9 @@ public:
 
 class DirectoryItem: public FileBase
 {
+    oslDirectoryItem _pData;
 
 public:
-    oslDirectoryItem _pData;
 
     /** Constructor.
     */
@@ -1527,6 +1527,30 @@ public:
     inline RC getFileStatus( FileStatus& rStatus )
     {
         return (RC) osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask );
+    }
+
+/** Determine if two directory items point the the same underlying file
+
+    The comparison is done first by URL, and then by resolving links to
+    find the target, and finally by comparing inodes on unix.
+
+    @param  pItemA [in]
+    A directory handle to compare with another handle
+
+    @param  pItemB [in]
+    A directory handle to compare with pItemA
+
+    @return
+    sal_True: if the items point to an identical resource<br>
+    sal_False: if the items point to a different resource, or a fatal error occured<br>
+
+    @see osl_getDirectoryItem()
+
+    @since LibreOffice 3.6
+*/
+    inline sal_Bool isIdenticalTo( const DirectoryItem &pOther )
+    {
+        return osl_identicalDirectoryItem( _pData, pOther._pData );
     }
 
     friend class Directory;

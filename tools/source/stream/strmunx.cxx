@@ -146,7 +146,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
     for( size_t i = 0; i < rLockList.size(); ++i )
     {
         pLock = rLockList[ i ];
-        if( osl_identicalDirectoryItem( aItem._pData, pLock->m_aItem._pData) )
+        if( aItem.isIdenticalTo( pLock->m_aItem ) )
         {
             sal_Bool bDenyByOptions = sal_False;
             StreamMode nLockMode = pLock->m_pStream->GetStreamMode();
