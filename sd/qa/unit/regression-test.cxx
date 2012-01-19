@@ -52,6 +52,44 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 
+#include <string>
+#include <iostream>
+#include <rtl/oustringostreaminserter.hxx>
+
+namespace {
+
+bool compareFiles( const rtl::OUString& aFileNameOne, const rtl::OUString& aFileNameTwo)
+{
+    rtl::OString aOFileNameOne = rtl::OUStringToOString(aFileNameOne, RTL_TEXTENCODING_UTF8);
+    std::ifstream aFileOne(aOFileNameOne.getStr());
+    rtl::OString aOFileNameTwo = rtl::OUStringToOString(aFileNameTwo, RTL_TEXTENCODING_UTF8);
+    std::ifstream aFileTwo(aOFileNameTwo.getStr());
+
+    CPPUNIT_ASSERT_MESSAGE("files not open", aFileOne.is_open() && aFileTwo.is_open());
+
+    sal_Int32 nLine = 1;
+    while(!aFileOne.eof() && !aFileTwo.eof())
+    {
+        std::string aLineFileOne;
+        std::string aLineFileTwo;
+
+        std::getline(aFileOne, aLineFileOne);
+        std::getline(aFileTwo, aLineFileTwo);
+
+        if( aLineFileOne != aLineFileTwo)
+        {
+            rtl::OStringBuffer aErrorMessage("Mismatch between reference file and exported file in line ");
+            aErrorMessage.append(nLine).append(".\nExpected: ");
+            aErrorMessage.append(aLineFileOne.c_str()).append("\nFound   : ").append(aLineFileTwo.c_str());
+            CPPUNIT_ASSERT_MESSAGE(aErrorMessage.getStr(), false);
+        }
+        nLine++;
+    }
+    return true;
+}
+
+}
+
 /* Implementation of Filters test */
 
 using namespace ::com::sun::star;
@@ -154,6 +192,8 @@ void SdFiltersTest::test()
     rtl::OUString aNewSvgURL = m_aSolverRootURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/unittest/sd/test2.svg"));
 
     xStorable->storeToURL( aNewSvgURL, aArgs );
+
+    compareFiles( getPathFromSrc("/sd/qa/unit/data/svg/test.svg"), getPathFromSolver("/unittest/sd/test2.svg") );
 
     xDocShRef->DoClose();
 }

@@ -30,7 +30,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_regression_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_regression_test, \
-    sd/qa/unit/regression-test2 \
+    sd/qa/unit/regression-test \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sd_regression_test, \
@@ -113,7 +113,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/expand/ucpexpand1 \
     ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/gio/ucpgio \
     ucb/source/ucp/package/ucppkg1 \
     ucb/source/ucp/tdoc/ucptdoc1 \
     unotools/util/utl \
