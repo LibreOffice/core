@@ -113,7 +113,7 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
     }
 
     //FIXME: what is legal?
-    if (arg.getLength() > 0) {
+    if (!arg.isEmpty()) {
         m_NodeID = arg;
     } else {
         throw css::lang::IllegalArgumentException(

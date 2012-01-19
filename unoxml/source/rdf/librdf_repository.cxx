@@ -1265,7 +1265,7 @@ static bool isMetadatableWithoutMetadata(
     uno::Reference<uno::XInterface> const & i_xNode)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( i_xNode, uno::UNO_QUERY );
-    return (xMeta.is() && !xMeta->getMetadataReference().Second.getLength());
+    return (xMeta.is() && xMeta->getMetadataReference().Second.isEmpty());
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -1483,7 +1483,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     // ensure that the metadatable has an XML ID
     i_xObject->ensureMetadataReference();
     const beans::StringPair mdref( i_xObject->getMetadataReference() );
-    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
+    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
         throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
                 "ensureMetadataReference did not")), *this);
@@ -1503,7 +1503,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     ::osl::MutexGuard g(m_aMutex);
-    ::rtl::OUString const content( (i_rRDFaContent.getLength() == 0)
+    ::rtl::OUString const content( (i_rRDFaContent.isEmpty())
             ? xTextRange->getString()
             : i_rRDFaContent );
     uno::Reference<rdf::XNode> xContent;
@@ -1523,7 +1523,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "cannot create literal")), *this, uno::makeAny(iae));
     }
     removeStatementRDFa(i_xObject);
-    if (i_rRDFaContent.getLength() == 0) {
+    if (i_rRDFaContent.isEmpty()) {
         m_RDFaXHTMLContentSet.erase(sXmlId);
     } else {
         m_RDFaXHTMLContentSet.insert(sXmlId);
@@ -1546,7 +1546,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
+    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
         return; // nothing to do...
     }
     uno::Reference<rdf::XURI> xXmlId;
@@ -1577,7 +1577,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_Repository::getStatementRDFa: Element is null")), *this, 0);
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
+    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
         return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
     ::rtl::OUString const sXmlId(mdref.First +
@@ -2065,7 +2065,7 @@ librdf_node* librdf_TypeConverter::mkNode( librdf_world* i_pWorld,
         RTL_TEXTENCODING_UTF8) );
     const uno::Reference< rdf::XURI > xType(xLiteral->getDatatype());
     librdf_node * ret(0);
-    if (lang.getLength() == 0) {
+    if (lang.isEmpty()) {
         if (!xType.is()) {
             ret = librdf_new_node_from_literal(i_pWorld,
                 reinterpret_cast<const unsigned char*> (val.getStr()),

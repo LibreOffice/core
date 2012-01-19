@@ -318,7 +318,7 @@ namespace DOM
         Reference< XElement > aElement(aNode, UNO_QUERY);
         OUString aRefName;
         OUString aPrefix = aElement->getPrefix();
-        if (aPrefix.getLength() > 0)
+        if (!aPrefix.isEmpty())
             aRefName = aPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aElement->getTagName();
         else
             aRefName = aElement->getTagName();

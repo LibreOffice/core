@@ -68,7 +68,7 @@ namespace DOM
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
-            OUString name = (prefix.getLength() == 0)
+            OUString name = (prefix.isEmpty())
                 ? OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns"))
                 : OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:")) + prefix;
             const xmlChar *pHref = pNs->href;
@@ -84,14 +84,14 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
-            OUString name = (prefix.getLength() == 0)
+            OUString name = (prefix.isEmpty())
                 ? pNode->getLocalName()
                 : prefix + OUString(static_cast<sal_Unicode>(':')) + pNode->getLocalName();
             OUString val  = pNode->getNodeValue();
             pAttrs->AddAttribute(name, type, val);
         }
         OUString prefix = getPrefix();
-        OUString name = (prefix.getLength() == 0)
+        OUString name = (prefix.isEmpty())
             ? getLocalName()
             : prefix + OUString(static_cast<sal_Unicode>(':')) + getLocalName();
         Reference< XAttributeList > xAttrList(pAttrs);
@@ -510,7 +510,7 @@ namespace DOM
         }
 
         Reference< XAttr > aAttr;
-        if (oldAttr->getNamespaceURI().getLength() > 0) {
+        if (!oldAttr->getNamespaceURI().isEmpty()) {
             ::rtl::OUStringBuffer qname(oldAttr->getPrefix());
             if (0 != qname.getLength()) {
                 qname.append(sal_Unicode(':'));
@@ -667,7 +667,7 @@ namespace DOM
             OUString const& qualifiedName, OUString const& value)
         throw (RuntimeException, DOMException)
     {
-        if (namespaceURI.getLength() == 0) throw RuntimeException();
+        if (namespaceURI.isEmpty()) throw RuntimeException();
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -778,7 +778,7 @@ namespace DOM
     void SAL_CALL CElement::setElementName(const OUString& aName)
         throw (RuntimeException, DOMException)
     {
-        if ((aName.getLength() <= 0) ||
+        if (aName.isEmpty() ||
             (0 <= aName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(":")))))
         {
             DOMException e;

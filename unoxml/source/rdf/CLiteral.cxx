@@ -134,7 +134,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
         ::rtl::OUString arg1;
         css::uno::Reference< css::rdf::XURI > xURI;
         if ((aArguments[1] >>= arg1)) {
-            if (arg1.getLength() > 0) {
+            if (!arg1.isEmpty()) {
                 m_Language = arg1;
             } else {
                 throw css::lang::IllegalArgumentException(
@@ -160,7 +160,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
 // ::com::sun::star::rdf::XNode:
 ::rtl::OUString SAL_CALL CLiteral::getStringValue() throw (css::uno::RuntimeException)
 {
-    if (m_Language.getLength()) {
+    if (!m_Language.isEmpty()) {
         ::rtl::OUStringBuffer buf(m_Value);
         buf.appendAscii("@");
         buf.append(m_Language);

@@ -553,7 +553,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         sal_Int32 i = qname.indexOf(':');
-        if (ns.getLength() == 0) throw RuntimeException();
+        if (ns.isEmpty()) throw RuntimeException();
         xmlChar *xPrefix;
         xmlChar *xName;
         OString o1, o2, o3;
@@ -805,9 +805,9 @@ namespace DOM
             OUString const aNsPrefix = xImportedNode->getPrefix();
             OUString aQName = xElement->getTagName();
             Reference< XElement > xNewElement;
-            if (aNsUri.getLength() > 0)
+            if (!aNsUri.isEmpty())
             {
-                if (aNsPrefix.getLength() > 0) {
+                if (!aNsPrefix.isEmpty()) {
                     aQName = aNsPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
                                 + aQName;
                 }
@@ -828,9 +828,9 @@ namespace DOM
                     OUString const aAttrPrefix = curAttr->getPrefix();
                     OUString aAttrName = curAttr->getName();
                     OUString const sValue = curAttr->getValue();
-                    if (aAttrUri.getLength() > 0)
+                    if (!aAttrUri.isEmpty())
                     {
-                        if (aAttrPrefix.getLength() > 0) {
+                        if (!aAttrPrefix.isEmpty()) {
                             aAttrName = aAttrPrefix +
                                 OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aAttrName;
                         }

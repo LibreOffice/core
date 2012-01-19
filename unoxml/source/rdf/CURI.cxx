@@ -803,7 +803,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
     }
 
     //FIXME: what is legal?
-    if (arg0.getLength() > 0) {
+    if (!arg0.isEmpty()) {
         m_Namespace = arg0;
     } else {
         throw css::lang::IllegalArgumentException(
