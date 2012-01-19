@@ -50,7 +50,7 @@ module com { module sun { module star { module i18n {
     <b>MUST</b> support some predefined format codes. These predefined
     format codes are accessed through indices as the following, and
     the locale data format code definitions in
-    i18npool\source\localedata\data\*.xml <b>MUST</b> have matching
+    i18npool/source/localedata/data/*.xml <b>MUST</b> have matching
     entries in the form <br/>
 
     <code>&lt;FormatElement formatindex="0"&gt;</code> <br/>
@@ -65,7 +65,7 @@ module com { module sun { module star { module i18n {
 
     <p> Date formats may have a comment of DIN/EN/ISO, meaning
         <ul>
-            <li> DIN 5008 (Deutsche Industrie Norm) </li>
+            <li> DIN 5008 (Deutsches Institut f&uuml;r Normung, formerly Deutsche Industrie-Norm) </li>
             <li> EN 28601 (European Norm) </li>
             <li> ISO 8601 (International Standards Organization) </li>
         </ul>
@@ -198,7 +198,7 @@ published constants NumberFormatIndex
     const short DATE_SYS_NNNNDMMMMYYYY      = DATE_START+12;
     /// 10-08           <br/> DIN/EN
     const short DATE_DIN_MMDD               = DATE_START+13;
-    /// 97-10-08        <br/> DIN/EN/ISO
+    /// 97-10-08        <br/> DIN/EN
     const short DATE_DIN_YYMMDD             = DATE_START+14;
     /// 1997-10-08      <br/> DIN/EN/ISO
     const short DATE_DIN_YYYYMMDD           = DATE_START+15;
