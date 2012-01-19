@@ -50,7 +50,7 @@ module com { module sun { module star { module i18n {
     <b>MUST</b> support some predefined format codes. These predefined
     format codes are accessed through indices as the following, and
     the locale data format code definitions in
-    i18npool/source/localedata/data/*.xml <b>MUST</b> have matching
+    i18npool\source\localedata\data\*.xml <b>MUST</b> have matching
     entries in the form <br/>
 
     <code>&lt;FormatElement formatindex="0"&gt;</code> <br/>
