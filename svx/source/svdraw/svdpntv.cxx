@@ -204,7 +204,7 @@ void SdrPaintView::ImpClearVars()
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
-:   mpPageView(0L),
+:   mpPageView(NULL),
     aDefaultAttr(pModel1->GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),

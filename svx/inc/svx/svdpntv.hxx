@@ -132,6 +132,7 @@ class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, p
     friend class                FrameAnimator;
     friend class                SdrGrafObj;
 
+    SdrPageView*                mpPageView;
 protected:
     SdrModel*                   pMod;
 #ifdef DBG_UTIL
@@ -145,7 +146,6 @@ protected:
     String                      aMeasureLayer; // Aktueller Layer fuer Bemassung
 
 //  Container                   aPagV;         // Liste von SdrPageViews
-    SdrPageView*                mpPageView;
 
     // All windows this view is displayed on
     SdrPaintWindowVector        maPaintWindows;

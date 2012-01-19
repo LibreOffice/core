@@ -307,21 +307,15 @@ void SdrMarkView::ClearPageView()
 void SdrMarkView::HideSdrPage()
 {
     bool bMrkChg(false);
-    //HMHbool bVis(false);
 
-    if(mpPageView)
+    SdrPageView* pPageView = GetSdrPageView();
+    if (pPageView)
     {
         // break all creation actions when hiding page (#75081#)
         BrkAction();
-        //HMHbVis = IsMarkHdlShown();
-
-        //HMHif(bVis)
-        //HMH{
-        //HMH   HideMarkHdl();
-        //HMH}
 
         // Discard all selections on this page
-        bMrkChg = GetMarkedObjectListWriteAccess().DeletePageView(*mpPageView);
+        bMrkChg = GetMarkedObjectListWriteAccess().DeletePageView(*pPageView);
     }
 
     SdrSnapView::HideSdrPage();
@@ -331,11 +325,6 @@ void SdrMarkView::HideSdrPage()
         MarkListHasChanged();
         AdjustMarkHdl();
     }
-
-    //HMHif(bVis)
-    //HMH{
-    //HMH   ShowMarkHdl();
-    //HMH}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
