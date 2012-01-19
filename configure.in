@@ -4927,7 +4927,7 @@ linux-androideabi*)
 
     case "$host_cpu" in
 
-    armel)
+    arm|armel)
         JAVA_ARCH="arm"
         JAVA_TOOLKIT="server"
         ;;
