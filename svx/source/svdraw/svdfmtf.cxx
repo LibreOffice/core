@@ -361,7 +361,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
 
         pTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode(), EE_CHAR_WLM));
         pTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
-        pTextAttr->Put(SvxColorItem(aFnt.GetColor(), EE_CHAR_COLOR));
+        pTextAttr->Put(SvxColorItem(aVD.GetTextColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
         bFntDirty=sal_False;
     }
