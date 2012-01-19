@@ -49,12 +49,6 @@ extern "C" {
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
 
-/* Compare directory items for being the same underlying file
- * this unwinds unix hard-links and symlinks etc.
- */
-
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(oslDirectory a, oslDirectory b);
-
 /*  Get the OS specific "handle" of an open file. */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
     oslFileHandle Handle,

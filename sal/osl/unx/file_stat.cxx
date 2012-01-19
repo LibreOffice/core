@@ -461,17 +461,17 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
                 pB->m_ustrFilePath->buffer, pB->m_ustrFilePath->length ) == 0)
         return sal_True;
 
-    fprintf (stderr, "We have to do an inode compare !\n");
-    /*
-    int rc = stat_c( cpFilePath, statb );
+#if defined(__GNUC__) && (__GNUC__ < 3)
+    struct ::stat a_stat, b_stat;
+#else
+    struct stat a_stat, b_stat;
+#endif
 
-        Stat.st_ino == ...
-    if (rc == -1)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
-    else
-        return osl_File_E_None;
-    */
-    return sal_False;
+    if (osl::lstat(rtl::OUString(pA->m_ustrFilePath), a_stat) != 0 ||
+        osl::lstat(rtl::OUString(pB->m_ustrFilePath), b_stat) != 0)
+        return sal_False;
+
+    return (a_stat.st_ino == b_stat.st_ino);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
