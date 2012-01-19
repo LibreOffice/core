@@ -70,7 +70,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName",		"SOFFICE\0"
-				value "LegalCopyright",		S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				value "LegalCopyright",		S_CRIGHT " Apache Software Foundation\0"
 			}
 #else
 			block "040904E4"
@@ -82,7 +82,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName", 		"SOFFICE\0"
-				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				value "LegalCopyright", 	S_CRIGHT " Apache Software Foundation\0"
 			}
 #endif
 		}

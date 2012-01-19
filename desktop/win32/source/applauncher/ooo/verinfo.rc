@@ -65,7 +65,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
 				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright",		S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				value "LegalCopyright",		S_CRIGHT " Apache Software Foundation. All rights reserved.\0"
 			}
 #else
 			block "040904E4"
@@ -77,7 +77,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
 				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				value "LegalCopyright", 	S_CRIGHT " Apache Software Foundation. All rights reserved.\0"
 			}
 #endif
 		}
