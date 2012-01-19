@@ -600,10 +600,10 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     com::sun::star::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
-        nCoordLeft  = aViewBox.X;
-        nCoordTop   = aViewBox.Y;
-        nCoordWidth = labs( aViewBox.Width );
-        nCoordHeight= labs( aViewBox.Height);
+        nCoordLeft    = aViewBox.X;
+        nCoordTop     = aViewBox.Y;
+        nCoordWidthG  = labs( aViewBox.Width );
+        nCoordHeightG = labs( aViewBox.Height);
     }
     const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
 
@@ -630,6 +630,14 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSegments );
     if ( pAny )
         *pAny >>= seqSegments;
+
+    //////////////////////
+    // Path/SubViewSize //
+    //////////////////////
+    const rtl::OUString sSubViewSize( RTL_CONSTASCII_USTRINGPARAM ( "SubViewSize" ) );
+    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSubViewSize );
+    if ( pAny )
+        *pAny >>= seqSubViewSize;
 
     ///////////////////
     // Path/StretchX //
@@ -686,14 +694,65 @@ EnhancedCustomShape2d::~EnhancedCustomShape2d()
 {
 }
 
+void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
+{
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
+
+    if ( seqSubViewSize.getLength() && nIndex < seqSubViewSize.getLength() ) {
+        nWidth = seqSubViewSize[ nIndex ].Width;
+        nHeight = seqSubViewSize[ nIndex ].Height;
+        OSL_TRACE("set subpath %d size: %d x %d", nIndex, nWidth, nHeight);
+    }
+
+    if ( nWidth && nHeight ) {
+        nCoordWidth = nWidth;
+        nCoordHeight = nHeight;
+    } else {
+        nCoordWidth = nCoordWidthG;
+        nCoordHeight = nCoordHeightG;
+    }
+
+    fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
+    fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
+    if ( bOOXMLShape )
+    {
+        OSL_TRACE("ooxml shape, path width: %d height: %d", nCoordWidth, nCoordHeight);
+        if ( nCoordWidth == 0 )
+            fXScale = 1.0;
+        if ( nCoordHeight == 0 )
+            fYScale = 1.0;
+    }
+    if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+    {
+        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
+        if ( fXRatio > 1 )
+            fXScale /= fXRatio;
+        else
+            fXRatio = 1.0;
+    }
+    else
+        fXRatio = 1.0;
+    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
+    {
+        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
+        if ( fYRatio > 1 )
+            fYScale /= fYRatio;
+        else
+            fYRatio = 1.0;
+    }
+    else
+        fYRatio = 1.0;
+}
+
 EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     SfxItemSet          ( pAObj->GetMergedItemSet() ),
     pCustomShapeObj     ( pAObj ),
     eSpType             ( mso_sptNil ),
     nCoordLeft          ( 0 ),
     nCoordTop           ( 0 ),
-    nCoordWidth         ( 21600 ),
-    nCoordHeight        ( 21600 ),
+    nCoordWidthG        ( 21600 ),
+    nCoordHeightG       ( 21600 ),
     bOOXMLShape         ( sal_False ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
@@ -754,6 +813,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
          nRotateAngle = pCustomShapeObj->GetRotateAngle();
 
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
+    SetPathSize();
+
     switch( eSpType )
     {
         case mso_sptCan :                       nColorData = 0x20400000; break;
@@ -798,39 +859,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
             break;
     }
 
-    fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
-    fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-    if ( bOOXMLShape )
-    {
-        OSL_TRACE("ooxml shape, path width: %d height: %d", nCoordWidth, nCoordHeight);
-        if ( nCoordWidth == 0 )
-            fXScale = 1.0;
-        if ( nCoordHeight == 0 )
-            fYScale = 1.0;
-    }
-    if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
-    {
-        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
-        if ( fXRatio > 1 )
-            fXScale /= fXRatio;
-        else
-            fXRatio = 1.0;
-    }
-    else
-        fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
-    {
-        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
-        if ( fYRatio > 1 )
-            fYScale /= fYRatio;
-        else
-            fYRatio = 1.0;
-    }
-    else
-        fYRatio = 1.0;
-
     sal_Int32 i, nLength = seqEquations.getLength();
-
 
     if ( nLength )
     {
@@ -1452,8 +1481,9 @@ basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, cons
 }
 
 void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
-                                                                                        const sal_Bool bLineGeometryNeededOnly,
-                                                                                        const sal_Bool bSortFilledObjectsToBack )
+                                           const sal_Bool bLineGeometryNeededOnly,
+                                           const sal_Bool bSortFilledObjectsToBack,
+                                           sal_Int32 nIndex )
 {
     sal_Bool bNoFill = sal_False;
     sal_Bool bNoStroke = sal_False;
@@ -1461,6 +1491,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     basegfx::B2DPolyPolygon aNewB2DPolyPolygon;
     basegfx::B2DPolygon aNewB2DPolygon;
+
+    SetPathSize( nIndex );
 
     sal_Int32 nCoordSize = seqCoordinates.getLength();
     sal_Int32 nSegInfoSize = seqSegments.getLength();
@@ -2132,9 +2164,12 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     std::vector< SdrPathObj* > vObjectList;
     sal_Bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
 
+    sal_Int32 nSubPathIndex = 0;
+
     while( nSegmentInd <= seqSegments.getLength() )
     {
-        CreateSubPath( nSrcPt, nSegmentInd, vObjectList, bLineGeometryNeededOnly, bSortFilledObjectsToBack );
+        CreateSubPath( nSrcPt, nSegmentInd, vObjectList, bLineGeometryNeededOnly, bSortFilledObjectsToBack, nSubPathIndex );
+        nSubPathIndex ++;
     }
 
     SdrObject* pRet = NULL;

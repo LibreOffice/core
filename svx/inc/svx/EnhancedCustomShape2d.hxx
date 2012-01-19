@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -86,6 +87,8 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         sal_Int32                   nCoordLeft;
         sal_Int32                   nCoordTop;
+        sal_Int32                   nCoordWidthG;
+        sal_Int32                   nCoordHeightG;
         sal_Int32                   nCoordWidth;
         sal_Int32                   nCoordHeight;
         Rectangle                   aLogicRect;
@@ -119,6 +122,7 @@ class EnhancedCustomShape2d : public SfxItemSet
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                          seqHandles;
+        com::sun::star::uno::Sequence< com::sun::star::awt::Size >                                      seqSubViewSize;
 
         sal_Bool                    bTextFlow       : 1;
         sal_Bool                    bFilled         : 1;
@@ -139,9 +143,12 @@ class EnhancedCustomShape2d : public SfxItemSet
                                                     const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 
         void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
-                                                                                                sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack );
+                                                   sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack,
+                                                   sal_Int32 nIndex );
         SdrObject*                  CreatePathObj( sal_Bool bLineGeometryNeededOnly );
         const sal_Int32*            ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
+
+        void                        SetPathSize( sal_Int32 nIndex = 0 );
 
     public :
 
