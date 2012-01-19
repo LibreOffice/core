@@ -269,7 +269,7 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
     ::osl::MutexGuard aGuard( Mutex );
 
     SvMemoryStream aMem;
-    aMem << BINARYSETUPMARKER;
+    aMem << sal_uInt32(BINARYSETUPMARKER);
     aMem << GetPrinter()->GetJobSetup();
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
