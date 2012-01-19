@@ -32,6 +32,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/tokenmap.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
@@ -220,14 +221,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         awt::Size aSize;
         awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
-        if ( maPath2DList.size() )
-        {   // TODO: each polygon may have its own size, but I think it is rather been used
-            // so we are only taking care of the first
-            if ( maPath2DList[ 0 ].w )
-                aViewBox.Width = static_cast< sal_Int32 >( maPath2DList[ 0 ].w );
-            if ( maPath2DList[ 0 ].h )
-                aViewBox.Height = static_cast< sal_Int32 >( maPath2DList[ 0 ].h );
-        }
         aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
@@ -241,6 +234,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
 
         PropertyMap aPath;
+
         Sequence< EnhancedCustomShapeSegment > aSegments( maSegments.size() );
         for ( i = 0; i < maSegments.size(); i++ )
             aSegments[ i ] = maSegments[ i ];
@@ -258,11 +252,36 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         sal_uInt32 j, k, nParameterPairs = 0;
         for ( i = 0; i < maPath2DList.size(); i++ )
             nParameterPairs += maPath2DList[ i ].parameter.size();
+
         Sequence< EnhancedCustomShapeParameterPair > aParameterPairs( nParameterPairs );
         for ( i = 0, k = 0; i < maPath2DList.size(); i++ )
             for ( j = 0; j < maPath2DList[ i ].parameter.size(); j++ )
                 aParameterPairs[ k++ ] = maPath2DList[ i ].parameter[ j ];
         aPath[ PROP_Coordinates ] <<= aParameterPairs;
+
+        if ( maPath2DList.size() )
+        {
+            sal_Bool bAllZero = sal_True;
+            for ( i=0; i < maPath2DList.size(); i++ )
+            {
+                if ( maPath2DList[i].w || maPath2DList[i].h ) {
+                    bAllZero = sal_False;
+                    break;
+                }
+            }
+
+            if ( !bAllZero ) {
+                Sequence< awt::Size > aSubViewSize( maPath2DList.size() );
+                for ( i=0; i < maPath2DList.size(); i++ )
+                {
+                    aSubViewSize[i].Width = static_cast< sal_Int32 >( maPath2DList[i].w );
+                    aSubViewSize[i].Height = static_cast< sal_Int32 >( maPath2DList[i].h );
+                    OSL_TRACE("set subpath %d size: %d x %d", i, maPath2DList[i].w, maPath2DList[i].h);
+                }
+                aPath[ PROP_SubViewSize ] <<= aSubViewSize;
+            }
+        }
+
         Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
         aPropertyMap[ PROP_Path ] <<= aPathSequence;
 

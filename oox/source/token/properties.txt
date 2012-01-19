@@ -434,6 +434,7 @@ StartingAngle
 State
 StringItemList
 Subtotals
+SubViewSize
 Suffix
 SwapXAndYAxis
 Symbol
