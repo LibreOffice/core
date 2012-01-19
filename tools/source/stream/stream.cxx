@@ -69,7 +69,7 @@ inline static void SwapLong( long& r )
     {   r = SWAPLONG(r);   }
 inline static void SwapULong( sal_uInt32& r )
     {   r = SWAPLONG(r);   }
-inline static void SwapLongInt( int& r )
+inline static void SwapLongInt( sal_Int32& r )
     {   r = SWAPLONG(r);   }
 inline static void SwapLongUInt( unsigned int& r )
     {   r = SWAPLONG(r);   }
