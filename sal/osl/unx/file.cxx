@@ -892,7 +892,7 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
-oslFileError
+static oslFileError
 SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
     oslFileError eRet;

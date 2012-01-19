@@ -223,7 +223,7 @@ class StreamData
 public:
     oslFileHandle rHandle;
 
-            StreamData() { }
+    StreamData() : rHandle( 0 ) { }
 };
 
 // -----------------------------------------------------------------------
@@ -683,8 +683,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 {
     sal_uInt32 uFlags;
     oslFileHandle nHandleTmp;
-    struct stat buf;
-    sal_Bool bStatValid = sal_False;
 
     Close();
     errno = 0;
@@ -707,16 +705,22 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
 
-    if ( osl_lstatFilePath( aLocalFilename.getStr(), &buf ) == osl_File_E_None )
-      {
-        bStatValid = sal_True;
-        // SvFileStream soll kein Directory oeffnen
-        if( S_ISDIR( buf.st_mode ) )
-          {
-            SetError( ::GetSvError( EISDIR ) );
-            return;
-          }
-      }
+    rtl::OUString aFileURL;
+    osl::DirectoryItem aItem;
+    osl::FileStatus aStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
+
+    // FIXME: we really need to switch to a pure URL model ...
+    if ( osl::File::getFileURLFromSystemPath( aFilename, aFileURL ) != osl::FileBase::RC::E_None )
+        aFileURL = aFilename;
+    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) != osl::FileBase::RC::E_None &&
+                        aItem.getFileStatus( aStatus ) != osl::FileBase::RC::E_None );
+
+    // SvFileStream can't open a directory
+    if( bStatValid && aStatus.getFileType() == osl::FileStatus::Type::Directory )
+    {
+        SetError( ::GetSvError( EISDIR ) );
+        return;
+    }
 
     if ( !( nOpenMode & STREAM_WRITE ) )
         uFlags = osl_File_OpenFlag_Read;
@@ -736,44 +740,37 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
     if ( nOpenMode & STREAM_WRITE)
     {
-      if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
-          {
-          if ( bStatValid  &&  S_ISLNK( buf.st_mode ) < 0 )
+        if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
+        {
+            if ( bStatValid && aStatus.getFileType() == osl::FileStatus::Type::Link &&
+                 aStatus.getLinkTargetURL().getLength() > 0 )
             {
-              char *pBuf = new char[ 1024+1 ];
-              if ( readlink( aLocalFilename.getStr(), pBuf, 1024 ) > 0 )
+                // delete the symbolic link, and replace it with the contents of the link
+                if (osl::File::remove( aFileURL ) == osl::FileBase::RC::E_None )
                 {
-                  if (  unlink(aLocalFilename.getStr())  == 0 )
-                      {
-#ifdef DBG_UTIL
-                      fprintf( stderr,
-                               "Copying file on symbolic link (%s).\n",
-                               aLocalFilename.getStr() );
+                    File::copy( aStatus.getLinkTargetURL(), aFileURL );
+#if OSL_DEBUG_LEVEL > 0
+                    fprintf( stderr,
+                             "Removing link and replacing with file contents (%s) -> (%s).\n",
+                             rtl::OUStringToOString( aStatus.getLinkTargetURL(),
+                                                     RTL_TEXTENCODING_UTF8).getStr(),
+                             rtl::OUStringToOString( aFileURL,
+                                                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
-                      String aTmpString( pBuf, osl_getThreadTextEncoding() );
-                      const DirEntry aSourceEntry( aTmpString );
-                      const DirEntry aTargetEntry( aFilename );
-                      FileCopier aFileCopier( aSourceEntry, aTargetEntry );
-                      aFileCopier.Execute();
-                    }
                 }
-              delete [] pBuf;
             }
         }
     }
 
-    oslFileError rc = osl_openFilePath( aLocalFilename.getStr(),&nHandleTmp, uFlags );
-
+    oslFileError rc = osl_openFile( aFileURL.pData, &nHandleTmp, uFlags );
     if ( rc != osl_File_E_None )
     {
         if ( uFlags & osl_File_OpenFlag_Write )
         {
             // auf Lesen runterschalten
             uFlags &= ~osl_File_OpenFlag_Write;
-            rc = osl_openFilePath( aLocalFilename.getStr(),
-                                   &nHandleTmp,
-                                   uFlags );
-            }
+            rc = osl_openFile( aFileURL.pData, &nHandleTmp, uFlags );
+        }
     }
     if ( rc == osl_File_E_None )
     {

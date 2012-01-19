@@ -576,10 +576,10 @@ class TOOLS_DLLPUBLIC SvFileStream : public SvStream
     friend class FileCopier;
 
 private:
-    StreamData*         pInstanceData;
+    StreamData*     pInstanceData;
     String          aFilename;
     sal_uInt16      nLockCounter;
-    sal_Bool            bIsOpen;
+    sal_Bool        bIsOpen;
     sal_uInt32      GetFileHandle() const;
 
     // Forbidden and not implemented.

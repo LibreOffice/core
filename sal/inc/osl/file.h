@@ -664,6 +664,7 @@ typedef void *oslFileHandle;
 #define osl_File_OpenFlag_Write     0x00000002L
 #define osl_File_OpenFlag_Create    0x00000004L
 #define osl_File_OpenFlag_NoLock    0x00000008L
+/* larger bit-fields reserved for internal use cf. detail/file.h */
 
 /** Open a regular file.
 

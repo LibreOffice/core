@@ -49,25 +49,13 @@ extern "C" {
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
 
-/* Variant of osl_openFile that takes the file pathname directly as a
-   char*
-*/
-
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
-    const char *cpFilePath,
-    oslFileHandle *pHandle,
-    sal_uInt32 uFlags );
-
 /* Compare directory items for being the same underlying file
  * this unwinds unix hard-links and symlinks etc.
  */
 
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(oslDirectory a, oslDirectory b);
 
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_lstatFilePath( const char *cpFilePath, struct stat *statb );
-
 /*  Get the OS specific "handle" of an open file. */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
     oslFileHandle Handle,
     sal_IntPtr *piFileHandle );
