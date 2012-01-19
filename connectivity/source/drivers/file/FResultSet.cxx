@@ -1438,26 +1438,31 @@ sal_Bool OResultSet::OpenImpl()
             else
             {
                 sal_Bool bDistinct = sal_False;
-                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
-                ::std::vector<sal_Int32>                aOrderbyColumnNumberSave;
-                ::std::vector<TAscendingOrder>          aOrderbyAscendingSave;
 
+                assert(m_aOrderbyColumnNumber.size() ==
+                       m_aOrderbyAscending.size());
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT )
                 {
-                    // Sort on all columns, saving original order for later
-                    if(IsSorted())
+                    // To eliminate duplicates we need to sort on all columns.
+                    // This is not a problem because the SQL spec says that the
+                    // order of columns that are not specified in ORDER BY
+                    // clause is undefined, so it doesn't hurt to sort on
+                    // these; pad the vectors to include them.
+                    for (sal_Int32 i = 1;
+                         static_cast<size_t>(i) < m_aColMapping.size(); ++i)
                     {
-                        aOrderbyColumnNumberSave = m_aOrderbyColumnNumber;
-                        m_aOrderbyColumnNumber.clear();
-                        aOrderbyAscendingSave.assign(m_aOrderbyAscending.begin(), m_aOrderbyAscending.end());
-                        bWasSorted = sal_True;
+                        if (::std::find(m_aOrderbyColumnNumber.begin(),
+                                        m_aOrderbyColumnNumber.end(), i)
+                                == m_aOrderbyColumnNumber.end())
+                        {
+                            m_aOrderbyColumnNumber.push_back(i);
+                            m_aOrderbyAscending.push_back(
+                                    (m_aOrderbyAscending.empty())
+                                        ? SQL_ASC // default for no ORDER BY
+                                        : m_aOrderbyAscending.back());
+                        }
                     }
-
-                    // the first column is the bookmark column
-                    ::std::vector<sal_Int32>::iterator aColStart = (m_aColMapping.begin()+1);
-                    ::std::copy(aColStart, m_aColMapping.end(),::std::back_inserter(m_aOrderbyColumnNumber));
-                    m_aOrderbyAscending.assign(m_aColMapping.size()-1, SQL_ASC);
                     bDistinct = sal_True;
                 }
 
@@ -1539,23 +1544,6 @@ sal_Bool OResultSet::OpenImpl()
                         m_pFileSet->get().erase(::std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),
                                                             ::std::bind2nd(::std::equal_to<sal_Int32>(),0))
                                           ,m_pFileSet->get().end());
-
-                        if (bWasSorted)
-                        {
-                            // Re-sort on original requested order
-                            m_aOrderbyColumnNumber = aOrderbyColumnNumberSave;
-                            m_aOrderbyAscending.assign(aOrderbyAscendingSave.begin(), aOrderbyAscendingSave.end());
-
-                            TIntVector aEvaluationKeySet(m_pFileSet->get());
-                            m_pEvaluationKeySet = &aEvaluationKeySet;
-                            sortRows();
-                        }
-                        else
-                        {
-                            m_aOrderbyColumnNumber.clear();
-                            m_aOrderbyAscending.clear();
-                            ::std::sort(m_pFileSet->get().begin(),m_pFileSet->get().end());
-                        }
                     }
                 }
             }
