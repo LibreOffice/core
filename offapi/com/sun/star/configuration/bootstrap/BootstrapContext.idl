@@ -48,6 +48,8 @@ module com { module sun { module star { module configuration { module bootstrap 
     </p>
 
     @since OOo 1.1.2
+
+    @deprecated
 */
 published service BootstrapContext
 {
