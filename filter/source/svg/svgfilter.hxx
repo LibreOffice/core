@@ -143,8 +143,6 @@ public:
     sal_Bool IsUseNativeTextDecoration() const;
     sal_Bool IsUseOpacity() const;
 
-    const ::basegfx::B2DPolyPolygon* getCurClip() const;
-
 protected:
 
     virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}

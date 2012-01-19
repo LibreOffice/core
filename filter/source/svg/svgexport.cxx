@@ -392,13 +392,6 @@ sal_Bool SVGExport::IsUseOpacity() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
-const ::basegfx::B2DPolyPolygon* SVGExport::getCurClip() const
-{
-    return NULL;
-}
-
 // ------------------------
 // - ObjectRepresentation -
 // ------------------------
