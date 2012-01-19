@@ -36,13 +36,6 @@ class ResMgr;
 //.........................................................................
 namespace formula
 {
-
-#define FORMULA_RES( id )                       ResourceManager::loadString( id )
-#define FORMULA_RES_PARAM( id, ascii, replace ) ResourceManager::loadString( id, ascii, replace )
-
-#define FORMULACORE_RESSTRING( id ) FORMULA_RES( id )
-        // (compatibility)
-
     //==================================================================
     //= ResourceManager
     //= handling ressources within the FORMULA-Core library
