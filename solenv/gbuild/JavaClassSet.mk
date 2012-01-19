@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
+gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS)
 gb_JavaClassSet_JAVACDEBUG :=
 
 ifneq ($(gb_DEBUGLEVEL),0)
