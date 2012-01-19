@@ -271,6 +271,9 @@ PROFILE=
 DBGUTIL=
 dbgutil=
 
+ZIPDEP:="zipdep.pl"
+
+
 # ===========================================================================
 # unter NT werden Variablennamen an untergeordnete makefiles UPPERCASE
 # weitergereicht, aber case significant ausgewertet!
@@ -563,7 +566,7 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
 $(posix_PWD)/$(OUT)/inc/%world.mk :
-    @$(MKOUT) $(ROUT)
+    @mkout.pl $(ROUT)
     @echo $(EMQ)# > $@
 
 .INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk

@@ -191,7 +191,7 @@
     my $verbose = 0;
 
     my @modules_built = ();
-    my $deliver_command = $ENV{DELIVER};
+    my $deliver_command = "deliver.pl";
     my %prj_platform = ();
     my $check_error_string = '';
     my $dmake = '';
@@ -1512,7 +1512,7 @@ sub cancel_build {
     print STDERR "\n";
     print STDERR "" . $ENV{'OOO_SHELL'} . "\n";
     print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
-    print STDERR "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
+    print STDERR "source ./build_env\n";
     print STDERR "cd $module\n";
     if ($source_config->is_gbuild($module) )
     {

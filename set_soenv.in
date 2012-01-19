@@ -646,9 +646,6 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
 }
 
-ToFile( "DELIVER",       "deliver.pl",     "e" );
-ToFile( "MKOUT",         "mkout.pl",       "e" );
-ToFile( "ZIPDEP",        "zipdep.pl",      "e" );
 
 #
 # Writing the aliases to file.
@@ -666,7 +663,6 @@ if ($platform =~ m/solaris|darwin|freebsd/)
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
 }
 
-ToFile( "ENV_SCRIPT", "$outfile", "e" );
 #
 # Writing unset variables you might not need to file.
 #
