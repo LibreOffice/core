@@ -576,7 +576,7 @@ HierarchyDataSource::getConfigProvider()
 bool HierarchyDataSource::createConfigPath(
                 const rtl::OUString & rInPath, rtl::OUString & rOutPath )
 {
-    if ( rInPath.getLength() )
+    if ( !rInPath.isEmpty() )
     {
         if ( rInPath.indexOf( '/' ) == 0 )
         {

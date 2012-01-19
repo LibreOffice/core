@@ -150,7 +150,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aURL;
-        if ( aId.getLength() )
+        if ( !aId.isEmpty() )
         {
             // Already cached.
             return aId;
@@ -184,7 +184,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     }
 
     rtl::OUString aId = queryContentIdentifierString( nIndex );
-    if ( aId.getLength() )
+    if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
@@ -269,7 +269,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             rtl::OUString aName = xNamed->getName();
 
-            if ( !aName.getLength() )
+            if ( aName.isEmpty() )
             {
                 OSL_FAIL( "DataSupplier::getResult - Empty name!" );
                 break;
@@ -347,7 +347,7 @@ sal_uInt32 DataSupplier::totalCount()
 
             rtl::OUString aName = xNamed->getName();
 
-            if ( !aName.getLength() )
+            if ( aName.isEmpty() )
             {
                 OSL_FAIL( "DataSupplier::getResult - Empty name!" );
                 break;

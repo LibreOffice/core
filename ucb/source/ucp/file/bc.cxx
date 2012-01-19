@@ -645,7 +645,7 @@ BaseContent::createNewContent(
     throw( RuntimeException )
 {
     // Check type.
-    if ( !Info.Type.getLength() )
+    if ( Info.Type.isEmpty() )
         return Reference< XContent >();
 
     sal_Bool bFolder
@@ -899,7 +899,7 @@ BaseContent::setPropertyValues(
                         rtl::OUStringBuffer aBuf(
                             m_aUncPath.copy( 0, nLastSlash + 1 ) );
 
-                        if ( NewTitle.getLength() > 0 )
+                        if ( !NewTitle.isEmpty() )
                         {
                             aBuf.append( NewTitle );
                             if ( bTrailingSlash )
@@ -914,7 +914,7 @@ BaseContent::setPropertyValues(
                     }
                     else
                     {
-                        if ( NewTitle.getLength() > 0 )
+                        if ( !NewTitle.isEmpty() )
                         {
                             // Initial Title before "insert".
                             // m_aUncPath contains parent's URI.
@@ -952,7 +952,7 @@ BaseContent::setPropertyValues(
                 ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
                 break;
             }
-            else if( ! NewTitle.getLength() )
+            else if( NewTitle.isEmpty() )
             {
                 ret[i] <<= lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
                 break;
@@ -1113,7 +1113,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     // Determine the new title !
     rtl::OUString NewTitle;
-    if( aTransferInfo.NewTitle.getLength() )
+    if( !aTransferInfo.NewTitle.isEmpty() )
         NewTitle = rtl::Uri::encode( aTransferInfo.NewTitle,
                                      rtl_UriCharClassPchar,
                                      rtl_UriEncodeIgnoreEscapes,
@@ -1249,7 +1249,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
             m_pMyShell->handleTask( nMyCommandIdentifier,aReq );
             if(  aRequestImpl->aborted() ||
-                 !aRequestImpl->newName().getLength() )
+                 aRequestImpl->newName().isEmpty() )
                 // means aborting
                 break;
 

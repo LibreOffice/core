@@ -132,7 +132,7 @@ Content* Content::create(
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
 {
-    if ( !Info.Type.getLength() )
+    if ( Info.Type.isEmpty() )
         return 0;
 
     if ( !Info.Type.equalsAsciiL(
@@ -739,7 +739,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !Info.Type.getLength() )
+        if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
         sal_Bool bCreateFolder =
@@ -765,7 +765,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
-        OSL_ENSURE( aURL.getLength() > 0,
+        OSL_ENSURE( !aURL.isEmpty(),
                     "Content::createNewContent - empty identifier!" );
 
         if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
@@ -1275,7 +1275,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if ( rValue.Value >>= aNewValue )
                 {
                     // No empty titles!
-                    if ( aNewValue.getLength() > 0 )
+                    if ( !aNewValue.isEmpty() )
                     {
                         if ( aNewValue != m_aProps.getTitle() )
                         {
@@ -1439,7 +1439,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     }
 
-    if ( aOldTitle.getLength() )
+    if ( !aOldTitle.isEmpty() )
     {
         aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aEvent.OldValue     = uno::makeAny( aOldTitle );
@@ -1708,7 +1708,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     {
         // Required: Title
 
-        if ( m_aProps.getTitle().getLength() == 0 )
+        if ( m_aProps.getTitle().isEmpty() )
             m_aProps.setTitle( aUri.getDecodedName() );
     }
     else // stream
@@ -1727,7 +1727,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 
         // Required: Title
 
-        if ( m_aProps.getTitle().getLength() == 0 )
+        if ( m_aProps.getTitle().isEmpty() )
             m_aProps.setTitle( aUri.getDecodedName() );
     }
 
@@ -2169,7 +2169,7 @@ void Content::transfer(
     // Copy data.
     /////////////////////////////////////////////////////////////////////////
 
-    rtl::OUString aNewName( rInfo.NewTitle.getLength() > 0
+    rtl::OUString aNewName( !rInfo.NewTitle.isEmpty()
                                 ? rInfo.NewTitle
                                 : aSourceUri.getDecodedName() );
 
@@ -2201,7 +2201,7 @@ void Content::transfer(
     if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
         aTargetUri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-    if ( rInfo.NewTitle.getLength() > 0 )
+    if ( !rInfo.NewTitle.isEmpty() )
         aTargetUri += ::ucb_impl::urihelper::encodeSegment( rInfo.NewTitle );
     else
         aTargetUri += aSourceUri.getName();

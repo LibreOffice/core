@@ -120,7 +120,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         ::rtl::OUString lcl_compose( const ::rtl::OUString& i_rBaseURL, const ::rtl::OUString& i_rRelativeURL )
         {
-            ENSURE_OR_RETURN( i_rBaseURL.getLength(), "illegal base URL", i_rRelativeURL );
+            ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
 
             ::rtl::OUStringBuffer aComposer( i_rBaseURL );
             if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
@@ -216,7 +216,7 @@ namespace ucb { namespace ucp { namespace ext
         if ( i_nIndex < m_pImpl->m_aResults.size() )
         {
             const ::rtl::OUString sId = m_pImpl->m_aResults[ i_nIndex ].sId;
-            if ( sId.getLength() )
+            if ( !sId.isEmpty() )
                 return sId;
         }
 
@@ -237,7 +237,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         ::rtl::OUString sId = queryContentIdentifierString( i_nIndex );
-        if ( sId.getLength() )
+        if ( !sId.isEmpty() )
         {
             Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( sId );
             m_pImpl->m_aResults[ i_nIndex ].xId = xId;
@@ -329,7 +329,7 @@ namespace ucb { namespace ucp { namespace ext
             const ::rtl::OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
             const ::rtl::OUString sRootURL( ContentProvider::getRootURL() );
             ::rtl::OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
-            if ( ( sTitle.getLength() > 0 ) && ( sTitle[ sTitle.getLength() - 1 ] == '/' ) )
+            if ( !sTitle.isEmpty() && ( sTitle[ sTitle.getLength() - 1 ] == '/' ) )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
             xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xSMgr, getResultSet()->getProperties(), sTitle );
         }

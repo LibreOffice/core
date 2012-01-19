@@ -737,7 +737,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
 //    if ( m_bTransient )
 //   @@@ ???
 
-    if ( !Name.getLength() )
+    if ( Name.isEmpty() )
         throw lang::IllegalArgumentException();
 
     // Check property type.
@@ -994,7 +994,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !Info.Type.getLength() )
+    if ( Info.Type.isEmpty() )
         return uno::Reference< ucb::XContent >();
 
     if ( ( !Info.Type.equalsAsciiL(
@@ -1006,7 +1006,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
-    OSL_ENSURE( aURL.getLength() > 0,
+    OSL_ENSURE( !aURL.isEmpty(),
                 "WebdavContent::createNewContent - empty identifier!" );
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
@@ -1584,7 +1584,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( rValue.Value >>= aNewValue )
             {
                 // No empty titles!
-                if ( aNewValue.getLength() > 0 )
+                if ( !aNewValue.isEmpty() )
                 {
                     try
                     {
@@ -1881,7 +1881,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     }
 
-    if ( aNewTitle.getLength() )
+    if ( !aNewTitle.isEmpty() )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2258,7 +2258,7 @@ void Content::insert(
 
     // Check, if all required properties are present.
 
-    if ( aEscapedTitle.getLength() == 0 )
+    if ( aEscapedTitle.isEmpty() )
     {
         OSL_FAIL( "Content::insert - Title missing!" );
 
@@ -2564,7 +2564,7 @@ void Content::transfer(
 
         // Check for same host
         //
-        if ( sourceURI.GetHost().getLength() &&
+        if ( !sourceURI.GetHost().isEmpty() &&
              ( sourceURI.GetHost() != targetURI.GetHost() ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -2578,7 +2578,7 @@ void Content::transfer(
 
         rtl::OUString aTitle = rArgs.NewTitle;
 
-        if ( !aTitle.getLength() )
+        if ( aTitle.isEmpty() )
             aTitle = sourceURI.GetPathBaseNameUnescaped();
 
         if ( aTitle.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "/" ) ) )
@@ -3169,7 +3169,7 @@ Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
         m_xCachedProps->getValue( rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM(
                                         "Content-Location" ) ) ) >>= aLocation;
-        if ( aLocation.getLength() )
+        if ( !aLocation.isEmpty() )
         {
             try
             {

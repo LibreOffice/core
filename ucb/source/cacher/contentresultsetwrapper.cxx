@@ -585,7 +585,7 @@ void SAL_CALL ContentResultSetWrapper
         throw UnknownPropertyException();
     }
 
-    if( aPropertyName.getLength() )
+    if( !aPropertyName.isEmpty() )
     {
         m_xPropertySetInfo->getPropertyByName( aPropertyName );
         //throws UnknownPropertyException, if so
@@ -636,7 +636,7 @@ void SAL_CALL ContentResultSetWrapper
         OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
-    if( rPropertyName.getLength() )
+    if( !rPropertyName.isEmpty() )
     {
         m_xPropertySetInfo->getPropertyByName( rPropertyName );
         //throws UnknownPropertyException, if so
@@ -693,7 +693,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !pContainer )
     {
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             if( !getPropertySetInfo().is() )
                 throw UnknownPropertyException();
@@ -752,7 +752,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !pContainer )
     {
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             if( !getPropertySetInfo().is() )
                 throw UnknownPropertyException();

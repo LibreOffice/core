@@ -127,7 +127,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         void lcl_ensureAndTransfer( ::rtl::OUString& io_rIdentifierFragment, ::rtl::OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
         {
-            if ( ( io_rIdentifierFragment.getLength() == 0 ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
+            if ( ( io_rIdentifierFragment.isEmpty() ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
                 throw IllegalIdentifierException();
             io_rIdentifierFragment = io_rIdentifierFragment.copy( 1 );
             o_rNormalization.append( i_nLeadingChar );
@@ -158,7 +158,7 @@ namespace ucb { namespace ucp { namespace ext
         lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
 
         // the normalized form requires one additional /, but we also accept identifiers which don't have it
-        if ( sRemaining.getLength() == 0 )
+        if ( sRemaining.isEmpty() )
         {
             // the root content is a special case, it requires ///
             aComposer.appendAscii( "//" );
@@ -174,7 +174,7 @@ namespace ucb { namespace ucp { namespace ext
             {
                 lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
                 // by now, we moved "vnd.sun.star.extension://" from the URL to aComposer
-                if ( sRemaining.getLength() == 0 )
+                if ( sRemaining.isEmpty() )
                 {
                     // again, it's the root content, but one / is missing
                     aComposer.append( sal_Unicode( '/' ) );

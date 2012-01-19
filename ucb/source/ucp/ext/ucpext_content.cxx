@@ -118,7 +118,7 @@ namespace ucb { namespace ucp { namespace ext
         //--------------------------------------------------------------------------------------------------------------
         ::rtl::OUString lcl_compose( const ::rtl::OUString& i_rBaseURL, const ::rtl::OUString& i_rRelativeURL )
         {
-            ENSURE_OR_RETURN( i_rBaseURL.getLength(), "illegal base URL", i_rRelativeURL );
+            ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
 
             ::rtl::OUStringBuffer aComposer( i_rBaseURL );
             if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
@@ -368,7 +368,7 @@ namespace ucb { namespace ucp { namespace ext
             sRelativeURL = sRelativeURL.copy( sSeparatedExtensionId.getLength() );
 
             // cut the final slash (if any)
-            ENSURE_OR_BREAK( sRelativeURL.getLength(), "illegal URL structure - ExtensionContent should have a level below the extension ID" );
+            ENSURE_OR_BREAK( !sRelativeURL.isEmpty(), "illegal URL structure - ExtensionContent should have a level below the extension ID" );
             if ( sRelativeURL.getStr()[ sRelativeURL.getLength() - 1 ] == '/' )
                 sRelativeURL = sRelativeURL.copy( 0, sRelativeURL.getLength() - 1 );
 
@@ -470,7 +470,7 @@ namespace ucb { namespace ucp { namespace ext
             aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
         const ::rtl::OUString sPackageLocation( xPackageInfo->getPackageLocation( m_sExtensionId ) );
 
-        if ( m_sPathIntoExtension.getLength() == 0 )
+        if ( m_sPathIntoExtension.isEmpty() )
             return sPackageLocation;
         return lcl_compose( sPackageLocation, m_sPathIntoExtension );
     }

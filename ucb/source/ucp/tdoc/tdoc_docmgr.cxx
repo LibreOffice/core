@@ -170,7 +170,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
     }
 
-    if ( aId.getLength() == 0 )
+    if ( aId.isEmpty() )
     {
         // fallback: generate UID from document's this pointer.
         // normalize the interface pointer first. Else, calls with different
@@ -181,7 +181,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         aId = rtl::OUString::valueOf( nId );
     }
 
-    OSL_ENSURE( aId.getLength() > 0, "getDocumentId - Empty id!" );
+    OSL_ENSURE( !aId.isEmpty(), "getDocumentId - Empty id!" );
     return aId;
 }
 
@@ -741,7 +741,7 @@ bool OfficeDocumentsManager::isBasicIDE(
             OSL_FAIL( "Caught UnknownModuleException!" );
         }
 
-        if ( aModule.getLength() > 0 )
+        if ( !aModule.isEmpty() )
         {
             // Filter unwanted items, that are no real documents.
             if ( aModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(

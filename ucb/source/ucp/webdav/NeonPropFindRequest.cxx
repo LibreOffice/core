@@ -137,7 +137,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
         {
             OString aValue( value );
             aValue = aValue.trim(); // #107358# remove leading/trailing spaces
-            if ( aValue.getLength() )
+            if ( !aValue.isEmpty() )
             {
                 aValue = stripDavNamespace( aValue ).toAsciiLowerCase();
                 if ( aValue.compareTo(

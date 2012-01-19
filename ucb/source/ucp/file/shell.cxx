@@ -2090,7 +2090,7 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 {
     rtl::OUString aPath;
 
-    if ( rUnqPath.getLength() < 1 )
+    if ( rUnqPath.isEmpty() )
         return sal_False;
 
     if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )

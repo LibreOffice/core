@@ -117,7 +117,7 @@ inline sal_Bool Uri::isRoot() const
 inline sal_Bool Uri::isDocument() const
 {
     init();
-    return ( ( m_aDocId.getLength() > 0 ) /* not root */
+    return ( ( !m_aDocId.isEmpty() ) /* not root */
              && ( m_aPath.copy( m_aDocId.getLength() + 1 ).getLength() < 2 ) );
 }
 

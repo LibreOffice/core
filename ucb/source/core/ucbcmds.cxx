@@ -342,7 +342,7 @@ rtl::OUString createDesiredName(
     const rtl::OUString & rSourceURL, const rtl::OUString & rNewTitle )
 {
     rtl::OUString aName( rNewTitle );
-    if ( aName.getLength() == 0 )
+    if ( aName.isEmpty() )
     {
         // calculate name using source URL
 
@@ -830,7 +830,7 @@ void transferProperties(
     uno::Sequence< beans::PropertyValue > aPropValues(
                                                 aAllProps.getLength() + 2 );
 
-    sal_Bool bHasTitle = ( rContext.aArg.NewTitle.getLength() == 0 );
+    sal_Bool bHasTitle = rContext.aArg.NewTitle.isEmpty();
     sal_Bool bHasTargetURL = ( rContext.aArg.Operation
                                 != ucb::TransferCommandOperation_LINK );
 
@@ -887,7 +887,7 @@ void transferProperties(
     }
 
     // Title needed, but not set yet?
-    if ( !bHasTitle && ( rContext.aArg.NewTitle.getLength() > 0 ) )
+    if ( !bHasTitle && !rContext.aArg.NewTitle.isEmpty() )
     {
         aPropValues[ nWritePos ].Name
             = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
@@ -1105,7 +1105,7 @@ void handleNameClashRename(
     }
 
     rtl::OUString aOldTitle = xRow->getString( 1 );
-    if ( !aOldTitle.getLength() )
+    if ( aOldTitle.isEmpty() )
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
@@ -1274,7 +1274,7 @@ void globalTransfer_(
     }
 
     // TargetURL: property is optional.
-    sal_Bool bSourceIsLink = ( xSourceProps->getString( 3 ).getLength() > 0 );
+    sal_Bool bSourceIsLink = !xSourceProps->getString( 3 ).isEmpty();
 
     //////////////////////////////////////////////////////////////////////
     //
@@ -2047,11 +2047,11 @@ void UniversalContentBroker::globalTransfer(
     TransferCommandContext aTransferCtx(
         m_xSMgr, this, xLocalEnv, xEnv, rArg );
 
-    if ( rArg.NewTitle.getLength() == 0 )
+    if ( rArg.NewTitle.isEmpty() )
     {
         // BaseURI: property is optional.
         rtl::OUString aBaseURI( xRow->getString( 4 ) );
-        if ( aBaseURI.getLength() )
+        if ( !aBaseURI.isEmpty() )
         {
             aTransferCtx.aArg.NewTitle
                 = createDesiredName( aBaseURI, rtl::OUString() );

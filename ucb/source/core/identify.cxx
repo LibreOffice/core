@@ -99,7 +99,7 @@ OUString SAL_CALL ContentIdentifier::getContentIdentifier()
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     throw( RuntimeException )
 {
-    if ( !m_aProviderScheme.getLength() && m_aContentId.getLength() )
+    if ( m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty() )
     {
         // The content provider scheme is the part before the first ':'
         // within the content id.

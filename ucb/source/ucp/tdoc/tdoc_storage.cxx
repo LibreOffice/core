@@ -648,7 +648,7 @@ StorageElementFactory::queryStream(
     // No object re-usage mechanism; streams are seekable => not stateless.
 
     uno::Reference< io::XStream > xStream;
-    if ( rPassword.getLength() > 0 )
+    if ( !rPassword.isEmpty() )
     {
         if ( eMode == READ )
         {

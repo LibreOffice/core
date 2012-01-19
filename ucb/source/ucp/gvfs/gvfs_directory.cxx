@@ -162,7 +162,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( nIndex < m_pImpl->m_aResults.size() ) {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
-        if ( aId.getLength() ) // cached
+        if ( !aId.isEmpty() ) // cached
             return aId;
     }
 
@@ -200,7 +200,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     }
 
     rtl::OUString aId = queryContentIdentifierString( nIndex );
-    if ( aId.getLength() ) {
+    if ( !aId.isEmpty() ) {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;

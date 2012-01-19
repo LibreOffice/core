@@ -94,7 +94,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( false )
 {
-    OSL_ENSURE( rResource.uri.getLength(),
+    OSL_ENSURE( !rResource.uri.isEmpty(),
                 "ContentProperties ctor - Empty resource URI!" );
 
     // Title

@@ -806,7 +806,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) ) {
             if ( rValue.Value >>= aNewTitle ) {
-                if ( aNewTitle.getLength() <= 0 )
+                if ( aNewTitle.isEmpty() )
                     aRet[ n ] <<= lang::IllegalArgumentException
                         ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty title not allowed!")),
                           static_cast< cppu::OWeakObject * >( this ), -1 );
@@ -1592,18 +1592,18 @@ extern "C" {
         {
             aDomain = GnomeToOUString( in->domain );
             eDomain = ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY;
-            if (!aDomain.getLength())
+            if (aDomain.isEmpty())
                 aDomain = GnomeToOUString( in->default_domain );
         }
         else // no underlying capability to display realm otherwise
             eDomain = ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
         aUserName = GnomeToOUString( in->username );
-        if (!aUserName.getLength())
+        if (aUserName.isEmpty())
             aUserName = GnomeToOUString( in->default_user );
         eUserName = (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_USERNAME) ?
             ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY :
-                (aUserName.getLength() ?
+                (!aUserName.isEmpty() ?
                     ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED :
                     ucbhelper::SimpleAuthenticationRequest::ENTITY_NA);
 
@@ -1646,13 +1646,13 @@ extern "C" {
                 ::rtl::OUString aNewDomain, aNewUserName, aNewPassword;
 
                 aNewUserName = xSupp->getUserName();
-                if ( aNewUserName.getLength() )
+                if ( !aNewUserName.isEmpty() )
                     aUserName = aNewUserName;
                 aNewDomain = xSupp->getRealm();
-                if ( aNewDomain.getLength() )
+                if ( !aNewDomain.isEmpty() )
                     aDomain = aNewDomain;
                 aNewPassword = xSupp->getPassword();
-                if ( aNewPassword.getLength() )
+                if ( !aNewPassword.isEmpty() )
                     aPassword = aNewPassword;
 
                 {

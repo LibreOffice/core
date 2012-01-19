@@ -123,7 +123,7 @@ NeonUri::NeonUri( const ne_uri * inUri )
 NeonUri::NeonUri( const rtl::OUString & inUri )
     throw ( DAVException )
 {
-    if ( inUri.getLength() <= 0 )
+    if ( inUri.isEmpty() )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     // #i77023#
@@ -197,7 +197,7 @@ void NeonUri::calculateURI ()
 {
     rtl::OUStringBuffer aBuf( mScheme );
     aBuf.appendAscii( "://" );
-    if ( mUserInfo.getLength() > 0 )
+    if ( !mUserInfo.isEmpty() )
     {
         //TODO! differentiate between empty and missing userinfo
         aBuf.append( mUserInfo );

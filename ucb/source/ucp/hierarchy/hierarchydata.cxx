@@ -217,7 +217,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             // installation, the path to the office installtion directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
-            if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+            if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty()  )
                 aValue = m_xOfficeInstDirs->makeAbsoluteURL( aValue );
             rData.setTargetURL( aValue );
 
@@ -434,7 +434,7 @@ sal_Bool HierarchyEntry::setData(
                     // directory must never be stored directly. Use a
                     // placeholder instead.
                     rtl::OUString aValue( rData.getTargetURL() );
-                    if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+                    if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
                         aValue
                             = m_xOfficeInstDirs->makeRelocatableURL( aValue );
 
@@ -755,7 +755,7 @@ sal_Bool HierarchyEntry::move(
         // directory must never be stored directly. Use a placeholder
         // instead.
         rtl::OUString aValue( rData.getTargetURL() );
-        if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+        if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
@@ -936,7 +936,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
             {
                 uno::Reference< container::XNameAccess > xNameAccess;
 
-                if ( m_aPath.getLength() > 0 )
+                if ( !m_aPath.isEmpty() )
                 {
                     rtl::OUString aPath = m_aPath;
                     aPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Children"));
@@ -1162,7 +1162,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             // installation, the path to the office installtion directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
-            if ( m_pImpl->officeDirs.is() && ( aValue.getLength() > 0 ) )
+            if ( m_pImpl->officeDirs.is() && !aValue.isEmpty() )
                 aValue = m_pImpl->officeDirs->makeAbsoluteURL( aValue );
             m_pImpl->entry.setTargetURL( aValue );
 

@@ -558,7 +558,7 @@ Property SAL_CALL CCRS_PropertySetInfo
     ::getPropertyByName( const OUString& aName )
         throw( UnknownPropertyException, RuntimeException )
 {
-    if ( !aName.getLength() )
+    if ( aName.isEmpty() )
         throw UnknownPropertyException();
 
     Property aProp;

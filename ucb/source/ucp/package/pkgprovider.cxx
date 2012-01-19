@@ -247,7 +247,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !rName.getLength() )
+    if ( rName.isEmpty() )
     {
         OSL_FAIL( "ContentProvider::createPackage - Invalid URL!" );
         return uno::Reference< container::XHierarchicalNameAccess >();

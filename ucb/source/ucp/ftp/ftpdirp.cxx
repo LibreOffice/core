@@ -599,7 +599,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
             if (*p != '.' || p == pFileName || p - pFileName > 39)
             {
-                if (aFirstLineName.getLength())
+                if (!aFirstLineName.isEmpty())
                     continue;
                 else
                     return sal_False;
@@ -615,7 +615,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
             if (*p != ';' || p == pFileName || p - pFileName > 39)
             {
-                if (aFirstLineName.getLength())
+                if (!aFirstLineName.isEmpty())
                     continue;
                 else
                     return sal_False;
@@ -640,7 +640,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
             // Skip <version> part:
             if (*p < '1' || *p > '9')
             {
-                if (aFirstLineName.getLength())
+                if (!aFirstLineName.isEmpty())
                     continue;
                 else
                     return sal_False;
@@ -660,7 +660,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
             {
                 if (!bLWS)
                 {
-                    if (aFirstLineName.getLength())
+                    if (!aFirstLineName.isEmpty())
                         continue;
                     else
                         return sal_False;

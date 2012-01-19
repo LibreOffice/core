@@ -172,7 +172,7 @@ ContentProvider::createDocumentContent(
     if ( m_xDocsMgr.is() )
     {
         rtl::OUString aDocId = m_xDocsMgr->queryDocumentId( Model );
-        if ( aDocId.getLength() > 0 )
+        if ( !aDocId.isEmpty() )
         {
             rtl::OUStringBuffer aBuffer;
             aBuffer.appendAscii( TDOC_URL_SCHEME ":/" );
@@ -603,7 +603,7 @@ ContentProvider::queryStorageTitle( const rtl::OUString & rUri ) const
         aTitle = aUri.getDecodedName();
     }
 
-    OSL_ENSURE( ( aTitle.getLength() > 0 ) || aUri.isRoot(),
+    OSL_ENSURE( !aTitle.isEmpty() || aUri.isRoot(),
                 "ContentProvider::queryStorageTitle - empty title!" );
     return aTitle;
 }

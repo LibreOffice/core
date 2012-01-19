@@ -828,7 +828,7 @@ bool UniversalContentBroker::getContentProviderData(
             const OUString & rKey2,
             ContentProviderDataList & rListToFill )
 {
-    if ( !m_xSMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
+    if ( !m_xSMgr.is() || rKey1.isEmpty() || rKey2.isEmpty() )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - Invalid argument!" );
         return false;

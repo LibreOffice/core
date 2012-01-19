@@ -302,7 +302,7 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         {
             NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
             rtl::OUString aUserInfo( uri.GetUserInfo() );
-            if ( aUserInfo.getLength() )
+            if ( !aUserInfo.isEmpty() )
             {
                 sal_Int32 nPos = aUserInfo.indexOf( '@' );
                 if ( nPos == -1 )
@@ -577,7 +577,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
         RequestDataMap::const_iterator it = pRequestData->find( req );
         if ( it != pRequestData->end() )
         {
-            if ( (*it).second.aContentType.getLength() )
+            if ( !(*it).second.aContentType.isEmpty() )
             {
                 char * pData = headers->data;
                 if ( strstr( pData, "Content-Type:" ) == NULL )
@@ -590,7 +590,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                 }
             }
 
-            if ( (*it).second.aReferer.getLength() )
+            if ( !(*it).second.aReferer.isEmpty() )
             {
                 char * pData = headers->data;
                 if ( strstr( pData, "Referer:" ) == NULL )
@@ -825,7 +825,7 @@ void NeonSession::Init()
         ne_hook_destroy_session( m_pHttpSession, destroy_sess_hook_fn, this );
 #endif
 
-        if ( m_aProxyName.getLength() )
+        if ( !m_aProxyName.isEmpty() )
         {
             ne_session_proxy( m_pHttpSession,
                               rtl::OUStringToOString(
@@ -878,7 +878,7 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri,
 sal_Bool NeonSession::UsesProxy()
 {
     Init();
-    return ( m_aProxyName.getLength() > 0 );
+    return  !m_aProxyName.isEmpty() ;
 }
 
 // -------------------------------------------------------------------
@@ -2026,7 +2026,7 @@ int NeonSession::POST( ne_session * sess,
 
     RequestDataMap * pData = 0;
 
-    if ( rContentType.getLength() || rReferer.getLength() )
+    if ( !rContentType.isEmpty() || !rReferer.isEmpty() )
     {
         // Remember contenttype and referer. Data will be added to HTTP request
         // header in in 'PreSendRequest' callback.

@@ -414,7 +414,7 @@ ResultSetBase::queryContentIdentifier(
     {
         if(!m_aIdents[m_nRow].is()) {
             rtl::OUString url = queryContentIdentifierString();
-            if(url.getLength() )
+            if(!url.isEmpty() )
                 m_aIdents[m_nRow] =
                     uno::Reference< ucb::XContentIdentifier >(
                         new ::ucbhelper::ContentIdentifier(m_xMSF,url) );

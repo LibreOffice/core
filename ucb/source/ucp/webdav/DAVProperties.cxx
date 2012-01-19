@@ -120,7 +120,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
     rtl::OUString aName
         = rtl::OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
 
-    if ( !aNameSpace.getLength() )
+    if ( aNameSpace.isEmpty() )
     {
         // Some servers send XML without proper namespaces. Assume "DAV:"
         // in this case, if name is a well-known dav property name.

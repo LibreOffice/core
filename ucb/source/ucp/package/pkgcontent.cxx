@@ -219,7 +219,7 @@ Content* Content::create(
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
 {
-    if ( !Info.Type.getLength() )
+    if ( Info.Type.isEmpty() )
         return 0;
 
     PackageUri aURI( Identifier->getContentIdentifier() );
@@ -762,7 +762,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !Info.Type.getLength() )
+        if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
         if ( !Info.Type.equalsIgnoreAsciiCase(
@@ -1178,7 +1178,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if ( rValue.Value >>= aNewValue )
                 {
                     // No empty titles!
-                    if ( aNewValue.getLength() > 0 )
+                    if ( !aNewValue.isEmpty() )
                     {
                         if ( aNewValue != m_aProps.aTitle )
                         {
@@ -1464,7 +1464,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     }
 
-    if ( aNewTitle.getLength() )
+    if ( !aNewTitle.isEmpty() )
     {
         aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aEvent.OldValue     = uno::makeAny( m_aProps.aTitle );
@@ -1678,7 +1678,7 @@ void Content::insert(
     {
         // Required: Title
 
-        if ( !m_aProps.aTitle.getLength() )
+        if ( m_aProps.aTitle.isEmpty() )
             m_aProps.aTitle = m_aUri.getName();
     }
     else
@@ -1697,7 +1697,7 @@ void Content::insert(
 
         // Required: Title
 
-        if ( !m_aProps.aTitle.getLength() )
+        if ( m_aProps.aTitle.isEmpty() )
             m_aProps.aTitle = m_aUri.getName();
     }
 
@@ -1893,7 +1893,7 @@ void Content::transfer(
     }
 
     // Is source a package content?
-    if ( ( rInfo.SourceURL.getLength() == 0 ) ||
+    if ( ( rInfo.SourceURL.isEmpty() ) ||
          ( rInfo.SourceURL.compareTo(
             m_aUri.getUri(), PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
     {
@@ -2016,7 +2016,7 @@ void Content::transfer(
 
     if ( nCount )
     {
-        sal_Bool bHadTitle = ( rInfo.NewTitle.getLength() == 0 );
+        sal_Bool bHadTitle = rInfo.NewTitle.isEmpty();
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow
@@ -2105,7 +2105,7 @@ void Content::transfer(
 
                     rtl::OUString aName = xNamed->getName();
 
-                    if ( !aName.getLength() )
+                    if ( aName.isEmpty() )
                     {
                         OSL_FAIL( "Content::transfer - Empty name!" );
                         break;

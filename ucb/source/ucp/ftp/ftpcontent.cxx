@@ -898,7 +898,7 @@ Sequence<Any> FTPContent::setPropertyValues(
             if(!(seqPropVal[i].Value >>= Title)) {
                 ret[i] <<= IllegalTypeException();
                 continue;
-            } else if(!Title.getLength()) {
+            } else if(Title.isEmpty()) {
                 ret[i] <<= IllegalArgumentException();
                 continue;
             }

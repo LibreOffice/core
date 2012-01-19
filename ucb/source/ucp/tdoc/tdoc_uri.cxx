@@ -120,7 +120,7 @@ void Uri::init() const
                 m_aDocId = m_aPath.copy( 1, nSlash - 1 );
         }
 
-        if ( m_aDocId.getLength() > 0 )
+        if ( !m_aDocId.isEmpty() )
         {
             sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
             if ( nSlash != - 1 )

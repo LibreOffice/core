@@ -49,7 +49,7 @@ namespace cmis
 
         // Split the query into bits and locate the repo-id key
         rtl::OUString query = url.GetParam( );
-        while ( query.getLength() > 0 )
+        while ( !query.isEmpty() )
         {
             sal_Int32 nPos = query.indexOfAsciiL( "&", 1 );
             rtl::OUString segment;

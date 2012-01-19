@@ -186,13 +186,13 @@ void FTPURL::parse(const rtl::OUString& url)
         l = aExpr.indexOf(sal_Unicode(':'));
         if(l != -1) {
             aPassword = aExpr.copy(1+l);
-            if(aPassword.getLength())
+            if(!aPassword.isEmpty())
                 m_bShowPassword = true;
         }
         if(l > 0)
             // Overwritte only if the username is not empty.
             m_aUsername = aExpr.copy(0,l);
-        else if(aExpr.getLength())
+        else if(!aExpr.isEmpty())
             m_aUsername = aExpr;
     }
 
@@ -268,7 +268,7 @@ rtl::OUString FTPURL::ident(bool withslash,bool internal) const
                         aAccount);
 
         if((m_bShowPassword || internal) &&
-           aPassword.getLength() )
+           !aPassword.isEmpty() )
             bff.append(sal_Unicode(':'))
                 .append(aPassword);
 
@@ -313,7 +313,7 @@ rtl::OUString FTPURL::parent(bool internal) const
                         aPassword,
                         aAccount);
 
-        if((internal || m_bShowPassword) && aPassword.getLength())
+        if((internal || m_bShowPassword) && !aPassword.isEmpty())
             bff.append(sal_Unicode(':'))
                 .append(aPassword);
 
@@ -339,7 +339,7 @@ rtl::OUString FTPURL::parent(bool internal) const
         else
             bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
 
-    if(!last.getLength())
+    if(last.isEmpty())
         bff.appendAscii("..");
     else if(last.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
         bff.append(last).appendAscii("/..");

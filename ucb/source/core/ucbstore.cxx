@@ -399,7 +399,7 @@ Reference< XPersistentPropertySet > SAL_CALL
 PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
     throw( RuntimeException )
 {
-    if ( key.getLength() )
+    if ( !key.isEmpty() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -529,7 +529,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     throw( RuntimeException )
 {
-    if ( !key.getLength() )
+    if ( key.isEmpty() )
         return;
 
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -681,7 +681,7 @@ void PropertySetRegistry::add( PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
 
-    if ( key.getLength() )
+    if ( !key.isEmpty() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_aPropSets[ key ] = pSet;
@@ -693,7 +693,7 @@ void PropertySetRegistry::remove( PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
 
-    if ( key.getLength() )
+    if ( !key.isEmpty() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -1184,7 +1184,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
         if ( m_pImpl->m_xRootWriteAccess.is() )
         {
-            if ( rPath.getLength() )
+            if ( !rPath.isEmpty() )
             {
                 Reference< XHierarchicalNameAccess > xNA(
                                 m_pImpl->m_xRootWriteAccess, UNO_QUERY );
@@ -1445,7 +1445,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
            WrappedTargetException,
            RuntimeException )
 {
-    if ( !aPropertyName.getLength() )
+    if ( aPropertyName.isEmpty() )
         throw UnknownPropertyException();
 
     osl::ClearableGuard< osl::Mutex > aCGuard( m_pImpl->m_aMutex );
@@ -1551,7 +1551,7 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
            WrappedTargetException,
            RuntimeException )
 {
-    if ( !PropertyName.getLength() )
+    if ( PropertyName.isEmpty() )
         throw UnknownPropertyException();
 
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -1698,7 +1698,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
            IllegalArgumentException,
            RuntimeException )
 {
-    if ( !Name.getLength() )
+    if ( Name.isEmpty() )
         throw IllegalArgumentException();
 
     // @@@ What other types can't be written to config server?
@@ -2359,10 +2359,10 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
 //=========================================================================
 const OUString& PersistentPropertySet::getFullKey()
 {
-    if ( !m_pImpl->m_aFullKey.getLength() )
+    if ( m_pImpl->m_aFullKey.isEmpty() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        if ( !m_pImpl->m_aFullKey.getLength() )
+        if ( m_pImpl->m_aFullKey.isEmpty() )
         {
             m_pImpl->m_aFullKey
                 = makeHierarchalNameSegment( m_pImpl->m_aKey );

@@ -148,7 +148,7 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
-        if ( aId.getLength() )
+        if ( !aId.isEmpty() )
         {
             // Already cached.
             return aId;
@@ -190,7 +190,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     }
 
     rtl::OUString aId = queryContentIdentifierString( nIndex );
-    if ( aId.getLength() )
+    if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );

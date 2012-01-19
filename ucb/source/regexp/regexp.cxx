@@ -60,8 +60,8 @@ inline Regexp::Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
     m_bTranslation(bTheTranslation)
 {
     OSL_ASSERT(m_eKind == KIND_DOMAIN
-               || (!m_bEmptyDomain && m_aInfix.getLength() == 0));
-    OSL_ASSERT(m_bTranslation || m_aReversePrefix.getLength() == 0);
+               || (!m_bEmptyDomain && m_aInfix.isEmpty()));
+    OSL_ASSERT(m_bTranslation || m_aReversePrefix.isEmpty());
 }
 
 //============================================================================
@@ -233,12 +233,12 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         rtl::OUStringBuffer aBuffer;
         if (bReverse)
         {
-            if (m_aReversePrefix.getLength() != 0)
+            if (!m_aReversePrefix.isEmpty())
                 appendStringLiteral(&aBuffer, m_aReversePrefix);
         }
         else
         {
-            if (m_aPrefix.getLength() != 0)
+            if (!m_aPrefix.isEmpty())
                 appendStringLiteral(&aBuffer, m_aPrefix);
         }
         switch (m_eKind)
@@ -255,7 +255,7 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
             case KIND_DOMAIN:
                 aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("([^/?#]"));
                 aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
-                if (m_aInfix.getLength() != 0)
+                if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
                 aBuffer.
                     appendAscii(RTL_CONSTASCII_STRINGPARAM("([/?#].*)?)"));
@@ -264,12 +264,12 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("->"));
         if (bReverse)
         {
-            if (m_aPrefix.getLength() != 0)
+            if (!m_aPrefix.isEmpty())
                 appendStringLiteral(&aBuffer, m_aPrefix);
         }
         else
         {
-            if (m_aReversePrefix.getLength() != 0)
+            if (!m_aReversePrefix.isEmpty())
                 appendStringLiteral(&aBuffer, m_aReversePrefix);
         }
         aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\1"));
@@ -280,7 +280,7 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
     else
     {
         rtl::OUStringBuffer aBuffer;
-        if (m_aPrefix.getLength() != 0)
+        if (!m_aPrefix.isEmpty())
             appendStringLiteral(&aBuffer, m_aPrefix);
         switch (m_eKind)
         {
@@ -295,7 +295,7 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
             case KIND_DOMAIN:
                 aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("[^/?#]"));
                 aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
-                if (m_aInfix.getLength() != 0)
+                if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
                 aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("([/?#].*)?"));
                 break;

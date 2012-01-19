@@ -67,10 +67,10 @@ int DAVAuthListener_Impl::authenticate(
         {
             // #102871# - Supply username and password from previous try.
             // Password container service depends on this!
-            if ( inoutUserName.getLength() == 0 )
+            if ( inoutUserName.isEmpty() )
                 inoutUserName = m_aPrevUsername;
 
-            if ( outPassWord.getLength() == 0 )
+            if ( outPassWord.isEmpty() )
                 outPassWord = m_aPrevPassword;
 
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
@@ -1067,17 +1067,17 @@ void DAVResourceAccess::initialize()
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    if ( m_aPath.getLength() == 0 )
+    if ( m_aPath.isEmpty() )
     {
         NeonUri aURI( m_aURL );
         rtl::OUString aPath( aURI.GetPath() );
 
         /* #134089# - Check URI */
-        if ( !aPath.getLength() )
+        if ( aPath.isEmpty() )
             throw DAVException( DAVException::DAV_INVALID_ARG );
 
         /* #134089# - Check URI */
-        if ( !aURI.GetHost().getLength() )
+        if ( aURI.GetHost().isEmpty() )
             throw DAVException( DAVException::DAV_INVALID_ARG );
 
         if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL, m_aFlags ) )

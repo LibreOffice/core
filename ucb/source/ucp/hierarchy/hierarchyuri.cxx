@@ -56,7 +56,7 @@ using namespace hierarchy_ucp;
 void HierarchyUri::init() const
 {
     // Already inited?
-    if ( m_aUri.getLength() && !m_aPath.getLength() )
+    if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
         m_aService = m_aParentUri = m_aName = rtl::OUString();

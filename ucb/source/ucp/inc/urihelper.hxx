@@ -104,13 +104,13 @@ namespace ucb_impl { namespace urihelper {
         }
         while ( nIndex >= 0 );
 
-        if ( aParams.getLength() > 0 )
+        if ( !aParams.isEmpty() )
         {
             aResult.append( sal_Unicode( '?' ) );
             aResult.append( aParams );
         }
 
-        if ( aFragment.getLength() > 0 )
+        if ( !aFragment.isEmpty() )
         {
             aResult.append( sal_Unicode( '#' ) );
             aResult.append( aFragment );

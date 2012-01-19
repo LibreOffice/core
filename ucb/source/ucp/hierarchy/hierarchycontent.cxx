@@ -111,7 +111,7 @@ HierarchyContent* HierarchyContent::create(
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
 {
-    if ( !Info.Type.getLength() )
+    if ( Info.Type.isEmpty() )
         return 0;
 
     if ( !Info.Type.equalsAsciiL(
@@ -635,7 +635,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !Info.Type.getLength() )
+        if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
         sal_Bool bCreateFolder =
@@ -649,7 +649,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
-        OSL_ENSURE( aURL.getLength() > 0,
+        OSL_ENSURE( !aURL.isEmpty(),
                     "HierarchyContent::createNewContent - empty identifier!" );
 
         if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
@@ -1214,7 +1214,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 if ( rValue.Value >>= aNewValue )
                 {
                     // No empty titles!
-                    if ( aNewValue.getLength() > 0 )
+                    if ( !aNewValue.isEmpty() )
                     {
                         if ( aNewValue != m_aProps.getTitle() )
                         {
@@ -1275,7 +1275,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     if ( rValue.Value >>= aNewValue )
                     {
                         // No empty target URL's!
-                        if ( aNewValue.getLength() > 0 )
+                        if ( !aNewValue.isEmpty() )
                         {
                             if ( aNewValue != m_aProps.getTargetURL() )
                             {
@@ -1406,7 +1406,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         }
     }
 
-    if ( aOldTitle.getLength() )
+    if ( !aOldTitle.isEmpty() )
     {
         aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aEvent.OldValue     = uno::makeAny( aOldTitle );
@@ -1473,7 +1473,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     }
 
     // Check, if all required properties were set.
-    if ( m_aProps.getTitle().getLength() == 0 )
+    if ( m_aProps.getTitle().isEmpty() )
     {
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
@@ -1812,7 +1812,7 @@ void HierarchyContent::transfer(
 
     if ( nCount )
     {
-        sal_Bool bHadTitle = ( rInfo.NewTitle.getLength() == 0 );
+        sal_Bool bHadTitle = rInfo.NewTitle.isEmpty();
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow

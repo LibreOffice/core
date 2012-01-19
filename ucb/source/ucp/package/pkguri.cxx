@@ -76,7 +76,7 @@ static void normalize( OUString& rURL )
 void PackageUri::init() const
 {
     // Already inited?
-    if ( m_aUri.getLength() && !m_aPath.getLength() )
+    if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
         m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme
@@ -128,7 +128,7 @@ void PackageUri::init() const
                      RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
             {
                 m_aParam +=
-                    ( m_aParam.getLength()
+                    ( !m_aParam.isEmpty()
                       ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&purezip" ) )
                       : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?purezip" ) ) );
             }
