@@ -9,8 +9,9 @@ it should be nuked from orbit and started again from scratch with a saner design
 CT_xxx (Complex Type) - it seems to be used for XML elements
 ST_xxx (Simple Type) - it seems to be used for XML attributes
 
-- SPRM - no idea what that actually means, but in the context of OOXML it seems
-    to pretty much mean "XML element"
+- SPRM (the Sprm structure specified a modification to a property of a
+character, paragraph, table, or section in the binary .doc format) - in
+the context of OOXML it seems to pretty much mean "XML element"
 
 -
 
