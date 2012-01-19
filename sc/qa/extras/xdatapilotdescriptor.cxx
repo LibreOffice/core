@@ -156,7 +156,7 @@ void ScXDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet:
             case 0:
                 {
                     uno::Any aAny;
-                   aAny<<= sheet::DataPilotFieldOrientation_COLUMN;
+                    aAny<<= sheet::DataPilotFieldOrientation_COLUMN;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
