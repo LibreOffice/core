@@ -97,6 +97,10 @@ service EnhancedCustomShapePath
         default is false;
     */
     [optional, property] boolean TextPathAllowed;
+
+    /** This property specifies view size per sub path
+    */
+    [optional, property] sequence< ::com::sun::star::awt::Size > SubViewSize;
 };
 
 //=============================================================================
