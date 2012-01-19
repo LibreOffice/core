@@ -2004,7 +2004,8 @@ if test "$build_os" = "cygwin" ; then
     fi
 fi
 
-
+# remenber SYSBASE value
+AC_SUBST(SYSBASE)
 
 dnl ===================================================================
 dnl  Checks if ccache is available

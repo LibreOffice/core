@@ -811,13 +811,6 @@ ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
-if ( defined $ENV{SYSBASE} )
-{  $SYSBASE = $ENV{SYSBASE};
-}
-else
-{  $SYSBASE = '';
-}
-ToFile( "SYSBASE",           "$SYSBASE",         "e" );
 ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
 ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 if ( '@CROSS_COMPILING@' eq 'YES' )
