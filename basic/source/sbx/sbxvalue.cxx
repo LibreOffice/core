@@ -1566,8 +1566,11 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             // Match the Int on this system?
             if( n > SAL_TYPES_SIZEOFINT )
                 r >> aData.nLong, aData.eType = SbxLONG;
-            else
-                r >> aData.nInt;
+            else {
+                sal_Int32 nInt;
+                r >> nInt;
+                aData.nInt = nInt;
+            }
             break;
         }
         case SbxUINT:
