@@ -48,6 +48,7 @@ CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 .ENDIF
 
 SLOFILES=\
+        $(SLO)$/legacy.obj\
         $(SLO)$/snprintf.obj\
         $(SLO)$/snwprintf.obj
 
@@ -55,6 +56,10 @@ SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
+.IF "$(COM)"=="MSC"
+DEF1EXPORTFILE=\
+    $(SHL1TARGET).dxp
+.ENDIF
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
