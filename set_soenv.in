@@ -615,9 +615,6 @@ else
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
 }
 ToFile( "CXX",               $CXX,               "e" );
-if ( '@ENABLE_RPATH@' eq "no" ) {
-  ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
-}
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 

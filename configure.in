@@ -3366,18 +3366,6 @@ else
 fi
 AC_SUBST(ENABLE_UGLY)
 
-dnl ===================================================================
-dnl Disable rpath in shared libraries?
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use RPATH in shared libraries])
-if test "$enable_rpath" = "no"; then
-    ENABLE_RPATH="no"
-else
-    ENABLE_RPATH="yes"
-fi
-AC_MSG_RESULT([$ENABLE_RPATH])
-AC_SUBST(ENABLE_RPATH)
-
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include MySpell dictionaries])
