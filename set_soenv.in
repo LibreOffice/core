@@ -158,7 +158,6 @@ chomp( $oldPATH );                  # cut off new line
 # NB: Language options now set at 'ToFile' stage.
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $comment              = "#";           # UNIX script comment character
-$TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/cygwin|mingw32/ )
@@ -259,11 +258,6 @@ $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
-
-# default TARFILE_LOCATION
-if ('@TARFILE_LOCATION@' eq "DEFAULT")
-{	$TARFILE_LOCATION="$SRC_ROOT/src";
-}
 
 #
 $SOLARENV             = PathFormat($SRC_ROOT.$SOLENV);
@@ -514,7 +508,6 @@ ToFile( "Platform independent constant values.", $empty, "c" );
 
 }
 ToFile( "nodep",             "@nodep@",          "e" );
-ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 
 #
 # Writing the platform dependent constant values to file.
