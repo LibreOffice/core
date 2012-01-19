@@ -534,8 +534,6 @@ ToFile( "Platform independent constant values.", $empty, "c" );
 # Languages
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
-if ("@ENABLE_DEBUG@" eq "TRUE") {
-ToFile( "debug",             "true",             "e" );
 }
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );

@@ -3229,7 +3229,7 @@ if test -n "$enable_debug" && test "$enable_debug" != "no"; then
     enable_symbols="yes"
     AC_MSG_RESULT([yes])
 else
-    ENABLE_DEBUG="FALSE"
+    ENABLE_DEBUG=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
