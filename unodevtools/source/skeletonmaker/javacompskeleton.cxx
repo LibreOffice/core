@@ -66,7 +66,7 @@ void generateImports(std::ostream & o, ProgramOptions const & options,
         else
             o << "import com.sun.star.lib.uno.helper.WeakBase;\n";
     }
-    if (propertyhelper.getLength() > 0) {
+    if (!propertyhelper.isEmpty()) {
         if (propertyhelper.equals("_")) {
             o << "import com.sun.star.lib.uno.helper.PropertySet;\n";
             o << "import com.sun.star.beans.PropertyAttribute;\n";
@@ -938,7 +938,7 @@ void generateSkeleton(ProgramOptions const & options,
     checkDefaultInterfaces(interfaces, services, propertyhelper);
 
     if (options.componenttype == 2) {
-        if (propertyhelper.getLength() > 0)
+        if (!propertyhelper.isEmpty())
             std::cerr << "WARNING: interfaces specifying calc add-in functions "
                 "shouldn't support attributes!\n";
     }

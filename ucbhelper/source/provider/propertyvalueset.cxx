@@ -612,7 +612,7 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( columnName.getLength() )
+    if ( !columnName.isEmpty() )
     {
         sal_Int32 nCount = m_pValues->size();
         for ( sal_Int32 n = 0; n < nCount; ++n )

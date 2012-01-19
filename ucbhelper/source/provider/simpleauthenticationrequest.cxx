@@ -52,14 +52,14 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.ServerName     = rServerName;
 //    aRequest.Diagnostic     = // OUString
-    aRequest.HasRealm       = ( rRealm.getLength() > 0 );
+    aRequest.HasRealm       = !rRealm.isEmpty();
     if ( aRequest.HasRealm )
         aRequest.Realm = rRealm;
     aRequest.HasUserName    = sal_True;
     aRequest.UserName       = rUserName;
     aRequest.HasPassword    = sal_True;
     aRequest.Password       = rPassword;
-    aRequest.HasAccount     = ( rAccount.getLength() > 0 );
+    aRequest.HasAccount     = !rAccount.isEmpty();
     if ( aRequest.HasAccount )
         aRequest.Account = rAccount;
     aRequest.URL = rURL;

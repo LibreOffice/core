@@ -572,7 +572,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "throw (css::uno::RuntimeException)\n{\n"
             "    ::rtl::OUString ret;\n    try {\n        "
             "::rtl::OUStringBuffer buf(funcName);\n"
-            "        if (paramName.getLength() > 0) {\n"
+            "        if (!paramName.isEmpty()) {\n"
             "            buf.appendAscii(\"/Parameters/\");\n"
             "            buf.append(paramName);\n        }\n\n"
             "        css::uno::Reference< css::beans::XPropertySet > xPropSet(\n"
@@ -924,14 +924,14 @@ void generateQueryInterface(std::ostream& o,
                             OString const & classname,
                             OString const & propertyhelper)
 {
-    if (propertyhelper.getLength() == 0)
+    if (propertyhelper.isEmpty())
         return;
 
     o << "css::uno::Any " << classname
       << "::queryInterface(css::uno::Type const & type) throw ("
         "css::uno::RuntimeException)\n{\n    ";
 
-    if (propertyhelper.getLength() >= 1)
+    if (!propertyhelper.isEmpty())
         o << "return ";
     else
         o << "css::uno::Any a(";
@@ -949,7 +949,7 @@ void generateQueryInterface(std::ostream& o,
             o << ">";
     }
 
-    if (propertyhelper.getLength() >= 1) {
+    if (!propertyhelper.isEmpty()) {
         o << "::queryInterface(type);\n";
     } else {
         o << "::queryInterface(type));\n";
@@ -1160,7 +1160,7 @@ void generateCalcAddin(ProgramOptions const & options,
     OString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
 
-    if (propertyhelper.getLength() > 0)
+    if (!propertyhelper.isEmpty())
         std::cerr << "WARNING: interfaces specifying calc add-in functions "
             "shouldn't support attributes!\n";
 

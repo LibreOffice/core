@@ -394,7 +394,7 @@ void printMethods(std::ostream & o,
     }
 
     static OString sd(RTL_CONSTASCII_STRINGPARAM("_"));
-    bool body = ((delegate.getLength() > 0) ? true : false);
+    bool body = !delegate.isEmpty();
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
     if (body && propertyhelper.getLength() > 1) {
@@ -496,7 +496,7 @@ void printMethods(std::ostream & o,
         printType(o, options, manager,
                   codemaker::convertString(reader.getFieldTypeName(i)), 1);
         o << " SAL_CALL ";
-        if (classname.getLength() > 0)
+        if (!classname.isEmpty())
             o << classname;
 
         o << "get"
@@ -513,7 +513,7 @@ void printMethods(std::ostream & o,
         }
         if (body) {
             if (defaultbody) {
-                if (propertyhelper.getLength() > 0) {
+                if (!propertyhelper.isEmpty()) {
                     o << "\n{\n    osl::MutexGuard g(m_aMutex);\n    return m_"
                       << codemaker::convertString(reader.getFieldName(i)).getStr()
                       << ";\n}\n\n";
@@ -547,7 +547,7 @@ void printMethods(std::ostream & o,
                 o << "virtual ";
 
             o << "void SAL_CALL ";
-            if (classname.getLength() > 0)
+            if (!classname.isEmpty())
                 o << classname;
 
             o << "set"
@@ -567,7 +567,7 @@ void printMethods(std::ostream & o,
             }
             if (body) {
                 if (defaultbody) {
-                    if (propertyhelper.getLength() > 0) {
+                    if (!propertyhelper.isEmpty()) {
                         printSetPropertyMixinBody(o, reader, i, method);
                     } else {
                         if (options.componenttype == 1) {
@@ -599,7 +599,7 @@ void printMethods(std::ostream & o,
                   codemaker::convertString(
                       reader.getMethodReturnTypeName(method)), 1);
         o << " SAL_CALL ";
-        if (classname.getLength() > 0)
+        if (!classname.isEmpty())
             o << classname;
 
         const OString methodName(codemaker::convertString(reader.getMethodName(method)));
@@ -662,7 +662,7 @@ void printConstructionMethods(std::ostream & o,
             options, manager,
             codemaker::convertString(reader.getSuperTypeName(0)), 1);
         o << ' ';
-        if (reader.getMethodName(i).getLength() == 0) {
+        if (reader.getMethodName(i).isEmpty()) {
             o << "create";
         } else {
             o << (codemaker::cpp::translateUnoToCppIdentifier(
@@ -701,7 +701,7 @@ void printServiceMembers(std::ostream & o,
         }
     }
 
-    if (delegate.getLength() == 0) {
+    if (delegate.isEmpty()) {
         o << "\n// properties of service \""<< type.getStr() << "\"\n";
         for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
             OString fieldName(
@@ -755,7 +755,7 @@ void generateDocumentation(std::ostream & o,
         &arguments);
 
     bool comment=true;
-    if (delegate.getLength() > 0) {
+    if (!delegate.isEmpty()) {
         if (typeClass != RT_TYPE_INTERFACE &&
             typeClass != RT_TYPE_SERVICE )
         {

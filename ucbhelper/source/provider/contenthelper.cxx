@@ -458,7 +458,7 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const rtl::OUString& rName = pSeq[ n ];
-            if ( rName.getLength() )
+            if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->addInterface(
                     rName, Listener );
         }
@@ -491,7 +491,7 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const rtl::OUString& rName = pSeq[ n ];
-            if ( rName.getLength() )
+            if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->removeInterface(
                     rName, Listener );
         }
@@ -780,7 +780,7 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
     uno::Reference< uno::XInterface > xParent;
     rtl::OUString aURL = getParentURL();
 
-    if ( aURL.getLength() )
+    if ( !aURL.isEmpty() )
     {
         uno::Reference< com::sun::star::ucb::XContentIdentifier > xId(
             new ContentIdentifier( m_xSMgr, aURL ) );

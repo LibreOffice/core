@@ -387,7 +387,7 @@ void printMethods(std::ostream & o,
     }
 
     static OString sd(RTL_CONSTASCII_STRINGPARAM("_"));
-    bool body = ((delegate.getLength() > 0) ? true : false);
+    bool body = !delegate.isEmpty();
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
     generated.add(type);
@@ -577,7 +577,7 @@ void printConstructionMethods(std::ostream & o,
             options, manager,
             codemaker::convertString(reader.getSuperTypeName(0)), false);
         o << ' ';
-        if ( reader.getMethodName(i).getLength() == 0 ) {
+        if ( reader.getMethodName(i).isEmpty() ) {
             o << "create";
         } else {
             o << (codemaker::java::translateUnoToJavaIdentifier(
@@ -668,7 +668,7 @@ void generateDocumentation(std::ostream & o,
         &arguments);
 
     bool comment=true;
-    if ( delegate.getLength() > 0 ) {
+    if ( !delegate.isEmpty() ) {
         if ( typeClass != RT_TYPE_INTERFACE && typeClass != RT_TYPE_SERVICE )
             return;
 

@@ -495,7 +495,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         return m_aEmptyProxy;
     }
 
-    if ( rHost.getLength() && m_aNoProxyList.size() )
+    if ( !rHost.isEmpty() && m_aNoProxyList.size() )
     {
         //////////////////////////////////////////////////////////////////
         // First, try direct hostname match - #110515#
@@ -532,7 +532,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         }
 
         // Error resolving name? -> fallback.
-        if ( !aFullyQualifiedHost.getLength() )
+        if ( aFullyQualifiedHost.isEmpty() )
             aFullyQualifiedHost = aHost;
 
         if ( aFullyQualifiedHost != aHost )
@@ -558,16 +558,16 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
     if ( rProtocol.toAsciiLowerCase()
             .equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ftp" ) ) )
     {
-        if ( m_aFtpProxy.aName.getLength() > 0 && m_aFtpProxy.nPort >= 0 )
+        if ( !m_aFtpProxy.aName.isEmpty() && m_aFtpProxy.nPort >= 0 )
             return m_aFtpProxy;
     }
     else if ( rProtocol.toAsciiLowerCase()
                   .equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
     {
-        if ( m_aHttpsProxy.aName.getLength() )
+        if ( !m_aHttpsProxy.aName.isEmpty() )
             return m_aHttpsProxy;
     }
-    else if ( m_aHttpProxy.aName.getLength() )
+    else if ( !m_aHttpProxy.aName.isEmpty() )
     {
         // All other protocols use the HTTP proxy.
         return m_aHttpProxy;
@@ -592,7 +592,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
         {
             const util::ElementChange& rElem = pElementChanges[ n ];
             rtl::OUString aKey;
-            if ( ( rElem.Accessor >>= aKey ) && aKey.getLength() )
+            if ( ( rElem.Accessor >>= aKey ) && !aKey.isEmpty() )
             {
                 if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
                                                     PROXY_TYPE_KEY ) ) )
@@ -702,7 +702,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
     m_aNoProxyList.clear();
 
-    if ( rNoProxyList.getLength() )
+    if ( !rNoProxyList.isEmpty() )
     {
         // List of connection endpoints hostname[:port],
         // separated by semicolon. Wilcards allowed.
@@ -718,7 +718,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
             rtl::OUString aToken = rNoProxyList.copy( nPos, nEnd - nPos );
 
-            if ( aToken.getLength() )
+            if ( !aToken.isEmpty() )
             {
                 rtl::OUString aServer;
                 rtl::OUString aPort;
@@ -757,7 +757,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 }
 
                 rtl::OUStringBuffer aFullyQualifiedHost;
-                if ( aServer.getLength() )
+                if ( !aServer.isEmpty() )
                 {
                     // Remember fully qualified server name if current list
                     // entry specifies exactly one non-fully qualified server
@@ -840,7 +840,7 @@ bool InternetProxyDecider::shouldUseProxy( const rtl::OUString & rProtocol,
     const InternetProxyServer & rData = m_pImpl->getProxy( rProtocol,
                                                            rHost,
                                                            nPort );
-    return ( rData.aName.getLength() > 0 );
+    return !rData.aName.isEmpty();
 }
 
 //=========================================================================

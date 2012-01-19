@@ -273,7 +273,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
         return OUString();
 
     OUString aLabel = m_pImpl->m_aColumnData[ column - 1 ].columnLabel;
-    if ( aLabel.getLength() )
+    if ( !aLabel.isEmpty() )
         return aLabel;
 
     return m_aProps.getConstArray()[ column - 1 ].Name;

@@ -248,7 +248,7 @@ void checkType(TypeManager const & manager,
                 // constructor because in this case XInitialization is not called.
                 if ( reader.getMethodCount() > 1 ||
                      ( reader.getMethodCount() == 1 &&
-                       reader.getMethodName(0).getLength() > 0 ) )
+                       !reader.getMethodName(0).isEmpty() ) )
                 {
                     OString s("com.sun.star.lang.XInitialization");
                     if ( interfaceTypes.find(s) == interfaceTypes.end() )

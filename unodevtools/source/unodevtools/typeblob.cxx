@@ -283,7 +283,7 @@ RTFieldAccess checkPropertyFlags(short flags) {
 void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                   const OString& typeName, sal_uInt32* blobsize)
 {
-    if ( typeName.getLength() == 0 )
+    if ( typeName.isEmpty() )
         return NULL;
 
     OUString uTypeName(OStringToOUString(typeName, RTL_TEXTENCODING_UTF8)

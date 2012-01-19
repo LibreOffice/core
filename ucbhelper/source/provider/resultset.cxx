@@ -1352,7 +1352,7 @@ void SAL_CALL ResultSet::setPropertyValue( const rtl::OUString& aPropertyName,
            lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    if ( !aPropertyName.getLength() )
+    if ( aPropertyName.isEmpty() )
         throw beans::UnknownPropertyException();
 
     if ( aPropertyName.equals(
@@ -1381,7 +1381,7 @@ uno::Any SAL_CALL ResultSet::getPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    if ( !PropertyName.getLength() )
+    if ( PropertyName.isEmpty() )
         throw beans::UnknownPropertyException();
 
     uno::Any aValue;
@@ -1417,7 +1417,7 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
-    if ( aPropertyName.getLength() &&
+    if ( !aPropertyName.isEmpty() &&
          !aPropertyName.equals(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
          !aPropertyName.equals(
@@ -1443,7 +1443,7 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
 {
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
-    if ( aPropertyName.getLength() &&
+    if ( !aPropertyName.isEmpty() &&
          !aPropertyName.equals(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
          !aPropertyName.equals(

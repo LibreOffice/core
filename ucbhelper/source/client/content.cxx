@@ -1094,7 +1094,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( rContentType.getLength() == 0 )
+    if ( rContentType.isEmpty() )
         return sal_False;
 
     // First, try it using "createNewContent" command -> the "new" way.
@@ -1157,7 +1157,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( rContentType.getLength() == 0 )
+    if ( rContentType.isEmpty() )
         return sal_False;
 
     // First, try it using "createNewContent" command -> the "new" way.
@@ -1438,11 +1438,11 @@ void Content_Impl::disposing( const EventObject& Source )
 //=========================================================================
 const rtl::OUString& Content_Impl::getURL() const
 {
-    if ( !m_aURL.getLength() && m_xContent.is() )
+    if ( m_aURL.isEmpty() && m_xContent.is() )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_aURL.getLength() && m_xContent.is() )
+        if ( m_aURL.isEmpty() && m_xContent.is() )
         {
             Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
             if ( xId.is() )
@@ -1456,11 +1456,11 @@ const rtl::OUString& Content_Impl::getURL() const
 //=========================================================================
 Reference< XContent > Content_Impl::getContent()
 {
-    if ( !m_xContent.is() && m_aURL.getLength() )
+    if ( !m_xContent.is() && !m_aURL.isEmpty() )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_xContent.is() && m_aURL.getLength() )
+        if ( !m_xContent.is() && !m_aURL.isEmpty() )
         {
             ContentBroker* pBroker = ContentBroker::get();
 

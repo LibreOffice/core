@@ -403,7 +403,7 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                         aOldKeyWithSlash += rtl::OUString( sal_Unicode('/') );
                         aOldKeyWithoutSlash = rOldKey;
                     }
-                    else if ( rOldKey.getLength() )
+                    else if ( !rOldKey.isEmpty() )
                         aOldKeyWithoutSlash
                             = rOldKey.copy( 0, rOldKey.getLength() - 1 );
 
@@ -490,7 +490,7 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
                         aSrcKeyWithSlash += rtl::OUString( sal_Unicode('/') );
                         aSrcKeyWithoutSlash = rSourceKey;
                     }
-                    else if ( rSourceKey.getLength() )
+                    else if ( !rSourceKey.isEmpty() )
                         aSrcKeyWithoutSlash = rSourceKey.copy(
                             0, rSourceKey.getLength() - 1 );
 
@@ -629,7 +629,7 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
                         aKeyWithSlash += rtl::OUString( (sal_Unicode)'/' );
                         aKeyWithoutSlash = rKey;
                     }
-                    else if ( rKey.getLength() )
+                    else if ( !rKey.isEmpty() )
                         aKeyWithoutSlash
                             = rKey.copy( 0, rKey.getLength() - 1 );
 
