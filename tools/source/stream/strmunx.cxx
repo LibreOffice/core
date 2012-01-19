@@ -710,13 +710,13 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     osl::FileStatus aStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
 
     // FIXME: we really need to switch to a pure URL model ...
-    if ( osl::File::getFileURLFromSystemPath( aFilename, aFileURL ) != osl::FileBase::RC::E_None )
+    if ( osl::File::getFileURLFromSystemPath( aFilename, aFileURL ) != osl::FileBase::E_None )
         aFileURL = aFilename;
-    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) != osl::FileBase::RC::E_None &&
-                        aItem.getFileStatus( aStatus ) != osl::FileBase::RC::E_None );
+    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) != osl::FileBase::E_None &&
+                        aItem.getFileStatus( aStatus ) != osl::FileBase::E_None );
 
     // SvFileStream can't open a directory
-    if( bStatValid && aStatus.getFileType() == osl::FileStatus::Type::Directory )
+    if( bStatValid && aStatus.getFileType() == osl::FileStatus::Directory )
     {
         SetError( ::GetSvError( EISDIR ) );
         return;
@@ -742,11 +742,11 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     {
         if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
         {
-            if ( bStatValid && aStatus.getFileType() == osl::FileStatus::Type::Link &&
+            if ( bStatValid && aStatus.getFileType() == osl::FileStatus::Link &&
                  aStatus.getLinkTargetURL().getLength() > 0 )
             {
                 // delete the symbolic link, and replace it with the contents of the link
-                if (osl::File::remove( aFileURL ) == osl::FileBase::RC::E_None )
+                if (osl::File::remove( aFileURL ) == osl::FileBase::E_None )
                 {
                     File::copy( aStatus.getLinkTargetURL(), aFileURL );
 #if OSL_DEBUG_LEVEL > 0
