@@ -3178,11 +3178,9 @@ AC_SUBST(CPU_FOR_BUILD)
 AC_SUBST(CPUNAME_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
-AC_SUBST(GXX_INCLUDE_PATH_FOR_BUILD)
 AC_SUBST(INPATH_FOR_BUILD)
 AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
-AC_SUBST(SYSTEM_LIBXSLT_FOR_BUILD)
 
 AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(PATH_FOR_BUILD)
@@ -3986,6 +3984,8 @@ if test "$GXX" = "yes"; then
         with_gxx_include_path="NO_GXX_INCLUDE"
         AC_MSG_RESULT([none])
     else
+        PathFormat "$with_gxx_include_path"
+        with_gxx_include_path="$formatted_path"
         AC_MSG_RESULT([$with_gxx_include_path])
     fi
 else
@@ -4833,6 +4833,8 @@ _ACEOF
             echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
         fi
     fi
+    PathFormat "$JAVA_HOME"
+    JAVA_HOME="$formatted_path"
 fi
 
 AWTLIB=
@@ -5751,6 +5753,11 @@ else
     fi
 fi
 AC_SUBST(SYSTEM_LIBXSLT)
+if test -z "$SYSTEM_LIBXSLT_FOR_BUILD" ; then
+    SYSTEM_LIBXSLT_FOR_BUILD="$SYSTEM_LIBXSLT"
+fi
+AC_SUBST(SYSTEM_LIBXSLT_FOR_BUILD)
+
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 AC_SUBST(XSLTPROC)
@@ -7759,6 +7766,8 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     else
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
     fi
+    PathFormat "$DIRECTXSDK_LIB"
+    DIRECTXSDK_LIB="$formatted_path"
 
     if test -f "$DIRECTXSDK_LIB/ddraw.lib" -o -f "$DIRECTXSDK_LIB/d3d9.lib" ; then
         HAVE_DIRECTXSDK_LIB="yes"
@@ -7833,6 +7842,8 @@ if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
     else
         AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
     fi
+else
+    GNUPATCH=$PATCH
 fi
 
 dnl We also need to check for --with-gnu-cp
@@ -9996,6 +10007,11 @@ EOF
     fi
     if test -z "$ANT_HOME"; then
         ANT_HOME="NO_ANT_HOME"
+    else
+        PathFormat "$ANT_HOME"
+        ANT_HOME="$formatted_path"
+        PathFormat "$ANT"
+        ANT="$ANT"
     fi
     AC_SUBST(ANT_HOME)
 
@@ -10027,6 +10043,8 @@ EOF
                 fi
             fi
         fi
+        PathFormat "$ANT_LIB"
+        ANT_LIB="$formatted_path"
         AC_MSG_RESULT([Ant lib directory found.])
     fi
     AC_SUBST(ANT_LIB)
@@ -10580,6 +10598,39 @@ fi
 AC_MSG_RESULT([$BUILD_NCPUS])
 AC_SUBST(BUILD_NCPUS)
 
+#
+# Set up ILIB for windows build
+#
+if test "$build_os" = "cygwin"; then
+    ILIB="."
+    WinPath "$SRC_ROOT/solver/$INPATH/lib"
+    ILIB="$ILIB;$formatted_path"
+    if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME" ; then
+        WinPath "$JAVA_HOME/lib"
+        ILIB="$ILIB;$formatted_path"
+    fi
+    if test "$CL_X64" = "TRUE" ; then
+        WinPath "$COMPATH/lib"
+        ILIB="$ILIB;$formatted_path"
+        WinPath "$WINDOWS_SDK_HOME/lib"
+        ILIB="$ILIB;$formatted_path"
+    else
+        WinPath "$COMPATH/lib/amd64"
+        ILIB="$ILIB;$formatted_path"
+        WinPath "$WINDOWS_SDK_HOME/lib64"
+        ILIB="$ILIB;$formatted_path"
+    fi
+    WinPath "$DOTNET_FRAMEWORK_HOME/lib"
+    ILIB="$ILIB;$formatted_path"
+
+    if test "$ENABLE_DIRECTX" = "TRUE" ; then
+        WinPath "$DIRECTXSDK_LIB"
+        ILIB="$ILIB;$formatted_path"
+    fi
+    AC_SUBST(ILIB)
+fi
+
+
 # ===================================================================
 # Creating bigger shared library to link against
 # ===================================================================
@@ -10666,6 +10717,14 @@ if test "$build_os" = "cygwin" ; then
         ATL_LIB="$ATL_LIB/amd64"
         MFC_LIB="$MFC_LIB/amd64"
     fi
+    PathFormat "/usr/bin/grep.exe"
+    WIN_GREP="$formatted_path"
+    PathFormat "/usr/bin/find.exe"
+    WIN_FIND="$formatted_path"
+    PathFormat "/usr/bin/ls.exe"
+    WIN_LS="$formatted_path"
+    PathFormat "/usr/bin/touch.exe"
+    WIN_TOUCH="$formatted_path"
 fi
 
 AC_SUBST(ATL_INCLUDE)

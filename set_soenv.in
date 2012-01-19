@@ -35,7 +35,7 @@ use File::Basename;
 #
 my ( $outfile, $newline, $comment,
      $ds, $ps,
-     $wps, $cur_dir, $par_dir, $I, $L, $tmp,
+     $wps, $cur_dir, $par_dir, $tmp,
      $platform,
      $empty,
      $warnfile, $Warning, $result, $unsetvars, $exportvars);
@@ -45,39 +45,33 @@ my ( $outfile, $newline, $comment,
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my ( $SOLAR_JAVA,
-     $CC, $CXX);
+my ( $CC );
 #
 # Platform dependent constant values.
 my (
       $OUTPATH, $INPATH,
+      );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
 #-------------------------------------------
 #
 # Help variables.
-my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
-     $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, @languages, $ASM_PATH, $PERL_PATH, $CL_X64 );
+my ( $BIN, $LIB,
+     $ASM_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
+my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK,
      $UPD,
-     $SOLARSRC, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
-     $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
+     $SOLARENV,
+     $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
-     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
-     $SOLARINC, $FRAMEWORKSHOME, $PERL,
-     $COMP_ENV, $ILIB, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
-     $USE_DIRECTX5, $TMPDIR,
-     $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH,
-     $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
-     $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA,
-     $SYSBASE);
+     $PATH,
+     $PERL,
+     $COMP_ENV, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
+     $TMPDIR,
+     $GNUMAKE,
+     );
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -89,7 +83,6 @@ my ( $dmake, $build, $mkout, $deliver, $zipdep );
 $INPATH="@INPATH@";
 $OUTPATH="@OUTPATH@";
 $COMPATH="@COMPATH@";
-$FRAMEWORKSHOME="@FRAMEWORKSHOME@";
 #-------------------------------------------------------------
 # IIIa. Initialising constants.
 #-------------------------------------------------------------
@@ -105,21 +98,11 @@ $ps             = ":";              # path separator
 $wps            = ":";              # path separator, will be set to ';' for windows later.
 $cur_dir        = ".";              # current directory
 $par_dir        = "..";             # parrent directory
-$I              = " -I";            # include search path
-$L              = " -L";            # library search path
 $empty          = "";               # used as argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
-$SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
-if ($SYSTEM_PYTHON eq "NO") {
-    $PYTHON              = "python";
-}
-$SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
-$JAVAFLAGS 		= '@JAVAFLAGS@';
 $CC             = '@CC@';            # C compiler
-$CXX            = '@CXX@';           # C++ compiler
-$PROEXT         = "@PROEXT@";
 $CL_X64 = '@CL_X64@';
 $GNUMAKE        = "@GNUMAKE@";
 
@@ -155,8 +138,6 @@ chomp( $oldPATH );                  # cut off new line
 # C. Setting the constant values.
 #
 # Setting platform independent constant values.
-# NB: Language options now set at 'ToFile' stage.
-$SOLAR_JAVA           = "@SOLAR_JAVA@";
 $comment              = "#";           # UNIX script comment character
 
 # Setting platform dependent constant values.
@@ -166,14 +147,11 @@ if ( $platform =~ m/cygwin|mingw32/ )
     $MIDL_PATH      = PathFormat('@MIDL_PATH@');
     $CSC_PATH       = PathFormat('@CSC_PATH@');
     $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
-    $WINDOWS_SDK_HOME      = PathFormat('@WINDOWS_SDK_HOME@');
-    $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
+    $WINDOWS_SDK_HOME      = "@WINDOWS_SDK_HOME@";
     $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
     $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
 }
-elsif ( $platform =~ m/darwin/ )
-{
-}
+
 
 print "done\n";
 
@@ -187,9 +165,6 @@ $SRC_ROOT = $ENV{"SRC_ROOT"};
 CheckPathExist( $SRC_ROOT );
 
 
-# 3. bash path.
-$OOO_SHELL = '@BASH@';
-
 # ml.exe assembler path for Windows users.
 if ($platform =~ m/cygwin/)
 {
@@ -200,79 +175,15 @@ if ($platform =~ m/cygwin/)
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
 
-$USR                  = $ds."usr";
-$ETC                  = $ds."etc";
 $BIN                  = $ds."bin";
 $LIB                  = $ds."lib";
-$LIB64                = $ds."lib";
-$LIB64               .= "64" if ($platform =~ m/x86_64-.*-linux/);
-$LIB64               .= "64" if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
-$LIB64               .= "64" if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
-$LIB64               .= $ds."x64" if ($platform =~ m/cygwin/);
-$INC                  = $ds."inc";
-$INCLUDE              = $ds."include";
-$DEV                  = $ds."dev";
-$OPT                  = $ds."opt";
-$LOCAL                = $ds."local";
-$SOLENV               = $ds."solenv";
-$SOLVER               = $ds."solver";
-$DEFIMGS              = $ds."icon-themes/galaxy";
-$CONFIG               = $ds."config";
-$USR_BIN              = $USR.$BIN;
-$USR_LIB              = $USR.$LIB64;
-$USR_LOCAL            = $USR.$ds."local";
-$USR_CCS              = $USR.$ds."ccs";
-$USR_OPENWIN          = $USR.$ds."openwin";
-$USR_DT               = $USR.$ds."dt";
-$COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
-
-# Windows NT only variables
-if ($platform =~ m/cygwin/)
-{
-   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
-   {
-      $JAVA_LIB             = $JAVA_HOME.$LIB;
-   }
-   # Import SystemDrive enviroment variable
-   use Env qw(SYSTEMDRIVE);
-   # Change $SYSTEMDRIVE to lower case.
-   $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
-   use Env qw(SYSTEMROOT);
-   $CYGWIN_PATH          = PathFormat('/usr/bin'); # Windows bash path
-   $WIN_GREP             = '$CYGWIN_PATH'.$ds."grep.exe";
-   $WIN_FIND             = '$CYGWIN_PATH'.$ds."find.exe";
-   $WIN_LS               = '$CYGWIN_PATH'.$ds."ls.exe";
-   $WIN_GNUCOPY          = '$CYGWIN_PATH'.$ds."cp.exe";
-   $WIN_TOUCH            = '$CYGWIN_PATH'.$ds."touch.exe";
-}
-
-if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
-{
-   $JAVA_BIN             = $JAVA_HOME.$BIN;
-   $JAVA_INCLUDE         = $JAVA_HOME.$INCLUDE;
-}
-
 
 $PERL                 = PathFormat('@PERL@'); # Perl program
 $PERL_PATH            = dirname('@PERL@'); # Perl Path
-$XLIB                 = PathFormat('@XLIB@'); # X11 libraries
-$XINC                 = PathFormat('@XINC@'); # X11 includes
-
 
 #
-$SOLARENV             = PathFormat($SRC_ROOT.$SOLENV);
-# Location of the solver tree.
-$SOLARVER             = $SRC_ROOT.$SOLVER;
+$SOLARENV             = PathFormat("$SRC_ROOT/solenv");
 
-#Location of Solar version.
-$SOLARVERSION         = '$SOLARVER';
-
-#Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
-
-
-$SOLARENVINC          = '$SOLARENV'.$INC;
-# Location of dmake resource.
-$DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
 $CLASSPATH            = '';
@@ -285,29 +196,7 @@ $XCLASSPATH           = $CLASSPATH;
 
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
-{  $COMP_ENV          = $OUTPATH;
-
-   $JAVAHOME          = $JAVA_HOME;
-
-   $ILIB             = $cur_dir;
-
-   $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB;
-   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" ) {
-       $ILIB   .= $wps.$JAVA_HOME.$LIB;
-   }
-   if ( $CL_X64 ne "TRUE" ) {
-       $ILIB   .= $wps.$COMPATH.$LIB.
-                  $wps.$WINDOWS_SDK_HOME.$LIB;
-   } else {
-       $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
-                  $wps.$WINDOWS_SDK_HOME.$LIB64;
-   }
-   $ILIB       .= $wps.$DOTNET_FRAMEWORK_HOME.$LIB;
-   if ( '@ENABLE_DIRECTX@' ne "" ) {
-       $ILIB   .= $wps.$DIRECTXSDK_LIB;
-   }
-   # ILIB needs to use '\' directory seperators;
-   $ILIB = WinPath( $ILIB, ";" );
+{
 
    $JAVAHOME          = $JAVA_HOME;
 
@@ -320,7 +209,7 @@ if ($platform =~ m/linux|netbsd|freebsd|aix|solaris|openbsd|dragonfly/)
                         $ps.'$SOLARENV'.$BIN;
 
    if ($platform =~ m/solaris/) {
-	$PATH .= $ps.$USR_CCS.$BIN;
+	$PATH .= $ps."/usr/ccs/bin";
    }
 
    $PATH             .= $ps.$oldPATH;
@@ -491,51 +380,10 @@ open( OUT, ">$SRC_ROOT/$outfile" ) ||
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 
-ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
-ToFile( "L10N_MODULE",       $L10N_MODULE,       "e" );
-ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
-ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
-ToFile( "ANT",               PathFormat("@ANT@"), "e" );
-ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
-ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
-ToFile( "Empty",             $empty,             "n" );
 
-#
-# Writing the platform independent constant values to file.
-# (c = comment, e = environment variable, a = alias )
-ToFile( "Platform independent constant values.", $empty, "c" );
-
-}
-ToFile( "nodep",             "@nodep@",          "e" );
-
-#
-# Writing the platform dependent constant values to file.
-# (c = comment, e = environment variable, a = alias )
-ToFile( "Platform dependent constant values.", $empty, "c" );
-ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
-
-#
-# Writing the variables to file.
-# (c = comment, e = environment variable, a = alias, n = newline )
-ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform =~ m/cygwin/ )
-{  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
-   ToFile( "WINDOWS_SDK_HOME",  $WINDOWS_SDK_HOME,  "e" );
-   ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
-   ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
-   ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
-   ToFile( "INCLUDE",           "",                 "e" );
-   # Variables used when building the parts that needs to be available
-   # also as 64-bit versions in a 32-bit LibreOffice build, like
-   # the Explorer extension. If the configure script hasn't
-   # found the 64-bit (cross-)compiler, then @BUILD_X64@ will be empty.
-   ToFile( "BUILD_X64",         "@BUILD_X64@",      "e" );
-   if ( "@BUILD_X64@" eq "TRUE" ) {
-       ToFile( "CXX_X64_BINARY","@CXX_X64_BINARY@", "e" );
-       ToFile( "LINK_X64_BINARY","@LINK_X64_BINARY@","e" );
-       ToFile( "LIBMGR_X64_BINARY","@LIBMGR_X64_BINARY@","e" );
-   }
+{
 
    # Hack around dmake's mktmp not generating DOS paths.
    my $tmpdir = qx{cygpath -m "/tmp"};
@@ -547,24 +395,17 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "TMP", "$ENV{'TMP'}", "e" );
    }
 }
-elsif ( $platform =~ m/mingw32/ )
-{  ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
-   ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
-   ToFile( "MINGW_CLIB_DIR",    "@MINGW_CLIB_DIR@", "e" );
-   ToFile( "MINGW_SHARED_GCCLIB", "@MINGW_SHARED_GCCLIB@", "e" );
-   ToFile( "MINGW_SHARED_GXXLIB", "@MINGW_SHARED_GXXLIB@", "e" );
-   ToFile( "MINGW_SHARED_LIBSTDCPP", "@MINGW_SHARED_LIBSTDCPP@", "e" );
-   ToFile( "MINGW_GCCDLL",      "@MINGW_GCCDLL@",   "e" );
-   ToFile( "MINGW_GXXDLL",      "@MINGW_GXXDLL@",   "e" );
-
+else
+{
+   if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
+      ToFile( "TMPDIR",      "/tmp",               "e" );
+   } else {
+      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
+   }
 }
 
 ToFile( "PERL",              $PERL,              "e" );
-ToFile( "SOLARVER",          $SOLARVER,          "e" );
-ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
-ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
-ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
    ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
@@ -573,18 +414,7 @@ if ( $JDK ne "gcj" ) {
 else {
    ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
 }
-if ( '@JDK@' ne '' )
-{
-   ToFile( "JDK",             "@JDK@",           "e" );
-   ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
-   ToFile( "JAVA_SOURCE_VER", "@JAVA_SOURCE_VER@","e" );
-   ToFile( "JAVA_TARGET_VER", "@JAVA_TARGET_VER@","e" );
-   ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
-   ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
-   ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
-   ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
-   ToFile( "JVM_ONE_PATH_CHECK", "@JVM_ONE_PATH_CHECK@", "e" );
-}
+
 if ( '@CROSS_COMPILING@' eq 'YES' )
 {
    # Obviously we shouldn't set PATH to contain host binaries
@@ -593,48 +423,9 @@ if ( '@CROSS_COMPILING@' eq 'YES' )
 else
 {
    ToFile( "PATH",           $PATH,              "e" );
-}
-ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
-ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
-ToFile( "CC",                $CC,                "e" );
-ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
-ToFile( "HOST_PLATFORM",     "@host@",           "e" );
-if ( '@CROSS_COMPILING@' eq 'YES' )
-{
-   ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
-   ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
-   ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
-   ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT_FOR_BUILD@", "e" );
-}
-else
-{
-   ToFile( "CC_FOR_BUILD",      $CC,             "e" );
-   ToFile( "CXX_FOR_BUILD",     $CXX,            "e" );
-   ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
-   ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT@", "e" );
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
 }
-ToFile( "CXX",               $CXX,               "e" );
-ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
-ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-
-if ($platform !~ m/cygwin/) {
-   if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
-      ToFile( "TMPDIR",      "/tmp",               "e" );
-   } else {
-      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
-   }
-}
-
-if ( $platform =~ m/cygwin/ )
-{
-   ToFile( "ILIB",              $ILIB,              "e" );
-   ToFile( "GREP",              $WIN_GREP,          "e" );
-   ToFile( "FIND",              $WIN_FIND,          "e" );
-   ToFile( "LS",                $WIN_LS,            "e" );
-   ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
-   ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
-}
+ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 
 
 #
@@ -646,12 +437,6 @@ ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
 ToFile( "alias zipdep",      $zipdep,            "a" );
-
-# on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
-if ($platform =~ m/solaris|darwin|freebsd/)
-{
-  ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
-}
 
 #
 # Writing unset variables you might not need to file.
