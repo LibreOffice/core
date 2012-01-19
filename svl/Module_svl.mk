@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 # in tail build
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
+	CppunitTest_svl_urihelper \
     JunitTest_svl_complex \
 ))
 
