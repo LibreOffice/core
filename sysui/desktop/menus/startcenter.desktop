@@ -8,4 +8,4 @@ Exec=openoffice %U
 MimeType=application/vnd.openofficeorg.extension;
 Name=%PRODUCTNAME 
 GenericName=Office 
-Comment=The office productivity suite compatible to the open and standardized ODF document format. Supported by Sun Microsystems.
+Comment=The office productivity suite compatible to the open and standardized ODF document format.
