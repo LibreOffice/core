@@ -273,9 +273,6 @@ $SOLARVER             = $SRC_ROOT.$SOLVER;
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
 
-#Location of gnu make directories.
-$WORKDIR              = '$SRC_ROOT/workdir/$INPATH';
-$OUTDIR              = '$SOLARVER/$INPATH';
 #Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
 
 
@@ -311,27 +308,6 @@ foreach $language (@languages)
     }
 }
 
-# Location used by the linker to create libraries.
-if ($platform =~ m/solaris/)
-{  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$ds."lib.solaris.2.6".
-                        $L.$LIB.
-                        $L.$USR.$LIB.
-                        $L.$USR.$LOCAL.$LIB.
-                        $L.$USR_DT.$LIB.
-                        $L.$USR_OPENWIN.$LIB;
-}
-elsif ($platform =~ m/linux|netbsd|freebsd|aix|openbsd|dragonfly/)
-{
-   $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
-}
-elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
-{
-  # Nothing should be needed
-}
-elsif ($platform !~ m/cygwin/ && $platform !~ m/mingw32/ && $platform !~ m/^arm-apple/)
-{  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
-}
 
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
@@ -513,155 +489,6 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for general environment paths" );
 }
 
-# Linker library search directory paths.
-if ($platform =~ m/solaris/)
-{  $SOLARLIB          = $L.$par_dir.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB."solaris.2.6".
-                        $L.$LIB.
-                        $L.$USR_LIB;
-   if ( $CC =~ "gcc" ) {
-      $SOLARLIB      .= $L.$COMPATH.$LIB;
-   }
-   $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
-                        $L.$USR_DT.$LIB.
-                        $L.$USR_OPENWIN.$LIB.
-                        $L.$XLIB;
-
-}
-elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
-{  $SOLARLIB          = $L.$par_dir.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
-   if ($platform =~ m/openbsd/) {
-      $SOLARLIB       .= $L.$USR_LOCAL.$LIB;
-   }
-   if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" && $XLIB ne "no_x_libraries" ) {
-      $SOLARLIB       .= $L.$XLIB;
-   }
-}
-elsif ($platform =~ m/cygwin|mingw32/)
-{  $SOLARLIB          = $L.$par_dir.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$INPATH'.$LIB;
-}
-elsif ($platform =~ m/darwin/)
-{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB;
-}
-
-if ($SYSTEM_MOZILLA eq "YES")
-{
-       $SOLARLIB .= $L."@MOZ_LIB@"
-}
-
-# Location of the compiler include search directory paths.
-$SOLARINC             = $I.$cur_dir.
-                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."stl".
-                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".
-                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.
-                        $I.'$SOLARENV'.$INC.$ds.'$OUTPATH'.
-                        $I.'$SOLARENV'.$INC.
-                        $I.'$SRC_ROOT'.$ds."res";
-
-if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/ && '@CROSS_COMPILING@' ne 'YES')
-{
-    if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
-    {
-        $SOLARINC            .= '/SC5 ';
-    }
-    # Platform dependent include path at the top of this list of include paths
-    if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
-    {
-        $SOLARINC         .= $I.$COMPATH.$INCLUDE;
-    }
-
-	# pickup system jpeg over java jpeg on OpenBSD
-	if ($platform =~ m/openbsd/)
-	{   $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
-	}
-    if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
-    {   $SOLARINC  .= $I.$JAVA_HOME.$INCLUDE;
-	}
-
-	#include system dependent Java include directory
-	if (!($JDK eq "gcj") && $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
-	{
-   		if ($platform =~ m/solaris/)
-   		{  $SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."solaris";
-   		}
-   		elsif  ($platform =~ m/linux/)
-   		{  $SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."linux";
-   		}
-   		elsif ($platform =~ m/freebsd/)
-   		{
-      		$SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."freebsd";
-      		$SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."bsd";
-      		$SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."linux";
-   		}
-   		elsif ($platform =~ m/netbsd/)
-   		{  $SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."netbsd";
-   		}
-		elsif ( $platform =~ m/aix/ )
-		{  $SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."aix";
-		}
-		elsif ($platform =~ m/openbsd/)
-		{  $SOLARINC   .=$I.$JAVA_HOME.$INCLUDE.$ds."openbsd";
-		}
-
-   		#java threads include path
-
-        $SOLARINC .=$I.$JAVA_HOME.$INCLUDE.$ds."native_threads".$INCLUDE;
-	}
-    #The tail, if needed
-    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
-    {  if ( $XINC ne "/usr/include" && $XINC ne 'no_x_includes' ) {
-            $SOLARINC  .= $I.$XINC;
-       }
-    }
-}
-elsif ($platform =~ m/cygwin/)
-{  if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
-   {  $SOLARINC       .= $I.$JAVA_HOME.$INCLUDE.$ds."win32".
-                         $I.$JAVA_HOME.$INCLUDE;
-   }
-   $SOLARINC       .= $I.'$WINDOWS_SDK_HOME'.$INCLUDE.
-                      $I.'$COMPATH'.$INCLUDE;
-   if ( '@ENABLE_DIRECTX@' ne "" ) {
-       $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
-   }
-}
-elsif ($platform =~ m/mingw32/)
-{  if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
-   {  if (  '@build_os' eq 'cygwin' )
-      {  # Using MinGW from Cygwin. Use the normal Windows JDK
-         # headers
-         $SOLARINC       .= $I.$JAVA_HOME.$INCLUDE.$ds."win32".
-                            $I.$JAVA_HOME.$INCLUDE;
-      }
-      else
-      {  # Cross-compilation. Use our fake jni_md.h
-         # and othewise the build platform JDK headers
-         $SOLARINC       .= $I.$SOLARENVINC.$ds."win32".
-                            $I.$JAVA_HOME.$INCLUDE;
-      }
-   }
-}
-elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
-{  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
-                        $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
-}
-elsif ($platform =~ m/^arm-apple/)
-{
-}
-elsif ($platform =~ m/linux-androideabi$/)
-{
-}
-else
-{  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
-}
 
 #
 # F. Setting the different aliases.
@@ -710,7 +537,6 @@ ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
-ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 
@@ -770,8 +596,6 @@ ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
-ToFile( "WORKDIR",           $WORKDIR,           "e" );
-ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
 ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
@@ -795,8 +619,6 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
    ToFile( "JVM_ONE_PATH_CHECK", "@JVM_ONE_PATH_CHECK@", "e" );
 }
-ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
-ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
 if ( '@CROSS_COMPILING@' eq 'YES' )
 {
    # Obviously we shouldn't set PATH to contain host binaries
@@ -806,8 +628,6 @@ else
 {
    ToFile( "PATH",           $PATH,              "e" );
 }
-ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
-ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
@@ -819,10 +639,6 @@ if ( '@CROSS_COMPILING@' eq 'YES' )
    ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
    ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT_FOR_BUILD@", "e" );
-   ToFile( "OUTDIR_FOR_BUILD",  "@OUTDIR_FOR_BUILD@", "e");
-   ToFile( "SOLARINC_FOR_BUILD", "@SOLARINC_FOR_BUILD@", "e");
-   ToFile( "SOLARLIB_FOR_BUILD", "@SOLARLIB_FOR_BUILD@", "e");
-   ToFile( "WORKDIR_FOR_BUILD", "@WORKDIR_FOR_BUILD@", "e");
 }
 else
 {
@@ -830,11 +646,7 @@ else
    ToFile( "CXX_FOR_BUILD",     $CXX,            "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
    ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT@", "e" );
-   ToFile( "OUTDIR_FOR_BUILD",  $OUTDIR,         "e" );
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
-   ToFile( "SOLARINC_FOR_BUILD", $SOLARINC,      "e" );
-   ToFile( "SOLARLIB_FOR_BUILD", $SOLARLIB,      "e" );
-   ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
 ToFile( "CXX",               $CXX,               "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
