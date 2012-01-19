@@ -134,7 +134,7 @@ $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+$(COMPONENT_IMAGES) : $(SRC_ROOT)/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

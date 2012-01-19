@@ -55,7 +55,7 @@ my_instsets = $(shell ls -dt \
 installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
-    $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
+    $(SRC_ROOT)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
 .END
 
 .IF "$(OS)" == "WNT" && "$(CROSS_COMPILING)" != "YES"

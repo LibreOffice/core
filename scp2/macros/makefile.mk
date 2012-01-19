@@ -45,4 +45,4 @@ ALLTAR : $(INCCOM)$/langmacros.inc
 .PHONY $(INCCOM)$/langmacros.inc:
     @echo ------------------------------
     @echo Making: $@  
-    $(COMMAND_ECHO)$(PERL) macro.pl $(VERBOSITY) -o $@ -c $(SOLARSRC)/set_soenv.stamp
+    $(COMMAND_ECHO)$(PERL) macro.pl $(VERBOSITY) -o $@ -c $(SRC_ROOT)/set_soenv.stamp

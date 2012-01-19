@@ -1335,7 +1335,7 @@ sub usage {
     print STDERR "        --help       - print help info\n";
     print STDERR "        --ignore     - force tool to ignore errors\n";
     print STDERR "        --html       - generate html page with build status\n";
-    print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SOLARSRC}\n";
+    print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SRC_ROOT}\n";
     print STDERR "          --html_path      - set html page path\n";
     print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --interactive      - start interactive build process (process can be managed via html page)\n";

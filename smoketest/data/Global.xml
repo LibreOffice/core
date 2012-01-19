@@ -120,8 +120,8 @@ Dim gDlgState as Integer
 
 Sub SetGlobalDoc
     gOutputDoc = ThisComponent
-    REM need to have the binfilter component, and SOLARSRC set to find sample docs
-    if Environ(&quot;SOLARSRC&quot;) &lt;&gt; &quot;&quot; then
+    REM need to have the binfilter component, and SRC_ROOT set to find sample docs
+    if Environ(&quot;SRC_ROOT&quot;) &lt;&gt; &quot;&quot; then
         oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
     End If
 end Sub

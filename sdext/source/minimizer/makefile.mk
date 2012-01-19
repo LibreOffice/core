@@ -130,11 +130,11 @@ ZIP2LIST= \
 .IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
 
-$(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
+$(COMPONENT_BITMAPS) : $(SRC_ROOT)/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+$(COMPONENT_IMAGES) : $(SRC_ROOT)/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

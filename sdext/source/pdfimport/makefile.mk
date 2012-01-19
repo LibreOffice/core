@@ -165,7 +165,7 @@ $(MISC)/descriptions : $(DESCRIPTION)
 .ENDIF
     $(TOUCH) $@
 
-$(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+$(COMPONENT_IMAGES) :  $(SRC_ROOT)/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .ENDIF # L10N_framework

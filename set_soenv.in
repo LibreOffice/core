@@ -259,8 +259,6 @@ $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
-# Location of the source.
-$SOLARSRC             = '$SRC_ROOT';
 
 # default TARFILE_LOCATION
 if ('@TARFILE_LOCATION@' eq "DEFAULT")
@@ -279,7 +277,6 @@ $SOLARVERSION         = '$SOLARVER';
 $WORKDIR              = '$SRC_ROOT/workdir/$INPATH';
 $OUTDIR              = '$SOLARVER/$INPATH';
 #Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
-$SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
 
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
@@ -779,7 +776,6 @@ ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
 ToFile( "WORKDIR",           $WORKDIR,           "e" );
 ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
-ToFile( "SOLARDEFIMG",       $SOLARDEFIMG,       "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
 ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
@@ -864,8 +860,6 @@ if ($platform !~ m/cygwin/) {
       ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
    }
 }
-ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
-ToFile( "SRCDIR",           $SOLARSRC,           "e" );
 
 if ( $platform =~ m/cygwin/ )
 {
