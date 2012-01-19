@@ -97,10 +97,10 @@ namespace dbaccess
         sal_Int32                   m_nFetchSize;
         sal_Int32                   m_nRowCount;
         sal_Int32                   m_nPrivileges;
-        sal_Int32                   m_nPosition;                // 0 means beforefirst
+        sal_Int32                   m_nPosition;                // 0 means before first (i.e. 1-based)
 
-        sal_Int32                   m_nStartPos;                // start pos of the window zero based
-        sal_Int32                   m_nEndPos;                  // end   pos of the window zero based
+        sal_Int32                   m_nStartPos;                // start pos of the window zero based (inclusive)
+        sal_Int32                   m_nEndPos;                  // end   pos of the window zero based (exclusive)
 
         sal_Bool                    m_bRowCountFinal ;
         sal_Bool                    m_bBeforeFirst ;
@@ -109,7 +109,7 @@ namespace dbaccess
         sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
 
-        sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
+        sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::const_iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
         sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
         sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
@@ -143,7 +143,7 @@ namespace dbaccess
         ORowSetMatrix::iterator calcPosition() const;
 
     protected:
-        ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
+        const ORowSetMatrix::iterator& getEnd() const { return m_aMatrixEnd;}
         // is called when after a moveToInsertRow a movement (next, etc) was called
         void cancelRowModification();
     public:

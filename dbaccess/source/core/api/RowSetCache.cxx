@@ -443,17 +443,29 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
     }
     if(!m_nPosition)
     {
-        sal_Int32 nNewSt = 1;
-        fillMatrix(nNewSt,_nSize+1);
+        sal_Int32 nNewSt = 0;
+        fillMatrix(nNewSt,_nSize);
+        OSL_ENSURE(nNewSt == 0, "fillMatrix set new start to unexpected value");
         m_nStartPos = 0;
         m_nEndPos = _nSize;
     }
-    else if (m_nStartPos < m_nPosition && m_nPosition < m_nEndPos)
+    else if (m_nStartPos < m_nPosition && m_nPosition <= m_nEndPos)
     {
         sal_Int32 nNewSt = -1;
-        fillMatrix(nNewSt,_nSize+1);
-        m_nStartPos = 0;
-        m_nEndPos = _nSize;
+        fillMatrix(nNewSt,_nSize);
+        if (nNewSt >= 0)
+        {
+            m_nStartPos = nNewSt;
+            m_nEndPos =  nNewSt + _nSize;
+            m_aMatrixIter = calcPosition();
+        }
+    }
+    else
+    {
+        OSL_FAIL("m_nPosition not between m_nStartPos and m_nEndpos");
+        // try to repair
+        moveWindow();
+        m_aMatrixIter = calcPosition();
     }
 }
 
@@ -737,32 +749,34 @@ sal_Bool ORowSetCache::afterLast(  )
 sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos)
 {
     OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
-    // fill the whole window with new data
+    // If _nNewStartPos >= 0, then fill the whole window with new data
+    // Else if _nNewStartPos == -1, then fill only segment [m_nEndPos, _nNewEndPos)
+    // Else, undefined (invalid argument)
+    OSL_ENSURE( _nNewStartPos >= -1, "ORowSetCache::fillMatrix: invalid _nNewStartPos" );
+
     ORowSetMatrix::iterator aIter;
     sal_Int32 i;
     sal_Bool bCheck;
     if ( _nNewStartPos == -1 )
     {
-        aIter = m_pMatrix->begin() + m_nEndPos;
-        i = m_nEndPos+1;
+        aIter = m_pMatrix->begin() + (m_nEndPos - m_nStartPos);
+        i = m_nEndPos;
     }
     else
     {
         aIter = m_pMatrix->begin();
-        i = _nNewStartPos;
+        i = _nNewStartPos + 1;
     }
-    bCheck = m_pCacheSet->absolute(i); // -1 no need to
+    bCheck = m_pCacheSet->absolute(i);
 
 
-    for(;i<_nNewEndPos;++i,++aIter)
+    for(; i <= _nNewEndPos; ++i,++aIter)
     {
         if(bCheck)
         {
             if(!aIter->is())
                 *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
             m_pCacheSet->fillValueRow(*aIter,i);
-            if(!m_bRowCountFinal)
-                ++m_nRowCount;
         }
         else
         {   // there are no more rows found so we can fetch some before start
@@ -775,35 +789,28 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
                     m_nRowCount = i-1; // it can be that getRow return zero
                 m_bRowCountFinal = sal_True;
             }
-            if(m_nRowCount > m_nFetchSize)
-            {
-                ORowSetMatrix::iterator aEnd = aIter;
-                ORowSetMatrix::iterator aRealEnd = m_pMatrix->end();
-                sal_Int32 nPos = m_nRowCount - m_nFetchSize + 1;
-                _nNewStartPos = nPos;
-                bCheck = m_pCacheSet->absolute(_nNewStartPos);
+            const ORowSetMatrix::iterator aEnd = aIter;
+            ORowSetMatrix::iterator aRealEnd = m_pMatrix->end();
+            sal_Int32 nPos = (m_nRowCount > m_nFetchSize) ? (m_nRowCount - m_nFetchSize) : 0;
+            _nNewStartPos = nPos;
+            ++nPos;
+            bCheck = m_pCacheSet->absolute(nPos);
 
-                for(;bCheck && aIter != aRealEnd;++aIter)
-                {
-                    if(bCheck)
-                    {
-                        if(!aIter->is())
-                            *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
-                        m_pCacheSet->fillValueRow(*aIter,nPos++);
-                    }
-                    bCheck = m_pCacheSet->next();
-                }
-                if(aIter != aEnd)
-                    ::std::rotate(m_pMatrix->begin(),aEnd,aRealEnd);
+            for(;bCheck && aIter != aRealEnd;++aIter)
+            {
+                if(!aIter->is())
+                    *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
+                m_pCacheSet->fillValueRow(*aIter,nPos++);
+                bCheck = m_pCacheSet->next();
             }
+            if(aIter != aEnd)
+                ::std::rotate(m_pMatrix->begin(),aEnd,aIter);
             break;
         }
-        if ( i < (_nNewEndPos-1) )
-            bCheck = m_pCacheSet->next();
+        bCheck = m_pCacheSet->next();
     }
     // we have to read one row forward to ensure that we know when we are on last row
     // but only when we don't know it already
-    /*
     if(!m_bRowCountFinal)
     {
         if(!m_pCacheSet->next())
@@ -816,52 +823,94 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
            m_nRowCount = std::max(i,m_nRowCount);
 
     }
-    */
     return bCheck;
 }
 
+// If m_nPosition is out of the current window,
+// move it and update m_nStartPos and m_nEndPos
+// Caller is responsible for updating m_aMatrixIter
 sal_Bool ORowSetCache::moveWindow()
 {
+
+    if ( m_nStartPos < m_nPosition && m_nPosition <= m_nEndPos )
+    {
+        // just move inside the window
+        OSL_ENSURE((m_nPosition - m_nStartPos) <= (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+        // make double plus sure that we have fetched that row
+        m_aMatrixIter = calcPosition();
+        OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(), "New m_aMatrixIter is at end(), but should not.");
+        if(!m_aMatrixIter->is())
+        {
+            sal_Bool bOk( m_pCacheSet->absolute( m_nPosition ) );
+            if ( bOk )
+            {
+                *m_aMatrixIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
+                m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
+                // we have to read one row forward to ensure that we know when we are on last row
+                // but only when we don't know it already
+                if ( !m_bRowCountFinal )
+                {
+                    bOk = m_pCacheSet->absolute_checked( m_nPosition + 1,sal_False );
+                    if ( bOk )
+                        m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
+                }
+            }
+            if(!bOk && !m_bRowCountFinal)
+            {
+                // because we stand after the last row
+                m_nRowCount = m_pCacheSet->previous_checked(sal_False) ? m_pCacheSet->getRow() : 0;
+                m_bRowCountFinal = sal_True;
+            }
+        }
+        return sal_True;
+    }
+
     sal_Bool bRet = sal_True;
 
-    sal_Int32 nDiff = (sal_Int32)(m_nFetchSize*0.5 -0.5);
-    sal_Int32 nNewStartPos  = (m_nPosition - nDiff);
+    sal_Int32 nDiff = (m_nFetchSize - 1) / 2;
+    sal_Int32 nNewStartPos  = (m_nPosition - nDiff) - 1; //m_nPosition is 1-based, but m_nStartPos is 0-based
     sal_Int32 nNewEndPos    = nNewStartPos + m_nFetchSize;
 
-    if ( m_nPosition <= m_nStartPos )
-    {   // the window is behind the new start pos
+    if ( nNewStartPos <= m_nStartPos )
+    {   // the new window starts behind the old start pos
         if(!m_nStartPos)
-            return sal_False;
-        // the new position should be the nPos - nFetchSize/2
+            // Can't go any lower than that
+            return sal_True;
         if ( nNewEndPos > m_nStartPos )
-        {   // but the two regions are overlapping
-            // fill the rows behind the new end
-
-            ORowSetMatrix::iterator aEnd; // the iterator we need for rotate
-            ORowSetMatrix::iterator aIter; // the iterator we fill with new values
+        {   // The two regions are overlapping.
+            // We'll first rotate the contents of m_pMatrix so that the overlap area
+            // is positioned right; in the old window it is at the beginning,
+            // it has to go to the end.
+            // then we fill in the rows between new and old start pos.
 
             sal_Bool bCheck = sal_True;
-            if ( nNewStartPos < 1 )
+            if ( nNewStartPos < 0 )
             {
+                // The computed new window crashes through the floor (begins before first row);
+                // nNew*Pos has to be shifted by -nNewStartPos
+                nNewEndPos -= nNewStartPos;
+                nNewStartPos = 0;
                 bCheck = m_pCacheSet->first();
-                OSL_ENSURE((nNewEndPos - m_nStartPos - nNewStartPos) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-                aEnd = m_pMatrix->begin() + (nNewEndPos - m_nStartPos - nNewStartPos);
-                aIter = aEnd;
-                m_nStartPos = 0;
             }
             else
             {
-                OSL_ENSURE((nNewEndPos - m_nStartPos -1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-                aEnd = m_pMatrix->begin() + ((nNewEndPos - m_nStartPos)-1);
-                aIter = m_pMatrix->begin() + ((nNewEndPos - m_nStartPos)-1);
                 bCheck = m_pCacheSet->absolute(nNewStartPos);
-                m_nStartPos = nNewStartPos -1;
             }
+            const sal_Int32 nOverlapSize = nNewEndPos - m_nStartPos;
+            OSL_ENSURE( static_cast<ORowSetMatrix::size_type>(nOverlapSize) <= m_pMatrix->size(), "new window end is after end of cache matrix!" );
+            // the first position in m_pMatrix we don't recycle;
+            // content will be moved to m_pMatrix.begin()
+            ORowSetMatrix::iterator aEnd (m_pMatrix->begin() + nOverlapSize);
+            m_nStartPos = nNewStartPos;
+            m_nEndPos = nNewEndPos;
 
             if ( bCheck )
             {
-                sal_Int32 nPos = m_nStartPos;
-                bCheck = fill(aIter,m_pMatrix->end(),nPos,bCheck);
+                {
+                    ORowSetMatrix::iterator aIter(aEnd);
+                    sal_Int32 nPos = m_nStartPos + 1;
+                    bCheck = fill(aIter, m_pMatrix->end(), nPos, bCheck);
+                }
 
                 ::std::rotate(m_pMatrix->begin(),aEnd,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
@@ -869,29 +918,23 @@ sal_Bool ORowSetCache::moveWindow()
                 ptrdiff_t nNewDist = aEnd - m_pMatrix->begin();
                 ptrdiff_t nOffSet = m_pMatrix->end() - aEnd;
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-                ORowSetCacheMap::iterator aCacheEnd  = m_aCacheIterators.end();
+                const ORowSetCacheMap::const_iterator aCacheEnd  = m_aCacheIterators.end();
                 for(;aCacheIter != aCacheEnd;++aCacheIter)
                 {
                     if ( !aCacheIter->second.pRowSet->isInsertRow()
                         && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
                     {
-                        ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                        const ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                         if ( nDist >= nNewDist )
                         {
+                            // That's from outside the overlap area; invalidate iterator.
                             aCacheIter->second.aIterator = m_pMatrix->end();
                         }
                         else
                         {
-#if OSL_DEBUG_LEVEL > 0
-                            ORowSetMatrix::iterator aOldPos;
-                            aOldPos = aCacheIter->second.aIterator;
-#endif
-                            CHECK_MATRIX_POS( ((aOldPos - m_pMatrix->begin()) + nOffSet) );
+                            // Inside overlap area: move to correct position
+                            CHECK_MATRIX_POS( (nDist + nOffSet) );
                             aCacheIter->second.aIterator += nOffSet;
-#if OSL_DEBUG_LEVEL > 0
-                            ORowSetMatrix::iterator aCurrentPos;
-                            aCurrentPos = aCacheIter->second.aIterator;
-#endif
                             OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
                                     && aCacheIter->second.aIterator < m_pMatrix->end(),"Iterator out of area!");
                         }
@@ -906,24 +949,23 @@ sal_Bool ORowSetCache::moveWindow()
         }
         else
         {// no rows can be reused so fill again
-            if(nNewStartPos < 1) // special case
+            if(nNewStartPos < 1) // special case // LEM: Err... Why not just call reFillMatrix(0, m_nFetchSize) ?
             {
                 m_nStartPos = 0;
 
-                rotateCacheIterator(static_cast<sal_Int16>(m_nFetchSize+1)); // static_cast<sal_Int16>(m_nFetchSize+1)
+                rotateCacheIterator(static_cast<ORowSetMatrix::difference_type>(m_nFetchSize+1)); // invalidate every iterator
 
                 m_pCacheSet->beforeFirst();
 
-                sal_Bool bCheck;
                 ORowSetMatrix::iterator aIter = m_pMatrix->begin();
-                for(sal_Int32 i=0;i<m_nFetchSize;++i,++aIter)
+                for(sal_Int32 i=1;i<=m_nFetchSize;++i,++aIter)
                 {
-                    bCheck = m_pCacheSet->next();
+                    bool bCheck = m_pCacheSet->next();
                     if ( bCheck )
                     {
                         if(!aIter->is())
                             *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
-                        m_pCacheSet->fillValueRow(*aIter,i+1);
+                        m_pCacheSet->fillValueRow(*aIter,i);
                     }
                     else
                         *aIter = NULL;
@@ -933,78 +975,61 @@ sal_Bool ORowSetCache::moveWindow()
                 bRet = reFillMatrix(nNewStartPos,nNewEndPos);
         }
     }
-    else if(m_nPosition > m_nStartPos)
+    else /* nNewStartPos > m_nStartPos */
     {   // the new start pos is above the startpos of the window
 
-        if(m_nPosition <= (m_nStartPos+m_nFetchSize))
-        {   // position in window
-            OSL_ENSURE((m_nPosition - m_nStartPos -1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-            m_aMatrixIter = calcPosition();
-            if(!m_aMatrixIter->is())
-            {
-                sal_Bool bOk( m_pCacheSet->absolute( m_nPosition ) );
-                if ( bOk )
-                {
-                    *m_aMatrixIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
-                    m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
-                    // we have to read one row forward to ensure that we know when we are on last row
-                    // but only when we don't know it already
-                    if ( !m_bRowCountFinal )
-                    {
-                        bOk = m_pCacheSet->absolute_checked( m_nPosition + 1,sal_False );
-                        if ( bOk )
-                            m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
-                    }
-                }
-                if(!bOk && !m_bRowCountFinal)
-                {
-                    // because we stand after the last row
-                    m_nRowCount = m_pCacheSet->previous_checked(sal_False) ? m_pCacheSet->getRow() : 0;//  + 1 removed
-                    m_bRowCountFinal = sal_True;
-                }
-            }
-        }
-        else if(nNewStartPos < (m_nStartPos+m_nFetchSize))
-        {   // position behind window but the region is overlapping
-            // the rows from begin() to (begin + nNewStartPos - m_nStartPos) can be refilled with the new rows
-            // the rows behind this can be reused
+        if(nNewStartPos < (m_nStartPos+m_nFetchSize))
+        {   // Position behind window but the region is overlapping.
+            // The rows from begin() [inclusive] to (begin() + nNewStartPos - m_nStartPos) [exclusive]
+            // have to be refilled with new to-be-fetched rows.
+            // The rows behind this can be reused
             ORowSetMatrix::iterator aIter = m_pMatrix->begin();
-            CHECK_MATRIX_POS(nNewStartPos - m_nStartPos - 1);
-            ORowSetMatrix::iterator aEnd  = m_pMatrix->begin() + (nNewStartPos - m_nStartPos - 1);
+            const sal_Int32 nNewStartPosInMatrix = nNewStartPos - m_nStartPos;
+            CHECK_MATRIX_POS( nNewStartPosInMatrix );
+            const ORowSetMatrix::iterator aEnd  = m_pMatrix->begin() + nNewStartPosInMatrix;
 
-            sal_Int32 nPos = m_nStartPos + m_nFetchSize + 1;
+            sal_Int32 nPos = m_nEndPos + 1;
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
-            bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region wew don't need anymore
+            bCheck = fill(aIter, aEnd, nPos, bCheck); // refill the region we don't need anymore
+            //aIter and nPos are now the position *after* last filled in one!
 
-            // we have to read one row forward to enshure that we know when we are on last row
-            // but only when we don't know it already
-            sal_Bool bOk = sal_True;
-            if(bCheck && !m_bRowCountFinal)
-                bOk = m_pCacheSet->next();
             // bind end to front
             if(bCheck)
-            {   // rotate the end to the front
-                ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
+            {
+                OSL_ENSURE(aIter == aEnd, "fill() said went till end, but did not.");
+                // rotate the end to the front
+                ::std::rotate(m_pMatrix->begin(), aEnd, m_pMatrix->end());
                 // now correct the iterator in our iterator vector
-                rotateCacheIterator( (sal_Int16)( aIter - m_pMatrix->begin() ) );
-                m_nStartPos = nNewStartPos - 1; // must be -1
+                rotateCacheIterator( aEnd - m_pMatrix->begin() );
+                m_nStartPos = nNewStartPos;
+                m_nEndPos = nNewEndPos;
                 // now I can say how many rows we have
+                // we have to read one row forward to ensure that we know when we are on last row
+                // but only when we don't know it already
+                sal_Bool bOk = sal_True;
+                if(!m_bRowCountFinal)
+                    bOk = m_pCacheSet->next();
                 if(!bOk)
                 {
                     m_pCacheSet->previous_checked(sal_False); // because we stand after the last row
                     m_nRowCount      = nPos; // here we have the row count
+                    OSL_ENSURE(nPos == m_pCacheSet->getRow(),"nPos is not valid!");
                     m_bRowCountFinal = sal_True;
                 }
                 else if(!m_bRowCountFinal)
-                    m_nRowCount = std::max(++nPos,m_nRowCount);
+                    m_nRowCount = std::max(nPos+1, m_nRowCount); //+1 because we successfully moved to row after nPos
+                else
+                    OSL_ENSURE(m_nRowCount > nPos, "Final m_nRowCount is smaller than row I moved to!");
             }
             else
-            {   // the end was reached before end() so we can set the start before nNewStartPos
+            {   // the end was reached before or at end() so we can set the start before or at nNewStartPos
+                // and possibly keep more of m_pMatrix than planned.
+                const ORowSetMatrix::iterator::difference_type nStartPosOffset  = aIter - m_pMatrix->begin();
 
-                m_nStartPos += (aIter - m_pMatrix->begin());
+                m_nStartPos += nStartPosOffset;
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
-                rotateCacheIterator( (sal_Int16)( aIter - m_pMatrix->begin() ) );
+                rotateCacheIterator( nStartPosOffset );
 
                 if ( !m_bRowCountFinal )
                 {
@@ -1013,12 +1038,12 @@ sal_Bool ORowSetCache::moveWindow()
                     OSL_ENSURE(nPos == m_pCacheSet->getRow(),"nPos isn't valid!");
                     m_bRowCountFinal = sal_True;
                 }
-                // TODO check
-                //  m_nStartPos = (nNewStartPos+m_nRowCount) - m_nFetchSize ;
+
                 if(m_nStartPos < 0)
                     m_nStartPos = 0;
+                m_nEndPos = m_nStartPos + m_nFetchSize;
             }
-            // here we need only to check if the begining row is valid. If not we have to fetch it.
+            // here we need only to check if the beginning row is valid. If not we have to fetch it.
             if(!m_pMatrix->begin()->is())
             {
                 aIter = m_pMatrix->begin();
@@ -1050,10 +1075,10 @@ sal_Bool ORowSetCache::moveWindow()
 
 sal_Bool ORowSetCache::first(  )
 {
-    // first move to the first row
-    // then check if the cache window is at the begining
-    // when not postionize the window and fill it with data
-    // smart moving of the window -> clear only the rows whom are out of range
+    // First move to the first row.
+    // Then check if the cache window is at the beginning.
+    // If not, then position the window and fill it with data.
+    // We move the window smartly, i.e. we clear only the rows that are out of range
     sal_Bool bRet = m_pCacheSet->first();
     if(bRet)
     {
@@ -1082,7 +1107,7 @@ sal_Bool ORowSetCache::last(  )
         if(!m_bRowCountFinal)
         {
             m_bRowCountFinal = sal_True;
-            m_nRowCount = m_nPosition = m_pCacheSet->getRow(); // not  + 1
+            m_nRowCount = m_pCacheSet->getRow(); // not  + 1
         }
         m_nPosition = m_pCacheSet->getRow();
         moveWindow();
@@ -1630,7 +1655,7 @@ void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 
 sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
-    TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
+    const TOldRowSetRows::const_iterator aOldRowEnd = m_aOldRows.end();
     for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
     {
         if ( aOldRowIter->is() && (*aOldRowIter)->getRow().is() )
@@ -1638,28 +1663,30 @@ sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPo
     }
     sal_Int32 nNewSt = _nNewStartPos;
     sal_Bool bRet = fillMatrix(nNewSt,_nNewEndPos);
-    m_nStartPos = nNewSt - 1;
-    rotateCacheIterator(static_cast<sal_Int16>(m_nFetchSize+1)); // forces every iterator to null
+    m_nStartPos = nNewSt;
+    m_nEndPos = nNewSt + (_nNewEndPos - _nNewStartPos);
+    OSL_ENSURE( _nNewEndPos - _nNewStartPos == m_nFetchSize, "reFillMatrix called with Start/EndPos not m_nFetchSize apart");
+    rotateCacheIterator(static_cast<ORowSetMatrix::difference_type>(m_nFetchSize+1)); // invalidate every iterator
     return bRet;
 }
 
-sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck)
+sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::const_iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck)
 {
-    sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
-    for(; _bCheck && _aIter != _aEnd;)
+    const sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
+    for(; _bCheck && _aIter != _aEnd; _aIter++, _nPos++)
     {
         if ( !_aIter->is() )
             *_aIter = new ORowSetValueVector(nColumnCount);
         else
         {
-            TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
+            const TOldRowSetRows::const_iterator aOldRowEnd = m_aOldRows.end();
             for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
             {
                 if ( (*aOldRowIter)->getRow() == *_aIter )
                     *_aIter = new ORowSetValueVector(nColumnCount);
             }
         }
-        m_pCacheSet->fillValueRow(*_aIter++,++_nPos);
+        m_pCacheSet->fillValueRow(*_aIter, _nPos);
         _bCheck = m_pCacheSet->next();
     }
     return _bCheck;
@@ -1677,7 +1704,7 @@ void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 
     m_bRowCountFinal = sal_False;
     m_nRowCount = 0;
-    reFillMatrix(m_nStartPos+1,m_nEndPos+1);
+    reFillMatrix(m_nStartPos,m_nEndPos);
 }
 
 void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
