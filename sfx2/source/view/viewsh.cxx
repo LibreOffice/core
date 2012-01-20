@@ -1480,7 +1480,7 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
 void SfxViewShell::AddSubShell( SfxShell& rShell )
 {
-    pImp->aArr.Insert( &rShell, pImp->aArr.Count() );
+    pImp->aArr.push_back(&rShell);
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( pDisp->IsActive(*this) )
     {
@@ -1494,25 +1494,24 @@ void SfxViewShell::RemoveSubShell( SfxShell* pShell )
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( !pShell )
     {
-        sal_uInt16 nCount = pImp->aArr.Count();
+        size_t nCount = pImp->aArr.size();
         if ( pDisp->IsActive(*this) )
         {
-            for ( sal_uInt16 n=nCount; n>0; n-- )
-                pDisp->Pop( *pImp->aArr[n-1] );
+            for(size_t n = nCount; n > 0; --n)
+                pDisp->Pop(*pImp->aArr[n - 1]);
             pDisp->Flush();
         }
-
-        pImp->aArr.Remove(0, nCount);
+        pImp->aArr.clear();
     }
     else
     {
-        sal_uInt16 nPos = pImp->aArr.GetPos( pShell );
-        if ( nPos != 0xFFFF )
+        SfxShellArr_Impl::iterator i = std::find(pImp->aArr.begin(), pImp->aArr.end(), pShell);
+        if(i != pImp->aArr.end())
         {
-            pImp->aArr.Remove( nPos );
-            if ( pDisp->IsActive(*this) )
+            pImp->aArr.erase(i);
+            if(pDisp->IsActive(*this))
             {
-                pDisp->RemoveShell_Impl( *pShell );
+                pDisp->RemoveShell_Impl(*pShell);
                 pDisp->Flush();
             }
         }
@@ -1521,22 +1520,21 @@ void SfxViewShell::RemoveSubShell( SfxShell* pShell )
 
 SfxShell* SfxViewShell::GetSubShell( sal_uInt16 nNo )
 {
-    sal_uInt16 nCount = pImp->aArr.Count();
-    if ( nNo<nCount )
-        return pImp->aArr[nCount-nNo-1];
+    sal_uInt16 nCount = pImp->aArr.size();
+    if(nNo < nCount)
+        return pImp->aArr[nCount - nNo - 1];
     return NULL;
 }
 
 void SfxViewShell::PushSubShells_Impl( sal_Bool bPush )
 {
-    sal_uInt16 nCount = pImp->aArr.Count();
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( bPush )
     {
-        for ( sal_uInt16 n=0; n<nCount; n++ )
-            pDisp->Push( *pImp->aArr[n] );
+        for(SfxShellArr_Impl::const_iterator i = pImp->aArr.begin(); i != pImp->aArr.end(); ++i)
+            pDisp->Push(**i);
     }
-    else if ( nCount )
+    else if(!pImp->aArr.empty())
     {
         SfxShell& rPopUntil = *pImp->aArr[0];
         if ( pDisp->GetShellLevel( rPopUntil ) != USHRT_MAX )

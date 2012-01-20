@@ -29,8 +29,6 @@
 #ifndef SFX_VIEWIMP_HXX
 #define SFX_VIEWIMP_HXX
 
-// include ---------------------------------------------------------------
-
 #include <basic/sbxobj.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>                  // SvBorder
@@ -43,13 +41,11 @@
 #include <vcl/print.hxx>
 #include <queue>
 
-// forward ---------------------------------------------------------------
-
 class SfxOfficeDispatch;
 class SfxBaseController;
 
 typedef SfxShell* SfxShellPtr_Impl;
-SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
+typedef std::vector<SfxShellPtr_Impl> SfxShellArr_Impl;
 
 class SfxClipboardChangeListener;
 
