@@ -43,7 +43,6 @@
 
 #include <sfx2/sfx.hrc>
 
-
 struct SfxSlotType_Impl
 {
     sal_uInt16  nId;
@@ -53,9 +52,6 @@ struct SfxSlotType_Impl
         nId(nTheId), nType(nTheType)
     {}
 };
-
-DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8)
-
 
 SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
  : _pGroups(0)
@@ -82,8 +78,8 @@ SfxSlotPool::~SfxSlotPool()
     delete _pGroups;
     if ( _pTypes )
     {
-        for ( sal_uInt16 n =_pTypes->Count(); n--; )
-            delete _pTypes->GetObject(n);
+        for(sal_uInt16 n = 0; n < _pTypes->size(); ++n)
+            delete (*_pTypes)[n];
         delete _pTypes;
     }
 }
