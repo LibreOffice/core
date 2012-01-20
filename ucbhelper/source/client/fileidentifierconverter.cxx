@@ -47,9 +47,7 @@ namespace ucbhelper {
 //============================================================================
 
 rtl::OUString
-getLocalFileURL(
-    uno::Reference< ucb::XContentProviderManager > const &)
-    SAL_THROW((uno::RuntimeException))
+getLocalFileURL() SAL_THROW((uno::RuntimeException))
 {
     // If there were more file systems than just "file:///" (e.g., the obsolete
     // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for

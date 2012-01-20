@@ -117,7 +117,7 @@ bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::
 
         try
         {
-            rtl::OUString aBase( ::ucbhelper::getLocalFileURL( xManager ) );
+            rtl::OUString aBase( ::ucbhelper::getLocalFileURL() );
             rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, aBase, rName );
         }
         catch (const ::com::sun::star::uno::RuntimeException&)
@@ -145,7 +145,7 @@ bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::
         try
         {
             INetURLObject aObj( rName );
-            INetURLObject aLocal( ::ucbhelper::getLocalFileURL( xManager ) );
+            INetURLObject aLocal( ::ucbhelper::getLocalFileURL() );
             if ( aObj.GetProtocol() == aLocal.GetProtocol() )
                 rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
         }

@@ -48,17 +48,11 @@ namespace ucbhelper {
     The result can be used as the rBaseURL parameter of
     ucb::getFileURLFromSystemPath().
 
-    @param rManager
-    A content provider manager.  Must not be null.
-
     @returns
     either a 'root' URL for the most 'local' file content provider, or an
     empty string, if no such URL can meaningfully be constructed.
  */
-UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL(
-    com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager)
+UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL()
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
 //============================================================================

@@ -2346,7 +2346,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             DBG_ASSERT(xManager.is(),
                        "MyWin::ToolBarHandler(): Service lacks interface");
 
-            rtl::OUString aURL(getLocalFileURL(xManager));
+            rtl::OUString aURL(getLocalFileURL());
 
             String aText(RTL_CONSTASCII_USTRINGPARAM("Local file URL: "));
             aText += String(aURL);
