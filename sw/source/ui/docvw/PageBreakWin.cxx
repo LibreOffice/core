@@ -83,11 +83,17 @@ namespace
 
     void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )
     {
-        Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
-        if ( !m_pWin->Contains( aEventPos ) )
-            m_pWin->Fade( false );
+        if ( rMEvt.IsLeaveWindow() )
+        {
+            // don't fade if we just move to the 'button'
+            Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
+            if ( !m_pWin->Contains( aEventPos ) )
+                m_pWin->Fade( false );
+        }
         else if ( !m_pWin->IsVisible() )
+        {
             m_pWin->Fade( true );
+        }
 
         if ( !rMEvt.IsSynthetic() )
         {
@@ -303,9 +309,13 @@ void SwPageBreakWin::Select( )
 
 void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
 {
-    Point aEventPos( rMEvt.GetPosPixel() + rMEvt.GetPosPixel() );
-    if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
-        Fade( false );
+    if ( rMEvt.IsLeaveWindow() )
+    {
+        // don't fade if we just move to the 'line', or the popup menu is open
+        Point aEventPos( rMEvt.GetPosPixel() + rMEvt.GetPosPixel() );
+        if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
+            Fade( false );
+    }
     else if ( !IsVisible() )
         Fade( true );
 }
