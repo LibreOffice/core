@@ -43,7 +43,6 @@
 
 #include <sfx2/sfx.hrc>
 
-//====================================================================
 
 struct SfxSlotType_Impl
 {
@@ -55,10 +54,8 @@ struct SfxSlotType_Impl
     {}
 };
 
-DECL_PTRARRAY(SfxInterfaceArr_Impl, SfxInterface*, 6, 3)
 DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8)
 
-//====================================================================
 
 SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
  : _pGroups(0)
@@ -97,13 +94,13 @@ SfxSlotPool::~SfxSlotPool()
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 {
     // add to the list of SfxObjectInterface instances
-    if ( _pInterfaces == 0 )
+    if ( _pInterfaces == NULL )
         _pInterfaces = new SfxInterfaceArr_Impl;
-    _pInterfaces->Append(&rInterface);
+    _pInterfaces->push_back(&rInterface);
 
     // Stop at a (single) Null-slot (for syntactic reasons the interfaces
     // always contain at least one slot)
-    if ( rInterface.Count() == 1 && !rInterface[0]->nSlotId )
+    if ( rInterface.Count() != 0 && !rInterface[0]->nSlotId )
         return;
 
     // possibly add Interface-id and group-ids of funcs to the list of groups
@@ -120,7 +117,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
     if ( !_pTypes )
         _pTypes = new SfxSlotTypeArr_Impl;
-    for ( sal_uInt16 nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
+    for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
         SfxSlot *pDef = rInterface[nFunc];
         if ( pDef->GetGroupId() && /* pDef->GetGroupId() != GID_INTERN && */
@@ -149,21 +146,21 @@ void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
 {
     DBG_ASSERT( _pInterfaces, "releasing SfxInterface, but there are none" );
     // remove from the list of SfxInterface instances
-    _pInterfaces->Remove(&rInterface);
+    SfxInterfaceArr_Impl::iterator i = std::find(_pInterfaces->begin(), _pInterfaces->end(), &rInterface);
+    if(i != _pInterfaces->end())
+        _pInterfaces->erase(i);
 }
-
-//--------------------------------------------------------------------
 
 // get the first SfxMessage for a special Id (e.g. for getting check-mode)
 
 const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 {
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
+    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
 
     // First, search their own interfaces
-    for ( sal_uInt16 nInterf = 0; nInterf < _pInterfaces->Count(); ++nInterf )
+    for ( sal_uInt16 nInterf = 0; nInterf < _pInterfaces->size(); ++nInterf )
     {
-        const SfxSlot *pDef = _pInterfaces->GetObject(nInterf)->GetSlot(nId);
+        const SfxSlot *pDef = ((*_pInterfaces)[nInterf])->GetSlot(nId);
         if ( pDef )
             return pDef;
     }
@@ -178,7 +175,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 
 String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 {
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
+    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
 
     // if the group exists, use it
     if ( _pGroups && nNo < _pGroups->size() )
@@ -231,10 +228,10 @@ sal_uInt16 SfxSlotPool::GetGroupCount()
 
 const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 {
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
+    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
 
     // The numbering starts at the interfaces of the parent pool
-    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
+    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
 
     // have reached the end of the Parent-Pools?
     if ( nStartInterface < nFirstInterface &&
@@ -250,7 +247,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
     }
 
     // find the first func-def with the current group id
-    sal_uInt16 nCount = _pInterfaces->Count() + nFirstInterface;
+    sal_uInt16 nCount = _pInterfaces->size() + nFirstInterface;
     for ( _nCurInterface = nStartInterface;
             _nCurInterface < nCount;
           ++_nCurInterface )
@@ -274,10 +271,10 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 
 const SfxSlot* SfxSlotPool::NextSlot()
 {
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
+    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
 
     // The numbering starts at the interfaces of the parent pool
-    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
+    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
 
     if ( _nCurInterface < nFirstInterface && _nCurGroup >= _pParentPool->_pGroups->size() )
         _nCurInterface = nFirstInterface;
@@ -296,7 +293,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
     sal_uInt16 nInterface = _nCurInterface - nFirstInterface;
     // possibly we are already at the end
-    if ( nInterface >= _pInterfaces->Count() )
+    if ( nInterface >= _pInterfaces->size() )
         return 0;
 
     // look for further matching func-defs within the same Interface
@@ -319,7 +316,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 SfxInterface* SfxSlotPool::FirstInterface()
 {
     _nCurInterface = 0;
-    if ( !_pInterfaces || !_pInterfaces->Count() )
+    if ( !_pInterfaces || !_pInterfaces->size() )
         return 0;
     return _pParentPool ? _pParentPool->FirstInterface() : (*_pInterfaces)[0];
 }
@@ -330,17 +327,17 @@ SfxInterface* SfxSlotPool::FirstInterface()
 SfxInterface* SfxSlotPool::NextInterface()
 {
     _nCurInterface++;
-    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
+    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
     if ( _nCurInterface < nFirstInterface )
         return (*_pParentPool->_pInterfaces)[_nCurInterface];
     sal_uInt16 nInterface = _nCurInterface - nFirstInterface;
-    return nInterface < _pInterfaces->Count() ? (*_pInterfaces)[nInterface] : 0;
+    return nInterface < _pInterfaces->size() ? (*_pInterfaces)[nInterface] : 0;
 }
 
 const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
 {
     const SfxSlot *pSlot = NULL;
-    for ( sal_uInt16 nInterface=0; nInterface<_pInterfaces->Count(); nInterface++ )
+    for ( sal_uInt16 nInterface=0; nInterface<_pInterfaces->size(); ++nInterface )
     {
         pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
         if ( pSlot )
