@@ -20,7 +20,13 @@ Then it is necessary to get stdout/err to go to somewhere we can find it:
 	make run ; adb shell logcat
 
 	And if all goes well - you should have some nice unit
-test output to enjoy.
+test output to enjoy. After a while of this loop you'll probably
+find that android has lost a lot of space on your device at
+this point:
+
+	adb shell stop ; adb shell start
+
+	and continue onwards & upwards.
 
 * Detailed explanation
 
