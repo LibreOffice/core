@@ -1948,6 +1948,7 @@ ToFile( "SYSTEM_SAXON",      "@SYSTEM_SAXON@",     "e" );
 ToFile( "SAXON_JAR",         "@SAXON_JAR@",        "e" );
 ToFile( "DISABLE_SAXON",     "@DISABLE_SAXON@",    "e" );
 ToFile( "ENABLE_JAVASCRIPT", "@ENABLE_JAVASCRIPT@","e" );
+ToFile( "ENABLE_COINMP",     "@ENABLE_COINMP@",    "e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
 ToFile( "SYSTEM_LIBXSLT",    "@SYSTEM_LIBXSLT@",   "e" );
 ToFile( "LIBXSLT_CFLAGS",    "@LIBXSLT_CFLAGS@",   "e" );

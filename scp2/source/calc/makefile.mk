@@ -33,8 +33,13 @@ TARGETTYPE=CUI
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_LPSOLVE)" == "YES"
-SCPDEFS+=-DSYSTEM_LPSOLVE
+.IF "$(ENABLE_COINMP)" == "YES"
+SCPDEFS+=-DENABLE_COINMP
+.IF "$(GUI)"!="WNT"
+# For the non-Windows platforms all libraries related to CoinMP have to be
+# added explicitly.
+SCPDEFS+=-DADD_ALL_COINMP_LIBRARIES
+.ENDIF
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl

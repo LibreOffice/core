@@ -23,6 +23,55 @@
 
 #include "macros.inc"
 
+
+#ifdef ENABLE_COINMP
+STD_LIB_FILE( gid_File_Lib_Solver, solver)
+
+#ifdef ADD_ALL_COINMP_LIBRARIES
+File gid_File_Lib_CoinMP
+    Name = SPECIAL_NAME_VER(CoinMP,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_CoinUtils
+    Name = SPECIAL_NAME_VER(CoinUtils,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_Clp
+    Name = SPECIAL_NAME_VER(Clp,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_Cbc
+    Name = SPECIAL_NAME_VER(Cbc,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_Osi
+    Name = SPECIAL_NAME_VER(Osi,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_OsiClp
+    Name = SPECIAL_NAME_VER(OsiClp,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_Cgl
+    Name = SPECIAL_NAME_VER(Cgl,0);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_CbcSolver
+    Name = SPECIAL_NAME_VER(CbcSolver,0);
+    PACKED_LIB_FILE_BODY;
+End
+#else
+# On Windows only the CoinMP library is built and used.
+# Version numbering is not used either.
+File gid_File_Lib_CoinMP
+    Name = SPECIAL_NAME(CoinMP);
+    PACKED_LIB_FILE_BODY;
+End
+#endif
+
+#endif
+
+
 STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
 File gid_File_Share_Registry_Calc_Xcd
@@ -43,6 +92,8 @@ STD_LIB_FILE( gid_File_Lib_Scui, scui)
 STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
+
+STD_RES_FILE( gid_File_Res_Solver, solver)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 

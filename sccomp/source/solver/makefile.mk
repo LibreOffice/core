@@ -52,7 +52,7 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
                 $(CPPULIB)          \
                 $(SALLIB)           \
                 $(TOOLSLIB)         \
-                CoinMP.lib
+                $(COINMPLIB)
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
@@ -79,3 +79,4 @@ $(MISC)/solver.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt solver.component
+

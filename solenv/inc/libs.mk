@@ -19,7 +19,6 @@
 #  
 #**************************************************************
 
-
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
@@ -335,7 +334,12 @@ MYTHESLIB=$(MYTHES_LIBS)
 MYTHESLIB=-lmythes-1.2
 .ENDIF
 PYUNOLIB=-lpyuno
-LPSOLVELIB=-llpsolve55
+COINMPLIB=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
+.IF "$(OS)" == "MACOSX"
+COINMPLIB+=-lbz2
+.ELSE
+COINMPLIB+=-lz
+.ENDIF
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
@@ -517,7 +521,7 @@ HUNSPELLLIB=$(LIBPRE) libhunspell.lib
 .ENDIF
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
-LPSOLVELIB=lpsolve55.lib
+COINMPLIB=CoinMP.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
