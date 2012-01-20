@@ -69,7 +69,6 @@ SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
  , _nCurGroup(0)
  , _nCurInterface(0)
  , _nCurMsg(0)
- , _pUnoSlots( 0 )
 {
     if ( !_pResMgr )
         _pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();

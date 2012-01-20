@@ -73,10 +73,6 @@ struct SfxExternalLib_Impl;
 typedef SfxExternalLib_Impl* SfxExternalLibPtr;
 SV_DECL_PTRARR_DEL( SfxExternalLibArr_Impl, SfxExternalLibPtr, 2, 2 )
 
-class SfxSlot;
-typedef SfxSlot* SfxSlotPtr;
-SV_DECL_PTRARR( SfxSlotArr_Impl, SfxSlotPtr, 20, 20 )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

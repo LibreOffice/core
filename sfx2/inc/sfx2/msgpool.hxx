@@ -42,7 +42,6 @@ class SfxInterface;
 class SfxSlot;
 class SfxInterfaceArr_Impl;
 class SfxSlotTypeArr_Impl;
-class SfxSlotArr_Impl;
 
 typedef std::basic_string< sal_uInt16 > SfxSlotGroupArr_Impl;
 
@@ -58,7 +57,6 @@ class SFX2_DLLPUBLIC SfxSlotPool
     sal_uInt16                      _nCurGroup;
     sal_uInt16                      _nCurInterface;
     sal_uInt16                      _nCurMsg;
-    SfxSlotArr_Impl*            _pUnoSlots;
 
 private:
     const SfxSlot* SeekSlot( sal_uInt16 nObject );
