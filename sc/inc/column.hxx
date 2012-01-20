@@ -106,7 +106,7 @@ private:
     SCCOL           nCol;
     SCTAB           nTab;
 
-    std::vector<ColEntry>      aItems;
+    std::vector<ColEntry> maItems;
 
     ScAttrArray*       pAttrArray;
     ScDocument*                pDocument;
@@ -256,7 +256,7 @@ public:
     double      GetValue( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
-    SCSIZE      GetCellCount() const { return aItems.size(); }
+    SCSIZE      GetCellCount() const { return maItems.size(); }
     sal_uInt32 GetWeightedCount() const;
     sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
     sal_uInt16  GetErrCode( SCROW nRow ) const;

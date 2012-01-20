@@ -72,9 +72,9 @@ bool ScColumn::bDoubleAlloc = false;    // fuer Import: Groesse beim Allozieren 
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 {
     sal_Bool bIsAppended = false;
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
-        if (aItems[aItems.size()-1].nRow < nRow)
+        if (maItems[maItems.size()-1].nRow < nRow)
         {
             Append(nRow, pNewCell );
             bIsAppended = sal_True;
@@ -85,7 +85,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
         SCSIZE  nIndex;
         if (Search(nRow, nIndex))
         {
-            ScBaseCell* pOldCell = aItems[nIndex].pCell;
+            ScBaseCell* pOldCell = maItems[nIndex].pCell;
 
             // move broadcaster and note to new cell, if not existing in new cell
             if (pOldCell->HasBroadcaster() && !pNewCell->HasBroadcaster())
@@ -97,17 +97,17 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
             {
                 pOldCell->EndListeningTo( pDocument );
                 // falls in EndListening NoteCell in gleicher Col zerstoert
-                if ( nIndex >= aItems.size() || aItems[nIndex].nRow != nRow )
+                if ( nIndex >= maItems.size() || maItems[nIndex].nRow != nRow )
                     Search(nRow, nIndex);
             }
             pOldCell->Delete();
-            aItems[nIndex].pCell = pNewCell;
+            maItems[nIndex].pCell = pNewCell;
         }
         else
         {
-            aItems.insert(aItems.begin() + nIndex, ColEntry());
-            aItems[nIndex].pCell = pNewCell;
-            aItems[nIndex].nRow  = nRow;
+            maItems.insert(maItems.begin() + nIndex, ColEntry());
+            maItems[nIndex].pCell = pNewCell;
+            maItems[nIndex].nRow  = nRow;
         }
     }
     // Bei aus Clipboard sind hier noch falsche (alte) Referenzen!
@@ -148,9 +148,9 @@ void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
 
 void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
 {
-    aItems.push_back(ColEntry());
-    aItems[aItems.size() - 1].pCell = pCell;
-    aItems[aItems.size() - 1].nRow  = nRow;
+    maItems.push_back(ColEntry());
+    maItems[maItems.size() - 1].pCell = pCell;
+    maItems[maItems.size() - 1].nRow  = nRow;
 }
 
 
@@ -160,9 +160,9 @@ void ScColumn::Delete( SCROW nRow )
 
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         ScNoteCell* pNoteCell = new ScNoteCell;
-        aItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
+        maItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
         pDocument->Broadcast( ScHint( SC_HINT_DYING,
             ScAddress( nCol, nRow, nTab ), pCell ) );
         if ( SvtBroadcaster* pBC = pCell->ReleaseBroadcaster() )
@@ -172,7 +172,7 @@ void ScColumn::Delete( SCROW nRow )
         else
         {
             pNoteCell->Delete();
-            aItems.erase(aItems.end() - 1);
+            maItems.erase(maItems.end() - 1);
             //  Soll man hier den Speicher freigeben (delta)? Wird dann langsamer!
         }
         pCell->EndListeningTo( pDocument );
@@ -183,13 +183,13 @@ void ScColumn::Delete( SCROW nRow )
 
 void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 {
-    ScBaseCell* pCell = aItems[nIndex].pCell;
+    ScBaseCell* pCell = maItems[nIndex].pCell;
     ScNoteCell* pNoteCell = new ScNoteCell;
-    aItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
+    maItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
     pDocument->Broadcast( ScHint( SC_HINT_DYING,
-        ScAddress( nCol, aItems[nIndex].nRow, nTab ), pCell ) );
+        ScAddress( nCol, maItems[nIndex].nRow, nTab ), pCell ) );
     pNoteCell->Delete();
-    aItems.erase(aItems.begin() + nIndex);
+    maItems.erase(maItems.begin() + nIndex);
     pCell->EndListeningTo( pDocument );
     pCell->Delete();
 }
@@ -197,9 +197,9 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 
 void ScColumn::FreeAll()
 {
-    for (SCSIZE i = 0; i < aItems.size(); i++)
-        aItems[i].pCell->Delete();
-    aItems.clear();
+    for (SCSIZE i = 0; i < maItems.size(); i++)
+        maItems[i].pCell->Delete();
+    maItems.clear();
 }
 
 
@@ -207,12 +207,12 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
     pAttrArray->DeleteRow( nStartRow, nSize );
 
-    if ( aItems.empty() )
+    if ( maItems.empty() )
         return ;
 
     SCSIZE nFirstIndex;
     Search( nStartRow, nFirstIndex );
-    if ( nFirstIndex >= aItems.size() )
+    if ( nFirstIndex >= maItems.size() )
         return ;
 
     sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
@@ -224,7 +224,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     SCSIZE nEndIndex = 0;
     SCSIZE i;
 
-    for ( i = nFirstIndex; i < aItems.size() && aItems[i].nRow <= nEndRow; i++ )
+    for ( i = nFirstIndex; i < maItems.size() && maItems[i].nRow <= nEndRow; i++ )
     {
         if (!bFound)
         {
@@ -233,7 +233,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         }
         nEndIndex = i;
 
-        ScBaseCell* pCell = aItems[i].pCell;
+        ScBaseCell* pCell = maItems[i].pCell;
         SvtBroadcaster* pBC = pCell->GetBroadcaster();
         if (pBC)
         {
@@ -247,7 +247,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     {
         DeleteRange( nStartIndex, nEndIndex, IDF_CONTENTS );
         Search( nStartRow, i );
-        if ( i >= aItems.size() )
+        if ( i >= maItems.size() )
         {
             pDocument->SetAutoCalc( bOldAutoCalc );
             return ;
@@ -260,18 +260,18 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
     // for sparse occupation use single broadcasts, not ranges
-    sal_Bool bSingleBroadcasts = (((aItems[aItems.size()-1].nRow - aItems[i].nRow) /
-                (aItems.size() - i)) > 1);
+    sal_Bool bSingleBroadcasts = (((maItems[maItems.size()-1].nRow - maItems[i].nRow) /
+                (maItems.size() - i)) > 1);
     if ( bSingleBroadcasts )
     {
         SCROW nLastBroadcast = MAXROW+1;
-        for ( ; i < aItems.size(); i++ )
+        for ( ; i < maItems.size(); i++ )
         {
-            SCROW nOldRow = aItems[i].nRow;
+            SCROW nOldRow = maItems[i].nRow;
             // Aenderung Quelle broadcasten
             rAddress.SetRow( nOldRow );
             pDocument->AreaBroadcast( aHint );
-            SCROW nNewRow = (aItems[i].nRow -= nSize);
+            SCROW nNewRow = (maItems[i].nRow -= nSize);
             // Aenderung Ziel broadcasten
             if ( nLastBroadcast != nNewRow )
             {   // direkt aufeinanderfolgende nicht doppelt broadcasten
@@ -279,20 +279,20 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
                 pDocument->AreaBroadcast( aHint );
             }
             nLastBroadcast = nOldRow;
-            ScBaseCell* pCell = aItems[i].pCell;
+            ScBaseCell* pCell = maItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
         }
     }
     else
     {
-        rAddress.SetRow( aItems[i].nRow );
+        rAddress.SetRow( maItems[i].nRow );
         ScRange aRange( rAddress );
-        aRange.aEnd.SetRow( aItems[aItems.size()-1].nRow );
-        for ( ; i < aItems.size(); i++ )
+        aRange.aEnd.SetRow( maItems[maItems.size()-1].nRow );
+        for ( ; i < maItems.size(); i++ )
         {
-            SCROW nNewRow = (aItems[i].nRow -= nSize);
-            ScBaseCell* pCell = aItems[i].pCell;
+            SCROW nNewRow = (maItems[i].nRow -= nSize);
+            ScBaseCell* pCell = maItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
         }
@@ -313,7 +313,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     bool bNoCaptions = (nDelFlag & IDF_NOCAPTIONS) != 0;
     if (bDeleteNote && bNoCaptions)
         for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
-            if ( ScPostIt* pNote = aItems[ nIdx ].pCell->GetNote() )
+            if ( ScPostIt* pNote = maItems[ nIdx ].pCell->GetNote() )
                 pNote->ForgetCaption();
 
     ScHint aHint( SC_HINT_DYING, ScAddress( nCol, 0, nTab ), 0 );
@@ -324,7 +324,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     aDelCells.reserve( nEndIndex - nStartIndex + 1 );
 
     typedef mdds::flat_segment_tree<SCSIZE, bool> RemovedSegments_t;
-    RemovedSegments_t aRemovedSegments(nStartIndex, aItems.size(), false);
+    RemovedSegments_t aRemovedSegments(nStartIndex, maItems.size(), false);
     SCSIZE nFirst(nStartIndex);
 
     // dummy replacement for old cells, to prevent that interpreter uses old cell
@@ -333,9 +333,9 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
     {
         // all content is deleted and cell does not contain broadcaster
-        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && !aItems[ nIdx ].pCell->GetBroadcaster())
+        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && !maItems[ nIdx ].pCell->GetBroadcaster())
         {
-            ScBaseCell* pOldCell = aItems[ nIdx ].pCell;
+            ScBaseCell* pOldCell = maItems[ nIdx ].pCell;
             if (pOldCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 // cache formula cell, will be deleted below
@@ -344,8 +344,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             else
             {
                 // interpret in broadcast must not use the old cell
-                aItems[ nIdx ].pCell = pDummyCell.get();
-                aHint.GetAddress().SetRow( aItems[ nIdx ].nRow );
+                maItems[ nIdx ].pCell = pDummyCell.get();
+                aHint.GetAddress().SetRow( maItems[ nIdx ].nRow );
                 aHint.SetCell( pOldCell );
                 pDocument->Broadcast( aHint );
                 pOldCell->Delete();
@@ -355,13 +355,13 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         else
         {
             bool bDelete = false;
-            ScBaseCell* pOldCell = aItems[nIdx].pCell;
+            ScBaseCell* pOldCell = maItems[nIdx].pCell;
             CellType eCellType = pOldCell->GetCellType();
             if ((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS)
                 bDelete = true;
             else
             {
-                // decide whether to delete the cell object according to passed 
+                // decide whether to delete the cell object according to passed
                 // flags
                 switch ( eCellType )
                 {
@@ -374,7 +374,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                             if( !bDelete && (nValFlags != 0) )
                             {
                                 sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
-                                            aItems[nIdx].nRow, ATTR_VALUE_FORMAT ))->GetValue();
+                                            maItems[nIdx].nRow, ATTR_VALUE_FORMAT ))->GetValue();
                                 short nType = pDocument->GetFormatTable()->GetType(nIndex);
                                 bool bIsDate = (nType == NUMBERFORMAT_DATE) ||
                                     (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
@@ -416,16 +416,16 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 }
 
                 // remove cell entry in cell item list
-                SCROW nOldRow = aItems[nIdx].nRow;
+                SCROW nOldRow = maItems[nIdx].nRow;
                 if (pNoteCell)
                 {
                     // replace old cell with the replacement note cell
-                    aItems[nIdx].pCell = pNoteCell;
+                    maItems[nIdx].pCell = pNoteCell;
                     // ... so it's not really deleted
                     bDelete = false;
                 }
                 else
-                    aItems[nIdx].pCell = pDummyCell.get();
+                    maItems[nIdx].pCell = pDummyCell.get();
 
                 // cache formula cells (will be deleted later), delete cell of other type
                 if (eCellType == CELLTYPE_FORMULA)
@@ -446,7 +446,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             {
                 // delete cell note
                 if (bDeleteNote)
-                    aItems[nIdx].pCell->DeleteNote();
+                    maItems[nIdx].pCell->DeleteNote();
             }
 
             if (!bDelete)
@@ -480,7 +480,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             { // this segment removed
                 if (!bRemoved)
                     nStartSegment = aIt->first;
-                    // The first of removes in a row sets start (they should be 
+                    // The first of removes in a row sets start (they should be
                     // alternating removed/notremoved anyway).
                 bRemoved = true;
             }
@@ -490,9 +490,9 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 { // previous segment(s) removed, move tail
                     SCSIZE const nEndSegment(aIt->first);
                     memmove(
-                            &aItems[nStartSegment - nShift],
-                            &aItems[nEndSegment - nShift],
-                            (aItems.size() - nEndSegment) * sizeof(ColEntry));
+                            &maItems[nStartSegment - nShift],
+                            &maItems[nEndSegment - nShift],
+                            (maItems.size() - nEndSegment) * sizeof(ColEntry));
                     nShift += nEndSegment - nStartSegment;
                     bRemoved = false;
                 }
@@ -502,8 +502,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         // The last removed segment up to aItems.size() is discarded, there's
         // nothing following to be moved.
         if (bRemoved)
-            nShift += aItems.size() - nStartSegment;
-        aItems.erase(aItems.end() - nShift, aItems.end());
+            nShift += maItems.size() - nStartSegment;
+        maItems.erase(maItems.end() - nShift, maItems.end());
     }
 
     // *** delete all formula cells ***
@@ -547,17 +547,17 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         nContMask |= IDF_NOCAPTIONS;
     sal_uInt16 nContFlag = nDelFlag & nContMask;
 
-    if ( !aItems.empty() && nContFlag)
+    if ( !maItems.empty() && nContFlag)
     {
         if (nStartRow==0 && nEndRow==MAXROW)
-            DeleteRange( 0, aItems.size()-1, nContFlag );
+            DeleteRange( 0, maItems.size()-1, nContFlag );
         else
         {
             sal_Bool bFound=false;
             SCSIZE nStartIndex = 0;
             SCSIZE nEndIndex = 0;
-            for (SCSIZE i = 0; i < aItems.size(); i++)
-                if ((aItems[i].nRow >= nStartRow) && (aItems[i].nRow <= nEndRow))
+            for (SCSIZE i = 0; i < maItems.size(); i++)
+                if ((maItems[i].nRow >= nStartRow) && (maItems[i].nRow <= nEndRow))
                 {
                     if (!bFound)
                     {
@@ -594,7 +594,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
     //  auch bei IDF_CONTENTS komplett, wegen Notes / Broadcastern
 
     sal_Bool bMatch = false;
-    ScBaseCell* pCell = aItems[nIndex].pCell;
+    ScBaseCell* pCell = maItems[nIndex].pCell;
     CellType eCellType = pCell->GetCellType();
     switch ( eCellType )
     {
@@ -607,7 +607,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
                 else if ( nValFlags )
                 {
                     sal_uLong nNumIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
-                                    aItems[nIndex].nRow, ATTR_VALUE_FORMAT ))->GetValue();
+                                    maItems[nIndex].nRow, ATTR_VALUE_FORMAT ))->GetValue();
                     short nTyp = pDocument->GetFormatTable()->GetType(nNumIndex);
                     if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) || (nTyp == NUMBERFORMAT_DATETIME))
                         bMatch = ((nFlags & IDF_DATETIME) != 0);
@@ -631,7 +631,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
     //  Referenz einsetzen
     ScSingleRefData aRef;
     aRef.nCol = nCol;
-    aRef.nRow = aItems[nIndex].nRow;
+    aRef.nRow = maItems[nIndex].nRow;
     aRef.nTab = nTab;
     aRef.InitFlags();                           // -> alles absolut
     aRef.SetFlag3D(true);
@@ -664,20 +664,20 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
 
             SCSIZE nStartIndex;
             rColumn.Search( nRow1-nDy, nStartIndex );
-            while ( nStartIndex < rColumn.aItems.size() && rColumn.aItems[nStartIndex].nRow <= nRow2-nDy )
+            while ( nStartIndex < rColumn.maItems.size() && rColumn.maItems[nStartIndex].nRow <= nRow2-nDy )
             {
                 SCSIZE nEndIndex = nStartIndex;
-                if ( rColumn.aItems[nStartIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+                if ( rColumn.maItems[nStartIndex].pCell->GetCellType() != CELLTYPE_NOTE )
                 {
-                    SCROW nStartRow = rColumn.aItems[nStartIndex].nRow;
+                    SCROW nStartRow = rColumn.maItems[nStartIndex].nRow;
                     SCROW nEndRow = nStartRow;
 
                     //  find consecutive non-empty cells
 
                     while ( nEndRow < nRow2-nDy &&
-                            nEndIndex+1 < rColumn.aItems.size() &&
-                            rColumn.aItems[nEndIndex+1].nRow == nEndRow+1 &&
-                            rColumn.aItems[nEndIndex+1].pCell->GetCellType() != CELLTYPE_NOTE )
+                            nEndIndex+1 < rColumn.maItems.size() &&
+                            rColumn.maItems[nEndIndex+1].nRow == nEndRow+1 &&
+                            rColumn.maItems[nEndIndex+1].pCell->GetCellType() != CELLTYPE_NOTE )
                     {
                         ++nEndIndex;
                         ++nEndRow;
@@ -700,7 +700,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         //! IDF_ALL muss immer mehr Flags enthalten, als bei "Inhalte Einfuegen"
         //! einzeln ausgewaehlt werden koennen!
 
-        Resize( aItems.size() + static_cast<SCSIZE>(nRow2-nRow1+1) );
+        Resize( maItems.size() + static_cast<SCSIZE>(nRow2-nRow1+1) );
 
         ScAddress aDestPos( nCol, 0, nTab );        // Row wird angepasst
 
@@ -726,7 +726,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         return;
     }
 
-    SCSIZE nColCount = rColumn.aItems.size();
+    SCSIZE nColCount = rColumn.maItems.size();
 
     // ignore IDF_FORMULA - "all contents but no formulas" results in the same number of cells
     if ((nInsFlag & ( IDF_CONTENTS & ~IDF_FORMULA )) == ( IDF_CONTENTS & ~IDF_FORMULA ) && nRow2-nRow1 >= 64)
@@ -734,7 +734,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         //! Always do the Resize from the outside, where the number of repetitions is known
         //! (then it can be removed here)
 
-        SCSIZE nNew = aItems.size() + nColCount;
+        SCSIZE nNew = maItems.size() + nColCount;
         Resize( nNew );
     }
 
@@ -744,7 +744,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
     sal_Bool bAtEnd = false;
     for (SCSIZE i = 0; i < nColCount && !bAtEnd; i++)
     {
-        SCsROW nDestRow = rColumn.aItems[i].nRow + nDy;
+        SCsROW nDestRow = rColumn.maItems[i].nRow + nDy;
         if ( nDestRow > (SCsROW) nRow2 )
             bAtEnd = sal_True;
         else if ( nDestRow >= (SCsROW) nRow1 )
@@ -765,14 +765,14 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             if (pAddNoteCell)
             {
                 // do nothing if source cell does not contain a note
-                const ScBaseCell* pSourceCell = rColumn.aItems[i].pCell;
+                const ScBaseCell* pSourceCell = rColumn.maItems[i].pCell;
                 const ScPostIt* pSourceNote = pSourceCell ? pSourceCell->GetNote() : 0;
                 if (pSourceNote)
                 {
                     OSL_ENSURE( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
                     bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
                     // #i52342# if caption is cloned, the note must be constructed with the destination document
-                    ScAddress aSourcePos( rColumn.nCol, rColumn.aItems[i].nRow, rColumn.nTab );
+                    ScAddress aSourcePos( rColumn.nCol, rColumn.maItems[i].nRow, rColumn.nTab );
                     ScPostIt* pNewNote = pSourceNote->Clone( aSourcePos, *pDocument, aDestPos, bCloneCaption );
                     pAddNoteCell->TakeNote( pNewNote );
                 }
@@ -820,7 +820,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
     bool bForceFormula  = false;
 
     ScBaseCell* pNew = 0;
-    ScBaseCell& rSource = *aItems[nIndex].pCell;
+    ScBaseCell& rSource = *maItems[nIndex].pCell;
     switch (rSource.GetCellType())
     {
         case CELLTYPE_NOTE:
@@ -836,7 +836,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
 
         case CELLTYPE_VALUE:
             // note will be cloned below
-            if (lclCanCloneValue( *pDocument, *this, aItems[nIndex].nRow, bCloneValue, bCloneDateTime ))
+            if (lclCanCloneValue( *pDocument, *this, maItems[nIndex].nRow, bCloneValue, bCloneDateTime ))
                 pNew = rSource.CloneWithoutNote( rDestDoc, rDestPos );
         break;
 
@@ -875,7 +875,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
                 }
                 else if (rForm.IsValue())
                 {
-                    if (lclCanCloneValue( *pDocument, *this, aItems[nIndex].nRow, bCloneValue, bCloneDateTime ))
+                    if (lclCanCloneValue( *pDocument, *this, maItems[nIndex].nRow, bCloneValue, bCloneDateTime ))
                     {
                         double nVal = rForm.GetValue();
                         pNew = new ScValueCell(nVal);
@@ -911,7 +911,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
         {
             bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
             // #i52342# if caption is cloned, the note must be constructed with the destination document
-            ScAddress aOwnPos( nCol, aItems[nIndex].nRow, nTab );
+            ScAddress aOwnPos( nCol, maItems[nIndex].nRow, nTab );
             ScPostIt* pNewNote = pNote->Clone( aOwnPos, rDestDoc, rDestPos, bCloneCaption );
             if (!pNew)
                 pNew = new ScNoteCell( pNewNote );
@@ -986,7 +986,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
                             sal_uInt16 nFunction, bool bSkipEmpty,
                             ScColumn& rSrcCol )
 {
-    SCSIZE nSrcCount = rSrcCol.aItems.size();
+    SCSIZE nSrcCount = rSrcCol.maItems.size();
 
     SCSIZE nIndex;
     Search( nRow1, nIndex );
@@ -996,11 +996,11 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
     rSrcCol.Search( nRow1, nSrcIndex );         //! Testen, ob Daten ganz vorne
 
     SCROW nNextThis = MAXROW+1;
-    if ( nIndex < aItems.size() )
-        nNextThis = aItems[nIndex].nRow;
+    if ( nIndex < maItems.size() )
+        nNextThis = maItems[nIndex].nRow;
     SCROW nNextSrc = MAXROW+1;
     if ( nSrcIndex < nSrcCount )
-        nNextSrc = rSrcCol.aItems[nSrcIndex].nRow;
+        nNextSrc = rSrcCol.maItems[nSrcIndex].nRow;
 
     while ( nNextThis <= nRow2 || nNextSrc <= nRow2 )
     {
@@ -1012,10 +1012,10 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         sal_Bool bDelete = false;
 
         if ( nSrcIndex < nSrcCount && nNextSrc == nRow )
-            pSrc = rSrcCol.aItems[nSrcIndex].pCell;
+            pSrc = rSrcCol.maItems[nSrcIndex].pCell;
 
-        if ( nIndex < aItems.size() && nNextThis == nRow )
-            pDest = aItems[nIndex].pCell;
+        if ( nIndex < maItems.size() && nNextThis == nRow )
+            pDest = maItems[nIndex].pCell;
 
         OSL_ENSURE( pSrc || pDest, "Nanu ?" );
 
@@ -1139,19 +1139,19 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
             if (pNew)
                 nNextThis = nRow;       // nIndex zeigt jetzt genau auf nRow
             else
-                nNextThis = ( nIndex < aItems.size() ) ? aItems[nIndex].nRow : MAXROW+1;
+                nNextThis = ( nIndex < maItems.size() ) ? maItems[nIndex].nRow : MAXROW+1;
         }
 
         if ( nNextThis == nRow )
         {
             ++nIndex;
-            nNextThis = ( nIndex < aItems.size() ) ? aItems[nIndex].nRow : MAXROW+1;
+            nNextThis = ( nIndex < maItems.size() ) ? maItems[nIndex].nRow : MAXROW+1;
         }
         if ( nNextSrc == nRow )
         {
             ++nSrcIndex;
             nNextSrc = ( nSrcIndex < nSrcCount ) ?
-                            rSrcCol.aItems[nSrcIndex].nRow :
+                            rSrcCol.maItems[nSrcIndex].nRow :
                             MAXROW+1;
         }
     }
@@ -1166,15 +1166,15 @@ ScAttrIterator* ScColumn::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) c
 
 void ScColumn::StartAllListeners()
 {
-    if ( !aItems.empty() )
-        for (SCSIZE i = 0; i < aItems.size(); i++)
+    if ( !maItems.empty() )
+        for (SCSIZE i = 0; i < maItems.size(); i++)
         {
-            ScBaseCell* pCell = aItems[i].pCell;
+            ScBaseCell* pCell = maItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                SCROW nRow = aItems[i].nRow;
+                SCROW nRow = maItems[i].nRow;
                 ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
-                if ( nRow != aItems[i].nRow )
+                if ( nRow != maItems[i].nRow )
                     Search( nRow, i );      // Listener eingefuegt?
             }
         }
@@ -1183,19 +1183,19 @@ void ScColumn::StartAllListeners()
 
 void ScColumn::StartNeededListeners()
 {
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
-        for (SCSIZE i = 0; i < aItems.size(); i++)
+        for (SCSIZE i = 0; i < maItems.size(); i++)
         {
-            ScBaseCell* pCell = aItems[i].pCell;
+            ScBaseCell* pCell = maItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
                 if (pFCell->NeedsListening())
                 {
-                    SCROW nRow = aItems[i].nRow;
+                    SCROW nRow = maItems[i].nRow;
                     pFCell->StartListeningTo( pDocument );
-                    if ( nRow != aItems[i].nRow )
+                    if ( nRow != maItems[i].nRow )
                         Search( nRow, i );      // Listener eingefuegt?
                 }
             }
@@ -1206,14 +1206,14 @@ void ScColumn::StartNeededListeners()
 
 void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 {
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
         SCROW nRow;
         SCSIZE nIndex;
         Search( nRow1, nIndex );
-        while ( nIndex < aItems.size() && (nRow = aItems[nIndex].nRow) <= nRow2 )
+        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
         {
-            ScBaseCell* pCell = aItems[nIndex].pCell;
+            ScBaseCell* pCell = maItems[nIndex].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->SetDirty();
             else
@@ -1227,17 +1227,17 @@ void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 
 void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 {
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
         SCROW nRow;
         SCSIZE nIndex;
         Search( nRow1, nIndex );
-        while ( nIndex < aItems.size() && (nRow = aItems[nIndex].nRow) <= nRow2 )
+        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
         {
-            ScBaseCell* pCell = aItems[nIndex].pCell;
+            ScBaseCell* pCell = maItems[nIndex].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
-            if ( nRow != aItems[nIndex].nRow )
+            if ( nRow != maItems[nIndex].nRow )
                 Search( nRow, nIndex );     // durch Listening eingefuegt
             nIndex++;
         }
@@ -1313,17 +1313,17 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             sal_Bool bIsText = false;
             if ( bIsLoading )
             {
-                if ( !aItems.empty() )
+                if ( !maItems.empty() )
                 {
                     String aStr;
-                    SCSIZE i = aItems.size();
+                    SCSIZE i = maItems.size();
                     SCSIZE nStop = (i >= 3 ? i - 3 : 0);
                     // die letzten Zellen vergleichen, ob gleicher String
                     // und IsNumberFormat eingespart werden kann
                     do
                     {
                         i--;
-                        ScBaseCell* pCell = aItems[i].pCell;
+                        ScBaseCell* pCell = maItems[i].pCell;
                         switch ( pCell->GetCellType() )
                         {
                             case CELLTYPE_STRING :
@@ -1334,7 +1334,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                             case CELLTYPE_NOTE :    // durch =Formel referenziert
                             break;
                             default:
-                                if ( i == aItems.size() - 1 )
+                                if ( i == maItems.size() - 1 )
                                     i = 0;
                                     // wahrscheinlich ganze Spalte kein String
                         }
@@ -1439,7 +1439,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         }
     }
 
-    if ( bIsLoading && (aItems.empty() || nRow > aItems[aItems.size()-1].nRow) )
+    if ( bIsLoading && (maItems.empty() || nRow > maItems[maItems.size()-1].nRow) )
     {   // Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
         // und Broadcast kommt eh erst nach dem Laden
         if ( pNewCell )
@@ -1450,7 +1450,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         SCSIZE i;
         if (Search(nRow, i))
         {
-            ScBaseCell* pOldCell = aItems[i].pCell;
+            ScBaseCell* pOldCell = maItems[i].pCell;
             ScPostIt* pNote = pOldCell->ReleaseNote();
             SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
             if (pNewCell || pNote || pBC)
@@ -1469,11 +1469,11 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 {
                     pOldCell->EndListeningTo( pDocument );
                     // falls in EndListening NoteCell in gleicher Col zerstoert
-                    if ( i >= aItems.size() || aItems[i].nRow != nRow )
+                    if ( i >= maItems.size() || maItems[i].nRow != nRow )
                         Search(nRow, i);
                 }
                 pOldCell->Delete();
-                aItems[i].pCell = pNewCell;         // ersetzen
+                maItems[i].pCell = pNewCell;         // ersetzen
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
                 {
                     pNewCell->StartListeningTo( pDocument );
@@ -1511,9 +1511,9 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
     Search( nStartRow, nIndex );
 
-    while ( (nIndex < aItems.size()) ? ((nRow=aItems[nIndex].nRow) <= nEndRow) : false )
+    while ( (nIndex < maItems.size()) ? ((nRow=maItems[nIndex].nRow) <= nEndRow) : false )
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         TypedStrData* pData = NULL;
         sal_uLong nFormat = GetNumberFormat( nRow );
 
@@ -1605,11 +1605,11 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, b
     if (bThisUsed)
         ++nDownIndex;                   // Startzelle ueberspringen
 
-    while ( nUpIndex || nDownIndex < aItems.size() )
+    while ( nUpIndex || nDownIndex < maItems.size() )
     {
         if ( nUpIndex )                 // nach oben
         {
-            ScBaseCell* pCell = aItems[nUpIndex-1].pCell;
+            ScBaseCell* pCell = maItems[nUpIndex-1].pCell;
             CellType eType = pCell->GetCellType();
             if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
             {
@@ -1632,9 +1632,9 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, b
             --nUpIndex;
         }
 
-        if ( nDownIndex < aItems.size() )      // nach unten
+        if ( nDownIndex < maItems.size() )      // nach unten
         {
-            ScBaseCell* pCell = aItems[nDownIndex].pCell;
+            ScBaseCell* pCell = maItems[nDownIndex].pCell;
             CellType eType = pCell->GetCellType();
             if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
             {
@@ -1680,21 +1680,21 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
         else if ( pAttr->GetHideFormula() )
         {
             Search( nTop, nIndex );
-            while ( nIndex<aItems.size() && aItems[nIndex].nRow<=nBottom )
+            while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nBottom )
             {
-                if ( aItems[nIndex].pCell->GetCellType() == CELLTYPE_FORMULA )
+                if ( maItems[nIndex].pCell->GetCellType() == CELLTYPE_FORMULA )
                 {
-                    ScFormulaCell* pFormula = (ScFormulaCell*)aItems[nIndex].pCell;
+                    ScFormulaCell* pFormula = (ScFormulaCell*)maItems[nIndex].pCell;
                     if (pFormula->IsValue())
                     {
                         double nVal = pFormula->GetValue();
-                        aItems[nIndex].pCell = new ScValueCell( nVal );
+                        maItems[nIndex].pCell = new ScValueCell( nVal );
                     }
                     else
                     {
                         String aString;
                         pFormula->GetString(aString);
-                        aItems[nIndex].pCell = new ScStringCell( aString );
+                        maItems[nIndex].pCell = new ScStringCell( aString );
                     }
                     delete pFormula;
                 }
@@ -1735,7 +1735,7 @@ void ScColumn::GetString( SCROW nRow, rtl::OUString& rString ) const
     Color* pColor;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         if (pCell->GetCellType() != CELLTYPE_NOTE)
         {
             sal_uLong nFormat = GetNumberFormat( nRow );
@@ -1754,7 +1754,7 @@ void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         if (pCell->GetCellType() != CELLTYPE_NOTE)
         {
             sal_uLong nFormat = GetNumberFormat( nRow );
@@ -1773,7 +1773,7 @@ double ScColumn::GetValue( SCROW nRow ) const
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         switch (pCell->GetCellType())
         {
             case CELLTYPE_VALUE:
@@ -1801,7 +1801,7 @@ void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
             ((ScFormulaCell*)pCell)->GetFormula( rFormula );
         else
@@ -1816,7 +1816,7 @@ CellType ScColumn::GetCellType( SCROW nRow ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
-        return aItems[nIndex].pCell->GetCellType();
+        return maItems[nIndex].pCell->GetCellType();
     return CELLTYPE_NONE;
 }
 
@@ -1826,7 +1826,7 @@ sal_uInt16 ScColumn::GetErrCode( SCROW nRow ) const
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = aItems[nIndex].pCell;
+        ScBaseCell* pCell = maItems[nIndex].pCell;
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
             return ((ScFormulaCell*)pCell)->GetErrCode();
     }
@@ -1838,7 +1838,7 @@ bool ScColumn::HasStringData( SCROW nRow ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
-        return (aItems[nIndex].pCell)->HasStringData();
+        return (maItems[nIndex].pCell)->HasStringData();
     return false;
 }
 
@@ -1847,7 +1847,7 @@ bool ScColumn::HasValueData( SCROW nRow ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
-        return (aItems[nIndex].pCell)->HasValueData();
+        return (maItems[nIndex].pCell)->HasValueData();
     return false;
 }
 
@@ -1855,13 +1855,13 @@ bool ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
 {
     //  TRUE, wenn String- oder Editzellen im Bereich
 
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
         SCSIZE nIndex;
         Search( nStartRow, nIndex );
-        while ( nIndex < aItems.size() && aItems[nIndex].nRow <= nEndRow )
+        while ( nIndex < maItems.size() && maItems[nIndex].nRow <= nEndRow )
         {
-            CellType eType = aItems[nIndex].pCell->GetCellType();
+            CellType eType = maItems[nIndex].pCell->GetCellType();
             if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 return sal_True;
             ++nIndex;
@@ -1874,7 +1874,7 @@ bool ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
 ScPostIt* ScColumn::GetNote( SCROW nRow )
 {
     SCSIZE nIndex;
-    return Search( nRow, nIndex ) ? aItems[ nIndex ].pCell->GetNote() : 0;
+    return Search( nRow, nIndex ) ? maItems[ nIndex ].pCell->GetNote() : 0;
 }
 
 
@@ -1882,7 +1882,7 @@ void ScColumn::TakeNote( SCROW nRow, ScPostIt* pNote )
 {
     SCSIZE nIndex;
     if( Search( nRow, nIndex ) )
-        aItems[ nIndex ].pCell->TakeNote( pNote );
+        maItems[ nIndex ].pCell->TakeNote( pNote );
     else
         Insert( nRow, new ScNoteCell( pNote ) );
 }
@@ -1894,7 +1894,7 @@ ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
     SCSIZE nIndex;
     if( Search( nRow, nIndex ) )
     {
-        ScBaseCell* pCell = aItems[ nIndex ].pCell;
+        ScBaseCell* pCell = maItems[ nIndex ].pCell;
         pNote = pCell->ReleaseNote();
         if( (pCell->GetCellType() == CELLTYPE_NOTE) && !pCell->GetBroadcaster() )
             DeleteAtIndex( nIndex );
@@ -1912,7 +1912,7 @@ void ScColumn::DeleteNote( SCROW nRow )
 sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {
     sal_Int32 nStringLen = 0;
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
         rtl::OUString aString;
         rtl::OString aOString;
@@ -1921,9 +1921,9 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
         SCSIZE nIndex;
         SCROW nRow;
         Search( nRowStart, nIndex );
-        while ( nIndex < aItems.size() && (nRow = aItems[nIndex].nRow) <= nRowEnd )
+        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRowEnd )
         {
-            ScBaseCell* pCell = aItems[nIndex].pCell;
+            ScBaseCell* pCell = maItems[nIndex].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE )
             {
                 Color* pColor;
@@ -1966,16 +1966,16 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
         // In case of unlimited precision, use 2 instead.
         nPrecision = 2;
 
-    if ( !aItems.empty() )
+    if ( !maItems.empty() )
     {
         rtl::OUString aString;
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
         SCSIZE nIndex;
         SCROW nRow;
         Search( nRowStart, nIndex );
-        while ( nIndex < aItems.size() && (nRow = aItems[nIndex].nRow) <= nRowEnd )
+        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRowEnd )
         {
-            ScBaseCell* pCell = aItems[nIndex].pCell;
+            ScBaseCell* pCell = maItems[nIndex].pCell;
             CellType eType = pCell->GetCellType();
             if ( eType == CELLTYPE_VALUE || (eType == CELLTYPE_FORMULA
                     && ((ScFormulaCell*)pCell)->IsValue()) )

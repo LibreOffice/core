@@ -128,7 +128,7 @@ sal_Bool ScDocumentIterator::GetThisCol()
 
         do
         {
-            nColRow = (nColPos < pCol->aItems.size()) ? pCol->aItems[nColPos].nRow : MAXROW+1;
+            nColRow = (nColPos < pCol->maItems.size()) ? pCol->maItems[nColPos].nRow : MAXROW+1;
             if (nColRow < nRow)
                 ++nColPos;
         }
@@ -137,7 +137,7 @@ sal_Bool ScDocumentIterator::GetThisCol()
         if (nColRow == nRow)
         {
             bFound   = sal_True;
-            pCell    = pCol->aItems[nColPos].pCell;
+            pCell    = pCol->maItems[nColPos].pCell;
             pPattern = pAtt->pData[nAttrPos].pPattern;
         }
         else if ( pAtt->pData[nAttrPos].pPattern != pDefPattern )
@@ -311,19 +311,19 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                     }
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->aItems.size() == 0 );
+            } while ( pCol->maItems.size() == 0 );
             pCol->Search( nRow, nColRow );
         }
 
-        while (( nColRow < pCol->aItems.size() ) && ( pCol->aItems[nColRow].nRow < nRow ))
+        while (( nColRow < pCol->maItems.size() ) && ( pCol->maItems[nColRow].nRow < nRow ))
             nColRow++;
 
-        if ( nColRow < pCol->aItems.size() && pCol->aItems[nColRow].nRow <= nEndRow )
+        if ( nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow <= nEndRow )
         {
-            nRow = pCol->aItems[nColRow].nRow + 1;
+            nRow = pCol->maItems[nColRow].nRow + 1;
             if ( !bSubTotal || !pDoc->maTabs[nTab]->RowFiltered( nRow-1 ) )
             {
-                ScBaseCell* pCell = pCol->aItems[nColRow].pCell;
+                ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
                 ++nColRow;
                 switch (pCell->GetCellType())
                 {
@@ -343,13 +343,13 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                         //  wenn in der selben Spalte gleich noch eine Value-Cell folgt, die
                         //  auch noch im Block liegt, den Wert jetzt schon holen
                         //
-                        if ( nColRow < pCol->aItems.size() &&
-                             pCol->aItems[nColRow].nRow <= nEndRow &&
-                             pCol->aItems[nColRow].pCell->GetCellType() == CELLTYPE_VALUE &&
+                        if ( nColRow < pCol->maItems.size() &&
+                             pCol->maItems[nColRow].nRow <= nEndRow &&
+                             pCol->maItems[nColRow].pCell->GetCellType() == CELLTYPE_VALUE &&
                              !bSubTotal )
                         {
-                            fNextValue = ((ScValueCell*)pCol->aItems[nColRow].pCell)->GetValue();
-                            nNextRow = pCol->aItems[nColRow].nRow;
+                            fNextValue = ((ScValueCell*)pCol->maItems[nColRow].pCell)->GetValue();
+                            nNextRow = pCol->maItems[nColRow].nRow;
                             bNextValid = sal_True;
                             if ( bCalcAsShown )
                             {
@@ -422,12 +422,12 @@ void ScValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
             const ScBaseCell* pCell;
             SCSIZE nIdx = nColRow - 1;
             // there might be rearranged something, so be on the safe side
-            if ( nIdx < pCol->aItems.size() && pCol->aItems[nIdx].nRow == nRow )
-                pCell = pCol->aItems[nIdx].pCell;
+            if ( nIdx < pCol->maItems.size() && pCol->maItems[nIdx].nRow == nRow )
+                pCell = pCol->maItems[nIdx].pCell;
             else
             {
                 if ( pCol->Search( nRow, nIdx ) )
-                    pCell = pCol->aItems[nIdx].pCell;
+                    pCell = pCol->maItems[nIdx].pCell;
                 else
                     pCell = NULL;
             }
@@ -478,7 +478,7 @@ SCROW ScDBQueryDataIterator::GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab,
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
     ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
-    return pCol->aItems[nColRow].nRow;
+    return pCol->maItems[nColRow].nRow;
 }
 
 ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
@@ -486,7 +486,7 @@ ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTA
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
     ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
-    return pCol->aItems[nColRow].pCell;
+    return pCol->maItems[nColRow].pCell;
 }
 
 ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
@@ -1040,19 +1040,19 @@ ScBaseCell* ScCellIterator::GetThis()
                         return NULL;                // Ende und Aus
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->aItems.size() == 0 );
+            } while ( pCol->maItems.size() == 0 );
             pCol->Search( nRow, nColRow );
         }
 
-        while ( (nColRow < pCol->aItems.size()) && (pCol->aItems[nColRow].nRow < nRow) )
+        while ( (nColRow < pCol->maItems.size()) && (pCol->maItems[nColRow].nRow < nRow) )
             nColRow++;
 
-        if ( nColRow < pCol->aItems.size() && pCol->aItems[nColRow].nRow <= nEndRow )
+        if ( nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow <= nEndRow )
         {
-            nRow = pCol->aItems[nColRow].nRow;
+            nRow = pCol->maItems[nColRow].nRow;
             if ( !bSubTotal || !pDoc->maTabs[nTab]->RowFiltered( nRow ) )
             {
-                ScBaseCell* pCell = pCol->aItems[nColRow].pCell;
+                ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
 
                 if ( bSubTotal && pCell->GetCellType() == CELLTYPE_FORMULA
                                 && ((ScFormulaCell*)pCell)->IsSubTotal() )
@@ -1152,20 +1152,20 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                     nFirstQueryField = rEntry.nField;
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->aItems.size() == 0 );
+            } while ( pCol->maItems.size() == 0 );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
                 !mpParam->bHasHeader && rItem.meType == ScQueryEntry::ByString &&
                 mpParam->bByRow;
         }
 
-        while ( nColRow < pCol->aItems.size() && pCol->aItems[nColRow].nRow < nRow )
+        while ( nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow < nRow )
             nColRow++;
 
-        if ( nColRow < pCol->aItems.size() &&
-                (nRow = pCol->aItems[nColRow].nRow) <= mpParam->nRow2 )
+        if ( nColRow < pCol->maItems.size() &&
+                (nRow = pCol->maItems[nColRow].nRow) <= mpParam->nRow2 )
         {
-            ScBaseCell* pCell = pCol->aItems[nColRow].pCell;
+            ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
             if ( pCell->GetCellType() == CELLTYPE_NOTE )
                 ++nRow;
             else if (bAllStringIgnore && pCell->HasStringData())
@@ -1394,7 +1394,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         OSL_FAIL("try to access index out of bounds, FIX IT");
     nCol = mpParam->nCol1;
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-    if (!pCol->aItems.size())
+    if (!pCol->maItems.size())
         return 0;
 
     ScBaseCell* pCell;
@@ -1414,11 +1414,11 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     if (mpParam->bHasHeader)
         nRow++;
     if (pCol->Search( nRow, nLo ) && bFirstStringIgnore &&
-            pCol->aItems[nLo].pCell->HasStringData())
+            pCol->maItems[nLo].pCell->HasStringData())
     {
         rtl::OUString aCellStr;
-        sal_uLong nFormat = pCol->GetNumberFormat( pCol->aItems[nLo].nRow);
-        ScCellFormat::GetInputString( pCol->aItems[nLo].pCell, nFormat, aCellStr,
+        sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLo].nRow);
+        ScCellFormat::GetInputString( pCol->maItems[nLo].pCell, nFormat, aCellStr,
                 rFormatter);
         sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
@@ -1428,8 +1428,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     }
     if (!pCol->Search( mpParam->nRow2, nHi ) && nHi>0)
         --nHi;
-    while (bAllStringIgnore && nLo <= nHi && nLo < pCol->aItems.size() &&
-            pCol->aItems[nLo].pCell->HasStringData())
+    while (bAllStringIgnore && nLo <= nHi && nLo < pCol->maItems.size() &&
+            pCol->maItems[nLo].pCell->HasStringData())
         ++nLo;
 
     // Bookkeeping values for breaking up the binary search in case the data
@@ -1442,12 +1442,12 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     String aLastInRangeString;
     if (!bLessEqual)
         aLastInRangeString.Assign( sal_Unicode(0xFFFF));
-    if (nLastInRange < pCol->aItems.size())
+    if (nLastInRange < pCol->maItems.size())
     {
-        pCell = pCol->aItems[nLastInRange].pCell;
+        pCell = pCol->maItems[nLastInRange].pCell;
         if (pCell->HasStringData())
         {
-            sal_uLong nFormat = pCol->GetNumberFormat( pCol->aItems[nLastInRange].nRow);
+            sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLastInRange].nRow);
             rtl::OUString aStr;
             ScCellFormat::GetInputString( pCell, nFormat, aStr,
                     rFormatter);
@@ -1480,7 +1480,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     {
         SCSIZE nMid = (nLo+nHi)/2;
         SCSIZE i = nMid;
-        while (i <= nHi && pCol->aItems[i].pCell->GetCellType() == CELLTYPE_NOTE)
+        while (i <= nHi && pCol->maItems[i].pCell->GetCellType() == CELLTYPE_NOTE)
             ++i;
         if (i > nHi)
         {
@@ -1490,14 +1490,14 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
                 bDone = true;
             continue;   // while
         }
-        sal_Bool bStr = pCol->aItems[i].pCell->HasStringData();
+        sal_Bool bStr = pCol->maItems[i].pCell->HasStringData();
         nRes = 0;
         // compares are content<query:-1, content>query:1
         // Cell value comparison similar to ScTable::ValidQuery()
         if (!bStr && !bByString)
         {
             double nCellVal;
-            pCell = pCol->aItems[i].pCell;
+            pCell = pCol->maItems[i].pCell;
             switch ( pCell->GetCellType() )
             {
                 case CELLTYPE_VALUE :
@@ -1551,8 +1551,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         else if (bStr && bByString)
         {
             rtl::OUString aCellStr;
-            sal_uLong nFormat = pCol->GetNumberFormat( pCol->aItems[i].nRow);
-            ScCellFormat::GetInputString( pCol->aItems[i].pCell, nFormat, aCellStr,
+            sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[i].nRow);
+            ScCellFormat::GetInputString( pCol->maItems[i].pCell, nFormat, aCellStr,
                     rFormatter);
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
             if (nRes < 0 && bLessEqual)
@@ -1642,17 +1642,17 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         // --nLo with nLastInRange == nLo-1. Both conditions combined yield:
         nLo = nLastInRange;
     }
-    if (nLo < pCol->aItems.size() && pCol->aItems[nLo].nRow <= mpParam->nRow2)
+    if (nLo < pCol->maItems.size() && pCol->maItems[nLo].nRow <= mpParam->nRow2)
     {
-        nRow = pCol->aItems[nLo].nRow;
-        pCell = pCol->aItems[nLo].pCell;
+        nRow = pCol->maItems[nLo].nRow;
+        pCell = pCol->maItems[nLo].pCell;
         nColRow = nLo;
     }
     else
     {
         nRow = mpParam->nRow2 + 1;
         pCell = 0;
-        nColRow = pCol->aItems.size() - 1;
+        nColRow = pCol->maItems.size() - 1;
     }
     return pCell;
 }
@@ -1700,9 +1700,9 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
 
         SCSIZE nIndex;
         pCol->Search( nStartRow, nIndex );
-        if ( nIndex < pCol->aItems.size() )
+        if ( nIndex < pCol->maItems.size() )
         {
-            pNextRows[i-nStartCol] = pCol->aItems[nIndex].nRow;
+            pNextRows[i-nStartCol] = pCol->maItems[nIndex].nRow;
             pNextIndices[i-nStartCol] = nIndex;
         }
         else
@@ -1725,11 +1725,11 @@ ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 
         ScColumn* pCol = &pDoc->maTabs[nTab]->aCol[nCol];
         SCSIZE nIndex = pNextIndices[nCol-nStartCol];
-        OSL_ENSURE( nIndex < pCol->aItems.size(), "ScHorizontalCellIterator::GetNext: nIndex out of range" );
-        ScBaseCell* pCell = pCol->aItems[nIndex].pCell;
-        if ( ++nIndex < pCol->aItems.size() )
+        OSL_ENSURE( nIndex < pCol->maItems.size(), "ScHorizontalCellIterator::GetNext: nIndex out of range" );
+        ScBaseCell* pCell = pCol->maItems[nIndex].pCell;
+        if ( ++nIndex < pCol->maItems.size() )
         {
-            pNextRows[nCol-nStartCol] = pCol->aItems[nIndex].nRow;
+            pNextRows[nCol-nStartCol] = pCol->maItems[nIndex].nRow;
             pNextIndices[nCol-nStartCol] = nIndex;
         }
         else
@@ -1822,7 +1822,7 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     pAttrArray = 0;
     nAttrEndRow = 0;
 
-    pCellIter = new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol, 
+    pCellIter = new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
             nStartRow, nEndCol, nEndRow );
 }
 
@@ -1919,7 +1919,7 @@ void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nInde
             const ScBaseCell* pCell;
             SCSIZE nCurIndex;
             if ( pCol->Search( nCurRow, nCurIndex ) )
-                pCell = pCol->aItems[nCurIndex].pCell;
+                pCell = pCol->maItems[nCurIndex].pCell;
             else
                 pCell = NULL;
             if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
