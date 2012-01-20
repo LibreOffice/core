@@ -87,20 +87,20 @@ STD_FONT_FILE( gid_File_Fnt_Arimo_BoldItalic, Arimo-BoldItalic.ttf, Arimo Bold I
 // Cousine
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_Cousine_Regular, Cousine-Regular.ttf, Liberation Mono Regular) 
-STD_FONT_FILE( gid_File_Fnt_Cousine_Bold, Cousine-Bold.ttf, Liberation Mono Bold) 
-STD_FONT_FILE( gid_File_Fnt_Cousine_Italic, Cousine-Italic.ttf, Liberation Mono Italic) 
-STD_FONT_FILE( gid_File_Fnt_Cousine_BoldItalic, Cousine-BoldItalic.ttf, Liberation Mono Bold Italic) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Regular, Cousine-Regular.ttf, Cousine Regular) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Bold, Cousine-Bold.ttf, Cousine Bold) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_Italic, Cousine-Italic.ttf, Cousine Italic) 
+STD_FONT_FILE( gid_File_Fnt_Cousine_BoldItalic, Cousine-BoldItalic.ttf, Cousine Bold Italic) 
 #endif
 #endif
 
 // Timos
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_Timos_Regular, Timos-Regular.ttf, Liberation Serif Regular) 
-STD_FONT_FILE( gid_File_Fnt_Timos_Bold, Timos-Bold.ttf, Liberation Serif Bold) 
-STD_FONT_FILE( gid_File_Fnt_Timos_Italic, Timos-Italic.ttf, Liberation Serif Italic) 
-STD_FONT_FILE( gid_File_Fnt_Timos_BoldItalic, Timos-BoldItalic.ttf, Liberation Serif Bold Italic) 
+STD_FONT_FILE( gid_File_Fnt_Timos_Regular, Timos-Regular.ttf, Timos Regular) 
+STD_FONT_FILE( gid_File_Fnt_Timos_Bold, Timos-Bold.ttf, Timos Bold) 
+STD_FONT_FILE( gid_File_Fnt_Timos_Italic, Timos-Italic.ttf, Timos Italic) 
+STD_FONT_FILE( gid_File_Fnt_Timos_BoldItalic, Timos-BoldItalic.ttf, Timos Bold Italic) 
 #endif
 #endif
 
@@ -110,8 +110,6 @@ STD_FONT_FILE( gid_File_Fnt_Timos_BoldItalic, Timos-BoldItalic.ttf, Liberation S
 STD_FONT_FILE( gid_File_Fnt_SymbolNeu, SymbolNeu.ttf, Symbol Neu) 
 #endif
 #endif
-
-
 
 
 // Gentium fonts
