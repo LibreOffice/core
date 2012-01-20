@@ -37,6 +37,7 @@
 #include <svl/svarray.hxx>
 
 #include <string>
+#include <vector>
 
 class SfxInterface;
 class SfxSlot;
