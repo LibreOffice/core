@@ -93,8 +93,8 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
-    // For normal foot notes we treat chapter and document-wise numbering
-    // seperately. For Endnotes we only have chapter-wise numbering.
+    // For normal foot notes we treat per-chapter and per-document numbering
+    // seperately. For Endnotes we only have per-document numbering.
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
@@ -153,7 +153,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    // sal_Bool, so that also go through the Endnotes with chapter setting enabled
+    // unless we have per-document numbering, only look at endnotes here
     const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
     sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
@@ -199,7 +199,6 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             }
         }
     }
-    // Pageweise wird vom MA erfuellt !!
 }
 
 

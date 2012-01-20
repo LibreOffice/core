@@ -586,8 +586,8 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
         }
 
-        // If DestBox is a Headline Box and has TableTemplate set, then
-        // DO NOT automatically set the TableHeadline Template!
+        // If DestBox is a Headline Box and has Table style set, then
+        // DO NOT automatically set the TableHeadline style!
         if( 1 < rDstTbl.GetTabLines().Count() &&
             pLine == rDstTbl.GetTabLines()[0] )
         {
@@ -628,7 +628,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                                     RES_POOLCOLL_TABLE == nPoolId
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ) );
-            if( pColl )         // Apply Template
+            if( pColl )         // Apply style
             {
                 SwPaM aPam( aSavePos );
                 aPam.SetMark();
@@ -939,7 +939,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[ nLn %
                                         rCpyTbl.GetTabLines().Count() ];
 
-            // Selected too less rows?
+            // Selected too few rows?
             if( pInsFLine )
             {
                 // We insert a new row into the FndBox

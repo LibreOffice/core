@@ -1181,7 +1181,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 SwTOXSortTabBase* pBase = 0;
                 if(TOX_INDEX == eTOXTyp)
                 {
-                    // Keyword section mark
+                    // index entry mark
                     lang::Locale aLocale;
                     if ( pBreakIt->GetBreakIter().is() )
                     {
@@ -1208,7 +1208,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 }
                 else if( TOX_USER == eTOXTyp ||
                     pMark->GetLevel() <= GetLevel())
-                {   // Content section mark
+                {   // table of content mark
                     // also used for user marks
                     pBase = new SwTOXContent( *pTOXSrc, pTxtMark, rIntl );
                     InsertSorted(pBase);
@@ -1680,7 +1680,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
                     if( aNdRect.IsEmpty() )
                     {
-                        // Nothing helped so far, so we go via the PageTemplate
+                        // Nothing helped so far, so we go via the PageDesc
                         sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
                         sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
                         pPageDesc = pTOXNd->FindPageDesc( sal_False, pPgDescNdIdx );

@@ -172,7 +172,7 @@ void SwDoc::SetRedlineMode( RedlineMode_t eMode )
         {
             bool bSaveInXMLImportFlag = IsInXMLImport();
             SetInXMLImport( false );
-            // and then hide everything, display it
+            // and then hide/display everything
             void (SwRedline::*pFnc)( sal_uInt16 ) = 0;
 
             switch( nsRedlineMode_t::REDLINE_SHOW_MASK & eMode )
@@ -280,7 +280,7 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 
 /*
 
-Text means Text not "poluted" by Redlines.
+Text means Text not "polluted" by Redlines.
 
 Behaviour of Insert-Redline:
 
@@ -1138,7 +1138,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     case POS_INSIDE:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ))
-                            // an own can be ignored completely
+                            // own one can be ignored completely
                             delete pNewRedl, pNewRedl = 0;
 
                         else if( *pREnd == *pEnd )
@@ -1796,7 +1796,7 @@ sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
             case POS_OUTSIDE:
             case POS_EQUAL:
                 {
-                    // delete the area again
+                    // delete the range again
                     rArr.Remove( rPos-- );
                     bDelRedl = sal_True;
                     if( bCallDelete )
@@ -2025,7 +2025,7 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
 
 void lcl_AdjustRedlineRange( SwPaM& rPam )
 {
-    // The Selection is only in the ContentArea. If there are Redlines
+    // The Selection is only in the ContentSection. If there are Redlines
     // to Non-ContentNodes before or after that, then the Selections
     // expand to them.
     SwPosition* pStt = rPam.Start(),
@@ -2133,7 +2133,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         (nsRedlineMode_t::REDLINE_SHOW_MASK & eRedlineMode) )
       SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE | eRedlineMode));
 
-    // The Selection is only in the ContentArea. If there are Redlines
+    // The Selection is only in the ContentSection. If there are Redlines
     // to Non-ContentNodes before or after that, then the Selections
     // expand to them.
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
@@ -2243,7 +2243,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
         (nsRedlineMode_t::REDLINE_SHOW_MASK & eRedlineMode) )
       SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE | eRedlineMode));
 
-    // The Selection is only in the ContentArea. If there are Redlines
+    // The Selection is only in the ContentSection. If there are Redlines
     // to Non-ContentNodes before or after that, then the Selections
     // expand to them.
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
@@ -2408,7 +2408,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
     sal_Bool bRestart;
 
     // If the starting positon points to the last valid ContentNode,
-    // we take the next Redline in any case.
+    // we take the previous Redline in any case.
     sal_uInt16 n = 0;
     const SwRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, sal_False );
     if( pFnd )
@@ -2608,7 +2608,7 @@ sal_Bool SwRedlineTbl::Insert( SwRedlinePtr& p, sal_Bool bIns )
         bRet = InsertWithValidRanges( p );
     else
     {
-        OSL_ENSURE( !this, "Redline: wrong Area" );
+        OSL_ENSURE( !this, "Redline: wrong range" );
     }
     return bRet;
 }
@@ -2625,14 +2625,14 @@ sal_Bool SwRedlineTbl::Insert( SwRedlinePtr& p, sal_uInt16& rP, sal_Bool bIns )
         bRet = InsertWithValidRanges( p, &rP );
     else
     {
-        OSL_ENSURE( !this, "Redline: wrong Area" );
+        OSL_ENSURE( !this, "Redline: wrong range" );
     }
     return bRet;
 }
 
 sal_Bool SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, sal_uInt16* pInsPos )
 {
-    // Create valid "sub-areas" from the Selection
+    // Create valid "sub-ranges" from the Selection
     sal_Bool bAnyIns = sal_False;
     SwPosition* pStt = p->Start(),
               * pEnd = pStt == p->GetPoint() ? p->GetMark() : p->GetPoint();
@@ -2888,7 +2888,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
 
             if( pTNd->HasSwAttrSet() )
             {
-                // Only set those that are not there anymore. Others can
+                // Only set those that are not there anymore. Others
                 // could have changed, but we don't touch these.
                 SfxItemSet aTmp( *pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
@@ -3083,7 +3083,7 @@ SwRedline::~SwRedline()
 {
     if( pCntntSect )
     {
-        // delete the ContentArea
+        // delete the ContentSection
         if( !GetDoc()->IsInDtor() )
             GetDoc()->DeleteSection( &pCntntSect->GetNode() );
         delete pCntntSect;
@@ -3414,7 +3414,7 @@ void SwRedline::CopyToSection()
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
             pDoc->CopyRange( *this, aPos, false );
 
-            // Take over the Template from the EndNode if needed
+            // Take over the style from the EndNode if needed
             // We don't want this in Doc::Copy
             if( pCEndNd && pCEndNd != pCSttNd )
             {
