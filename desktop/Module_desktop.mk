@@ -112,10 +112,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 else ifeq ($(OS),ANDROID)
 
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_soffice.bin \
-))
-
 else ifeq ($(OS),IOS)
 
 else
