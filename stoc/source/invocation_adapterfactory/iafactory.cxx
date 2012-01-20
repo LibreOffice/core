@@ -157,10 +157,10 @@ struct AdapterImpl
     // XInvocation calls
     void getValue(
         const typelib_TypeDescription * pMemberType,
-        void * pReturn, void * pArgs[], uno_Any ** ppException );
+        void * pReturn, uno_Any ** ppException );
     void setValue(
         const typelib_TypeDescription * pMemberType,
-        void * pReturn, void * pArgs[], uno_Any ** ppException );
+        void * pArgs[], uno_Any ** ppException );
     void invoke(
         const typelib_TypeDescription * pMemberType,
         void * pReturn, void * pArgs[], uno_Any ** ppException );
@@ -380,7 +380,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 //______________________________________________________________________________
 void AdapterImpl::getValue(
     const typelib_TypeDescription * pMemberType,
-    void * pReturn, void * [], uno_Any ** ppException )
+    void * pReturn, uno_Any ** ppException )
 {
     uno_Any aInvokRet;
     void * pInvokArgs[1];
@@ -415,7 +415,7 @@ void AdapterImpl::getValue(
 //______________________________________________________________________________
 void AdapterImpl::setValue(
     const typelib_TypeDescription * pMemberType,
-    void *, void * pArgs[], uno_Any ** ppException )
+    void * pArgs[], uno_Any ** ppException )
 {
     uno_Any aInvokVal;
     ::uno_type_any_construct(
@@ -647,9 +647,9 @@ static void SAL_CALL adapter_dispatch(
         else // attribute
         {
             if (pReturn)
-                that->getValue( pMemberType, pReturn, pArgs, ppException );
+                that->getValue( pMemberType, pReturn, ppException );
             else
-                that->setValue( pMemberType, pReturn, pArgs, ppException );
+                that->setValue( pMemberType, pArgs, ppException );
         }
     }
     }
