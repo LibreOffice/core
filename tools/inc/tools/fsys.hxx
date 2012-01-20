@@ -327,11 +327,11 @@ public:
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
 };
 
-// --------------
-// - FileCopier -
-// --------------
+// -----------------------------------------------------
+// - FileCopier - a private impl. detail of tools/ ... -
+// -----------------------------------------------------
 
-class TOOLS_DLLPUBLIC FileCopier
+class FileCopier
 {
     DirEntry            aSource;
     DirEntry            aTarget;
