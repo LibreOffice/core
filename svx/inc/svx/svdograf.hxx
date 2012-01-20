@@ -71,7 +71,7 @@ public:
     sal_Bool                    bMirrored;
 
     SdrGrafObjGeoData()
-    :   bMirrored(sal_False)
+    :   bMirrored(false)
     {
     }
 };
@@ -104,21 +104,21 @@ private:
     String                  aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
-    bool                    bMirrored;          // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
+    bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
-    unsigned                    mbGrafAnimationAllowed : 1;
+    bool mbGrafAnimationAllowed:1;
 
     // #i25616#
-    unsigned                    mbInsidePaint : 1;
-    unsigned                    mbIsPreview   : 1;
+    bool mbInsidePaint:1;
+    bool mbIsPreview:1;
 
 private:
 
     void                    ImpLinkAnmeldung();
     void                    ImpLinkAbmeldung();
-    sal_Bool                ImpUpdateGraphicLink( sal_Bool bAsynchron = sal_True ) const;
+    bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
 
@@ -131,7 +131,7 @@ public:
     virtual                 ~SdrGrafObj();
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
-    const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
+    const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
 
     void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
@@ -143,11 +143,11 @@ public:
 
     // #111096#
     // Keep ATM for SD.
-    sal_Bool IsAnimated() const;
-    sal_Bool IsEPS() const;
-    sal_Bool IsRenderGraphic() const;
-    sal_Bool HasRenderGraphic() const;
-    sal_Bool IsSwappedOut() const;
+    bool IsAnimated() const;
+    bool IsEPS() const;
+    bool IsRenderGraphic() const;
+    bool HasRenderGraphic() const;
+    bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;
     const Size&             GetGrafPrefSize() const;
@@ -160,7 +160,7 @@ public:
 
     void                    SetGraphicLink(const String& rFileName, const String& rFilterName);
     void                    ReleaseGraphicLink();
-    sal_Bool IsLinkedGraphic() const { return (sal_Bool)aFileName.Len(); }
+    bool IsLinkedGraphic() const;
 
     const String&           GetFileName() const { return aFileName; }
     const String&           GetFilterName() const { return aFilterName; }
@@ -203,12 +203,12 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    bool                    IsMirrored() { return bMirrored; }
-    void                    SetMirrored( bool _bMirrored ) { bMirrored = _bMirrored; }
+    bool IsMirrored() const;
+    void SetMirrored( bool _bMirrored );
 
     // #111096#
     // Access to GrafAnimationAllowed flag
-    void SetGrafAnimationAllowed(sal_Bool bNew);
+    void SetGrafAnimationAllowed(bool bNew);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
 

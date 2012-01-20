@@ -140,9 +140,9 @@ namespace sdr
                         else
                         {
                             // SwapIn direct
-                            rGrafObj.mbInsidePaint = sal_True;
+                            rGrafObj.mbInsidePaint = true;
                             rGrafObj.ForceSwapIn();
-                            rGrafObj.mbInsidePaint = sal_False;
+                            rGrafObj.mbInsidePaint = false;
                         }
 
                         bRetval = true;
@@ -192,9 +192,9 @@ namespace sdr
                     else
                     {
                         // SwapIn direct
-                        rGrafObj.mbInsidePaint = sal_True;
+                        rGrafObj.mbInsidePaint = true;
                         rGrafObj.ForceSwapIn();
-                        rGrafObj.mbInsidePaint = sal_False;
+                        rGrafObj.mbInsidePaint = false;
                         }
 
                     bRetval = true;
