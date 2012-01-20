@@ -63,6 +63,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_namedrangeobj, \
 	test \
     tl \
     tk \
+    subsequenttest \
     ucbhelper \
 	unotest \
     utl \

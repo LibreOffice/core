@@ -332,6 +332,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     sofficeapp \
     srtrs1 \
     store \
+    subsequenttest \
     test \
     textconv_dict \
     ucb1 \

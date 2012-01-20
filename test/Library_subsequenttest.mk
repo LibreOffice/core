@@ -25,30 +25,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,test))
+$(eval $(call gb_Library_Library,subsequenttest))
 
-$(eval $(call gb_Library_add_package_headers,test,test_inc))
-
-$(eval $(call gb_Library_set_include,test,\
+$(eval $(call gb_Library_set_include,subsequenttest,\
 	-I$(SRCDIR)/tools/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_defs,test,\
+$(eval $(call gb_Library_add_defs,subsequenttest,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))
 
-$(eval $(call gb_Library_add_api,test,\
+$(eval $(call gb_Library_add_api,subsequenttest,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,test,\
+$(eval $(call gb_Library_add_linked_libs,subsequenttest,\
     comphelper \
     cppu \
     cppuhelper \
 	i18nisolang1 \
     sal \
+    test \
 	tl \
 	utl \
 	ucbhelper \
@@ -58,16 +57,16 @@ $(eval $(call gb_Library_add_linked_libs,test,\
 ))
 
 ifeq ($(GUIBASE),unx)
-$(call gb_Library_get_target,test) : \
+$(call gb_Library_get_target,subsequenttest) : \
     $(call gb_Library_get_target,desktop_detector) \
     $(call gb_Library_get_target,vclplug_svp) \
 
 endif
 
-$(eval $(call gb_Library_use_external,test,cppunit))
+$(eval $(call gb_Library_use_external,subsequenttest,cppunit))
 
-$(eval $(call gb_Library_add_exception_objects,test,\
-    test/source/bootstrapfixture \
+$(eval $(call gb_Library_add_exception_objects,subsequenttest,\
+    test/source/unoapi_test \
 ))
 
 # vim: set noet sw=4 ts=4:

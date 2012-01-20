@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
     sc \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

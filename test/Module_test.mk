@@ -29,6 +29,7 @@ $(eval $(call gb_Module_Module,test))
 
 $(eval $(call gb_Module_add_targets,test,\
     Library_test \
+    Library_subsequenttest \
     Package_inc \
     Package_unittest \
 ))
