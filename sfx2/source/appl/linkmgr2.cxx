@@ -467,14 +467,14 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
     }
 }
 
-sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
+bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
                                     sal_uInt16 nFileType,
                                     const String& rFileNm,
                                     const String* pFilterNm,
                                     const String* pRange )
 {
     if( !( OBJECT_CLIENT_SO & rLink.GetObjType() ))
-        return sal_False;
+        return false;
 
     String sCmd( rFileNm );
     sCmd += ::sfx2::cTokenSeperator;
@@ -484,6 +484,30 @@ sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
         ( sCmd += ::sfx2::cTokenSeperator ) += *pFilterNm;
 
     return InsertLink( &rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &sCmd );
+}
+
+bool LinkManager::InsertFileLink(
+    sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const rtl::OUString& rFileNm,
+    const rtl::OUString* pFilterNm, const rtl::OUString* pRange)
+{
+    if (!(OBJECT_CLIENT_SO & rLink.GetObjType()))
+        return false;
+
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(rFileNm);
+    aBuf.append(sfx2::cTokenSeperator);
+
+    if (pRange)
+        aBuf.append(*pRange);
+
+    if (pFilterNm)
+    {
+        aBuf.append(sfx2::cTokenSeperator);
+        aBuf.append(*pFilterNm);
+    }
+
+    String aCmd = aBuf.makeStringAndClear();
+    return InsertLink(&rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &aCmd);
 }
 
 // A transfer is aborted, so cancel all download media

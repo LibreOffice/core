@@ -114,11 +114,15 @@ public:
     sal_Bool        InsertDDELink( SvBaseLink* );
 
     // Connect the links to a pseudo-object and add to the list
-    sal_Bool InsertFileLink( sfx2::SvBaseLink&,
+    bool InsertFileLink( sfx2::SvBaseLink&,
                         sal_uInt16 nFileType,
-                        const String& rTxt,
+                        const String& rFileNm,
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
+
+    bool InsertFileLink(
+        sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const rtl::OUString& rFileNm,
+        const rtl::OUString* pFilterNm = NULL, const rtl::OUString* pRange = NULL);
 
     void ReconnectDdeLink(SfxObjectShell& rServer);
 
