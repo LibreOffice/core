@@ -76,7 +76,7 @@ struct Encoder
 };
 
 
-int main(int, char**)
+int main()
 {
 #   define EXP(x) Encoder(x, #x)
 
