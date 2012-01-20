@@ -980,8 +980,10 @@ sub create_transforms
 
     installer::logger::include_header_into_logfile("Creating Transforms");
 
+    my $cscript = "cscript.exe";    # Has to be in the path
     my $msitran = "msitran.exe";    # Has to be in the path
     my $msidb = "msidb.exe";    # Has to be in the path
+    my $tmpdir = $ENV{TMPDIR};    # Variable %TEMP% will be set to it for WiLangId.vbs to work
     my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
 
     my $from = cwd();
@@ -1121,7 +1123,7 @@ sub create_transforms
         }
     }
 
-    $systemcall = "cscript.exe " . $wilangid . " " . $basedbname . " Package " . $templatevalue;
+    $systemcall = "TEMP=" . $tmpdir . " " . $cscript . " " . $wilangid . " " . $basedbname . " Package " . $templatevalue;
 
     $returnvalue = system($systemcall);
 
