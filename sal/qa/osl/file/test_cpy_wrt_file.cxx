@@ -46,11 +46,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-//Use to silence OSL_ warnings for a deliberate error
-extern "C" void SAL_CALL suppressOslDebugMessage2( const sal_Char *, sal_Int32, const sal_Char * )
-{
-}
-
 class test_osl_writeFile : public CppUnit::TestFixture
 {
 public:
@@ -72,11 +67,6 @@ public:
         sErrorMsg += "' would exist!";
         CPPUNIT_ASSERT_MESSAGE(sErrorMsg.getStr(), err == FileBase::E_EXIST);
 
-        //deliberate errors, suppress run-time warning for operations on
-        //un-opened File
-        pfunc_osl_printDetailedDebugMessage pOldDebugMessageFunc =
-            osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage2 );
-
         char buffer[1];
         sal_uInt64 written = 0;
         err = tmp_file.write((void*)buffer, sizeof(buffer), written);
@@ -87,8 +77,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE("sync on unconnected file should fail", err != FileBase::E_None);
         err = tmp_file.close();
         CPPUNIT_ASSERT_MESSAGE("close on unconnected file should fail", err != FileBase::E_None);
-
-        osl_setDetailedDebugMessageFunc( pOldDebugMessageFunc );
 
         err = ::osl::File::remove(aTmpFile);
         CPPUNIT_ASSERT_MESSAGE("temp file should have existed", err == FileBase::E_None);
