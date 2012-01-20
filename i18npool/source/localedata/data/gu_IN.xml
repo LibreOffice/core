@@ -12,7 +12,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="hi_IN"/>
-  <LC_FORMAT ref="hi_IN" replaceTo="[$ઋુ.-447]"/>
+  <LC_FORMAT ref="hi_IN" replaceTo="[રૂ-447]"/>
   <LC_COLLATION ref="hi_IN"/>
   <LC_SEARCH ref="hi_IN"/>
   <LC_INDEX ref="en_US"/>
@@ -21,112 +21,112 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>ઋવિ.</DefaultAbbrvName>
-          <DefaultFullName>ઋવિવાઋ</DefaultFullName>
+          <DefaultAbbrvName>રવિ</DefaultAbbrvName>
+          <DefaultFullName>રવિવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>સોમ.</DefaultAbbrvName>
-          <DefaultFullName>સોમવાઋ્</DefaultFullName>
+          <DefaultAbbrvName>સોમવાર</DefaultAbbrvName>
+          <DefaultFullName>સોમવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>મંગલ.</DefaultAbbrvName>
-          <DefaultFullName>મંગલવાઋ</DefaultFullName>
+          <DefaultAbbrvName>મંગળ</DefaultAbbrvName>
+          <DefaultFullName>મંગળવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>બુધ.</DefaultAbbrvName>
-          <DefaultFullName>બુધવાઋ</DefaultFullName>
+          <DefaultAbbrvName>બુધ</DefaultAbbrvName>
+          <DefaultFullName>બુધવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>ગુઋુ.</DefaultAbbrvName>
-          <DefaultFullName>ગુઋુવાઋ</DefaultFullName>
+          <DefaultAbbrvName>ગુરુ</DefaultAbbrvName>
+          <DefaultFullName>ગુરુવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>શુક્ઋ.</DefaultAbbrvName>
-          <DefaultFullName>શુક્ઋવાઋ</DefaultFullName>
+          <DefaultAbbrvName>શુક્ર</DefaultAbbrvName>
+          <DefaultFullName>શુક્રવાર</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>શનિ.</DefaultAbbrvName>
-          <DefaultFullName>શનિવાઋ</DefaultFullName>
+          <DefaultAbbrvName>શનિ</DefaultAbbrvName>
+          <DefaultFullName>શનિવાર</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>જનવઋી.</DefaultAbbrvName>
-          <DefaultFullName>જનવઋી</DefaultFullName>
+          <DefaultAbbrvName>જાન</DefaultAbbrvName>
+          <DefaultFullName>જાન્યુઆરી</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>ફઋવઋી.</DefaultAbbrvName>
-          <DefaultFullName>ફઋવઋી</DefaultFullName>
+          <DefaultAbbrvName>ફેબ</DefaultAbbrvName>
+          <DefaultFullName>ફેબ્રુઆરી</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>માઋ્ચ.</DefaultAbbrvName>
-          <DefaultFullName>માઋ્ચ</DefaultFullName>
+          <DefaultAbbrvName>માર્ચ</DefaultAbbrvName>
+          <DefaultFullName>માર્ચ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>અપ્ઋેલ.</DefaultAbbrvName>
-          <DefaultFullName>અપ્ઋેલ</DefaultFullName>
+          <DefaultAbbrvName>એપ્રિલ</DefaultAbbrvName>
+          <DefaultFullName>એપ્રિલ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>મઈ.</DefaultAbbrvName>
-          <DefaultFullName>મઈ</DefaultFullName>
+          <DefaultAbbrvName>મે</DefaultAbbrvName>
+          <DefaultFullName>મે</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>જૂન.</DefaultAbbrvName>
+          <DefaultAbbrvName>જૂન</DefaultAbbrvName>
           <DefaultFullName>જૂન</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>જુલાઇ.</DefaultAbbrvName>
+          <DefaultAbbrvName>જુલ</DefaultAbbrvName>
           <DefaultFullName>જુલાઇ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>અગસ્ત.</DefaultAbbrvName>
-          <DefaultFullName>અગસ્ત</DefaultFullName>
+          <DefaultAbbrvName>ઑગ</DefaultAbbrvName>
+          <DefaultFullName>ઑગસ્ટ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>સિતંબઋ.</DefaultAbbrvName>
-          <DefaultFullName>સિતંબઋ</DefaultFullName>
+          <DefaultAbbrvName>સપ્ટ</DefaultAbbrvName>
+          <DefaultFullName>સપ્ટેમ્બર</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>અક્તોબઋ.</DefaultAbbrvName>
-          <DefaultFullName>અક્તોબઋ</DefaultFullName>
+          <DefaultAbbrvName>ઑક્ટ</DefaultAbbrvName>
+          <DefaultFullName>ઑક્ટોબર</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>નવંબઋ.</DefaultAbbrvName>
-          <DefaultFullName>નવંબઋ</DefaultFullName>
+          <DefaultAbbrvName>નવ</DefaultAbbrvName>
+          <DefaultFullName>નવેમ્બર</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>ડિસધંબઋ.</DefaultAbbrvName>
-          <DefaultFullName>ડિસંબઋ</DefaultFullName>
+          <DefaultAbbrvName>ડિસ</DefaultAbbrvName>
+          <DefaultFullName>ડિસેમ્બર</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>ઈસાપૂઋ્વ.હ્ન</DefaultAbbrvName>
-          <DefaultFullName>ઈસાપૂઋ્વ.</DefaultFullName>
+          <DefaultAbbrvName>ઈ.સ.પૂ.</DefaultAbbrvName>
+          <DefaultFullName>ઈસવીસનપૂર્વે</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>સન.</DefaultAbbrvName>
-          <DefaultFullName>સન.</DefaultFullName>
+          <DefaultAbbrvName>ઈ.સ.</DefaultAbbrvName>
+          <DefaultFullName>ઈસવીસન</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -138,7 +138,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>INR</CurrencyID>
-      <CurrencySymbol>ઋુ.</CurrencySymbol>
+      <CurrencySymbol>₹</CurrencySymbol>
       <BankSymbol>INR</BankSymbol>
       <CurrencyName>Rupee</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
@@ -154,13 +154,13 @@
       <LineMode/>
     </BreakIteratorRules>
     <ReservedWords>
-      <trueWord>સહી</trueWord>
-      <falseWord>ગલત</falseWord>
-      <quarter1Word>પેહલા હંત 1</quarter1Word>
-      <quarter2Word>ડૂસઋા હંત 2</quarter2Word>
-      <quarter3Word>તીસઋા હંત 3</quarter3Word>
-      <quarter4Word>ચૌતા હંત 4</quarter4Word>
-      <aboveWord>ઊપઋ</aboveWord>
+      <trueWord>ખરું</trueWord>
+      <falseWord>ખોટું</falseWord>
+      <quarter1Word>ચતુર્થાંશ૧</quarter1Word>
+      <quarter2Word>ચતુર્થાંશ૨</quarter2Word>
+      <quarter3Word>ચતુર્થાંશ૩</quarter3Word>
+      <quarter4Word>ચતુર્થાંશ૪</quarter4Word>
+      <aboveWord>ઊપર</aboveWord>
       <belowWord>નીચે</belowWord>
       <quarter1Abbreviation>Q1</quarter1Abbreviation>
       <quarter2Abbreviation>Q2</quarter2Abbreviation>
