@@ -39,12 +39,12 @@ namespace unodevtools {
 
 //-------------------------------------------------------------------------------
 sal_Bool readOption( rtl::OUString * pValue, const sal_Char * pOpt,
-                     sal_Int32 * pnIndex, const rtl::OUString & aArg)
+                     sal_uInt32 * pnIndex, const rtl::OUString & aArg)
     throw (com::sun::star::uno::RuntimeException);
 
 //-------------------------------------------------------------------------------
 sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
-                     sal_Int32 * pnIndex, const rtl::OUString & aArg);
+                     sal_uInt32 * pnIndex, const rtl::OUString & aArg);
 
 } // end of namespace unodevtools
 

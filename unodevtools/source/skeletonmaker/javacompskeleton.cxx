@@ -47,7 +47,6 @@ void generatePackage(std::ostream & o, const OString & implname)
 }
 
 void generateImports(std::ostream & o, ProgramOptions const & options,
-         const boost::unordered_set< OString, OStringHash >& /*interfaces*/,
          const OString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
@@ -265,7 +264,6 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
 }
 
 void registerProperties(std::ostream& o,
-                        TypeManager const & /*manager*/,
                         const AttributeInfo& properties,
                         const OString& indentation)
 {
@@ -837,7 +835,7 @@ void generateClassDefinition(std::ostream& o,
         o << "\n    public " << classname << "( XComponentContext context )\n"
             "    {\n        m_xContext = context;\n";
         if (propertyhelper.equals("_")) {
-            registerProperties(o, manager, properties, "        ");
+            registerProperties(o, properties, "        ");
         } else {
             if (propertyhelper.getLength() > 1) {
                 o << propcomment
@@ -862,8 +860,7 @@ void generateClassDefinition(std::ostream& o,
 
 void generateSkeleton(ProgramOptions const & options,
                       TypeManager const & manager,
-                      std::vector< OString > const & types,
-                      OString const & /*delegate*/)
+                      std::vector< OString > const & types)
 {
     boost::unordered_set< OString, OStringHash > interfaces;
     boost::unordered_set< OString, OStringHash > services;
@@ -958,7 +955,7 @@ void generateSkeleton(ProgramOptions const & options,
 
         generatePackage(*pofs, options.implname);
 
-        generateImports(*pofs, options, interfaces, propertyhelper,
+        generateImports(*pofs, options, propertyhelper,
                         serviceobject, supportxcomponent);
 
         OString classname(options.implname);

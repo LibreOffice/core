@@ -41,7 +41,6 @@ namespace skeletonmaker { namespace cpp {
 
 void generateIncludes(std::ostream & o,
          const boost::unordered_set< OString, OStringHash >& interfaces,
-         const AttributeInfo& /*properties*/,
          OString propertyhelper, bool serviceobject,
          bool supportxcomponent)
 {
@@ -968,8 +967,7 @@ void generateQueryInterface(std::ostream& o,
 
 void generateSkeleton(ProgramOptions const & options,
                       TypeManager const & manager,
-                      std::vector< OString > const & types,
-                      OString const & /*delegate*/)
+                      std::vector< OString > const & types)
 {
     // special handling of calc add-ins
     if (options.componenttype == 2) {
@@ -1030,8 +1028,8 @@ void generateSkeleton(ProgramOptions const & options,
             printLicenseHeader(*pofs, compFileName);
         }
 
-        generateIncludes(*pofs, interfaces, properties, propertyhelper,
-                         serviceobject, supportxcomponent);
+        generateIncludes(*pofs, interfaces, propertyhelper, serviceobject,
+                         supportxcomponent);
 
         if (options.componenttype == 3) {
             *pofs << "#include \"com/sun/star/frame/XFrame.hpp\"\n";
@@ -1192,8 +1190,8 @@ void generateCalcAddin(ProgramOptions const & options,
             printLicenseHeader(*pofs, compFileName);
         }
 
-        generateIncludes(*pofs, interfaces, properties, propertyhelper,
-                         serviceobject, supportxcomponent);
+        generateIncludes(*pofs, interfaces, propertyhelper, serviceobject,
+                         supportxcomponent);
 
         *pofs <<
             "#include \"com/sun/star/beans/PropertyValue.hpp\"\n"

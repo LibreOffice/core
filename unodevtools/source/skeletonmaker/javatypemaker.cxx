@@ -203,7 +203,7 @@ void printConstructor(std::ostream & o,
 void printMethodParameters(std::ostream & o,
     ProgramOptions const & options, TypeManager const & manager,
     typereg::Reader const & reader, sal_uInt16 method, bool previous,
-    bool withtype, bool /*shortname*/)
+    bool withtype)
 {
     for ( sal_uInt16 i = 0; i < reader.getMethodParameterCount(method); ++i ) {
         if ( previous  )

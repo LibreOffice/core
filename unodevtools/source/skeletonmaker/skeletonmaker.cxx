@@ -141,12 +141,13 @@ void printUsageAndExit(const char* programname, const char* version)
 
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
+SAL_IMPLEMENT_MAIN()
 {
     const char* version = "0.4";
     const char* programname = "uno-skeletonmaker";
 
-    if ( argc <= 1 ) {
+    sal_uInt32 nCount = rtl_getAppCommandArgCount();
+    if ( nCount == 0 ) {
         printUsageAndExit(programname, version);
         exit(EXIT_FAILURE);
     }
@@ -158,8 +159,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
 
     try {
 
-    sal_Int32 nPos = 0;
-    sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
+    sal_uInt32 nPos = 0;
     OUString arg, sOption;
     sal_Bool bOption=sal_False;
 
@@ -327,10 +327,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
         switch ( options.language )
         {
         case 1: //Java
-            java::generateSkeleton(options, manager, types, delegate);
+            java::generateSkeleton(options, manager, types);
             break;
         case 2: //C++
-            cpp::generateSkeleton(options, manager, types, delegate);
+            cpp::generateSkeleton(options, manager, types);
             break;
         default:
             OSL_ASSERT(false);

@@ -130,8 +130,7 @@ void generateDocumentation(std::ostream & o,
 
 void generateSkeleton(ProgramOptions const & options,
                       TypeManager const & manager,
-                      std::vector< rtl::OString > const & types,
-                      rtl::OString const & delegate);
+                      std::vector< rtl::OString > const & types);
 
 void generateCalcAddin(ProgramOptions const & options,
                        TypeManager const & manager,

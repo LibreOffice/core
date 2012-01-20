@@ -64,8 +64,7 @@ void printMethodParameters(std::ostream & o,
                            TypeManager const & manager,
                            typereg::Reader const & reader,
                            sal_uInt16 method, bool previous,
-                           bool withtype,
-                           bool shortname=false);
+                           bool withtype);
 
 void printExceptionSpecification(std::ostream & o,
                                  ProgramOptions const & options,
@@ -109,7 +108,7 @@ void generateDocumentation(std::ostream & o,
                            rtl::OString const & type,
                            rtl::OString const & delegate);
 
-void generateSkeleton(ProgramOptions const & options, TypeManager const & manager, std::vector< rtl::OString > const & types, rtl::OString const & delegate);
+void generateSkeleton(ProgramOptions const & options, TypeManager const & manager, std::vector< rtl::OString > const & types);
 
 } }
 
