@@ -326,7 +326,6 @@ public:
     WString& getName(){ return name; }
     bool IsEnabled();
     bool IsMenuToolbar(){ return ( ( ltbtr & 0x2000000 ) == 0x2000000 ); }
-    bool NeedsPositioning();
 };
 
 class MSFILTER_DLLPUBLIC SRECT : public TBBase

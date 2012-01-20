@@ -781,11 +781,6 @@ bool TB::IsEnabled()
     return ( bFlags & 0x01 ) != 0x01;
 }
 
-bool TB::NeedsPositioning()
-{
-    return ( bFlags & 0x10 ) == 0x10;
-}
-
 void TB::Print( FILE* fp )
 {
     Indent a;
