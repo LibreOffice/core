@@ -56,12 +56,15 @@ public:
                         Font( FontFamily eFamily, const Size& );
                         ~Font();
 
+    // setting the color on the font is obsolete, the only remaining
+    // valid use is for keeping backward compatibility with old MetaFiles
     void                SetColor( const Color& );
     const Color&        GetColor() const;
     void                SetFillColor( const Color& );
     const Color&        GetFillColor() const;
     void                SetTransparent( sal_Bool bTransparent );
     sal_Bool                IsTransparent() const;
+
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
