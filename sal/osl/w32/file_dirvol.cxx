@@ -1219,6 +1219,26 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
+
+sal_Bool
+SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
+{
+    DirectoryItem_Impl *pA = (DirectoryItem_Impl *) a;
+    DirectoryItem_Impl *pB = (DirectoryItem_Impl *) b;
+    if (a == b)
+        return sal_True;
+    /* same name => same item, unless renaming / moving madness has occurred */
+    if (rtl_ustr_compare_WithLength(
+                pA->m_pFullPath->buffer, pA->m_pFullPath->length,
+                pB->m_pFullPath->buffer, pB->m_pFullPath->length ) == 0)
+        return sal_True;
+
+    // FIXME: as/when/if this is used in anger on Windows we could
+    // do better here.
+
+    return sal_False;
+}
+
 //#####################################################
 // volume / file info handling functions
 //#####################################################
