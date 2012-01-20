@@ -364,7 +364,7 @@ class REGEXP_DLLPUBLIC Regexpr
             sal_Int32 arg2, sal_Unicode *end);
     sal_Bool at_begline_loc_p(const sal_Unicode *local_pattern,
                   const sal_Unicode *p);
-    sal_Bool at_endline_loc_p(const sal_Unicode *p, const sal_Unicode *pend);
+    sal_Bool at_endline_loc_p(const sal_Unicode *p);
     reg_errcode_t compile_range(sal_Unicode range_begin, sal_Unicode range_end, sal_Unicode *b);
     sal_Bool group_in_compile_stack(compile_stack_type compile_stack,
                     sal_uInt32 regnum);

@@ -688,7 +688,7 @@ Regexpr::at_begline_loc_p(const sal_Unicode *local_pattern, const sal_Unicode *p
    at least one character after the $, i.e., `P < PEND'.  */
 
 sal_Bool
-Regexpr::at_endline_loc_p(const sal_Unicode *p, const sal_Unicode * /* pend */ )
+Regexpr::at_endline_loc_p(const sal_Unicode *p)
 {
   const sal_Unicode *next = p;
   //sal_Bool next_backslash = *next == (sal_Unicode)'\\';
@@ -993,7 +993,7 @@ Regexpr::regex_compile()
       if (   /* If at end of pattern, it's an operator.  */
       p == pend
       /* Otherwise, depends on what's next.  */
-      || at_endline_loc_p(p, pend)) {
+      || at_endline_loc_p(p)) {
     BUF_PUSH(endline);
       } else {
     goto normal_char;
