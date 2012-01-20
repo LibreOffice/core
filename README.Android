@@ -1,5 +1,29 @@
 Android-specific notes
 
+* Getting something running
+
+	Create an AVD in the android UI, don't even try to get
+the data partition size right in the GUI, that is doomed to producing
+and AVD that doesn't work. Instead start it from the console:
+
+	emulator-arm -avd <Name> -partition-size 500
+
+	Where <Name> is the literal name of the AVD that you entered.
+Then it is necessary to get stdout/err to go to somewhere we can find it:
+
+	adb shell stop; adb shell setprop log.redirect-stdio true; adb shell start
+
+	Then:
+
+	cd android/qa/sc
+	make clean all install
+	make run ; adb shell logcat
+
+	And if all goes well - you should have some nice unit
+test output to enjoy.
+
+* Detailed explanation
+
 Unit tests are the first thing we want to run on Android, to get some
 idea how well, if at all, the basic LO libraraies work. We want to
 build even unit tests as normal Android apps, i.e. packaged as .apk
