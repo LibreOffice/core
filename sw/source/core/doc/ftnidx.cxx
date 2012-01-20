@@ -84,7 +84,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     if( !Count() )
         return;
 
-    // besorge erstmal das Nodes-Array ueber den StartIndex der ersten Fussnote
+    // Get the NodesArray using the first foot note's StartIndex
     SwDoc* pDoc = rStt.GetNode().GetDoc();
     if( pDoc->IsInReading() )
         return ;
@@ -93,9 +93,8 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
-    //Fuer normale Fussnoten werden Chapter- und Dokumentweise Nummerierung
-    //getrennt behandelt. Fuer Endnoten gibt es nur die Dokumentweise
-    //Nummerierung.
+    // For normal foot notes we treat chapter and document-wise numbering
+    // seperately. For Endnotes we only have chapter-wise numbering.
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
@@ -103,21 +102,21 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
         if( rOutlNds.Count() )
         {
-            // suche den Start des Kapitels, in den rStt steht.
+            // Find the Chapter's start, which contains rStt
             sal_uInt16 n;
 
             for( n = 0; n < rOutlNds.Count(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
-                    break;      // gefunden
+                    break;      // found it!
                 //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )  //#outline level,zhaojianwei
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )   //<-end,zhaojianwei
-                    pCapStt = rOutlNds[ n ];    // Start eines neuen Kapitels
-            // dann suche jetzt noch das Ende vom Bereich
+                    pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
+            // now find the end of the range
             for( ; n < rOutlNds.Count(); ++n )
                 //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
                 {
-                    nCapEnd = rOutlNds[ n ]->GetIndex();    // Ende des gefundenen Kapitels
+                    nCapEnd = rOutlNds[ n ]->GetIndex();    // End of the found Chapter
                     break;
                 }
         }
@@ -125,14 +124,14 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         sal_uInt16 nPos, nFtnNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
-            // gehe nach vorne bis der Index nicht mehr gleich ist
+            // Step forward until the Index is not the same anymore
             const SwNode* pCmpNd = &rStt.GetNode();
             while( nPos && pCmpNd == &((*this)[ --nPos ]->GetTxtNode()) )
                 ;
             ++nPos;
         }
 
-        if( nPos == Count() )       // nichts gefunden
+        if( nPos == Count() )       // nothing found
             return;
 
         if( !rOutlNds.Count() )
@@ -154,8 +153,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
-    // durchlaufen.
+    // sal_Bool, so that also go through the Endnotes with chapter setting enabled
     const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
     sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
@@ -179,7 +177,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         }
     }
 
-    // ab nPos bei allen FootNotes die Array-Nummer setzen
+    // Set the array number for all footnotes starting from nPos
     for( ; nPos < Count(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
