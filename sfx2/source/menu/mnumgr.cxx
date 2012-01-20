@@ -76,7 +76,6 @@
 #include <sfx2/objface.hxx>
 #include "thessubmenu.hxx"
 
-
 static const sal_uInt16 nCompatVersion = 4;
 static const sal_uInt16 nVersion = 5;
 
@@ -84,12 +83,6 @@ static const sal_uInt16 nVersion = 5;
 PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
 
 using namespace com::sun::star;
-
-//=========================================================================
-
-DECL_PTRSTACK(SfxMenuCfgItemArrStack, SfxMenuCfgItemArr*, 4, 4 );
-
-//-------------------------------------------------------------------------
 
 void TryToHideDisabledEntries_Impl( Menu* pMenu )
 {
