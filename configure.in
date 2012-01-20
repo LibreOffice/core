@@ -120,6 +120,7 @@ dnl ===================================================================
 ANDROID_SDK_HOME=
 if test -n "$with_android_sdk"; then
    ANDROID_SDK_HOME=$with_android_sdk
+   PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
 fi
 AC_SUBST(ANDROID_SDK_HOME)
 
