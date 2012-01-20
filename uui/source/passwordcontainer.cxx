@@ -178,8 +178,8 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
         // Runtime / Persistent info avail for current auth request?
 
         rtl::OUString aResult = xUrlContainer->findUrl(
-            rURL.getLength() ? rURL : rRequest.ServerName );
-        if ( aResult.getLength() > 0 )
+            rURL.isEmpty() ? rRequest.ServerName : rURL );
+        if ( !aResult.isEmpty() )
         {
             if ( fillContinuation( true,
                                    rRequest,
@@ -199,10 +199,10 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     {
         try
         {
-            if (rRequest.UserName.getLength() == 0)
+            if (rRequest.UserName.isEmpty())
             {
                 task::UrlRecord aRec;
-                if ( rURL.getLength() )
+                if ( !rURL.isEmpty() )
                     aRec = xContainer->find(rURL, xIH);
 
                 if ( aRec.UserList.getLength() == 0 )
@@ -225,7 +225,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             else
             {
                 task::UrlRecord aRec;
-                if ( rURL.getLength() )
+                if ( !rURL.isEmpty() )
                     aRec = xContainer->findForName(
                         rURL, rRequest.UserName, xIH);
 
@@ -265,7 +265,7 @@ bool PasswordContainerHelper::addRecord(
 {
     try
     {
-        if ( rUsername.getLength() )
+        if ( !rUsername.isEmpty() )
         {
             OSL_ENSURE( m_xPasswordContainer.is(),
                         "Got no XPasswordContainer!" );

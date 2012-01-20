@@ -101,7 +101,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
 
     try
     {
-        if ( ( sNotifyURL.getLength() > 0 ) && ( m_sVersion.getLength() > 0 ) )
+        if (  !sNotifyURL.isEmpty()  &&  !m_sVersion.isEmpty() )
         {
             uno::Reference< lang::XMultiServiceFactory > xSMGR =
                 ::comphelper::getProcessServiceFactory();
@@ -110,7 +110,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             sNotifyURL += m_sVersion;
-            if ( xSystemShell.is() && sNotifyURL.getLength() )
+            if ( xSystemShell.is() && !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
                     sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );

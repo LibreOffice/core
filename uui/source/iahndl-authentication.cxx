@@ -335,7 +335,7 @@ handleAuthenticationRequest_(
               if (aInfo.GetIsRememberPassword())
               {
                   if (!aPwContainerHelper.addRecord(
-                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           rtl::OUString(), // empty u/p -> sys creds
                           uno::Sequence< rtl::OUString >(),
                           xIH,
@@ -350,7 +350,7 @@ handleAuthenticationRequest_(
                            == ucb::RememberAuthentication_SESSION)
               {
                   if (!aPwContainerHelper.addRecord(
-                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           rtl::OUString(), // empty u/p -> sys creds
                           uno::Sequence< rtl::OUString >(),
                           xIH,
@@ -373,7 +373,7 @@ handleAuthenticationRequest_(
               if (aInfo.GetIsRememberPassword())
               {
                   if (!aPwContainerHelper.addRecord(
-                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           aInfo.GetUserName(),
                           aPassList,
                           xIH,
@@ -388,7 +388,7 @@ handleAuthenticationRequest_(
                            == ucb::RememberAuthentication_SESSION)
               {
                   if (!aPwContainerHelper.addRecord(
-                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           aInfo.GetUserName(),
                           aPassList,
                           xIH,

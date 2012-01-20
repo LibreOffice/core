@@ -42,7 +42,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
     {
         nRet = (long) RENAME;
         rtl::OUString aNewName = maEDNewName.GetText();
-        if ( ( aNewName == maNewName ) || !aNewName.getLength() )
+        if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
             ErrorBox aError( NULL, WB_OK, maSameName );
             aError.Execute();
@@ -100,7 +100,7 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
     aInfo.SearchAndReplaceAscii( "%NAME", rClashingName );
     aInfo.SearchAndReplaceAscii( "%FOLDER", aPath );
     maFTMessage.SetText( aInfo );
-    if ( rProposedNewName.getLength() )
+    if ( !rProposedNewName.isEmpty() )
         maEDNewName.SetText( rProposedNewName );
     else
         maEDNewName.SetText( rClashingName );

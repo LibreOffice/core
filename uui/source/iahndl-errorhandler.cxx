@@ -61,7 +61,7 @@ executeErrorDialog(
     SolarMutexGuard aGuard;
 
     rtl::OUStringBuffer aText(rContext);
-    if (rContext.getLength() != 0 && rMessage.getLength() != 0)
+    if (!rContext.isEmpty() && !rMessage.isEmpty())
         aText.appendAscii(RTL_CONSTASCII_STRINGPARAM(":\n"));
             //TODO! must be internationalized
     aText.append(rMessage);
@@ -265,7 +265,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
 
         //TODO! remove this backwards compatibility?
         rtl::OUString aContext(getContextProperty());
-        if (aContext.getLength() == 0 && nErrorCode != 0)
+        if (aContext.isEmpty() && nErrorCode != 0)
         {
             SolarMutexGuard aGuard;
             ErrorContext * pContext = ErrorContext::GetContext();

@@ -120,7 +120,7 @@ PasswordDialog::PasswordDialog(
     aFTPassword.SetText( aFTPassword.GetText() + aDocURL );
     if (bIsSimplePasswordRequest)
     {
-        DBG_ASSERT( aDocURL.getLength() == 0, "A simple password request should not have a document URL! Use document password request instead." );
+        DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
         aFTPassword.SetText( String( ResId( STR_ENTER_SIMPLE_PASSWORD, *pResourceMgr ) ) );
     }
 

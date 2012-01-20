@@ -499,7 +499,7 @@ UUIInteractionHelper::handleRequest_impl(
             ErrCode nErrorCode = ERRCODE_UUI_IO_TARGETALREADYEXISTS;
             std::vector< rtl::OUString > aArguments;
 
-            if( aNCException.Name.getLength() )
+            if( !aNCException.Name.isEmpty() )
             {
                 nErrorCode = ERRCODE_UUI_IO_ALREADYEXISTS;
                 aArguments.push_back( aNCException.Name );
@@ -648,33 +648,25 @@ UUIInteractionHelper::handleRequest_impl(
         {
             ErrCode nErrorCode;
             std::vector< rtl::OUString > aArguments;
-            if (aWrongJavaVersionException.DetectedVersion.getLength() == 0)
-                if (aWrongJavaVersionException.LowestSupportedVersion.
-                    getLength()
-                    == 0)
+            if (aWrongJavaVersionException.DetectedVersion.isEmpty())
+                if (aWrongJavaVersionException.LowestSupportedVersion.isEmpty())
                     nErrorCode = ERRCODE_UUI_WRONGJAVA;
                 else
                 {
                     nErrorCode = ERRCODE_UUI_WRONGJAVA_MIN;
-                    aArguments.push_back(aWrongJavaVersionException.
-                                         LowestSupportedVersion);
+                    aArguments.push_back(aWrongJavaVersionException.LowestSupportedVersion);
                 }
-            else if (aWrongJavaVersionException.LowestSupportedVersion.
-                     getLength()
-                     == 0)
+            else if (aWrongJavaVersionException.LowestSupportedVersion.isEmpty())
             {
                 nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION;
-                aArguments.push_back(aWrongJavaVersionException.
-                                     DetectedVersion);
+                aArguments.push_back(aWrongJavaVersionException.DetectedVersion);
             }
             else
             {
                 nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION_MIN;
                 aArguments.reserve(2);
-                aArguments.push_back(aWrongJavaVersionException.
-                                     DetectedVersion);
-                aArguments.push_back(aWrongJavaVersionException.
-                                     LowestSupportedVersion);
+                aArguments.push_back(aWrongJavaVersionException.DetectedVersion);
+                aArguments.push_back(aWrongJavaVersionException.LowestSupportedVersion);
             }
             handleErrorHandlerRequest(task::InteractionClassification_ERROR,
                                       nErrorCode,
@@ -736,7 +728,7 @@ UUIInteractionHelper::handleRequest_impl(
             const ErrCode nErrorCode = ERRCODE_UUI_CONFIGURATION_BACKENDMISSING;
 
             rtl::OUString aStratum = aStratumCreationException.StratumData;
-            if (aStratum.getLength() == 0)
+            if (aStratum.isEmpty())
                 aStratum = aStratumCreationException.StratumService;
 
             std::vector< rtl::OUString > aArguments;
@@ -827,7 +819,7 @@ UUIInteractionHelper::handleRequest_impl(
         {
             std::vector< rtl::OUString > aArguments;
 
-            if( aBrokenPackageRequest.aName.getLength() )
+            if( !aBrokenPackageRequest.aName.isEmpty() )
                 aArguments.push_back( aBrokenPackageRequest.aName );
 
             handleBrokenPackageRequest( aArguments,
@@ -930,7 +922,7 @@ UUIInteractionHelper::handleRequest_impl(
                 handleMacroConfirmRequest(
                     aMacroConfirmRequest.DocumentURL,
                     aMacroConfirmRequest.DocumentStorage,
-                    aMacroConfirmRequest.DocumentVersion.getLength() ? aMacroConfirmRequest.DocumentVersion : ODFVER_012_TEXT,
+                    !aMacroConfirmRequest.DocumentVersion.isEmpty() ? aMacroConfirmRequest.DocumentVersion : ODFVER_012_TEXT,
                     aMacroConfirmRequest.DocumentSignatureInformation,
                     rRequest->getContinuations());
                 return true;
@@ -1233,12 +1225,10 @@ UUIInteractionHelper::handleNameClashResolveRequest(
         task::XInteractionContinuation > > const & rContinuations)
   SAL_THROW((uno::RuntimeException))
 {
-    OSL_ENSURE(
-        rRequest.TargetFolderURL.getLength() > 0,
+    OSL_ENSURE(!rRequest.TargetFolderURL.isEmpty(),
         "NameClashResolveRequest must not contain empty TargetFolderURL" );
 
-    OSL_ENSURE(
-        rRequest.ClashingName.getLength() > 0,
+    OSL_ENSURE(!rRequest.ClashingName.isEmpty(),
         "NameClashResolveRequest must not contain empty ClashingName" );
 
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -1332,7 +1322,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
                                        : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
                                    *xManager.get() ) );
 
-            if ( aTitle.getLength() && aErrTitle.getLength() )
+            if ( !aTitle.isEmpty() && !aErrTitle.isEmpty() )
                 aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
             aTitle += aErrTitle;
 

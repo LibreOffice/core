@@ -193,7 +193,7 @@ handleNoSuchFilterRequest_(
 
     // If he doesn't select anyone
     // -> abort operation
-    if (sSelectedFilter.getLength()<1)
+    if (sSelectedFilter.isEmpty())
     {
         xAbort->select();
         return;
@@ -298,7 +298,7 @@ handleAmbigousFilterRequest_(
                                  lNames,
                                  sFilter );
 
-            if( sFilter.getLength() > 0 )
+            if( !sFilter.isEmpty() )
             {
                 xFilterTransport->setFilter( sFilter );
                 xFilterTransport->select();
@@ -362,7 +362,7 @@ handleFilterOptionsRequest_(
                     {
                         ::rtl::OUString aServiceName;
                         aProps[nProperty].Value >>= aServiceName;
-                        if( aServiceName.getLength() )
+                        if( !aServiceName.isEmpty() )
                         {
                             uno::Reference<
                                 ui::dialogs::XExecutableDialog > xFilterDialog(

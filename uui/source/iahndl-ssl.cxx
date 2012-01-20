@@ -92,7 +92,7 @@ isDomainMatch(
     for ( int i = 0; i < certHostNames.getLength(); i++){
         ::rtl::OUString element = certHostNames[i];
 
-       if (element.getLength() == 0)
+       if (element.isEmpty())
            continue;
 
        if (hostName.equalsIgnoreAsciiCase( element ))

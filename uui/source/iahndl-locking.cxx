@@ -96,7 +96,7 @@ handleLockedDocumentRequest_(
         sal_Int32 nResult = RET_CANCEL;
         if ( nMode == UUI_DOC_LOAD_LOCK )
         {
-            aArguments.push_back( aInfo.getLength()
+            aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
                                   : ::rtl::OUString( String(
                                         ResId( STR_UNKNOWNUSER,
@@ -111,7 +111,7 @@ handleLockedDocumentRequest_(
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
         {
-            aArguments.push_back( aInfo.getLength()
+            aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
                                   : ::rtl::OUString( String(
                                         ResId( STR_UNKNOWNUSER,
