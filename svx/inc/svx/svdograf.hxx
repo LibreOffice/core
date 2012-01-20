@@ -83,6 +83,9 @@ public:
 class GraphicObject;
 class SdrGraphicLink;
 
+/**
+ * This class represents an embedded or linked bitmap graphic object.
+ */
 class SVX_DLLPUBLIC SdrGrafObj : public SdrRectObj
 {
 private:
@@ -100,8 +103,8 @@ private:
     void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
     GraphicAttr             aGrafInfo;
 
-    String                  aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
-    String                  aFilterName;
+    rtl::OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
+    rtl::OUString aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
     bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
@@ -158,12 +161,12 @@ public:
     void                    ForceSwapIn() const;
     void                    ForceSwapOut() const;
 
-    void                    SetGraphicLink(const String& rFileName, const String& rFilterName);
+    void                    SetGraphicLink(const rtl::OUString& rFileName, const String& rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
-    const String&           GetFileName() const { return aFileName; }
-    const String&           GetFilterName() const { return aFilterName; }
+    const rtl::OUString& GetFileName() const;
+    const rtl::OUString& GetFilterName() const;
 
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
 

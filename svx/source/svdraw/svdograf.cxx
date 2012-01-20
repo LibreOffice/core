@@ -597,10 +597,11 @@ void SdrGrafObj::ImpLinkAnmeldung()
 
     if( pLinkManager != NULL && pGraphicLink == NULL )
     {
-        if( aFileName.Len() )
+        if (!aFileName.isEmpty())
         {
             pGraphicLink = new SdrGraphicLink( this );
-            pLinkManager->InsertFileLink( *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, ( aFilterName.Len() ? &aFilterName : NULL ), NULL );
+            pLinkManager->InsertFileLink(
+                *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, (aFilterName.isEmpty() ? NULL : &aFilterName), NULL);
             pGraphicLink->Connect();
         }
     }
@@ -622,7 +623,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterName )
+void SdrGrafObj::SetGraphicLink(const rtl::OUString& rFileName, const String& rFilterName)
 {
     ImpLinkAbmeldung();
     aFileName = rFileName;
@@ -639,13 +640,23 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
 void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpLinkAbmeldung();
-    aFileName = String();
-    aFilterName = String();
+    aFileName = rtl::OUString();
+    aFilterName = rtl::OUString();
 }
 
 bool SdrGrafObj::IsLinkedGraphic() const
 {
-    return aFileName.Len() > 0;
+    return !aFileName.isEmpty();
+}
+
+const rtl::OUString& SdrGrafObj::GetFileName() const
+{
+    return aFileName;
+}
+
+const rtl::OUString& SdrGrafObj::GetFilterName() const
+{
+    return aFilterName;
 }
 
 // -----------------------------------------------------------------------------
@@ -974,7 +985,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
 
     SdrRectObj::SetPage( pNewPage );
 
-    if(aFileName.Len() && bInsert)
+    if (!aFileName.isEmpty() && bInsert)
         ImpLinkAnmeldung();
 }
 
@@ -999,7 +1010,7 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
     // realize model
     SdrRectObj::SetModel(pNewModel);
 
-    if( bChg && aFileName.Len() )
+    if (bChg && !aFileName.isEmpty())
         ImpLinkAnmeldung();
 }
 
@@ -1345,7 +1356,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
             }
         }
 
-        if( !xStream.is() && aFileName.Len() )
+        if (!xStream.is() && !aFileName.isEmpty())
         {
             SvFileStream* pStream = new SvFileStream( aFileName, STREAM_READ );
             if( pStream )
