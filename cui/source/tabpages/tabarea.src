@@ -682,51 +682,6 @@ TabPage RID_SVXPAGE_SHADOW
     };
 };
 
-// Helper for creating the load / save / embed buttons in std. positions
-
-#define LOAD_BUTTON(hid,qhtxt) \
-    ImageButton BTN_LOAD \
-    { \
-	HelpID = hid ; \
-        Pos = MAP_APPFONT ( 197 , 104  ) ; \
-        Size = MAP_APPFONT ( 16 , 16 ) ; \
-        TabStop = TRUE ; \
-        QuickHelpText [ en-US ] = qhtxt ; \
-        ButtonImage = Image \
-        { \
-            ImageBitmap = Bitmap \
-            { \
-                File = "sc05501.bmp" ; \
-            }; \
-        }; \
-    } \
-
-#define SAVE_BUTTON(hid,qhtxt) \
-    ImageButton BTN_SAVE \
-    { \
-	HelpID = hid ;			   \
-        Pos = MAP_APPFONT ( 217 , 104  ) ; \
-        Size = MAP_APPFONT ( 16 , 16 ) ; \
-        TabStop = TRUE ; \
-        QuickHelpText [ en-US ] = qhtxt ; \
-        ButtonImage = Image \
-        { \
-            ImageBitmap = Bitmap \
-            { \
-                File = "sc05502.bmp" ; \
-            }; \
-        }; \
-    }
-
-#define EMBED_BUTTON(hid,txt) \
-    CheckBox BTN_EMBED \
-    { \
-	HelpID = hid ; \
-        Pos = MAP_APPFONT ( 197 , 124 ) ; \
-        Size = MAP_APPFONT ( 122 , 10 ) ; \
-        Text [ en-US ] = txt ; \
-    }
-
 // ------------------------------------------------------
 TabPage RID_SVXPAGE_HATCH
 {
@@ -868,9 +823,43 @@ TabPage RID_SVXPAGE_HATCH
         TabStop = TRUE ;
     };
 
-    LOAD_BUTTON( "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_LOAD", "Load Hatches List" );
-    SAVE_BUTTON( "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_SAVE", "Save Hatches List" );
-    EMBED_BUTTON( "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_EMBED", "Embed" );
+    ImageButton BTN_LOAD
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_LOAD";
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Hatches List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_SAVE";
+        Pos = MAP_APPFONT ( 217 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Hatches List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+        };
+    };
+    CheckBox BTN_EMBED
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_EMBED";
+        Pos = MAP_APPFONT ( 197 , 124 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
+        Text [ en-US ] = "Embed";
+    };
 };
 
 // ------------------------------------------------------
@@ -983,9 +972,43 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
     };
 
-    LOAD_BUTTON( "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_LOAD", "Load Bitmap List" );
-    SAVE_BUTTON( "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_SAVE", "Save Bitmap List" );
-    EMBED_BUTTON( "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_EMBED", "Embed" );
+    ImageButton BTN_LOAD
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_LOAD";
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Bitmap List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_SAVE";
+        Pos = MAP_APPFONT ( 217 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Bitmap List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+        };
+    }
+    CheckBox BTN_EMBED
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_EMBED";
+        Pos = MAP_APPFONT ( 197 , 124 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
+        Text [ en-US ] =  "Embed";
+    }
 };
 
 // ------------------------------------------------------
@@ -1214,9 +1237,43 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
     };
-    LOAD_BUTTON( "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_LOAD", "Load Gradients List" );
-    SAVE_BUTTON( "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_SAVE", "Save Gradients List" );
-    EMBED_BUTTON( "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_EMBED", "Embed" );
+    ImageButton BTN_LOAD
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_LOAD";
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Gradients List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_SAVE";
+        Pos = MAP_APPFONT ( 217 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Gradients List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+        };
+    };
+    CheckBox BTN_EMBED
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_EMBED";
+        Pos = MAP_APPFONT ( 197 , 124 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
+        Text [ en-US ] = "Embed";
+    };
 };
 
 // ------------------------------------------------------
@@ -1417,9 +1474,43 @@ TabPage RID_SVXPAGE_COLOR
         Text [ en-US ] = "~Modify" ;
         TabStop = TRUE ;
     };
-    LOAD_BUTTON( "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_LOAD", "Load Color List" );
-    SAVE_BUTTON( "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_SAVE", "Save Color List" );
-    EMBED_BUTTON( "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_EMBED", "Embed" );
+    ImageButton BTN_LOAD
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_LOAD";
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Color List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_SAVE";
+        Pos = MAP_APPFONT ( 217 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Color List";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+        };
+    };
+    CheckBox BTN_EMBED
+    {
+	HelpID = "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_EMBED";
+        Pos = MAP_APPFONT ( 197 , 124 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
+        Text [ en-US ] = "Embed";
+    };
 };
 
 // ------------------------------------------------------
