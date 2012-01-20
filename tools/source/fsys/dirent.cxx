@@ -140,17 +140,6 @@ sal_Bool bInRedirection = sal_False;
 static osl::Mutex* pRedirectMutex = 0;
 
 //------------------------------------------------------------------------
-void FSysRedirector::Register( FSysRedirector *pRedirector )
-{
-        if ( pRedirector )
-            pRedirectMutex = new osl::Mutex;
-        else
-                DELETEZ( pRedirectMutex );
-        _pRedirector = pRedirector;
-}
-
-//------------------------------------------------------------------------
-
 void FSysRedirector::DoRedirect( String &rPath )
 {
         String aURL(rPath);
@@ -185,19 +174,14 @@ void FSysRedirector::DoRedirect( String &rPath )
         aURL.Insert( String("file:///", osl_getThreadTextEncoding()), 0 );
 
         // do redirection
-        Redirector();
+        if ( !_pRedirector )
+        {
+            pRedirectMutex = new osl::Mutex;
+            _pRedirector = new FSysRedirector;
+        }
 
         bInRedirection = sal_False;
         return;
-}
-
-//------------------------------------------------------------------------
-
-FSysRedirector* FSysRedirector::Redirector()
-{
-        if ( !_pRedirector )
-                Register( new FSysRedirector );
-        return _pRedirector;
 }
 
 #endif // BOOTSTRAP

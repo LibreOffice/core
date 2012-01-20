@@ -453,21 +453,6 @@ class FSysRedirector
     static sal_Bool             _bEnabled;
 
 public:
-    /** This method must called with the one and only instance of the
-        subclass which implements the redirection.
-
-        <P>It must be called with 0 when the instance is destroyed.
-     */
-    static void             Register( FSysRedirector *pRedirector );
-
-    //-----------------------------------------------------------------------
-    /** This method returns the currently registererd instance of
-        a subclass which implements the redirection.
-
-        <P>If no redirector is registered, it returns 0.
-     */
-    static FSysRedirector*  Redirector();
-
     //-----------------------------------------------------------------------
     /** This method is to be used to redirect a file system path.
 

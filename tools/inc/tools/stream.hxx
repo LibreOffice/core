@@ -586,6 +586,11 @@ private:
     SvFileStream (const SvFileStream&);
     SvFileStream & operator= (const SvFileStream&);
 
+    sal_Bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
+    sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
+    sal_Bool LockFile();
+    sal_Bool UnlockFile();
+
 protected:
 
     virtual sal_Size    GetData( void* pData, sal_Size nSize );
@@ -601,11 +606,6 @@ public:
                     ~SvFileStream();
 
     virtual void    ResetError();
-
-    sal_Bool            LockRange( sal_Size nByteOffset, sal_Size nBytes );
-    sal_Bool            UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
-    sal_Bool            LockFile();
-    sal_Bool            UnlockFile();
 
     void            Open( const String& rFileName, StreamMode eOpenMode );
     void            Close();
