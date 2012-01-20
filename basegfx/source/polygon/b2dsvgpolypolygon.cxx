@@ -80,8 +80,7 @@ namespace basegfx
 
             bool lcl_getDoubleChar(double&                  o_fRetval,
                                    sal_Int32&               io_rPos,
-                                   const ::rtl::OUString&   rStr,
-                                   const sal_Int32          /*nLen*/)
+                                   const ::rtl::OUString&   rStr)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
@@ -136,7 +135,7 @@ namespace basegfx
                                             const ::rtl::OUString&  rStr,
                                             const sal_Int32         nLen )
             {
-                if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr, nLen) )
+                if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr) )
                     return false;
 
                 lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
