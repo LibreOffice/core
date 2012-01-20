@@ -66,14 +66,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 
-//=========================================================================
-
 DBG_NAME(SfxVirtualMenu)
 
-//=========================================================================
-
 typedef SfxMenuControl* SfxMenuControlPtr;
-SV_IMPL_PTRARR(SfxMenuCtrlArr_Impl, SfxMenuControlPtr);
 
 class SfxMenuImageControl_Impl : public SfxControllerItem
 {
@@ -401,7 +396,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 pPopup = 0;
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
+                rCtrlArr.push_back(pMnuCtrl);
                 (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
                 pMnuCtrl->Bind( this, nSlotId, sItemText, *pBindings);
 
@@ -444,7 +439,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
+                            rCtrlArr.push_back(pMnuCtrl);
                             (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
                         }
                     }
@@ -456,7 +451,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
+                            rCtrlArr.push_back(pMnuCtrl);
                             (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
                         }
                         else
@@ -736,12 +731,11 @@ void SfxVirtualMenu::BindControllers()
     }
 
     SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-    for ( nPos=0; nPos<rCtrlArr.Count(); nPos++ )
+    for(SfxMenuCtrlArr_Impl::const_iterator i = rCtrlArr.begin(); i != rCtrlArr.end(); ++i)
     {
-        SfxMenuControl* pCtrl = rCtrlArr[nPos];
-        sal_uInt16 nSlotId = pCtrl->GetId();
+        sal_uInt16 nSlotId = (*i)->GetId();
         if ( !pSVMenu->GetItemCommand(nSlotId).Len() )
-            pCtrl->ReBind();
+            (*i)->ReBind();
     }
 
     pBindings->LEAVEREGISTRATIONS();
@@ -761,12 +755,11 @@ void SfxVirtualMenu::UnbindControllers()
     }
 
     SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-    for ( nPos=0; nPos<rCtrlArr.Count(); nPos++ )
+    for(SfxMenuCtrlArr_Impl::const_iterator i = rCtrlArr.begin(); i != rCtrlArr.end(); ++i)
     {
-        SfxMenuControl* pCtrl = rCtrlArr[nPos];
-        if ( pCtrl->IsBound() )
+        if((*i)->IsBound())
             // UnoController is not binded!
-            pCtrl->UnBind();
+            (*i)->UnBind();
     }
 
     pBindings->LEAVEREGISTRATIONS();

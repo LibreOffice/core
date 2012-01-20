@@ -28,8 +28,6 @@
 #ifndef _SFXVIRTMENU_HXX
 #define _SFXVIRTMENU_HXX
 
-
-#include <svl/svarray.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "mnucfga.hxx"
 
@@ -37,7 +35,7 @@ class SfxBindings;
 class Timer;
 class SfxMenuImageControl_Impl;
 
-SV_DECL_PTRARR_DEL( SfxMenuCtrlArr_Impl, SfxMenuControl*, 2, 2 )
+typedef std::vector<SfxMenuControl*> SfxMenuCtrlArr_Impl;
 
 class SAL_DLLPUBLIC_EXPORT SfxVirtualMenu
 {
