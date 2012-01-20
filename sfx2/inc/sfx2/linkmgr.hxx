@@ -132,11 +132,15 @@ public:
     void LinkServerShell(const ::rtl::OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
 
     // Obtain the string for the dialog
-    sal_Bool GetDisplayNames( const SvBaseLink *,
+    bool GetDisplayNames( const SvBaseLink *,
                                     String* pType,
                                     String* pFile = 0,
                                     String* pLink = 0,
                                     String* pFilter = 0 ) const;
+
+    bool GetDisplayNames(
+        const SvBaseLink* pLink, rtl::OUString* pType, rtl::OUString* pFile = NULL,
+        rtl::OUString* pLinkStr = NULL, rtl::OUString* pFilter = NULL) const;
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 

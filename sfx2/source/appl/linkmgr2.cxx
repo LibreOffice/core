@@ -231,13 +231,13 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 
 
 // Obtain the string for the dialog
-sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
+bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         String* pType,
                                         String* pFile,
                                         String* pLinkStr,
                                         String* pFilter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const String sLNm( pLink->GetLinkSourceName() );
     if( sLNm.Len() )
     {
@@ -266,7 +266,7 @@ sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                             ? RID_SVXSTR_FILELINK
                                             : RID_SVXSTR_GRAFIKLINK ));
                     }
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 break;
             case OBJECT_CLIENT_DDE:
@@ -282,7 +282,7 @@ sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                         *pFile = sTopic;
                     if( pLinkStr )
                         *pLinkStr = sCmd.Copy( nTmp );
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 break;
             default:
@@ -293,6 +293,22 @@ sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
     return bRet;
 }
 
+bool LinkManager::GetDisplayNames(
+    const SvBaseLink* pLink, rtl::OUString* pType, rtl::OUString* pFile,
+    rtl::OUString* pLinkStr, rtl::OUString* pFilter) const
+{
+    String aType, aFile, aLinkStr, aFilter;
+    bool bRet = GetDisplayNames(pLink, &aType, &aFile, &aLinkStr, &aFilter);
+    if (pType)
+        *pType = aType;
+    if (pFile)
+        *pFile = aFile;
+    if (pLinkStr)
+        *pLinkStr = aLinkStr;
+    if (pFilter)
+        *pFilter = aFilter;
+    return bRet;
+}
 
 void LinkManager::UpdateAllLinks(
     sal_Bool bAskUpdate,
