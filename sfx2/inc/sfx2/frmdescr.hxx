@@ -42,8 +42,6 @@ class SvStream;
 struct SfxFrameDescriptor_Impl;
 class SfxFrameDescriptor;
 class Wallpaper;
-typedef SfxFrameDescriptor* SfxFrameDescriptorPtr;
-SV_DECL_PTRARR(SfxFramesArr, SfxFrameDescriptorPtr, 4, 2)
 
 //===========================================================================
 // The SfxFrame descriptors build a recursive structure, that covers all the
