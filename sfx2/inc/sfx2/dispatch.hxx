@@ -37,10 +37,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <deque>
+
 class SfxSlotServer;
 class SfxShell;
 class SfxRequest;
-class SfxShellStack_Impl;
 class SfxHintPoster;
 class SfxViewFrame;
 class SfxBindings;
@@ -64,19 +65,17 @@ namespace com
     }
 }
 
-//=========================================================================
-
 #define SFX_SHELL_POP_UNTIL     4
 #define SFX_SHELL_POP_DELETE    2
 #define SFX_SHELL_PUSH          1
-
-//=========================================================================
 
 typedef SfxPoolItem* SfxPoolItemPtr;
 SV_DECL_PTRARR_DEL( SfxItemPtrArray, SfxPoolItemPtr, 4, 4 )
 
 // fuer  shell.cxx
 typedef SfxItemPtrArray SfxItemArray_Impl;
+
+typedef std::deque<SfxShell*> SfxShellStack_Impl;
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {
