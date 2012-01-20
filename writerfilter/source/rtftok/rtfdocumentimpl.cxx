@@ -1450,6 +1450,21 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     checkUnicode();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
+    int nSprm = -1;
+
+    // Map all underline flags to a single sprm.
+    switch (nKeyword)
+    {
+        case RTF_ULD: nSprm = 4; break;
+        case RTF_ULW: nSprm = 2; break;
+        default: break;
+    }
+    if (nSprm >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nSprm));
+        m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CKul, pValue));
+        return 0;
+    }
 
     // Indentation
     switch (nKeyword)
@@ -2565,11 +2580,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
 
-    // Map all underline keywords to a single sprm.
+    // Map all underline toggles to a single sprm.
     switch (nKeyword)
     {
         case RTF_UL: nSprm = 1; break;
-        case RTF_ULD: nSprm = 4; break;
         case RTF_ULDASH: nSprm = 7; break;
         case RTF_ULDASHD: nSprm = 9; break;
         case RTF_ULDASHDD: nSprm = 10; break;
@@ -2583,7 +2597,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_ULTHDASHDD: nSprm = 26; break;
         case RTF_ULTHLDASH: nSprm = 55; break;
         case RTF_ULULDBWAVE: nSprm = 43; break;
-        case RTF_ULW: nSprm = 2; break;
         case RTF_ULWAVE: nSprm = 11; break;
         default: break;
     }
