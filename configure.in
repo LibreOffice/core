@@ -90,23 +90,38 @@ if test -z "$SED"; then
 fi
 
 dnl ===================================================================
-dnl Building with an android-ndk implies a lot of pre-canned defaults
+dnl When building for Android the --with-android-ndk is mandatory
 dnl ===================================================================
 ANDROID_NDK_HOME=
-if test "z$with_android_ndk" != "z"; then
+if test -n "$with_android_ndk"; then
    ANDROID_NDK_HOME=$with_android_ndk
+   # Set up a lot of pre-canned defaults
+   # What if the NDK at some point starts including several toolchains for different
+   # gcc versions (like some 3rd-party improved NDK builds already do)?
+   # Then the use of a wildcard below will break.
    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/arm-linux*/prebuilt/*/bin`
+
    test -z "$SYSBASE" && SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-arm
    test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-ar
    test -z "$NM" && NM=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-nm
    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-objdump
    test -z "$RANLIB" && RANLIB=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-ranlib
    test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-strip
-   test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-gcc --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm  -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a"
-   test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-g++ --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti"
-#   PATH="$ANDROID_NDK_HOME/:$PATH"
+
+   ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a"
+   test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-gcc $ANDROIDCFLAGS"
+   test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-g++ $ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -fexceptions -frtti"
 fi
 AC_SUBST(ANDROID_NDK_HOME)
+
+dnl ===================================================================
+dnl Also --with-android-sdk is mandatory
+dnl ===================================================================
+ANDROID_SDK_HOME=
+if test -n "$with_android_sdk"; then
+   ANDROID_SDK_HOME=$with_android_sdk
+fi
+AC_SUBST(ANDROID_SDK_HOME)
 
 dnl ===================================================================
 dnl The following is a list of supported systems.
@@ -301,14 +316,22 @@ linux-androideabi*)
     test_unix_quickstarter=no
     _os=Android
 
-    # Make sure env vars pointing to where to find the cross-build
-    # toolchain are set. There aren't really any sensible
-    # guesstimates.
-    for var in CC CXX AR NM OBJDUMP RANLIB STRIP; do
-        if test -z "`eval echo '$'$var`"; then
-            AC_MSG_ERROR([You need to set the $var environment variable in a cross-compilation for Android. See README.cross for an example.])
-        fi
-    done
+    if test -z "$with_android_ndk"; then
+        AC_MSG_ERROR([the --with-android-ndk option is mandatory])
+    fi
+
+    if test -z "$with_android_sdk"; then
+        AC_MSG_ERROR([the --with-android-sdk option is mandatory])
+    fi
+
+    # Verify that the NDK and SDK options are proper
+    if test ! -f "$ANDROID_NDK_HOME/platforms/android-9/arch-arm/usr/lib/libc.a"; then
+        AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
+    fi
+
+    if test ! -f "$ANDROID_SDK_HOME/platforms/android-14/android.jar"; then
+        AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
+    fi
 
     BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     FREETYPE_TARBALL=dbf2caca1d3afd410a29217a9809d397-freetype-2.4.8.tar.bz2
@@ -854,7 +877,12 @@ dnl Optional Packages (--with/without-)
 dnl ===================================================================
 AC_ARG_WITH(android-ndk,
     AS_HELP_STRING([--with-android-ndk],
-        [Specify location of the Android Native Development Kit to use for buildin.]),
+        [Specify location of the Android Native Development Kit. Mandatory when building for Android.]),
+,)
+
+AC_ARG_WITH(android-sdk,
+    AS_HELP_STRING([--with-android-sdk],
+        [Specify location of the Android SDK. Mandatory when building for Android.]),
 ,)
 
 AC_ARG_WITH(gnu-patch,
@@ -2931,6 +2959,7 @@ if test "$cross_compiling" = "yes"; then
     tar cf - \
         bin/repo-list.in \
         build_env.in \
+        android/qa/sc/local.properties.in \
         config.guess \
         config_host.mk.in \
         configure \
@@ -10457,7 +10486,7 @@ else
     echo > set_soenv.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list build_env])
+AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list build_env android/qa/sc/local.properties])
 AC_OUTPUT
 
 # touch the config timestamp file set_soenv.stamp
