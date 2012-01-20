@@ -38,7 +38,6 @@ $(eval $(call gb_Library_add_api,svt,\
 ))
 
 $(eval $(call gb_Library_set_include,svt,\
-    -I$(OUTDIR)/inc/external/jpeg \
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \

@@ -120,6 +120,11 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_jpeg
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/external/jpeg \
+)
+
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	jpeglib \
 )
