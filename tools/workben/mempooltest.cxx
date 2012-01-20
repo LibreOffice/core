@@ -8,7 +8,7 @@ struct MempoolTest
   DECL_FIXEDMEMPOOL_NEWDEL(MempoolTest);
 };
 
-IMPL_FIXEDMEMPOOL_NEWDEL(MempoolTest, 0, 0);
+IMPL_FIXEDMEMPOOL_NEWDEL(MempoolTest);
 
 int main()
 {

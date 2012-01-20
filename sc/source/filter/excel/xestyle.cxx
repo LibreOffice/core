@@ -158,7 +158,7 @@ public:
     void                Merge( const XclListColor& rColor );
 };
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclListColor, 100, 100 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclListColor )
 
 XclListColor::XclListColor( const Color& rColor, sal_uInt32 nColorId ) :
     maColor( rColor ),

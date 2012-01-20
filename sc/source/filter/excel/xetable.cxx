@@ -570,7 +570,7 @@ void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell )
 
 XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -616,7 +616,7 @@ void XclExpNumberCell::WriteContents( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
 
 XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot rRoot, const XclAddress& rXclPos,
@@ -647,7 +647,7 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
     rStrm << sal_uInt16( mbValue ? 1 : 0 ) << EXC_BOOLERR_BOOL;
 }
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell )
 
 XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -757,7 +757,7 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
 
 XclExpFormulaCell::XclExpFormulaCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -1194,7 +1194,7 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell )
 
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
     XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
@@ -1244,7 +1244,7 @@ void XclExpBlankCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell, 256, 256 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell )
 
 XclExpRkCell::XclExpRkCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,

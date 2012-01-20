@@ -55,11 +55,9 @@
 #define SC_CHGTRACK_CXX
 #include "chgtrack.hxx"
 
-const sal_uInt16 nMemPoolChangeActionCellListEntry = (0x2000 - 64) / sizeof(ScChangeActionCellListEntry);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry, nMemPoolChangeActionCellListEntry, nMemPoolChangeActionCellListEntry )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 
-const sal_uInt16 nMemPoolChangeActionLinkEntry = (0x8000 - 64) / sizeof(ScChangeActionLinkEntry);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry, nMemPoolChangeActionLinkEntry, nMemPoolChangeActionLinkEntry )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
 
 // loaded MSB > eigenes => inkompatibel
 #define SC_CHGTRACK_FILEFORMAT_FIRST    0x0001
@@ -1252,8 +1250,7 @@ sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc )
 
 // --- ScChangeActionContent -----------------------------------------------
 
-const sal_uInt16 nMemPoolChangeActionContent = (0x8000 - 64) / sizeof(ScChangeActionContent);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent, nMemPoolChangeActionContent, nMemPoolChangeActionContent )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
@@ -2031,7 +2028,7 @@ ScChangeActionReject::ScChangeActionReject(const sal_uLong nActionNumber, const 
 
 // --- ScChangeTrack -------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo, 16, 16 )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo )
 
 const SCROW ScChangeTrack::nContentRowsPerSlot = InitContentRowsPerSlot();
 const SCSIZE ScChangeTrack::nContentSlots =

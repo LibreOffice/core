@@ -39,8 +39,7 @@
 |*
 *************************************************************************/
 
-FixedMemPool::FixedMemPool (
-    char const * pTypeName, sal_uInt16 nTypeSize, sal_uInt16, sal_uInt16)
+FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
   : m_pTypeName (pTypeName)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];

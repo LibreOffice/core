@@ -45,19 +45,16 @@ namespace formula
     using namespace com::sun::star;
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via FormulaTokenIterator Push/Pop moeglich
-IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
+IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator )
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
 // Need a lot of FormulaDoubleToken
-const sal_uInt16 nMemPoolDoubleToken = (0x3000 - 64) / sizeof(FormulaDoubleToken);
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken )
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 // Need a lot of FormulaByteToken
-const sal_uInt16 nMemPoolByteToken = (0x3000 - 64) / sizeof(FormulaByteToken);
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken, nMemPoolByteToken, nMemPoolByteToken )
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 // Need several FormulaStringToken
-const sal_uInt16 nMemPoolStringToken = (0x1000 - 64) / sizeof(FormulaStringToken);
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken, nMemPoolStringToken, nMemPoolStringToken )
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 
 
 // --- helpers --------------------------------------------------------------

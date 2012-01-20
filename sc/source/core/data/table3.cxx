@@ -211,8 +211,7 @@ struct ScSortInfo
     SCCOLROW        nOrg;
     DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
-const sal_uInt16 nMemPoolSortInfo = (0x8000 - 64) / sizeof(ScSortInfo);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
 // END OF STATIC DATA -----------------------------------------------------
 

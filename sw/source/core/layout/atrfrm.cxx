@@ -2462,7 +2462,7 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 //  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFrmFmt, SwFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt )
 
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
@@ -2690,7 +2690,7 @@ String SwFrmFmt::GetDescription() const
 //  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFlyFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
 {
@@ -3130,7 +3130,7 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 //  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt )
 
 SwDrawFrmFmt::~SwDrawFrmFmt()
 {

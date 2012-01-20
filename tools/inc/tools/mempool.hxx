@@ -28,6 +28,9 @@
 #ifndef _SVMEMPOOL_HXX
 #define _SVMEMPOOL_HXX
 
+#include "sal/config.h"
+
+#include "sal/macros.h"
 #include "tools/toolsdllapi.h"
 #include "tools/solar.h"
 
@@ -44,9 +47,7 @@ class TOOLS_DLLPUBLIC FixedMemPool
 
 public:
                     FixedMemPool( char const * pTypeName,
-                                  sal_uInt16 nTypeSize,
-                                  sal_uInt16 nInitSize = 512,
-                                  sal_uInt16 nGrowSize = 256 );
+                                  sal_uInt16 nTypeSize );
                     ~FixedMemPool();
 
     void*           Alloc();
@@ -100,11 +101,8 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
         DECL_FIXEDMEMPOOL_NEW_INLINE( Class, aPool ) \
         DECL_FIXEDMEMPOOL_DEL_INLINE( Class, aPool )
 
-#define IMPL_FIXEDMEMPOOL_STRING(x) IMPL_FIXEDMEMPOOL_MAKESTRING(x)
-#define IMPL_FIXEDMEMPOOL_MAKESTRING(x) #x
-
-#define IMPL_FIXEDMEMPOOL_NEWDEL( Class, InitSize, GrowSize) \
-    FixedMemPool Class::aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) );
+#define IMPL_FIXEDMEMPOOL_NEWDEL( Class ) \
+    FixedMemPool Class::aPool( SAL_STRINGIFY( Class ), sizeof( Class ) );
 
 #define DECL_FIXEDMEMPOOL_NEWDEL_DLL( Class ) \
     private: \
@@ -113,15 +111,12 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
         DECL_FIXEDMEMPOOL_NEW_DECL(); \
         DECL_FIXEDMEMPOOL_DEL_DECL();
 
-#define IMPL_FIXEDMEMPOOL_NEWDEL_DLL( Class, InitSize, GrowSize) \
-    FixedMemPool Class::aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) ); \
+#define IMPL_FIXEDMEMPOOL_NEWDEL_DLL( Class ) \
+    FixedMemPool Class::aPool( SAL_STRINGIFY( Class ), sizeof( Class ) ); \
     DECL_FIXEDMEMPOOL_NEW_IMPL( Class ) \
     IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool ) \
     DECL_FIXEDMEMPOOL_DEL_IMPL( Class ) \
     IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
-
-#define INIT_FIXEDMEMPOOL_NEWDEL_DLL( Class, aPool, InitSize, GrowSize ) \
-    aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) )
 
 #endif // _SVMEMPOOL_HXX
 

@@ -71,15 +71,10 @@ const sal_uInt16 MAXRECURSION = 400;
 // STATIC DATA -----------------------------------------------------------
 
 #ifdef USE_MEMPOOL
-// MemPools auf 4k Boundaries  - 64 Bytes ausrichten
-const sal_uInt16 nMemPoolValueCell = (0x8000 - 64) / sizeof(ScValueCell);
-const sal_uInt16 nMemPoolFormulaCell = (0x8000 - 64) / sizeof(ScFormulaCell);
-const sal_uInt16 nMemPoolStringCell = (0x4000 - 64) / sizeof(ScStringCell);
-const sal_uInt16 nMemPoolNoteCell = (0x1000 - 64) / sizeof(ScNoteCell);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell,   nMemPoolValueCell, nMemPoolValueCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell, nMemPoolFormulaCell, nMemPoolFormulaCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell, nMemPoolStringCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,    nMemPoolNoteCell, nMemPoolNoteCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 #endif
 
 // ============================================================================

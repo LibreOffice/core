@@ -36,7 +36,7 @@
 
 SV_IMPL_PTRARR( SwUnoCrsrTbl, SwUnoCrsrPtr )
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr, 10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false ), SwModify( 0 ),

@@ -53,11 +53,11 @@ long SwTxtFrm::nMinPrtLine = 0;
 SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine,      50,  50 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion,  50,  50 ) //Absaetze
-IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout,  150, 150 ) //Zeilen
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion, 150, 150 ) //z.B. Blanks am Zeilenende
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion,  200, 100 ) //Attributwechsel
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) //Absaetze
+IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) //Zeilen
+IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) //z.B. Blanks am Zeilenende
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) //Attributwechsel
 
 /*************************************************************************
  *                  _TextInit(), _TextFinit()

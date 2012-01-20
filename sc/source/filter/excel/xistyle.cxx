@@ -1588,7 +1588,7 @@ ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
 
 // Buffer for XF indexes in cells =============================================
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange, 100, 500 )
+IMPL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange )
 
 bool XclImpXFRange::Expand( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
