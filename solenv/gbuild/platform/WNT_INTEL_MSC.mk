@@ -254,7 +254,7 @@ define gb_Helper_convert_native
 $(subst file:!!!,file:///, \
 $(subst //,/, \
 $(subst file:///,file:!!!, \
-$(subst $(REPODIR),$(pathsubst %/,%,$(gb_Helper_REPODIR_NATIVE)), \
+$(subst $(REPODIR),$(patsubst %/,%,$(gb_Helper_REPODIR_NATIVE)), \
 $(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
 $(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
 $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
