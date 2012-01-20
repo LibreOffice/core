@@ -423,8 +423,6 @@ const KeyCode*  Application::GetReservedKeyCode( sal_uLong i )
 
 void Application::Execute()
 {
-    DBG_STARTAPPEXECUTE();
-
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mbInAppExecute = sal_True;
 
@@ -432,8 +430,6 @@ void Application::Execute()
         Application::Yield();
 
     pSVData->maAppData.mbInAppExecute = sal_False;
-
-    DBG_ENDAPPEXECUTE();
 }
 
 // -----------------------------------------------------------------------

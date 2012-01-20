@@ -61,7 +61,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
     tools/source/debug/debug \
-    tools/source/debug/stcktree \
     tools/source/fsys/comdep \
     tools/source/fsys/dirent \
     tools/source/fsys/filecopy \

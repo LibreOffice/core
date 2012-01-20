@@ -320,14 +320,6 @@ inline void DbgPrintFile( const sal_Char* pLine )
     DbgFunc( DBG_FUNC_PRINTFILE, (void*)(sal_Char*)pLine );
 }
 
-// --- Dbg-StackTree-Functions ---
-
-TOOLS_DLLPUBLIC void DbgStartStackTree();
-TOOLS_DLLPUBLIC void DbgEndStackTree();
-void* DbgGetStackTree( sal_uIntPtr nAlloc = 0 );
-void DbgFreeStackTree( void* p, sal_uIntPtr nAlloc = 0 );
-void DbgPrintStackTree( void* p );
-
 // --- Dbg-Output ---
 
 #define DBG_OUT_TRACE               1
@@ -398,9 +390,6 @@ public:
 #define DBG_DEBUGSTART()                    DbgDebugStart()
 #define DBG_DEBUGEND()                      DbgDebugEnd()
 #define DBG_GLOBALDEBUGEND()                DbgGlobalDebugEnd()
-
-#define DBG_STARTAPPEXECUTE()               DbgStartStackTree()
-#define DBG_ENDAPPEXECUTE()                 DbgEndStackTree()
 
 #define DBG_PROFSTART( aName )                      \
     DbgProf( DBG_PROF_START, DBG_FUNC( aName ) )
@@ -503,9 +492,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_DEBUGSTART() ((void)0)
 #define DBG_DEBUGEND() ((void)0)
 #define DBG_GLOBALDEBUGEND() ((void)0)
-
-#define DBG_STARTAPPEXECUTE() ((void)0)
-#define DBG_ENDAPPEXECUTE() ((void)0)
 
 #define DBG_NAME( aName )
 #define DBG_NAMEEX( aName )
