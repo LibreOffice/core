@@ -89,8 +89,6 @@ typedef WeakImplHelper1< XStarBasicDialogInfo > DialogInfoHelper;
 typedef WeakImplHelper1< XStarBasicLibraryInfo > LibraryInfoHelper;
 typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
 
-#define CURR_VER        2
-
 // Version 1
 //    sal_uIntPtr   nEndPos
 //    sal_uInt16    nId
