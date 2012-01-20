@@ -49,8 +49,6 @@
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 
-using std::nothrow_t;
-
 // =======================================================================
 // AllocatorTraits
 // =======================================================================
@@ -158,8 +156,8 @@ static void* allocate (
 
 // =======================================================================
 
-static void* allocate (
-    std::size_t n, AllocatorTraits const & rTraits, std::nothrow_t const &)
+static void* allocate_nothrow (
+    std::size_t n, AllocatorTraits const & rTraits)
     SAL_THROW(())
 {
     try
@@ -205,7 +203,7 @@ void SAL_CALL operator delete (void * p) throw ()
 
 void* SAL_CALL operator new (std::size_t n, std::nothrow_t const &) throw ()
 {
-    return allocate (n, ScalarTraits(), nothrow_t());
+    return allocate_nothrow (n, ScalarTraits());
 }
 
 // =======================================================================
@@ -237,7 +235,7 @@ void SAL_CALL operator delete[] (void * p) throw ()
 
 void* SAL_CALL operator new[] (std::size_t n, std::nothrow_t const &) throw ()
 {
-    return allocate (n, VectorTraits(), nothrow_t());
+    return allocate_nothrow (n, VectorTraits());
 }
 
 // =======================================================================
