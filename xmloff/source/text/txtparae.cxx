@@ -916,8 +916,8 @@ void XMLTextParagraphExport::exportListChange(
             // Thus, for other document types <sListId> is empty.
             const ::rtl::OUString sListId( rNextInfo.GetListId() );
             bool bExportListStyle( true );
-            bool bRestartNumberingAtContinuedRootList( false );
-            sal_Int16 nRestartValueForContinuedRootList( -1 );
+            bool bRestartNumberingAtContinuedList( false );
+            sal_Int32 nRestartValueForContinuedList( -1 );
             bool bContinueingPreviousSubList = !bRootListToBeStarted &&
                                                rNextInfo.IsContinueingPreviousSubTree();
             do {
@@ -990,9 +990,9 @@ void XMLTextParagraphExport::exportListChange(
                                  ( nListLevelsToBeOpened != 1 ||
                                    !rNextInfo.HasStartValue() ) )
                             {
-                                bRestartNumberingAtContinuedRootList = true;
-                                nRestartValueForContinuedRootList =
-                                                rNextInfo.GetListLevelStartValue();
+                                bRestartNumberingAtContinuedList = true;
+                                nRestartValueForContinuedList =
+                                            rNextInfo.GetListLevelStartValue();
                             }
                         }
 
@@ -1013,6 +1013,18 @@ void XMLTextParagraphExport::exportListChange(
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                             GetExport().EncodeStyleName( sListStyleName ) );
                     bExportListStyle = false;
+
+
+                }
+                else
+                {
+                    // rhbz#746174: also export list restart for non root list
+                    if (rNextInfo.IsRestart() && !rNextInfo.HasStartValue())
+                    {
+                        bRestartNumberingAtContinuedList = true;
+                        nRestartValueForContinuedList =
+                                        rNextInfo.GetListLevelStartValue();
+                    }
                 }
 
                 if ( bContinueingPreviousSubList )
@@ -1041,9 +1053,7 @@ void XMLTextParagraphExport::exportListChange(
                 // <text:list-header> or <text:list-item>
                 GetExport().CheckAttrList();
 
-                /* Export start value in case of <bRestartNumberingAtContinuedRootList>
-                   at correct list item (#i97309#)
-                */
+                /* Export start value at correct list item (#i97309#) */
                 if ( nListLevelsToBeOpened == 1 )
                 {
                     if ( rNextInfo.HasStartValue() )
@@ -1053,14 +1063,14 @@ void XMLTextParagraphExport::exportListChange(
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                                       aBuffer.makeStringAndClear() );
                     }
-                    else if ( bRestartNumberingAtContinuedRootList )
+                    else if (bRestartNumberingAtContinuedList)
                     {
                         OUStringBuffer aBuffer;
-                        aBuffer.append( (sal_Int32)nRestartValueForContinuedRootList );
+                        aBuffer.append( nRestartValueForContinuedList );
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                   XML_START_VALUE,
                                                   aBuffer.makeStringAndClear() );
-                        bRestartNumberingAtContinuedRootList = false;
+                        bRestartNumberingAtContinuedList = false;
                     }
                 }
 
