@@ -160,7 +160,7 @@ static const char arUsingText[] =
 
 //--------------------------------------------------------------------------------------------------
 static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
-                            sal_Int32 * pnIndex, const OUString & aArg)
+                            sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
     const OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
@@ -178,7 +178,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
-        if (*pnIndex >= (sal_Int32)rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
+        if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
@@ -217,7 +217,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 }
 //--------------------------------------------------------------------------------------------------
 static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
-                            sal_Int32 * pnIndex, const OUString & aArg)
+                            sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
     OUString aOpt = OUString::createFromAscii(pOpt);
@@ -610,9 +610,10 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 
 using namespace unoexe;
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
+SAL_IMPLEMENT_MAIN()
 {
-    if (argc <= 1)
+    sal_uInt32 nCount = rtl_getAppCommandArgCount();
+    if (nCount == 0)
     {
         out( arUsingText );
         return 0;
@@ -636,8 +637,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
         bool bNewRegistryMimic = false;
         OUString aReadWriteRegistry;
 
-        sal_Int32 nPos = 0;
-        sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
+        sal_uInt32 nPos = 0;
         // read up to arguments
         while (nPos < nCount)
         {
@@ -728,7 +728,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
         aParams.realloc( nCount - nPos );
         OUString * pParams = aParams.getArray();
 
-        sal_Int32 nOffset = nPos;
+        sal_uInt32 nOffset = nPos;
         for ( ; nPos < nCount; ++nPos )
         {
             if (rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData )
