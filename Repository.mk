@@ -109,6 +109,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	basebmp_cppunittester_all \
     i18npool_cppunittester_all \
     sax_cppunittester_all \
+	tools_cppunittester_all \
 ))
 
 endif
