@@ -52,9 +52,14 @@ public:
                                   int nDefButton )
     {
         (void)rButtons; (void)nDefButton;
+#if 0
         __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
                             rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
                             rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+#endif
+        fprintf (stderr, "LibreOffice - dialog '%s': '%s'",
+                 rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+                 rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         return 0;
     }
 };
@@ -74,9 +79,57 @@ public:
 
 SalInstance *CreateSalInstance()
 {
-    SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
+    AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
     return pInstance;
+}
+
+void DestroySalInstance( SalInstance *pInst )
+{
+    pInst->ReleaseYieldMutex();
+    delete pInst;
+}
+
+// All the interesting stuff is slaved from the AndroidSalInstance
+void InitSalData()   {}
+void DeInitSalData() {}
+void InitSalMain()   {}
+void DeInitSalMain() {}
+
+void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+{
+    rtl::OUString aError( rErrorText );
+    if( aError.isEmpty() )
+        aError = rtl::OUString::createFromAscii("Unknown application error");
+    ::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+
+#if 0
+    __android_log_print(ANDROID_LOG_INFO, "SalAbort: '%s'",
+                        rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+#endif
+    fprintf( stderr, "SalAbort: '%s'",
+             rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr() );
+    if( bDumpCore )
+        abort();
+    else
+        _exit(1);
+}
+
+const OUString& SalGetDesktopEnvironment()
+{
+    static rtl::OUString aEnv( RTL_CONSTASCII_USTRINGPARAM( "android" ) );
+    return aEnv;
+}
+
+SalData::SalData() :
+    m_pInstance( 0 ),
+    m_pPlugin( 0 ),
+    m_pPIManager(0 )
+{
+}
+
+SalData::~SalData()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -458,11 +458,26 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/fontmanager/fontmanager \
     vcl/generic/fontmanager/helper \
     vcl/generic/fontmanager/parseAFM \
-    vcl/android/androidinst \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
+    vcl/android/androidinst \
+    vcl/headless/svpbmp \
+    vcl/headless/svpdummies \
+    vcl/headless/svpelement \
+    vcl/headless/svpframe \
+    vcl/headless/svpgdi \
+    vcl/headless/svpinst \
+    vcl/headless/svpdata \
+    vcl/headless/svpprn \
+    vcl/headless/svptext \
+    vcl/headless/svpvd \
 ))
+
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+	basebmp \
+))
+
 $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \
 	freetype \
