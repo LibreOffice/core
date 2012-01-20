@@ -179,6 +179,12 @@ run_filters_test:
 
 run: run_ucalc run_filters_test
 
+# If you reinstall an app several times, even if you uninstall it
+# between, disk space seems to leak that won't get recycled until you
+# stop and start...
+stop-start-cycle:
+	adb shell stop && adb shell start && sleep 10
+
 clean:
 	ant clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
