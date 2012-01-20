@@ -102,6 +102,17 @@ endif
 
 endif
 
+ifeq ($(OS),IOS)
+
+$(eval $(call gb_Helper_register_executables,OOO,\
+	basegfx_cppunittester_all \
+	basebmp_cppunittester_all \
+    i18npool_cppunittester_all \
+    sax_cppunittester_all \
+))
+
+endif
+
 ifeq ($(WITH_MOZILLA),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
     pluginapp.bin \
