@@ -12,7 +12,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="hi_IN"/>
-  <LC_FORMAT ref="hi_IN" replaceTo="[રૂ-447]"/>
+  <LC_FORMAT ref="hi_IN" replaceTo="[$₹-447]"/>
   <LC_COLLATION ref="hi_IN"/>
   <LC_SEARCH ref="hi_IN"/>
   <LC_INDEX ref="en_US"/>
@@ -139,6 +139,13 @@
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>INR</CurrencyID>
       <CurrencySymbol>₹</CurrencySymbol>
+      <BankSymbol>INR</BankSymbol>
+      <CurrencyName>Rupee</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>INR</CurrencyID>
+      <CurrencySymbol>ઋુ.</CurrencySymbol>
       <BankSymbol>INR</BankSymbol>
       <CurrencyName>Rupee</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
