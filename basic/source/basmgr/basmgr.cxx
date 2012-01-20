@@ -88,8 +88,6 @@ typedef WeakImplHelper1< XStarBasicModuleInfo > ModuleInfoHelper;
 typedef WeakImplHelper1< XStarBasicDialogInfo > DialogInfoHelper;
 typedef WeakImplHelper1< XStarBasicLibraryInfo > LibraryInfoHelper;
 typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
-typedef vector< BasicError* > BasErrorLst;
-
 
 #define CURR_VER        2
 
