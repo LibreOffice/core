@@ -2366,18 +2366,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                             pIntValue));
             }
             break;
-        case RTF_PAPERH:
+        case RTF_PAPERH: // fall through: set the default + current value
             lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, true);
-            break;
-        case RTF_PAPERW:
-            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
-            break;
         case RTF_PGHSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, true);
             break;
+        case RTF_PAPERW: // fall through: set the default + current value
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
         case RTF_PGWSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
