@@ -2,7 +2,7 @@ Cross-compiling LibreOffice
 ===========================
 
 Notes on cross-compiling LibreOffice, originally written by Tor
-Lillqvist <tlillqvist@novell.com> <tml@iki.fi> in May, 2011, for later
+Lillqvist <tlillqvist@suse.com> <tml@iki.fi> in May, 2011, for later
 history see git log.
 
 My cross-compilation experimentation is going on for four platforms:
