@@ -32,14 +32,14 @@ buildrcs:
 	echo "[Bootstrap]" > assets/program/sofficerc
 	echo "Logo=1" >> assets/program/sofficerc
 	echo "NativeProgress=1" >> assets/program/sofficerc
-	echo "URE_BOOTSTRAP=file://assets/program/fundamentalrc" >> assets/program/sofficerc
+	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/sofficerc
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
 	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
-	echo "BRAND_BASE_DIR=file://assets/" >> assets/program/fundamentalrc
+	echo "BRAND_BASE_DIR=file:///assets/" >> assets/program/fundamentalrc
 	echo "CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry module:${BRAND_BASE_DIR}/share/registry/modules res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini xcsxcu:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry userext:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu" >> assets/program/fundamentalrc
-	echo "URE_BIN_DIR=file://assets/ure/bin/dir/not-here/can-we/exec-anyway" >> assets/program/fundamentalrc
+	echo "URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway" >> assets/program/fundamentalrc
 	echo "URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}" >> assets/program/fundamentalrc
 	echo "URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}" >> assets/program/fundamentalrc
 # unorc ini ...
