@@ -130,8 +130,8 @@ public:
         SAL_THROW( () )
         { return *this; }
 
-    /** Basic queryInterface() implementation supporting ::com::sun::star::uno::XWeak and
-        ::com::sun::star::uno::XInterface.
+    /** Basic queryInterface() implementation supporting \::com::sun::star::uno::XWeak and
+        \::com::sun::star::uno::XInterface.
 
         @param rType demanded type
         @return demanded type or empty any
@@ -150,7 +150,7 @@ public:
 
     /** XWeak::queryAdapter() implementation
 
-        @return a ::com::sun::star::uno::XAdapter reference
+        @return a \::com::sun::star::uno::XAdapter reference
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
         throw (::com::sun::star::uno::RuntimeException);

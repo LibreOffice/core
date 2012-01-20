@@ -62,7 +62,6 @@ namespace osl {
 
 
         /** Close the opened profile an flush all data to the disk.
-            @param Profile handle to a opened profile.
         */
         ~Profile()
         {
@@ -143,8 +142,9 @@ namespace osl {
             return bRet;
         }
 
-        /** Acquire the mutex, block if already acquired by another thread.
-            @param Profile handle to a opened profile.
+        /** Remove an entry from a section.
+            @param rSection Name of the section.
+            @param rEntry Name of the entry to remove.
             @return False if section or entry could not be found.
         */
         sal_Bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
@@ -153,7 +153,7 @@ namespace osl {
         }
 
         /** Get all entries belonging to the specified section.
-            @param Profile handle to a opened profile.
+            @param rSection Name of the section.
             @return Pointer to a array of pointers.
         */
         std::list< rtl::OString > getSectionEntries(const rtl::OString& rSection )
@@ -176,7 +176,6 @@ namespace osl {
         }
 
         /** Get all section entries
-            @param Profile handle to a opened profile.
             @return Pointer to a array of pointers.
         */
         std::list< rtl::OString > getSections()

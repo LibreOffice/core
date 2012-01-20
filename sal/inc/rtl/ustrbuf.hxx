@@ -126,7 +126,7 @@ public:
         capacity of the string buffer is <code>16</code> plus the length
         of the string argument.
 
-        @param   str   the initial contents of the buffer.
+        @param   value   the initial contents of the buffer.
      */
     OUStringBuffer(OUString value)
         : pData(NULL)
@@ -430,7 +430,7 @@ public:
         The argument is appended to the contents of this string buffer.
         The length of this string buffer increases by <code>1</code>.
 
-        @param   ch   an ASCII <code>char</code>.
+        @param   c   an ASCII <code>char</code>.
         @return  this string buffer.
 
         @since LibreOffice 3.5
@@ -448,7 +448,7 @@ public:
         The argument is appended to the contents of this string buffer.
         The length of this string buffer increases by <code>1</code>.
 
-        @param   ch   a <code>char</code>.
+        @param   c   a <code>char</code>.
         @return  this string buffer.
      */
     OUStringBuffer & append(sal_Unicode c)

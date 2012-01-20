@@ -59,7 +59,7 @@ public:
     /** Creates a secure pipe that access depends on the umask settings.
         @param strName
         @param Options
-        @param Security
+        @param rSecurity
     */
     inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity);
 
@@ -87,7 +87,7 @@ public:
         If the pipe was already created, the old one will be discarded.
         @param strName
         @param Options
-        @param Security
+        @param rSec
         @return True if socket was successfully created.
     */
     inline sal_Bool create( const ::rtl::OUString & strName,

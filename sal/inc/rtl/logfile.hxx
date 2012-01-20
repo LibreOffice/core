@@ -42,7 +42,7 @@ namespace rtl
         Therefore we have provided a set of macros that uses the class Logfile only if
         this symbol is defined.  If the macros are not sufficient, i.e. you need more
         then three arguments for a printf style message, then you have to insert an
-        #ifdef TIMELOG/#endif brace yourself.
+        \#ifdef TIMELOG/\#endif brace yourself.
 
         Additionally the environment variable RTL_LOGFILE has to be defined in order to generate
         logging information. If the variable is not empty, it creates a file with the name

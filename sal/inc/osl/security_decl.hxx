@@ -52,8 +52,8 @@ public:
     inline ~Security();
     /** get the security information for one user.
         The underlying operating system is asked for this information.
-        @param strName [in] denotes the name of the user
-        @param strPasswd [in] denotes the password of this user
+        @param[in] strName denotes the name of the user
+        @param[in] strPasswd denotes the password of this user
         @return True, if the specified user is known by the underlying operating system,
         otherwise False
     */
@@ -64,8 +64,8 @@ public:
         If a network resource named \\server\username exists and this resource
         could be connected by this user, the methos will return true and getHomeDir
         will return \\server\username.
-        @param strName [in] denotes the name of the user
-        @param strPasswd [in] denotes the password of this user
+        @param[in] strName denotes the name of the user
+        @param[in] strPasswd denotes the password of this user
         @return True, if the specified user is known by file server and the
         could be connected, otherwise False
     */
@@ -74,29 +74,25 @@ public:
                                        const rtl::OUString & strFileServer);
 
     /** get the ident of the logged in user.
-        @param strName [out] is the buffer which returns the name
-        @param max [in] is the size of this buffer
+        @param[out] strName is the OUString which returns the name
         @return True, if any user is successfuly logged in, otherwise False
     */
     inline sal_Bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
-        @param strName [out] is the buffer which returns the name
-        @param max [in] is the size of this buffer
+        @param[out] strName is the OUString which returns the name
         @return True, if any user is successfuly logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getUserName( rtl::OUString& strName) const;
 
     /** get the home directory of the logged in user.
-        @param strDirectory [out] is the buffer which returns the directory name
-        @param max [in] is the size of this buffer
-        @return True, if any user is successfuly logged in, otherwise False
+        @param[out] strDirectory is the OUString which returns the directory name
+         @return True, if any user is successfuly logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
-        @param strDirectory [out] is the buffer which returns the directory name
-        @param max [in] is the size of this buffer
+        @param[out] strDirectory is the OUString which returns the directory name
         @return True, if any user is successfuly logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;

@@ -122,7 +122,7 @@ public:
     /** New string from OString data without acquiring it.  Takeover of ownership.
 
       @param    str         a OString data.
-      @param    dummy       SAL_NO_ACQUIRE to distinguish from other ctors
+      @param    __sal_NoAcquire    SAL_NO_ACQUIRE to distinguish from other ctors
     */
     inline OString( rtl_String * str, __sal_NoAcquire ) SAL_THROW(())
     {

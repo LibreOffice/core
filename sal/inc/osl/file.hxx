@@ -120,7 +120,7 @@ public:
         @param ustrRequestedURL [in]
         Requested name of a file or directory.
 
-        @param pustrValidURL [out]
+        @param ustrValidURL [out]
         On success receives a name which is unused and valid on the actual Operating System and
         File System.
 
@@ -251,7 +251,7 @@ public:
 
     /** Retrieves the file URL of the system's temporary directory path.
 
-        @param ustrTempDirURL[out]
+        @param[out] ustrTempDirURL
         On success receives the URL of system's temporary directory path.
 
         @return
@@ -1529,16 +1529,13 @@ public:
         return (RC) osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask );
     }
 
-/** Determine if two directory items point the the same underlying file
+/** Determine if a directory item point the the same underlying file
 
     The comparison is done first by URL, and then by resolving links to
     find the target, and finally by comparing inodes on unix.
 
-    @param  pItemA [in]
-    A directory handle to compare with another handle
-
-    @param  pItemB [in]
-    A directory handle to compare with pItemA
+    @param[in]  pOther
+    A directory handle to compare with the underlying object's item
 
     @return
     sal_True: if the items point to an identical resource<br>

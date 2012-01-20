@@ -392,7 +392,7 @@ namespace osl
               level <code>osl_Socket_LevelSocket</code>.
             @param pBuffer The Buffer will be filled with the attribute.
 
-            @param BufferSize The size of pBuffer.
+            @param BufferLen The size of pBuffer.
 
             @param Level The option level.
 
@@ -545,10 +545,10 @@ namespace osl
 
         /** Tries to receive BytesToRead data from the connected socket,
 
-            @param pBuffer [out] Points to a buffer that will be filled with the received
+            @param[out] pBuffer Points to a buffer that will be filled with the received
             data. pBuffer must have at least have a size of BytesToRead.
-            @param BytesToRead [in] The number of bytes to read.
-            @param Flag [in] Modifier for the call. Valid values are:
+            @param[in] BytesToRead The number of bytes to read.
+            @param[in] flags Modifier for the call. Valid values are:
 
             <ul>
             <li><code>osl_Socket_MsgNormal</code>
