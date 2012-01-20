@@ -88,7 +88,7 @@ copy-stuff:
 		  saxlo \
 		  sblo \
 		  sclo \
-		  scfilt \
+		  scfiltlo \
 		  sfxlo \
 		  sotlo \
 		  stocservices.uno \
