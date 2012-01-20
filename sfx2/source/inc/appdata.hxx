@@ -47,7 +47,6 @@ class DdeService;
 class SfxEventConfiguration;
 class SfxMacroConfig;
 class SfxItemPool;
-class SfxInitLinkList;
 class SfxFilterMatcher;
 class ISfxTemplateCommon;
 class SfxFilterMatcher;
@@ -82,11 +81,6 @@ class SfxBasicManagerCreationListener;
 namespace sfx2 { namespace appl { class ImeStatusWindow; } }
 
 typedef Link* LinkPtr;
-SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4)
-
-//=========================================================================
-// SfxAppData_Impl
-//=========================================================================
 
 class SfxAppData_Impl
 {
@@ -103,9 +97,6 @@ public:
     // single instance classes
     SfxChildWinFactArr_Impl*            pFactArr;
     SfxFrameArr_Impl*                   pTopFrames;
-
-    // special members
-    SfxInitLinkList*                    pInitLinkList;
 
     // application members
     SfxFilterMatcher*                   pMatcher;

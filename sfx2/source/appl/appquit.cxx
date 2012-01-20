@@ -140,7 +140,6 @@ void SfxApplication::Deinitialize()
 
     DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pFactArr);
-    DELETEX(pAppData_Impl->pInitLinkList);
 
     DELETEX(pAppData_Impl->pTbxCtrlFac);
     DELETEX(pAppData_Impl->pStbCtrlFac);
