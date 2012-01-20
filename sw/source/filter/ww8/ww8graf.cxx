@@ -2978,7 +2978,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     {
         const SdrGrafObj *pGrf= (const SdrGrafObj*)rpObject;
         bool bDone = false;
-        if (pGrf->IsLinkedGraphic() && pGrf->GetFileName().Len())
+        if (pGrf->IsLinkedGraphic() && !pGrf->GetFileName().isEmpty())
         {
             GraphicType eType = pGrf->GetGraphicType();
             String aGrfName(

@@ -129,13 +129,8 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        String aTmp1;
-        String aTmp2;
-        String aTmp3;
-        pLinkManager->GetDisplayNames(this, NULL, &aTmp1, &aTmp2, &aTmp3);
-        rtl::OUString aFile = aTmp1;
-        rtl::OUString aArea = aTmp2;
-        rtl::OUString aFilter = aTmp3;
+        rtl::OUString aFile, aArea, aFilter;
+        pLinkManager->GetDisplayNames(this, NULL, &aFile, &aArea, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
@@ -148,9 +143,9 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 
             // adjust in dialog:
             String aNewLinkName;
-            aTmp1 = aFilter;
-            sfx2::MakeLnkName(aNewLinkName, NULL, aFile, aArea, &aTmp1);
-            aFilter = aTmp1;
+            String aTmp = aFilter;
+            sfx2::MakeLnkName(aNewLinkName, NULL, aFile, aArea, &aTmp);
+            aFilter = aTmp;
             SetName( aNewLinkName );
         }
 

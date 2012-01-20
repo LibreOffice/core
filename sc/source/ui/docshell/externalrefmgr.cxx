@@ -1250,7 +1250,7 @@ void ScExternalRefLink::Closed()
     if (!mbDoRefresh)
         return SUCCESS;
 
-    String aFile, aFilter;
+    rtl::OUString aFile, aFilter;
     mpDoc->GetLinkManager()->GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
     ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
 

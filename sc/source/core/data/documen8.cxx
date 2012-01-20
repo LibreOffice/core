@@ -1031,7 +1031,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
             {
                 // Update failed.  Notify the user.
 
-                String aFile;
+                rtl::OUString aFile;
                 pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
                 // Decode encoded URL for display friendliness.
                 INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);

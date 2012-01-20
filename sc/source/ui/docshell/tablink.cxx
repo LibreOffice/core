@@ -147,11 +147,8 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        String aTmp1;
-        String aTmp2;
-        pLinkManager->GetDisplayNames(this, 0, &aTmp1, NULL, &aTmp2);
-        rtl::OUString aFile = aTmp1;
-        rtl::OUString aFilter = aTmp2;
+        rtl::OUString aFile, aFilter;
+        pLinkManager->GetDisplayNames(this, 0, &aFile, NULL, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
