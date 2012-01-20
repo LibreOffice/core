@@ -62,6 +62,7 @@
 #include "virtmenu.hxx"
 #include <sfx2/msg.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/minstack.hxx>
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/bindings.hxx>

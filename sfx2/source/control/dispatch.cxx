@@ -48,6 +48,7 @@
 #include "appdata.hxx"
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
+#include <sfx2/minstack.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
