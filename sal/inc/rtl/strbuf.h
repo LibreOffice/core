@@ -69,7 +69,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_newFromStr_WithLength(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer(
                                                          rtl_String ** newStr,
                                                          sal_Int32 capacity,
-                                                         rtl_String * olsStr );
+                                                         rtl_String * oldStr );
 
 /**
     Ensures that the capacity of the buffer is at least equal to the
@@ -105,7 +105,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_ensureCapacity(
 
     @param  capacity    the capacity of the string buffer
     @param  offset      the offset.
-    @param  ch          a character array.
+    @param  str         a character array.
     @param  len         the number of characters to append.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(

@@ -959,7 +959,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_Stri
     @param str
     a valid string.
 
-    @param index
+    @param idx
     the index into str at which to start replacement.  Must be between 0 and
     the length of str, inclusive.
 
@@ -1103,7 +1103,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
     @param cTok
     the character that seperates the tokens.
 
-    @param index
+    @param idx
     the position at which searching for the token starts.  Must not be greater
     than the length of str.
 

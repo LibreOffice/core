@@ -221,7 +221,7 @@ once then every registration is treated as if made for a different listener. Tha
 a different cookie is returned and the callback function will be called as many times
 as it has been registered.
 @param callback - a function that is called to notify listeners.
-@param this  - a value to distinguish different listener instances
+@param _this  - a value to distinguish different listener instances
 @return identifier which is used in rtl_removeUnloadingListener
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback, void* _this);

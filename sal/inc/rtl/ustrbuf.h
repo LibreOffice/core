@@ -69,7 +69,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer(
                                                           rtl_uString ** newStr,
                                                           sal_Int32 capacity,
-                                                          rtl_uString * olsStr );
+                                                          rtl_uString * oldStr );
 
 /**
     Ensures that the capacity of the buffer is at least equal to the

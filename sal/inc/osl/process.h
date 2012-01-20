@@ -146,7 +146,7 @@ typedef void* oslProcess;
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
 
-    @param ustrEnviroments
+    @param ustrEnvironments
     [in] An array of strings describing environment variables that should be merged into the
     environment of the new process. Each string has to be in the form "variable=value".
     This parameter can be NULL in which case the new process gets the same environment
@@ -190,7 +190,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
 
 /** Execute a process and redirect child process standard IO.
 
-    @param ustrImageName
+    @param strImageName
     [in] The file URL of the executable to be started.
     Can be NULL in this case the file URL of the executable must be the first element
     in ustrArguments.
@@ -216,7 +216,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
 
-    @param ustrEnviroments
+    @param ustrEnvironments
     [in] An array of strings describing environment variables that should be merged into the
     environment of the new process. Each string has to be in the form "variable=value".
     This parameter can be NULL in which case the new process gets the same environment
@@ -333,14 +333,14 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
         oslProcess Process, const TimeValue* pTimeout);
 
 /** Retrieves information about a Process
-    @param Process [in] the process handle of the process
-    @param Field   [in] the information which is to be retrieved
+    @param[in] Process  the process handle of the process
+    @param[in] Fields   the information which is to be retrieved
                         this can be one or more of
                         osl_Process_IDENTIFIER
                         osl_Process_EXITCODE
                         osl_Process_CPUTIMES
                         osl_Process_HEAPUSAGE
-    @param pInfo  [out] a pointer to a vaid oslProcessInfo structure.
+    @param[out] pInfo   a pointer to a vaid oslProcessInfo structure.
                         the Size field has to be initialized with the size
                         of the oslProcessInfo structure.
                         on success the the Field member holds the (or'ed)

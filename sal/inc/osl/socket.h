@@ -208,7 +208,7 @@ typedef sal_uInt8 oslSocketIpxNodeNumber[6];
 */
 
 /** Creates a socket-address for the given family.
-    @param family If family == osl_Socket_FamilyInet the address is
+    @param Family If family == osl_Socket_FamilyInet the address is
                   set to INADDR_ANY port 0.
     @return 0 if address could not be created.
 */

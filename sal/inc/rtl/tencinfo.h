@@ -196,7 +196,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
 
 /** Map from a Unix charset to a text encoding.
 
-    @param pMimeCharset
+    @param pUnixCharset
     Any Unix charset string.  Must not be null.
 
     @return

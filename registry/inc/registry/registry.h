@@ -58,7 +58,7 @@ RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
     @param  hKey identifies a currently open key. The key which will be opened by this function
                  is a subkey of the key identified by hKey
     @param  keyName points to a null terminated string specifying the name of a key.
-    @param  phNewKey points to a variable that receives the handle of the opened key.
+    @param  phOpenKey points to a variable that receives the handle of the opened key.
                      The memory to store this variable will be allocated and will be freed by the function
                      reg_closeKey. If the function fails, phNewKey is NULL.
     @return REG_NO_ERROR if succeeds else an error code.
@@ -415,7 +415,7 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 
 /** This function returns the name of a registry.
 
-    @param  hReg identifies a currently open registry whose name will be returned.
+    @param  hRegistry identifies a currently open registry whose name will be returned.
     @param  pName returns the name of the registry if the function succeeds otherwise an empty string.
     @return REG_NO_ERROR if succeeds else an error code.
 */

@@ -193,7 +193,7 @@ inline char const * unwrapStream(StreamIgnore const &) {
 
     would be an example of such a call; if the given s is of type rtl::OUString,
 
-      #include "rtl/oustringostreaminserter.hxx"
+      \#include "rtl/oustringostreaminserter.hxx"
 
     would make sure that an appropriate operator << is available.
 

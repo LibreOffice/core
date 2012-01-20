@@ -45,7 +45,7 @@ extern "C" {
     RTL_LOGFILE. If the variable is not empty, it creates a file with the name
     $(RTL_LOGFILE)_$(PID).log, where $(PID) is the process id of the running process.
 
-    @param pszformat A format string with fprintf-syntax
+    @param pszFormat A format string with fprintf-syntax
     @param ...       An arbitrary number of arguments for fprintf, matching the
                      format string.
 */

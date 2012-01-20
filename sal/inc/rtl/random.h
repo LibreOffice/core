@@ -77,9 +77,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_random_destroyPool (
 
 
 /** Add bytes to a Random Pool.
-    @param Pool    [in] a Random Pool.
-    @param pBuffer [in] a buffer containing the bytes to add.
-    @param nBufLen [in] the number of bytes to read from the buffer.
+    @param[in] Pool   a Random Pool.
+    @param[in] Buffer a buffer containing the bytes to add.
+    @param[in] Bytes  the number of bytes to read from the buffer.
     @return rtl_Random_E_None upon success.
  */
 SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_addBytes (
@@ -90,9 +90,9 @@ SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_addBytes (
 
 
 /** Retrieve bytes from a Random Pool.
-    @param Pool    [in] a Random Pool.
-    @param pBuffer [inout] a buffer to receive the random bytes.
-    @param nBufLen [in] the number of bytes to write to the buffer.
+    @param[in] Pool    a Random Pool.
+    @param[in,out] Buffer a buffer to receive the random bytes.
+    @param[in] Bytes the number of bytes to write to the buffer.
     @return rtl_Random_E_None upon success.
  */
 SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_getBytes (

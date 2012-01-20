@@ -105,20 +105,20 @@ SAL_DLLPUBLIC void SAL_CALL rtl_locale_setDefault(
 /**
     Getter for programmatic name of field,
     a lowercased two-letter ISO 639-1 or three-letter ISO 639-3 code.
-    @see #getDisplayLanguage
+    @see getDisplayLanguage
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getLanguage( rtl_Locale * This );
 
 /**
     Getter for programmatic name of field,
     an uppercased two-letter ISO-3166 code.
-    @see #getDisplayCountry
+    @see getDisplayCountry
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getCountry( rtl_Locale * This );
 
 /**
     Getter for programmatic name of field.
-    @see #getDisplayVariant
+    @see getDisplayVariant
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getVariant( rtl_Locale * This );
 

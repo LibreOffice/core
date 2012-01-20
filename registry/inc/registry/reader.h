@@ -318,7 +318,7 @@ void SAL_CALL typereg_reader_getFieldTypeName(
    @param type an out-parameter obtaining the field value's type; must not be
    null
 
-   @param result an out-parameter obtaining the field value's value; must not be
+   @param value an out-parameter obtaining the field value's value; must not be
    null
 
    @return false iff an out-of-memory condition occurred, in which case
