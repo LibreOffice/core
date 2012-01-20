@@ -29,10 +29,17 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
-	Library_vbaobj \
 	Package_uiconfig \
 	Package_xml \
 ))
+
+ifneq (IOS,$(OS))
+
+$(eval $(call gb_Module_add_targets,sc,\
+	Library_vbaobj \
+))
+
+endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \

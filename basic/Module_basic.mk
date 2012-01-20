@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Module_Module,basic))
 
+ifneq (IOS,$(OS))
+
 $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \
 	Library_sb \
@@ -37,5 +39,7 @@ $(eval $(call gb_Module_add_targets,basic,\
 $(eval $(call gb_Module_add_check_targets,basic,\
      CppunitTest_basic_scanner \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

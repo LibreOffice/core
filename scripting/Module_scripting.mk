@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Module_Module,scripting))
 
+ifneq (IOS,$(OS))
+
 $(eval $(call gb_Module_add_targets,scripting,\
 	$(if $(SOLAR_JAVA),\
 		Jar_HelloWorld \
@@ -55,5 +57,7 @@ $(eval $(call gb_Module_add_targets,scripting,\
 	Zip_ScriptsJavaScript \
 	Zip_ScriptsPython \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Module_Module,vbahelper))
 
+ifneq (IOS,$(OS))
+
 # the targets to be inserted are their file names without .mk extension
 $(eval $(call gb_Module_add_targets,vbahelper,\
     Library_vbahelper \
@@ -43,5 +45,7 @@ $(eval $(call gb_Module_add_targets,vbahelper,\
 # add any subsequent checks (e.g. complex tests) here
 #$(eval $(call gb_Module_add_subsequentcheck_targets,vbahelper,\
 #))
+
+endif
 
 # vim: set noet sw=4 ts=4:
