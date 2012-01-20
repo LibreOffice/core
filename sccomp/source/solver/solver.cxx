@@ -21,12 +21,7 @@
 
 
 
-#undef LANGUAGE_NONE
-#define WINAPI __stdcall
-#define LoadInverseLib FALSE
-#define LoadLanguageLib FALSE
-#include <lpsolve/lp_lib.h>
-#undef LANGUAGE_NONE
+#include <coinmp/CoinMP.h>
 
 #include "solver.hxx"
 #include "solver.hrc"
@@ -310,12 +305,6 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
     maStatus = OUString();
     mbSuccess = false;
 
-    if ( mnEpsilonLevel < EPS_TIGHT || mnEpsilonLevel > EPS_BAGGY )
-    {
-        maStatus = lcl_GetResourceString( RID_ERROR_EPSILONLEVEL );
-        return;
-    }
-
     xModel->lockControllers();
 
     // collect variables in vector (?)
@@ -394,29 +383,32 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
         return;
 
     //
-    // build lp_solve model
+    // build parameter arrays for CoinMP
     //
-
-    lprec* lp = make_lp( 0, nVariables );
-    if ( !lp )
-        return;
-
-    set_outputfile( lp, const_cast<char*>( "" ) );  // no output
 
     // set objective function
 
     const std::vector<double>& rObjCoeff = aCellsHash[maObjective];
-    REAL* pObjVal = new REAL[nVariables+1];
-    pObjVal[0] = 0.0;                           // ignored
+    double* pObjectCoeffs = new double[nVariables];
     for (nVar=0; nVar<nVariables; nVar++)
-        pObjVal[nVar+1] = rObjCoeff[nVar+1];
-    set_obj_fn( lp, pObjVal );
-    delete[] pObjVal;
-    set_rh( lp, 0, rObjCoeff[0] );              // constant term of objective
+        pObjectCoeffs[nVar] = rObjCoeff[nVar+1];
+    double nObjectConst = rObjCoeff[0];             // constant term of objective
 
     // add rows
 
-    set_add_rowmode(lp, TRUE);
+    size_t nRows = maConstraints.getLength();
+    size_t nCompSize = nVariables * nRows;
+    double* pCompMatrix = new double[nCompSize];    // first collect all coefficients, row-wise
+    for (size_t i=0; i<nCompSize; i++)
+        pCompMatrix[i] = 0.0;
+
+    double* pRHS = new double[nRows];
+    char* pRowType = new char[nRows];
+    for (size_t i=0; i<nRows; i++)
+    {
+        pRHS[i] = 0.0;
+        pRowType[i] = 'N';
+    }
 
     for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
     {
@@ -438,10 +430,9 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
             table::CellAddress aLeftAddr = maConstraints[nConstrPos].Left;
 
             const std::vector<double>& rLeftCoeff = aCellsHash[aLeftAddr];
-            REAL* pValues = new REAL[nVariables+1];
-            pValues[0] = 0.0;                               // ignored?
+            double* pValues = &pCompMatrix[nConstrPos * nVariables];
             for (nVar=0; nVar<nVariables; nVar++)
-                pValues[nVar+1] = rLeftCoeff[nVar+1];
+                pValues[nVar] = rLeftCoeff[nVar+1];
 
             // if left hand cell has a constant term, put into rhs value
             double fRightValue = -rLeftCoeff[0];
@@ -451,40 +442,67 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
                 const std::vector<double>& rRightCoeff = aCellsHash[aRightAddr];
                 // modify pValues with rhs coefficients
                 for (nVar=0; nVar<nVariables; nVar++)
-                    pValues[nVar+1] -= rRightCoeff[nVar+1];
+                    pValues[nVar] -= rRightCoeff[nVar+1];
 
                 fRightValue += rRightCoeff[0];      // constant term
             }
             else
                 fRightValue += fDirectValue;
 
-            int nConstrType = LE;
             switch ( eOp )
             {
-                case sheet::SolverConstraintOperator_LESS_EQUAL:    nConstrType = LE; break;
-                case sheet::SolverConstraintOperator_GREATER_EQUAL: nConstrType = GE; break;
-                case sheet::SolverConstraintOperator_EQUAL:         nConstrType = EQ; break;
+                case sheet::SolverConstraintOperator_LESS_EQUAL:    pRowType[nConstrPos] = 'L'; break;
+                case sheet::SolverConstraintOperator_GREATER_EQUAL: pRowType[nConstrPos] = 'G'; break;
+                case sheet::SolverConstraintOperator_EQUAL:         pRowType[nConstrPos] = 'E'; break;
                 default:
                     OSL_ENSURE( false, "unexpected enum type" );
             }
-            add_constraint( lp, pValues, nConstrType, fRightValue );
-
-            delete[] pValues;
+            pRHS[nConstrPos] = fRightValue;
         }
     }
 
-    set_add_rowmode(lp, FALSE);
+    // Find non-zero coefficients, column-wise
+
+    int* pMatrixBegin = new int[nVariables+1];
+    int* pMatrixCount = new int[nVariables];
+    double* pMatrix = new double[nCompSize];    // not always completely used
+    int* pMatrixIndex = new int[nCompSize];
+    int nMatrixPos = 0;
+    for (nVar=0; nVar<nVariables; nVar++)
+    {
+        int nBegin = nMatrixPos;
+        for (size_t nRow=0; nRow<nRows; nRow++)
+        {
+            double fCoeff = pCompMatrix[ nRow * nVariables + nVar ];    // row-wise
+            if ( fCoeff != 0.0 )
+            {
+                pMatrix[nMatrixPos] = fCoeff;
+                pMatrixIndex[nMatrixPos] = nRow;
+                ++nMatrixPos;
+            }
+        }
+        pMatrixBegin[nVar] = nBegin;
+        pMatrixCount[nVar] = nMatrixPos - nBegin;
+    }
+    pMatrixBegin[nVariables] = nMatrixPos;
+    delete[] pCompMatrix;
+    pCompMatrix = NULL;
 
     // apply settings to all variables
 
+    double* pLowerBounds = new double[nVariables];
+    double* pUpperBounds = new double[nVariables];
     for (nVar=0; nVar<nVariables; nVar++)
     {
-        if ( !mbNonNegative )
-            set_unbounded(lp, nVar+1);          // allow negative (default is non-negative)
-                                                //! collect bounds from constraints?
-        if ( mbInteger )
-            set_int(lp, nVar+1, TRUE);
+        pLowerBounds[nVar] = mbNonNegative ? 0.0 : -DBL_MAX;
+        pUpperBounds[nVar] = DBL_MAX;
+
+        // bounds could possibly be further restricted from single-cell constraints
     }
+
+    char* pColType = new char[nVariables];
+    for (nVar=0; nVar<nVariables; nVar++)
+        pColType[nVar] = mbInteger ? 'I' : 'C';
 
     // apply single-var integer constraints
 
@@ -500,51 +518,69 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
                 if ( AddressEqual( aVariableCells[nVar], aLeftAddr ) )
                 {
                     if ( eOp == sheet::SolverConstraintOperator_INTEGER )
-                        set_int(lp, nVar+1, TRUE);
+                        pColType[nVar] = 'I';
                     else
-                        set_binary(lp, nVar+1, TRUE);
+                    {
+                        pColType[nVar] = 'B';
+                        pLowerBounds[nVar] = 0.0;
+                        pUpperBounds[nVar] = 1.0;
+                    }
                 }
         }
     }
 
-    if ( mbMaximize )
-        set_maxim(lp);
-    else
-        set_minim(lp);
+    int nObjectSense = mbMaximize ? SOLV_OBJSENS_MAX : SOLV_OBJSENS_MIN;
 
-    if ( !mbLimitBBDepth )
-        set_bb_depthlimit( lp, 0 );
+    HPROB hProb = CoinCreateProblem("");
+    int nResult = CoinLoadProblem( hProb, nVariables, nRows, nMatrixPos, 0,
+                    nObjectSense, nObjectConst, pObjectCoeffs,
+                    pLowerBounds, pUpperBounds, pRowType, pRHS, NULL,
+                    pMatrixBegin, pMatrixCount, pMatrixIndex, pMatrix,
+                    NULL, NULL, NULL );
+    nResult = CoinLoadInteger( hProb, pColType );
 
-    set_epslevel( lp, mnEpsilonLevel );
-    set_timeout( lp, mnTimeout );
+    delete[] pColType;
+    delete[] pMatrixIndex;
+    delete[] pMatrix;
+    delete[] pMatrixCount;
+    delete[] pMatrixBegin;
+    delete[] pUpperBounds;
+    delete[] pLowerBounds;
+    delete[] pRowType;
+    delete[] pRHS;
+    delete[] pObjectCoeffs;
+
+    CoinSetRealOption( hProb, COIN_REAL_MAXSECONDS, mnTimeout );
+    CoinSetRealOption( hProb, COIN_REAL_MIPMAXSEC, mnTimeout );
+
+    // TODO: handle (or remove) settings: epsilon, B&B depth
 
     // solve model
 
-    int nResult = ::solve( lp );
+    nResult = CoinCheckProblem( hProb );
+    nResult = CoinOptimizeProblem( hProb, 0 );
 
-    mbSuccess = ( nResult == OPTIMAL );
+    mbSuccess = ( nResult == SOLV_CALL_SUCCESS );
     if ( mbSuccess )
     {
         // get solution
 
         maSolution.realloc( nVariables );
-
-        REAL* pResultVar = NULL;
-        get_ptr_variables( lp, &pResultVar );
-        for (nVar=0; nVar<nVariables; nVar++)
-            maSolution[nVar] = pResultVar[nVar];
-
-        mfResultValue = get_objective( lp );
+        CoinGetSolutionValues( hProb, maSolution.getArray(), NULL, NULL, NULL );
+        mfResultValue = CoinGetObjectValue( hProb );
     }
-    else if ( nResult == INFEASIBLE )
-        maStatus = lcl_GetResourceString( RID_ERROR_INFEASIBLE );
-    else if ( nResult == UNBOUNDED )
-        maStatus = lcl_GetResourceString( RID_ERROR_UNBOUNDED );
-    else if ( nResult == TIMEOUT || nResult == SUBOPTIMAL )
-        maStatus = lcl_GetResourceString( RID_ERROR_TIMEOUT );
-    // SUBOPTIMAL is assumed to be caused by a timeout, and reported as an error
+    else
+    {
+        int nSolutionStatus = CoinGetSolutionStatus( hProb );
+        if ( nSolutionStatus == 1 )
+            maStatus = lcl_GetResourceString( RID_ERROR_INFEASIBLE );
+        else if ( nSolutionStatus == 2 )
+            maStatus = lcl_GetResourceString( RID_ERROR_UNBOUNDED );
+        // TODO: detect timeout condition and report as RID_ERROR_TIMEOUT
+        // (currently reported as infeasible)
+    }
 
-    delete_lp( lp );
+    CoinUnloadProblem( hProb );
 }
 
 // -------------------------------------------------------------------------

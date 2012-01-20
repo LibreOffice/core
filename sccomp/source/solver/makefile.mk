@@ -52,7 +52,7 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
                 $(CPPULIB)          \
                 $(SALLIB)           \
                 $(TOOLSLIB)         \
-                $(LPSOLVELIB)
+                CoinMP.lib
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
