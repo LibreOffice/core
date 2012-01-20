@@ -1001,14 +1001,14 @@ TabPage RID_SVXPAGE_BITMAP
                 File = "sc05502.bmp" ;
             };
         };
-    }
+    };
     CheckBox BTN_EMBED
     {
 	HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_EMBED";
         Pos = MAP_APPFONT ( 197 , 124 ) ;
         Size = MAP_APPFONT ( 122 , 10 ) ;
         Text [ en-US ] =  "Embed";
-    }
+    };
 };
 
 // ------------------------------------------------------
