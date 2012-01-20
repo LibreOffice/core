@@ -1296,7 +1296,7 @@ SCROW ScColumn::GetFirstDataPos() const
 SCROW ScColumn::GetLastDataPos() const
 {
     if ( !maItems.empty() )
-        return maItems[maItems.size()-1].nRow;
+        return maItems.back().nRow;
     else
         return 0;
 }

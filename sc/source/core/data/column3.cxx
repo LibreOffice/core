@@ -74,7 +74,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
     sal_Bool bIsAppended = false;
     if ( !maItems.empty() )
     {
-        if (maItems[maItems.size()-1].nRow < nRow)
+        if (maItems.back().nRow < nRow)
         {
             Append(nRow, pNewCell );
             bIsAppended = sal_True;
@@ -149,8 +149,8 @@ void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
 void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
 {
     maItems.push_back(ColEntry());
-    maItems[maItems.size() - 1].pCell = pCell;
-    maItems[maItems.size() - 1].nRow  = nRow;
+    maItems.back().pCell = pCell;
+    maItems.back().nRow  = nRow;
 }
 
 
@@ -260,7 +260,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
     // for sparse occupation use single broadcasts, not ranges
-    sal_Bool bSingleBroadcasts = (((maItems[maItems.size()-1].nRow - maItems[i].nRow) /
+    bool bSingleBroadcasts = (((maItems.back().nRow - maItems[i].nRow) /
                 (maItems.size() - i)) > 1);
     if ( bSingleBroadcasts )
     {
@@ -288,7 +288,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     {
         rAddress.SetRow( maItems[i].nRow );
         ScRange aRange( rAddress );
-        aRange.aEnd.SetRow( maItems[maItems.size()-1].nRow );
+        aRange.aEnd.SetRow( maItems.back().nRow );
         for ( ; i < maItems.size(); i++ )
         {
             SCROW nNewRow = (maItems[i].nRow -= nSize);
@@ -1439,7 +1439,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         }
     }
 
-    if ( bIsLoading && (maItems.empty() || nRow > maItems[maItems.size()-1].nRow) )
+    if ( bIsLoading && (maItems.empty() || nRow > maItems.back().nRow) )
     {   // Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
         // und Broadcast kommt eh erst nach dem Laden
         if ( pNewCell )
@@ -1820,6 +1820,10 @@ CellType ScColumn::GetCellType( SCROW nRow ) const
     return CELLTYPE_NONE;
 }
 
+SCSIZE ScColumn::GetCellCount() const
+{
+    return maItems.size();
+}
 
 sal_uInt16 ScColumn::GetErrCode( SCROW nRow ) const
 {

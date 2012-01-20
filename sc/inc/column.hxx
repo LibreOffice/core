@@ -256,7 +256,7 @@ public:
     double      GetValue( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
-    SCSIZE      GetCellCount() const { return maItems.size(); }
+    SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;
     sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
     sal_uInt16  GetErrCode( SCROW nRow ) const;

@@ -705,7 +705,7 @@ bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
         nIndex = 0;
         return nRow == nMinRow;
     }
-    SCROW nMaxRow = maItems[maItems.size()-1].nRow;
+    SCROW nMaxRow = maItems.back().nRow;
     if ( nRow >= nMaxRow )
     {
         if ( nRow == nMaxRow )
@@ -1103,7 +1103,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
     // for sparse occupation use single broadcasts, not ranges
-    bool bSingleBroadcasts = (((maItems[maItems.size()-1].nRow - maItems[i].nRow) /
+    bool bSingleBroadcasts = (((maItems.back().nRow - maItems[i].nRow) /
                 (maItems.size() - i)) > 1);
     if ( bSingleBroadcasts )
     {
@@ -1150,7 +1150,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             }
         }
         if ( !bCountChanged )
-            aRange.aEnd.SetRow( maItems[maItems.size()-1].nRow );
+            aRange.aEnd.SetRow( maItems.back().nRow );
         pDocument->AreaBroadcastInRange( aRange, aHint );
     }
 
