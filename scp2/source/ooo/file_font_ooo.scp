@@ -94,13 +94,13 @@ STD_FONT_FILE( gid_File_Fnt_Cousine_BoldItalic, Cousine-BoldItalic.ttf, Cousine 
 #endif
 #endif
 
-// Timos
+// Tinos
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_Timos_Regular, Timos-Regular.ttf, Timos Regular) 
-STD_FONT_FILE( gid_File_Fnt_Timos_Bold, Timos-Bold.ttf, Timos Bold) 
-STD_FONT_FILE( gid_File_Fnt_Timos_Italic, Timos-Italic.ttf, Timos Italic) 
-STD_FONT_FILE( gid_File_Fnt_Timos_BoldItalic, Timos-BoldItalic.ttf, Timos Bold Italic) 
+STD_FONT_FILE( gid_File_Fnt_Tinos_Regular, Tinos-Regular.ttf, Tinos Regular)
+STD_FONT_FILE( gid_File_Fnt_Tinos_Bold, Tinos-Bold.ttf, Tinos Bold)
+STD_FONT_FILE( gid_File_Fnt_Tinos_Italic, Tinos-Italic.ttf, Tinos Italic)
+STD_FONT_FILE( gid_File_Fnt_Tinos_BoldItalic, Tinos-BoldItalic.ttf, Tinos Bold Italic)
 #endif
 #endif
 
