@@ -75,13 +75,18 @@
 
 namespace css = ::com::sun::star;
 
+//==================================================================
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
 
+//==================================================================
 typedef SfxRequest* SfxRequestPtr;
 SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
 SV_DECL_PTRARR_DEL( SfxRequestPtrArray, SfxRequestPtr, 4, 4 )
 SV_IMPL_PTRARR( SfxRequestPtrArray, SfxRequestPtr );
+
+DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
+//==================================================================
 
 struct SfxToDo_Impl
 {
@@ -570,15 +575,14 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = pImp->aToDoStack.rbegin(); i != pImp->aToDoStack.rend(); ++i)
     {
         if(i->bPush)
-            aStack.push_front(i->pCluster);
+            aStack.Push(i->pCluster);
         else
         {
             SfxShell* pPopped(NULL);
             do
             {
-                DBG_ASSERT( aStack.size(), "popping from empty stack" );
-                pPopped = aStack.front();
-                aStack.pop_front();
+                DBG_ASSERT( aStack.Count(), "popping from empty stack" );
+                pPopped = aStack.Pop();
             }
             while(i->bUntil && pPopped != i->pCluster);
             DBG_ASSERT(pPopped == i->pCluster, "popping unpushed SfxInterface");
@@ -587,12 +591,9 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
 
     sal_Bool bReturn;
     if ( bDeep )
-    {
-        SfxShellStack_Impl::const_iterator i = std::find(aStack.begin(), aStack.end(), &rShell);
-        bReturn = (i != aStack.end());
-    }
+        bReturn = aStack.Contains(&rShell);
     else
-        bReturn = aStack.front() == &rShell;
+        bReturn = aStack.Top() == &rShell;
     return bReturn;
 }
 
@@ -618,15 +619,15 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
     SFX_STACK(SfxDispatcher::GetShellLevel);
     Flush();
 
-    for(size_t n = 0; n < pImp->aStack.size(); ++n)
-        if ( pImp->aStack[n] == &rShell )
+    for ( sal_uInt16 n = 0; n < pImp->aStack.Count(); ++n )
+        if ( pImp->aStack.Top( n ) == &rShell )
             return n;
     if ( pImp->pParent )
     {
         sal_uInt16 nRet = pImp->pParent->GetShellLevel(rShell);
         if ( nRet == USHRT_MAX )
             return nRet;
-        return  nRet + pImp->aStack.size();
+        return  nRet + pImp->aStack.Count();
     }
 
     return USHRT_MAX;
@@ -646,9 +647,9 @@ SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
 */
 
 {
-    sal_uInt16 nShellCount = pImp->aStack.size();
+    sal_uInt16 nShellCount = pImp->aStack.Count();
     if ( nIdx < nShellCount )
-        return pImp->aStack[nIdx];
+        return pImp->aStack.Top(nIdx);
     else if ( pImp->pParent )
         return pImp->pParent->GetShell( nIdx - nShellCount );
     return 0;
@@ -739,8 +740,8 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     if ( IsAppDispatcher() )
         return;
 
-    for(size_t i = 0; i < pImp->aStack.size(); ++i)
-        pImp->aStack[i]->DoActivate_Impl(pImp->pFrame, bMDI);
+    for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
+        pImp->aStack.Top( (sal_uInt16) i )->DoActivate_Impl(pImp->pFrame, bMDI);
 
     if ( bMDI && pImp->pFrame )
     {
@@ -765,8 +766,8 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
 void SfxDispatcher::DoParentActivate_Impl()
 {
-    for(size_t i = 0; i < pImp->aStack.size(); ++i)
-        pImp->aStack[i]->ParentActivate();
+    for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
+        pImp->aStack.Top( (sal_uInt16) i )->ParentActivate();
 }
 
 //--------------------------------------------------------------------
@@ -820,8 +821,8 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
         return;
 
-    for ( sal_uInt16 i = 0; i < pImp->aStack.size(); ++i )
-        pImp->aStack[i]->DoDeactivate_Impl(pImp->pFrame, bMDI);
+    for ( sal_uInt16 i = 0; i < pImp->aStack.Count(); ++i )
+        pImp->aStack.Top(i)->DoDeactivate_Impl(pImp->pFrame, bMDI);
 
     sal_Bool bHidePopups = bMDI && pImp->pFrame;
     if ( pNew && pImp->pFrame )
@@ -853,8 +854,8 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
 void SfxDispatcher::DoParentDeactivate_Impl()
 {
-    for(size_t i = 0; i < pImp->aStack.size(); ++i)
-        pImp->aStack[i]->ParentDeactivate();
+    for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
+        pImp->aStack.Top( (sal_uInt16) i )->ParentDeactivate();
 }
 
 //--------------------------------------------------------------------
@@ -891,7 +892,7 @@ int SfxDispatcher::GetShellAndSlot_Impl
     SfxSlotServer aSvr;
     if ( _FindServer(nSlot, aSvr, bModal) )
     {
-        if ( bOwnShellsOnly && aSvr.GetShellLevel() >= pImp->aStack.size() )
+        if ( bOwnShellsOnly && aSvr.GetShellLevel() >= pImp->aStack.Count() )
             return sal_False;
 
         *ppShell = GetShell(aSvr.GetShellLevel());
@@ -938,10 +939,10 @@ void SfxDispatcher::_Execute
         SfxDispatcher *pDispat = this;
         while ( pDispat )
         {
-            sal_uInt16 nShellCount = pDispat->pImp->aStack.size();
-            for ( sal_uInt16 n=0; n<nShellCount; ++n )
+            sal_uInt16 nShellCount = pDispat->pImp->aStack.Count();
+            for ( sal_uInt16 n=0; n<nShellCount; n++ )
             {
-                if ( &rShell == pDispat->pImp->aStack[n] )
+                if ( &rShell == pDispat->pImp->aStack.Top(n) )
                 {
                     if ( eCallMode & SFX_CALLMODE_RECORD )
                         rReq.AllowRecording( sal_True );
@@ -985,13 +986,13 @@ const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
 {
     // Count the number of Shells on the linked Dispatcher
     Flush();
-    sal_uInt16 nTotCount = pImp->aStack.size();
+    sal_uInt16 nTotCount = pImp->aStack.Count();
     if ( pImp->pParent )
     {
         SfxDispatcher *pParent = pImp->pParent;
         while ( pParent )
         {
-            nTotCount += pParent->pImp->aStack.size();
+            nTotCount = nTotCount + pParent->pImp->aStack.Count();
             pParent = pParent->pImp->pParent;
         }
     }
@@ -1439,7 +1440,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
     SfxShell *pStatusBarShell = NULL;
 
     SfxSlotPool* pSlotPool = &SfxSlotPool::GetSlotPool( GetFrame() );
-    sal_uInt16 nTotCount = pImp->aStack.size();
+    sal_uInt16 nTotCount = pImp->aStack.Count();
     for ( sal_uInt16 nShell = nTotCount; nShell > 0; --nShell )
     {
         SfxShell *pShell = GetShell( nShell-1 );
@@ -1615,11 +1616,9 @@ void SfxDispatcher::FlushImpl()
         if(i->bPush)
         {
             // Actually push
-            {
-                SfxShellStack_Impl::const_iterator it = std::find(pImp->aStack.begin(), pImp->aStack.end(), i->pCluster);
-                DBG_ASSERT(it != pImp->aStack.end(), "pushed SfxShell already on stack" );
-            }
-            pImp->aStack.push_front(i->pCluster);
+            DBG_ASSERT(!pImp->aStack.Contains(i->pCluster),
+                       "pushed SfxShell already on stack" );
+            pImp->aStack.Push(i->pCluster);
             i->pCluster->SetDisableFlags(pImp->nDisableFlags);
 
             // Mark the moved shell
@@ -1632,9 +1631,8 @@ void SfxDispatcher::FlushImpl()
             bool bFound = false;
             do
             {
-                DBG_ASSERT( !pImp->aStack.empty(), "popping from empty stack" );
-                pPopped = pImp->aStack.front();
-                pImp->aStack.pop_front();
+                DBG_ASSERT( pImp->aStack.Count(), "popping from empty stack" );
+                pPopped = pImp->aStack.Pop();
                 pPopped->SetDisableFlags( 0 );
                 bFound = (pPopped == i->pCluster);
 
@@ -1817,7 +1815,7 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
 {
     // Maybe the parent is also belongs to a component
     SfxDispatcher *pParent = pImp->pParent;
-    sal_uInt16 nLevels = pImp->aStack.size();
+    sal_uInt16 nLevels = pImp->aStack.Count();
     while ( pParent && pParent->pImp->pFrame )
     {
         if ( pParent->pImp->pFrame->GetFrame().HasComponent() )
@@ -1834,7 +1832,7 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
                 break;
         }
         else
-            nLevels += pParent->pImp->aStack.size();
+            nLevels = nLevels + pParent->pImp->aStack.Count();
 
         pParent = pParent->pImp->pParent;
     }
@@ -1897,13 +1895,13 @@ sal_Bool SfxDispatcher::_FindServer
 
     // Count the number of Shells in the linked dispatchers.
     Flush();
-    sal_uInt16 nTotCount = pImp->aStack.size();
+    sal_uInt16 nTotCount = pImp->aStack.Count();
     if ( pImp->pParent )
     {
         SfxDispatcher *pParent = pImp->pParent;
         while ( pParent )
         {
-            nTotCount += pParent->pImp->aStack.size();
+            nTotCount = nTotCount + pParent->pImp->aStack.Count();
             pParent = pParent->pImp->pParent;
         }
     }
@@ -1945,7 +1943,7 @@ sal_Bool SfxDispatcher::_FindServer
         {
             sal_Bool bRet = pImp->pParent->_FindServer( nSlot, rServer, bModal );
             rServer.SetShellLevel
-                ( rServer.GetShellLevel() + pImp->aStack.size() );
+                ( rServer.GetShellLevel() + pImp->aStack.Count() );
             return bRet;
         }
         else
@@ -1956,7 +1954,7 @@ sal_Bool SfxDispatcher::_FindServer
 
     // search through all the shells of the chained dispatchers
     // from top to bottom
-    sal_uInt16 nFirstShell = pImp->bModal && !bModal ? pImp->aStack.size() : 0;
+    sal_uInt16 nFirstShell = pImp->bModal && !bModal ? pImp->aStack.Count() : 0;
     for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
     {
         SfxShell *pObjShell = GetShell(i);
@@ -2106,7 +2104,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
     if ( rDisp.pImp->bQuiet )
     {
         nConfigId = 0;
-        nShLevel = rDisp.pImp->aStack.size();
+        nShLevel = rDisp.pImp->aStack.Count();
     }
 
     Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
@@ -2133,7 +2131,7 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
     if ( rDisp.pImp->bQuiet )
     {
         nConfigId = 0;
-        nShLevel = rDisp.pImp->aStack.size();
+        nShLevel = rDisp.pImp->aStack.Count();
     }
 
     Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
@@ -2309,10 +2307,10 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
 
 sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
 {
-    sal_uInt16 nShellCount = pImp->aStack.size();
-    if(nShell < nShellCount)
+    sal_uInt16 nShellCount = pImp->aStack.Count();
+    if ( nShell < nShellCount )
     {
-        SfxShell* pShell = pImp->aStack[nShell];
+        SfxShell* pShell = pImp->aStack.Top( nShell );
         if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) || pShell->ISA( SfxViewFrame ) )
             return sal_False;
         else
@@ -2323,19 +2321,27 @@ sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
     return sal_True;
 }
 
+// A dirty trick, to get hold of the methods of the private base class
+// SfxShellStack_Impl
+class StackAccess_Impl : public SfxShellStack_Implarr_
+{};
+
 void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
 {
     Flush();
 
-    for(SfxShellStack_Impl::iterator i = pImp->aStack.begin(); i != pImp->aStack.end(); ++i)
+    // The cast is because SfxShellStack_Impl member has non of its own
+    StackAccess_Impl& rStack = *((StackAccess_Impl*) (&pImp->aStack));
+    sal_uInt16 nCount = rStack.Count();
+    for ( sal_uInt16 n=0; n<nCount; ++n )
     {
-        if(*i != &rShell)
-            continue;
-
-        pImp->aStack.erase(i);
-        rShell.SetDisableFlags( 0 );
-        rShell.DoDeactivate_Impl(pImp->pFrame, sal_True);
-        break;
+        if ( rStack[n] == &rShell )
+        {
+            rStack.Remove( n );
+            rShell.SetDisableFlags( 0 );
+            rShell.DoDeactivate_Impl(pImp->pFrame, sal_True);
+            break;
+        }
     }
 
     if ( !SFX_APP()->IsDowning() )
@@ -2438,8 +2444,8 @@ sal_Bool SfxDispatcher::IsUpdated_Impl() const
 void SfxDispatcher::SetDisableFlags( sal_uInt32 nFlags )
 {
     pImp->nDisableFlags = nFlags;
-    for(SfxShellStack_Impl::const_iterator i = pImp->aStack.begin(); i != pImp->aStack.end(); ++i)
-        (*i)->SetDisableFlags(nFlags);
+    for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
+        pImp->aStack.Top( (sal_uInt16) i )->SetDisableFlags( nFlags );
 }
 
 sal_uInt32 SfxDispatcher::GetDisableFlags() const
