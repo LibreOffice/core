@@ -44,6 +44,13 @@ attached, so you need to carefully guess where to put:
 	into the code; and when you see that in logcat, you have time
 to run: ndk-gdb and it will attach the process.
 
+* Common Errors / Gotchas
+
+lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
+	This (most likely) means that the install quietly failed, and that
+the file is truncated; check it out with adb shell ls -l /data/data/....
+
+
 * Detailed explanation
 
 Unit tests are the first thing we want to run on Android, to get some
