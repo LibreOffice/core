@@ -40,16 +40,13 @@
 
 class SfxInterface;
 class SfxSlot;
-class SfxSlotType_Impl;
 
 typedef std::basic_string< sal_uInt16 > SfxSlotGroupArr_Impl;
-typedef std::vector<SfxSlotType_Impl*> SfxSlotTypeArr_Impl;
 typedef std::vector<SfxInterface*> SfxInterfaceArr_Impl;
 
 class SFX2_DLLPUBLIC SfxSlotPool
 {
     SfxSlotGroupArr_Impl*       _pGroups;
-    SfxSlotTypeArr_Impl*        _pTypes;
     SfxSlotPool*                _pParentPool;
     ResMgr*                     _pResMgr;
     SfxInterfaceArr_Impl*       _pInterfaces;

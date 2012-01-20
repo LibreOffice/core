@@ -43,19 +43,8 @@
 
 #include <sfx2/sfx.hrc>
 
-struct SfxSlotType_Impl
-{
-    sal_uInt16  nId;
-    TypeId  nType;
-
-    SfxSlotType_Impl( sal_uInt16 nTheId, TypeId nTheType ):
-        nId(nTheId), nType(nTheType)
-    {}
-};
-
 SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
  : _pGroups(0)
- , _pTypes(0)
  , _pParentPool( pParent )
  , _pResMgr( pResManager )
  , _pInterfaces(0)
@@ -76,12 +65,6 @@ SfxSlotPool::~SfxSlotPool()
         delete pIF;
     delete _pInterfaces;
     delete _pGroups;
-    if ( _pTypes )
-    {
-        for(sal_uInt16 n = 0; n < _pTypes->size(); ++n)
-            delete (*_pTypes)[n];
-        delete _pTypes;
-    }
 }
 
 //====================================================================
@@ -111,8 +94,6 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
         }
     }
 
-    if ( !_pTypes )
-        _pTypes = new SfxSlotTypeArr_Impl;
     for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
         SfxSlot *pDef = rInterface[nFunc];
