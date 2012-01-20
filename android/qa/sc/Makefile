@@ -185,6 +185,10 @@ run: run_ucalc run_filters_test
 stop-start-cycle:
 	adb shell stop && adb shell start && sleep 10
 
+# Too hard to remember this stuff;)
+redirect-stdio:
+	adb shell stop && adb shell setprop log.redirect-stdio true && adb shell start
+
 clean:
 	ant clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
