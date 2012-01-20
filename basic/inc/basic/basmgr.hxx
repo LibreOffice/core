@@ -34,6 +34,7 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include "basicdllapi.h"
+#include <vector>
 
 // Basic XML Import/Export
 BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
@@ -72,12 +73,10 @@ public:
     void    SetErrorStr( const String& rStr)    { aErrStr = rStr; }
 };
 
-
-
 class BasicLibs;
 class ErrorManager;
 class BasicLibInfo;
-class BasicErrorManager;
+
 namespace basic { class BasicManagerCleaner; }
 
 // Library password handling for 5.0 documents
@@ -127,7 +126,7 @@ class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
 
 private:
     BasicLibs*          pLibs;
-    BasicErrorManager*  pErrorMgr;
+    std::vector<BasicError> aErrors;
 
     String              aName;
     String              maStorageName;
@@ -140,7 +139,7 @@ private:
 
 protected:
     sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False ) const;
+    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const String& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
@@ -198,9 +197,7 @@ public:
     sal_Bool            IsModified() const;
     sal_Bool            IsBasicModified() const;
 
-    sal_Bool            HasErrors();
-    BasicError*     GetFirstError();
-    BasicError*     GetNextError();
+    std::vector<BasicError>& GetErrors();
 
     /** sets a global constant in the basic library, referring to some UNO object, to a new value.
 

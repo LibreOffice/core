@@ -454,21 +454,20 @@ namespace basic
             _out_rpBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
                                                                 &aAppBasicDir, sal_True );
-            if ( _out_rpBasicManager->HasErrors() )
+            if ( !_out_rpBasicManager->GetErrors().empty() )
             {
                 // handle errors
-                BasicError* pErr = _out_rpBasicManager->GetFirstError();
-                while ( pErr )
+                std::vector<BasicError>& aErrors = _out_rpBasicManager->GetErrors();
+                for(std::vector<BasicError>::const_iterator i = aErrors.begin(); i != aErrors.end(); ++i)
                 {
                     // show message to user
-                    if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( pErr->GetErrorId() ) )
+                    if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( i->GetErrorId() ) )
                     {
                         // user wants to break loading of BASIC-manager
                         BasicManagerCleaner::deleteBasicManager( _out_rpBasicManager );
                         xStorage.clear();
                         break;
                     }
-                    pErr = _out_rpBasicManager->GetNextError();
                 }
             }
         }
