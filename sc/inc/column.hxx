@@ -35,6 +35,7 @@
 #include "rangenam.hxx"
 
 #include <set>
+#include <vector>
 
 namespace editeng { class SvxBorderLine; }
 
@@ -105,9 +106,7 @@ private:
     SCCOL           nCol;
     SCTAB           nTab;
 
-    SCSIZE          nCount;
-    SCSIZE          nLimit;
-    ColEntry*       pItems;
+    std::vector<ColEntry>      aItems;
 
     ScAttrArray*       pAttrArray;
     ScDocument*                pDocument;
@@ -257,7 +256,7 @@ public:
     double      GetValue( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
-    SCSIZE      GetCellCount() const { return nCount; }
+    SCSIZE      GetCellCount() const { return aItems.size(); }
     sal_uInt32 GetWeightedCount() const;
     sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
     sal_uInt16  GetErrCode( SCROW nRow ) const;

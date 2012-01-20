@@ -105,7 +105,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
-        ScBaseCell* pCell = pItems[nIndex].pCell;
+        ScBaseCell* pCell = aItems[nIndex].pCell;
         const ScPatternAttr* pPattern = rOptions.pPattern;
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
@@ -544,7 +544,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
                                      const ScMarkData* pMarkData,
                                      const ScColWidthParam* pParam )
 {
-    if (nCount == 0)
+    if ( aItems.empty() )
         return nOldWidth;
 
     sal_uInt16  nWidth = (sal_uInt16) (nOldWidth * nPPTX);
@@ -579,11 +579,11 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
             xub_StrLen nLongLen = 0;
             while (aDataIter.Next(nIndex))
             {
-                if (nIndex >= nCount)
+                if (nIndex >= aItems.size())
                     // Out-of-bound reached.  No need to keep going.
                     break;
 
-                ScBaseCell* pCell = pItems[nIndex].pCell;
+                ScBaseCell* pCell = aItems[nIndex].pCell;
                 rtl::OUString aValStr;
                 ScCellFormat::GetString(
                     pCell, nFormat, aValStr, &pColor, *pFormatter, true, false, ftCheck );
@@ -611,9 +611,9 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
 
         while (aDataIter.Next( nIndex ))
         {
-            SCROW nRow = pItems[nIndex].nRow;
+            SCROW nRow = aItems[nIndex].nRow;
 
-            sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+            sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, aItems[nIndex].pCell );
             if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
             const ScPatternAttr* pPattern = GetPattern( nRow );
@@ -778,9 +778,9 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHe
 
                     SCSIZE nIndex;
                     Search(nStart,nIndex);
-                    while ( nIndex < nCount && (nRow=pItems[nIndex].nRow) <= nEnd )
+                    while ( nIndex < aItems.size() && (nRow=aItems[nIndex].nRow) <= nEnd )
                     {
-                        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+                        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, aItems[nIndex].pCell );
                         if ( nScript != nDefScript )
                         {
                             if ( nScript == SCRIPTTYPE_ASIAN )
@@ -816,7 +816,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHe
 
                 SCSIZE nIndex;
                 Search(nStart,nIndex);
-                while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEnd) : false )
+                while ( (nIndex < aItems.size()) ? ((nRow=aItems[nIndex].nRow) <= nEnd) : false )
                 {
                     //  Zellhoehe nur berechnen, wenn sie spaeter auch gebraucht wird (#37928#)
 
@@ -904,10 +904,10 @@ void ScColumn::RemoveAutoSpellObj()
 {
     ScTabEditEngine* pEngine = NULL;
 
-    for (SCSIZE i=0; i<nCount; i++)
-        if ( pItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
+    for (SCSIZE i=0; i<aItems.size(); i++)
+        if ( aItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
         {
-            ScEditCell* pOldCell = (ScEditCell*) pItems[i].pCell;
+            ScEditCell* pOldCell = (ScEditCell*) aItems[i].pCell;
             const EditTextObject* pData = pOldCell->GetData();
             //  keine Abfrage auf HasOnlineSpellErrors, damit es auch
             //  nach dem Laden funktioniert
@@ -935,7 +935,7 @@ void ScColumn::RemoveAutoSpellObj()
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
                 pNewCell->TakeNote( pOldCell->ReleaseNote() );
-                pItems[i].pCell = pNewCell;
+                aItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
         }
@@ -949,10 +949,10 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 
     SCSIZE i;
     Search( nStartRow, i );
-    for (; i<nCount && pItems[i].nRow <= nEndRow; i++)
-        if ( pItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
+    for (; i<aItems.size() && aItems[i].nRow <= nEndRow; i++)
+        if ( aItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
         {
-            ScEditCell* pOldCell = (ScEditCell*) pItems[i].pCell;
+            ScEditCell* pOldCell = (ScEditCell*) aItems[i].pCell;
             const EditTextObject* pData = pOldCell->GetData();
 
             //  Fuer den Test auf harte Formatierung (ScEditAttrTester) sind die Defaults
@@ -1005,7 +1005,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
                 pNewCell->TakeNote( pOldCell->ReleaseNote() );
-                pItems[i].pCell = pNewCell;
+                aItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
         }
@@ -1018,10 +1018,10 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 bool ScColumn::TestTabRefAbs(SCTAB nTable)
 {
     bool bRet = false;
-    if (pItems)
-        for (SCSIZE i = 0; i < nCount; i++)
-            if ( pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
-                if (((ScFormulaCell*)pItems[i].pCell)->TestTabRefAbs(nTable))
+    if ( !aItems.empty() )
+        for (SCSIZE i = 0; i < aItems.size(); i++)
+            if ( aItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
+                if (((ScFormulaCell*)aItems[i].pCell)->TestTabRefAbs(nTable))
                     bRet = true;
     return bRet;
 }
@@ -1042,12 +1042,12 @@ ScColumnIterator::~ScColumnIterator()
 
 bool ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
 {
-    if ( nPos < pColumn->nCount )
+    if ( nPos < pColumn->aItems.size() )
     {
-        rRow = pColumn->pItems[nPos].nRow;
+        rRow = pColumn->aItems[nPos].nRow;
         if ( rRow <= nBottom )
         {
-            rpCell = pColumn->pItems[nPos].pCell;
+            rpCell = pColumn->aItems[nPos].pCell;
             ++nPos;
             return true;
         }
@@ -1103,10 +1103,10 @@ bool ScMarkedDataIter::Next( SCSIZE& rIndex )
             bAll  = false;                  // nur beim ersten Versuch
         }
 
-        if ( nPos >= pColumn->nCount )
+        if ( nPos >= pColumn->aItems.size() )
             return false;
 
-        if ( pColumn->pItems[nPos].nRow <= nBottom )
+        if ( pColumn->aItems[nPos].nRow <= nBottom )
             bFound = true;
         else
             bNext = true;
@@ -1122,20 +1122,20 @@ bool ScMarkedDataIter::Next( SCSIZE& rIndex )
 
 bool ScColumn::IsEmptyData() const
 {
-    return (nCount == 0);
+    return (aItems.empty());
 }
 
 bool ScColumn::IsEmptyVisData(bool bNotes) const
 {
-    if (!pItems || nCount == 0)
+    if ( aItems.empty() )
         return true;
     else
     {
         bool bVisData = false;
         SCSIZE i;
-        for (i=0; i<nCount && !bVisData; i++)
+        for (i=0; i<aItems.size() && !bVisData; i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
                 bVisData = true;
         }
@@ -1150,10 +1150,10 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
     SCSIZE nVisCount = 0;
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
-    while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
+    while ( nIndex < aItems.size() && aItems[nIndex].nRow <= nEndRow )
     {
-        if ( pItems[nIndex].nRow >= nStartRow &&
-             pItems[nIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+        if ( aItems[nIndex].nRow >= nStartRow &&
+             aItems[nIndex].pCell->GetCellType() != CELLTYPE_NOTE )
         {
             ++nVisCount;
         }
@@ -1165,18 +1165,18 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
 SCROW ScColumn::GetLastVisDataPos(bool bNotes) const
 {
     SCROW nRet = 0;
-    if (pItems)
+    if ( !aItems.empty() )
     {
         SCSIZE i;
         bool bFound = false;
-        for (i=nCount; i>0 && !bFound; )
+        for (i=aItems.size(); i>0 && !bFound; )
         {
             --i;
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
                 bFound = true;
-                nRet = pItems[i].nRow;
+                nRet = aItems[i].nRow;
             }
         }
     }
@@ -1186,17 +1186,17 @@ SCROW ScColumn::GetLastVisDataPos(bool bNotes) const
 SCROW ScColumn::GetFirstVisDataPos(bool bNotes) const
 {
     SCROW nRet = 0;
-    if (pItems)
+    if ( !aItems.empty() )
     {
         SCSIZE i;
         bool bFound = false;
-        for (i=0; i<nCount && !bFound; i++)
+        for (i=0; i<aItems.size() && !bFound; i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
                 bFound = true;
-                nRet = pItems[i].nRow;
+                nRet = aItems[i].nRow;
             }
         }
     }
@@ -1207,7 +1207,7 @@ bool ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (!pItems[nIndex].pCell->IsBlank())
+        if (!aItems[nIndex].pCell->IsBlank())
             return true;
 
     return false;
@@ -1228,14 +1228,14 @@ bool ScColumn::IsEmpty() const
 
 bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
 {
-    if ( nCount == 0 || !pItems )
+    if ( aItems.empty() )
         return true;
 
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
-    while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
+    while ( nIndex < aItems.size() && aItems[nIndex].nRow <= nEndRow )
     {
-        if ( !pItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
+        if ( !aItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
             return false;                           // not empty
         ++nIndex;
     }
@@ -1247,35 +1247,35 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
     SCSIZE nLines = 0;
     bool bFound = false;
     SCSIZE i;
-    if (pItems && (nCount > 0))
+    if ( !aItems.empty() )
     {
         if (eDir == DIR_BOTTOM)
         {
-            i = nCount;
+            i = aItems.size();
             while (!bFound && (i > 0))
             {
                 i--;
-                if ( pItems[i].nRow < nStartRow )
+                if ( aItems[i].nRow < nStartRow )
                     break;
-                bFound = pItems[i].nRow <= nEndRow && !pItems[i].pCell->IsBlank();
+                bFound = aItems[i].nRow <= nEndRow && !aItems[i].pCell->IsBlank();
             }
             if (bFound)
-                nLines = static_cast<SCSIZE>(nEndRow - pItems[i].nRow);
+                nLines = static_cast<SCSIZE>(nEndRow - aItems[i].nRow);
             else
                 nLines = static_cast<SCSIZE>(nEndRow - nStartRow);
         }
         else if (eDir == DIR_TOP)
         {
             i = 0;
-            while (!bFound && (i < nCount))
+            while (!bFound && (i < aItems.size()))
             {
-                if ( pItems[i].nRow > nEndRow )
+                if ( aItems[i].nRow > nEndRow )
                     break;
-                bFound = pItems[i].nRow >= nStartRow && !pItems[i].pCell->IsBlank();
+                bFound = aItems[i].nRow >= nStartRow && !aItems[i].pCell->IsBlank();
                 i++;
             }
             if (bFound)
-                nLines = static_cast<SCSIZE>(pItems[i-1].nRow - nStartRow);
+                nLines = static_cast<SCSIZE>(aItems[i-1].nRow - nStartRow);
             else
                 nLines = static_cast<SCSIZE>(nEndRow - nStartRow);
         }
@@ -1287,16 +1287,16 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
 
 SCROW ScColumn::GetFirstDataPos() const
 {
-    if (nCount)
-        return pItems[0].nRow;
+    if ( !aItems.empty() )
+        return aItems[0].nRow;
     else
         return 0;
 }
 
 SCROW ScColumn::GetLastDataPos() const
 {
-    if (nCount)
-        return pItems[nCount-1].nRow;
+    if ( !aItems.empty() )
+        return aItems[aItems.size()-1].nRow;
     else
         return 0;
 }
@@ -1304,13 +1304,13 @@ SCROW ScColumn::GetLastDataPos() const
 bool ScColumn::GetPrevDataPos(SCROW& rRow) const
 {
     bool bFound = false;
-    SCSIZE i = nCount;
+    SCSIZE i = aItems.size();
     while (!bFound && (i > 0))
     {
         --i;
-        bFound = (pItems[i].nRow < rRow);
+        bFound = (aItems[i].nRow < rRow);
         if (bFound)
-            rRow = pItems[i].nRow;
+            rRow = aItems[i].nRow;
     }
     return bFound;
 }
@@ -1321,9 +1321,9 @@ bool ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
     if (Search( rRow, nIndex ))
         ++nIndex;                   // next cell
 
-    bool bMore = ( nIndex < nCount );
+    bool bMore = ( nIndex < aItems.size() );
     if ( bMore )
-        rRow = pItems[nIndex].nRow;
+        rRow = aItems[nIndex].nRow;
     return bMore;
 }
 
@@ -1334,7 +1334,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
     SCSIZE nIndex;
     bool bThere = Search(rRow, nIndex);
-    if (bThere && pItems[nIndex].pCell->IsBlank())
+    if (bThere && aItems[nIndex].pCell->IsBlank())
         bThere = false;
 
     if (bThere)
@@ -1343,17 +1343,17 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
         SCSIZE nOldIndex = nIndex;
         if (bForward)
         {
-            if (nIndex<nCount-1)
+            if (nIndex<aItems.size()-1)
             {
                 ++nIndex;
-                while (nIndex<nCount-1 && pItems[nIndex].nRow==nLast+1
-                                        && !pItems[nIndex].pCell->IsBlank())
+                while (nIndex<aItems.size()-1 && aItems[nIndex].nRow==nLast+1
+                                        && !aItems[nIndex].pCell->IsBlank())
                 {
                     ++nIndex;
                     ++nLast;
                 }
-                if (nIndex==nCount-1)
-                    if (pItems[nIndex].nRow==nLast+1 && !pItems[nIndex].pCell->IsBlank())
+                if (nIndex==aItems.size()-1)
+                    if (aItems[nIndex].nRow==nLast+1 && !aItems[nIndex].pCell->IsBlank())
                         ++nLast;
             }
         }
@@ -1362,14 +1362,14 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             if (nIndex>0)
             {
                 --nIndex;
-                while (nIndex>0 && pItems[nIndex].nRow+1==nLast
-                                        && !pItems[nIndex].pCell->IsBlank())
+                while (nIndex>0 && aItems[nIndex].nRow+1==nLast
+                                        && !aItems[nIndex].pCell->IsBlank())
                 {
                     --nIndex;
                     --nLast;
                 }
                 if (nIndex==0)
-                    if (pItems[nIndex].nRow+1==nLast && !pItems[nIndex].pCell->IsBlank())
+                    if (aItems[nIndex].nRow+1==nLast && !aItems[nIndex].pCell->IsBlank())
                         --nLast;
             }
         }
@@ -1386,19 +1386,19 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     {
         if (bForward)
         {
-            while (nIndex<nCount && pItems[nIndex].pCell->IsBlank())
+            while (nIndex<aItems.size() && aItems[nIndex].pCell->IsBlank())
                 ++nIndex;
-            if (nIndex<nCount)
-                rRow = pItems[nIndex].nRow;
+            if (nIndex<aItems.size())
+                rRow = aItems[nIndex].nRow;
             else
                 rRow = MAXROW;
         }
         else
         {
-            while (nIndex>0 && pItems[nIndex-1].pCell->IsBlank())
+            while (nIndex>0 && aItems[nIndex-1].pCell->IsBlank())
                 --nIndex;
             if (nIndex>0)
-                rRow = pItems[nIndex-1].nRow;
+                rRow = aItems[nIndex-1].nRow;
             else
                 rRow = 0;
         }
@@ -1412,7 +1412,7 @@ bool ScColumn::HasDataAt(SCROW nRow) const
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (!pItems[nIndex].pCell->IsBlank())
+        if (!aItems[nIndex].pCell->IsBlank())
             return true;
 
     return false;
@@ -1469,7 +1469,7 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
     SCROW nRow = 0;
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
-    while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : false )
+    while ( (nIndex < aItems.size()) ? ((nRow=aItems[nIndex].nRow) <= nEndRow) : false )
     {
         pUsed[nRow-nStartRow] = true;
         ++nIndex;
@@ -1484,7 +1484,7 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
     SCSIZE nIndex;
     if (Search(nRow,nIndex))
     {
-        pCell = pItems[nIndex].pCell;
+        pCell = aItems[nIndex].pCell;
         pBC = pCell->GetBroadcaster();
     }
     else
@@ -1509,7 +1509,7 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
     SCSIZE nIndex;
     if (Search(nDestRow,nIndex))
     {
-        pCell = pItems[nIndex].pCell;
+        pCell = aItems[nIndex].pCell;
         pBC = pCell->GetBroadcaster();
     }
     else
@@ -1540,7 +1540,7 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
     SCSIZE nIndex;
     if (Search(nRow,nIndex))
     {
-        ScBaseCell* pCell = pItems[nIndex].pCell;
+        ScBaseCell* pCell = aItems[nIndex].pCell;
         SvtBroadcaster* pBC = pCell->GetBroadcaster();
         if (pBC)
         {
@@ -1559,10 +1559,10 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 
 void ScColumn::CompileDBFormula()
 {
-    if (pItems)
-        for (SCSIZE i = 0; i < nCount; i++)
+    if ( !aItems.empty() )
+        for (SCSIZE i = 0; i < aItems.size(); i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*) pCell)->CompileDBFormula();
         }
@@ -1570,10 +1570,10 @@ void ScColumn::CompileDBFormula()
 
 void ScColumn::CompileDBFormula( bool bCreateFormulaString )
 {
-    if (pItems)
-        for (SCSIZE i = 0; i < nCount; i++)
+    if ( !aItems.empty() )
+        for (SCSIZE i = 0; i < aItems.size(); i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*) pCell)->CompileDBFormula( bCreateFormulaString );
         }
@@ -1581,10 +1581,10 @@ void ScColumn::CompileDBFormula( bool bCreateFormulaString )
 
 void ScColumn::CompileNameFormula( bool bCreateFormulaString )
 {
-    if (pItems)
-        for (SCSIZE i = 0; i < nCount; i++)
+    if ( !aItems.empty() )
+        for (SCSIZE i = 0; i < aItems.size(); i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*) pCell)->CompileNameFormula( bCreateFormulaString );
         }
@@ -1592,10 +1592,10 @@ void ScColumn::CompileNameFormula( bool bCreateFormulaString )
 
 void ScColumn::CompileColRowNameFormula()
 {
-    if (pItems)
-        for (SCSIZE i = 0; i < nCount; i++)
+    if ( !aItems.empty() )
+        for (SCSIZE i = 0; i < aItems.size(); i++)
         {
-            ScBaseCell* pCell = pItems[i].pCell;
+            ScBaseCell* pCell = aItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*) pCell)->CompileColRowNameFormula();
         }
@@ -1690,11 +1690,11 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     ScMarkedDataIter aDataIter(this, &rMark, false);
     while (aDataIter.Next( nIndex ))
     {
-        SCROW nRow = pItems[nIndex].nRow;
+        SCROW nRow = aItems[nIndex].nRow;
         bool bRowHidden = rHiddenRows.getValue(nRow);
         if ( !bRowHidden )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
-                lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
+                lcl_UpdateSubTotal( rData, aItems[nIndex].pCell );
     }
 }
 
@@ -1705,12 +1705,12 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
 {
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
-    while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
+    while ( nIndex<aItems.size() && aItems[nIndex].nRow<=nEndRow )
     {
-        SCROW nRow = pItems[nIndex].nRow;
+        SCROW nRow = aItems[nIndex].nRow;
         bool bRowHidden = rHiddenRows.getValue(nRow);
         if ( !bRowHidden )
-            lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
+            lcl_UpdateSubTotal( rData, aItems[nIndex].pCell );
         ++nIndex;
     }
 }
@@ -1721,9 +1721,9 @@ sal_uInt32 ScColumn::GetWeightedCount() const
 
     //  Notizen werden nicht gezaehlt
 
-    for (SCSIZE i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<aItems.size(); i++)
     {
-        ScBaseCell* pCell = pItems[i].pCell;
+        ScBaseCell* pCell = aItems[i].pCell;
         switch ( pCell->GetCellType() )
         {
             case CELLTYPE_VALUE:
@@ -1750,9 +1750,9 @@ sal_uInt32 ScColumn::GetCodeCount() const
 {
     sal_uInt32 nCodeCount = 0;
 
-    for (SCSIZE i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<aItems.size(); i++)
     {
-        ScBaseCell* pCell = pItems[i].pCell;
+        ScBaseCell* pCell = aItems[i].pCell;
         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             nCodeCount += ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen();
     }

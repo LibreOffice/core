@@ -390,8 +390,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 bool bHiddenRow = true;
                 SCROW nHiddenEndRow = -1;
                 (void) pThisCol->Search( nY1, nUIndex );
-                while ( nUIndex < pThisCol->nCount &&
-                        (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
+                while ( nUIndex < pThisCol->aItems.size() &&
+                        (nThisRow=pThisCol->aItems[nUIndex].nRow) <= nY2 )
                 {
                     if (nThisRow > nHiddenEndRow)
                         bHiddenRow = RowHidden( nThisRow, nTab, NULL, &nHiddenEndRow);
@@ -403,7 +403,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                        pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
+                        pInfo->pCell = pThisCol->aItems[nUIndex].pCell;
                         if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
                         {
                             pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
