@@ -28,6 +28,22 @@ this point:
 
 	and continue onwards & upwards.
 
+* Debugging
+
+	Debugging is fun, the default NDK gdb (in v7) is busted, you
+need to download a new one from:
+
+	http://code.google.com/p/mingw-and-ndk/
+
+	Even this 'fixed' gdb is broken in the way that it can see
+symbols only for shlibs that were already loaded when the debuggee was
+attached, so you need to carefully guess where to put:
+
+	fprintf(stderr, "Sleeping NOW!\n"); ::sleep(20);
+
+	into the code; and when you see that in logcat, you have time
+to run: ndk-gdb and it will attach the process.
+
 * Detailed explanation
 
 Unit tests are the first thing we want to run on Android, to get some
