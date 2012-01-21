@@ -146,68 +146,59 @@ void SwGlossaryGroupDlg::Apply()
 
     String aActGroup = SwGlossaryDlg::GetCurrGroup();
 
-    if (!m_RemovedArr.empty())
+    for (OUVector_t::const_iterator it(m_RemovedArr.begin());
+            it != m_RemovedArr.end(); ++it)
     {
-        for (OUVector_t::const_iterator it(m_RemovedArr.begin());
-                it != m_RemovedArr.end(); ++it)
+        const String sDelGroup =
+            ::comphelper::string::getToken(*it, 0, '\t');
+        if( sDelGroup == aActGroup )
         {
-            const String sDelGroup =
-                ::comphelper::string::getToken(*it, 0, '\t');
-            if( sDelGroup == aActGroup )
+            //when the current group is deleted, the current group has to be relocated
+            if(aGroupTLB.GetEntryCount())
             {
-                //when the current group is deleted, the current group has to be relocated
-                if(aGroupTLB.GetEntryCount())
-                {
-                    SvLBoxEntry* pFirst = aGroupTLB.First();
-                    GlosBibUserData* pUserData = (GlosBibUserData*)pFirst->GetUserData();
-                    pGlosHdl->SetCurGroup(pUserData->sGroupName);
-                }
+                SvLBoxEntry* pFirst = aGroupTLB.First();
+                GlosBibUserData* pUserData = (GlosBibUserData*)pFirst->GetUserData();
+                pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
-            String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
-            String sTitle( ::comphelper::string::getToken(*it, 1, '\t') );
-            if(sTitle.Len())
-                sMsg += sTitle;
-            else
-                sDelGroup.GetToken(1, GLOS_DELIM);
-            sMsg += SW_RESSTR(STR_QUERY_DELETE_GROUP2);
-            QueryBox aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
-            if(RET_YES == aQuery.Execute())
-                pGlosHdl->DelGroup( sDelGroup );
         }
+        String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
+        String sTitle( ::comphelper::string::getToken(*it, 1, '\t') );
+        if(sTitle.Len())
+            sMsg += sTitle;
+        else
+            sDelGroup.GetToken(1, GLOS_DELIM);
+        sMsg += SW_RESSTR(STR_QUERY_DELETE_GROUP2);
+        QueryBox aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
+        if(RET_YES == aQuery.Execute())
+            pGlosHdl->DelGroup( sDelGroup );
+    }
 
-    }
     //don't rename before there was one
-    if (!m_RenamedArr.empty())
+    for (OUVector_t::const_iterator it(m_RenamedArr.begin());
+            it != m_RenamedArr.end(); ++it)
     {
-        for (OUVector_t::const_iterator it(m_RenamedArr.begin());
-                it != m_RenamedArr.end(); ++it)
+        ::rtl::OUString const sOld(
+                ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
+        String sNew(
+                ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
+        ::rtl::OUString const sTitle(
+                ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
+        pGlosHdl->RenameGroup(sOld, sNew, sTitle);
+        if (it == m_RenamedArr.begin())
         {
-            ::rtl::OUString const sOld(
-                    ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
-            String sNew(
-                    ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
-            ::rtl::OUString const sTitle(
-                    ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
-            pGlosHdl->RenameGroup(sOld, sNew, sTitle);
-            if (it == m_RenamedArr.begin())
-            {
-                sCreatedGroup = sNew;
-            }
+            sCreatedGroup = sNew;
         }
     }
-    if (!m_InsertedArr.empty())
+    for (OUVector_t::const_iterator it(m_InsertedArr.begin());
+            it != m_InsertedArr.end(); ++it)
     {
-        for (OUVector_t::const_iterator it(m_InsertedArr.begin());
-                it != m_InsertedArr.end(); ++it)
+        String sNewGroup = *it;
+        String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
+        if( sNewGroup != aActGroup )
         {
-            String sNewGroup = *it;
-            String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
-            if( sNewGroup != aActGroup )
-            {
-                pGlosHdl->NewGroup(sNewGroup, sNewTitle);
-                if(!sCreatedGroup.Len())
-                    sCreatedGroup = sNewGroup;
-            }
+            pGlosHdl->NewGroup(sNewGroup, sNewTitle);
+            if(!sCreatedGroup.Len())
+                sCreatedGroup = sNewGroup;
         }
     }
 }
@@ -272,35 +263,29 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     ::rtl::OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     sal_Bool bDelete = sal_True;
-    if (!m_InsertedArr.empty())
+    for (OUVector_t::iterator it(m_InsertedArr.begin());
+            it != m_InsertedArr.end(); ++it)
     {
-        for (OUVector_t::iterator it(m_InsertedArr.begin());
-                it != m_InsertedArr.end(); ++it)
+        if (*it == sEntry)
         {
-            if (*it == sEntry)
-            {
-                m_InsertedArr.erase(it);
-                bDelete = sal_False;
-                break;
-            }
-
+            m_InsertedArr.erase(it);
+            bDelete = sal_False;
+            break;
         }
+
     }
     // it should probably be renamed?
     if(bDelete)
     {
-        if (!m_RenamedArr.empty())
+        for (OUVector_t::iterator it(m_RenamedArr.begin());
+                it != m_RenamedArr.end(); ++it)
         {
-            for (OUVector_t::iterator it(m_RenamedArr.begin());
-                    it != m_RenamedArr.end(); ++it)
+            if (::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM)
+                    == sEntry)
             {
-                if (::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM)
-                        == sEntry)
-                {
-                    m_RenamedArr.erase(it);
-                    bDelete = sal_False;
-                    break;
-                }
+                m_RenamedArr.erase(it);
+                bDelete = sal_False;
+                break;
             }
         }
     }
@@ -336,18 +321,15 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     // if the name to be renamed is among the new ones - replace
     sal_Bool bDone = sal_False;
-    if (!m_InsertedArr.empty())
+    for (OUVector_t::iterator it(m_InsertedArr.begin());
+            it != m_InsertedArr.end(); ++it)
     {
-        for (OUVector_t::iterator it(m_InsertedArr.begin());
-                it != m_InsertedArr.end(); ++it)
+        if (String(*it) == sEntry)
         {
-            if (String(*it) == sEntry)
-            {
-                m_InsertedArr.erase(it);
-                m_InsertedArr.push_back(sNewName);
-                bDone = sal_True;
-                break;
-            }
+            m_InsertedArr.erase(it);
+            m_InsertedArr.push_back(sNewName);
+            bDone = sal_True;
+            break;
         }
     }
     if(!bDone)
@@ -438,16 +420,13 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
     // as well! Because for non existing region names ReadOnly issues
     // sal_True.
 
-    if (!m_InsertedArr.empty())
+    for (OUVector_t::const_iterator it(m_InsertedArr.begin());
+            it != m_InsertedArr.end(); ++it)
     {
-        for (OUVector_t::const_iterator it(m_InsertedArr.begin());
-                it != m_InsertedArr.end(); ++it)
+        if (String(*it) == rGroup)
         {
-            if (String(*it) == rGroup)
-            {
-                bDel = sal_True;
-                break;
-            }
+            bDel = sal_True;
+            break;
         }
     }
 
