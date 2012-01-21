@@ -695,9 +695,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     pContentDev->SetMapMode(MAP_PIXEL);
     aOutputData.DrawDocumentBackground();
+
     if ( bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid( bGrid, bPage );
+
     aOutputData.DrawBackground();
+
+    if ( !bGridFirst && ( bGrid || bPage ) )
+        aOutputData.DrawGrid( bGrid, bPage );
+
     if ( bPageMode )
     {
         // DrawPagePreview draws complete lines/page numbers, must always be clipped
@@ -707,6 +713,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             pContentDev->SetClipRegion();
         }
     }
+
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     if ( !bLogicText )
@@ -730,10 +737,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks();
 
-    if ( !bGridFirst && ( bGrid || bPage ) )
-    {
-        aOutputData.DrawGrid( bGrid, bPage );
-    }
     aOutputData.DrawClipMarks();
 
     //  Szenario / ChangeTracking muss auf jeden Fall nach DrawGrid sein, auch bei !bGridFirst
