@@ -53,7 +53,12 @@ TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
+.IF "$(OS)" == "ANDROID"
+CONFIGURE_FLAGS=shared no-idea
+.ELSE
+# explicitly including /usr/include seems hyper-broken anyway but ...
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
+.ENDIF
 
 BUILD_DIR=.
 
