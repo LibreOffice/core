@@ -245,6 +245,7 @@ BasicIDEShell::~BasicIDEShell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
+    delete m_pCurLocalizationMgr;
 
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin )
