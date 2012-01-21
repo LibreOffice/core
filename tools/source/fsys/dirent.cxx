@@ -1529,9 +1529,9 @@ DirEntry DirEntry::GetDevice() const
 
         if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT || pTop->eFlag == FSYS_FLAG_RELROOT ) &&
                  !pTop->aName.isEmpty() )
-                return DirEntry( pTop->aName, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
+                return DirEntry( pTop->aName, FSYS_FLAG_VOLUME );
         else
-                return DirEntry( rtl::OString(), FSYS_FLAG_INVALID, FSYS_STYLE_HOST );
+                return DirEntry( rtl::OString(), FSYS_FLAG_INVALID );
 }
 
 #endif

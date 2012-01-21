@@ -315,13 +315,13 @@ USHORT DirReader_Impl::Read()
             DirEntry *pTemp = new DirEntry( rtl::OString(pDosEntry->d_name),
                                             eFlag );
 #ifdef FEAT_FSYS_DOUBLESPEED
-            pTemp->ImpSetStat( new FileStat( (void*) pDosDir, (void*) 0 ) );
+            pTemp->ImpSetStat( new FileStat( (void*) pDosDir ) );
 #endif
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False );
             if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
             {
-                FileStat *pNewStat = new FileStat( (void*) pDosDir, (void*) 0 );
+                FileStat *pNewStat = new FileStat( (void*) pDosDir );
                 pDir->ImpSortedInsert( pTemp, pNewStat );
             }
             else
