@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,fwl,framework/util/fwl))
 $(eval $(call gb_Library_set_include,fwl,\
     -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(realpath $(SRCDIR)/framework/source/inc) \
-    -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
 ))
 

@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_api,fwi,\
 $(eval $(call gb_Library_set_include,fwi,\
     -I$(realpath $(SRCDIR)/framework/source/inc) \
     -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
 ))
 

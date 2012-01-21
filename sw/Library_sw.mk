@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
-    -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
 ))
 

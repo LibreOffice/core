@@ -26,7 +26,6 @@ $(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
 
 $(eval $(call gb_Library_set_include,scd,\
         -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
 ))
 

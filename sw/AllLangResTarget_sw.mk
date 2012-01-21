@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,sw/res))
 
 $(eval $(call gb_SrsTarget_set_include,sw/res,\
     $$(INCLUDE) \
-    -I$(WORKDIR)/inc/sw \
     -I$(realpath $(SRCDIR)/sw/inc) \
     -I$(realpath $(SRCDIR)/sw/source/core/inc) \
     -I$(realpath $(SRCDIR)/sw/source/core/undo) \

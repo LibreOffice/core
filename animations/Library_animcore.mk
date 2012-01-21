@@ -32,11 +32,6 @@ $(eval $(call gb_Library_add_package_headers,animcore,animations_inc))
 
 $(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore))
 
-$(eval $(call gb_Library_set_include,animcore,\
-    $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/animcore/source/animcore) \
-))
-
 $(eval $(call gb_Library_add_api,animcore,\
     offapi \
     udkapi \
