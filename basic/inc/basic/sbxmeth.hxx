@@ -48,16 +48,9 @@ public:
     virtual SbxClassType GetClass() const;
 };
 
-#ifndef __SBX_SBXMETHODREF_HXX
-#define __SBX_SBXMETHODREF_HXX
-
-#ifndef SBX_METHOD_DECL_DEFINED
-#define SBX_METHOD_DECL_DEFINED
 SV_DECL_REF(SbxMethod)
-#endif
 SV_IMPL_REF(SbxMethod)
 
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
