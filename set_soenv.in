@@ -194,14 +194,6 @@ $CLASSPATH           .= $wps.'.' if ($CLASSPATH ne '');
 $XCLASSPATH           = $CLASSPATH;
 
 
-# Windows NT only variables
-if ($platform =~ m/cygwin/)
-{
-
-   $JAVAHOME          = $JAVA_HOME;
-
-}
-
 # The general environment path.
 if ($platform =~ m/linux|netbsd|freebsd|aix|solaris|openbsd|dragonfly/)
 {  $PATH              = $cur_dir.
@@ -425,8 +417,6 @@ else
    ToFile( "PATH",           $PATH,              "e" );
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
 }
-ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
-
 
 #
 # Writing the aliases to file.
