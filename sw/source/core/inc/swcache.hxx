@@ -108,7 +108,7 @@ public:
     SwCache( const sal_uInt16 nInitSize, const rtl::OString &rNm );
     ~SwCache();
 #else
-    SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize );
+    SwCache( const sal_uInt16 nInitSize );
 #endif
 
     void Flush( const sal_uInt8 nPercent = 100 );
