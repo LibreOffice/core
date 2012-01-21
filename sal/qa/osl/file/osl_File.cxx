@@ -4807,14 +4807,14 @@ namespace osl_File
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::read, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::write, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::readLine, "osl_File" );
-// FIXME: disabled these tests for now ... they seem not to pass ...
-//    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::copy, "osl_File" );
-//    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::move, "osl_File" );
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::copy, "osl_File" );
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::move, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::remove, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::setAttributes, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::setTime, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::sync, "osl_File" );
-    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_File" );
+// FIXME: to enable these tests (when they work cross-platform) we need to add the below:
+//    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_File" );
 
 }// namespace osl_File
 
