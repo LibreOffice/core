@@ -61,7 +61,7 @@ RtfSdrExport::~RtfSdrExport()
 
 void RtfSdrExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     EscherEx::OpenContainer( nEscherContainer, nRecInstance );
 
@@ -77,7 +77,7 @@ void RtfSdrExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance 
 
 void RtfSdrExport::CloseContainer()
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     if ( mRecTypes.back() == ESCHER_SpContainer )
     {
@@ -94,21 +94,21 @@ void RtfSdrExport::CloseContainer()
 
 sal_uInt32 RtfSdrExport::EnterGroup( const String& /*rShapeName*/, const Rectangle* /*pRect*/ )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     return GenerateShapeId();
 }
 
 void RtfSdrExport::LeaveGroup()
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     /* noop */
 }
 
 void RtfSdrExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 /*nShapeId*/ )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
@@ -146,7 +146,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
 
 void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return;
@@ -314,7 +314,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                 case 0x8000: // end
                                     break;
                                 default:
-                                    SAL_INFO("sw", OSL_THIS_FUNC << ": unhandled segment '" << nSeg << "' in the path");
+                                    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled segment '" << nSeg << "' in the path");
                                     break;
                             }
                         }
@@ -331,7 +331,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                             m_aShapeProps.insert(std::pair<OString,OString>(OString("pSegmentInfo"), aSegmentInfo.makeStringAndClear()));
                     }
                     else
-                        SAL_INFO("sw", OSL_THIS_FUNC << ": unhandled shape path, missing either pVertices or pSegmentInfo");
+                        SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled shape path, missing either pVertices or pSegmentInfo");
                 }
                 break;
             case ESCHER_Prop_shapePath:
@@ -363,7 +363,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                 m_aShapeProps.insert(std::pair<OString,OString>(OString("txflTextFlow"), OString::valueOf(sal_Int32(it->nPropValue))));
                 break;
             default:
-                SAL_INFO("sw", OSL_THIS_FUNC << ": unhandled property: " << nId << " (value: " << it->nPropValue << ")");
+                SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled property: " << nId << " (value: " << it->nPropValue << ")");
                 break;
         }
     }
@@ -371,7 +371,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
 
 void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>(OString("posrelh"), OString::valueOf(sal_Int32(3))));
@@ -399,7 +399,7 @@ void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
 
 void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>(OString("posrelh"), OString::valueOf(sal_Int32(3))));
@@ -421,7 +421,7 @@ void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::r
 }
 sal_Int32 RtfSdrExport::StartShape()
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return -1;
@@ -479,7 +479,7 @@ sal_Int32 RtfSdrExport::StartShape()
 
 void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 {
-    SAL_INFO("sw", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( m_rExport, rEditObj, TXT_HFTXTBOX );
@@ -527,12 +527,12 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
     }
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR).append('}');
 
-    SAL_INFO("sw", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
 void RtfSdrExport::EndShape( sal_Int32 nShapeElement )
 {
-    SAL_INFO("sw", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     if ( nShapeElement >= 0 )
     {
