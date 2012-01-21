@@ -72,21 +72,17 @@
 #include <rtl/strbuf.hxx>
 
 #include <deque>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace css = ::com::sun::star;
 
-//==================================================================
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
 
-//==================================================================
-typedef SfxRequest* SfxRequestPtr;
-SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
-SV_DECL_PTRARR_DEL( SfxRequestPtrArray, SfxRequestPtr, 4, 4 )
-SV_IMPL_PTRARR( SfxRequestPtrArray, SfxRequestPtr );
+typedef boost::ptr_vector<SfxRequest> SfxRequestPtrArray;
 
+SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
 DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
-//==================================================================
 
 struct SfxToDo_Impl
 {
@@ -1264,7 +1260,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
         else
         {
             if ( pImp->bLocked )
-                pImp->aReqArr.Insert( new SfxRequest(*pReq), pImp->aReqArr.Count() );
+                pImp->aReqArr.push_back(new SfxRequest(*pReq));
             else
                 pImp->xPoster->Post(new SfxRequest(*pReq));
         }
@@ -2176,10 +2172,9 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     pImp->bLocked = bLock;
     if ( !bLock )
     {
-        sal_uInt16 nCount = pImp->aReqArr.Count();
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-            pImp->xPoster->Post( pImp->aReqArr[i] );
-        pImp->aReqArr.Remove( 0, nCount );
+        for(size_t i = 0; i < pImp->aReqArr.size(); ++i)
+            pImp->xPoster->Post(&pImp->aReqArr[i]);
+        pImp->aReqArr.clear();
     }
 }
 
