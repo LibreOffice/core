@@ -34,9 +34,9 @@
 #include <tools/string.hxx>
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/utility.hpp>
 #include <vector>
-
 
 struct SvParser_Impl;
 class SvStream;
@@ -256,7 +256,9 @@ public:
  * SvKeyValueIterator.
  *
  *======================================================================*/
-class SvKeyValueList_Impl;
+
+typedef boost::ptr_vector<SvKeyValue> SvKeyValueList_Impl;
+
 class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase,
     private boost::noncopyable
 {

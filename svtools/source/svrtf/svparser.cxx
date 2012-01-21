@@ -667,8 +667,6 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
  * SvKeyValueIterator.
  *
  *======================================================================*/
-SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4)
-SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
 
 /*
  * SvKeyValueIterator.
@@ -692,7 +690,7 @@ SvKeyValueIterator::~SvKeyValueIterator (void)
  */
 sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 {
-    m_nPos = m_pList->Count();
+    m_nPos = m_pList->size();
     return GetNext (rKeyVal);
 }
 
@@ -703,7 +701,7 @@ sal_Bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 {
     if (m_nPos > 0)
     {
-        rKeyVal = *m_pList->GetObject(--m_nPos);
+        rKeyVal = (*m_pList)[--m_nPos];
         return sal_True;
     }
     else
@@ -718,8 +716,7 @@ sal_Bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
  */
 void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
 {
-    SvKeyValue *pKeyVal = new SvKeyValue (rKeyVal);
-    m_pList->C40_INSERT(SvKeyValue, pKeyVal, m_pList->Count());
+    m_pList->push_back(new SvKeyValue(rKeyVal));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
