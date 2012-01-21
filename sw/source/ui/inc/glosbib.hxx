@@ -83,9 +83,9 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     PushButton      aDelPB;
     PushButton      aRenamePB;
 
-    std::vector<String*> *pRemovedArr;
-    std::vector<String*> *pInsertedArr;
-    std::vector<String*> *pRenamedArr;
+    std::vector<String> m_RemovedArr;
+    std::vector<String> m_InsertedArr;
+    std::vector<String> m_RenamedArr;
 
     SwGlossaryHdl   *pGlosHdl;
 
