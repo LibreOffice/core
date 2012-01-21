@@ -32,7 +32,6 @@ $(eval $(call gb_Executable_set_include,bmp,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \
-    -I$(OUTDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svtools/inc) \
     -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
     -I$(realpath $(SRCDIR)/svtools/source/inc) \

@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
-    -I$(OUTDIR)/inc \
 ))
 
 include $(SRCDIR)/writerfilter/debug_setup.mk

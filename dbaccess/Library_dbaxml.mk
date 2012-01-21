@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,dbaxml))
 $(eval $(call gb_Library_set_include,dbaxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,dbaxml,\

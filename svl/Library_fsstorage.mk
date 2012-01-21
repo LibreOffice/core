@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,fsstorage,\
     -I$(realpath $(SRCDIR)/svl/inc) \
     -I$(realpath $(SRCDIR)/svl/inc/svl) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
-    -I$(OUTDIR)/inc \
     $$(INCLUDE) \
 ))
 

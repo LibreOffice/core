@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,writerfilter_uno))
 $(eval $(call gb_Library_set_include,writerfilter_uno,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,writerfilter_uno,\

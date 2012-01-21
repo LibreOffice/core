@@ -36,7 +36,6 @@ $(eval $(call gb_Library_add_package_headers,oox,\
 
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(realpath $(SRCDIR)/oox/inc) \
 ))
 

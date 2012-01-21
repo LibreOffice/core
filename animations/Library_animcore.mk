@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/a
 $(eval $(call gb_Library_set_include,animcore,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/animcore/source/animcore) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,animcore,\

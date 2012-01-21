@@ -30,7 +30,6 @@ $(eval $(call gb_Library_set_include,sm,\
         -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sm,\
@@ -102,7 +101,6 @@ $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
         -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(realpath $(SRCDIR)/starmath/sdi) \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc \
 ))
 
 # vim: set noet sw=4 ts=4:

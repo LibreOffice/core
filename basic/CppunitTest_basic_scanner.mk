@@ -34,5 +34,4 @@ $(eval $(call gb_CppunitTest_set_include,basic_scanner,\
 -I$(realpath $(SRCDIR)/basic/source/inc) \
 -I$(realpath $(SRCDIR)/basic/inc) \
 $$(INCLUDE) \
--I$(OUTDIR)/inc \
 ))

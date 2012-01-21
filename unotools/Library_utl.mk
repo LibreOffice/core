@@ -39,7 +39,6 @@ $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,utl,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 # add any additional definitions to be set for compilation here

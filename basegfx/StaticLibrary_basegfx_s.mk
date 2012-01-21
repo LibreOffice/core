@@ -34,7 +34,6 @@ $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 	-I$(realpath $(SRCDIR)/basegfx/inc) \
 	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc \
 ))
 
 # Work around gcc bug 41847 present at least in

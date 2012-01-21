@@ -34,9 +34,7 @@ $(eval $(call gb_Library_set_include,hatchwindowfactory,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \
-    -I$(OUTDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svtools/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,hatchwindowfactory,\

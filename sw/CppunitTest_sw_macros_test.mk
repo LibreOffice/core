@@ -74,7 +74,6 @@ $(eval $(call gb_CppunitTest_set_include,sw_macros_test,\
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sw_macros_test,\

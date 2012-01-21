@@ -47,7 +47,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
 
 $(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,hwpfilter_test_hwpfilter,\

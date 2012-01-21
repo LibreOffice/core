@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,scfilt,\
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
         -I$(WORKDIR)/oox/inc/ \
-        -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,scfilt,\

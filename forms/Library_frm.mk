@@ -31,7 +31,6 @@ $(eval $(call gb_Library_set_include,frm,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/forms/source/inc) \
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,frm,\

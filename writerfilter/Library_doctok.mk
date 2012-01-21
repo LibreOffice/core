@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,doctok,\
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-    -I$(OUTDIR)/inc \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)

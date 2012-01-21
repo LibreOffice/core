@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,rptui,\
     -I$(realpath $(SRCDIR)/reportdesign/inc) \
     -I$(realpath $(SRCDIR)/reportdesign/source/inc) \
     -I$(realpath $(SRCDIR)/reportdesign/source/ui/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,rptui,\

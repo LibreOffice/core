@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
     -I$(realpath $(SRCDIR)/dbaccess/source/ui/inc) \
     -I$(WORKDIR)/inc/dbaccess \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,dbu,\

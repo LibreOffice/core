@@ -34,7 +34,6 @@ $(eval $(call gb_Library_add_package_headers,dbmm,\
 $(eval $(call gb_Library_set_include,dbmm,\
     $$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,dbmm,\

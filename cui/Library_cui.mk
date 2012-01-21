@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
 $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/cui/source/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,cui,\

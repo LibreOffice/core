@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,fwe,\
     -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/framework \
 ))
 
 $(eval $(call gb_Library_add_defs,fwe,\

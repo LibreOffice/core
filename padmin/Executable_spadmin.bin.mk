@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,spadmin.bin))
 
 $(eval $(call gb_Executable_set_include,spadmin.bin,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,spadmin.bin,\

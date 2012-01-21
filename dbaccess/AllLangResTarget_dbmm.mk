@@ -37,7 +37,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbmm))
 
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbmm,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/dbmm,\

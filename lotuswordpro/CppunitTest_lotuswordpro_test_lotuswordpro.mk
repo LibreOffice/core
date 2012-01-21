@@ -47,7 +47,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
 
 $(eval $(call gb_CppunitTest_set_include,lotuswordpro_test_lotuswordpro,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,lotuswordpro_test_lotuswordpro,\

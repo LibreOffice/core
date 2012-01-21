@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_package_headers,drawinglayer,drawinglayer_inc))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,drawinglayer,\

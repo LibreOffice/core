@@ -31,7 +31,6 @@ $(eval $(call gb_Library_set_include,sdui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \
     -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sdui,\

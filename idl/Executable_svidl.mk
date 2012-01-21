@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,svidl))
 
 $(eval $(call gb_Executable_set_include,svidl,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/ \
 	-I$(realpath $(SRCDIR)/idl/inc) \
 ))
 

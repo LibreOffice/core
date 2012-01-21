@@ -40,7 +40,6 @@ $(eval $(call gb_SrsTarget_set_include,dbaccess/sdbt,\
     -I$(WORKDIR)/inc/dbaccess \
     -I$(realpath $(SRCDIR)/dbaccess/inc) \
     -I$(realpath $(SRCDIR)/dbaccess/source/sdbtools/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/sdbt,\

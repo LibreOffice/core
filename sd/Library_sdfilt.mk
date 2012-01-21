@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,sdfilt))
 $(eval $(call gb_Library_set_include,sdfilt,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(OUTDIR)/inc \
     -I$(WORKDIR)/oox/inc/ \
 ))
 

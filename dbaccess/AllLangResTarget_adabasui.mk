@@ -38,7 +38,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/adabasui))
 $(eval $(call gb_SrsTarget_set_include,dbaccess/adabasui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/adabasui,\

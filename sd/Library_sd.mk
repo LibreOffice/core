@@ -56,7 +56,6 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(realpath $(SRCDIR)/sd/source/ui/slidesorter/inc) \
     -I$(WORKDIR)/inc/sd \
     -I$(WORKDIR)/SdiTarget/sd/sdi \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sd,\

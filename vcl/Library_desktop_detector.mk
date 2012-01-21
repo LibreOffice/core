@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,desktop_detector,\

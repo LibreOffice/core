@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_add_package_headers,slideshow,sd_qa_unit))
 $(eval $(call gb_CppunitTest_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/slideshow/source/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_set_defs,slideshow,\

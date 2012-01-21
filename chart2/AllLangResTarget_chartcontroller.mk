@@ -42,7 +42,6 @@ $(eval $(call gb_SrsTarget_set_include,chart2/res,\
     -I$(realpath $(SRCDIR)/chart2/source/controller/main) \
     -I$(realpath $(SRCDIR)/chart2/source/inc) \
     -I$(WORKDIR)/inc/chart2 \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,chart2/res,\

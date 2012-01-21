@@ -47,7 +47,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
     -I$(WORKDIR)/CustomTarget/vcl/generic/fontmanager \
 ))

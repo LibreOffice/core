@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,sdbt,\
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/inc/) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/sdbtools/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sdbt,\

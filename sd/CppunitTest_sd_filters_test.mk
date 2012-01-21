@@ -70,7 +70,6 @@ $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
     -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sd/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sd_filters_test,\

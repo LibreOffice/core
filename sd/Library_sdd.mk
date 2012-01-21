@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,sdd))
 $(eval $(call gb_Library_set_include,sdd,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sdd,\

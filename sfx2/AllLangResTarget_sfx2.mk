@@ -38,7 +38,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,sfx/res))
 
 $(eval $(call gb_SrsTarget_set_include,sfx/res,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(WORKDIR)/inc \
     -I$(realpath $(SRCDIR)/sfx2/source/dialog) \
     -I$(realpath $(SRCDIR)/sfx2/source/inc) \

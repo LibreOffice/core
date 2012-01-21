@@ -49,7 +49,6 @@ $(eval $(call gb_Library_set_include,sfx,\
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sfx,\

@@ -54,7 +54,6 @@ $(eval $(call gb_CppunitTest_use_external,extensions_test_update,curl))
 $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/inc \
-	-I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,extensions_test_update,\
