@@ -1320,8 +1320,8 @@ static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >*
 
                                 if( pFDesc->cItems )
                                 {
-                                    ByteString sDesc( pFDesc->fgd[ 0 ].cFileName );
-                                    bRet = 4 < sDesc.Len() && sDesc.Copy( sDesc.Len()-4 ).EqualsIgnoreCaseAscii( ".URL" );
+                                    rtl::OString sDesc( pFDesc->fgd[ 0 ].cFileName );
+                                    bRet = 4 < sDesc.getLength() && sDesc.copy(sDesc.getLength()-4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL"));
                                 }
                             }
                         }
