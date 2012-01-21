@@ -41,10 +41,6 @@ SV_DECL_PTRARR( SfxViewFrameArr_Impl, SfxViewFrame*, 4, 4 )
 class SfxViewShell;
 SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4, 4 )
 
-class SfxObjectFactory;
-typedef SfxObjectFactory* SfxObjectFactoryPtr;
-SV_DECL_PTRARR( SfxObjectFactoryArr_Impl, SfxObjectFactoryPtr, 3, 3 )
-
 struct SfxTbxCtrlFactory;
 SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8, 4 )
 

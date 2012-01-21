@@ -41,7 +41,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdefs.hxx>
 
-class SfxObjectFactoryArr_Impl;
 class SfxMedium;
 class SfxFilter;
 class SfxViewFactory;
