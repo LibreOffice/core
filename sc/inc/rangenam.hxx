@@ -230,6 +230,7 @@ public:
     SC_DLLPUBLIC bool insert(ScRangeData* p);
 
     void erase(const ScRangeData& r);
+    void erase(const rtl::OUString& rName);
 
     /**
      * Erase by iterator position.  Note that this method doesn't check for

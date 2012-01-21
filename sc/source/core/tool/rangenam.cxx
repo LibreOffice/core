@@ -894,7 +894,7 @@ bool ScRangeName::insert(ScRangeData* p)
     }
 
     rtl::OUString aName(p->GetUpperName());
-    maData.erase(aName); // ptr_map won't insert it if a duplicate name exists.
+    erase(aName); // ptr_map won't insert it if a duplicate name exists.
     pair<DataType::iterator, bool> r = maData.insert(aName, p);
     if (r.second)
     {
@@ -909,7 +909,12 @@ bool ScRangeName::insert(ScRangeData* p)
 
 void ScRangeName::erase(const ScRangeData& r)
 {
-    DataType::iterator itr = maData.find(r.GetUpperName());
+    erase(r.GetUpperName());
+}
+
+void ScRangeName::erase(const rtl::OUString& rName)
+{
+    DataType::iterator itr = maData.find(rName);
     if (itr != maData.end())
         erase(itr);
 }
