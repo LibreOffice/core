@@ -25,13 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,sal_osl_process))
+$(eval $(call gb_CppunitTest_CppunitTest,sal_osl_thread))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_process,\
-    sal/qa/osl/process/osl_process \
+$(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_thread,\
+    sal/qa/osl/process/osl_Thread \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_process,\
+$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_thread,\
     sal \
     $(gb_STDLIBS) \
 ))

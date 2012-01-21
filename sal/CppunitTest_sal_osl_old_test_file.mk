@@ -25,7 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# sal_osl_old_test_file
 $(eval $(call gb_CppunitTest_CppunitTest,sal_osl_old_test_file))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_old_test_file,\

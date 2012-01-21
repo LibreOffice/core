@@ -25,7 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# sal_osl_module
 $(eval $(call gb_CppunitTest_CppunitTest,sal_osl_module))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module,\
@@ -33,18 +32,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module,\
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_module,\
-    sal \
-    $(gb_STDLIBS) \
-))
-
-# sal_osl_module_dll
-$(eval $(call gb_CppunitTest_CppunitTest,sal_osl_module_dll))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module_dll,\
-    sal/qa/osl/module/osl_Module_DLL \
-))
-
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_module_dll,\
     sal \
     $(gb_STDLIBS) \
 ))
