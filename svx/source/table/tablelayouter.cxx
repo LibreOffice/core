@@ -1172,28 +1172,6 @@ void TableLayouter::SetWritingMode( com::sun::star::text::WritingMode eWritingMo
     meWritingMode = eWritingMode;
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Int32 TableLayouter::getColumnStart( sal_Int32 nColumn ) const
-{
-    if( isValidColumn(nColumn) )
-        return maColumns[nColumn].mnPos;
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Int32 TableLayouter::getRowStart( sal_Int32 nRow ) const
-{
-    if( isValidRow(nRow) )
-        return maRows[nRow].mnPos;
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------------
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

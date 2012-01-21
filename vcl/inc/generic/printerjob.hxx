@@ -101,8 +101,6 @@ public:             // for usage in PrinterGfx
     sal_uInt16      GetPostscriptLevel (const JobData *pJobData = NULL) const;
     sal_Bool        IsColorPrinter () const;
 
-    osl::File*      GetDocumentHeader ();
-    osl::File*      GetDocumentTrailer ();
     osl::File*      GetCurrentPageHeader ();
     osl::File*      GetCurrentPageBody ();
 
@@ -140,8 +138,6 @@ public:
 
     sal_Bool        StartPage (const JobData& rJobSetup);
     sal_Bool        EndPage ();
-
-    sal_uInt32      GetErrorCode ();
 };
 
 }  /* namespace psp */

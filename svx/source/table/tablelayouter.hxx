@@ -98,9 +98,6 @@ public:
 
     sal_Int32 getMinimumColumnWidth( sal_Int32 nColumn );
 
-    sal_Int32 getColumnStart( sal_Int32 nColumn ) const;
-    sal_Int32 getRowStart( sal_Int32 nRow ) const;
-
     /** checks if the given edge is visible.
         Edges between merged cells are not visible.
     */

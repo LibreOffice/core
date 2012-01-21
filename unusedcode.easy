@@ -1653,9 +1653,6 @@ psp::PrinterGfx::GetGlyphOutline(unsigned short, unsigned short**, Point**, unsi
 psp::PrinterGfx::GetResolution(int&, int&) const
 psp::PrinterGfx::PSRMoveTo(int, int)
 psp::PrinterGfx::SetFallbackFont(int)
-psp::PrinterJob::GetDocumentHeader()
-psp::PrinterJob::GetDocumentTrailer()
-psp::PrinterJob::GetErrorCode()
 pyuno::Runtime::finalize()
 pyuno::importToGlobal(_object*, _object*, _object*)
 rptui::OFieldExpressionControl::LinkStubAsynchActivate(void*, void*)
@@ -1730,10 +1727,6 @@ sdr::table::SdrTableObj::getRowCount() const
 sdr::table::SdrTableObjImpl::GetCellItem(sdr::table::CellPos const&, unsigned short) const
 sdr::table::SvxTableController::DeleteTable()
 sdr::table::SvxTableController::getSelectionCursor()
-sdr::table::TableLayouter::getColumnStart(int) const
-sdr::table::TableLayouter::getRowStart(int) const
-sdr::table::TableLayouter::setColumnWidth(int, int)
-sdr::table::TableLayouter::setRowHeight(int, int)
 sfx2::TaskPaneWrapper::GetChildWindowId()
 slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
 std::__cxx1998::map<rtl::OUString, OutputStorageWrapper_Impl*, OUStringLess, std::allocator<std::pair<rtl::OUString const, OutputStorageWrapper_Impl*> > >::~map()

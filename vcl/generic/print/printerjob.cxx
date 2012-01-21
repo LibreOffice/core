@@ -179,18 +179,6 @@ PrinterJob::IsColorPrinter () const
 }
 
 osl::File*
-PrinterJob::GetDocumentHeader ()
-{
-    return mpJobHeader;
-}
-
-osl::File*
-PrinterJob::GetDocumentTrailer ()
-{
-    return mpJobTrailer;
-}
-
-osl::File*
 PrinterJob::GetCurrentPageHeader ()
 {
     return maHeaderList.back();
@@ -706,13 +694,6 @@ PrinterJob::EndPage ()
     pPageBody->close();
 
     return sal_True;
-}
-
-sal_uInt32
-PrinterJob::GetErrorCode ()
-{
-    /* TODO */
-    return 0;
 }
 
 struct less_ppd_key : public ::std::binary_function<double, double, bool>
