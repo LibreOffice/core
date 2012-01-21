@@ -61,9 +61,9 @@
 // see also swtable.cxx
 #define COLFUZZY 20L
 
-// defines, determining how tables are merged:
+// macros, determining how table boxes are merged:
 //  - 1. remove empty lines, all boxes separated with blanks,
-//      all empty lines separated with ParaBreak
+//      all lines separated with ParaBreak
 //  - 2. remove all empty lines and remove all empty boxes at beginning and end,
 //      all boxes separated with Blank,
 //      all lines separated with ParaBreak
@@ -132,7 +132,7 @@ const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
 
 const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
 {
-    // assure cell is left  (areas)
+    // ensure we leave the cell (sections)
     const SwLayoutFrm *pTmp = pLay;
     do {
         pTmp = pTmp->GetNextLayoutLeaf();
@@ -173,7 +173,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
 void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
                 const SwTblSearchType eSearchType )
 {
-    // get start- and endcell  and request next.
+    // get start and end cell
     if ( !rShell.IsTableMode() )
         rShell.GetCrsr();
 
@@ -183,7 +183,7 @@ void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType eSearchType )
 {
-    // get start- and endcell  and request next.
+    // get start and end cell
     OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
             "Tabselection not on Cnt." );
 
@@ -287,7 +287,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     do {
         bTblIsValid = sal_True;
 
-        // First we search for tables and squares
+        // First, compute tables and rectangles
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
@@ -415,8 +415,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
         SwDeletionChecker aDelCheck( pStart );
 
-        // otherwise quickly "calculate" the table layout
-        // and set it up again
+        // otherwise quickly "calculate" the table layout and start over
         SwTabFrm *pTable = aUnions[0]->GetTable();
         while( pTable )
         {
@@ -497,7 +496,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
         sal_uInt16 nRowCells = USHRT_MAX;
 
-        // First we search for tables and squares
+        // First, compute tables and rectangles
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_NO_UNION_CORRECT );
 
@@ -566,8 +565,8 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                         {
                             // ok, rUnion is _not_ completely outside of rFrmRect
 
-                            // if not completely outside the union, then for Chart
-                            // it is an invalid selection
+                            // if not completely inside the union, then
+                            // for Chart it is an invalid selection
                             if( rUnion.Left()   <= rFrmRect.Left() + nXFuzzy &&
                                 rFrmRect.Left() <= nUnionRight &&
                                 rUnion.Left()   <= nFrmRight &&
@@ -601,7 +600,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             if( !bValidChartSel )
                 break;
 
-            // all cells of the (part) table together. Now check of
+            // all cells of the (part) table together. Now check if
             // they're all adjacent
             size_t n, nCellCnt = 0;
             long nYPos = LONG_MAX;
@@ -616,7 +615,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     // new row
                     if( n )
                     {
-                        if( USHRT_MAX == nRowCells )        // 1. row exchange
+                        if( USHRT_MAX == nRowCells )        // 1. row change
                             nRowCells = nCellCnt;
                         else if( nRowCells != nCellCnt )
                         {
@@ -678,7 +677,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         if( bTblIsValid )
             break;
 
-        // otherwise quickly "calculate" table layout and set it up again
+        // otherwise quickly "calculate" table layout and start over
         SwTabFrm *pTable = aUnions[0]->GetTable();
         for( i = 0; i < aUnions.Count(); ++i )
         {
@@ -695,7 +694,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
     } while( sal_True );
 
-    OSL_ENSURE( nLoopMax, "table layout is still invalide!" );
+    OSL_ENSURE( nLoopMax, "table layout is still invalid!" );
 
     if( !bValidChartSel && pGetCLines )
         pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
@@ -742,16 +741,16 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     while( pSttCell && !pSttCell->IsCellFrm() )
         pSttCell = pSttCell->GetUpper();
 
-    // first we search for tables and squares
+    // First, compute tables and rectangles
     SwSelUnions aUnions;
 
-    // then we test for above and to the left
+    // by default, first test above and then to the left
     ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_COL );
 
     sal_Bool bTstRow = sal_True, bFound = sal_False;
     sal_uInt16 i;
 
-    // 1. check if box above contains values/formulas
+    // 1. check if box above contains value/formula
     for( i = 0; i < aUnions.Count(); ++i )
     {
         SwSelUnion *pUnion = aUnions[i];
@@ -780,7 +779,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                                 break;
 
                         // all boxes together, do not check the
-                        // row, if a formula of values was found
+                        // row, if a formula or value was found
                         bTstRow = 0 == nWhichId || USHRT_MAX == nWhichId;
                         bFound = sal_True;
                         break;
@@ -849,7 +848,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                                     break;
 
                             // all boxes together, do not check the
-                            // row, if a formula of values was found
+                            // row if a formula or value was found
                             bFound = 0 != nWhichId && USHRT_MAX != nWhichId;
                             bTstRow = sal_False;
                             break;
@@ -963,7 +962,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 {
     rBoxes.clear();
 
-    // first we check for tables and squares
     OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
             "Tabselection not on Cnt." );
 
@@ -979,6 +977,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
+    // First, compute tables and rectangles
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
     if( !aUnions.Count() )
@@ -1178,11 +1177,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     if( 1 >= rBoxes.size() )
         return;
 
-    // now search all adjacent boxes and connect
-    // their contents with blanks. All underneath will be tied
+    // now search all horizontally adjacent boxes and connect
+    // their contents with blanks. All vertically adjacent will be tied
     // together as paragraphs
 
-    // 1. Solution: map array and all on same Y-plane
+    // 1. Solution: map array and all on same Y-level
     //      are separated with blanks
     //      all others are separated with paragraphs
     sal_Bool bCalcWidth = sal_True;
@@ -1202,7 +1201,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         for( n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
-            if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same plane ?
+            if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
                 if( bEmptyLine && !IsEmptyBox( *rPt.pSelBox, aPam ))
                     bEmptyLine = sal_False;
@@ -1246,7 +1245,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         for( n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
-            if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same plane ?
+            if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
                 sal_Bool bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
                 if( bEmptyBox )
@@ -1341,7 +1340,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             const _CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
             {
-                if( nY == ( bVert ? rPt.X() : rPt.Y() ) )            // same plane ?
+                if( nY == ( bVert ? rPt.X() : rPt.Y() ) ) // same Y level?
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 else
                     bCalcWidth = sal_False;     // one line ready
@@ -1367,12 +1366,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         lcl_InsTblBox( pTblNd, pDoc, pTmpBox, nInsPos );
         (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];
-        pInsLine->GetTabBoxes().Remove( nInsPos );      // deliver again
+        pInsLine->GetTabBoxes().Remove( nInsPos );  // remove again
         (*ppMergeBox)->SetUpper( 0 );
         (*ppMergeBox)->ClaimFrmFmt();
 
-        // define the border: of the first box the upper-left of the
-        // last box the lower-right corner:
+        // define the border: the upper/left side of the first box,
+        // the lower/right side of the last box:
         if( pLastBox && pFirstBox )
         {
             SvxBoxItem aBox( pFirstBox->GetFrmFmt()->GetBox() );
@@ -1404,8 +1403,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aPam.GetPoint()->nContent.Assign( pCNd, nL );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
-            // one node should be kept in the box ( otherwise the
-            // selection would be deleted during a move
+            // one node should be kept in the box (otherwise the
+            // section would be deleted during a move)
             bool const bUndo(pDoc->GetIDocumentUndoRedo().DoesUndo());
             if( pUndo )
             {
@@ -1535,8 +1534,8 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
     return eRet;
 }
 
-// Determines tables and union-squares affected by a table selection
-// also for splitt tables
+// Determines tables affected by a table selection and union rectangles
+// of the selection (also for split tables)
 SV_IMPL_PTRARR( SwSelUnions, SwSelUnion* );
 
 SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
@@ -1782,7 +1781,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         if ( !pTmpLeaf || !pTmpTab->IsAnLower( pTmpLeaf ) )
         {
             pTmpTab = (const SwTabFrm*)pTmpTab->FindPrev();
-            OSL_ENSURE( pTmpTab->IsTabFrm(), "Predecessor of Follow not in Master.");
+            OSL_ENSURE( pTmpTab->IsTabFrm(), "Predecessor of Follow not Master.");
             rpEnd = pTmpTab->FindLastCntnt()->GetUpper();
             while( !rpEnd->IsCellFrm() )
                 rpEnd = rpEnd->GetUpper();
@@ -1819,7 +1818,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     {
         if ( !pTable->IsAnFollow( pEndTable ) )
         {
-            OSL_ENSURE( pEndTable->IsAnFollow( pTable ), "Tabchain linked." );
+            OSL_ENSURE( pEndTable->IsAnFollow( pTable ), "Tabchain in knots." );
             bExchange = sal_True;
         }
     }
@@ -1847,7 +1846,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     }
 
     // Beginning and end now nicely sorted, if required we
-    // should transfer them
+    // should move them
     if( nsSwTblSearchType::TBLSEARCH_ROW == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndRow( pStart, pEnd, nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType );
     else if( nsSwTblSearchType::TBLSEARCH_COL == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
@@ -1855,7 +1854,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
     if ( !pEnd ) return; // Made code robust.
 
-    // retrieve again, as they have been transferred
+    // retrieve again, as they have been moved
     pTable = pStart->FindTabFrm();
     pEndTable = pEnd->FindTabFrm();
 
@@ -1913,13 +1912,12 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         SwRect aUnion( aSt, Size( aDiff.X(), aDiff.Y() ) );
         aUnion.Justify();
 
-        // for
         if( !(nsSwTblSearchType::TBLSEARCH_NO_UNION_CORRECT & eSearchType ))
         {
-            // Pity the union contains rounding errors, therefore
+            // Unfortunately the union contains rounding errors now, therefore
             // erroneous results could occur during split/merge.
             // To prevent these we will determine the first and last row
-            // within the union and use their values for the new union
+            // within the union and use their values for a new union
             const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                       pTable->GetFirstNonHeadlineRow() :
                                       (const SwLayoutFrm*)pTable->Lower();
@@ -2006,7 +2004,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
     sal_uInt16 nMinValue = nDiv * MINLAY;
 
-    // Get start- and end cell and request next
+    // Get start and end cell
     Point aPtPos, aMkPos;
     const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
     if( pShCrsr )
@@ -2024,7 +2022,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
     SWRECTFN( pStart->GetUpper() )
 
-    // first we search for tables and squares
+    // First, compute tables and rectangles
     SwSelUnions aUnions;
 
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
@@ -2072,11 +2070,8 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 }
 
 // -------------------------------------------------------------------
-// Diese Klassen kopieren die aktuelle Tabellen-Selektion (rBoxes)
-// unter Beibehaltung der Tabellen-Struktur in eine eigene Struktur
-// neu: SS zum gezielten Loeschen/Retaurieren des Layouts.
 // These Classes copy the current table selections (rBoxes),
-// retaining the table structure in a own structure
+// into a new structure, retaining the table structure
 // new: SS for targeted erasing/restoring of the layout
 
 void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
@@ -2284,7 +2279,7 @@ void _FndBox::DelFrms( SwTable &rTable )
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
 
-                        // A TabellenFrm should always remain!
+                        // A TableFrm should always remain!
                         if ( pPrev || pFollow )
                         {
                             // OD 26.08.2003 #i18103# - if table is in a section,
@@ -2443,9 +2438,9 @@ void _FndBox::MakeFrms( SwTable &rTable )
 void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                                             const sal_Bool bBehind )
 {
-    // Create Frms for new inserted lines
+    // Create Frms for newly inserted lines
     // bBehind == sal_True:  before  pLineBehind
-    //         == sal_False: afer    pLineBefore
+    //         == sal_False: after   pLineBefore
     const sal_uInt16 nBfPos = pLineBefore ?
         rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBefore ) :
         USHRT_MAX;
@@ -2454,7 +2449,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
         USHRT_MAX;
 
     //nNumber: how often did we insert
-    //nCnt:    how many nNumber were inserted
+    //nCnt:    how many were inserted nNumber times
 
     const sal_uInt16 nCnt =
         ((nBhPos != USHRT_MAX ? nBhPos : rTable.GetTabLines().Count()) -

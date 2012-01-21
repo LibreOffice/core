@@ -292,12 +292,11 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 {
     sal_Bool bRet = sal_True;
 
-    // The list should be copied, while new objects below
-    // were selected
+    // The list should be copied, because below new objects will be selected
     const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkedObjectList() );
     sal_uLong nMarkCount = aMrkList.GetMarkCount();
     if( !pDestShell->Imp()->GetDrawView() )
-        // should be generated
+        // should create it now
         pDestShell->MakeDrawView();
     else if( bSelectInsert )
         pDestShell->Imp()->GetDrawView()->UnmarkAll();
@@ -322,7 +321,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
         if( pDestDrwView->IsGroupEntered() )
         {
             // insert into the group, when it belongs to an entered group
-            // or when the object is not coupled to a character
+            // or when the object is not anchored as a character
             if( pSrcDrwView->IsGroupEntered() ||
                 (FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
@@ -470,14 +469,14 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     // Shift references
     sal_Bool bCopyIsMove = pDoc->IsCopyIsMove();
     if( bIsMove )
-        // set a flag in Doc, therefore in TextNodes
+        // set a flag in Doc, handled in TextNodes
         pDoc->SetCopyIsMove( sal_True );
 
     RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
     pDestShell->GetDoc()->SetRedlineMode_intern( (RedlineMode_t)(eOldRedlMode | nsRedlineMode_t::REDLINE_DELETE_REDLINES));
 
-    // Are there table formulas in the area, then display the table first
-    // such that the table formula can calculate a new value first
+    // If there are table formulas in the area, then display the table first
+    // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
      SwFieldType* pTblFldTyp = pDestShell->GetDoc()->GetSysFldType( RES_TABLEFLD );
 
@@ -699,8 +698,8 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aIdx ); //DocStart
 
-    // Are there table formulas in the area, then display the table first
-    // such that the table formula can calculate a new value first
+    // If there are table formulas in the area, then display the table first
+    // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
      SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
@@ -899,7 +898,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
         else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
                  pClpDoc->GetSpzFrmFmts()->Count() )
         {
-            // draw a DrawView this slow
+            // we need a DrawView
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
@@ -994,7 +993,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                             if( pFlyFrm )
                                 SelectFlyFrm( *pFlyFrm, sal_True );
                             // always pick the first FlyFrame only; the others
-                            // were via Fly in Fly copied to the clipboard
+                            // were copied to the clipboard via Fly in Fly
                             break;
                         }
                         else
@@ -1036,7 +1035,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                                 pBoxNd->GetIndex() &&
                 aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
             {
-                // Copy more as 1 node in the current box. But
+                // Copy more than 1 node in the current box. But
                 // then the BoxAttribute should be removed
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
@@ -1275,8 +1274,8 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                     else
                     {
                         // fix(23806): not the origial size, but the current one.
-                        // Otherwise it could occur the for vectorgraphics
-                        // many MB's are requested
+                        // Otherwise it could happen that for vector graphics
+                        // many MB's of memory are allocated.
                         const Size aSz( FindFlyFrm()->Prt().SSize() );
                         VirtualDevice aVirtDev( *GetWin() );
 

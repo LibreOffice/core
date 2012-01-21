@@ -457,8 +457,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                              const String& rCharacterStyle,
                              const sal_Bool bCpyBrd )
 {
-    // get CrsrPosition of NodeIndex, remaining stuff can
-    // be done by the document self
+    // get node index of cursor position, SwDoc can do everything else itself
     SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( sal_False );
     if( LTYPE_DRAW==eType || pCnt )
     {
@@ -524,7 +523,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
             }
             break;
         default:
-            OSL_ENSURE( !this, "Crsr both not in table nor in fly." );
+            OSL_ENSURE( !this, "Crsr neither in table nor in fly." );
         }
 
         if( nIdx )
@@ -557,7 +556,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
     if(IsTableMode())
     {
         // Sort table
-        // check if SPoint/Mark of current Crsr are in one table
+        // check if Point/Mark of current Crsr are in one table
         SwFrm *pFrm = GetCurrFrm( sal_False );
         OSL_ENSURE( pFrm->FindTabFrm(), "Crsr not in table." );
 

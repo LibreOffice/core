@@ -202,7 +202,7 @@ void SwFEShell::ParkCursorInTab()
 #***********************************************************************/
 sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -233,7 +233,7 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 
 sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -295,7 +295,7 @@ sal_Bool SwFEShell::IsLastCellInRow() const
 
 sal_Bool SwFEShell::DeleteCol()
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -341,7 +341,7 @@ sal_Bool SwFEShell::DeleteCol()
 
 sal_Bool SwFEShell::DeleteRow()
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -365,11 +365,11 @@ sal_Bool SwFEShell::DeleteRow()
     {
         TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
-        // Delete crsr from the deletion area.
+        // Delete cursors from the deletion area.
         // Then the cursor is:
-        //  - there is one line next to this
-        //  - there is one line previous to this
-        //  - otherwise always next
+        //  1. the following row, if there is another row after this
+        //  2. the preceding row, if there is another row before this
+        //  3. otherwise below the table
         {
             SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
 
@@ -430,7 +430,7 @@ sal_Bool SwFEShell::DeleteRow()
             sal_uLong nIdx;
             if( pNextBox )      // put cursor here
                 nIdx = pNextBox->GetSttIdx() + 1;
-            else                // otherwise behind the table
+            else                // otherwise below the table
                 nIdx = pTblNd->EndOfSectionIndex() + 1;
 
             SwNodeIndex aIdx( GetDoc()->GetNodes(), nIdx );
@@ -467,7 +467,7 @@ sal_Bool SwFEShell::DeleteRow()
 
 sal_uInt16 SwFEShell::MergeTab()
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     sal_uInt16 nRet = TBLMERGE_NOSELECTION;
     if( IsTableMode() )
     {
@@ -498,7 +498,7 @@ sal_uInt16 SwFEShell::MergeTab()
 
 sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHeight )
 {
-    // check if Spoint/Mark of current cursor are in a table
+    // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -549,7 +549,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastCols )
     {
-        // assure few small things
         sal_Bool bDel = sal_True;
         if ( pColumnCacheLastTable == pTab->GetTable() )
         {
@@ -627,7 +626,6 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastRows )
     {
-        // assure few things
         sal_Bool bDel = sal_True;
         if ( pRowCacheLastTable == pTab->GetTable() )
         {
@@ -1223,7 +1221,7 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
 
 sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
 {
-    // at least one line with content should be contained in the selection
+    // at least one row with content should be contained in the selection
 
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
@@ -1266,7 +1264,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
     return sal_False;
 }
 
-    // AutoFormat for the table/tables selections
+    // AutoFormat for the table/table selection
 sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
 {
     SwTableNode *pTblNd = (SwTableNode*)IsCrsrInTbl();
@@ -1352,7 +1350,7 @@ sal_Bool SwFEShell::DeleteTblSel()
     SET_CURR_SHELL( this );
     StartAllAction();
 
-   // search boxes via the layout
+    // search boxes via the layout
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
