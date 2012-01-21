@@ -888,7 +888,7 @@ void MSWord_SdrAttrIter::NextPara( sal_uInt16 nPar )
 
 rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 {
-    if( aChrSetArr.size() )
+    if( !aChrSetArr.empty() )
         return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.size() - 1 ];
     return eNdChrSet;
 }
