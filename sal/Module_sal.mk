@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_file \
 	CppunitTest_sal_osl_module \
 	CppunitTest_sal_osl_mutex \
+	CppunitTest_sal_osl_old_test_file \
 	CppunitTest_sal_osl_process \
 	CppunitTest_sal_osl_profile \
 	CppunitTest_sal_osl_security \
@@ -61,6 +62,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_rtl_ostringbuffer \
 	CppunitTest_sal_rtl_oustringbuffer \
 	CppunitTest_sal_rtl_strings \
+	CppunitTest_sal_tcwf \
 	CppunitTest_sal_types \
 ))
 
