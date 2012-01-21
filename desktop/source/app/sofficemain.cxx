@@ -34,6 +34,7 @@
 #include "cmdlinehelp.hxx"
 
 #include <rtl/logfile.hxx>
+#include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
 int SVMain();
@@ -44,6 +45,8 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #ifdef ANDROID
     try {
+        rtl::Bootstrap::setIniFilename(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
 #endif
     tools::extendApplicationEnvironment();
 

@@ -29,10 +29,10 @@ all: build-ant
 buildrcs:
 # main sofficerc ini ...
 	mkdir -p assets/program/
-	echo "[Bootstrap]" > assets/program/sofficerc
-	echo "Logo=1" >> assets/program/sofficerc
-	echo "NativeProgress=1" >> assets/program/sofficerc
-	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/sofficerc
+	echo "[Bootstrap]" > assets/program/lofficerc
+	echo "Logo=1" >> assets/program/lofficerc
+	echo "NativeProgress=1" >> assets/program/lofficerc
+	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
@@ -186,9 +186,9 @@ uninstall:
 	adb uninstall $(APP_PACKAGE)
 
 run:
-	echo "STAR_RESOURCEPATH=/assets/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector -env:INIFILENAME=file:///assets/program/sofficerc" >cmdline
+	echo "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
 	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-delay 5 -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
