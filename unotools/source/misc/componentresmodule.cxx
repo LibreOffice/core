@@ -91,9 +91,9 @@ namespace utl
         if ( !m_pRessources && !m_bInitialized )
         {
             // create a manager with a fixed prefix
-            ByteString aMgrName = m_sResFilePrefix;
+            rtl::OString aMgrName = m_sResFilePrefix;
 
-            m_pRessources = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
+            m_pRessources = ResMgr::CreateResMgr( aMgrName.getStr() );
             OSL_ENSURE( m_pRessources,
                     rtl::OStringBuffer( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
                 .append(aMgrName)
