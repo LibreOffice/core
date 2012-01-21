@@ -39,7 +39,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,officecfg/registry, \
 
 $(eval $(call gb_CustomTarget_add_dependencies,officecfg/registry, \
     officecfg/registry/cppheader.xsl \
-    $(foreach i,$(FILES),officecfg/registry/schema/org/openoffice/$(i).xcs)))
+    $(foreach i,$(officecfg_FILES),officecfg/registry/schema/org/openoffice/$(i).xcs)))
 
-$(eval $(foreach i,$(FILES),$(call \
+$(eval $(foreach i,$(officecfg_FILES),$(call \
     gb_Package_add_file,officecfg_cppheader,inc/officecfg/$(i).hxx,$(i).hxx)))

@@ -33,7 +33,7 @@ include $(WFDIR)/files.mk
 
 .DEFAULT_GOAL := all
 .PHONY: all
-all: $(foreach i,$(FILES),$(i).hxx)
+all: $(foreach i,$(officecfg_FILES),$(i).hxx)
 
 define my_target
 $(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \

@@ -1,4 +1,4 @@
-FILES = \
+officecfg_FILES = \
     FirstStartWizard \
     Inet \
     Interaction \
