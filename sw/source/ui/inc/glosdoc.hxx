@@ -61,12 +61,12 @@ class SW_DLLPUBLIC SwGlossaries
     String                  m_aPath;
     String                  m_sOldErrPath;
     String                  m_sErrPath;
-    std::vector<String*>    m_aPathArr;
-    std::vector<String*>   *m_pGlosArr;
+    std::vector<String>     m_PathArr;
+    std::vector<String>     m_GlosArr;
     sal_Bool                m_bError;
 
     SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, sal_Bool bCreate = sal_True) const;
-    SW_DLLPRIVATE std::vector<String*>* GetNameList();
+    SW_DLLPRIVATE std::vector<String> & GetNameList();
 
     // implementation in unoatxt.cxx
     SW_DLLPRIVATE void RemoveFileFromList( const String& rGroup );
@@ -121,8 +121,8 @@ public:
     sal_Bool            FindGroupName(String & rGroup);
 
     SwTextBlocks*   GetGroupDoc(const String &rName,
-                                sal_Bool bCreate = sal_False) const;
-    SwTextBlocks*   GetDefGroupDoc() const {return GetGroupDoc(GetDefName());}
+                                sal_Bool bCreate = sal_False);
+    SwTextBlocks*   GetDefGroupDoc() { return GetGroupDoc(GetDefName()); }
     void            PutGroupDoc(SwTextBlocks *pBlock);
     static String   GetDefName();
     static String   GetExtension();
@@ -137,7 +137,7 @@ public:
     void            UpdateGlosPath(sal_Bool bFull);
     void            ShowError();
     inline sal_uLong            IsGlosPathErr() { return m_bError; }
-    const std::vector<String*>* GetPathArray() const { return &m_aPathArr; }
+    std::vector<String> const& GetPathArray() const { return m_PathArr; }
 };
 
 

@@ -59,7 +59,7 @@
 #define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
-                        const std::vector<String*> *pPathArr,
+                        std::vector<String> const& rPathArr,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
     aBibFT(     this, SW_RES(FT_BIB)),
@@ -96,9 +96,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aPathLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
     aRenamePB.SetClickHdl(LINK(this, SwGlossaryGroupDlg, RenameHdl));
 
-    for( size_t i = 0; i < pPathArr->size(); i++ )
+    for (size_t i = 0; i < rPathArr.size(); ++i)
     {
-        String sPath(*(*pPathArr)[i]);
+        String sPath(rPathArr[i]);
         INetURLObject aTempURL(sPath);
         sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         aPathLB.InsertEntry(sPath);

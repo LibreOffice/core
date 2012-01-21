@@ -270,7 +270,7 @@ void SwGlossaryList::Update()
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
-    const std::vector<String*>* pPathArr = pGlossaries->GetPathArray();
+    const std::vector<String> & rPathArr = pGlossaries->GetPathArray();
     String sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
@@ -279,13 +279,13 @@ void SwGlossaryList::Update()
         {
             String sGrpName = pGlossaries->GetGroupName(i);
             sal_uInt16 nPath = (sal_uInt16)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
-            if( static_cast<size_t>(nPath) < pPathArr->size() )
+            if( static_cast<size_t>(nPath) < rPathArr.size() )
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
                 pGroup->sName = sGrpName;
 
                 FillGroup(pGroup, pGlossaries);
-                String sName = *(*pPathArr)[nPath];
+                String sName = rPathArr[nPath];
                 sName += INET_PATH_TOKEN;
                 sName += pGroup->sName.GetToken(0, GLOS_DELIM);
                 sName += sExt;
@@ -301,13 +301,13 @@ void SwGlossaryList::Update()
     }
     else
     {
-        for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
+        for( size_t nPath = 0; nPath < rPathArr.size(); nPath++ )
         {
             std::vector<String> aFoundGroupNames;
             std::vector<String*> aFiles;
             SvPtrarr aDateTimeArr( 16 );
 
-            SWUnoHelper::UCB_GetFileListOfFolder( *(*pPathArr)[nPath], aFiles,
+            SWUnoHelper::UCB_GetFileListOfFolder( rPathArr[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
             for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {

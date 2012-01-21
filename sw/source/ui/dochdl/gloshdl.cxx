@@ -136,11 +136,12 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
             String sCurBase = aTemp.getBase();
             aTemp.removeSegment();
             const String sCurEntryPath = aTemp.GetMainURL(INetURLObject::NO_DECODE);
-            const std::vector<String*> *pPathArr = rStatGlossaries.GetPathArray();
+            const std::vector<String> & rPathArr =
+                rStatGlossaries.GetPathArray();
             sal_uInt16 nCurrentPath = USHRT_MAX;
-            for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
+            for (size_t nPath = 0; nPath < rPathArr.size(); ++nPath)
             {
-                if(sCurEntryPath == *(*pPathArr)[nPath])
+                if (sCurEntryPath == rPathArr[nPath])
                 {
                     nCurrentPath = static_cast<sal_uInt16>(nPath);
                     break;

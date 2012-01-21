@@ -1073,7 +1073,8 @@ void SwAutoTextEventDescriptor::replaceByName(
                 (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
                 "Unknown event ID" );
 
-    const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
+    SwGlossaries *const pGlossaries =
+        const_cast<SwGlossaries*>(rAutoTextEntry.GetGlossaries());
     SwTextBlocks* pBlocks =
         pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
     OSL_ENSURE( NULL != pBlocks,
@@ -1111,7 +1112,8 @@ void SwAutoTextEventDescriptor::getByName(
                 (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
                 "Unknown event ID" );
 
-    const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
+    SwGlossaries *const pGlossaries =
+        const_cast<SwGlossaries*>(rAutoTextEntry.GetGlossaries());
     SwTextBlocks* pBlocks =
         pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
     OSL_ENSURE( NULL != pBlocks,

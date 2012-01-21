@@ -939,10 +939,10 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if(!GetParent(pEntry))
             {
                 GroupUserData* pData = (GroupUserData*)pEntry->GetUserData();
-                const std::vector<String*>* pPathArr = ::GetGlossaries()->GetPathArray();
-                if( !pPathArr->empty() )
+                const std::vector<String> & rPathArr = ::GetGlossaries()->GetPathArray();
+                if( !rPathArr.empty() )
                 {
-                    sMsg = (*(*pPathArr)[pData->nPathIdx]);
+                    sMsg = rPathArr[pData->nPathIdx];
                     sMsg += INET_PATH_TOKEN;
                     sMsg += pData->sGroupName;
                     sMsg += SwGlossaries::GetExtension();

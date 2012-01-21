@@ -104,7 +104,7 @@ protected:
 
 public:
     SwGlossaryGroupDlg(Window * pParent,
-                        const std::vector<String*> *pPathArr,
+                        std::vector<String> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 
