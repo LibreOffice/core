@@ -91,7 +91,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
     if( pCollectStm )
         pCollectStm->Seek( STREAM_SEEK_TO_END );
 
-    if( rInDirs.size() )
+    if( !rInDirs.empty() )
     {
         ByteString                  aLine;
         String                      aInfo, aPrefix, aName( rName ), aString;

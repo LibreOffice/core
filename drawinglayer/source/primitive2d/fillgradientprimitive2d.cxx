@@ -128,7 +128,7 @@ namespace drawinglayer
             Primitive2DSequence aRetval(rColors.size() ? rMatrices.size() + 1 : rMatrices.size());
 
             // create solid fill with start color
-            if(rColors.size())
+            if(!rColors.empty())
             {
                 // create primitive
                 const Primitive2DReference xRef(
@@ -175,7 +175,7 @@ namespace drawinglayer
 
                 aRetval.realloc(nEntryCount);
 
-                if(rColors.size())
+                if(!rColors.empty())
                 {
                     basegfx::B2DRange aOuterPolyRange(aOuterPoly.getB2DRange());
                     aOuterPolyRange.expand(getObjectRange());
@@ -193,7 +193,7 @@ namespace drawinglayer
                     aCombinedPolyPoly = basegfx::B2DPolyPolygon(aInnerPoly);
                 }
 
-                if(rColors.size())
+                if(!rColors.empty())
                 {
                     aRetval[nIndex] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
                         aCombinedPolyPoly, rColors[rColors.size() - 1]));

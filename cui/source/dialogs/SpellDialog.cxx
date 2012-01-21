@@ -1181,7 +1181,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
     if(!bUseSavedSentence)
         m_aSavedSentence = aSentence;
     bool bHasReplaced = false;
-    while(aSentence.size())
+    while(!aSentence.empty())
     {
         //apply all changes that are already part of the "ChangeAllList"
         //returns true if the list still contains errors after the changes have been applied
@@ -1195,7 +1195,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
             break;
     }
 
-    if(aSentence.size())
+    if(!aSentence.empty())
     {
         SpellPortions::iterator aStart = aSentence.begin();
         rtl::OUString sText;

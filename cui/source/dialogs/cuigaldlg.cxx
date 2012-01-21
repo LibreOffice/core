@@ -1217,7 +1217,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
             else
                 aCbxPreview.Disable();
 
-            if( aFoundList.size() )
+            if( !aFoundList.empty() )
                 aBtnTakeAll.Enable();
             else
                 aBtnTakeAll.Disable();
@@ -1258,7 +1258,7 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 
 IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMPTYARG )
 {
-  if( aFoundList.size() )
+  if( !aFoundList.empty() )
   {
       aLbxFound.SelectEntryPos( 0 );
       aBtnTakeAll.Enable();

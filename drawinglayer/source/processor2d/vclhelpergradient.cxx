@@ -140,7 +140,7 @@ namespace drawinglayer
             }
 
             // draw last poly in last color
-            if(rColors.size())
+            if(!rColors.empty())
             {
                 const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
                 rOutDev.SetFillColor(Color(aFillColor));
@@ -179,7 +179,7 @@ namespace drawinglayer
             }
 
             // draw last poly in last color
-            if(rColors.size())
+            if(!rColors.empty())
             {
                 const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
                 rOutDev.SetFillColor(Color(aFillColor));
@@ -265,7 +265,7 @@ namespace drawinglayer
         }
 
         // paint them with mask using the XOR method
-        if(aMatrices.size())
+        if(!aMatrices.empty())
         {
             if(bSimple)
             {

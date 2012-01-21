@@ -261,7 +261,7 @@ namespace basegfx
                     }
                 }
 
-                if(maStartEntries.size())
+                if(!maStartEntries.empty())
                 {
                     // sort initial list
                     ::std::sort(maStartEntries.begin(), maStartEntries.end());

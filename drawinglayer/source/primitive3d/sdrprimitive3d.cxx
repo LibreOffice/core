@@ -64,7 +64,7 @@ namespace drawinglayer
         {
             basegfx::B3DRange aRetval;
 
-            if(rSlices.size())
+            if(!rSlices.empty())
             {
                 for(sal_uInt32 a(0L); a < rSlices.size(); a++)
                 {

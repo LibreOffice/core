@@ -437,7 +437,7 @@ namespace basegfx
             // #i76891# using findCuts recursively is not sufficient here
             findCutsAndTouchesAndCommonForBezier(aTempPolygonA, aTempPolygonEdge, aTempPointVectorA, aTempPointVectorEdge);
 
-            if(aTempPointVectorA.size())
+            if(!aTempPointVectorA.empty())
             {
                 // adapt tempVector entries to segment
                 adaptAndTransferCutsWithBezierSegment(aTempPointVectorA, aTempPolygonA, nIndA, rTempPointsA);
@@ -479,13 +479,13 @@ namespace basegfx
             // #i76891# using findCuts recursively is not sufficient here
             findCutsAndTouchesAndCommonForBezier(aTempPolygonA, aTempPolygonB, aTempPointVectorA, aTempPointVectorB);
 
-            if(aTempPointVectorA.size())
+            if(!aTempPointVectorA.empty())
             {
                 // adapt tempVector entries to segment
                 adaptAndTransferCutsWithBezierSegment(aTempPointVectorA, aTempPolygonA, nIndA, rTempPointsA);
             }
 
-            if(aTempPointVectorB.size())
+            if(!aTempPointVectorB.empty())
             {
                 // adapt tempVector entries to segment
                 adaptAndTransferCutsWithBezierSegment(aTempPointVectorB, aTempPolygonB, nIndB, rTempPointsB);
@@ -518,7 +518,7 @@ namespace basegfx
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findCuts(aTempPolygon, aTempPointVector);
 
-            if(aTempPointVector.size())
+            if(!aTempPointVector.empty())
             {
                 // adapt tempVector entries to segment
                 adaptAndTransferCutsWithBezierSegment(aTempPointVector, aTempPolygon, nInd, rTempPoints);
@@ -715,7 +715,7 @@ namespace basegfx
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findTouches(aTempPolygon, rPointPolygon, aTempPointVector);
 
-            if(aTempPointVector.size())
+            if(!aTempPointVector.empty())
             {
                 // adapt tempVector entries to segment
                 adaptAndTransferCutsWithBezierSegment(aTempPointVector, aTempPolygon, nInd, rTempPoints);

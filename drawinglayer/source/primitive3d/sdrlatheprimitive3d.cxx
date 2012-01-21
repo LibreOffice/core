@@ -55,7 +55,7 @@ namespace drawinglayer
             // get slices
             const Slice3DVector& rSliceVector = getSlices();
 
-            if(rSliceVector.size())
+            if(!rSliceVector.empty())
             {
                 const bool bBackScale(!basegfx::fTools::equal(getBackScale(), 1.0));
                 const bool bClosedRotation(!bBackScale && getHorizontalSegments() && basegfx::fTools::equal(getRotation(), F_2PI));

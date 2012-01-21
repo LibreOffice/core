@@ -66,7 +66,7 @@ namespace basegfx
 
     void RasterConverter3D::rasterconvertB3DArea(sal_Int32 nStartLine, sal_Int32 nStopLine)
     {
-        if(maLineEntries.size())
+        if(!maLineEntries.empty())
         {
             OSL_ENSURE(nStopLine >= nStartLine, "nStopLine is bigger than nStartLine (!)");
 
@@ -317,7 +317,7 @@ namespace basegfx
             }
         }
 
-        if(maLineEntries.size())
+        if(!maLineEntries.empty())
         {
             rasterconvertB3DArea(nStartLine, nStopLine);
         }

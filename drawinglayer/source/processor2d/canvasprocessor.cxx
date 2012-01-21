@@ -539,7 +539,7 @@ namespace drawinglayer
                     aStrokeAttribute.MiterLimit = 15.0; // degrees; maybe here (15.0 * F_PI180) is needed, not clear in the documentation
                     const ::std::vector< double >& rDotDashArray = rStrokeAttribute.getDotDashArray();
 
-                    if(rDotDashArray.size())
+                    if(!rDotDashArray.empty())
                     {
                         aStrokeAttribute.DashArray = uno::Sequence< double >(&rDotDashArray[0], rDotDashArray.size());
                     }

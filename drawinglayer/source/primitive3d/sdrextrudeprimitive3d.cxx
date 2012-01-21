@@ -55,7 +55,7 @@ namespace drawinglayer
             // get slices
             const Slice3DVector& rSliceVector = getSlices();
 
-            if(rSliceVector.size())
+            if(!rSliceVector.empty())
             {
                 sal_uInt32 a;
 

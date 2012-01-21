@@ -550,7 +550,7 @@ namespace basegfx
                     }
                 }
 
-                if(maTrDeEdgeEntries.size())
+                if(!maTrDeEdgeEntries.empty())
                 {
                     // single and initial sort of traversing edges
                     maTrDeEdgeEntries.sort();

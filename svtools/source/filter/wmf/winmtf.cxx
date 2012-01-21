@@ -2178,7 +2178,7 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
 void WinMtfOutput::Pop()
 {
     // Die aktuellen Daten vom Stack holen
-    if( vSaveStack.size() )
+    if( !vSaveStack.empty() )
     {
         // Die aktuelle Daten auf dem Stack sichern
         SaveStructPtr pSave( vSaveStack.back() );

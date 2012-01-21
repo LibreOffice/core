@@ -1178,7 +1178,7 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
     {
         xNewNode = new AnimationNode( *this );
 
-        if( maChildren.size() )
+        if( !maChildren.empty() )
         {
             Reference< XTimeContainer > xContainer( xNewNode, UNO_QUERY );
             if( xContainer.is() )

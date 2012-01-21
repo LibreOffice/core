@@ -277,7 +277,7 @@ namespace drawinglayer
                         nLen = nChars;
                     }
 
-                    if(aTransformedDXArray.size())
+                    if(!aTransformedDXArray.empty())
                     {
                         mpOutputDevice->DrawTextArray(
                             aStartPoint,

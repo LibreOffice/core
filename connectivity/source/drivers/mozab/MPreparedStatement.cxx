@@ -486,7 +486,7 @@ void OPreparedStatement::describeParameter()
 {
     ::std::vector< OSQLParseNode*> aParseNodes;
     scanParameter(m_pParseTree,aParseNodes);
-    if(aParseNodes.size())
+    if(!aParseNodes.empty())
     {
         m_xParamColumns = new OSQLColumns();
         const OSQLTables& xTabs = m_pSQLIterator->getTables();

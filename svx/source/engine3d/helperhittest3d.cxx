@@ -279,7 +279,7 @@ bool checkHitSingle3DObject(
                 ::std::vector< basegfx::B3DPoint > aHitsWithObject;
                 getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject, true);
 
-                if(aHitsWithObject.size())
+                if(!aHitsWithObject.empty())
                 {
                     return true;
                 }

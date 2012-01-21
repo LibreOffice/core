@@ -2933,7 +2933,7 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
     const SwTableBox* pRet = 0;
     sal_uInt16 n;
 
-    if( aPosArr.size() )
+    if( !aPosArr.empty() )
     {
         for( n = 0; n < aPosArr.size(); ++n )
             if( aPosArr[ n ] == nWidth )

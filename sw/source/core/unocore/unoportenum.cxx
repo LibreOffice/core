@@ -1020,7 +1020,7 @@ lcl_GetNextIndex(
     SwSoftPageBreakList const & rBreakArr )
 {
     sal_Int32 nRet = -1;
-    if(rBkmArr.size())
+    if(!rBkmArr.empty())
     {
         SwXBookmarkPortion_ImplSharedPtr pPtr = (*rBkmArr.begin());
         nRet = pPtr->getIndex();
@@ -1032,7 +1032,7 @@ lcl_GetNextIndex(
         if(nRet < 0 || nTmp < nRet)
             nRet = nTmp;
     }
-    if(rBreakArr.size())
+    if(!rBreakArr.empty())
     {
         if(nRet < 0 || *rBreakArr.begin() < static_cast<sal_uInt32>(nRet))
             nRet = *rBreakArr.begin();
