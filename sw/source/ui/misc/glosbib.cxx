@@ -30,6 +30,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/msgbox.hxx>
@@ -147,10 +148,11 @@ void SwGlossaryGroupDlg::Apply()
 
     if (!m_RemovedArr.empty())
     {
-        for (std::vector<String>::const_iterator it(m_RemovedArr.begin());
+        for (OUVector_t::const_iterator it(m_RemovedArr.begin());
                 it != m_RemovedArr.end(); ++it)
         {
-            const String sDelGroup = it->GetToken(0, '\t');
+            const String sDelGroup =
+                ::comphelper::string::getToken(*it, 0, '\t');
             if( sDelGroup == aActGroup )
             {
                 //when the current group is deleted, the current group has to be relocated
@@ -162,7 +164,7 @@ void SwGlossaryGroupDlg::Apply()
                 }
             }
             String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
-            String sTitle( it->GetToken(1, '\t') );
+            String sTitle( ::comphelper::string::getToken(*it, 1, '\t') );
             if(sTitle.Len())
                 sMsg += sTitle;
             else
@@ -177,13 +179,15 @@ void SwGlossaryGroupDlg::Apply()
     //don't rename before there was one
     if (!m_RenamedArr.empty())
     {
-        for (std::vector<String>::const_iterator it(m_RenamedArr.begin());
+        for (OUVector_t::const_iterator it(m_RenamedArr.begin());
                 it != m_RenamedArr.end(); ++it)
         {
-            xub_StrLen nStrSttPos = 0;
-            String sOld( it->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos ) );
-            String sNew( it->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
-            String sTitle( it->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
+            ::rtl::OUString const sOld(
+                    ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
+            String sNew(
+                    ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
+            ::rtl::OUString const sTitle(
+                    ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
             pGlosHdl->RenameGroup(sOld, sNew, sTitle);
             if (it == m_RenamedArr.begin())
             {
@@ -193,7 +197,7 @@ void SwGlossaryGroupDlg::Apply()
     }
     if (!m_InsertedArr.empty())
     {
-        for (std::vector<String>::const_iterator it(m_InsertedArr.begin());
+        for (OUVector_t::const_iterator it(m_InsertedArr.begin());
                 it != m_InsertedArr.end(); ++it)
         {
             String sNewGroup = *it;
@@ -265,15 +269,15 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         return 0;
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
-    String sEntry(pUserData->sGroupName);
+    ::rtl::OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     sal_Bool bDelete = sal_True;
     if (!m_InsertedArr.empty())
     {
-        for (std::vector<String>::iterator it(m_InsertedArr.begin());
+        for (OUVector_t::iterator it(m_InsertedArr.begin());
                 it != m_InsertedArr.end(); ++it)
         {
-            if( *it == sEntry )
+            if (*it == sEntry)
             {
                 m_InsertedArr.erase(it);
                 bDelete = sal_False;
@@ -287,10 +291,11 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     {
         if (!m_RenamedArr.empty())
         {
-            for (std::vector<String>::iterator it(m_RenamedArr.begin());
+            for (OUVector_t::iterator it(m_RenamedArr.begin());
                     it != m_RenamedArr.end(); ++it)
             {
-                if (it->GetToken(0, RENAME_TOKEN_DELIM) == sEntry)
+                if (::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM)
+                        == sEntry)
                 {
                     m_RenamedArr.erase(it);
                     bDelete = sal_False;
@@ -333,10 +338,10 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     sal_Bool bDone = sal_False;
     if (!m_InsertedArr.empty())
     {
-        for (std::vector<String>::iterator it(m_InsertedArr.begin());
+        for (OUVector_t::iterator it(m_InsertedArr.begin());
                 it != m_InsertedArr.end(); ++it)
         {
-            if (*it == sEntry)
+            if (String(*it) == sEntry)
             {
                 m_InsertedArr.erase(it);
                 m_InsertedArr.push_back(sNewName);
@@ -435,10 +440,10 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 
     if (!m_InsertedArr.empty())
     {
-        for (std::vector<String>::const_iterator it(m_InsertedArr.begin());
+        for (OUVector_t::const_iterator it(m_InsertedArr.begin());
                 it != m_InsertedArr.end(); ++it)
         {
-            if (*it == rGroup)
+            if (String(*it) == rGroup)
             {
                 bDel = sal_True;
                 break;
