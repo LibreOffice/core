@@ -2649,6 +2649,8 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 AC_SUBST(COMEX)
+PathFormat "$MSPDB_PATH"
+MSPDB_PATH="$formatted_path"
 AC_SUBST(MSPDB_PATH)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
@@ -3571,7 +3573,6 @@ if test "$PERL"; then
 else
     AC_MSG_ERROR([Perl not found, install version 5 of Perl])
 fi
-AC_SUBST(PERL)
 
 dnl ===================================================================
 dnl Testing for required Perl modules
@@ -3723,9 +3724,16 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-dotnet-framework-home])
     fi
     AC_MSG_RESULT(found)
-    # Convert to posix path with 8.3 filename restrictions ( No spaces )
-    DOTNET_FRAMEWORK_HOME=`cygpath -d "$DOTNET_FRAMEWORK_HOME"`
-    DOTNET_FRAMEWORK_HOME=`cygpath -u "$DOTNET_FRAMEWORK_HOME"`
+
+    PathFormat "$MIDL_PATH"
+    MIDL_PATH="$formatted_path"
+
+    PathFormat "$DOTNET_FRAMEWORK_HOME"
+    DOTNET_FRAMEWORK_HOME="$formatted_path"
+
+    PathFormat "$CSC_PATH"
+    CSC_PATH="$formatted_path"
+
     AC_SUBST(MIDL_PATH)
     AC_SUBST(CSC_PATH)
     AC_SUBST(DOTNET_FRAMEWORK_HOME)
@@ -5150,11 +5158,20 @@ if test "$SOLAR_JAVA" != "" ; then
         test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/$JAVA_TOOLKIT"
         test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/native_thread"
     fi
+
+    CLASSPATH=
+    if test "$JDK"!="gcj" ; then
+        if test -f "$JAVA_HOME/jre/lib/rt.jar" ; then
+            CLASSPATH="${JAVA_HOME}/jre/lib/rt.jar${P_SEP}."
+        fi
+    fi
+    XCLASSPATH="$CLASSPATH"
 else
     x_JAVALIB=[\#]
     x_JDKLIB=[\#]
 fi
 
+AC_SUBST(CLASSPATH)
 AC_SUBST(JAVALIB)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
@@ -5166,6 +5183,7 @@ AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JDK)
 AC_SUBST(JDKLIB)
+AC_SUBST(XCLASSPATH)
 AC_SUBST(x_JAVALIB)
 AC_SUBST(x_JDKLIB)
 
@@ -7930,7 +7948,9 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
 else
     with_asm_home="NO_ASM_HOME"
 fi
-ASM_HOME="$with_asm_home"
+
+FormatPath "$with_asm_home"
+ASM_HOME="$formatted_path"
 AC_SUBST(ASM_HOME)
 AC_SUBST(ML_EXE)
 
@@ -10764,6 +10784,25 @@ if test -z "$SOLARLIB_FOR_BUILD" ; then
     SOLARLIB_FOR_BUILD="$SOLARLIB"
 fi
 AC_SUBST(SOLARLIB_FOR_BUILD)
+
+PathFormat "$PERL"
+PERL="$formatted_path"
+AC_SUBST(PERL)
+
+if test "$build_os" = "cygwin" ; then
+    TEMP_DIRECTORY=`cygpath -m "/tmp"`
+    if test -n "$TMP" ; then
+        TMP_DIRECTORY="$TMP"
+    else
+        TMP_DIRECTORY="$TEMP_DIRECTORY"
+    fi
+else
+    if test -n "$TMPDIR" ; then
+        TEMP_DIRECTORY="$TMPDIR"
+    else
+        TEMP_DIRECTORY="/tmp"
+    fi
+fi
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
 chmod +x ./config.guess

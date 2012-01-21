@@ -49,7 +49,7 @@ my ( $CC );
 #
 # Platform dependent constant values.
 my (
-      $OUTPATH, $INPATH,
+      $OUTPATH,
       );
 #
 #-------------------------------------------
@@ -64,12 +64,10 @@ my ( $BIN, $LIB,
 my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK,
      $UPD,
      $SOLARENV,
-     $CLASSPATH, $XCLASSPATH, $COMPATH,
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
+     $COMPATH,
      $PATH,
      $PERL,
-     $COMP_ENV, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
-     $TMPDIR,
+     $WINDOWS_SDK_HOME, $DOTNET_FRAMEWORK_HOME,
      $GNUMAKE,
      );
 #
@@ -80,14 +78,11 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK,
 my ( $dmake, $build, $mkout, $deliver, $zipdep );
 #
 
-$INPATH="@INPATH@";
 $OUTPATH="@OUTPATH@";
 $COMPATH="@COMPATH@";
 #-------------------------------------------------------------
 # IIIa. Initialising constants.
 #-------------------------------------------------------------
-#
-# $platform is needed for PathFormat()
 #
 $platform       = '@host@';
 
@@ -107,7 +102,7 @@ $CL_X64 = '@CL_X64@';
 $GNUMAKE        = "@GNUMAKE@";
 
 # JAVA_HOME as argument from autoconf.
-$JAVA_HOME = PathFormat('@JAVA_HOME@') ;
+$JAVA_HOME = "@JAVA_HOME@" ;
 
 if ( $platform =~ m/cygwin/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
@@ -143,12 +138,6 @@ $comment              = "#";           # UNIX script comment character
 # Setting platform dependent constant values.
 if ( $platform =~ m/cygwin|mingw32/ )
 {
-    $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
-    $MIDL_PATH      = PathFormat('@MIDL_PATH@');
-    $CSC_PATH       = PathFormat('@CSC_PATH@');
-    $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
-    $WINDOWS_SDK_HOME      = "@WINDOWS_SDK_HOME@";
-    $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
     $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
 }
 
@@ -165,12 +154,6 @@ $SRC_ROOT = $ENV{"SRC_ROOT"};
 CheckPathExist( $SRC_ROOT );
 
 
-# ml.exe assembler path for Windows users.
-if ($platform =~ m/cygwin/)
-{
-    $ASM_PATH = PathFormat('@ASM_HOME@');
-}
-
 #
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
@@ -178,20 +161,11 @@ if ($platform =~ m/cygwin/)
 $BIN                  = $ds."bin";
 $LIB                  = $ds."lib";
 
-$PERL                 = PathFormat('@PERL@'); # Perl program
+$PERL                 = '@PERL@';
 $PERL_PATH            = dirname('@PERL@'); # Perl Path
 
 #
-$SOLARENV             = PathFormat("$SRC_ROOT/solenv");
-
-# Location of JDK classes .zip file.
-# but in jdk 1.2 it is called rt.jar and it lives in jre/lib
-$CLASSPATH            = '';
-$CLASSPATH           .= $JAVA_HOME.$ds.'jre'.$LIB.$ds."rt.jar" if (-f $JAVA_HOME.$ds.'jre'.$LIB.$ds."rt.jar");
-$CLASSPATH           .= $wps.'.' if ($CLASSPATH ne '');
-
-# Why do we need XCLASSPATH when it has the exact same value as CLASSPATH?
-$XCLASSPATH           = $CLASSPATH;
+$SOLARENV             = "$SRC_ROOT/solenv";
 
 
 # The general environment path.
@@ -253,29 +227,29 @@ elsif ($platform =~ m/cygwin/)
        $PATH .= $ps.$tmppath;
    }
 
-    $tmppath = CygFormat($MSPDB_PATH);
+    $tmppath = CygFormat("@MSPDB_PATH@");
     # for MSVC to find mspdb*.dll
     if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
         $PATH .= $ps.$tmppath;
     }
     # need midl.exe
-    $tmppath = CygFormat($MIDL_PATH);
+    $tmppath = CygFormat("@MIDL_PATH@");
     if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
         $PATH .= $ps.$tmppath;
     }
     # needs csc.exe
-    $tmppath = CygFormat($CSC_PATH);
+    $tmppath = CygFormat("@CSC_PATH@");
     if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
         $PATH .= $ps.$tmppath;
     }
     # Installer needs some files if the Windows Installer SDK
-    $tmppath = CygFormat($WINDOWS_SDK_HOME);
+    $tmppath = CygFormat("@WINDOWS_SDK_HOME@");
     if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
         $PATH .= $ps.$tmppath.$BIN;
     }
 
-   if ( $ASM_PATH ne "ASM_IN_PATH" )
-   {   $PATH          .= $ps.CygFormat($ASM_PATH);
+   if ( "@ASM_HOME@" ne "ASM_IN_PATH" )
+   {   $PATH          .= $ps.CygFormat("@ASM_HOME@");
    }
 
    # Possible cygwin paths must follow behind the OOo and MS paths.
@@ -287,7 +261,7 @@ elsif ($platform =~ m/cygwin/)
       $PATH          .= $ps.$tmppath;
    }
    # path to sn.exe (signing) for Windows users.
-   my $sn_path = PathFormat('@DOTNET_FRAMEWORK_HOME@/bin');
+   my $sn_path = "@DOTNET_FRAMEWORK_HOME@/bin";
    $tmppath = CygFormat($sn_path);
    if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
        $PATH          .= $ps.$tmppath;
@@ -372,40 +346,8 @@ open( OUT, ">$SRC_ROOT/$outfile" ) ||
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 
-ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 
-if ( $platform =~ m/cygwin/ )
-{
-
-   # Hack around dmake's mktmp not generating DOS paths.
-   my $tmpdir = qx{cygpath -m "/tmp"};
-   chomp($tmpdir);
-   ToFile( "TMPDIR",     $tmpdir,            "e" );
-   if ( !defined $ENV{"TMP"} || $ENV{"TMP"} eq "" ) {
-      ToFile( "TMP", $tmpdir, "e" );
-   } else {
-      ToFile( "TMP", "$ENV{'TMP'}", "e" );
-   }
-}
-else
-{
-   if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
-      ToFile( "TMPDIR",      "/tmp",               "e" );
-   } else {
-      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
-   }
-}
-
-ToFile( "PERL",              $PERL,              "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
-if ( $JDK ne "gcj" ) {
-   ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
-   ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
-   ToFile( "JAVACISKAFFE",     '@JAVACISKAFFE@',    "e" );
-}
-else {
-   ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
-}
 
 if ( '@CROSS_COMPILING@' eq 'YES' )
 {
@@ -642,39 +584,7 @@ sub ToFile {
    {  print "Unknown type!$newline";
    }
 }
-#----------------------------------------------------------
-# Function name: PathFormat
-# Description:   Reformat path to either POSIX or mixed mode style.
-# Arguments:     1. Variable (string)
-# Return value:  Reformatted String
-#----------------------------------------------------------
-sub PathFormat
-{  my ( $variable, $d1, $d2 );
-   $variable = $_[ 0 ];
 
-   if ( $platform =~ m/cygwin/ )
-   {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables
-       $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables twice!
-
-       # Complain if PosixPath is used on a PATH-like string
-       if ( $variable =~ m/;/ ) {
-           die( "Do not use on PATH lists (i.e., 'c:\\foo;d:\\bar')");
-       }
-
-       # Replace path with space with short dos path
-       if ( $variable =~ / / ) {
-           chomp( $variable = qx{cygpath -d "$variable"} ) ;
-       }
-
-       # Replace absolute paths or DOS paths with ...
-       if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
-           # mixed mode paths
-           chomp( $variable = qx{realpath "$variable"} ) unless ($variable =~ m/:/);
-           chomp( $variable = qx{cygpath -m "$variable"} );
-       }
-   }
-   return $variable;
-}
 #----------------------------------------------------------
 # Function name: CygFormat
 # Description:   Format variables to cygwin posix style path
