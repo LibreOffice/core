@@ -28,14 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_datapilottableobj))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellrangesbase, \
-    sc/qa/extras/xcellrangesquery \
-    sc/qa/extras/cellproperties \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilottableobj, \
+    sc/qa/extras/scdatapilottableobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_cellrangesbase, \
+$(eval $(call gb_CppunitTest_add_linked_libs,sc_datapilottableobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -73,25 +72,25 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_cellrangesbase, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_set_include,sc_datapilottableobj,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_add_api,sc_datapilottableobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_uses_ure,sc_datapilottableobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_add_type_rdbs,sc_datapilottableobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_add_components,sc_datapilottableobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -124,7 +123,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_set_args,sc_datapilottableobj,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
@@ -135,7 +134,7 @@ $(eval $(call gb_CppunitTest_set_args,sc_cellrangesbase,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_cellrangesbase) : \
+$(call gb_CppunitTest_get_target,sc_datapilottableobj) : \
     $(WORKDIR)/AllLangRes/sc \
     $(call gb_Library_get_target,localedata_en) \
     $(call gb_Library_get_target,scfilt) \

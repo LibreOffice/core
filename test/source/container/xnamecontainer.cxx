@@ -26,37 +26,37 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/container/xnamecontainer.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
+#include "cppunit/extensions/HelperMacros.h"
+#include <iostream>
 
-namespace ScTableSheetsObj
+using namespace com::sun::star::uno;
+
+namespace apitest {
+
+XNameContainer::XNameContainer(): maNameToRemove(RTL_CONSTASCII_USTRINGPARAM("XNameContainer"))
 {
+}
 
-class ScXNameContainer : public UnoApiTest
+XNameContainer::XNameContainer(const rtl::OUString& rNameToRemove):
+        maNameToRemove(rNameToRemove)
 {
-    uno::Reference< container::XNameContainer > init();
+}
 
-    void testRemoveByName();
-
-    CPPUNIT_TEST_SUITE(ScXNameContainer);
-    CPPUNIT_TEST(testRemoveByName);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-void ScXNameContainer::testRemoveByName()
+void XNameContainer::testRemoveByName()
 {
-    rtl::OUString aSheet2(RTL_CONSTASCII_USTRINGPARAM("Sheet2"));
-    uno::Reference< container::XNameContainer > xNameContainer = init();
-    CPPUNIT_ASSERT(xNameContainer->hasByName(aSheet2));
-    xNameContainer->removeByName(aSheet2);
-    CPPUNIT_ASSERT(!xNameContainer->hasByName(aSheet2));
+    uno::Reference< container::XNameContainer > xNameContainer(init(),UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xNameContainer->hasByName(maNameToRemove));
+    xNameContainer->removeByName(maNameToRemove);
+    CPPUNIT_ASSERT(!xNameContainer->hasByName(maNameToRemove));
 
     bool bExceptionThrown = false;
     try
     {
-        xNameContainer->removeByName(aSheet2);
+        xNameContainer->removeByName(maNameToRemove);
     }
     catch( const container::NoSuchElementException& )
     {
@@ -66,19 +66,6 @@ void ScXNameContainer::testRemoveByName()
 
     CPPUNIT_ASSERT_MESSAGE("no exception thrown", bExceptionThrown);
 }
-
-uno::Reference< container::XNameContainer > ScXNameContainer::init()
-{
-    uno::Reference< lang::XComponent > xComponent;
-    xComponent = loadFromDesktop(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc")));
-    CPPUNIT_ASSERT(xComponent.is());
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XNameContainer > xNameContainer ( xDoc->getSheets(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xNameContainer.is());
-    return xNameContainer;
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXNameContainer);
 
 }
 

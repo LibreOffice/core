@@ -26,7 +26,7 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/sheet/xnamedrange.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -44,47 +44,26 @@
 #include <com/sun/star/sheet/Border.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 
+#include "cppunit/extensions/HelperMacros.h"
 #include <rtl/oustringostreaminserter.hxx>
 
-namespace ScNamedRangeObj {
+using namespace com::sun::star::uno;
 
-class ScXNamedRange : public UnoApiTest
-{
-    uno::Reference< sheet::XSpreadsheetDocument> init();
-    uno::Reference< sheet::XNamedRange> getTestedNamedRange(const rtl::OUString&);
+namespace apitest {
 
-    // XNamedRange
-    void testGetContent();
-    void testSetContent();
-    void testGetType();
-    void testSetType();
-    void testGetReferencePosition();
-    void testSetReferencePosition();
-
-    CPPUNIT_TEST_SUITE(ScXNamedRange);
-    CPPUNIT_TEST(testGetContent);
-    CPPUNIT_TEST(testSetContent);
-    CPPUNIT_TEST(testGetType);
-    CPPUNIT_TEST(testSetType);
-    CPPUNIT_TEST(testGetReferencePosition);
-    CPPUNIT_TEST(testSetReferencePosition);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-
-void ScXNamedRange::testGetContent()
+void XNamedRange::testGetContent()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     rtl::OUString aExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$1"));
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 on GetContent", xNamedRange->getContent().equals(aExpectedContent));
 }
 
-void ScXNamedRange::testSetContent()
+void XNamedRange::testSetContent()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     rtl::OUString aExpectedContent;
 
@@ -106,17 +85,17 @@ void ScXNamedRange::testSetContent()
 
 }
 
-void ScXNamedRange::testGetType()
+void XNamedRange::testGetType()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected Type", xNamedRange->getType() == 0);
 }
 
-void ScXNamedRange::testSetType()
+void XNamedRange::testSetType()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;;
     xNamedRange->setType(nType);
@@ -139,10 +118,10 @@ void ScXNamedRange::testSetType()
     CPPUNIT_ASSERT_MESSAGE("Wrong expected Type 0 after setting it", xNamedRange->getType() == nType);
 }
 
-void ScXNamedRange::testGetReferencePosition()
+void XNamedRange::testGetReferencePosition()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial2"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
     // the expeted address is on B1, as it was the active cell when intial2 created
@@ -151,10 +130,10 @@ void ScXNamedRange::testGetReferencePosition()
     CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", xCellAddress.Row == 0);
 }
 
-void ScXNamedRange::testSetReferencePosition()
+void XNamedRange::testSetReferencePosition()
 {
     rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
-    uno::Reference< sheet::XNamedRange > xNamedRange = getTestedNamedRange(aTestedNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress aBaseAddress = table::CellAddress(1,2,3);
 
@@ -166,35 +145,7 @@ void ScXNamedRange::testSetReferencePosition()
     CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position after setting it", xCellAddress.Row == 3);
 }
 
-uno::Reference< sheet::XSpreadsheetDocument> ScXNamedRange::init()
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods"));
-    createFileURL(aFileBase, aFileURL);
-    static uno::Reference< lang::XComponent > xComponent;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDoc.is());
 
-    return xDoc;
-}
-
-uno::Reference< sheet::XNamedRange> ScXNamedRange::getTestedNamedRange(const rtl::OUString& aTestedNamedRangeString)
-{
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc = init();
-    uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
-    rtl::OUString aNamedRangesPropertyString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
-
-    uno::Reference< sheet::XNamedRange > xNamedRange(xNamedRangesNameAccess->getByName(aTestedNamedRangeString), UNO_QUERY_THROW);
-
-    return xNamedRange;
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXNamedRange);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

@@ -67,6 +67,17 @@ $(eval $(call gb_Library_use_external,subsequenttest,cppunit))
 
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/unoapi_test \
+    test/source/container/xnamecontainer \
+    test/source/sheet/cellproperties \
+    test/source/sheet/datapilotfield \
+    test/source/sheet/xcellrangesquery \
+    test/source/sheet/xdatabaserange \
+    test/source/sheet/xdatapilotdescriptor \
+    test/source/sheet/xdatapilotfieldgrouping \
+    test/source/sheet/xdatapilottable \
+    test/source/sheet/xnamedrange \
+    test/source/sheet/xnamedranges \
+    test/source/sheet/xspreadsheets2 \
 ))
 
 # vim: set noet sw=4 ts=4:

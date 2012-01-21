@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
+ * Copyright (C) 2012 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -27,75 +27,54 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/sheet/xdatapilotfieldgrouping.hxx>
+#include <test/sheet/datapilotfield.hxx>
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
-#include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+namespace sc_apitest {
 
-namespace ScDataPilotFieldObj {
+#define NUMBER_OF_TESTS 6
 
-#define NUMBER_OF_TESTS  1
-
-class ScXDataPilotFieldGrouping : public UnoApiTest
+class ScDataPilotFieldObj : public UnoApiTest, apitest::XDataPilotFieldGrouping,
+                                apitest::DataPilotField
 {
 public:
-    void testCreateNameGroup();
-    void testCreateDateGroup();
-
     virtual void setUp();
     virtual void tearDown();
+    virtual uno::Reference< uno::XInterface > init();
 
-    CPPUNIT_TEST_SUITE(ScXDataPilotFieldGrouping);
+    CPPUNIT_TEST_SUITE(ScDataPilotFieldObj);
+    CPPUNIT_TEST(testSortInfo);
+    CPPUNIT_TEST(testLayoutInfo);
+    CPPUNIT_TEST(testAutoShowInfo);
+    CPPUNIT_TEST(testReference);
+    CPPUNIT_TEST(testIsGroupField);
     CPPUNIT_TEST(testCreateNameGroup);
-    //broken: fdo#43609
+    // see fdo#
     //CPPUNIT_TEST(testCreateDateGroup);
     CPPUNIT_TEST_SUITE_END();
-
-    uno::Reference< sheet::XDataPilotFieldGrouping > init();
-
 private:
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
+    static sal_Int32 nTest;
+    static uno::Reference< lang::XComponent > mxComponent;
 };
 
-int ScXDataPilotFieldGrouping::nTest = 0;
-uno::Reference< lang::XComponent > ScXDataPilotFieldGrouping::xComponent;
+sal_Int32 ScDataPilotFieldObj::nTest = 0;
+uno::Reference< lang::XComponent > ScDataPilotFieldObj::mxComponent;
 
-void ScXDataPilotFieldGrouping::testCreateNameGroup()
-{
-    uno::Reference< sheet::XDataPilotFieldGrouping > xDataPilotFieldGrouping = init();
-    uno::Reference< sheet::XDataPilotField > xDataPilotField( xDataPilotFieldGrouping, UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess( xDataPilotField->getItems(), UNO_QUERY_THROW );
-    CPPUNIT_ASSERT(xNameAccess->hasElements());
-
-    uno::Sequence< rtl::OUString > aElements = xNameAccess->getElementNames();
-    xDataPilotFieldGrouping->createNameGroup( aElements );
-}
-
-void ScXDataPilotFieldGrouping::testCreateDateGroup()
-{
-    uno::Reference< sheet::XDataPilotFieldGrouping > xDataPilotFieldGrouping = init();
-    sheet::DataPilotFieldGroupInfo aGroupInfo;
-    aGroupInfo.GroupBy = sheet::DataPilotFieldGroupBy::MONTHS;
-    aGroupInfo.HasDateValues = true;
-    xDataPilotFieldGrouping->createDateGroup(aGroupInfo);
-}
-
-uno::Reference< sheet::XDataPilotFieldGrouping> ScXDataPilotFieldGrouping::init()
+uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 {
     rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("scdatapilotfieldobj.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scdatapilotfieldobj.ods")), aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
 
@@ -105,32 +84,26 @@ uno::Reference< sheet::XDataPilotFieldGrouping> ScXDataPilotFieldGrouping::init(
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
     uno::Sequence<rtl::OUString> aElementNames = xDPT->getElementNames();
-    for (int i = 0; i < aElementNames.getLength(); ++i)
-    {
-        std::cout << "PivotTable: " << aElementNames[i] << std::endl;
-    }
 
     uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot1"))),UNO_QUERY_THROW);
-
     CPPUNIT_ASSERT(xDPDsc.is());
     uno::Reference< container::XIndexAccess > xIA( xDPDsc->getDataPilotFields(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XDataPilotFieldGrouping > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< uno::XInterface > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xReturnValue.is());
     return xReturnValue;
 }
 
-void ScXDataPilotFieldGrouping::setUp()
+void ScDataPilotFieldObj::setUp()
 {
-    nTest += 1;
+    nTest++;
     UnoApiTest::setUp();
 }
 
-void ScXDataPilotFieldGrouping::tearDown()
+void ScDataPilotFieldObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
+        closeDocument(mxComponent);
     }
 
     UnoApiTest::tearDown();
@@ -138,11 +111,12 @@ void ScXDataPilotFieldGrouping::tearDown()
     if (nTest == NUMBER_OF_TESTS)
     {
         mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXDataPilotFieldGrouping);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

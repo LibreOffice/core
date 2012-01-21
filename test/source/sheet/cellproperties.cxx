@@ -26,46 +26,21 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/sheet/cellproperties.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
-namespace ScCellRangeBase {
+#include "cppunit/extensions/HelperMacros.h"
+#include <iostream>
 
-#define NUMBER_OF_TESTS 2
+using namespace com::sun::star::uno;
 
-class ScCellProperties : public UnoApiTest
+namespace apitest {
+
+void CellProperties::testVertJustify()
 {
-public:
-    virtual void setUp();
-    virtual void tearDown();
-
-    void testVertJustify();
-    void testRotateReference();
-    CPPUNIT_TEST_SUITE(ScCellProperties);
-    CPPUNIT_TEST(testVertJustify);
-    CPPUNIT_TEST(testRotateReference);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference < beans::XPropertySet > init();
-
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
-};
-
-int ScCellProperties::nTest = 0;
-uno::Reference< lang::XComponent > ScCellProperties::xComponent;
-
-
-void ScCellProperties::testVertJustify()
-{
-    uno::Reference< beans::XPropertySet > xCellRangeBase = init();
+    uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
     rtl::OUString aVertJustify(RTL_CONSTASCII_USTRINGPARAM("VertJustify"));
     uno::Any aOldVertJustify = xCellRangeBase->getPropertyValue(aVertJustify);
     sal_Int32 aValue = 0;
@@ -81,9 +56,9 @@ void ScCellProperties::testVertJustify()
     CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
-void ScCellProperties::testRotateReference()
+void CellProperties::testRotateReference()
 {
-    uno::Reference< beans::XPropertySet > xCellRangeBase = init();
+    uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
     rtl::OUString aRotateReference(RTL_CONSTASCII_USTRINGPARAM("RotateReference"));
     uno::Any aOldRotateReference = xCellRangeBase->getPropertyValue(aRotateReference);
     sal_Int32 aValue = 0;
@@ -98,50 +73,6 @@ void ScCellProperties::testRotateReference()
     std::cout << "New RotateReference value: " << aValue << std::endl;
     CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
-
-uno::Reference< beans::XPropertySet > ScCellProperties::init()
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
-    createFileURL(aFileBase, aFileURL);
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDoc.is());
-
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
-
-    uno::Reference< table::XCellRange > xCellRange(xSheet->getCellRangeByPosition(0,0,3,4), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xCellRange.is());
-
-    uno::Reference< beans::XPropertySet > xReturn(xCellRange, UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create object of type XPropertySet", xReturn.is());
-    return xReturn;
-}
-
-void ScCellProperties::setUp()
-{
-    nTest += 1;
-    UnoApiTest::setUp();
-}
-
-void ScCellProperties::tearDown()
-{
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
-    }
-
-    UnoApiTest::tearDown();
-
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScCellProperties);
 
 }
 

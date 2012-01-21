@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer) ]
+ * Copyright (C) 2011 Laurent Godard lgodard.libre@laposte.net (initial developer)
  *
  * All Rights Reserved.
  *
@@ -26,35 +26,38 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <test/testdllapi.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
 
-// basic uno api test class
+namespace apitest {
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OOO_DLLPUBLIC_TEST XNamedRanges
 {
 public:
-    UnoApiTest();
+    // remove default entry
+    XNamedRanges();
+    // removes given entry
+    XNamedRanges(const rtl::OUString& rNameToRemove);
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
+    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheets = 0) = 0;
 
-    virtual void setUp();
-    virtual void tearDown();
+    // XNamedRanges
+    void testAddNewByName();
+    void testAddNewFromTitles();
+    void testRemoveByName();
+    void testOutputList();
 
 protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
-
+    uno::Reference< sheet::XSpreadsheet > xSheet;
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+    rtl::OUString maNameToRemove;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

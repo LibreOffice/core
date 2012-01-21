@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer) ]
+ * Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -26,35 +26,30 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <test/testdllapi.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
 
-// basic uno api test class
+namespace apitest {
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OOO_DLLPUBLIC_TEST XNameContainer
 {
 public:
-    UnoApiTest();
+    // removes default entry
+    XNameContainer();
+    // removes given entry
+    XNameContainer(const rtl::OUString& rName);
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
+    virtual uno::Reference< uno::XInterface > init() = 0;
 
-    virtual void setUp();
-    virtual void tearDown();
-
-protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
-
+    void testRemoveByName();
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+    rtl::OUString maNameToRemove;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

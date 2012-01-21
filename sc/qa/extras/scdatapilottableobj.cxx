@@ -27,93 +27,71 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/sheet/xdatapilottable.hxx>
+#include <test/sheet/xdatapilotdescriptor.hxx>
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+namespace sc_apitest {
 
-namespace ScDataPilotDescriptorBase
-{
+#define NUMBER_OF_TESTS 9
 
-#define NUMBER_OF_TESTS 2
-
-class ScXDataPilotTable : public UnoApiTest
+class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable
 {
 public:
-
     virtual void setUp();
     virtual void tearDown();
+    virtual uno::Reference< uno::XInterface > init();
 
-    void testGetOutputRange();
-    void testRefresh();
-    CPPUNIT_TEST_SUITE(ScXDataPilotTable);
+    CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
+    //CPPUNIT_TEST(testRefresh);
+    //CPPUNIT_TEST(testGetHiddenFields);
     CPPUNIT_TEST(testGetOutputRange);
-    CPPUNIT_TEST(testRefresh);
+    CPPUNIT_TEST(testSourceRange);
+    CPPUNIT_TEST(testTag);
+    CPPUNIT_TEST(testGetFilterDescriptor);
+    CPPUNIT_TEST(testGetDataPilotFields);
+    CPPUNIT_TEST(testGetColumnFields);
+    CPPUNIT_TEST(testGetRowFields);
+    CPPUNIT_TEST(testGetPageFields);
+    CPPUNIT_TEST(testGetDataFields);
     CPPUNIT_TEST_SUITE_END();
+
 private:
-
-    uno::Reference< sheet::XDataPilotTable > init();
-
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
-
-    uno::Reference< table::XCell > xCellForChange;
-    uno::Reference< table::XCell > xCellForCheck;
+    static sal_Int32 nTest;
+    static uno::Reference< lang::XComponent > mxComponent;
 };
 
-int ScXDataPilotTable::nTest = 0;
-uno::Reference< lang::XComponent > ScXDataPilotTable::xComponent;
+sal_Int32 ScDataPilotTableObj::nTest = 0;
+uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
 
-void ScXDataPilotTable::testGetOutputRange()
-{
-    uno::Reference< sheet::XDataPilotTable > xDPTable = init();
-
-    table::CellRangeAddress aRange = xDPTable->getOutputRange();
-    CPPUNIT_ASSERT( aRange.Sheet == 0 );
-    CPPUNIT_ASSERT( aRange.StartColumn == 7 );
-    CPPUNIT_ASSERT( aRange.StartRow == 8 );
-}
-
-void ScXDataPilotTable::testRefresh()
-{
-    uno::Reference< sheet::XDataPilotTable > xDPTable = init();
-    xCellForChange->setValue( 5 );
-
-    double aOldData = xCellForCheck->getValue();
-    xDPTable->refresh();
-    double aNewData = xCellForCheck->getValue();
-    CPPUNIT_ASSERT_MESSAGE("value needs to change", aOldData != aNewData);
-}
-
-uno::Reference< sheet::XDataPilotTable > ScXDataPilotTable::init()
+uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {
     rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods")), aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    // set variables
+    // set variables from xdatapilottable.[ch]xx
     xCellForChange = xSheet->getCellByPosition( 1, 5 );
     xCellForCheck = xSheet->getCellByPosition( 7, 11 );
+    CPPUNIT_ASSERT(xCellForCheck.is());
+    CPPUNIT_ASSERT(xCellForChange.is());
 
     CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
     uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDPTS.is());
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
-    uno::Sequence<rtl::OUString> aElementNames = xDPT->getElementNames();
 
     uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable"))),UNO_QUERY_THROW);
 
@@ -121,18 +99,17 @@ uno::Reference< sheet::XDataPilotTable > ScXDataPilotTable::init()
     return xDPTable;
 }
 
-void ScXDataPilotTable::setUp()
+void ScDataPilotTableObj::setUp()
 {
-    nTest += 1;
+    nTest++;
     UnoApiTest::setUp();
 }
 
-void ScXDataPilotTable::tearDown()
+void ScDataPilotTableObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
+        closeDocument(mxComponent);
     }
 
     UnoApiTest::tearDown();
@@ -140,9 +117,12 @@ void ScXDataPilotTable::tearDown()
     if (nTest == NUMBER_OF_TESTS)
     {
         mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
     }
 }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTableObj);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

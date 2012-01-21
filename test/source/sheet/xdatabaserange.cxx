@@ -26,7 +26,8 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/sheet/xdatabaserange.hxx>
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
@@ -36,42 +37,21 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <rtl/oustringostreaminserter.hxx>
+#include "cppunit/extensions/HelperMacros.h"
+#include <iostream>
 
-namespace ScDatabaseRangeObj {
+using namespace com::sun::star::uno;
 
-#define NUMBER_OF_TESTS 3
-
-class ScXDatabaseRange : public UnoApiTest
-{
-    virtual void setUp();
-    virtual void tearDown();
-
-    void testDataArea();
-    void testGetSortDescriptor();
-    void testGetSubtotalDescriptor();
-
-    CPPUNIT_TEST_SUITE(ScXDatabaseRange);
-    CPPUNIT_TEST(testDataArea);
-    CPPUNIT_TEST(testGetSortDescriptor);
-    CPPUNIT_TEST(testGetSubtotalDescriptor);
-    CPPUNIT_TEST_SUITE_END();
-private:
-    uno::Reference< sheet::XDatabaseRange > init(const rtl::OUString& rName);
-
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
-};
-
-int ScXDatabaseRange::nTest = 0;
-uno::Reference< lang::XComponent > ScXDatabaseRange::xComponent;
+namespace apitest {
 
 /**
  * tests setDataArea and getDataArea
  */
-void ScXDatabaseRange::testDataArea()
+void XDatabaseRange::testDataArea()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange = init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataArea")));
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataArea"))), UNO_QUERY_THROW);
 
     table::CellRangeAddress aCellAddress;
     aCellAddress.Sheet = 0;
@@ -89,16 +69,16 @@ void ScXDatabaseRange::testDataArea()
     CPPUNIT_ASSERT( aCellAddress.EndColumn == aValue.EndColumn );
 }
 
-void ScXDatabaseRange::testGetSubtotalDescriptor()
+void XDatabaseRange::testGetSubtotalDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange = init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubtotalDescriptor")));
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubtotalDescriptor"))), UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalDescriptor> xSubtotalDescr = xDBRange->getSubTotalDescriptor();
     CPPUNIT_ASSERT(xSubtotalDescr.is());
 }
 
-void ScXDatabaseRange::testGetSortDescriptor()
+void XDatabaseRange::testGetSortDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange = init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SortDescriptor")));
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SortDescriptor"))), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
     for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
     {
@@ -159,50 +139,6 @@ void ScXDatabaseRange::testGetSortDescriptor()
         }
     }
 }
-
-uno::Reference< sheet::XDatabaseRange > ScXDatabaseRange::init(const rtl::OUString& rName)
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xdatabaserange.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xPropSet(xDoc,UNO_QUERY_THROW);
-    uno::Reference< sheet::XDatabaseRanges > xDBRanges( xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges"))), UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xName( xDBRanges, UNO_QUERY_THROW);
-    uno::Reference< sheet::XDatabaseRange > xDBRange( xName->getByName(rName), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDBRange.is());
-    return xDBRange;
-}
-
-void ScXDatabaseRange::setUp()
-{
-    nTest += 1;
-    UnoApiTest::setUp();
-}
-
-void ScXDatabaseRange::tearDown()
-{
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
-    }
-
-    UnoApiTest::tearDown();
-
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
-    }
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXDatabaseRange);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

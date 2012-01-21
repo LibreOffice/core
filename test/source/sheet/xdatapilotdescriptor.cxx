@@ -26,82 +26,33 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
-#include <com/sun/star/sheet/XDataPilotTables.hpp>
+#include "test/sheet/xdatapilotdescriptor.hxx"
+
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include "cppunit/extensions/HelperMacros.h"
+
 #include <rtl/oustringostreaminserter.hxx>
-#include <vector>
 
-namespace ScDataPilotDescriptorBase
-{
+using namespace com::sun::star::uno;
 
-#define NUMBER_OF_TESTS 9
+namespace apitest {
 
-class ScXDataPilotDescriptor : public UnoApiTest
-{
-public:
-
-    virtual void setUp();
-    virtual void tearDown();
-
-    void testSourceRange();
-    void testTag();
-    void testGetFilterDescriptor();
-    void testGetDataPilotFields();
-    void testGetColumnFields();
-    void testGetRowFields();
-    void testGetPageFields();
-    void testGetDataFields();
-    void testGetHiddenFields();
-    CPPUNIT_TEST_SUITE(ScXDataPilotDescriptor);
-    CPPUNIT_TEST(testSourceRange);
-    CPPUNIT_TEST(testTag);
-    CPPUNIT_TEST(testGetFilterDescriptor);
-    CPPUNIT_TEST(testGetDataPilotFields);
-    CPPUNIT_TEST(testGetColumnFields);
-    CPPUNIT_TEST(testGetRowFields);
-    CPPUNIT_TEST(testGetPageFields);
-    CPPUNIT_TEST(testGetDataFields);
-    CPPUNIT_TEST(testGetHiddenFields);
-    CPPUNIT_TEST_SUITE_END();
-
-
-private:
-
-    uno::Reference< sheet::XDataPilotDescriptor > init();
-
-    void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );
-
-    void checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex );
-    static std::vector<rtl::OUString> maFieldNames;
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
-};
-
-std::vector< rtl::OUString > ScXDataPilotDescriptor::maFieldNames;
-int ScXDataPilotDescriptor::nTest = 0;
-uno::Reference< lang::XComponent > ScXDataPilotDescriptor::xComponent;
-
-void ScXDataPilotDescriptor::testTag()
+void XDataPilotDescriptor::testTag()
 {
     rtl::OUString aTag(RTL_CONSTASCII_USTRINGPARAM("DataPilotDescriptor_Tag"));
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     xDescr->setTag(aTag);
     rtl::OUString aNewTag = xDescr->getTag();
     CPPUNIT_ASSERT( aTag == aNewTag );
 }
 
-void ScXDataPilotDescriptor::testSourceRange()
+void XDataPilotDescriptor::testSourceRange()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     table::CellRangeAddress aOldAddress = xDescr->getSourceRange();
 
     table::CellRangeAddress aAddress;
@@ -125,15 +76,22 @@ void ScXDataPilotDescriptor::testSourceRange()
     xDescr->setSourceRange(aOldAddress);
 }
 
-void ScXDataPilotDescriptor::testGetFilterDescriptor()
+void XDataPilotDescriptor::testGetFilterDescriptor()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetFilterDescriptor > xSheetFilterDescr = xDescr->getFilterDescriptor();
     CPPUNIT_ASSERT(xSheetFilterDescr.is());
 }
 
-void ScXDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr)
+void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr)
 {
+    //this method should only be called once but needs to be called before any of the other tests
+    static bool bCalled = false;
+    if (bCalled)
+        return;
+    else
+        bCalled = true;
+
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataPilotFields(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT( xIndex.is());
 
@@ -194,80 +152,59 @@ void ScXDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet:
     }
 }
 
-void ScXDataPilotDescriptor::testGetDataPilotFields()
+void XDataPilotDescriptor::testGetDataPilotFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
 }
 
-void ScXDataPilotDescriptor::testGetColumnFields()
+void XDataPilotDescriptor::testGetColumnFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
+    testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getColumnFields(), UNO_QUERY_THROW);
 
     checkName( xIndex, 0 );
 }
 
-void ScXDataPilotDescriptor::testGetRowFields()
+void XDataPilotDescriptor::testGetRowFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
+    testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getRowFields(), UNO_QUERY_THROW);
 
     //checkName( xIndex, 1 );
 }
 
-void ScXDataPilotDescriptor::testGetPageFields()
+void XDataPilotDescriptor::testGetPageFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
+    testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getPageFields(), UNO_QUERY_THROW);
 
     checkName( xIndex, 4 );
 }
 
-void ScXDataPilotDescriptor::testGetDataFields()
+void XDataPilotDescriptor::testGetDataFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
+    testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataFields(), UNO_QUERY_THROW);
 
     checkName( xIndex, 2 );
 }
 
-void ScXDataPilotDescriptor::testGetHiddenFields()
+void XDataPilotDescriptor::testGetHiddenFields()
 {
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr = init();
+    std::cout << "testGetHiddenFields" <<std::endl;
+    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);;
+    testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getHiddenFields(), UNO_QUERY_THROW);
 
     checkName( xIndex, 3 );
 }
 
-uno::Reference< sheet::XDataPilotDescriptor> ScXDataPilotDescriptor::init()
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
-    uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDPTS.is());
-    uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
-    CPPUNIT_ASSERT(xDPT.is());
-    uno::Sequence<rtl::OUString> aElementNames = xDPT->getElementNames();
-
-    uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable"))),UNO_QUERY_THROW);
-
-    testGetDataPilotFields_Impl( xDPDsc );
-
-    CPPUNIT_ASSERT(xDPDsc.is());
-    return xDPDsc;
-}
-
-void ScXDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex )
+void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex )
 {
     CPPUNIT_ASSERT(xIndex.is());
     CPPUNIT_ASSERT(maFieldNames.size() >= static_cast<size_t>(nIndex));
@@ -275,36 +212,10 @@ void ScXDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess 
     for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
     {
         uno::Reference< container::XNamed > xNamed( xIndex->getByIndex(i), UNO_QUERY_THROW);
+        std::cout << "Expected: " << maFieldNames[nIndex] << " Got: " << xNamed->getName() << std::endl;
         CPPUNIT_ASSERT( xNamed->getName() == maFieldNames[nIndex] );
     }
 }
-
-void ScXDataPilotDescriptor::setUp()
-{
-    nTest += 1;
-    UnoApiTest::setUp();
-}
-
-void ScXDataPilotDescriptor::tearDown()
-{
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
-    }
-
-    UnoApiTest::tearDown();
-
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
-    }
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXDataPilotDescriptor);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

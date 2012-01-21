@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_spreadsheetobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_namedrangesobj))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetobj, \
-    sc/qa/extras/xspreadsheets2 \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangesobj, \
+    sc/qa/extras/scnamedrangesobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
+$(eval $(call gb_CppunitTest_add_linked_libs,sc_namedrangesobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
     sc \
     sfx \
     sot \
-    subsequenttest \
     svl \
     svt \
     svx \
@@ -63,6 +62,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
 	test \
     tl \
     tk \
+    subsequenttest \
     ucbhelper \
 	unotest \
     utl \
@@ -72,25 +72,25 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_namedrangesobj,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_add_api,sc_namedrangesobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_spreadsheetobj))
+$(eval $(call gb_CppunitTest_uses_ure,sc_namedrangesobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_add_type_rdbs,sc_namedrangesobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_add_components,sc_namedrangesobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -123,7 +123,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_spreadsheetobj,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_set_args,sc_namedrangesobj,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
@@ -134,6 +134,9 @@ $(eval $(call gb_CppunitTest_set_args,sc_spreadsheetobj,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_spreadsheetobj) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+$(call gb_CppunitTest_get_target,sc_namedrangesobj) : \
+    $(WORKDIR)/AllLangRes/sc \
+    $(call gb_Library_get_target,localedata_en) \
+    $(call gb_Library_get_target,scfilt) \
 
 # vim: set noet sw=4 ts=4:

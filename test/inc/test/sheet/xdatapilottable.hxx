@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer) ]
+ * Copyright (C) 2012 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -26,35 +26,29 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/table/XCell.hpp>
+#include <test/testdllapi.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+#include "cppunit/extensions/HelperMacros.h"
 
-// basic uno api test class
+using namespace com::sun::star;
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+namespace apitest {
+
+class OOO_DLLPUBLIC_TEST XDataPilotTable
 {
 public:
-    UnoApiTest();
+    virtual uno::Reference< uno::XInterface > init() = 0;
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
-
-    virtual void setUp();
-    virtual void tearDown();
+    void testGetOutputRange();
+    void testRefresh();
 
 protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
-
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+    uno::Reference< table::XCell > xCellForChange;
+    uno::Reference< table::XCell > xCellForCheck;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

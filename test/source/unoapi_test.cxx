@@ -28,6 +28,8 @@
 
 #include "test/unoapi_test.hxx"
 
+#include <com/sun/star/util/XCloseable.hpp>
+
 UnoApiTest::UnoApiTest()
       : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/extras/testdocuments"))
 {
@@ -62,6 +64,12 @@ void UnoApiTest::createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rF
     aBuffer.append(m_aBaseString).append(aSep);
     aBuffer.append(aFileBase);
     rFilePath = aBuffer.makeStringAndClear();
+}
+
+void UnoApiTest::closeDocument( uno::Reference< lang::XComponent > xDocument )
+{
+    uno::Reference< util::XCloseable > xCloseable(xDocument, UNO_QUERY_THROW);
+    xCloseable->close(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,35 +26,32 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <test/testdllapi.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
 
-// basic uno api test class
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+namespace apitest {
+
+
+class OOO_DLLPUBLIC_TEST XCellRangesQuery
 {
 public:
-    UnoApiTest();
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
+    virtual uno::Reference< uno::XInterface > init() = 0;
 
-    virtual void setUp();
-    virtual void tearDown();
+    //Testcases
+    void testQueryColumnDifference();
+    void testQueryContentDifference();
+    void testQueryEmptyCells();
+    void testQueryFormulaCells();
+    void testQueryIntersection();
+    void testQueryRowDifference();
+    void testQueryVisibleCells();
 
-protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
-
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

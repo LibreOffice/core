@@ -26,7 +26,7 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/sheet/datapilotfieldobj.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
@@ -42,32 +42,16 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
+#include "cppunit/extensions/HelperMacros.h"
+#include <iostream>
 
-namespace ScDataPilotFieldObj {
+using namespace com::sun::star::uno;
 
-class ScDataPilotField : public UnoApiTest
+namespace apitest {
+
+void DataPilotField::testSortInfo()
 {
-
-    uno::Reference< beans::XPropertySet > init();
-
-    void testSortInfo();
-    void testLayoutInfo();
-    void testAutoShowInfo();
-    void testReference();
-    void testIsGroupField();
-
-    CPPUNIT_TEST_SUITE(ScDataPilotField);
-    CPPUNIT_TEST(testSortInfo);
-    CPPUNIT_TEST(testLayoutInfo);
-    CPPUNIT_TEST(testAutoShowInfo);
-    CPPUNIT_TEST(testReference);
-    CPPUNIT_TEST(testIsGroupField);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-void ScDataPilotField::testSortInfo()
-{
-    uno::Reference< beans::XPropertySet> xPropSet = init();
+    uno::Reference< beans::XPropertySet> xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldSortInfo aSortInfoValue;
     rtl::OUString aSortInfo(RTL_CONSTASCII_USTRINGPARAM("SortInfo"));
     aSortInfoValue.Field = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
@@ -99,9 +83,9 @@ void ScDataPilotField::testSortInfo()
     CPPUNIT_ASSERT_MESSAGE("should have no sort info", !bHasSortInfo);
 }
 
-void ScDataPilotField::testLayoutInfo()
+void DataPilotField::testLayoutInfo()
 {
-    uno::Reference< beans::XPropertySet > xPropSet = init();
+    uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldLayoutInfo aLayoutInfoValue;
     rtl::OUString aLayoutInfo(RTL_CONSTASCII_USTRINGPARAM("LayoutInfo"));
     aLayoutInfoValue.AddEmptyLines = false;
@@ -132,9 +116,9 @@ void ScDataPilotField::testLayoutInfo()
     CPPUNIT_ASSERT_MESSAGE("should have no longer sort information", !bHasLayoutInfo);
 }
 
-void ScDataPilotField::testAutoShowInfo()
+void DataPilotField::testAutoShowInfo()
 {
-    uno::Reference< beans::XPropertySet > xPropSet = init();
+    uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldAutoShowInfo aAutoShowInfoValue;
     aAutoShowInfoValue.DataField = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
     aAutoShowInfoValue.IsEnabled = true;
@@ -165,9 +149,9 @@ void ScDataPilotField::testAutoShowInfo()
     CPPUNIT_ASSERT_MESSAGE("should have no longer AutoShow information", !bHasAutoShowInfo);
 }
 
-void ScDataPilotField::testReference()
+void DataPilotField::testReference()
 {
-    uno::Reference< beans::XPropertySet > xPropSet = init();
+    uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldReference aReferenceValue;
     aReferenceValue.ReferenceField = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
@@ -198,9 +182,9 @@ void ScDataPilotField::testReference()
     CPPUNIT_ASSERT_MESSAGE("should have no longer reference information", !bHasReference);
 }
 
-void ScDataPilotField::testIsGroupField()
+void DataPilotField::testIsGroupField()
 {
-    uno::Reference< beans::XPropertySet > xPropSet = init();
+    uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     uno::Any xValue;
     rtl::OUString aIsGroupField(RTL_CONSTASCII_USTRINGPARAM("IsGroupField"));
     sal_Bool bIsGroupField;
@@ -221,43 +205,6 @@ void ScDataPilotField::testIsGroupField()
     else
         std::cout << "Could not test IsGroupField" << std::endl;
 }
-
-uno::Reference< beans::XPropertySet > ScDataPilotField::init()
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("scdatapilotfieldobj.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    static uno::Reference< lang::XComponent > xComponent;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
-    uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDPTS.is());
-    uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
-    CPPUNIT_ASSERT(xDPT.is());
-    uno::Sequence<rtl::OUString> aElementNames = xDPT->getElementNames();
-    for (int i = 0; i < aElementNames.getLength(); ++i)
-    {
-        std::cout << "PivotTable: " << aElementNames[i] << std::endl;
-    }
-
-    uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot1"))),UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT(xDPDsc.is());
-    uno::Reference< container::XIndexAccess > xIA( xDPDsc->getDataPilotFields(), UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xReturnValue.is());
-    return xReturnValue;
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotField);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

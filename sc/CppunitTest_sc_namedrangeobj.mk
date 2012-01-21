@@ -31,8 +31,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_namedrangeobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangeobj, \
-    sc/qa/extras/xnamedranges \
-    sc/qa/extras/xnamedrange \
+    sc/qa/extras/scnamedrangeobj \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_namedrangeobj, \

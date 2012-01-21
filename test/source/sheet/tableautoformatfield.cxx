@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
+ * Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initTestial developer)
  *
  * All Rights Reserved.
  *
@@ -26,41 +26,18 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <test/sheet/tableautoformatfield.hxx>
 
 #include <iostream>
+#include "cppunit/extensions/HelperMacros.h"
 
-namespace ScAutoFormatFieldObj {
+using namespace com::sun::star::uno;
 
-#define NUMBER_OF_TESTS 2
+namespace apitest {
 
-class ScTableAutoFormatField : public UnoApiTest
+uno::Reference< beans::XPropertySet > TableAutoFormatField::initTest()
 {
-public:
-
-    virtual void setUp();
-    virtual void tearDown();
-
-    uno::Reference< beans::XPropertySet > init();    void testRotateReference();
-    void testVertJustify();
-
-    CPPUNIT_TEST_SUITE(ScTableAutoFormatField);
-    CPPUNIT_TEST(testRotateReference);
-    CPPUNIT_TEST(testVertJustify);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-
-    static int nTest;
-};
-
-int ScTableAutoFormatField::nTest = 0;
-
-uno::Reference< beans::XPropertySet > ScTableAutoFormatField::init()
-{
-    uno::Reference< container::XIndexAccess > xAutoFormatFields( m_xSFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormats"))), UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xAutoFormatFields( getServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormats"))), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xAutoFormatFields.is());
     uno::Reference< container::XIndexAccess > xIndex( xAutoFormatFields->getByIndex(0), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xIndex.is());
@@ -69,9 +46,9 @@ uno::Reference< beans::XPropertySet > ScTableAutoFormatField::init()
     return xReturn;
 }
 
-void ScTableAutoFormatField::testRotateReference()
+void TableAutoFormatField::testRotateReference()
 {
-    uno::Reference< beans::XPropertySet > xTableAutoFormatField = init();
+    uno::Reference< beans::XPropertySet > xTableAutoFormatField = initTest();
     rtl::OUString aRotateReference(RTL_CONSTASCII_USTRINGPARAM("RotateReference"));
     uno::Any aOldRotateReference = xTableAutoFormatField->getPropertyValue(aRotateReference);
     sal_Int32 aValue = 0;
@@ -87,9 +64,9 @@ void ScTableAutoFormatField::testRotateReference()
     CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
-void ScTableAutoFormatField::testVertJustify()
+void TableAutoFormatField::testVertJustify()
 {
-    uno::Reference< beans::XPropertySet > xTableAutoFormatField = init();
+    uno::Reference< beans::XPropertySet > xTableAutoFormatField = initTest();
     rtl::OUString aVertJustify(RTL_CONSTASCII_USTRINGPARAM("VertJustify"));
     uno::Any aOldVertJustify = xTableAutoFormatField->getPropertyValue(aVertJustify);
     sal_Int32 aValue = 0;
@@ -104,27 +81,6 @@ void ScTableAutoFormatField::testVertJustify()
     std::cout << "New VertJustify value: " << aValue << std::endl;
     CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
-
-void ScTableAutoFormatField::setUp()
-{
-    nTest += 1;
-    UnoApiTest::setUp();
-}
-
-void ScTableAutoFormatField::tearDown()
-{
-    UnoApiTest::tearDown();
-
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxDesktop->terminate();
-        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
-    }
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScTableAutoFormatField);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

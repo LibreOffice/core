@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer) ]
+ * Copyright (C) 2012 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -26,35 +26,42 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+#include <test/testdllapi.hxx>
 
-// basic uno api test class
+#include <vector>
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+using namespace com::sun::star;
+
+namespace apitest {
+
+class OOO_DLLPUBLIC_TEST XDataPilotDescriptor
 {
 public:
-    UnoApiTest();
+    void testSourceRange();
+    void testTag();
+    void testGetFilterDescriptor();
+    void testGetDataPilotFields();
+    void testGetColumnFields();
+    void testGetRowFields();
+    void testGetPageFields();
+    void testGetDataFields();
+    void testGetHiddenFields();
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
-
-    virtual void setUp();
-    virtual void tearDown();
-
-protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
-
-
+    virtual uno::Reference< uno::XInterface > init() = 0;
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+
+    void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );
+
+    void checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex );
+    static std::vector<rtl::OUString> maFieldNames;
 };
+
+std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

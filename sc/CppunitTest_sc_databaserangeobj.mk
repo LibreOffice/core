@@ -31,7 +31,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_databaserangeobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_databaserangeobj, \
-    sc/qa/extras/xdatabaserange \
+    sc/qa/extras/scdatabaserangeobj \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_databaserangeobj, \
@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_databaserangeobj, \
     sc \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

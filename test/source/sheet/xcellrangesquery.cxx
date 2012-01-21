@@ -26,170 +26,90 @@
  * instead of those above.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/sheet/xcellrangesquery.hxx>
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
+
+#include "cppunit/extensions/HelperMacros.h"
 
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 
-namespace ScCellRangeBase {
+namespace apitest {
 
-#define NUMBER_OF_TESTS 5
-
-class ScXCellRangesQuery : public UnoApiTest
-{
-public:
-
-    virtual void setUp();
-    virtual void tearDown();
-
-    //Testcases
-    void testQueryColumnDifference();
-    void testQueryContentDifference();
-    void testQueryEmptyCells();
-    void testQueryFormulaCells();
-    void testQueryIntersection();
-    void testQueryRowDifference();
-    void testQueryVisibleCells();
-
-    CPPUNIT_TEST_SUITE(ScXCellRangesQuery);
-    CPPUNIT_TEST(testQueryColumnDifference);
-    CPPUNIT_TEST(testQueryContentDifference);
-    CPPUNIT_TEST(testQueryEmptyCells);
-    //looks broken
-    //CPPUNIT_TEST(testQueryFormulaCells);
-    CPPUNIT_TEST(testQueryIntersection);
-    CPPUNIT_TEST(testQueryRowDifference);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<sheet::XCellRangesQuery> init();
-
-    static int nTest;
-    static uno::Reference< lang::XComponent > xComponent;
-};
-
-int ScXCellRangesQuery::nTest = 0;
-uno::Reference< lang::XComponent > ScXCellRangesQuery::xComponent;
-
-uno::Reference<sheet::XCellRangesQuery> ScXCellRangesQuery::init()
-{
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
-    createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !xComponent.is())
-        xComponent = loadFromDesktop(aFileURL);
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
-
-    uno::Reference<sheet::XCellRangesQuery> xReturn(xSheet->getCellRangeByPosition(0,0,3,4), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
-    return xReturn;
-}
-
-void ScXCellRangesQuery::testQueryColumnDifference()
+void XCellRangesQuery::testQueryColumnDifference()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.B1:C1,Sheet1.B3:C5"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryColumnDifferences(table::CellAddress(0, 1, 1));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryColumnDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryColumnDifference", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryContentDifference()
+void XCellRangesQuery::testQueryContentDifference()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.B2:B3"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::VALUE);
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryContentDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryContentDifference", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryEmptyCells()
+void XCellRangesQuery::testQueryEmptyCells()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.A1:A5,Sheet1.B1:C1,Sheet1.B5,Sheet1.C3:C5,Sheet1.D1:D5"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryEmptyCells();
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryEmptyCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryEmptyCells", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryFormulaCells()
+void XCellRangesQuery::testQueryFormulaCells()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.C2"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryFormulaCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryIntersection()
+void XCellRangesQuery::testQueryIntersection()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.D4:D5"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryIntersection(table::CellRangeAddress(0,3,3,7,7));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryIntersection: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryRowDifference()
+void XCellRangesQuery::testQueryRowDifference()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.A2:A4,Sheet1.C2:D4"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryRowDifferences(table::CellAddress(0,1,1));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryRowDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
 }
 
-void ScXCellRangesQuery::testQueryVisibleCells()
+void XCellRangesQuery::testQueryVisibleCells()
 {
-    rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.A2"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
+    rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.A1:D5"));
+    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryVisibleCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
 }
-
-void ScXCellRangesQuery::setUp()
-{
-    nTest += 1;
-    UnoApiTest::setUp();
-}
-
-void ScXCellRangesQuery::tearDown()
-{
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
-        xCloseable->close( false );
-    }
-
-    UnoApiTest::tearDown();
-
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXCellRangesQuery);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 

@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer) ]
+ * Copyright (C) 2011 Laurent Godard lgodard.libre@laposte.net (initial developer)
  *
  * All Rights Reserved.
  *
@@ -26,35 +26,31 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <test/testdllapi.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
 
-// basic uno api test class
+namespace apitest {
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OOO_DLLPUBLIC_TEST XNamedRange
 {
 public:
-    UnoApiTest();
+    virtual uno::Reference< uno::XInterface > init() = 0;
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
-
-    virtual void setUp();
-    virtual void tearDown();
-
+    // XNamedRange
+    void testGetContent();
+    void testSetContent();
+    void testGetType();
+    void testSetType();
+    void testGetReferencePosition();
+    void testSetReferencePosition();
 protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
+    virtual uno::Reference< sheet::XNamedRange> getNamedRange(const rtl::OUString&) = 0;
 
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
