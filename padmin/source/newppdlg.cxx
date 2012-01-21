@@ -138,7 +138,7 @@ void PPDImportDialog::Import()
 
     int i = 0;
     aProgress.setRange( 0, aFiles.size() );
-    while( aFiles.size() )
+    while( !aFiles.empty() )
     {
         aProgress.setValue( ++i );
         aProgress.setFilename( aFiles.front() );
