@@ -95,9 +95,7 @@ struct LinkStruct
         nEndTextPos(nEnd) {}
 };
 
-typedef LinkStruct* LinkStructPtr;
-SV_DECL_PTRARR(LinkStructArr, LinkStructPtr, 0, 5 )
-SV_IMPL_PTRARR(LinkStructArr, LinkStructPtr)
+typedef std::vector<LinkStruct*> LinkStructArr;
 
 sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
 {
@@ -1816,7 +1814,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                         pNewLink->aINetFmt.SetVisitedFmtId(USHRT_MAX);
                         pNewLink->aINetFmt.SetINetFmtId(USHRT_MAX);
                     }
-                    aLinkArr.Insert( pNewLink, aLinkArr.Count() );
+                    aLinkArr.push_back(pNewLink);
                     nLinkStartPosition = STRING_NOTFOUND;
                     sLinkCharacterStyle.Erase();
                 }
@@ -1854,13 +1852,11 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
         pTOXNd->SetAttr( aTStops );
     }
 
-    if(aLinkArr.Count())
-        for(sal_uInt16 i = 0; i < aLinkArr.Count(); ++i )
-        {
-            LinkStruct* pTmp = aLinkArr.GetObject(i);
-            pTOXNd->InsertItem( pTmp->aINetFmt, pTmp->nStartTextPos,
-                            pTmp->nEndTextPos);
-        }
+    for(LinkStructArr::const_iterator i = aLinkArr.begin(); i != aLinkArr.end(); ++i)
+    {
+        pTOXNd->InsertItem((*i)->aINetFmt, (*i)->nStartTextPos,
+                           (*i)->nEndTextPos);
+    }
 }
 
 /*--------------------------------------------------------------------
