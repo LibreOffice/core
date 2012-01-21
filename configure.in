@@ -7713,7 +7713,6 @@ the  Windows SDK are installed.])
              -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe" ; then
             AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
         fi
-        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
     fi
 
     if test -z "$WINDOWS_SDK_HOME"; then
@@ -7727,6 +7726,9 @@ the  Windows SDK are installed.])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
+    PathFormat "$WINDOWS_SDK_HOME"
+    WINDOWS_SDK_HOME="$formatted_path"
+    SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
 
@@ -7752,7 +7754,6 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     elif test -n "$with_directx_home"; then
         DIRECTXSDK_HOME="$with_directx_home"
     fi
-    SOLARINC="$SOLARINC -I$DIRECTXSDK_HOME/include"
 
     if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" -o -f "$DIRECTXSDK_HOME/Include/d3d9.h" ; then
         HAVE_DIRECTXSDK_H="yes"
@@ -7780,6 +7781,9 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     else
         AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
     fi
+    PathFormat "$DIRECTXSDK_HOME"
+    DIRECTXSDK_HOME="$formatted_path"
+    SOLARINC="$SOLARINC -I$DIRECTXSDK_HOME/include"
 fi
 AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
