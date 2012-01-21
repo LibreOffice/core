@@ -26,16 +26,16 @@
  *
  ************************************************************************/
 
-
 #include <svtools/fontsubstconfig.hxx>
 #include <svl/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/debug.hxx>
-
 #include <vcl/outdev.hxx>
 #include <rtl/logfile.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -54,11 +54,8 @@ const sal_Char cSubstituteFont[]= "SubstituteFont";
 const sal_Char cOnScreenOnly[]  = "OnScreenOnly";
 const sal_Char cAlways[]        = "Always";
 
-//-----------------------------------------------------------------------------
-typedef SubstitutionStruct* SubstitutionStructPtr;
-SV_DECL_PTRARR_DEL(SubstitutionStructArr, SubstitutionStructPtr, 2, 2)
-SV_IMPL_PTRARR(SubstitutionStructArr, SubstitutionStructPtr);
-//-----------------------------------------------------------------------------
+typedef boost::ptr_vector<SubstitutionStruct> SubstitutionStructArr;
+
 struct SvtFontSubstConfig_Impl
 {
     SubstitutionStructArr   aSubstArr;
@@ -101,12 +98,12 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     nName = 0;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
-        SubstitutionStructPtr pInsert = new SubstitutionStruct;
+        SubstitutionStruct* pInsert = new SubstitutionStruct;
         pNodeValues[nName++] >>= pInsert->sFont;
         pNodeValues[nName++] >>= pInsert->sReplaceBy;
         pInsert->bReplaceAlways = *(sal_Bool*)pNodeValues[nName++].getValue();
         pInsert->bReplaceOnScreenOnly = *(sal_Bool*)pNodeValues[nName++].getValue();
-        pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
+        pImpl->aSubstArr.push_back(pInsert);
     }
 }
 
@@ -128,11 +125,11 @@ void SvtFontSubstConfig::Commit()
     PutProperties(aNames, aValues);
 
     OUString sNode(C2U(cFontPairs));
-    if(!pImpl->aSubstArr.Count())
+    if(pImpl->aSubstArr.empty())
         ClearNodeSet(sNode);
     else
     {
-        Sequence<PropertyValue> aSetValues(4 * pImpl->aSubstArr.Count());
+        Sequence<PropertyValue> aSetValues(4 * pImpl->aSubstArr.size());
         PropertyValue* pSetValues = aSetValues.getArray();
         sal_Int32 nSetValue = 0;
 
@@ -142,22 +139,22 @@ void SvtFontSubstConfig::Commit()
         const OUString sOnScreenOnly(C2U(cOnScreenOnly));
 
         const uno::Type& rBoolType = ::getBooleanCppuType();
-        for(sal_uInt16 i = 0; i < pImpl->aSubstArr.Count(); i++)
+        for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
         {
             OUString sPrefix(sNode);
             sPrefix += C2U("/_");
             sPrefix += OUString::valueOf((sal_Int32)i);
             sPrefix += C2U("/");
 
-            SubstitutionStructPtr pSubst = pImpl->aSubstArr[i];
+            SubstitutionStruct& pSubst = pImpl->aSubstArr[i];
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
-            pSetValues[nSetValue++].Value <<= pSubst->sFont;
+            pSetValues[nSetValue++].Value <<= pSubst.sFont;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
-            pSetValues[nSetValue++].Value <<= pSubst->sReplaceBy;
+            pSetValues[nSetValue++].Value <<= pSubst.sReplaceBy;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
-            pSetValues[nSetValue++].Value.setValue(&pSubst->bReplaceAlways, rBoolType);
+            pSetValues[nSetValue++].Value.setValue(&pSubst.bReplaceAlways, rBoolType);
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
-            pSetValues[nSetValue++].Value.setValue(&pSubst->bReplaceOnScreenOnly, rBoolType);
+            pSetValues[nSetValue++].Value.setValue(&pSubst.bReplaceOnScreenOnly, rBoolType);
         }
         ReplaceSetProperties(sNode, aSetValues);
     }
@@ -165,26 +162,26 @@ void SvtFontSubstConfig::Commit()
 
 sal_Int32 SvtFontSubstConfig::SubstitutionCount() const
 {
-    return pImpl->aSubstArr.Count();
+    return pImpl->aSubstArr.size();
 }
 
 void SvtFontSubstConfig::ClearSubstitutions()
 {
-    pImpl->aSubstArr.DeleteAndDestroy(0, pImpl->aSubstArr.Count());
+    pImpl->aSubstArr.clear();
 }
 
 const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
 {
-    DBG_ASSERT(nPos >= 0 && nPos < pImpl->aSubstArr.Count(), "illegal array index");
-    if(nPos >= 0 && nPos < pImpl->aSubstArr.Count())
-        return pImpl->aSubstArr[(sal_uInt16)nPos];
-    return 0;
+    sal_Int32 nCount = static_cast<sal_Int32>(pImpl->aSubstArr.size());
+    DBG_ASSERT(nPos >= 0 && nPos < nCount, "illegal array index");
+    if(nPos >= 0 && nPos < nCount)
+        return &pImpl->aSubstArr[nPos];
+    return NULL;
 }
 
 void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
 {
-    SubstitutionStructPtr pInsert = new SubstitutionStruct(rToAdd);
-    pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
+    pImpl->aSubstArr.push_back(new SubstitutionStruct(rToAdd));
 }
 
 void SvtFontSubstConfig::Apply()
