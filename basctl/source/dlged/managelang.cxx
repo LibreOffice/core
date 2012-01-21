@@ -85,10 +85,8 @@ namespace {
     }
 }
 
-ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr ) :
-
+ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr ) :
     ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
-
     m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
     m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
     m_aAddPB            ( this, IDEResId( PB_ADD_LANG ) ),
@@ -290,10 +288,9 @@ IMPL_LINK( ManageLanguageDialog, SelectHdl, ListBox *, EMPTYARG )
 
 // class SetDefaultLanguageDialog -----------------------------------------------
 
-SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr ) :
+SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr ) :
 
     ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
-
     m_aLanguageFT   ( this, IDEResId( FT_DEF_LANGUAGE ) ),
     m_pLanguageLB   ( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
     m_pCheckLangLB  ( NULL ),
@@ -302,9 +299,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
     m_aOKBtn        ( this, IDEResId( PB_DEF_OK ) ),
     m_aCancelBtn    ( this, IDEResId( PB_DEF_CANCEL ) ),
     m_aHelpBtn      ( this, IDEResId( PB_DEF_HELP ) ),
-
     m_pLocalizationMgr( _pLMgr )
-
 {
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {

@@ -68,7 +68,7 @@ private:
     HelpButton          m_aHelpBtn;
     OKButton            m_aCloseBtn;
 
-    LocalizationMgr*    m_pLocalizationMgr;
+    boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
 
     ::rtl::OUString     m_sDefLangStr;
     ::rtl::OUString     m_sDeleteStr;
@@ -85,7 +85,7 @@ private:
     DECL_LINK(          SelectHdl, ListBox * );
 
 public:
-    ManageLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr );
+    ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
     ~ManageLanguageDialog();
 };
 
@@ -103,13 +103,13 @@ private:
     HelpButton          m_aHelpBtn;
 
     bool                m_bIsDefaultMode;
-    LocalizationMgr*    m_pLocalizationMgr;
+    boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
 
     void                FillLanguageBox();
     void                CalcInfoSize();
 
 public:
-    SetDefaultLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr );
+    SetDefaultLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
     ~SetDefaultLanguageDialog();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;

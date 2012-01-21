@@ -206,8 +206,6 @@ void BasicIDEShell::Init()
     pObjectCatalog = 0;
     bCreatingWindow = sal_False;
 
-    m_pCurLocalizationMgr = NULL;
-
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
     bTabBarSplitted = sal_False;
@@ -244,8 +242,6 @@ BasicIDEShell::~BasicIDEShell()
 
     SetWindow( 0 );
     SetCurWindow( 0 );
-
-    delete m_pCurLocalizationMgr;
 
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin )
@@ -1014,7 +1010,6 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString 
 void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName )
 {
     // Create LocalizationMgr
-    delete m_pCurLocalizationMgr;
     Reference< resource::XStringResourceManager > xStringResourceManager;
     try
     {
@@ -1026,9 +1021,8 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, :
     }
     catch (const container::NoSuchElementException& )
     {}
-    m_pCurLocalizationMgr = new LocalizationMgr
-        ( this, rDocument, aLibName, xStringResourceManager );
 
+    m_pCurLocalizationMgr = boost::shared_ptr<LocalizationMgr>(new LocalizationMgr(this, rDocument, aLibName, xStringResourceManager));
     m_pCurLocalizationMgr->handleTranslationbar();
 }
 

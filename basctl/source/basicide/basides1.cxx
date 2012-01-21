@@ -1024,7 +1024,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 else
                 {
                     ::rtl::OUString aItemStr;
-                    LocalizationMgr* pCurMgr = GetCurLocalizationMgr();
+                    boost::shared_ptr<LocalizationMgr> pCurMgr(GetCurLocalizationMgr());
                     if ( pCurMgr->isLibraryLocalized() )
                     {
                         Sequence< lang::Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();

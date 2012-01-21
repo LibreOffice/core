@@ -85,7 +85,7 @@ friend class LocalizationMgr;
     IDEBaseWindow*      pCurWin;
     ScriptDocument      m_aCurDocument;
     ::rtl::OUString     m_aCurLibName;
-    LocalizationMgr*    m_pCurLocalizationMgr;
+    boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
     ScrollBar           aHScrollBar;
     ScrollBar           aVScrollBar;
@@ -177,7 +177,7 @@ public:
                         GetCurDocument() const { return m_aCurDocument; }
     const ::rtl::OUString&       GetCurLibName() const { return m_aCurLibName; }
     ObjectCatalog*      GetObjectCatalog() const    { return pObjectCatalog; }
-    LocalizationMgr*    GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
+    boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
     ScrollBar&          GetVScrollBar()         { return aVScrollBar; }

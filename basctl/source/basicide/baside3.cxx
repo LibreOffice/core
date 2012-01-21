@@ -1152,7 +1152,7 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
                 bool bCopyResourcesForDialog = true;
                 if( bAddDialogLanguagesToLib )
                 {
-                    LocalizationMgr* pCurMgr = pIDEShell->GetCurLocalizationMgr();
+                    boost::shared_ptr<LocalizationMgr> pCurMgr = pIDEShell->GetCurLocalizationMgr();
 
                     lang::Locale aFirstLocale;
                     aFirstLocale = aOnlyInImportLanguages[0];

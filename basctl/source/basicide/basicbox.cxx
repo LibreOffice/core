@@ -424,7 +424,7 @@ void BasicLanguageBox::FillBox()
     m_sCurrentText = GetSelectEntry();
     ClearBox();
 
-    LocalizationMgr* pCurMgr = BasicIDEGlobals::GetShell()->GetCurLocalizationMgr();
+    boost::shared_ptr<LocalizationMgr> pCurMgr(BasicIDEGlobals::GetShell()->GetCurLocalizationMgr());
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
