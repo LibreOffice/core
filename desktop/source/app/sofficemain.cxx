@@ -42,6 +42,9 @@ int SVMain();
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
+#ifdef ANDROID
+    try {
+#endif
     tools::extendApplicationEnvironment();
 
     RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Main()" );
@@ -65,6 +68,13 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     }
 #endif
     return SVMain();
+#ifdef ANDROID
+    } catch (const ::com::sun::star::uno::Exception &e) {
+        fprintf (stderr, "Not handled UNO exception at main: '%s'\n",
+                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        throw e; // to get exception type printed
+    }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
