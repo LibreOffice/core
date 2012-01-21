@@ -380,7 +380,8 @@
 namespace com { namespace sun { namespace star { namespace uno {
 
 std::ostream & operator <<(
-    std::ostream & out, com::sun::star::uno::Exception const &)
+    std::ostream & out,
+    SAL_UNUSED_PARAMETER com::sun::star::uno::Exception const &)
 {
     return out << "<UNO exception>";
 }

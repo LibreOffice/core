@@ -43,7 +43,7 @@ struct SwTOXSortTabBase;
 
 typedef SwTOXSortTabBase* SwTOXSortTabBasePtr;
 
-SV_DECL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr, 0, 5 )
+SV_DECL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr, 0)
 
 /*--------------------------------------------------------------------
      Beschreibung: Ring der speziellen Verzeichnisse

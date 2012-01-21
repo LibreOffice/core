@@ -391,8 +391,8 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
     }
 }
 
-void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxMSF */, const Reference< XDrawPage >& rxDrawPage,
-                               const GraphicSettings& /* rGraphicSettings */, sal_Int32& rnGraphics )
+void ImpCountBackgroundGraphic(
+    const Reference< XDrawPage >& rxDrawPage, sal_Int32& rnGraphics )
 {
     try
     {
@@ -430,13 +430,13 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMS
         for ( i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCountBackgroundGraphic( rxMSF, xDrawPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( xDrawPage, rnGraphics );
             Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
             ImpCountGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rnGraphics );
 
             Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
             Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
-            ImpCountBackgroundGraphic( rxMSF, xNotesPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( xNotesPage, rnGraphics );
             Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
             ImpCountGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rnGraphics );
         }
@@ -445,7 +445,7 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMS
         for ( i = 0; i < xMasterPages->getCount(); i++ )
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCountBackgroundGraphic( rxMSF, xMasterPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( xMasterPage, rnGraphics );
             Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
             ImpCountGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rnGraphics );
         }

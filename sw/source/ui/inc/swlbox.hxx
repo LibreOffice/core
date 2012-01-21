@@ -38,7 +38,7 @@
 class SwBoxEntry;
 class Window;
 
-SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
+SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10)
 
 /*--------------------------------------------------------------------
      Description: SwBoxEntry

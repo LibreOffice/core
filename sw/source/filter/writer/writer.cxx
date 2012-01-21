@@ -108,7 +108,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
     SvPtrarr* pArr = pBkmkNodePos->Get( nNd );
     if( !pArr )
     {
-        pArr = new SvPtrarr( 1, 4 );
+        pArr = new SvPtrarr( 1 );
         pBkmkNodePos->Insert( nNd, pArr );
     }
 
@@ -121,7 +121,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
         pArr = pBkmkNodePos->Get( nNd );
         if( !pArr )
         {
-            pArr = new SvPtrarr( 1, 4 );
+            pArr = new SvPtrarr( 1 );
             pBkmkNodePos->Insert( nNd, pArr );
         }
         pArr->Insert( p, pArr->Count() );
@@ -473,7 +473,7 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
     {
         if (!m_pImpl->pFontRemoveLst)
         {
-            m_pImpl->pFontRemoveLst = new SvPtrarr( 0, 10 );
+            m_pImpl->pFontRemoveLst = new SvPtrarr( 0 );
         }
 
         void* p = (void*)pItem;

@@ -393,7 +393,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
         GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
 
     rStrm << (sal_uInt8) GetFamily() << (sal_uInt8) GetPitch()
-          << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion()));
+          << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet()));
 
     String aStoreFamilyName( GetFamilyName() );
     if( bToBats )
@@ -430,7 +430,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     aStyle = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // Set the "correct" textencoding
-    eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding, (sal_uInt16)rStrm.GetVersion() );
+    eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding );
 
     // at some point, the StarBats changes from  ANSI font to SYMBOL font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
@@ -2104,8 +2104,7 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_uInt8)GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion())
-          << GetValue();
+    rStrm << (sal_uInt8)GetSOStoreTextEncoding(GetCharSet()) << GetValue();
     return rStrm;
 }
 

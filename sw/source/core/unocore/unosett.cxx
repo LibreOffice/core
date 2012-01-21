@@ -106,7 +106,7 @@ struct PropValData
 #define API_COL_LINE_DASHED             3
 
 typedef PropValData* PropValDataPtr;
-SV_DECL_PTRARR(PropValDataArr, PropValDataPtr, 5, 5 )
+SV_DECL_PTRARR(PropValDataArr, PropValDataPtr, 5)
 SV_IMPL_PTRARR(PropValDataArr, PropValDataPtr)
 
 

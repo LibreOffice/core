@@ -86,7 +86,7 @@ struct SwInsDBColumn
 };
 
 typedef SwInsDBColumn* SwInsDBColumnPtr;
-SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32, 32 )
+SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32 )
 
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem

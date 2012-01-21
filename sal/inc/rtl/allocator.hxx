@@ -88,7 +88,7 @@ public:
 
     //-----------------------------------------
     template<class U>
-    Allocator (const Allocator<U>&) SAL_THROW(())
+    Allocator (SAL_UNUSED_PARAMETER const Allocator<U>&) SAL_THROW(())
     {}
 
     //-----------------------------------------
@@ -126,14 +126,14 @@ public:
        are not enabled, e.g. GCC under Linux and it is
        in general not desired to compile sal with exceptions
        enabled. */
-    pointer allocate (size_type n, const void* = 0)
+    pointer allocate (size_type n, SAL_UNUSED_PARAMETER const void* = 0)
     {
         return reinterpret_cast<pointer>(
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
 
     //-----------------------------------------
-    void deallocate (pointer p, size_type /* n */)
+    void deallocate (pointer p, SAL_UNUSED_PARAMETER size_type /* n */)
     {
         rtl_freeMemory(p);
     }
@@ -157,8 +157,9 @@ public:
 // references above) that's why the operators below
 // return always true or false
 
-template<class T, class U>
-inline bool operator== (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
+template<class T, class U> inline bool operator ==(
+    SAL_UNUSED_PARAMETER const Allocator<T>&,
+    SAL_UNUSED_PARAMETER const Allocator<U>&) SAL_THROW(())
 {
     return true;
 }

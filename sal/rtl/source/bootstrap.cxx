@@ -581,7 +581,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
 //----------------------------------------------------------------------------
 
 void SAL_CALL rtl_bootstrap_args_close (
-    rtlBootstrapHandle
+    SAL_UNUSED_PARAMETER rtlBootstrapHandle
 ) SAL_THROW_EXTERN_C()
 {
     // do nothing; the BootstrapMap::map_ just keeps growing for now

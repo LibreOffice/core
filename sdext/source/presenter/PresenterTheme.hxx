@@ -133,8 +133,7 @@ public:
         sal_uInt32& rColor);
 
     ::boost::shared_ptr<PresenterConfigurationAccess> GetNodeForViewStyle (
-        const ::rtl::OUString& rsStyleName,
-        const PresenterConfigurationAccess::WriteMode) const;
+        const ::rtl::OUString& rsStyleName) const;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;

@@ -428,7 +428,7 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
 }
 
 //=========================================================================
-SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16,8)
+SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16)
 SV_IMPL_PTRARR(ExpandedEntries, StringPtr)
 
 /*  [Description]
@@ -647,7 +647,7 @@ struct StyleTree_Impl
 };
 
 typedef StyleTree_Impl* StyleTree_ImplPtr;
-SV_DECL_PTRARR_DEL(StyleTreeArr_Impl, StyleTree_ImplPtr, 16, 8)
+SV_DECL_PTRARR_DEL(StyleTreeArr_Impl, StyleTree_ImplPtr, 16)
 SV_IMPL_PTRARR(StyleTreeArr_Impl, StyleTree_ImplPtr)
 
 

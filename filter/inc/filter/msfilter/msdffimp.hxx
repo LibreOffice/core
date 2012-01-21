@@ -184,14 +184,14 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
 // nach der Reihenfolge des Auftretens sortiert werden:
-SV_DECL_PTRARR_DEL(SvxMSDffBLIPInfos,   SvxMSDffBLIPInfo_Ptr,   16,16)
+SV_DECL_PTRARR_DEL(SvxMSDffBLIPInfos,   SvxMSDffBLIPInfo_Ptr,   16)
 
-SV_DECL_PTRARR_DEL(SvxMSDffShapeOrders, SvxMSDffShapeOrder_Ptr, 16,16)
+SV_DECL_PTRARR_DEL(SvxMSDffShapeOrders, SvxMSDffShapeOrder_Ptr, 16)
 
 // explizit sortiert werden:
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY(SvxMSDffShapeInfos,  SvxMSDffShapeInfo_Ptr,  16,16, MSFILTER_DLLPUBLIC)
+SV_DECL_PTRARR_SORT_DEL_VISIBILITY(SvxMSDffShapeInfos,  SvxMSDffShapeInfo_Ptr,  16, MSFILTER_DLLPUBLIC)
 
-SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder_Ptr, 16,16, MSFILTER_DLLPUBLIC)
+SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder_Ptr, 16, MSFILTER_DLLPUBLIC)
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
@@ -331,7 +331,7 @@ private:
 typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
 
 // Liste aller SvxMSDffImportRec fuer eine Gruppe
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY(MSDffImportRecords, MSDffImportRec_Ptr, 16,16, MSFILTER_DLLPUBLIC)
+SV_DECL_PTRARR_SORT_DEL_VISIBILITY(MSDffImportRecords, MSDffImportRec_Ptr, 16, MSFILTER_DLLPUBLIC)
 
 //---------------------------------------------------------------------------
 //   Import-/Export-Parameterblock fuer 1 x ImportObjAtCurrentStreamPos()

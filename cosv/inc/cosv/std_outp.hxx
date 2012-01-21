@@ -106,11 +106,11 @@ Cerr()
 
 
 
-typedef void (*F_FLUSHING_FUNC)(ostream&, bool, int*);
+typedef void (*F_FLUSHING_FUNC)(ostream&);
 
-void                Endl( ostream&, bool, int* );
+void                Endl( ostream& );
 
-void                Flush( ostream&, bool, int* );
+void                Flush( ostream& );
 
 
 }   // namespace csv
@@ -123,7 +123,7 @@ operator<<( csv::ostream &          io_rStream,
 {
 #ifndef CSV_NO_IOSTREAMS
 //    (*i_fFlushingFunc)( io_rStream, csv::redirect_out::useme_(), 0 );
-    (*i_fFlushingFunc)( io_rStream, false, 0 );
+    (*i_fFlushingFunc)( io_rStream );
 #else
     csv_assert( csv::redirect_out::useme_() );
     (*i_fFlushingFunc)( io_rStream, true, 0 );

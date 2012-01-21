@@ -129,7 +129,7 @@ public:
 };
 
 typedef SvxAutocorrWord* SvxAutocorrWordPtr;
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxAutocorrWordList, SvxAutocorrWordPtr, 10, 10 , EDITENG_DLLPUBLIC)
+SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxAutocorrWordList, SvxAutocorrWordPtr, 10, EDITENG_DLLPUBLIC)
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 {

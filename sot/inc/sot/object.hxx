@@ -40,79 +40,79 @@
 #define TEST_INVARIANT
 #ifdef TEST_INVARIANT
 #define SO2_DECL_INVARIANT()                                            \
-        virtual void TestObjRef( sal_Bool bFree );                          \
-        void         TestMemberObjRef( sal_Bool bFree );                    \
-        virtual void TestInvariant( sal_Bool bPrint );                      \
-        void         TestMemberInvariant( sal_Bool bPrint );
+        virtual void TestObjRef();                                      \
+        void         TestMemberObjRef();                                \
+        virtual void TestInvariant();                                   \
+        void         TestMemberInvariant();
 
 #define SO2_IMPL_INVARIANT(ClassName)                                   \
-void ClassName::TestObjRef( sal_Bool bFree )                       \
+void ClassName::TestObjRef()                                            \
 {                                                                       \
-    TestMemberObjRef( bFree );                                          \
+    TestMemberObjRef();                                                 \
 }                                                                       \
-void ClassName::TestInvariant( sal_Bool bPrint )                   \
+void ClassName::TestInvariant()                                         \
 {                                                                       \
-    TestMemberInvariant( bPrint );                                      \
+    TestMemberInvariant();                                              \
 }
 
 #define SO2_IMPL_INVARIANT1(ClassName,Super1)                           \
-void ClassName::TestObjRef( sal_Bool bFree )                       \
+void ClassName::TestObjRef()                                            \
 {                                                                       \
-    TestMemberObjRef( bFree );                                          \
-    Super1::TestObjRef( bFree );                                        \
+    TestMemberObjRef();                                                 \
+    Super1::TestObjRef();                                               \
 }                                                                       \
-void ClassName::TestInvariant( sal_Bool bPrint )                   \
+void ClassName::TestInvariant()                                         \
 {                                                                       \
-    TestMemberInvariant( bPrint );                                      \
-    Super1::TestInvariant( bPrint );                                    \
+    TestMemberInvariant();                                              \
+    Super1::TestInvariant();                                            \
 }
 
 #define SO2_IMPL_INVARIANT2(ClassName,Super1,Super2)                    \
-void ClassName::TestObjRef( sal_Bool bFree )                       \
+void ClassName::TestObjRef()                                            \
 {                                                                       \
-    TestMemberObjRef( bFree );                                          \
-    Super1::TestObjRef( bFree );                                        \
-    Super2::TestObjRef( bFree );                                        \
+    TestMemberObjRef();                                                 \
+    Super1::TestObjRef();                                               \
+    Super2::TestObjRef();                                               \
 }                                                                       \
-void ClassName::TestInvariant( sal_Bool bPrint )                   \
+void ClassName::TestInvariant()                                         \
 {                                                                       \
-    TestMemberInvariant( bPrint );                                      \
-    Super1::TestInvariant( bPrint );                                    \
-    Super2::TestInvariant( bPrint );                                    \
+    TestMemberInvariant();                                              \
+    Super1::TestInvariant();                                            \
+    Super2::TestInvariant();                                            \
 }
 
 #define SO2_IMPL_INVARIANT3(ClassName,Super1,Super2,Super3)             \
-void ClassName::TestObjRef( sal_Bool bFree )                       \
+void ClassName::TestObjRef()                                            \
 {                                                                       \
-    TestMemberObjRef( bFree );                                          \
-    Super1::TestObjRef( bFree );                                        \
-    Super2::TestObjRef( bFree );                                        \
-    Super3::TestObjRef( bFree );                                        \
+    TestMemberObjRef();                                                 \
+    Super1::TestObjRef();                                               \
+    Super2::TestObjRef();                                               \
+    Super3::TestObjRef();                                               \
 }                                                                       \
-void ClassName::TestInvariant( sal_Bool bPrint )                   \
+void ClassName::TestInvariant()                                         \
 {                                                                       \
-    TestMemberInvariant( bPrint );                                      \
-    Super1::TestInvariant( bPrint );                                    \
-    Super2::TestInvariant( bPrint );                                    \
-    Super3::TestInvariant( bPrint );                                    \
+    TestMemberInvariant();                                              \
+    Super1::TestInvariant();                                            \
+    Super2::TestInvariant();                                            \
+    Super3::TestInvariant();                                            \
 }
 
 #define SO2_IMPL_INVARIANT4(ClassName,Super1,Super2,Super3,Super4)      \
-void ClassName::TestObjRef( sal_Bool bFree )                       \
+void ClassName::TestObjRef()                                            \
 {                                                                       \
-    TestMemberObjRef( bFree );                                          \
-    Super1::TestObjRef( bFree );                                        \
-    Super2::TestObjRef( bFree );                                        \
-    Super3::TestObjRef( bFree );                                        \
-    Super4::TestObjRef( bFree );                                        \
+    TestMemberObjRef();                                                 \
+    Super1::TestObjRef();                                               \
+    Super2::TestObjRef();                                               \
+    Super3::TestObjRef();                                               \
+    Super4::TestObjRef();                                               \
 }                                                                       \
-void ClassName::TestInvariant( sal_Bool bPrint )                   \
+void ClassName::TestInvariant()                                         \
 {                                                                       \
-    TestMemberInvariant( bPrint );                                      \
-    Super1::TestInvariant( bPrint );                                    \
-    Super2::TestInvariant( bPrint );                                    \
-    Super3::TestInvariant( bPrint );                                    \
-    Super4::TestInvariant( bPrint );                                    \
+    TestMemberInvariant();                                              \
+    Super1::TestInvariant();                                            \
+    Super2::TestInvariant();                                            \
+    Super3::TestInvariant();                                            \
+    Super4::TestInvariant();                                            \
 }
 
 #ifdef DBG_UTIL

@@ -83,12 +83,14 @@ struct StreamIgnore {
     typedef struct { char a[2]; } Result;
 };
 
-inline StreamString operator <<(StreamStart const &, char const * s) {
+inline StreamString operator <<(
+    SAL_UNUSED_PARAMETER StreamStart const &, char const * s)
+{
     return StreamString(s);
 }
 
 template< typename T > inline StreamIgnore operator <<(
-    StreamStart const &, T const &)
+    SAL_UNUSED_PARAMETER StreamStart const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
 #if defined _MSC_VER
@@ -97,7 +99,7 @@ template< typename T > inline StreamIgnore operator <<(
 }
 
 template< typename T > inline StreamIgnore operator <<(
-    StreamString const &, T const &)
+    SAL_UNUSED_PARAMETER StreamString const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
 #if defined _MSC_VER
@@ -106,7 +108,7 @@ template< typename T > inline StreamIgnore operator <<(
 }
 
 template< typename T > inline StreamIgnore operator <<(
-    StreamIgnore const &, T const &)
+    SAL_UNUSED_PARAMETER StreamIgnore const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
 #if defined _MSC_VER
@@ -118,7 +120,7 @@ template< typename T > typename T::Result getResult(T const &);
 
 inline char const * unwrapStream(StreamString const & s) { return s.string; }
 
-inline char const * unwrapStream(StreamIgnore const &) {
+inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     std::abort();
 #if defined _MSC_VER
     return 0;

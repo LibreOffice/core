@@ -70,7 +70,7 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
         SwProgress *pProgress = 0;
 
         if ( !pProgressContainer )
-            pProgressContainer = new SvPtrarr( 2, 2 );
+            pProgressContainer = new SvPtrarr( 2 );
         else
         {
             if ( 0 != (pProgress = lcl_SwFindProgress( pDocShell )) )

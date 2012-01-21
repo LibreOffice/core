@@ -137,7 +137,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
     //__________________________________________________________________________
     private native Object dispatch_call(
-        long bridge_handle, String decl_class, String method, Object args [] )
+        long bridge_handle, String method, Object args [] )
         throws Throwable;
 
     // InvocationHandler impl
@@ -172,8 +172,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         else if (decl_class.isAssignableFrom( m_class ))
         {
             // dispatch interface call
-            return dispatch_call(
-                m_bridge_handle, decl_class.getName(), method_name, args );
+            return dispatch_call( m_bridge_handle, method_name, args );
         }
         // IQueryInterface impl
         else if (IQueryInterface.class.equals( decl_class ))
@@ -185,9 +184,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
                     m_java_env.getRegisteredInterface( m_oid, (Type)args[ 0 ] );
                 if (null == registered_proxy)
                 {
-                    return dispatch_call(
-                        m_bridge_handle,
-                        "com.sun.star.uno.XInterface", method_name, args );
+                    return dispatch_call( m_bridge_handle, method_name, args );
                 }
                 else
                 {

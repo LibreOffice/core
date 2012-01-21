@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "sal/types.h"
+
 #include <precomp.h>
 #include <s2_luidl/pe_const.hxx>
 
@@ -160,7 +164,7 @@ PE_Constant::On_expect_curl_bracket_open_Punctuation(const char * i_sText)
 }
 
 void
-PE_Constant::On_expect_const_Stereotype(const char *)
+PE_Constant::On_expect_const_Stereotype(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult( done, push_sure, pPE_Type.Ptr() );
 }
@@ -180,7 +184,7 @@ PE_Constant::On_expect_const_Punctuation(const char * i_sText)
 }
 
 void
-PE_Constant::On_expect_value_Identifier(const char *)
+PE_Constant::On_expect_value_Identifier(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult( not_done, push_sure, pPE_Value.Ptr() );
 }
@@ -200,7 +204,7 @@ PE_Constant::On_expect_finish_Punctuation(const char * i_sText)
 }
 
 void
-PE_Constant::On_Default(const char * )
+PE_Constant::On_Default(SAL_UNUSED_PARAMETER const char * )
 {
     SetResult(not_done,pop_failure);
     eState = e_none;

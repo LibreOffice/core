@@ -177,7 +177,7 @@ class RscTypCont
     RscTop *    InitClassColor( RscTop * pSuper, RscEnum * pColor );
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap,
                                 RscTop * pClassColor );
-    RscTop *    InitClassImageList( RscTop * pSuper, RscTop *pClassBitmap,
+    RscTop *    InitClassImageList( RscTop * pSuper,
                                     RscTop * pClassColor, RscCont * pStrLst );
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo );
@@ -221,8 +221,7 @@ class RscTypCont
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
     RscTop *    InitClassMetricFormatter( RscTop * pSuper,
                                           RscEnum * pFieldUnits );
-    RscTop *    InitClassCurrencyFormatter( RscTop * pSuper,
-                                            RscEnum * pFieldUnits );
+    RscTop *    InitClassCurrencyFormatter( RscTop * pSuper );
     RscTop *    InitClassDateFormatter( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeFormatter( RscTop * pSuper, RscTop * pClassTime,
                                         RscEnum * pTimeFieldFormat );
@@ -240,8 +239,8 @@ class RscTypCont
     RscTop *    InitClassMetricBox( RscTop * pSuper );
     RscTop *    InitClassCurrencyBox( const char * pClassName, sal_uInt32 nRT,
                                         RscTop * pSuper );
-    RscTop *    InitClassDateBox( RscTop * pSuper, RscTop * pClassDate );
-    RscTop *    InitClassTimeBox( RscTop * pSuper, RscTop * pClassTime );
+    RscTop *    InitClassDateBox( RscTop * pSuper );
+    RscTop *    InitClassTimeBox( RscTop * pSuper );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );
@@ -254,8 +253,7 @@ class RscTypCont
     RscTop *    InitClassMoreButton( RscTop * pSuper, RscEnum * pMapUnit );
     RscTop *    InitClassFloatingWindow( RscTop * pSuper,
                                          RscEnum * pMapUnit );
-    RscTop *    InitClassTabControlItem( RscTop * pSuper,
-                                         RscTop * pClassTabPage );
+    RscTop *    InitClassTabControlItem( RscTop * pSuper );
     RscTop *    InitClassTabControl(  RscTop * pSuper,
                                      RscTop * pClassTabControlItem );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
@@ -343,7 +341,7 @@ public:
     void        ClearSysNames();
     ERRTYPE     WriteRc( WriteRcContext& rContext );
     void        WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
-                          CharSet nCharSet, sal_Bool bName = sal_True );
+                          sal_Bool bName = sal_True );
     ERRTYPE     WriteHxx( FILE * fOutput, sal_uLong nFileKey);
     ERRTYPE     WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                           const rtl::OString& rHxxName );

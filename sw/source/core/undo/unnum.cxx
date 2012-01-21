@@ -40,7 +40,7 @@
 #include <rolbck.hxx>
 
 
-SV_DECL_PTRARR_DEL( _SfxPoolItems, SfxPoolItem*, 16, 16 )
+SV_DECL_PTRARR_DEL( _SfxPoolItems, SfxPoolItem*, 16 )
 SV_IMPL_PTRARR( _SfxPoolItems, SfxPoolItem* );
 
 

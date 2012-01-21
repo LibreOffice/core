@@ -1285,11 +1285,7 @@ sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_u
 
 // -----------------------------------------------------------------------------
 
-static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl&
-#ifdef WNT
-rEntry
-#endif
-)
+static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
 {
     DataFlavor  aFlavor;
     sal_Bool        bRet = sal_True;
@@ -1333,6 +1329,8 @@ rEntry
                 }
                 break;
             }
+#else
+            (void) rEntry; // avoid warnings
 #endif
         }
     }

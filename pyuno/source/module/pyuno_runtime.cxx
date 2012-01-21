@@ -802,7 +802,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                     Reference< XInterface > () );
             }
         }
-        else if( PyObject_IsInstance( o, getPyUnoClass( runtime ).get() ) )
+        else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
         {
             PyUNO* o_pi;
             o_pi = (PyUNO*) o;

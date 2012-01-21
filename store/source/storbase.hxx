@@ -857,7 +857,7 @@ public:
     {
         return rtl_allocateMemory (sal_uInt32(n));
     }
-    static void operator delete (void * p, size_t) SAL_THROW(())
+    static void operator delete (void * p) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }

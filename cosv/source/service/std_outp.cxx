@@ -50,7 +50,7 @@ redirect_out *  redirect_out::pStdErr_ = 0;
 
 
 void
-Endl( ostream & io_rStream, bool /*bUseRedirect*/, int* )
+Endl( ostream & io_rStream )
 {
 #ifndef CSV_NO_IOSTREAMS
 //    if (NOT bUseRedirect)
@@ -61,7 +61,7 @@ Endl( ostream & io_rStream, bool /*bUseRedirect*/, int* )
 }
 
 void
-Flush( ostream & io_rStream, bool /*bUseRedirect*/, int* )
+Flush( ostream & io_rStream )
 {
 #ifndef CSV_NO_IOSTREAMS
 //    if (NOT bUseRedirect)

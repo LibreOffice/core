@@ -56,7 +56,7 @@ class SdrObject;
 class SwView;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4 )
 
 class SwXTextView :
     public ::com::sun::star::view::XSelectionSupplier,

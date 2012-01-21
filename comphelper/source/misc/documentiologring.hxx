@@ -30,7 +30,6 @@
 #define __DOCUMENTIOLOGRING_HXX_
 
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -54,7 +53,7 @@ class OSimpleLogRing : public ::cppu::WeakImplHelper3< ::com::sun::star::logging
     sal_Int32 m_nPos;
 
 public:
-    OSimpleLogRing( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+    OSimpleLogRing();
     virtual ~OSimpleLogRing();
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL

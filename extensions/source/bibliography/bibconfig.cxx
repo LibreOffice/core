@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
 typedef Mapping* MappingPtr;
-SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2)
+SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2)
 SV_IMPL_PTRARR(MappingArray, MappingPtr);
 
 #define C2U(cChar) OUString::createFromAscii(cChar)

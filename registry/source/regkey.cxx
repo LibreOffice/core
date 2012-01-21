@@ -625,7 +625,9 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 //*********************************************************************
 //  createLink
 //
-RegError REGISTRY_CALLTYPE createLink(RegKeyHandle, rtl_uString*, rtl_uString*)
+RegError REGISTRY_CALLTYPE createLink(
+    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
+    SAL_UNUSED_PARAMETER rtl_uString*)
 {
     return REG_INVALID_LINK; // links are no longer supported
 }
@@ -633,7 +635,8 @@ RegError REGISTRY_CALLTYPE createLink(RegKeyHandle, rtl_uString*, rtl_uString*)
 //*********************************************************************
 //  deleteLink
 //
-RegError REGISTRY_CALLTYPE deleteLink(RegKeyHandle, rtl_uString*)
+RegError REGISTRY_CALLTYPE deleteLink(
+    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*)
 {
     return REG_INVALID_LINK; // links are no longer supported
 }
@@ -659,7 +662,8 @@ RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
 //  getLinkTarget
 //
 RegError REGISTRY_CALLTYPE getLinkTarget(
-    RegKeyHandle, rtl_uString*, rtl_uString**)
+    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
+    SAL_UNUSED_PARAMETER rtl_uString**)
 {
     return REG_INVALID_LINK; // links are no longer supported
 }
@@ -669,7 +673,7 @@ RegError REGISTRY_CALLTYPE getLinkTarget(
 //
 RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
                                               rtl_uString* keyName,
-                                              sal_Bool,
+                                              SAL_UNUSED_PARAMETER sal_Bool,
                                                 rtl_uString** pResolvedName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);

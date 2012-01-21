@@ -192,7 +192,7 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
 /*************************************************************************
 |*    RscTypCont::InitClassImageList()
 *************************************************************************/
-RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscTop * /*pClassBitmap*/,
+RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
                                          RscTop * pClassColor, RscCont * pStrLst )
 {
     Atom        nId;
@@ -1450,10 +1450,7 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
 /*************************************************************************
 |*    RscTypCont::InitClassCurrencyFormatter()
 *************************************************************************/
-RscTop * RscTypCont::InitClassCurrencyFormatter
-(
-    RscTop * pSuper,
-    RscEnum * /* pFieldUnits */)
+RscTop * RscTypCont::InitClassCurrencyFormatter(RscTop * pSuper)
 {
     Atom        nId;
     RscTop *    pClassCurrency;
@@ -1802,8 +1799,7 @@ RscTop * RscTypCont::InitClassCurrencyBox
 /*************************************************************************
 |*    RscTypCont::InitClassDateBox()
 *************************************************************************/
-RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper,
-                                       RscTop * /*pClassDate*/ )
+RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassDateBox;
@@ -1823,8 +1819,7 @@ RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper,
 /*************************************************************************
 |*    RscTypCont::InitClassTimeBox()
 *************************************************************************/
-RscTop * RscTypCont::InitClassTimeBox( RscTop * pSuper,
-                                       RscTop * /*pClassTime*/ )
+RscTop * RscTypCont::InitClassTimeBox( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassTimeBox;
@@ -2187,8 +2182,7 @@ RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
 /*************************************************************************
 |*    RscTypCont::InitClassTabControlItem()
 *************************************************************************/
-RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper,
-                                              RscTop * /*pClassTabPage*/ )
+RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassTabControlItem;

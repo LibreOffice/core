@@ -176,7 +176,7 @@ struct _DB_Column
 };
 
 typedef _DB_Column* _DB_ColumnPtr;
-SV_DECL_PTRARR_DEL( _DB_Columns, _DB_ColumnPtr, 32, 32 )
+SV_DECL_PTRARR_DEL( _DB_Columns, _DB_ColumnPtr, 32 )
 SV_IMPL_PTRARR( _DB_Columns, _DB_ColumnPtr )
 
 SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
@@ -1025,7 +1025,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             ++nRows;
 
         // prepare the array for the selected columns
-        SwInsDBColumns_SAR aColFlds( 255 >= nCols ? (sal_uInt8)nCols : 255, 5 );
+        SwInsDBColumns_SAR aColFlds( 255 >= nCols ? (sal_uInt8)nCols : 255 );
         for( n = 0; n < nCols; ++n )
         {
             sal_uInt16 nFndPos;

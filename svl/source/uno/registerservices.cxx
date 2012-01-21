@@ -54,7 +54,8 @@ extern "C"
 {
 
 SVL_DLLPUBLIC void* SAL_CALL svl_component_getFactory (
-    const sal_Char * pImplementationName, void * _pServiceManager, void * /* _pRegistryKey*/)
+    const sal_Char * pImplementationName, void * _pServiceManager,
+    SAL_UNUSED_PARAMETER void * /* _pRegistryKey*/)
 {
     void * pResult = 0;
     if ( _pServiceManager )

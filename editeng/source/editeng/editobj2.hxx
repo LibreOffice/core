@@ -87,7 +87,7 @@ inline sal_Bool XEditAttribute::IsFeature()
 }
 
 typedef XEditAttribute* XEditAttributePtr;
-SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0, 4 )
+SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0 )
 
 class XEditAttributeList : public XEditAttributeListImpl
 {
@@ -105,7 +105,7 @@ struct XParaPortion
 };
 
 typedef XParaPortion* XParaPortionPtr;
-SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0, 4 )
+SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0 )
 
 class XParaPortionList : public  XBaseParaPortionList
 {
@@ -174,7 +174,7 @@ public:
 };
 
 typedef ContentInfo* ContentInfoPtr;
-SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
+SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1 )
 
 class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {

@@ -78,7 +78,7 @@ public:
     /** Allocation.
      */
     static void* operator new (size_t n);
-    static void  operator delete (void *p, size_t);
+    static void  operator delete (void *p);
 
     /** IStoreHandle.
      */

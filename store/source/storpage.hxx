@@ -205,7 +205,7 @@ inline sal_Bool OStorePageManager::isValid (void) const
 }
 
 template<> inline OStorePageManager*
-SAL_CALL query (IStoreHandle *pHandle, OStorePageManager*)
+SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStorePageManager*)
 {
     if (pHandle && pHandle->isKindOf (OStorePageManager::m_nTypeId))
     {

@@ -1208,7 +1208,7 @@ HTMLSttEndPos::~HTMLSttEndPos()
 }
 
 typedef HTMLSttEndPos *HTMLSttEndPosPtr;
-SV_DECL_PTRARR( _HTMLEndLst, HTMLSttEndPosPtr, 5, 5 )
+SV_DECL_PTRARR( _HTMLEndLst, HTMLSttEndPosPtr, 5 )
 
 enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
                       HTML_REAL_VALUE,      // Attribut mit Wert

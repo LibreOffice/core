@@ -84,7 +84,7 @@ struct SwPosition;
 typedef SwNode * SwNodePtr;
 typedef sal_Bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 
-SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0, 10 )
+SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0 )
 
 class SW_DLLPUBLIC SwNodes
     : private BigPtrArray

@@ -66,7 +66,7 @@ public:
 };
 
 typedef SwColumn* SwColumnPtr;
-SV_DECL_PTRARR_DEL( SwColumns, SwColumnPtr, 0, 2 )
+SV_DECL_PTRARR_DEL( SwColumns, SwColumnPtr, 0 )
 
 enum SwColLineAdj
 {

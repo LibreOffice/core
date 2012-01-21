@@ -183,7 +183,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
                      ppException );
 }}
 
-extern "C" void SAL_CALL Proxy_free(uno_ExtEnvironment * /*pEnv*/, void * pProxy) SAL_THROW_EXTERN_C()
+extern "C" void SAL_CALL Proxy_free(SAL_UNUSED_PARAMETER uno_ExtEnvironment * /*pEnv*/, void * pProxy) SAL_THROW_EXTERN_C()
 {
     Proxy * pThis = static_cast<Proxy * >(reinterpret_cast<uno_Interface *>(pProxy));
     delete pThis;

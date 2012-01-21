@@ -285,7 +285,7 @@ XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 // --------------------------------------------------------------------------
 
 typedef XMLTextColumnContext_Impl *XMLTextColumnContext_ImplPtr;
-SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr, 5, 5 )
+SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr, 5 )
 
 TYPEINIT1( XMLTextColumnsContext, XMLElementPropertyContext );
 

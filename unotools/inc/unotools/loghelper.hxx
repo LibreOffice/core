@@ -30,14 +30,7 @@
 
 namespace css = ::com::sun::star;
 
-class LogHelper
-{
-public:
-    LogHelper();
-    ~LogHelper();
-
-    static void logIt(const css::uno::Exception&){}
-};
+namespace LogHelper {
 
 inline void logIt(const css::uno::Exception& ex)
 {
@@ -46,6 +39,8 @@ inline void logIt(const css::uno::Exception& ex)
     sMsg.append(ex.Message);
     sMsg.appendAscii("\"");
     OSL_FAIL(::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+}
+
 }
 
 #endif

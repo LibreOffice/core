@@ -57,7 +57,7 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5,5)
+SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5)
 
 class SbiSymPool {
     friend class SbiSymDef;

@@ -336,7 +336,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetNewDoc();   // Avoid performance problems
 
         // Remember Flys of this site
-        SvPtrarr aFlyArr(0, 5);
+        SvPtrarr aFlyArr(0);
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
 

@@ -105,7 +105,7 @@ using namespace ::com::sun::star::container;
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
 
 typedef SwContent* SwContentPtr;
-SV_DECL_PTRARR_SORT_DEL( SwContentArr, SwContentPtr, 0,4)
+SV_DECL_PTRARR_SORT_DEL( SwContentArr, SwContentPtr, 0 )
 SV_IMPL_OP_PTRARR_SORT(SwContentArr, SwContentPtr)
 
 sal_Bool SwContentTree::bIsInDrag = sal_False;

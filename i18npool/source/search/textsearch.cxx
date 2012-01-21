@@ -981,7 +981,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18nsearch_component_getFactory( const sal_Char* sImplementationName,
-        void* _pServiceManager, void* /*_pRegistryKey*/ )
+        void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
 

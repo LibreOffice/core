@@ -106,7 +106,7 @@ public:
 };
 
 typedef SwWriteTableCell *SwWriteTableCellPtr;
-SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
+SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5 )
 
 
 //-----------------------------------------------------------------------
@@ -175,7 +175,7 @@ inline int SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 }
 
 typedef SwWriteTableRow *SwWriteTableRowPtr;
-SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5, 5 )
+SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5 )
 
 
 //-----------------------------------------------------------------------
@@ -233,7 +233,7 @@ inline int SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 
 
 typedef SwWriteTableCol *SwWriteTableColPtr;
-SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5, 5 )
+SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5 )
 
 //-----------------------------------------------------------------------
 

@@ -137,18 +137,15 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------------
-    void* OModule::getComponentFactory( const sal_Char* _pImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
+    void* OModule::getComponentFactory( const sal_Char* _pImplementationName )
     {
         Reference< XInterface > xFactory( getComponentFactory(
-            ::rtl::OUString::createFromAscii( _pImplementationName ),
-            Reference< XMultiServiceFactory >( static_cast< XMultiServiceFactory* >( _pServiceManager ) )
-        ) );
+            ::rtl::OUString::createFromAscii( _pImplementationName ) ) );
         return xFactory.get();
     }
 
     //--------------------------------------------------------------------------
-    Reference< XInterface > OModule::getComponentFactory( const ::rtl::OUString& _rImplementationName,
-        const Reference< XMultiServiceFactory >& /* _rxServiceManager */ )
+    Reference< XInterface > OModule::getComponentFactory( const ::rtl::OUString& _rImplementationName )
     {
         Reference< XInterface > xReturn;
 

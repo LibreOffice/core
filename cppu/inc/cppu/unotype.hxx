@@ -123,90 +123,96 @@ namespace cppu { namespace detail {
 #endif
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::cppu::UnoVoidType const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoVoidType const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_VOID);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(bool const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER bool const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BOOLEAN);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_Bool const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Bool const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BOOLEAN);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_Int8 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int8 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BYTE);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_Int16 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int16 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_SHORT);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::cppu::UnoUnsignedShortType const *) {
+cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::cppu::UnoUnsignedShortType const *)
+{
     return ::cppu::detail::getTypeFromTypeClass(
         ::typelib_TypeClass_UNSIGNED_SHORT);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_Int32 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int32 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_LONG);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_uInt32 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_uInt32 const *) {
     return ::cppu::detail::getTypeFromTypeClass(
         ::typelib_TypeClass_UNSIGNED_LONG);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_Int64 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int64 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_HYPER);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::sal_uInt64 const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_uInt64 const *) {
     return ::cppu::detail::getTypeFromTypeClass(
         ::typelib_TypeClass_UNSIGNED_HYPER);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(float const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER float const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_FLOAT);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(double const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER double const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_DOUBLE);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::cppu::UnoCharType const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoCharType const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_CHAR);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::rtl::OUString const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::rtl::OUString const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_STRING);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::Type const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::com::sun::star::uno::Type const *)
+{
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_TYPE);
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::Any const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::com::sun::star::uno::Any const *)
+{
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_ANY);
 }
 
 template< typename T > inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::cppu::UnoSequenceType< T > const *) {
+cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::cppu::UnoSequenceType< T > const *)
+{
     //TODO: depending on memory model, the following might not work reliably
     static typelib_TypeDescriptionReference * p = 0;
     if (p == 0) {
@@ -217,23 +223,29 @@ cppu_detail_getUnoType(::cppu::UnoSequenceType< T > const *) {
 }
 
 template< typename T > inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::Sequence< T > const *) {
+cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Sequence< T > const *)
+{
     return cppu_detail_getUnoType(
         static_cast< ::cppu::UnoSequenceType< T > * >(0));
 }
 
-inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::Exception const *) {
+inline ::com::sun::star::uno::Type const & cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Exception const *)
+{
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_EXCEPTION);
 }
 
-inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::XInterface const *) {
+inline ::com::sun::star::uno::Type const & cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::XInterface const *)
+{
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_INTERFACE);
 }
 
 template< typename T > inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(::com::sun::star::uno::Reference< T > const *) {
+cppu_detail_getUnoType(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Reference< T > const *)
+{
     return ::cppu::UnoType< T >::get();
 }
 
@@ -287,7 +299,7 @@ private:
    @since UDK 3.2.2
 */
 template< typename T > inline ::com::sun::star::uno::Type const &
-getTypeFavourUnsigned(T const *) {
+getTypeFavourUnsigned(SAL_UNUSED_PARAMETER T const *) {
     return ::cppu::UnoType< T >::get();
 }
 
@@ -302,7 +314,7 @@ getTypeFavourUnsigned(T const *) {
    @since UDK 3.2.2
 */
 inline ::com::sun::star::uno::Type const &
-getTypeFavourUnsigned(::sal_uInt16 const *) {
+getTypeFavourUnsigned(SAL_UNUSED_PARAMETER ::sal_uInt16 const *) {
     return ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get();
 }
 
@@ -334,7 +346,7 @@ getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *);
    @since UDK 3.2.3
 */
 template< typename T > inline ::com::sun::star::uno::Type const &
-getTypeFavourChar(T const *) {
+getTypeFavourChar(SAL_UNUSED_PARAMETER T const *) {
     return ::cppu::UnoType< T >::get();
 }
 
@@ -350,7 +362,7 @@ getTypeFavourChar(T const *) {
    @since UDK 3.2.3
 */
 inline ::com::sun::star::uno::Type const &
-getTypeFavourChar(::sal_Unicode const *) {
+getTypeFavourChar(SAL_UNUSED_PARAMETER ::sal_Unicode const *) {
     return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 

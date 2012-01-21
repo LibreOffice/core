@@ -152,7 +152,7 @@ void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
 
 #endif
 
-#define _SV_DECL_VARARR_GEN(nm, AE, IS, GS, AERef, vis )\
+#define _SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
 class vis nm\
 {\
@@ -164,7 +164,7 @@ protected:\
     void _resize(size_t n);\
 \
 public:\
-    nm( sal_uInt16= IS, sal_uInt8= GS );\
+    nm( sal_uInt16= IS );\
     ~nm() { rtl_freeMemory( pData ); }\
 \
     _SVVARARR_DEF_GET_OP_INLINE(nm, AE )\
@@ -192,24 +192,21 @@ public:\
             CONCAT( FnForEach_, nm ) fnCall, void* pArgs = 0 );\
 \
 
-#define _SV_DECL_VARARR(nm, AE, IS, GS ) \
-_SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE & )
-
-#define SV_DECL_VARARR_GEN(nm, AE, IS, GS, AERef, vis )\
-_SV_DECL_VARARR_GEN(nm, AE, IS, GS, AERef, vis )\
+#define SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
+_SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
 private:\
 nm( const nm& );\
 nm& operator=( const nm& );\
 };
 
-#define SV_DECL_VARARR(nm, AE, IS, GS ) \
-SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE &, )
+#define SV_DECL_VARARR(nm, AE, IS) \
+SV_DECL_VARARR_GEN(nm, AE, IS, AE &, )
 
-#define SV_DECL_VARARR_VISIBILITY(nm, AE, IS, GS, vis ) \
-SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE &, vis )
+#define SV_DECL_VARARR_VISIBILITY(nm, AE, IS, vis ) \
+SV_DECL_VARARR_GEN(nm, AE, IS, AE &, vis )
 
 #define SV_IMPL_VARARR_GEN( nm, AE, AERef )\
-nm::nm( sal_uInt16 nInit, sal_uInt8 )\
+nm::nm( sal_uInt16 nInit )\
     : pData (0),\
       nFree (nInit),\
       nA    (0)\
@@ -310,21 +307,21 @@ _SVVARARR_IMPL_GET_OP_INLINE(nm, AE )\
 #define SV_IMPL_VARARR( nm, AE ) \
 SV_IMPL_VARARR_GEN( nm, AE, AE & )
 
-#define _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, GS, AERef, vis )\
-_SV_DECL_VARARR_GEN( nm, AE, IS, GS, AERef, vis)\
+#define _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, AERef, vis )\
+_SV_DECL_VARARR_GEN( nm, AE, IS, AERef, vis)\
 sal_uInt16 GetPos( const AERef aE ) const;\
 };
 
-#define _SV_DECL_PTRARR_DEF( nm, AE, IS, GS, vis )\
-_SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, GS, AE &, vis )
+#define _SV_DECL_PTRARR_DEF( nm, AE, IS, vis )\
+_SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, AE &, vis )
 
-#define SV_DECL_PTRARR_GEN(nm, AE, IS, GS, Base, AERef, VPRef, vis )\
+#define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
 class vis nm: public Base \
 {\
 public:\
-    nm( sal_uInt16 nIni=IS, sal_uInt8 nG=GS )\
-        : Base(nIni,nG) {}\
+    nm( sal_uInt16 nIni=IS )\
+        : Base(nIni) {}\
     void Insert( const nm *pI, sal_uInt16 nP, \
             sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
         Base::Insert((const Base*)pI, nP, nS, nE);\
@@ -370,19 +367,19 @@ private:\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR(nm, AE, IS, GS )\
-SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, )
+#define SV_DECL_PTRARR(nm, AE, IS)\
+SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, )
 
-#define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, GS, vis )\
-SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis )
+#define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
+SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
-#define SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, Base, AERef, VPRef, vis )\
+#define SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
 class vis nm: public Base \
 {\
 public:\
-    nm( sal_uInt16 nIni=IS, sal_uInt8 nG=GS )\
-        : Base(nIni,nG) {}\
+    nm( sal_uInt16 nIni=IS )\
+        : Base(nIni) {}\
     ~nm() { DeleteAndDestroy( 0, Count() ); }\
     void Insert( const nm *pI, sal_uInt16 nP, \
             sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
@@ -429,11 +426,11 @@ private:\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR_DEL(nm, AE, IS, GS )\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, )
+#define SV_DECL_PTRARR_DEL(nm, AE, IS)\
+SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, )
 
-#define SV_DECL_PTRARR_DEL_VISIBILITY(nm, AE, IS, GS, vis )\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis)
+#define SV_DECL_PTRARR_DEL_VISIBILITY(nm, AE, IS, vis)\
+SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis)
 
 #define SV_IMPL_PTRARR_GEN(nm, AE, Base)\
 void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
@@ -450,17 +447,17 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarr )
 
 typedef void* VoidPtr;
-_SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, 1, SVL_DLLPUBLIC )
+_SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, SVL_DLLPUBLIC )
 
 // SORTARR - Begin
 
-#define _SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
+#define _SORT_CLASS_DEF(nm, AE, IS, vis)\
 typedef sal_Bool (*FnForEach_##nm)( const AE&, void* );\
 class vis nm : private nm##_SAR \
 {\
 public:\
-    nm(sal_uInt16 nSize = IS, sal_uInt8 nG = GS)\
-        : nm##_SAR(nSize,nG) {}\
+    nm(sal_uInt16 nSize = IS)\
+        : nm##_SAR(nSize) {}\
     void Insert( const nm *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );\
     sal_Bool Insert( const AE& aE );\
     sal_Bool Insert( const AE& aE, sal_uInt16& rP );\
@@ -630,9 +627,9 @@ void nm::Remove( const AE &aE, sal_uInt16 nL )\
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }
 
-#define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
-SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, GS, vis)\
-_SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
+#define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
+SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, vis)\
+_SORT_CLASS_DEF(nm, AE, IS, vis)\
     AE operator[](sal_uInt16 nP) const {\
         return nm##_SAR::operator[]( nP );\
     }\
@@ -654,37 +651,37 @@ _SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
 \
 /* Das Ende stehe im DECL-Makro !!! */
 
-#define _SV_DECL_PTRARR_SORT(nm, AE, IS, GS, vis)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
+#define _SV_DECL_PTRARR_SORT(nm, AE, IS, vis)\
+_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR_SORT(nm, AE, IS, GS)\
-_SV_DECL_PTRARR_SORT(nm, AE, IS, GS, )
+#define SV_DECL_PTRARR_SORT(nm, AE, IS)\
+_SV_DECL_PTRARR_SORT(nm, AE, IS,)
 
-#define SV_DECL_PTRARR_SORT_VISIBILITY(nm, AE, IS, GS, vis)\
-_SV_DECL_PTRARR_SORT(nm, AE, IS, GS, vis)
+#define SV_DECL_PTRARR_SORT_VISIBILITY(nm, AE, IS, vis)\
+_SV_DECL_PTRARR_SORT(nm, AE, IS, vis)
 
 
-#define _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS, vis)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
+#define _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, vis)\
+_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
     ~nm() { DeleteAndDestroy( 0, Count() ); }\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)\
-_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS, )
+#define SV_DECL_PTRARR_SORT_DEL(nm, AE, IS)\
+_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS,)
 
-#define SV_DECL_PTRARR_SORT_DEL_VISIBILITY(nm, AE, IS, GS, vis)\
-_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS, vis)
+#define SV_DECL_PTRARR_SORT_DEL_VISIBILITY(nm, AE, IS, vis)\
+_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, vis)
 
-#define _SV_DECL_VARARR_SORT(nm, AE, IS, GS, vis)\
-SV_DECL_VARARR_VISIBILITY(nm##_SAR, AE, IS, GS, vis)\
-_SORT_CLASS_DEF(nm, AE, IS, GS, vis) \
+#define _SV_DECL_VARARR_SORT(nm, AE, IS, vis)\
+SV_DECL_VARARR_VISIBILITY(nm##_SAR, AE, IS, vis)\
+_SORT_CLASS_DEF(nm, AE, IS, vis) \
     const AE& operator[](sal_uInt16 nP) const {\
         return nm##_SAR::operator[]( nP );\
     }\
@@ -706,11 +703,11 @@ private:\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_VARARR_SORT(nm, AE, IS, GS)\
-_SV_DECL_VARARR_SORT(nm, AE, IS, GS,)
+#define SV_DECL_VARARR_SORT(nm, AE, IS)\
+_SV_DECL_VARARR_SORT(nm, AE, IS,)
 
-#define SV_DECL_VARARR_SORT_VISIBILITY(nm, AE, IS, GS, vis)\
-_SV_DECL_VARARR_SORT(nm, AE, IS, GS, vis)
+#define SV_DECL_VARARR_SORT_VISIBILITY(nm, AE, IS, vis)\
+_SV_DECL_VARARR_SORT(nm, AE, IS, vis)
 
 #define SV_IMPL_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\

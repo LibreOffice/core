@@ -783,7 +783,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         }
 
         // Release page write access.
-        eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
+        eErrCode = base::releasePage (aDescr);
 
         // Release and free directory page.
         eErrCode = base::free (aPage.location());

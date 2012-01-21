@@ -89,7 +89,7 @@ LinkHelper::XrefsSuffix() const
 
 
 String
-nameChainLinker( const char * )
+nameChainLinker( SAL_UNUSED_PARAMETER const char * )
 {
     static const String
         sModuleFileName_( output::ModuleFileName() );

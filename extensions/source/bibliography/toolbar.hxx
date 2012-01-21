@@ -111,7 +111,7 @@ public:
 
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>* BibToolBarListenerPtr;
-SV_DECL_PTRARR_DEL( BibToolBarListenerArr, BibToolBarListenerPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( BibToolBarListenerArr, BibToolBarListenerPtr, 4 )
 
 class BibToolBar:   public ToolBox
 {

@@ -107,13 +107,13 @@ public:
     // -------------------------------------------------------
 
     /// @return constant value, regardless of iterator content
-    template< typename IteratorType > value_type operator()(IteratorType const& ) const
+    template< typename IteratorType > value_type operator()(SAL_UNUSED_PARAMETER IteratorType const& ) const
     {
         return maGetterValue;
     }
     /// @return constant value, regardless of iterator content
     template< typename IteratorType, class Difference >
-    value_type operator()(IteratorType const& , Difference const& ) const
+    value_type operator()(SAL_UNUSED_PARAMETER IteratorType const& , SAL_UNUSED_PARAMETER Difference const& ) const
     {
         return maGetterValue;
     }

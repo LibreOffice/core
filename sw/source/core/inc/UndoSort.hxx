@@ -67,8 +67,8 @@ struct SwSortUndoElement
     ~SwSortUndoElement();
 };
 
-SV_DECL_PTRARR_DEL(SwSortList, SwSortUndoElement*, 10,30)
-SV_DECL_PTRARR(SwUndoSortList, SwNodeIndex*, 10,30)
+SV_DECL_PTRARR_DEL(SwSortList, SwSortUndoElement*, 10)
+SV_DECL_PTRARR(SwUndoSortList, SwNodeIndex*, 10)
 
 class SwUndoSort : public SwUndo, private SwUndRng
 {

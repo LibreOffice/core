@@ -56,8 +56,8 @@ typedef const _FndBox*      _FndBoxPtr;
 typedef SwSortElement*      SwSortElementPtr;
 typedef const SwTableBox*   SwMovedBoxPtr;
 
-SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0, 1 )
-SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10, 10 )
+SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
+SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10)
 
 /*--------------------------------------------------------------------
     Beschreibung: Funktionen zum Moven von Boxen

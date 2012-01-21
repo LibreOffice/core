@@ -75,7 +75,7 @@
 #include <set>
 #include <vector>
 
-SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16)
+SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32)
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
@@ -584,7 +584,7 @@ public:
 };
 
 // ========================================================================
-SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16, 0)
+SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16)
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:

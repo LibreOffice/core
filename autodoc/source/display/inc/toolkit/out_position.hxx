@@ -73,16 +73,14 @@ class Position
     void                Get_Chain(
                             StringVector &      o_result ) const
                                                 { pDirectory->Get_Chain(o_result); }
-    String              LinkToRoot(
-                            const String &      i_localLabel = String::Null_() ) const;
+    String              LinkToRoot() const;
 
     void                Get_LinkTo(
                             StreamStr &         o_result,
                             const Position &    i_destination,
                             const String &      i_localLabel = String::Null_() ) const;
     void                Get_LinkToRoot(
-                            StreamStr &         o_result,
-                            const String &      i_localLabel = String::Null_() ) const;
+                            StreamStr &         o_result ) const;
 
     static char         Delimiter()             { return '/'; }
 

@@ -1102,7 +1102,6 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
 void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const ::rtl::OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs,
                             sal_Bool bSaveAs )
         throw ( uno::Exception )
@@ -1551,7 +1550,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_False );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, sal_False );
 
     // TODO: should the listener notification be done?
 }
@@ -1585,7 +1584,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_True );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, sal_True );
 
     // TODO: should the listener notification be done here or in saveCompleted?
 }

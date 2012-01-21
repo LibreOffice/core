@@ -64,7 +64,7 @@ struct SearchAttrItem
 
 // class SearchAttrItemList ----------------------------------------------
 
-SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, 8, SVX_DLLPUBLIC)
+SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, SVX_DLLPUBLIC)
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
 {

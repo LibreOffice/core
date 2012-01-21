@@ -249,7 +249,7 @@ void CppuType::dumpGetCppuTypePreamble(FileStream & out) {
             out << "\n\n";
         }
         out << ("inline ::com::sun::star::uno::Type const &"
-                " cppu_detail_getUnoType(");
+                " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, false, false, true);
         out << " const *) {\n";
     }
@@ -271,7 +271,8 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
         }
     }
     dumpTemplateHead(out);
-    out << "inline ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
+    out << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
+            " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, m_typeName);
     dumpTemplateParameters(out);
     out << " const *) SAL_THROW(()) {\n";
@@ -531,7 +532,7 @@ void CppuType::dumpHFileContent(
     {
         out << "\n" << indent()
             << ("inline ::com::sun::star::uno::Type const &"
-                " cppu_detail_getUnoType(");
+                " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, false, false, true);
         out << " const *);\n";
     }
@@ -550,7 +551,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
     if (m_typeName.equals("com/sun/star/uno/XInterface")) {
         out << indent()
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
-                " getCppuType(");
+                " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
         out << " *) SAL_THROW(()) {\n";
         inc();
@@ -562,7 +563,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
     } else if (m_typeName.equals("com/sun/star/uno/Exception")) {
         out << indent()
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
-                " getCppuType(");
+                " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
         out << " *) SAL_THROW(()) {\n";
         inc();
@@ -1435,7 +1436,7 @@ sal_Bool InterfaceType::dumpHxxFile(
 
     o << "\n::com::sun::star::uno::Type const & "
       << scopedCppName(m_typeName)
-      << "::static_type(void *) {\n";
+      << "::static_type(SAL_UNUSED_PARAMETER void *) {\n";
     inc();
     o << indent() << "return ::getCppuType(static_cast< ";
     dumpType(o, m_typeName);

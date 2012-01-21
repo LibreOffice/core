@@ -616,7 +616,7 @@ static void SAL_CALL defenv_harden(
 }
 
 //------------------------------------------------------------------------------
-static void SAL_CALL defenv_dispose( uno_Environment * )
+static void SAL_CALL defenv_dispose( SAL_UNUSED_PARAMETER uno_Environment * )
 {
 }
 }
@@ -908,7 +908,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
 
 //==============================================================================
 static void SAL_CALL unoenv_acquireInterface(
-    uno_ExtEnvironment *, void * pUnoI_ )
+    SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
     uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(pUnoI_);
     (*pUnoI->acquire)( pUnoI );
@@ -916,7 +916,7 @@ static void SAL_CALL unoenv_acquireInterface(
 
 //==============================================================================
 static void SAL_CALL unoenv_releaseInterface(
-    uno_ExtEnvironment *, void * pUnoI_ )
+    SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
     uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(pUnoI_);
     (*pUnoI->release)( pUnoI );
@@ -1059,8 +1059,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
 }
 
 static bool loadEnv(OUString const  & cLibStem,
-                    uno_Environment * pEnv,
-                    void            * /*pContext*/)
+                    uno_Environment * pEnv)
 {
 #ifdef IOS
     oslModule hMod;
@@ -1121,7 +1120,7 @@ static uno_Environment * initDefaultEnvironment(
             rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
             libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
 
-            if(!loadEnv(libStem, pEnv, pContext))
+            if(!loadEnv(libStem, pEnv))
             {
                 pEnv->release(pEnv);
                 return NULL;
@@ -1136,7 +1135,7 @@ static uno_Environment * initDefaultEnvironment(
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno" ) );
         OUString aStr( aLibName.makeStringAndClear() );
 
-        if (!loadEnv(aStr, pEnv, pContext))
+        if (!loadEnv(aStr, pEnv))
         {
             pEnv->release(pEnv);
             return NULL;

@@ -49,7 +49,7 @@ public:
 };
 
 typedef SwRubyListEntry* SwRubyListEntryPtr;
-SV_DECL_PTRARR_DEL( SwRubyList, SwRubyListEntryPtr, 0, 32 )
+SV_DECL_PTRARR_DEL( SwRubyList, SwRubyListEntryPtr, 0 )
 
 
 #endif  //_RUBYLIST_HXX

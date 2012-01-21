@@ -61,7 +61,7 @@
 
 class SwCacheObj;
 
-SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1,1)
+SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1)
 
 class SwCache : public SwCacheObjArr
 {
@@ -105,8 +105,7 @@ public:
 
     //nur sal_uInt8 hineinstecken!!!
 #ifdef DBG_UTIL
-    SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize,
-            const rtl::OString &rNm );
+    SwCache( const sal_uInt16 nInitSize, const rtl::OString &rNm );
     ~SwCache();
 #else
     SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize );

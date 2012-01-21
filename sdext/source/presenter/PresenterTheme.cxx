@@ -381,8 +381,7 @@ bool PresenterTheme::ConvertToColor (
 }
 
 ::boost::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyle (
-    const ::rtl::OUString& rsStyleName,
-    const PresenterConfigurationAccess::WriteMode) const
+    const ::rtl::OUString& rsStyleName) const
 {
     if (mpTheme.get() == NULL)
         return ::boost::shared_ptr<PresenterConfigurationAccess>();

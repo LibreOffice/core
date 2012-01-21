@@ -209,11 +209,11 @@ void checkRestParam( Reference<reflection::XParameter> const & xNewParam,
         typeError( OUSTR("Different ... parameters specified!"), context );
 }
 
-void checkRestParam( Reference<reflection::XMethodParameter> const &,
-                     Reference<reflection::XMethodParameter> const &,
-                     OUString const & )
-{
-}
+void checkRestParam(
+    SAL_UNUSED_PARAMETER Reference<reflection::XMethodParameter> const &,
+    SAL_UNUSED_PARAMETER Reference<reflection::XMethodParameter> const &,
+    SAL_UNUSED_PARAMETER OUString const & )
+{}
 
 template<typename T>
 void checkParameters( Sequence< Reference<T> > const & newParams,

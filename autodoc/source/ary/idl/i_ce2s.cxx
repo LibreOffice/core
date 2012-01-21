@@ -53,7 +53,7 @@ Ce_2s::~Ce_2s()
 }
 
 DYN Ce_2s *
-Ce_2s::Create_( ClassId )
+Ce_2s::Create_()
 {
     return new Ce_2s;
 }

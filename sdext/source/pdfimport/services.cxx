@@ -120,7 +120,8 @@ namespace
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+component_writeInfo(
+    SAL_UNUSED_PARAMETER void* /*pServiceManager*/, void* pRegistryKey )
 {
     Reference< XRegistryKey > xRootKey( static_cast< XRegistryKey* >( pRegistryKey ) );
 
@@ -149,7 +150,9 @@ component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
-    const sal_Char* pImplementationName, void* /*pServiceManager*/, void* /*pRegistryKey*/ )
+    const sal_Char* pImplementationName,
+    SAL_UNUSED_PARAMETER void* /*pServiceManager*/,
+    SAL_UNUSED_PARAMETER void* /*pRegistryKey*/ )
 {
     ::rtl::OUString sImplementationName( ::rtl::OUString::createFromAscii( pImplementationName ) );
 

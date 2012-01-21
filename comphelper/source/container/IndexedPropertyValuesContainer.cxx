@@ -34,8 +34,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 
 #include <vector>
 
@@ -256,7 +254,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::
 
 
 uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer::Create(
-                const uno::Reference< uno::XComponentContext >&)
+                SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >&)
 {
     return (cppu::OWeakObject*)new IndexedPropertyValuesContainer();
 }

@@ -500,7 +500,9 @@ Sequence< OUString > ODataInputStream::getSupportedServiceNames(void) throw ()
 *
 ****/
 
-Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference < XComponentContext > & ) throw( Exception)
+Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+    throw( Exception)
 {
     ODataInputStream *p = new ODataInputStream;
     return Reference< XInterface > ( (OWeakObject * ) p );
@@ -904,7 +906,9 @@ Sequence< OUString > ODataOutputStream::getSupportedServiceNames(void) throw ()
 
 
 
-Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference < XComponentContext > & ) throw(Exception)
+Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+    throw(Exception)
 {
     ODataOutputStream *p = new ODataOutputStream;
     Reference< XInterface > xService = *p;
@@ -1186,7 +1190,8 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
 
 
 
-Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference < XComponentContext > & )
+Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
     throw(Exception)
 {
     OObjectOutputStream *p = new OObjectOutputStream;

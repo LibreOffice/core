@@ -715,7 +715,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 |*
 *************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
-                             CharSet /*nCharSet*/, sal_Bool bName )
+                             sal_Bool bName )
 {
     RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );

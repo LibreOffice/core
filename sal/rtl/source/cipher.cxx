@@ -1282,7 +1282,8 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8 *, sal_Size) SAL_THROW_EXTERN_C()
+    SAL_UNUSED_PARAMETER const sal_uInt8 *, SAL_UNUSED_PARAMETER sal_Size)
+    SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
 

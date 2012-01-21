@@ -238,7 +238,7 @@ USHORT DirReader_Impl::Init()
         {
             sDrive[0] = c;
             sRoot[0] = c;
-            DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
+            DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME );
             if ( pDir->aNameMask.Matches( String(rtl::OStringToOUString(sDrive, osl_getThreadTextEncoding())) ) && GetDriveType( sRoot ) != 1 )
             {
                 if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
@@ -313,7 +313,7 @@ USHORT DirReader_Impl::Read()
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( rtl::OString(pDosEntry->d_name),
-                                            eFlag, FSYS_STYLE_NTFS );
+                                            eFlag );
 #ifdef FEAT_FSYS_DOUBLESPEED
             pTemp->ImpSetStat( new FileStat( (void*) pDosDir, (void*) 0 ) );
 #endif
@@ -404,8 +404,7 @@ void FileStat::ImpInit( void* p )
 |*
 *************************************************************************/
 
-FileStat::FileStat( const void *pInfo,      // struct dirent
-                    const void * ):         // dummy
+FileStat::FileStat( const void *pInfo ): // struct dirent
     aDateCreated(0),
     aTimeCreated(0),
     aDateModified(0),

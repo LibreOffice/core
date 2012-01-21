@@ -1156,7 +1156,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
     //uebrigbleiben, weil wir weder zeichengebunde Rahmen verbinden noch
     //Objecte die in zeichengebundenen verankert sind.
 
-    SwSpzFrmFmts aCpy( 255, 255 );
+    SwSpzFrmFmts aCpy( 255 );
     aCpy.Insert( pTbl, 0 );
 
     sal_uInt16 nOldCnt = USHRT_MAX;

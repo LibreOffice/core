@@ -103,7 +103,7 @@ struct SfxChildWinContextFactory
     {}
 };
 
-SV_DECL_PTRARR_DEL( SfxChildWinContextArr_Impl, SfxChildWinContextFactory*, 2, 2 )
+SV_DECL_PTRARR_DEL( SfxChildWinContextArr_Impl, SfxChildWinContextFactory*, 2 )
 
 struct SfxChildWinFactory
 {

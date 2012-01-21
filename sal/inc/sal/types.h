@@ -479,6 +479,37 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #   define SAL_WNODEPRECATED_DECLARATIONS_POP
 #endif
 
+/** Annotate unused but required C++ function parameters.
+
+    An unused parameter is required if the function needs to adhere to a given
+    type (e.g., if its address is assigned to a function pointer of a specific
+    type, or if it is called from template code).  This annotation helps static
+    analysis tools suppress false warnings.  In the case of virtual functions
+    (where unused required parameters are common, too), the annotation is not
+    required (as static analysis tools can themselves derive the information
+    whether a function is virtual).
+
+    Use the annotation in function definitions like
+
+      void f(SAL_UNUSED_PARAMETER int) {}
+
+    C does not allow unnamed parameters, anyway, so a function definition like
+    the above needs to be written there as
+
+      void f(int dummy) { (void) dummy; / * avoid warnings * / }
+
+    without a SAL_UNUSED_PARAMETER annotation.
+
+    @since LibreOffice 3.6
+ */
+#if defined __cplusplus
+#if defined __GNUC__
+#define SAL_UNUSED_PARAMETER __attribute__ ((unused))
+#else
+#define SAL_UNUSED_PARAMETER
+#endif
+#endif
+
 #endif /*_SAL_TYPES_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

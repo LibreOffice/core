@@ -72,7 +72,8 @@ void PyUNO_callable_del (PyObject* self)
     return;
 }
 
-PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
+PyObject* PyUNO_callable_call(
+    PyObject* self, PyObject* args, SAL_UNUSED_PARAMETER PyObject*)
 {
     PyUNO_callable* me;
 

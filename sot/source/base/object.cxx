@@ -56,9 +56,7 @@ SO2_IMPL_INVARIANT(SotObject)
 |*
 |*  Beschreibung:
 *************************************************************************/
-void SotObject::TestMemberObjRef( sal_Bool /*bFree*/ )
-{
-}
+void SotObject::TestMemberObjRef() {}
 
 /*************************************************************************
 |*  SotObject::TestMemberObjRef()
@@ -66,9 +64,7 @@ void SotObject::TestMemberObjRef( sal_Bool /*bFree*/ )
 |*  Beschreibung:
 *************************************************************************/
 #ifdef TEST_INVARIANT
-void SotObject::TestMemberInvariant( sal_Bool /*bPrint*/ )
-{
-}
+void SotObject::TestMemberInvariant() {}
 #endif
 
 /*************************************************************************

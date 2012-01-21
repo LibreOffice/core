@@ -187,7 +187,7 @@ PE_Interface::Process_Default()
 
 
 void
-PE_Interface::On_need_uik_MetaType(const char *)
+PE_Interface::On_need_uik_MetaType(SAL_UNUSED_PARAMETER const char *)
 {
     // Deprecated, data will be ignored
     SetResult(done, stay);
@@ -195,7 +195,7 @@ PE_Interface::On_need_uik_MetaType(const char *)
 }
 
 void
-PE_Interface::On_uik_Identifier(const char *)
+PE_Interface::On_uik_Identifier(SAL_UNUSED_PARAMETER const char *)
 {
     // Deprecated, data will be ignored
     SetResult(done, stay);
@@ -213,14 +213,14 @@ PE_Interface::On_uik_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_need_ident_MetaType(const char *)
+PE_Interface::On_need_ident_MetaType(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult(done, stay);
     eState = ident;
 }
 
 void
-PE_Interface::On_ident_Identifier(const char *)
+PE_Interface::On_ident_Identifier(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult(done, stay);
 }
@@ -236,7 +236,7 @@ PE_Interface::On_ident_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_need_interface_MetaType(const char *)
+PE_Interface::On_need_interface_MetaType(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult(done, stay);
     eState = need_name;
@@ -343,21 +343,21 @@ PE_Interface::On_std_Stereotype(const char * i_sText)
 }
 
 void
-PE_Interface::On_std_GotoFunction(const char * )
+PE_Interface::On_std_GotoFunction(SAL_UNUSED_PARAMETER const char * )
 {
     SetResult(not_done, push_sure, pPE_Function.Ptr());
     eState = in_function;
 }
 
 void
-PE_Interface::On_std_GotoAttribute(const char * )
+PE_Interface::On_std_GotoAttribute(SAL_UNUSED_PARAMETER const char * )
 {
         SetResult(not_done, push_sure, pPE_Attribute.Ptr());
         eState = in_attribute;
 }
 
 void
-PE_Interface::On_std_GotoBaseInterface(const char * )
+PE_Interface::On_std_GotoBaseInterface(SAL_UNUSED_PARAMETER const char * )
 {
        SetResult(done, push_sure, pPE_Type.Ptr());
     eState = in_base_interface;
@@ -379,7 +379,7 @@ PE_Interface::On_need_finish_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_Default(const char *)
+PE_Interface::On_Default(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult(not_done, pop_failure);
 }

@@ -59,7 +59,7 @@ class SwTOXBase;
 SV_DECL_REF( SwServerObject )
 #endif
 
-SV_DECL_PTRARR( SwSections, SwSection*, 0, 4 )
+SV_DECL_PTRARR( SwSections, SwSection*, 0 )
 
 enum SectionType { CONTENT_SECTION,
                     TOX_HEADER_SECTION,

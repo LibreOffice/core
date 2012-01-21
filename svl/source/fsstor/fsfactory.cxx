@@ -31,7 +31,6 @@
 #include "cppuhelper/factory.hxx"
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
 
@@ -88,7 +87,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         static_cast< OWeakObject* >(
             new FSStorage(  aResultContent,
                             embed::ElementModes::READWRITE,
-                            uno::Sequence< beans::PropertyValue >(),
                             m_xFactory ) ),
         uno::UNO_QUERY );
 }
@@ -143,38 +141,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         throw uno::Exception(); // TODO: Illegal argument
     }
 
-    // retrieve mediadescriptor and set storage properties
-    uno::Sequence< beans::PropertyValue > aDescr;
-    uno::Sequence< beans::PropertyValue > aPropsToSet;
-
-    if ( nArgNum >= 3 )
-    {
-        if( aArguments[2] >>= aDescr )
-        {
-            aPropsToSet.realloc(1);
-            aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
-            aPropsToSet[0].Value <<= aURL;
-
-            for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
-            {
-                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
-                {
-                    aPropsToSet.realloc( ++nNumArgs );
-                    aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
-                    aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
-                    break;
-                }
-                else
-                    OSL_FAIL( "Unacceptable property, will be ignored!\n" );
-            }
-        }
-        else
-        {
-            OSL_FAIL( "Wrong third argument!\n" );
-            throw uno::Exception(); // TODO: Illegal argument
-        }
-    }
-
     // allow to use other ucp's
     // if ( !isLocalNotFile_Impl( aURL ) )
     if ( aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.pkg", 16 )
@@ -186,7 +152,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     }
 
     if ( ( nStorageMode & embed::ElementModes::WRITE ) && !( nStorageMode & embed::ElementModes::NOCREATE ) )
-        FSStorage::MakeFolderNoUI( aURL, sal_False );
+        FSStorage::MakeFolderNoUI( aURL );
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
         throw io::IOException(); // there is no such folder
 
@@ -197,7 +163,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     return uno::Reference< uno::XInterface >(
         static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                     nStorageMode,
-                                                    aPropsToSet,
                                                     m_xFactory ) ),
         uno::UNO_QUERY );
 }
@@ -234,7 +199,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::getSupportedServiceN
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
-    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
+    const sal_Char * pImplementationName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {
     void * pResult = 0;
     if (pServiceManager)

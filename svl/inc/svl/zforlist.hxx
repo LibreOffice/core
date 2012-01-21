@@ -313,9 +313,9 @@ public:
 };
 
 typedef NfCurrencyEntry* NfCurrencyEntryPtr;
-SV_DECL_PTRARR_DEL( NfCurrencyTable, NfCurrencyEntryPtr, 128, 1 )
+SV_DECL_PTRARR_DEL( NfCurrencyTable, NfCurrencyEntryPtr, 128 )
 typedef String* WSStringPtr;
-SV_DECL_PTRARR_DEL_VISIBILITY( NfWSStringsDtor, WSStringPtr, 8, 1, SVL_DLLPUBLIC )
+SV_DECL_PTRARR_DEL_VISIBILITY( NfWSStringsDtor, WSStringPtr, 8, SVL_DLLPUBLIC )
 
 
 class SvNumberFormatterRegistry_Impl;

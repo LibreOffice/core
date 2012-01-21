@@ -70,14 +70,10 @@ SO2_IMPL_BASIC_CLASS1_DLL(SotStorageStream,SotStorageStreamFactory,SotObject,
 SO2_IMPL_INVARIANT(SotStorageStream)
 
 
-void SotStorageStream::TestMemberObjRef( sal_Bool /*bFree*/ )
-{
-}
+void SotStorageStream::TestMemberObjRef() {}
 
 #ifdef TEST_INVARIANT
-void SotStorageStream::TestMemberInvariant( sal_Bool /*bPrint*/ )
-{
-}
+void SotStorageStream::TestMemberInvariant() {}
 #endif
 
 /************************************************************************
@@ -448,14 +444,10 @@ SO2_IMPL_INVARIANT(SotStorage)
 |*
 |*    Beschreibung
 *************************************************************************/
-void SotStorage::TestMemberObjRef( sal_Bool /*bFree*/ )
-{
-}
+void SotStorage::TestMemberObjRef() {}
 
 #ifdef TEST_INVARIANT
-void SotStorage::TestMemberInvariant( sal_Bool /*bPrint*/ )
-{
-}
+void SotStorage::TestMemberInvariant() {}
 #endif
 
 /************************************************************************

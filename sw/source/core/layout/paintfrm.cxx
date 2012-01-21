@@ -195,7 +195,7 @@ public:
     sal_Bool MakeUnion( const SwRect &rRect );
 };
 
-SV_DECL_VARARR( SwLRects, SwLineRect, 100, 100 )
+SV_DECL_VARARR( SwLRects, SwLineRect, 100 )
 
 class SwLineRects : public SwLRects
 {
@@ -500,7 +500,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     static const long nAdd = 20;
 
-    SvPtrarr   aCheck( 64, 64 );
+    SvPtrarr   aCheck( 64 );
 
     for ( int i = 0; i < (int)Count(); ++i )
     {
@@ -3984,7 +3984,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     const long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth() );
     const long nHeight = ::lcl_AlignHeight( rShadow.GetWidth() );
 
-    SwRects aRegion( 2, 2 );
+    SwRects aRegion( 2 );
     SwRect aOut( rOutRect );
 
     const sal_Bool bCnt    = IsCntntFrm();
@@ -4206,7 +4206,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 
     if ( pPage->GetSortedObjs() )
     {
-        SwRegionRects aRegion( aOut, 4, 1 );
+        SwRegionRects aRegion( aOut, 4 );
         ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
         for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
             pLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );

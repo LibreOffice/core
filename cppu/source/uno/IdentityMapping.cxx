@@ -76,7 +76,7 @@ static void SAL_CALL s_release(uno_Mapping * pMapping) SAL_THROW(())
 static void SAL_CALL s_mapInterface(uno_Mapping                       * pMapping,
                                     void                             ** ppOut,
                                     void                              * pInterface,
-                                    struct _typelib_InterfaceTypeDescription * /*pInterfaceTypeDescr*/)
+                                    SAL_UNUSED_PARAMETER struct _typelib_InterfaceTypeDescription * /*pInterfaceTypeDescr*/)
     SAL_THROW(())
 {
     *ppOut = pInterface;

@@ -93,7 +93,8 @@ public:
 // -----------------------------------------------------------------------
 
 css::uno::Reference< css::uno::XInterface > PathService_CreateInstance (
-    const css::uno::Reference< css::lang::XMultiServiceFactory > &)
+    SAL_UNUSED_PARAMETER const css::uno::Reference<
+        css::lang::XMultiServiceFactory > &)
 {
     return css::uno::Reference< css::uno::XInterface >(
         static_cast< cppu::OWeakObject* >(new PathService()));

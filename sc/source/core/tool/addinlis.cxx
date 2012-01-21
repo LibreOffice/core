@@ -59,7 +59,7 @@ ScAddInListener* ScAddInListener::CreateListener(
 ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc ) :
     xVolRes( xVR )
 {
-    pDocs = new ScAddInDocs( 1, 1 );
+    pDocs = new ScAddInDocs( 1 );
     pDocs->Insert( pDoc );
 }
 

@@ -934,7 +934,7 @@ namespace stoc_services
 {
 //*************************************************************************
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-    const Reference< XComponentContext > & )
+    SAL_UNUSED_PARAMETER const Reference< XComponentContext > & )
     throw( RuntimeException )
 {
     static Reference< XInterface > s_ref( (OWeakObject *) new stoc_tcv::TypeConverter_Impl() );

@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SV_DECL_PTRARR_SORT( SwpFmts, SwFmt*, 0, 4 )
+SV_DECL_PTRARR_SORT( SwpFmts, SwFmt*, 0 )
 SV_IMPL_PTRARR_SORT( SwpFmts, SwFmt* )
 
     // Sonderbehandlung fuer SvxFontItem, nur den Namen vergleichen:

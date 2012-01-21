@@ -54,7 +54,7 @@
 extern sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, sal_Bool bChkSection );
 
-SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2,2)
+SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2)
 
 
 // Funktion zum bestimmen des hoechsten Levels innerhalb des Bereiches
@@ -472,7 +472,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     sal_uLong nInsPos = 0;                  // Cnt fuer das TmpArray
 
     // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
-    SwSttNdPtrs aSttNdStack( 1, 5 );
+    SwSttNdPtrs aSttNdStack( 1 );
 
     // setze den Start-Index
     SwNodeIndex  aIdx( aIndex );
@@ -1102,7 +1102,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
     SwNode * pAktNode;
     SwNodeIndex aTmpIdx( aStart, +1 );
     // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
-    SwSttNdPtrs aSttNdStack( 1, 5 );
+    SwSttNdPtrs aSttNdStack( 1 );
     SwStartNode* pTmp = aStart.GetNode().GetStartNode();
     aSttNdStack.C40_INSERT( SwStartNode, pTmp, 0 );
 

@@ -99,8 +99,7 @@ public:
     storeError acquirePage (
         const OStorePageDescriptor& rDescr, storeAccessMode eMode);
 
-    storeError releasePage (
-        const OStorePageDescriptor& rDescr, storeAccessMode eMode);
+    storeError releasePage (const OStorePageDescriptor& rDescr);
 
     sal_uInt32 getRefererCount (void);
 

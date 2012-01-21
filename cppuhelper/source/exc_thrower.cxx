@@ -78,9 +78,9 @@ extern "C"
 {
 
 //------------------------------------------------------------------------------
-static void SAL_CALL ExceptionThrower_acquire_release_nop( uno_Interface * )
-{
-}
+static void SAL_CALL ExceptionThrower_acquire_release_nop(
+    SAL_UNUSED_PARAMETER uno_Interface * )
+{}
 
 //------------------------------------------------------------------------------
 static void SAL_CALL ExceptionThrower_dispatch(

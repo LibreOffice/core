@@ -41,7 +41,7 @@
 #include "wrthtml.hxx"
 
 typedef SwTxtFtn *SwTxtFtnPtr;
-SV_DECL_PTRARR( SwHTMLTxtFtns, SwTxtFtnPtr, 1, 1 )
+SV_DECL_PTRARR( SwHTMLTxtFtns, SwTxtFtnPtr, 1 )
 
 struct SwHTMLFootEndNote_Impl
 {

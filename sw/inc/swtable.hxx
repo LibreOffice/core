@@ -72,13 +72,13 @@ struct Parm;
 SV_DECL_REF( SwServerObject )
 #endif
 
-SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10, 20)
-SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25, 50)
+SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10)
+SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25)
 
 // Save content-bearing box-pointers additionally in a sorted array
 // (for calculation in table).
 typedef SwTableBox* SwTableBoxPtr;
-SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
+SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25 )
 typedef SwTableLine* SwTableLinePtr;
 
 class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.

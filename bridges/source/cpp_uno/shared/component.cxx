@@ -189,7 +189,8 @@ static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCpp
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_releaseInterface, pExtEnv, pCppI);
 }
 
-static void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
+static void SAL_CALL environmentDisposing(
+    SAL_UNUSED_PARAMETER uno_Environment * ) SAL_THROW( () )
 {
     bridges::cpp_uno::shared::g_moduleCount.modCnt.release(
         &bridges::cpp_uno::shared::g_moduleCount.modCnt );

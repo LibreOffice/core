@@ -241,7 +241,7 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
 
     if( pIStm )
     {
-        pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet, (sal_uInt16)pIStm->GetVersion()));
+        pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet));
 
         char cRTF[5];
         cRTF[4] = 0;

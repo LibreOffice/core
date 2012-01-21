@@ -74,7 +74,7 @@ public:
     sal_Bool            isGroupSeparator() const    { return 0 == m_aType.Len(); }
 };
 
-SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3, 3 )
+SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3 )
 
 enum SvtFileDlgMode
 {

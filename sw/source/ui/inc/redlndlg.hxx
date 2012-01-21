@@ -63,18 +63,18 @@ struct SwRedlineDataParent
 };
 
 typedef SwRedlineDataParent* SwRedlineDataParentPtr;
-SV_DECL_PTRARR_DEL(SwRedlineDataParentArr, SwRedlineDataParentPtr, 10, 20)
+SV_DECL_PTRARR_DEL(SwRedlineDataParentArr, SwRedlineDataParentPtr, 10)
 
 
-SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10, 20)
+SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10)
 
 
 typedef SwRedlineDataChild* SwRedlineDataChildPtr;
-SV_DECL_PTRARR_DEL(SwRedlineDataChildArr, SwRedlineDataChildPtr, 4, 4)
+SV_DECL_PTRARR_DEL(SwRedlineDataChildArr, SwRedlineDataChildPtr, 4)
 
 
 typedef SvLBoxEntry* SvLBoxEntryPtr;
-SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100, 100)
+SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100)
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {

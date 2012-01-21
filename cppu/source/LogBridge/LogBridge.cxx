@@ -209,8 +209,8 @@ int LogBridge::v_isValid(rtl::OUString * pReason)
 
 void LogProbe(
     bool                                pre,
-    void                              * /*pThis*/,
-    void                              * /*pContext*/,
+    SAL_UNUSED_PARAMETER void         * /*pThis*/,
+    SAL_UNUSED_PARAMETER void         * /*pContext*/,
     typelib_TypeDescriptionReference  * pReturnTypeRef,
     typelib_MethodParameter           * pParams,
     sal_Int32                           nParams,

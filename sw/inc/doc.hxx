@@ -241,7 +241,7 @@ namespace sfx2 {
 
 // PageDescriptor-interface, Array because of inlines.
 typedef SwPageDesc* SwPageDescPtr;
-SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4 )
 
 // forward declaration
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );

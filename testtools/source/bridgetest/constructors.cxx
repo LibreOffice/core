@@ -448,7 +448,8 @@ void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeExceptio
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+        const &)
     SAL_THROW((css::uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new Impl);
@@ -468,7 +469,8 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() {
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+        const &)
     SAL_THROW((css::uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new Impl2);

@@ -82,7 +82,7 @@ public:
 private:
     class DO_NOT_ACQUIRE;
 
-    OString( rtl_String * value, DO_NOT_ACQUIRE * )
+    OString( rtl_String * value, SAL_UNUSED_PARAMETER DO_NOT_ACQUIRE * )
     {
         pData = value;
     }

@@ -2475,7 +2475,6 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
 
 bool ImpSvNumberInputScan::IsNumberFormatMain(
         const String& rString,                  // string to be analyzed
-        double& ,                               // OUT: result as number, if possible
         const SvNumberformat* pFormat )         // maybe number format set to match against
 {
     Reset();
@@ -2869,7 +2868,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
         aString = pFormatter->GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
         TransformInput( aString );
-        res = IsNumberFormatMain( aString, fOutNumber, pFormat );
+        res = IsNumberFormatMain( aString, pFormat );
     }
 
     if (res)

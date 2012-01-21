@@ -278,7 +278,7 @@ public:
 
 // Row of a HTML table
 typedef HTMLTableCell* HTMLTableCellPtr;
-SV_DECL_PTRARR_DEL(HTMLTableCells,HTMLTableCellPtr,5,5)
+SV_DECL_PTRARR_DEL(HTMLTableCells,HTMLTableCellPtr,5)
 
 class HTMLTableRow
 {
@@ -378,12 +378,12 @@ public:
 
 // HTML table
 typedef HTMLTableRow* HTMLTableRowPtr;
-SV_DECL_PTRARR_DEL(HTMLTableRows,HTMLTableRowPtr,5,5)
+SV_DECL_PTRARR_DEL(HTMLTableRows,HTMLTableRowPtr,5)
 
 typedef HTMLTableColumn* HTMLTableColumnPtr;
-SV_DECL_PTRARR_DEL(HTMLTableColumns,HTMLTableColumnPtr,5,5)
+SV_DECL_PTRARR_DEL(HTMLTableColumns,HTMLTableColumnPtr,5)
 
-SV_DECL_PTRARR(SdrObjects,SdrObject *,1,1)
+SV_DECL_PTRARR(SdrObjects,SdrObject *,1)
 
 class HTMLTable
 {

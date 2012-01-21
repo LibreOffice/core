@@ -1300,7 +1300,8 @@ void SimpleRegistry::mergeKey(
 namespace stoc_bootstrap {
 
 css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+        const &)
 {
     return static_cast< cppu::OWeakObject * >(new SimpleRegistry);
 }

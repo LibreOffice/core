@@ -59,8 +59,7 @@ void ODummyEmbeddedObject::CheckInit()
 }
 
 //----------------------------------------------
-void ODummyEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
-                                            const uno::Reference< uno::XInterface >& /*xSource*/ )
+void ODummyEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
     {
@@ -411,8 +410,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    PostEvent_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAs" )),
-                    uno::Reference< uno::XInterface >( static_cast< cppu::OWeakObject* >( this ) ) );
+    PostEvent_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAs" )) );
 
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
 
@@ -447,8 +445,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         m_xParentStorage = m_xNewParentStorage;
         m_aEntryName = m_aNewEntryName;
 
-        PostEvent_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsDone" )),
-                        uno::Reference< uno::XInterface >( static_cast< cppu::OWeakObject* >( this ) ) );
+        PostEvent_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsDone" )) );
     }
 
     m_xNewParentStorage = uno::Reference< embed::XStorage >();

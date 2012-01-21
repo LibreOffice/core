@@ -50,7 +50,7 @@ namespace sw {
 
 
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
-SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
+SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8 )
 
 
 namespace sw {

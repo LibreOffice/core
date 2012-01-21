@@ -33,35 +33,35 @@
 #include <vector>
 
 class SfxObjectShell;
-SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4, 4 )
+SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4 )
 
 class SfxViewFrame;
-SV_DECL_PTRARR( SfxViewFrameArr_Impl, SfxViewFrame*, 4, 4 )
+SV_DECL_PTRARR( SfxViewFrameArr_Impl, SfxViewFrame*, 4 )
 
 class SfxViewShell;
-SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4, 4 )
+SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4 )
 
 struct SfxTbxCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8, 4 )
+SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8 )
 
 struct SfxStbCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory*, 8, 4 )
+SV_DECL_PTRARR_DEL( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory*, 8 )
 
 struct SfxMenuCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxMenuCtrlFactArr_Impl, SfxMenuCtrlFactory*, 2, 2 )
+SV_DECL_PTRARR_DEL( SfxMenuCtrlFactArr_Impl, SfxMenuCtrlFactory*, 2 )
 
 struct SfxChildWinFactory;
-SV_DECL_PTRARR_DEL( SfxChildWinFactArr_Impl, SfxChildWinFactory*, 2, 2 )
+SV_DECL_PTRARR_DEL( SfxChildWinFactArr_Impl, SfxChildWinFactory*, 2 )
 
 class SfxModule;
-SV_DECL_PTRARR( SfxModuleArr_Impl, SfxModule*, 2, 2 )
+SV_DECL_PTRARR( SfxModuleArr_Impl, SfxModule*, 2 )
 
 class SfxFilter;
 DECL_PTRARRAY( SfxFilterArr_Impl, SfxFilter*, 4, 4 )
 
 class SfxFrame;
 typedef SfxFrame* SfxFramePtr;
-SV_DECL_PTRARR( SfxFrameArr_Impl, SfxFramePtr, 4, 4 )
+SV_DECL_PTRARR( SfxFrameArr_Impl, SfxFramePtr, 4 )
 
 typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
 

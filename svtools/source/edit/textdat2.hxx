@@ -90,7 +90,7 @@ public:
 
 
 typedef TETextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 )
+SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0 )
 
 class TETextPortionList : public TextPortionArray
 {
@@ -117,7 +117,7 @@ struct TEWritingDirectionInfo
     }
 };
 
-SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0, 4 )
+SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0 )
 
 class TextLine
 {
@@ -178,7 +178,7 @@ public:
 };
 
 typedef TextLine* TextLinePtr;
- SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 )
+ SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1 )
 
 inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
 {

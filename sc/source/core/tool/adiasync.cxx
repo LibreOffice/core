@@ -74,7 +74,7 @@ ScAddInAsync::ScAddInAsync( sal_uLong nHandleP, sal_uInt16 nIndex, ScDocument* p
     nHandle( nHandleP ),
     bValid( false )
 {
-    pDocs = new ScAddInDocs( 1, 1 );
+    pDocs = new ScAddInDocs( 1 );
     pDocs->Insert( pDoc );
     pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
     eType = pFuncData->GetAsyncType();

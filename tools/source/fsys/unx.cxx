@@ -324,7 +324,7 @@ sal_uInt16 DirReader_Impl::Read()
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
-            DirEntry *pTemp = new DirEntry(rtl::OString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX);
+            DirEntry *pTemp = new DirEntry(rtl::OString(pDosEntry->d_name), eFlag);
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False);
             FileStat aStat( *pTemp );
@@ -356,7 +356,7 @@ sal_uInt16 DirReader_Impl::Read()
 |*
 *************************************************************************/
 
-FileStat::FileStat( const void *, const void * ):
+FileStat::FileStat( const void * ):
     aDateCreated(0),
     aTimeCreated(0),
     aDateModified(0),
@@ -371,7 +371,7 @@ FileStat::FileStat( const void *, const void * ):
 |*    FileStat::Update()
 |*
 *************************************************************************/
-sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
+sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_Bool )
 {
 
     nSize = 0;

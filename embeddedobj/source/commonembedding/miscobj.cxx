@@ -326,8 +326,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 }
 
 //------------------------------------------------------
-void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
-                                            const uno::Reference< uno::XInterface >& /*xSource*/ )
+void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
     {

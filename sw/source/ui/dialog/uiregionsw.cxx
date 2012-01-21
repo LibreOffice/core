@@ -823,7 +823,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
     // are copied (ClearRedo!)
 
     const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
-    SwSectionFmts aOrigArray( 0, 5 );
+    SwSectionFmts aOrigArray( 0 );
     aOrigArray.Insert( &rDocFmts, 0 );
 
     rSh.StartAllAction();
@@ -1148,7 +1148,7 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
         aSet.Put( pSectRepr->GetLRSpace() );
 
         const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
-        SwSectionFmts aOrigArray( 0, 5 );
+        SwSectionFmts aOrigArray( 0 );
         aOrigArray.Insert( &rDocFmts, 0 );
 
         SwSectionFmt* pFmt = aOrigArray[pSectRepr->GetArrPos()];

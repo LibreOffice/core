@@ -117,7 +117,7 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
         return sal_False;
 
-    SvPtrarr aRefArr( 10, 10 ), aArr( 10, 10 );
+    SvPtrarr aRefArr( 10 ), aArr( 10 );
     ::lcl_GetLayTree( pFrm, aRefArr );
     ::lcl_GetLayTree( pMyFrm, aArr );
 
@@ -928,7 +928,7 @@ public:
     String GetName() { return aName; }
 };
 
-SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5, 5 )
+SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5 )
 SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
 
 /// Get a sorted list of the field IDs from a document.

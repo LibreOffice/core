@@ -85,8 +85,7 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
 
 protected:
     void CheckInit();
-    void PostEvent_Impl( const ::rtl::OUString& aEventName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xSource );
+    void PostEvent_Impl( const ::rtl::OUString& aEventName );
 
 public:
 

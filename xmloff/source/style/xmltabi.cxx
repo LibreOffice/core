@@ -185,7 +185,7 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
 
 
 typedef SvxXMLTabStopContext_Impl *SvxXMLTabStopContext_Impl_ImplPtr;
-SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr, 20, 5 )
+SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr, 20 )
 
 
 // ---

@@ -520,8 +520,8 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
 //==================================================================================================
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
-    unsigned char const *, unsigned char const * )
-{
-}
+    SAL_UNUSED_PARAMETER unsigned char const *,
+    SAL_UNUSED_PARAMETER unsigned char const * )
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ struct SfxAllEnumValue_Impl
     XubString aText;
 };
 
-SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0, 8)
+SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0)
 SV_IMPL_PTRARR(SfxAllEnumValueArr, SfxAllEnumValue_Impl*)
 
 // -----------------------------------------------------------------------

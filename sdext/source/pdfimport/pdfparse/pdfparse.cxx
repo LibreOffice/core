@@ -300,7 +300,7 @@ public:
         return aStr.makeStringAndClear();
     }
 
-    void haveFile( iteratorT pBegin, iteratorT /*pEnd*/ )
+    void haveFile( iteratorT pBegin, SAL_UNUSED_PARAMETER iteratorT /*pEnd*/ )
     {
         if( m_aObjectStack.empty() )
         {
@@ -387,7 +387,7 @@ public:
         insertNewValue( new PDFName(iteratorToString(first,last)), first );
     }
 
-    void pushDouble( iteratorT first, iteratorT /*last*/ )
+    void pushDouble( iteratorT first, SAL_UNUSED_PARAMETER iteratorT /*last*/ )
     {
         insertNewValue( new PDFNumber(m_fDouble), first );
     }
@@ -402,13 +402,13 @@ public:
         insertNewValue( new PDFBool( (last-first == 4) ), first );
     }
 
-    void pushNull( iteratorT first, iteratorT )
+    void pushNull( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         insertNewValue( new PDFNull(), first );
     }
 
 
-    void beginObject( iteratorT first, iteratorT /*last*/ )
+    void beginObject( iteratorT first, SAL_UNUSED_PARAMETER iteratorT /*last*/ )
     {
         if( m_aObjectStack.empty() )
             m_aObjectStack.push_back( new PDFPart() );
@@ -433,7 +433,7 @@ public:
             parseError( "object in wrong place", first );
     }
 
-    void endObject( iteratorT first, iteratorT )
+    void endObject( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "endobj without obj", first );
@@ -443,7 +443,7 @@ public:
             m_aObjectStack.pop_back();
     }
 
-    void pushObjectRef( iteratorT first, iteratorT )
+    void pushObjectRef( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         unsigned int nGeneration = m_aUIntStack.back();
         m_aUIntStack.pop_back();
@@ -452,7 +452,7 @@ public:
         insertNewValue( new PDFObjectRef(nObject,nGeneration), first );
     }
 
-    void beginDict( iteratorT first, iteratorT )
+    void beginDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFDict* pDict = new PDFDict();
         pDict->m_nOffset = first - m_aGlobalBegin;
@@ -461,7 +461,7 @@ public:
         // will not come here if insertion fails (exception)
         m_aObjectStack.push_back( pDict );
     }
-    void endDict( iteratorT first, iteratorT )
+    void endDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFDict* pDict = NULL;
         if( m_aObjectStack.empty() )
@@ -482,7 +482,7 @@ public:
         }
     }
 
-    void beginArray( iteratorT first, iteratorT )
+    void beginArray( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFArray* pArray = new PDFArray();
         pArray->m_nOffset = first - m_aGlobalBegin;
@@ -492,7 +492,7 @@ public:
         m_aObjectStack.push_back( pArray );
     }
 
-    void endArray( iteratorT first, iteratorT )
+    void endArray( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "array end without begin", first );
@@ -525,7 +525,7 @@ public:
             parseError( "stream without object", first );
     }
 
-    void beginTrailer( iteratorT first, iteratorT )
+    void beginTrailer( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             m_aObjectStack.push_back( new PDFPart() );
@@ -545,7 +545,7 @@ public:
             parseError( "trailer in wrong place", first );
     }
 
-    void endTrailer( iteratorT first, iteratorT )
+    void endTrailer( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "%%EOF without trailer", first );

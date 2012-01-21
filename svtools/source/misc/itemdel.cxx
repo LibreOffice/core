@@ -56,7 +56,7 @@ public:
                  ~SfxItemDesruptor_Impl();
 };
 
-SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4, 4 )
+SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4 )
 
 // ------------------------------------------------------------------------
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):

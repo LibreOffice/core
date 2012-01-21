@@ -97,7 +97,7 @@ public:
 
 typedef WW8SelBoxInfo* WW8SelBoxInfoPtr;
 
-SV_DECL_PTRARR_DEL(WW8MergeGroups, WW8SelBoxInfoPtr, 16,16)
+SV_DECL_PTRARR_DEL(WW8MergeGroups, WW8SelBoxInfoPtr, 16)
 SV_IMPL_PTRARR(WW8MergeGroups, WW8SelBoxInfoPtr)
 
 struct WW8TabBandDesc

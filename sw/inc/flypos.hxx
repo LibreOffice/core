@@ -56,7 +56,7 @@ public:
 };
 
 typedef SwPosFlyFrm* SwPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40, SW_DLLPUBLIC )
+SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, SW_DLLPUBLIC )
 
 #endif // _FLYPOS_HXX
 

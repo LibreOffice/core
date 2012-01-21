@@ -41,7 +41,7 @@
 
 //class XResultListenerRef;
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
-SV_DECL_PTRARR_DEL( XResultListenerArr_Impl, XResultListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XResultListenerArr_Impl, XResultListenerPtr, 4 );
 
 
 class ScAddInResult : public cppu::WeakImplHelper1<

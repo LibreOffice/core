@@ -533,9 +533,9 @@ static int ImplConvertUnicodeCharToChar(
 }
 
 sal_Size sal::detail::textenc::convertCharToUnicode(
-    void const * pData, void *, char const * pSrcBuf, sal_Size nSrcBytes,
-    sal_Unicode * pDestBuf, sal_Size nDestChars, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+    void const * pData, SAL_UNUSED_PARAMETER void *, char const * pSrcBuf,
+    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
 {
     sal_uChar                   c;
     sal_Unicode                 cConv;
@@ -593,8 +593,9 @@ sal_Size sal::detail::textenc::convertCharToUnicode(
 }
 
 sal_Size sal::detail::textenc::convertUnicodeToChar(
-    void const * pData, void *, sal_Unicode const * pSrcBuf, sal_Size nSrcChars,
-    char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags, sal_uInt32 * pInfo,
+    void const * pData, SAL_UNUSED_PARAMETER void *,
+    sal_Unicode const * pSrcBuf, sal_Size nSrcChars, char * pDestBuf,
+    sal_Size nDestBytes, sal_uInt32 nFlags, sal_uInt32 * pInfo,
     sal_Size * pSrcCvtChars)
 {
     sal_Unicode                 c;

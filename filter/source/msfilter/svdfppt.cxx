@@ -458,7 +458,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
     return rIn;
 }
 
-SV_DECL_PTRARR_DEL( PptFontEntityAtomList, PptFontEntityAtom*, 16, 16 )
+SV_DECL_PTRARR_DEL( PptFontEntityAtomList, PptFontEntityAtom*, 16 )
 SV_IMPL_PTRARR( PptFontEntityAtomList, PptFontEntityAtom* );
 
 class PptFontCollection: public PptFontEntityAtomList {

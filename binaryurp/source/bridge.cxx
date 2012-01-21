@@ -99,7 +99,8 @@ rtl::OUString toString(css::uno::TypeDescription const & type) {
     return rtl::OUString(d->pTypeName);
 }
 
-extern "C" void SAL_CALL freeProxyCallback(uno_ExtEnvironment *, void * pProxy)
+extern "C" void SAL_CALL freeProxyCallback(
+    SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pProxy)
 {
     assert(pProxy != 0);
     static_cast< Proxy * >(pProxy)->do_free();

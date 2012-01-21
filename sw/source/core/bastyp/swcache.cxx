@@ -90,12 +90,12 @@ void SwCache::Check()
 |*************************************************************************/
 
 
-SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
+SwCache::SwCache( const sal_uInt16 nInitSize
 #ifdef DBG_UTIL
     , const rtl::OString &rNm
 #endif
     ) :
-    SwCacheObjArr( (sal_uInt8)nInitSize, (sal_uInt8)nGrowSize ),
+    SwCacheObjArr( (sal_uInt8)nInitSize ),
     pRealFirst( 0 ),
     pFirst( 0 ),
     pLast( 0 ),

@@ -199,16 +199,16 @@ struct SuperBlockPage
     {
         return rtl_allocateMemory (sal::static_int_cast<sal_Size>(n));
     }
-    static void operator delete (void * p, size_t) SAL_THROW(())
+    static void operator delete (void * p) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }
 
-    static void * operator new (size_t, sal_uInt16 nPageSize) SAL_THROW(())
+    static void * operator new (SAL_UNUSED_PARAMETER size_t, sal_uInt16 nPageSize) SAL_THROW(())
     {
         return rtl_allocateZeroMemory (sal::static_int_cast<sal_Size>(nPageSize));
     }
-    static void operator delete (void * p, sal_uInt16) SAL_THROW(())
+    static void operator delete (void * p, SAL_UNUSED_PARAMETER sal_uInt16) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }
@@ -422,7 +422,8 @@ OStorePageBIOS::Ace::~Ace()
 }
 
 int
-SAL_CALL OStorePageBIOS::Ace::constructor (void * obj, void * /* arg */)
+SAL_CALL OStorePageBIOS::Ace::constructor (
+    void * obj, SAL_UNUSED_PARAMETER void * /* arg */)
 {
   Ace * ace = static_cast<Ace*>(obj);
   ace->m_next = ace->m_prev = ace;
@@ -782,8 +783,7 @@ storeError OStorePageBIOS::acquirePage (
  * releasePage.
  * Precond: initialized.
  */
-storeError OStorePageBIOS::releasePage (
-    const OStorePageDescriptor& rDescr, storeAccessMode /* eMode */)
+storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);

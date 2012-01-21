@@ -41,12 +41,12 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 
 class ScAddInAsync;
 typedef ScAddInAsync* ScAddInAsyncPtr;
-SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4, 4 )
+SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4 )
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
 class ScDocument;
 typedef ScDocument* ScAddInDocPtr;
-SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1, 1 )
+SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1 )
 
 class String;
 

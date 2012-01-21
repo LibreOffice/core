@@ -2589,7 +2589,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
     SwCntntNode* pCNd;
     sal_uInt16 n;
 
-    _HTMLAttrs aFields( 5, 5 );
+    _HTMLAttrs aFields( 5 );
 
     for( n = aSetAttrTab.Count(); n; )
     {

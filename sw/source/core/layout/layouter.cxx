@@ -128,7 +128,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
         }
     }
     if( !pEndArr )
-        pEndArr = new SvPtrarr( 5, 5 );  // deleted from the SwLayouter
+        pEndArr = new SvPtrarr( 5 );  // deleted from the SwLayouter
     pEndArr->Insert( (VoidPtr)pFtn, pEndArr->Count() );
 }
 

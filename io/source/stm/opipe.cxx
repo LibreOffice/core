@@ -454,7 +454,8 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 
 
 Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
-    const Reference < XComponentContext > & ) throw(Exception)
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+    throw(Exception)
 {
     OPipeImpl *p = new OPipeImpl;
 

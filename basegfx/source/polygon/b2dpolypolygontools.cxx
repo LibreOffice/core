@@ -467,8 +467,9 @@ namespace basegfx
             }
         }
 
-        void correctGrowShrinkPolygonPair(B2DPolyPolygon& /*rOriginal*/, B2DPolyPolygon& /*rGrown*/)
+        void correctGrowShrinkPolygonPair(SAL_UNUSED_PARAMETER B2DPolyPolygon& /*rOriginal*/, SAL_UNUSED_PARAMETER B2DPolyPolygon& /*rGrown*/)
         {
+            //TODO!
         }
 
         B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments)

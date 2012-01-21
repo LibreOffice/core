@@ -131,7 +131,7 @@ Position::operator-=( intt i_levels )
 }
 
 String
-Position::LinkToRoot( const String & ) const
+Position::LinkToRoot() const
 {
     StreamLock sl(C_nAssumedMaxLinkLength);
     return sl() << get_UpLink(Depth()) << c_str;
@@ -176,8 +176,7 @@ Position::Get_LinkTo( StreamStr &         o_result,
 }
 
 void
-Position::Get_LinkToRoot( StreamStr &         o_result,
-                          const String &      ) const
+Position::Get_LinkToRoot( StreamStr & o_result ) const
 {
     o_result << get_UpLink(Depth());
 }

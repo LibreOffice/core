@@ -166,8 +166,7 @@ public:
         { addAttribute( rAttrName, ::rtl::OUString::valueOf(bValue) ); }
     void addNumberFormatAttr(
         css::uno::Reference< css::beans::XPropertySet >
-        const & xFormatProperties,
-        ::rtl::OUString const & rAttrName );
+        const & xFormatProperties );
 
     void readEvents() SAL_THROW( (css::uno::Exception) );
     void readDialogModel( StyleBag * all_styles )

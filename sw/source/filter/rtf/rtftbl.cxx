@@ -50,7 +50,7 @@
 using namespace ::com::sun::star;
 
 typedef SwTableBoxFmt* SwTableBoxFmtPtr;
-SV_DECL_PTRARR( SwBoxFrmFmts, SwTableBoxFmtPtr, 25, 50 )
+SV_DECL_PTRARR( SwBoxFrmFmts, SwTableBoxFmtPtr, 25 )
 
 class SwShareBoxFmts;
 extern void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* = 0,

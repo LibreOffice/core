@@ -892,7 +892,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
 
 //------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL create_DocumentHandlerImpl(
-    Reference< XComponentContext > const & )
+    SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(

@@ -213,7 +213,7 @@ PyRef getEnumClass( const Runtime &);
 PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
-PyRef getPyUnoClass( const Runtime &);
+PyRef getPyUnoClass();
 PyRef getClass( const rtl::OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );

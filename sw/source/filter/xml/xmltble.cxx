@@ -105,7 +105,7 @@ sal_Int32 SwXMLTableColumnCmpWidth_Impl( const SwXMLTableColumn_Impl& r1,
 // ---------------------------------------------------------------------
 
 typedef SwXMLTableColumn_Impl *SwXMLTableColumnPtr;
-SV_DECL_PTRARR_SORT_DEL( SwXMLTableColumns_Impl, SwXMLTableColumnPtr, 5, 5 )
+SV_DECL_PTRARR_SORT_DEL( SwXMLTableColumns_Impl, SwXMLTableColumnPtr, 5 )
 SV_IMPL_OP_PTRARR_SORT( SwXMLTableColumns_Impl, SwXMLTableColumnPtr )
 
 DECLARE_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl,

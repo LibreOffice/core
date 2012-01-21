@@ -153,7 +153,6 @@ FSStorage_Impl::~FSStorage_Impl()
 //-----------------------------------------------
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
-                    uno::Sequence< beans::PropertyValue >,
                     uno::Reference< lang::XMultiServiceFactory > xFactory )
 : m_pImpl( new FSStorage_Impl( aContent, nMode, xFactory ) )
 {
@@ -179,7 +178,7 @@ FSStorage::~FSStorage()
 }
 
 //-----------------------------------------------
-sal_Bool FSStorage::MakeFolderNoUI( const ::rtl::OUString& rFolder, sal_Bool )
+sal_Bool FSStorage::MakeFolderNoUI( const ::rtl::OUString& rFolder )
 {
     INetURLObject aURL( rFolder );
     ::rtl::OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -613,12 +612,12 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             {
                 ::utl::UCBContentHelper::Kill( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomar :(
             }
             else if ( !bFolderExists )
             {
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomar :(
             }
         }
         else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
@@ -631,7 +630,6 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         xResult = uno::Reference< embed::XStorage >(
                             static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                                         nStorageMode,
-                                                                        uno::Sequence< beans::PropertyValue >(),
                                                                         m_pImpl->m_xFactory ) ),
                             uno::UNO_QUERY );
     }

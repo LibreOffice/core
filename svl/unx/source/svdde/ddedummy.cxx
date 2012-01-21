@@ -45,11 +45,11 @@ DdeData::DdeData( const void*, long, sal_uLong)
 {
 }
 
-DdeData::~DdeData( void )
+DdeData::~DdeData()
 {
 }
 
-void DdeData::SetFormat( sal_uLong )
+void DdeData::SetFormat( SAL_UNUSED_PARAMETER sal_uLong )
 {
 }
 
@@ -82,7 +82,7 @@ DdeConnection::DdeConnection( const String&, const String& )
 {
 }
 
-DdeConnection::~DdeConnection( void )
+DdeConnection::~DdeConnection()
 {
 }
 
@@ -106,23 +106,23 @@ DdeTransaction::DdeTransaction( const DdeTransaction& rTransaction ) :
 {
 }
 
-void DdeTransaction::Execute(void)
+void DdeTransaction::Execute()
 {
 }
 
-void DdeTransaction::Done( sal_Bool )
+void DdeTransaction::Done( SAL_UNUSED_PARAMETER sal_Bool )
 {
 }
 
-void DdeTransaction::Data( const DdeData* )
+void DdeTransaction::Data( SAL_UNUSED_PARAMETER const DdeData* )
 {
 }
 
-DdeTransaction::~DdeTransaction(void)
+DdeTransaction::~DdeTransaction()
 {
 }
 
-DdeRequest::DdeRequest(DdeConnection& rConnection, const String& rString, long lLong ) :
+DdeRequest::DdeRequest( DdeConnection& rConnection, const String& rString, long lLong ) :
      DdeTransaction( rConnection, rString, lLong )
 {
 }
@@ -146,15 +146,15 @@ DdeTopic::~DdeTopic()
 {
 }
 
-void DdeTopic::Connect (long )
+void DdeTopic::Connect( SAL_UNUSED_PARAMETER long )
 {
 }
 
-void DdeTopic::Disconnect( long )
+void DdeTopic::Disconnect( SAL_UNUSED_PARAMETER long )
 {
 }
 
-void DdeTopic::InsertItem( DdeItem* )
+void DdeTopic::InsertItem( SAL_UNUSED_PARAMETER DdeItem* )
 {
 }
 
@@ -163,16 +163,16 @@ DdeItem* DdeTopic::AddItem( const DdeItem& rDdeItem )
   return (DdeItem*) &rDdeItem;
 }
 
-void DdeTopic::RemoveItem( const DdeItem& )
+void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )
 {
 }
 
-DdeData* DdeTopic::Get( sal_uLong )
+DdeData* DdeTopic::Get( SAL_UNUSED_PARAMETER sal_uLong )
 {
   return NULL;
 }
 
-sal_Bool DdeTopic::MakeItem( const String& )
+sal_Bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const String& )
 {
   return sal_False;
 }
@@ -187,12 +187,12 @@ sal_Bool DdeTopic::StopAdviseLoop()
   return sal_False;
 }
 
-sal_Bool DdeTopic::Execute( const String* )
+sal_Bool DdeTopic::Execute( SAL_UNUSED_PARAMETER const String* )
 {
   return sal_False;
 }
 
-sal_Bool DdeTopic::Put( const DdeData* )
+sal_Bool DdeTopic::Put( SAL_UNUSED_PARAMETER const DdeData* )
 {
   return sal_False;
 }
@@ -227,7 +227,7 @@ String DdeService::SysTopicGet(const String& rString) {
     return rString;
 }
 
-sal_Bool DdeService::SysTopicExecute(const String*) {
+sal_Bool DdeService::SysTopicExecute(SAL_UNUSED_PARAMETER const String*) {
     return sal_False;
 }
 
@@ -245,19 +245,19 @@ String DdeService::GetHelp()
   return String::EmptyString();
 }
 
-void DdeService::AddFormat( sal_uLong )
+void DdeService::AddFormat( SAL_UNUSED_PARAMETER sal_uLong )
 {
 }
 
-void DdeService::AddTopic( const DdeTopic& )
+void DdeService::AddTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
 }
 
-void DdeService::RemoveTopic( const DdeTopic& )
+void DdeService::RemoveTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
 }
 
-sal_Bool DdeService::MakeTopic( const String& )
+sal_Bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const String& )
 {
   return sal_False;
 }
@@ -304,17 +304,17 @@ DdeItem( rItem )
 {
 }
 
-DdeData* DdeGetPutItem::Get( sal_uLong )
+DdeData* DdeGetPutItem::Get( SAL_UNUSED_PARAMETER sal_uLong )
 {
   return NULL;
 }
 
-sal_Bool DdeGetPutItem::Put( const DdeData* )
+sal_Bool DdeGetPutItem::Put( SAL_UNUSED_PARAMETER const DdeData* )
 {
   return sal_False;
 }
 
-void DdeGetPutItem::AdviseLoop( sal_Bool )
+void DdeGetPutItem::AdviseLoop( SAL_UNUSED_PARAMETER sal_Bool )
 {
 }
 

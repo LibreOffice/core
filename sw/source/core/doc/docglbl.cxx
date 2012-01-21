@@ -176,7 +176,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
         if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
         {
-            pOutlNds = new SwOutlineNodes( 8, 8 );
+            pOutlNds = new SwOutlineNodes( 8 );
             SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
             for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                 if( pTNd->GetNodes().IsDocNodes() )

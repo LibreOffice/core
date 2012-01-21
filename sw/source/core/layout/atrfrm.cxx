@@ -813,7 +813,7 @@ SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     aLineColor( rCpy.aLineColor),
     nLineHeight( rCpy.GetLineHeight() ),
     eAdj( rCpy.GetLineAdj() ),
-    aColumns( (sal_Int8)rCpy.GetNumCols(), 1 ),
+    aColumns( (sal_Int8)rCpy.GetNumCols() ),
     nWidth( rCpy.GetWishWidth() ),
     bOrtho( rCpy.IsOrtho() )
 {

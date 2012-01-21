@@ -481,7 +481,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 
 //==============================================================================
 static Reference< XInterface > SAL_CALL proxyfac_create(
-    Reference< XComponentContext > const & )
+    SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)
 {
     Reference< XInterface > xRet;

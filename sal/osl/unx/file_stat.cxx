@@ -345,7 +345,6 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt6
 
 static oslFileError osl_psz_setFileTime (
     const sal_Char* pszFilePath,
-    const TimeValue* /*pCreationTime*/,
     const TimeValue* pLastAccessTime,
     const TimeValue* pLastWriteTime )
 {
@@ -426,7 +425,7 @@ static oslFileError osl_psz_setFileTime (
 
 oslFileError SAL_CALL osl_setFileTime (
     rtl_uString* ustrFileURL,
-    const TimeValue* pCreationTime,
+    SAL_UNUSED_PARAMETER const TimeValue* /* pCreationTime */,
     const TimeValue* pLastAccessTime,
     const TimeValue* pLastWriteTime )
 {
@@ -445,7 +444,7 @@ oslFileError SAL_CALL osl_setFileTime (
       return oslTranslateFileError( OSL_FET_ERROR, errno );
 #endif/* MACOSX */
 
-    return osl_psz_setFileTime( path, pCreationTime, pLastAccessTime, pLastWriteTime );
+    return osl_psz_setFileTime( path, pLastAccessTime, pLastWriteTime );
 }
 
 sal_Bool

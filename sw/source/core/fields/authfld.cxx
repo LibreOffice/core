@@ -57,12 +57,12 @@ using rtl::OUString;
 
 
 typedef SwAuthEntry* SwAuthEntryPtr;
-SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5, 5 )
+SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5 )
 SV_IMPL_PTRARR( SwAuthDataArr, SwAuthEntryPtr )
 
 
 typedef SwTOXSortKey* TOXSortKeyPtr;
-SV_DECL_PTRARR_DEL( SortKeyArr, TOXSortKeyPtr, 5, 5 )
+SV_DECL_PTRARR_DEL( SortKeyArr, TOXSortKeyPtr, 5 )
 SV_IMPL_PTRARR( SortKeyArr, TOXSortKeyPtr )
 
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
@@ -84,7 +84,7 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
     m_pDataArr(new SwAuthDataArr ),
-    m_pSortKeyArr(new SortKeyArr(3, 3)),
+    m_pSortKeyArr(new SortKeyArr(3)),
     m_cPrefix('['),
     m_cSuffix(']'),
     m_bIsSequence(sal_False),
@@ -96,7 +96,7 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
 SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
     : SwFieldType( RES_AUTHORITY ),
     m_pDataArr(new SwAuthDataArr ),
-    m_pSortKeyArr(new SortKeyArr(3, 3)),
+    m_pSortKeyArr(new SortKeyArr(3)),
     m_cPrefix(rFType.m_cPrefix),
     m_cSuffix(rFType.m_cSuffix),
     m_bIsSequence(rFType.m_bIsSequence),

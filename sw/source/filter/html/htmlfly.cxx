@@ -313,7 +313,7 @@ void SwHTMLWriter::CollectFlyFrms()
             "number of browser configurations has changed" );
 
     sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
-    SwPosFlyFrms aFlyPos( nSz, nSz );
+    SwPosFlyFrms aFlyPos( nSz );
     pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, sal_True );
 
     for( sal_uInt16 i=0; i< aFlyPos.Count(); i++ )

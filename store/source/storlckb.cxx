@@ -72,9 +72,9 @@ OStoreLockBytes::~OStoreLockBytes (void)
         {
             OStorePageDescriptor aDescr (m_xNode->m_aDescr);
             if (m_bWriteable)
-                m_xManager->releasePage (aDescr, store_AccessReadWrite);
+                m_xManager->releasePage (aDescr);
             else
-                m_xManager->releasePage (aDescr, store_AccessReadOnly);
+                m_xManager->releasePage (aDescr);
         }
     }
 }

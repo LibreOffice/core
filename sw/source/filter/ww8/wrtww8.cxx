@@ -229,7 +229,7 @@ public:
 SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
 
 typedef WW8_WrPc* WW8_WrPcPtr;
-SV_DECL_PTRARR_DEL( WW8_WrPcPtrs, WW8_WrPcPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( WW8_WrPcPtrs, WW8_WrPcPtr, 4 )
 SV_IMPL_PTRARR( WW8_WrPcPtrs, WW8_WrPcPtr )
 
 static void WriteDop( WW8Export& rWrt )
@@ -1377,7 +1377,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo)
 void WW8Export::AppendBookmarks( const SwTxtNode& rNd,
     xub_StrLen nAktPos, xub_StrLen nLen )
 {
-    SvPtrarr aArr( 8, 8 );
+    SvPtrarr aArr( 8 );
     sal_uInt16 nCntnt;
     xub_StrLen nAktEnd = nAktPos + nLen;
     if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))

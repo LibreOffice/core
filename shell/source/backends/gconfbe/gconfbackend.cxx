@@ -206,7 +206,8 @@ css::uno::Any Service::getPropertyValue(rtl::OUString const & PropertyName)
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+        const &)
 {
     return static_cast< cppu::OWeakObject * >(new Service);
 }

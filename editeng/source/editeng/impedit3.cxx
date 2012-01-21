@@ -86,7 +86,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-SV_DECL_VARARR_SORT( SortedPositions, sal_uInt32, 16, 8 )
+SV_DECL_VARARR_SORT( SortedPositions, sal_uInt32, 16 )
 SV_IMPL_VARARR_SORT( SortedPositions, sal_uInt32 );
 
 #define CH_HYPH     '-'

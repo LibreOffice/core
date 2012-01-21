@@ -116,8 +116,7 @@ class DT_MLTag : public DT_Dsapi
 class DT_MupType : public DT_MLTag
 {
   public:
-    explicit            DT_MupType(             /// Constructor for End-Tag
-                            bool                )   /// Must be there, but is not evaluated.
+    explicit            DT_MupType()            /// Constructor for End-Tag
                                                 :   bIsBegin(false) {}
     explicit            DT_MupType(             /// Constructor for Begin-Tag
                             const String &      i_sScope )
@@ -138,8 +137,7 @@ class DT_MupType : public DT_MLTag
 class DT_MupMember : public DT_MLTag
 {
   public:
-    explicit            DT_MupMember(           /// Constructor for End-Tag
-                            bool                )   /// Must be there, but is not evaluated.
+    explicit            DT_MupMember()          /// Constructor for End-Tag
                                                 :   bIsBegin(false) {}
                         DT_MupMember(           /// Constructor for Begin-Tag
                             const String &      i_sScope )

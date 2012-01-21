@@ -36,7 +36,7 @@
 #include <tools/stream.hxx>
 #include <svl/svarray.hxx>
 
-SV_DECL_VARARR( SfxUINT32s, sal_uInt32, 8, 8 )
+SV_DECL_VARARR( SfxUINT32s, sal_uInt32, 8 )
 
 //------------------------------------------------------------------------
 
@@ -453,8 +453,8 @@ protected:
 
                     SfxMultiFixRecordWriter( sal_uInt8 nRecordType,
                                              SvStream *pStream,
-                                             sal_uInt16 nTag, sal_uInt8 nCurVer,
-                                             sal_uInt32 nContentSize );
+                                             sal_uInt16 nTag,
+                                             sal_uInt8 nCurVer );
 
 public:
     inline          ~SfxMultiFixRecordWriter();

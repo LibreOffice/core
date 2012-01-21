@@ -105,8 +105,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dba_component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::dba::DbaModule::getInstance().getComponentFactory(
-            ::rtl::OUString::createFromAscii( pImplementationName ),
-            static_cast< XMultiServiceFactory* >( pServiceManager ) );
+            ::rtl::OUString::createFromAscii( pImplementationName ) );
     }
 
     if (xRet.is())

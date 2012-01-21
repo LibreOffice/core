@@ -81,8 +81,8 @@ class SVL_DLLPUBLIC DdeData
 
 public:
                     DdeData();
-                    DdeData( const void*, long, sal_uLong = FORMAT_STRING );
-                    DdeData( const String& );
+                    DdeData( SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER sal_uLong = FORMAT_STRING );
+                    DdeData( SAL_UNUSED_PARAMETER const String& );
                     DdeData( const DdeData& );
                     ~DdeData();
 
@@ -117,7 +117,7 @@ protected:
     Link            aDone;
     sal_Bool            bBusy;
 
-                    DdeTransaction( DdeConnection&, const String&, long = 0 );
+                    DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const String&, SAL_UNUSED_PARAMETER long = 0 );
 
 public:
     virtual        ~DdeTransaction();
@@ -203,7 +203,7 @@ class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 public:
             DdePoke( DdeConnection&, const String&, const char*, long,
                      sal_uLong = FORMAT_STRING, long = 0 );
-            DdePoke( DdeConnection&, const String&, const DdeData&, long = 0 );
+            DdePoke( DdeConnection&, const String&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
             DdePoke( DdeConnection&, const String&, const String&, long = 0 );
 };
 
@@ -231,7 +231,7 @@ class SVL_DLLPUBLIC DdeConnection
     DdeImp*         pImp;
 
 public:
-                    DdeConnection( const String&, const String& );
+                    DdeConnection( SAL_UNUSED_PARAMETER const String&, SAL_UNUSED_PARAMETER const String& );
                     ~DdeConnection();
 
     long            GetError();
@@ -269,7 +269,7 @@ protected:
 
 public:
                     DdeItem( const sal_Unicode* );
-                    DdeItem( const String& );
+                    DdeItem( SAL_UNUSED_PARAMETER const String& );
                     DdeItem( const DdeItem& );
                     virtual ~DdeItem();
 
@@ -332,7 +332,7 @@ private:
     Link            aExecLink;
 
 public:
-                    DdeTopic( const String& );
+                    DdeTopic( SAL_UNUSED_PARAMETER const String& );
     virtual        ~DdeTopic();
 
     const String&   GetName() const;
@@ -397,7 +397,7 @@ private:
     SVL_DLLPRIVATE sal_Bool            HasCbFormat( sal_uInt16 );
 
 public:
-                    DdeService( const String& );
+                    DdeService( SAL_UNUSED_PARAMETER const String& );
     virtual        ~DdeService();
 
     const String&   GetName() const;

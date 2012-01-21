@@ -92,7 +92,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* /*pRegistryKey*/)
+                    SAL_UNUSED_PARAMETER void* /*pRegistryKey*/)
 {
     pcr_initializeModule();
 
@@ -100,8 +100,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::pcr::PcrModule::getInstance().getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName),
-            static_cast< XMultiServiceFactory* >(pServiceManager));
+            ::rtl::OUString::createFromAscii(pImplementationName));
     }
 
     if (xRet.is())

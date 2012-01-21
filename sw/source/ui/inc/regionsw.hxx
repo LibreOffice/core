@@ -66,7 +66,7 @@ namespace sfx2
 *************************************************************************/
 class SectRepr;
 typedef SectRepr* SectReprPtr;
-SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
+SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0 )
 
 class SwEditRegionDlg : public SfxModalDialog
 {

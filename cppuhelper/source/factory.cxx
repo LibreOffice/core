@@ -956,9 +956,7 @@ class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleService
 
 public:
 
-    OFactoryProxyHelper(
-        const Reference<XMultiServiceFactory > & /*rServiceManager*/,
-        const Reference<XSingleServiceFactory > & rFactory )
+    OFactoryProxyHelper( const Reference<XSingleServiceFactory > & rFactory )
         SAL_THROW( () )
         : xFactory( rFactory )
         {}
@@ -1053,12 +1051,11 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
 
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createFactoryProxy(
-    const Reference<XMultiServiceFactory > & rServiceManager,
+    SAL_UNUSED_PARAMETER const Reference<XMultiServiceFactory > &,
     const Reference<XSingleServiceFactory > & rFactory )
     SAL_THROW( () )
 {
-    return new OFactoryProxyHelper(
-        rServiceManager, rFactory );
+    return new OFactoryProxyHelper( rFactory );
 }
 
 // global function

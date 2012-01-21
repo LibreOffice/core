@@ -111,7 +111,7 @@ struct _SaveFly
     { }
 };
 
-SV_DECL_VARARR( _SaveFlyArr, _SaveFly, 0, 10 )
+SV_DECL_VARARR( _SaveFlyArr, _SaveFly, 0 )
 
 void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsPos );
@@ -182,7 +182,7 @@ public:
     const SwFmtAnchor* GetAnchor() const        { return pAnchor; }
 };
 
-SV_DECL_VARARR_SORT( _ZSortFlys, _ZSortFly, 0, 10 )
+SV_DECL_VARARR_SORT( _ZSortFlys, _ZSortFly, 0 )
 
 
 class SwTblNumFmtMerge

@@ -194,7 +194,8 @@ private:
 // the extern interface
 //---------------------------------------
 Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
-    const Reference< XMultiServiceFactory  >  & ) throw(Exception)
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+    throw(Exception)
 {
     SaxExpatParser *p = new SaxExpatParser;
 
@@ -843,12 +844,10 @@ void SaxExpatParser_Impl::callbackProcessingInstruction(    void *pvThis,
 }
 
 
-void SaxExpatParser_Impl::callbackUnparsedEntityDecl(void *pvThis ,
-                                                     const XML_Char *entityName,
-                                                     const XML_Char * /*base*/,
-                                                     const XML_Char *systemId,
-                                                     const XML_Char *publicId,
-                                                     const XML_Char *notationName)
+void SaxExpatParser_Impl::callbackUnparsedEntityDecl(
+    void *pvThis, const XML_Char *entityName,
+    SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
+    const XML_Char *publicId, const XML_Char *notationName)
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
     if( pImpl->rDTDHandler.is() ) {
@@ -862,11 +861,10 @@ void SaxExpatParser_Impl::callbackUnparsedEntityDecl(void *pvThis ,
     }
 }
 
-void SaxExpatParser_Impl::callbackNotationDecl( void *pvThis,
-                                                const XML_Char *notationName,
-                                                const XML_Char * /*base*/,
-                                                const XML_Char *systemId,
-                                                const XML_Char *publicId)
+void SaxExpatParser_Impl::callbackNotationDecl(
+    void *pvThis, const XML_Char *notationName,
+    SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
+    const XML_Char *publicId)
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
     if( pImpl->rDTDHandler.is() ) {
@@ -880,11 +878,10 @@ void SaxExpatParser_Impl::callbackNotationDecl( void *pvThis,
 
 
 
-int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
-                                                    const XML_Char *context,
-                                                    const XML_Char * /*base*/,
-                                                    const XML_Char *systemId,
-                                                    const XML_Char *publicId)
+int SaxExpatParser_Impl::callbackExternalEntityRef(
+    XML_Parser parser, const XML_Char *context,
+    SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
+    const XML_Char *publicId)
 {
     sal_Bool bOK = sal_True;
     InputSource source;
@@ -953,9 +950,10 @@ int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
     return bOK;
 }
 
-int SaxExpatParser_Impl::callbackUnknownEncoding(void * /*encodingHandlerData*/,
-                                                 const XML_Char * /*name*/,
-                                                 XML_Encoding * /*info*/)
+int SaxExpatParser_Impl::callbackUnknownEncoding(
+    SAL_UNUSED_PARAMETER void * /*encodingHandlerData*/,
+    SAL_UNUSED_PARAMETER const XML_Char * /*name*/,
+    SAL_UNUSED_PARAMETER XML_Encoding * /*info*/)
 {
     return 0;
 }
@@ -1030,7 +1028,8 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const sal_Char * pImplName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 

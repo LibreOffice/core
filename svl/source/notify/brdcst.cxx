@@ -34,7 +34,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/lstner.hxx>
 
-SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0, 2 )
+SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0 )
 
 #define _SFX_BRDCST_CXX
 #include <svl/brdcst.hxx>

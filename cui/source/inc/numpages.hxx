@@ -69,7 +69,7 @@ struct SvxNumSettings_Impl
 };
 
 typedef SvxNumSettings_Impl* SvxNumSettings_ImplPtr;
-SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8,4)
+SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8)
 
 
 //------------------------------------------------

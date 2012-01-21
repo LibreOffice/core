@@ -88,7 +88,7 @@ struct SvxGroupInfo_Impl
 };
 
 typedef SvxGroupInfo_Impl* SvxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5, 5)
+SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5)
 
 class ImageProvider
 {

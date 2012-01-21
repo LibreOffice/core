@@ -139,7 +139,7 @@ struct SwGetINetAttr
         : sText( rTxt ), rINetAttr( rAttr )
     {}
 };
-SV_DECL_PTRARR_DEL( SwGetINetAttrs, SwGetINetAttr*, 0, 5 )
+SV_DECL_PTRARR_DEL( SwGetINetAttrs, SwGetINetAttr*, 0 )
 
 // Types of forms of content.
 #define CNT_TXT 0x0001

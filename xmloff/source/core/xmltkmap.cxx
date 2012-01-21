@@ -73,7 +73,7 @@ public:
 };
 
 typedef SvXMLTokenMapEntry_Impl *SvXMLTokenMapEntry_ImplPtr;
-SV_DECL_PTRARR_SORT_DEL( SvXMLTokenMap_Impl, SvXMLTokenMapEntry_ImplPtr, 5, 5 )
+SV_DECL_PTRARR_SORT_DEL( SvXMLTokenMap_Impl, SvXMLTokenMapEntry_ImplPtr, 5 )
 SV_IMPL_OP_PTRARR_SORT( SvXMLTokenMap_Impl, SvXMLTokenMapEntry_ImplPtr )
 
 // ---------------------------------------------------------------------

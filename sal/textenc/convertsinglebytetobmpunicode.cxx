@@ -40,7 +40,7 @@
 #include "unichars.hxx"
 
 sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
-    void const * data, void *, sal_Char const * srcBuf,
+    void const * data, SAL_UNUSED_PARAMETER void *, sal_Char const * srcBuf,
     sal_Size srcBytes, sal_Unicode * destBuf, sal_Size destChars,
     sal_uInt32 flags, sal_uInt32 * info, sal_Size * srcCvtBytes)
 {

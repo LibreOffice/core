@@ -335,15 +335,9 @@ rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel
     return aCutPath.makeStringAndClear();
 }
 
-#if defined(WNT)
-/*************************************************************************
-|*
-|*    DirEntry::ImpParseOs2Name()
-|*
-*************************************************************************/
-
-FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eStyle  )
+FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
 {
+#if defined(WNT)
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     // die einzelnen Namen auf einen Stack packen
@@ -374,7 +368,7 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
                 if ( aPfad.GetChar(nPos) == '\\' || aPfad.GetChar(nPos) == '/' )
                     break;
             aName = rtl::OUStringToOString(aPfad.Copy( 2, nPos-2 ), osl_getThreadTextEncoding());
-            aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT, eStyle ) );
+            aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT ) );
         }
         // ist der Name die Root des aktuellen Drives?
         else if ( nPos == 0 && aPfad.Len() > 0 &&
@@ -402,7 +396,7 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
                         return FSYS_ERR_MISPLACEDCHAR;
                     }
                     // Root-Directory des Drive
-                    aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT, eStyle ) );
+                    aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT ) );
                 }
                 else
                 {
@@ -419,7 +413,7 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
 
                     // liegt jetzt nichts mehr auf dem Stack?
                     if ( aStack.Empty() )
-                        aStack.Push( new DirEntry( aName, FSYS_FLAG_RELROOT, eStyle ) );
+                        aStack.Push( new DirEntry( aName, FSYS_FLAG_RELROOT ) );
                 }
             }
 
@@ -459,7 +453,7 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
                 else
                 {
                     // normalen Entries kommen auf den Stack
-                    DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
+                    DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL );
                     if ( !pNew->IsValid() )
                     {
                         aName = rPfad;
@@ -512,27 +506,115 @@ FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eS
     if ( nErr )
         aName = rPfad;
     return nErr;
-}
-#endif
-
-/*************************************************************************
-|*
-|*    DirEntry::ImpParseName()
-|*
-*************************************************************************/
-
-FSysError DirEntry::ImpParseName( const rtl::OString& rbInitName,
-                                  FSysPathStyle eStyle )
-{
-    if ( eStyle == FSYS_STYLE_HOST )
-        eStyle = DEFSTYLE;
-
-#if defined(WNT)
-    return ImpParseOs2Name( rbInitName, eStyle );
 #else
-    return ImpParseUnixName( rbInitName, eStyle );
-#endif
+    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
+    // die einzelnen Namen auf einen Stack packen
+    DirEntryStack   aStack;
+    rtl::OString aPfad(rPfad);
+    do
+    {
+        // den Namen vor dem ersten "/" abspalten,
+        // falls '/' am Anfang, ist der Name '/',
+        // der Rest immer ohne die fuehrenden '/'.
+        // den ersten '/' suchen
+        sal_uInt16 nPos;
+        for ( nPos = 0;
+              nPos < aPfad.getLength() && aPfad[nPos] != '/';
+              nPos++ )
+            /* do nothing */;
+
+            // ist der Name die Root des aktuellen Drives?
+        if ( nPos == 0 && !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
+        {
+            // Root-Directory des aktuellen Drives
+            aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
+        }
+        else
+        {
+            // den Namen ohne Trenner abspalten
+            aName = aPfad.copy(0, nPos);
+
+                        // stellt der Name die aktuelle Directory dar?
+            if ( aName == "." )
+                /* do nothing */;
+
+#ifdef UNX
+            // stellt der Name das User-Dir dar?
+            else if ( aName == "~" )
+            {
+                DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
+                for ( sal_uInt16 n = aHome.Level(); n; --n )
+                    aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
+            }
+#endif
+            // stellt der Name die Parent-Directory dar?
+            else if ( aName == ".." )
+            {
+                // ist nichts, ein Parent oder eine relative Root
+                // auf dem Stack?
+                if ( ( aStack.Empty() ) || ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
+                {
+                    // fuehrende Parents kommen auf den Stack
+                    aStack.Push( new DirEntry(rtl::OString(), FSYS_FLAG_PARENT) );
+                }
+                // ist es eine absolute Root
+                else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT )
+                {
+                    // die hat keine Parent-Directory
+                    return FSYS_ERR_NOTEXISTS;
+                }
+                else
+                    // sonst hebt der Parent den TOS auf
+                    delete aStack.Pop();
+            }
+            else
+            {
+                DirEntry *pNew = NULL;
+                // normalen Entries kommen auf den Stack
+                pNew = new DirEntry( aName, FSYS_FLAG_NORMAL );
+                if ( !pNew->IsValid() )
+                {
+                    aName = rPfad;
+                    ErrCode eErr = pNew->GetError();
+                    delete pNew;
+                    return eErr;
+                }
+                aStack.Push( pNew );
+            }
+        }
+
+        // den Restpfad bestimmen
+        aPfad = nPos < aPfad.getLength()
+            ? aPfad.copy(nPos + 1) : rtl::OString();
+        while ( !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
+            aPfad = aPfad.copy(1);
+    }
+    while (!aPfad.isEmpty());
+
+    // Haupt-Entry (selbst) zuweisen
+    if ( aStack.Empty() )
+    {
+        eFlag = FSYS_FLAG_CURRENT;
+        aName = rtl::OString();
+    }
+    else
+    {
+        eFlag = aStack.Top()->eFlag;
+        aName = aStack.Top()->aName;
+        delete aStack.Pop();
+    }
+
+    // die Parent-Entries vom Stack holen
+    DirEntry** pTemp = &pParent;
+    while ( !aStack.Empty() )
+    {
+        *pTemp = aStack.Pop();
+        pTemp = &( (*pTemp)->pParent );
+    }
+
+    return FSYS_ERR_OK;
+#endif
 }
 
 /*************************************************************************
@@ -559,7 +641,7 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 |*
 *************************************************************************/
 
-void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
+void DirEntry::ImpTrim()
 {
     // Wildcards werden nicht geclipt
     if ( ( aName.indexOf( '*' ) != -1 ) ||
@@ -588,8 +670,7 @@ void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
 |*
 *************************************************************************/
 
-DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag,
-                    FSysPathStyle eStyle ) :
+DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag ) :
 #ifdef FEAT_FSYS_DOUBLESPEED
             pStat( 0 ),
 #endif
@@ -601,7 +682,7 @@ DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag,
     eFlag           = eDirFlag;
     nError          = FSYS_ERR_OK;
 
-    ImpTrim( eStyle );
+    ImpTrim();
 }
 
 /*************************************************************************
@@ -683,7 +764,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 #endif
     }
 
-    nError  = ImpParseName( aTmpName, eStyle );
+    nError  = ImpParseName( aTmpName );
 
     if ( nError != FSYS_ERR_OK )
         eFlag = FSYS_FLAG_INVALID;
@@ -729,7 +810,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     }
 #endif
 
-    nError  = ImpParseName( aTmpName, eStyle );
+    nError  = ImpParseName( aTmpName );
 
     if ( nError != FSYS_ERR_OK )
         eFlag = FSYS_FLAG_INVALID;
@@ -1699,125 +1780,6 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 
     return *pRes;
 }
-
-#if !defined(WNT)
-/*************************************************************************
-|*
-|*    DirEntry::ImpParseUnixName()
-|*
-*************************************************************************/
-
-FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle eStyle )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    // die einzelnen Namen auf einen Stack packen
-    DirEntryStack   aStack;
-    rtl::OString aPfad(rPfad);
-    do
-    {
-        // den Namen vor dem ersten "/" abspalten,
-        // falls '/' am Anfang, ist der Name '/',
-        // der Rest immer ohne die fuehrenden '/'.
-        // den ersten '/' suchen
-        sal_uInt16 nPos;
-        for ( nPos = 0;
-              nPos < aPfad.getLength() && aPfad[nPos] != '/';
-              nPos++ )
-            /* do nothing */;
-
-            // ist der Name die Root des aktuellen Drives?
-        if ( nPos == 0 && !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
-        {
-            // Root-Directory des aktuellen Drives
-            aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
-        }
-        else
-        {
-            // den Namen ohne Trenner abspalten
-            aName = aPfad.copy(0, nPos);
-
-                        // stellt der Name die aktuelle Directory dar?
-            if ( aName == "." )
-                /* do nothing */;
-
-#ifdef UNX
-            // stellt der Name das User-Dir dar?
-            else if ( aName == "~" )
-            {
-                DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
-                for ( sal_uInt16 n = aHome.Level(); n; --n )
-                    aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
-            }
-#endif
-            // stellt der Name die Parent-Directory dar?
-            else if ( aName == ".." )
-            {
-                // ist nichts, ein Parent oder eine relative Root
-                // auf dem Stack?
-                if ( ( aStack.Empty() ) || ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
-                {
-                    // fuehrende Parents kommen auf den Stack
-                    aStack.Push( new DirEntry(rtl::OString(), FSYS_FLAG_PARENT, eStyle) );
-                }
-                // ist es eine absolute Root
-                else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT )
-                {
-                    // die hat keine Parent-Directory
-                    return FSYS_ERR_NOTEXISTS;
-                }
-                else
-                    // sonst hebt der Parent den TOS auf
-                    delete aStack.Pop();
-            }
-            else
-            {
-                DirEntry *pNew = NULL;
-                // normalen Entries kommen auf den Stack
-                pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
-                if ( !pNew->IsValid() )
-                {
-                    aName = rPfad;
-                    ErrCode eErr = pNew->GetError();
-                    delete pNew;
-                    return eErr;
-                }
-                aStack.Push( pNew );
-            }
-        }
-
-        // den Restpfad bestimmen
-        aPfad = nPos < aPfad.getLength()
-            ? aPfad.copy(nPos + 1) : rtl::OString();
-        while ( !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
-            aPfad = aPfad.copy(1);
-    }
-    while (!aPfad.isEmpty());
-
-    // Haupt-Entry (selbst) zuweisen
-    if ( aStack.Empty() )
-    {
-        eFlag = FSYS_FLAG_CURRENT;
-        aName = rtl::OString();
-    }
-    else
-    {
-        eFlag = aStack.Top()->eFlag;
-        aName = aStack.Top()->aName;
-        delete aStack.Pop();
-    }
-
-    // die Parent-Entries vom Stack holen
-    DirEntry** pTemp = &pParent;
-    while ( !aStack.Empty() )
-    {
-        *pTemp = aStack.Pop();
-        pTemp = &( (*pTemp)->pParent );
-    }
-
-    return FSYS_ERR_OK;
-}
-#endif
 
 #define MAX_EXT_MAX       250
 #define MAX_LEN_MAX       255

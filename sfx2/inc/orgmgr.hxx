@@ -37,7 +37,7 @@ struct _FileListEntry;
 
 //=========================================================================
 
-SV_DECL_PTRARR_SORT(_SfxObjectList, _FileListEntry*, 1, 4)
+SV_DECL_PTRARR_SORT(_SfxObjectList, _FileListEntry*, 1)
 
 class SfxObjectList: public _SfxObjectList
 {

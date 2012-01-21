@@ -157,7 +157,7 @@ struct AutoMarkEntry
         bWord(sal_False){}
 };
 typedef AutoMarkEntry* AutoMarkEntryPtr;
-SV_DECL_PTRARR_DEL(AutoMarkEntryArr, AutoMarkEntryPtr, 0, 4)
+SV_DECL_PTRARR_DEL(AutoMarkEntryArr, AutoMarkEntryPtr, 0)
 SV_IMPL_PTRARR(AutoMarkEntryArr, AutoMarkEntryPtr);
 
 typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;

@@ -49,7 +49,7 @@ class SwTable;
 class SwUndoTblMerge;
 class SwCellFrm;
 
-SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16, 16 )
+SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16 )
 
 
 class SwSelBoxes : private std::map<sal_uLong, SwTableBox*>
@@ -128,8 +128,8 @@ sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // Check if selection is balanced.
-SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16, 16)
-SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25, 50)
+SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16)
+SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25 )
 
 sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines = 0 );
@@ -174,7 +174,7 @@ public:
           SwTabFrm *GetTable()       { return pTable; }
 };
 
-SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10, 20 )
+SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10 )
 
 // Gets the tables involved in a table selection and the union-rectangles of the selections
 // - also for split tables.
@@ -192,8 +192,8 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
 class _FndBox;
 class _FndLine;
 
-SV_DECL_PTRARR_DEL( _FndBoxes, _FndBox*, 10, 20 )
-SV_DECL_PTRARR_DEL( _FndLines, _FndLine*,10, 20 )
+SV_DECL_PTRARR_DEL( _FndBoxes, _FndBox*, 10 )
+SV_DECL_PTRARR_DEL( _FndLines, _FndLine*,10 )
 
 class _FndBox
 {

@@ -32,7 +32,7 @@
 
 #include "swrect.hxx"
 
-SV_DECL_VARARR( SwRects, SwRect, 20, 8 )
+SV_DECL_VARARR( SwRects, SwRect, 20 )
 
 class SwRegionRects : public SwRects
 {
@@ -41,8 +41,7 @@ class SwRegionRects : public SwRects
     inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, sal_Bool &rDel);
 
 public:
-    SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20,
-                                             sal_uInt16 nGrow = 8 );
+    SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20 );
 
     // For punching from aOrigin.
     void operator-=( const SwRect& rRect );

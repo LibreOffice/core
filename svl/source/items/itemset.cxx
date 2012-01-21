@@ -104,14 +104,8 @@ SfxItemSet::SfxItemSet
     SfxItemPool&    rPool,          /* der Pool, in dem die SfxPoolItems,
                                        welche in dieses SfxItemSet gelangen,
                                        aufgenommen werden sollen */
-    sal_Bool
-#ifdef DBG_UTIL
-#ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
-
-                    bTotalRanges    /* komplette Pool-Ranges uebernehmen,
+    sal_Bool        bTotalRanges    /* komplette Pool-Ranges uebernehmen,
                                        muss auf sal_True gesetzt werden */
-#endif
-#endif
 )
 /*  [Beschreibung]
 
@@ -134,11 +128,11 @@ SfxItemSet::SfxItemSet
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
-#ifdef DBG_UTIL
-#ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
+#if defined DBG_UTIL && defined SFX_ITEMSET_NO_DEFAULT_CTOR
     if ( !bTotalRanges )
         *(int*)0 = 0; // GPF
-#endif
+#else
+    (void) bTotalRanges; // avoid warnings
 #endif
 
     _pWhichRanges = (sal_uInt16*) _pPool->GetFrozenIdRanges();

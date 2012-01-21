@@ -29,6 +29,10 @@
 #ifndef ADC_UIDL_PE_FUNC2_HXX
 #define ADC_UIDL_PE_FUNC2_HXX
 
+#include "sal/config.h"
+
+#include "sal/types.h"
+
 // USED SERVICES
     // BASE CLASSES
 #include <s2_luidl/parsenv2.hxx>

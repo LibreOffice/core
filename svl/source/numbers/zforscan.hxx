@@ -249,7 +249,7 @@ private:                            // ---- privater Teil
                         xub_StrLen& nPos,
                       String& sSymbol);       // Naechstes Symbol
     xub_StrLen Symbol_Division(const String& rString);// lexikalische Voranalyse
-    xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
+    xub_StrLen ScanType(); // Analyse des Formattyps
     xub_StrLen FinalScan( String& rString );  // Endanalyse mit Vorgabe des Typs
 
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found

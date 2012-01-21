@@ -472,7 +472,7 @@ throw ( ::css::uno::RuntimeException )
     return static_cast< ::cppu::OWeakObject * >( new OTempFileService(context) );
 }
 
-::css::uno::Reference < ::css::lang::XSingleComponentFactory > OTempFileService::createServiceFactory_Static( ::css::uno::Reference < ::css::lang::XMultiServiceFactory > const & )
+::css::uno::Reference < ::css::lang::XSingleComponentFactory > OTempFileService::createServiceFactory_Static()
 {
     return ::cppu::createSingleComponentFactory( XTempFile_createInstance, getImplementationName_Static(), getSupportedServiceNames_Static() );
 }
@@ -485,7 +485,8 @@ throw ( ::css::uno::RuntimeException )
  * @return a component factory (generic uno interface)
  */
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL utl_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const sal_Char * pImplName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     ::css::uno::Reference< ::css::lang::XMultiServiceFactory > xSMgr(
@@ -493,7 +494,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL utl_component_getFactory(
     ::css::uno::Reference< ::css::lang::XSingleComponentFactory > xFactory;
 
     if (OTempFileService::getImplementationName_Static().compareToAscii( pImplName ) == 0)
-        xFactory = OTempFileService::createServiceFactory_Static ( xSMgr );
+        xFactory = OTempFileService::createServiceFactory_Static();
 
     if ( xFactory.is() )
     {

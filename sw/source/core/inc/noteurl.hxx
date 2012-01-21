@@ -54,7 +54,7 @@ public:
 };
 
 typedef SwURLNote* SwURLNotePtr;
-SV_DECL_PTRARR_DEL(SwURLNoteList, SwURLNotePtr, 0, 5)
+SV_DECL_PTRARR_DEL(SwURLNoteList, SwURLNotePtr, 0)
 
 class SwNoteURL
 {

@@ -100,7 +100,7 @@ SvLinkSource_Entry_Impl::~SvLinkSource_Entry_Impl()
 }
 
 typedef SvLinkSource_Entry_Impl* SvLinkSource_Entry_ImplPtr;
-SV_DECL_PTRARR_DEL( SvLinkSource_Array_Impl, SvLinkSource_Entry_ImplPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( SvLinkSource_Array_Impl, SvLinkSource_Entry_ImplPtr, 4 )
 SV_IMPL_PTRARR( SvLinkSource_Array_Impl, SvLinkSource_Entry_ImplPtr );
 
 class SvLinkSource_EntryIter_Impl

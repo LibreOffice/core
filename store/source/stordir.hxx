@@ -114,7 +114,7 @@ private:
 };
 
 template<> inline OStoreDirectory_Impl*
-SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory_Impl*)
+SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStoreDirectory_Impl*)
 {
     if (pHandle && pHandle->isKindOf (OStoreDirectory_Impl::m_nTypeId))
     {

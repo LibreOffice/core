@@ -252,7 +252,7 @@ SwDoc::SwDoc()
     maListStyleLists(),
     pRedlineTbl( new SwRedlineTbl ),
     pAutoFmtRedlnComment( 0 ),
-    pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
+    pUnoCrsrTbl( new SwUnoCrsrTbl( 0 ) ),
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),

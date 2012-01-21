@@ -340,7 +340,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         Runtime runtime;
 
         PyRef paras,callable;
-        if( PyObject_IsInstance( object, getPyUnoClass( runtime ).get() ) )
+        if( PyObject_IsInstance( object, getPyUnoClass().get() ) )
         {
             PyUNO* me = (PyUNO*) object;
             OUString attrName = OUString::createFromAscii(name);
@@ -607,7 +607,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     try
     {
         Runtime runtime;
-        if( PyObject_IsInstance( that, getPyUnoClass( runtime ).get() ) )
+        if( PyObject_IsInstance( that, getPyUnoClass().get() ) )
         {
 
             PyUNO *me = reinterpret_cast< PyUNO*> ( self );
@@ -697,7 +697,7 @@ static PyTypeObject PyUNOType =
 #endif
 };
 
-PyRef getPyUnoClass( const Runtime &)
+PyRef getPyUnoClass()
 {
     return PyRef( reinterpret_cast< PyObject * > ( &PyUNOType ) );
 }

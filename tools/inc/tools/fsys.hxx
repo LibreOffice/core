@@ -174,8 +174,7 @@ private:
 
 protected:
                     // Implementation
-                    FileStat( const void *pInfo,      // CInfoPBRec
-                              const void *pVolInfo ); // ParamBlockRec
+                    FileStat( SAL_UNUSED_PARAMETER const void *pInfo ); // CInfoPBRec
 
 public:
                     FileStat();
@@ -229,27 +228,18 @@ friend class FileCopier;
 
 private:
     TOOLS_DLLPRIVATE            DirEntry( const rtl::OString& rInitName,
-                                  DirEntryFlag aDirFlag,
-                                  FSysPathStyle eStyle );
+                                  DirEntryFlag aDirFlag );
 
     friend class Dir;
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
 
-    TOOLS_DLLPRIVATE FSysError          ImpParseName( const rtl::OString& rIntiName,
-                                      FSysPathStyle eParser );
-#if defined(WNT)
-    TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const rtl::OString& rPfad,
-                                         FSysPathStyle eStyle );
-#else
-    TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const rtl::OString& rPfad,
-                                          FSysPathStyle eStyle );
-#endif
+    TOOLS_DLLPRIVATE FSysError          ImpParseName( const rtl::OString& rIntiName );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
 
 protected:
-    void                ImpTrim( FSysPathStyle eStyle );
+    void                ImpTrim();
     const rtl::OString& ImpTheName() const;
     DirEntryFlag        ImpTheFlag() const { return eFlag; };
     DirEntry*           ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize = sal_True );

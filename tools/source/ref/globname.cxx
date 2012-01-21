@@ -44,7 +44,7 @@ ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
 }
 
 /************** class ImpSvGlobalName ************************************/
-ImpSvGlobalName::ImpSvGlobalName( int )
+ImpSvGlobalName::ImpSvGlobalName( Empty )
 {
     nRefCount = 1;
     memset( szData, 0, sizeof( szData ) );
@@ -63,7 +63,7 @@ sal_Bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 *************************************************************************/
 SvGlobalName::SvGlobalName()
 {
-    static ImpSvGlobalName aNoName( 0 );
+    static ImpSvGlobalName aNoName( ImpSvGlobalName::EMPTY );
 
     pImp = &aNoName;
     pImp->nRefCount++;

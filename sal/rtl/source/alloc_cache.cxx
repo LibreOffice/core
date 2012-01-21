@@ -253,7 +253,7 @@ rtl_cache_hash_remove (
 /** rtl_cache_slab_constructor()
  */
 static int
-rtl_cache_slab_constructor (void * obj, void *)
+rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
 
@@ -267,7 +267,7 @@ rtl_cache_slab_constructor (void * obj, void *)
 /** rtl_cache_slab_destructor()
  */
 static void
-rtl_cache_slab_destructor (void * obj, void *)
+rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = static_cast< rtl_cache_slab_type * >(obj);
     assert(QUEUE_STARTED_NAMED(slab, slab_)); // assure removed from queue(s)
@@ -572,7 +572,7 @@ rtl_cache_slab_free (
 /** rtl_cache_magazine_constructor()
  */
 static int
-rtl_cache_magazine_constructor (void * obj, void *)
+rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
     /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
@@ -588,7 +588,7 @@ rtl_cache_magazine_constructor (void * obj, void *)
 /** rtl_cache_magazine_destructor()
  */
 static void
-rtl_cache_magazine_destructor (void * obj, void *)
+rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = static_cast< rtl_cache_magazine_type * >(
         obj);

@@ -34,12 +34,12 @@
 #include "tcvtbyte.hxx"
 #include "tenchelp.hxx"
 
-sal_Size ImplSymbolToUnicode( const void*,
-                              void*,
+sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
+                              SAL_UNUSED_PARAMETER void*,
                               const char* pSrcBuf, sal_Size nSrcBytes,
                               sal_Unicode* pDestBuf, sal_Size nDestChars,
-                              sal_uInt32, sal_uInt32* pInfo,
-                              sal_Size* pSrcCvtBytes )
+                              SAL_UNUSED_PARAMETER sal_uInt32,
+                              sal_uInt32* pInfo, sal_Size* pSrcCvtBytes )
 {
     sal_uChar               c;
     sal_Unicode*            pEndDestBuf;
@@ -70,8 +70,8 @@ sal_Size ImplSymbolToUnicode( const void*,
     return (nDestChars - (pEndDestBuf-pDestBuf));
 }
 
-sal_Size ImplUnicodeToSymbol( const void*,
-                              void*,
+sal_Size ImplUnicodeToSymbol( SAL_UNUSED_PARAMETER const void*,
+                              SAL_UNUSED_PARAMETER void*,
                               const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                               char* pDestBuf, sal_Size nDestBytes,
                               sal_uInt32 nFlags, sal_uInt32* pInfo,
@@ -130,10 +130,10 @@ sal_Size ImplUnicodeToSymbol( const void*,
 }
 
 sal_Size ImplUpperCharToUnicode( const void* pData,
-                            void*,
+                            SAL_UNUSED_PARAMETER void*,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32, sal_uInt32* pInfo,
+                            SAL_UNUSED_PARAMETER sal_uInt32, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
     sal_uChar                   c;

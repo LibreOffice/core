@@ -82,7 +82,7 @@ struct TextBlockInfo_Impl
     String sGroupName;
 };
 typedef TextBlockInfo_Impl* TextBlockInfo_ImplPtr;
-SV_DECL_PTRARR_DEL( TextBlockInfoArr, TextBlockInfo_ImplPtr, 0, 4 )
+SV_DECL_PTRARR_DEL( TextBlockInfoArr, TextBlockInfo_ImplPtr, 0 )
 SV_IMPL_PTRARR( TextBlockInfoArr, TextBlockInfo_ImplPtr )
 SV_IMPL_REF( SwDocShell )
 

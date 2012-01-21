@@ -118,7 +118,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService::getSuppor
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService::Create(
-    const uno::Reference< uno::XComponentContext >& )
+    SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
 {
     return static_cast< ::cppu::OWeakObject * >( new SequenceOutputStreamService());
 }

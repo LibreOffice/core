@@ -457,7 +457,8 @@ namespace stoc_services {
 namespace UriSchemeParser_vndDOTsunDOTstarDOTscript {
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+        const &)
     SAL_THROW((css::uno::Exception))
 {
     //TODO: single instance

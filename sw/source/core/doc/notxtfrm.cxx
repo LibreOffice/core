@@ -213,7 +213,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
                     OutputDevice &rOut, const SwRect& rPtArea,
                     const SwRect &rGrfArea )
 {
-    SwRegionRects aRegion( rPtArea, 4, 4 );
+    SwRegionRects aRegion( rPtArea, 4 );
     aRegion -= rGrfArea;
 
     if ( aRegion.Count() )

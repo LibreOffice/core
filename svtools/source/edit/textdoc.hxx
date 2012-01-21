@@ -36,7 +36,7 @@
 #include <tools/string.hxx>
 
 typedef TextCharAttrib* TextCharAttribPtr;
-SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )
+SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0 )
 
 class TextCharAttribList : private TextCharAttribs
 {

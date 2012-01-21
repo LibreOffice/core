@@ -38,7 +38,7 @@ class SbxFactory;
 class SbxVariable;
 class SbxBasicFormater;
 
-SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5,5)
+SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5)
 
 // AppData structure for SBX:
 struct SbxAppData

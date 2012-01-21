@@ -61,7 +61,7 @@ public:
 };
 
 typedef SwBlinkPortion* SwBlinkPortionPtr;
-SV_DECL_PTRARR_SORT_DEL(SwBlinkList, SwBlinkPortionPtr, 0, 10)
+SV_DECL_PTRARR_SORT_DEL(SwBlinkList, SwBlinkPortionPtr, 0)
 
 class SwBlink
 {

@@ -390,8 +390,8 @@ extern "C"
 //------------------------------------------------------------------------------
 JNIEXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
-    JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring,
-    jstring jo_method, jobjectArray jo_args /* may be 0 */ )
+    JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring jo_method,
+    jobjectArray jo_args /* may be 0 */ )
     SAL_THROW_EXTERN_C()
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );

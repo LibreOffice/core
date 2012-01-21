@@ -38,9 +38,8 @@ SV_IMPL_VARARR( SwRects, SwRect );
 |*  SwRegionRects::SwRegionRects()
 |*************************************************************************/
 
-SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit,
-                                                        sal_uInt16 nGrow ) :
-    SwRects( (sal_uInt8)nInit, (sal_uInt8)nGrow ),
+SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
+    SwRects( (sal_uInt8)nInit ),
     aOrigin( rStartRect )
 {
     Insert( aOrigin, 0 );

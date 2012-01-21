@@ -39,7 +39,7 @@ class SvStream;
 #define MAX_NUM_RULES 9
 
 typedef SfxPoolItem* SfxPoolItemPtr;
-SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5,0 )
+SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5 )
 
 class SW_DLLPUBLIC SwNumRulesWithName
 {

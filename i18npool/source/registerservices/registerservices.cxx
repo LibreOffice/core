@@ -91,7 +91,7 @@
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
         SAL_CALL ImplName##_CreateInstance(                                 \
-            const ::com::sun::star::uno::Reference<                         \
+            SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference<    \
                     ::com::sun::star::lang::XMultiServiceFactory >& )       \
 {                                                                           \
     return ::com::sun::star::uno::Reference <                               \
@@ -574,7 +574,7 @@ static const struct InstancesArray {
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
 

@@ -177,7 +177,7 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
 
 // --- class EditApp -------------------------------------------------
 
-SV_DECL_PTRARR_DEL( StringList, String*, 0, 4 );
+SV_DECL_PTRARR_DEL( StringList, String*, 0 );
 SV_IMPL_PTRARR( StringList, String* );
 StringList aSimpleHistory;
 

@@ -44,7 +44,7 @@ class SwModuleOptions;
 
 class InsCaptionOpt;
 typedef InsCaptionOpt* InsCaptionOptPtr;
-SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0, 5)
+SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0)
 
 class InsCaptionOptArr : public InsCapOptArr
 {

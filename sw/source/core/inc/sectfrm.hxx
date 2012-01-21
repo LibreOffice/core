@@ -154,7 +154,7 @@ public:
 };
 
 typedef SwSectionFrm* SwSectionFrmPtr;
-SV_DECL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr, 1, 5)
+SV_DECL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr, 1 )
 
 inline const SwSectionFrm *SwSectionFrm::GetFollow() const
 {

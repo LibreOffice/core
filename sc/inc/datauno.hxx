@@ -71,7 +71,7 @@ struct ScSortParam;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XRefreshListener >* XDBRefreshListenerPtr;
-SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4 )
 
 class ScDataUnoConversion
 {

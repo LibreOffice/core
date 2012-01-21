@@ -70,7 +70,7 @@ void _TextInit()
 {
     pFntCache = new SwFntCache;                     // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache;                 // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
-    SwCache *pTxtCache = new SwCache( 250, 100      // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
+    SwCache *pTxtCache = new SwCache( 250 // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
 #ifdef DBG_UTIL
     , "static SwTxtFrm::pTxtCache"
 #endif

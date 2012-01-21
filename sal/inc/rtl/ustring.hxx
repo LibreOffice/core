@@ -83,7 +83,7 @@ public:
 private:
     class DO_NOT_ACQUIRE{};
 
-    OUString( rtl_uString * value, DO_NOT_ACQUIRE * )
+    OUString( rtl_uString * value, SAL_UNUSED_PARAMETER DO_NOT_ACQUIRE * )
     {
         pData = value;
     }

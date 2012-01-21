@@ -111,7 +111,7 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL( SwLabRecs, SwLabRec*, 110, 10 )
+SV_DECL_PTRARR_DEL( SwLabRecs, SwLabRec*, 110 )
 
 #endif
 

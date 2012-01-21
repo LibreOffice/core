@@ -57,7 +57,7 @@ class SwTOXMark;
 class SwTxtTOXMark;
 class SwDoc;
 
-SV_DECL_PTRARR(SwTOXMarks, SwTOXMark*, 0, 10)
+SV_DECL_PTRARR(SwTOXMarks, SwTOXMark*, 0)
 
 /*--------------------------------------------------------------------
      Description:  Entry of content index, alphabetical index or user defined index

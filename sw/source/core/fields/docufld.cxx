@@ -2153,7 +2153,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     if( !pNew && !pOld && GetDepends() )
     {
         // sammel erstmal alle SetPageRefFelder ein.
-        _SetGetExpFlds aTmpLst( 10, 5 );
+        _SetGetExpFlds aTmpLst( 10 );
         if( MakeSetList( aTmpLst ) )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *this );
@@ -2301,7 +2301,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     OSL_ENSURE( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // sammel erstmal alle SetPageRefFelder ein.
-    _SetGetExpFlds aTmpLst( 10, 5 );
+    _SetGetExpFlds aTmpLst( 10 );
     if( !pGetType->MakeSetList( aTmpLst ) )
         return ;
 

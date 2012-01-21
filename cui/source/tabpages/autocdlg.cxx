@@ -932,7 +932,7 @@ struct DoubleString
     void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
 };
 typedef DoubleString* DoubleStringPtr;
-SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4)
+SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4)
 SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
 
 void lcl_ClearTable(DoubleStringTable& rTable)

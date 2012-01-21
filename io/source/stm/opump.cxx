@@ -485,7 +485,9 @@ Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
 }
 
 
-Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & ) throw (Exception)
+Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference< XComponentContext > & )
+    throw (Exception)
 {
     return Reference< XInterface >( *new Pump );
 }

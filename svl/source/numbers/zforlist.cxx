@@ -3184,7 +3184,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry(
 
 
 // static
-IMPL_STATIC_LINK_NOINSTANCE( SvNumberFormatter, CurrencyChangeLink, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( SvNumberFormatter, CurrencyChangeLink, SAL_UNUSED_PARAMETER void*, EMPTYARG )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     String aAbbrev;
@@ -4092,15 +4092,13 @@ void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr,
 
 
 // static
-sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat( sal_uInt16
-#if ! NF_BANKSYMBOL_FIX_POSITION
-            nIntlFormat
-#endif
-            , sal_uInt16 nCurrFormat, bool bBank )
+sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat(
+    sal_uInt16 nIntlFormat, sal_uInt16 nCurrFormat, bool bBank )
 {
     if ( bBank )
     {
 #if NF_BANKSYMBOL_FIX_POSITION
+        (void) nIntlFormat; // avoid warnings
         return 3;
 #else
         switch ( nIntlFormat )

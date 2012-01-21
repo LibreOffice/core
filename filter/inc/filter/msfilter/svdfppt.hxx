@@ -353,7 +353,7 @@ public:
     sal_uInt32          GetSlideId() const { return aPersistAtom.nSlideId; }
 };
 
-SV_DECL_PTRARR_DEL(_PptSlidePersistList,PptSlidePersistEntry*,16,16)
+SV_DECL_PTRARR_DEL(_PptSlidePersistList,PptSlidePersistEntry*,16)
 
 #define PPTSLIDEPERSIST_ENTRY_NOTFOUND 0xFFFF
 

@@ -66,7 +66,7 @@ struct SfxDock_Impl
 };
 
 typedef SfxDock_Impl* SfxDockPtr;
-SV_DECL_PTRARR_DEL( SfxDockArr_Impl, SfxDockPtr, 4, 4)
+SV_DECL_PTRARR_DEL( SfxDockArr_Impl, SfxDockPtr, 4 )
 SV_IMPL_PTRARR( SfxDockArr_Impl, SfxDockPtr);
 
 class SfxEmptySplitWin_Impl : public SplitWindow

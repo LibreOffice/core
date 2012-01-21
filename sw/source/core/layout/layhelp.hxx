@@ -57,7 +57,7 @@ class SvStream;
 
 class SwFlyCache;
 typedef SwFlyCache* SwFlyCachePtr;
-SV_DECL_PTRARR_DEL( SwPageFlyCache, SwFlyCachePtr, 0, 4 )
+SV_DECL_PTRARR_DEL( SwPageFlyCache, SwFlyCachePtr, 0 )
 
 class SwLayCacheImpl : public std::vector<sal_uLong>
 {

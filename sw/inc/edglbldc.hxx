@@ -71,7 +71,7 @@ public:
 
 
 typedef SwGlblDocContent* SwGlblDocContentPtr;
-SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10, 10 )
+SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10 )
 
 
 

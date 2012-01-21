@@ -3547,7 +3547,7 @@ void SwRedline::MoveFromSection()
     {
         SwDoc* pDoc = GetDoc();
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
-        SvPtrarr aBeforeArr( 16, 16 ), aBehindArr( 16, 16 );
+        SvPtrarr aBeforeArr( 16 ), aBehindArr( 16 );
         sal_uInt16 nMyPos = rTbl.GetPos( this );
         OSL_ENSURE( this, "this is not in the array?" );
         sal_Bool bBreak = sal_False;

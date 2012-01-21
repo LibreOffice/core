@@ -497,7 +497,7 @@ public:
 //! replace PtrArr with 32-bit array ????
 
 typedef ScDPDataMember* ScDPDataMemberPtr;
-SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES_GROW)
+SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW)
 
 
 //  result dimension contains only members

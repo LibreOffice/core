@@ -115,8 +115,7 @@ class Messages
     void                WriteParagraph(
                             csv::File &         o_out,
                             const MessageMap &  i_source,
-                            const String &      i_title,
-                            const String &      i_firstIntermediateText );
+                            const String &      i_title );
 
     // DATA
     MessageMap          aMissingDocs;

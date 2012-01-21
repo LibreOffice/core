@@ -753,7 +753,7 @@ fileOpen(const char *URI) {
 }
 
 static void *
-zipOpen(const char * /*URI*/) {
+zipOpen(SAL_UNUSED_PARAMETER const char *) {
     rtl::OUString language,jar,path;
 
     if( ugblData->m_pInitial->get_eid().getLength() )

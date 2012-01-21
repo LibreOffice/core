@@ -432,7 +432,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 void SwTable::AdjustWidths( const long nOld, const long nNew )
 {
-    SvPtrarr aFmtArr( (sal_uInt8)aLines[0]->GetTabBoxes().Count(), 1 );
+    SvPtrarr aFmtArr( (sal_uInt8)aLines[0]->GetTabBoxes().Count() );
     ::lcl_ModifyLines( aLines, nOld, nNew, aFmtArr, true );
 }
 
@@ -699,7 +699,7 @@ struct Parm
     SwShareBoxFmts aShareFmts;
 
     Parm( const SwTabCols &rN, const SwTabCols &rO ) :
-        rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0), aBoxArr( 10, 1 ){}
+        rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0), aBoxArr( 10 ){}
 };
 inline sal_Bool BoxInArr( SvPtrarr& rArr, SwTableBox* pBox )
 {
@@ -1555,7 +1555,7 @@ sal_Bool SwTable::IsTblComplex() const
 SwTableLine::SwTableLine( SwTableLineFmt *pFmt, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
     : SwClient( pFmt ),
-    aBoxes( (sal_uInt8)nBoxes, 1 ),
+    aBoxes( (sal_uInt8)nBoxes ),
     pUpper( pUp )
 {
 }
@@ -1698,7 +1698,7 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 |*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient( 0 ),
-    aLines( (sal_uInt8)nLines, 1 ),
+    aLines( (sal_uInt8)nLines ),
     pSttNd( 0 ),
     pUpper( pUp ),
     pImpl( 0 )
@@ -1709,7 +1709,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
                         SwTableLine *pUp )
     : SwClient( 0 ),
-    aLines( 0, 0 ),
+    aLines( 0 ),
     pUpper( pUp ),
     pImpl( 0 )
 {
@@ -1728,7 +1728,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
 
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableLine *pUp ) :
     SwClient( 0 ),
-    aLines( 0, 0 ),
+    aLines( 0 ),
     pSttNd( &rSttNd ),
     pUpper( pUp ),
     pImpl( 0 )

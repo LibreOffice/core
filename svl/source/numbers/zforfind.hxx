@@ -327,7 +327,6 @@ private:
     //! converted to ASCII.
     bool IsNumberFormatMain(                    // Main anlyzing function
             const String& rString,
-            double& fOutNumber,                 // return value if string is numeric
             const SvNumberformat* pFormat = NULL    // optional number format to match against
             );
 

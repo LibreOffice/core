@@ -93,7 +93,7 @@ OStoreDirectory_Impl::~OStoreDirectory_Impl (void)
     if (m_xManager.is())
     {
         if (m_aDescr.m_nAddr != STORE_PAGE_NULL)
-            m_xManager->releasePage (m_aDescr, store_AccessReadOnly);
+            m_xManager->releasePage (m_aDescr);
     }
     rtl_destroyTextToUnicodeConverter (m_hTextCvt);
 }

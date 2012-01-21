@@ -842,8 +842,9 @@ typedef void (* handleUnoTypeRegistryEntityFunction)(
     typereg::Reader const & reader, Dependencies * dependencies);
 
 void handleEnumType(
-    TypeManager const &, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies *)
+    SAL_UNUSED_PARAMETER TypeManager const &,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    SAL_UNUSED_PARAMETER Dependencies *)
 {
     sal_uInt16 fields = reader.getFieldCount();
     if (fields == 0 || reader.getSuperTypeCount() != 0
@@ -2364,7 +2365,8 @@ void handleInterfaceType(
 }
 
 void handleTypedef(
-    TypeManager const & manager, JavaOptions /*TODO const*/ &,
+    TypeManager const & manager,
+    SAL_UNUSED_PARAMETER JavaOptions /*TODO const*/ &,
     typereg::Reader const & reader, Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);

@@ -69,10 +69,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 typedef TextView* TextViewPtr;
-SV_DECL_PTRARR( TextViews, TextViewPtr, 0, 1 )
+SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
 // SV_IMPL_PTRARR( TextViews, TextViewPtr );
 
-SV_DECL_VARARR_SORT( TESortedPositions, sal_uLong, 16, 8 )
+SV_DECL_VARARR_SORT( TESortedPositions, sal_uLong, 16 )
 SV_IMPL_VARARR_SORT( TESortedPositions, sal_uLong )
 
 #define RESDIFF     10

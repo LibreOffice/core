@@ -50,7 +50,7 @@ struct DdeItemImpData
     DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
-SV_DECL_VARARR( DdeItemImp, DdeItemImpData, 1, 1 )
+SV_DECL_VARARR( DdeItemImp, DdeItemImpData, 1 )
 SV_IMPL_VARARR( DdeItemImp, DdeItemImpData )
 
 // --- DdeInternat::SvrCallback() ----------------------------------

@@ -63,7 +63,7 @@ using ::rtl::OUString;
  */
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
-    JNIEnv * pJEnv, jclass, jstring jLibName, jobject jSMgr,
+    JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jobject jSMgr,
     jobject jRegKey, jobject loader )
 {
     sal_Bool bRet = sal_False;
@@ -143,7 +143,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
  */
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
-    JNIEnv * pJEnv, jclass, jstring jLibName, jstring jImplName,
+    JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jstring jImplName,
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
@@ -239,7 +239,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
  */
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
-    JNIEnv * pJEnv, jclass, jstring jWriteRegFile,
+    JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jWriteRegFile,
     jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
 {
     jobject joRegServiceFac = 0;

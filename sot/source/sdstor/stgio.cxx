@@ -126,7 +126,7 @@ sal_Bool StgIo::CommitAll()
     // Store the data (all streams and the TOC)
     if( pTOC->Store() )
     {
-        if( Commit( NULL ) )
+        if( Commit() )
         {
             aHdr.SetDataFATStart( pDataFAT->GetStart() );
             aHdr.SetDataFATSize( pDataFAT->GetPages() );

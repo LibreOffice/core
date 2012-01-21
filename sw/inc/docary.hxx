@@ -49,42 +49,41 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <svl/svarray.hxx>
 
 typedef SwFieldType* SwFldTypePtr;
-#define GROW_FLDTYPES   16
 
 // PageDescriptor-interface
 // typedef SwPageDesc * SwPageDescPtr;
-// SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1,1);
+// SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1);
 
 typedef SwFrmFmt* SwFrmFmtPtr;
-SV_DECL_PTRARR_DEL(SwFrmFmts,SwFrmFmtPtr,4,4)
+SV_DECL_PTRARR_DEL(SwFrmFmts,SwFrmFmtPtr,4)
 
 // Specific frame formats (frames, DrawObjects).
-SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0,4)
+SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0)
 
 typedef SwCharFmt* SwCharFmtPtr;
-SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4,4)
+SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4)
 
-SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES, GROW_FLDTYPES )
+SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES )
 
 typedef SwTOXType* SwTOXTypePtr;
-SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )
+SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0 )
 
 // Array of Undo-history.
 typedef SwSectionFmt* SwSectionFmtPtr;
-SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0,4)
+SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0)
 
 
 typedef SwNumRule* SwNumRulePtr;
-SV_DECL_PTRARR_DEL_VISIBILITY( SwNumRuleTbl, SwNumRulePtr, 0, 5, SW_DLLPUBLIC )
+SV_DECL_PTRARR_DEL_VISIBILITY( SwNumRuleTbl, SwNumRulePtr, 0, SW_DLLPUBLIC )
 
 typedef SwRedline* SwRedlinePtr;
-SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0, 16 )
+SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0 )
 
 class SwRedlineTbl : private _SwRedlineTbl
 {
 public:
-    SwRedlineTbl( sal_uInt8 nSize = 0, sal_uInt8 nG = 16 )
-        : _SwRedlineTbl( nSize, nG ) {}
+    SwRedlineTbl( sal_uInt8 nSize = 0 )
+        : _SwRedlineTbl( nSize ) {}
     ~SwRedlineTbl() {}
 
     sal_Bool SavePtrInArr( SwRedlinePtr p ) { return _SwRedlineTbl::Insert( p ); }
@@ -114,10 +113,10 @@ public:
 };
 
 typedef SwUnoCrsr* SwUnoCrsrPtr;
-SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0, 4 )
+SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0 )
 
 typedef SwOLENode* SwOLENodePtr;
-SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16,16)
+SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16)
 
 
 #endif  //_DOCARY_HXX

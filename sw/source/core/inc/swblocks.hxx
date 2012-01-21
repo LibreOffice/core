@@ -63,7 +63,7 @@ public:
     int operator< ( const SwBlockName& r ) { return aShort <  r.aShort; }
 };
 
-SV_DECL_PTRARR_SORT( SwBlockNames, SwBlockName*, 10, 10 )
+SV_DECL_PTRARR_SORT( SwBlockNames, SwBlockName*, 10 )
 
 
 class SwImpBlocks

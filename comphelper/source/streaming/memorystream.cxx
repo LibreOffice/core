@@ -233,7 +233,7 @@ Sequence< ::rtl::OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_s
 }
 
 Reference< XInterface > SAL_CALL UNOMemoryStream::Create(
-    const Reference< XComponentContext >& )
+    SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
 {
     return static_cast<OWeakObject*>(new UNOMemoryStream());
 }

@@ -32,7 +32,7 @@
 #include <svl/hint.hxx>
 #include <svl/brdcst.hxx>
 
-SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0, 2 )
+SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0 )
 
 #define _SFX_LSTNER_CXX
 #include <svl/lstner.hxx>

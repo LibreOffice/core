@@ -42,7 +42,7 @@
 #define NS_UNO      ::com::sun::star::uno
 
 typedef NS_BEANS::PropertyValue* SbPropertyValuePtr;
-SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4, 4 )
+SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4 )
 
 typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet,
                                  NS_BEANS::XPropertyAccess > SbPropertyValuesHelper;

@@ -847,7 +847,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
     }
 }
 
-void FastSaxParser::callbackEndElement( const XML_Char* )
+void FastSaxParser::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char* )
 {
     Entity& rEntity = getEntity();
     OSL_ENSURE( !rEntity.maContextStack.empty(), "FastSaxParser::callbackEndElement - no context" );
@@ -887,8 +887,10 @@ void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
     }
 }
 
-int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
-        const XML_Char *context, const XML_Char * /*base*/, const XML_Char *systemId, const XML_Char *publicId )
+int FastSaxParser::callbackExternalEntityRef(
+    XML_Parser parser, const XML_Char *context,
+    SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
+    const XML_Char *publicId )
 {
     bool bOK = true;
     InputSource source;

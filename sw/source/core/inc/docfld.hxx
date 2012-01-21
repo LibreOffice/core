@@ -118,7 +118,7 @@ public:
 };
 
 typedef _SetGetExpFld* _SetGetExpFldPtr;
-SV_DECL_PTRARR_SORT_DEL( _SetGetExpFlds, _SetGetExpFldPtr, 0, 10 )
+SV_DECL_PTRARR_SORT_DEL( _SetGetExpFlds, _SetGetExpFldPtr, 0 )
 
 
 // Struktur zum Speichern der Strings aus SetExp-String-Feldern

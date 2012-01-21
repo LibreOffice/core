@@ -128,9 +128,7 @@ namespace pdfi
 
         void drawCharGlyphs( rtl::OUString&             rGlyphs,
                              ::com::sun::star::geometry::RealRectangle2D&  rRect,
-                             ::com::sun::star::geometry::Matrix2D&         rFontMatrix,
                              GraphicsContext aGC,
-                             Element* pCurElement,
                              ParagraphElement* pPara,
                              FrameElement* pFrame,
                              bool bSpaceFlag );

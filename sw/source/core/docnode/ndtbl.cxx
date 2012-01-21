@@ -471,7 +471,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
 
-    SvPtrarr aBoxFmtArr( 0, 16 );
+    SvPtrarr aBoxFmtArr( 0 );
     SwTableBoxFmt* pBoxFmt = 0;
     if( !bDfltBorders && !pTAFmt )
     {
@@ -758,7 +758,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
         sal_uInt8 nBoxArrLen = pTAFmt ? 16 : 4;
-        SvPtrarr aBoxFmtArr( nBoxArrLen, 0 );
+        SvPtrarr aBoxFmtArr( nBoxArrLen );
         {
             for( sal_uInt8 i = 0; i < nBoxArrLen; ++i )
                 aBoxFmtArr.Insert( (void*)0, i );
@@ -1680,7 +1680,7 @@ sal_Bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
     if( rTbl.ISA( SwDDETable ))
         return sal_False;
 
-    SwTableSortBoxes aTmpLst( 0, 5 );
+    SwTableSortBoxes aTmpLst( 0 );
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1743,7 +1743,7 @@ sal_Bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
     if( rTbl.ISA( SwDDETable ))
         return sal_False;
 
-    SwTableSortBoxes aTmpLst( 0, 5 );
+    SwTableSortBoxes aTmpLst( 0 );
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -2142,7 +2142,7 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
         return sal_False;
 
     std::vector<sal_uLong> aNdsCnts;
-    SwTableSortBoxes aTmpLst( 0, 5 );
+    SwTableSortBoxes aTmpLst( 0 );
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3265,7 +3265,7 @@ class _SplitTable_Para
 
 public:
     _SplitTable_Para( SwTableNode* pNew, SwTable& rOld )
-        : aSrc( 16, 16 ), aDest( 16, 16 ), pNewTblNd( pNew ), rOldTbl( rOld )
+        : aSrc( 16 ), aDest( 16 ), pNewTblNd( pNew ), rOldTbl( rOld )
     {}
     sal_uInt16 SrcFmt_GetPos( void* pFmt ) const
             { return aSrc.GetPos( pFmt ); }

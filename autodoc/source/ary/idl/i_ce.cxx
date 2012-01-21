@@ -61,7 +61,7 @@ CodeEntity::Secondaries()
 {
     if (p2s)
         return *p2s;
-    p2s = Ce_2s::Create_(AryClass());
+    p2s = Ce_2s::Create_();
     return *p2s;
 }
 

@@ -70,7 +70,7 @@ public:
 };
 
 typedef SvI18NMapEntry_Impl *SvI18NMapEntry_ImplPtr;
-SV_DECL_PTRARR_SORT_DEL( SvI18NMap_Impl, SvI18NMapEntry_ImplPtr, 20, 5 )
+SV_DECL_PTRARR_SORT_DEL( SvI18NMap_Impl, SvI18NMapEntry_ImplPtr, 20 )
 SV_IMPL_OP_PTRARR_SORT( SvI18NMap_Impl, SvI18NMapEntry_ImplPtr )
 
 // ---------------------------------------------------------------------

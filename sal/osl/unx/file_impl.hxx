@@ -44,7 +44,7 @@ struct DirectoryItem_Impl
     ~DirectoryItem_Impl();
 
     static void * operator new(size_t n);
-    static void operator delete (void * p, size_t);
+    static void operator delete (void * p);
 
     void acquire(); /* @see osl_acquireDirectoryItem() */
     void release(); /* @see osl_releaseDirectoryItem() */

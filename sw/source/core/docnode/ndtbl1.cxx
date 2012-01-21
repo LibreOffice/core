@@ -328,7 +328,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, false );
 
         if( aRowArr.Count() )
@@ -338,7 +338,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
+            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
@@ -360,7 +360,7 @@ void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, false );
 
         if( aRowArr.Count() )
@@ -388,7 +388,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
@@ -398,7 +398,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
+            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
             for ( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
             SwTblFmtCmp::Delete( aFmtCmp );
@@ -419,7 +419,7 @@ void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
@@ -444,7 +444,7 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( 1 < aRowArr.Count() )
@@ -472,7 +472,7 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                             new SwUndoAttrTbl(*pTblNd));
                 }
 
-                SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
+                SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
                 for( i = 0; i < aRowArr.Count(); ++i )
                     ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], aNew );
                 SwTblFmtCmp::Delete( aFmtCmp );
@@ -493,7 +493,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
@@ -503,7 +503,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
+            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
@@ -523,7 +523,7 @@ sal_Bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
+        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
@@ -596,7 +596,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
-        SvPtrarr aFmtCmp( 255, 255 );
+        SvPtrarr aFmtCmp( 255 );
         const SvxBoxItem* pSetBox;
         const SvxBoxInfoItem *pSetBoxInfo;
 
@@ -651,7 +651,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             const SwRect &rUnion = pUnion->GetUnion();
             const sal_Bool bLast  = i == aUnions.Count() - 1 ? sal_True : sal_False;
 
-            SvPtrarr aCellArr( 255, 255 );
+            SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
 
             //Alle Zellenkanten, die mit dem UnionRect uebereinstimmen oder
@@ -847,7 +847,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         {
             SwSelUnion *pUnion = aUnions[i];
             SwTabFrm *pTab = pUnion->GetTable();
-            SvPtrarr aCellArr( 255, 255 );
+            SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
 
             for ( sal_uInt16 j = 0; j < aCellArr.Count(); ++j )
@@ -933,7 +933,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             const sal_Bool bFirst = i == 0 ? sal_True : sal_False;
             const sal_Bool bLast  = i == aUnions.Count() - 1 ? sal_True : sal_False;
 
-            SvPtrarr aCellArr( 255, 255 );
+            SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, rUnion, (SwTabFrm*)pTab );
 
             for ( sal_uInt16 j = 0; j < aCellArr.Count(); ++j )
@@ -1123,7 +1123,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
-        SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.size()) ), 255 );
+        SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.size()) ) );
         for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
         {
             SwTableBox *pBox = it->second;

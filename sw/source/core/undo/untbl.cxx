@@ -85,17 +85,17 @@
 extern void ClearFEShellTabCols();
 
 typedef SfxItemSet* SfxItemSetPtr;
-SV_DECL_PTRARR_DEL( SfxItemSets, SfxItemSetPtr, 10, 5 )
+SV_DECL_PTRARR_DEL( SfxItemSets, SfxItemSetPtr, 10 )
 
 typedef SwUndoSaveSection* SwUndoSaveSectionPtr;
-SV_DECL_PTRARR_DEL( SwUndoSaveSections, SwUndoSaveSectionPtr, 0, 10 )
+SV_DECL_PTRARR_DEL( SwUndoSaveSections, SwUndoSaveSectionPtr, 0 )
 
 typedef SwUndoMove* SwUndoMovePtr;
-SV_DECL_PTRARR_DEL( SwUndoMoves, SwUndoMovePtr, 0, 10 )
+SV_DECL_PTRARR_DEL( SwUndoMoves, SwUndoMovePtr, 0 )
 
 struct SwTblToTxtSave;
 typedef SwTblToTxtSave* SwTblToTxtSavePtr;
-SV_DECL_PTRARR_DEL( SwTblToTxtSaves, SwTblToTxtSavePtr, 0, 10 )
+SV_DECL_PTRARR_DEL( SwTblToTxtSaves, SwTblToTxtSavePtr, 0 )
 
 struct _UndoTblCpyTbl_Entry
 {
@@ -110,7 +110,7 @@ struct _UndoTblCpyTbl_Entry
     ~_UndoTblCpyTbl_Entry();
 };
 typedef _UndoTblCpyTbl_Entry* _UndoTblCpyTbl_EntryPtr;
-SV_DECL_PTRARR_DEL( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr, 0, 10 )
+SV_DECL_PTRARR_DEL( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr, 0 )
 
 class _SaveBox;
 class _SaveLine;
@@ -1354,7 +1354,7 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
     else
     {
         sal_uLong nEnd = pDoc->GetNodes()[ nSttNode ]->EndOfSectionIndex();
-        Ptrs.pCntntAttrs = new SfxItemSets( (sal_uInt8)(nEnd - nSttNode - 1 ), 5 );
+        Ptrs.pCntntAttrs = new SfxItemSets( (sal_uInt8)(nEnd - nSttNode - 1 ) );
         for( sal_uLong n = nSttNode + 1; n < nEnd; ++n )
         {
             SwCntntNode* pCNd = pDoc->GetNodes()[ n ]->GetCntntNode();
@@ -1733,7 +1733,7 @@ void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 {
     OSL_ENSURE( IsDelBox(), "falsche Action" );
     if( pDelSects.get() == NULL )
-        pDelSects.reset( new SwUndoSaveSections( 10, 5 ) );
+        pDelSects.reset( new SwUndoSaveSections( 10 ) );
 
     SwTableNode* pTblNd = pSttNd->FindTableNode();
     SwUndoSaveSection* pSave = new SwUndoSaveSection;
@@ -2861,7 +2861,7 @@ sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
     SwTableNode* pTblNd = (SwTableNode*)rTbl.GetTabSortBoxes()[0]->
                                 GetSttNd()->FindTableNode();
 
-    SwTableSortBoxes aTmpLst( 0, 5 );
+    SwTableSortBoxes aTmpLst( 0 );
     pInsRowUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW, rBoxes, *pTblNd,
                                        0, 0, nCnt, sal_True, sal_False );
     aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );

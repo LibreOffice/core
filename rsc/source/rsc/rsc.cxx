@@ -536,8 +536,7 @@ void RscCompiler::EndCompile()
                 {
                     if( !pFN->IsIncFile() )
                     {
-                        pTC->WriteSrc( foutput, NOFILE_INDEX,
-                                       RTL_TEXTENCODING_UNICODE, sal_False );
+                        pTC->WriteSrc( foutput, NOFILE_INDEX, sal_False );
                         break; // ?T 281091MM nur eine Src-Datei
                     }
                 };
@@ -1019,7 +1018,7 @@ ERRTYPE RscCompiler::Link()
             pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputSrc.getStr() );
 
         // Schreibe Datei
-        pTC->WriteSrc( foutput, NOFILE_INDEX, RTL_TEXTENCODING_UNICODE );
+        pTC->WriteSrc( foutput, NOFILE_INDEX );
 
         fclose( foutput );
         fExitFile = NULL;

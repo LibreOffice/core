@@ -911,7 +911,7 @@ SAL_CALL rtl_arena_create (
     rtl_arena_type *   source_arena,
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
-    int
+    SAL_UNUSED_PARAMETER int
 ) SAL_THROW_EXTERN_C()
 {
     rtl_arena_type * result = 0;

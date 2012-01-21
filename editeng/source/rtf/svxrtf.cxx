@@ -1213,7 +1213,7 @@ SvxRTFItemStackType::~SvxRTFItemStackType()
 void SvxRTFItemStackType::Add( SvxRTFItemStackType* pIns )
 {
     if( !pChildList )
-         pChildList = new SvxRTFItemStackList( 4, 16 );
+         pChildList = new SvxRTFItemStackList( 4 );
     pChildList->Insert( pIns, pChildList->Count() );
 }
 

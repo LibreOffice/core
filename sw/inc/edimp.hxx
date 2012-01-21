@@ -62,7 +62,7 @@ struct SwPamRange
         { return nStart < rRg.nStart ? sal_True : sal_False; }
 };
 
-SV_DECL_VARARR_SORT( _SwPamRanges, SwPamRange, 0, 1 )
+SV_DECL_VARARR_SORT( _SwPamRanges, SwPamRange, 0 )
 
 class SwPamRanges : private _SwPamRanges
 {

@@ -1532,7 +1532,9 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL passwordcontainer_component_getFactory (
-    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
+    const sal_Char * pImplementationName,
+    SAL_UNUSED_PARAMETER void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {
     void * pResult = 0;
     if (pServiceManager)

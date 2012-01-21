@@ -72,7 +72,7 @@ extern HTMLOptionEnum aHTMLImgVAlignTable[];
 
 class _HTMLAttr;
 typedef _HTMLAttr *_HTMLAttrPtr;
-SV_DECL_PTRARR( _HTMLAttrs, _HTMLAttrPtr, 5, 5 )
+SV_DECL_PTRARR( _HTMLAttrs, _HTMLAttrPtr, 5 )
 
 class _HTMLAttr
 {
@@ -332,16 +332,16 @@ public:
 };
 
 typedef _HTMLAttrContext *_HTMLAttrContextPtr;
-SV_DECL_PTRARR( _HTMLAttrContexts, _HTMLAttrContextPtr, 5, 5 )
+SV_DECL_PTRARR( _HTMLAttrContexts, _HTMLAttrContextPtr, 5 )
 
 class HTMLTable;
 class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
 typedef ImageMap *ImageMapPtr;
-SV_DECL_PTRARR_DEL( ImageMaps, ImageMapPtr, 1, 1 )
+SV_DECL_PTRARR_DEL( ImageMaps, ImageMapPtr, 1 )
 typedef SwFrmFmt *SwFrmFmtPtr;
-SV_DECL_PTRARR( SwHTMLFrmFmts, SwFrmFmtPtr, 2, 2 )
+SV_DECL_PTRARR( SwHTMLFrmFmts, SwFrmFmtPtr, 2 )
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002

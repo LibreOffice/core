@@ -66,7 +66,7 @@ class SfxFoundCacheArr_Impl;
 class SfxWorkWindow;
 class SfxUnoControllerItem;
 typedef SfxUnoControllerItem* SfxUnoControllerItemPtr;
-SV_DECL_PTRARR( SfxUnoControllerArr_Impl, SfxUnoControllerItemPtr, 20, 20 )
+SV_DECL_PTRARR( SfxUnoControllerArr_Impl, SfxUnoControllerItemPtr, 20 )
 
 //________________________________________________________________________________________________________________
 //  defines

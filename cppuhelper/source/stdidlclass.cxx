@@ -29,20 +29,22 @@
 #include "sal/config.h"
 
 #include "cppuhelper/stdidlclass.hxx"
-#include "osl/diagnose.h"
+#include "sal/log.hxx"
+#include "sal/types.h"
 
 namespace cppu {
 
 com::sun::star::reflection::XIdlClass * createStandardClassWithSequence(
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        const &,
-    rtl::OUString const &,
-    com::sun::star::uno::Reference< com::sun::star::reflection::XIdlClass >
-        const &,
-    com::sun::star::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
+    SAL_UNUSED_PARAMETER com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory > const &,
+    SAL_UNUSED_PARAMETER rtl::OUString const &,
+    SAL_UNUSED_PARAMETER com::sun::star::uno::Reference<
+        com::sun::star::reflection::XIdlClass > const &,
+    SAL_UNUSED_PARAMETER com::sun::star::uno::Sequence< rtl::OUString > const &)
+    SAL_THROW(())
 {
-    OSL_TRACE(
-        OSL_LOG_PREFIX
+    SAL_INFO(
+        "cppuhelper",
         "deprecated/defunct cppu::createStandardClassWithSequence called");
     return 0;
 }

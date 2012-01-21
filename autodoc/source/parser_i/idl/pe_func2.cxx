@@ -72,7 +72,7 @@ PE_Function::PE_Function( const RParent &       i_rCurInterface )
 }
 
 PE_Function::PE_Function( const RParent &     i_rCurService,
-                          E_Constructor        )
+                          E_Constructor )
     :   eState(expect_name),
         sData_Name(),
         nData_ReturnType(0),

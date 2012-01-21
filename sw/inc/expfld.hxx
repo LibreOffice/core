@@ -58,12 +58,12 @@ struct _SeqFldLstElem
         : sDlgEntry( rStr ), nSeqNo( nNo )
     {}
 };
-SV_DECL_PTRARR_DEL( _SwSeqFldList, _SeqFldLstElem*, 10, 10 )
+SV_DECL_PTRARR_DEL( _SwSeqFldList, _SeqFldLstElem*, 10 )
 
 class SW_DLLPUBLIC SwSeqFldList : public _SwSeqFldList
 {
 public:
-    SwSeqFldList()  : _SwSeqFldList( 10, 10 ) {}
+    SwSeqFldList()  : _SwSeqFldList( 10 ) {}
 
     sal_Bool InsertSort( _SeqFldLstElem* );
     sal_Bool SeekEntry( const _SeqFldLstElem& , sal_uInt16* pPos = 0 );

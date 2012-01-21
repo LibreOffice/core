@@ -422,9 +422,7 @@ void PDFIProcessor::processGlyph( double       fPreAvarageSpaceValue,
 
         drawCharGlyphs(  aGlyph.getGlyph(),
                          aGlyph.getRect(),
-                         aGlyph.getFontMatrix(),
                          aGlyph.getGC(),
-                         aGlyph.getCurElement(),
                          pPara,
                          pFrame,
                          flag);
@@ -433,9 +431,7 @@ void PDFIProcessor::processGlyph( double       fPreAvarageSpaceValue,
     {
         drawCharGlyphs( aGlyph.getGlyph(),
                         aGlyph.getRect(),
-                        aGlyph.getFontMatrix(),
                         aGlyph.getGC(),
-                        aGlyph.getCurElement(),
                         pPara,
                         pFrame,
                         false );
@@ -513,9 +509,7 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
 }
 void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
                                     geometry::RealRectangle2D& rRect,
-                                    geometry::Matrix2D&         ,
                                     GraphicsContext aGC,
-                                    Element*  ,
                                     ParagraphElement* pPara,
                                     FrameElement* pFrame,
                                     bool bSpaceFlag )

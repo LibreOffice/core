@@ -464,7 +464,9 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw
 * external binding
 *
 *------------------------*/
-Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance( const Reference < XComponentContext > & ) throw(Exception)
+Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+    throw(Exception)
 {
     OMarkableOutputStream *p = new OMarkableOutputStream( );
 
@@ -991,7 +993,8 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw 
 *
 *------------------------*/
 Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
-    const Reference < XComponentContext > & ) throw(Exception)
+    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+    throw(Exception)
 {
     OMarkableInputStream *p = new OMarkableInputStream( );
     return Reference< XInterface > ( (OWeakObject * ) p );

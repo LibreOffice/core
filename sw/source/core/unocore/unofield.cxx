@@ -730,7 +730,7 @@ SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
 }
 
 typedef SwFmtFld* SwFmtFldPtr;
-SV_DECL_PTRARR(SwDependentFields, SwFmtFldPtr, 5, 5)
+SV_DECL_PTRARR(SwDependentFields, SwFmtFldPtr, 5)
 SV_IMPL_PTRARR(SwDependentFields, SwFmtFldPtr)
 
 uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)

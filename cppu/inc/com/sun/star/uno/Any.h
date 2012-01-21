@@ -375,7 +375,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 
     @return type of IDL type any
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Any * ) SAL_THROW( () )
 {
     return ::cppu::UnoType< ::com::sun::star::uno::Any >::get();
 }

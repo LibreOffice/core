@@ -245,7 +245,7 @@ public:
 };
 
 typedef SwTableAutoFmt* SwTableAutoFmtPtr ;
-SV_DECL_PTRARR_DEL( _SwTableAutoFmtTbl, SwTableAutoFmtPtr, 1, 5 )
+SV_DECL_PTRARR_DEL( _SwTableAutoFmtTbl, SwTableAutoFmtPtr, 1 )
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
 {

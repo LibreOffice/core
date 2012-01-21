@@ -104,7 +104,7 @@ void * DirectoryItem_Impl::operator new(size_t n)
 {
     return rtl_allocateMemory(n);
 }
-void DirectoryItem_Impl::operator delete(void * p, size_t)
+void DirectoryItem_Impl::operator delete(void * p)
 {
     rtl_freeMemory(p);
 }
@@ -310,7 +310,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, sal_Bool bFilterLocalAndParen
  *  osl_getNextDirectoryItem
  ***************************************************************************/
 
-oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, sal_uInt32 /*uHint*/)
+oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
     oslDirectoryImpl* pDirImpl     = (oslDirectoryImpl*)Directory;
     rtl_uString*      ustrFileName = NULL;

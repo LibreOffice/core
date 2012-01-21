@@ -57,7 +57,7 @@ using namespace ::__cxxabiv1;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-void dummy_can_throw_anything( char const * )
+void dummy_can_throw_anything( SAL_UNUSED_PARAMETER char const * )
 {
 }
 

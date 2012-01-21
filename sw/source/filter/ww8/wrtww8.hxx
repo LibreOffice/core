@@ -1215,7 +1215,7 @@ public:
 };
 
 typedef WW8_WrFkp* WW8_FkpPtr;  // Plc fuer Chpx und Papx ( incl PN-Plc )
-SV_DECL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr, 4, 4 )
+SV_DECL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr, 4 )
 
 class WW8_WrPlcPn                   // Plc fuer Page Numbers
 {

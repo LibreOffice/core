@@ -580,7 +580,7 @@ sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
 
         if( !bDelNodes )
         {
-            SwSections aArr( 0, 4 );
+            SwSections aArr( 0 );
             sal_uInt16 nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, sal_False );
             for( sal_uInt16 n = 0; n < nCnt; ++n )
             {

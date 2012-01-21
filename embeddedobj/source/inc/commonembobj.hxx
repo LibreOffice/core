@@ -258,9 +258,7 @@ public:
     void requestPositioning( const ::com::sun::star::awt::Rectangle& aRect );
 
     // not a real listener and should not be
-    void PostEvent_Impl( const ::rtl::OUString& aEventName,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xSource =
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+    void PostEvent_Impl( const ::rtl::OUString& aEventName );
 
 // XInterface
 

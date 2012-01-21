@@ -1075,7 +1075,7 @@ bool ImpSvNumberformatScan::Is100SecZero( sal_uInt16 i, bool bHadDecSep )
                 // SS"any"00  take "any" as a valid decimal separator
 }
 
-xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
+xub_StrLen ImpSvNumberformatScan::ScanType()
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
@@ -2714,7 +2714,7 @@ xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString )
 {
     xub_StrLen res = Symbol_Division(rString);  //lexikalische Analyse
     if (!res)
-        res = ScanType(rString);            // Erkennung des Formattyps
+        res = ScanType(); // Erkennung des Formattyps
     if (!res)
         res = FinalScan( rString );         // Typabhaengige Endanalyse
     return res;                             // res = Kontrollposition

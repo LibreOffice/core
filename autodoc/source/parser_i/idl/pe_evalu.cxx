@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "sal/types.h"
+
 #include <precomp.h>
 #include <s2_luidl/pe_evalu.hxx>
 
@@ -151,7 +155,7 @@ PE_Value::On_got_name_Assignment(const char * i_sText)
 }
 
 void
-PE_Value::On_Default(const char * )
+PE_Value::On_Default(SAL_UNUSED_PARAMETER const char * )
 {
     SetResult(not_done,pop_failure);
 }

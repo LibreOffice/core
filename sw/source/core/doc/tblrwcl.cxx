@@ -78,7 +78,7 @@ using namespace ::com::sun::star;
 #endif
 
 typedef SwTableLine* SwTableLinePtr;
-SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16, 16 )
+SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16 )
 SV_IMPL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr );
 
 SV_IMPL_PTRARR( _SwShareBoxFmts, SwShareBoxFmt* )
@@ -277,7 +277,7 @@ _CpyTabFrm& _CpyTabFrm::operator=( const _CpyTabFrm& rCpyTabFrm )
     return *this;
 }
 
-SV_DECL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm, 0, 50 )
+SV_DECL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm, 0 )
 SV_IMPL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm )
 
 void lcl_DelCpyTabFrmFmts( _CpyTabFrm& rArr );
@@ -3527,7 +3527,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     const SvxLRSpaceItem& rLR = GetFrmFmt()->GetLRSpace();
 
     _FndBox* pFndBox = 0;                   // fuers Einfuegen/Loeschen
-    SwTableSortBoxes aTmpLst( 0, 5 );       // fuers Undo
+    SwTableSortBoxes aTmpLst( 0 );       // fuers Undo
     sal_Bool bBigger,
         bRet = sal_False,
         bLeft = nsTblChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
@@ -4260,7 +4260,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
     _FndBox* pFndBox = 0;                   // fuers Einfuegen/Loeschen
-    SwTableSortBoxes aTmpLst( 0, 5 );       // fuers Undo
+    SwTableSortBoxes aTmpLst( 0 );       // fuers Undo
     sal_Bool bBigger,
         bRet = sal_False,
         bTop = nsTblChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||

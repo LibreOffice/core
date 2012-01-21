@@ -66,6 +66,11 @@ PATCH_FILES+=boost.6397.warnings.patch
 
 PATCH_FILES+=boost.windows.patch
 
+# Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
+.IF "$(COM)" == "GCC"
+PATCH_FILES += boost_1_44_0-unused-parameters.patch
+.END
+
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk \
 	libs/date_time/src/gregorian/makefile.mk

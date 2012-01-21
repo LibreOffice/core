@@ -229,7 +229,7 @@ public:
 // FmNavRequestSelectHint - jemand teilt dem NavigatorTree mit, dass er bestimmte Eintraege selektieren soll
 
 typedef FmEntryData* FmEntryDataPtr;
-SV_DECL_PTRARR_SORT( FmEntryDataArray, FmEntryDataPtr, 16, 16 )
+SV_DECL_PTRARR_SORT( FmEntryDataArray, FmEntryDataPtr, 16 )
 
 class FmNavRequestSelectHint : public SfxHint
 {
@@ -420,7 +420,7 @@ namespace svxform
 
     //========================================================================
     typedef SvLBoxEntry* SvLBoxEntryPtr;
-    SV_DECL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr, 16, 16 )
+    SV_DECL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr, 16 )
 
     class NavigatorTree : public SvTreeListBox, public SfxListener
     {

@@ -416,7 +416,7 @@ void RscTypCont::Init()
     pRoot->Insert( pClassImage );
 
     /********** I M A G E L I S T ****************************************/
-     pClassImageList = InitClassImageList( pClassMgr, pClassBitmap,
+     pClassImageList = InitClassImageList( pClassMgr,
                                           pClassColor, pStringLongTupelList );
     pRoot->Insert( pClassImageList );
 
@@ -723,7 +723,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
-    pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
+    pClassTmp = InitClassCurrencyFormatter( pClassTmp );
     aBaseLst.push_back( pClassTmp );
 
     pClassCurrencyField = InitClassCurrencyField( "CurrencyField", RSC_CURRENCYFIELD, pClassTmp );
@@ -782,7 +782,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
-    pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
+    pClassTmp = InitClassCurrencyFormatter( pClassTmp );
     aBaseLst.push_back( pClassTmp );
 
     pClassCurrencyBox = InitClassCurrencyBox( "CurrencyBox", RSC_CURRENCYBOX, pClassTmp );
@@ -796,7 +796,7 @@ void RscTypCont::Init()
     RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
     aBaseLst.push_back( pClassTmp );
 
-    pClassDateBox = InitClassDateBox( pClassTmp, pClassDate );
+    pClassDateBox = InitClassDateBox( pClassTmp );
     pRoot->Insert( pClassDateBox );
     }
     /********** T I M E B O X ********************************************/
@@ -805,7 +805,7 @@ void RscTypCont::Init()
                                                  pTimeFieldFormat );
     aBaseLst.push_back( pClassTmp );
 
-    pClassTimeBox = InitClassTimeBox( pClassTmp, pClassTime );
+    pClassTimeBox = InitClassTimeBox( pClassTmp );
     pRoot->Insert( pClassTimeBox );
     }
     /********** D O C K I N G W I N D O W ********************************/
@@ -854,8 +854,7 @@ void RscTypCont::Init()
     pRoot->Insert( pClassTabDialog );
 
     /********** T A B C O N T R O L I T E M *******************************/
-    pClassTabControlItem = InitClassTabControlItem( pClassMgr,
-                                                    pClassTabPage );
+    pClassTabControlItem = InitClassTabControlItem( pClassMgr );
     pRoot->Insert( pClassTabControlItem );
 
     /********** T A B C O N T R O L **************************************/

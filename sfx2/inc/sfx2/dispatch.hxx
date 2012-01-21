@@ -73,7 +73,7 @@ namespace com
 //=========================================================================
 
 typedef SfxPoolItem* SfxPoolItemPtr;
-SV_DECL_PTRARR_DEL( SfxItemPtrArray, SfxPoolItemPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( SfxItemPtrArray, SfxPoolItemPtr, 4 )
 
 // fuer  shell.cxx
 typedef SfxItemPtrArray SfxItemArray_Impl;

@@ -537,8 +537,10 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
 
 css::uno::Reference< css::lang::XSingleComponentFactory >
 createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    css::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    SAL_UNUSED_PARAMETER cppu::ComponentFactoryFunc,
+    SAL_UNUSED_PARAMETER rtl::OUString const &,
+    SAL_UNUSED_PARAMETER css::uno::Sequence< rtl::OUString > const &,
+    SAL_UNUSED_PARAMETER rtl_ModuleCount *)
     SAL_THROW(())
 {
     return new Factory;

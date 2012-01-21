@@ -108,7 +108,7 @@ public:
 
 // ============================================================================
 
-SV_DECL_VARARR_SORT( ScHTMLColOffset, sal_uLong, 16, 4)
+SV_DECL_VARARR_SORT( ScHTMLColOffset, sal_uLong, 16 )
 
 struct ScHTMLTableStackEntry
 {

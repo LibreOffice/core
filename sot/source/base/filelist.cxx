@@ -110,9 +110,9 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
  * e.g. DropQueryFile
  */
 
-SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
+SvStream& operator<<( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
 {
-    OSL_FAIL("Not implemented!");
+    OSL_FAIL("TODO: Not implemented!");
     return rOStm;
 }
 

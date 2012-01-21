@@ -148,8 +148,8 @@ typedef WW8LFOInfo* WW8LFOInfo_Ptr;
 struct WW8OleMap;
 typedef WW8OleMap* WW8OleMap_Ptr;
 
-SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
-SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
+SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16)
+SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16)
 
 class WW8Reader : public StgReader
 {

@@ -2018,7 +2018,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
     //(der Inhalt zu einem Attribut kann ueber mehrere Seiten verteilt sein)
     //und ausschneiden.
 
-    SvPtrarr aNotFtnArr( 20, 20 );  //Zur Robustheit werden hier die nicht
+    SvPtrarr aNotFtnArr( 20 );  //Zur Robustheit werden hier die nicht
                                     //dazugehoerigen Fussnoten eingetragen.
                                     //Wenn eine Fussnote zweimal angefasst wird
                                     //ists vorbei! So kommt die Funktion auch
@@ -2377,7 +2377,7 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
         OSL_ENSURE( pDestBoss, "+SwPageFrm::MoveFtns: no destination boss" );
         if( pDestBoss )     // robust
         {
-            SvPtrarr aFtnArr( 5, 5 );
+            SvPtrarr aFtnArr( 5 );
             pDestBoss->_CollectFtns( pDest, pFtn, aFtnArr );
             if ( aFtnArr.Count() )
             {
@@ -2888,7 +2888,7 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     if( !pStart )
         pStart = ContainsCntnt();
 
-    SvPtrarr aFtnArr( 5, 5 );
+    SvPtrarr aFtnArr( 5 );
 
     while ( IsAnLower( pStart ) )
     {
@@ -2912,7 +2912,7 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     if( pStart && pOldBoss->IsInSct() && ( pOldChief = pOldBoss->FindSctFrm() )
         != ( pNewChief = pNewBoss->FindSctFrm() ) )
     {
-        pFtnArr = new SvPtrarr( 5, 5 );
+        pFtnArr = new SvPtrarr( 5 );
         pOldChief = pOldBoss->FindFtnBossFrm( sal_True );
         pNewChief = pNewBoss->FindFtnBossFrm( sal_True );
         while( pOldChief->IsAnLower( pStart ) )

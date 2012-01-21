@@ -154,7 +154,7 @@ public:
 };
 
 typedef SwTxtFmtColl* SwTxtFmtCollPtr;
-SV_DECL_PTRARR(SwTxtFmtColls,SwTxtFmtCollPtr,2,4)
+SV_DECL_PTRARR(SwTxtFmtColls,SwTxtFmtCollPtr,2)
 
 class SwGrfFmtColl: public SwFmtColl
 {
@@ -177,7 +177,7 @@ public:
 };
 
 typedef SwGrfFmtColl* SwGrfFmtCollPtr;
-SV_DECL_PTRARR(SwGrfFmtColls,SwGrfFmtCollPtr,2,4)
+SV_DECL_PTRARR(SwGrfFmtColls,SwGrfFmtCollPtr,2)
 
 // FEATURE::CONDCOLL
 // Conditional styles.
@@ -237,7 +237,7 @@ public:
 };
 
 typedef SwCollCondition* SwCollConditionPtr;
-SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0, 5 )
+SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0 )
 
 class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
 {

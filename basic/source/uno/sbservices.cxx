@@ -59,10 +59,10 @@ namespace basic
 //........................................................................
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL sb_component_getFactory(
-    const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+    const sal_Char* pImplementationName, void*, void* )
 {
     ::basic::initializeModule();
-    return ::basic::BasicModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+    return ::basic::BasicModule::getInstance().getComponentFactory( pImplementationName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

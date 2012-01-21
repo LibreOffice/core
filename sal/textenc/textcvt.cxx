@@ -122,7 +122,8 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter )
+void SAL_CALL rtl_destroyTextToUnicodeConverter(
+    SAL_UNUSED_PARAMETER rtl_TextToUnicodeConverter )
 {}
 
 /* ----------------------------------------------------------------------- */
@@ -199,7 +200,8 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter )
+void SAL_CALL rtl_destroyUnicodeToTextConverter(
+    SAL_UNUSED_PARAMETER rtl_UnicodeToTextConverter )
 {}
 
 /* ----------------------------------------------------------------------- */

@@ -40,7 +40,7 @@ namespace comphelper
 {
 
 // ----------------------------------------------------------
-OSimpleLogRing::OSimpleLogRing( const uno::Reference< uno::XComponentContext >& /*xContext*/ )
+OSimpleLogRing::OSimpleLogRing()
 : m_aMessages( SIMPLELOGRING_SIZE )
 , m_bInitialized( sal_False )
 , m_bFull( sal_False )
@@ -80,9 +80,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNam
 }
 
 // ----------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( const uno::Reference< uno::XComponentContext >& rxContext )
+uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
 {
-    return static_cast< cppu::OWeakObject* >( new OSimpleLogRing( rxContext ) );
+    return static_cast< cppu::OWeakObject* >( new OSimpleLogRing );
 }
 
 // XSimpleLogRing

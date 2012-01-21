@@ -273,7 +273,7 @@ TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
 // ---------------------------------------------------------------------
 
 typedef SwXMLConditionContext_Impl *SwXMLConditionContextPtr;
-SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 )
+SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5 )
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {

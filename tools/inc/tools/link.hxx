@@ -66,7 +66,7 @@ typedef long (*PSTUB)( void*, void* );
     long Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
-    long Class::Method( Class*, ArgType ArgName )
+    long Class::Method( SAL_UNUSED_PARAMETER Class*, ArgType ArgName )
 
 #define LINK( Inst, Class, Member ) \
     Link( (Class*)Inst, (PSTUB)&Class::LinkStub##Member )

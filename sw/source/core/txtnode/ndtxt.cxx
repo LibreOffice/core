@@ -94,11 +94,11 @@
 using namespace ::com::sun::star;
 
 
-SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
+SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0 )
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
 
-SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
+SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1)
 
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge

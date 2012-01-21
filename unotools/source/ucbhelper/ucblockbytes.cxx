@@ -1591,7 +1591,7 @@ void UcbLockBytes::Cancel()
 }
 
 //----------------------------------------------------------------------------
-IMPL_LINK( UcbLockBytes, DataAvailHdl, void*, EMPTYARG )
+IMPL_LINK( UcbLockBytes, DataAvailHdl, SAL_UNUSED_PARAMETER void*, EMPTYARG )
 {
     if ( hasInputStream_Impl() && m_xHandler.Is() )
         m_xHandler->Handle( UcbLockBytesHandler::DATA_AVAILABLE, this );

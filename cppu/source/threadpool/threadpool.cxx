@@ -428,7 +428,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_attach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
+uno_threadpool_attach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
@@ -453,14 +453,14 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_detach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
+uno_threadpool_detach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
 {
     // we might do here some tiding up in case a thread called attach but never detach
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_putJob(
-    uno_ThreadPool,
+    SAL_UNUSED_PARAMETER uno_ThreadPool,
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),

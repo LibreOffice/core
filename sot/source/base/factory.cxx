@@ -202,7 +202,7 @@ void SotFactory::TestInvariant()
 
     std::list<SotObject*>::iterator it;
     for( it = pSotData->aObjectList.begin(); it != pSotData->aObjectList.end(); ++it )
-        (*it)->TestInvariant( sal_False );
+        (*it)->TestInvariant();
 #endif
 }
 

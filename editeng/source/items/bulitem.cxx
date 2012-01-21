@@ -53,7 +53,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
     rStream << rFont.GetColor();
     nTemp = (sal_uInt16)rFont.GetFamily(); rStream << nTemp;
 
-    nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet(), (sal_uInt16)rStream.GetVersion());
+    nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet());
     rStream << nTemp;
 
     nTemp = (sal_uInt16)rFont.GetPitch(); rStream << nTemp;
@@ -82,7 +82,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
 
     rStream >> nTemp;
-    nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp, (sal_uInt16)rStream.GetVersion());
+    nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp);
     aFont.SetCharSet((rtl_TextEncoding)nTemp);
 
     rStream >> nTemp; aFont.SetPitch((FontPitch)nTemp);

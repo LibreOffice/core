@@ -70,7 +70,7 @@ struct SvXMLNumFmtEntry
 };
 
 typedef SvXMLNumFmtEntry* SvXMLNumFmtEntryPtr;
-SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4 )
 
 struct SvXMLEmbeddedElement
 {
@@ -86,7 +86,7 @@ struct SvXMLEmbeddedElement
 };
 
 typedef SvXMLEmbeddedElement* SvXMLEmbeddedElementPtr;
-SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0, 4 )
+SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0 )
 
 //-------------------------------------------------------------------------
 

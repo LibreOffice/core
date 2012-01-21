@@ -164,7 +164,7 @@ namespace sw
             }
         };
 
-        SV_DECL_PTRARR_SORT_DEL(AuthorInfos, AuthorInfo_Ptr,16,16)
+        SV_DECL_PTRARR_SORT_DEL(AuthorInfos, AuthorInfo_Ptr,16)
 
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes

@@ -57,10 +57,10 @@ class SvBaseLink;
 class SvBaseLinkRef;
 
 typedef SvBaseLinkRef* SvBaseLinkRefPtr;
-SV_DECL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr, 1, 1 )
+SV_DECL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr, 1 )
 
 typedef SvLinkSource* SvLinkSourcePtr;
-SV_DECL_PTRARR( SvLinkSources, SvLinkSourcePtr, 1, 1 )
+SV_DECL_PTRARR( SvLinkSources, SvLinkSourcePtr, 1 )
 
 class SFX2_DLLPUBLIC LinkManager
 {

@@ -74,7 +74,9 @@ using bridges::cpp_uno::shared::VtableFactory;
 
 namespace {
 
-extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
+extern "C" void * SAL_CALL allocExec(
+    SAL_UNUSED_PARAMETER rtl_arena_type *, sal_Size * size)
+{
     sal_Size pagesize;
 #if defined SAL_UNX
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
@@ -113,7 +115,7 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
 }
 
 extern "C" void SAL_CALL freeExec(
-    rtl_arena_type *, void * address, sal_Size size)
+    SAL_UNUSED_PARAMETER rtl_arena_type *, void * address, sal_Size size)
 {
 #if defined SAL_UNX
     munmap(static_cast< char * >(address), size);

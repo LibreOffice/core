@@ -72,8 +72,8 @@ MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
  // Class SwpHtStart/End
 
 
-SV_DECL_PTRARR_SORT(SwpHtStart,SwTxtAttr*,1,1)
-SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1,1)
+SV_DECL_PTRARR_SORT(SwpHtStart,SwTxtAttr*,1)
+SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1)
 
 // Class SwpHintsArr
 

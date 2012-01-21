@@ -2899,7 +2899,8 @@ Reference< XInterface > SAL_CALL ImplIntrospection_CreateInstance( const Referen
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * )
+    const sal_Char * pImplName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * )
 {
     void * pRet = 0;
 

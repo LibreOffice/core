@@ -857,7 +857,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
 MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
     const EditTextObject& rEditObj, sal_uInt8 nTyp )
     : MSWordAttrIter( rWr ), pEditObj(&rEditObj), pEditPool(0),
-      aTxtAtrArr(), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
+      aTxtAtrArr(), aChrTxtAtrArr( 0 ), aChrSetArr( 0 ),
     mnTyp(nTyp)
 {
     NextPara( 0 );

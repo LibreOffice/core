@@ -380,7 +380,7 @@ public:
 //  ----------------------------------------------------------------------
 
 typedef EditView* EditViewPtr;
-SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 )
+SV_DECL_PTRARR( EditViews, EditViewPtr, 0 )
 
 class ImpEditEngine : public SfxListener
 {

@@ -118,7 +118,7 @@ struct WritingDirectionInfo
 typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
 
 typedef EditCharAttrib* EditCharAttribPtr;
-SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 )
+SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0 )
 
 class ContentAttribsInfo
 {
@@ -136,7 +136,7 @@ public:
 };
 
 typedef ContentAttribsInfo* ContentAttribsInfoPtr;
-SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 )
+SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1 )
 
 //  ----------------------------------------------------------------------
 //  class SvxFontTable
@@ -304,13 +304,13 @@ public:
 };
 
 typedef ContentNode* ContentNodePtr;
-SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0, 4 )
+SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0 )
 
 class ContentList : public DummyContentList
 {
   sal_uInt16 nLastCache;
 public:
-  ContentList() : DummyContentList( 0, 4 ), nLastCache(0) {}
+  ContentList() : DummyContentList( 0 ), nLastCache(0) {}
   sal_uInt16 GetPos( const ContentNodePtr &rPtr ) const;
 };
 
@@ -439,7 +439,7 @@ public:
 // class TextPortionList
 // -------------------------------------------------------------------------
 typedef TextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 )
+SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0 )
 
 class TextPortionList : public TextPortionArray
 {
@@ -455,7 +455,7 @@ public:
 
 class ParaPortion;
 
-SV_DECL_VARARR( CharPosArray, sal_Int32, 0, CHARPOSGROW )
+SV_DECL_VARARR( CharPosArray, sal_Int32, 0 )
 
 // ------------------------------------------------------------------------
 // class EditLine
@@ -550,7 +550,7 @@ public:
 // class LineList
 // -------------------------------------------------------------------------
 typedef EditLine* EditLinePtr;
-SV_DECL_PTRARR( LineArray, EditLinePtr, 0, 4 )
+SV_DECL_PTRARR( LineArray, EditLinePtr, 0 )
 
 class EditLineList : public LineArray
 {
@@ -633,7 +633,7 @@ public:
 };
 
 typedef ParaPortion* ParaPortionPtr;
-SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 )
+SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0 )
 
 // -------------------------------------------------------------------------
 // class ParaPortionList
@@ -712,7 +712,7 @@ public:
 };
 
 typedef DeletedNodeInfo* DeletedNodeInfoPtr;
-SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0, 4 )
+SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0 )
 
 // -------------------------------------------------------------------------
 // class EditDoc

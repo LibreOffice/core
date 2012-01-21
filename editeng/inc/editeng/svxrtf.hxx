@@ -88,7 +88,7 @@ typedef std::deque< ColorPtr > SvxRTFColorTbl;
 DECLARE_TABLE( SvxRTFFontTbl, Font* )
 DECLARE_TABLE( SvxRTFStyleTbl, SvxRTFStyleType* )
 typedef SvxRTFItemStackType* SvxRTFItemStackTypePtr;
-SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1, 1 )
+SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1 )
 
 // SvxRTFItemStack can't be "std::stack< SvxRTFItemStackTypePtr >" type, because
 // the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file

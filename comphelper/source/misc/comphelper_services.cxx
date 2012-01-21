@@ -84,10 +84,11 @@ namespace comphelper { namespace module
 //........................................................................
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL comphelp_component_getFactory(
-    const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
+    SAL_UNUSED_PARAMETER void* )
 {
     ::comphelper::module::initializeModule();
-    return ::comphelper::module::ComphelperModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+    return ::comphelper::module::ComphelperModule::getInstance().getComponentFactory( pImplementationName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

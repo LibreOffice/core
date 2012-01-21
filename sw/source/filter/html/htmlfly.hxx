@@ -129,7 +129,7 @@ public:
 };
 
 typedef SwHTMLPosFlyFrm *SwHTMLPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT( SwHTMLPosFlyFrms, SwHTMLPosFlyFrmPtr, 10, 10 )
+SV_DECL_PTRARR_SORT( SwHTMLPosFlyFrms, SwHTMLPosFlyFrmPtr, 10 )
 
 
 #endif

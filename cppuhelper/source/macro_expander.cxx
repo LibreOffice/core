@@ -111,7 +111,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 public:
-    inline Bootstrap_MacroExpander( Reference< XComponentContext > const & ) SAL_THROW( () )
+    inline Bootstrap_MacroExpander() SAL_THROW( () )
         : t_uno_impl( m_mutex )
         {}
     virtual ~Bootstrap_MacroExpander()
@@ -173,10 +173,10 @@ OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
 
 //==================================================================================================
 Reference< XInterface > SAL_CALL service_create(
-    Reference< XComponentContext > const & xComponentContext )
+    SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     SAL_THROW( (RuntimeException) )
 {
-    return static_cast< ::cppu::OWeakObject * >( new Bootstrap_MacroExpander( xComponentContext ) );
+    return static_cast< ::cppu::OWeakObject * >( new Bootstrap_MacroExpander );
 }
 
 }

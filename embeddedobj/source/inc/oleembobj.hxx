@@ -240,7 +240,6 @@ protected:
     void StoreToLocation_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                             const ::rtl::OUString& sEntName,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs,
                             sal_Bool bSaveAs )
         throw ( ::com::sun::star::uno::Exception );

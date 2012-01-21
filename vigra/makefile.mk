@@ -50,6 +50,11 @@ TARFILE_NAME=vigra1.4.0
 TARFILE_MD5=ea91f2fb4212a21d708aced277e6e85a
 PATCH_FILES=$(TARFILE_NAME).patch
 
+# Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
+.IF "$(COM)" == "GCC"
+PATCH_FILES += vigra1.4.0-unused-parameters.patch
+.END
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 

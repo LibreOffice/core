@@ -103,7 +103,7 @@ public:
 
 // class SvxTabStopItem --------------------------------------------------
 
-SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, 1, EDITENG_DLLPUBLIC )
+SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, EDITENG_DLLPUBLIC )
 
 /*  [Description]
 

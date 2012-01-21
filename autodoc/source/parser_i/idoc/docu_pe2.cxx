@@ -229,10 +229,10 @@ SapiDocu_PE::Process_XmlLink_EndTag( const Tok_XmlLink_EndTag & i_rToken )
             (this->*fCurTokenAddFunction)(*new DT_Style("</b>",false));
             break;
         case Tok_XmlLink_Tag::member:
-            (this->*fCurTokenAddFunction)(*new DT_MupMember(true));
+            (this->*fCurTokenAddFunction)(*new DT_MupMember);
             break;
         case Tok_XmlLink_Tag::type:
-            (this->*fCurTokenAddFunction)(*new DT_MupType(true));
+            (this->*fCurTokenAddFunction)(*new DT_MupType);
             break;
         default:
             //  Do nothing.

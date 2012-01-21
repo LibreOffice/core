@@ -74,7 +74,7 @@ struct SwConnectionData
 };
 
 typedef SwConnectionData* SwConnectionDataPtr;
-SV_DECL_PTRARR_DEL( SwConnectionArr, SwConnectionDataPtr, 32, 32 )
+SV_DECL_PTRARR_DEL( SwConnectionArr, SwConnectionDataPtr, 32 )
 SV_IMPL_PTRARR( SwConnectionArr, SwConnectionDataPtr )
 
 class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >

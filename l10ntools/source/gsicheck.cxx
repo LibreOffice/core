@@ -720,7 +720,7 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLi
     }
 }
 
-void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, sal_Bool /*bRequireSourceLine*/ )
+void GSIBlock::WriteFixed( LazySvFileStream &aFixOut )
 {
     if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
         return;
@@ -1100,7 +1100,7 @@ int _cdecl main( int argc, char *argv[] )
                         if ( bWriteCorrect )
                             pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
                         if ( bWriteFixed )
-                            pBlock->WriteFixed( aFixOut, aSourceLang.Len() != 0 );
+                            pBlock->WriteFixed( aFixOut );
 
                         delete pBlock;
                     }
@@ -1168,7 +1168,7 @@ int _cdecl main( int argc, char *argv[] )
         if ( bWriteCorrect )
             pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
         if ( bWriteFixed )
-            pBlock->WriteFixed( aFixOut, aSourceLang.Len() != 0 );
+            pBlock->WriteFixed( aFixOut );
 
         delete pBlock;
     }

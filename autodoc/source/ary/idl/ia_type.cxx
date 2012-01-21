@@ -52,9 +52,7 @@ namespace idl
 {
 
 String              MakeTemplateName(
-                        const String &      i_localName,
-                        const std::vector<Type_id> &
-                                            i_templateParameters );
+                        const String &      i_localName );
 
 
 
@@ -130,9 +128,7 @@ TypeAdmin::lhf_CheckIn_TypeName( const String &        i_sLocalName,
          ?  (!i_templateParameters->empty())
          :  false )
     {
-        sSearchLocalName = MakeTemplateName(
-                                i_sLocalName,
-                                *i_templateParameters);
+        sSearchLocalName = MakeTemplateName(i_sLocalName);
     }
 
     Type_id
@@ -344,8 +340,7 @@ TypeAdmin::IsBuiltInOrRelated( const Type & i_rType ) const
 
 
 String
-MakeTemplateName( const String &                i_localName,
-                  const std::vector<Type_id> &  )
+MakeTemplateName( const String &                i_localName )
 {
     StreamLock
         sl(200);

@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "sal/types.h"
+
 #include <precomp.h>
 #include <s2_luidl/pe_tydf2.hxx>
 
@@ -120,7 +124,7 @@ PE_Typedef::Process_Default()
 }
 
 void
-PE_Typedef::On_expect_description_Any(const char *)
+PE_Typedef::On_expect_description_Any(SAL_UNUSED_PARAMETER const char *)
 {
     SetResult(not_done,push_sure, pPE_Type.Ptr());
 }
@@ -146,7 +150,7 @@ PE_Typedef::On_got_name_Punctuation(const char * i_sText)
 }
 
 void
-PE_Typedef::On_Default(const char * )
+PE_Typedef::On_Default(SAL_UNUSED_PARAMETER const char * )
 {
     SetResult(not_done,pop_failure);
 }

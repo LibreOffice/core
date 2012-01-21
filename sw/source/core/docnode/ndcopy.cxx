@@ -232,7 +232,7 @@ struct _MapTblFrmFmt
     {}
 };
 
-SV_DECL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt, 0, 10 )
+SV_DECL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt, 0 )
 SV_IMPL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt );
 
 SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
@@ -1474,7 +1474,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     //Alle kopierten (also die neu erzeugten) Rahmen in ein weiteres Array
     //stopfen. Dort sizten sie passend zu den Originalen, damit hinterher
     //die Chains entsprechend aufgebaut werden koennen.
-    SvPtrarr aNewArr( 10, 10 );
+    SvPtrarr aNewArr( 10 );
 
     for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
     {

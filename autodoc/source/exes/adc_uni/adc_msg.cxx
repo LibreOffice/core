@@ -62,28 +62,23 @@ Messages::WriteFile(const String & i_sOutputFilePath)
     // KORR_FUTURE Enable this when appropriate:
     WriteParagraph( aOut,
                     aParseErrors,
-                    "Incompletely Parsed Files",
-                    "Stopped parsing at " );
+                    "Incompletely Parsed Files" );
 
     WriteParagraph( aOut,
                     aMissingDocs,
-                    "Entities Without Documentation",
-                    " in " );
+                    "Entities Without Documentation" );
 
     WriteParagraph( aOut,
                     aInvalidConstSymbols,
-                    "Incorrectly Written Const Symbols",
-                    " in " );
+                    "Incorrectly Written Const Symbols" );
 
     WriteParagraph( aOut,
                     aUnresolvedLinks,
-                    "Unresolved Links",
-                    " in\n        " );
+                    "Unresolved Links" );
 
     WriteParagraph( aOut,
                     aTypeVsMemberMisuses,
-                    "Confusion or Misuse of <Type> vs. <Member>",
-                    " in " );
+                    "Confusion or Misuse of <Type> vs. <Member>" );
     aOut.close();
 }
 
@@ -164,8 +159,7 @@ Messages::AddValue( MessageMap &        o_dest,
 void
 Messages::WriteParagraph( csv::File &         o_out,
                           const MessageMap &  i_source,
-                          const String &      i_title,
-                          const String &      )
+                          const String &      i_title )
 {
     StreamStr   aLine(2000);
 

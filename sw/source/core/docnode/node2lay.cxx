@@ -261,7 +261,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
 
 void SwNode2LayImpl::SaveUpperFrms()
 {
-    pUpperFrms = new SvPtrarr( 0, 20 );
+    pUpperFrms = new SvPtrarr( 0 );
     SwFrm* pFrm;
     while( 0 != (pFrm = NextFrm()) )
     {

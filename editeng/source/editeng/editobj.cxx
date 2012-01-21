@@ -1038,7 +1038,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     }
 
     // Store Current text encoding ...
-    rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( osl_getThreadTextEncoding(), (sal_uInt16) rOStream.GetVersion() );
+    rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( osl_getThreadTextEncoding() );
     rOStream << (sal_uInt16) eEncoding;
 
     // The number of paragraphs ...
@@ -1214,7 +1214,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
     sal_uInt16 nCharSet;
     rIStream >> nCharSet;
 
-    rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet, (sal_uInt16)rIStream.GetVersion() );
+    rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet );
 
     // The number of paragraphs ...
     sal_uInt16 nParagraphs;

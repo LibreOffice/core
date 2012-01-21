@@ -33,7 +33,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -61,7 +60,6 @@ public:
 
     FSStorage(  const ::ucbhelper::Content& aContent,
                 sal_Int32 nMode,
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
 
     virtual ~FSStorage();
@@ -75,7 +73,7 @@ public:
     void CopyContentToStorage_Impl( ::ucbhelper::Content* pContent,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest );
 
-    static sal_Bool MakeFolderNoUI( const ::rtl::OUString& rFolder, sal_Bool bNewOnly );
+    static sal_Bool MakeFolderNoUI( const ::rtl::OUString& rFolder );
 
     //____________________________________________________________________________________________________
     //  XInterface

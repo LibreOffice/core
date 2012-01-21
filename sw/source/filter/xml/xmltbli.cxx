@@ -287,7 +287,7 @@ inline void SwXMLTableCell_Impl::Dispose()
 // ---------------------------------------------------------------------
 
 typedef SwXMLTableCell_Impl* SwXMLTableCellPtr;
-SV_DECL_PTRARR_DEL(SwXMLTableCells_Impl,SwXMLTableCellPtr,5,5)
+SV_DECL_PTRARR_DEL(SwXMLTableCells_Impl,SwXMLTableCellPtr,5)
 SV_IMPL_PTRARR(SwXMLTableCells_Impl,SwXMLTableCellPtr)
 
 class SwXMLTableRow_Impl
@@ -1271,7 +1271,7 @@ public:
 
 
 typedef SwXMLTableRow_Impl* SwXMLTableRowPtr;
-SV_DECL_PTRARR_DEL(SwXMLTableRows_Impl,SwXMLTableRowPtr,5,5)
+SV_DECL_PTRARR_DEL(SwXMLTableRows_Impl,SwXMLTableRowPtr,5)
 SV_IMPL_PTRARR(SwXMLTableRows_Impl,SwXMLTableRowPtr)
 
 SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,

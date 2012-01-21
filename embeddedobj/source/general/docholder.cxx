@@ -1222,7 +1222,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
     if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
-        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ), aEvent.Source );
+        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ) );
 }
 
 //---------------------------------------------------------------------------
@@ -1237,7 +1237,7 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
           && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAs" ) )
           && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) )
           && !( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnVisAreaChanged" ) ) && m_nNoResizeReact ) )
-            m_pEmbedObj->PostEvent_Impl( Event.EventName, Event.Source );
+            m_pEmbedObj->PostEvent_Impl( Event.EventName );
     }
 }
 

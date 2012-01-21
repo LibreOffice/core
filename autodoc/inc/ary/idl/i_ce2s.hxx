@@ -54,8 +54,7 @@ class Ce_2s
     Ce_2s() {}
     virtual             ~Ce_2s();
 
-    static DYN Ce_2s *  Create_(
-                            ClassId             i_nCeClass );
+    static DYN Ce_2s *  Create_();
     // OPERATIONS
     void                Add_Link2DescriptionInManual(
                             const String &      i_link,

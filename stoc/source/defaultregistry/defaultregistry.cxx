@@ -1380,7 +1380,8 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 namespace stoc_bootstrap
 {
 //*************************************************************************
-Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XComponentContext>& )
+Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference<XComponentContext>& )
     throw(Exception)
 {
     Reference<XInterface>   xRet;

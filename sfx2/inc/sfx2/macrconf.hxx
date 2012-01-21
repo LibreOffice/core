@@ -48,7 +48,7 @@ class SvStream;
 class SvxMacro;
 
 typedef SfxMacroInfo* SfxMacroInfoPtr;
-SV_DECL_PTRARR(SfxMacroInfoArr_Impl, SfxMacroInfoPtr, 5, 5)
+SV_DECL_PTRARR(SfxMacroInfoArr_Impl, SfxMacroInfoPtr, 5)
 
 class SFX2_DLLPUBLIC SfxMacroInfo
 {

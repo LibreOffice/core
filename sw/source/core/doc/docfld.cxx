@@ -2168,7 +2168,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFldSortLst = new _SetGetExpFlds( 64, 16 );
+        pFldSortLst = new _SetGetExpFlds( 64 );
     }
 
     if( bIns )      // insert anew:
@@ -2195,7 +2195,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
     delete pFldSortLst;
-    pFldSortLst = new _SetGetExpFlds( 64, 16 );
+    pFldSortLst = new _SetGetExpFlds( 64 );
 
     /// consider and unhide sections
     ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)

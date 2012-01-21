@@ -1135,8 +1135,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ) ) >>= xSupplier)
         {
             addNumberFormatAttr(
-                xSupplier->getNumberFormats()->getByKey( nKey ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+                xSupplier->getNumberFormats()->getByKey( nKey ) );
         }
     }
     readBoolAttr(

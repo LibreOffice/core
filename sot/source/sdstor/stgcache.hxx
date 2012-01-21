@@ -87,8 +87,7 @@ public:
     StgPage* Find( sal_Int32 );                 // find a cached page
     StgPage* Get( sal_Int32, sal_Bool );            // get a cached page
     StgPage* Copy( sal_Int32, sal_Int32=STG_FREE ); // copy a page
-    sal_Bool Commit( StgDirEntry* = NULL );     // flush all pages
-    void Revert( StgDirEntry* = NULL );     // revert dirty pages
+    sal_Bool Commit(); // flush all pages
     void Clear();                           // clear the cache
 };
 

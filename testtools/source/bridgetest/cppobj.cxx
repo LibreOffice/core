@@ -1183,7 +1183,8 @@ Sequence< OUString > Test_Impl::getSupportedServiceNames()
 // ...
 
 //==================================================================================================
-static Reference< XInterface > SAL_CALL Test_Impl_create( const Reference< XMultiServiceFactory > & )
+static Reference< XInterface > SAL_CALL Test_Impl_create(
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
 {
     return Reference< XInterface >( (XBridgeTest *)new Test_Impl() );
 }
@@ -1193,7 +1194,8 @@ static Reference< XInterface > SAL_CALL Test_Impl_create( const Reference< XMult
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * )
+    const sal_Char * pImplName, SAL_UNUSED_PARAMETER void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * )
 {
     void * pRet = 0;
 

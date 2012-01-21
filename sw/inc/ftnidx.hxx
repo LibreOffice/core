@@ -42,7 +42,7 @@ class SwSectionNode;
 
 
 typedef SwTxtFtn* SwTxtFtnPtr;
-SV_DECL_PTRARR_SORT( _SwFtnIdxs, SwTxtFtnPtr, 0, 10 )
+SV_DECL_PTRARR_SORT( _SwFtnIdxs, SwTxtFtnPtr, 0 )
 
 class SwFtnIdxs : public _SwFtnIdxs
 {
@@ -62,7 +62,7 @@ class SwUpdFtnEndNtAtEnd
     std::vector<sal_uInt16> aFtnNums, aEndNums;
 
 public:
-    SwUpdFtnEndNtAtEnd() : aFtnSects( 0, 4 ), aEndSects( 0, 4 ) {}
+    SwUpdFtnEndNtAtEnd() : aFtnSects( 0 ), aEndSects( 0 ) {}
 
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTxtFtn& rTxtFtn );

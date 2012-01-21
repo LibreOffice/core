@@ -64,7 +64,7 @@ struct SwTOXSource
     {}
 };
 
-SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0, 10 )
+SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0 )
 
 class SwTOXInternational
 {

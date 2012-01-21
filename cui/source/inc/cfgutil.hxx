@@ -116,7 +116,7 @@ struct CuiMacroInfo
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5, 5)
+SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5)
 
 class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {

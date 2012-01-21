@@ -183,7 +183,7 @@ class SwShareBoxFmt
 
 public:
     SwShareBoxFmt( const SwFrmFmt& rFmt )
-        : pOldFmt( &rFmt ), aNewFmts( 1, 4 )
+        : pOldFmt( &rFmt ), aNewFmts( 1 )
     {}
 
     const SwFrmFmt& GetOldFormat() const { return *pOldFmt; }
@@ -196,7 +196,7 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL( _SwShareBoxFmts, SwShareBoxFmt*, 8, 8 )
+SV_DECL_PTRARR_DEL( _SwShareBoxFmts, SwShareBoxFmt*, 8 )
 
 class SwShareBoxFmts
 {

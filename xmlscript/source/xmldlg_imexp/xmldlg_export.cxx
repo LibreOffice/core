@@ -572,8 +572,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 
 //__________________________________________________________________________________________________
 void ElementDescriptor::addNumberFormatAttr(
-    Reference< beans::XPropertySet > const & xFormatProperties,
-    OUString const & /*rAttrName*/ )
+    Reference< beans::XPropertySet > const & xFormatProperties )
 {
     Reference< beans::XPropertyState > xState( xFormatProperties, UNO_QUERY );
     OUString sFormat;

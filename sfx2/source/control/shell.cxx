@@ -64,7 +64,7 @@ TYPEINIT0(SfxShell);
 
 //====================================================================
 typedef SfxSlot* SfxSlotPtr;
-SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4, 4)
+SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4 )
 SV_IMPL_PTRARR( SfxVerbSlotArr_Impl, SfxSlotPtr);
 
 using namespace com::sun::star;

@@ -46,7 +46,7 @@ struct ScRTFCellDefault
 };
 
 // deswegen ULONG, typedef bringt's auch nicht :-(
-SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16, 4)
+SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16 )
 
 #else       // SC_RTFPARSE_CXX
 

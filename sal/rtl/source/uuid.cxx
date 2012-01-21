@@ -100,7 +100,8 @@ static  void write_v3( sal_uInt8 *pUuid  )
 
 
 extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
-                                         const sal_uInt8 *, sal_Bool )
+                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
+                                         SAL_UNUSED_PARAMETER sal_Bool )
 {
     {
         osl::MutexGuard g(osl::Mutex::getGlobalMutex());

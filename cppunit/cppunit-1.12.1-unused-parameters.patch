@@ -1,0 +1,11 @@
+--- misc/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2012-01-18 10:28:28.189298501 +0100
++++ misc/build/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2012-01-18 10:28:06.449450460 +0100
+@@ -153,7 +153,7 @@
+ // Unix
+ #elif defined(CPPUNIT_HAVE_UNIX_DLL_LOADER) || defined(CPPUNIT_HAVE_UNIX_SHL_LOADER)
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
+-  int main( int, char *[] )                           \
++  int main() \
+   {                                                   \
+     return 0;                                         \
+   }                                                   \

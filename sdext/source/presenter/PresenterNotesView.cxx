@@ -665,8 +665,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
                 mxViewId->getResourceURL()));
             ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
                 mpPresenterController->GetTheme()->GetNodeForViewStyle(
-                    sStyleName,
-                    PresenterConfigurationAccess::READ_WRITE));
+                    sStyleName));
             if (pConfiguration.get()==NULL || ! pConfiguration->IsValid())
                 return;
 

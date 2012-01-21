@@ -39,7 +39,7 @@ namespace lang = css::lang ;
 //------------------------------------------------------------------------------
 
 static uno::Reference<uno::XInterface> SAL_CALL createLocaleBackend(
-    const uno::Reference<uno::XComponentContext>&){
+    SAL_UNUSED_PARAMETER const uno::Reference<uno::XComponentContext>&){
 
     return * LocaleBackend::createInstance();
 }

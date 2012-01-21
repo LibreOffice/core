@@ -354,7 +354,7 @@ public:
 #endif
 
 typedef SwHistoryHint* SwHistoryHintPtr;
-SV_DECL_PTRARR_DEL( SwpHstry, SwHistoryHintPtr, 0, 2 )
+SV_DECL_PTRARR_DEL( SwpHstry, SwHistoryHintPtr, 0 )
 
 class SwHistory
 {
@@ -366,7 +366,7 @@ class SwHistory
     sal_uInt16 m_nEndDiff;
 
 public:
-    SwHistory( sal_uInt16 nInitSz = 0, sal_uInt16 nGrowSz = 2 );
+    SwHistory( sal_uInt16 nInitSz = 0 );
     ~SwHistory();
 
     // delete History from nStart to array end

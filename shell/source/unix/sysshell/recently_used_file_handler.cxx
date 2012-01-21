@@ -102,13 +102,13 @@ namespace /* private */ {
                 timestamp_ = t;
         }
 
-        void set_is_private(const string_t& /*character*/)
+        void set_is_private(SAL_UNUSED_PARAMETER const string_t& /*character*/)
         { is_private_ = true; }
 
         void set_groups(const string_t& character)
         { groups_.push_back(character); }
 
-        void set_nothing(const string_t& /*character*/)
+        void set_nothing(SAL_UNUSED_PARAMETER const string_t& /*character*/)
         {}
 
         bool has_groups() const

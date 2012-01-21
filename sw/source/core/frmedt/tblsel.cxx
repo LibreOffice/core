@@ -103,7 +103,7 @@ struct _CmpLPt
 };
 
 
-SV_DECL_VARARR_SORT( _MergePos, _CmpLPt, 0, 40 )
+SV_DECL_VARARR_SORT( _MergePos, _CmpLPt, 0 )
 SV_IMPL_VARARR_SORT( _MergePos, _CmpLPt )
 
 SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
@@ -1576,7 +1576,7 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
     while ( rpEnd->GetNext() )
         rpEnd = (SwLayoutFrm*)rpEnd->GetNext();
 
-    SvPtrarr aSttArr( 8, 8 ), aEndArr( 8, 8 );
+    SvPtrarr aSttArr( 8 ), aEndArr( 8 );
     const SwLayoutFrm *pTmp;
     for( pTmp = rpStart; (FRM_CELL|FRM_ROW) & pTmp->GetType();
                 pTmp = pTmp->GetUpper() )

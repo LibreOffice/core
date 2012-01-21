@@ -37,7 +37,8 @@ using namespace ::com::sun::star::registry;
 namespace cppu {
 
 sal_Bool component_writeInfoHelper(
-    void *, void *pRegistryKey , const struct ImplementationEntry entries[] )
+    SAL_UNUSED_PARAMETER void *, void * pRegistryKey,
+    ImplementationEntry const * entries)
 {
     sal_Bool bRet = sal_False;
     try
@@ -70,8 +71,8 @@ sal_Bool component_writeInfoHelper(
 
 
 void * component_getFactoryHelper(
-    const sal_Char * pImplName, void *, void *,
-    const struct ImplementationEntry entries[] )
+    char const * pImplName, SAL_UNUSED_PARAMETER void *,
+    SAL_UNUSED_PARAMETER void *, ImplementationEntry const * entries)
 {
 
       void * pRet = 0;

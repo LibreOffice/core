@@ -150,7 +150,7 @@ private:
 };
 
 template<> inline OStoreLockBytes*
-SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*)
+SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
 {
     if (pHandle && pHandle->isKindOf (OStoreLockBytes::m_nTypeId))
     {

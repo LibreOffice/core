@@ -31,7 +31,6 @@
 #include <comphelper/comphelperdllapi.h>
 
 /** === begin UNO includes === **/
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 /** === end UNO includes === **/
@@ -141,23 +140,17 @@ namespace comphelper
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
-            @param _rxServiceManager
-                a pointer to an XMultiServiceFactory interface as got in component_getFactory
             @param _pImplementationName
                 the implementation name of the component
             @return
                 the XInterface access to a factory for the component
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-            const ::rtl::OUString& _rImplementationName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
-        );
+            const ::rtl::OUString& _rImplementationName );
 
-        /** version of getComponentFactory which directly takes the arguments you got in your component_getFactory call
+        /** version of getComponentFactory which directly takes the char argument you got in your component_getFactory call
         */
-        void* getComponentFactory(
-            const sal_Char* _pImplementationName, void* _pServiceManager, void* _pRegistryKey
-        );
+        void* getComponentFactory( const sal_Char* _pImplementationName );
 
     public:
         class ClientAccess { friend class OModuleClient; private: ClientAccess() { } };

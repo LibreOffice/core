@@ -76,7 +76,7 @@ public:
 };
 
 typedef SfxFilter* SfxFilterPtr;
-SV_DECL_PTRARR( SfxFilterPtrArr, SfxFilterPtr, 0, 4 )
+SV_DECL_PTRARR( SfxFilterPtrArr, SfxFilterPtr, 0 )
 
 // class SvxProxyTabPage -------------------------------------------------
 

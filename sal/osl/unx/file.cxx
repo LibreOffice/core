@@ -114,7 +114,7 @@ struct FileHandle_Impl
     ~FileHandle_Impl();
 
     static void* operator new (size_t n);
-    static void  operator delete (void * p, size_t);
+    static void  operator delete (void * p);
 
     static size_t getpagesize();
 
@@ -282,7 +282,7 @@ void* FileHandle_Impl::operator new (size_t n)
 {
     return rtl_allocateMemory(n);
 }
-void FileHandle_Impl::operator delete (void * p, size_t)
+void FileHandle_Impl::operator delete (void * p)
 {
     rtl_freeMemory(p);
 }

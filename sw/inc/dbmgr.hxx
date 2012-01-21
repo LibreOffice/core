@@ -145,7 +145,7 @@ struct SwDSParam : public SwDBData
         }
 };
 typedef SwDSParam* SwDSParamPtr;
-SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
+SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0)
 
 struct SwMergeDescriptor
 {

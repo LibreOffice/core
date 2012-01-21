@@ -368,8 +368,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
     sal_uInt8           nRecordType,    // Subklassen Record-Kennung
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
     sal_uInt16          nContentTag,    // Content-Art-Kennung
-    sal_uInt8           nContentVer,    // Content-Versions-Kennung
-    sal_uInt32                          // Gr"o\se jedes einzelnen Contents in Bytes
+    sal_uInt8           nContentVer     // Content-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -426,7 +425,7 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
     Interner Ctor f"ur Subklassen.
 */
 
-:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag, nRecordVer, 0 ),
+:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag, nRecordVer ),
     _nContentVer( 0 )
 {
 }
@@ -454,7 +453,7 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 */
 
 :   SfxMultiFixRecordWriter( SFX_REC_TYPE_VARSIZE,
-                             pStream, nRecordTag, nRecordVer, 0 ),
+                             pStream, nRecordTag, nRecordVer ),
     _nContentVer( 0 )
 {
 }

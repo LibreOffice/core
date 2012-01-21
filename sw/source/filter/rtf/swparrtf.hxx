@@ -147,7 +147,7 @@ struct SwListEntry
 };
 
 typedef SwFlySave* SwFlySavePtr;
-SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
+SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0 )
 typedef std::deque< SwListEntry > SwListArr;
 
 struct DocPageInformation

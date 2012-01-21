@@ -1044,7 +1044,7 @@ sal_Bool ScAutoFormat::Load()
                     OSL_FAIL( "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
-                rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet, nFileVers ) );
+                rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet ) );
                 rStream.SetVersion( nFileVers );
             }
 
@@ -1134,7 +1134,7 @@ sal_Bool ScAutoFormat::Save()
         rStream << nVal
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
                 << (sal_uInt8)::GetSOStoreTextEncoding(
-                    osl_getThreadTextEncoding(), sal::static_int_cast<sal_uInt16>(rStream.GetVersion()) );
+                    osl_getThreadTextEncoding() );
         ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);

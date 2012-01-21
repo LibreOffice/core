@@ -291,7 +291,7 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 
 // Flush the cache whose owner is given. NULL flushes all.
 
-sal_Bool StgCache::Commit( StgDirEntry* )
+sal_Bool StgCache::Commit()
 {
     StgPage* p = pElem1;
     if( p ) do
@@ -337,9 +337,6 @@ sal_Bool StgCache::Commit( StgDirEntry* )
 #endif
     return sal_True;
 }
-
-void StgCache::Revert( StgDirEntry* )
-{}
 
 // Set a stream
 

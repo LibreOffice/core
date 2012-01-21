@@ -1014,8 +1014,8 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 
 
 
-SwHistory::SwHistory( sal_uInt16 nInitSz, sal_uInt16 nGrowSz )
-    : m_SwpHstry( (sal_uInt8)nInitSz, (sal_uInt8)nGrowSz )
+SwHistory::SwHistory( sal_uInt16 nInitSz )
+    : m_SwpHstry( (sal_uInt8)nInitSz )
     , m_nEndDiff( 0 )
 {}
 

@@ -228,7 +228,7 @@ sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 }
 
 SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
-    : aWordLst( 0, 255 ), aLRULst( 0, 255 ),
+    : aWordLst( 0 ), aLRULst( 0 ),
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),

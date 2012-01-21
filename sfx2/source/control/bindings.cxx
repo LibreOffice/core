@@ -208,7 +208,7 @@ struct SfxFoundCache_Impl
 
 //--------------------------------------------------------------------------
 
-SV_DECL_PTRARR_SORT_DEL(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*, 16, 16 )
+SV_DECL_PTRARR_SORT_DEL(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*, 16)
 SV_IMPL_OP_PTRARR_SORT(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*);
 
 //==========================================================================

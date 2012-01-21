@@ -225,7 +225,9 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 namespace cppu {
 
 template< typename T > inline ::com::sun::star::uno::Type const &
-getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *) {
+getTypeFavourUnsigned(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Sequence< T > const *)
+{
     if (::com::sun::star::uno::Sequence< T >::s_pType == 0) {
         ::typelib_static_sequence_type_init(
             &::com::sun::star::uno::Sequence< T >::s_pType,
@@ -240,7 +242,9 @@ getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *) {
 }
 
 template< typename T > inline ::com::sun::star::uno::Type const &
-getTypeFavourChar(::com::sun::star::uno::Sequence< T > const *) {
+getTypeFavourChar(
+    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Sequence< T > const *)
+{
     //TODO  On certain platforms with weak memory models, the following code can
     // result in some threads observing that td points to garbage:
     static typelib_TypeDescriptionReference * td = 0;
@@ -261,7 +265,8 @@ getTypeFavourChar(::com::sun::star::uno::Sequence< T > const *) {
 // generic sequence template
 template< class E >
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * )
+SAL_CALL getCppuType(
+    SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Sequence< E > * )
     SAL_THROW( () )
 {
     return ::cppu::getTypeFavourUnsigned(

@@ -72,7 +72,7 @@ void* OStoreObject::operator new (size_t n)
 /*
  * operator delete.
  */
-void OStoreObject::operator delete (void *p, size_t)
+void OStoreObject::operator delete (void *p)
 {
     rtl_freeMemory (p);
 }

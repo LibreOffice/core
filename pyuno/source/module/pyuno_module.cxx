@@ -253,7 +253,8 @@ void raisePySystemException( const char * exceptionType, const OUString & messag
 
 extern "C" {
 
-static PyObject* getComponentContext (PyObject*, PyObject*)
+static PyObject* getComponentContext(
+    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
 {
     PyRef ret;
     try
@@ -352,7 +353,8 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
     return obj;
 }
 
-static PyObject *createUnoStructHelper(PyObject *, PyObject* args, PyObject* keywordArgs)
+static PyObject *createUnoStructHelper(
+    SAL_UNUSED_PARAMETER PyObject *, PyObject* args, PyObject* keywordArgs)
 {
     Any IdlStruct;
     PyRef ret;
@@ -439,7 +441,8 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args, PyObject* key
     return ret.getAcquired();
 }
 
-static PyObject *getTypeByName( PyObject *, PyObject *args )
+static PyObject *getTypeByName(
+    SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     PyObject * ret = NULL;
 
@@ -472,7 +475,8 @@ static PyObject *getTypeByName( PyObject *, PyObject *args )
     return ret;
 }
 
-static PyObject *getConstantByName( PyObject *, PyObject *args )
+static PyObject *getConstantByName(
+    SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     PyObject *ret = 0;
     try
@@ -520,7 +524,7 @@ static PyObject *getConstantByName( PyObject *, PyObject *args )
     return ret;
 }
 
-static PyObject *checkType( PyObject *, PyObject *args )
+static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
@@ -544,7 +548,7 @@ static PyObject *checkType( PyObject *, PyObject *args )
     return Py_None;
 }
 
-static PyObject *checkEnum( PyObject *, PyObject *args )
+static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
@@ -568,7 +572,7 @@ static PyObject *checkEnum( PyObject *, PyObject *args )
     return Py_None;
 }
 
-static PyObject *getClass( PyObject *, PyObject *args )
+static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.getClass");
     if( ! obj )
@@ -594,7 +598,7 @@ static PyObject *getClass( PyObject *, PyObject *args )
     return NULL;
 }
 
-static PyObject *isInterface( PyObject *, PyObject *args )
+static PyObject *isInterface( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
 
     if( PyTuple_Check( args ) && PyTuple_Size( args ) == 1 )
@@ -606,7 +610,8 @@ static PyObject *isInterface( PyObject *, PyObject *args )
     return PyLong_FromLong( 0 );
 }
 
-static PyObject * generateUuid( PyObject *, PyObject * )
+static PyObject * generateUuid(
+    SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * )
 {
     Sequence< sal_Int8 > seq( 16 );
     rtl_createUuid( (sal_uInt8*)seq.getArray() , 0 , sal_False );
@@ -623,7 +628,8 @@ static PyObject * generateUuid( PyObject *, PyObject * )
     return ret.getAcquired();
 }
 
-static PyObject *systemPathToFileUrl( PyObject *, PyObject * args )
+static PyObject *systemPathToFileUrl(
+    SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.systemPathToFileUrl" );
     if( ! obj )
@@ -648,7 +654,8 @@ static PyObject *systemPathToFileUrl( PyObject *, PyObject * args )
     return ustring2PyUnicode( url ).getAcquired();
 }
 
-static PyObject * fileUrlToSystemPath( PyObject *, PyObject * args )
+static PyObject * fileUrlToSystemPath(
+    SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.fileUrlToSystemPath" );
     if( ! obj )
@@ -673,7 +680,7 @@ static PyObject * fileUrlToSystemPath( PyObject *, PyObject * args )
     return ustring2PyUnicode( sysPath ).getAcquired();
 }
 
-static PyObject * absolutize( PyObject *, PyObject * args )
+static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
 {
     if( PyTuple_Check( args ) && PyTuple_Size( args ) == 2 )
     {
@@ -702,7 +709,7 @@ static PyObject * absolutize( PyObject *, PyObject * args )
     return 0;
 }
 
-static PyObject * invoke(PyObject *, PyObject *args)
+static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
 {
     PyObject *ret = 0;
     if(PyTuple_Check(args) && PyTuple_Size(args) == 3)
@@ -744,7 +751,8 @@ static PyObject * invoke(PyObject *, PyObject *args)
     return ret;
 }
 
-static PyObject *getCurrentContext( PyObject *, PyObject * )
+static PyObject *getCurrentContext(
+    SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * )
 {
     PyRef ret;
     try
@@ -760,7 +768,8 @@ static PyObject *getCurrentContext( PyObject *, PyObject * )
     return ret.getAcquired();
 }
 
-static PyObject *setCurrentContext( PyObject *, PyObject * args )
+static PyObject *setCurrentContext(
+    SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * args )
 {
     PyRef ret;
     try

@@ -41,12 +41,14 @@ struct ImpSvGlobalName
     sal_uInt8       szData[ 16 ];
     sal_uInt16      nRefCount;
 
+    enum Empty { EMPTY };
+
                 ImpSvGlobalName()
                 {
                     nRefCount = 0;
                 }
                 ImpSvGlobalName( const ImpSvGlobalName & rObj );
-                ImpSvGlobalName( int );
+                ImpSvGlobalName( Empty );
 
     sal_Bool    operator == ( const ImpSvGlobalName & rObj ) const;
 };

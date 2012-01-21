@@ -1491,9 +1491,10 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
 
 // -----------------------------------------------------------------------
 
-void DestroyFontToSubsFontConverter( FontToSubsFontConverter )
+void DestroyFontToSubsFontConverter(
+    SAL_UNUSED_PARAMETER FontToSubsFontConverter )
 {
-    // nothing to do for now, because we use static ImplCvtChars
+    //TODO: nothing to do for now, because we use static ImplCvtChars
 }
 
 // -----------------------------------------------------------------------

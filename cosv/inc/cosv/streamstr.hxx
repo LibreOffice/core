@@ -29,6 +29,10 @@
 #ifndef CSV_STREAMSTR_HXX
 #define CSV_STREAMSTR_HXX
 
+#include "sal/config.h"
+
+#include "sal/types.h"
+
 // BASE CLASSES
 #include <cosv/bstream.hxx>
 // USED SERVICES
@@ -271,7 +275,7 @@ class StreamStrLock
 // IMPLEMENTATION
 
 inline const char *
-StreamStr::operator<<( F_CSTR )
+StreamStr::operator<<( SAL_UNUSED_PARAMETER F_CSTR )
     { return dpData; }
 inline void
 StreamStr::clear()

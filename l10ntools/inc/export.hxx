@@ -469,9 +469,9 @@ public:
     MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID , const ByteString &rFilename )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
-    PFormEntrys* GetPFormEntrys( ResData *pResData );
+    PFormEntrys* GetPFormEntries();
 
-    void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );
+    void Insert( PFormEntrys* pfEntrys );
     PFormEntrys* GetPFObject( const ByteString& rPFO );
 
     ByteString Dump();

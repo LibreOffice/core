@@ -134,7 +134,7 @@ class SwRenderData;
 class ViewShell;
 
 typedef UnoActionContext* UnoActionContextPtr;
-SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
+SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4)
 
 
 /******************************************************************************

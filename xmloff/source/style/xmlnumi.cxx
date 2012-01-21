@@ -1086,8 +1086,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAl
 // ---------------------------------------------------------------------
 
 typedef SvxXMLListLevelStyleContext_Impl *SvxXMLListLevelStyleContext_ImplPtr;
-SV_DECL_PTRARR( SvxXMLListStyle_Impl, SvxXMLListLevelStyleContext_ImplPtr,
-                10, 5 )
+SV_DECL_PTRARR( SvxXMLListStyle_Impl, SvxXMLListLevelStyleContext_ImplPtr, 10 )
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,

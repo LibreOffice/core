@@ -122,14 +122,14 @@ MergeData::~MergeData()
 {
 }
 
-PFormEntrys* MergeData::GetPFormEntrys(ResData*)
+PFormEntrys* MergeData::GetPFormEntries()
 {
     if( aMap.find( ByteString("HACK") ) != aMap.end() )
         return aMap[ ByteString("HACK") ];
     return NULL;
 }
 
-void MergeData::Insert(const ByteString&, PFormEntrys* pfEntrys )
+void MergeData::Insert(PFormEntrys* pfEntrys )
 {
     aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
 }
@@ -291,7 +291,7 @@ PFormEntrys *MergeDataFile::GetPFormEntrys( ResData *pResData )
     // search for requested PFormEntrys
     MergeData *pData = GetMergeData( pResData );
     if ( pData )
-        return pData->GetPFormEntrys( pResData );
+        return pData->GetPFormEntries();
     return NULL;
 }
 
@@ -300,7 +300,7 @@ PFormEntrys *MergeDataFile::GetPFormEntrysCaseSensitive( ResData *pResData )
     // search for requested PFormEntrys
     MergeData *pData = GetMergeData( pResData , true );
     if ( pData )
-        return pData->GetPFormEntrys( pResData );
+        return pData->GetPFormEntries();
     return NULL;
 }
 
@@ -336,7 +336,7 @@ void MergeDataFile::InsertEntry(
     {
         // create new PFormEntrys, cause no one exists with current properties
         pFEntrys = new PFormEntrys( rPFO );
-        pData->Insert( rPFO , pFEntrys );
+        pData->Insert( pFEntrys );
     }
 
     // finaly insert the cur string

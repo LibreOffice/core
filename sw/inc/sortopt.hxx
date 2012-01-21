@@ -49,7 +49,7 @@ struct SW_DLLPUBLIC SwSortKey
     sal_Bool            bIsNumeric;
 };
 
-SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3, 1)
+SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3)
 
 struct SW_DLLPUBLIC SwSortOptions
 {

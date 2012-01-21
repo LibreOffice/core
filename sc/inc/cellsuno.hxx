@@ -127,11 +127,11 @@ public:
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener >* XModifyListenerPtr;
-SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4 )
 
 class ScNamedEntry;
 typedef ScNamedEntry* ScNamedEntryPtr;
-SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
+SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4 )
 
 
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)

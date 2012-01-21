@@ -363,7 +363,7 @@ TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
 void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
-    SwCache *pNew = new SwCache( 100, 100
+    SwCache *pNew = new SwCache( 100
 #ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
 #endif
@@ -395,7 +395,7 @@ void _FrmFinit()
 |*************************************************************************/
 
 typedef CurrShell* CurrShellPtr;
-SV_DECL_PTRARR_SORT(SwCurrShells,CurrShellPtr,4,4)
+SV_DECL_PTRARR_SORT(SwCurrShells,CurrShellPtr,4)
 SV_IMPL_PTRARR_SORT(SwCurrShells,CurrShellPtr)
 
 CurrShell::CurrShell( ViewShell *pNew )

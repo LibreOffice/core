@@ -318,7 +318,7 @@ void LinkManager::UpdateAllLinks(
 {
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
-    SvPtrarr aTmpArr( 255, 50 );
+    SvPtrarr aTmpArr( 255 );
     sal_uInt16 n;
     for( n = 0; n < aLinkTbl.Count(); ++n )
     {

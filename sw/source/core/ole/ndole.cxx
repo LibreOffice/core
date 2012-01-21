@@ -898,7 +898,7 @@ String SwOLEObj::GetDescription()
 
 
 SwOLELRUCache::SwOLELRUCache()
-    : SvPtrarr( 64, 16 ),
+    : SvPtrarr( 64 ),
     utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"))),
     nLRU_InitSize( 20 ),
     bInUnload( sal_False )

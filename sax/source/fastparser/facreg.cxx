@@ -19,13 +19,17 @@ namespace sax_fastparser
 //--------------------------------------
 // the extern interface
 //---------------------------------------
-Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception)
+Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+    throw(Exception)
 {
     FastSaxParser *p = new FastSaxParser;
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-Reference< XInterface > SAL_CALL FastSaxSerializer_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception)
+Reference< XInterface > SAL_CALL FastSaxSerializer_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+    throw(Exception)
 {
     FastSaxSerializer *p = new FastSaxSerializer;
     return Reference< XInterface > ( (OWeakObject * ) p );
@@ -35,7 +39,9 @@ Reference< XInterface > SAL_CALL FastSaxSerializer_CreateInstance( const Referen
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL fastsax_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL fastsax_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 

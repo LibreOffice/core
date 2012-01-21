@@ -41,7 +41,7 @@
 class SvxBoxEntry;
 class SvxListBase;
 
-SV_DECL_PTRARR( SvxEntryLst, SvxBoxEntry*, 10, 10 )
+SV_DECL_PTRARR( SvxEntryLst, SvxBoxEntry*, 10 )
 
 // class SvxBoxEntry -----------------------------------------------------
 

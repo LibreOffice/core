@@ -136,7 +136,7 @@ SvNumberFormatterServiceObj::~SvNumberFormatterServiceObj()
 {
 }
 
-com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvNumberFormatterServiceObj_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
+com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvNumberFormatterServiceObj_CreateInstance( SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
     return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new SvNumberFormatterServiceObj );
 }

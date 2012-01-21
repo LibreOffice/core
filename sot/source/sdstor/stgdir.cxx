@@ -769,7 +769,6 @@ StgDirStrm::StgDirStrm( StgIo& r )
         // the TOC pages can be removed.
         pEntry = (StgDirEntry*) this; // just for a bit pattern
         SetupEntry( 0, pRoot );
-        rIo.Revert( pEntry );
         pEntry = NULL;
     }
 }

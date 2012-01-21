@@ -223,7 +223,7 @@ public:
 };
 
 typedef SvXMLImportContext *SvXMLImportContextPtr;
-SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20, 5 )
+SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20 )
 SV_IMPL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr )
 
 SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
