@@ -106,7 +106,7 @@ inline ::rtl::OUString getExecutablePath( void )
     osl::Module::getUrlFromAddress( ( void* ) &getExecutablePath, dirPath );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    dirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bin"));
+    dirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Executable"));
     return dirPath;
 }
 
@@ -744,8 +744,7 @@ public:
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
     CPPUNIT_TEST(osl_execProc_merged_child_environment);
 #endif
-    ///TODO: Repair makefile to get the batch.sh, batch.bat copied to $(BIN) for test execution
-    // CPPUNIT_TEST(osl_execProc_test_batch);
+    CPPUNIT_TEST(osl_execProc_test_batch);
     ///TODO: Repair test (or tested function ;-) - test fails.
     // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
     SAL_CPPUNIT_TEST_SUITE_END();

@@ -66,9 +66,9 @@ inline void printUString( const ::rtl::OUString & str )
 inline ::rtl::OUString getDllURL( void )
 {
 #if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
-    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("Module_DLL.dll") );
+    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("test_Module_DLL.dll") );
 #else
-    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("libModule_DLL.so") );
+    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("libtest_Module_DLL.so") );
 #endif
 
     ::rtl::OUString dirPath, dllPath;

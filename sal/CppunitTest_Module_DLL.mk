@@ -25,13 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,sal_osl_module_dll))
+# This is not really a test. Only a dynamic library which is loaded by
+# sal_osl_module unit test library.
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module_dll,\
+$(eval $(call gb_CppunitTest_CppunitTest,Module_DLL))
+
+$(eval $(call gb_CppunitTest_add_exception_objects,Module_DLL,\
     sal/qa/osl/module/osl_Module_DLL \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_module_dll,\
+$(eval $(call gb_CppunitTest_add_linked_libs,Module_DLL,\
     sal \
     $(gb_STDLIBS) \
 ))

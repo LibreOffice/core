@@ -37,6 +37,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gendict \
     genindex_data \
     mkunroll \
+    osl_process_child \
     rsc \
     rscdep \
     saxparser \
