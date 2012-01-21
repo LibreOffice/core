@@ -699,8 +699,8 @@ oslFileError FileHandle_Impl::readLineAt (
             }
             if (state != LINE_STATE_BEGIN)
             {
-                /* store (and eat) the newline char */
-                m_buffer[curpos] = 0x0A, curpos++;
+                /* skip the newline char */
+                curpos++;
 
                 /* flush buffer to sequence */
                 result = writeSequence_Impl (
@@ -854,9 +854,9 @@ static int osl_file_queryLocking (sal_uInt32 uFlags)
     return 0;
 }
 
-#ifdef ANDROID
+#ifdef UNX
 
-static oslFileError
+oslFileError
 SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
 {
     oslFileError eRet;
