@@ -343,7 +343,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
                 DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
             //check offset of outer series
-            if( aSeriesVec.size() )
+            if( !aSeriesVec.empty() )
             {
                 sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
                 Reference< chart2::XDataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );

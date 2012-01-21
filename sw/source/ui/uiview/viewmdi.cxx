@@ -460,7 +460,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             }
 
             // move
-            if(vNavMarks.size())
+            if(!vNavMarks.empty())
             {
                 if(bNext)
                 {

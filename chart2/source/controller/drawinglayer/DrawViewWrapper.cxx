@@ -221,7 +221,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
                 const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
                 getAllHit3DObjectsSortedFrontToBack(aHitPoint, *pScene, aHitList);
 
-                if(aHitList.size())
+                if(!aHitList.empty())
                 {
                     // choose the frontmost hit 3D object of the scene
                     pRet = const_cast< E3dCompoundObject* >(aHitList[0]);

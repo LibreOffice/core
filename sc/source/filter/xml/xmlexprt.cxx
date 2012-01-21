@@ -1892,7 +1892,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         xProperties->getPropertyValue(SC_NUMBERFORMAT) >>= nNumberFormat;
     if (!sStyleName.isEmpty())
     {
-        if (xPropStates.size())
+        if (!xPropStates.empty())
         {
             sal_Int32 nIndex;
             if (pOldName)
@@ -1968,7 +1968,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
     rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
 
     std::vector<XMLPropertyState> xPropStates(xColumnStylesExportPropertySetMapper->Filter(xColumnProperties));
-    if(xPropStates.size())
+    if(!xPropStates.empty())
     {
         std::vector< XMLPropertyState >::iterator aItr(xPropStates.begin());
         std::vector< XMLPropertyState >::iterator aEndItr(xPropStates.end());
@@ -2013,7 +2013,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
     rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
 
     std::vector<XMLPropertyState> xPropStates(xRowStylesExportPropertySetMapper->Filter(xRowProperties));
-    if(xPropStates.size())
+    if(!xPropStates.empty())
     {
         rtl::OUString sParent;
         if (pOldName)
@@ -2365,7 +2365,7 @@ void ScXMLExport::_ExportAutoStyles()
             if (xTableProperties.is())
             {
                 std::vector<XMLPropertyState> xPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
-                if(xPropStates.size())
+                if(!xPropStates.empty())
                 {
                     rtl::OUString sParent;
                     rtl::OUString sName;
