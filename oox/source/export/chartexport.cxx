@@ -564,17 +564,6 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
 {
 }
 
-sal_Int32 ChartExport::GetXmlNamespace() const
-{
-    return mnXmlNamespace;
-}
-
-ChartExport& ChartExport::SetXmlNamespace( sal_Int32 nXmlNamespace )
-{
-    mnXmlNamespace = nXmlNamespace;
-    return *this;
-}
-
 sal_Int32 ChartExport::GetChartID( )
 {
     sal_Int32 nID = GetFB()->GetUniqueId();

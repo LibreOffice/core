@@ -577,17 +577,6 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
 {
 }
 
-sal_Int32 ShapeExport::GetXmlNamespace() const
-{
-    return mnXmlNamespace;
-}
-
-ShapeExport& ShapeExport::SetXmlNamespace( sal_Int32 nXmlNamespace )
-{
-    mnXmlNamespace = nXmlNamespace;
-    return *this;
-}
-
 awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
 {
     Size aRetSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );

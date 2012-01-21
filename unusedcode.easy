@@ -1536,8 +1536,6 @@ oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<
 oox::core::PowerPointExport::WriteTextStyles(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::Relations::getExternalTargetFromFirstType(rtl::OUString const&) const
 oox::core::XmlFilterBase::getChartConverter()
-oox::drawingml::ChartExport::GetXmlNamespace() const
-oox::drawingml::ChartExport::SetXmlNamespace(int)
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)
@@ -1550,8 +1548,6 @@ oox::drawingml::GetPoint2D(com::sun::star::uno::Reference<com::sun::star::xml::s
 oox::drawingml::GetTextMargin(rtl::OUString const&)
 oox::drawingml::GetTextVerticalAdjust(int)
 oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties const&)
-oox::drawingml::ShapeExport::GetXmlNamespace() const
-oox::drawingml::ShapeExport::SetXmlNamespace(int)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const
 oox::drawingml::Theme::getEffectStyle(int) const
