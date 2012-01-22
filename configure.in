@@ -101,7 +101,7 @@ if test -n "$with_android_ndk"; then
    # Then the use of a wildcard below will break.
    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/arm-linux*/prebuilt/*/bin`
 
-   test -z "$SYSBASE" && SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-arm
+   test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-arm
    test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-ar
    test -z "$NM" && NM=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-nm
    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_ABI_PREBUILT_BIN/arm-linux-androideabi-objdump
