@@ -60,9 +60,8 @@ struct assertion_traits<String>
 
     static std::string toString(const String& x)
     {
-        std::string text = ByteString(x, RTL_TEXTENCODING_UTF8).GetBuffer();
         OStringStream ost;
-        ost << text;
+        ost << rtl::OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
         return ost.str();
     }
 };
