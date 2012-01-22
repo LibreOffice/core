@@ -38,7 +38,7 @@
 
 class Tracer
 {
-    ByteString m_sBlockDescription;
+    rtl::OString m_sBlockDescription;
 
     DECLARE_STL_STDKEY_MAP( ::oslThreadIdentifier, sal_Int32, MapThreadId2Int );
     static MapThreadId2Int s_aThreadIndents;

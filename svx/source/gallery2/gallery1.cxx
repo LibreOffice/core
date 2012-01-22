@@ -573,25 +573,42 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
     // try fallback, if no entry was found
     if( !pFound )
     {
-        ByteString      aFallback;
+        rtl::OString aFallback;
 
         switch( nThemeId )
         {
-            case( GALLERY_THEME_3D ): aFallback = "3D"; break;
-            case( GALLERY_THEME_BULLETS ): aFallback = "Bullets"; break;
-            case( GALLERY_THEME_HOMEPAGE ): aFallback = "Homepage"; break;
-            case( GALLERY_THEME_HTMLBUTTONS ): aFallback = "private://gallery/hidden/HtmlExportButtons"; break;
-            case( GALLERY_THEME_POWERPOINT ): aFallback = "private://gallery/hidden/imgppt"; break;
-            case( GALLERY_THEME_FONTWORK ): aFallback = "private://gallery/hidden/fontwork"; break;
-            case( GALLERY_THEME_FONTWORK_VERTICAL ): aFallback = "private://gallery/hidden/fontworkvertical"; break;
-            case( GALLERY_THEME_RULERS ): aFallback = "Rulers"; break;
-            case( GALLERY_THEME_SOUNDS ): aFallback = "Sounds"; break;
-
+            case( GALLERY_THEME_3D ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("3D"));
+                break;
+            case( GALLERY_THEME_BULLETS ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bullets"));
+                break;
+            case( GALLERY_THEME_HOMEPAGE ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Homepage"));
+                break;
+            case( GALLERY_THEME_HTMLBUTTONS ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/HtmlExportButtons"));
+                break;
+            case( GALLERY_THEME_POWERPOINT ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/imgppt"));
+                break;
+            case( GALLERY_THEME_FONTWORK ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/fontwork"));
+                break;
+            case( GALLERY_THEME_FONTWORK_VERTICAL ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/fontworkvertical"));
+                break;
+            case( GALLERY_THEME_RULERS ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Rulers"));
+                break;
+            case( GALLERY_THEME_SOUNDS ):
+                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Sounds"));
+                break;
             default:
-            break;
+                break;
         }
 
-        pFound = ( (Gallery*) this )->ImplGetThemeEntry( String::CreateFromAscii( aFallback.GetBuffer() ) );
+        pFound = const_cast<Gallery*>(this)->ImplGetThemeEntry(rtl::OStringToOUString(aFallback, RTL_TEXTENCODING_ASCII_US));
     }
 
     return( pFound ? pFound->GetThemeName() : rtl::OUString() );
