@@ -187,7 +187,7 @@ MergeDataFile::MergeDataFile(
 {
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     aInputStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
-    ByteString sLine;
+    rtl::OString sLine;
     const ByteString sHACK("HACK");
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(sFile));
     const bool isFileEmpty = !sFileNormalized.isEmpty();
@@ -208,17 +208,17 @@ MergeDataFile::MergeDataFile(
             const ::rtl::OString filename = lcl_NormalizeFilename(getToken(sLine, 1 , '\t'));
             if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
             {
-                xub_StrLen rIdx = 0;
-                const ByteString sTYP = sLine.GetToken( 3, '\t', rIdx );
-                const ByteString sGID = sLine.GetToken( 0, '\t', rIdx ); // 4
-                const ByteString sLID = sLine.GetToken( 0, '\t', rIdx ); // 5
-                ByteString sPFO = sLine.GetToken( 1, '\t', rIdx ); // 7
+                sal_Int32 rIdx = 0;
+                const ByteString sTYP = sLine.getToken( 3, '\t', rIdx );
+                const ByteString sGID = sLine.getToken( 0, '\t', rIdx ); // 4
+                const ByteString sLID = sLine.getToken( 0, '\t', rIdx ); // 5
+                ByteString sPFO = sLine.getToken( 1, '\t', rIdx ); // 7
                 sPFO = sHACK;
-                ByteString nLANG = sLine.GetToken( 1, '\t', rIdx ); // 9
+                ByteString nLANG = sLine.getToken( 1, '\t', rIdx ); // 9
                 nLANG = comphelper::string::strip(nLANG, ' ');
-                const ByteString sTEXT = sLine.GetToken( 0, '\t', rIdx ); // 10
-                const ByteString sQHTEXT = sLine.GetToken( 1, '\t', rIdx ); // 12
-                const ByteString sTITLE = sLine.GetToken( 0, '\t', rIdx );  // 13
+                const ByteString sTEXT = sLine.getToken( 0, '\t', rIdx ); // 10
+                const ByteString sQHTEXT = sLine.getToken( 1, '\t', rIdx ); // 12
+                const ByteString sTITLE = sLine.getToken( 0, '\t', rIdx );  // 13
 
 
                 if( !nLANG.EqualsIgnoreCaseAscii("en-US") )

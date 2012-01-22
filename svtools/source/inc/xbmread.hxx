@@ -69,7 +69,7 @@ class XBMReader : public GraphicReader
     sal_Bool                bStatus;
 
     void                InitTable();
-    ByteString          FindTokenLine( SvStream* pInStm, const char* pTok1,
+    rtl::OString        FindTokenLine( SvStream* pInStm, const char* pTok1,
                                        const char* pTok2 = NULL, const char* pTok3 = NULL );
     long                ParseDefine( const sal_Char* pDefine );
     sal_Bool                ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat );

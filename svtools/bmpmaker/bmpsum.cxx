@@ -297,15 +297,15 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
     if( aIStm.IsOpen() && aOStm.IsOpen() )
     {
-        ByteString                  aReadLine;
+        rtl::OString aReadLine;
         ::std::set< ByteString >    aFileNameSet;
 
         while( aIStm.ReadLine( aReadLine ) )
         {
-            if( aReadLine.Len() )
+            if( !aReadLine.isEmpty() )
                 aFileNameSet.insert( aReadLine );
 
-            if( aReadLine.Search( "enus" ) != STRING_NOTFOUND )
+            if( comphelper::string::indexOfL(aReadLine, RTL_CONSTASCII_STRINGPARAM("enus") ) != -1 )
             {
                 static const char* aLanguages[] =
                 {
@@ -340,7 +340,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
                 }
             }
 
-            aReadLine.Erase();
+            aReadLine = rtl::OString();
         }
 
         aIStm.Close();

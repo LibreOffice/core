@@ -93,7 +93,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
 
     if( !rInDirs.empty() )
     {
-        ByteString                  aLine;
+        rtl::OString                aLine;
         String                      aInfo, aPrefix, aName( rName ), aString;
         SvFileStream                aOutStream;
         BitmapEx                    aTotalBmpEx;
@@ -123,7 +123,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
         aOutFile += DirEntry( aName );
 
         // get number of bitmaps
-        while( aLine.Search( '}' ) == STRING_NOTFOUND )
+        while( aLine.indexOf('}') == -1 )
         {
             if( !pSRS->ReadLine( aLine ) )
                 break;
@@ -136,11 +136,11 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             {
                 aString = aPrefix;
 
-                if( atoi( aLine.GetBuffer() ) < 10000 )
+                if( atoi( aLine.getStr() ) < 10000 )
                     aString += String::CreateFromInt32( 0 );
 
                 // search for pngs by default
-                String aPngString( aString += String( aLine.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+                String aPngString( aString += rtl::OStringToOUString(aLine, RTL_TEXTENCODING_UTF8) );
                 aNameVector.push_back( aPngString += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) );
            }
         }
@@ -361,8 +361,10 @@ void BmpCreator::Create( const String& rSRSName,
     else
     {
         String      aText;
-        ByteString  aByteText;
+        rtl::OString aByteText;
         sal_Bool        bLangDep = sal_False;
+
+        using comphelper::string::indexOfL;
 
         do
         {
@@ -371,24 +373,24 @@ void BmpCreator::Create( const String& rSRSName,
                 if (!pSRS->ReadLine(aByteText))
                     break;
             }
-            while ( aByteText.Search( "ImageList" ) == STRING_NOTFOUND );
+            while ( indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("ImageList")) == -1 );
 
             do
             {
                 if (!pSRS->ReadLine( aByteText ) )
                     break;
             }
-            while ( aByteText.Search( "File" ) == STRING_NOTFOUND );
-            aText = String::CreateFromAscii( aByteText.GetBuffer() );
+            while ( indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("File")) == -1 );
+            aText = rtl::OStringToOUString(aByteText, RTL_TEXTENCODING_ASCII_US);
 
             const String aName( aText.GetToken( 1, '"' ) );
 
             do
             {
                 if( !bLangDep &&
-                    aByteText.Search( "File" ) != STRING_NOTFOUND &&
-                    aByteText.Search( '[' ) != STRING_NOTFOUND &&
-                    aByteText.Search( ']' ) != STRING_NOTFOUND )
+                    indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("File")) != -1 &&
+                    aByteText.indexOf('[') != -1 &&
+                    aByteText.indexOf(']') != -1 )
                 {
                     bLangDep = sal_True;
                 }
@@ -396,8 +398,8 @@ void BmpCreator::Create( const String& rSRSName,
                 if (!pSRS->ReadLine(aByteText))
                     break;
             }
-            while (aByteText.Search( "IdList" ) == STRING_NOTFOUND );
-            aText = String::CreateFromAscii( aByteText.GetBuffer() );
+            while (indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
+            aText = rtl::OStringToOUString(aByteText, RTL_TEXTENCODING_ASCII_US);
 
             // if image list is not language dependent, don't do anything for languages except german
             if( aText.Len() )

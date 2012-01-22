@@ -654,7 +654,7 @@ sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSe
     return bRet;
 }
 
-sal_Bool SvStream::ReadLine( ByteString& rStr )
+sal_Bool SvStream::ReadLine(rtl::OString& rStr)
 {
     sal_Char    buf[256+1];
     sal_Bool        bEnd        = sal_False;
@@ -722,9 +722,9 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
     return bEnd;
 }
 
-sal_Bool SvStream::ReadLine( rtl::OString& rStr )
+sal_Bool SvStream::ReadLine( ByteString& rStr )
 {
-    ByteString aFoo;
+    rtl::OString aFoo;
     sal_Bool ret = ReadLine(aFoo);
     rStr = aFoo;
     return ret;

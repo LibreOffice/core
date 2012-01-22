@@ -80,15 +80,16 @@ static const sal_Int16 DIC_VERSION_5 = 5;
 static const sal_Int16 DIC_VERSION_6 = 6;
 static const sal_Int16 DIC_VERSION_7 = 7;
 
-static sal_Bool getTag(const ByteString &rLine,
-        const sal_Char *pTagName, ByteString &rTagValue)
+static bool getTag(const rtl::OString &rLine, const sal_Char *pTagName,
+    rtl::OString &rTagValue)
 {
-    xub_StrLen nPos = rLine.Search( pTagName );
-    if (nPos == STRING_NOTFOUND)
-        return sal_False;
+    sal_Int32 nPos = rLine.indexOf(pTagName);
+    if (nPos == -1)
+        return false;
 
-    rTagValue = comphelper::string::strip(rLine.Copy(nPos + sal::static_int_cast< xub_StrLen >(strlen( pTagName ))), ' ');
-    return sal_True;
+    rTagValue = comphelper::string::strip(rLine.copy(nPos + rtl_str_getLength(pTagName)),
+        ' ');
+    return true;
 }
 
 
@@ -111,7 +112,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
         !strcmp(pMagicHeader, pVerOOo7))
     {
         sal_Bool bSuccess;
-        ByteString aLine;
+        rtl::OString aLine;
 
         nDicVersion = DIC_VERSION_7;
 
@@ -121,31 +122,31 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
         // 2nd line: language all | en-US | pt-BR ...
         while (sal_True == (bSuccess = rpStream->ReadLine(aLine)))
         {
-            ByteString aTagValue;
+            rtl::OString aTagValue;
 
-            if (aLine.GetChar(0) == '#') // skip comments
+            if (aLine[0] == '#') // skip comments
                 continue;
 
             // lang: field
             if (getTag(aLine, "lang: ", aTagValue))
             {
-                if (aTagValue == "<none>")
+                if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("<none>")))
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = MsLangId::convertIsoStringToLanguage(OUString(aTagValue.GetBuffer(),
-                                aTagValue.Len(), RTL_TEXTENCODING_ASCII_US));
+                    nLng = MsLangId::convertIsoStringToLanguage(rtl::OStringToOUString(
+                        aTagValue, RTL_TEXTENCODING_ASCII_US));
             }
 
             // type: negative / positive
             if (getTag(aLine, "type: ", aTagValue))
             {
-                if (aTagValue == "negative")
+                if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("negative")))
                     bNeg = sal_True;
                 else
                     bNeg = sal_False;
             }
 
-            if (aLine.Search ("---") != STRING_NOTFOUND) // end of header
+            if (comphelper::string::indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("---")) != -1) // end of header
                 break;
         }
         if (!bSuccess)
@@ -369,14 +370,14 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     else if (DIC_VERSION_7 == nDicVersion)
     {
         sal_Bool bSuccess;
-        ByteString aLine;
+        rtl::OString aLine;
 
         // remaining lines - stock strings (a [==] b)
         while (sal_True == (bSuccess = pStream->ReadLine(aLine)))
         {
-            if (aLine.GetChar(0) == '#') // skip comments
+            if (aLine[0] == '#') // skip comments
                 continue;
-            rtl::OUString aText = rtl::OStringToOUString (aLine, RTL_TEXTENCODING_UTF8);
+            rtl::OUString aText = rtl::OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
             uno::Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
             addEntry_Impl( xEntry , sal_True ); //! don't launch events here

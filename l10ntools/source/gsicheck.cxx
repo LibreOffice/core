@@ -1046,12 +1046,12 @@ int _cdecl main( int argc, char *argv[] )
     }
 
 
-    ByteString sReferenceLine;
+    rtl::OString sReferenceLine;
     GSILine* pReferenceLine = NULL;
     ByteString aOldReferenceId("No Valid ID");   // just set to something which can never be an ID
     sal_uLong nReferenceLine = 0;
 
-    ByteString sGSILine;
+    rtl::OString sGSILine;
     GSILine* pGSILine = NULL;
     ByteString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;

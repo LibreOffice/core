@@ -101,13 +101,11 @@ void XBMReader::InitTable()
 
 // ------------------------------------------------------------------------
 
-ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
+rtl::OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
 {
-    ByteString  aRet;
-    long        nPos1;
-    long        nPos2;
-    long        nPos3;
+    rtl::OString aRet;
+    sal_Int32 nPos1, nPos2, nPos3;
 
     bStatus = sal_False;
 
@@ -118,7 +116,7 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
 
         if( pTok1 )
         {
-            if( ( nPos1 = aRet.Search( pTok1 ) ) != STRING_NOTFOUND )
+            if( ( nPos1 = aRet.indexOf( pTok1 ) ) != -1 )
             {
                 bStatus = sal_True;
 
@@ -126,7 +124,7 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                 {
                     bStatus = sal_False;
 
-                    if( ( ( nPos2 = aRet.Search( pTok2 ) ) != STRING_NOTFOUND ) &&
+                    if( ( ( nPos2 = aRet.indexOf( pTok2 ) ) != -1 ) &&
                          ( nPos2 > nPos1 ) )
                     {
                         bStatus = sal_True;
@@ -135,7 +133,7 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                         {
                             bStatus = sal_False;
 
-                            if( ( ( nPos3 = aRet.Search( pTok3 ) ) != STRING_NOTFOUND ) && ( nPos3 > nPos2 ) )
+                            if( ( ( nPos3 = aRet.indexOf( pTok3 ) ) != -1 ) && ( nPos3 > nPos2 ) )
                                 bStatus = sal_True;
                         }
                     }
@@ -201,7 +199,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
 
 sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat )
 {
-    ByteString      aLine;
+    rtl::OString    aLine;
     long            nRow = 0;
     long            nCol = 0;
     long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
@@ -214,18 +212,18 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
     {
         if( bFirstLine )
         {
-            xub_StrLen nPos;
+            sal_Int32 nPos;
 
             // einfuehrende geschweifte Klammer loeschen
-            if( (nPos = ( aLine = aLastLine ).Search( '{' ) ) != STRING_NOTFOUND )
-                aLine.Erase( 0, nPos + 1 );
+            if( (nPos = ( aLine = aLastLine ).indexOf('{') ) != -1 )
+                aLine = aLine.copy(nPos + 1);
 
             bFirstLine = sal_False;
         }
         else if( !pInStm->ReadLine( aLine ) )
             break;
 
-        if( aLine.Len() )
+        if (!aLine.isEmpty())
         {
             const sal_Int32 nCount = comphelper::string::getTokenCount(aLine, ',');
 

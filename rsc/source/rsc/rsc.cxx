@@ -75,6 +75,7 @@ using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using comphelper::string::getToken;
 using comphelper::string::getTokenCount;
+using comphelper::string::indexOfL;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -1149,7 +1150,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {
-        ByteString aLine;
+        rtl::OString aLine;
         rtl::OString aFilePath;
 
         while( aIStm.ReadLine( aLine ) )
@@ -1160,43 +1161,47 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                 rtl::OString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );
 
                 if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
-                    ( ( aLine = "File = \"" ) += aFilePath ) += "\";";
+                {
+                    aLine = rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("File = \"")).
+                        append(aFilePath).append(RTL_CONSTASCII_STRINGPARAM("\";")).
+                        makeStringAndClear();
+                }
                 else
                     aMissingImages.push_back( aBaseFileName );
 
-                aOStm.WriteLine( aLine );
+                aOStm.WriteLine(aLine);
             }
-            else if( aLine.Search( "ImageList" ) != STRING_NOTFOUND )
+            else if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("ImageList")) != -1)
             {
                 ::std::vector< ::std::pair< rtl::OString, sal_Int32 > > aEntryVector;
 
-                aOStm.WriteLine( aLine );
+                aOStm.WriteLine(aLine);
 
-                if( aLine.Search( ';' ) == STRING_NOTFOUND )
+                if (aLine.indexOf(';') == -1)
                 {
                     const sal_uInt32 nImgListStartPos = aIStm.Tell();
 
                     do
                     {
-                        if( !aIStm.ReadLine( aLine ) )
+                        if( !aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while( aLine.Search( "Prefix" ) == STRING_NOTFOUND );
+                    while (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("Prefix")) == -1);
 
                     const rtl::OString aPrefix( getToken(aLine, 1, '"') );
                     aIStm.Seek( nImgListStartPos );
 
                     do
                     {
-                        if (!aIStm.ReadLine( aLine ) )
+                        if (!aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while( aLine.Search( "IdList" ) == STRING_NOTFOUND );
+                    while (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
 
                     // scan all ids and collect images
-                    while( aLine.Search( '}' ) == STRING_NOTFOUND )
+                    while (aLine.indexOf('}') == -1)
                     {
-                        if( !aIStm.ReadLine( aLine ) )
+                        if( !aIStm.ReadLine(aLine) )
                             break;
 
                         aLine = comphelper::string::stripStart(aLine, ' ');
@@ -1205,7 +1210,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                         if (comphelper::string::isdigitAsciiString(aLine))
                         {
-                            sal_Int32 nNumber = atoi( aLine.GetBuffer() );
+                            sal_Int32 nNumber = atoi(aLine.getStr());
 
                             rtl::OStringBuffer aBuf(aPrefix);
                             if( nNumber < 10000 )
@@ -1226,13 +1231,13 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     {
                         aIStm.ReadLine( aLine );
 
-                        if( aLine.Search( "IdList" ) != STRING_NOTFOUND )
+                        if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("IdList")) != -1)
                         {
-                            while( aLine.Search( '}' ) == STRING_NOTFOUND )
-                                aIStm.ReadLine( aLine );
+                            while (aLine.indexOf('}') == -1)
+                                aIStm.ReadLine(aLine);
                         }
                         else
-                            aOStm.WriteLine( aLine );
+                            aOStm.WriteLine(aLine);
                     }
 
                     aOStm.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("FileList = {")));
@@ -1253,10 +1258,10 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     aOStm.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("};")));
                 }
                 else
-                    aOStm.WriteLine( aLine );
+                    aOStm.WriteLine(aLine);
             }
             else
-                aOStm.WriteLine( aLine );
+                aOStm.WriteLine(aLine);
         }
     }
 

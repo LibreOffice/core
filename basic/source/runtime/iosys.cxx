@@ -647,7 +647,9 @@ SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerBy
     nExpandOnWriteTo = 0;
     if( !bForceReadingPerByte && IsText() )
     {
-        pStrm->ReadLine( rBuf );
+        rtl::OString aBuffer;
+        pStrm->ReadLine(aBuffer);
+        rBuf = aBuffer;
         nLine++;
     }
     else

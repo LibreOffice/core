@@ -296,7 +296,7 @@ class PPDDecompressStream
 
     bool IsOpen() const;
     bool IsEof() const;
-    void ReadLine( ByteString& o_rLine);
+    rtl::OString ReadLine();
     void Open( const rtl::OUString& i_rFile );
     void Close();
     const rtl::OUString& GetFileName() const { return maFileName; }
@@ -378,12 +378,14 @@ bool PPDDecompressStream::IsEof() const
     return ( mpMemStream ? mpMemStream->IsEof() : ( mpFileStream ? mpFileStream->IsEof() : true ) );
 }
 
-void PPDDecompressStream::ReadLine( ByteString& o_rLine )
+rtl::OString PPDDecompressStream::ReadLine()
 {
+    rtl::OString o_rLine;
     if( mpMemStream )
         mpMemStream->ReadLine( o_rLine );
     else if( mpFileStream )
         mpFileStream->ReadLine( o_rLine );
+    return o_rLine;
 }
 
 static osl::FileBase::RC resolveLink( const rtl::OUString& i_rURL, rtl::OUString& o_rResolvedURL, rtl::OUString& o_rBaseName, osl::FileStatus::Type& o_rType, int nLinkLevel = 10 )
@@ -565,8 +567,7 @@ String PPDParser::getPPDFile( const String& rFile )
     String aRet;
     if( aStream.IsOpen() )
     {
-        ByteString aLine;
-        aStream.ReadLine( aLine );
+        ByteString aLine = aStream.ReadLine();
         if( aLine.Search( "*PPD-Adobe" ) == 0 )
             aRet = aStream.GetFileName();
         else
@@ -575,7 +576,7 @@ String PPDParser::getPPDFile( const String& rFile )
             // with *PPD-Adobe, so try some lines for *Include
             int nLines = 10;
             while( aLine.Search( "*Include" ) != 0 && --nLines )
-                aStream.ReadLine( aLine );
+                aLine = aStream.ReadLine();
             if( nLines )
                 aRet = aStream.GetFileName();
         }
@@ -596,9 +597,8 @@ String PPDParser::getPPDPrinterName( const String& rFile )
         String aCurLine;
         while( ! aStream.IsEof() && aStream.IsOpen() )
         {
-            ByteString aByteLine;
-            aStream.ReadLine( aByteLine );
-            aCurLine = String( aByteLine, RTL_TEXTENCODING_MS_1252 );
+            rtl::OString aByteLine = aStream.ReadLine();
+            aCurLine = rtl::OStringToOUString(aByteLine, RTL_TEXTENCODING_MS_1252);
             if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )
             {
                 aCurLine.Erase( 0, 9 );
@@ -694,10 +694,9 @@ PPDParser::PPDParser( const String& rFile ) :
     bool bLanguageEncoding = false;
     if( aStream.IsOpen() )
     {
-        ByteString aCurLine;
         while( ! aStream.IsEof() )
         {
-            aStream.ReadLine( aCurLine );
+            ByteString aCurLine = aStream.ReadLine();
             if( aCurLine.GetChar( 0 ) == '*' )
             {
                 if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )

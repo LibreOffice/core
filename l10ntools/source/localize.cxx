@@ -371,12 +371,12 @@ void SourceTreeLocalizer::WorkOnFile(
             nFileCnt++;
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
-            ByteString sLine;
-            while ( aSDFIn.IsOpen() && !aSDFIn.IsEof()) {
+            rtl::OString sLine;
+            while ( aSDFIn.IsOpen() && !aSDFIn.IsEof())
+            {
                 aSDFIn.ReadLine( sLine );
-                if ( sLine.Len()) {
+                if (!sLine.isEmpty())
                     aSDF.WriteLine( sLine );
-                }
             }
             aSDFIn.Close();
 
