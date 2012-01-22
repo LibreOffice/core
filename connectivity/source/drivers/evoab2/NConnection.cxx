@@ -36,8 +36,8 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
-#include "NDebug.hxx"
 #include <comphelper/sequence.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 
 using namespace connectivity::evoab;
 using namespace dbtools;
@@ -105,7 +105,7 @@ IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connec
 void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_incrementInterlockedCount( &m_refCount );
-    EVO_TRACE_STRING("OEvoabConnection::construct()::url = %s\n", url );
+    SAL_INFO("evoab2", "OEvoabConnection::construct()::url = " << url );
 
      ::rtl::OUString sPassword;
         const char* pPwd                = "password";

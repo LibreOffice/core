@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
-
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -40,7 +40,6 @@
 #include "NConnection.hxx"
 #include "NDatabaseMetaData.hxx"
 #include "NResultSet.hxx"
-#include "NDebug.hxx"
 #include "resource/evoab2_res.hrc"
 #include <resource/common_res.hrc>
 #include <connectivity/dbexception.hxx>
@@ -415,7 +414,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
-            EVO_TRACE_STRING( "Plain contains '%s'", aMatchString );
+            SAL_INFO( "evoab2", "Plain contains '" << aMatchString << "'" );
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString );
             if( pResult && bNotLike )
                 pResult = e_book_query_not( pResult, TRUE );
@@ -485,7 +484,7 @@ rtl::OUString OCommonStatement::getTableName()
 
 void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQueryData )
 {
-    EVO_TRACE_STRING( "parsing %s", sql );
+    SAL_INFO( "evoab2", "parsing " << sql );
 
     _out_rQueryData.eFilterType = eFilterOther;
 
@@ -503,7 +502,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUString sTreeDebug;
         pOrderByClause->showParseTree( sTreeDebug );
-        EVO_TRACE_STRING( "found order-by tree:\n%s", sTreeDebug );
+        SAL_INFO( "evoab2", "found order-by tree:\n" << sTreeDebug );
     #endif
         orderByAnalysis( pOrderByClause, _out_rQueryData.aSortOrder );
     }
@@ -514,7 +513,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUString sTreeDebug;
         pWhereClause->showParseTree( sTreeDebug );
-        EVO_TRACE_STRING( "found where tree:\n%s", sTreeDebug );
+        SAL_INFO( "evoab2", "found where tree:\n" << sTreeDebug );
     #endif
         EBookQuery* pQuery = whereAnalysis( pWhereClause->getChild( 1 ) );
         if ( !pQuery )
@@ -622,7 +621,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
 // -------------------------------------------------------------------------
 Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const ::rtl::OUString& _rSql )
 {
-    EVO_TRACE_STRING( "OCommonStatement::impl_executeQuery_throw(%s)\n", _rSql );
+    SAL_INFO( "evoab2", "OCommonStatement::impl_executeQuery_throw(" << _rSql << "%s)\n" );
 
 #if OSL_DEBUG_LEVEL > 1
     g_message( "Parse SQL '%s'\n",

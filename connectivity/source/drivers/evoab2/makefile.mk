@@ -63,7 +63,6 @@ SLOFILES=\
     $(SLO)$/NResultSet.obj  \
     $(SLO)$/NResultSetMetaData.obj \
     $(SLO)$/EApi.obj \
-    $(SLO)$/NDebug.obj
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
