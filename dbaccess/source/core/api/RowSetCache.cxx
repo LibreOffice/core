@@ -760,7 +760,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
     if ( _nNewStartPos == -1 )
     {
         aIter = m_pMatrix->begin() + (m_nEndPos - m_nStartPos);
-        i = m_nEndPos;
+        i = m_nEndPos + 1;
     }
     else
     {
