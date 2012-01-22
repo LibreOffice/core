@@ -9696,7 +9696,7 @@ dnl        this should be unified into using only one version for both
 
 AC_MSG_CHECKING([whether to use the system libjpeg])
 
-if test "$SYSTEM_JPEG" == "YES"; then
+if test "$SYSTEM_JPEG" = "YES"; then
     SYSTEM_LIBJPEG=YES
     AC_MSG_RESULT([yes])
 else
