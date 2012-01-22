@@ -12,6 +12,7 @@ BUILD_TYPE="LibO"
 SCPDEFS=""
 GIT_REPO_NAMES=""
 MINGW_EXTERNAL_DLLS=""
+LO_PATH= # used by path_munge to construct a PATH variable
 
 PathFormat()
 {
@@ -47,10 +48,6 @@ WinPath()
         formatted_path=`cygpath -d "$formatted_path"`
     fi
 }
-
-if test -n "$SOLARENV" ; then
-    AC_MSG_ERROR([You have sourced Env.Host.sh in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
-fi
 
 echo "********************************************************************"
 echo "*"
@@ -1941,11 +1938,19 @@ AC_PROG_EGREP
 
 pathmunge ()
 {
-    if ! echo HOST_PATH | $EGREP -q "(^|:)$1($|:)" ; then
-        if test "$2" = "after" ; then
-            HOST_PATH="$HOST_PATH:$1"
+    if test -n "$1" ; then
+        if test "$build_os" = "cygwin" ; then
+            WinPath "$1"
+            new_path=`cygpath -u "$formatted_path"`
         else
-            HOST_PATH="$1:$HOST_PATH"
+            new_path="$1"
+        fi
+        if ! echo LO_PATH | $EGREP -q "(^|:)$1($|:)" ; then
+            if test "$2" = "after" ; then
+                LO_PATH="$LO_PATH:$1"
+            else
+                LO_PATH="$1:$LO_PATH"
+            fi
         fi
     fi
 }
@@ -2651,7 +2656,6 @@ fi
 AC_SUBST(COMEX)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
-AC_SUBST(MSPDB_PATH)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
 #
@@ -3081,7 +3085,7 @@ m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
 if test "$cross_compiling" = "yes"; then
     AC_MSG_CHECKING([for BUILD platform configuration])
     echo
-    rm -rf CONF-FOR-BUILD Env.Build.sh
+    rm -rf CONF-FOR-BUILD config_build.mk
     mkdir CONF-FOR-BUILD
     tar cf - \
         bin/repo-list.in \
@@ -3120,13 +3124,10 @@ if test "$cross_compiling" = "yes"; then
         --without-doxygen \
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
-    test -f ./Env.Host.sh 2>/dev/null || exit
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
-    sed -e 's/config_host.mk/config_build.mk/' <Env.Host.sh >../Env.Build.sh
     cp config.log ../config.Build.log
     . ./config_host.mk
-    . ./Env.Host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
         VV='$'$V
@@ -3137,7 +3138,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in OUTDIR PATH SOLARINC SOLARLIB WORKDIR; do
+    for V in OUTDIR LO_PATH SOLARINC SOLARLIB WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
@@ -3149,8 +3150,6 @@ if test "$cross_compiling" = "yes"; then
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
-    test -f Env.Build.sh || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
-    perl -pi -e 's,/CONF-FOR-BUILD,,g' Env.Build.sh
     perl -pi -e 's,/CONF-FOR-BUILD,,g' config_build.mk
     eval `cat CONF-FOR-BUILD/build-config`
     AC_MSG_RESULT([checking for BUILD platform configuration... done])
@@ -3498,7 +3497,6 @@ make_warning=
 if test "z$_make_ver_check" = "z"; then
    STALE_MAKE=TRUE
 fi
-AC_SUBST(STALE_MAKE)
 
 HAVE_LD_HASH_STYLE=FALSE
 WITH_LINKER_HASH_STYLE=
@@ -3734,9 +3732,6 @@ if test "$build_os" = "cygwin"; then
     PathFormat "$CSC_PATH"
     CSC_PATH="$formatted_path"
 
-    AC_SUBST(MIDL_PATH)
-    AC_SUBST(CSC_PATH)
-    AC_SUBST(DOTNET_FRAMEWORK_HOME)
 fi
 
 dnl ===================================================================
@@ -7349,8 +7344,8 @@ fi
 if test "$XLIB" != "no_x_libraries" -a "$XLIB" != "/usr/lib" -a "$XLIB" != "/usr/lib64" ; then
     SOLARLIB="$SOLARLIB -L$XLIB"
 fi
-if test "$XiNC" != "no_x_include" -a "$XINC" != "/usr/include" ; then
-    SOLARLIB="$SOLARLIB -I$XINC"
+if test "$XINC" != "no_x_includes" -a "$XINC" != "/usr/include" ; then
+    SOLARINC="$SOLARINC -I$XINC"
 fi
 AC_SUBST(XLIB)
 
@@ -7746,7 +7741,9 @@ the  Windows SDK are installed.])
     fi
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
-    SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
+    if test "$build_os" = "cygwin"; then
+        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
+    fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
 
@@ -7945,13 +7942,12 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
             ML_EXE="$assembler"
         fi
     fi
+    FormatPath "$with_asm_home"
+    ASM_HOME="$formatted_path"
 else
-    with_asm_home="NO_ASM_HOME"
+    ASM_HOME=""
 fi
 
-FormatPath "$with_asm_home"
-ASM_HOME="$formatted_path"
-AC_SUBST(ASM_HOME)
 AC_SUBST(ML_EXE)
 
 dnl ===================================================================
@@ -10803,6 +10799,61 @@ else
         TEMP_DIRECTORY="/tmp"
     fi
 fi
+AC_SUBST(TEMP_DIRECTORY)
+AC_SUBST(TMP_DIRECTORY)
+
+# setup the PATH for the environment
+LO_PATH="$PATH"
+
+case "$host_os" in
+
+aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
+    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        pathmunge "$JAVA_HOME/bin" "after"
+    fi
+    ;;
+
+cygwin*)
+    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        pathmunge "$DOTNET_FRAMEWORK_HOME" "before"
+        pathmunge "$ASM_HOME" "before"
+        pathmunge "$WINDOWS_SDK_HOME" "before"
+        pathmunge "$CSC_PATH" "before"
+        pathmunge "$MIDL_PATH" "before"
+        pathmunge "$MSPDB_PATH" "before"
+        if test "$CL_X64"="TRUE" ; then
+            pathmunge "$COMPATH/bin/amd64" "before"
+        else
+            pathmunge "$COMPATH/bin" "before"
+        fi
+        if test -d "$JAVA_HOME/jre/bin/client" ; then
+            pathmunge "$JAVA_HOME/jre/bin/client" "before"
+        fi
+        if test -d "$JAVA_HOME/jre/bin/hotspot" ; then
+            pathmunge "$JAVA_HOME/jre/bin/hotspot" "before"
+        fi
+        pathmunge "$JAVA_HOME/bin" "before"
+
+    fi
+    ;;
+
+solaris*)
+    pathmunge "/usr/css/bin" "before"
+    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        pathmunge "$JAVA_HOME/bin" "after"
+    fi
+    ;;
+esac
+
+pathmunge "$SRC_ROOT/solenv/$OUTPATH/bin" "before"
+pathmunge "$SRC_ROOT/solenv/bin" "before"
+pathmunge "." "before"
+
+AC_SUBST(LO_PATH)
+if test -z "$LO_PATH_FOR_BUILD" ; then
+    LO_PATH_FOR_BUILD="$SOLARLIB"
+fi
+AC_SUBST(LO_PATH_FOR_BUILD)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
 chmod +x ./config.guess
@@ -10816,28 +10867,78 @@ autoconf post_download.in > post_download
 chmod +x post_download
 
 # Generate a configuration timestamp we can use for deps
-if test -f set_soenv; then
-    mv -f set_soenv set_soenv.last
+if test -f config_host.mk; then
+    mv -f config_host.mk config_host.mk.last
 else
-    echo > set_soenv.last
+    echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list build_env android/qa/sc/local.properties android/qa/desktop/local.properties])
+AC_CONFIG_FILES([config_host.mk ooo.lst bin/repo-list build_env android/qa/sc/local.properties android/qa/desktop/local.properties])
 AC_OUTPUT
 
 # touch the config timestamp file set_soenv.stamp
 if test ! -f set_soenv.stamp; then
     echo > set_soenv.stamp
-elif diff set_soenv set_soenv.last >/dev/null 2>&1; then
+elif diff config_host.mk config_host.mk.last >/dev/null 2>&1; then
     echo "Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > set_soenv.stamp
 fi
 
-dnl Run the set_soenv script to setup the Env.Host.sh script that sets
-dnl environment variables for the build.
-chmod +x set_soenv
 
-. ./config_host.mk && ./set_soenv
+if test "STALE_MAKE"="TRUE" -a "$build_os"="cygwin" ; then
+cat << _EOS
+****************************************************************************
+WARNING:
+Your make version is known to be horribly slow, and hard to debug
+problems with. To get a reasonably functional make please do:
+
+to install a pre-compiled binary make for cygwin
+
+mkdir -p /opt/lo/bin
+cd /opt/lo/bin
+wget http://dev-www.libreoffice.org/bin/cygwin/make
+chmod +x make
+
+to install from source:
+place yourself in a working directory of you choice.
+
+git clone git://anongit.freedesktop.org/libreoffice/contrib/dev-tools
+cd dev-tools/make-3.82-gbuild
+./configure --prefix=/opt/lo
+make
+sudo make install
+
+Then re-run autogen.sh
+
+Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GNUMAKE is not already defined.
+Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
+
+_EOS
+fi
+
+cat << _EOF
+****************************************************************************
+To build, issue:
+$GNUMAKE
+
+To install when the build is finished, issue:
+$GNUMAKE install
+
+If you want to develop LibreOffice, you might prefer:
+$GNUMAKE dev-install
+
+If you want to run the smoketest, issue:
+$GNUMAKE check
+
+ATTENTION: Env.Host.sh and Env.Build.sh are no more.
+The environment is now in config_host.mk and config_build.mk (for cross-compile)
+You do not need to source them, even for partial build.
+In order to have 'build' and 'deliver' alias, source build_env instead.
+(you need to do that only once in a session. this is not impacted by
+ autogen, clean etc...)
+
+_EOF
+
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

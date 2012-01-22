@@ -1,4 +1,4 @@
-#   -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 #   Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -29,14 +29,14 @@
 # speed up if no target need to parse all modules
 gb_SpeedUpTargets_WRAPPEDBUILD:=
 ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/Env.Host.sh,$(MAKECMDGOALS)),)
+ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/config_host.mk,$(MAKECMDGOALS)),)
 gb_SpeedUpTargets_WRAPPEDBUILD:=T
 endif
 endif
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out clean distclean id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/Env.Host.sh,$(MAKECMDGOALS)),)
+ifeq ($(filter-out clean distclean id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/config_host.mk,$(MAKECMDGOALS)),)
 gb_SpeedUpTargets_WRAPPEDBUILD:=T
 endif
 endif

@@ -1,24 +1,24 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#  
+#
 #   Version: MPL 1.1 / GPLv3+ / LGPLv3+
-#  
+#
 #   The contents of this file are subject to the Mozilla Public License Version
 #   1.1 (the "License"); you may not use this file except in compliance with
 #   the License or as specified alternatively below. You may obtain a copy of
 #   the License at http://www.mozilla.org/MPL/
-#  
+#
 #   Software distributed under the License is distributed on an "AS IS" basis,
 #   WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 #   for the specific language governing rights and limitations under the
 #   License.
-#  
+#
 #   Major Contributor(s):
 #   [ Copyright (C) 2011 Bjoern Michaelsen <bjoern.michaelsen@canonical.com> (initial developer) ]
-#  
+#
 #   All Rights Reserved.
-#  
+#
 #   For minor contributions see the git repository.
-#  
+#
 #   Alternatively, the contents of this file may be used under the terms of
 #   either the GNU General Public License Version 3 or later (the "GPLv3+"), or
 #   the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
@@ -117,7 +117,7 @@ build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(I
 	$(call gb_BuildplTarget_command,instsetoo_native,--all)
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
-	source $(SRCDIR)/config_build.mk && source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
+	source $(SRCDIR)/config_build.mk && $(call gb_BuildplTarget_command,$@,--all)
 
 # experimental callcatcher target
 # http://www.skynet.ie/~caolan/Packages/callcatcher.html
@@ -125,16 +125,13 @@ findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
 	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/config_host.mk > $(SRCDIR)/config_host_callcatcher.mk
-	@sed -e s,config_host,config_host_callcatcher,g $(SRCDIR)/Env.Host.sh > $(SRCDIR)/Env.callcatcher.sh
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
 	    source $(SRCDIR)/config_host_callcatcher.mk && \
-	    source $(SRCDIR)/Env.callcatcher.sh && \
 	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
 	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
 	@source $(SRCDIR)/config_host_callcatcher.mk && \
-            source $(SRCDIR)/Env.callcatcher.sh && \
 	    callanalyse \
 		$$WORKDIR/LinkTarget/*/* \
 		*/$$OUTPATH/bin/* \

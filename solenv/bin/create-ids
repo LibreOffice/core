@@ -2,7 +2,7 @@
 
 # create ID file for the whole LibO tree. run it in toplevel dir
 
-. ./config_host.mk && . ./Env.Host.sh
+. ./config_host.mk
 
 # --with-outpath includes projects/$INPATH/inc (also solver/$INPATH/inc)
 if [ "$1" = "--with-outpath" ]; then

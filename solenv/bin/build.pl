@@ -1510,7 +1510,6 @@ sub cancel_build {
     }
     print STDERR "-----------------------------------------------------------------------\n";
     print STDERR "\n";
-    print STDERR "" . $ENV{'OOO_SHELL'} . "\n";
     print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
     print STDERR "source ./build_env\n";
     print STDERR "cd $module\n";

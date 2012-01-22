@@ -61,8 +61,8 @@ fetch:
 	@true
 
 # fixme: can we prevent these exports in the first place?
-$(SRCDIR)/Env.Host.sh: autogen.lastrun configure.in ooo.lst.in set_soenv.in
-	$(if $(filter reconfigure,$(gb_SourceEnvAndRecurse_STAGE)),$(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/Env.Host.sh && exit 2)
+$(SRCDIR)/config_host.mk: autogen.lastrun configure.in ooo.lst.in config_host.mk.in
+	$(if $(filter reconfigure,$(gb_SourceEnvAndRecurse_STAGE)),$(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/config.host.mk && exit 2)
 
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
@@ -110,7 +110,7 @@ docs:
 distro-pack-install:
 	@true
 
-$(SRCDIR)/Env.Host.sh:
+$(SRCDIR)/config_host.mk:
 	@true
 
 clean-host:
