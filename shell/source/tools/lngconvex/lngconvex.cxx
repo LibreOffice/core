@@ -327,7 +327,7 @@ typedef std::map< unsigned short , std::string , std::less< unsigned short > > s
 
 void add_group_entries(
     Config& aConfig,
-    const ByteString& GroupName,
+    const rtl::OString& GroupName,
     Substitutor& Substitutor)
 {
     OSL_ASSERT(aConfig.HasGroup(GroupName));
@@ -338,8 +338,8 @@ void add_group_entries(
 
     for (size_t i = 0; i < key_count; i++)
     {
-        ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
-        ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
+        rtl::OString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
+        rtl::OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
         if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
@@ -352,14 +352,14 @@ void add_group_entries(
                 rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
             Substitutor.add_substitution(
-                GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
-            map[ static_cast<unsigned short>(ltype) ] = std::string( iso_lang.GetBuffer() );
+                GroupName.getStr(), make_winrc_unicode_string(key_value_utf16));
+            map[ static_cast<unsigned short>(ltype) ] = std::string( iso_lang.getStr() );
         }
         else
         {
             if( !map[ ltype ].empty() )
             {
-                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", ltype , map[ ltype ].c_str() , iso_lang.GetBuffer());
+                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", ltype , map[ ltype ].c_str() , iso_lang.getStr());
                 exit( -1 );
             }
         }
