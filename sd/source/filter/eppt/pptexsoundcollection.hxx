@@ -34,7 +34,7 @@
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 
 namespace ppt
@@ -43,17 +43,17 @@ namespace ppt
 class ExSoundEntry
 {
         sal_uInt32              nFileSize;
-        String                  aSoundURL;
+        rtl::OUString           aSoundURL;
 
-        String                  ImplGetName() const;
-        String                  ImplGetExtension() const;
+        rtl::OUString           ImplGetName() const;
+        rtl::OUString           ImplGetExtension() const;
 
     public :
 
-        sal_Bool                IsSameURL( const String& rURL ) const;
+        sal_Bool                IsSameURL(const rtl::OUString& rURL) const;
         sal_uInt32              GetFileSize( ) const { return nFileSize; };
 
-                                ExSoundEntry( const String& rSoundURL );
+                                ExSoundEntry(const rtl::OUString& rSoundURL);
 
         // returns the size of a complete SoundContainer
         sal_uInt32              GetSize( sal_uInt32 nId ) const;
@@ -64,7 +64,7 @@ class ExSoundCollection
 {
     public:
 
-        sal_uInt32              GetId( const String& );
+        sal_uInt32              GetId(const rtl::OUString&);
 
         // returns the size of a complete SoundCollectionContainer
         sal_uInt32              GetSize() const;

@@ -37,9 +37,9 @@
 namespace ppt
 {
 
-ExSoundEntry::ExSoundEntry( const String& rString )
-:   nFileSize( 0 )
-,   aSoundURL( rString )
+ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
+    : nFileSize(0)
+    , aSoundURL(rString)
 {
     try
     {
@@ -55,13 +55,13 @@ ExSoundEntry::ExSoundEntry( const String& rString )
     }
 };
 
-String ExSoundEntry::ImplGetName() const
+rtl::OUString ExSoundEntry::ImplGetName() const
 {
     INetURLObject aTmp( aSoundURL );
     return aTmp.GetName();
 }
 
-String ExSoundEntry::ImplGetExtension() const
+rtl::OUString ExSoundEntry::ImplGetExtension() const
 {
     INetURLObject aTmp( aSoundURL );
     String aExtension( aTmp.GetExtension() );
@@ -70,24 +70,24 @@ String ExSoundEntry::ImplGetExtension() const
     return aExtension;
 }
 
-sal_Bool ExSoundEntry::IsSameURL( const String& rURL ) const
+sal_Bool ExSoundEntry::IsSameURL(const rtl::OUString& rURL) const
 {
     return ( rURL == aSoundURL );
 }
 
 sal_uInt32 ExSoundEntry::GetSize( sal_uInt32 nId ) const
 {
-    String aName( ImplGetName() );
-    String aExtension( ImplGetExtension() );
+    rtl::OUString aName( ImplGetName() );
+    rtl::OUString aExtension( ImplGetExtension() );
 
     sal_uInt32 nSize = 8;                           // SoundContainer Header
-    if ( aName.Len() )                              // String Atom          ( instance 0 - name of sound )
-        nSize += aName.Len() * 2 + 8;
-    if ( aExtension.Len() )                         // String Atom          ( instance 1 - extension of sound )
-        nSize += aExtension.Len() * 2 + 8;
+    if ( !aName.isEmpty() )                         // String Atom          ( instance 0 - name of sound )
+        nSize += aName.getLength() * 2 + 8;
+    if ( !aExtension.isEmpty() )                    // String Atom          ( instance 1 - extension of sound )
+        nSize += aExtension.getLength() * 2 + 8;
 
-    String aId( String::CreateFromInt32( nId ) );   // String Atom          ( instance 2 - reference id )
-    nSize += 2 * aId.Len() + 8;
+    rtl::OUString aId( rtl::OUString::valueOf(static_cast<sal_Int32>(nId)) );   // String Atom          ( instance 2 - reference id )
+    nSize += 2 * aId.getLength() + 8;
 
     nSize += nFileSize + 8;                         // SoundData Atom
 
@@ -104,30 +104,30 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
         // create SoundContainer
         rSt << (sal_uInt32)( ( EPP_Sound << 16 ) | 0xf ) << (sal_uInt32)( GetSize( nId ) - 8 );
 
-        String aSoundName( ImplGetName() );
-        sal_uInt16 i, nSoundNameLen = aSoundName.Len();
+        rtl::OUString aSoundName( ImplGetName() );
+        sal_Int32 i, nSoundNameLen = aSoundName.getLength();
         if ( nSoundNameLen )
         {
             // name of sound ( instance 0 )
             rSt << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nSoundNameLen * 2 );
-            for ( i = 0; i < nSoundNameLen; i++ )
-                rSt << aSoundName.GetChar( i );
+            for ( i = 0; i < nSoundNameLen; ++i )
+                rSt << aSoundName[i];
         }
-        String aExtension( ImplGetExtension() );
-        sal_uInt32 nExtensionLen = aExtension.Len();
+        rtl::OUString aExtension( ImplGetExtension() );
+        sal_Int32 nExtensionLen = aExtension.getLength();
         if ( nExtensionLen )
         {
             // extension of sound ( instance 1 )
             rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 16 ) << (sal_uInt32)( nExtensionLen * 2 );
-            for ( i = 0; i < nExtensionLen; i++ )
-                rSt << aExtension.GetChar( i );
+            for ( i = 0; i < nExtensionLen; ++i )
+                rSt << aExtension[i];
         }
         // id of sound ( instance 2 )
-        String aId( String::CreateFromInt32( nId ) );
-        sal_uInt32 nIdLen = aId.Len();
+        rtl::OUString aId( rtl::OUString::valueOf(static_cast<sal_Int32>(nId) ) );
+        sal_Int32 nIdLen = aId.getLength();
         rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 32 ) << (sal_uInt32)( nIdLen * 2 );
-        for ( i = 0; i < nIdLen; i++ )
-            rSt << aId.GetChar( i );
+        for ( i = 0; i < nIdLen; ++i )
+            rSt << aId[i];
 
         rSt << (sal_uInt32)( EPP_SoundData << 16 ) << (sal_uInt32)( nFileSize );
         sal_uInt32 nBytesLeft = nFileSize;
@@ -152,10 +152,10 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     }
 }
 
-sal_uInt32 ExSoundCollection::GetId( const String& rString )
+sal_uInt32 ExSoundCollection::GetId(const rtl::OUString& rString)
 {
     sal_uInt32 nSoundId = 0;
-    if( rString.Len() )
+    if (!rString.isEmpty())
     {
         const sal_uInt32 nSoundCount = maEntries.size();
         boost::ptr_vector<ExSoundEntry>::const_iterator iter;
