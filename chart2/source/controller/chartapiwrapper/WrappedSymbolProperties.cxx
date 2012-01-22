@@ -380,7 +380,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         if( bMatchesPrefix )
         {
             GraphicObject aGrObj = GraphicObject(
-                ByteString( U2C( aNewGraphicURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ))));
+                rtl::OUStringToOString(aNewGraphicURL.copy( RTL_CONSTASCII_LENGTH(UNO_NAME_GRAPHOBJ_URLPREFIX) ), RTL_TEXTENCODING_ASCII_US));
             aSymbol.Graphic.set( aGrObj.GetGraphic().GetXGraphic());
             xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
         }
