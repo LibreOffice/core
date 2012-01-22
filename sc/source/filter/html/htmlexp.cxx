@@ -876,11 +876,14 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         size_t ListSize = aGraphList.size();
         for ( size_t i = 0; i < ListSize; ++i )
         {
-            pGraphEntry = &aGraphList[ i ];
-            if ( pGraphEntry->bInCell && pGraphEntry->aRange.In( aPos ) )
+            ScHTMLGraphEntry* pE = &aGraphList[ i ];
+            if ( pE->bInCell && pE->aRange.In( aPos ) )
             {
-                if ( pGraphEntry->aRange.aStart == aPos )
+                if ( pE->aRange.aStart == aPos )
+                {
+                    pGraphEntry = pE;
                     break;  // for
+                }
                 else
                     return ;        // ist ein Col/RowSpan, Overlapped
             }
