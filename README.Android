@@ -101,5 +101,3 @@ functions in liblo-bootstrap it calls a named function in that
 This Android-specific native code (the lo-bootstrap library) is for
 now in sal/android, and the Java code in the android "module"
 (subdirectory right here).
-
---Tor Lillqvist <tml@iki.fi>
