@@ -64,6 +64,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -447,15 +448,16 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
 OUString DrawingML::WriteImage( const OUString& rURL )
 {
-    ByteString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+    rtl::OString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-    int index = aURLBS.Search( aURLBegin );
+    using comphelper::string::indexOfL;
+    sal_Int32 index = indexOfL(aURLBS, RTL_CONSTASCII_STRINGPARAM(aURLBegin));
 
-    if ( index != STRING_NOTFOUND ) {
-        DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + sizeof( aURLBegin ) - 1 ));
-        aURLBS.Erase( 0, sizeof( aURLBegin ) - 1 );
-        Graphic aGraphic = GraphicObject( aURLBS ).GetTransformedGraphic ();
+    if ( index != -1 )
+    {
+        DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
+        Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
 
         return WriteImage( aGraphic );
     } else {
