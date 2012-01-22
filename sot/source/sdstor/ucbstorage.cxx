@@ -52,6 +52,8 @@
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
+#include <comphelper/string.hxx>
+
 #include <rtl/digest.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -429,7 +431,7 @@ public:
     String                      m_aURL;         // the full path name to create the content
     String                      m_aContentType;
     String                      m_aOriginalContentType;
-    ByteString                  m_aKey;
+    rtl::OString                m_aKey;
     ::ucbhelper::Content*       m_pContent;     // the content that provides the data
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
     SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
@@ -446,7 +448,7 @@ public:
                                                 // reference is destroyed
     sal_Bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, sal_Bool, const ByteString* pKey=0, sal_Bool bRepair = sal_False, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
+                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, sal_Bool, const rtl::OString* pKey=0, sal_Bool bRepair = sal_False, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
 
     void                        Free();
     sal_Bool                        Init();
@@ -518,7 +520,7 @@ public:
     sal_Bool                        Revert();
     sal_Bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect );
-    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const ByteString* pKey=0 );
+    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const rtl::OString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     sal_Int32                   GetObjectCount();
@@ -642,7 +644,7 @@ sal_Bool UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress  )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, sal_Bool bDirect, const rtl::OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress  )
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( NULL )
@@ -681,7 +683,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
 
             // stream is encrypted and should be decrypted (without setting the key we'll get the raw data)
             sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-            rtlDigestError nErr = rtl_digest_SHA1( pKey->GetBuffer(), pKey->Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            rtlDigestError nErr = rtl_digest_SHA1( pKey->getStr(), pKey->getLength(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
             if ( nErr == rtl_Digest_E_None )
             {
                 sal_uInt8* pBuffer = aBuffer;
@@ -692,12 +694,12 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             }
         }
     }
-    catch ( ContentCreationException& )
+    catch (const ContentCreationException&)
     {
         // content could not be created
         SetError( SVSTREAM_CANNOT_MAKE );
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
@@ -761,7 +763,7 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
             {
                 aResult = m_pContent->openStream();
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
                 // usually means that stream could not be opened
             }
@@ -819,12 +821,12 @@ sal_Bool UCBStorageStream_Impl::Init()
         {
             m_rSource = m_pContent->openStream();
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
             // usually means that stream could not be opened
         }
 
-            if( m_rSource.is() )
+        if( m_rSource.is() )
         {
             m_pStream->Seek( STREAM_SEEK_TO_END );
 
@@ -832,12 +834,12 @@ sal_Bool UCBStorageStream_Impl::Init()
             {
                 m_rSource->skipBytes( m_pStream->Tell() );
             }
-            catch( BufferSizeExceededException& )
+            catch (const BufferSizeExceededException&)
             {
                 // the temporary stream already contain all the data
                 m_bSourceRead = sal_False;
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
                 // something is really wrong
                 m_bSourceRead = sal_False;
@@ -880,14 +882,10 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
                 aResult += m_pStream->Write( aData.getArray(), aReaded );
             } while( aReaded == 32000 );
         }
-#if OSL_DEBUG_LEVEL > 1
-        catch( const Exception & e )
+        catch (const Exception &e)
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#else
-        catch( Exception & )
-        {
-#endif
+            (void)e;
         }
     }
 
@@ -923,14 +921,10 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
             if( aResult < aLength )
                 m_bSourceRead = sal_False;
         }
-#if OSL_DEBUG_LEVEL > 1
         catch( const Exception & e )
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#else
-        catch( Exception & )
-        {
-#endif
+            (void)e;
         }
     }
 
@@ -981,14 +975,10 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
             aResult += m_pStream->Write( (void*)aData.getArray(), aReaded );
             memcpy( pData, aData.getArray(), aReaded );
         }
-#if OSL_DEBUG_LEVEL > 1
-        catch( const Exception & e )
+        catch (const Exception &e)
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#else
-        catch( Exception & )
-        {
-#endif
+            (void)e;
         }
 
         if( aResult < nSize )
@@ -1200,19 +1190,19 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 m_bModified = sal_False;
                 m_bSourceRead = sal_True;
             }
-            catch ( CommandAbortedException& )
+            catch (const CommandAbortedException&)
             {
                 // any command wasn't executed successfully - not specified
                 SetError( ERRCODE_IO_GENERAL );
                 return COMMIT_RESULT_FAILURE;
             }
-            catch ( RuntimeException& )
+            catch (const RuntimeException&)
             {
                 // any other error - not specified
                 SetError( ERRCODE_IO_GENERAL );
                 return COMMIT_RESULT_FAILURE;
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
                 // any other error - not specified
                 SetError( ERRCODE_IO_GENERAL );
@@ -1261,15 +1251,15 @@ sal_Bool UCBStorageStream_Impl::Revert()
         else
             SetError( SVSTREAM_CANNOT_MAKE );
     }
-    catch ( ContentCreationException& )
+    catch (const ContentCreationException&)
     {
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1332,7 +1322,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
@@ -1542,7 +1532,7 @@ sal_Bool UCBStorageStream::SetProperty( const String& rName, const ::com::sun::s
             return sal_True;
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1559,7 +1549,7 @@ sal_Bool UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::u
             return sal_True;
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1843,7 +1833,7 @@ void UCBStorage_Impl::Init()
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
                 DBG_ASSERT( sal_False,
                             "getPropertyValue has thrown an exception! Please let developers know the scenario!" );
@@ -1888,12 +1878,12 @@ void UCBStorage_Impl::CreateContent()
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
     }
-    catch ( ContentCreationException& )
+    catch (const ContentCreationException&)
     {
         // content could not be created
         SetError( SVSTREAM_CANNOT_MAKE );
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         // any other error - not specified
         SetError( SVSTREAM_CANNOT_MAKE );
@@ -1990,34 +1980,34 @@ void UCBStorage_Impl::ReadContent()
             }
         }
     }
-    catch ( const InteractiveIOException& r )
+    catch (const InteractiveIOException& r)
     {
         if ( r.Code != IOErrorCode_NOT_EXISTING )
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( CommandAbortedException& )
+    catch (const CommandAbortedException&)
     {
         // any command wasn't executed successfully - not specified
         if ( !( m_nMode & STREAM_WRITE ) )
             // if the folder was just inserted and not already commited, this is not an error!
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( ResultSetException& )
+    catch (const ResultSetException&)
     {
         // means that the package file is broken
         SetError( ERRCODE_IO_BROKENPACKAGE );
     }
-    catch ( SQLException& )
+    catch (const SQLException&)
     {
         // means that the file can be broken
         SetError( ERRCODE_IO_WRONGFORMAT );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
@@ -2222,17 +2212,17 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
             }
         }
     }
-    catch ( CommandAbortedException& )
+    catch (const CommandAbortedException&)
     {
         // any command wasn't executed successfully - not specified
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
@@ -2346,25 +2336,25 @@ sal_Int16 UCBStorage_Impl::Commit()
                     break;
             }
         }
-        catch ( ContentCreationException& )
+        catch (const ContentCreationException&)
         {
             // content could not be created
             SetError( ERRCODE_IO_NOTEXISTS );
             return COMMIT_RESULT_FAILURE;
         }
-        catch ( CommandAbortedException& )
+        catch (const CommandAbortedException&)
         {
             // any command wasn't executed successfully - not specified
             SetError( ERRCODE_IO_GENERAL );
             return COMMIT_RESULT_FAILURE;
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             // any other error - not specified
             SetError( ERRCODE_IO_GENERAL );
             return COMMIT_RESULT_FAILURE;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
             // any other error - not specified
             SetError( ERRCODE_IO_GENERAL );
@@ -2440,7 +2430,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         }
                     }
                 }
-                catch ( CommandAbortedException& )
+                catch (const CommandAbortedException&)
                 {
                     // how to tell the content : forget all changes ?!
                     // or should we assume that the content does it by itself because he throwed an exception ?!
@@ -2448,7 +2438,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;
                 }
-                catch ( RuntimeException& )
+                catch (const RuntimeException&)
                 {
                     // how to tell the content : forget all changes ?!
                     // or should we assume that the content does it by itself because he throwed an exception ?!
@@ -2456,7 +2446,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;
                 }
-                catch ( const InteractiveIOException& r )
+                catch (const InteractiveIOException& r)
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED || r.Code == IOErrorCode_LOCKING_VIOLATION )
                         SetError( ERRCODE_IO_ACCESSDENIED );
@@ -2471,7 +2461,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                     return COMMIT_RESULT_FAILURE;
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     // how to tell the content : forget all changes ?!
                     // or should we assume that the content does it by itself because he throwed an exception ?!
@@ -2810,7 +2800,7 @@ sal_Bool UCBStorage::Revert()
     return pImp->Revert();
 }
 
-BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
+BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey )
 {
     if( !rEleName.Len() )
         return NULL;
@@ -2856,7 +2846,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             {
                 // check if stream is opened with the same keyword as before
                 // if not, generate a new stream because it could be encrypted vs. decrypted!
-                ByteString aKey;
+                rtl::OString aKey;
                 if ( pKey )
                     aKey = *pKey;
                 if ( pElement->m_xStream->m_aKey == aKey )
@@ -2879,7 +2869,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
+UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey )
 {
     String aName( m_aURL );
     aName += '/';
@@ -3303,11 +3293,10 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
-        ByteString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
-        if ( aTmp.CompareTo( "ContentURL=", 11 ) == COMPARE_EQUAL )
+        rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+        if (comphelper::string::matchL(aTmp, RTL_CONSTASCII_STRINGPARAM("ContentURL=")))
         {
-            aTmp.Erase( 0, 11 );
-            aString = String( aTmp, RTL_TEXTENCODING_UTF8 );
+            aString = rtl::OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -3410,7 +3399,7 @@ sal_Bool UCBStorage::SetProperty( const String& rName, const ::com::sun::star::u
             return sal_True;
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -3427,7 +3416,7 @@ sal_Bool UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::An
             return sal_True;
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -3458,7 +3447,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
                 return sal_True;
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -3480,7 +3469,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
                 return sal_True;
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }

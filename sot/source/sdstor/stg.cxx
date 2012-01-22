@@ -626,7 +626,7 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, sal_Bool b
 // Open a stream
 
 BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, sal_Bool,
-const ByteString*
+const rtl::OString*
 #ifdef DBG_UTIL
 pB
 #endif

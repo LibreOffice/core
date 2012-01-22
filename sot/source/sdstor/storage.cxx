@@ -1219,13 +1219,13 @@ sal_Bool SotStorage::IsOLEStorage( SvStream* pStream )
     return Storage::IsStorageFile( pStream );
 }
 
-void SotStorage::SetKey( const ByteString& rKey )
+void SotStorage::SetKey( const rtl::OString& rKey )
 {
     m_aKey = rKey;
     if ( !IsOLEStorage() )
     {
         sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-        rtlDigestError nError = rtl_digest_SHA1( m_aKey.GetBuffer(), m_aKey.Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+        rtlDigestError nError = rtl_digest_SHA1( m_aKey.getStr(), m_aKey.getLength(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
         if ( nError == rtl_Digest_E_None )
         {
             sal_uInt8* pBuffer = aBuffer;

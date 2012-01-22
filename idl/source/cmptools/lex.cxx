@@ -339,13 +339,13 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
             aBuf.append(static_cast<char>(c));
             c = GetFastNextChar();
         }
-        ByteString aStr = aBuf.makeStringAndClear();
-        if( aStr.EqualsIgnoreCaseAscii( aStrTrue ) )
+        rtl::OString aStr = aBuf.makeStringAndClear();
+        if( aStr.equalsIgnoreAsciiCase( aStrTrue ) )
         {
             rToken.nType = SVTOKEN_BOOL;
             rToken.bBool = sal_True;
         }
-        else if( aStr.EqualsIgnoreCaseAscii( aStrFalse ) )
+        else if( aStr.equalsIgnoreAsciiCase( aStrFalse ) )
         {
             rToken.nType = SVTOKEN_BOOL;
             rToken.bBool = sal_False;

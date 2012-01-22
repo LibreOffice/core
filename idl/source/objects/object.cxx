@@ -471,7 +471,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const ByteString & rShellName,
 
 void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                             SvMetaClassList &rClassList,
-                            const ByteString & rPrefix, SvIdlDataBase& rBase)
+                            const rtl::OString& rPrefix, SvIdlDataBase& rBase)
 {
     // was this class already written?
     for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
@@ -589,7 +589,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     std::vector<sal_uLong> aSuperList;
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
-    InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
+    InsertSlots(aSlotList, aSuperList, classList, rtl::OString(), rBase);
     for ( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {
         SvSlotElement *pEle = aSlotList[ i ];
@@ -703,16 +703,16 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
         aSuperName = GetSuperClass()->GetName().getString();
     const char * pSup = aSuperName.getStr();
 
-    ByteString name = GetSvName();
+    rtl::OString name = GetSvName();
     // GetTypeName
-    rOutStm << "SvGlobalName " << name.GetBuffer() << "::GetTypeName() const" << endl
+    rOutStm << "SvGlobalName " << name.getStr() << "::GetTypeName() const" << endl
     << '{' << endl
     << "\treturn ClassName();" << endl
     << '}' << endl;
 
     SvMetaModule * pMod = GetModule();
     // FillTypeLibInfo
-    rOutStm << "sal_Bool " << name.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
+    rOutStm << "sal_Bool " << name.getStr() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
     << "\t                               sal_uInt16 * pMajor," << endl
     << "\t                               sal_uInt16 * pMinor ) const" << endl
     << '{' << endl
@@ -728,7 +728,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << '}' << endl;
 
     // FillTypeLibInfo
-    rOutStm << "sal_Bool " << name.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
+    rOutStm << "sal_Bool " << name.getStr() << "::FillTypeLibInfo( ByteString * pName,"
     << "\t                               sal_uInt16 * pMajor," << endl
     << "\t                               sal_uInt16 * pMinor ) const" << endl;
     rOutStm << '{' << endl
@@ -742,7 +742,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\treturn sal_True;" << endl
     << '}' << endl;
 
-    rOutStm << "void " << name.GetBuffer() << "::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )" << endl
+    rOutStm << "void " << name.getStr() << "::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )" << endl
     << '{' << endl
     << "\t" << pSup << "::Notify( rBC, rHint );" << endl
     << '}' << endl;

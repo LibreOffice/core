@@ -124,7 +124,7 @@ friend class ::binfilter::SvStorage;
     String      m_aName;      // Name des Storage
     sal_Bool        m_bIsRoot:1,  // z.B.: File-Storage
                 m_bDelStm:1;
-    ByteString  m_aKey;           // aKey.Len != 0  -> Verschluesselung
+    rtl::OString m_aKey;           // aKey.Len != 0  -> Verschluesselung
     long        m_nVersion;
 
 protected:
@@ -155,8 +155,8 @@ public:
 
     virtual sal_Bool        Validate();
 
-    void                SetKey( const ByteString& rKey );
-    const ByteString &  GetKey() const { return m_aKey; }
+    void                SetKey( const rtl::OString& rKey );
+    const rtl::OString& GetKey() const { return m_aKey; }
 
     void                SetVersion( long nVers )
                         {

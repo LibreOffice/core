@@ -102,7 +102,7 @@ class SvMetaClass : public SvMetaType
 
     void                InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                                     SvMetaClassList & rClassList,
-                                    const ByteString & rPrefix, SvIdlDataBase& rBase );
+                                    const rtl::OString& rPrefix, SvIdlDataBase& rBase );
 
 protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
