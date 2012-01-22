@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_corba_corba_idl__
+#define __com_sun_star_corba_corba_idl__
+
 module com { module sun { module star { module corba
 {
     /**
@@ -102,5 +105,7 @@ module com { module sun { module star { module corba
     };
 
 }; }; }; };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
