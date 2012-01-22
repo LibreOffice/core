@@ -1,20 +1,16 @@
 Cross-compiling LibreOffice
 ===========================
 
-Notes on cross-compiling LibreOffice, originally written by Tor
-Lillqvist <tlillqvist@suse.com> <tml@iki.fi> in May, 2011, for later
-history see git log.
-
-My cross-compilation experimentation is going on for four platforms:
-Windows, iOS, Android and PowerPC Mac OS X. I work on the master
-branch of LibreOffice. Some other people have talked about setting up
-a separate branch for Android work, or even separate clones at
-github. I am not interested in that.
+The cross-compilation experimentation is going on for four platforms:
+Windows, iOS, Android and PowerPC Mac OS X. It happens in the master
+branch of LibreOffice. Some people have talked about setting up a
+separate branch for Android work, or even separate clones at github,
+but that is not necessary.
 
 Cross-compilation of LibreOffice completely is not possible yet. Much
 work has been done, "baby steps" for some platforms, much more for
 others, but a lot remains. For iOS and Android this work is highly
-experimental, originally done in my spare time just for the hacking
+experimental, originally done in spare time just for the hacking
 pleasure. No promise, explicit or implied, is given that it will ever
 be finished.
 
@@ -64,27 +60,27 @@ Windows
 -------
 
 There is some support in LibreOffice already (from OpenOffice.org) for
-building it locally on Windows with the GNU tool-chain (MinGW). But as
-far as I know, that work has never attempted cross-compilation.
+building it locally on Windows with the GNU tool-chain
+(MinGW). Apparently, that work has never attempted cross-compilation.
 
 This OOo-originated MinGW support attempts to support both running
 Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler. The
 -mno-cygwin mechanism in the Cygwin gcc is rapidly being obsoleted, if
-it isn't already, and I have not attempted to try to keep it working;
-in fact I have activly cleaned out mechanisms related to this. Ditto
+it isn't already, and we have not attempted to try to keep it working;
+in fact we have activly cleaned out mechanisms related to this. Ditto
 for native MinGW. If one compiles natively on Windows, just use
 Microsoft's compiler. OOo/LO has been built for Windows all the time
 using that.
 
-In my opinion, the only case where it makes sense to use MinGW is for
+The only case where it makes sense to use MinGW is for
 cross-compilation. There is just too much crack on Windows anyway, and
 it is a semi-miracle (well, make that the result of years of work)
 that the MSVC build under Cygwin works as nicely as it does.
 
 MinGW is available as cross-build toolchains pre-packaged in more or
-less official packages for many Linux distros including Debian, Fedora,
-openSUSE and SLE. Personally I use the mingw32 packages in the Open
-Build Service, running on openSUSE:
+less official packages for many Linux distros including Debian,
+Fedora, openSUSE and SLE. For instance the mingw32 packages in the
+Open Build Service, running on openSUSE:
 
 http://download.opensuse.org/repositories/windows:/mingw:/win32/
 
@@ -119,8 +115,8 @@ that's likely to be fixed in the openSUSE project.
 
 It is somewhat unclear how well thought-out the conditionals and code
 for MinGW inside the OOo-originated code in LibreOffice actually
-are. What I have noticed of it seems a bit randomish, with
-copy-pasting having been preferred to factoring out differences.
+are. It often seems a bit randomish, with copy-pasting having been
+preferred to factoring out differences.
 
 Most of the configuration settings are maintained in the
 distro-configs/LibreOfficeMinGW.conf file, so in your autogen.lastrun,
@@ -239,7 +235,7 @@ TODO:
   - much of the stuff currently relies on --with-system-*, and
     consequently on the mingw32-* openSUSE packages; might be good to be
     able to build with as few dependencies as possible - but that is low
-    prio I think
+    prio
 
 - profiling
   - when all the above is sorted out, we should look at the speed of
@@ -273,9 +269,9 @@ how UNO is implemented and used. None of that has been spared much
 thought yet.
 
 The Apple tool-chain for iOS cross-building is available only for
-Mac OS X, so that is where I have been doing it.
+Mac OS X.
 
-Here is my autogen.lastrun for iOS (device):
+Here is an autogen.lastrun for iOS (device):
 CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++ -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
@@ -316,13 +312,13 @@ handling.
 
 As for the GUI, the same holds as said above for iOS.
 
-I have done my Android cross-compilation work on Linux (openSUSE in
+Android cross-compilation work has been done on Linux (openSUSE in
 particular) and Mac OS X. The Android cross-buld tool-chain (the
 "Native Development Kit", or NDK) is available for Linux, Mac OS X and
 Windows. (Trying to cross-compile from Windows will probably drive you
 insane.)
 
-Here is my autogen.lastrun for Android, when cross-compiling from Mac OS X:
+Here is an autogen.lastrun for Android, when cross-compiling from Mac OS X:
 
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
@@ -338,7 +334,7 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --without-myspell-dicts
 --with-java
 
-And here is my autogen.lastrun for Android when cross-compiling from Linux:
+And here is an autogen.lastrun for Android when cross-compiling from Linux:
 
 CC_FOR_BUILD=ccache gcc
 CXX_FOR_BUILD=ccache g++
@@ -355,10 +351,10 @@ CXX_FOR_BUILD=ccache g++
 
 There is no interactive end-user "app" you could run yet that would
 use LibreOffice code, but you can build some non-interactive unit
-tests and run them on the emulator (or, presumably,
-on a device, although I haven't tested that as I don't have any
-Android device...)  The simple unit tests will succeed, the complex
-one still fails. 
+tests and run them on the emulator (or, presumably, on a device,
+although that hasn't been tested as nobody with an actual Android
+device has worked on it yet...)  The simple unit tests will succeed,
+the complex one still fails.
 
 These unit tests *are* proper "apps" from Android'd point of view, but
 they don't have any GUI and thus don't take part in the normal Android
@@ -399,8 +395,8 @@ PowerPC Mac OS X
 Cross-compiling for PowerPC Mac OS X from Intel Mac OS X will probably
 be easy. The APIs available should after all be closely identical to
 those on Intel Mac OS X, and LibreOffice builds fine natively on
-PowerPC Mac already. I have just started experimenting with it. My
-autogen.lastrun looks like this:
+PowerPC Mac already. Only a little experimenting has been done with
+it. An autogen.lastrun looks like this:
 
 CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
 CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc
@@ -411,11 +407,3 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --disable-mozilla
 --disable-build-mozilla
 --with-external-tar=/Volumes/ooo/git/master/src
-
-
-
-That's all, thank you, and have a nice day. People with commit access,
-feel free to edit this document, and add yourself below. Sorry for
-writing now initially from such a personal point of view.
-
---Tor Lillqvist <tlillqvist@suse.com>, <tml@iki.fi>
