@@ -137,7 +137,7 @@ const sal_uInt16 nNewStandardFlagVersionId = 0x4653;    // "SF"
 
 void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz )
 {
-    for (sal_uInt16 i = 0; i < nAnz; i++)
+    for (sal_uInt16 i = 0; i < nAnz; ++i)
     {
         sStrArray[i]  = rNumFor.sStrArray[i];
         nTypeArray[i] = rNumFor.nTypeArray[i];
@@ -348,8 +348,6 @@ ImpSvNumFor::ImpSvNumFor()
 
 ImpSvNumFor::~ImpSvNumFor()
 {
-    for (sal_uInt16 i = 0; i < nAnzStrings; i++)
-        aI.sStrArray[i].Erase();
     delete [] aI.sStrArray;
     delete [] aI.nTypeArray;
 }
@@ -358,10 +356,8 @@ void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
 {
     if ( nAnzStrings != nAnz )
     {
-        if ( aI.nTypeArray )
-            delete [] aI.nTypeArray;
-        if ( aI.sStrArray )
-            delete [] aI.sStrArray;
+        delete [] aI.nTypeArray;
+        delete [] aI.sStrArray;
         nAnzStrings = nAnz;
         if ( nAnz )
         {
