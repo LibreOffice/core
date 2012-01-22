@@ -167,6 +167,7 @@ void PageObjectPainter::PaintPageObject (
 
 void PageObjectPainter::NotifyResize (const bool bForce)
 {
+    mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     if (bForce || ! mpPageObjectLayouter)
         InvalidateBitmaps();
     else
