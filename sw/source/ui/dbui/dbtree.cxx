@@ -57,6 +57,8 @@
 
 #include <unomid.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -73,9 +75,7 @@ struct SwConnectionData
     Reference<XConnection>  xConnection;
 };
 
-typedef SwConnectionData* SwConnectionDataPtr;
-SV_DECL_PTRARR_DEL( SwConnectionArr, SwConnectionDataPtr, 32 )
-SV_IMPL_PTRARR( SwConnectionArr, SwConnectionDataPtr )
+typedef boost::ptr_vector<SwConnectionData> SwConnectionArr;
 
 class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 {
@@ -125,12 +125,11 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
     SolarMutexGuard aGuard;
     ::rtl::OUString sSource;
     rEvent.Accessor >>= sSource;
-    for(sal_uInt16 i = 0; i < aConnections.Count(); i++)
+    for(SwConnectionArr::iterator i = aConnections.begin(); i != aConnections.end(); ++i)
     {
-        SwConnectionDataPtr pPtr = aConnections[i];
-        if(pPtr->sSourceName == sSource)
+        if(i->sSourceName == sSource)
         {
-            aConnections.DeleteAndDestroy(i);
+            aConnections.erase(i);
             break;
         }
     }
@@ -167,22 +166,21 @@ sal_Bool SwDBTreeList_Impl::HasContext()
 
 Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rSourceName)
 {
-    Reference<XConnection>  xRet;
-    for(sal_uInt16 i = 0; i < aConnections.Count(); i++)
+    Reference<XConnection> xRet;
+    for(SwConnectionArr::const_iterator i = aConnections.begin(); i != aConnections.end(); ++i)
     {
-        SwConnectionDataPtr pPtr = aConnections[i];
-        if(pPtr->sSourceName == rSourceName)
+        if(i->sSourceName == rSourceName)
         {
-            xRet = pPtr->xConnection;
+            xRet = i->xConnection;
             break;
         }
     }
     if(!xRet.is() && xDBContext.is() && pWrtSh)
     {
-        SwConnectionDataPtr pPtr = new SwConnectionData();
+        SwConnectionData* pPtr = new SwConnectionData();
         pPtr->sSourceName = rSourceName;
         xRet = pWrtSh->GetNewDBMgr()->RegisterConnection(pPtr->sSourceName);
-        aConnections.Insert(pPtr, aConnections.Count());
+        aConnections.push_back(pPtr);
     }
     return xRet;
 }
