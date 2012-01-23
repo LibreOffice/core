@@ -98,8 +98,19 @@ Bootstrap const & get_unorc() SAL_THROW( () )
     static rtlBootstrapHandle s_bstrap = 0;
     if (! s_bstrap)
     {
+#ifdef ANDROID
+        // Wouldn't it be lovely to avoid this fugly hard-coding.
+        // The problem is that the 'create_boostrap_macro_expander_factory()'
+        // required for bootstrapping services, calls cppu::get_unorc directly
+        // instead of re-using the BoostrapHandle from:
+        //     defaultBootstrap_InitialComponentContext
+        // and since rtlBootstrapHandle is not ref-counted doing anything
+        // clean here is hardish.
+        OUString iniName( RTL_CONSTASCII_USTRINGPARAM( "file:///assets/program/unorc" ) );
+#else
         OUString iniName(
             get_this_libpath() + OUSTR("/" SAL_CONFIGFILE("uno")) );
+#endif
         rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
 
         ClearableMutexGuard guard( Mutex::getGlobalMutex() );
