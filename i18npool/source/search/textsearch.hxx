@@ -101,6 +101,7 @@ class TextSearch: public cppu::WeakImplHelper2
         RESrchBkwrd( const ::rtl::OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
+    void RESrchPrepare( const ::com::sun::star::util::SearchOptions&);
 
     // Members and methods for the "Weight Levenshtein-Distance" search
     int nLimit;

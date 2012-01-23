@@ -176,27 +176,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         case SearchAlgorithms_REGEXP:
             fnForward = &TextSearch::RESrchFrwrd;
             fnBackward = &TextSearch::RESrchBkwrd;
-
-            {
-            sal_uInt32 nIcuSearchFlags = 0;
-            // map com::sun::star::util::SearchFlags to ICU uregex.h flags
-            // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
-            // REG_NEWLINE is neither defined properly nor used anywhere => not implemented
-            // REG_NOSUB is not used anywhere => not implemented
-            // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
-            // LEV_RELAXED is only used for SearchAlgorithm==Approximate
-            // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
-            if( (aSrchPara.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
-                nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
-            UErrorCode nIcuErr = U_ZERO_ERROR;
-            // assumption: transliteration doesn't mangle regexp control chars
-            OUString& rPatternStr = (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
-                    : ((aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : aSrchPara.searchString);
-            const IcuUniString aIcuSearchPatStr( rPatternStr.getStr(), rPatternStr.getLength());
-            pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
-            if( nIcuErr)
-                { delete pRegexMatcher; pRegexMatcher = NULL;}
-            } break;
+            RESrchPrepare( aSrchPara);
+            break;
 
         case SearchAlgorithms_APPROXIMATE:
             fnForward = &TextSearch::ApproxSrchFrwrd;
@@ -718,6 +699,41 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
         nCmpIdx -= nSuchIdx;
     }
     return aRet;
+}
+
+void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOptions)
+{
+    // select the transliterated pattern string
+    const OUString& rPatternStr =
+        (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
+        : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
+
+    sal_uInt32 nIcuSearchFlags = 0;
+    // map com::sun::star::util::SearchFlags to ICU uregex.h flags
+    // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
+    // REG_NEWLINE is neither properly defined nor used anywhere => not implemented
+    // REG_NOSUB is not used anywhere => not implemented
+    // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
+    // LEV_RELAXED is only used for SearchAlgorithm==Approximate
+    // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
+    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
+        nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    // assumption: transliteration didn't mangle regexp control chars
+    IcuUniString aIcuSearchPatStr( rPatternStr.getStr(), rPatternStr.getLength());
+#if 1
+    // for conveniance specific syntax elements of the old regex engine are emulated
+    // by using regular word boundary matching \b to replace \< and \>
+    static const IcuUniString aChevronPattern( "\\<|\\>", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronReplace( "\\b", -1, IcuUniString::kInvariant);
+    static RegexMatcher aChevronMatcher( aChevronPattern, 0, nIcuErr);
+    aChevronMatcher.reset( aIcuSearchPatStr);
+    aIcuSearchPatStr = aChevronMatcher.replaceAll( aChevronReplace, nIcuErr);
+    aChevronMatcher.reset();
+#endif
+    pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
+    if( nIcuErr)
+        { delete pRegexMatcher; pRegexMatcher = NULL;}
 }
 
 //---------------------------------------------------------------------------
