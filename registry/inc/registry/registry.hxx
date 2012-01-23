@@ -1233,7 +1233,7 @@ inline RegError Registry::close()
 inline RegError Registry::destroy(const ::rtl::OUString& registryName)
     {
         RegError ret = m_pApi->destroyRegistry(m_hImpl, registryName.pData);
-        if ( !ret && (registryName.getLength() == 0) )
+        if ( !ret && registryName.isEmpty() )
             m_hImpl = NULL;
         return ret;
     }

@@ -89,7 +89,7 @@ namespace COMPMOD_NAMESPACE
         // note that this method is not threadsafe, which counts for the whole class !
         if (!m_pRessources && !m_bInitialized)
         {
-            DBG_ASSERT(m_sFilePrefix.getLength(), "OModuleImpl::getResManager: no resource file prefix!");
+            DBG_ASSERT(!m_sFilePrefix.isEmpty(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
             m_pRessources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
             DBG_ASSERT(m_pRessources,
@@ -241,7 +241,7 @@ namespace COMPMOD_NAMESPACE
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
         OSL_ENSURE(_rxServiceManager.is(), "OModule::getComponentFactory : invalid argument (service manager) !");
-        OSL_ENSURE(_rImplementationName.getLength(), "OModule::getComponentFactory : invalid argument (implementation name) !");
+        OSL_ENSURE(!_rImplementationName.isEmpty(), "OModule::getComponentFactory : invalid argument (implementation name) !");
 
         if (!s_pImplementationNames)
         {

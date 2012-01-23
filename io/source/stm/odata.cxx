@@ -1366,7 +1366,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
     sal_Bool bLoadSuccesfull = sal_True;
     if( nId )
     {
-        if( aName.getLength() )
+        if( !aName.isEmpty() )
         {
             // load the object
             Reference< XInterface > x = m_rSMgr->createInstanceWithContext( aName, m_rCxt );

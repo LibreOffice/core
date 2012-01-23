@@ -104,7 +104,7 @@ namespace connectivity
             m_Writable(_aWritable),
             m_DefinitelyWritable(_aDefinitelyWritable)
         {
-            if(!m_ColumnLabel.getLength())
+            if(m_ColumnLabel.isEmpty())
                 m_ColumnLabel = _aColumnName;
         }
 

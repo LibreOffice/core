@@ -175,7 +175,7 @@ namespace connectivity
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
         inline const ::com::sun::star::sdbc::SQLException&   getErrors() const { return m_aErrors; }
-        inline bool hasErrors() const { return m_aErrors.Message.getLength() > 0; }
+        inline bool hasErrors() const { return !m_aErrors.Message.isEmpty(); }
 
         // statement type (already set in setParseTree):
         OSQLStatementType getStatementType() const { return m_eStatementType; }

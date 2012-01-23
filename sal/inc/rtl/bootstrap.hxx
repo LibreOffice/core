@@ -191,7 +191,7 @@ namespace rtl
 
     inline Bootstrap::Bootstrap(const OUString & iniName)
     {
-        if(iniName.getLength())
+        if(!iniName.isEmpty())
             _handle = rtl_bootstrap_args_open(iniName.pData);
 
         else
