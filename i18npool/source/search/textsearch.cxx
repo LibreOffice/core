@@ -708,7 +708,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
         (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
         : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
 
-    sal_uInt32 nIcuSearchFlags = 0;
+    sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capbility
     // map com::sun::star::util::SearchFlags to ICU uregex.h flags
     // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
     // REG_NEWLINE is neither properly defined nor used anywhere => not implemented
