@@ -330,6 +330,7 @@ public:
         ScDocument* mpDoc;
     public:
         DBCaches(ScDocument* pDoc);
+        bool hasCache(sal_Int32 nSdbType, const rtl::OUString& rDBName, const rtl::OUString& rCommand) const;
         const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
         size_t size() const;
 
@@ -385,6 +386,12 @@ public:
 private:
     /** Only to be called from ScDPCache::RemoveReference(). */
     void RemoveCache(const ScDPCache* pCache);
+
+    void GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const;
+    void GetAllTables(const rtl::OUString& rSrcName, std::set<ScDPObject*>& rRefs) const;
+    void GetAllTables(
+        sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+        std::set<ScDPObject*>& rRefs) const;
 
 private:
     typedef ::boost::ptr_vector<ScDPObject> TablesType;
