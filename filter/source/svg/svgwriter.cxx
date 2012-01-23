@@ -1890,7 +1890,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
 
-                    if( pA->GetText().Len() )
+                    if (!pA->GetText().isEmpty())
                     {
                         Font    aFont( mpVDev->GetFont() );
                         Size    aSz;

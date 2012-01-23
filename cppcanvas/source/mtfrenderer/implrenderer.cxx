@@ -2548,7 +2548,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
                             NULL,
                             rFactoryParms,
                             bSubsettableActions );
@@ -2567,7 +2567,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
                             pAct->GetDXArray(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2643,7 +2643,7 @@ namespace cppcanvas
                             convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
                         const sal_uInt16 nLen( pAct->GetLen() == (sal_uInt16)STRING_LEN ?
-                                           pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen() );
+                                           pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen() );
 
                         // #i70897# Nothing to do, actually...
                         if( nLen == 0 )
@@ -2678,7 +2678,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
                             pDXArray.get(),
                             rFactoryParms,
                             bSubsettableActions );

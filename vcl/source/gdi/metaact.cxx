@@ -1203,7 +1203,7 @@ IMPL_META_ACTION( Text, META_TEXT_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaTextAction::MetaTextAction( const Point& rPt, const XubString& rStr,
+MetaTextAction::MetaTextAction( const Point& rPt, const rtl::OUString& rStr,
                                 sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_TEXT_ACTION ),
     maPt        ( rPt ),
@@ -1263,11 +1263,11 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnIndex;
     rOStm   << mnLen;
 
-    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
     rOStm << nLen;
-    for ( i = 0; i < nLen; i++ )
+    for (sal_uInt16 i = 0; i < nLen; ++i )
     {
-        sal_Unicode nUni = maStr.GetChar( i );
+        sal_Unicode nUni = maStr[i];
         rOStm << nUni;
     }
 }
@@ -1284,11 +1284,16 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         rIStm >> nLen;
-        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        rtl::OUStringBuffer aBuffer(nLen);
         while ( nLen-- )
-            rIStm >> *pBuffer++;
+        {
+            sal_uInt16 nChar;
+            rIStm >> nChar;
+            aBuffer.append(nChar);
+        }
+        maStr = aBuffer.makeStringAndClear();
     }
 }
 
@@ -1325,7 +1330,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 // ------------------------------------------------------------------------
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
-                                          const XubString& rStr,
+                                          const rtl::OUString& rStr,
                                           const sal_Int32* pDXAry,
                                           sal_uInt16 nIndex,
                                           sal_uInt16 nLen ) :
@@ -1333,7 +1338,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     maStartPt   ( rStartPt ),
     maStr       ( rStr ),
     mnIndex     ( nIndex ),
-    mnLen       ( ( nLen == STRING_LEN ) ? rStr.Len() : nLen )
+    mnLen       ( ( nLen == STRING_LEN ) ? rStr.getLength() : nLen )
 {
     const sal_uLong nAryLen = pDXAry ? mnLen : 0;
 
@@ -1416,11 +1421,11 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     for( sal_uLong i = 0UL; i < nAryLen; i++ )
         rOStm << mpDXAry[ i ];
 
-    sal_uInt16 j, nLen = maStr.Len();                           // version 2
+    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
     rOStm << nLen;
-    for ( j = 0; j < nLen; j++ )
+    for (sal_uInt16 j = 0; j < nLen; ++j )
     {
-        sal_Unicode nUni = maStr.GetChar( j );
+        sal_Unicode nUni = maStr[j];
         rOStm << nUni;
     }
 }
@@ -1440,7 +1445,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
 
-    if ( mnIndex + mnLen > maStr.Len() )
+    if ( mnIndex + mnLen > maStr.getLength() )
     {
         mnIndex = 0;
         mpDXAry = 0;
@@ -1475,13 +1480,18 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         rIStm >> nLen;
-        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        rtl::OUStringBuffer aBuffer(nLen);
         while ( nLen-- )
-            rIStm >> *pBuffer++;
+        {
+            sal_uInt16 nChar;
+            rIStm >> nChar;
+            aBuffer.append(nChar);
+        }
+        maStr = aBuffer.makeStringAndClear();
 
-        if ( mnIndex + mnLen > maStr.Len() )
+        if ( mnIndex + mnLen > maStr.getLength() )
         {
             mnIndex = 0;
             delete[] mpDXAry, mpDXAry = NULL;
@@ -1496,7 +1506,7 @@ IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
-                                              const XubString& rStr,
+                                              const rtl::OUString& rStr,
                                               sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_STRETCHTEXT_ACTION ),
     maPt        ( rPt ),
@@ -1560,11 +1570,11 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnIndex;
     rOStm   << mnLen;
 
-    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
     rOStm << nLen;
-    for ( i = 0; i < nLen; i++ )
+    for ( sal_uInt16 i = 0; i < nLen; ++i )
     {
-        sal_Unicode nUni = maStr.GetChar( i );
+        sal_Unicode nUni = maStr[i];
         rOStm << nUni;
     }
 }
@@ -1582,11 +1592,16 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         rIStm >> nLen;
-        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        rtl::OUStringBuffer aBuffer(nLen);
         while ( nLen-- )
-            rIStm >> *pBuffer++;
+        {
+            sal_uInt16 nChar;
+            rIStm >> nChar;
+            aBuffer.append(nChar);
+        }
+        maStr = aBuffer.makeStringAndClear();
     }
 }
 
@@ -1597,7 +1612,7 @@ IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
-                                        const XubString& rStr, sal_uInt16 nStyle ) :
+                                        const rtl::OUString& rStr, sal_uInt16 nStyle ) :
     MetaAction  ( META_TEXTRECT_ACTION ),
     maRect      ( rRect ),
     maStr       ( rStr ),
@@ -1653,11 +1668,11 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnStyle;
 
-    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
     rOStm << nLen;
-    for ( i = 0; i < nLen; i++ )
+    for (sal_uInt16 i = 0; i < nLen; ++i)
     {
-        sal_Unicode nUni = maStr.GetChar( i );
+        sal_Unicode nUni = maStr[i];
         rOStm << nUni;
     }
 }
@@ -1673,11 +1688,16 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         rIStm >> nLen;
-        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        rtl::OUStringBuffer aBuffer(nLen);
         while ( nLen-- )
-            rIStm >> *pBuffer++;
+        {
+            sal_uInt16 nChar;
+            rIStm >> nChar;
+            aBuffer.append(nChar);
+        }
+        maStr = aBuffer.makeStringAndClear();
     }
 }
 

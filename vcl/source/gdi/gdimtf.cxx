@@ -2811,14 +2811,14 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
             }
             break;
 
-            case( META_TEXT_ACTION ): nSizeBytes += ( ( (MetaTextAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
-            case( META_STRETCHTEXT_ACTION ): nSizeBytes += ( ( (MetaStretchTextAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
-            case( META_TEXTRECT_ACTION ): nSizeBytes += ( ( (MetaTextRectAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
+            case( META_TEXT_ACTION ): nSizeBytes += ( ( (MetaTextAction*) pAction )->GetText().getLength() * sizeof( sal_Unicode ) ); break;
+            case( META_STRETCHTEXT_ACTION ): nSizeBytes += ( ( (MetaStretchTextAction*) pAction )->GetText().getLength() * sizeof( sal_Unicode ) ); break;
+            case( META_TEXTRECT_ACTION ): nSizeBytes += ( ( (MetaTextRectAction*) pAction )->GetText().getLength() * sizeof( sal_Unicode ) ); break;
             case( META_TEXTARRAY_ACTION ):
             {
                 MetaTextArrayAction* pTextArrayAction = (MetaTextArrayAction*) pAction;
 
-                nSizeBytes += ( pTextArrayAction->GetText().Len() * sizeof( sal_Unicode ) );
+                nSizeBytes += ( pTextArrayAction->GetText().getLength() * sizeof( sal_Unicode ) );
 
                 if( pTextArrayAction->GetDXArray() )
                     nSizeBytes += ( pTextArrayAction->GetLen() << 2 );

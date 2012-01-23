@@ -1984,7 +1984,7 @@ namespace
                     const MetaTextAction* pA = (const MetaTextAction*)pAction;
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
-                    const sal_uInt32 nStringLength(pA->GetText().Len());
+                    const sal_uInt32 nStringLength(pA->GetText().getLength());
 
                     if(nTextLength + nTextIndex > nStringLength)
                     {
@@ -2012,7 +2012,7 @@ namespace
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pAction;
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
-                    const sal_uInt32 nStringLength(pA->GetText().Len());
+                    const sal_uInt32 nStringLength(pA->GetText().getLength());
 
                     if(nTextLength + nTextIndex > nStringLength)
                     {
@@ -2060,7 +2060,7 @@ namespace
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
-                    const sal_uInt32 nStringLength(pA->GetText().Len());
+                    const sal_uInt32 nStringLength(pA->GetText().getLength());
 
                     if(nTextLength + nTextIndex > nStringLength)
                     {
@@ -2116,7 +2116,7 @@ namespace
                     // OSL_FAIL("META_TEXTRECT_ACTION requested (!)");
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
-                    const sal_uInt32 nStringLength(pA->GetText().Len());
+                    const sal_uInt32 nStringLength(pA->GetText().getLength());
 
                     if(!rRectangle.IsEmpty() && 0 != nStringLength)
                     {
