@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SFXVIRTMENU_HXX
-#define _SFXVIRTMENU_HXX
+#ifndef SFXVIRTMENU_HXX
+#define SFXVIRTMENU_HXX
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sfx2/mnuitem.hxx>
 #include "mnucfga.hxx"
@@ -35,7 +37,7 @@ class SfxBindings;
 class Timer;
 class SfxMenuImageControl_Impl;
 
-typedef std::vector<SfxMenuControl*> SfxMenuCtrlArr_Impl;
+typedef ::boost::ptr_vector<SfxMenuControl> SfxMenuCtrlArr_Impl;
 
 class SAL_DLLPUBLIC_EXPORT SfxVirtualMenu
 {

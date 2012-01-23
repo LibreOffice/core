@@ -731,11 +731,14 @@ void SfxVirtualMenu::BindControllers()
     }
 
     SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-    for(SfxMenuCtrlArr_Impl::const_iterator i = rCtrlArr.begin(); i != rCtrlArr.end(); ++i)
+    for (SfxMenuCtrlArr_Impl::iterator i = rCtrlArr.begin();
+            i != rCtrlArr.end(); ++i)
     {
-        sal_uInt16 nSlotId = (*i)->GetId();
+        sal_uInt16 nSlotId = i->GetId();
         if ( !pSVMenu->GetItemCommand(nSlotId).Len() )
-            (*i)->ReBind();
+        {
+            i->ReBind();
+        }
     }
 
     pBindings->LEAVEREGISTRATIONS();
@@ -755,11 +758,14 @@ void SfxVirtualMenu::UnbindControllers()
     }
 
     SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-    for(SfxMenuCtrlArr_Impl::const_iterator i = rCtrlArr.begin(); i != rCtrlArr.end(); ++i)
+    for (SfxMenuCtrlArr_Impl::iterator i = rCtrlArr.begin();
+            i != rCtrlArr.end(); ++i)
     {
-        if((*i)->IsBound())
-            // UnoController is not binded!
-            (*i)->UnBind();
+        if (i->IsBound())
+        {
+            // UnoController is not bound!
+            i->UnBind();
+        }
     }
 
     pBindings->LEAVEREGISTRATIONS();
