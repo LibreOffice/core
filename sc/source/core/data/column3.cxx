@@ -172,7 +172,7 @@ void ScColumn::Delete( SCROW nRow )
         else
         {
             pNoteCell->Delete();
-            maItems.erase(maItems.end() - 1);
+            maItems.erase( maItems.begin() + nIndex);
             //  Soll man hier den Speicher freigeben (delta)? Wird dann langsamer!
         }
         pCell->EndListeningTo( pDocument );
