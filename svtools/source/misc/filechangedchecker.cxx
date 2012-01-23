@@ -83,7 +83,7 @@ bool FileChangedChecker::hasFileChanged()
     // Check if the seconds time stamp has any difference
     // If so, then our file has changed meanwhile
     if( newTime.Seconds != mLastModTime.Seconds ||
-        newTime.Seconds != mLastModTime.Seconds )
+        newTime.Nanosec != mLastModTime.Nanosec )
     {
         // Since the file has changed, set the new status as the file status and
         // return True
