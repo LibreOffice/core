@@ -26,7 +26,7 @@
  * instead of those above.
  */
 
-#include <test/sheet/datapilotfieldobj.hxx>
+#include <test/sheet/datapilotfield.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
