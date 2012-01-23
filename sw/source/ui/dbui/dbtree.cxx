@@ -344,10 +344,7 @@ void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
                     for (long i = 0; i < nCount; i++)
                     {
                         String sName = pColNames[i];
-                        if(bTable)
-                            InsertEntry(sName, pParent);
-                        else
-                            InsertEntry(sName, pParent);
+                        InsertEntry(sName, pParent);
                     }
                 }
             }
