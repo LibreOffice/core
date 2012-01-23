@@ -1212,3 +1212,18 @@ description = "OpenGL slide transitions module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
+
+Start
+module = "gid_Module_Optional_PostgresqlSdbc"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-postgresql-sdbc"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-base"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-postgresql-sdbc"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
+copyright = "2000-2008 by Sun Microsystems, Inc.; 2011 by Lionel Elie Mamane and other LibreOffice contributors"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "PostgreSQL Connector extension for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

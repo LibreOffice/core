@@ -432,6 +432,12 @@ MY_FILES_binfilter = \
     $(MY_MOD)/fcfg_writer_bf_types.xcu
 .END
 
+.IF "$(BUILD_POSTGRESQL_SDBC)" == "YES"
+MY_XCDS += $(MISC)/postgresqlsdbc.xcd
+MY_DEPS_postgresqlsdbc = main
+MY_FILES_postgresqlsdbc = $(MY_MOD)/DataAccess/postgresql.xcu
+.END
+
 .IF "$(GUIBASE)" == "unx" && \
         (("$(ENABLE_GCONF)" == "TRUE" && "$(ENABLE_LOCKDOWN)" == "YES") || \
          "$(ENABLE_GIO)" == "TRUE")

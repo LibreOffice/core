@@ -43,7 +43,8 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_base.par             \
-        file_base.par
+        file_base.par               \
+        postgresqlsdbc.par
 
 .IF "$(GUI)"=="WNT"
 PARFILES += \
@@ -54,7 +55,8 @@ PARFILES += \
 ULFFILES= \
         module_base.ulf              \
         registryitem_base.ulf        \
-        folderitem_base.ulf
+        folderitem_base.ulf          \
+        postgresqlsdbc.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk

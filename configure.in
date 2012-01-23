@@ -427,11 +427,6 @@ AC_ARG_ENABLE(ext-pdfimport,
         [Disable the PDF Import extension.])
 )
 
-AC_ARG_ENABLE(ext-postgresql-sdbc,
-    AS_HELP_STRING([--enable-ext-postgresql-sdbc],
-        [Enable the build of the PostgreSQL-SDBC extension.])
-)
-
 AC_ARG_ENABLE(ext-presenter-console,
     AS_HELP_STRING([--disable-ext-presenter-console],
         [Disable the Presenter Console extension.])
@@ -873,6 +868,11 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(postgresql-sdbc,
+    AS_HELP_STRING([--disable-postgresql-sdbc],
+        [Disable the build of the PostgreSQL-SDBC driver.])
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -1199,7 +1199,7 @@ AC_ARG_WITH(system-mysql-cppconn,
 AC_ARG_WITH(system-postgresql,
     AS_HELP_STRING([--with-system-postgresql],
         [Use PostgreSQL libraries already on system, for building the PostgreSQL-SDBC
-         extension. If pg_config is not in PATH, use PGCONFIG to point to it.]),,
+         driver. If pg_config is not in PATH, use PGCONFIG to point to it.]),,
     [with_system_postgresql="$with_system_libs"])
 
 AC_ARG_WITH(libpq-path,
@@ -6118,13 +6118,11 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
-if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
-    if test "x$enable_extension_integration" = "xyes"; then
-      SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
-    fi
+if test "x$enable_postgresql_sdbc" != "xno"; then
+    SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
 # if/when anything else than PostgreSQL uses Kerberos,
-# move this out of `test "x$enable_ext_postgresql_sdbc" = "xyes"'
+# move this out of `test "x$enable_postgresql_sdbc" != "xno"'
 WITH_KRB5=NO
 WITH_GSSAPI=no
 case "$_os" in

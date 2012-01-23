@@ -209,17 +209,6 @@ End
 
 #endif
 
-/* ** PostgreSQL Connector ** */
-
-#ifdef WITH_EXTENSION_POSTGRESQL
-
-Directory gid_Brand_Dir_Share_Extensions_PostgreSQL
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "postgresql-sdbc";
-End
-
-#endif
-
 /* ** MySQL Connector ** */
 
 #ifdef WITH_EXTENSION_MYSQLC

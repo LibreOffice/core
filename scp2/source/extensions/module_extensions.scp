@@ -282,21 +282,6 @@ Module gid_Module_Optional_Extensions_LanguageTool
 End
 #endif
 
-/* ** PostgreSQL Connector ** */
-
-#ifdef WITH_EXTENSION_POSTGRESQL
-Module gid_Module_Optional_Extensions_PostgreSQL
- PackageInfo = "packinfo_extensions.txt";
- MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_POSTGRESQL);
- ParentID = gid_Module_Optional_Extensions;
- Files = (
- gid_File_Oxt_PostgreSQL );
- Minimal = NO;
- Default = YES;
- Styles = ( );
-End
-#endif
-
 /* ** MySQL Connector ** */
 
 #ifdef WITH_EXTENSION_MYSQLC
