@@ -127,6 +127,7 @@ copy-stuff:
 	mkdir -p assets/bin assets/lib assets/xml/ure
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
+#
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 # So just hardcode the known APP_DATA_PATH for now...
 # Ditto for URE_INTERNAL_LIB_DIR
@@ -141,16 +142,20 @@ copy-stuff:
 		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$$F.rdb >assets/lib/$$F.rdb; \
 	done
 	cp -R $(OUTDIR)/xml/registry assets/xml
+#
 # .res files
 	for F in $(OUTDIR)/bin/*.res; do \
 		cp $$F assets/bin; \
 	done
+#
+# Test documents for filters_test
+	(cd $(SRC_ROOT) && tar cf - sc/qa/unit/data) | (cd assets && tar xvf -)
+#
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
-#
 	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
