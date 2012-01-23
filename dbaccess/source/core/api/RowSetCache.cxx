@@ -796,7 +796,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
             ++nPos;
             bCheck = m_pCacheSet->absolute(nPos);
 
-            for(;bCheck && aIter != aRealEnd;++aIter)
+            for(;bCheck && nPos <= m_nStartPos && aIter != aRealEnd; ++aIter)
             {
                 if(!aIter->is())
                     *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
