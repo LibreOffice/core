@@ -143,7 +143,7 @@ $(wf_GEN_ooxml_NamespaceIds_hxx) : $(wf_SRC_ooxml_NamespaceIds_xsl) $(wf_GEN_oox
 $(wf_GEN_ooxml_GperfFastToken_hxx) : $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $(wf_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$@,build,GPF,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $(wf_GEN_ooxml_Model_processed)) \
-	| tr -d '\r' | gperf -I -t -E -S1 -c -G -LC++ > $@
+	| tr -d '\r' | $(GPERF) -I -t -E -S1 -c -G -LC++ > $@
 
 $(wf_GEN_ooxml_Model_analyzed): $(wf_SRC_ooxml_Analyze_model_xsl) $(wf_SRC_ooxml_Model)
 	$(call gb_Output_announce,$@,build,XSL,1)

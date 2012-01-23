@@ -372,7 +372,7 @@ $(eval $(call gb_Library_set_include,oox,\
 ))
 
 $(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
-	gperf --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
+	$(GPERF) --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
 
 oox_GenTarget_get_target = $(oox_MISC)/$(1)
 
