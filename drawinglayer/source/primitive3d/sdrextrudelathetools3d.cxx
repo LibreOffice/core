@@ -116,14 +116,14 @@ namespace
         bool bCreateTextureCoordinates)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
-        const sal_uInt32 nPolygonCount(rPolA.count());
+        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             const basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(aSubA.count());
+            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
 
             if(nPointCount)
             {
@@ -213,13 +213,14 @@ namespace
         bool bSmoothHorizontalNormals)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
+        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
 
-        for(sal_uInt32 a(0L); a < rPolA.count(); a++)
+        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(aSubA.count());
+            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
 
             if(nPointCount)
             {
@@ -296,13 +297,14 @@ namespace
     {
         const double fWeightB(1.0 - fWeightA);
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
+        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
 
-        for(sal_uInt32 a(0L); a < rPolA.count(); a++)
+        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(aSubA.count());
+            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
 
             for(sal_uInt32 b(0L); b < nPointCount; b++)
             {
@@ -539,11 +541,18 @@ namespace drawinglayer
 
                         for(sal_uInt32 d(0); d < nNumSlices; d++)
                         {
-                            OSL_ENSURE(nSlideSubPolygonCount == rSliceVector[d].getB3DPolyPolygon().count(),
-                                "Slice PolyPolygon with different Polygon count (!)");
-                            OSL_ENSURE(nSubPolygonPointCount == rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).count(),
-                                "Slice Polygon with different point count (!)");
-                            aNew.append(rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).getB3DPoint(c));
+                            const bool bSamePolygonCount(nSlideSubPolygonCount == rSliceVector[d].getB3DPolyPolygon().count());
+                            const bool bSamePointCount(nSubPolygonPointCount == rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).count());
+
+                            if(bSamePolygonCount && bSamePointCount)
+                            {
+                                aNew.append(rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).getB3DPoint(c));
+                            }
+                            else
+                            {
+                                OSL_ENSURE(bSamePolygonCount, "Slice PolyPolygon with different Polygon count (!)");
+                                OSL_ENSURE(bSamePointCount, "Slice Polygon with different point count (!)");
+                            }
                         }
 
                         aNew.setClosed(bCloseHorLines);

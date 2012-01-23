@@ -369,7 +369,8 @@ namespace drawinglayer
         {
             // prepare the polygon. No double points, correct orientations and a correct
             // outmost polygon are needed
-            maCorrectedPolyPolygon = getPolyPolygon();
+            // Also important: subdivide here to ensure equal point count for all slices (!)
+            maCorrectedPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(getPolyPolygon());
             maCorrectedPolyPolygon.removeDoublePoints();
             maCorrectedPolyPolygon = basegfx::tools::correctOrientations(maCorrectedPolyPolygon);
             maCorrectedPolyPolygon = basegfx::tools::correctOutmostPolygon(maCorrectedPolyPolygon);
