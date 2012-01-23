@@ -699,7 +699,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 4. den Nummerierungsstring einlesen: ergibt Prefix und Postfix
     //
-    String sNumString(read_LEuInt16_PascalString(rSt));
+    String sNumString(read_uInt16_PascalString(rSt));
 
     //
     // 5. gelesene Werte in Writer Syntax umwandeln
@@ -2169,13 +2169,13 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     *pDataStream >> hps;
 
     // xstzName
-    sTitle = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    sTitle = read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_EDIT)
     {   // Field is a textbox
         // Default text
         // xstzTextDef
-        sDefault = read_LEuInt16_BeltAndBracesString(*pDataStream);
+        sDefault = read_uInt16_BeltAndBracesString(*pDataStream);
     }
     else
     {
@@ -2191,14 +2191,14 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         }
     }
     // xstzTextFormat
-    sFormatting = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    sFormatting = read_uInt16_BeltAndBracesString(*pDataStream);
     // xstzHelpText
-    sHelp = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    sHelp = read_uInt16_BeltAndBracesString(*pDataStream);
     // xstzStatText
-    sToolTip = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    sToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
 
-    String sEntryMacro = read_LEuInt16_BeltAndBracesString(*pDataStream);
-    String sExitMcr = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    String sEntryMacro = read_uInt16_BeltAndBracesString(*pDataStream);
+    String sExitMcr = read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
@@ -2225,7 +2225,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         maListEntries.reserve(nNoStrings);
         for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
         {
-            String sEntry =  read_LEuInt16_PascalString(*pDataStream);
+            String sEntry =  read_uInt16_PascalString(*pDataStream);
             maListEntries.push_back(sEntry);
         }
     }

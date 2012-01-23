@@ -1910,11 +1910,11 @@ Err:
     return false;
 }
 
-String read_LEuInt16_PascalString(SvStream& rStrm)
+String read_uInt16_PascalString(SvStream& rStrm)
 {
     sal_uInt16 nLen(0);
     rStrm >> nLen;
-    return read_LEuInt16s_ToOUString(rStrm, nLen);
+    return read_uInt16s_ToOUString(rStrm, nLen);
 }
 
 String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
@@ -1924,9 +1924,9 @@ String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
     return aRet;
 }
 
-String read_LEuInt16_BeltAndBracesString(SvStream& rStrm)
+String read_uInt16_BeltAndBracesString(SvStream& rStrm)
 {
-    String aRet = read_LEuInt16_PascalString(rStrm);
+    String aRet = read_uInt16_PascalString(rStrm);
     rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
     return aRet;
 }
@@ -1961,7 +1961,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             nLen = USHRT_MAX - 1;
 
         if( bIsUnicode )
-            rStr.Append(String(read_LEuInt16s_ToOUString(rStrm, nLen)));
+            rStr.Append(String(read_uInt16s_ToOUString(rStrm, nLen)));
         else
             rStr.Append(String(read_uInt8s_ToOUString(rStrm, nLen, eEnc)));
         nTotalRead  += nLen;
@@ -3860,7 +3860,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             for (sal_uInt16 i=0; i < nStrings; ++i)
             {
                 if (bUnicode)
-                    rArray.push_back(read_LEuInt16_PascalString(rStrm));
+                    rArray.push_back(read_uInt16_PascalString(rStrm));
                 else
                 {
                     rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
@@ -3891,7 +3891,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 for (sal_uInt16 i=0; i < nStrings; ++i)
                 {
                     if( bUnicode )
-                        pValueArray->push_back(read_LEuInt16_PascalString(rStrm));
+                        pValueArray->push_back(read_uInt16_PascalString(rStrm));
                     else
                     {
                         rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
@@ -6143,7 +6143,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     // trailing zero
                     if (TestBeltAndBraces<sal_Unicode>(rSt))
                     {
-                        *pString = read_LEuInt16_BeltAndBracesString(rSt);
+                        *pString = read_uInt16_BeltAndBracesString(rSt);
                         rSkip -= (pString->Len() + 2) * 2;
                     }
                     else

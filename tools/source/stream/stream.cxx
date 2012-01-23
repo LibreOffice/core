@@ -2370,8 +2370,8 @@ rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
     return pStr ? rtl::OString(pStr, SAL_NO_ACQUIRE) : rtl::OString();
 }
 
-//Create a OUString of nLen little endian sal_Unicodes from rStream
-rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
+//Create a OUString of nLen sal_Unicodes from rStream
+rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
 {
     using comphelper::string::rtl_uString_alloc;
 
@@ -2391,10 +2391,11 @@ rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
             pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
             pStr->buffer[pStr->length] = 0;
         }
-#ifdef OSL_BIGENDIAN
-        for (sal_Int32 i = 0; i < pStr->length; ++i)
-            pStr->buffer[i] = SWAPSHORT(pStr->buffer[i]);
-#endif
+        if (rStrm.IsEndianSwap())
+        {
+            for (sal_Int32 i = 0; i < pStr->length; ++i)
+                pStr->buffer[i] = SWAPSHORT(pStr->buffer[i]);
+        }
     }
 
     //take ownership of buffer and return, otherwise return empty string

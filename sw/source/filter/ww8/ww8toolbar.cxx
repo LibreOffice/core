@@ -787,7 +787,7 @@ Xst::Read( SvStream& rS )
 {
     OSL_TRACE("Xst::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    sString = read_LEuInt16_PascalString(rS);
+    sString = read_uInt16_PascalString(rS);
     return true;
 }
 
@@ -1128,7 +1128,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             rS >> dataItems[ index ].cchData;
-            dataItems[ index ].data = read_LEuInt16s_ToOUString(rS, dataItems[index].cchData);
+            dataItems[ index ].data = read_uInt16s_ToOUString(rS, dataItems[index].cchData);
             rS >> dataItems[ index ].extraData;
         }
     }

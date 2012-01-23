@@ -279,7 +279,7 @@ bool Sttb::Read( SvStream& rS )
         {
             SBBItem aItem;
             rS >> aItem.cchData;
-            aItem.data = read_LEuInt16s_ToOUString(rS, aItem.cchData);
+            aItem.data = read_uInt16s_ToOUString(rS, aItem.cchData);
             dataItems.push_back( aItem );
         }
     }
@@ -5396,7 +5396,7 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
             }
             else
             {
-                mpAtnNames->push_back(read_LEuInt16_PascalString(rStrm));
+                mpAtnNames->push_back(read_uInt16_PascalString(rStrm));
                 // UNICode: doppelte Laenge + sal_uInt16 Count
                 nRead += mpAtnNames->rbegin()->Len() * 2 + 2;
             }

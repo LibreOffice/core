@@ -499,9 +499,9 @@ TOOLS_DLLPUBLIC inline rtl::OUString read_uInt8s_ToOUString(SvStream& rStrm,
     return rtl::OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
 }
 
-//Attempt to read nUnits little endian 16bit units to an OUString, returned
+//Attempt to read nUnits 16bit units to an OUString, returned
 //rtl::OUString's length is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm,
     sal_Size nUnits);
 
 //Attempt to read 8bit units to an OString until a zero terminator is

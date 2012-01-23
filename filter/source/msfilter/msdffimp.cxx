@@ -4014,7 +4014,7 @@ rtl::OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
     String sBuf;
 
     if( bUniCode )
-        sBuf = read_LEuInt16s_ToOUString(rIn, nLen/2);
+        sBuf = read_uInt16s_ToOUString(rIn, nLen/2);
     else
         sBuf = read_uInt8s_ToOUString(rIn, nLen, RTL_TEXTENCODING_MS_1252);
 

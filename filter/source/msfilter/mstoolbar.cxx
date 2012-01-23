@@ -412,7 +412,7 @@ WString::Read( SvStream &rS )
     nOffSet = rS.Tell();
     sal_uInt8 nChars = 0;
     rS >> nChars;
-    sString = read_LEuInt16s_ToOUString(rS, nChars);
+    sString = read_uInt16s_ToOUString(rS, nChars);
     return true;
 }
 
