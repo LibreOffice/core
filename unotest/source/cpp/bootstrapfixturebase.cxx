@@ -58,8 +58,8 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
         m_aSolverRootURL += rtl::OUString::createFromAscii( "/" );
 #endif
 #else
-    const char* pSrcRoot = "/";
-    const char* pSolverRoot = "/";
+    const char* pSrcRoot = "/assets";
+    const char* pSolverRoot = "/assets";
 #endif
     m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
