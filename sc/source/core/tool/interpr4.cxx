@@ -1285,6 +1285,8 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
                 pMat = PopMatrix();
             else
                 PopExternalDoubleRef(pMat);
+            if (nGlobalError)
+                break;
             return new ScDBExternalRange(pDok, pMat);
         }
         default:
@@ -1541,7 +1543,14 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
     // references, which means the array should only contain a
     // single matrix token.
     ScToken* p = static_cast<ScToken*>(pArray->First());
-    rMat = p->GetMatrix();
+    if (!p || p->GetType() != svMatrix)
+        SetError( errIllegalParameter);
+    else
+    {
+        rMat = p->GetMatrix();
+        if (!rMat)
+            SetError( errUnknownVariable);
+    }
 }
 
 void ScInterpreter::GetExternalDoubleRef(
