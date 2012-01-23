@@ -8,7 +8,8 @@
 
 #endif
 
-// zoom factor for Calc, Writer, Draw and Impress
-#define ZOOM_FACTOR    1.2
+// Zoom factor for Calc, Writer, Draw and Impress
+// We use 2^(1/4) so that 4 steps lead to double / half size
+#define ZOOM_FACTOR    1.1892071150027210667175
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
