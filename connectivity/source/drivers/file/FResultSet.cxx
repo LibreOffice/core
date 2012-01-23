@@ -1449,7 +1449,7 @@ sal_Bool OResultSet::OpenImpl()
                     // order of columns that are not specified in ORDER BY
                     // clause is undefined, so it doesn't hurt to sort on
                     // these; pad the vectors to include them.
-                    for (sal_Int32 i = 1;
+                    for (sal_Int32 i = 1; // 0: bookmark (see setBoundedColumns)
                          static_cast<size_t>(i) < m_aColMapping.size(); ++i)
                     {
                         if (::std::find(m_aOrderbyColumnNumber.begin(),
@@ -1457,10 +1457,8 @@ sal_Bool OResultSet::OpenImpl()
                                 == m_aOrderbyColumnNumber.end())
                         {
                             m_aOrderbyColumnNumber.push_back(i);
-                            m_aOrderbyAscending.push_back(
-                                    (m_aOrderbyAscending.empty())
-                                        ? SQL_ASC // default for no ORDER BY
-                                        : m_aOrderbyAscending.back());
+                            // ASC or DESC doesn't matter
+                            m_aOrderbyAscending.push_back(SQL_ASC);
                         }
                     }
                     bDistinct = sal_True;
