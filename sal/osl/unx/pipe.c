@@ -32,6 +32,9 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/interlck.h>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
+#include <rtl/bootstrap.h>
 
 #include "sockimpl.h"
 
@@ -158,8 +161,38 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 
 }
 
+static sal_Bool
+cpyBootstrapSocketPath(sal_Char *name, size_t len)
+{
+    sal_Bool bRet = sal_False;
+    rtl_uString *pName = 0, *pValue = 0;
+
+    rtl_uString_newFromAscii(&pName, "OSL_SOCKET_PATH");
+
+    if (rtl_bootstrap_get(pName, &pValue, NULL))
+    {
+        rtl_String *pStrValue = 0;
+        if (pValue && pValue->length > 0)
+        {
+            rtl_uString2String(&pStrValue, pValue->buffer,
+                               pValue->length, RTL_TEXTENCODING_UTF8,
+                               OUSTRING_TO_OSTRING_CVTFLAGS);
+            if (pStrValue && pStrValue->length > 0)
+            {
+                size_t nCopy = SAL_MIN (len-1, (size_t)pStrValue->length);
+                strncpy (name, pStrValue->buffer, nCopy);
+                name[nCopy] = '\0';
+                bRet = (size_t)pStrValue->length < len;
+            }
+            rtl_string_release(pStrValue);
+        }
+        rtl_uString_release(pName);
+    }
+    return bRet;
+}
+
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
-                       oslSecurity Security)
+                                    oslSecurity Security)
 {
     int    Flags;
     size_t     len;
@@ -174,9 +207,13 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {
         strncpy(name, PIPEDEFAULTPATH, sizeof(name));
     }
-    else
+    else if (access(PIPEALTERNATEPATH, R_OK|W_OK) == 0)
     {
         strncpy(name, PIPEALTERNATEPATH, sizeof(name));
+    }
+    else if (!cpyBootstrapSocketPath (name, sizeof (name)))
+    {
+        return NULL;
     }
     name[sizeof(name) - 1] = '\0';  // ensure the string is NULL-terminated
     nNameLength = strlen(name);
@@ -599,6 +636,5 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     }
     return BytesRead;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

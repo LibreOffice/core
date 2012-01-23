@@ -33,6 +33,8 @@ buildrcs:
 	echo "Logo=1" >> assets/program/lofficerc
 	echo "NativeProgress=1" >> assets/program/lofficerc
 	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
+	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
+	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
