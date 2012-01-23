@@ -37,16 +37,16 @@ buildrcs:
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
 	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
-	echo "BRAND_BASE_DIR=file:///assets/" >> assets/program/fundamentalrc
-	echo "CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry module:${BRAND_BASE_DIR}/share/registry/modules res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini xcsxcu:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry userext:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu" >> assets/program/fundamentalrc
-	echo "URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway" >> assets/program/fundamentalrc
-	echo "URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}" >> assets/program/fundamentalrc
-	echo "URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}" >> assets/program/fundamentalrc
+	echo "BRAND_BASE_DIR=file:///assets" >> assets/program/fundamentalrc
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry bundledext:$${$${BRAND_BASE_DIR}/program/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:$${$${BRAND_BASE_DIR}/program/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini xcsxcu:$${$${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry userext:$${$${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu' >> assets/program/fundamentalrc
+	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb <$$ORIGIN/services>*' >> assets/program/fundamentalrc
 # unorc ini ...
 	echo "[Bootstrap]" > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
-	echo "UNO_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}" >> assets/program/unorc
-	echo "UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}" >> assets/program/unorc
+	echo 'UNO_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
+	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 
 copy-stuff: buildrcs
 #
@@ -189,7 +189,8 @@ uninstall:
 run:
 	echo "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
 	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-delay 5 -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+# add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you

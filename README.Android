@@ -24,7 +24,7 @@ test output to enjoy. After a while of this loop you'll probably
 find that android has lost a lot of space on your device at
 this point:
 
-	adb shell stop ; adb shell start
+	adb shell stop; adb shell setprop log.redirect-stdio true; adb shell start
 
 	and continue onwards & upwards.
 
@@ -43,6 +43,11 @@ attached, so you need to carefully guess where to put:
 
 	into the code; and when you see that in logcat, you have time
 to run: ndk-gdb and it will attach the process.
+
+	thread 12 # or perhaps 13
+	backtrace
+
+	may show you the native code trace.
 
 * Common Errors / Gotchas
 
