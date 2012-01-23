@@ -75,7 +75,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     } catch (const ::com::sun::star::uno::Exception &e) {
         fprintf (stderr, "Not handled UNO exception at main: '%s'\n",
                  rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        throw e; // to get exception type printed
+        throw; // to get exception type printed
     }
 #endif
 }
