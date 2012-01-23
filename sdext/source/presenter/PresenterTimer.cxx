@@ -511,7 +511,7 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
         {
             if (aDateTime.Seconds != maDateTime.Seconds
                 || aDateTime.Minutes != maDateTime.Minutes
-                || aDateTime.Seconds != maDateTime.Seconds)
+                || aDateTime.Hours != maDateTime.Hours)
             {
                 // The displayed part of the current time has changed.
                 // Prepare to call the listeners.
