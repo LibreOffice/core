@@ -414,9 +414,6 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 
         cairo_matrix_init_identity(&m);
 
-        if (rFont.NeedsArtificialItalic())
-            m.xy = -m.xx * 0x6000L / 0x10000L;
-
         if (rLayout.GetOrientation())
             cairo_matrix_rotate(&m, toRadian(rLayout.GetOrientation()));
 
@@ -461,6 +458,14 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
                 xdiff += font_extents.descent/nHeight;
             }
             cairo_matrix_translate(&m, xdiff, ydiff);
+        }
+
+        if (rFont.NeedsArtificialItalic())
+        {
+            cairo_matrix_t shear;
+            cairo_matrix_init_identity(&shear);
+            shear.xy = -shear.xx * 0x6000L / 0x10000L;
+            cairo_matrix_multiply(&m, &shear, &m);
         }
 
         cairo_set_font_matrix(cr, &m);
