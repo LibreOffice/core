@@ -851,30 +851,6 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 
 // -----------------------------------------------------------------------
 
-long LineListBox::GetEntryLine1( sal_uInt16 nPos ) const
-{
-    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->GetLine1ForWidth( m_nWidth ) : 0;
-}
-
-// -----------------------------------------------------------------------
-
-long LineListBox::GetEntryLine2( sal_uInt16 nPos ) const
-{
-    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->GetLine2ForWidth( m_nWidth ) : 0;
-}
-
-// -----------------------------------------------------------------------
-
-long LineListBox::GetEntryDistance( sal_uInt16 nPos ) const
-{
-    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->GetDistForWidth( m_nWidth ) : 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;

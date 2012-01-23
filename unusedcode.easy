@@ -112,9 +112,6 @@ InsCapOptArr::Remove(InsCaptionOpt* const&, unsigned short)
 InsCapOptArr::Remove(unsigned short, unsigned short)
 ItemList::FindAttrib(unsigned short)
 KeyboardSettings::CopyData()
-LineListBox::GetEntryDistance(unsigned short) const
-LineListBox::GetEntryLine1(unsigned short) const
-LineListBox::GetEntryLine2(unsigned short) const
 LinkStructArr::DeleteAndDestroy(unsigned short, unsigned short)
 LngSvcMgr::RemoveLngSvcEvtBroadcaster(com::sun::star::uno::Reference<com::sun::star::linguistic2::XLinguServiceEventBroadcaster> const&)
 LocaleDataWrapper::getCollatorImplementations() const

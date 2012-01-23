@@ -352,16 +352,10 @@ public:
 
     using ListBox::GetEntryPos;
     virtual sal_uInt16  GetEntryPos( sal_uInt16 nStyle = STYLE_SOLID ) const;
-    long            GetEntryLine1( sal_uInt16 nPos ) const;
-    long            GetEntryLine2( sal_uInt16 nPos ) const;
-    long            GetEntryDistance( sal_uInt16 nPos ) const;
     sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
 
     void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( sal_uInt16 nStyle = STYLE_SOLID, sal_Bool bSelect = sal_True );
-    long            GetSelectEntryLine1( sal_uInt16 nSelIndex = 0 ) const;
-    long            GetSelectEntryLine2( sal_uInt16 nSelIndex = 0 ) const;
-    long            GetSelectEntryDistance( sal_uInt16 nSelIndex = 0 ) const;
     sal_uInt16          GetSelectEntryStyle( sal_uInt16 nSelIndex = 0 ) const;
     inline sal_Bool     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
     sal_Bool            IsEntrySelected( sal_uInt16 nStyle1 = STYLE_SOLID ) const;
@@ -388,33 +382,6 @@ private:
     void            SetEntryData( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData( sal_uInt16 nPos ) const;
 };
-
-inline long LineListBox::GetSelectEntryLine1( sal_uInt16 nSelIndex ) const
-{
-    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return GetEntryLine1( nPos );
-    else
-        return 0;
-}
-
-inline long LineListBox::GetSelectEntryLine2( sal_uInt16 nSelIndex ) const
-{
-    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return GetEntryLine2( nPos );
-    else
-        return 0;
-}
-
-inline long LineListBox::GetSelectEntryDistance( sal_uInt16 nSelIndex ) const
-{
-    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return GetEntryDistance( nPos );
-    else
-        return 0;
-}
 
 inline sal_Bool LineListBox::IsEntrySelected( sal_uInt16 nStyle ) const
 {
