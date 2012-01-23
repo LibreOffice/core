@@ -38,7 +38,7 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 9
+#define NUMBER_OF_TESTS 10
 
 class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable
 {
@@ -48,7 +48,7 @@ public:
     virtual uno::Reference< uno::XInterface > init();
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
-    //CPPUNIT_TEST(testRefresh);
+    CPPUNIT_TEST(testRefresh);
     //CPPUNIT_TEST(testGetHiddenFields);
     CPPUNIT_TEST(testGetOutputRange);
     CPPUNIT_TEST(testSourceRange);
