@@ -49,10 +49,10 @@ namespace abp
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
-            :public OABSPilotUno_DBase
+            :public OModuleResourceClient
+            ,public OABSPilotUno_DBase
             ,public OABSPilotUno_JBase
             ,public OABSPilotUno_PBase
-            ,public OModuleResourceClient
     {
         ::rtl::OUString m_sDataSourceName;
         OABSPilotUno(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
