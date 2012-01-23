@@ -142,7 +142,21 @@ findunusedcode:
 #because non-c++ symbols could be dlsymed lets make a list of class level
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
-	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
+#
+#filter out cppu:: because there's a concern they might be required for the
+#extensions abi
+#
+#filter out boost:: and Icc*:: because there are external libraries we
+#build but don't include into our install sets
+#
+#filter out Atom*:: from libcmis, because its too painful to customize
+#it to only build the methods we directly call
+	@grep ::.*\( unusedcode.all \
+		| grep -v ^cppu:: \
+		| grep -v ^boost:: \
+		| grep -v ^CIcc \
+		| grep -v ^CAtom \
+		> unusedcode.easy
 
 subsequentcheck: dev-install
 
