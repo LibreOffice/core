@@ -1,1 +1,0 @@
-A native PostgreSQL database driver for LibreOffice. It is faster, seamlessly integrated and there is no need to install and setup a JDBC or ODBC driver separately. Compatible with PostgreSQL version 8.4 and later.

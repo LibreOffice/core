@@ -241,19 +241,6 @@ End
 
 #endif
 
-/* ** PostgreSQL Connector ** */
-
-#ifdef WITH_EXTENSION_POSTGRESQL
-
-File gid_File_Oxt_PostgreSQL
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_PostgreSQL;
-    Name = "postgresql-sdbc.oxt";
-End
-
-#endif
-
 /* ** MySQL Connector ** */
 
 #ifdef WITH_EXTENSION_MYSQLC

@@ -175,7 +175,7 @@ static sal_Int32 readLogLevelFromConfiguration()
     osl_getModuleURLFromAddress(
         (void*) readLogLevelFromConfiguration, (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString::createFromAscii(  SAL_CONFIGFILE("postgresql-sdbc.uno") );
+    fileName += OUString::createFromAscii( "postgresql-sdbc.ini" );
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
@@ -785,19 +785,6 @@ static struct cppu::ImplementationEntry g_entries[] =
 extern "C"
 {
 
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {

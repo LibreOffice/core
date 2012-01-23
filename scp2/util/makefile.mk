@@ -84,7 +84,8 @@ SCP1FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
-             module_accessories.par
+             module_accessories.par        \
+             postgresqlsdbc.par
 .IF "$(WITH_EXTRA_GALLERY)" != ""
 SCP1FILES +=                               \
              module_gallery_accessories.par   \
