@@ -185,9 +185,16 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
+#ifdef ANDROID
+    rtl::OUString aUnoRc( OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///assets/program/unorc" ) ) );
+    return Reference<XMultiServiceFactory>(
+        cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
+        UNO_QUERY_THROW);
+#else
     return Reference<XMultiServiceFactory>(
         cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
         UNO_QUERY_THROW);
+#endif
 }
 
 void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
