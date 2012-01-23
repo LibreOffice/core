@@ -3852,14 +3852,6 @@ bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
         ;
 }
 
-void NfCurrencyEntry::ApplyVariableInformation( const NfCurrencyEntry& r )
-{
-    nPositiveFormat = r.nPositiveFormat;
-    nNegativeFormat = r.nNegativeFormat;
-    cZeroChar       = r.cZeroChar;
-}
-
-
 void NfCurrencyEntry::BuildSymbolString( String& rStr, bool bBank,
             bool bWithoutExtension ) const
 {

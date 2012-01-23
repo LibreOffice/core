@@ -147,7 +147,6 @@ MultiLineEdit::IsFocusSelectionHideEnabled() const
 MultiSelection::Append(long)
 MultiSelection::PrevSelected()
 NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) const
-NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
 NfCurrencyEntry::NfCurrencyEntry()
 NotificationSettings::CopyData()
 NumberFormatCodeWrapper::getDefault(short, short) const

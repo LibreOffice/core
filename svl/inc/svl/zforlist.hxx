@@ -260,10 +260,6 @@ public:
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
-                        /** Apply format information (nPositiveFormat,
-                             nNegativeFormat, nDigits, cZeroChar) of another format. */
-    void                ApplyVariableInformation( const NfCurrencyEntry& );
-
     const String&       GetSymbol() const           { return aSymbol; }
     const String&       GetBankSymbol() const       { return aBankSymbol; }
     LanguageType        GetLanguage() const         { return eLanguage; }
