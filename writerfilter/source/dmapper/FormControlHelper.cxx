@@ -202,7 +202,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     m_pImpl->aSize.Height = m_pImpl->aSize.Width;
 
     uno::Any aAny;
-    if (m_pFFData->getStatusText().getLength())
+    if (!m_pFFData->getStatusText().isEmpty())
     {
         aAny <<= m_pFFData->getStatusText();
 
@@ -212,7 +212,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     aAny <<= m_pFFData->getCheckboxChecked();
     xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState")), aAny);
 
-    if (m_pFFData->getHelpText().getLength())
+    if (!m_pFFData->getHelpText().isEmpty())
     {
         aAny <<= m_pFFData->getHelpText();
         xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text")), aAny);
@@ -235,7 +235,7 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
         if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
             xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-            if (  m_pFFData->getName().getLength() )
+            if (  !m_pFFData->getName().isEmpty() )
             {
                 xNamed->setName( m_pFFData->getName() );
             }

@@ -123,7 +123,7 @@ int RTFValue::getInt() const
 
 OUString RTFValue::getString() const
 {
-    if (m_sValue.getLength() > 0 || m_bForceString)
+    if (!m_sValue.isEmpty() || m_bForceString)
         return m_sValue;
     else
         return OUString::valueOf(sal_Int32(m_nValue));
@@ -137,7 +137,7 @@ void RTFValue::setString(OUString sValue)
 uno::Any RTFValue::getAny() const
 {
     uno::Any ret;
-    if (m_sValue.getLength() > 0 || m_bForceString)
+    if (!m_sValue.isEmpty() || m_bForceString)
         ret <<= m_sValue;
     else if (m_rShape.is())
         ret <<= m_rShape;
@@ -168,7 +168,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
 
 std::string RTFValue::toString() const
 {
-    if (m_sValue.getLength() > 0 || m_bForceString)
+    if (!m_sValue.isEmpty() || m_bForceString)
         return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
     else
         return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();

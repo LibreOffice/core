@@ -127,7 +127,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                     if(pNames[nName].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "word" )))
                     {
                         bWord = true;
-                        if( !sTypeName.getLength() )
+                        if( sTypeName.isEmpty() )
                             sTypeName = ::rtl::OUString(
                                     RTL_CONSTASCII_STRINGPARAM( "writer_MS_Word_2007" ), RTL_TEXTENCODING_ASCII_US);
                         break;

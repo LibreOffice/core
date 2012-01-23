@@ -369,7 +369,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
     {
         if( bFirst )
         {
-            if( !m_sFirstPageStyleName.getLength() && xPageStyles.is() )
+            if( m_sFirstPageStyleName.isEmpty() && xPageStyles.is() )
             {
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
@@ -387,7 +387,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         }
         else
         {
-            if( !m_sFollowPageStyleName.getLength() && xPageStyles.is() )
+            if( m_sFollowPageStyleName.isEmpty() && xPageStyles.is() )
             {
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFollowPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
@@ -445,17 +445,17 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     switch( nValue & 0x07)
     {
         case 0: /*all styles*/
-            if ( m_sFollowPageStyleName.getLength( ) > 0 )
+            if ( !m_sFollowPageStyleName.isEmpty() )
                 xFirst = GetPageStyle( xPageStyles, xTextFactory, false );
-            if ( m_sFirstPageStyleName.getLength( ) > 0 )
+            if ( !m_sFirstPageStyleName.isEmpty() )
                 xSecond = GetPageStyle( xPageStyles, xTextFactory, true );
         break;
         case 1: /*first page*/
-            if ( m_sFirstPageStyleName.getLength( ) > 0 )
+            if ( !m_sFirstPageStyleName.isEmpty() )
                 xFirst = GetPageStyle( xPageStyles, xTextFactory, true );
         break;
         case 2: /*left and right*/
-            if ( m_sFollowPageStyleName.getLength( ) > 0 )
+            if ( !m_sFollowPageStyleName.isEmpty() )
                 xFirst  = GetPageStyle( xPageStyles, xTextFactory, false );
         break;
         case 3: //whole document?

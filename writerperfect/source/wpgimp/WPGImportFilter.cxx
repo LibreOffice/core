@@ -169,7 +169,7 @@ throw( com::sun::star::uno::RuntimeException )
     if (libwpg::WPGraphics::isSupported(&input))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_WordPerfect_Graphics" ) );
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {

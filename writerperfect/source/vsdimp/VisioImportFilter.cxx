@@ -170,7 +170,7 @@ throw( com::sun::star::uno::RuntimeException )
     if (libvisio::VisioDocument::isSupported(&input))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_Visio_Document" ) );
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {

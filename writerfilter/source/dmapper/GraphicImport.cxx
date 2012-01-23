@@ -1497,7 +1497,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
                 try
                 {
-                    if( m_pImpl->sName.getLength() )
+                    if( !m_pImpl->sName.isEmpty() )
                     {
                         uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
                         xNamed->setName( m_pImpl->sName );

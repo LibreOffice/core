@@ -187,7 +187,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
         rtl::OUString aURL = aLister.getURL();
 
-        while (aURL.getLength() > 0)
+        while (!aURL.isEmpty())
         {
             uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
                 (xFactory->createInstanceWithContext

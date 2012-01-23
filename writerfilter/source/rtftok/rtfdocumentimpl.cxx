@@ -213,7 +213,7 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
 {
     RTFSprms aAttributes;
     RTFValue::Pointer_t pPos(new RTFValue(nPos));
-    if (rString.getLength())
+    if (!rString.isEmpty())
     {
         // If present, this should be sent first.
         RTFValue::Pointer_t pString(new RTFValue(rString));
@@ -368,7 +368,7 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
     pImpl->setSubstream(true);
     pImpl->setIgnoreFirst(rIgnoreFirst);
-    if (m_aAuthor.getLength())
+    if (!m_aAuthor.isEmpty())
     {
         pImpl->setAuthor(m_aAuthor);
         m_aAuthor = OUString();
@@ -849,7 +849,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (bRet)
         return;
 
-    if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
+    if (!m_aIgnoreFirst.isEmpty() && m_aIgnoreFirst.equals(rString))
     {
         m_aIgnoreFirst = OUString();
         return;
@@ -1170,7 +1170,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             else
             {
                 // If there is an author set, emit it now.
-                if (m_aAuthor.getLength())
+                if (!m_aAuthor.isEmpty())
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
                     RTFSprms aAttributes;
@@ -2504,7 +2504,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     case RTF_NOFCHARSWS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount")); break;
                     default: break;
                 }
-                if (aName.getLength())
+                if (!aName.isEmpty())
                 {
                     bool bFound = false;
                     int nLen = aSet.getLength();

@@ -191,7 +191,7 @@ throw( com::sun::star::uno::RuntimeException )
     if ((confidence == WPS_CONFIDENCE_EXCELLENT) || (confidence == WPS_CONFIDENCE_GOOD))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_MS_Works_Document" ) );
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {

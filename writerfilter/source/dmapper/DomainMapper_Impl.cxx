@@ -123,7 +123,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
 {
     if ( rxFieldProps.is() )
     {
-        if ( pFFDataHandler->getName().getLength() )
+        if ( !pFFDataHandler->getName().isEmpty() )
             rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ), uno::makeAny( pFFDataHandler->getName() ) );
 
         const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
@@ -135,7 +135,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
         sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
         if ( nResult )
             rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItem") ), uno::makeAny( sItems[ nResult ] ) );
-        if ( pFFDataHandler->getHelpText().getLength() )
+        if ( !pFFDataHandler->getHelpText().isEmpty() )
              rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Help") ), uno::makeAny( pFFDataHandler->getHelpText() ) );
     }
 }
@@ -1404,7 +1404,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             aFontProps->Insert(PROP_CHAR_FONT_PITCH, true, uno::makeAny( pFontEntry->nPitchRequest  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
-        else if(pTopContext->GetFootnoteFontName().getLength())
+        else if(!pTopContext->GetFootnoteFontName().isEmpty())
         {
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
@@ -1623,7 +1623,7 @@ sal_Int16 lcl_ParseNumberingType( const ::rtl::OUString& rCommand )
     //  The command looks like: " PAGE \* Arabic "
     ::rtl::OUString sNumber = lcl_FindQuotedText(rCommand, "\\* ", ' ');
 
-    if( sNumber.getLength() )
+    if( !sNumber.isEmpty() )
     {
         //todo: might make sense to hash this list, too
         struct NumberingPairs
@@ -1771,7 +1771,7 @@ extract a parameter (with or without quotes) between the command and the followi
     ::rtl::OUString sRet = sShortCommand.getToken( 0, ' ', nIndex);
     if( nIndex > 0)
         rHint = sShortCommand.copy( nIndex );
-    if( !rHint.getLength() )
+    if( rHint.isEmpty() )
         rHint = sRet;
     return sRet;
 }
@@ -1963,7 +1963,7 @@ void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
         OUString sToken = GetCommand().getToken(0, ' ', nIndex);
         bool bInStringNext = bInString;
 
-        if (sToken.getLength() == 0)
+        if (sToken.isEmpty())
             continue;
 
         if (sToken.getStr()[0] == '"')
@@ -2155,7 +2155,7 @@ void DomainMapper_Impl::handleFieldAsk
 
     sVariable = lcl_ExctractAskVariableAndHint( pContext->GetCommand(),
         sHint );
-    if(sVariable.getLength())
+    if(!sVariable.isEmpty())
     {
         // determine field master name
         uno::Reference< beans::XPropertySet > xMaster =
@@ -2231,7 +2231,7 @@ void DomainMapper_Impl::handleAuthor
     ::rtl::OUString sParam =
         lcl_ExtractParameter(pContext->GetCommand(), nLen );
 
-    if(sParam.getLength())
+    if(!sParam.isEmpty())
     {
         xFieldProperties->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_IS_FIXED ),
@@ -2251,7 +2251,7 @@ void DomainMapper_Impl::handleAuthor
     ::rtl::OUString sParam =
         lcl_ExtractParameter(pContext->GetCommand(), sizeof(" DOCPROPERTY") );
 
-    if(sParam.getLength())
+    if(!sParam.isEmpty())
     {
         #define SET_ARABIC      0x01
         #define SET_FULL_NAME   0x02
@@ -2302,7 +2302,7 @@ void DomainMapper_Impl::handleAuthor
         ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM
             ("com.sun.star.text.TextField."));
         bool bIsCustomField = false;
-        if(!sFieldServiceName.getLength())
+        if(sFieldServiceName.isEmpty())
         {
             //create a custom property field
             sServiceName +=
@@ -2424,7 +2424,7 @@ void DomainMapper_Impl::handleToc
     {
         sal_Int32 nPos = 0;
         ::rtl::OUString sToken = sValue.getToken( 1, '"', nPos);
-        sTemplate = sToken.getLength() ? sToken : sValue;
+        sTemplate = sToken.isEmpty() ? sValue : sToken;
     }
 //                  \u  Builds a table of contents by using the applied paragraph outline level
     if( lcl_FindInCommand( pContext->GetCommand(), 'u', sValue ))
@@ -2447,7 +2447,7 @@ void DomainMapper_Impl::handleToc
 //                    { //todo: unsupported feature  }
 
                     //if there's no option then it should be created from outline
-    if( !bFromOutline && !bFromEntries && !sTemplate.getLength()  )
+    if( !bFromOutline && !bFromEntries && sTemplate.isEmpty()  )
         bFromOutline = true;
 
     uno::Reference< beans::XPropertySet > xTOC;
@@ -2466,7 +2466,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
-        if( sTemplate.getLength() )
+        if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels
                             //like: "Heading 1,1,Heading 2,2"
@@ -2477,12 +2477,12 @@ void DomainMapper_Impl::handleToc
             {
                 ::rtl::OUString sStyleName = sTemplate.getToken( 0, ',', nPosition );
                                 //empty tokens should be skipped
-                while( !sStyleName.getLength() && nPosition > 0 )
+                while( sStyleName.isEmpty() && nPosition > 0 )
                     sStyleName = sTemplate.getToken( 0, ',', nPosition );
                 nLevel = sTemplate.getToken( 0, ',', nPosition ).toInt32();
                 if( !nLevel )
                     nLevel = 1;
-                if( sStyleName.getLength() )
+                if( !sStyleName.isEmpty() )
                     aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
             }
             uno::Reference< container::XIndexReplace> xParaStyles;
@@ -2505,7 +2505,7 @@ void DomainMapper_Impl::handleToc
             xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
 
         }
-        if(bHyperlinks  || sChapterNoSeparator.getLength())
+        if(bHyperlinks  || !sChapterNoSeparator.isEmpty())
         {
             uno::Reference< container::XIndexReplace> xLevelFormats;
             xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
@@ -2516,7 +2516,7 @@ void DomainMapper_Impl::handleToc
                 uno::Sequence< beans::PropertyValues > aLevel;
                 xLevelFormats->getByIndex( nLevel ) >>= aLevel;
                                 //create a copy of the level and add two new entries - hyperlink start and end
-                bool bChapterNoSeparator  = sChapterNoSeparator.getLength() > 0;
+                bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
                 sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
                 uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
                 beans::PropertyValues* pNewLevel = aNewLevel.getArray();
@@ -2761,7 +2761,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 uno::Reference< container::XNamed > xNamed( xFormField, uno::UNO_QUERY );
                                 if ( xNamed.is() )
                                 {
-                                    if ( pFFDataHandler && pFFDataHandler->getName().getLength() )
+                                    if ( pFFDataHandler && !pFFDataHandler->getName().isEmpty() )
                                         xNamed->setName(  pFFDataHandler->getName() );
                                     pContext->SetFormField( xFormField );
                                 }
@@ -2816,7 +2816,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             ++aPartIt;
                         }
 
-                        if (sURL.getLength() > 0)
+                        if (!sURL.isEmpty())
                         {
                             pContext->SetHyperlinkURL(sURL);
                         }
@@ -2828,7 +2828,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_KEYWORDS     :
                     {
                         ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" KEYWORDS") );
-                        if(sParam.getLength())
+                        if(!sParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -2939,7 +2939,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_SUBJECT      :
                     {
                         ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" SUBJECT") );
-                        if(sParam.getLength())
+                        if(!sParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -2955,7 +2955,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_TITLE        :
                     {
                         ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" TITLE") );
-                        if(sParam.getLength())
+                        if(!sParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -2976,7 +2976,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName)),
                                 uno::UNO_QUERY_THROW);
                         ::rtl::OUString sTCText = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" TC") );
-                        if( sTCText.getLength())
+                        if( !sTCText.isEmpty())
                             xTC->setPropertyValue(rPropNameSupplier.GetName(PROP_ALTERNATIVE_TEXT),
                                 uno::makeAny(sTCText));
                         ::rtl::OUString sValue;
@@ -2989,7 +2989,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // \l Outline Level
                         {
                             sal_Int32 nLevel = sValue.toInt32();
-                            if( sValue.getLength() && nLevel >= 0 && nLevel <= 10 )
+                            if( !sValue.isEmpty() && nLevel >= 0 && nLevel <= 10 )
                                 xTC->setPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL), uno::makeAny( (sal_Int16)nLevel ));
                         }
     //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
@@ -3173,7 +3173,7 @@ void DomainMapper_Impl::PopFieldContext()
                                 pFormControlHelper->insertControl(xTxtRange);
                             }
                         }
-                        else if(pContext->GetHyperlinkURL().getLength())
+                        else if(!pContext->GetHyperlinkURL().isEmpty())
                         {
                             PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                             xCrsr->gotoEnd( true );
@@ -3231,7 +3231,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
                 xCursor->gotoRange( xTextAppend->getEnd(), true );
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 //todo: make sure the name is not used already!
-                if ( aBookmarkIter->second.m_sBookmarkName.getLength() > 0 )
+                if ( !aBookmarkIter->second.m_sBookmarkName.isEmpty() )
                     xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
                 else
                     xBkmNamed->setName( rBookmarkName );

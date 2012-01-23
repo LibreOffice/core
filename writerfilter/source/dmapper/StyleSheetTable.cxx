@@ -387,7 +387,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         case NS_rtf::LN_STI:
         {
             ::rtl::OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
-            if (tempStyleIdentifier.getLength())
+            if (!tempStyleIdentifier.isEmpty())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = tempStyleIdentifier;
             if (nIntValue == 0 || nIntValue == 65)
                 m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
@@ -417,12 +417,12 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_rtf::LN_XSTZNAME:
             m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
-            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
+            if (!m_pImpl->m_pCurrentEntry->sStyleIdentifierI.isEmpty())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_XSTZNAME1:
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
-            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
+            if (!m_pImpl->m_pCurrentEntry->sStyleIdentifierI.isEmpty())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_UPX:
@@ -620,7 +620,7 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
     ref->resolve(*this);
     //append it to the table
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
-    if( !m_pImpl->m_rDMapper.IsOOXMLImport() || m_pImpl->m_pCurrentEntry->sStyleName.getLength() >0)
+    if( !m_pImpl->m_rDMapper.IsOOXMLImport() || !m_pImpl->m_pCurrentEntry->sStyleName.isEmpty())
     {
         m_pImpl->m_pCurrentEntry->sConvertedStyleName = ConvertStyleName( m_pImpl->m_pCurrentEntry->sStyleName );
         m_pImpl->m_aStyleSheetEntries.push_back( m_pImpl->m_pCurrentEntry );
@@ -725,7 +725,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                         rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )),
                                         uno::UNO_QUERY_THROW);
                     }
-                    if( pEntry->sBaseStyleIdentifier.getLength() )
+                    if( !pEntry->sBaseStyleIdentifier.isEmpty() )
                     {
                         try
                         {
@@ -781,7 +781,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
                     uno::Sequence< beans::PropertyValue > aPropValues = pEntry->pProperties->GetPropertyValues();
                     bool bAddFollowStyle = false;
-                    if(bParaStyle && !pEntry->sNextStyleIdentifier.getLength() )
+                    if(bParaStyle && pEntry->sNextStyleIdentifier.isEmpty() )
                     {
                             bAddFollowStyle = true;
                     }
@@ -862,7 +862,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             std::vector< StyleSheetEntryPtr >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
                             for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
                             {
-                                if( ( *aNextStyleIt )->sStyleName.getLength() &&
+                                if( !( *aNextStyleIt )->sStyleName.isEmpty() &&
                                         ( *aNextStyleIt )->sStyleName == pEntry->sNextStyleIdentifier)
                                 {
                                     beans::PropertyValue aNew;
@@ -966,7 +966,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
 
 const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
 {
-    if( !sBaseStyle.getLength() )
+    if( sBaseStyle.isEmpty() )
     {
         StyleSheetEntryPtr pEmptyPtr;
         return pEmptyPtr;
@@ -1150,7 +1150,7 @@ static const sal_Char* const aStyleNamePairs[] =
         }
     }
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( sRet );
-    if(aIt != m_pImpl->m_aStyleNameMap.end() && aIt->second.getLength())
+    if(aIt != m_pImpl->m_aStyleNameMap.end() && !aIt->second.isEmpty())
         sRet = aIt->second;
     return sRet;
 }
@@ -1224,7 +1224,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 {
     //find out if any of the styles already has the required properties then return it's name
     ::rtl::OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
-    if( sListLabel.getLength() )
+    if( !sListLabel.isEmpty() )
         return sListLabel;
     const char cListLabel[] = "ListLabel ";
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );

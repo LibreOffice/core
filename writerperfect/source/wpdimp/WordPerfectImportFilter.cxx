@@ -160,7 +160,7 @@ throw (RuntimeException)
 
     OdtGenerator collector(&xHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPG);
-    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.getLength() ? aUtf8Passwd.getStr() : 0))
+    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
         return sal_True;
     return sal_False;
 }
@@ -236,7 +236,7 @@ throw( com::sun::star::uno::RuntimeException )
     if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_WordPerfect_Document" ) );
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {

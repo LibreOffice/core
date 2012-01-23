@@ -75,7 +75,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
     switch(Name)
     {
         case NS_ooxml::LN_CT_TextFont_typeface:
-         if (sValue.getLength())
+         if (!sValue.isEmpty())
              m_pImpl->m_currentFontThemeEntry[m_pImpl->m_currentThemeFontId] = sValue;
          break;
         default:

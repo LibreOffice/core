@@ -530,7 +530,7 @@ void lcl_CopyTextProperties(PropertyMapPtr pToFill,
     if( !pStyleSheetEntry )
         return;
     //fill base style properties first, recursively
-    if( pStyleSheetEntry->sBaseStyleIdentifier.getLength())
+    if( !pStyleSheetEntry->sBaseStyleIdentifier.isEmpty())
     {
         const StyleSheetEntryPtr pParentStyleSheet =
             pStyleSheetTable->FindStyleSheetByISTD(pStyleSheetEntry->sBaseStyleIdentifier);

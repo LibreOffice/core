@@ -265,7 +265,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
     // todo: this is not the bullet char
-    if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && m_sBulletChar.getLength() )
+    if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
 
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, m_nTabstop ) );

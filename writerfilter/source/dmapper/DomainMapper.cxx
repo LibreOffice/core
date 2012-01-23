@@ -3152,7 +3152,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             if ( pOLEHandler->isOLEObject( ) )
             {
                 ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
-                if( sStreamName.getLength() )
+                if( !sStreamName.isEmpty() )
                 {
                     m_pImpl->appendOLE( sStreamName, pOLEHandler );
                 }
@@ -3296,7 +3296,7 @@ void DomainMapper::lcl_startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
     DomainMapperTableManager& rTableManager = m_pImpl->getTableManager();
-    if( rTableManager.getTableStyleName().getLength() )
+    if( !rTableManager.getTableStyleName().isEmpty() )
     {
         PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
         rTableManager.CopyTextProperties(pTopContext, m_pImpl->GetStyleSheetTable());

@@ -119,7 +119,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
     PropertyMapPtr pRet;
-    if( pStyleSheet->sBaseStyleIdentifier.getLength())
+    if(!pStyleSheet->sBaseStyleIdentifier.isEmpty())
     {
         const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( pStyleSheet->sBaseStyleIdentifier );
         pRet = lcl_SearchParentStyleSheetAndMergeProperties( pParentStyleSheet, pStyleSheetTable );
