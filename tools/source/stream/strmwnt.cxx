@@ -396,9 +396,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     //    !!! aFilename = aDirEntry.GetFull();
     aFilename = aParsedFilename;
     rtl::OString aFileNameA(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-#ifndef BOOTSTRAP
     FSysRedirector::DoRedirect( aFilename );
-#endif
     SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!
 
     DWORD   nOpenAction;

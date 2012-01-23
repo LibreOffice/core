@@ -128,8 +128,6 @@ int Sys2SolarError_Impl( int nSysErr )
 
 //--------------------------------------------------------------------
 
-#ifndef BOOTSTRAP
-
 FSysRedirector* FSysRedirector::_pRedirector = 0;
 sal_Bool FSysRedirector::_bEnabled = sal_True;
 #ifdef UNX
@@ -183,8 +181,6 @@ void FSysRedirector::DoRedirect( String &rPath )
         bInRedirection = sal_False;
         return;
 }
-
-#endif // BOOTSTRAP
 
 //--------------------------------------------------------------------
 
@@ -738,11 +734,9 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
     if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
     {
-#ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
                 eStyle = FSYS_STYLE_HOST;
-#endif // BOOTSTRAP
     }
     else
     {
@@ -792,11 +786,9 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     rtl::OString aTmpName( rInitName );
     if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
     {
-#ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
         eStyle = FSYS_STYLE_HOST;
-#endif
     }
 #ifdef DBG_UTIL
     else
@@ -916,10 +908,8 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 
 sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 {
-#ifndef BOOTSTRAP
     static osl::Mutex aLocalMutex;
     osl::MutexGuard aGuard( aLocalMutex );
-#endif
         if ( !IsValid() )
                 return sal_False;
 
@@ -968,9 +958,7 @@ sal_Bool DirEntry::First()
     FSysFailOnErrorImpl();
 
         String    aUniPathName( GetPath().GetFull() );
-#ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aUniPathName );
-#endif
         rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 
         DIR *pDir = opendir(aPathName.getStr());
@@ -1724,9 +1712,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 // Redirect
                 String aRetVal(ret_val, osl_getThreadTextEncoding());
                                 String aRedirected (aRetVal);
-#ifndef BOOTSTRAP
                                 FSysRedirector::DoRedirect( aRedirected );
-#endif
                                 if ( FSYS_KIND_DIR == eKind )
                                 {
                                                 if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
@@ -1823,9 +1809,7 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                         {
                                 FSysFailOnErrorImpl();
                                 String aDirName(pNewDir->GetFull());
-#ifndef BOOTSTRAP
                                 FSysRedirector::DoRedirect( aDirName );
-#endif
                                 rtl::OString bDirName(rtl::OUStringToOString(aDirName, osl_getThreadTextEncoding()));
 
 #ifdef WIN32
@@ -1911,15 +1895,11 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
 
-#ifndef BOOTSTRAP
         FSysRedirector::DoRedirect(aFrom);
-#endif
 
         String aTo( aDest.GetFull() );
 
-#ifndef BOOTSTRAP
         FSysRedirector::DoRedirect(aTo);
-#endif
 
         rtl::OString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
         rtl::OString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
@@ -2058,9 +2038,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 
         // Name als doppelt 0-terminierter String
         String aTmpName( GetFull() );
-#ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aTmpName );
-#endif
         rtl::OString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
         char *pName = new char[bTmpName.getLength()+2];

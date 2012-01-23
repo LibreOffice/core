@@ -425,9 +425,6 @@ public:
     DirEntry&       operator []( size_t nIndex ) const;
 };
 
-// we don't need this stuff for bootstraping
-#ifndef BOOTSTRAP
-
 //========================================================================
 
 /** FSysRedirector is an abstract base class for a hook to redirect
@@ -464,7 +461,6 @@ public:
     static void             DoRedirect( String &rPath );
 };
 
-#endif // BOOTSTRP
 
 #if defined(DBG_UTIL)
 void FSysTest();

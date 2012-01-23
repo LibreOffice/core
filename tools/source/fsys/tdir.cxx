@@ -310,11 +310,9 @@ void Dir::Reset()
         }
     }
 
-#ifndef BOOTSTRAP
     // ggf. einen neuen Reader aufsetzen
     if ( !pReader )
         pReader = new DirReader_Impl( *this );
-#endif
 
     // gibt es das zu oeffnende Verzeichnis ueberhaupt?
 #if !defined(UNX)   //explanation: see DirReader_Impl::Read() in unx.cxx

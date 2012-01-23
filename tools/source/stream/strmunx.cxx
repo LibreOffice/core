@@ -58,9 +58,7 @@ using namespace osl;
 // - InternalLock -
 // ----------------
 
-#ifndef BOOTSTRAP
 namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
-#endif
 
 class InternalStreamLock
 {
@@ -122,9 +120,7 @@ InternalStreamLock::~InternalStreamLock()
 
 sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
-#ifndef BOOTSTRAP
     osl::MutexGuard aGuard( LockMutex::get() );
-#endif
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
     {
@@ -181,9 +177,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 
 void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
-#ifndef BOOTSTRAP
     osl::MutexGuard aGuard( LockMutex::get() );
-#endif
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
@@ -693,9 +687,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 //    !!! DirEntry aDirEntry( rFilename );
 //    !!! aFilename = aDirEntry.GetFull();
     aFilename = rFilename;
-#ifndef BOOTSTRAP
     FSysRedirector::DoRedirect( aFilename );
-#endif
     rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
