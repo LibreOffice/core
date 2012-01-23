@@ -177,6 +177,7 @@ build-ant: copy-stuff
 	unset JAVA_HOME && ant debug
 
 install: copy-stuff
+	adb shell rm -r $(APP_DATA_PATH)
 	unset JAVA_HOME && ant debug install
 	@echo
 	@echo 'Run it with "make run"'
