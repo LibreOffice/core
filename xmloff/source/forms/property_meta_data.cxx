@@ -32,7 +32,6 @@
 #include "xmloff/xmltoken.hxx"
 #include "xmloff/xmlnmspe.hxx"
 
-#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 
 #include <boost/unordered_map.hpp>

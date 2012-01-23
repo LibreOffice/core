@@ -34,7 +34,6 @@ class TabBar;
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
-#include <tools/diagnose_ex.h>
 #include <comphelper/string.hxx>
 #include <svimpbox.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
