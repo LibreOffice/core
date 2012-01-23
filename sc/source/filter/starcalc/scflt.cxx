@@ -1708,7 +1708,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         sal_uInt16 nValue1;
         Sc10ColData *pColData;
 
-        // Font (Name, Groesse)
+        // Font (Name, Size)
         nStart = 0;
         nEnd = 0;
         nLimit = aFont.Count;
@@ -1739,7 +1739,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             nStart = nEnd + 1;
         }
 
-    // Fontfarbe
+    // Font color
     nStart = 0;
     nEnd = 0;
     nLimit = aColor.Count;
@@ -1758,7 +1758,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Fontattribute (Fett, Kursiv...)
+    // Font attributes (Bold, Italic...)
     nStart = 0;
     nEnd = 0;
     nLimit = aAttr.Count;
@@ -1783,7 +1783,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Zellausrichtung
+    // Cell alignment
     nStart = 0;
     nEnd = 0;
     nLimit = aJustify.Count;
@@ -1834,15 +1834,15 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                 aScPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,27000));
 
             sal_Int16 Margin = Max((sal_uInt16)20, (sal_uInt16)(EJustify * 20));
-            if (((OJustify & ojBottomTop) == ojBottomTop) || ((OJustify & ojBottomTop) == ojBottomTop))
+            if (OJustify & ojBottomTop)
                 aScPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin, ATTR_MARGIN));
             else
                 aScPattern.GetItemSet().Put(SvxMarginItem(Margin, 20, Margin, 20, ATTR_MARGIN));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
-    nStart = nEnd + 1;
+        nStart = nEnd + 1;
     }
-    // Umrandung
+    // Border
     sal_Bool            bEnd = false;
     sal_uInt16          nColorIndex = 0;
     sal_uInt16          nFrameIndex = 0;
@@ -1966,9 +1966,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         pColData++;
     }
 
-    // ACHTUNG: Code bis hier ueberarbeitet ... jetzt hab' ich keinen Bock mehr! (GT)
+    // ATTENTION: Code up to here works more or less ... from here I've had enough ! (GT)
 
-    // Hintergrund (Farbe, Raster)
+    // Background (Color, Raster)
     sal_uInt16      nRasterIndex = 0;
     bEnd        = false;
     nColorIndex = 0;
@@ -2056,7 +2056,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nHelpMe--;
     }
 
-    // Zahlenformate
+    // Number format
     nStart = 0;
     nEnd = 0;
     nLimit = aValue.Count;
@@ -2078,7 +2078,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Zellattribute (Schutz, Versteckt...)
+    // Cell attributes (Protected, hidden...)
     nStart = 0;
     nEnd = 0;
     for (i=0; i<aFlag.Count; i++)
@@ -2097,7 +2097,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // ZellVorlagen
+    // Cell style
     nStart = 0;
     nEnd = 0;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
