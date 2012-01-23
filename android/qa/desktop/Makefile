@@ -43,7 +43,7 @@ buildrcs:
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry user:$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
-	echo 'URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb <$$ORIGIN/services>*' >> assets/program/fundamentalrc
+	echo 'URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 # unorc ini ...
 	echo "[Bootstrap]" > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
@@ -53,7 +53,7 @@ buildrcs:
 	echo "[Bootstrap]" > assets/program/bootstraprc
 	echo "InstallMode=<installmode>" >> assets/program/bootstraprc
 	echo "ProductKey=LibreOffice 3.5" >> assets/program/bootstraprc
-	echo "UserInstallation=file://$(APP_DATA_PATH)=/data/data/$(APP_PACKAGE)/files/.libreoffice" >> assets/program/bootstraprc
+	echo "UserInstallation=file://$(APP_DATA_PATH)/files/.libreoffice" >> assets/program/bootstraprc
 
 copy-stuff: buildrcs
 #
@@ -177,6 +177,16 @@ copy-stuff: buildrcs
 	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
 # .res files
 	cp $(OUTDIR)/bin/*en-US.res assets/program/resource/
+# presets - becomes the users home directory
+	mkdir -p assets/presets/autocorr
+	mkdir -p assets/presets/autotext
+	mkdir -p assets/presets/backup
+	mkdir -p assets/presets/basic
+	mkdir -p assets/presets/config
+	mkdir -p assets/presets/gallery
+	mkdir -p assets/presets/psprint
+	mkdir -p assets/presets/template
+	mkdir -p assets/presets/wordbook
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
