@@ -47,6 +47,11 @@ buildrcs:
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
 	echo 'UNO_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
+# bootstraprc ini ...
+	echo "[Bootstrap]" > assets/program/bootstraprc
+	echo "InstallMode=<installmode>" >> assets/program/bootstraprc
+	echo "ProductKey=LibreOffice 3.5" >> assets/program/bootstraprc
+	echo "UserInstallation=file://$(APP_DATA_PATH)=/data/data/$(APP_PACKAGE)/files/.libreoffice" >> assets/program/bootstraprc
 
 copy-stuff: buildrcs
 #
@@ -111,6 +116,7 @@ copy-stuff: buildrcs
 		  mergedlo \
 		  msfilterlo \
 		  ooxlo \
+		  package2 \
 		  reg \
 		  saxlo \
 		  sblo \
