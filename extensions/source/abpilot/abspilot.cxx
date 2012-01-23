@@ -135,6 +135,11 @@ namespace abp
         typeSelectionChanged( m_aSettings.eType );
     }
 
+    OAddessBookSourcePilot::~OAddessBookSourcePilot()
+    {
+        FreeResource();
+    }
+
     //---------------------------------------------------------------------
     String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {

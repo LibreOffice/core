@@ -59,6 +59,8 @@ namespace abp
         OAddessBookSourcePilot(
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        /// dtor
+        ~OAddessBookSourcePilot();
 
         /// get the service factory which was used to create the dialog
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
