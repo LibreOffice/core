@@ -1410,24 +1410,22 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
         Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
         if(xSource.is())
         {
-            for (  ExternalFeaturesMap::iterator aLoop = m_aExternalFeatures.begin();
-                  aLoop != m_aExternalFeatures.end();
-                  ++aLoop
-                )
+            ExternalFeaturesMap::iterator aLoop = m_aExternalFeatures.begin();
+            ExternalFeaturesMap::iterator aEnd = m_aExternalFeatures.end();
+            while (aLoop != aEnd)
             {
-                if ( aLoop->second.xDispatcher.get() == xSource.get() )
+                ExternalFeaturesMap::iterator aI = aLoop++;
+                if ( aI->second.xDispatcher.get() == xSource.get() )
                 {
-                    ExternalFeaturesMap::iterator aPrevious = aLoop;
-                    --aPrevious;
+                    sal_uInt16 nSlot = aI->first;
 
                     // remove it
-                    m_aExternalFeatures.erase( aLoop );
+                    m_aExternalFeatures.erase(aI);
 
                     // maybe update the UI
-                    implCheckExternalSlot(aLoop->first);
+                    implCheckExternalSlot(nSlot);
 
                     // continue, the same XDispatch may be resposible for more than one URL
-                    aLoop = aPrevious;
                 }
             }
         }
