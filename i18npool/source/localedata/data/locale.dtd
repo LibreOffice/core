@@ -243,16 +243,18 @@
         data. The requirements are the same as for formatindex="21" above.
 
     Of usage="TIME":
-        formatindices 43, 44, 45 are special in the sense that they are
-        programmatically used to automatically display values that meet certain
-        criteria:
-        Formatindex="43" contains the [HH] format code that displays hour
-        values greater than or equal to 24 (as opposed to a simple HH that
-        displays modulo 24).
-        Formatindex="44" uses no hour code but 100th seconds and the
-        Time100SecSeparator.
-        Formatindex="45" uses both [HH] hour code and 100th seconds to be able
-        to edit such time values without loosing information.
+        * The FormatElement with default="true" type="medium" is used to edit
+          times and thus must contain all HH and MM and SS codes, e.g. HH:MM:SS
+        * Formatindices 43, 44, 45 are special in the sense that they are
+          programmatically used to automatically display values that meet
+          certain criteria:
+          * Formatindex="43" contains the [HH] format code that displays hour
+            values greater than or equal to 24 (as opposed to a simple HH that
+            displays modulo 24).
+          * Formatindex="44" uses no hour code but 100th seconds and the
+            Time100SecSeparator.
+          * Formatindex="45" uses both [HH] hour code and 100th seconds to be
+            able to edit such time values without loosing information.
 
     Of usage="CURRENCY":
         formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the
