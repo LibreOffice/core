@@ -51,10 +51,6 @@
 
 #include "KDESalDisplay.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <stdio.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 9, 0 )
