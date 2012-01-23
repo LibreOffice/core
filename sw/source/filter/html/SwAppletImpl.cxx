@@ -47,76 +47,76 @@ static char const sHTML_O_Object[] = "OBJECT";
 
 }
 
-sal_uInt16 SwApplet_Impl::GetOptionType( const String& rName, sal_Bool bApplet )
+sal_uInt16 SwApplet_Impl::GetOptionType( const ::rtl::OUString& rName, sal_Bool bApplet )
 {
     sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
 
-    switch( rName.GetChar(0) )
+    switch( rName.toChar() )
     {
     case 'A':
     case 'a':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
-            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
-                 (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
-                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
+                 (rName.equalsIgnoreAsciiCaseAscii( sHTML_O_archive ) ||
+                 rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Archives )) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'C':
     case 'c':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
-            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
-                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'H':
     case 'h':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) )
             nType = SWHTML_OPTTYPE_SIZE;
-        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
+        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
     case 'i':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'M':
     case 'm':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+        if( bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'N':
     case 'n':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'O':
     case 'o':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
+        if( bApplet && rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Object ) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'S':
     case 's':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'T':
     case 't':
-        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
+        if( !bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'V':
     case 'v':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'W':
     case 'w':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
             nType = SWHTML_OPTTYPE_SIZE;
         break;
     }
@@ -128,9 +128,9 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16
 {
 }
 
-void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
-                                      sal_Bool bMayScript, const String& rCodeBase,
-                                      const String& rDocumentBaseURL )
+void SwApplet_Impl::CreateApplet( const ::rtl::OUString& rCode, const ::rtl::OUString& rName,
+                                  sal_Bool bMayScript, const ::rtl::OUString& rCodeBase,
+                                  const ::rtl::OUString& rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
     ::rtl::OUString aName;
@@ -142,42 +142,42 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
     INetURLObject aUrlBase(rDocumentBaseURL);
     aUrlBase.removeSegment();
 
-    String sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
+    ::rtl::OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
-        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")), uno::makeAny( ::rtl::OUString( rCode ) ) );
-        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")), uno::makeAny( ::rtl::OUString( rName ) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")), uno::makeAny( rCode ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")), uno::makeAny( rName ) );
         xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")), uno::makeAny( sal_Bool(bMayScript) ) );
-        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletDocBase")), uno::makeAny( ::rtl::OUString(sDocBase) ) );
-        if ( rCodeBase.Len() )
-            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( ::rtl::OUString( rCodeBase ) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletDocBase")), uno::makeAny( sDocBase ) );
+        if ( !rCodeBase.isEmpty() )
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( rCodeBase ) );
         else
-            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( ::rtl::OUString( sDocBase ) ) );
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( sDocBase ) );
     }
 }
 #ifdef SOLAR_JAVA
-sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
+sal_Bool SwApplet_Impl::CreateApplet( const ::rtl::OUString& rBaseURL )
 {
-    String aCode, aName, aCodeBase;
+    ::rtl::OUString aCode, aName, aCodeBase;
     sal_Bool bMayScript = sal_False;
 
     size_t nArgCount = aCommandList.size();
     for( size_t i = 0; i < nArgCount; i++ )
     {
         const SvCommand& rArg = aCommandList[i];
-        const String& rName = rArg.GetCommand();
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) )
+        const ::rtl::OUString& rName = rArg.GetCommand();
+        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) )
             aCode = rArg.GetArgument();
-        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
+        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
             aCodeBase = INetURLObject::GetAbsURL( rBaseURL, rArg.GetArgument() );
-        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
+        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
             aName = rArg.GetArgument();
-        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             bMayScript = sal_True;
     }
 
-    if( !aCode.Len() )
+    if( aCode.isEmpty() )
         return sal_False;
     CreateApplet( aCode, aName, bMayScript, aCodeBase, rBaseURL );
     return sal_True;
@@ -199,7 +199,7 @@ void SwApplet_Impl::FinishApplet()
 }
 
 #ifdef SOLAR_JAVA
-void SwApplet_Impl::AppendParam( const String& rName, const String& rValue )
+void SwApplet_Impl::AppendParam( const ::rtl::OUString& rName, const ::rtl::OUString& rValue )
 {
     aCommandList.Append( rName, rValue );
 }
