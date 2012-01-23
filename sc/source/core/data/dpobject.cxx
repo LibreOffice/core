@@ -2680,6 +2680,13 @@ bool ScDPCollection::DBType::less::operator() (const DBType& left, const DBType&
 
 ScDPCollection::DBCaches::DBCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
+bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const
+{
+    DBType aType(nSdbType, rDBName, rCommand);
+    CachesType::const_iterator itr = maCaches.find(aType);
+    return itr != maCaches.end();
+}
+
 const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
 {
     DBType aType(nSdbType, rDBName, rCommand);
@@ -2872,13 +2879,27 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
         {
             // cache by named range
             ScDPCollection::NameCaches& rCaches = GetNameCaches();
-            rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), rRefs);
+            if (rCaches.hasCache(pDesc->GetRangeName()))
+                rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), rRefs);
+            else
+            {
+                // Not cached yet.  Collect all tables that use this named
+                // range as data source.
+                GetAllTables(pDesc->GetRangeName(), rRefs);
+            }
         }
         else
         {
             // cache by cell range
             ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
-            rCaches.updateCache(pDesc->GetSourceRange(), rRefs);
+            if (rCaches.hasCache(pDesc->GetSourceRange()))
+                rCaches.updateCache(pDesc->GetSourceRange(), rRefs);
+            else
+            {
+                // Not cached yet.  Collect all tables that use this range as
+                // data source.
+                GetAllTables(pDesc->GetSourceRange(), rRefs);
+            }
         }
     }
     else if (pDPObj->IsImportData())
@@ -2889,8 +2910,15 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             return STR_ERR_DATAPILOTSOURCE;
 
         ScDPCollection::DBCaches& rCaches = GetDBCaches();
-        rCaches.updateCache(
-            pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
+        if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
+            rCaches.updateCache(
+                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
+        else
+        {
+            // Not cached yet.  Collect all tables that use this range as
+            // data source.
+            GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
+        }
     }
     return 0;
 }
@@ -3114,6 +3142,91 @@ void ScDPCollection::RemoveCache(const ScDPCache* pCache)
     if (maDBCaches.remove(pCache))
         // database cache removed.
         return;
+}
+
+void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const
+{
+    std::set<ScDPObject*> aRefs;
+    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPObject& rObj = *it;
+        if (!rObj.IsSheetData())
+            // Source is not a sheet range.
+            continue;
+
+        const ScSheetSourceDesc* pDesc = rObj.GetSheetDesc();
+        if (!pDesc)
+            continue;
+
+        if (pDesc->HasRangeName())
+            // This table has a range name as its source.
+            continue;
+
+        if (pDesc->GetSourceRange() != rSrcRange)
+            // Different source range.
+            continue;
+
+        aRefs.insert(const_cast<ScDPObject*>(&rObj));
+    }
+
+    rRefs.swap(aRefs);
+}
+
+void ScDPCollection::GetAllTables(const rtl::OUString& rSrcName, std::set<ScDPObject*>& rRefs) const
+{
+    std::set<ScDPObject*> aRefs;
+    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPObject& rObj = *it;
+        if (!rObj.IsSheetData())
+            // Source is not a sheet range.
+            continue;
+
+        const ScSheetSourceDesc* pDesc = rObj.GetSheetDesc();
+        if (!pDesc)
+            continue;
+
+        if (!pDesc->HasRangeName())
+            // This table probably has a sheet range as its source.
+            continue;
+
+        if (pDesc->GetRangeName() != rSrcName)
+            // Different source name.
+            continue;
+
+        aRefs.insert(const_cast<ScDPObject*>(&rObj));
+    }
+
+    rRefs.swap(aRefs);
+}
+
+void ScDPCollection::GetAllTables(
+    sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+    std::set<ScDPObject*>& rRefs) const
+{
+    std::set<ScDPObject*> aRefs;
+    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPObject& rObj = *it;
+        if (!rObj.IsImportData())
+            // Source data is not a database.
+            continue;
+
+        const ScImportSourceDesc* pDesc = rObj.GetImportSourceDesc();
+        if (!pDesc)
+            continue;
+
+        if (!pDesc->aDBName.equals(rDBName) || !pDesc->aObject.equals(rCommand) || pDesc->GetCommandType() != nSdbType)
+            // Different database source.
+            continue;
+
+        aRefs.insert(const_cast<ScDPObject*>(&rObj));
+    }
+
+    rRefs.swap(aRefs);
 }
 
 bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType& right)
