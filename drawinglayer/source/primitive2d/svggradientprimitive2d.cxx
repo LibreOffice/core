@@ -41,6 +41,31 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace
+{
+    sal_uInt32 calculateStepsForSvgGradient(const basegfx::BColor& rColorA, const basegfx::BColor& rColorB, double fDelta, double fDiscreteUnit)
+    {
+        // use color distance, assume to do every color step (full quality)
+        sal_uInt32 nSteps(basegfx::fround(rColorA.getDistance(rColorB) * 255.0));
+
+        if(nSteps)
+        {
+            // calc discrete length to change color all 1.5 disctete units (pixels)
+            const sal_uInt32 nDistSteps(basegfx::fround(fDelta / (fDiscreteUnit * 1.5)));
+
+            nSteps = std::min(nSteps, nDistSteps);
+        }
+
+        // roughly cut when too big or too small
+        nSteps = std::min(nSteps, sal_uInt32(255));
+        nSteps = std::max(nSteps, sal_uInt32(1));
+
+        return nSteps;
+    }
+} // end of anonymous namespace
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace primitive2d
@@ -263,13 +288,11 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
-            SpreadMethod aSpreadMethod,
-            double fOverlapping)
+            SpreadMethod aSpreadMethod)
         :   maPolyPolygon(rPolyPolygon),
             maGradientEntries(rGradientEntries),
             maStart(rStart),
             maSpreadMethod(aSpreadMethod),
-            mfOverlapping(fOverlapping),
             mbPreconditionsChecked(false),
             mbCreatesContent(false),
             mbSingleEntry(false),
@@ -284,8 +307,7 @@ namespace drawinglayer
             return (getPolyPolygon() == rCompare.getPolyPolygon()
                 && getGradientEntries() == rCompare.getGradientEntries()
                 && getStart() == rCompare.getStart()
-                && getSpreadMethod() == rCompare.getSpreadMethod()
-                && getOverlapping() == rCompare.getOverlapping());
+                && getSpreadMethod() == rCompare.getSpreadMethod());
         }
 
     } // end of namespace primitive2d
@@ -315,24 +337,6 @@ namespace drawinglayer
             }
         }
 
-        void SvgLinearGradientPrimitive2D::ensureGeometry(
-            basegfx::B2DPolyPolygon& rPolyPolygon,
-            const SvgGradientEntry& rFrom,
-            const SvgGradientEntry& rTo,
-            sal_Int32 nOffset) const
-        {
-            if(!rPolyPolygon.count())
-            {
-                rPolyPolygon.append(
-                    basegfx::tools::createPolygonFromRect(
-                        basegfx::B2DRange(
-                            rFrom.getOffset() - getOverlapping() + nOffset,
-                            0.0,
-                            rTo.getOffset() + getOverlapping() + nOffset,
-                            1.0)));
-            }
-        }
-
         void SvgLinearGradientPrimitive2D::createAtom(
             Primitive2DVector& rTargetColor,
             Primitive2DVector& rTargetOpacity,
@@ -347,48 +351,18 @@ namespace drawinglayer
             }
             else
             {
-                const bool bColorChange(rFrom.getColor() != rTo.getColor());
-                const bool bOpacityChange(rFrom.getOpacity() != rTo.getOpacity());
-                basegfx::B2DPolyPolygon aPolyPolygon;
+                rTargetColor.push_back(
+                    new SvgLinearAtomPrimitive2D(
+                        rFrom.getColor(), rFrom.getOffset() + nOffset,
+                        rTo.getColor(), rTo.getOffset() + nOffset));
 
-                if(bColorChange)
-                {
-                    rTargetColor.push_back(
-                        new SvgLinearAtomPrimitive2D(
-                            rFrom.getColor(), rFrom.getOffset() + nOffset,
-                            rTo.getColor(), rTo.getOffset() + nOffset,
-                            getOverlapping()));
-                }
-                else
-                {
-                    ensureGeometry(aPolyPolygon, rFrom, rTo, nOffset);
-                    rTargetColor.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            aPolyPolygon,
-                            rFrom.getColor()));
-                }
+                const double fTransFrom(1.0 - rFrom.getOpacity());
+                const double fTransTo(1.0 - rTo.getOpacity());
 
-                if(bOpacityChange)
-                {
-                    const double fTransFrom(1.0 - rFrom.getOpacity());
-                    const double fTransTo(1.0 - rTo.getOpacity());
-
-                    rTargetOpacity.push_back(
-                        new SvgLinearAtomPrimitive2D(
-                            basegfx::BColor(fTransFrom, fTransFrom, fTransFrom), rFrom.getOffset() + nOffset,
-                            basegfx::BColor(fTransTo,fTransTo, fTransTo), rTo.getOffset() + nOffset,
-                            getOverlapping()));
-                }
-                else if(!getFullyOpaque())
-                {
-                    const double fTransparence(1.0 - rFrom.getOpacity());
-
-                    ensureGeometry(aPolyPolygon, rFrom, rTo, nOffset);
-                    rTargetOpacity.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            aPolyPolygon,
-                            basegfx::BColor(fTransparence, fTransparence, fTransparence)));
-                }
+                rTargetOpacity.push_back(
+                    new SvgLinearAtomPrimitive2D(
+                        basegfx::BColor(fTransFrom, fTransFrom, fTransFrom), rFrom.getOffset() + nOffset,
+                        basegfx::BColor(fTransTo,fTransTo, fTransTo), rTo.getOffset() + nOffset));
             }
         }
 
@@ -556,10 +530,9 @@ namespace drawinglayer
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
-            SpreadMethod aSpreadMethod,
-            double fOverlapping)
+            SpreadMethod aSpreadMethod)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod, fOverlapping),
+            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod),
             maEnd(rEnd)
         {
         }
@@ -612,60 +585,6 @@ namespace drawinglayer
             }
         }
 
-        void SvgRadialGradientPrimitive2D::ensureGeometry(
-            basegfx::B2DPolyPolygon& rPolyPolygon,
-            const SvgGradientEntry& rFrom,
-            const SvgGradientEntry& rTo,
-            sal_Int32 nOffset) const
-        {
-            if(!rPolyPolygon.count())
-            {
-                basegfx::B2DPolygon aPolygonA(basegfx::tools::createPolygonFromUnitCircle());
-                basegfx::B2DPolygon aPolygonB(basegfx::tools::createPolygonFromUnitCircle());
-                double fScaleFrom(rFrom.getOffset() + nOffset);
-                const double fScaleTo(rTo.getOffset() + nOffset);
-
-                if(fScaleFrom > getOverlapping())
-                {
-                    fScaleFrom -= getOverlapping();
-                }
-
-                if(isFocalSet())
-                {
-                    const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
-                    const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
-
-                    aPolygonA.transform(
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            fScaleFrom,
-                            fScaleFrom,
-                            aTranslateFrom.getX(),
-                            aTranslateFrom.getY()));
-                    aPolygonB.transform(
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            fScaleTo,
-                            fScaleTo,
-                            aTranslateTo.getX(),
-                            aTranslateTo.getY()));
-                }
-                else
-                {
-                    aPolygonA.transform(
-                        basegfx::tools::createScaleB2DHomMatrix(
-                            fScaleFrom,
-                            fScaleFrom));
-                    aPolygonB.transform(
-                        basegfx::tools::createScaleB2DHomMatrix(
-                            fScaleTo,
-                            fScaleTo));
-                }
-
-                // add the outer polygon first
-                rPolyPolygon.append(aPolygonB);
-                rPolyPolygon.append(aPolygonA);
-            }
-        }
-
         void SvgRadialGradientPrimitive2D::createAtom(
             Primitive2DVector& rTargetColor,
             Primitive2DVector& rTargetOpacity,
@@ -680,82 +599,48 @@ namespace drawinglayer
             }
             else
             {
-                const bool bColorChange(rFrom.getColor() != rTo.getColor());
-                const bool bOpacityChange(rFrom.getOpacity() != rTo.getOpacity());
-                basegfx::B2DPolyPolygon aPolyPolygon;
+                const double fScaleFrom(rFrom.getOffset() + nOffset);
+                const double fScaleTo(rTo.getOffset() + nOffset);
 
-                if(bColorChange)
+                if(isFocalSet())
                 {
-                    const double fScaleFrom(rFrom.getOffset() + nOffset);
-                    const double fScaleTo(rTo.getOffset() + nOffset);
+                    const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
+                    const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
 
-                    if(isFocalSet())
-                    {
-                        const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
-                        const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
-
-                        rTargetColor.push_back(
-                            new SvgRadialAtomPrimitive2D(
-                                rFrom.getColor(), fScaleFrom, aTranslateFrom,
-                                rTo.getColor(), fScaleTo, aTranslateTo,
-                                getOverlapping()));
-                    }
-                    else
-                    {
-                        rTargetColor.push_back(
-                            new SvgRadialAtomPrimitive2D(
-                                rFrom.getColor(), fScaleFrom,
-                                rTo.getColor(), fScaleTo,
-                                getOverlapping()));
-                    }
+                    rTargetColor.push_back(
+                        new SvgRadialAtomPrimitive2D(
+                            rFrom.getColor(), fScaleFrom, aTranslateFrom,
+                            rTo.getColor(), fScaleTo, aTranslateTo));
                 }
                 else
                 {
-                    ensureGeometry(aPolyPolygon, rFrom, rTo, nOffset);
                     rTargetColor.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            aPolyPolygon,
-                            rFrom.getColor()));
+                        new SvgRadialAtomPrimitive2D(
+                            rFrom.getColor(), fScaleFrom,
+                            rTo.getColor(), fScaleTo));
                 }
 
-                if(bOpacityChange)
+                const double fTransFrom(1.0 - rFrom.getOpacity());
+                const double fTransTo(1.0 - rTo.getOpacity());
+                const basegfx::BColor aColorFrom(fTransFrom, fTransFrom, fTransFrom);
+                const basegfx::BColor aColorTo(fTransTo, fTransTo, fTransTo);
+
+                if(isFocalSet())
                 {
-                    const double fTransFrom(1.0 - rFrom.getOpacity());
-                    const double fTransTo(1.0 - rTo.getOpacity());
-                    const basegfx::BColor aColorFrom(fTransFrom, fTransFrom, fTransFrom);
-                    const basegfx::BColor aColorTo(fTransTo, fTransTo, fTransTo);
-                    const double fScaleFrom(rFrom.getOffset() + nOffset);
-                    const double fScaleTo(rTo.getOffset() + nOffset);
+                    const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
+                    const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
 
-                    if(isFocalSet())
-                    {
-                        const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
-                        const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
-
-                        rTargetOpacity.push_back(
-                            new SvgRadialAtomPrimitive2D(
-                                aColorFrom, fScaleFrom, aTranslateFrom,
-                                aColorTo, fScaleTo, aTranslateTo,
-                                getOverlapping()));
-                    }
-                    else
-                    {
-                        rTargetOpacity.push_back(
-                            new SvgRadialAtomPrimitive2D(
-                                aColorFrom, fScaleFrom,
-                                aColorTo, fScaleTo,
-                                getOverlapping()));
-                    }
-                }
-                else if(!getFullyOpaque())
-                {
-                    const double fTransparence(1.0 - rFrom.getOpacity());
-
-                    ensureGeometry(aPolyPolygon, rFrom, rTo, nOffset);
                     rTargetOpacity.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            aPolyPolygon,
-                            basegfx::BColor(fTransparence, fTransparence, fTransparence)));
+                        new SvgRadialAtomPrimitive2D(
+                            aColorFrom, fScaleFrom, aTranslateFrom,
+                            aColorTo, fScaleTo, aTranslateTo));
+                }
+                else
+                {
+                    rTargetOpacity.push_back(
+                        new SvgRadialAtomPrimitive2D(
+                            aColorFrom, fScaleFrom,
+                            aColorTo, fScaleTo));
                 }
             }
         }
@@ -901,10 +786,9 @@ namespace drawinglayer
             const basegfx::B2DPoint& rStart,
             double fRadius,
             SpreadMethod aSpreadMethod,
-            const basegfx::B2DPoint* pFocal,
-            double fOverlapping)
+            const basegfx::B2DPoint* pFocal)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod, fOverlapping),
+            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod),
             mfRadius(fRadius),
             maFocal(rStart),
             maFocalVector(0.0, 0.0),
@@ -973,61 +857,54 @@ namespace drawinglayer
 
             if(!basegfx::fTools::equalZero(fDelta))
             {
-                if(getColorA() == getColorB())
+                // use one discrete unit for overlap (one pixel)
+                const double fDiscreteUnit(getDiscreteUnit());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDelta, fDiscreteUnit));
+
+                // prepare loop and polygon (with overlap for linear gradients)
+                double fStart(0.0);
+                double fStep(fDelta / nSteps);
+                const basegfx::B2DPolygon aPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        basegfx::B2DRange(
+                            getOffsetA() - fDiscreteUnit,
+                            0.0,
+                            getOffsetA() + fStep + fDiscreteUnit,
+                            1.0)));
+
+                // loop and create primitives
+                xRetval.realloc(nSteps);
+
+                for(sal_uInt32 a(0); a < nSteps; a++, fStart += fStep)
                 {
-                    const basegfx::B2DPolygon aPolygon(
-                        basegfx::tools::createPolygonFromRect(
-                            basegfx::B2DRange(
-                                getOffsetA() - getOverlapping(),
-                                0.0,
-                                getOffsetB() + getOverlapping(),
-                                1.0)));
+                    basegfx::B2DPolygon aNew(aPolygon);
 
-                    xRetval.realloc(1);
-                    xRetval[0] = new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aPolygon),
-                        getColorA());
-                }
-                else
-                {
-                    // calc discrete length to change color all 2.5 pixels
-                    sal_uInt32 nSteps(basegfx::fround(fDelta / (getDiscreteUnit() * 2.5)));
-
-                    // use color distance, assume to do every 3rd
-                    const double fColorDistance(getColorA().getDistance(getColorB()));
-                    const sal_uInt32 nColorSteps(basegfx::fround(fColorDistance * (255.0 * 0.3)));
-                    nSteps = std::min(nSteps, nColorSteps);
-
-                    // roughly cut when too big
-                    nSteps = std::min(nSteps, sal_uInt32(100));
-                    nSteps = std::max(nSteps, sal_uInt32(1));
-
-                    // preapare iteration
-                    double fStart(0.0);
-                    double fStep(fDelta / nSteps);
-
-                    xRetval.realloc(nSteps);
-
-                    for(sal_uInt32 a(0); a < nSteps; a++, fStart += fStep)
-                    {
-                        const double fLeft(getOffsetA() + fStart);
-                        const double fRight(fLeft + fStep);
-                        const basegfx::B2DPolygon aPolygon(
-                            basegfx::tools::createPolygonFromRect(
-                                basegfx::B2DRange(
-                                    fLeft - getOverlapping(),
-                                    0.0,
-                                    fRight + getOverlapping(),
-                                    1.0)));
-
-                        xRetval[a] = new PolyPolygonColorPrimitive2D(
-                            basegfx::B2DPolyPolygon(aPolygon),
-                            basegfx::interpolate(getColorA(), getColorB(), fStart/fDelta));
-                    }
+                    aNew.transform(basegfx::tools::createTranslateB2DHomMatrix(fStart, 0.0));
+                    xRetval[a] = new PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aNew),
+                        basegfx::interpolate(getColorA(), getColorB(), fStart/fDelta));
                 }
             }
 
             return xRetval;
+        }
+
+        SvgLinearAtomPrimitive2D::SvgLinearAtomPrimitive2D(
+            const basegfx::BColor& aColorA, double fOffsetA,
+            const basegfx::BColor& aColorB, double fOffsetB)
+        :   DiscreteMetricDependentPrimitive2D(),
+            maColorA(aColorA),
+            maColorB(aColorB),
+            mfOffsetA(fOffsetA),
+            mfOffsetB(fOffsetB)
+        {
+            if(mfOffsetA > mfOffsetB)
+            {
+                OSL_ENSURE(false, "Wrong offset order (!)");
+                ::std::swap(mfOffsetA, mfOffsetB);
+            }
         }
 
         bool SvgLinearAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -1039,8 +916,7 @@ namespace drawinglayer
                 return (getColorA() == rCompare.getColorA()
                     && getColorB() == rCompare.getColorB()
                     && getOffsetA() == rCompare.getOffsetA()
-                    && getOffsetB() == rCompare.getOffsetB()
-                    && getOverlapping() == rCompare.getOverlapping());
+                    && getOffsetB() == rCompare.getOffsetB());
             }
 
             return false;
@@ -1066,158 +942,119 @@ namespace drawinglayer
 
             if(!basegfx::fTools::equalZero(fDeltaScale))
             {
-                if(getColorA() == getColorB())
+                // use one discrete unit for overlap (one pixel)
+                const double fDiscreteUnit(getDiscreteUnit());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDeltaScale, fDiscreteUnit));
+
+                // prepare loop (outside to inside, full polygons, no polypolygons with holes)
+                double fEndScale(getScaleB());
+                double fStepScale(fDeltaScale / nSteps);
+
+                // loop and create primitives
+                xRetval.realloc(nSteps);
+
+                for(sal_uInt32 a(0); a < nSteps; a++, fEndScale -= fStepScale)
                 {
-                    basegfx::B2DPolygon aPolygonA(basegfx::tools::createPolygonFromUnitCircle());
-                    basegfx::B2DPolygon aPolygonB(basegfx::tools::createPolygonFromUnitCircle());
-                    double fScaleA(getScaleA());
-                    const double fScaleB(getScaleB());
+                    const double fUnitScale(fEndScale/fDeltaScale);
+                    basegfx::B2DHomMatrix aTransform;
 
-                    if(fScaleA > getOverlapping())
+                    if(isTranslateSet())
                     {
-                        fScaleA -= getOverlapping();
-                    }
+                        const basegfx::B2DVector aTranslate(
+                            basegfx::interpolate(
+                                getTranslateA(),
+                                getTranslateB(),
+                                fUnitScale));
 
-                    const bool bUseA(basegfx::fTools::equalZero(fScaleA));
-
-                    if(getTranslateSet())
-                    {
-                        if(bUseA)
-                        {
-                            aPolygonA.transform(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                    fScaleA,
-                                    fScaleA,
-                                    getTranslateA().getX(),
-                                    getTranslateA().getY()));
-                        }
-
-                        aPolygonB.transform(
-                            basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                fScaleB,
-                                fScaleB,
-                                getTranslateB().getX(),
-                                getTranslateB().getY()));
+                        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            fEndScale,
+                            fEndScale,
+                            aTranslate.getX(),
+                            aTranslate.getY());
                     }
                     else
                     {
-                        if(bUseA)
-                        {
-                            aPolygonA.transform(
-                                basegfx::tools::createScaleB2DHomMatrix(
-                                    fScaleA,
-                                    fScaleA));
-                        }
-
-                        aPolygonB.transform(
-                            basegfx::tools::createScaleB2DHomMatrix(
-                                fScaleB,
-                                fScaleB));
+                        aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                            fEndScale,
+                            fEndScale);
                     }
 
-                    basegfx::B2DPolyPolygon aPolyPolygon(aPolygonB);
+                    basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
 
-                    if(bUseA)
-                    {
-                        aPolyPolygon.append(aPolygonA);
-                    }
-
-                    xRetval.realloc(1);
-
-                    xRetval[0] = new PolyPolygonColorPrimitive2D(
-                        aPolyPolygon,
-                        getColorA());
-                }
-                else
-                {
-                    // calc discrete length to change color all 2.5 pixels
-                    sal_uInt32 nSteps(basegfx::fround(fDeltaScale / (getDiscreteUnit() * 2.5)));
-
-                    // use color distance, assume to do every 3rd
-                    const double fColorDistance(getColorA().getDistance(getColorB()));
-                    const sal_uInt32 nColorSteps(basegfx::fround(fColorDistance * (255.0 * 0.3)));
-                    nSteps = std::min(nSteps, nColorSteps);
-
-                    // roughly cut when too big
-                    nSteps = std::min(nSteps, sal_uInt32(100));
-                    nSteps = std::max(nSteps, sal_uInt32(1));
-
-                    // preapare iteration
-                    double fStartScale(0.0);
-                    double fStepScale(fDeltaScale / nSteps);
-
-                    xRetval.realloc(nSteps);
-
-                    for(sal_uInt32 a(0); a < nSteps; a++, fStartScale += fStepScale)
-                    {
-                        double fScaleA(getScaleA() + fStartScale);
-                        const double fScaleB(fScaleA + fStepScale);
-                        const double fUnitScale(fStartScale/fDeltaScale);
-                        basegfx::B2DPolygon aPolygonA(basegfx::tools::createPolygonFromUnitCircle());
-                        basegfx::B2DPolygon aPolygonB(basegfx::tools::createPolygonFromUnitCircle());
-
-                        if(fScaleA > getOverlapping())
-                        {
-                            fScaleA -= getOverlapping();
-                        }
-
-                        const bool bUseA(basegfx::fTools::equalZero(fScaleA));
-
-                        if(getTranslateSet())
-                        {
-                            const double fUnitScaleEnd((fStartScale + fStepScale)/fDeltaScale);
-                            const basegfx::B2DVector aTranslateB(basegfx::interpolate(getTranslateA(), getTranslateB(), fUnitScaleEnd));
-
-                            if(bUseA)
-                            {
-                                const basegfx::B2DVector aTranslateA(basegfx::interpolate(getTranslateA(), getTranslateB(), fUnitScale));
-
-                                aPolygonA.transform(
-                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                        fScaleA,
-                                        fScaleA,
-                                        aTranslateA.getX(),
-                                        aTranslateA.getY()));
-                            }
-
-                            aPolygonB.transform(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                    fScaleB,
-                                    fScaleB,
-                                    aTranslateB.getX(),
-                                    aTranslateB.getY()));
-                        }
-                        else
-                        {
-                            if(bUseA)
-                            {
-                                aPolygonA.transform(
-                                    basegfx::tools::createScaleB2DHomMatrix(
-                                        fScaleA,
-                                        fScaleA));
-                            }
-
-                            aPolygonB.transform(
-                                basegfx::tools::createScaleB2DHomMatrix(
-                                    fScaleB,
-                                    fScaleB));
-                        }
-
-                        basegfx::B2DPolyPolygon aPolyPolygon(aPolygonB);
-
-                        if(bUseA)
-                        {
-                            aPolyPolygon.append(aPolygonA);
-                        }
-
-                        xRetval[nSteps - 1 - a] = new PolyPolygonColorPrimitive2D(
-                            aPolyPolygon,
-                            basegfx::interpolate(getColorA(), getColorB(), fUnitScale));
-                    }
+                    aNew.transform(aTransform);
+                    xRetval[a] = new PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aNew),
+                        basegfx::interpolate(getColorA(), getColorB(), fUnitScale));
                 }
             }
 
             return xRetval;
+        }
+
+        SvgRadialAtomPrimitive2D::SvgRadialAtomPrimitive2D(
+            const basegfx::BColor& aColorA, double fScaleA, const basegfx::B2DVector& rTranslateA,
+            const basegfx::BColor& aColorB, double fScaleB, const basegfx::B2DVector& rTranslateB)
+        :   DiscreteMetricDependentPrimitive2D(),
+            maColorA(aColorA),
+            maColorB(aColorB),
+            mfScaleA(fScaleA),
+            mfScaleB(fScaleB),
+            mpTranslate(0)
+        {
+            // check and evtl. set translations
+            if(!rTranslateA.equal(rTranslateB))
+            {
+                mpTranslate = new VectorPair(rTranslateA, rTranslateB);
+            }
+
+            // scale A and B have to be positive
+            mfScaleA = ::std::max(mfScaleA, 0.0);
+            mfScaleB = ::std::max(mfScaleB, 0.0);
+
+            // scale B has to be bigger than scale A; swap if different
+            if(mfScaleA > mfScaleB)
+            {
+                OSL_ENSURE(false, "Wrong offset order (!)");
+                ::std::swap(mfScaleA, mfScaleB);
+
+                if(mpTranslate)
+                {
+                    ::std::swap(mpTranslate->maTranslateA, mpTranslate->maTranslateB);
+                }
+            }
+        }
+
+        SvgRadialAtomPrimitive2D::SvgRadialAtomPrimitive2D(
+            const basegfx::BColor& aColorA, double fScaleA,
+            const basegfx::BColor& aColorB, double fScaleB)
+        :   DiscreteMetricDependentPrimitive2D(),
+            maColorA(aColorA),
+            maColorB(aColorB),
+            mfScaleA(fScaleA),
+            mfScaleB(fScaleB),
+            mpTranslate(0)
+        {
+            // scale A and B have to be positive
+            mfScaleA = ::std::max(mfScaleA, 0.0);
+            mfScaleB = ::std::max(mfScaleB, 0.0);
+
+            // scale B has to be bigger than scale A; swap if different
+            if(mfScaleA > mfScaleB)
+            {
+                OSL_ENSURE(false, "Wrong offset order (!)");
+                ::std::swap(mfScaleA, mfScaleB);
+            }
+        }
+
+        SvgRadialAtomPrimitive2D::~SvgRadialAtomPrimitive2D()
+        {
+            if(mpTranslate)
+            {
+                delete mpTranslate;
+                mpTranslate = 0;
+            }
         }
 
         bool SvgRadialAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -1226,13 +1063,21 @@ namespace drawinglayer
             {
                 const SvgRadialAtomPrimitive2D& rCompare = static_cast< const SvgRadialAtomPrimitive2D& >(rPrimitive);
 
-                return (getColorA() == rCompare.getColorA()
+                if(getColorA() == rCompare.getColorA()
                     && getColorB() == rCompare.getColorB()
                     && getScaleA() == rCompare.getScaleA()
-                    && getScaleB() == rCompare.getScaleB()
-                    && getTranslateA() == rCompare.getTranslateA()
-                    && getTranslateB() == rCompare.getTranslateB()
-                    && getOverlapping() == rCompare.getOverlapping());
+                    && getScaleB() == rCompare.getScaleB())
+                {
+                    if(isTranslateSet() && rCompare.isTranslateSet())
+                    {
+                        return (getTranslateA() == rCompare.getTranslateA()
+                            && getTranslateB() == rCompare.getTranslateB());
+                    }
+                    else if(!isTranslateSet() && !rCompare.isTranslateSet())
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;

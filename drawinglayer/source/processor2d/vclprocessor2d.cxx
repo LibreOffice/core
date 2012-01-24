@@ -56,6 +56,9 @@
 #include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -75,6 +78,34 @@
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    sal_uInt32 calculateStepsForSvgGradient(const basegfx::BColor& rColorA, const basegfx::BColor& rColorB, double fDelta, double fDiscreteUnit)
+    {
+        // use color distance, assume to do every color step
+        sal_uInt32 nSteps(basegfx::fround(rColorA.getDistance(rColorB) * 255.0));
+
+        if(nSteps)
+        {
+            // calc discrete length to change color each disctete unit (pixel)
+            const sal_uInt32 nDistSteps(basegfx::fround(fDelta / fDiscreteUnit));
+
+            nSteps = std::min(nSteps, nDistSteps);
+        }
+
+        // reduce quality to 3 discrete units or every 3rd color step for rendering
+        nSteps /= 2;
+
+        // roughly cut when too big or too small (not full quality, reduce complexity)
+        nSteps = std::min(nSteps, sal_uInt32(255));
+        nSteps = std::max(nSteps, sal_uInt32(1));
+
+        return nSteps;
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1327,6 +1358,100 @@ namespace drawinglayer
                         // fallback visualisation using full transformation (e.g. rotation)
                         process(rEpsPrimitive2D.get2DDecomposition(getViewInformation2D()));
                     }
+                }
+            }
+        }
+
+        void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate)
+        {
+            const double fDelta(rCandidate.getOffsetB() - rCandidate.getOffsetA());
+
+            if(basegfx::fTools::more(fDelta, 0.0))
+            {
+                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
+
+                // prepare loop and polygon
+                double fStart(0.0);
+                double fStep(fDelta / nSteps);
+                const basegfx::B2DPolygon aPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        basegfx::B2DRange(
+                            rCandidate.getOffsetA() - fDiscreteUnit,
+                            0.0,
+                            rCandidate.getOffsetA() + fStep + fDiscreteUnit,
+                            1.0)));
+
+                // switch off line painting
+                mpOutputDevice->SetLineColor();
+
+                // loop and paint
+                for(sal_uInt32 a(0); a < nSteps; a++, fStart += fStep)
+                {
+                    basegfx::B2DPolygon aNew(aPolygon);
+
+                    aNew.transform(maCurrentTransformation * basegfx::tools::createTranslateB2DHomMatrix(fStart, 0.0));
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fStart/fDelta)));
+                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
+                }
+            }
+        }
+
+        void VclProcessor2D::RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate)
+        {
+            const double fDeltaScale(rCandidate.getScaleB() - rCandidate.getScaleA());
+
+            if(basegfx::fTools::more(fDeltaScale, 0.0))
+            {
+                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDeltaScale, fDiscreteUnit));
+
+                // switch off line painting
+                mpOutputDevice->SetLineColor();
+
+                // prepare loop (outside to inside)
+                double fEndScale(rCandidate.getScaleB());
+                double fStepScale(fDeltaScale / nSteps);
+
+                for(sal_uInt32 a(0); a < nSteps; a++, fEndScale -= fStepScale)
+                {
+                    const double fUnitScale(fEndScale/fDeltaScale);
+                    basegfx::B2DHomMatrix aTransform;
+
+                    if(rCandidate.isTranslateSet())
+                    {
+                        const basegfx::B2DVector aTranslate(
+                            basegfx::interpolate(
+                                rCandidate.getTranslateA(),
+                                rCandidate.getTranslateB(),
+                                fUnitScale));
+
+                        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            fEndScale,
+                            fEndScale,
+                            aTranslate.getX(),
+                            aTranslate.getY());
+                    }
+                    else
+                    {
+                        aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                            fEndScale,
+                            fEndScale);
+                    }
+
+                    basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
+
+                    aNew.transform(maCurrentTransformation * aTransform);
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
+                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
                 }
             }
         }

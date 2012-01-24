@@ -54,6 +54,8 @@ namespace drawinglayer { namespace primitive2d {
     class ControlPrimitive2D;
     class PagePreviewPrimitive2D;
     class EpsPrimitive2D;
+    class SvgLinearAtomPrimitive2D;
+    class SvgRadialAtomPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -109,6 +111,8 @@ namespace drawinglayer
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
             void RenderEpsPrimitive2D(const primitive2d::EpsPrimitive2D& rEpsPrimitive2D);
+            void RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate);
+            void RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate);
 
             /////////////////////////////////////////////////////////////////////////////
             // DrawMode adaption support

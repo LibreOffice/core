@@ -55,7 +55,7 @@
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
-
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
@@ -571,6 +571,16 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
                 {
                     RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
+                {
+                    RenderSvgLinearAtomPrimitive2D(static_cast< const primitive2d::SvgLinearAtomPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
+                {
+                    RenderSvgRadialAtomPrimitive2D(static_cast< const primitive2d::SvgRadialAtomPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :
