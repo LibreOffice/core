@@ -335,11 +335,6 @@ MYTHESLIB=-lmythes-1.2
 .ENDIF
 PYUNOLIB=-lpyuno
 COINMPLIB=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
-.IF "$(OS)" == "MACOSX"
-COINMPLIB+=-lbz2
-.ELSE
-COINMPLIB+=-lz
-.ENDIF
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
