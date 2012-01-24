@@ -200,53 +200,11 @@ public class DBHelper
             return null;
         }
 
-
-    /**
-     * This method removes all entries of the given<br>
-     * module/platform combination
-     * @param mdl the name of the module, e.g. sal
-     * @param os the name of the platform, e.g. unxsols
-     */
-    // LLA: public static void SQLdeleteValues(Connection _aCon, String _sEnvironment, String _sUnitName, String _sMethodName, String _sCWS, String _sDate)
-    // LLA:     {
-    // LLA:         String sSQL =
-    // LLA:             "DELETE FROM states WHERE " +
-    // LLA:             "     unit=" + DatabaseEntry.Quote(_sUnitName) +
-    // LLA:             " AND pf="   + DatabaseEntry.Quote (_sEnvironment) +
-    // LLA:             " AND meth=" + DatabaseEntry.Quote (_sMethodName) +
-    // LLA:             " AND cws="  + DatabaseEntry.Quote(_sCWS) +
-    // LLA:             " AND dt="   + DatabaseEntry.Quote(_sDate);
-    // LLA:
-    // LLA:         // ExecSQL(_aCon, sSQL);
-    // LLA:     }
-
     protected synchronized void ExecSQL(Connection _aCon, String _sSQL)
             {
                 MySQLThread aSQLThread = new MySQLThread(_aCon, _sSQL);
                 aSQLThread.start();
             }
-
-
-
-    // public static int QueryIntFromSQL(String _sSQL, String _sColumnName, String _sValue)
-    //     {
-    //         boolean bNeedSecondTry = false;
-    //         int nValue = 0;
-    //         do
-    //         {
-    //             try
-    //             {
-    //                 nValue = QueryIntFromSQL(_sSQL, _sColumnName, _sValue);
-    //             }
-    //             catch (ValueNotFoundException e)
-    //             {
-    //                 bNeedSecondTry = true;
-    //                 String sSQL = "INSERT INTO " + _sTable + "(" + _sColumnName + ") VALUES (" + _sValue + ")";
-    //                 ExecSQL(sSQL);
-    //             }
-    //         } while (bNeedSecondTry);
-    //         return nValue;
-    //     }
 
     public int QueryIntFromSQL(Connection _aCon, String _sSQL, String _sColumnName)
         throws ValueNotFoundException

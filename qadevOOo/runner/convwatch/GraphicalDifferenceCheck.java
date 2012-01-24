@@ -68,22 +68,8 @@ public class GraphicalDifferenceCheck
      */
     public static void createReferences(String _sInputPath, String _sReferencePath, GraphicalTestArguments _aGTA) throws ConvWatchException
         {
-//!
-//            System.out.println("createReferences() InputPath: " + _sInputPath + " refpath: " + _sReferencePath);
             showVersion();
             File aInputPath = new File(_sInputPath);
-
-//            System.out.println("Inputpath in file: " + aInputPath.getAbsolutePath());
-//!
-//             if (aInputPath.exists())
-//             {
-//                 System.out.println("Inputpath exists");
-//             }
-//             else
-//             {
-//                 System.out.println("Inputpath doesn't exists");
-//                 return;
-//             }
 
             if (aInputPath.isDirectory())
             {
@@ -102,7 +88,6 @@ public class GraphicalDifferenceCheck
             }
             else
             {
-//!
                 // System.out.println("No directory.");
                 createOneReferenceFile(_sInputPath, _sReferencePath, _aGTA);
             }
@@ -287,36 +272,6 @@ public class GraphicalDifferenceCheck
             sInputFile = FileHelper.getSystemPathFromFileURL(sInputFile);
             return convwatch.ConvWatch.check(_aGTA, _sOutputPath, sInputFile, _sReferencePath);
         }
-
-
-// LLA: old!     /**
-// LLA: old!      * Returns 'true' if a reference document on the specific output path exists.
-// LLA: old!      * The name of the document is corresponding to the input document, which can be
-// LLA: old!      * provided by a single name or path.
-// LLA: old!      *
-// LLA: old!      * @param inputPath       the original document name (possibly including path)
-// LLA: old!      * @param referencePath   the directory where the reference document will be stored
-// LLA: old!
-// LLA: old!      */
-// LLA: old!     public static boolean isReferencExistent(String inputDocumentPath, String referencePath)
-// LLA: old!     {
-// LLA: old!        // isolate the document name
-// LLA: old!         if(inputDocumentPath.indexOf(File.separator) != -1)
-// LLA: old!             inputDocumentPath = inputDocumentPath.substring(inputDocumentPath.lastIndexOf(File.separator) + 1, inputDocumentPath.length());
-// LLA: old!
-// LLA: old!        // exchange any arbitray suffix against the refence suffix (.prn)
-// LLA: old!         if(inputDocumentPath.indexOf('.') != -1)
-// LLA: old!             inputDocumentPath = inputDocumentPath.substring(0, inputDocumentPath.lastIndexOf('.'));
-// LLA: old!         inputDocumentPath = inputDocumentPath + ".prn";
-// LLA: old! System.out.println("GraphicalDifference CheckReferenceDocument: " + inputDocumentPath);
-// LLA: old!
-// LLA: old!         File refFile = new File(referencePath + inputDocumentPath);
-// LLA: old!         if(refFile.exists()){
-// LLA: old!             return true;
-// LLA: old!         }else
-// LLA: old!             return false;
-// LLA: old!    }
-
 
     private static String createInputFile(XComponent xComponent, String _sOutputPath, String resultDocName)
         throws ConvWatchCancelException
