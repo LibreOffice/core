@@ -49,7 +49,6 @@
 
 #include <vcl/svapp.hxx>
 
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
 #include <algorithm>

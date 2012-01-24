@@ -663,7 +663,7 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
 {
     if (IsAvailableRes(ResId(1,*rResId.GetResMgr()).SetRT(RSC_STRING)))
     {
-        Name = XubString(ResId(1,*rResId.GetResMgr()));
+        Name = ResId::toString(ResId(1,*rResId.GetResMgr()));
 
         int i;
         for (i = 0; i < 4; i++)
@@ -1510,7 +1510,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
     if (bFreeRes)
         FreeResource();
 
-    aSymbolSetName = String();
+    aSymbolSetName = rtl::OUString();
     aSymbolSet.clear();
     FillSymbolSets();
     if (aSymbolSets.GetEntryCount() > 0)
@@ -1575,7 +1575,7 @@ bool SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
     bool    bRet = false;
     sal_uInt16  nPos = aSymbolSets.GetEntryPos(rSymbolSetName);
 
-    aSymbolSetName = String();
+    aSymbolSetName = rtl::OUString();
     aSymbolSet.clear();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1676,7 +1676,7 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 
     rComboBox.Clear();
     if (bDeleteText)
-        rComboBox.SetText(XubString());
+        rComboBox.SetText(rtl::OUString());
 
     ComboBox &rBox = &rComboBox == &aOldSymbols ? aOldSymbolSets : aSymbolSets;
     SymbolPtrVec_t aSymSet( aSymbolMgrCopy.GetSymbolSet( rBox.GetText() ) );
@@ -1694,7 +1694,7 @@ void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
 
     rComboBox.Clear();
     if (bDeleteText)
-        rComboBox.SetText(XubString());
+        rComboBox.SetText(rtl::OUString());
 
     const std::set< String >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
     std::set< String >::const_iterator aIt( aSymbolSetNames.begin() );
@@ -1725,7 +1725,7 @@ void SmSymDefineDialog::FillStyles(bool bDeleteText)
 {
     aStyles.Clear();
     if (bDeleteText)
-        aStyles.SetText(XubString());
+        aStyles.SetText(rtl::OUString());
 
     XubString aText (aFonts.GetSelectEntry());
     if (aText.Len() != 0)
@@ -1933,7 +1933,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 
     // clear display for original symbol if necessary
     if (bNameChanged)
-        SetOrigSymbol(NULL, XubString());
+        SetOrigSymbol(NULL, rtl::OUString());
 
     // update display of new symbol
     aSymbolDisplay.SetSymbol( &aNewSymbol );
@@ -1965,7 +1965,7 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
         aSymbolMgrCopy.RemoveSymbol( pOrigSymbol->GetName() );
 
         // clear display for original symbol
-        SetOrigSymbol(NULL, XubString());
+        SetOrigSymbol(NULL, rtl::OUString());
 
         // update list box entries
         FillSymbolSets(aOldSymbolSets, false);
@@ -2200,7 +2200,7 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(XubString());
+        rComboBox.SetText(rtl::OUString());
 
     bool  bIsOld = &rComboBox == &aOldSymbolSets;
 
@@ -2249,7 +2249,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
     }
     else
     {   // loeschen des angezeigten Symbols
-        aOldSymbolDisplay.SetText(XubString());
+        aOldSymbolDisplay.SetText(rtl::OUString());
         aOldSymbolDisplay.Invalidate();
     }
     aOldSymbolName   .SetText(aSymName);
@@ -2308,7 +2308,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(XubString());
+        rComboBox.SetText(rtl::OUString());
 
     if (bIsOld)
     {
@@ -2417,7 +2417,7 @@ bool SmSymDefineDialog::SelectStyle(const XubString &rStyleName, bool bApplyFont
         bRet = sal_True;
     }
     else
-        aStyles.SetText(XubString());
+        aStyles.SetText(rtl::OUString());
 
     UpdateButtons();
 
