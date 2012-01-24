@@ -498,15 +498,15 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
     // read defaults
     aConfig.SetGroup( "Xprinter,PostScript" );
-    ByteString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
-    ByteString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
-    ByteString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
-    ByteString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
-    ByteString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
-    ByteString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
-    ByteString aDefScale( aConfig.ReadKey( "Scale" ) );
-    ByteString aDefCopies( aConfig.ReadKey( "Copies" ) );
-    ByteString aDefDPI( aConfig.ReadKey( "DPI" ) );
+    rtl::OString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
+    rtl::OString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
+    rtl::OString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
+    rtl::OString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
+    rtl::OString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
+    rtl::OString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
+    rtl::OString aDefScale( aConfig.ReadKey( "Scale" ) );
+    rtl::OString aDefCopies( aConfig.ReadKey( "Copies" ) );
+    rtl::OString aDefDPI( aConfig.ReadKey( "DPI" ) );
 
     using comphelper::string::getToken;
 
@@ -540,8 +540,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         // read the command
         aConfig.SetGroup( "ports" );
-        ByteString aCommand( aConfig.ReadKey( aPort ) );
-        if( ! aCommand.Len() )
+        rtl::OString aCommand( aConfig.ReadKey( aPort ) );
+        if (aCommand.isEmpty())
         {
             String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
             aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), rtl::OStringToOUString(aPrinter, aEncoding) );
@@ -603,23 +603,22 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
         if (!aValue.isEmpty())
-            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase( "landscape" ) == COMPARE_EQUAL ? orientation::Landscape : orientation::Portrait;
+            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("landscape")) ? orientation::Landscape : orientation::Portrait;
         int nGroupKeys = aConfig.GetKeyCount();
         for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
         {
-            ByteString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
+            rtl::OString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
             // ignore page region
             // there are some ppd keys in old Xpdefaults that
             // should never have been writte because they are defaults
             // PageRegion leads to problems in conjunction
             // with a not matching PageSize
-            if( aPPDKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL &&
-                aPPDKey != "PPD_PageRegion"
-                )
+            if (comphelper::string::matchL(aPPDKey, RTL_CONSTASCII_STRINGPARAM("PPD_")) &&
+                !aPPDKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PPD_PageRegion")))
             {
                 aValue = aConfig.ReadKey( nPPDKey );
-                aPPDKey.Erase( 0, 4 );
-                const PPDKey* pKey = aInfo.m_pParser->getKey( String( aPPDKey, RTL_TEXTENCODING_ISO_8859_1 ) );
+                aPPDKey = aPPDKey.copy(4);
+                const PPDKey* pKey = aInfo.m_pParser->getKey( rtl::OStringToOUString(aPPDKey, RTL_TEXTENCODING_ISO_8859_1) );
                 const PPDValue* pValue = pKey ? ( aValue.equalsL(RTL_CONSTASCII_STRINGPARAM("*nil")) ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
                 if( pKey )
                     aInfo.m_aContext.setValue( pKey, pValue, true );
@@ -1097,40 +1096,40 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
 String AddPrinterDialog::getOldPrinterLocation()
 {
     static const char* pHome = getenv( "HOME" );
-    String aRet;
-    ByteString aFileName;
+    rtl::OString aFileName;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     if( pHome )
     {
-        aFileName = pHome;
-        aFileName.Append( "/.Xpdefaults" );
-        if( access( aFileName.GetBuffer(), F_OK ) )
+        aFileName = rtl::OStringBuffer().append(pHome).
+            append(RTL_CONSTASCII_STRINGPARAM("/.Xpdefaults")).
+            makeStringAndClear();
+        if (access(aFileName.getStr(), F_OK))
         {
-            aFileName = pHome;
-            aFileName.Append( "/.sversionrc" );
-            Config aSVer( String( aFileName, aEncoding ) );
+            aFileName = rtl::OStringBuffer().append(pHome).
+                append(RTL_CONSTASCII_STRINGPARAM("/.sversionrc")).
+                makeStringAndClear();
+            Config aSVer(rtl::OStringToOUString(aFileName, aEncoding));
             aSVer.SetGroup( "Versions" );
             aFileName = aSVer.ReadKey( "StarOffice 5.2" );
-            if( aFileName.Len() )
-                aFileName.Append( "/share/xp3/Xpdefaults" );
+            if (!aFileName.isEmpty())
+                aFileName = aFileName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("/share/xp3/Xpdefaults"));
             else if(
-                    (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).Len()
+                    (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).getLength()
                     ||
-                    (aFileName = aSVer.ReadKey( "StarOffice 5.0" ) ).Len()
+                    (aFileName = aSVer.ReadKey( "StarOffice 5.0" ) ).getLength()
                     ||
-                    (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).Len()
+                    (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).getLength()
                     )
             {
-                aFileName.Append( "/xp3/Xpdefaults" );
+                aFileName = aFileName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("/xp3/Xpdefaults"));
             }
-            if( aFileName.Len() && access( aFileName.GetBuffer(), F_OK ) )
-                aFileName.Erase();
+            if (!aFileName.isEmpty() && access(aFileName.getStr(), F_OK))
+                aFileName = rtl::OString();
         }
     }
-    if( aFileName.Len() )
-        aRet = String( aFileName, aEncoding );
-    return aRet;
+
+    return !aFileName.isEmpty() ? rtl::OStringToOUString(aFileName, aEncoding) : rtl::OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

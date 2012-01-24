@@ -82,7 +82,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
                 int nLen = strlen( pBuffer );
                 if( pBuffer[nLen-1] == '\n' ) // strip newline
                     pBuffer[--nLen] = 0;
-                aCommand = String( ByteString( pBuffer ), aEncoding );
+                aCommand = rtl::OUString(pBuffer, nLen, aEncoding);
                 if( ( ( aCommand.GetChar( 0 ) == '/' )
                       || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
                       || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
@@ -105,7 +105,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
                 int nLen = strlen( pBuffer );
                 if( pBuffer[nLen-1] == '\n' ) // strip newline
                     pBuffer[--nLen] = 0;
-                aCommand = String( ByteString( pBuffer ), aEncoding );
+                aCommand = rtl::OUString(pBuffer, nLen, aEncoding);
                 if( ( ( aCommand.GetChar( 0 ) == '/' )
                       || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
                       || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )

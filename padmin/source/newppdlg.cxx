@@ -80,9 +80,9 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
     m_aPathBox.SetText( rtl::OStringToOUString(rConfig.ReadKey("LastDir"), RTL_TEXTENCODING_UTF8) );
     for (sal_Int32 i = 0; i < 11; ++i)
     {
-        ByteString aEntry(rConfig.ReadKey(rtl::OString::valueOf(i)));
-        if( aEntry.Len() )
-            m_aPathBox.InsertEntry( String( aEntry, RTL_TEXTENCODING_UTF8 ) );
+        rtl::OString aEntry(rConfig.ReadKey(rtl::OString::valueOf(i)));
+        if (!aEntry.isEmpty())
+            m_aPathBox.InsertEntry(rtl::OStringToOUString(aEntry, RTL_TEXTENCODING_UTF8));
     }
 
     m_aOKBtn.SetClickHdl( LINK( this, PPDImportDialog, ClickBtnHdl ) );

@@ -123,8 +123,7 @@ void setupMethodStubs( functor_vector_type& res )
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
                    900 );
 
-    const String      aString( ByteString("This is a test"),
-                               RTL_TEXTENCODING_ASCII_US );
+    const String      aString(RTL_CONSTASCII_USTRINGPARAM("This is a test"));
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
     // unfortunately, VDevs have inaccessible copy constructors
