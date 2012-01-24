@@ -31,7 +31,6 @@
 #include "NTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include "NDebug.hxx"
 
 
 // -------------------------------------------------------------------------

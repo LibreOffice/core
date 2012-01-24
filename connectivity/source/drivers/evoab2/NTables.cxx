@@ -40,7 +40,6 @@
 #include "connectivity/dbexception.hxx"
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
-#include "NDebug.hxx"
 #include "NTable.hxx"
 using namespace ::comphelper;
 

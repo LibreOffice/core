@@ -30,7 +30,6 @@
 #include "NDatabaseMetaData.hxx"
 #include "connectivity/dbexception.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "NDebug.hxx"
 #include "resource/evoab2_res.hrc"
 
 using namespace connectivity::evoab;

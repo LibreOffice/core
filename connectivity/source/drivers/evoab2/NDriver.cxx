@@ -36,7 +36,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
-#include "NDebug.hxx"
 #include <signal.h>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"

@@ -29,7 +29,6 @@
 #ifndef _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
 #define _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
 
-#include "NDebug.hxx"
 #include "NConnection.hxx"
 #include "TDatabaseMetaDataBase.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
