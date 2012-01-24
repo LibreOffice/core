@@ -856,7 +856,7 @@
         <value>Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
-    <node oor:name="bn" oor:op="replace">
+    <node oor:name="bn-IN" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
       </prop>
