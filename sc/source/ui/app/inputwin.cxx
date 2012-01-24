@@ -1125,7 +1125,8 @@ ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh
         ScTextWnd( pParen, pViewSh ),
         mrGroupBar(* pParen ),
         mnLines( 1 ),
-        mnLastExpandedLines( INPUTWIN_MULTILINES )
+        mnLastExpandedLines( INPUTWIN_MULTILINES ),
+        mbInvalidate( false )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
 }
@@ -1138,7 +1139,14 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
     EditView* pView = GetEditView();
     if ( pView )
-        pView->Paint( rRec );
+    {
+        if ( mbInvalidate )
+        {
+            pView->Invalidate();
+            mbInvalidate = false;
+        }
+        pEditView->Paint( rRec );
+    }
 }
 
 EditView* ScMultiTextWnd::GetEditView()
@@ -1403,8 +1411,7 @@ void ScMultiTextWnd::SetTextString( const String& rNewString )
     // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
     // are synced I guess ).
     // should fix that I suppose :-/ need to look a bit further into that
-    if ( pEditView )
-        pEditView->Invalidate();
+    mbInvalidate = true; // ensure next Paint ( that uses editengine ) call will call Invalidate first
     ScTextWnd::SetTextString( rNewString );
     SetScrollBarRange();
     DoScroll();
