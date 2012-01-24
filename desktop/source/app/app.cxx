@@ -1540,6 +1540,7 @@ int Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_pLockfile.reset( new Lockfile );
+#ifndef ANDROID
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning ))
         {
@@ -1559,11 +1560,11 @@ int Desktop::Main()
                     return EXIT_FAILURE;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
+#endif
 
         // terminate if requested...
         if( rCmdLineArgs.IsTerminateAfterInit() )
             return EXIT_SUCCESS;
-
 
         //  Read the common configuration items for optimization purpose
         if ( !InitializeConfiguration() )
