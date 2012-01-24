@@ -42,8 +42,6 @@
 #include <MarkedSection.hxx>
 #include "ViewsWindow.hxx"
 
-class Splitter;
-
 namespace rptui
 {
     class ODesignView;
