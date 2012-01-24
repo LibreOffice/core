@@ -914,7 +914,6 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     /* Quick fix for #106048, the whole copy file function seems
        to be erroneous anyway and needs to be rewritten.
-       Besides osl_copyFile is currently not used from OO/SO code.
     */
     memset(pszTmpDestFile, 0, size_tmp_dest_buff);
 
