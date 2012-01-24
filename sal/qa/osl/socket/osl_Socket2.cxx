@@ -1121,26 +1121,11 @@ namespace osl_Socket
 
             t_print("#setOption_001: getOption is %" SAL_PRIdINT32 " \n", *pGetBuffer);
 
-// LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-// LLA:             *pbDontTouteSet = sal_True;
-// LLA:             sal_Bool * pbDontTouteGet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-// LLA:             *pbDontTouteGet = sal_False;
-// LLA:             asAcceptorSocket.setOption( osl_Socket_OptionDontRoute,  pbDontTouteSet, sizeof ( sal_Bool ) );
-// LLA:             asAcceptorSocket.getOption( osl_Socket_OptionDontRoute,  pbDontTouteGet, sizeof ( sal_Bool ) );
-// LLA:             ::rtl::OUString suError = outputError(::rtl::OUString::valueOf((sal_Int32)*pbDontTouteGet),
-// LLA:                 ::rtl::OUString::valueOf((sal_Int32)*pbDontTouteSet),
-// LLA:                 "test for setOption function: set osl_Socket_OptionDontRoute and then check");
-// LLA:
-// LLA:             sal_Bool bOK = ( sal_True  ==  *pbDontTouteGet );
-// LLA:             free( pbDontTouteSet );
-// LLA:             free( pbDontTouteGet );
-
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
                                       ( sal_True == bOK ) && (sal_True == bOK2) );
 
             free( pbDontRouteSet );
             free( pGetBuffer );
-// LLA:             CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
         }
 
         void setOption_002()

@@ -74,55 +74,13 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
 
     if (nDelta > nPrec)
     {
-        // printf("values are not equal! ndelta:%.20f\n", nDelta);
+        // values are not equal
         return false;
     }
-    // else
-    // {
-    // printf("values are equal.     ndelta:%.20f\n", nDelta);
-    return true;
-    // }
-}
 
-// LLA: bool is_float_equal(float x, float y)
-// LLA: {
-// LLA:     // due to the fact that this check looks only if both values are equal
-// LLA:     // we only need to look on one value
-// LLA:
-// LLA:     // 6 digits will announce the checkPrecisionSize
-// LLA:
-// LLA:     const sal_Int32 nPRECISION = 6;
-// LLA:     if (x < 0)
-// LLA:     {
-// LLA:         x = -x;
-// LLA:     }
-// LLA:     if (y < 0)
-// LLA:     {
-// LLA:         y = -y;
-// LLA:     }
-// LLA:
-// LLA:     printf("double equal: %.20f\n#               %.20f\n", x, y);
-// LLA:     sal_Int32 nPrecOfN = -nPRECISION + sal_Int32( log10(x) );
-// LLA:
-// LLA:     printf("prec: %d\n", nPrecOfN);
-// LLA:     double nPrec = pow(10, nPrecOfN) * 1;
-// LLA:
-// LLA:     printf("        prec: %.20f\n", nPrec);
-// LLA:
-// LLA:     double nDelta = fabs( x - y );
-// LLA:     printf("       delta: %.20f\n\n", nDelta);
-// LLA:
-// LLA:     if (nDelta > nPrec)
-// LLA:     {
-// LLA:         // printf("values are not equal! ndelta:%.20f\n", nDelta);
-// LLA:         return false;
-// LLA:     }
-// LLA:     // else
-// LLA:     // {
-// LLA:     // printf("values are equal.     ndelta:%.20f\n", nDelta);
-// LLA:     return true;
-// LLA:     // }
-// LLA: }
+    // values are equal
+    return true;
+}
 
 bool is_float_equal(float x, float y)
 {

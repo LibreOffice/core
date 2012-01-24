@@ -1142,34 +1142,6 @@ namespace osl_StreamSocket
 
 
     public:
-// LLA: orig        void send_recv()
-// LLA: orig             {
-// LLA: orig                if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("margritte.germany"))) == sal_True )
-// LLA: orig                    t_print("margritte is alive ! \n");
-// LLA: orig                if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10.16.66.252"))) == sal_False )
-// LLA: orig                {
-// LLA: orig            t_print("ip 10.16.66.252 is not alive! \n");
-// LLA: orig            return;
-// LLA: orig        }
-// LLA: orig                 ReadSocket2Thread myReadThread;
-// LLA: orig                 myReadThread.create();
-// LLA: orig
-// LLA: orig                 thread_sleep( 2 );
-// LLA: orig                 // send_Acceptor();
-// LLA: orig                 send_Connector();
-// LLA: orig
-// LLA: orig                 myReadThread.join();
-// LLA: orig
-// LLA: orig                 // statistics
-// LLA: orig                 sal_uInt32 nLength = myReadThread.getCount();
-// LLA: orig                 bool       bIsOk   = myReadThread.isOk(); // check if the values are right.
-// LLA: orig
-// LLA: orig                 t_print("Length:=%d\n", nLength);
-// LLA: orig                 t_print(" bIsOk:=%d\n", bIsOk);
-// LLA: orig             }
-
-        // -----------------------------------------------------------------------------
-
         // LLA: send_Connector_2_margritte works, it send strings to echo server on margritte
         //      but can not receive anything
 

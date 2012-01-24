@@ -121,38 +121,6 @@ void oldtests::test_OUString()
     s6 = s5.valueOf(m);
     TEST_ENSURE( s6.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("-3223372036854775807")) ) == 0, "test_OWString error 17");
 
-// LLA: locale tests removed        ::rtl::OLocale locale = ::rtl::OLocale::getDefault();
-// LLA: locale tests removed
-// LLA: locale tests removed    OUString s61(OUString(RTL_CONSTASCII_USTRINGPARAM("HaLLo")));
-// LLA: locale tests removed    s61 = s61.toLowerCase(locale);
-// LLA: locale tests removed    TEST_ENSURE( s61 == OUString(RTL_CONSTASCII_USTRINGPARAM("hallo")), "test_OWString error 17a");
-// LLA: locale tests removed    s61 = s61.toUpperCase();
-// LLA: locale tests removed    TEST_ENSURE( s61 == OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO")), "test_OWString error 17b");
-// LLA: locale tests removed    s61 = s61.toLowerCase();
-// LLA: locale tests removed    TEST_ENSURE( s61 == OUString(RTL_CONSTASCII_USTRINGPARAM("hallo")), "test_OWString error 17c");
-// LLA: locale tests removed
-// LLA: locale tests removed    ::rtl::OLocale::setDefault( OUString(RTL_CONSTASCII_USTRINGPARAM("de")), OUString(RTL_CONSTASCII_USTRINGPARAM("DE")), OUString() );
-// LLA: locale tests removed    locale = OLocale::getDefault();
-// LLA: locale tests removed
-// LLA: locale tests removed    // AB, 24.3.2000, removed NAMESPACE_RTL(OLocale)::getENGLISH() and error 18
-// LLA: locale tests removed
-// LLA: locale tests removed    OUString s7(OUString(RTL_CONSTASCII_USTRINGPARAM("HaLLo")));
-// LLA: locale tests removed    s7 = s7.toLowerCase(locale);
-// LLA: locale tests removed    TEST_ENSURE( s7 == OUString(RTL_CONSTASCII_USTRINGPARAM("hallo")), "test_OWString error 19");
-// LLA: locale tests removed    s7 = s7.toUpperCase(locale);
-// LLA: locale tests removed    TEST_ENSURE( s7 == OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO")), "test_OWString error 20");
-// LLA: locale tests removed
-// LLA: locale tests removed    OUString s8(OUString(RTL_CONSTASCII_USTRINGPARAM("HaLLo ICH BIn eIn ")));
-// LLA: locale tests removed    s8 += OUString::valueOf( (sal_Unicode)0xDF );
-// LLA: locale tests removed    locale = OLocale::registerLocale( OUString(RTL_CONSTASCII_USTRINGPARAM("tr")), OUString(RTL_CONSTASCII_USTRINGPARAM("TR")), OUString());
-// LLA: locale tests removed    s8 = s8.toLowerCase(locale);
-// LLA: locale tests removed    s8 = s8.toUpperCase(locale);
-// LLA: locale tests removed    TEST_ENSURE( s8 == OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN SS")), "test_OWString error 21");
-// LLA: locale tests removed
-// LLA: locale tests removed    s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo ich bIn ein I"));
-// LLA: locale tests removed    s7 = s8.toUpperCase(locale);
-// LLA: locale tests removed    TEST_ENSURE( s7 != OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN I")), "test_OWString error 21.b");
-
      OUString s7;
     OUString s8(OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN SS")));
     s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("          "));
@@ -162,7 +130,6 @@ void oldtests::test_OUString()
 
     s7 = s8.trim();
     TEST_ENSURE( s7 == OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN SS")), "test_OWString error 23");
-//  TEST_ENSURE( wcscmp(s7.getStr(), L"HALLO ICH BIN EIN SS") == 0, "test_OWString error 24");
 
     s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo"));
     s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("aber Hallo"));
@@ -179,54 +146,11 @@ void oldtests::test_OUString()
 
     s8 = s8.replace((sal_Unicode)'l', (sal_Unicode)'r');
     TEST_ENSURE( s8 == OUString(RTL_CONSTASCII_USTRINGPARAM("Harro")), "test_OWString error 32");
-// LLA: len() unknown   TEST_ENSURE( s8.len() == 5, "test_OWString error 33");
 
     //       "Ich bin ein String mit einem A und C und vielen m, m, m, m"
     //        |    |    |    |    |    |    |    |    |    |    |    |
     //index   0    5    10   15   20   25   30   35   40   45   50   55
     s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("Ich bin ein String mit einem A und C und vielen m, m, m, m"));
-// LLA: no matching     TEST_ENSURE( s8.search((sal_Unicode)'I') == 0, "test_OWString error 34");
-// LLA: no matching     TEST_ENSURE( s8.search((sal_Unicode)'A') == 29, "test_OWString error 35");
-// LLA: no matching     s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("A und C"));
-// LLA: no matching     TEST_ENSURE( s8.search(s7) == 29, "test_OWString error 36");
-// LLA: no matching     TEST_ENSURE( s8.search(OUString(RTL_CONSTASCII_USTRINGPARAM("mit einem A"))) == 19, "test_OWString error 37");
-// LLA: no matching
-// LLA: no matching     s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("||token1|token2|token3||token4|token5||"));
-// LLA: no matching     TEST_ENSURE( s8.getTokenCount('|') == 10, "test_OWString error 38a");
-// LLA: no matching     TEST_ENSURE( s8.getToken(10,'|') == OUString(), "test_OWString error 39a");
-// LLA: no matching
-// LLA: no matching     s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("token1"));
-// LLA: no matching     TEST_ENSURE( s8.getTokenCount('|') == 1, "test_OWString error 38b");
-// LLA: no matching     TEST_ENSURE( s8.getToken(0,'|') == OUString(RTL_CONSTASCII_USTRINGPARAM("token1")), "test_OWString error 39b");
-// LLA: no matching     TEST_ENSURE( s8.getToken(-1,'|') == OUString(), "test_OWString error 39c");
-// LLA: no matching     TEST_ENSURE( s8.getToken(1,'|') == OUString(), "test_OWString error 39d");
-// LLA: no matching
-// LLA: no matching     s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("|hallo1|hallo2|hallo3|hallo4|hallo5|hallo6|hallo7|hallo8|"));
-// LLA: no matching     TEST_ENSURE( s8.getTokenCount((sal_Unicode)'|') == 10, "test_OWString error 38");
-// LLA: no matching     TEST_ENSURE( s8.getToken(3, (sal_Unicode)'|') == OUString(RTL_CONSTASCII_USTRINGPARAM("hallo3")), "test_OWString error 39");
-
-// LLA: removed due to the fact, this is not a clean test!
-
-// LLA:     s7 = OUString();
-// LLA:     s7 += s8;
-// LLA:     TEST_ENSURE( s7 == s8, "test_OWString error 40");
-// LLA:
-// LLA:     s7 = s8.replaceAt(8, 6, OUString(RTL_CONSTASCII_USTRINGPARAM("mmmmmmmmmm")));
-// LLA:     TEST_ENSURE( s7.getLength() == 61, "test_OWString error 41");
-// LLA:
-// LLA:     s8 = s7.replaceAt(8, 11, OUString());
-// LLA:     TEST_ENSURE( s8.getLength() == 50, "test_OWString error 42");
-// LLA:
-// LLA:     s7 = s8.replaceAt(8, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("hallo2|")));
-// LLA:     TEST_ENSURE( s7.getLength() == 57, "test_OWString error 43");
-// LLA:
-// LLA:     sal_Int32 pos = 0;
-// LLA:     while ((pos = s7.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("|")))) >= 0)
-// LLA:     {
-// LLA:         s8 = s7.replaceAt(pos, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("**")));
-// LLA:         s7 = s8;
-// LLA:     }
-// LLA:     TEST_ENSURE( s7.getLength() == 66, "test_OWString error 44");
 
     TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) ) < 0, "test_OWString error 46" );
     TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")) ) == 0, "test_OWString error 46" );
@@ -347,15 +271,6 @@ void oldtests::test_OUString()
 
     sal_Int64 n3 = s13.toInt64( 16 );
     TEST_ENSURE( n3 == 0x4423A61, "test_OWString error 73" );
-
-// LLA: Value tests fails most the time, this is not a good test
-// LLA:     double d = 1.23456781;
-// LLA:     OUString sDouble = OUString::valueOf( d );
-// LLA:     char str[] = "1.2345678099999999";
-// LLA:     sal_Int32 nLength = sDouble.getLength();
-// LLA:     TEST_ENSURE( nLength == strlen( str ), "test_OWString error 74" );
-// LLA:     sal_Int32 nCompare = sDouble.compareToAscii( str );
-// LLA:     TEST_ENSURE( nCompare == 0, "test_OWString error 75" );
 
     printf("test_OWString OK !!!\n");
     return;

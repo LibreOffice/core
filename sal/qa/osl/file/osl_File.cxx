@@ -2765,52 +2765,6 @@ namespace osl_FileStatus
         {
         }
 
-/*
- * LLA: removed, m_aSocketItem is wrong initialised.
- */
-
-// LLA:         void getFileType_005()
-// LLA:         {
-// LLA: #if defined ( SOLARIS ) //Socket file may differ in Windows
-// LLA:             // nError1 = ::osl::DirectoryItem::get( aTypeURL1, m_aSocketItem );
-// LLA:             nError1 = ::osl::DirectoryItem::get( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/dev/null")), m_aSocketItem );
-// LLA:             printError(nError1);
-// LLA:             CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
-// LLA:
-// LLA:             //check for File type
-// LLA:             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
-// LLA:
-// LLA:             nError1 = m_aSocketItem.getFileStatus( rFileStatus );
-// LLA:             CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
-// LLA:
-// LLA:             if (rFileStatus.isValid( osl_FileStatus_Mask_Type ))
-// LLA:             {
-// LLA:                 osl::FileStatus::Type eType = rFileStatus.getFileType();
-// LLA:                 printFileType(eType);
-// LLA:                 CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: Socket, Solaris version ",
-// LLA:                                         ( eType == ::osl::FileStatus::Socket ) );
-// LLA:             }
-// LLA: #endif
-// LLA:         }
-
-
-// deprecated since there is a same case Directory::getNextItem_004
-/*#if defined 0 //( UNX ) //( SOLARIS ) //Link file is not defined in Windows
-        void getFileType_006()
-        {
-  nError1 = ::osl::DirectoryItem::get( aTypeURL3, m_aLinkItem );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            //check for File type
-             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
-  nError1 = m_aLinkItem.getFileStatus( rFileStatus );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: Link, UNX version ",
-                                     ( ::osl::FileStatus::Link == rFileStatus.getFileType() ) );
-        }
-#endif  */
-
         void getFileType_007()
         {
 #if defined ( SOLARIS ) //Special file is differ in Windows
@@ -2837,8 +2791,6 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileType_001 );
         CPPUNIT_TEST( getFileType_002 );
         CPPUNIT_TEST( getFileType_003 );
-        // LLA: CPPUNIT_TEST( getFileType_005 );
-        //CPPUNIT_TEST( getFileType_006 );
         CPPUNIT_TEST( getFileType_007 );
         SAL_CPPUNIT_TEST_SUITE_END();
     };// class getFileType
