@@ -52,18 +52,7 @@ endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
+    CppunitTest_sd_regression_test \
 ))
-#TODO: Disabled for now, needs work by Thorsten Behrens to get "don't embed font
-# config" taken into account, otherwise leads to failures like
-#  regression-test.cxx:84:Assertion
-#  Test name: SdFiltersTest::test
-#  assertion failed
-#  - Expression: false
-#  - Mismatch between reference file and exported file in line 60.
-#  Expected: <font-face font-family="StarSymbol embedded" units-per-em="2048"
-#   font-weight="normal" font-style="normal" ascent="1693" descent="318"/>
-#  Found   : <font-face font-family="StarSymbol embedded" units-per-em="2048"
-#   font-weight="normal" font-style="normal" ascent="1640" descent="397"/>
-# CppunitTest_sd_regression_test \
 
 # vim: set noet sw=4 ts=4:

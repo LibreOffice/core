@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#define ITEMID_FIELD 0
-
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
@@ -37,6 +35,7 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 
+#include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -488,9 +487,14 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         // font embedding
         const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
+        rtl::OUString aEmbedFontEnv(
+            RTL_CONSTASCII_USTRINGPARAM("${SVG_DISABLE_FONT_EMBEDDING}"));
+        rtl::Bootstrap::expandMacros(aEmbedFontEnv);
+        const bool bEmbedFonts=pSVGDisableFontEmbedding ? false : (
+            aEmbedFontEnv.getLength() ? false : true);
 
         maFilterData[ 1 ].Name = B2UCONST( SVG_PROP_EMBEDFONTS );
-        maFilterData[ 1 ].Value <<= (sal_Bool) ( pSVGDisableFontEmbedding ? sal_False : sal_True );
+        maFilterData[ 1 ].Value <<= (sal_Bool) (bEmbedFonts);
 
         // Native decoration
         maFilterData[ 2 ].Name = B2UCONST( SVG_PROP_NATIVEDECORATION );
