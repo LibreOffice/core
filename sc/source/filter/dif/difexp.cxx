@@ -255,7 +255,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         nPos = aTmpStr.Search( cStrDelim, nPos+2 );
                     }
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
-                    rOut.WriteUnicodeText(aTmpStr);
+                    write_uInt16s_FromOUString(rOut, aTmpStr);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                 }
                 else if ( bContextOrNotAsciiEncoding )

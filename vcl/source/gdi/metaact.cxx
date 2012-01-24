@@ -1263,13 +1263,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnIndex;
     rOStm   << mnLen;
 
-    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
-    rOStm << nLen;
-    for (sal_uInt16 i = 0; i < nLen; ++i )
-    {
-        sal_Unicode nUni = maStr[i];
-        rOStm << nUni;
-    }
+    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1410,13 +1404,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     for( sal_uLong i = 0UL; i < nAryLen; i++ )
         rOStm << mpDXAry[ i ];
 
-    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
-    rOStm << nLen;
-    for (sal_uInt16 j = 0; j < nLen; ++j )
-    {
-        sal_Unicode nUni = maStr[j];
-        rOStm << nUni;
-    }
+    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1550,13 +1538,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnIndex;
     rOStm   << mnLen;
 
-    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
-    rOStm << nLen;
-    for ( sal_uInt16 i = 0; i < nLen; ++i )
-    {
-        sal_Unicode nUni = maStr[i];
-        rOStm << nUni;
-    }
+    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1637,13 +1619,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnStyle;
 
-    sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(maStr.getLength()); // version 2
-    rOStm << nLen;
-    for (sal_uInt16 i = 0; i < nLen; ++i)
-    {
-        sal_Unicode nUni = maStr[i];
-        rOStm << nUni;
-    }
+    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------

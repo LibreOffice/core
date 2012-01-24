@@ -1947,7 +1947,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         if ( bNeedQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
-                        rStream.WriteUnicodeText( aUniString );
+                        write_uInt16s_FromOUString(rStream, aUniString);
                         if ( bNeedQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                     }

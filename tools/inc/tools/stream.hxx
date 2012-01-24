@@ -515,6 +515,50 @@ rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
     return read_uInt16s_ToOUString(rStrm, nUnits);
 }
 
+//Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
+//returned value is number of bytes written
+TOOLS_DLLPUBLIC sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
+    const rtl::OUString& rStr, sal_Size nUnits);
+
+TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
+    const rtl::OUString& rStr)
+{
+    return write_uInt16s_FromOUString(rStrm, rStr, rStr.getLength());
+}
+
+namespace streamdetail
+{
+    //Attempt to write a pascal-style length (of type prefix) prefixed sequence of
+    //units from a string-type, returned value is number of bytes written (including
+    //byte-count of prefix)
+    template<typename prefix, typename S, sal_Size (*writeOper)(SvStream&, const S&, sal_Size)>
+        sal_Size write_lenPrefixed_seq_From_str(SvStream& rStrm, const S &rStr)
+    {
+        SAL_WARN_IF(rStr.getLength() > std::numeric_limits<prefix>::max(),
+            "tools.stream",
+            "string too long for prefix count to fit in output type");
+
+        sal_Size nWritten = 0;
+        prefix nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
+        rStrm << nUnits;
+        if (rStrm.good())
+        {
+            nWritten += sizeof(prefix);
+            nWritten += writeOper(rStrm, rStr, nUnits);
+        }
+        return nWritten;
+    }
+}
+
+//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
+//16bit units from an OUString, returned value is number of bytes written (including
+//byte-count of prefix)
+template<typename prefix> sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+    const rtl::OUString &rStr)
+{
+    return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OUString, write_uInt16s_FromOUString>(rStrm, rStr);
+}
+
 //Attempt to read 8bit units to an OString until a zero terminator is
 //encountered, returned rtl::OString's length is number of units *definitely*
 //successfully read, check SvStream::good() to see if null terminator was
@@ -546,25 +590,26 @@ rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
 }
 
+//Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
+//returned value is number of bytes written
+TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const rtl::OString& rStr,
+    sal_Size nUnits)
+{
+    return rStrm.Write(rStr.getStr(), nUnits);
+}
+
+TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const rtl::OString& rStr)
+{
+    return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
+}
+
 //Attempt to write a pascal-style length (of type prefix) prefixed sequence of
 //8bit units from an OString, returned value is number of bytes written (including
 //byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
     const rtl::OString &rStr)
 {
-    SAL_WARN_IF(rStr.getLength() > std::numeric_limits<prefix>::max(),
-        "tools.stream",
-        "string too long for prefix count to fit in output type");
-
-    sal_Size nWritten = 0;
-    prefix nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
-    rStrm << nUnits;
-    if (rStrm.good())
-    {
-        nWritten += sizeof(prefix);
-        nWritten += rStrm.Write(rStr.getStr(), nUnits);
-    }
-    return nWritten;
+    return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OString, write_uInt8s_FromOString>(rStrm, rStr);
 }
 
 //Attempt to write a pascal-style length (of type prefix) prefixed sequence of

@@ -856,6 +856,35 @@ rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextE
         read_zeroTerminated_uInt8s_ToOString(rStream), eEnc);
 }
 
+//Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
+//returned value is number of bytes written
+sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const rtl::OUString& rStr,
+    sal_Size nUnits)
+{
+    DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "write_uInt16s_FromOUString: swapping sizeof(sal_Unicode) not implemented" );
+    sal_Size nWritten;
+    if (!rStrm.IsEndianSwap())
+        nWritten = rStrm.Write( (char*)rStr.getStr(), nUnits * sizeof(sal_Unicode) );
+    else
+    {
+        sal_Size nLen = nUnits;
+        sal_Unicode aBuf[384];
+        sal_Unicode* const pTmp = ( nLen > 384 ? new sal_Unicode[nLen] : aBuf);
+        memcpy( pTmp, rStr.getStr(), nLen * sizeof(sal_Unicode) );
+        sal_Unicode* p = pTmp;
+        const sal_Unicode* const pStop = pTmp + nLen;
+        while ( p < pStop )
+        {
+            SwapUShort( *p );
+            p++;
+        }
+        nWritten = rStrm.Write( (char*)pTmp, nLen * sizeof(sal_Unicode) );
+        if ( pTmp != aBuf )
+            delete [] pTmp;
+    }
+    return nWritten;
+}
+
 /*************************************************************************
 |*
 |*    Stream::WriteUnicodeText()
@@ -864,37 +893,21 @@ rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextE
 
 sal_Bool SvStream::WriteUnicodeText( const String& rStr )
 {
-    DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "WriteUnicodeText: swapping sizeof(sal_Unicode) not implemented" );
-    if ( bSwap )
-    {
-        xub_StrLen nLen = rStr.Len();
-        sal_Unicode aBuf[384];
-        sal_Unicode* const pTmp = ( nLen > 384 ? new sal_Unicode[nLen] : aBuf);
-        memcpy( pTmp, rStr.GetBuffer(), nLen * sizeof(sal_Unicode) );
-        sal_Unicode* p = pTmp;
-        const sal_Unicode* const pStop = pTmp + nLen;
-        while ( p < pStop )
-        {
-            SwapUShort( *p );
-            p++;
-        }
-        Write( (char*)pTmp, nLen * sizeof(sal_Unicode) );
-        if ( pTmp != aBuf )
-            delete [] pTmp;
-    }
-    else
-        Write( (char*)rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
+    write_uInt16s_FromOUString(*this, rStr, rStr.Len());
     return nError == SVSTREAM_OK;
 }
 
 sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        return WriteUnicodeText( rStr );
+    {
+        write_uInt16s_FromOUString(*this, rStr, rStr.Len());
+        return nError == SVSTREAM_OK;
+    }
     else
     {
         rtl::OString aStr(rtl::OUStringToOString(rStr, eDestCharSet));
-        Write(aStr.getStr(), aStr.getLength());
+        write_uInt8s_FromOString(*this, aStr, aStr.getLength());
         return nError == SVSTREAM_OK;
     }
 }
