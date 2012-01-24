@@ -1283,18 +1283,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-    {
-        sal_uInt16 nLen(0);
-        rIStm >> nLen;
-        rtl::OUStringBuffer aBuffer(nLen);
-        while ( nLen-- )
-        {
-            sal_uInt16 nChar;
-            rIStm >> nChar;
-            aBuffer.append(nChar);
-        }
-        maStr = aBuffer.makeStringAndClear();
-    }
+        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
 }
 
 // ========================================================================
@@ -1480,16 +1469,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        sal_uInt16 nLen(0);
-        rIStm >> nLen;
-        rtl::OUStringBuffer aBuffer(nLen);
-        while ( nLen-- )
-        {
-            sal_uInt16 nChar;
-            rIStm >> nChar;
-            aBuffer.append(nChar);
-        }
-        maStr = aBuffer.makeStringAndClear();
+        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
 
         if ( mnIndex + mnLen > maStr.getLength() )
         {
@@ -1591,18 +1571,7 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-    {
-        sal_uInt16 nLen(0);
-        rIStm >> nLen;
-        rtl::OUStringBuffer aBuffer(nLen);
-        while ( nLen-- )
-        {
-            sal_uInt16 nChar;
-            rIStm >> nChar;
-            aBuffer.append(nChar);
-        }
-        maStr = aBuffer.makeStringAndClear();
-    }
+        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
 }
 
 // ========================================================================
@@ -1687,18 +1656,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnStyle;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-    {
-        sal_uInt16 nLen(0);
-        rIStm >> nLen;
-        rtl::OUStringBuffer aBuffer(nLen);
-        while ( nLen-- )
-        {
-            sal_uInt16 nChar;
-            rIStm >> nChar;
-            aBuffer.append(nChar);
-        }
-        maStr = aBuffer.makeStringAndClear();
-    }
+        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
 }
 
 // ========================================================================

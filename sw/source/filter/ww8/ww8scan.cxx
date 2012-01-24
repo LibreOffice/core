@@ -1910,13 +1910,6 @@ Err:
     return false;
 }
 
-String read_uInt16_PascalString(SvStream& rStrm)
-{
-    sal_uInt16 nLen(0);
-    rStrm >> nLen;
-    return read_uInt16s_ToOUString(rStrm, nLen);
-}
-
 String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
     rtl::OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);

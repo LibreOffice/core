@@ -504,6 +504,17 @@ TOOLS_DLLPUBLIC inline rtl::OUString read_uInt8s_ToOUString(SvStream& rStrm,
 TOOLS_DLLPUBLIC rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm,
     sal_Size nUnits);
 
+//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+//16bit units to an OUString, returned rtl::OString's length is number of units
+//successfully read.
+template<typename prefix>
+rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
+{
+    prefix nUnits = 0;
+    rStrm >> nUnits;
+    return read_uInt16s_ToOUString(rStrm, nUnits);
+}
+
 //Attempt to read 8bit units to an OString until a zero terminator is
 //encountered, returned rtl::OString's length is number of units *definitely*
 //successfully read, check SvStream::good() to see if null terminator was
