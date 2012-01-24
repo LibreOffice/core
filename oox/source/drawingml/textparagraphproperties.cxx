@@ -376,7 +376,7 @@ TextParagraphProperties::~TextParagraphProperties()
 
 void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps )
 {
-    maTextParagraphPropertyMap.insert( rSourceProps.maTextParagraphPropertyMap.begin(), rSourceProps.maTextParagraphPropertyMap.end() );
+    maTextParagraphPropertyMap.assignAll( rSourceProps.maTextParagraphPropertyMap );
     maBulletList.apply( rSourceProps.maBulletList );
     maTextCharacterProperties.assignUsed( rSourceProps.maTextCharacterProperties );
     if ( rSourceProps.maParaTopMargin.bHasValue )

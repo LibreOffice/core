@@ -86,6 +86,9 @@ public:
     inline void         assignUsed( const PropertyMap& rPropMap )
                             { insert( rPropMap.begin(), rPropMap.end() ); }
 
+    /** Inserts all properties contained in the passed property map */
+    void                assignAll( const PropertyMap& rPropMap );
+
     /** Returns a sequence of property values, filled with all contained properties. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         makePropertyValueSequence() const;

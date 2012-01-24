@@ -234,6 +234,12 @@ const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
     return (aIt == end()) ? 0 : &aIt->second;
 }
 
+void PropertyMap::assignAll( const PropertyMap& rPropMap )
+{
+    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); it++ )
+        (*this)[it->first] = it->second;
+}
+
 Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
 {
     Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( size() ) );
