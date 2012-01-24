@@ -49,7 +49,7 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 endif
 endif
 
-ifeq ($(OS),Linux)
+ifeq ($(OS),LINUX)
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Module_add_targets,sfx2,\
     Library_qstart \
