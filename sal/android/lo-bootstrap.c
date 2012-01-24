@@ -1076,9 +1076,15 @@ new_stat(const char *path,
          int mode,
          int fake_ino)
 {
+    struct tm tm;
+
     memset(statp, 0, sizeof(*statp));
     statp->st_mode = mode | S_IRUSR | S_IRGRP | S_IROTH;
     statp->st_nlink = 1;
+
+    statp->st_uid = getuid();
+    statp->st_gid = getgid();
+
     if (entry != NULL)
         statp->st_size = entry->uncompressed_size;
     else
@@ -1088,11 +1094,26 @@ new_stat(const char *path,
         statp->st_blocks = 0;
     else
         statp->st_blocks = (statp->st_size - 1) / statp->st_blksize + 1;
-    /* Leave timestamps at zero for now? */
+
+    statp->st_atime = time(NULL);
+
+    memset(&tm, 0, sizeof(tm));
+    tm.tm_sec = (letoh16(entry->lastmod_time) & 0x1F) * 2;
+    tm.tm_min = (letoh16(entry->lastmod_time) >> 5) & 0x3F;
+    tm.tm_hour = (letoh16(entry->lastmod_time) >> 11) & 0x1F;
+    tm.tm_mday = letoh16(entry->lastmod_date) & 0x1F;
+    tm.tm_mon = ((letoh16(entry->lastmod_date) >> 5) & 0x0F) - 1;
+    tm.tm_year = ((letoh16(entry->lastmod_date) >> 9) & 0x7F) + 80;
+
+    statp->st_mtime = mktime(&tm);
+    statp->st_ctime = statp->st_mtime;
+
     statp->st_ino = fake_ino;
 
     (void) path;
-    /* LOGI("lo_apk_lstat(%s) = { st_mode=%o, st_size=%lld, st_ino=%lld }", path, statp->st_mode, statp->st_size, statp->st_ino); */
+    /* LOGI("lo_apk_lstat(%s) = { mode=%o, size=%lld, ino=%lld mtime=%.24s }",
+         path, statp->st_mode, statp->st_size, statp->st_ino,
+         ctime((const time_t *) &statp->st_mtime)); */
 
     return 0;
 }
