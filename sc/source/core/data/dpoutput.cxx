@@ -795,10 +795,18 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
-        // Avoid unwanted automatic format detection.
+        bool bNumeric = (nFlags & sheet::MemberResultFlags::NUMERIC) != 0;
         ScSetStringParam aParam;
-        aParam.mbDetectNumberFormat = false;
-        aParam.mbSetTextCellFormat = true;
+        if (bNumeric)
+        {
+            aParam.mbDetectNumberFormat = true;
+            aParam.mbSetTextCellFormat = false;
+        }
+        else
+        {
+            aParam.mbDetectNumberFormat = false;
+            aParam.mbSetTextCellFormat = true;
+        }
         pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
     }
 
