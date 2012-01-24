@@ -159,7 +159,6 @@ namespace desktop {
 
     static osl::FileBase::RC copy_recursive( const rtl::OUString& srcUnqPath, const rtl::OUString& dstUnqPath)
     {
-
         FileBase::RC err;
         DirectoryItem aDirItem;
         DirectoryItem::get(srcUnqPath, aDirItem);
@@ -207,6 +206,13 @@ namespace desktop {
             // copy single file - foldback
             err = File::copy( srcUnqPath,dstUnqPath );
         }
+
+#ifdef ANDROID
+        fprintf (stderr, "copy_recursive '%s' to '%s' returns (%d)0x%x\n",
+                 rtl::OUStringToOString(srcUnqPath, RTL_TEXTENCODING_UTF8).getStr(),
+                 rtl::OUStringToOString(dstUnqPath, RTL_TEXTENCODING_UTF8).getStr(),
+                 (int)err, (int)err);
+#endif
         return err;
     }
 
@@ -235,7 +241,10 @@ namespace desktop {
     File::setAttributes(aUserPath, osl_File_Attribute_OwnWrite| osl_File_Attribute_OwnRead| osl_File_Attribute_OwnExe);
 #endif
 
-            // copy data from shared data directory of base installation
+#ifndef ANDROID
+        // as of now osl_copyFile does not work on Android => don't do this.
+
+        // copy data from shared data directory of base installation
         for (sal_Int32 i=0; pszSrcList[i]!=NULL && pszDstList[i]!=NULL; i++)
         {
             rc = copy_recursive(
@@ -251,6 +260,7 @@ namespace desktop {
                     return UserInstall::E_Creation;
             }
         }
+#endif
         try
         {
             OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
