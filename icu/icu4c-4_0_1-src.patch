@@ -1,3 +1,23 @@
+--- misc/icu/source/config/mh-bsd-gcc	2009-01-15 16:46:10.000000000 +0900
++++ misc/build/icu/source/config/mh-bsd-gcc	2011-06-14 17:12:14.000000000 +0900
+@@ -18,7 +18,15 @@
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=	
+-LD_RPATH_PRE=	-Wl,-rpath,
++LD_RPATH_PRE=	-Wl,-z,origin -Wl,-rpath,
++
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++## (incl. the C++ runtime libs potentially found in the URE lib dir):
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
++
++#SH#  ENABLE_RPATH=YES
++#SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'"
+ 
+ ## Compiler switch to embed a library name
+ LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
+
 --- misc/icu/source/common/putil.c	2008-07-01 03:41:12.000000000 +0200
 +++ misc/build/icu/source/common/putil.c	2008-09-02 07:01:29.335795765 +0200
 @@ -52,7 +52,7 @@

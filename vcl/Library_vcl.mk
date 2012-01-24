@@ -41,11 +41,11 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
+    $$(FREETYPE_CFLAGS) \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
-    $$(FREETYPE_CFLAGS) \
 ))
 endif
 
