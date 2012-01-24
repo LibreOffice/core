@@ -1630,8 +1630,6 @@ void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings
         aStatBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
 }
 
-#define SFX_ITEMTYPE_STATBAR 4
-
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
     Reference< ::com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
