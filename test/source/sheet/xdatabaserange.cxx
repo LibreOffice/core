@@ -87,19 +87,19 @@ void XDatabaseRange::testGetSortDescriptor()
 
         if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSortColumns")))
         {
-            sal_Bool bIsSortColumns;
+            sal_Bool bIsSortColumns = true;
             xProp.Value >>= bIsSortColumns;
             CPPUNIT_ASSERT(bIsSortColumns == false);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainsHeader")))
         {
-            sal_Bool bContainsHeader;
+            sal_Bool bContainsHeader = true;
             xProp.Value >>= bContainsHeader;
             CPPUNIT_ASSERT(bContainsHeader == true);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxFieldCount")))
         {
-            sal_Int32 nMaxFieldCount;
+            sal_Int32 nMaxFieldCount = 0;
             xProp.Value >>= nMaxFieldCount;
             std::cout << "Value: " << nMaxFieldCount << std::endl;
 
@@ -110,13 +110,13 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BindFormatsToContent")))
         {
-            sal_Bool bBindFormatsToContent;
+            sal_Bool bBindFormatsToContent = false;
             xProp.Value >>= bBindFormatsToContent;
             CPPUNIT_ASSERT(bBindFormatsToContent == true);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyOutputData")))
         {
-            sal_Bool bCopyOutputData;
+            sal_Bool bCopyOutputData = true;
             xProp.Value >>= bCopyOutputData;
             CPPUNIT_ASSERT(bCopyOutputData == false);
         }
@@ -126,14 +126,14 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUserListEnabled")))
         {
-            sal_Bool bIsUserListEnabled;
+            sal_Bool bIsUserListEnabled true;
             xProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(bIsUserListEnabled == false);
 
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserListIndex")))
         {
-            sal_Int32 nUserListIndex;
+            sal_Int32 nUserListIndex = 1;
             xProp.Value >>= nUserListIndex;
             CPPUNIT_ASSERT(nUserListIndex == 0);
         }
