@@ -61,6 +61,10 @@ BUILD_DIR=src/interfaces/libpq
 
 CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --without-readline --disable-shared --with-openssl
 
+.IF "$(CROSS_COMPILING)" == "YES"
+CONFIGURE_ACTION += --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 .IF "$(WITH_LDAP)" == "YES"
 CONFIGURE_ACTION += --with-ldap
 .IF "$(WITH_OPENLDAP)" != "YES"
