@@ -431,6 +431,11 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_add_libs,vcl,\
+	-llog \
+	-landroid \
+	-llo-bootstrap \
+))
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \

@@ -325,25 +325,32 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         else
             nTimeoutMS = -1; // wait until something happens
 
-        // release yield mutex
-        nAcquireCount = ReleaseYieldMutex();
-        // poll
-        struct pollfd aPoll;
-        aPoll.fd = m_pTimeoutFDS[0];
-        aPoll.events = POLLIN;
-        aPoll.revents = 0;
-        poll( &aPoll, 1, nTimeoutMS );
+        DoReleaseYield(nTimeoutMS);
+    }
+}
 
-        // acquire yield mutex again
-        AcquireYieldMutex( nAcquireCount );
+void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
+{
+    // poll
+    struct pollfd aPoll;
+    aPoll.fd = m_pTimeoutFDS[0];
+    aPoll.events = POLLIN;
+    aPoll.revents = 0;
 
-        // clean up pipe
-        if( (aPoll.revents & POLLIN) != 0 )
-        {
-            int buffer;
-            while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)
-                continue;
-        }
+    // release yield mutex
+    sal_uLong nAcquireCount = ReleaseYieldMutex();
+
+    poll( &aPoll, 1, nTimeoutMS );
+
+    // acquire yield mutex again
+    AcquireYieldMutex( nAcquireCount );
+
+    // clean up pipe
+    if( (aPoll.revents & POLLIN) != 0 )
+    {
+        int buffer;
+        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)
+            continue;
     }
 }
 

@@ -30,16 +30,48 @@
 #include <headless/svpdummies.hxx>
 #include <generic/gendata.hxx>
 #include <android/log.h>
+#include <android/looper.h>
+#include <osl/detail/android.h>
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
-    fprintf (stderr, "created Android Sal Instance\n");
+    fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
+             global_android_app,
+             global_android_app ? global_android_app->window : NULL);
 }
 
 AndroidSalInstance::~AndroidSalInstance()
 {
     fprintf (stderr, "destroyed Android Sal Instance\n");
+}
+
+void AndroidSalInstance::Wakeup()
+{
+    if (global_android_app && global_android_app->looper)
+        ALooper_wake (global_android_app->looper);
+    else
+        fprintf (stderr, "busted - no global looper\n");
+}
+
+void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
+{
+    // release yield mutex
+    sal_uLong nAcquireCount = ReleaseYieldMutex();
+
+    fprintf (stderr, "DoReleaseYield for %d ms\n", nTimeoutMS);
+//    int ALooper_pollOnce(timeoutMs, int* outFd, int* outEvents, void** outData);
+
+    // acquire yield mutex again
+    AcquireYieldMutex(nAcquireCount);
+}
+
+bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
+{
+    // FIXME: ideally we should check the input queue to avoid being busy ...
+    fprintf (stderr, "FIXME: AnyInput returns true\n");
+    // global_android_app->inputQueue ? ...
+    return true;
 }
 
 class AndroidSalSystem : public SvpSalSystem {
@@ -52,14 +84,9 @@ public:
                                   int nDefButton )
     {
         (void)rButtons; (void)nDefButton;
-#if 0
         __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
                             rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
                             rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
-#endif
-        fprintf (stderr, "LibreOffice - dialog '%s': '%s'",
-                 rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                 rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         return 0;
     }
 };
@@ -77,19 +104,6 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-SalInstance *CreateSalInstance()
-{
-    AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
-    new AndroidSalData( pInstance );
-    return pInstance;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
-    pInst->ReleaseYieldMutex();
-    delete pInst;
-}
-
 // All the interesting stuff is slaved from the AndroidSalInstance
 void InitSalData()   {}
 void DeInitSalData() {}
@@ -103,12 +117,8 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
         aError = rtl::OUString::createFromAscii("Unknown application error");
     ::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
-#if 0
     __android_log_print(ANDROID_LOG_INFO, "SalAbort: '%s'",
                         rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
-#endif
-    fprintf( stderr, "SalAbort: '%s'",
-             rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr() );
     if( bDumpCore )
         abort();
     else
@@ -130,6 +140,20 @@ SalData::SalData() :
 
 SalData::~SalData()
 {
+}
+
+// This is our main entry point:
+SalInstance *CreateSalInstance()
+{
+    AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
+    new AndroidSalData( pInstance );
+    return pInstance;
+}
+
+void DestroySalInstance( SalInstance *pInst )
+{
+    pInst->ReleaseYieldMutex();
+    delete pInst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

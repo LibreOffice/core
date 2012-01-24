@@ -39,6 +39,12 @@ public:
     virtual ~AndroidSalInstance();
 
     virtual SalSystem* CreateSalSystem();
+
+    // mainloop pieces
+    virtual void Wakeup();
+    virtual bool AnyInput( sal_uInt16 nType );
+protected:
+    virtual void DoReleaseYield( int nTimeoutMS );
 };
 
 #endif // ANDROID_SALINST_H

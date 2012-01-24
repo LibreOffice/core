@@ -95,6 +95,9 @@ class SvpSalInstance : public SalGenericInstance
 
     bool isFrameAlive( const SalFrame* pFrame ) const;
 
+protected:
+    virtual void DoReleaseYield( int nTimeoutMS );
+
 public:
     static SvpSalInstance* s_pDefaultInstance;
 
