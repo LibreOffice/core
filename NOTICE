@@ -79,7 +79,7 @@ We use the Tango base icon theme under Public Domain by the
 Tango Desktop Project. More information is available here:
     http://tango.freedesktop.org/
 
-For general convenience swe also include the DejaVu fonts,
+For general convenience we also include the DejaVu fonts,
 a font family based on the Vera Fonts. More information
 is available here:
     http://dejavu-fonts.org/
@@ -94,6 +94,12 @@ binaries from some accepted weak copyleft code bases.
 The Open Source SAXON XSLT processor was developed by Michael
 Kay of Saxonica Limited and is available under the MPL at:
     https://sourceforge.net/projects/saxon/files/Saxon-B/
+
+The LP solver in Calc uses the algorithms developed by the
+Computational Infrastructure for Operations Research COIN_OR
+project (specifically CLP and CBC) in the CoinMP library.
+The source code is available under EPL is here:
+    http://www.coin-or.org/download/source/CoinMP/
 
 The graphite module is distributed under CPL (Common Public
 License). Silgraphite as used by the program is available
