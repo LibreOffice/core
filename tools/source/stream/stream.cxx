@@ -932,21 +932,6 @@ sal_Bool SvStream::WriteLine(const rtl::OString& rStr)
 
 /*************************************************************************
 |*
-|*    Stream::WriteLines()
-|*
-*************************************************************************/
-
-sal_Bool SvStream::WriteLines( const ByteString& rStr )
-{
-    ByteString aStr( rStr );
-    aStr.ConvertLineEnd( eLineDelimiter );
-    Write( aStr.GetBuffer(), aStr.Len() );
-    endl( *this );
-    return (sal_Bool)(nError == SVSTREAM_OK);
-}
-
-/*************************************************************************
-|*
 |*    Stream::WriteUniOrByteChar()
 |*
 *************************************************************************/

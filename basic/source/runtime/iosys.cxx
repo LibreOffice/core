@@ -703,6 +703,17 @@ void SbiStream::ExpandFile()
     }
 }
 
+namespace
+{
+    void WriteLines(SvStream &rStream, const ByteString& rStr)
+    {
+        ByteString aStr( rStr );
+        aStr.ConvertLineEnd( rStream.GetLineDelimiter() );
+        rStream.Write( aStr.GetBuffer(), aStr.Len() );
+        endl( rStream );
+    }
+}
+
 SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
 {
     ExpandFile();
@@ -720,7 +731,7 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
             aLine.Erase( nLineLen );
             if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0D )
                 aLine.Erase( nLineLen );
-            pStrm->WriteLines( aLine );
+            WriteLines(*pStrm, aLine);
             aLine.Erase();
         }
     }
