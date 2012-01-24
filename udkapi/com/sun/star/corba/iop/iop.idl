@@ -62,7 +62,7 @@ module com { module sun { module star { module corba { module iop
      */
     published struct IOR
     {
-        CorbaString8 type_id;
+        com::sun::star::corba::CorbaString8 type_id;
         sequence <TaggedProfile> profiles;
     };
 

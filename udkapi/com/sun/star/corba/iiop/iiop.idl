@@ -47,7 +47,7 @@ published   struct Version
 published   struct ProfileBody_1_0
     {// renamed from ProfileBody
         Version iiop_version;
-        CorbaString8 host;
+        com::sun::star::corba::CorbaString8 host;
         unsigned short port;
         sequence <byte> object_key;
     };
@@ -58,7 +58,7 @@ published   struct ProfileBody_1_0
 published   struct ProfileBody_1_1
     {// also used for 1.2
         Version iiop_version;
-        CorbaString8 host;
+        com::sun::star::corba::CorbaString8 host;
         unsigned short port;
         sequence < byte > object_key;
 // Added in 1.1 unchanged for 1.2
@@ -70,7 +70,7 @@ published   struct ProfileBody_1_1
     */
 published   struct ListenPoint
     {
-        CorbaString8 host;
+        com::sun::star::corba::CorbaString8 host;
         unsigned short port;
     };
 

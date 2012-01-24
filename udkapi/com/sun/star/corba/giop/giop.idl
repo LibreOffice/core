@@ -96,7 +96,7 @@ published   struct RequestHeader_1_0
         unsigned long request_id;
         boolean response_expected;
         sequence < byte > object_key;
-        CorbaString8 operation;
+        com::sun::star::corba::CorbaString8 operation;
         sequence < byte > requesting_principal;
     };
 
@@ -112,7 +112,7 @@ published   struct RequestHeader_1_1
         byte reserved_2;
         byte reserved_3; // Added in GIOP 1.1
         sequence <byte> object_key;
-        CorbaString8 operation;
+        com::sun::star::corba::CorbaString8 operation;
         sequence <byte> requesting_principal; // binary compatible
     };
 
@@ -138,7 +138,7 @@ published constants TargetAddressGroup
     /**
       @deprecated
      */
-published struct TargetAddress : CorbaUnion
+published struct TargetAddress : com::sun::star::corba::CorbaUnion
     {
         short nDiscriminator;
         sequence < byte > object_key;  // KeyAddr
@@ -158,7 +158,7 @@ published   struct RequestHeader_1_2
         byte reserved_2;
         byte reserved_3;
         TargetAddress target;
-        CorbaString8 operation;
+        com::sun::star::corba::CorbaString8 operation;
 // Principal not in GIOP 1.2
         com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
     };
@@ -193,7 +193,7 @@ published   struct ReplyHeader_1_2
      */
 published   struct SystemExceptionReplyBody
     {
-        CorbaString8 exception_id;
+        com::sun::star::corba::CorbaString8 exception_id;
         unsigned long minor_code_value;
         unsigned long completion_status;
     };
