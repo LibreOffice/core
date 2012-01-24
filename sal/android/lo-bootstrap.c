@@ -1135,7 +1135,8 @@ lo_apk_lstat(const char *path,
     }
 
     name_size = strlen(pn);
-    while (count--) {
+    while (count--)
+    {
         if (letoh16(entry->filename_size) >= name_size &&
             !memcmp(entry->data, pn, name_size) &&
             (letoh16(entry->filename_size) == name_size || entry->data[name_size] == '/'))
