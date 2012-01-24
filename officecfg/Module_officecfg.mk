@@ -24,6 +24,9 @@ $(eval $(call gb_Module_add_targets,officecfg,\
 	Package_misc \
 	Package_tools \
 	Configuration_officecfg \
+))
+
+$(eval $(call gb_Module_add_check_targets,officecfg,\
         CppunitTest_officecfg_cppheader_test \
 ))
 
