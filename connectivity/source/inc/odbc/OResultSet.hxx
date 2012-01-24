@@ -160,9 +160,11 @@ namespace connectivity
             sal_Int32 getFetchDirection()       const;
             sal_Int32 getFetchSize()            const;
             ::rtl::OUString getCursorName()     const;
+            template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
 
             void setFetchDirection(sal_Int32 _par0);
             void setFetchSize(sal_Int32 _par0);
+            template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
 
             void fillRow(sal_Int32 _nToColumn);
