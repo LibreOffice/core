@@ -216,6 +216,7 @@ namespace desktop {
         return err;
     }
 
+#ifndef ANDROID
     static const char *pszSrcList[] = {
         "/presets",
         NULL
@@ -224,7 +225,7 @@ namespace desktop {
         "/user",
         NULL
     };
-
+#endif
 
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {

@@ -130,7 +130,10 @@ namespace desktop
 static oslSignalHandler pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
 
+#ifndef ANDROID
 static ::rtl::OUString getBrandSharePreregBundledPathURL();
+#endif
+
 // ----------------------------------------------------------------------------
 
 ResMgr* Desktop::GetDesktopResManager()
@@ -355,6 +358,8 @@ void ReplaceStringHookProc( UniString& rStr )
 static const char      pLastSyncFileName[]     = "lastsynchronized";
 static const sal_Int32 nStrLenLastSync         = 16;
 
+#ifndef ANDROID
+
 static bool needsSynchronization(
     ::rtl::OUString const & baseSynchronizedURL, ::rtl::OUString const & userSynchronizedURL )
 {
@@ -462,6 +467,9 @@ static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
 
     return aTmp.makeStringAndClear();
 }
+
+#endif
+
 //Checks if the argument src is the folder of the help or configuration
 //backend in the prereg folder
 static bool excludeTmpFilesAndFolders(const rtl::OUString & src)
