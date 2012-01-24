@@ -22,8 +22,8 @@ Globals
 			SOLSUREPACKAGEPREFIX openofficeorg
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
-            POOLPRODUCT 1
-            REGISTRATION_HOST https://hs-ws1.oracle.com/RegistrationWeb
+			POOLPRODUCT 1
+			REGISTRATION_HOST https://registration.openoffice.org
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
 			PROGRESSBARCOLOR 14,133,205
 			PROGRESSSIZE 320,7
@@ -31,13 +31,13 @@ Globals
 			PROGRESSFRAMECOLOR 207,208,211
 			NATIVEPROGRESS true
 			REGISTRYLAYERNAME Layers
-            SERVICEPACK 1
-            UPDATE_DATABASE 1
-            CREATE_MSP_INSTALLSET 0
-            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
+			SERVICEPACK 1
+			UPDATE_DATABASE 1
+			CREATE_MSP_INSTALLSET 0
+			UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 8
-            OOOVENDOR Oracle
+			OOOVENDOR Apache Software Foundation
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
 			NOLANGUAGESELECTIONPRODUCT 0
@@ -94,13 +94,13 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_LAYOUT_STYLE 0
+			REGISTRATION_PRODUCT OpenOffice.org
+			REGISTRATION_CID 926117
+			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -122,14 +122,14 @@ OpenOffice_wJRE
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
+			POSTVERSIONEXTENSION
+			POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
 			BASEPRODUCTVERSION 3.4
 			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -159,13 +159,13 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_LAYOUT_STYLE 0
+			REGISTRATION_PRODUCT OpenOffice.org
+			REGISTRATION_CID 926117
+			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -188,8 +188,8 @@ OpenOffice_Dev
 			SHORT_PRODUCTEXTENSION 
 			BASISROOTNAME OOo-dev
 			UNIXBASISROOTNAME ooo-dev
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
+			POSTVERSIONEXTENSION
+			POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
@@ -201,7 +201,7 @@ OpenOffice_Dev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -230,13 +230,13 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_LAYOUT_STYLE 0
+			REGISTRATION_PRODUCT OpenOffice.org
+			REGISTRATION_CID 926117
+			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -273,13 +273,13 @@ URE
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             NOLANGUAGESELECTIONPRODUCT 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
 			PACKAGEMAP package_names_ext.txt
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
         }
         active 1
         compression 5
@@ -321,11 +321,11 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
         }
         active 1
         compression 5
