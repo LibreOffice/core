@@ -277,7 +277,8 @@ namespace canvas
 
         VectorOfSprites::iterator aEnd=
             ::std::unique( aUpdatableSprites.begin(),
-                           aUpdatableSprites.end() );
+                           aUpdatableSprites.end(),
+                           aSpriteComparator );
 
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
