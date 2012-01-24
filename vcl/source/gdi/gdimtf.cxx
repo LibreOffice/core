@@ -406,9 +406,9 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
 
-        for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
-        {
-            if( !Hook() )
+        OSL_TRACE("GDIMetaFile::Play on device of size: %d x %d", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
+        if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSizePixel() ) ) {
+            for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
                 MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                 if( pAction->GetType() == META_COMMENT_ACTION &&
@@ -608,7 +608,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     {
         GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
 
-        if( bUseCanvas && !pMtf && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
+        if( bUseCanvas && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
             return;
 
         Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
