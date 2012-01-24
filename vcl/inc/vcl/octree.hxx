@@ -81,7 +81,7 @@ private:
     const BitmapReadAccess*     pAcc;
     sal_uInt16                      nPalIndex;
 
-                                Octree() {};
+                                Octree() {}
 
     void                        CreatePalette( PNODE pNode );
     void                        GetPalIndex( PNODE pNode );
@@ -94,10 +94,7 @@ private:
 public:
 
                                 Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors );
-                                Octree( sal_uLong nColors );
                                 ~Octree();
-
-    void                        AddColor( const BitmapColor& rColor );
 
     inline const BitmapPalette& GetPalette();
     inline sal_uInt16               GetBestPaletteIndex( const BitmapColor& rColor );

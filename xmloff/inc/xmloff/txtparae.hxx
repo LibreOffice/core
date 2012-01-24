@@ -236,10 +236,6 @@ protected:
     const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
 
 public:
-    ::rtl::OUString FindTextStyle(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet > & rPropSet,
-            sal_Bool& rbHasCharStyle ) const;
     ::rtl::OUString FindTextStyleAndHyperlink(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet > & rPropSet,

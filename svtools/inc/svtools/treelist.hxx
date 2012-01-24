@@ -444,7 +444,6 @@ protected:
 public:
 
                         SvListView();   // !!! setzt das Model auf 0
-                        SvListView( SvTreeList* pModel );
     virtual             ~SvListView();
     void                Clear();
     SvTreeList*         GetModel() const { return pModel; }

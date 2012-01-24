@@ -1423,16 +1423,6 @@ SvListEntry* SvTreeList::GetRootLevelParent( SvListEntry* pEntry ) const
 
 DBG_NAME(SvListView);
 
-SvListView::SvListView( SvTreeList* pModell )
-{
-    DBG_CTOR(SvListView,0);
-    pModel = 0;
-    nSelectionCount = 0;
-    nVisibleCount = 0;
-    bVisPositionsValid = sal_False;
-    SetModel( pModell );
-}
-
 SvListView::SvListView()
 {
     DBG_CTOR(SvListView,0);

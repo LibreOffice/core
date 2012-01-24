@@ -109,8 +109,6 @@ NumericFormatter::ConvertToFraction(long)
 NumericFormatter::ConvertToLong(Fraction const&)
 OLEObjCache::SetSize(unsigned long)
 ORegKey::acquireKey(void*)
-Octree::AddColor(BitmapColor const&)
-Octree::Octree(unsigned long)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 ParagraphObj::ParagraphObj(ParagraphObj&)
@@ -379,13 +377,11 @@ SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, unsigned char)
 SvLBoxButtonData::SvLBoxButtonData()
 SvLBoxEntryArr::DeleteAndDestroy(unsigned short, unsigned short)
 SvLBoxItem::GetSize(SvLBoxEntry*, SvViewDataEntry*)
-SvListView::SvListView(SvTreeList*)
 SvPersistStream::InsertObj(SvPersistBase*)
 SvPersistStream::RemoveObj(SvPersistBase*)
 SvPersistStream::SvPersistStream(SvClassManager&, SvStream*, SvPersistStream const&)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
 SvStream::ReadLine(ByteString&)
-SvStringsISortDtor::Insert(String* const*, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
 SvUnoAttributeContainer::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SvXMLAutoStylePoolNamesP_Impl::GetPos(rtl::OUString const*) const
@@ -773,7 +769,6 @@ XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
 XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
-XMLTextParagraphExport::FindTextStyle(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, unsigned char&) const
 XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, short)
 XPropertyList::Clear()
 XSecController::collectToSign(int, rtl::OUString const&)

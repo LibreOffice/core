@@ -821,16 +821,6 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
     return sName;
 }
 
-OUString XMLTextParagraphExport::FindTextStyle(
-           const Reference < XPropertySet > & rPropSet,
-        sal_Bool& rHasCharStyle ) const
-{
-    sal_Bool bDummy;
-    sal_Bool bDummy2;
-    return FindTextStyleAndHyperlink( rPropSet, bDummy, rHasCharStyle, bDummy2 );
-}
-
-
 // adjustments to support lists independent from list style
 void XMLTextParagraphExport::exportListChange(
         const XMLTextNumRuleInfo& rPrevInfo,

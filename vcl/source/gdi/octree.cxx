@@ -75,18 +75,6 @@ ImpNodeCache::~ImpNodeCache()
 // - Octree -
 // ----------
 
-Octree::Octree( sal_uLong nColors ) :
-            nMax        ( nColors ),
-            nLeafCount  ( 0L ),
-            pTree       ( NULL ),
-            pAcc        ( NULL )
-{
-    pNodeCache = new ImpNodeCache( nColors );
-    memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( PNODE ) );
-}
-
-// ------------------------------------------------------------------------
-
 Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             nMax        ( nColors ),
             nLeafCount  ( 0L ),
@@ -104,18 +92,6 @@ Octree::~Octree()
 {
     ImplDeleteOctree( &pTree );
     delete pNodeCache;
-}
-
-// ------------------------------------------------------------------------
-
-void Octree::AddColor( const BitmapColor& rColor )
-{
-    pColor = &(BitmapColor&) rColor;
-    nLevel = 0L;
-    ImplAdd( &pTree );
-
-    while( nLeafCount > nMax )
-        ImplReduce();
 }
 
 // ------------------------------------------------------------------------
