@@ -3127,7 +3127,8 @@ if test "$cross_compiling" = "yes"; then
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
     cp config.log ../config.Build.log
-    . ./config_host.mk
+    sed -e 's,=\(.*\),="\1",' < config_host.mk > config_host.sh
+    . ./config_host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
         VV='$'$V
@@ -3184,7 +3185,6 @@ AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
 
 AC_SUBST(OUTDIR_FOR_BUILD)
-AC_SUBST(PATH_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
 UPD="`echo AC_PACKAGE_VERSION | sed "s/\.//"`0"
@@ -10803,57 +10803,56 @@ AC_SUBST(TEMP_DIRECTORY)
 AC_SUBST(TMP_DIRECTORY)
 
 # setup the PATH for the environment
-LO_PATH="$PATH"
+if test -n "$LO_PATH_FOR_BUILD" ; then
+    LO_PATH="$LO_PATH_FOR_BUILD"
+else
+    LO_PATH="$PATH"
 
-case "$host_os" in
+    case "$host_os" in
 
-aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
-    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
-        pathmunge "$JAVA_HOME/bin" "after"
-    fi
-    ;;
-
-cygwin*)
-    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
-        pathmunge "$DOTNET_FRAMEWORK_HOME" "before"
-        pathmunge "$ASM_HOME" "before"
-        pathmunge "$WINDOWS_SDK_HOME" "before"
-        pathmunge "$CSC_PATH" "before"
-        pathmunge "$MIDL_PATH" "before"
-        pathmunge "$MSPDB_PATH" "before"
-        if test "$CL_X64"="TRUE" ; then
-            pathmunge "$COMPATH/bin/amd64" "before"
-        else
-            pathmunge "$COMPATH/bin" "before"
+    aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
+        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+            pathmunge "$JAVA_HOME/bin" "after"
         fi
-        if test -d "$JAVA_HOME/jre/bin/client" ; then
-            pathmunge "$JAVA_HOME/jre/bin/client" "before"
+        ;;
+
+    cygwin*)
+        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+            pathmunge "$DOTNET_FRAMEWORK_HOME" "before"
+            pathmunge "$ASM_HOME" "before"
+            pathmunge "$WINDOWS_SDK_HOME" "before"
+            pathmunge "$CSC_PATH" "before"
+            pathmunge "$MIDL_PATH" "before"
+            pathmunge "$MSPDB_PATH" "before"
+            if test "$CL_X64"="TRUE" ; then
+                pathmunge "$COMPATH/bin/amd64" "before"
+            else
+                pathmunge "$COMPATH/bin" "before"
+            fi
+            if test -d "$JAVA_HOME/jre/bin/client" ; then
+                pathmunge "$JAVA_HOME/jre/bin/client" "before"
+            fi
+            if test -d "$JAVA_HOME/jre/bin/hotspot" ; then
+                pathmunge "$JAVA_HOME/jre/bin/hotspot" "before"
+            fi
+            pathmunge "$JAVA_HOME/bin" "before"
         fi
-        if test -d "$JAVA_HOME/jre/bin/hotspot" ; then
-            pathmunge "$JAVA_HOME/jre/bin/hotspot" "before"
+        ;;
+
+    solaris*)
+        pathmunge "/usr/css/bin" "before"
+        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+            pathmunge "$JAVA_HOME/bin" "after"
         fi
-        pathmunge "$JAVA_HOME/bin" "before"
+        ;;
+    esac
 
-    fi
-    ;;
-
-solaris*)
-    pathmunge "/usr/css/bin" "before"
-    if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
-        pathmunge "$JAVA_HOME/bin" "after"
-    fi
-    ;;
-esac
-
-pathmunge "$SRC_ROOT/solenv/$OUTPATH/bin" "before"
-pathmunge "$SRC_ROOT/solenv/bin" "before"
-pathmunge "." "before"
+    pathmunge "$SRC_ROOT/solenv/$OUTPATH/bin" "before"
+    pathmunge "$SRC_ROOT/solenv/bin" "before"
+    pathmunge "." "before"
+fi
 
 AC_SUBST(LO_PATH)
-if test -z "$LO_PATH_FOR_BUILD" ; then
-    LO_PATH_FOR_BUILD="$SOLARLIB"
-fi
-AC_SUBST(LO_PATH_FOR_BUILD)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
 chmod +x ./config.guess
@@ -10886,7 +10885,7 @@ else
 fi
 
 
-if test "STALE_MAKE"="TRUE" -a "$build_os"="cygwin" ; then
+if test "$STALE_MAKE" = "TRUE" -a "$build_os" = "cygwin" ; then
 cat << _EOS
 ****************************************************************************
 WARNING:

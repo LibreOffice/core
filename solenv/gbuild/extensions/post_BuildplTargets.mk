@@ -113,29 +113,29 @@ dev-install: \
 			$(if $(filter check,$(MAKECMDGOALS)),build)
 	$(call gb_BuildplTarget_command,smoketestoo_native,)
 
-build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
-	$(call gb_BuildplTarget_command,instsetoo_native,--all)
+#build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+#	$(call gb_BuildplTarget_command,instsetoo_native,--all)
 
-cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
-	source $(SRCDIR)/config_build.mk && $(call gb_BuildplTarget_command,$@,--all)
+#cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
+#	source $(SRCDIR)/config_build.mk && $(call gb_BuildplTarget_command,$@,--all)
 
 # experimental callcatcher target
 # http://www.skynet.ie/~caolan/Packages/callcatcher.html
-findunusedcode:
-	@which callcatcher > /dev/null 2>&1 || \
-	    (echo "callcatcher not installed" && false)
-	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/config_host.mk > $(SRCDIR)/config_host_callcatcher.mk
-	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
-	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
-		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
-	    source $(SRCDIR)/config_host_callcatcher.mk && \
-	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
-	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
-	@source $(SRCDIR)/config_host_callcatcher.mk && \
-	    callanalyse \
-		$$WORKDIR/LinkTarget/*/* \
-		*/$$OUTPATH/bin/* \
-		*/$$OUTPATH/lib/* > unusedcode.all
+#findunusedcode:
+#	@which callcatcher > /dev/null 2>&1 || \
+#	    (echo "callcatcher not installed" && false)
+#	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/config_host.mk > $(SRCDIR)/config_host_callcatcher.mk
+#	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
+#	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
+#		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
+#	    source $(SRCDIR)/config_host_callcatcher.mk && \
+#	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
+#	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
+#	@source $(SRCDIR)/config_host_callcatcher.mk && \
+#	    callanalyse \
+#		$$WORKDIR/LinkTarget/*/* \
+#		*/$$OUTPATH/bin/* \
+#		*/$$OUTPATH/lib/* > unusedcode.all
 #because non-c++ symbols could be dlsymed lets make a list of class level
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
@@ -148,12 +148,12 @@ findunusedcode:
 #
 #filter out Atom*:: from libcmis, because its too painful to customize
 #it to only build the methods we directly call
-	@grep ::.*\( unusedcode.all \
-		| grep -v ^cppu:: \
-		| grep -v ^boost:: \
-		| grep -v ^CIcc \
-		| grep -v ^Atom \
-		> unusedcode.easy
+#	@grep ::.*\( unusedcode.all \
+#		| grep -v ^cppu:: \
+#		| grep -v ^boost:: \
+#		| grep -v ^CIcc \
+#		| grep -v ^Atom \
+#		> unusedcode.easy
 
 subsequentcheck: dev-install
 
