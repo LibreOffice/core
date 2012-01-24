@@ -223,3 +223,16 @@ sc.ScDDELinkObj
 ### fdo44167 ###
 sc.ScDatabaseRangeObj::com::sun::star::sheet::XDatabaseRange
 sc.ScDatabaseRangeObj::com::sun::star::util::XRefreshable
+
+### c++ based tests ###
+sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
+sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotDescriptor
+sc.ScDataPilotTableObj::com::sun::star::container::XNamed
+sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+sc.ScNamedRangeObj::com::sun::star::sheet::XNamedRange
+sc.ScNamedRangesObj::com::sun::star::sheet::XNamedRanges
+sc.ScTableSheetsObj::com::sun::star::container::XNamedContainer
+sc.ScTableSheetsObj::com::sun::star::sheet::XSpreadsheet2
+sc.ScCellRangeObj::com::sun::star::sheet::sheet::XCellRangesQuery
+sc.ScCellRangeObj::com::sun::star::table::CellProperties
