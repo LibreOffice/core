@@ -795,11 +795,18 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
-        // We need automatic number format detection here. Date and number
-        // grouping functionality depend on it.
+        bool bNumeric = (nFlags & sheet::MemberResultFlags::NUMERIC) != 0;
         ScSetStringParam aParam;
-        aParam.mbDetectNumberFormat = true;
-        aParam.mbSetTextCellFormat = false;
+        if (bNumeric)
+        {
+            aParam.mbDetectNumberFormat = true;
+            aParam.mbSetTextCellFormat = false;
+        }
+        else
+        {
+            aParam.mbDetectNumberFormat = false;
+            aParam.mbSetTextCellFormat = true;
+        }
         pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
     }
 
