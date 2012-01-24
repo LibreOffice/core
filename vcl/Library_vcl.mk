@@ -74,11 +74,16 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     i18nisolang1 \
     i18npaper \
     i18nutil \
-    jvmaccess \
     cppu \
     sal \
     $(gb_STDLIBS) \
 ))
+
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    jvmaccess \
+))
+endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
 	icule \

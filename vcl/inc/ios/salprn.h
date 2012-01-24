@@ -90,7 +90,7 @@ class IosSalInfoPrinter : public SalInfoPrinter
                                              long& o_rPageWidth, long& o_rPageHeight );
     virtual sal_uLong               GetCapabilities( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType );
     virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* i_pSetupData );
-    virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin );
+    virtual rtl::OUString       GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin );
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
 

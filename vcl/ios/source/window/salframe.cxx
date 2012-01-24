@@ -240,7 +240,7 @@ sal_Bool IosSalFrame::PostEvent( void *pData )
 }
 
 // -----------------------------------------------------------------------
-void IosSalFrame::SetTitle(const XubString& /* rTitle */)
+void IosSalFrame::SetTitle(const rtl::OUString& /* rTitle */)
 {
 }
 
@@ -617,7 +617,7 @@ void IosSalFrame::EndExtTextInput( sal_uInt16 )
 
 // -----------------------------------------------------------------------
 
-XubString IosSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+rtl::OUString IosSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     static std::map< sal_uInt16, rtl::OUString > aKeyMap;
     if( aKeyMap.empty() )
@@ -704,7 +704,7 @@ XubString IosSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-XubString IosSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
+rtl::OUString IosSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
 {
     return GetKeyName( nKeyCode );
 }

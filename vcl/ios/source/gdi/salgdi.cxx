@@ -1511,7 +1511,7 @@ void IosSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 // -----------------------------------------------------------------------
 
 bool IosSalGraphics::AddTempDevFont( ImplDevFontList*,
-    const String& rFontFileURL, const String& /*rFontName*/ )
+    const rtl::OUString& rFontFileURL, const rtl::OUString& /*rFontName*/ )
 {
     ::rtl::OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );

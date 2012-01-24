@@ -147,8 +147,8 @@ static NSString* getStandardString( int nButtonId )
 }
 @end
 
-int IosSalSystem::ShowNativeMessageBox( const String& rTitle,
-                                        const String& rMessage,
+int IosSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,
+                                        const rtl::OUString& rMessage,
                                         int nButtonCombination,
                                         int nDefaultButton)
 {

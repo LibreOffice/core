@@ -140,13 +140,13 @@ sal_Bool ImplSVMainHook( int * pnInit )
 
 // =======================================================================
 
-void SalAbort( const XubString& rErrorText, bool bDumpCore )
+void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {
-    if( !rErrorText.Len() )
+    if( rErrorText.isEmpty() )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
-            ByteString( rErrorText, osl_getThreadTextEncoding() ).GetBuffer() );
+            rtl::OUStringToOString( rErrorText, osl_getThreadTextEncoding() ).getStr() );
     if( bDumpCore )
         abort();
     else
@@ -197,7 +197,7 @@ void InitSalMain()
             if ( aCmdPath.Len() ) {
                 DirEntry aCmdDirEntry( aCmdPath );
                 aCmdDirEntry.ToAbs();
-                aCmdPath = ByteString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
+                aCmdPath = rtl::OUStringToOString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
             }
             // Assign to PATH environment variable
             if ( aCmdPath.Len() )
@@ -205,7 +205,7 @@ void InitSalMain()
                 aTmpPath = ByteString( "PATH=" );
                 aTmpPath += aCmdPath;
                 if ( aPath.Len() )
-                    aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aPath;
                 putenv( (char*)aTmpPath.GetBuffer() );
             }
@@ -215,7 +215,7 @@ void InitSalMain()
                 aTmpPath = ByteString( "STAR_RESOURCEPATH=" );
                 aTmpPath += aCmdPath;
                 if ( aResPath.Len() )
-                    aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aResPath;
                 putenv( (char*)aTmpPath.GetBuffer() );
             }
@@ -624,7 +624,7 @@ void IosSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 // -----------------------------------------------------------------------
 
-XubString IosSalInstance::GetDefaultPrinter()
+rtl::OUString IosSalInstance::GetDefaultPrinter()
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
