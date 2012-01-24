@@ -573,9 +573,12 @@ ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
 
 Image ErrorBox::GetStandardImage()
 {
-    try {
+    try
+    {
         ImplInitMsgBoxImageList();
-    } catch (const ::com::sun::star::uno::Exception &e) {
+    }
+    catch (const ::com::sun::star::uno::Exception &)
+    {
         // During early bootstrap we can have no initialized
         // ucb and hence no ability to get this image, so nop.
         return Image();
