@@ -1223,7 +1223,7 @@ requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
 copyright = "2000-2008 by Sun Microsystems, Inc.; 2011 by Lionel Elie Mamane and other LibreOffice contributors"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "PostgreSQL Connector extension for %PRODUCTNAME %PRODUCTVERSION"
+description = "PostgreSQL Connector driver for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
