@@ -33,9 +33,11 @@ buildrcs:
 	echo "Logo=1" >> assets/program/lofficerc
 	echo "NativeProgress=1" >> assets/program/lofficerc
 	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
-	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
+#	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
 	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
+# - this looks useful but breaks more than it fixes ...
+#	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
@@ -45,6 +47,19 @@ buildrcs:
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
+	echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/share/extensions' >> assets/program/fundamentalrc
+	echo 'BUNDLED_EXTENSIONS_PREREG=$$BRAND_BASE_DIR/share/prereg/bundled' >> assets/program/fundamentalrc
+	echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/bundled' >> assets/program/fundamentalrc
+	echo 'TMP_EXTENSIONS=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/tmp' >> assets/program/fundamentalrc
+	echo 'SHARED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/shared' >> assets/program/fundamentalrc
+	echo 'UNO_SHARED_PACKAGES=$$BRAND_BASE_DIR/share/uno_packages' >> assets/program/fundamentalrc
+	echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' >> assets/program/fundamentalrc
+	echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/uno_packages' >> assets/program/fundamentalrc
+	echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' >> assets/program/fundamentalrc
+	echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
+	echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
+	echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
+
 # unorc ini ...
 	echo "[Bootstrap]" > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
