@@ -672,7 +672,7 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
 
             if (IsAvailableRes(ResId(nI2,*rResId.GetResMgr()).SetRT(RSC_STRING)))
             {
-                Strings  [i] = new XubString(ResId(nI2,*rResId.GetResMgr()));
+                Strings  [i] = new rtl::OUString(ResId::toString(ResId(nI2,*rResId.GetResMgr())));
                 Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
             }
             else

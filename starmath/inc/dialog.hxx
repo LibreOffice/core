@@ -199,8 +199,8 @@ public:
 
 class SmCategoryDesc : public Resource
 {
-    XubString       Name;
-    XubString      *Strings[4];
+    rtl::OUString   Name;
+    rtl::OUString  *Strings[4];
     Bitmap         *Graphics[4];    /* regular bitmaps */
     sal_uInt16          Minimum[4];
     sal_uInt16          Maximum[4];
@@ -210,8 +210,8 @@ public:
     SmCategoryDesc(const ResId &rResId, sal_uInt16 nCategoryIdx);
     ~SmCategoryDesc();
 
-    const XubString &   GetName() const                 { return Name; }
-    const XubString *   GetString(sal_uInt16 Index) const   { return Strings[Index];  }
+    const rtl::OUString& GetName() const                 { return Name; }
+    const rtl::OUString* GetString(sal_uInt16 Index) const   { return Strings[Index];  }
     sal_uInt16          GetMinimum(sal_uInt16 Index)        { return Minimum[Index]; }
     sal_uInt16          GetMaximum(sal_uInt16 Index)        { return Maximum[Index]; }
     sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
