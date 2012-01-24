@@ -121,23 +121,23 @@ public:
     /**
      * Basic test for pivot tables.
      */
-    void testDataPilot();
+    void testPivotTable();
 
     /**
      * Test against unwanted automatic format detection on field names and
      * field members in pivot tables.
      */
-    void testDataPilotLabels();
+    void testPivotTableLabels();
 
     /**
      * Test for pivot table's filtering functionality by page fields.
      */
-    void testDataPilotFilters();
+    void testPivotTableFilters();
 
     /**
      * Test for pivot table's named source range.
      */
-    void testDataPilotNamedSource();
+    void testPivotTableNamedSource();
 
     void testSheetCopy();
     void testSheetMove();
@@ -188,10 +188,10 @@ public:
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
-    CPPUNIT_TEST(testDataPilot);
-    CPPUNIT_TEST(testDataPilotLabels);
-    CPPUNIT_TEST(testDataPilotFilters);
-    CPPUNIT_TEST(testDataPilotNamedSource);
+    CPPUNIT_TEST(testPivotTable);
+    CPPUNIT_TEST(testPivotTableLabels);
+    CPPUNIT_TEST(testPivotTableFilters);
+    CPPUNIT_TEST(testPivotTableNamedSource);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -1260,7 +1260,7 @@ ScDPObject* createDPFromRange(
 
 }
 
-void Test::testDataPilot()
+void Test::testPivotTable()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
@@ -1420,7 +1420,7 @@ void Test::testDataPilot()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDataPilotLabels()
+void Test::testPivotTableLabels()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
@@ -1480,7 +1480,7 @@ void Test::testDataPilotLabels()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDataPilotFilters()
+void Test::testPivotTableFilters()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
@@ -1610,7 +1610,7 @@ void Test::testDataPilotFilters()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDataPilotNamedSource()
+void Test::testPivotTableNamedSource()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
