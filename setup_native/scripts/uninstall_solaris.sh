@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # First parameter: Root path that will be removed
 # MY_ROOT=/export/home/is/root

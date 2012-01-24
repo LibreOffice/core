@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #**************************************************************
 #
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -41,7 +41,7 @@ sTestTool=""
 #------------------------------------------------------------------------
 #--- internally used functions ---
 #------------------------------------------------------------------------
-function GetValueFromSection ()
+GetValueFromSection ()
 # call with NameOfValue Section file
 {
    $AWK -v  sVarName="$1" -v sSectionName="$2" \

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Output a PS file with a legend for the node state colors
 #

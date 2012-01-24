@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 ADD="no"
 LINK="no"

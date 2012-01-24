@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 #  $Revision: 1.3 $
 #

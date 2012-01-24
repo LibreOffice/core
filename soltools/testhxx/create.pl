@@ -32,7 +32,7 @@ if ($ENV{OS} eq 'LINUX') {
     $in =~ s!\s+-o\s*\S+! -o /dev/null! || die 'bad input: no -o';
     $in =~ s!\S+/testhxx.cxx!-x c++ /proc/self/fd/0!
         || die 'bad input: no source file';
-    print STDOUT '#!/bin/bash', "\n";
+    print STDOUT '#!/bin/sh', "\n";
     print STDOUT $in,
         ' <<<"#include \\"`echo $(if [ ${1%/*} != $1 ];then cd ${1%/*};fi;',
         '/bin/pwd)/${1##*/}`\\""', "\n";

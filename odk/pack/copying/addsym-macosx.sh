@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script is needed in the process of generating exported
 # symbols list on Mac OS X

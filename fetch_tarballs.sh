@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #**************************************************************
 #
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -117,7 +117,7 @@ mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
 
 
-function basename ()
+basename ()
 {
     echo $1 | sed "s/^\(.*\/\)//"
 }
@@ -126,7 +126,7 @@ function basename ()
 #
 # Download a file from a URL and add its md5 checksum to its name.
 #
-function download ()
+download ()
 {
     local URL=$1
 
@@ -155,7 +155,7 @@ function download ()
 #
 # Download a file from a URL and check its md5 sum to the one that is part of its name.
 #
-function download_and_check ()
+download_and_check ()
 {
     local URL=$1
 

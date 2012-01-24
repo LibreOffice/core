@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SEARCHIN=$SRC_ROOT/writerfilter/source/dmapper
 

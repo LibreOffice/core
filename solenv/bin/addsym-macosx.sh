@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script is needed in the process of generating exported
 # symbols list out of map files on Mac OS X (see also #i69351#)
