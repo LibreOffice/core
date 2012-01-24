@@ -68,6 +68,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
 {
+    (void) nType;
     // FIXME: ideally we should check the input queue to avoid being busy ...
     fprintf (stderr, "FIXME: AnyInput returns true\n");
     // global_android_app->inputQueue ? ...
