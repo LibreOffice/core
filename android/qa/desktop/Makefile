@@ -34,6 +34,7 @@ buildrcs:
 	echo "NativeProgress=1" >> assets/program/lofficerc
 	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
 	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
+	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
@@ -177,16 +178,13 @@ copy-stuff: buildrcs
 	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
 # .res files
 	cp $(OUTDIR)/bin/*en-US.res assets/program/resource/
-# presets - becomes the users home directory
-	mkdir -p assets/presets/autocorr
-	mkdir -p assets/presets/autotext
-	mkdir -p assets/presets/backup
-	mkdir -p assets/presets/basic
-	mkdir -p assets/presets/config
-	mkdir -p assets/presets/gallery
-	mkdir -p assets/presets/psprint
-	mkdir -p assets/presets/template
-	mkdir -p assets/presets/wordbook
+# presets - becomes the users home directory, .stamp forces .zip dir creation
+	for D in $(strip autocorr autotext backup basic config gallery \
+	         psprint/driver psprint/fontmetric template \
+		 uno_packages/cache wordbook); do \
+		mkdir -p assets/presets/$$D ; \
+		echo "content" > assets/presets/$$D/stamp; \
+	done
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
