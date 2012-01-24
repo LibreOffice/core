@@ -125,6 +125,8 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
             ~ODatabaseMetaDataResultSet();
+            template < typename T, SQLSMALLINT sqlTypeId > T getInteger ( sal_Int32 columnIndex );
+
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             ODatabaseMetaDataResultSet(OConnection* _pConnection);

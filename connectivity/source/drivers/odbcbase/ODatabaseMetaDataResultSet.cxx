@@ -170,6 +170,30 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
             break;
     return i;
 }
+
+template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::getInteger ( sal_Int32 columnIndex )
+{
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    columnIndex = mapColumn(columnIndex);
+    T nVal = 0;
+    if(columnIndex <= m_nDriverColumnCount)
+    {
+        getValue<T>(m_pConnection, m_aStatementHandle, columnIndex, sqlTypeId, m_bWasNull, **this, nVal);
+
+        if ( !m_aValueRange.empty() )
+        {
+            ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator aValueRangeIter (m_aValueRange.find(columnIndex));
+            if ( aValueRangeIter != m_aValueRange.end() )
+                return static_cast<T>(aValueRangeIter->second[nVal]);
+        }
+    }
+    else
+        m_bWasNull = sal_True;
+    return nVal;
+}
+
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
@@ -215,24 +239,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
 
 sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
-    sal_Int8  nVal = 0;
-    if(columnIndex <= m_nDriverColumnCount)
-    {
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TINYINT,m_bWasNull,**this,&nVal,sizeof nVal);
-
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
-        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return sal_Int8((*aValueRangeIter).second[(sal_Int32)nVal]);
-    }
-    else
-        m_bWasNull = sal_True;
-    return nVal;
+    return getInteger<sal_Int8, SQL_C_STINYINT>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
@@ -322,24 +329,7 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
-    sal_Int32 nVal = 0;
-    if(columnIndex <= m_nDriverColumnCount)
-    {
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
-
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
-        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return (*aValueRangeIter).second[(sal_Int32)nVal];
-    }
-    else
-        m_bWasNull = sal_True;
-    return nVal;
+    return getInteger<sal_Int32, SQL_C_SLONG>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
@@ -349,10 +339,9 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, Ru
 }
 // -------------------------------------------------------------------------
 
-sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getLong", *this );
-    return 0;
+    return getInteger<sal_Int64, SQL_C_SBIGINT>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
@@ -398,23 +387,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, c
 
 sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    columnIndex = mapColumn(columnIndex);
-    sal_Int16 nVal = 0;
-    if(columnIndex <= m_nDriverColumnCount)
-    {
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
-
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
-        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return sal_Int16((*aValueRangeIter).second[(sal_Int32)nVal]);
-    }
-    else
-        m_bWasNull = sal_True;
-    return nVal;
+    return getInteger<sal_Int16, SQL_C_SSHORT>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
