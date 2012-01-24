@@ -30,10 +30,10 @@
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
-#include <svx/svdmodel.hxx> // fuer GetMaxObjSize und GetStyleSheetPool
+#include <svx/svdmodel.hxx> // for GetMaxObjSize and GetStyleSheetPool
 #include <svx/svdoutl.hxx>
-#include <svx/svdorect.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
-#include <svx/svdocapt.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
+#include <svx/svdorect.hxx> // for SetDirty at NbcAdjustTextFrameWidthAndHeight
+#include <svx/svdocapt.hxx> // for SetDirty at NbcAdjustTextFrameWidthAndHeight
 #include <svx/svdetc.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/editeng.hxx>
@@ -103,14 +103,14 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
             long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
             aSiz.Width()-=nHDist;
             aSiz.Height()-=nVDist;
-            if (aSiz.Width()<2) aSiz.Width()=2;   // Mindestgroesse 2
-            if (aSiz.Height()<2) aSiz.Height()=2; // Mindestgroesse 2
+            if (aSiz.Width()<2) aSiz.Width()=2;
+            if (aSiz.Height()<2) aSiz.Height()=2;
 
             sal_Bool bInEditMode = IsInEditMode();
 
             if(!bInEditMode)
             {
-                if (bHScroll) aSiz.Width()=0x0FFFFFFF; // Laufschrift nicht umbrechen
+                if (bHScroll) aSiz.Width()=0x0FFFFFFF; // don't break ticker text
                 if (bVScroll) aSiz.Height()=0x0FFFFFFF;
             }
 
@@ -119,17 +119,16 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 pEdtOutl->SetMaxAutoPaperSize(aSiz);
                 if (bWdtGrow) {
                     Size aSiz2(pEdtOutl->CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
+                    nWdt=aSiz2.Width()+1; // a little tolerance
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little tolerance
                 } else {
-                    nHgt=pEdtOutl->GetTextHeight()+1; // lieber etwas Tolleranz
+                    nHgt=pEdtOutl->GetTextHeight()+1; // a little tolerance
                 }
             } else {
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
                 rOutliner.SetUpdateMode(sal_True);
-                // !!! hier sollte ich wohl auch noch mal die Optimierung mit
-                // bPortionInfoChecked usw einbauen
+                // TODO: add the optimization with bPortionInfoChecked etc. here
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                 if ( pOutlinerParaObject != NULL )
                 {
@@ -139,21 +138,21 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 if (bWdtGrow)
                 {
                     Size aSiz2(rOutliner.CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
+                    nWdt=aSiz2.Width()+1; // a little tolerance
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little tolerance
                 } else {
-                    nHgt=rOutliner.GetTextHeight()+1; // lieber etwas Tolleranz
+                    nHgt=rOutliner.GetTextHeight()+1; // a little tolerance
                 }
                 rOutliner.Clear();
             }
             if (nWdt<nMinWdt) nWdt=nMinWdt;
             if (nWdt>nMaxWdt) nWdt=nMaxWdt;
             nWdt+=nHDist;
-            if (nWdt<1) nWdt=1; // nHDist kann auch negativ sein
+            if (nWdt<1) nWdt=1; // nHDist may be negative
             if (nHgt<nMinHgt) nHgt=nMinHgt;
             if (nHgt>nMaxHgt) nHgt=nMaxHgt;
             nHgt+=nVDist;
-            if (nHgt<1) nHgt=1; // nVDist kann auch negativ sein
+            if (nHgt<1) nHgt=1; // nVDist may be negative
             long nWdtGrow=nWdt-(rR.Right()-rR.Left());
             long nHgtGrow=nHgt-(rR.Bottom()-rR.Top());
             if (nWdtGrow==0) bWdtGrow=sal_False;
@@ -199,10 +198,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     bool bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
     if (bRet) {
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
+        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
             ((SdrRectObj*)this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // mal wieder 'nen Hack
+        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
             ((SdrCaptionObj*)this)->ImpRecalcTail();
         }
     }
@@ -217,10 +216,10 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         aRect=aNeuRect;
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
+        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
             ((SdrRectObj*)this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // mal wieder 'nen Hack
+        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
             ((SdrCaptionObj*)this)->ImpRecalcTail();
         }
         SetChanged();
@@ -239,9 +238,9 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL)
         {
-            // Zunaechst werden alle im ParaObject enthaltenen StyleSheets
-            // im Container aStyles gesammelt. Dazu wird die Family jeweils
-            // ans Ende des StyleSheet-Namen drangehaengt.
+            // First, we collect all stylesheets contained in the ParaObject in
+            // the container aStyles. The Family is always appended to the name
+            // of the stylesheet.
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
             XubString aStyleName;
             SfxStyleFamily eStyleFam;
@@ -264,7 +263,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
 
                     while(!bFnd && nNum > 0)
                     {
-                        // kein StyleSheet doppelt!
+                        // we don't want duplicate stylesheets
                         nNum--;
                         bFnd = (aStyleName.Equals(*(XubString*)aStyles.GetObject(nNum)));
                     }
@@ -277,7 +276,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             }
         }
 
-        // nun die Strings im Container durch StyleSheet* ersetzten
+        // now replace the strings in the container by StyleSheet*
         sal_uIntPtr nNum=aStyles.Count();
         while (nNum>0) {
             nNum--;
@@ -300,24 +299,24 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                 aStyles.Remove(nNum);
             }
         }
-        // jetzt alle ueberfluessigen StyleSheets entfernen
+        // now remove all superfluous stylesheets
         nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
             SfxBroadcaster* pBroadcast=GetBroadcasterJOE((sal_uInt16)nNum);
             SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pBroadcast);
-            if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // Sonderbehandlung fuer den StyleSheet des Objekts
+            if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
                 if (aStyles.GetPos(pStyle)==CONTAINER_ENTRY_NOTFOUND) {
                     EndListening(*pStyle);
                 }
             }
         }
-        // und schliesslich alle in aStyles enthaltenen StyleSheets mit den vorhandenen Broadcastern mergen
+        // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
         nNum=aStyles.Count();
         while (nNum>0) {
             nNum--;
             SfxStyleSheet* pStyle=(SfxStyleSheet*)aStyles.GetObject(nNum);
-            // StartListening soll selbst nachsehen, ob hier nicht evtl. schon gehorcht wird
+            // let StartListening see for itself if there's already a listener registered
             StartListening(*pStyle,sal_True);
         }
     }

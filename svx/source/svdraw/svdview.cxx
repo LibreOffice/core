@@ -28,16 +28,16 @@
 
 #include <editeng/eeitem.hxx>
 
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdopath.hxx> // fuer GetContext
-#include <svx/svdograf.hxx> // fuer GetContext
-#include <svx/svdomedia.hxx> // fuer GetContext
-#include <svx/svdetc.hxx>   // Fuer SdrEngineDefaults
+#include <svx/svdopath.hxx> // for GetContext
+#include <svx/svdograf.hxx> // for GetContext
+#include <svx/svdomedia.hxx> // for GetContext
+#include <svx/svdetc.hxx>   // for SdrEngineDefaults
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -45,8 +45,8 @@
 
 #include "svx/svdoutl.hxx"
 #include "svx/svdview.hxx"
-#include "editeng/editview.hxx" // fuer GetField
-#include "editeng/flditem.hxx"  // fuer URLField
+#include "editeng/editview.hxx" // for GetField
+#include "editeng/flditem.hxx"  // for URLField
 #include "svx/obj3d.hxx"
 #include "svx/svddrgmt.hxx"
 #include "svx/svdoutl.hxx"
@@ -297,28 +297,28 @@ SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, sal_uInt16 nEventKind,
     return PickAnything(aPnt,rVEvt);
 }
 
-// Mit der Maus draggen (Move)
-// Beispiel beim erzeugen eines Rechtecks. MouseDown muss ohne
-// ModKey erfolgen, weil sonst i.d.R. Markieren forciert wird (s.u.)
-// Drueckt man dann beim MouseMove gleichzeitig Shift, Ctrl, und Alt,
-// so erzeugt man ein zentrisches Quadrat ohne Fang.
-// Die Doppelbelegung von Ortho und Shift stellt i.d.R. kein Problem dar,
-// da sich beides meisst gegenseitig ausschliesst. Einzig Shear (das beim
-// Verzerren, nicht dass beim Drehen) beruecksichtigt beides gleichzeitig.
-// Dass muss der Anwender erstmal noch umschiffen (z.B. mit einer Hilfslinie).
-#define MODKEY_NoSnap    bCtrl  /* Fang temporaer aus */
-#define MODKEY_Ortho     bShift /* na eben ortho */
-#define MODKEY_Center    bAlt   /* Zentrisch erzeugen/resizen */
+// Dragging with the Mouse (Move)
+// Example when creating a rectangle: MouseDown has to happen without a ModKey,
+// else we usually force a selection (see below).
+// When pressing Shift, Ctrl and Alt at the same time while doing a MouseMove,
+// a centered, not snapped square is created.
+// The dual allocation of Ortho and Shift won't usually create a problem, as the
+// two functions are in most cases mutually exclusive. Only shearing (the kind
+// that happens when contorting, not when rotating) can use both functions at
+// the same time. To get around this, the user can use e. g. help lines.
+#define MODKEY_NoSnap    bCtrl  /* temporarily disable snapping */
+#define MODKEY_Ortho     bShift /* ortho */
+#define MODKEY_Center    bAlt   /* create/resize centeredly */
 #define MODKEY_AngleSnap bShift
-#define MODKEY_CopyDrag  bCtrl  /* Draggen mit kopieren */
+#define MODKEY_CopyDrag  bCtrl  /* drag and copy */
 
-// irgendwo hinklicken (MouseDown)
-#define MODKEY_PolyPoly  bAlt   /* Neues Poly bei InsPt und bei Create */
-#define MODKEY_MultiMark bShift /* MarkObj ohne vorher UnmarkAll */
-#define MODKEY_Unmark    bAlt   /* Unmark durch Rahmenaufziehen */
-#define MODKEY_ForceMark bCtrl  /* Rahmenaufziehen erzwingen, auch wenn Obj an MausPos */
+// click somewhere (MouseDown)
+#define MODKEY_PolyPoly  bAlt   /* new Poly at InsPt and at Create */
+#define MODKEY_MultiMark bShift /* MarkObj without doing UnmarkAll first */
+#define MODKEY_Unmark    bAlt   /* deselect with a dragged frame */
+#define MODKEY_ForceMark bCtrl  /* force dragging a frame, even if there's an object at cursor position */
 #define MODKEY_DeepMark  bAlt   /* MarkNextObj */
-#define MODKEY_DeepBackw bShift /* MarkNextObj rueckwaerts */
+#define MODKEY_DeepBackw bShift /* MarkNextObj but backwards */
 
 SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const
 {
@@ -328,7 +328,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         pOut = GetFirstOutputDevice();
     }
 
-    // #i73628# Use a non-changeable copy of he logic pos
+    // #i73628# Use a non-changeable copy of he logic position
     const Point aLocalLogicPosition(rLogicPos);
 
     sal_Bool bEditMode=IsEditMode();
@@ -357,15 +357,15 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     }
     else if (pHdl!=NULL)
     {
-        eHit=SDRHIT_HANDLE; // Handle getroffen hat hoechste Prioritaet
+        eHit=SDRHIT_HANDLE; // handle is hit: highest priority
     }
     else if (bEditMode && IsHlplVisible() && IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV))
     {
-        eHit=SDRHIT_HELPLINE; // Hilfslinie im Vordergrund getroffen zum verschieben
+        eHit=SDRHIT_HELPLINE; // help line in the foreground hit: can be moved now
     }
     else if (bGluePointMode && PickGluePoint(aLocalLogicPosition,pObj,nGlueId,pPV))
     {
-        eHit=SDRHIT_GLUEPOINT; // nichtmarkierter Klebepunkt getroffen
+        eHit=SDRHIT_GLUEPOINT; // deselected glue point hit
     }
     else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_MARKED,&pObj,NULL,&nHitPassNum))
     {
@@ -389,7 +389,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     }
     else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,NULL,&nHitPassNum))
     {
-        // MasterPages und WholePage fuer Macro und URL
+        // MasterPages and WholePage for Macro and URL
         eHit=SDRHIT_UNMARKEDOBJECT;
         ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( pObj );
         if( pTableObj )
@@ -410,13 +410,13 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     }
     else if (bEditMode && IsHlplVisible() && !IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV))
     {
-        eHit=SDRHIT_HELPLINE; // Hilfslinie im Vordergrund getroffen zum verschieben
+        eHit=SDRHIT_HELPLINE; // help line in foreground hit: can be moved now
     }
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT)
     {
         bool bRoot=pObj->HasMacro();
         sal_Bool bDeep=pObj!=pHitObj && pHitObj->HasMacro();
-        sal_Bool bMid=sal_False; // Gruppierte Gruppe mit Macro getroffen?
+        sal_Bool bMid=sal_False; // Have we hit upon a grouped group with a macro?
         SdrObject* pMidObj=NULL;
         if (pObj!=pHitObj)
         {
@@ -448,7 +448,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             if (bRoot) bRoot=pObj->IsMacroHit(aHitRec);
             if (bRoot || bMid || bDeep)
             {
-                // Prio: 1.Root, 2.Mid, 3.Deep
+                // Priorities: 1. Root, 2. Mid, 3. Deep
                 rVEvt.pRootObj=pObj;
                 if (!bRoot) pObj=pMidObj;
                 if (!bRoot && !bMid) pObj=pHitObj;
@@ -456,7 +456,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             }
         }
     }
-    // auf URL-Field checken
+    // check for URL field
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT)
     {
         SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pHitObj);
@@ -478,17 +478,17 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // #i73628# Use a text-relative position for hit test in hit test outliner
                 Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
 
-                // FitToSize berueksichtigen
+                // account for FitToSize
                 bool bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
                     Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
                     Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
                     ResizePoint(aTemporaryTextRelativePosition,Point(),aX,aY);
                 }
-                // Drehung berueksichtigen
+                // account for rotation
                 const GeoStat& rGeo=pTextObj->GetGeoStat();
-                if (rGeo.nDrehWink!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin fuer Unrotate
-                // Laufschrift berueksichtigen fehlt noch ...
+                if (rGeo.nDrehWink!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin for Unrotate
+                // we currently don't account for ticker text
                 if(pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {
                     OutlinerView aOLV(pOutliner, (Window*)pActualOutDev);
@@ -511,7 +511,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         (eHit==SDRHIT_MARKEDOBJECT || eHit==SDRHIT_UNMARKEDOBJECT) &&
         (IsTextTool() || (IsEditMode() && IsQuickTextEditMode())) && pHitObj->HasTextEdit())
     {
-        // Ringsum die TextEditArea ein Rand zum Selektieren ohne Textedit
+        // Around the TextEditArea there's a border to select without going into text edit mode.
         Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // Force to SnapRect when Fontwork
@@ -541,7 +541,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             bool bTEHit(pPV &&
                 SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
 
-            // TextEdit an Objekten im gesperrten Layer
+            // TextEdit attached to an object in a locked layer
             if (pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))
             {
                 bTEHit=sal_False;
@@ -624,12 +624,12 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         }
         else if (eHit==SDRHIT_HELPLINE)
         {
-            eEvent=SDREVENT_BEGDRAGHELPLINE; // nix weiter
+            eEvent=SDREVENT_BEGDRAGHELPLINE; // nothing, actually
         }
         else if (eHit==SDRHIT_GLUEPOINT)
         {
             eEvent=SDREVENT_MARKGLUEPOINT; // AddMark+Drag
-            rVEvt.bAddMark=MODKEY_MultiMark || MODKEY_DeepMark; // falls bei Deep nicht getroffen
+            rVEvt.bAddMark=MODKEY_MultiMark || MODKEY_DeepMark; // if not hit with Deep
         }
         else if (eHit==SDRHIT_HANDLE)
         {
@@ -658,7 +658,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 }
                 else if (bMarked)
                 {
-                    eEvent=SDREVENT_BEGDRAGOBJ; // MarkState nicht aendern, nur Drag
+                    eEvent=SDREVENT_BEGDRAGOBJ; // don't change MarkState, only change Drag
                 }
             }
         }
@@ -675,7 +675,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         {
             eEvent=SDREVENT_BEGTEXTEDIT; // AddMark+Drag,DeepMark+Drag,Unmark
             if (MODKEY_MultiMark || MODKEY_DeepMark)
-            { // falls bei Deep nicht getroffen
+            { // if not hit with Deep
                 eEvent=SDREVENT_MARKOBJ;
             }
         }
@@ -683,7 +683,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         {
             eEvent=SDREVENT_BEGMACROOBJ;       // AddMark+Drag
             if (MODKEY_MultiMark || MODKEY_DeepMark)
-            { // falls bei Deep nicht getroffen
+            { // if not hit with Deep
                 eEvent=SDREVENT_MARKOBJ;
             }
         }
@@ -691,7 +691,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         {
             eEvent=SDREVENT_EXECUTEURL;       // AddMark+Drag
             if (MODKEY_MultiMark || MODKEY_DeepMark)
-            { // falls bei Deep nicht getroffen
+            { // if not hit with Deep
                 eEvent=SDREVENT_MARKOBJ;
             }
         }
@@ -700,13 +700,13 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             eEvent=SDREVENT_BEGDRAGOBJ; // DeepMark+Drag,Unmark
 
             if (MODKEY_MultiMark || MODKEY_DeepMark)
-            { // falls bei Deep nicht getroffen
+            { // if not hit with Deep
                 eEvent=SDREVENT_MARKOBJ;
             }
         }
         else if (IsCreateMode())
         {
-            eEvent=SDREVENT_BEGCREATEOBJ;          // Nix weiter
+            eEvent=SDREVENT_BEGCREATEOBJ;          // nothing, actually
         }
         else if (eHit==SDRHIT_UNMARKEDOBJECT)
         {
@@ -719,7 +719,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
         if (eEvent==SDREVENT_MARKOBJ)
         {
-            rVEvt.bAddMark=MODKEY_MultiMark || MODKEY_DeepMark; // falls bei Deep nicht getroffen
+            rVEvt.bAddMark=MODKEY_MultiMark || MODKEY_DeepMark; // if not hit with Deep
             rVEvt.bPrevNextMark=MODKEY_DeepMark;
             rVEvt.bMarkPrev=MODKEY_DeepMark && MODKEY_DeepBackw;
         }
@@ -770,7 +770,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         if (bMouseLeft) aDragStat.SetMouseDown(sal_True);
     } else if (bMouseUp) {
         if (bMouseLeft) aDragStat.SetMouseDown(sal_False);
-    } else { // ansonsten MoueMove
+    } else { // else, MouseMove
         aDragStat.SetMouseDown(bMouseLeft);
     }
 
@@ -795,13 +795,13 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     SetCrookAtCenter(MODKEY_Center);
 #endif
     if (bMouseLeft && bMouseDown && rVEvt.bIsTextEdit && (eHit==SDRHIT_UNMARKEDOBJECT || eHit==SDRHIT_NONE)) {
-        SdrEndTextEdit(); // Danebengeklickt, Ende mit Edit
-        // pHdl ist dann ungueltig. Sollte aber egal sein, wein pHdl==NULL
-        // sein muesste (wg. eHit).
+        SdrEndTextEdit(); // User has clicked beneath object, exit edit mode.
+        // pHdl is invalid, then, that shouldn't matter, though, as we expect
+        // pHdl==NULL (because of eHit).
     }
     switch (rVEvt.eEvent) {
         case SDREVENT_NONE: bRet=sal_False; break;
-        case SDREVENT_TEXTEDIT: bRet=sal_False; break; // Events an die OutlinerView werden hier nicht beruecksichtigt
+        case SDREVENT_TEXTEDIT: bRet=sal_False; break; // Events handled by the OutlinerView are not taken into account here.
         case SDREVENT_MOVACTION: MovAction(aLogicPos); bRet=sal_True; break;
         case SDREVENT_ENDACTION: EndAction(); bRet=sal_True; break;
         case SDREVENT_BCKACTION: BckAction(); bRet=sal_True; break;
@@ -810,19 +810,19 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SDREVENT_BRKMARK  : {
             BrkAction();
             if (!MarkObj(aLogicPos,nHitTolLog,rVEvt.bAddMark)) {
-                // Kein Obj getroffen. Dann werden zuerst
-                // - Markierte Klebepunkte deselektiert
-                // - dann ggf. selektierte Polygonpunkte
-                // - und ansonsten Objekte
+                // No object hit. Do the following:
+                // 1. deselect any selected glue points
+                // 2. deselect any selected polygon points
+                // 3. deselect any selected objects
                 if (!rVEvt.bAddMark) UnmarkAll();
             }
             bRet=sal_True;
         } break;
-        case SDREVENT_ENDCREATE: { // ggf. MarkObj
+        case SDREVENT_ENDCREATE: { // if necessary, MarkObj
             SdrCreateCmd eCmd=SDRCREATE_NEXTPOINT;
             if (MODKEY_PolyPoly) eCmd=SDRCREATE_NEXTOBJECT;
             if (rVEvt.nMouseClicks>1) eCmd=SDRCREATE_FORCEEND;
-            if (!EndCreateObj(eCmd)) { // Event fuer Create nicht ausgewerten? -> Markieren
+            if (!EndCreateObj(eCmd)) { // Don't evaluate event for Create? -> Select
                 if (eHit==SDRHIT_UNMARKEDOBJECT || eHit==SDRHIT_TEXTEDIT) {
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
                     if (eHit==SDRHIT_TEXTEDIT)
@@ -837,20 +837,20 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
 
                             OutlinerView* pOLV=GetTextEditOutlinerView();
                             if (pOLV!=NULL) {
-                                pOLV->MouseButtonDown(aMEvt); // Event an den Outliner, aber ohne Doppelklick
-                                pOLV->MouseButtonUp(aMEvt); // Event an den Outliner, aber ohne Doppelklick
+                                pOLV->MouseButtonDown(aMEvt); // event for the Outliner, but without double-click
+                                pOLV->MouseButtonUp(aMEvt); // event for the Outliner, but without double-click
                             }
                         }
                     }
-                    bRet=sal_True; // Obj markiert und ggf. TextEdit gestartet
-                } else bRet=sal_False; // Create abgebrochen, sonst nix weiter.
-            } else bRet=sal_True; // EndCreate mit sal_True returniert
+                    bRet=sal_True; // object is selected and (if necessary) TextEdit is started
+                } else bRet=sal_False; // canceled Create, nothing else
+            } else bRet=sal_True; // return sal_True for EndCreate
         } break;
         case SDREVENT_ENDDRAG: {
             bRet=EndDragObj(IsDragWithCopy());
-            ForceMarkedObjToAnotherPage(); // Undo+Klammerung fehlt noch !!!
+            ForceMarkedObjToAnotherPage(); // TODO: Undo+bracing missing!
         } break;
-        case SDREVENT_MARKOBJ: { // + ggf. BegDrag
+        case SDREVENT_MARKOBJ: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllObj();
             sal_Bool bUnmark=rVEvt.bUnmark;
             if (rVEvt.bPrevNextMark) {
@@ -868,7 +868,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=sal_True;
             }
         } break;
-        case SDREVENT_MARKPOINT: { // + ggf. BegDrag
+        case SDREVENT_MARKPOINT: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllPoints();
             if (rVEvt.bPrevNextMark) {
                 bRet=MarkNextPoint(aLogicPos,rVEvt.bMarkPrev);
@@ -880,7 +880,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=sal_True;
             }
         } break;
-        case SDREVENT_MARKGLUEPOINT: { // + ggf. BegDrag
+        case SDREVENT_MARKGLUEPOINT: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllGluePoints();
             if (rVEvt.bPrevNextMark) {
                 bRet=MarkNextGluePoint(aLogicPos,rVEvt.bMarkPrev);
@@ -926,18 +926,18 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 MouseEvent aMEvt(pActualOutDev->LogicToPixel(aLogicPos),
                                  1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
                 OutlinerView* pOLV=GetTextEditOutlinerView();
-                if (pOLV!=NULL) pOLV->MouseButtonDown(aMEvt); // Event an den Outliner, aber ohne Doppelklick
+                if (pOLV!=NULL) pOLV->MouseButtonDown(aMEvt); // event for the Outliner, but without double-click
             }
         } break;
         default: break;
     } // switch
     if (bRet && pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
         Window* pWin=(Window*)pActualOutDev;
-        // Maus links gedrueckt?
+        // left mouse button pressed?
         sal_Bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
-        // Maus links losgelassen?
+        // left mouse button released?
         sal_Bool bLeftUp=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseUp;
-        // Maus links gedrueckt oder gehalten?
+        // left mouse button pressed or held?
         sal_Bool bLeftDown1=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && !rVEvt.bMouseUp;
         pWin->SetPointer(GetPreferedPointer(rVEvt.aLogicPos,pWin,
                 rVEvt.nMouseCode & (KEY_SHIFT|KEY_MOD1|KEY_MOD2),bLeftDown1));
@@ -987,7 +987,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
             else
                 return Pointer(POINTER_TEXT);
         }
-        // hier muss besser der Outliner was liefern:
+        // Outliner should return something here...
         Point aPos(pOut->LogicToPixel(rMousePos));
         Pointer aPointer(pTextEditOutlinerView->GetPointer(aPos));
         if (aPointer==POINTER_ARROW)
@@ -1001,9 +1001,9 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     }
 
     SdrViewEvent aVEvt;
-    aVEvt.nMouseCode=(nModifier&(KEY_SHIFT|KEY_MOD1|KEY_MOD2))|MOUSE_LEFT; // um zu sehen, was bei MouseLeftDown passieren wuerde
-    aVEvt.bMouseDown=!bLeftDown; // Was waere wenn ...
-    aVEvt.bMouseUp=bLeftDown;    // Was waere wenn ...
+    aVEvt.nMouseCode=(nModifier&(KEY_SHIFT|KEY_MOD1|KEY_MOD2))|MOUSE_LEFT; // to see what would happen on MouseLeftDown
+    aVEvt.bMouseDown=!bLeftDown; // What if ..?
+    aVEvt.bMouseUp=bLeftDown;    // What if ..?
     if (pOut!=NULL)
         ((SdrView*)this)->SetActualWin(pOut);
     SdrHitKind eHit=PickAnything(rMousePos,aVEvt);
@@ -1062,14 +1062,14 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
     sal_Bool bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
     SdrHdl* pHdl=aVEvt.pHdl;
-    // Nun die Pointer fuer Dragging checken
+    // now check the pointers for draggingNun die Pointer fuer Dragging checken
     if (pHdl!=NULL || bMarkHit) {
         SdrHdlKind eHdl= pHdl!=NULL ? pHdl->GetKind() : HDL_MOVE;
         sal_Bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();
         sal_Bool bVertex=pHdl!=NULL && pHdl->IsVertexHdl();
         sal_Bool bMov=eHdl==HDL_MOVE;
         if (bMov && (eDragMode==SDRDRAG_MOVE || eDragMode==SDRDRAG_RESIZE || bMarkedHitMovesAlways)) {
-            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // weil Doppelklick oder Drag&Drop moeglich
+            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
             return Pointer(POINTER_MOVE);
         }
         switch (eDragMode) {
@@ -1077,16 +1077,15 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                 if ((bCorner || bMov) && !IsRotateAllowed(sal_True))
                     return Pointer(POINTER_NOTALLOWED);
 
-                // Sind 3D-Objekte selektiert?
+                // are 3D objects selected?
                 sal_Bool b3DObjSelected = sal_False;
                 for (sal_uInt32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
                         b3DObjSelected = sal_True;
                 }
-                // Falls es um ein 3D-Objekt geht, muss trotz !IsShearAllowed
-                // weitergemacht werden, da es sich um eine Rotation statt um
-                // einen Shear handelt
+                // If we have a 3D object, go on despite !IsShearAllowed,
+                // because then we have a rotation instead of a shear.
                 if (bVertex && !IsShearAllowed() && !b3DObjSelected)
                     return Pointer(POINTER_NOTALLOWED);
                 if (bMov)
@@ -1099,7 +1098,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                 }
                 if (bVertex && !IsShearAllowed()) return Pointer(POINTER_NOTALLOWED);
                 if (bMov) {
-                    if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // weil Doppelklick oder Drag&Drop moeglich
+                    if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
                     return Pointer(POINTER_MOVE);
                 }
             } break;
@@ -1116,9 +1115,9 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                         b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
                     }
                     sal_Bool bNo=sal_False;
-                    if (!IsMirrorAllowed(sal_True,sal_True)) bNo=sal_True; // Spiegeln ueberhaupt nicht erlaubt
-                    if (!IsMirrorAllowed(sal_False,sal_False) && !b45) bNo=sal_True; // freies Spiegeln nicht erlaubt
-                    if (!IsMirrorAllowed(sal_True,sal_False) && !b90) bNo=sal_True;  // Spiegeln hor/ver erlaubt
+                    if (!IsMirrorAllowed(sal_True,sal_True)) bNo=sal_True; // any mirroring is forbidden
+                    if (!IsMirrorAllowed(sal_False,sal_False) && !b45) bNo=sal_True; // mirroring freely is forbidden
+                    if (!IsMirrorAllowed(sal_True,sal_False) && !b90) bNo=sal_True;  // mirroring horizontally/vertically is allowed
                     if (bNo) return Pointer(POINTER_NOTALLOWED);
                     if (b90) {
                         return Pointer(POINTER_MIRROR);
@@ -1161,7 +1160,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         }
         if (pHdl!=NULL) return pHdl->GetPointer();
         if (bMov) {
-            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // weil Doppelklick oder Drag&Drop moeglich
+            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
             return Pointer(POINTER_MOVE);
         }
     }
@@ -1174,7 +1173,7 @@ XubString SdrView::GetStatusText()
     XubString aStr;
     XubString aName;
 
-    aStr.AppendAscii("nix");
+    aStr.AppendAscii("nothing");
 
     if (pAktCreate!=NULL)
     {
@@ -1234,7 +1233,7 @@ XubString SdrView::GetStatusText()
         }
     }
     else if (IsTextEdit() && pTextEditOutlinerView!=NULL) {
-        aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Zeile y  Spalte x";
+        aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
         ESelection aSel(pTextEditOutlinerView->GetSelection());
         long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
         if (aSel.nEndPara>0) {
@@ -1242,10 +1241,9 @@ XubString SdrView::GetStatusText()
                 nLin+=pTextEditOutliner->GetLineCount(nParaNum);
             }
         }
-        // Noch 'ne kleine Unschoenheit:
-        // Am Ende einer Zeile eines mehrzeiligen Absatzes wird die Position
-        // der naechsten Zeile des selben Absatzes angezeigt, so es eine solche
-        // gibt.
+        // A little imperfection:
+        // At the end of a line of any multi-line paragraph, we display the
+        // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine=0;
         sal_uIntPtr nParaLineAnz=pTextEditOutliner->GetLineCount(aSel.nEndPara);
         sal_Bool bBrk=sal_False;
@@ -1257,7 +1255,7 @@ XubString SdrView::GetStatusText()
                 nLin++;
                 nParaLine++;
             } else bBrk=sal_True;
-            if (nLen==0) bBrk=sal_True; // Sicherheitshalber
+            if (nLen==0) bBrk=sal_True; // to be sure
         }
 
         aStr.SearchAndReplaceAscii("%1", UniString::CreateFromInt32(nPar + 1));
@@ -1294,7 +1292,7 @@ XubString SdrView::GetStatusText()
 
     if(aStr.Len())
     {
-        // ersten Buchstaben gross schreiben
+        // capitalize first letter
         String aTmpStr(aStr.Copy(0, 1));
         aTmpStr.ToUpperAscii();
         aStr.Replace(0, 1, aTmpStr);
@@ -1376,7 +1374,7 @@ void SdrView::UnmarkAll()
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
     } else if (HasMarkedGluePoints()) UnmarkAllGluePoints();
-    else if (HasMarkedPoints()) UnmarkAllPoints(); // ! Marked statt Markable !
+    else if (HasMarkedPoints()) UnmarkAllPoints(); // Marked, not Markable!
     else UnmarkAllObj();
 }
 
@@ -1455,7 +1453,7 @@ void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
     {
         mbMasterPagePaintCaching = bOn;
 
-        // reset at all SdrPageWindow's
+        // reset at all SdrPageWindows
         SdrPageView* pPageView = GetSdrPageView();
 
         if(pPageView)

@@ -62,7 +62,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
         if(mpModel && &rOutliner == &mpModel->GetHitTestOutliner())
             return;
 
-        // Optimierung: ggf. BigTextObject erzeugen
+        // TODO: optimization: we could create a BigTextObject
         mbPortionInfoChecked=true;
         if(mpOutlinerParaObject!=NULL && rOutliner.ShouldCreateBigTextObject())
         {
@@ -144,22 +144,21 @@ void SdrText::SetModel( SdrModel* pNewModel )
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
         bool bScaleUnitChanged=aNewUnit!=aOldUnit;
-        // und nun dem OutlinerParaObject einen neuen Pool verpassen
-        // !!! Hier muss noch DefTab und RefDevice der beiden Models
-        // !!! verglichen werden und dann ggf. AutoGrow zuschlagen !!!
-        // !!! fehlende Implementation !!!
+        // Now move the OutlinerParaObject into a new Pool.
+        // TODO: We should compare the DefTab and RefDevice of both Models to
+        // see whether we need to use AutoGrow!
         sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
         sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
         sal_Bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
         sal_Bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
         {
-            // zunaechst das HeightItem festklopfen, damit
-            // 1. Es eben bestehen bleibt und
-            // 2. DoStretchChars vom richtigen Wert ausgeht
+            // fix the value of HeightItem, so
+            // 1. it remains and
+            // 2. DoStretchChars gets the right value
             SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
         }
-        // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
+        // now use the Outliner, etc. so the above SetAttr can work at all
         SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
         rOutliner.SetText(*mpOutlinerParaObject);
         delete mpOutlinerParaObject;

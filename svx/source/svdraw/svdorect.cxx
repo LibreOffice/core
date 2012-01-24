@@ -39,13 +39,13 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdocapt.hxx> // fuer Import von SdrFileVersion 2
-#include <svx/svdpagv.hxx> // fuer
-#include <svx/svdview.hxx> // das
-#include <svx/svdundo.hxx> // Macro-Beispiel
+#include <svx/svdocapt.hxx> // for Import of SdrFileVersion 2
+#include <svx/svdpagv.hxx> // for
+#include <svx/svdview.hxx> // the
+#include <svx/svdundo.hxx> // macro example
 #include <svx/svdopath.hxx>
 #include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdstr.hrc"   // the object's name
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -93,7 +93,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
-               "SdrRectObj::SdrRectObj(SdrObjKind) ist nur fuer Textrahmen gedacht");
+               "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
     bClosedObj=sal_True;
 }
 
@@ -103,7 +103,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
-               "SdrRectObj::SdrRectObj(SdrObjKind,...) ist nur fuer Textrahmen gedacht");
+               "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
     bClosedObj=sal_True;
 }
 
@@ -153,7 +153,7 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
     aNeuPoly[nPointAnz]=aNeuPoly[0];
     aXPoly=aNeuPoly;
 
-    // Die Winkelangaben beziehen sich immer auf die linke obere Ecke von !aRect!
+    // these angles always relate to the top left corner of aRect
     if (aGeo.nShearWink!=0) ShearXPoly(aXPoly,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotateXPoly(aXPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     return aXPoly;
@@ -239,13 +239,11 @@ void SdrRectObj::TakeObjNameSingul(XubString& rName) const
     {
         sal_uInt16 nResId=STR_ObjNameSingulRECT;
         if (aGeo.nShearWink!=0) {
-            nResId+=4;  // Parallelogramm oder Raute
-            // Raute ist nicht, weil Shear die vertikalen Kanten verlaengert!
-            // Wenn Zeit ist, werde ich das mal berechnen.
+            nResId+=4;  // parallelogram or, maybe, rhombus
         } else {
-            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // Quadrat
+            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
         }
-        if (GetEckenradius()!=0) nResId+=8; // abgerundet
+        if (GetEckenradius()!=0) nResId+=8; // rounded down
         rName=ImpGetResStr(nResId);
 
         String aName( GetName() );
@@ -265,11 +263,11 @@ void SdrRectObj::TakeObjNamePlural(XubString& rName) const
     else {
         sal_uInt16 nResId=STR_ObjNamePluralRECT;
         if (aGeo.nShearWink!=0) {
-            nResId+=4;  // Parallelogramm oder Raute
+            nResId+=4;  // parallelogram or rhombus
         } else {
-            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // Quadrat
+            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
         }
-        if (GetEckenradius()!=0) nResId+=8; // abgerundet
+        if (GetEckenradius()!=0) nResId+=8; // rounded down
         rName=ImpGetResStr(nResId);
     }
 }
@@ -336,7 +334,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
         case 1:
         {
             long a = GetEckenradius();
-            long b = Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
+            long b = Max(aRect.GetWidth(),aRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
             if (a>b) a=b;
             if (a<0) a=0;
             aPnt=aRect.TopLeft();
@@ -344,14 +342,14 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             eKind = HDL_CIRC;
             break;
         }
-        case 2: aPnt=aRect.TopLeft();      eKind = HDL_UPLFT; break; // Oben links
-        case 3: aPnt=aRect.TopCenter();    eKind = HDL_UPPER; break; // Oben
-        case 4: aPnt=aRect.TopRight();     eKind = HDL_UPRGT; break; // Oben rechts
-        case 5: aPnt=aRect.LeftCenter();   eKind = HDL_LEFT ; break; // Links
-        case 6: aPnt=aRect.RightCenter();  eKind = HDL_RIGHT; break; // Rechts
-        case 7: aPnt=aRect.BottomLeft();   eKind = HDL_LWLFT; break; // Unten links
-        case 8: aPnt=aRect.BottomCenter(); eKind = HDL_LOWER; break; // Unten
-        case 9: aPnt=aRect.BottomRight();  eKind = HDL_LWRGT; break; // Unten rechts
+        case 2: aPnt=aRect.TopLeft();      eKind = HDL_UPLFT; break;
+        case 3: aPnt=aRect.TopCenter();    eKind = HDL_UPPER; break;
+        case 4: aPnt=aRect.TopRight();     eKind = HDL_UPRGT; break;
+        case 5: aPnt=aRect.LeftCenter();   eKind = HDL_LEFT ; break;
+        case 6: aPnt=aRect.RightCenter();  eKind = HDL_RIGHT; break;
+        case 7: aPnt=aRect.BottomLeft();   eKind = HDL_LWLFT; break;
+        case 8: aPnt=aRect.BottomCenter(); eKind = HDL_LOWER; break;
+        case 9: aPnt=aRect.BottomRight();  eKind = HDL_LWRGT; break;
     }
 
     if(!pH)
@@ -441,7 +439,7 @@ String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         {
             Point aPt(rDrag.GetNow());
 
-            // -sin fuer Umkehrung
+            // -sin for reversal
             if(aGeo.nDrehWink)
                 RotatePoint(aPt, aRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
 
@@ -580,7 +578,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
-    { // Nur Uebergangsweise bis zum neuen TakeContour()
+    { // TODO: this is only for the moment, until we have the new TakeContour()
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];
     }
@@ -602,7 +600,7 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier) const
 void SdrRectObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrTextObj::Notify(rBC,rHint);
-    SetXPolyDirty(); // wg. Eckenradius
+    SetXPolyDirty(); // because of the corner radius
 }
 
 void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)

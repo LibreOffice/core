@@ -197,7 +197,7 @@ namespace
             // add font scale to new transform
             aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
 
-            // look for proportional font scaling, evtl scale accordingly
+            // look for proportional font scaling, if necessary, scale accordingly
             if(100 != rInfo.mrFont.GetPropr())
             {
                 const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
@@ -210,7 +210,7 @@ namespace
                 aNewTransform.rotate(-rInfo.mrFont.GetOrientation() * F_PI1800);
             }
 
-            // look for escapement, evtl translate accordingly
+            // look for escapement, if necessary, translate accordingly
             if(rInfo.mrFont.GetEscapement())
             {
                 sal_Int16 nEsc(rInfo.mrFont.GetEscapement());
@@ -267,7 +267,7 @@ namespace
 
             // prepare wordLineMode (for underline and strikeout)
             // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-            // to be splitted which would not look like the original
+            // to be split which would not look like the original
             const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
 
             // prepare new primitive
@@ -296,7 +296,7 @@ namespace
                 const drawinglayer::primitive2d::TextLine eFontUnderline(
                     drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetUnderline()));
 
-                // check UndelineAbove
+                // check UnderlineAbove
                 const bool bUnderlineAbove(
                     drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
@@ -458,7 +458,7 @@ namespace
         if(rInfo.mpFieldData)
         {
             // Support for FIELD_SEQ_BEGIN, FIELD_SEQ_END. If used, create a TextHierarchyFieldPrimitive2D
-            // which holds the field type and evtl. the URL
+            // which holds the field type and, if applicable, the URL
             const SvxURLField* pURLField = dynamic_cast< const SvxURLField* >(rInfo.mpFieldData);
             const SvxPageField* pPageField = dynamic_cast< const SvxPageField* >(rInfo.mpFieldData);
 
@@ -688,7 +688,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     double fRotate, fShearX;
     rSdrContourTextPrimitive.getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // prepare contour polygon, force to non-mirrored for layouting
+    // prepare contour polygon, force to non-mirrored for laying out
     basegfx::B2DPolyPolygon aPolyPolygon(rSdrContourTextPrimitive.getUnitPolyPolygon());
     aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
 
@@ -929,7 +929,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
         const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
 
-        // set minimal paper size hor/ver if needed
+        // set minimal paper size horizontally/vertically if needed
         if(bHorizontalIsBlock)
         {
             rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
@@ -1103,7 +1103,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
-    // now get back the layouted text size from outliner
+    // now get back the laid out text size from outliner
     const Size aOutlinerTextSiz(rOutliner.CalcTextSize());
     const basegfx::B2DVector aOutlinerScale(
         basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(),
@@ -1351,7 +1351,7 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 
         if(basegfx::fTools::equalZero(fSingleStepWidth))
         {
-            // default to 1 milimeter
+            // default to 1 millimeter
             fSingleStepWidth = 100.0;
         }
 

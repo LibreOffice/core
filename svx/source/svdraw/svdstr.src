@@ -1566,19 +1566,19 @@ String STR_ItemNam_SHEARANGLE
  ////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
- // Ende der gecachten Strings
+ // End of cached strings
 
- // und hier noch Bitmaps
+ // Now: bitmaps:
 Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };
 Bitmap BMAP_GrafikDe { File = "grafikde.png" ; };
 
-// Strings fuer den Vorlagen-Dialog
+// Strings for the templates dialog
 String SIP_UNKNOWN_ATTR
 {
     Text [ en-US ] = "Unknown attribute";
 };
 
-// Strings fuer den Vorlagen-Dialog
+// Strings for the templates dialog
 String SIP_XA_LINESTYLE
 {
     Text [ en-US ] = "Line style";

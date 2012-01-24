@@ -35,7 +35,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/scene3d.hxx>
 #include <editeng/outlobj.hxx>
@@ -75,7 +75,7 @@ void SdrUndoAction::Repeat(SfxRepeatTarget& rView)
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
     if (pV!=NULL) SdrRepeat(*pV);
-    DBG_ASSERT(pV!=NULL,"Repeat: Uebergebenes SfxRepeatTarget ist keine SdrView");
+    DBG_ASSERT(pV!=NULL,"Repeat: SfxRepeatTarget that was handed over is not a SdrView");
 }
 
 XubString SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
@@ -290,7 +290,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     if(bIsGroup)
     {
-        // Aha, Gruppenobjekt
+        // it's a group object!
         pUndoGroup = new SdrUndoGroup(*pObj->GetModel());
         sal_uInt32 nObjAnz(pOL->GetObjCount());
 
@@ -381,7 +381,7 @@ void SdrUndoAttrObj::Undo()
         // it also sets fit-to-size text to non-fit-to-size text and
         // switches on autogrowheight (the default). That may lead to
         // loosing the geometry size info for the object when it is
-        // re-layouted from AdjustTextFrameWidthAndHeight(). This makes
+        // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
@@ -415,7 +415,7 @@ void SdrUndoAttrObj::Undo()
             pObj->SetMergedItemSet(*pUndoSet);
         }
 
-        // Restore prev size here when it was changed.
+        // Restore previous size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
             pObj->NbcSetSnapRect(aSnapRect);
@@ -482,7 +482,7 @@ void SdrUndoAttrObj::Redo()
             pObj->SetMergedItemSet(*pRedoSet);
         }
 
-        // Restore prev size here when it was changed.
+        // Restore previous size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
             pObj->NbcSetSnapRect(aSnapRect);
@@ -604,8 +604,9 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
     SdrObjList* pOL=rNewObj.GetSubList();
     if (pOL!=NULL && pOL->GetObjCount() && !rNewObj.ISA(E3dScene))
     {
-        // Aha, Gruppenobjekt
-        // Aber keine 3D-Szene, dann nur fuer die Szene selbst den Undo anlegen
+        // this is a group object!
+        // If this were 3D scene, we'd only add an Undo for the scene itself
+        // (which we do elsewhere).
         pUndoGroup=new SdrUndoGroup(*pObj->GetModel());
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
@@ -690,10 +691,10 @@ SdrUndoObjList::~SdrUndoObjList()
 {
     if (pObj!=NULL && IsOwner())
     {
-        // Attribute muessen wieder in den regulaeren Pool
+        // Attribute have to go back to the regular Pool
         SetOwner(sal_False);
 
-        // nun loeschen
+        // now delete
         SdrObject::Free( pObj );
     }
 }
@@ -710,12 +711,12 @@ void SdrUndoRemoveObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj ist bereits Inserted");
+    DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj has already been inserted.");
     if (!pObj->IsInserted())
     {
         // #i11426#
         // For UNDOs in Calc/Writer it is necessary to adapt the anchor
-        // pos of the target object.
+        // position of the target object.
         Point aOwnerAnchorPos(0, 0);
 
         if(pObjList
@@ -739,7 +740,7 @@ void SdrUndoRemoveObj::Undo()
 
 void SdrUndoRemoveObj::Redo()
 {
-    DBG_ASSERT(pObj->IsInserted(),"RedoRemoveObj: pObj ist nicht Inserted");
+    DBG_ASSERT(pObj->IsInserted(),"RedoRemoveObj: pObj is not inserted.");
     if (pObj->IsInserted())
     {
         ImplUnmarkObject( pObj );
@@ -758,7 +759,7 @@ void SdrUndoInsertObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj ist nicht Inserted");
+    DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj is not inserted.");
     if (pObj->IsInserted())
     {
         ImplUnmarkObject( pObj );
@@ -773,12 +774,12 @@ void SdrUndoInsertObj::Undo()
 
 void SdrUndoInsertObj::Redo()
 {
-    DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj ist bereits Inserted");
+    DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj is already inserted");
     if (!pObj->IsInserted())
     {
         // Restore anchor position of an object,
         // which becomes a member of a group, because its cleared in method
-        // <InsertObject(..)>. Needed for correct ReDo in Writer. (#i45952#)
+        // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
         if ( pObjList &&
              pObjList->GetOwnerObj() &&
@@ -806,14 +807,14 @@ void SdrUndoInsertObj::Redo()
 void SdrUndoDelObj::Undo()
 {
     SdrUndoRemoveObj::Undo();
-    DBG_ASSERT(IsOwner(),"UndoDeleteObj: pObj gehoert nicht der UndoAction");
+    DBG_ASSERT(IsOwner(),"UndoDeleteObj: pObj does not belong to UndoAction");
     SetOwner(sal_False);
 }
 
 void SdrUndoDelObj::Redo()
 {
     SdrUndoRemoveObj::Redo();
-    DBG_ASSERT(!IsOwner(),"RedoDeleteObj: pObj gehoert bereits der UndoAction");
+    DBG_ASSERT(!IsOwner(),"RedoDeleteObj: pObj already belongs to UndoAction");
     SetOwner(sal_True);
 }
 
@@ -846,14 +847,14 @@ XubString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 void SdrUndoNewObj::Undo()
 {
     SdrUndoInsertObj::Undo();
-    DBG_ASSERT(!IsOwner(),"RedoNewObj: pObj gehoert bereits der UndoAction");
+    DBG_ASSERT(!IsOwner(),"RedoNewObj: pObj already belongs to UndoAction");
     SetOwner(sal_True);
 }
 
 void SdrUndoNewObj::Redo()
 {
     SdrUndoInsertObj::Redo();
-    DBG_ASSERT(IsOwner(),"RedoNewObj: pObj gehoert nicht der UndoAction");
+    DBG_ASSERT(IsOwner(),"RedoNewObj: pObj does not belong to UndoAction");
     SetOwner(sal_False);
 }
 
@@ -891,18 +892,18 @@ SdrUndoReplaceObj::~SdrUndoReplaceObj()
 {
     if (pObj!=NULL && IsOldOwner())
     {
-        // Attribute muessen wieder in den regulaeren Pool
+        // Attribute have to go back into the Pool
         SetOldOwner(sal_False);
 
-        // nun loeschen
+        // now delete
         SdrObject::Free( pObj );
     }
     if (pNewObj!=NULL && IsNewOwner())
     {
-        // Attribute muessen wieder in den regulaeren Pool
+        // Attribute have to go back into the Pool
         SetNewOwner(sal_False);
 
-        // nun loeschen
+        // now delete
         SdrObject::Free( pNewObj );
     }
 }
@@ -914,8 +915,8 @@ void SdrUndoReplaceObj::Undo()
 
     if (IsOldOwner() && !IsNewOwner())
     {
-        DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Altes Objekt ist bereits inserted!");
-        DBG_ASSERT(pNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Neues Objekt ist nicht inserted!");
+        DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Old object is already inserted!");
+        DBG_ASSERT(pNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): New object is not inserted!");
         SetOldOwner(sal_False);
         SetNewOwner(sal_True);
 
@@ -924,7 +925,7 @@ void SdrUndoReplaceObj::Undo()
     }
     else
     {
-        OSL_FAIL("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Undo(): Wrong IsMine flags. Did you call Undo twice?");
     }
 }
 
@@ -932,8 +933,8 @@ void SdrUndoReplaceObj::Redo()
 {
     if (!IsOldOwner() && IsNewOwner())
     {
-        DBG_ASSERT(!pNewObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Neues Objekt ist bereits inserted!");
-        DBG_ASSERT(pObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Altes Objekt ist nicht inserted!");
+        DBG_ASSERT(!pNewObj->IsInserted(),"SdrUndoReplaceObj::Redo(): New object is already inserted!!");
+        DBG_ASSERT(pObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Old object is not inserted!!");
         SetOldOwner(sal_True);
         SetNewOwner(sal_False);
 
@@ -943,7 +944,7 @@ void SdrUndoReplaceObj::Redo()
     }
     else
     {
-        OSL_FAIL("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Redo(): Wrong IsMine flags. Did you call Redo twice?");
     }
 
     // Trigger PageChangeCall
@@ -1007,7 +1008,7 @@ void SdrUndoObjOrdNum::Undo()
 
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        OSL_FAIL("UndoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("UndoObjOrdNum: pObj does not have an ObjList.");
         return;
     }
     pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
@@ -1017,7 +1018,7 @@ void SdrUndoObjOrdNum::Redo()
 {
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        OSL_FAIL("RedoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("RedoObjOrdNum: pObj does not have an ObjList.");
         return;
     }
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
@@ -1074,11 +1075,11 @@ void SdrUndoObjSetText::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    // alten Text sichern fuer Redo
+    // save old text for Redo
     if (!bNewTextAvailable)
         AfterSetText();
 
-    // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
+    // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
     OutlinerParaObject* pText1 = pOldText;
     if(pText1)
         pText1 = new OutlinerParaObject(*pText1);
@@ -1093,7 +1094,7 @@ void SdrUndoObjSetText::Undo()
 
 void SdrUndoObjSetText::Redo()
 {
-    // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
+    // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
     OutlinerParaObject* pText1 = pNewText;
 
     if(pText1)
@@ -1278,18 +1279,18 @@ SdrUndoLayer::~SdrUndoLayer()
 
 void SdrUndoNewLayer::Undo()
 {
-    DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer gehoert bereits der UndoAction");
+    DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=sal_True;
 #ifdef DBG_UTIL
     SdrLayer* pCmpLayer=
 #endif
     pLayerAdmin->RemoveLayer(nNum);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoNewLayer::Undo(): Removter Layer ist != pLayer");
+    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoNewLayer::Undo(): Removed layer is != pLayer.");
 }
 
 void SdrUndoNewLayer::Redo()
 {
-    DBG_ASSERT(bItsMine,"SdrUndoNewLayer::Undo(): Layer gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"SdrUndoNewLayer::Undo(): Layer does not belong to UndoAction.");
     bItsMine=sal_False;
     pLayerAdmin->InsertLayer(pLayer,nNum);
 }
@@ -1303,20 +1304,20 @@ XubString SdrUndoNewLayer::GetComment() const
 
 void SdrUndoDelLayer::Undo()
 {
-    DBG_ASSERT(bItsMine,"SdrUndoDelLayer::Undo(): Layer gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"SdrUndoDelLayer::Undo(): Layer does not belong to UndoAction.");
     bItsMine=sal_False;
     pLayerAdmin->InsertLayer(pLayer,nNum);
 }
 
 void SdrUndoDelLayer::Redo()
 {
-    DBG_ASSERT(!bItsMine,"SdrUndoDelLayer::Undo(): Layer gehoert bereits der UndoAction");
+    DBG_ASSERT(!bItsMine,"SdrUndoDelLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=sal_True;
 #ifdef DBG_UTIL
     SdrLayer* pCmpLayer=
 #endif
     pLayerAdmin->RemoveLayer(nNum);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoDelLayer::Redo(): Removter Layer ist != pLayer");
+    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoDelLayer::Redo(): Removed layer is != pLayer.");
 }
 
 XubString SdrUndoDelLayer::GetComment() const
@@ -1332,7 +1333,7 @@ void SdrUndoMoveLayer::Undo()
     SdrLayer* pCmpLayer=
 #endif
     pLayerAdmin->RemoveLayer(nNeuPos);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Undo(): Removter Layer ist != pLayer");
+    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Undo(): Removed layer is != pLayer.");
     pLayerAdmin->InsertLayer(pLayer,nNum);
 }
 
@@ -1342,7 +1343,7 @@ void SdrUndoMoveLayer::Redo()
     SdrLayer* pCmpLayer=
 #endif
     pLayerAdmin->RemoveLayer(nNum);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Redo(): Removter Layer ist != pLayer");
+    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Redo(): Removed layer is != pLayer.");
     pLayerAdmin->InsertLayer(pLayer,nNeuPos);
 }
 
@@ -1360,7 +1361,7 @@ SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
 
 void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 {
-    DBG_ASSERT(!mrPage.IsInserted(),"SdrUndoPage::ImpInsertPage(): mrPage ist bereits Inserted");
+    DBG_ASSERT(!mrPage.IsInserted(),"SdrUndoPage::ImpInsertPage(): mrPage is already inserted.");
     if (!mrPage.IsInserted()) {
         if (mrPage.IsMasterPage()) {
             rMod.InsertMasterPage(&mrPage,nNum);
@@ -1372,7 +1373,7 @@ void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 
 void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 {
-    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage ist nicht Inserted");
+    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage is not inserted.");
     if (mrPage.IsInserted()) {
         SdrPage* pChkPg=NULL;
         if (mrPage.IsMasterPage()) {
@@ -1387,7 +1388,7 @@ void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 
 void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
 {
-    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpMovePage(): mrPage ist nicht Inserted");
+    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpMovePage(): mrPage is not inserted.");
     if (mrPage.IsInserted()) {
         if (mrPage.IsMasterPage()) {
             rMod.MoveMasterPage(nOldNum,nNewNum);
@@ -1427,7 +1428,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg):
 {
     bItsMine = sal_True;
 
-    // Und nun ggf. die MasterPage-Beziehungen merken
+    // now remember the master page relationships
     if(mrPage.IsMasterPage())
     {
         sal_uInt16 nPageAnz(rMod.GetPageCount());
@@ -1464,18 +1465,18 @@ SdrUndoDelPage::~SdrUndoDelPage()
 void SdrUndoDelPage::Undo()
 {
     ImpInsertPage(nPageNum);
-    if (pUndoGroup!=NULL) { // MasterPage-Beziehungen wiederherstellen
+    if (pUndoGroup!=NULL) { // recover master page relationships
         pUndoGroup->Undo();
     }
-    DBG_ASSERT(bItsMine,"UndoDeletePage: mrPage gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"UndoDeletePage: mrPage does not belong to UndoAction.");
     bItsMine=sal_False;
 }
 
 void SdrUndoDelPage::Redo()
 {
     ImpRemovePage(nPageNum);
-    // Die MasterPage-Beziehungen werden ggf. von selbst geloesst
-    DBG_ASSERT(!bItsMine,"RedoDeletePage: mrPage gehoert bereits der UndoAction");
+    // master page relations are dissolved automatically
+    DBG_ASSERT(!bItsMine,"RedoDeletePage: mrPage already belongs to UndoAction.");
     bItsMine=sal_True;
 }
 
@@ -1507,14 +1508,14 @@ bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 void SdrUndoNewPage::Undo()
 {
     ImpRemovePage(nPageNum);
-    DBG_ASSERT(!bItsMine,"UndoNewPage: mrPage gehoert bereits der UndoAction");
+    DBG_ASSERT(!bItsMine,"UndoNewPage: mrPage already belongs to UndoAction.");
     bItsMine=sal_True;
 }
 
 void SdrUndoNewPage::Redo()
 {
     ImpInsertPage(nPageNum);
-    DBG_ASSERT(bItsMine,"RedoNewPage: mrPage gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"RedoNewPage: mrPage does not belong to UndoAction.");
     bItsMine=sal_False;
 }
 

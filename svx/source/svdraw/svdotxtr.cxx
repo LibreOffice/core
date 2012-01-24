@@ -33,8 +33,8 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svdpage.hxx>   // fuer Convert
-#include <svx/svdmodel.hxx>  // fuer Convert
+#include <svx/svdpage.hxx>   // for Convert
+#include <svx/svdmodel.hxx>  // for Convert
 #include <editeng/outliner.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -67,7 +67,7 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
         aRect=rRect;
         ImpJustifyRect(aRect);
-        if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) { // #51139#
+        if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) {
             if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
             if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
             NbcAdjustTextFrameWidthAndHeight();
@@ -162,7 +162,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
         if(bXMirr != bYMirr)
         {
-            // Polygon wenden und etwas schieben
+            // turn polygon and move it a little
             Polygon aPol0(aPol);
 
             aPol[0] = aPol0[1];
@@ -177,7 +177,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
     if (bRota90Merk) {
         bool bRota90=aGeo.nDrehWink % 9000 ==0;
-        if (!bRota90) { // Scheinbar Rundungsfehler: Korregieren
+        if (!bRota90) { // there's seems to be a rounding error occurring: correct it
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
@@ -187,7 +187,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aGeo.nDrehWink=a;
             aGeo.RecalcSinCos();
         }
-        if (bNoShearMerk!=(aGeo.nShearWink==0)) { // Shear ggf. korregieren wg. Rundungsfehler
+        if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
             aGeo.nShearWink=0;
             aGeo.RecalcTan();
         }
@@ -196,7 +196,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpJustifyRect(aRect);
     long nTWdt1=aRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
     long nTHgt1=aRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
-    if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) { // #51139#
+    if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) {
         if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
         if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
         NbcAdjustTextFrameWidthAndHeight();
@@ -233,7 +233,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 {
     SetGlueReallyAbsolute(sal_True);
 
-    // when this is a SdrPathObj aRect maybe not initialized
+    // when this is a SdrPathObj, aRect may be uninitialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
@@ -267,7 +267,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     for (i=0; i<nPntAnz; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
-    // Polygon wenden und etwas schieben
+    // turn polygon and move it a little
     Polygon aPol0(aPol);
     aPol[0]=aPol0[1];
     aPol[1]=aPol0[0];
@@ -278,7 +278,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
     if (bRota90Merk) {
         bool bRota90=aGeo.nDrehWink % 9000 ==0;
-        if (bRota90Merk && !bRota90) { // Scheinbar Rundungsfehler: Korregieren
+        if (bRota90Merk && !bRota90) { // there's seems to be a rounding error occurring: correct it
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
@@ -289,7 +289,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
             aGeo.RecalcSinCos();
         }
     }
-    if (bNoShearMerk!=(aGeo.nShearWink==0)) { // Shear ggf. korregieren wg. Rundungsfehler
+    if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
         aGeo.nShearWink=0;
         aGeo.RecalcTan();
     }

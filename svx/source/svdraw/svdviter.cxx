@@ -89,8 +89,8 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
         {
             if(mpObject)
             {
-                // Objekt gewuenscht? Na dann erstmal sehen, ob
-                // das Obj in dieser PageView auch sichtbar ist.
+                // Looking for an object? First, determine if it visible in
+                // this PageView.
                 SetOfByte aObjLay;
                 mpObject->getMergedHierarchyLayerSet(aObjLay);
                 aObjLay &= pPV->GetVisibleLayers();
@@ -111,11 +111,11 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 
                     if(&rMasterPage == mpPage)
                     {
-                        // Aha, die gewuenschte Page ist also MasterPage in dieser PageView
+                        // the page we're looking for is a master page in this PageView
                         if(mpObject)
                         {
-                            // Objekt gewuenscht? Na dann erstmal sehen, ob
-                            // das Obj in dieser PageView auch sichtbar ist.
+                            // Looking for an object? First, determine if it visible in
+                            // this PageView.
                             SetOfByte aObjLay;
                             mpObject->getMergedHierarchyLayerSet(aObjLay);
                             aObjLay &= pPV->GetVisibleLayers();
@@ -124,7 +124,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                             if(!aObjLay.IsEmpty())
                             {
                                 return sal_True;
-                            } // ansonsten die naechste MasterPage der Page ansehen...
+                            } // else, look at the next master page of this page...
                         }
                         else
                         {
@@ -134,7 +134,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 }
             }
 
-            // MasterPage nicht erlaubt oder keine passende gefunden
+            // master page forbidden or no fitting master page found
             return sal_False;
         }
     }

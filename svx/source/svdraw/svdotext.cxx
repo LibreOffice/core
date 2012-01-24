@@ -29,14 +29,14 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
-#include <svx/svdpagv.hxx>  // fuer Abfrage im Paint, ob das
-#include <svx/svdview.hxx>  // Objekt gerade editiert wird
-#include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
+#include <svx/svdpagv.hxx>  // for the request in Paint to see whether
+#include <svx/svdview.hxx>  // the object is currently being edited
+#include <svx/svdpage.hxx>  // and for AnimationHandler (ticker text)
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdstr.hrc"   // the object's name
 #include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>
@@ -229,7 +229,7 @@ void SdrTextObj::FitFrameToTextSize()
         Rectangle aTextRect;
         Size aNewSize(rOutliner.CalcTextSize());
         rOutliner.Clear();
-        aNewSize.Width()++; // wegen evtl. Rundungsfehler
+        aNewSize.Width()++; // because of possible rounding errors
         aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
         aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
         Rectangle aNewRect(aRect);
@@ -301,7 +301,7 @@ const Size& SdrTextObj::GetTextSize() const
             aSiz=rOutliner.CalcTextSize();
             rOutliner.Clear();
         }
-        // 2x casting auf nonconst
+        // casting to nonconst twice
         ((SdrTextObj*)this)->aTextSize=aSiz;
         ((SdrTextObj*)this)->bTextSizeDirty=sal_False;
     }
@@ -311,7 +311,7 @@ const Size& SdrTextObj::GetTextSize() const
 bool SdrTextObj::IsAutoGrowHeight() const
 {
     if(!bTextFrame)
-        return sal_False; // AutoGrow nur bei TextFrames
+        return sal_False; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
@@ -336,7 +336,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
 bool SdrTextObj::IsAutoGrowWidth() const
 {
     if(!bTextFrame)
-        return sal_False; // AutoGrow nur bei TextFrames
+        return sal_False; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
@@ -390,7 +390,7 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust(const SfxItemSet& rSet) co
     }
 
     return eRet;
-} // defaults: BLOCK fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
+} // defaults: BLOCK (justify) for text frame, CENTER for captions of drawing objects
 
 SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
 {
@@ -423,7 +423,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
     }
 
     return eRet;
-} // defaults: TOP fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
+} // defaults: TOP for text frame, CENTER for captions of drawing objects
 
 void SdrTextObj::ImpJustifyRect(Rectangle& rRect) const
 {
@@ -453,7 +453,7 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed  =bNoTextFrame;
     rInfo.bMirror90Allowed  =bNoTextFrame;
 
-    // allow transparence
+    // allow transparency
     rInfo.bTransparenceAllowed = sal_True;
 
     // gradient depends on fillstyle
@@ -614,8 +614,8 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 
     if( bLineWidth )
     {
-        // Strichstaerke beruecksichtigen
-        // Beim Hittest muss das unterbleiben (Performance!)
+        // Take line width into account.
+        // When doing the hit test, avoid this. (Performance!)
         pContourPolyPolygon = new basegfx::B2DPolyPolygon();
 
         // test if shadow needs to be avoided for TakeContour()
@@ -665,7 +665,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     long nRightDist=GetTextRightDistance();
     long nUpperDist=GetTextUpperDistance();
     long nLowerDist=GetTextLowerDistance();
-    Rectangle aAnkRect(aRect); // Rect innerhalb dem geankert wird
+    Rectangle aAnkRect(aRect); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
@@ -681,9 +681,9 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     ImpJustifyRect(aAnkRect);
 
     if (bFrame) {
-        // !!! hier noch etwas verfeinern !!!
-        if (aAnkRect.GetWidth()<2) aAnkRect.Right()=aAnkRect.Left()+1;   // Mindestgroesse 2
-        if (aAnkRect.GetHeight()<2) aAnkRect.Bottom()=aAnkRect.Top()+1;  // Mindestgroesse 2
+        // TODO: Optimize this.
+        if (aAnkRect.GetWidth()<2) aAnkRect.Right()=aAnkRect.Left()+1; // minimum size h and v: 2 px
+        if (aAnkRect.GetHeight()<2) aAnkRect.Bottom()=aAnkRect.Top()+1;
     }
     if (aGeo.nDrehWink!=0) {
         Point aTmpPt(aAnkRect.TopLeft());
@@ -697,7 +697,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
                                Rectangle* pAnchorRect, bool bLineWidth ) const
 {
-    Rectangle aAnkRect; // Rect innerhalb dem geankert wird
+    Rectangle aAnkRect; // the rectangle in which we anchor
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -730,7 +730,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
 
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
-                // Grenzenlose Papiergroesse fuer Laufschrift
+                // unlimited paper size for ticker text
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nHgt=1000000;
             }
@@ -794,7 +794,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
         pText->CheckPortionInfo(rOutliner);
 
     Point aTextPos(aAnkRect.TopLeft());
-    Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() hat etwas Toleranz drauf, oder?
+    Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() adds a little tolerance, right?
 
     // For draw objects containing text correct hor/ver alignment if text is bigger
     // than the object itself. Without that correction, the text would always be
@@ -844,7 +844,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
     if (pAnchorRect)
         *pAnchorRect=aAnkRect;
 
-    // rTextRect ist bei ContourFrame in einigen Faellen nicht korrekt
+    // rTextRect might not be correct in some cases at ContourFrame
     rTextRect=Rectangle(aTextPos,aTextSiz);
     if (bContourFrame)
         rTextRect=aAnkRect;
@@ -868,7 +868,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
     if(pOut && pOut->GetOutDevType() == OUTDEV_PRINTER)
     {
-        // Checken ob CharStretching ueberhaupt moeglich
+        // check whether CharStretching is possible at all
         GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
         UniString aTestString(sal_Unicode('J'));
 
@@ -895,8 +895,8 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         bNoStretching = (aSize1 == aSize2);
 
 #ifdef WNT
-        // Windows vergroessert bei Size(100,500) den Font proportional
-        // Und das finden wir nicht so schoen.
+        // Windows zooms the font proportionally when using Size(100,500),
+        // we don't like that.
         if(aSize2.Height() >= aSize1.Height() * 2)
         {
             bNoStretching = sal_True;
@@ -914,14 +914,14 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     long nIsHgt=rTextSize.Height();
     if (nIsHgt==0) nIsHgt=1;
 
-    long nXTolPl=nWantWdt/100; // Toleranz +1%
-    long nXTolMi=nWantWdt/25;  // Toleranz -4%
-    long nXKorr =nWantWdt/20;  // Korrekturmasstab 5%
+    long nXTolPl=nWantWdt/100; // tolerance: +1%
+    long nXTolMi=nWantWdt/25;  // tolerance: -4%
+    long nXKorr =nWantWdt/20;  // correction scale: 5%
 
-    long nX=(nWantWdt*100) /nIsWdt; // X-Stretching berechnen
-    long nY=(nWantHgt*100) /nIsHgt; // Y-Stretching berechnen
+    long nX=(nWantWdt*100) /nIsWdt; // calculate X stretching
+    long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
     bool bChkX = true;
-    if (bNoStretching) { // evtl. nur proportional moeglich
+    if (bNoStretching) { // might only be be possible proportionally
         if (nX>nY) { nX=nY; bChkX=sal_False; }
         else { nY=nX; }
     }
@@ -957,12 +957,12 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0) {
             bNoMoreLoop = true;
         } else {
-            // Stretchingfaktoren korregieren
+            // correct stretching factors
             long nMul=nWantWdt;
             long nDiv=aSiz.Width();
             if (Abs(nXDiff)<=2*nXKorr) {
-                if (nMul>nDiv) nDiv+=(nMul-nDiv)/2; // und zwar nur um die haelfte des berechneten
-                else nMul+=(nDiv-nMul)/2;           // weil die EE ja eh wieder falsch rechnet
+                if (nMul>nDiv) nDiv+=(nMul-nDiv)/2; // but only add half of what we calculated,
+                else nMul+=(nDiv-nMul)/2;           // because the EE calculates wrongly later on
             }
             nX=nX*nMul/nDiv;
             if (bNoStretching) nY=nX;
@@ -1002,7 +1002,7 @@ void SdrTextObj::TakeObjNameSingul(XubString& rName) const
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject && eTextKind != OBJ_OUTLINETEXT)
     {
-        // Macht bei OUTLINETEXT wohl derzeit noch etwas Probleme
+        // shouldn't currently cause any problems at OUTLINETEXT
         XubString aStr2(pOutlinerParaObject->GetTextObject().GetText(0));
         aStr2.EraseLeadingChars();
 
@@ -1116,7 +1116,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval(SdrAttrObj::TakeContour());
 
-    // und nun noch ggf. das BoundRect des Textes dazu
+    // and now add the BoundRect of the text, if necessary
     if ( pModel && GetOutlinerParaObject() && !IsFontwork() && !IsContourTextFrame() )
     {
         // using Clone()-Paint() strategy inside TakeContour() leaves a destroyed
@@ -1237,7 +1237,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
 {
     if (!bContourFrame)
     {
-        // FitToSize erstmal nicht mit ContourFrame
+        // FitToSize can't be used together with ContourFrame for now
         if (IsFitToSize() || IsAutoFit())
         {
             sal_uIntPtr nStat=rOutliner.GetControlWord();
@@ -1251,7 +1251,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
 
     if (!bContourFrame)
     {
-        // FitToSize erstmal nicht mit ContourFrame
+        // FitToSize can't be used together with ContourFrame for now
         if (IsFitToSize())
         {
             ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXKorreg);
@@ -1297,7 +1297,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
         if (fFactor >= 1.0 )
         {
             // resulting text area fits into available shape rect -
-            // err on the larger streching, to optimally fill area
+            // err on the larger stretching, to optimally fill area
             nMinStretchX = std::max(nMinStretchX,nCurrStretchX);
             nMinStretchY = std::max(nMinStretchY,nCurrStretchY);
         }
@@ -1386,12 +1386,12 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
 
     SetTextSizeDirty();
     if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth()))
-    { // Textrahmen anpassen!
+    { // adapt text frame!
         NbcAdjustTextFrameWidthAndHeight();
     }
     if (!IsTextFrame())
     {
-        // Das SnapRect behaelt seine Groesse bei
+        // the SnapRect keeps its size
         SetRectsDirty(sal_True);
     }
 
@@ -1415,7 +1415,7 @@ void SdrTextObj::NbcReformatText()
         }
         else
         {
-            // Das SnapRect behaelt seine Groesse bei
+            // the SnapRect keeps its size
             SetBoundRectDirty();
             SetRectsDirty(sal_True);
         }
@@ -1459,7 +1459,7 @@ void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const
 }
 
 void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
-{ // RectsDirty wird von SdrObject gerufen
+{ // RectsDirty is called by SdrObject
     SdrAttrObj::RestGeoData(rGeo);
     SdrTextObjGeoData& rTGeo=(SdrTextObjGeoData&)rGeo;
     aRect  =rTGeo.aRect;
@@ -1576,7 +1576,7 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // transformation interface for StarOfficeAPI. This implements support for
-// homogen 3x3 matrices containing the transformation of the SdrObject. At the
+// homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
 //
@@ -1640,7 +1640,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     return sal_False;
 }
 
-// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+// sets the base geometry of the object using infos contained in the homogeneous 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
 void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
@@ -1771,19 +1771,19 @@ long SdrTextObj::GetMaxTextFrameWidth() const
 
 bool SdrTextObj::IsFontwork() const
 {
-    return (bTextFrame) ? false // Default ist FALSE
+    return (bTextFrame) ? false // Default is FALSE
         : ((XFormTextStyleItem&)(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE))).GetValue()!=XFT_NONE;
 }
 
 bool SdrTextObj::IsHideContour() const
 {
-    return (bTextFrame) ? false // Default ist: Nein, kein HideContour; HideContour nicht bei TextFrames
+    return (bTextFrame) ? false // Default is: no, don't HideContour; HideContour not together with TextFrames
         : ((XFormTextHideFormItem&)(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM))).GetValue();
 }
 
 bool SdrTextObj::IsContourTextFrame() const
 {
-    return (bTextFrame) ? false // ContourFrame nicht bei normalen TextFrames
+    return (bTextFrame) ? false // ContourFrame not together with normal TextFrames
         : ((SdrTextContourFrameItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME))).GetValue();
 }
 
@@ -1967,66 +1967,67 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Konzept des TextObjekts:
+// The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~
-// Attribute/Varianten:
-// - sal_Bool Textrahmen / beschriftetes Zeichenobjekt
-// - sal_Bool FontWork                 (wenn nicht Textrahmen und nicht ContourTextFrame)
-// - sal_Bool ContourTextFrame         (wenn nicht Textrahmen und nicht Fontwork)
-// - long Drehwinkel               (wenn nicht FontWork)
-// - long Textrahmenabstaende      (wenn nicht FontWork)
-// - sal_Bool FitToSize                (wenn nicht FontWork)
-// - sal_Bool AutoGrowingWidth/Height  (wenn nicht FitToSize und nicht FontWork)
-// - long Min/MaxFrameWidth/Height (wenn AutoGrowingWidth/Height)
-// - enum Horizontale Textverankerung Links,Mitte,Rechts,Block,Stretch(ni)
-// - enum Vertikale Textverankerung Oben,Mitte,Unten,Block,Stretch(ni)
-// - enum Laufschrift              (wenn nicht FontWork)
+// Attributes/Variations:
+// - sal_Bool text frame / graphics object with caption
+// - sal_Bool FontWork                 (if it is not a text frame and not a ContourTextFrame)
+// - sal_Bool ContourTextFrame         (if it is not a text frame and not Fontwork)
+// - long rotation angle               (if it is not FontWork)
+// - long text frame margins           (if it is not FontWork)
+// - sal_Bool FitToSize                (if it is not FontWork)
+// - sal_Bool AutoGrowingWidth/Height  (if it is not FitToSize and not FontWork)
+// - long Min/MaxFrameWidth/Height     (if AutoGrowingWidth/Height)
+// - enum horizontal text anchoring left,center,right,justify/block,Stretch(ni)
+// - enum vertical text anchoring top, middle, bottom, block, stretch(ni)
+// - enum ticker text                  (if it is not FontWork)
 //
-// Jedes abgeleitete Objekt ist entweder ein Textrahmen (bTextFrame=sal_True)
-// oder ein beschriftetes Zeichenobjekt (bTextFrame=sal_False).
+// Every derived object is either a text frame (bTextFrame=sal_True)
+// or a drawing object with a caption (bTextFrame=sal_False).
 //
-// Defaultverankerung von Textrahmen:
+// Default anchoring for text frames:
 //   SDRTEXTHORZADJUST_BLOCK, SDRTEXTVERTADJUST_TOP
-//   = statische Pooldefaults
-// Defaultverankerung von beschrifteten Zeichenobjekten:
+//   = static Pool defaults
+// Default anchoring for drawing objects with a caption:
 //   SDRTEXTHORZADJUST_CENTER, SDRTEXTVERTADJUST_CENTER
-//   durch harte Attributierung von SdrAttrObj
+//   via "hard" attribution of SdrAttrObj
 //
-// Jedes vom SdrTextObj abgeleitete Objekt muss ein "UnrotatedSnapRect"
-// (->TakeUnrotatedSnapRect()) liefern (Drehreferenz ist TopLeft dieses
-// Rechtecks (aGeo.nDrehWink)), welches die Grundlage der Textverankerung
-// bildet. Von diesem werden dann ringsum die Textrahmenabstaende abgezogen;
-// das Ergebnis ist der Ankerbereich (->TakeTextAnchorRect()). Innerhalb
-// dieses Bereichs wird dann in Abhaengigkeit von der horizontalen und
-// vertikalen Ausrichtung (SdrTextVertAdjust,SdrTextHorzAdjust) der Ankerpunkt
-// sowie der Ausgabebereich bestimmt. Bei beschrifteten Grafikobjekten kann
-// der Ausgabebereich durchaus groesser als der Ankerbereich werden, bei
-// Textrahmen ist er stets kleiner oder gleich (ausser bei negativen Textrahmen-
-// abstaenden).
+// Every object derived from SdrTextObj must return an "UnrotatedSnapRect"
+// (->TakeUnrotatedSnapRect()) (the reference point for the rotation is the top
+// left of the rectangle (aGeo.nDrehWink)) which is the basis for anchoring
+// text. We then subtract the text frame margins from this rectangle, as a re-
+// sult we get the anchoring area (->TakeTextAnchorRect()). Within this area, we
+// calculate the anchoring point and the painting area, depending on the hori-
+// zontal and vertical adjustment of the text (SdrTextVertAdjust,
+// SdrTextHorzAdjust).
+// In the case of drawing objects with a caption the painting area might well
+// be larger than the anchoring area, for text frames on the other hand, it is
+// always of the same or a smaller size (except when there are negative text
+// frame margins).
 //
-// FitToSize hat Prioritaet vor Textverankerung und AutoGrowHeight/Width. Der
-// Ausgabebereich ist bei FitToSize immer genau der Ankerbereich. Weiterhin
-// gibt es bei FitToSize keinen automatischen Zeilenumbruch.
+// FitToSize takes priority over text anchoring and AutoGrowHeight/Width. When
+// FitToSize is turned on, the painting area is always equal to the anchoring
+// area. Additionally, FitToSize doesn't allow automatic line breaks.
 //
 // ContourTextFrame:
-// - long Drehwinkel
-// - long Textrahmenabstaende         spaeter vielleicht
-// - sal_Bool FitToSize                   spaeter vielleicht
-// - sal_Bool AutoGrowingWidth/Height     viel spaeter vielleicht
-// - long Min/MaxFrameWidth/Height    viel spaeter vielleicht
-// - enum Horizontale Textverankerung spaeter vielleicht, erstmal Links, Absatz zentr.
-// - enum Vertikale Textverankerung   spaeter vielleicht, erstmal oben
-// - enum Laufschrift                 spaeter vielleicht (evtl. sogar mit korrektem Clipping)
+// - long rotation angle
+// - long text frame margins (maybe later)
+// - sal_Bool FitToSize (maybe later)
+// - sal_Bool AutoGrowingWidth/Height (maybe much later)
+// - long Min/MaxFrameWidth/Height (maybe much later)
+// - enum horizontal text anchoring (maybe later, for now: left, centered)
+// - enum vertical text anchoring (maybe later, for now: top)
+// - enum ticker text (maybe later, maybe even with correct clipping)
 //
-// Bei Aenderungen zu beachten:
+// When making changes, check these:
 // - Paint
 // - HitTest
 // - ConvertToPoly
 // - Edit
-// - Drucken,Speichern, Paint in Nachbarview waerend Edit
-// - ModelChanged (z.B. durch NachbarView oder Lineale) waerend Edit
-// - FillColorChanged waerend Edit
-// - uvm...
+// - Printing, Saving, Painting in neighboring View while editing
+// - ModelChanged (e. g. through a neighboring View or rulers) while editing
+// - FillColorChanged while editin
+// - and many more...
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 

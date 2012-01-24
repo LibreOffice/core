@@ -59,7 +59,7 @@ TYPEINIT1(SdrVirtObj,SdrObject);
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=sal_True; // this is only a virtual object
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -84,7 +84,7 @@ SdrObject& SdrVirtObj::ReferencedObj()
 void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
-    SetRectsDirty(); // hier noch Optimieren.
+    SetRectsDirty(); // TODO: Optimize this.
 
     // Only a repaint here, rRefObj may have changed and broadcasts
     ActionChanged();
@@ -125,14 +125,14 @@ SdrObjList* SdrVirtObj::GetSubList() const
 
 const Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
     ((SdrVirtObj*)this)->aOutRect+=aAnchor;
     return aOutRect;
 }
 
 const Rectangle& SdrVirtObj::GetLastBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); // Hier noch optimieren
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); // TODO: Optimize this.
     ((SdrVirtObj*)this)->aOutRect+=aAnchor;
     return aOutRect;
 }
@@ -150,11 +150,11 @@ void SdrVirtObj::SetChanged()
 
 SdrVirtObj* SdrVirtObj::Clone() const
 {
-    return new SdrVirtObj(this->rRefObj); // Nur eine weitere Referenz
+    return new SdrVirtObj(this->rRefObj); // only a further reference
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
-{   // ???anderes Objekt referenzieren???
+{   // reference different object??
     SdrObject::operator=(rObj);
     aAnchor=rObj.aAnchor;
     return *this;
@@ -326,7 +326,7 @@ bool SdrVirtObj::applySpecialDrag(SdrDragStat& rDrag)
 basegfx::B2DPolyPolygon SdrVirtObj::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
     return rRefObj.getSpecialDragPoly(rDrag);
-    // Offset handlen !!!!!! fehlt noch !!!!!!!
+    // TODO: we don't handle offsets yet!
 }
 
 String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
@@ -364,7 +364,7 @@ void SdrVirtObj::BrkCreate(SdrDragStat& rStat)
 basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
     return rRefObj.TakeCreatePoly(rDrag);
-    // Offset handlen !!!!!! fehlt noch !!!!!!!
+    // TODO: we don't handle offsets yet!
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -489,8 +489,8 @@ void SdrVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 
 const Rectangle& SdrVirtObj::GetLogicRect() const
 {
-    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetLogicRect();  // !!! Missbrauch von aSnapRect !!!
-    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;                // Wenns mal Aerger gibt, muss ein weiteres Rectangle Member her (oder Heap)
+    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetLogicRect();  // An abuse of aSnapRect!
+    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;                // If there's trouble, we need another Rectangle Member (or a Heap).
     return aSnapRect;
 }
 
@@ -615,27 +615,27 @@ bool SdrVirtObj::HasMacro() const
 
 SdrObject* SdrVirtObj::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.CheckMacroHit(rRec); // Todo: Positionsversatz
+    return rRefObj.CheckMacroHit(rRec); // TODO: positioning offset
 }
 
 Pointer SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.GetMacroPointer(rRec); // Todo: Positionsversatz
+    return rRefObj.GetMacroPointer(rRec); // TODO: positioning offset
 }
 
 void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
 {
-    rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // Todo: Positionsversatz
+    rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // TODO: positioning offset
 }
 
 bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
-    return rRefObj.DoMacro(rRec); // Todo: Positionsversatz
+    return rRefObj.DoMacro(rRec); // TODO: positioning offset
 }
 
 XubString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
-    return rRefObj.GetMacroPopupComment(rRec); // Todo: Positionsversatz
+    return rRefObj.GetMacroPopupComment(rRec); // TODO: positioning offset
 }
 
 const Point SdrVirtObj::GetOffset() const

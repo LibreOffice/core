@@ -223,7 +223,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
         AddWindowToPaintView(pOut);
     }
 
-    // Flag zur Visualisierung von Gruppen
+    // flag to visualize groups
     bVisualizeEnteredGroup = sal_True;
 
     maColorConfig.AddListener(this);
@@ -266,7 +266,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
     }
 
-    sal_Bool bObjChg=!bSomeObjChgdFlag; // sal_True= auswerten fuer ComeBack-Timer
+    sal_Bool bObjChg=!bSomeObjChgdFlag; // if sal_True, evaluate for ComeBack timer
     if (bObjChg) {
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
         if (pSdrHint!=NULL) {
@@ -313,7 +313,7 @@ IMPL_LINK_INLINE_END(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
 void SdrPaintView::FlushComeBackTimer() const
 {
     if (bSomeObjChgdFlag) {
-        // casting auf nonconst
+        // casting to nonconst
         ((SdrPaintView*)this)->ImpComeBackHdl(&((SdrPaintView*)this)->aComeBackTimer);
         ((SdrPaintView*)this)->aComeBackTimer.Stop();
     }
@@ -321,7 +321,7 @@ void SdrPaintView::FlushComeBackTimer() const
 
 void SdrPaintView::ModelHasChanged()
 {
-    // Auch alle PageViews benachrichtigen
+    // broadcast to all PageViews
     if(mpPageView && !mpPageView->GetPage()->IsInserted())
     {
         HideSdrPage();
@@ -1045,7 +1045,7 @@ bool SdrPaintView::IsGroupEntered() const
 
 void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool /*bReplaceAll*/)
 {
-    // bReplaceAll hat hier keinerlei Wirkung
+    // bReplaceAll has no effect here at all.
     sal_Bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
     const SfxPoolItem *pPoolItem=NULL;
     if (rAttr.GetItemState(SDRATTR_LAYERID,sal_True,&pPoolItem)==SFX_ITEM_SET) {
@@ -1064,7 +1064,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool /*
 
 void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnlyHardAttr*/) const
 {
-    // bOnlyHardAttr hat hier keinerlei Wirkung
+    // bOnlyHardAttr has no effect here at all.
     sal_Bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
     const XubString& aNam=bMeasure?aMeasureLayer:aAktLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
@@ -1092,13 +1092,13 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         if(bHasEEFeatureItems)
         {
             String aMessage;
-            aMessage.AppendAscii("SdrPaintView::SetDefaultAttr(): Das setzen von EE_FEATURE-Items an der SdrView macht keinen Sinn! Es fuehrt nur zu Overhead und nicht mehr lesbaren Dokumenten.");
+            aMessage.AppendAscii("SdrPaintView::SetDefaultAttr(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
             InfoBox(NULL, aMessage).Execute();
         }
     }
 #endif
     if (bReplaceAll) aDefaultAttr.Set(rAttr);
-    else aDefaultAttr.Put(rAttr,sal_False); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+    else aDefaultAttr.Put(rAttr,sal_False); // if FALSE, regard InvalidItems as "holes," not as Default
     SetNotPersistDefaultAttr(rAttr,bReplaceAll);
 #ifdef DBG_UTIL
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
@@ -1136,7 +1136,7 @@ sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardA
     }
     else
     {
-        // sonst DefStyleSheet dazumergen
+        // else merge with DefStyleSheet
         rTargetSet.Put(pDefaultStyleSheet->GetItemSet(), sal_False);
         rTargetSet.Put(aDefaultAttr, sal_False);
     }
@@ -1197,12 +1197,12 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
         if (bNeedMoreX || bNeedMoreY)
         {
             bNewScale=sal_True;
-            // Neuen MapMode (Size+Org) setzen und dabei alles invalidieren
+            // set new MapMode (Size+Org) and invalidate everything
             Fraction aXFact(aNewSize.Width(),aActualSize.Width());
             Fraction aYFact(aNewSize.Height(),aActualSize.Height());
             if (aYFact>aXFact) aXFact=aYFact;
             aXFact*=aMap.GetScaleX();
-            aXFact.ReduceInaccurate(10); // Um Ueberlaeufe und BigInt-Mapping zu vermeiden
+            aXFact.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
             aMap.SetScaleX(aXFact);
             aMap.SetScaleY(aYFact);
             rWin.SetMapMode(aMap);

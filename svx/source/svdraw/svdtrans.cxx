@@ -49,7 +49,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
     {
         if (xFact.GetDenominator()==0) {
             long nWdt=rRect.Right()-rRect.Left();
-            if (xFact.GetNumerator()>=0) { // DivZero abfangen
+            if (xFact.GetNumerator()>=0) { // catch divisions by zero
                 xFact=Fraction(xFact.GetNumerator(),1);
                 if (nWdt==0) rRect.Right()++;
             } else {
@@ -63,7 +63,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
     {
         if (yFact.GetDenominator()==0) {
             long nHgt=rRect.Bottom()-rRect.Top();
-            if (yFact.GetNumerator()>=0) { // DivZero abfangen
+            if (yFact.GetNumerator()>=0) { // catch divisions by zero
                 yFact=Fraction(yFact.GetNumerator(),1);
                 if (nHgt==0) rRect.Bottom()++;
             } else {
@@ -71,7 +71,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
                 if (nHgt==0) rRect.Top()--;
             }
 
-            yFact=Fraction(yFact.GetNumerator(),1); // DivZero abfangen
+            yFact=Fraction(yFact.GetNumerator(),1); // catch divisions by zero
         }
         rRect.Top()   =rRef.Y()+Round(((double)(rRect.Top()   -rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
         rRect.Bottom()=rRef.Y()+Round(((double)(rRect.Bottom()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
@@ -124,25 +124,24 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 {
     long mx=rRef2.X()-rRef1.X();
     long my=rRef2.Y()-rRef1.Y();
-    if (mx==0) { // Achse senkrecht
+    if (mx==0) { // vertical axis
         long dx=rRef1.X()-rPnt.X();
         rPnt.X()+=2*dx;
-    } else if (my==0) { // Achse waagerecht
+    } else if (my==0) { // horizontal axis
         long dy=rRef1.Y()-rPnt.Y();
         rPnt.Y()+=2*dy;
-    } else if (mx==my) { // Achse diagonal '\'
+    } else if (mx==my) { // diagonal axis '\'
         long dx1=rPnt.X()-rRef1.X();
         long dy1=rPnt.Y()-rRef1.Y();
         rPnt.X()=rRef1.X()+dy1;
         rPnt.Y()=rRef1.Y()+dx1;
-    } else if (mx==-my) { // Achse diagonal '/'
+    } else if (mx==-my) { // diagonal axis '/'
         long dx1=rPnt.X()-rRef1.X();
         long dy1=rPnt.Y()-rRef1.Y();
         rPnt.X()=rRef1.X()-dy1;
         rPnt.Y()=rRef1.Y()-dx1;
-    } else { // beliebige Achse
-        // mal optimieren !!!
-        // Lot auf der Spiegelachse faellen oder so
+    } else { // arbitrary axis
+        // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
         long nRefWink=GetAngle(rRef2-rRef1);
         rPnt-=rRef1;
         long nPntWink=GetAngle(rPnt);
@@ -202,15 +201,15 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
     RotatePoint(rPnt,rCenter,sn,cs);
     if (bC1) {
         if (bVert) {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            // move into the direction of the center, as a basic position for the rotation
             pC1->Y()-=y0;
-            // Resize, entsprechend der Entfernung vom Zentrum
+            // resize, account for the distance from the center
             pC1->Y()=Round(((double)pC1->Y()) /rRad.X()*(cx-pC1->X()));
             pC1->Y()+=cy;
         } else {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            // move into the direction of the center, as a basic position for the rotation
             pC1->X()-=x0;
-            // Resize, entsprechend der Entfernung vom Zentrum
+            // resize, account for the distance from the center
             long nPntRad=cy-pC1->Y();
             double nFact=(double)nPntRad/(double)rRad.Y();
             pC1->X()=Round((double)pC1->X()*nFact);
@@ -220,15 +219,15 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
     }
     if (bC2) {
         if (bVert) {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            // move into the direction of the center, as a basic position for the rotation
             pC2->Y()-=y0;
-            // Resize, entsprechend der Entfernung vom Zentrum
+            // resize, account for the distance from the center
             pC2->Y()=Round(((double)pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X()));
             pC2->Y()+=cy;
         } else {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            // move into the direction of the center, as a basic position for the rotation
             pC2->X()-=x0;
-            // Resize, entsprechend der Entfernung vom Zentrum
+            // resize, account for the distance from the center
             long nPntRad=rCenter.Y()-pC2->Y();
             double nFact=(double)nPntRad/(double)rRad.Y();
             pC2->X()=Round((double)pC2->X()*nFact);
@@ -325,13 +324,13 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, b
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
         Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
+        if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
+        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }
@@ -348,13 +347,13 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
         Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
+        if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
+        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }
@@ -371,13 +370,13 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
         Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
+        if (i+1<nPointAnz && rPoly.IsControl(i)) { //  control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
+        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }
@@ -455,7 +454,7 @@ long GetLen(const Point& rPnt)
 {
     long x=Abs(rPnt.X());
     long y=Abs(rPnt.Y());
-    if (x+y<0x8000) { // weil 7FFF * 7FFF * 2 = 7FFE0002
+    if (x+y<0x8000) { // because 7FFF * 7FFF * 2 = 7FFE0002
         x*=x;
         y*=y;
         x+=y;
@@ -469,7 +468,7 @@ long GetLen(const Point& rPnt)
         nx+=ny;
         nx=sqrt(nx);
         if (nx>0x7FFFFFFF) {
-            return 0x7FFFFFFF; // Ueberlauf, mehr is nich!
+            return 0x7FFFFFFF; // we can't go any further, for fear of an overrun!
         } else {
             return Round(nx);
         }
@@ -519,25 +518,25 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 {
     rGeo.nDrehWink=GetAngle(rPol[1]-rPol[0]);
     rGeo.nDrehWink=NormAngle360(rGeo.nDrehWink);
-    // Drehung ist damit im Kasten
+    // rotation successful
     rGeo.RecalcSinCos();
 
     Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
+    if (rGeo.nDrehWink!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
     long nWdt=aPt1.X();
 
     Point aPt0(rPol[0]);
     Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
+    if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
     long nHgt=aPt3.Y();
 
 
     long nShW=GetAngle(aPt3);
-    nShW-=27000; // ShearWink wird zur Senkrechten gemessen
+    nShW-=27000; // ShearWink is measured against a vertical line
     nShW=-nShW;  // Negieren, denn '+' ist Rechtskursivierung
 
     bool bMirr=aPt3.Y()<0;
-    if (bMirr) { // "Punktetausch" bei Spiegelung
+    if (bMirr) { // "exchange of points" when mirroring
         nHgt=-nHgt;
         nShW+=18000;
         aPt0=rPol[3];
@@ -546,7 +545,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     if (nShW<-9000 || nShW>9000) {
         nShW=NormAngle180(nShW+18000);
     }
-    if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // ShearWinkel begrenzen auf +/- 89.00 deg
+    if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
     if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;
     rGeo.nShearWink=nShW;
     rGeo.RecalcTan();
@@ -594,9 +593,9 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     BigInt aVal(nVal);
     aVal*=nMul;
     if (aVal.IsNeg()!=(nDiv<0)) {
-        aVal-=nDiv/2; // fuer korrektes Runden
+        aVal-=nDiv/2; // to round correctly
     } else {
-        aVal+=nDiv/2; // fuer korrektes Runden
+        aVal+=nDiv/2; // to round correctly
     }
     if(nDiv)
     {
@@ -615,23 +614,23 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
     if (nMul==0 || nDiv==0) return;
     sal_uInt32 a;
-    a=sal_uInt32(nMul); unsigned nMulZ=0; // Fuehrende Nullen zaehlen
+    a=sal_uInt32(nMul); unsigned nMulZ=0; // count leading zeros
     while (a<0x00800000) { nMulZ+=8; a<<=8; }
     while (a<0x80000000) { nMulZ++; a<<=1; }
-    a=sal_uInt32(nDiv); unsigned nDivZ=0; // Fuehrende Nullen zaehlen
+    a=sal_uInt32(nDiv); unsigned nDivZ=0; // count leading zeros
     while (a<0x00800000) { nDivZ+=8; a<<=8; }
     while (a<0x80000000) { nDivZ++; a<<=1; }
-    // Anzahl der verwendeten Digits bestimmen
+    // count the number of digits
     int nMulDigits=32-nMulZ;
     int nDivDigits=32-nDivZ;
-    // Nun bestimmen, wieviele Stellen hinten weg koennen
+    // count how many decimal places can be removed
     int nMulWeg=nMulDigits-nDigits; if (nMulWeg<0) nMulWeg=0;
     int nDivWeg=nDivDigits-nDigits; if (nDivWeg<0) nDivWeg=0;
     int nWeg=Min(nMulWeg,nDivWeg);
     nMul>>=nWeg;
     nDiv>>=nWeg;
     if (nMul==0 || nDiv==0) {
-        DBG_WARNING("Oups, beim kuerzen einer Fraction hat sich Joe verrechnet.");
+        DBG_WARNING("Math error after canceling decimal places.");
         return;
     }
     if (bNeg) nMul=-nMul;
@@ -639,8 +638,8 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Wieviele eU-Einheiten passen in einen mm bzw. Inch?
-// Oder wie gross ist ein eU in mm bzw. Inch, und davon der Kehrwert
+// How many eU units fit into a mm, respectively an inch?
+// Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
 
 FrPair GetInchOrMM(MapUnit eU)
 {
@@ -658,13 +657,13 @@ FrPair GetInchOrMM(MapUnit eU)
         case MAP_PIXEL      : {
             VirtualDevice aVD;
             aVD.SetMapMode(MapMode(MAP_100TH_MM));
-            Point aP(aVD.PixelToLogic(Point(64,64))); // 64 Pixel fuer bessere Genauigkeit
+            Point aP(aVD.PixelToLogic(Point(64,64))); // 64 pixels for more accuracy
             return FrPair(6400,aP.X(),6400,aP.Y());
         }
         case MAP_APPFONT: case MAP_SYSFONT: {
             VirtualDevice aVD;
             aVD.SetMapMode(MapMode(eU));
-            Point aP(aVD.LogicToPixel(Point(32,32))); // 32 Einheiten fuer bessere Genauigkeit
+            Point aP(aVD.LogicToPixel(Point(32,32))); // 32 units for more accuracy
             aVD.SetMapMode(MapMode(MAP_100TH_MM));
             aP=aVD.PixelToLogic(aP);
             return FrPair(3200,aP.X(),3200,aP.Y());
@@ -693,8 +692,8 @@ FrPair GetInchOrMM(FieldUnit eU)
     return Fraction(1,1);
 }
 
-// Den Faktor berechnen, der anzuwenden ist um n Einheiten von eS nach
-// eD umzurechnen. Z.B. GetMapFactor(UNIT_MM,UNIT_100TH_MM) => 100.
+// Calculate the factor that we need to convert units from eS to eD.
+// e. g. GetMapFactor(UNIT_MM,UNIT_100TH_MM) => 100.
 
 FrPair GetMapFactor(MapUnit eS, MapUnit eD)
 {
@@ -768,7 +767,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
     bool bMetr = false, bInch = false;
     switch (eFU) {
         case FUNIT_NONE     : break;
-        // Metrisch
+        // metrically
         case FUNIT_100TH_MM : bMetr = true; nKomma=5; break;
         case FUNIT_MM       : bMetr = true; nKomma=3; break;
         case FUNIT_CM       : bMetr = true; nKomma=2; break;
@@ -781,7 +780,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
         case FUNIT_INCH     : bInch = true; break;             // 1"    = 1"
         case FUNIT_FOOT     : bInch = true; rnMul=12; break;   // 1Ft   = 12"
         case FUNIT_MILE     : bInch = true; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
-        // sonstiges
+        // others
         case FUNIT_CUSTOM   : break;
         case FUNIT_PERCENT  : nKomma=2; break;
         // TODO: Add code to handle the following (added to remove warning)
@@ -799,7 +798,7 @@ void SdrFormatter::Undirty()
     bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
-    // Zunaechst normalisieren auf m bzw. "
+    // first: normalize to m or in
     if (!bSrcFU) {
         GetMeterOrInch(eSrcMU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
     } else {
@@ -823,7 +822,7 @@ void SdrFormatter::Undirty()
         nDiv1*=254;
     }
 
-    // Temporaere Fraction zum Kuerzen
+    // temporary fraction for canceling
     Fraction aTempFract(nMul1,nDiv1);
     nMul1=aTempFract.GetNumerator();
     nDiv1=aTempFract.GetDenominator();
@@ -846,7 +845,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
         return;
     }
 
-    // Hier fallen trotzdem evtl. Nachkommastellen weg, wg. MulDiv statt Real
+    // we may lose some decimal places here, because of MulDiv instead of Real
     sal_Bool bNeg(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
@@ -878,7 +877,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
     if(nK > 0 && aStr.Len() <= nK )
     {
-        // Komma erforderlich
+        // decimal separator necessary
         sal_Int16 nAnz(nK - aStr.Len());
 
         if(nAnz >= 0 && rLoc.isNumLeadingZero())
@@ -887,25 +886,25 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
         for(xub_StrLen  i=0; i<nAnz; i++)
             aStr.Insert(aNullCode, 0);
 
-        // zuviele Nachkommastellen abhacken
+        // remove superfluous decimal points
         xub_StrLen nNumDigits(rLoc.getNumDigits());
         xub_StrLen nWeg(nK - nNumDigits);
 
         if(nWeg > 0)
         {
-            // hier muesste eigentlich noch gerundet werden!
+            // TODO: we should round here
             aStr.Erase(aStr.Len() - nWeg);
             nK = nNumDigits;
         }
     }
 
-    // Vorkommastellen fuer spaeter merken
+    // remember everything before the decimal separator for later
     xub_StrLen nVorKomma(aStr.Len() - nK);
 
     if(nK > 0)
     {
-        // KommaChar einfuegen
-        // erstmal trailing Zeros abhacken
+        // insert KommaChar (decimal separator)
+        // remove trailing zeros
         while(nK > 0 && aStr.GetChar(aStr.Len() - 1) == aNullCode)
         {
             aStr.Erase(aStr.Len() - 1);
@@ -914,13 +913,13 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
         if(nK > 0)
         {
-            // na, noch Nachkommastellen da?
+            // do we still have decimal places?
             sal_Unicode cDec(rLoc.getNumDecimalSep().GetChar(0));
             aStr.Insert(cDec, nVorKomma);
         }
     }
 
-    // ggf. Trennpunkte bei jedem Tausender einfuegen
+    // add in thousands separator (if necessary)
     if( nVorKomma > 3 )
     {
         String aThoSep( rLoc.getNumThousandSep() );
@@ -952,7 +951,7 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
 {
     switch(eUnit)
     {
-        // Metrisch
+        // metrically
         case MAP_100TH_MM   :
         {
             rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
@@ -1007,7 +1006,7 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
             break;
         }
 
-        // Sonstiges
+        // others
         case MAP_PIXEL      :
         {
             rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pixel"));
@@ -1045,7 +1044,7 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
             break;
         }
 
-        // Metrisch
+        // metrically
         case FUNIT_100TH_MM:
         {
             rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
@@ -1106,7 +1105,7 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
             break;
         }
 
-        // sonstiges
+        // others
         case FUNIT_PERCENT:
         {
             rStr = UniString();

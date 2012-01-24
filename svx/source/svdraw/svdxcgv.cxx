@@ -37,14 +37,14 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx> // fuer kein OLE im SdrClipboardFormat
+#include <svx/svdoole2.hxx> // to not have OLE in SdrClipboardFormat
 #include <svx/svdorect.hxx>
-#include <svx/svdoedge.hxx> // fuer Konnektoren uebers Clipboard
-#include <svx/svdopage.hxx> // fuer Konnektoren uebers Clipboard
+#include <svx/svdoedge.hxx> // for connectors via the clipboard
+#include <svx/svdopage.hxx> // for connectors via the clipboard
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdtrans.hxx> // Fuer GetMapFactor zum umskalieren bei PasteModel
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include <svx/svdtrans.hxx> // for GetMapFactor, to rescale at PasteModel
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include "svx/xoutbmp.hxx"
 #include <vcl/metaact.hxx>
@@ -154,12 +154,12 @@ sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObj
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
     pObj->SetModel(pMod);
     pObj->SetLayer(nLayer);
-    pObj->NbcSetText(rStr); // SetText vor SetAttr, weil SetAttr sonst unwirksam!
+    pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
     pObj->SetMergedItemSet(aDefaultAttr);
 
-    SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
+    SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
@@ -195,7 +195,7 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uI
 
     pObj->SetMergedItemSet(aDefaultAttr);
 
-    SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
+    SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
@@ -235,7 +235,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
 {
     const SdrModel* pSrcMod=&rMod;
     if (pSrcMod==pMod)
-        return sal_False; // na so geht's ja nun nicht
+        return sal_False; // this can't work, right?
 
     const bool bUndo = IsUndoEnabled();
 
@@ -268,8 +268,8 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     if (bUnmark)
         UnmarkAllObj();
 
-    // evtl. umskalieren bei unterschiedlicher MapUnit am Model
-    // Dafuer erstmal die Faktoren berechnen
+    // Rescale, if the Model uses a different MapUnit.
+    // Calculate the necessary factors first.
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=pMod->GetScaleUnit();
     sal_Bool bResize=eSrcUnit!=eDstUnit;
@@ -356,8 +356,8 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
 
                 if (bMark) {
-                    // Markhandles noch nicht sofort setzen!
-                    // Das erledigt das ModelHasChanged der MarkView.
+                    // Don't already set Markhandles!
+                    // That is instead being done by ModelHasChanged in MarkView.
                     MarkObj(pNeuObj,pMarkPV,sal_False,sal_True);
                 }
 
@@ -378,22 +378,21 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         {
 #ifdef DBG_UTIL
             rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "SdrExchangeView::Paste(): Fehler beim Clonen "));
+                "SdrExchangeView::Paste(): Error when cloning "));
 
             if(nCloneErrCnt == 1)
             {
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                    "eines Zeichenobjekts."));
+                    "a drawing object."));
             }
             else
             {
-                aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
                 aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
             }
 
             aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                " Objektverbindungen werden nicht mitkopiert."));
+                " Not copying object connectors."));
 
             OSL_FAIL(aStr.getStr());
 #endif
@@ -448,7 +447,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
     sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
     if (bMark)
-    { // Obj in der ersten gefundenen PageView markieren
+    { // select object the first PageView we found
         MarkObj(pObj,pMarkPV);
     }
 }
@@ -475,7 +474,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
             const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
 
             // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
-            // rasterconverted to a bitmap
+            // raster-converted to a bitmap
             const SvtOptionsDrawinglayer aDrawinglayerOpt;
             const GraphicConversionParameters aParameters(
                 Size(),
@@ -549,8 +548,8 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarke
             aMtf.WindStart();
             aMtf.SetPrefMapMode( aMap );
 
-            // removed PrefSize extension. It is principially wrong to set a reduced size at
-            // the created MetaFile. The mentioned errors occurr at output time since the integer
+            // removed PrefSize extension. It is principally wrong to set a reduced size at
+            // the created MetaFile. The mentioned errors occur at output time since the integer
             // MapModes from VCL lead to errors. It is now corrected in the VCLRenderer for
             // primitives (and may later be done in breaking up a MetaFile to primitives)
             aMtf.SetPrefSize(aBoundSize);
@@ -616,7 +615,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             aOut.EnableOutput( sal_False );
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
-            pObj->SingleObjectPainter( aOut ); // #110094#-17
+            pObj->SingleObjectPainter( aOut );
             aMtf.Stop();
             aMtf.WindStart();
 
@@ -654,7 +653,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
     {
         SdrMark* pMark = GetSdrMarkByIndex( n );
 
-        // paint objects on control layer on top of all otherobjects
+        // paint objects on control layer on top of all other objects
         if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
             rObjVector2.push_back( pMark );
         else
@@ -668,7 +667,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
         for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
         {
             SdrMark*    pMark = rObjVector[ i ];
-            pMark->GetMarkedSdrObj()->SingleObjectPainter( rOut ); // #110094#-17
+            pMark->GetMarkedSdrObj()->SingleObjectPainter( rOut );
         }
     }
 }
@@ -677,8 +676,8 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 
 SdrModel* SdrExchangeView::GetMarkedObjModel() const
 {
-    // Wenn das sortieren der MarkList mal stoeren sollte,
-    // werde ich sie mir wohl kopieren muessen.
+    // Sorting the MarkList here might be problematic in the future, so
+    // use a copy.
     SortMarkedObjects();
     SdrModel* pNeuMod=pMod->AllocModel();
     SdrPage* pNeuPag=pNeuMod->AllocPage(sal_False);
@@ -754,22 +753,21 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         {
 #ifdef DBG_UTIL
             rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen "));
+                "SdrExchangeView::GetMarkedObjModel(): Error when cloning "));
 
             if(nCloneErrCnt == 1)
             {
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                    "eines Zeichenobjekts."));
+                    "a drawing object."));
             }
             else
             {
-                aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
                 aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
             }
 
             aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                " Objektverbindungen werden nicht mitkopiert."));
+                " Not copying object connectors."));
 
             OSL_FAIL(aStr.getStr());
 #endif
@@ -782,7 +780,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
 sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 {
-    OSL_FAIL( "SdrExchangeView::Cut: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Cut: Not supported any more." );
     return sal_False;
 }
 
@@ -790,7 +788,7 @@ sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 
 sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 {
-    OSL_FAIL( "SdrExchangeView::Yank: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Yank: Not supported any more." );
     return sal_False;
 }
 
@@ -798,7 +796,7 @@ sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 
 sal_Bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
 {
-    OSL_FAIL( "SdrExchangeView::Paste: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Paste: Not supported any more." );
     return sal_False;
 }
 

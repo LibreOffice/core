@@ -69,7 +69,7 @@ void ImpSdrObjTextLink::Closed()
 {
     if (pSdrObj )
     {
-        // pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
+        // set pLink of the object to NULL, because we are destroying the link instance now
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
         if (pData!=NULL) pData->pLink=NULL;
         pSdrObj->ReleaseTextLink();
@@ -281,7 +281,7 @@ void SdrTextObj::ImpLinkAnmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // Nicht 2x Anmelden
+    if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // don't register twice
         pData->pLink=new ImpSdrObjTextLink(this);
 #ifdef GCC
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
@@ -300,8 +300,8 @@ void SdrTextObj::ImpLinkAbmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
-        // Bei Remove wird *pLink implizit deleted
+    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // don't register twice
+        // when doing Remove, *pLink is deleted implicitly
         pLinkManager->Remove( pData->pLink );
         pData->pLink=NULL;
     }

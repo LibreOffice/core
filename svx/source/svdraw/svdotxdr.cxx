@@ -31,9 +31,9 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdorect.hxx> // fuer SetXPolyDirty in MovCreate bei SolidDragging
+#include <svx/svdorect.hxx> // for SetXPolyDirty in MovCreate at SolidDragging
 #include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdstr.hrc"   // the object's name
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -52,14 +52,14 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     Point aPnt;
     SdrHdlKind eKind=HDL_MOVE;
     switch (nHdlNum) {
-        case 0: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
-        case 1: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
-        case 2: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
-        case 3: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
-        case 4: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
-        case 5: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
-        case 6: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
-        case 7: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+        case 0: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break;
+        case 1: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break;
+        case 2: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break;
+        case 3: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break;
+        case 4: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break;
+        case 5: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break;
+        case 6: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break;
+        case 7: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break;
     }
     if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -113,13 +113,13 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=Abs(nYMul);
         nXDiv=Abs(nXDiv);
         nYDiv=Abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // Fractions zum kuerzen
-        Fraction aYFact(nYMul,nYDiv); // und zum vergleichen
+        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
+        Fraction aYFact(nYMul,nYDiv); // and for comparing
         nXMul=aXFact.GetNumerator();
         nYMul=aYFact.GetNumerator();
         nXDiv=aXFact.GetDenominator();
         nYDiv=aYFact.GetDenominator();
-        if (bEcke) { // Eckpunkthandles
+        if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
@@ -132,7 +132,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
                 if (bLft) aTmpRect.Left()=aTmpRect.Right()-nNeed;
                 if (bRgt) aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }
-        } else { // Scheitelpunkthandles
+        } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
                 long nHgt0b=aRect.Bottom()-aRect.Top();
                 long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
@@ -206,7 +206,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    aRect=aRect1; // fuer ObjName
+    aRect=aRect1; // for ObjName
     SetBoundRectDirty();
     bSnapRectDirty=sal_True;
     if (HAS_BASE(SdrRectObj,this)) {
@@ -232,7 +232,7 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             if (nWdt==1) nWdt=0;
             NbcSetMinTextFrameWidth(nWdt);
         }
-        // Textrahmen neu berechnen
+        // re-calculate text frame
         NbcAdjustTextFrameWidthAndHeight();
     }
     SetRectsDirty();

@@ -29,7 +29,7 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
-#include <svx/svdmodel.hxx> // fuer GetMaxObjSize
+#include <svx/svdmodel.hxx> // for GetMaxObjSize
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
@@ -40,14 +40,13 @@
 
 bool SdrTextObj::HasTextEdit() const
 {
-    // lt. Anweisung von MB duerfen gelinkte Textobjekte nun doch
-    // geaendert werden (kein automatisches Reload)
+    // linked text objects may be changed (no automatic reload)
     return true;
 }
 
 sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return sal_False; // Textedit laeuft evtl. schon an einer anderen View!
+    if (pEdtOutl!=NULL) return sal_False; // Textedit might already run in another View!
     pEdtOutl=&rOutl;
 
     mbInEditMode = sal_True;
@@ -79,7 +78,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
 
-    // ggf. Rahmenattribute am 1. (neuen) Absatz des Outliners setzen
+    // if necessary, set frame attributes for the first (new) paragraph of the
+    // outliner
     if( !HasTextImpl( &rOutl ) )
     {
         // Outliner has no text so we must set some
@@ -89,10 +89,10 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         if(GetStyleSheet())
             rOutl.SetStyleSheet( 0, GetStyleSheet());
 
-        // Beim setzen der harten Attribute an den ersten Absatz muss
-        // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
-        // werden, da sonst bei SetParaAttribs() auch alle in diesem
-        // Parent enthaltenen Items hart am Absatz attributiert werden.
+        // When setting the "hard" attributes for first paragraph, the Parent
+        // pOutlAttr (i. e. the template) has to be removed temporarily. Else,
+        // at SetParaAttribs(), all attributes contained in the parent become
+        // attributed hard to the paragraph.
         const SfxItemSet& rSet = GetObjectItemSet();
         SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
         aFilteredSet.Put(rSet);
@@ -142,7 +142,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // weil GetSize() ein draufaddiert
+    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
     if (pModel!=NULL) {
         Size aTmpSiz(pModel->GetMaxObjSize());
@@ -174,7 +174,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
-                // Grenzenlose Papiergroesse fuer Laufschrift
+                // ticker text uses an unlimited paper size
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
@@ -213,7 +213,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         else { pViewMin->Top()+=nYFree/2; pViewMin->Bottom()=pViewMin->Top()+aPaperMin.Height(); }
     }
 
-    // Die PaperSize soll in den meisten Faellen von selbst wachsen
+    // PaperSize should grow automatically in most cases
     if(IsVerticalWriting())
         aPaperMin.Width() = 0;
     else
@@ -223,7 +223,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aPaperMin.Width()=0;
     }
 
-    // For complete ver adjust support, set paper min height to 0, here.
+    // For complete vertical adjustment support, set paper min height to 0, here.
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
     {
         aPaperMin.Height() = 0;
@@ -242,7 +242,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
         if(HasTextImpl( &rOutl ) )
         {
-            // Damit der grauen Feldhintergrund wieder verschwindet
+            // to make the gray field background vanish again
             rOutl.UpdateFields();
 
             sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );

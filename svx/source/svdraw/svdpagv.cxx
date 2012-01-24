@@ -50,7 +50,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 
-#include <svx/svdotext.hxx> // fuer PaintOutlinerView
+#include <svx/svdotext.hxx> // for PaintOutlinerView
 #include <svx/svdoole2.hxx>
 
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
@@ -481,7 +481,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
             nMinLinPix=6;
         }
         else
-        { // z.B. 640x480
+        { // e. g. 640x480
             nMinDotPix=2;
             nMinLinPix=4;
         }
@@ -489,8 +489,8 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
         bool bHoriSolid=nx2<aMinDotDist.Width();
         bool bVertSolid=ny2<aMinDotDist.Height();
-        // Linienabstand vergroessern (mind. 4 Pixel)
-        // Vergroesserung: *2 *5 *10 *20 *50 *100 ...
+        // enlarge line offset (minimum 4 pixels)
+        // enlarge by: *2 *5 *10 *20 *50 *100 ...
         int nTgl=0;
         long nVal0=nx1;
         while (nx1<aMinLinDist.Width())
@@ -555,7 +555,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
             }
             if (!rRect.IsEmpty()) {
                 Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
-                long nX1Pix=a1PixSiz.Width();  // 1 Pixel Toleranz drauf
+                long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
                 long nY1Pix=a1PixSiz.Height();
                 if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
                 if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
@@ -590,12 +590,12 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
                     for(sal_uInt16 a=0;a<nSteps;a++)
                     {
-                        // Zeichnen
+                        // draw
                         rOut.DrawGrid(
                             Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
                             Size( nx1, ny1 ), nGridFlags );
 
-                        // Schritt machen
+                        // do a step
                         nStepOffset += nRestPerStepMul1000;
                         while(nStepOffset >= 1000)
                         {
@@ -615,12 +615,12 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
                     for(sal_uInt16 a=0;a<nSteps;a++)
                     {
-                        // Zeichnen
+                        // draw
                         rOut.DrawGrid(
                             Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
                             Size( nx1, ny1 ), nGridFlags );
 
-                        // Schritt machen
+                        // do a step
                         nStepOffset += nRestPerStepMul1000;
                         while(nStepOffset >= 1000)
                         {
@@ -677,13 +677,13 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
 {
     if(pObj)
     {
-        // Vom Markieren ausgeschlossen?
+        // excluded from selection?
         if(pObj->IsMarkProtect())
         {
             return sal_False;
         }
 
-        // only visible are markable
+        // only visible are selectable
         if( !pObj->IsVisible() )
         {
             return sal_False;
@@ -691,7 +691,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
 
         if(pObj->ISA(SdrObjGroup))
         {
-            // If object is a Group object, visibility depends evtl. on
+            // If object is a Group object, visibility may depend on
             // multiple layers. If one object is markable, Group is markable.
             SdrObjList* pObjList = ((SdrObjGroup*)pObj)->GetSubList();
 
@@ -721,7 +721,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
         }
         else
         {
-            // Der Layer muss sichtbar und darf nicht gesperrt sein
+            // the layer has to be visible and must not be locked
             SdrLayerID nL = pObj->GetLayer();
             return (aLayerVisi.IsSet(sal_uInt8(nL)) && !aLayerLock.IsSet(sal_uInt8(nL)));
         }
@@ -804,7 +804,7 @@ void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum)
         ImpInvalidateHelpLineArea(nNum);
 }
 
-// Betretene Gruppe und Liste setzen
+// set current group and list
 void SdrPageView::SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
 {
     if(pAktGroup != pNewGroup)
@@ -885,20 +885,20 @@ void SdrPageView::LeaveOneGroup()
         if(pParentGroup)
             pParentList = pParentGroup->GetSubList();
 
-        // Alles deselektieren
+        // deselect everything
         GetView().UnmarkAll();
 
-        // Zuweisungen, pAktGroup und pAktList muessen gesetzt sein
+        // allocations, pAktGroup and pAktList need to be set
         SetAktGroupAndList(pParentGroup, pParentList);
 
-        // gerade verlassene Gruppe selektieren
+        // select the group we just left
         if(pLastGroup)
             if(GetView().GetSdrPageView())
                 GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
 
         GetView().AdjustMarkHdl();
 
-        // invalidate only when view wants to visualize group entering
+        // invalidate only if view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
             InvalidateAllWin();
 
@@ -918,13 +918,13 @@ void SdrPageView::LeaveAllGroup()
 
         SdrObject* pLastGroup = GetAktGroup();
 
-        // Alles deselektieren
+        // deselect everything
         GetView().UnmarkAll();
 
-        // Zuweisungen, pAktGroup und pAktList muessen gesetzt sein
+        // allocations, pAktGroup and pAktList always need to be set
         SetAktGroupAndList(NULL, GetPage());
 
-        // Oberste letzte Gruppe finden und selektieren
+        // find and select uppermost group
         if(pLastGroup)
         {
             while(pLastGroup->GetUpGroup())
@@ -961,7 +961,7 @@ void SdrPageView::CheckAktGroup()
     SdrObject* pGrp=GetAktGroup();
     while (pGrp!=NULL &&
            (!pGrp->IsInserted() || pGrp->GetObjList()==NULL ||
-            pGrp->GetPage()==NULL || pGrp->GetModel()==NULL)) { // irgendwas daneben?
+            pGrp->GetPage()==NULL || pGrp->GetModel()==NULL)) { // anything outside of the borders?
         pGrp=pGrp->GetUpGroup();
     }
     if (pGrp!=GetAktGroup()) {

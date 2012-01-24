@@ -567,7 +567,7 @@ namespace
                             }
                         }
 
-                        // consume from portion // no += here, xub_StrLen is sal_uInt16 and the compiler will gererate a warning here
+                        // consume from portion // no += here, xub_StrLen is sal_uInt16 and the compiler will generate a warning here
                         nUsedTextLength = nUsedTextLength + nNextGlyphLen;
 
                         // consume from polygon
@@ -771,7 +771,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                     aRetvalA[a] = drawinglayer::primitive2d::Primitive2DReference(aShadowDecomposition[a]);
                 }
 
-                // evtl. add shadow outlines
+                // if necessary, add shadow outlines
                 if(rFormTextAttribute.getFormTextOutline()
                     && !rFormTextAttribute.getShadowOutline().isDefault())
                 {
@@ -794,7 +794,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                     aRetvalB[a] = drawinglayer::primitive2d::Primitive2DReference(aRegularDecomposition[a]);
                 }
 
-                // evtl. add outlines
+                // if necessary, add outlines
                 if(rFormTextAttribute.getFormTextOutline()
                     && !rFormTextAttribute.getOutline().isDefault())
                 {
@@ -809,7 +809,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
         }
     }
 
-    // cleanup outliner
+    // clean up outliner
     rOutliner.SetDrawPortionHdl(Link());
     rOutliner.Clear();
     rOutliner.setVisualizedPage(0);

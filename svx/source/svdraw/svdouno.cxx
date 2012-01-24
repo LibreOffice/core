@@ -46,8 +46,8 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // string cache
+#include "svx/svdstr.hrc"   // the object's name
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
@@ -68,7 +68,7 @@ using namespace ::sdr::contact;
 //************************************************************
 
 //************************************************************
-//   Hilfsklasse SdrControlEventListenerImpl
+//   Helper class SdrControlEventListenerImpl
 //************************************************************
 #include <com/sun/star/lang/XEventListener.hpp>
 
@@ -171,7 +171,7 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
-    // nur ein owner darf eigenstaendig erzeugen
+    // only an owner may create independently
     if (rModelName.Len())
         CreateUnoControlModel(rModelName);
 }
@@ -186,7 +186,7 @@ SdrUnoObj::SdrUnoObj(const String& rModelName,
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
-    // nur ein owner darf eigenstaendig erzeugen
+    // only an owner may create independently
     if (rModelName.Len())
         CreateUnoControlModel(rModelName,rxSFac);
 }
@@ -199,7 +199,7 @@ SdrUnoObj::~SdrUnoObj()
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
         {
-            // is the control model owned by it's environment?
+            // is the control model owned by its environment?
             uno::Reference< container::XChild > xContent(xUnoControlModel, uno::UNO_QUERY);
             if (xContent.is() && !xContent->getParent().is())
                 xComp->dispose();
@@ -362,7 +362,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 
     if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0)
     {
-        // kleine Korrekturen
+        // small correctures
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000)
         {
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
@@ -538,7 +538,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
 
     xUnoControlModel = xModel;
 
-    // control model muss servicename des controls enthalten
+    // control model has to contain service name of the control
     if (xUnoControlModel.is())
     {
         uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
