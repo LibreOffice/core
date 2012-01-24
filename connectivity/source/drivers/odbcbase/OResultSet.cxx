@@ -118,15 +118,15 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     try
     {
         m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
     }
     catch(const Exception&)
     { // we don't want our result destroy here
     }
-    SQLINTEGER nCurType = 0;
+    SQLULEN nCurType = 0;
     try
     {
-        N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
+        nCurType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
         SQLUINTEGER nValueLen = m_pStatement->getCursorProperties(nCurType,sal_False);
         if( (nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS ||
             (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)
@@ -841,9 +841,10 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    SQLLEN nMaxLen = 20;
+    const SQLLEN nMaxLen = 20;
     SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxLen);
+    assert (static_cast<size_t>(nMaxLen) >= sizeof(SQLLEN));
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
                                 0,
@@ -880,7 +881,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     if ( bPositionByBookmark )
     {
-        nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER); // SQL_LEN_BINARY_ATTR(aBookmark.getLength())
+        setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
 
         nRet = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
     }
@@ -1156,10 +1157,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
     {
         if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
         {
-            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "SQLGetStmtAttr" );
-            m_nUseBookmarks = SQL_UB_OFF;
-            SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
-            OSL_UNUSED( nRet );
+            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
         }
         if(m_nUseBookmarks == SQL_UB_OFF)
             throw SQLException();
@@ -1184,8 +1182,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
     if(m_aBookmark.getLength())
     {
-        SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,m_aBookmark.getArray(),SQL_IS_POINTER); // SQL_LEN_BINARY_ATTR(aBookmark.getLength())
-        OSL_UNUSED( nReturn );
+        SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(m_aBookmark.getArray()));
 
         if ( SQL_INVALID_HANDLE != nReturn && SQL_ERROR != nReturn )
         {
@@ -1211,7 +1208,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
 
     m_nLastColumnPos = 0;
     bookmark >>= m_aBookmark;
-    SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,m_aBookmark.getArray(),SQL_IS_POINTER);
+    SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(m_aBookmark.getArray()));
     OSL_UNUSED( nReturn );
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,rows);
@@ -1266,11 +1263,23 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
     return aRet;
 }
 //------------------------------------------------------------------------------
+template < typename T, SQLINTEGER BufferLength > T OResultSet::getStmtOption (SQLINTEGER fOption, T dflt) const
+{
+    T result (dflt);
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+    N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, NULL);
+    return result;
+}
+template < typename T, SQLINTEGER BufferLength > SQLRETURN OResultSet::setStmtOption (SQLINTEGER fOption, T value) const
+{
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+    SQLPOINTER sv = reinterpret_cast<SQLPOINTER>(value);
+    return N3SQLSetStmtAttr(m_aStatementHandle, fOption, sv, BufferLength);
+}
+//------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetConcurrency() const
 {
-    sal_uInt32 nValue = 0;
-    SQLRETURN nReturn = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
-    OSL_UNUSED( nReturn );
+    sal_uInt32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CONCURRENCY);
     if(SQL_CONCUR_READ_ONLY == nValue)
         nValue = ResultSetConcurrency::READ_ONLY;
     else
@@ -1281,16 +1290,14 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetType() const
 {
-    sal_uInt32 nValue = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SENSITIVITY,&nValue,SQL_IS_UINTEGER,0);
+    sal_uInt32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_SENSITIVITY);
     if(SQL_SENSITIVE == nValue)
         nValue = ResultSetType::SCROLL_SENSITIVE;
     else if(SQL_INSENSITIVE == nValue)
         nValue = ResultSetType::SCROLL_INSENSITIVE;
     else
     {
-        SQLINTEGER nCurType = 0;
-        N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
+        SQLULEN nCurType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
         if(SQL_CURSOR_KEYSET_DRIVEN == nCurType)
             nValue = ResultSetType::SCROLL_SENSITIVE;
         else if(SQL_CURSOR_STATIC  == nCurType)
@@ -1310,9 +1317,7 @@ sal_Int32 OResultSet::getFetchDirection() const
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getFetchSize() const
 {
-    sal_uInt32 nValue = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,&nValue,SQL_IS_UINTEGER,0);
-    return nValue;
+    return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE);
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString OResultSet::getCursorName() const
@@ -1328,13 +1333,12 @@ sal_Bool  OResultSet::isBookmarkable() const
     if(!m_aConnectionHandle)
         return sal_False;
 
-    sal_uInt32 nValue = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
+    const SQLULEN nCursorType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
 
     sal_Int32 nAttr = 0;
     try
     {
-        switch(nValue)
+        switch(nCursorType)
         {
         case SQL_CURSOR_FORWARD_ONLY:
             return sal_False;
@@ -1356,9 +1360,7 @@ sal_Bool  OResultSet::isBookmarkable() const
 
     if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
     {
-        m_nUseBookmarks = SQL_UB_OFF;
-        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
-        OSL_UNUSED( nRet );
+        m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
     }
 
     return (m_nUseBookmarks != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
@@ -1369,7 +1371,7 @@ void OResultSet::setFetchDirection(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch direction!");
     if ( _par0 > 0 )
     {
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
+        setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE, _par0);
     }
 }
 //------------------------------------------------------------------------------
@@ -1378,11 +1380,11 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
     if ( _par0 > 0 )
     {
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
+        setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
         delete [] m_pRowStatusArray;
 
         m_pRowStatusArray = new SQLUSMALLINT[_par0];
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
     }
 }
 // -------------------------------------------------------------------------
@@ -1656,10 +1658,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
         } // switch(_eCursorPosition)
         if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
         {
-            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "SQLGetStmtAttr" );
-            m_nUseBookmarks = SQL_UB_OFF;
-            SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
-            OSL_UNUSED( nRet );
+            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
         }
         if ( m_nUseBookmarks != SQL_UB_OFF )
         {
@@ -1679,10 +1678,8 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 // -----------------------------------------------------------------------------
 sal_Int32 OResultSet::getDriverPos() const
 {
-    sal_Int32 nValue = 0;
-    SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0);
-    OSL_UNUSED( nRet );
-    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = Ret = %d, RowNum = %d, RowPos = %d",nRet,nValue , m_nRowPos);
+    sal_Int32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_NUMBER);
+    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = RowNum = %d, RowPos = %d", nValue, m_nRowPos);
     return nValue ? nValue : m_nRowPos;
 }
 // -----------------------------------------------------------------------------
