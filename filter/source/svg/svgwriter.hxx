@@ -60,12 +60,6 @@
 
 // -----------------------------------------------------------------------------
 
-#define _SVG_WRITE_EXTENTS      1
-#undef _SVG_WRITE_TEXT_DESC
-#undef _SVG_USE_CONFIG
-
-// -----------------------------------------------------------------------------
-
 #define NMSP_CPPU               cppu
 #define NMSP_UNO                com::sun::star::uno
 #define NMSP_LANG               com::sun::star::lang

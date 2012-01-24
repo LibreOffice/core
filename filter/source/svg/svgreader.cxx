@@ -1771,7 +1771,7 @@ static void writeShapes( StatePool&                                        rStat
     visitElements(aVisitor, xElem);
 }
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 2
 struct DumpingVisitor
 {
     void operator()( const uno::Reference<xml::dom::XElement>& xElem )
@@ -1986,7 +1986,7 @@ sal_Bool SVGReader::parseAndConvert()
     annotateStyles(aStatePool,aStateMap,aInitialState,
                    xDocElem,m_xDocumentHandler);
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 2
     dumpTree(xDocElem);
 #endif
 
@@ -2767,7 +2767,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
                                      uno::Reference<xml::sax::XDocumentHandler>());
     svgi::visitElements(aVisitor, xDocElem);
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 2
     dumpTree(xDocElem);
 #endif
 

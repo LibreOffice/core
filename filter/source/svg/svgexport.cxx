@@ -38,7 +38,6 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 #include <svtools/miscopt.hxx>
-#include <svtools/FilterConfigItem.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
@@ -482,18 +481,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     // if no filter data is given use stored/prepared ones
     if( !maFilterData.getLength() )
     {
-#ifdef _SVG_USE_CONFIG
-        FilterConfigItem aCfgItem( String( RTL_CONSTASCII_USTRINGPARAM( SVG_EXPORTFILTER_CONFIGPATH ) ) );
-
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_TINYPROFILE ) ), sal_True );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_EMBEDFONTS ) ), sal_True );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), sal_False );
-        aCfgItem.ReadString( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), B2UCONST( "xlist" ) );
-        aCfgItem.ReadString( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_OPACITY ) ), sal_True );
-        aCfgItem.ReadString( String( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_GRADIENT ) ), sal_True );
-
-        maFilterData = aCfgItem.GetFilterData();
-#else
         maFilterData.realloc( 6 );
 
         maFilterData[ 0 ].Name = B2UCONST( SVG_PROP_TINYPROFILE );
@@ -526,7 +513,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         // Tiny Gradient
         maFilterData[ 5 ].Name = B2UCONST( SVG_PROP_GRADIENT );
         maFilterData[ 5 ].Value <<= (sal_Bool) sal_False;
-#endif
     }
 
     if( xOStm.is() && xServiceFactory.is() )
@@ -712,20 +698,6 @@ sal_Bool SVGFilter::implExportDocument()
 
     if( mpSVGExport->IsUseTinyProfile() )
          mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "baseProfile", B2UCONST( "tiny" ) );
-
-// enabling _SVG_WRITE_EXTENTS means that the slide size is not adapted
-// to the size of the browser window, moreover the slide is top left aligned
-// instead of centered.
-#undef _SVG_WRITE_EXTENTS
-#ifdef _SVG_WRITE_EXTENTS
-    aAttr = OUString::valueOf( nDocWidth * 0.01 );
-    aAttr += B2UCONST( "mm" );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
-
-    aAttr = OUString::valueOf( nDocHeight * 0.01 );
-    aAttr += B2UCONST( "mm" );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
-#endif
 
     aAttr = B2UCONST( "0 0 " );
     aAttr += OUString::valueOf( nDocWidth );
