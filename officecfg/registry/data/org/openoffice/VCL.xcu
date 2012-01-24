@@ -856,26 +856,6 @@
         <value>Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
-    <node oor:name="bn-IN" oor:op="replace">
-      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
-      </prop>
-      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Arial Unicode MS</value>
-      </prop>
-      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Arial Unicode MS</value>
-      </prop>
-      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Arial Unicode MS</value>
-      </prop>
-      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Arial Unicode MS</value>
-      </prop>
-      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Bengali;Vrinda;Lucidasans;Lucida Sans;Arial Unicode MS</value>
-      </prop>
-    </node>
     <node oor:name="hi" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
