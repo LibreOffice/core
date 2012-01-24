@@ -38,6 +38,7 @@
 
 #include <osl/security.h>
 #include <osl/diagnose.h>
+#include <rtl/bootstrap.h>
 
 #include "osl/thread.h"
 #include "osl/file.h"
@@ -105,6 +106,7 @@ static oslSecurityImpl * growSecurityImpl(
             n = SIZE_MAX;
         }
         p = realloc(impl, n);
+        memset (p, 0, n);
     }
     if (p == NULL) {
         free(impl);
@@ -301,13 +303,43 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     return bRet;
 }
 
-
 static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
 
     if (pSecImpl == NULL)
         return sal_False;
+
+#ifdef ANDROID
+{
+    sal_Bool bRet = sal_False;
+    rtl_uString *pName = 0, *pValue = 0;
+
+    rtl_uString_newFromAscii(&pName, "HOME");
+
+    if (rtl_bootstrap_get(pName, &pValue, NULL))
+    {
+        rtl_String *pStrValue = 0;
+        if (pValue && pValue->length > 0)
+        {
+            rtl_uString2String(&pStrValue, pValue->buffer,
+                               pValue->length, RTL_TEXTENCODING_UTF8,
+                               OUSTRING_TO_OSTRING_CVTFLAGS);
+            if (pStrValue && pStrValue->length > 0)
+            {
+                sal_Int32 nCopy = SAL_MIN ((sal_Int32)(nMax-1), pStrValue->length);
+                strncpy (pszDirectory, pStrValue->buffer, nCopy);
+                pszDirectory[nCopy] = '\0';
+                bRet = (size_t)pStrValue->length < nMax;
+            }
+            rtl_string_release(pStrValue);
+        }
+        rtl_uString_release(pName);
+    }
+    if (bRet)
+        return bRet;
+}
+#endif
 
     /* if current user, check also environment for HOME */
     if (getuid() == pSecImpl->m_pPasswd.pw_uid)
