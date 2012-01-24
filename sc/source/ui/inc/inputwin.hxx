@@ -204,6 +204,7 @@ private:
     ScInputBarGroup& mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
+    bool mbInvalidate;
 };
 
 class ScInputBarGroup : public ScTextWndBase
