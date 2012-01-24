@@ -144,7 +144,6 @@ my_components = \
     slideshow \
     sm \
     smd \
-    solver \
     spl \
     srtrs1 \
     stringresource \
@@ -189,6 +188,10 @@ my_components += component/vcl/vcl.unx
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
+.END
+
+.IF "$(ENABLE_COINMP)"=="YES"
+my_components += solver
 .END
 
 .IF "$(DISABLE_SAXON)" == ""

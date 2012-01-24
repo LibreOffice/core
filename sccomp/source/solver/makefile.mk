@@ -36,6 +36,13 @@ LIBTARGET=NO
 
 # --- Files -------------------------------------
 
+.IF "$(ENABLE_COINMP)"=="NO"
+
+dummy:
+    @echo "Nothing to build (CoinMP is disabled)"
+
+.ELSE
+
 SLOFILES=$(SLO)$/solver.obj
 
 SRS1NAME=$(TARGET)
@@ -80,3 +87,4 @@ $(MISC)/solver.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt solver.component
 
+.ENDIF

@@ -61,8 +61,8 @@ File gid_File_Lib_CbcSolver
     PACKED_LIB_FILE_BODY;
 End
 #else
-# On Windows only the CoinMP library is built and used.
-# Version numbering is not used either.
+// On Windows only the CoinMP library is built and used.
+// Version numbering is not used either.
 File gid_File_Lib_CoinMP
     Name = SPECIAL_NAME(CoinMP);
     PACKED_LIB_FILE_BODY;
@@ -93,7 +93,9 @@ STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
 
+#ifdef ENABLE_COINMP
 STD_RES_FILE( gid_File_Res_Solver, solver)
+#endif
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
