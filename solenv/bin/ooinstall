@@ -50,7 +50,7 @@ for $arg (@ARGV) {
 		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
 		if (!$do_link) {
 			my $destdir = Cwd::realpath( $ENV{DESTDIR} );
-			$path =~ s|$destdir||;
+#			$path =~ s|$destdir||;
 	    }
     }
 }
