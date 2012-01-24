@@ -274,7 +274,7 @@ void ContentProvider::init()
                        "org.openoffice.Office.Common" ) );
 
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
-    if( ! instPath.getLength() )
+    if( instPath.isEmpty() )
         // try to determine path from default
         instPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$(instpath)/help" ));
     // replace anything like $(instpath);

@@ -243,7 +243,7 @@ static bool impl_getZipFile(
     for ( int i = 0; i < rImagesZipPaths.getLength(); ++i )
     {
         rtl::OUString aFileName = pPathArray[ i ];
-        if ( aFileName.getLength() )
+        if ( !aFileName.isEmpty() )
         {
             if ( 1 + aFileName.lastIndexOf( '/' ) != aFileName.getLength() )
             {
@@ -292,14 +292,14 @@ rtl::OString Databases::getImagesZipFileURL()
             bChanged = true;
         }
 
-        if ( !m_aImagesZipFileURL.getLength() || bChanged )
+        if ( m_aImagesZipFileURL.isEmpty() || bChanged )
         {
             rtl::OUString aImageZip, aSymbolsStyleName;
             aResult = xAccess->getByHierarchicalName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc/SymbolStyle")));
             aResult >>= aSymbolsStyleName;
 
             bool bFound = false;
-            if ( aSymbolsStyleName.getLength() != 0 )
+            if ( !aSymbolsStyleName.isEmpty() )
             {
                 rtl::OUString aZipName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "images_" ));
                 aZipName += aSymbolsStyleName;
@@ -594,7 +594,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
                             const rtl::OUString& Language, bool helpText,
                             const rtl::OUString* pExtensionPath )
 {
-    if( ! Database.getLength() || ! Language.getLength() )
+    if( Database.isEmpty() || Language.isEmpty() )
         return 0;
 
     osl::MutexGuard aGuard( m_aMutex );
@@ -668,7 +668,7 @@ Databases::getCollator( const rtl::OUString& Language,
                 m_xContext ), UNO_QUERY );
         rtl::OUString langStr = processLang(Language);
         rtl::OUString countryStr = country(Language);
-        if( !countryStr.getLength() )
+        if( countryStr.isEmpty() )
         {
             if( langStr.compareToAscii("de") == 0 )
                 countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"));
@@ -914,7 +914,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         KeyDataBaseFileIterator aDbFileIt( m_xContext, *this, Database, Language );
         rtl::OUString fileURL;
         bool bExtension = false;
-        while( (fileURL = aDbFileIt.nextDbFile( bExtension )).getLength() > 0 )
+        while( !(fileURL = aDbFileIt.nextDbFile( bExtension )).isEmpty() )
         {
             Db table;
 
@@ -1024,8 +1024,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
-    if( ! jar.getLength() ||
-        ! Language.getLength() )
+    if( jar.isEmpty() || Language.isEmpty() )
     {
         return Reference< XHierarchicalNameAccess >( 0 );
     }
@@ -1114,8 +1113,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
       rtl::OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
-    if( ! jar.getLength() ||
-        ! Language.getLength() )
+    if( jar.isEmpty() || Language.isEmpty() )
     {
         return xNA;
     }
@@ -1136,7 +1134,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
                     aIdentifierInPath = path.copy( 0, nFindSlash );
 
                 beans::Optional<rtl::OUString> aIdentifierOptional = xParentPackageBundle->getIdentifier();
-                if( aIdentifierInPath.getLength() && aIdentifierOptional.IsPresent )
+                if( !aIdentifierInPath.isEmpty() && aIdentifierOptional.IsPresent )
                 {
                     rtl::OUString aUnencodedIdentifier = aIdentifierOptional.Value;
                     rtl::OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier,
@@ -1616,7 +1614,7 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
     const rtl::OUString& rFileExtension, Reference< deployment::XPackage > xPackage )
 {
     // No extension -> search for pure language folder
-    bool bLangFolderOnly = (rFileExtension.getLength() == 0);
+    bool bLangFolderOnly = rFileExtension.isEmpty();
 
     rtl::OUString aFile;
     rtl::OUString aLanguage = m_aLanguage;
@@ -1769,7 +1767,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
     }
 
     Db* pRetDb = NULL;
-    if (optRegData.IsPresent && optRegData.Value.getLength() > 0)
+    if (optRegData.IsPresent && !optRegData.Value.isEmpty())
     {
         rtl::OUString aRegDataUrl(optRegData.Value);
         aRegDataUrl += aSlash;
@@ -1817,7 +1815,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 {
     rtl::OUString aRetFile;
 
-    while( !aRetFile.getLength() && m_eState != END_REACHED )
+    while( aRetFile.isEmpty() && m_eState != END_REACHED )
     {
         switch( m_eState )
         {
@@ -2021,7 +2019,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
 {
     rtl::OUString aIndexFolder;
 
-    while( !aIndexFolder.getLength() && m_eState != END_REACHED )
+    while( aIndexFolder.isEmpty() && m_eState != END_REACHED )
     {
         switch( m_eState )
         {

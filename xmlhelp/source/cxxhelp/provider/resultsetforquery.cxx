@@ -103,7 +103,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     {
         sal_Int32 idx;
         rtl::OUString query = m_aURLParameter.get_query();
-        while( query.getLength() )
+        while( !query.isEmpty() )
         {
             idx = query.indexOf( sal_Unicode( ' ' ) );
             if( idx == -1 )
@@ -143,7 +143,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         vector< vector<HitItem>* > aIndexFolderResultVectorVector;
 
         bool bTemporary;
-        while( (idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).getLength() > 0 )
+        while( !(idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).isEmpty() )
         {
             vector<HitItem> aIndexFolderResultVector;
 

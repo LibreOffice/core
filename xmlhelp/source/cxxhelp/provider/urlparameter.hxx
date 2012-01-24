@@ -127,12 +127,12 @@ namespace chelp {
             throw( com::sun::star::ucb::IllegalIdentifierException );
 
         bool isPicture() const { return m_aModule.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("picture")); }
-        bool isActive() const { return m_aActive.getLength() > 0 && m_aActive.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")); }
-        bool isQuery() const { return m_aId.getLength() == 0 && m_aQuery.getLength() != 0; }
+        bool isActive() const { return !m_aActive.isEmpty() && m_aActive.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")); }
+        bool isQuery() const { return m_aId.isEmpty() && !m_aQuery.isEmpty(); }
         bool isEntryForModule() const { return m_aId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("start")) || m_bStart; }
-        bool isFile() const { return m_aId.getLength() != 0; }
-        bool isModule() const { return m_aId.getLength() == 0 && m_aModule.getLength() != 0; }
-        bool isRoot() const { return m_aModule.getLength() == 0; }
+        bool isFile() const { return !m_aId.isEmpty(); }
+        bool isModule() const { return m_aId.isEmpty() && !m_aModule.isEmpty(); }
+        bool isRoot() const { return m_aModule.isEmpty(); }
         bool isErrorDocument();
 
         rtl::OUString get_url() const { return m_aURL; }
@@ -157,7 +157,7 @@ namespace chelp {
 
         rtl::OUString get_dbpar() const
         {
-            if( m_aDbPar.getLength() )
+            if( !m_aDbPar.isEmpty() )
                 return m_aDbPar;
             else
                 return m_aModule;

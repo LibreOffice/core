@@ -135,7 +135,7 @@ namespace treeview {
 
         rtl::OUString getTargetURL()
         {
-            if( ! targetURL.getLength() )
+            if( targetURL.isEmpty() )
             {
                 sal_Int32 len;
                 for ( const TVDom* p = this;; p = p->parent )
@@ -307,7 +307,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
     if( tvDom->isLeaf() )
     {
         TargetURL = ( tvDom->getTargetURL() + configData.appendix );
-        if( tvDom->anchor.getLength() )
+        if( !tvDom->anchor.isEmpty() )
             TargetURL += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#" )) +
                            tvDom->anchor );
     }
@@ -504,8 +504,7 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 {
     ConfigData configData = init( xMSF );
 
-    if( ! configData.locale.getLength()  ||
-        ! configData.system.getLength() )
+    if( configData.locale.isEmpty() || configData.system.isEmpty() )
         return;
 
     sal_uInt64  ret,len = 0;
@@ -665,7 +664,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     rtl::OUString system( getKey( xHierAccess,"Help/System" ) );
     sal_Bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
-    if( ! instPath.getLength() )
+    if( instPath.isEmpty() )
       // try to determine path from default
       instPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$(instpath)/help" ));
 
@@ -742,7 +741,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     TreeFileIterator aTreeIt( locale );
     rtl::OUString aTreeFile;
     sal_Int32 nFileSize;
-    while( (aTreeFile = aTreeIt.nextTreeFile( nFileSize ) ).getLength() > 0 )
+    while( !(aTreeFile = aTreeIt.nextTreeFile( nFileSize ) ).isEmpty() )
     {
         configData.vFileLen.push_back( nFileSize );
         configData.vFileURL.push_back( aTreeFile );
@@ -1183,7 +1182,7 @@ rtl::OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
 {
     rtl::OUString aRetFile;
 
-    while( !aRetFile.getLength() && m_eState != END_REACHED )
+    while( aRetFile.isEmpty() && m_eState != END_REACHED )
     {
         switch( m_eState )
         {

@@ -187,7 +187,7 @@ rtl::OUString URLParameter::get_title()
 
 rtl::OUString URLParameter::get_language()
 {
-    if( m_aLanguage.getLength() == 0 )
+    if( m_aLanguage.isEmpty() )
         return m_aDefaultLanguage;
 
     return m_aLanguage;
@@ -196,7 +196,7 @@ rtl::OUString URLParameter::get_language()
 
 rtl::OUString URLParameter::get_program()
 {
-    if( ! m_aProgram.getLength() )
+    if( m_aProgram.isEmpty() )
     {
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
@@ -341,7 +341,7 @@ void URLParameter::readBerkeley()
         m_pDatabases->replaceName( m_aTitle );
         m_aPath  = converter.getFile();
         m_aJar   = converter.getDatabase();
-        if( aExtensionPath.getLength() > 0 )
+        if( !aExtensionPath.isEmpty() )
         {
             rtl::OUStringBuffer aExtendedJarStrBuf;
             aExtendedJarStrBuf.append( aQuestionMark );
@@ -550,8 +550,8 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
     if( ! scheme() ||
         ! name( module() ) ||
         ! query() ||
-        ! m_aLanguage.getLength() ||
-        ! m_aSystem.getLength() )
+        m_aLanguage.isEmpty() ||
+        m_aSystem.isEmpty() )
         throw com::sun::star::ucb::IllegalIdentifierException();
 }
 
@@ -635,7 +635,7 @@ bool URLParameter::query()
 {
     rtl::OUString query_;
 
-    if( ! m_aExpr.getLength() )
+    if( m_aExpr.isEmpty() )
         return true;
     else if( (m_aExpr.getStr())[0] == sal_Unicode( '?' ) )
         query_ = m_aExpr.copy( 1 ).trim();
@@ -647,7 +647,7 @@ bool URLParameter::query()
     sal_Int32 delimIdx,equalIdx;
     rtl::OUString parameter,value;
 
-    while( query_.getLength() != 0 )
+    while( !query_.isEmpty() )
     {
         delimIdx = query_.indexOf( sal_Unicode( '&' ) );
         equalIdx = query_.indexOf( sal_Unicode( '=' ) );
@@ -677,7 +677,7 @@ bool URLParameter::query()
             m_aDbPar = value;
         else if( parameter.compareToAscii( "Query" ) == 0 )
         {
-            if( ! m_aQuery.getLength() )
+            if( m_aQuery.isEmpty() )
                 m_aQuery = value;
             else
                 m_aQuery += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) + value );
@@ -756,7 +756,7 @@ static void *
 zipOpen(SAL_UNUSED_PARAMETER const char *) {
     rtl::OUString language,jar,path;
 
-    if( ugblData->m_pInitial->get_eid().getLength() )
+    if( !ugblData->m_pInitial->get_eid().isEmpty() )
         return (void*)(new Reference< XHierarchicalNameAccess >);
     else
     {
@@ -839,7 +839,7 @@ helpRead(void * context, char * buffer, int len) {
 
 static int
 zipRead(void * context, char * buffer, int len) {
-    if( ugblData->m_pInitial->get_eid().getLength() )
+    if( !ugblData->m_pInitial->get_eid().isEmpty() )
     {
         ugblData->m_pDatabases->popupDocument( ugblData->m_pInitial,&buffer,&len);
         return len;
@@ -946,7 +946,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[last++] = "hp";
         parString[last++] = rtl::OString('\'') + urlParam->getByName( "HelpPrefix" ) + rtl::OString('\'');
 
-        if( parString[last-1].getLength() )
+        if( !parString[last-1].isEmpty() )
         {
             parString[last++] = "sm";
             parString[last++] = "'vnd.sun.star.help%3A%2F%2F'";
@@ -992,7 +992,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             // Path not yet specified, search directly
             Reference< XHierarchicalNameAccess > xNA = pDatabases->findJarFileForPath
                 ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath, &aExtensionRegistryPath );
-            if( xNA.is() && aExtensionPath.getLength() )
+            if( xNA.is() && !aExtensionPath.isEmpty() )
                 bAddExtensionPath = true;
         }
 

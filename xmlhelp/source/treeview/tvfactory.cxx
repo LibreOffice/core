@@ -188,7 +188,7 @@ TVFactory::createInstanceWithArguments(
         break;
     }
 
-    if( hierview.getLength() )
+    if( !hierview.isEmpty() )
     {
         Reference< XHierarchicalNameAccess > xhieraccess( m_xHDS,UNO_QUERY );
         Any aAny = xhieraccess->getByHierarchicalName( hierview );

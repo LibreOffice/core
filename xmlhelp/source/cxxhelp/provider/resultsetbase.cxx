@@ -410,7 +410,7 @@ ResultSetBase::queryContentIdentifier(
     if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
     {
         rtl::OUString url = queryContentIdentifierString();
-        if( ! m_aIdents[m_nRow].is() && url.getLength() )
+        if( ! m_aIdents[m_nRow].is() && !url.isEmpty() )
             m_aIdents[m_nRow] = uno::Reference< ucb::XContentIdentifier >(
                 new ::ucbhelper::ContentIdentifier( m_xMSF,url ) );
         return m_aIdents[m_nRow];
