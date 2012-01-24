@@ -84,21 +84,7 @@ copy-stuff: buildrcs
 # First the most important one, liblo-bootstrap.so
 	$(call COPY,$(OUTDIR)/lib/liblo-bootstrap.so)
 #
-# Then the cppunittester "program". As all "program"
-# files we build for Android actually is a shared object.
-	$(call COPY,$(OUTDIR)/bin/cppunit/cppunittester,libcppunittester.so)
-#
-# The cppunit library
-#
-	$(call COPY,$(OUTDIR)/lib/libcppunit-1.12.so)
-#
-# The tests we run here
-#
-	for F in sc_ucalc sc_filters_test; do \
-	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
-	done
-#
-# Libs and UNO components that the tests need.
+# Libs and UNO components that we need.
 #
 	for F in $(strip \
 		  basebmplo \
