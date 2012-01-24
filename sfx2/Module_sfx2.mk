@@ -41,20 +41,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
     JunitTest_sfx2_unoapi \
 ))
 
-ifeq ($(OS),FREEBSD)
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Module_add_targets,sfx2,\
     Library_qstart \
 ))
-endif
-endif
-
-ifeq ($(OS),LINUX)
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Module_add_targets,sfx2,\
-    Library_qstart \
-))
-endif
 endif
 
 #todo: source/dialog BUILD_VER_STRING
