@@ -38,11 +38,4 @@ StmStatus::AsArray()
     return 0;
 }
 
-StmBoundsStatus *
-StmStatus::AsBounds()
-{
-    return 0;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

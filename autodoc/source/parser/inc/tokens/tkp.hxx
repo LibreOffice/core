@@ -42,9 +42,6 @@ class TkpContext;
     a text.
 
     Start() starts to parse the text from the given i_rSource.
-    GetNextToken() returns a Token on the heap as long as there are
-    still characters in the text left. This can be checked by
-    HasMore().
 
     The algorithms for parsing tokens from the text are an issue of
     the derived classes.
@@ -64,11 +61,6 @@ class TokenParser
     virtual void        Start(
                             CharacterSource &
                                             i_rSource );
-
-    /** @short  Gets the next identifiable token out of the
-        source code.
-    */
-    void                GetNextToken();
 
     /// @return true, if there are more tokens to parse.
     bool                HasMore() const         { return bHasMore; }

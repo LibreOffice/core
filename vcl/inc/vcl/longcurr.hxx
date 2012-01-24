@@ -57,8 +57,6 @@ protected:
     sal_Bool                    mbThousandSep;
 
                             LongCurrencyFormatter();
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-
 public:
                             ~LongCurrencyFormatter();
 

@@ -162,7 +162,6 @@ private:
                                              const Color* pMaskColor ) const;
     SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
     SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const ::rtl::OUString& rImageName ) const;
-    SAL_DLLPRIVATE void    ImplMakeUnique();
 };
 
 #endif  // _SV_IMAGE_HXX

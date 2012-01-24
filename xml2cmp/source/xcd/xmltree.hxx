@@ -134,9 +134,6 @@ class SupportedService : public MultipleTextElement
 {
   public:
                         SupportedService();
-
-    virtual void        Insert2Index(
-                            Index &             o_rIndex ) const;
 };
 
 

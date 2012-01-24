@@ -164,36 +164,12 @@ sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow ) const
 }
 
 // -----------------------------------------------------------------------------
-
-void TableLayouter::setRowHeight( sal_Int32 nRow, sal_Int32 nHeight )
-{
-    if( isValidRow(nRow) )
-    {
-        maRows[nRow].mnSize = nHeight;
-    }
-    else
-    {
-        OSL_FAIL( "TableLayouter::setRowHeight(), row out of range!" );
-    }
-}
-
-// -----------------------------------------------------------------------------
 sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
 {
     if( isValidColumn(nColumn) )
         return maColumns[nColumn].mnSize;
     else
         return 0;
-}
-
-// -----------------------------------------------------------------------------
-
-void TableLayouter::setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth )
-{
-    if( isValidColumn(nColumn) )
-        maColumns[nColumn].mnSize = nWidth;
-    else
-        OSL_FAIL( "TableLayouter::setColumnWidth(), column out of range!" );
 }
 
 // -----------------------------------------------------------------------------

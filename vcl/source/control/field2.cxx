@@ -824,34 +824,6 @@ PatternFormatter::PatternFormatter()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::ImplLoadRes( const ResId& rResId )
-{
-    rtl::OString aEditMask;
-    XubString   aLiteralMask;
-    ResMgr*     pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        sal_uLong       nMask = pMgr->ReadLong();
-
-        if ( PATTERNFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat( (sal_Bool)pMgr->ReadShort() );
-
-        if ( PATTERNFORMATTER_EDITMASK & nMask )
-        {
-            aEditMask = rtl::OUStringToOString(pMgr->ReadString(),
-                RTL_TEXTENCODING_ASCII_US);
-        }
-
-        if ( PATTERNFORMATTER_LITTERALMASK & nMask )
-            aLiteralMask = pMgr->ReadString();
-
-        if ( (PATTERNFORMATTER_EDITMASK | PATTERNFORMATTER_LITTERALMASK) & nMask )
-            ImplSetMask( aEditMask, aLiteralMask );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 PatternFormatter::~PatternFormatter()
 {
 }

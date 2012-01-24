@@ -31,16 +31,6 @@
 
 // NOT FULLY DECLARED SERVICES
 
-
-
-TkpNullContext G_aNullContext;
-
-TkpNullContext &
-TkpContext::Null_()
-{
-    return G_aNullContext;
-}
-
 TkpNullContext::~TkpNullContext()
 {
 }

@@ -38,7 +38,6 @@ $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 	xml2cmp/source/support/syshelp \
 	xml2cmp/source/support/badcast \
 	xml2cmp/source/xcd/cr_html \
-	xml2cmp/source/xcd/cr_index \
 	xml2cmp/source/xcd/cr_metho \
 	xml2cmp/source/xcd/filebuff \
 	xml2cmp/source/xcd/parse \

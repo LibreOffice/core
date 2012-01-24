@@ -47,8 +47,6 @@ PRJINC=$(PRJ)$/source
 OBJFILES= \
     $(OBJ)$/stmstarr.obj	\
     $(OBJ)$/stmstate.obj	\
-    $(OBJ)$/stmstfin.obj	\
-    $(OBJ)$/tkpstama.obj	\
     $(OBJ)$/tkp.obj			\
     $(OBJ)$/tkpcontx.obj	\
     $(OBJ)$/tokdeal.obj		

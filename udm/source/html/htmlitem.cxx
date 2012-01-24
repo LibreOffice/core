@@ -79,12 +79,6 @@ TableCell::LineBreakAfterEndTag() const
      return true;
 }
 
-TableCell &
-TableRow::AddCell( DYN Item * let_dpItem )
-{
-    return PushElem( *this, new TableCell, let_dpItem );
-}
-
 bool
 TableRow::LineBreakAfterBeginTag() const
 {
@@ -142,22 +136,6 @@ DefListDefinition::LineBreakAfterEndTag() const
      return true;
 }
 
-
-
-
-
-DefListTerm &
-DefList::AddTerm( DYN csi::xml::Item* let_dpItem )
-{
-    return PushElem( *this, new DefListTerm, let_dpItem );
-}
-
-DefListDefinition &
-DefList::AddDefinition( DYN csi::xml::Item* let_dpItem )
-{
-    return PushElem( *this, new DefListDefinition, let_dpItem );
-}
-
 bool
 DefList::LineBreakAfterBeginTag() const
 {
@@ -180,13 +158,6 @@ bool
 NumeratedList::LineBreakAfterBeginTag() const
 {
      return true;
-}
-
-
-ListItem &
-SimpleList::AddItem( DYN csi::xml::Item* let_dpItem )
-{
-    return PushElem( *this, new ListItem, let_dpItem );
 }
 
 bool

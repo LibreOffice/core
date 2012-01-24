@@ -138,25 +138,6 @@ class ImplementsTag : public AtTag
     AtTag *         pNext;
 };
 
-class KeywordTag : public AtTag
-{
-  public:
-                        KeywordTag();
-
-    virtual bool        Add_SpecialMeaningToken(
-                            const char *        i_sText,
-                            intt                i_nNr );
-    virtual const char *
-                        Title() const;
-    virtual UINT8       NrOfSpecialMeaningTokens() const;
-    virtual AtTag *     GetFollower();
-
-  private:
-    virtual DocuText *  Text();
-
-    StringVector        sKeys;
-};
-
 class ParameterTag : public AtTag
 {
   public:
@@ -182,30 +163,6 @@ class ParameterTag : public AtTag
     String              sValidRange;
     DocuText            aText;
     AtTag *             pNext;
-};
-
-class SeeTag : public AtTag
-{
-  public:
-                        SeeTag();
-
-    virtual bool        Add_SpecialMeaningToken(
-                            const char *        i_sText,
-                            intt                i_nNr );
-    virtual const char *
-                        Title() const;
-    virtual UINT8       NrOfSpecialMeaningTokens() const;
-    virtual AtTag *     GetFollower();
-
-    const std::vector< QualifiedName > &
-                        References() const      { return sReferences; }
-  private:
-    virtual void        do_StoreAt(
-                            DocuDisplay &       o_rDisplay ) const;
-    virtual DocuText *  Text();
-
-    std::vector< QualifiedName >
-                        sReferences;
 };
 
 class TemplateTag : public AtTag
@@ -234,54 +191,6 @@ class TemplateTag : public AtTag
     DocuText            aText;
     AtTag *             pNext;
 };
-
-class LabelTag : public AtTag
-{
-  public:
-                        LabelTag();
-
-    virtual bool        Add_SpecialMeaningToken(
-                            const char *        i_sText,
-                            intt                i_nNr );
-    virtual const char *
-                        Title() const;
-    virtual UINT8       NrOfSpecialMeaningTokens() const;
-    virtual AtTag *     GetFollower();
-
-  private:
-    virtual DocuText *  Text();
-
-    String              sLabel;
-};
-
-class SinceTag : public AtTag
-{
-  public:
-                        SinceTag();
-
-    virtual bool        Add_SpecialMeaningToken(
-                            const char *        i_sText,
-                            intt                i_nNr );
-    virtual const char *
-                        Title() const;
-    virtual UINT8       NrOfSpecialMeaningTokens() const;
-    virtual AtTag *     GetFollower();
-
-    const String &      Version() const         { return sVersion; }
-
-  private:
-    virtual void        do_StoreAt(
-                            DocuDisplay &       o_rDisplay ) const;
-    virtual DocuText *  Text();
-
-    // Data
-    String              sVersion;
-};
-
-
-
-// IMPLEMENTATION
-
 
 }
 }

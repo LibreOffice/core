@@ -58,10 +58,6 @@ class File : public bstream,
   public:
     // LIFECYCLE
                         File(
-                            const ::csv::ploc::Path &
-                                            i_rLocation,
-                            uintt           i_nMode = CFM_RW );
-                        File(
                             const char *    i_sLocation,
                             uintt           in_nMode = CFM_RW );
                         File(

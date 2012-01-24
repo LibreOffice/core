@@ -60,24 +60,6 @@ namespace formula
         static void revokeClient();
 
     public:
-        /** loads the string with the specified resource id
-        */
-        static ::rtl::OUString  loadString(sal_uInt16 _nResId);
-
-        /** loads a string from the resource file, substituting a placeholder with a given string
-
-            @param  _nResId
-                the resource ID of the string to loAD
-            @param  _pPlaceholderAscii
-                the ASCII representation of the placeholder string
-            @param  _rReplace
-                the string which should substutite the placeholder
-        */
-        static ::rtl::OUString  loadString(
-                sal_uInt16              _nResId,
-                const sal_Char*         _pPlaceholderAscii,
-                const ::rtl::OUString&  _rReplace
-        );
 
         static ResMgr*  getResManager();
     };

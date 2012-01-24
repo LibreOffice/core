@@ -52,8 +52,6 @@ class XmlElement
                             X2CParser &         io_rParser ) = 0;
     virtual void        Write2Html(
                             HtmlCreator &       io_rHC ) const = 0;
-    virtual void        Insert2Index(
-                            Index &             o_rIndex ) const;           // Default: Does nothing, but can be overwritten.
 
     const Simstr &      Name() const            { return sName; }
 

@@ -39,12 +39,6 @@ XmlElement::XmlElement( const char * i_sName )
 {
 }
 
-void
-XmlElement::Insert2Index( Index & ) const
-{
-    //  Default version. Does nothing.
-}
-
 XmlElement *
 MultipleElement::FindChild( const Simstr & i_sChildName )
 {

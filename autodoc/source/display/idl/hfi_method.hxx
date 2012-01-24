@@ -38,10 +38,6 @@
     // PARAMETERS
 #include <ary/idl/i_param.hxx>
 #include <ary/doc/d_oldidldocu.hxx>
-typedef ary::doc::OldIdlDocu CodeInfo;
-#include "hfi_linklist.hxx"
-
-
 
 namespace csi
 {

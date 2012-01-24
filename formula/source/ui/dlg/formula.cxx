@@ -119,7 +119,6 @@ namespace formula
         void            SaveArg( sal_uInt16 nEd );
         void            UpdateSelection();
         void            DoEnter( sal_Bool bOk );
-        void            ResizeArgArr( const IFunctionDescription* pNewFunc );
         void            FillListboxes();
         void            FillControls(sal_Bool &rbNext, sal_Bool &rbPrev);
 
@@ -1026,18 +1025,6 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 //                          Functions for 1. Page
 //  --------------------------------------------------------------------------
 
-void FormulaDlg_Impl::ResizeArgArr( const IFunctionDescription* pNewFunc )
-{
-    if ( pFuncDesc != pNewFunc )
-    {
-        DeleteArgs();
-
-        if ( pNewFunc )
-            nArgs = pNewFunc->getSuppressedArgumentCount();
-
-        pFuncDesc = pNewFunc;
-    }
-}
 // -----------------------------------------------------------------------------
 
 // Handler for Listboxes

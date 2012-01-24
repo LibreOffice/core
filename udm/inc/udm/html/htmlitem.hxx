@@ -177,8 +177,6 @@ class TableRow  : public csi::xml::AnElement
                         TableRow()
                                 :   csi::xml::AnElement("tr") {}
 
-    TableCell &         AddCell(
-                            DYN csi::xml::Item* let_dpItem = 0 );
   private:
     virtual bool        LineBreakAfterBeginTag() const;
 };
@@ -229,10 +227,6 @@ class DefList : public csi::xml::AnElement
                         DefList()
                                 :   csi::xml::AnElement("dl") {}
 
-    DefListTerm &       AddTerm(
-                            DYN csi::xml::Item* let_dpItem = 0 );
-    DefListDefinition & AddDefinition(
-                            DYN csi::xml::Item* let_dpItem = 0 );
   private:
     virtual bool        LineBreakAfterBeginTag() const;
     virtual bool        FinishEmptyTag_XmlStyle() const;
@@ -267,8 +261,6 @@ class SimpleList : public csi::xml::AnElement
                         SimpleList()
                                 :   csi::xml::AnElement("ul") {}
 
-    ListItem &          AddItem(
-                            DYN csi::xml::Item* let_dpItem = 0 );
   private:
     virtual bool        LineBreakAfterBeginTag() const;
 };

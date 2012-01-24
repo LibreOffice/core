@@ -48,21 +48,6 @@ TokenParser::Start( CharacterSource & i_rSource )
 }
 
 void
-TokenParser::GetNextToken()
-{
-    csv_assert(pChars != 0);
-
-    bHasMore = NOT pChars->IsFinished();
-
-    for ( bool bDone = NOT bHasMore; NOT bDone; )
-    {
-        CurrentContext().ReadCharChain(*pChars);
-        bDone = CurrentContext().PassNewToken();
-        SetCurrentContext(CurrentContext().FollowUpContext());
-    }
-}
-
-void
 TokenParser::InitSource( CharacterSource & i_rSource )
 {
     pChars = &i_rSource;

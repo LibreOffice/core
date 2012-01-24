@@ -120,7 +120,6 @@ private:
 protected:
                             PatternFormatter();
 
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void ImplSetMask(const rtl::OString& rEditMask,
         const XubString& rLiteralMask);
     SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
@@ -608,9 +607,6 @@ public:
 
 class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 {
-protected:
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-
 public:
                             CurrencyField( Window* pParent, WinBits nWinStyle );
 

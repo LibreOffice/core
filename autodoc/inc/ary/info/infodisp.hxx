@@ -44,12 +44,8 @@ namespace info
     class BaseTag;
     class ExceptionTag;
     class ImplementsTag;
-    class KeywordTag;
     class ParameterTag;
-    class SeeTag;
     class TemplateTag;
-    class LabelTag;
-    class SinceTag;
     class DT_Text;
     class DT_MaybeLink;
     class DT_Whitespace;
@@ -79,20 +75,11 @@ class DocuDisplay
     virtual void        Display_ImplementsTag(
                             const ImplementsTag &
                                                 i_rData ) = 0;
-    virtual void        Display_KeywordTag(
-                            const KeywordTag &  i_rData ) = 0;
     virtual void        Display_ParameterTag(
                             const ParameterTag &
                                                 i_rData ) = 0;
-    virtual void        Display_SeeTag(
-                            const SeeTag &      i_rData ) = 0;
     virtual void        Display_TemplateTag(
                             const TemplateTag & i_rData ) = 0;
-    virtual void        Display_LabelTag(
-                            const LabelTag &    i_rData ) = 0;
-    virtual void        Display_SinceTag(
-                            const ary::info::SinceTag &
-                                                i_rData ) = 0;
     virtual void        Display_DT_Text(
                             const DT_Text &     i_rData ) = 0;
     virtual void        Display_DT_MaybeLink(

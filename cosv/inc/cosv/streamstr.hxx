@@ -88,9 +88,6 @@ class StreamStr : public bostream
     // LIFECYCLE
                         StreamStr(
                             size_type           i_nCapacity );
-                        StreamStr(
-                            const char *        i_sInitStr,
-                            size_type           i_nCapacity ); /// Only used if > strlen(i_sInitStr).
     /// Copies also insert_mode and current position.
                         StreamStr(
                             const self &        i_rOther );
@@ -206,10 +203,6 @@ class StreamStr : public bostream
     void                replace_all(
                             char                i_cCarToSearch,
                             char                i_cReplacement );
-
-    StreamStr &         to_upper(
-                            position_type       i_nStart = 0,
-                            size_type           i_nLength = str::maxsize );
 
     // INQUIRY
     const char *        c_str() const;

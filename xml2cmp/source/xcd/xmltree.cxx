@@ -32,7 +32,6 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cr_html.hxx>
-#include <cr_index.hxx>
 
 
 char  C_sMODULEDESCRIPTION[] = "module-description";
@@ -208,15 +207,6 @@ CdName::Write2Html( HtmlCreator & io_rHC ) const
 SupportedService::SupportedService()
     :   MultipleTextElement(C_sSupportedService, lt_idl, true)
 {
-}
-
-void
-SupportedService::Insert2Index( Index & o_rIndex ) const
-{
-    for ( unsigned i = 0; i < Size(); ++i )
-    {
-        o_rIndex.InsertSupportedService( Data(i) );
-    }
 }
 
 FreeChoiceElement *

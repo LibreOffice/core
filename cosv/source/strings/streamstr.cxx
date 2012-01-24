@@ -74,23 +74,6 @@ StreamStr::StreamStr( size_type     i_nCapacity )
     *pEnd = '\0';
 }
 
-StreamStr::StreamStr( const char *  i_sInitStr,
-                      size_type     i_nCapacity )
-    :   bostream(),
-        nCapacity1(0),
-        dpData(0),
-        pEnd(0),
-        pCur(0),
-        eMode(str::overwrite)
-{
-    size_type nLength = strlen(i_sInitStr);
-    nCapacity1 = csv::max(nLength, i_nCapacity) + 1;
-    dpData = new char [nCapacity1];
-    strcpy(dpData, i_sInitStr);     // SAFE STRCPY (#100211# - checked)
-    pCur = dpData + nLength;
-    pEnd = pCur;
-}
-
 StreamStr::StreamStr( const self & i_rOther )
     :   bostream(),
         nCapacity1( i_rOther.nCapacity1 ),
@@ -475,37 +458,6 @@ StreamStr::replace_all( char i_cCarToSearch,
         if (*p == i_cCarToSearch)
             *p = i_cReplacement;
    }
-}
-
-StreamStr &
-StreamStr::to_upper( position_type       i_nStart,
-                     size_type           i_nLength )
-{
-    static char cUpper[128] =
-    { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
-     16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-     32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
-     48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
-     64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-     80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95,
-     96, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-     80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 123,124,125,126,127 };
-
-    if ( i_nStart < length() )
-    {
-        char * pStop = i_nStart + i_nLength < length()
-                            ?   dpData + i_nStart + i_nLength
-                            :   pEnd;
-        for ( char * pChange = dpData + i_nStart;
-              pChange != pStop;
-              ++pChange )
-        {
-            *pChange =  (static_cast< unsigned char >(*pChange) & 0x80) == 0
-                            ?   cUpper[ UINT8(*pChange) ]
-                            :   *pChange;
-        }
-    }
-    return *this;
 }
 
 class StreamStrPool

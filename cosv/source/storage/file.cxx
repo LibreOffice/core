@@ -43,15 +43,6 @@ namespace csv
 {
 
 
-File::File( const ploc::Path &  i_rLocation,
-            uintt               i_nMode )
-    :   aPath(i_rLocation),
-        pStream(0),
-        nMode(i_nMode),
-        eLastIO(io_none)
-{
-}
-
 File::File( const char *    i_sLocation,
             uintt           i_nMode )
     :   aPath(i_sLocation),

@@ -155,7 +155,7 @@ findunusedcode:
 		| grep -v ^cppu:: \
 		| grep -v ^boost:: \
 		| grep -v ^CIcc \
-		| grep -v ^CAtom \
+		| grep -v ^Atom \
 		> unusedcode.easy
 
 subsequentcheck: dev-install

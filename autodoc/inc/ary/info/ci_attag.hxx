@@ -51,8 +51,6 @@ class AtTag
   public:
     virtual             ~AtTag() {}
 
-    void                Set_HtmlUseInDocuText(
-                            bool                i_bUseIt );
     virtual bool        Add_SpecialMeaningToken(    /// @return false, if token was not spüecial.
                             const char *        i_sText,
                             intt                i_nNr ) = 0;

@@ -54,18 +54,6 @@ DocuText::~DocuText()
     }
 }
 
-void
-DocuText::StoreAt( DocuDisplay & o_rDisplay ) const
-{
-    ary::info::DocuText::TokenList::const_iterator itEnd = aTokens.end();
-    for ( ary::info::DocuText::TokenList::const_iterator it = aTokens.begin();
-          it != itEnd;
-          ++it )
-    {
-        (*it)->StoreAt(o_rDisplay);
-    }
-}
-
 }   // namespace info
 }   // namespace ary
 

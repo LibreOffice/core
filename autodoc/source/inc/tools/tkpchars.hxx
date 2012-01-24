@@ -75,9 +75,6 @@ class CharacterSource
         void            LoadText(
                             csv::bstream &      io_rSource);
 
-        void            InsertTextAtCurPos(
-                            const char *        i_sText2Insert );
-
         /// @return CurChar() after moving forward one char.
             char            MoveOn();
         /** @return

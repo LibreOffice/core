@@ -34,7 +34,6 @@
     // COMPONENTS
     // PARAMETERS
 class StmArrayStatus;
-class StmBoundsStatus;
 
 /** A StmStatus is a state within a StateMachine.
     There are two kinds of it.  Either its an array of pointers to
@@ -55,8 +54,6 @@ class StmStatus // := "State machine status"
         // OPERATIONS
     virtual StmArrayStatus *
                         AsArray();
-    virtual StmBoundsStatus *
-                        AsBounds();
 
         // INQUIRY
     virtual bool        IsADefault() const = 0;

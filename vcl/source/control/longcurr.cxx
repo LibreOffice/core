@@ -344,41 +344,6 @@ LongCurrencyFormatter::LongCurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
-{
-    ImpInit();
-
-    ResMgr*     pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        sal_uLong       nMask = pMgr->ReadLong();
-
-        if ( NUMERICFORMATTER_MIN & nMask )
-            mnMin = pMgr->ReadLong();
-
-        if ( NUMERICFORMATTER_MAX & nMask )
-            mnMax = pMgr->ReadLong();
-
-        if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat(  (sal_Bool)pMgr->ReadShort() );
-
-        if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
-            SetDecimalDigits( pMgr->ReadShort() );
-
-        if ( NUMERICFORMATTER_VALUE & nMask )
-        {
-            mnFieldValue = pMgr->ReadLong();
-            if ( mnFieldValue > mnMax )
-                mnFieldValue = mnMax;
-            else if ( mnFieldValue < mnMin )
-                mnFieldValue = mnMin;
-            mnLastValue = mnFieldValue;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 LongCurrencyFormatter::~LongCurrencyFormatter()
 {
 }

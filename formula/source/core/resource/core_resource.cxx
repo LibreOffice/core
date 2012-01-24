@@ -56,18 +56,6 @@ namespace formula
         m_pImpl = ResMgr::CreateResMgr("for", aLocale);
     }
 
-    //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
-    {
-        ::rtl::OUString sReturn;
-
-        ensureImplExists();
-        if (m_pImpl)
-            sReturn = String(ResId(_nResId,*m_pImpl));
-
-        return sReturn;
-    }
-
     //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {

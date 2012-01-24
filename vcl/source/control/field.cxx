@@ -2217,27 +2217,6 @@ CurrencyField::CurrencyField( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-void CurrencyField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-
-    sal_uLong      nMask = ReadLongRes();
-
-    if ( CURRENCYFIELD_FIRST & nMask )
-        mnFirst = ReadLongRes();
-
-    if ( CURRENCYFIELD_LAST & nMask )
-        mnLast = ReadLongRes();
-
-    if ( CURRENCYFIELD_SPINSIZE & nMask )
-        mnSpinSize = ReadLongRes();
-
-    Reformat();
-}
-
-// -----------------------------------------------------------------------
-
 CurrencyField::~CurrencyField()
 {
 }

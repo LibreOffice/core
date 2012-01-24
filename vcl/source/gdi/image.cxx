@@ -470,17 +470,6 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 }
 
 // -----------------------------------------------------------------------
-
-void ImageList::ImplMakeUnique()
-{
-    if( mpImplData && mpImplData->mnRefCount > 1 )
-    {
-        --mpImplData->mnRefCount;
-        mpImplData = new ImplImageList( *mpImplData ) ;
-    }
-}
-
-// -----------------------------------------------------------------------
 // Rather a performance hazard:
 BitmapEx ImageList::GetAsHorizontalStrip() const
 {

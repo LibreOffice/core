@@ -61,8 +61,6 @@ class DocuText
                             DYN DocuToken &     let_drToken )
                                                 { aTokens.push_back(&let_drToken); }
     const TokenList &   Tokens() const          { return aTokens; }
-    void                StoreAt(
-                            DocuDisplay &       o_rDisplay ) const;
     bool                IsNoHtml() const        { return NOT bUsesHtml; }
     bool                IsEmpty() const         { return aTokens.size() == 0; }
 

@@ -35,7 +35,6 @@
 #include "../support/cmdline.hxx"
 #include "cr_metho.hxx"
 #include "cr_html.hxx"
-#include "cr_index.hxx"
 #include "xmlelem.hxx"
 #include "xmltree.hxx"
 #include "parse.hxx"
@@ -139,7 +138,7 @@ void Create_TypeInfo( const char* o_sOutputFile, ModuleDescription& i_rData )
 
 int Do_DepCommandLine(const CommandLine & i_rCommandLine)
 {
-DependencyFinder aDependencies;
+    DependencyFinder aDependencies;
 
     aDependencies.GatherData(i_rCommandLine.DepPath());
     char sInput[500] = "";

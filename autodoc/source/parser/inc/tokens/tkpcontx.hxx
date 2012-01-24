@@ -88,9 +88,6 @@ class TkpContext
     virtual bool        PassNewToken() = 0;
     virtual TkpContext &
                         FollowUpContext() = 0;
-
-    static TkpNullContext &
-                        Null_();
 };
 
 class StateMachineContext
@@ -100,7 +97,6 @@ class StateMachineContext
 
     virtual ~StateMachineContext() {}
 
-    /// Is used by StmBoundsStatus only.
     virtual void        PerformStatusFunction(
                             uintt               i_nStatusSignal,
                             F_CRTOK             i_fTokenCreateFunction,

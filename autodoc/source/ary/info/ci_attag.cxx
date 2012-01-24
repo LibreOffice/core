@@ -41,14 +41,6 @@ namespace info
 {
 
 void
-AtTag::Set_HtmlUseInDocuText( bool i_bUseIt )
-{
-    DocuText * pText = Text();
-    if ( pText != 0 )
-        pText->Set_HtmlUse(i_bUseIt);
-}
-
-void
 AtTag::Add_Token( const char * i_sText )
 {
     DocuText * pText = Text();
