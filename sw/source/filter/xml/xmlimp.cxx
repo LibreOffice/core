@@ -1188,6 +1188,13 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
+    const PropertyValue* currentDatabaseDataSource = NULL;
+    const PropertyValue* currentDatabaseCommand = NULL;
+    const PropertyValue* currentDatabaseCommandType = NULL;
+    OUString currentDatabaseDataSourceKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseDataSource" ));
+    OUString currentDatabaseCommandKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommand" ));
+    OUString currentDatabaseCommandTypeKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommandType" ));
+
     while( nCount-- )
     {
         if( !bIsUserSetting )
@@ -1212,7 +1219,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     }
                     else
                     {
-                        xProps->setPropertyValue( pValues->Name,
+                        // HACK: Setting these out of order does not work.
+                        if( pValues->Name.equals( currentDatabaseDataSourceKey ))
+                            currentDatabaseDataSource = pValues;
+                        else if( pValues->Name.equals( currentDatabaseCommandKey ))
+                            currentDatabaseCommand = pValues;
+                        else if( pValues->Name.equals( currentDatabaseCommandTypeKey ))
+                            currentDatabaseCommandType = pValues;
+                        else
+                            xProps->setPropertyValue( pValues->Name,
                                                   pValues->Value );
                     }
                 }
@@ -1265,6 +1280,19 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             }
         }
         pValues++;
+    }
+
+    try
+    {
+        if( currentDatabaseDataSource != NULL )
+            xProps->setPropertyValue( currentDatabaseDataSource->Name, currentDatabaseDataSource->Value );
+        if( currentDatabaseCommand != NULL )
+            xProps->setPropertyValue( currentDatabaseCommand->Name, currentDatabaseCommand->Value );
+        if( currentDatabaseCommandType != NULL )
+            xProps->setPropertyValue( currentDatabaseCommandType->Name, currentDatabaseCommandType->Value );
+    } catch( Exception& )
+    {
+        OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
     }
 
     // finally, treat the non-default cases
