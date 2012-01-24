@@ -126,7 +126,7 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUserListEnabled")))
         {
-            sal_Bool bIsUserListEnabled true;
+            sal_Bool bIsUserListEnabled  = true;
             xProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(bIsUserListEnabled == false);
 
