@@ -605,6 +605,7 @@ void Desktop::Init()
 
     // Check for lastsynchronized file for bundled extensions in the user directory
     // and test if synchronzation is necessary!
+#ifndef ANDROID
     {
         ::rtl::OUString aUserLastSyncFilePathURL = getLastSyncFileURLFromUserInstallation();
         ::rtl::OUString aPreregSyncFilePathURL = getLastSyncFileURLFromBrandInstallation();
@@ -620,6 +621,7 @@ void Desktop::Init()
             copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
         }
     }
+#endif
 
     // We need to have service factory before going further, but see fdo#37195.
     // Doing this will mmap common.rdb, making it not overwritable on windows,
