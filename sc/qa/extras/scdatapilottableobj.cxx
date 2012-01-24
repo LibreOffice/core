@@ -29,6 +29,7 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xdatapilottable.hxx>
 #include <test/sheet/xdatapilotdescriptor.hxx>
+#include <test/container/xnamed.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -38,11 +39,14 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 10
+#define NUMBER_OF_TESTS 12
 
-class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable
+class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
+                                apitest::XNamed
 {
 public:
+    ScDataPilotTableObj();
+
     virtual void setUp();
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
@@ -59,6 +63,8 @@ public:
     CPPUNIT_TEST(testGetRowFields);
     CPPUNIT_TEST(testGetPageFields);
     CPPUNIT_TEST(testGetDataFields);
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetName);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -68,6 +74,12 @@ private:
 
 sal_Int32 ScDataPilotTableObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
+
+ScDataPilotTableObj::ScDataPilotTableObj()
+    : apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable")))
+{
+
+}
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {

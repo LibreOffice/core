@@ -35,6 +35,7 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xnamedranges.hxx,test/
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xnamedrange.hxx,test/sheet/xnamedrange.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatabaserange.hxx,test/sheet/xdatabaserange.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xelementaccess.hxx,test/container/xelementaccess.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamed.hxx,test/container/xnamed.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xindexaccess.hxx,test/container/xindexaccess.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamecontainer.hxx,test/container/xnamecontainer.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/cellproperties.hxx,test/sheet/cellproperties.hxx))

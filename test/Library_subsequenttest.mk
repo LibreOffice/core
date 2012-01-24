@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/container/xelementaccess \
     test/source/container/xindexaccess \
     test/source/container/xnamecontainer \
+    test/source/container/xnamed \
     test/source/sheet/cellproperties \
     test/source/sheet/datapilotfield \
     test/source/sheet/xcellrangesquery \
