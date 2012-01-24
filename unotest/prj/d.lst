@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc\unotest\detail
 ..\%__SRC%\lib\libunotest.dylib %_DEST%\lib\libunotest.dylib
 ..\%__SRC%\lib\libunotest.so %_DEST%\lib\libunotest.so
 ..\%__SRC%\lib\libunotest.dll.a %_DEST%\lib\libunotest.dll.a
+..\%__SRC%\lib\libunotest.a %_DEST%\lib\libunotest.a
 ..\%__SRC%\lib\unoexceptionprotector.dylib %_DEST%\lib\unoexceptionprotector.dylib
 ..\%__SRC%\lib\unoexceptionprotector.so %_DEST%\lib\unoexceptionprotector.so
 ..\%__SRC%\lib\libunoexceptionprotector.so %_DEST%\lib\libunoexceptionprotector.so
