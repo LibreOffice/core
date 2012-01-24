@@ -123,7 +123,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/convwatch/ReportDesignerTest \
     qadevOOo/runner/convwatch/SimpleFileSemaphore \
     qadevOOo/runner/convwatch/StatusHelper \
-    qadevOOo/runner/convwatch/StringHelper \
     qadevOOo/runner/convwatch/TimeHelper \
     qadevOOo/runner/convwatch/TriState \
     qadevOOo/runner/convwatch/ValueNotFoundException \
