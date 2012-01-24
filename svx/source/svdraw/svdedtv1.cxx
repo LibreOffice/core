@@ -727,7 +727,6 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
     {
         const SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
-        //const SdrPageView* pPV=pM->GetPageView();
         if( bUndo )
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 

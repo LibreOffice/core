@@ -510,7 +510,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
-        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0/*|WB_BORDER|WB_3DLOOK*/);
+        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,sal_False));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
@@ -1140,13 +1140,11 @@ void SdrItemBrowser::Undirty()
     aIdleTimer.Stop();
     bDirty = sal_False;
 
-//  SfxItemSet aSet(pView->GetAttributes());
     SfxItemSet aSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aSet);
 
     if(pView->AreObjectsMarked())
     {
-        // SfxItemSet a2ndSet(pView->GetAttributes(sal_True));
         SfxItemSet a2ndSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(a2ndSet, sal_True);
 
@@ -1169,7 +1167,6 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
     const ImpItemListRow* pEntry=pBrowse->GetAktChangeEntry();
     if (pEntry!=NULL)
     {
-//      SfxItemSet aSet(pView->GetAttributes());
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aSet);
 

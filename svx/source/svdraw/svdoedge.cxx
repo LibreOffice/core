@@ -1501,8 +1501,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 aXP1[3].X()-=dx/2;
                 aXP1[3].Y()-=dy/2;
                 aXP1.SetFlags(3,XPOLY_SYMMTR);
-                //aXP1[4].X()+=dx/2;
-                //aXP1[4].Y()+=dy/2;
                 aXP1.Remove(4,1); // because it's identical with aXP1[3]
             }
         }

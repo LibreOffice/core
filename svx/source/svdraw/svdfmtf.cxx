@@ -753,8 +753,6 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
 
     sal_Int32 nTextWidth = (sal_Int32)( aVD.GetTextWidth( rStr ) * fScaleX );
     sal_Int32 nTextHeight = (sal_Int32)( aVD.GetTextHeight() * fScaleY );
-    //sal_Int32 nDxWidth = 0;
-    //sal_Int32 nLen = rStr.Len();
 
     Point aPos( FRound(rPos.X() * fScaleX + aOfs.X()), FRound(rPos.Y() * fScaleY + aOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );

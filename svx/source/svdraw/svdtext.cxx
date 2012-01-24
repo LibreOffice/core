@@ -168,12 +168,6 @@ void SdrText::SetModel( SdrModel* pNewModel )
         {
             Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
 
-            // Funktioniert nicht richtig:
-            // Geht am Outliner leider nur in %
-            // double nPercFloat=double(aMetricFactor)*100+0.5;
-            // sal_uInt16 nPerc=(sal_uInt16)nPercFloat;
-            // rOutliner.DoStretchChars(100,nPerc);
-
             if (bSetHgtItem)
             {
                 // Und nun noch das Rahmenattribut korregieren

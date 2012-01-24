@@ -895,7 +895,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
             for ( i = nAdjustmentValues; i < nAdjustmentDefaults; i++ )
             {
                 seqAdjustmentValues[ i ].Value <<= pDefData[ i ];
-                seqAdjustmentValues[ i ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE; // com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+                seqAdjustmentValues[ i ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
             }
         }
         // check if there are defaulted adjustment values that should be filled the hard coded defaults (pDefValue)
@@ -1717,7 +1717,7 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, bool
 
 SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
-    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616#
 
     // #i25616#
     if(!LineIsOutsideGeometry())

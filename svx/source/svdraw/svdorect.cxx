@@ -527,7 +527,7 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
-    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616#
 
     // #i25616#
     if(!LineIsOutsideGeometry())
@@ -553,7 +553,7 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
 SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 {
-    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616#
 
     // #i25616#
     if(!LineIsOutsideGeometry())

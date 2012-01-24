@@ -303,7 +303,6 @@ SdrItemPool::SdrItemPool(
     pBoxInfoItem->SetValid( VALID_DISABLE, sal_True ); // some lines may have DontCare state only in tables
 
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
-//  mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_SHADOW - SDRATTR_START ] = new SvxShadowItem( SDRATTR_TABLE_BORDER_SHADOW );
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
 
@@ -314,7 +313,6 @@ SdrItemPool::SdrItemPool(
 
     mpLocalItemInfos[SDRATTR_TABLE_BORDER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_OUTER;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_INNER;
-//  mpLocalItemInfos[SDRATTR_TABLE_BORDER_SHADOW - SDRATTR_START ]._nSID = SID_ATTR_BORDER_SHADOW;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_TLBR;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_BLTR;
 
@@ -877,7 +875,6 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         xub_StrLen nAnz(2);
 
         const IntlWrapper* pMyIntlWrapper = NULL;
-//        DBG_ASSERT( pIntlWrapper, "SdrAngleItem::GetPresentation: using default App-IntlWrapper" );
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 ::comphelper::getProcessServiceFactory(),

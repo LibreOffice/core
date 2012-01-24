@@ -397,7 +397,6 @@ void SdrHdl::Touch()
 
 void SdrHdl::GetRidOfIAObject()
 {
-    //OLMaIAOGroup.Delete();
 
     // OVERLAYMANAGER
     maOverlayGroup.clear();
@@ -864,18 +863,8 @@ sal_Bool SdrHdl::IsFocusHdl() const
         case HDL_CIRC:      // angle of circle segments, corner radius of rectangles
         case HDL_REF1:      // reference point 1, e. g. center of rotation
         case HDL_REF2:      // reference point 2, e. g. endpoint of reflection axis
-        //case HDL_MIRX:        // reflection axis itself
         case HDL_GLUE:      // glue point
         case HDL_GLUE_DESELECTED:      // deselected glue point, used to be a little blue cross
-        // do NOT activate here, let SW implement their own SdrHdl and
-        // overload IsFocusHdl() there to make the anchor accessible
-        //case HDL_ANCHOR:      // anchor symbol (SD, SW)
-        // same for AnchorTR
-        //case HDL_ANCHOR_TR:   // anchor symbol (SD, SW)
-
-        //case HDL_TRNS:        // interactive transparence
-        //case HDL_GRAD:        // interactive gradient
-        //case HDL_COLR:        // interactive color
 
         // for SJ and the CustomShapeHandles:
         case HDL_CUSTOMSHAPE1:
@@ -936,7 +925,6 @@ void SdrHdlColor::CreateB2dIAObject()
             {
                 for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
@@ -1500,7 +1488,7 @@ Pointer ImpEdgeHdl::GetPointer() const
     if (pEdge==NULL)
         return SdrHdl::GetPointer();
     if (nObjHdlNum<=1)
-        return Pointer(POINTER_MOVEPOINT); //Pointer(POINTER_DRAW_CONNECT);
+        return Pointer(POINTER_MOVEPOINT);
     if (IsHorzDrag())
         return Pointer(POINTER_ESIZE);
     else
@@ -1948,7 +1936,6 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             if(pNew)
             {
                 pNew->Touch();
-                //SDObRefresh = sal_True;
             }
         }
 
@@ -1977,26 +1964,18 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
             if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
             {
-                //SDOsal_Bool bRefresh(sal_False);
                 mnFocusIndex = nNewHdlNum;
 
                 if(pActual)
                 {
                     pActual->Touch();
-                    //SDObRefresh = sal_True;
                 }
 
                 if(pNew)
                 {
                     pNew->Touch();
-                    //SDObRefresh = sal_True;
                 }
 
-                //OLMif(bRefresh)
-                //OLM{
-                //OLM   if(pView)
-                //OLM       pView->RefreshAllIAOManagers();
-                //OLM}
             }
         }
     }
@@ -2127,18 +2106,15 @@ void SdrHdlList::Sort()
 
     if(pPrev != pNow)
     {
-        //SDOsal_Bool bRefresh(sal_False);
 
         if(pPrev)
         {
             pPrev->Touch();
-            //SDObRefresh = sal_True;
         }
 
         if(pNow)
         {
             pNow->Touch();
-            //SDObRefresh = sal_True;
         }
     }
 }
@@ -2286,7 +2262,6 @@ void SdrCropHdl::CreateB2dIAObject()
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
         {
-            // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
             const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
             if(rPageWindow.GetPaintWindow().OutputToWindow())

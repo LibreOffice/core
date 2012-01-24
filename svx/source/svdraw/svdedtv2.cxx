@@ -2027,7 +2027,6 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         }
         if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
-            //const GDIMetaFile* pMtf=pOle2->GetGDIMetaFile();
             ImpSdrGDIMetaFileImport aFilter(*pMod);
             aFilter.SetScaleRect(pOle2->GetLogicRect());
             aFilter.SetLayer(pObj->GetLayer());

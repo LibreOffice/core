@@ -166,7 +166,6 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
     if(rNewPosition != maPosition)
     {
         // apply to OverlayObjects
-        // apply to OverlayObjects
         for(sal_uInt32 a(0); a < maObjects.count(); a++)
         {
             sdr::overlay::OverlayHelplineStriped* pCandidate =

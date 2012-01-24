@@ -665,7 +665,6 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             aHdl.SetMoveOutside(sal_False);
             aHdl.SetMoveOutside(sal_True);
-            //OLMRefreshAllIAOManagers();
 
             // register all windows as OutlinerViews with the Outliner
             if(!bOnlyOneView)
@@ -758,11 +757,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
     mxTextEditObj.reset(0);
     pTextEditPV=NULL;
     pTextEditWin=NULL;
-    //HMHif (bMarkHdlWhenTextEdit) {
-    //HMH    HideMarkHdl();
-    //HMH}
     aHdl.SetMoveOutside(sal_False);
-    //HMHShowMarkHdl();
 
     return sal_False;
 }
@@ -931,10 +926,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             aRect.Bottom()+=nMorePix;
             aRect=pWin->PixelToLogic(aRect);
             InvalidateOneWin(*pWin,aRect);
-//          pWin->Invalidate(INVALIDATE_UPDATE);
-
-//          pWin->Update();
-//          pWin->Flush();
             pWin->SetFillColor();
             pWin->SetLineColor(COL_BLACK);
             pWin->DrawPixel(aRect.TopLeft());
@@ -949,15 +940,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
         if (pTEWin!=NULL) {
             pTEWin->SetCursor(pTECursorMerker);
         }
-//HMH        if (bMarkHdlWhenTextEdit) {
-//HMH            HideMarkHdl();
-//HMH        }
         aHdl.SetMoveOutside(sal_False);
         if (eRet!=SDRENDTEXTEDIT_UNCHANGED)
-//HMH       {
-//HMH            ShowMarkHdl(); // Otherwise handles come via broadcast
-//HMH        }
-//HMH       else
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }
@@ -1104,7 +1088,7 @@ sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     {
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
-            if( pMod /* && !pMod->IsChanged() */ )
+            if( pMod )
             {
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
                     pMod->SetChanged( sal_True );
@@ -1249,7 +1233,7 @@ sal_Bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
                 return sal_True;
             }
         }
-        else // if (rCEvt.GetCommand() == COMMAND_VOICE )
+        else
         {
             pTextEditOutlinerView->Command(rCEvt);
             return sal_True;
@@ -1389,7 +1373,6 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
     sal_Bool bAllTextSelected=ImpIsTextEditAllSelected();
     SfxItemSet* pModifiedSet=NULL;
     const SfxItemSet* pSet=&rSet;
-    //const SvxAdjustItem* pParaJust=NULL;
 
     if (!bTextEdit)
     {

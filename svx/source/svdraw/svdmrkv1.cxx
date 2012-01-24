@@ -258,10 +258,6 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
             }
             Point aPos(pHdl->GetPos());
             if (pM!=NULL && (pRect==NULL || pRect->IsInside(aPos))) {
-                //HMHif (bHideHdl && IsMarkHdlShown() && pHdl->GetObj()!=NULL) {
-                    //HMHsal_uInt32 nAnz=pHdl->GetObj()->GetPlusHdlCount(*pHdl);
-                    //HMHif (nAnz!=0L) HideMarkHdl(); // #36987#
-                //HMH}
                 if (ImpMarkPoint(pHdl,pM,bUnmark)) bChgd=sal_True;
             }
         }
@@ -300,11 +296,8 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(sal_Bool bOn)
 { // TODO: Optimize HandlePaint!
     ForceUndirtyMrkPnt();
     if (bOn!=bPlusHdlAlways) {
-        //HMHBOOL bVis=IsMarkHdlShown();
-        //HMHif (bVis) HideMarkHdl();
         bPlusHdlAlways=bOn;
         SetMarkHandles();
-        //HMHif (bVis) ShowMarkHdl();
         MarkListHasChanged();
     }
 }
@@ -510,14 +503,13 @@ sal_Bool SdrMarkView::MarkGluePoints(const Rectangle* pRect, sal_Bool bUnmark)
 sal_Bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, sal_uIntPtr nOptions) const
 {
     SdrObject* pObj0=rpObj;
-    //SdrPageView* pPV0=rpPV;
     sal_uInt16 nId0=rnId;
     rpObj=NULL; rpPV=NULL; rnId=0;
     if (!IsGluePointEditMode()) return sal_False;
     sal_Bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
     sal_Bool bNext=(nOptions & SDRSEARCH_NEXT) !=0;
     OutputDevice* pOut=(OutputDevice*)pActualOutDev;
-    if (pOut==NULL) pOut=GetFirstOutputDevice(); //GetWin(0);
+    if (pOut==NULL) pOut=GetFirstOutputDevice();
     if (pOut==NULL) return sal_False;
     SortMarkedObjects();
     sal_uIntPtr nMarkAnz=GetMarkedObjectCount();

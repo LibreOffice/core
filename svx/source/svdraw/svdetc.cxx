@@ -84,8 +84,6 @@ SdrGlobalData::SdrGlobalData() :
     pResMgr(NULL),
     nExchangeFormat(0)
 {
-    //pSysLocale = new SvtSysLocale;
-    //pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     svx::ExtrusionBar::RegisterInterface();
     svx::FontworkBar::RegisterInterface();
@@ -463,8 +461,6 @@ SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
 
 SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
 {
-    //SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();
-
     SfxItemPool* pPool = &pModel->GetItemPool();
     SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );
     pOutl->SetEditTextObjectPool( pPool );

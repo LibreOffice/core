@@ -370,12 +370,12 @@ bool SdrModel::IsInDestruction() const
 }
 
 // not yet implemented
-void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
+void SdrModel::operator=(const SdrModel&)
 {
     OSL_FAIL("SdrModel::operator=() is not yet implemented.");
 }
 
-bool SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
+bool SdrModel::operator==(const SdrModel&) const
 {
     OSL_FAIL("SdrModel::operator==() is not yet implemented");
     return sal_False;
@@ -1817,8 +1817,6 @@ void SdrModel::setLock( bool bLock )
     {
         if( sal_False == bLock )
         {
-            // ReformatAllTextObjects(); due to a typo in the above if, this code was never
-            //                           executed, so I remove it until we discover that we need it here
             ImpReformatAllEdgeObjects();
         }
         mbModelLocked = bLock;

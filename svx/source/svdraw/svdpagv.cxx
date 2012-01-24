@@ -530,8 +530,8 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
         bool bMap0=rOut.IsMapModeEnabled();
 
-        long nWrX=0;//aWriterPageOffset.X();
-        long nWrY=0;//aWriterPageOffset.Y();
+        long nWrX=0;
+        long nWrY=0;
         Point aOrg(aPgOrg);
         long x1=GetPage()->GetLftBorder()+1+nWrX;
         long x2=GetPage()->GetWdt()-GetPage()->GetRgtBorder()-1+nWrY;

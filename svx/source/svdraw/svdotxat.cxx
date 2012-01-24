@@ -283,13 +283,11 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             nNum--;
             XubString* pName=(XubString*)aStyles.GetObject(nNum);
 
-            // UNICODE: String aFam(pName->Cut(pName->Len()-6));
             String aFam = pName->Copy(0, pName->Len() - 6);
 
             aFam.Erase(0,1);
             aFam.EraseTrailingChars();
 
-            // UNICODE: sal_uInt16 nFam=sal_uInt16(aFam);
             sal_uInt16 nFam = (sal_uInt16)aFam.ToInt32();
 
             SfxStyleFamily eFam=(SfxStyleFamily)nFam;

@@ -225,7 +225,6 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
     bool bRet=false;
     {
         SetDragWithCopy(sal_False);
-        //ForceEdgesOfMarkedNodes();
         //TODO: aAni.Reset();
         mpCurrentSdrDragMethod=NULL;
         bDragSpecial=sal_False;

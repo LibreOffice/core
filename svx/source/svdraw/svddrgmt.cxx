@@ -162,12 +162,6 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
     // out when clone and original have the same class, so that i can use operator=
     // in those cases
 
-    //        // copy all other needed stuff
-    //        basegfx::B2DHomMatrix aMatrix;
-    //        basegfx::B2DPolyPolygon aPolyPolygon;
-    //      pOleObject->TRGetBaseGeometry(aMatrix, aPolyPolygon);
-    //        pClone->TRSetBaseGeometry(aMatrix, aPolyPolygon);
-
     const SdrObject* pSource = &maOriginal;
 
     if(mpClone)
@@ -606,10 +600,6 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
             -aPolyRange.getMinX(), -aPolyRange.getMinY()));
         aPolyTransform.scale(fScaleX, fScaleY);
-
-        // normally the polygon should be moved back, but the translation is in the object
-        // transformation and thus does not need to be done
-        // aPolyTransform.translate(-aPolyRange.getMinX(), -aPolyRange.getMinY());
 
         // transform the polygon
         aObjectPolyPolygon.transform(aPolyTransform);

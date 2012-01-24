@@ -462,7 +462,7 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 
                     if(nPointCount >= 3)
                     {
-                        bRetval = pMarkedPathObject->IsClosedObj(); // #i76617# aPathPolygon.isClosed();
+                        bRetval = pMarkedPathObject->IsClosedObj(); // #i76617#
 
                         for(sal_uInt32 b(0); !bRetval && b < pSelectedPoints->GetCount(); b++)
                         {
@@ -547,7 +547,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
     }
 }
 
-void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen) // , long nOpenDistance)
+void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen)
 {
     if (AreObjectsMarked())
     {

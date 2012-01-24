@@ -912,16 +912,15 @@ sal_Bool SdrCreateView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceA
     }
 }
 
-SfxStyleSheet* SdrCreateView::GetStyleSheet() const // SfxStyleSheet* SdrCreateView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrCreateView::GetStyleSheet() const
 {
     if (pAktCreate!=NULL)
     {
-        //rOk=sal_True;
         return pAktCreate->GetStyleSheet();
     }
     else
     {
-        return SdrDragView::GetStyleSheet(); // SdrDragView::GetStyleSheet(rOk);
+        return SdrDragView::GetStyleSheet();
     }
 }
 

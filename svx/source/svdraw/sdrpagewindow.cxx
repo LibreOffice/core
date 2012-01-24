@@ -67,24 +67,10 @@ using namespace ::com::sun::star;
             // #100394# xC->setVisible triggers window->Show() and this has
             // problems when the view is not completely constructed which may
             // happen when loading. This leads to accessibility broadcasts which
-            // throw asserts due to the not finished view. All this chan be avoided
+            // throw asserts due to the not finished view. All this chain can be avoided
             // since xC->setVisible is here called only for the side effect in
             // UnoControlContainer::setVisible(...) which calls createPeer(...).
             // This will now be called directly from here.
-
-            // UnoContainerModel erzeugen
-            // uno::Reference< awt::XWindow > xC(mxControlContainer, uno::UNO_QUERY);
-            // CreateControlContainer() is only used from
-            // , thus it seems not necessary to make
-            // it visible her at all.
-            // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            // sal_Bool bVis = pWindow->IsVisible();
-            // xC->setVisible(sal_True);
-            // if ( !bVis )
-            //  pWindow->Hide();
-            //  if( !mxContext.is() && bVisible )
-            //      // Es ist ein TopWindow, also automatisch anzeigen
-            //      createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
 
             uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
             if(xControl.is())

@@ -1314,14 +1314,6 @@ bool SdrObject::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aOutRect);
     aOutRect.Justify();
 
-    // #i101648# for naked (non-derived) SdrObjects, do not invalidate aOutRect
-    // by calling SetBoundRectDirty(); aOutRect IS the geometry for such objects.
-    // No derivation implementation calls the parent implementation, so this will
-    // cause no further prolems
-    //
-    // SetBoundRectDirty();
-    // bSnapRectDirty=sal_True;
-
     return sal_True;
 }
 
@@ -1329,10 +1321,6 @@ bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aOutRect);
     aOutRect.Justify();
-
-    // #i101648# see description at MovCreate
-    //
-    // SetRectsDirty();
 
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
@@ -2729,8 +2717,6 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
 {
     maWeakUnoShape = _rxUnoShape;
     mpSvxShape = SvxShape::getImplementation( _rxUnoShape );
-//    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
-//        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
 }
 
 /** only for internal use! */

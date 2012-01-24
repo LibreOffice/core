@@ -519,7 +519,6 @@ public:
     bool beginPathDrag( SdrDragStat& rDrag )  const;
     bool movePathDrag( SdrDragStat& rDrag ) const;
     bool endPathDrag( SdrDragStat& rDrag );
-    //void cancelSpecialDrag( SdrDragStat& rDrag ) const;
     String getSpecialDragComment(const SdrDragStat& rDrag) const;
     basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
