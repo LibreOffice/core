@@ -261,14 +261,12 @@ sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 
 void ImageMap::ImpReadCERNLine( const rtl::OString& rLine, const String& rBaseURL  )
 {
-    ByteString  aStr( rLine );
-
-    aStr = comphelper::string::stripStart(aStr, ' ');
+    rtl::OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
     aStr = comphelper::string::remove(aStr, ';');
-    aStr.ToLowerAscii();
+    aStr = aStr.toAsciiLowerCase();
 
-    const char* pStr = aStr.GetBuffer();
+    const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
     // Anweisung finden
@@ -405,14 +403,12 @@ sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 
 void ImageMap::ImpReadNCSALine( const rtl::OString& rLine, const String& rBaseURL )
 {
-    ByteString  aStr( rLine );
-
-    aStr = comphelper::string::stripStart(aStr, ' ');
+    rtl::OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
     aStr = comphelper::string::remove(aStr, ';');
-    aStr.ToLowerAscii();
+    aStr = aStr.toAsciiLowerCase();
 
-    const char* pStr = aStr.GetBuffer();
+    const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
     // Anweisung finden

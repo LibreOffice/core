@@ -197,7 +197,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
 
 // ------------------------------------------------------------------------
 
-sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat )
+sal_Bool XBMReader::ParseData( SvStream* pInStm, const rtl::OString& aLastLine, XBMFormat eFormat )
 {
     rtl::OString    aLine;
     long            nRow = 0;
@@ -283,16 +283,14 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     // kehren wir zurueck und warten auf neue Daten
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
-        ByteString  aLine;
-
         rIStm.Seek( nLastPos );
         bStatus = sal_False;
-        aLine = FindTokenLine( &rIStm, "#define", "_width" );
+        rtl::OString aLine = FindTokenLine( &rIStm, "#define", "_width" );
 
         if ( bStatus )
         {
             int nValue;
-            if ( ( nValue = (int) ParseDefine( aLine.GetBuffer() ) ) > 0 )
+            if ( ( nValue = (int) ParseDefine( aLine.getStr() ) ) > 0 )
             {
                 nWidth = nValue;
                 aLine = FindTokenLine( &rIStm, "#define", "_height" );
@@ -310,7 +308,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
             if ( bStatus )
             {
-                if ( ( nValue = (int) ParseDefine( aLine.GetBuffer() ) ) > 0 )
+                if ( ( nValue = (int) ParseDefine( aLine.getStr() ) ) > 0 )
                 {
                     nHeight = nValue;
                     aLine = FindTokenLine( &rIStm, "static", "_bits" );
@@ -319,9 +317,10 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                     {
                         XBMFormat eFormat = XBM10;
 
-                        if ( aLine.Search( "short" ) != STRING_NOTFOUND )
+                        using comphelper::string::indexOfL;
+                        if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("short")) != -1)
                             eFormat = XBM10;
-                        else if ( aLine.Search( "char" ) != STRING_NOTFOUND )
+                        else if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("char")) != -1)
                             eFormat = XBM11;
                         else
                             bStatus = sal_False;
