@@ -83,7 +83,6 @@ class RtlReferencePrinter(object):
         self.val = val
 
     def to_string(self):
-        print("RtlReferencePrinter:to_string")
         pointee = self.val['m_pBody']
         if pointee:
             val = pointee.dereference()
