@@ -6121,59 +6121,59 @@ dnl ===================================================================
 if test "x$enable_postgresql_sdbc" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
-# if/when anything else than PostgreSQL uses Kerberos,
-# move this out of `test "x$enable_postgresql_sdbc" != "xno"'
-WITH_KRB5=NO
-WITH_GSSAPI=no
-case "$_os" in
-  Darwin)
-    # MacOS X has system MIT Kerberos 5 since 10.4
-    if test "$with_krb5" != "no"; then
-      WITH_KRB5=YES
-      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
-                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
-      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
-    fi
-    if test "$with_gssapi" != "no"; then
-      WITH_GSSAPI=YES
-      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-    fi
-   ;;
-  WINNT)
-   if test "$with_krb5" = "yes" || "$with_gssapi" = "yes"; then
-      AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
-   fi
-  ;;
-  *)
-    if test "$with_krb5" = "yes"; then
-      WITH_KRB5=YES
-      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
-                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
-      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
-    fi
-    if test "$with_gssapi" = "yes"; then
-      WITH_GSSAPI=YES
-      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-    fi
-esac
+    # if/when anything else than PostgreSQL uses Kerberos,
+    # move this out of `test "x$enable_postgresql_sdbc" != "xno"'
+    WITH_KRB5=NO
+    WITH_GSSAPI=no
+    case "$_os" in
+    Darwin)
+        # MacOS X has system MIT Kerberos 5 since 10.4
+        if test "$with_krb5" != "no"; then
+            WITH_KRB5=YES
+            AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+        fi
+        if test "$with_gssapi" != "no"; then
+          WITH_GSSAPI=YES
+          AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+        fi
+        ;;
+    WINNT)
+        if test "$with_krb5" = "yes" || "$with_gssapi" = "yes"; then
+            AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
+        fi
+        ;;
+    *)
+        if test "$with_krb5" = "yes"; then
+            WITH_KRB5=YES
+            AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+        fi
+        if test "$with_gssapi" = "yes"; then
+            WITH_GSSAPI=YES
+            AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+        fi
+    esac
 
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
         SYSTEM_POSTGRESQL=YES
         if test "$_os" = Darwin; then
-           supp_path=''
-           for d in /Library/PostgreSQL/9.*/bin /sw/opt/postgresql/9.*/bin /opt/local/lib/postgresql9*/bin; do
-            pg_supp_path="$P_SEP$d$pg_supp_path"
-           done
+            supp_path=''
+            for d in /Library/PostgreSQL/9.*/bin /sw/opt/postgresql/9.*/bin /opt/local/lib/postgresql9*/bin; do
+                pg_supp_path="$P_SEP$d$pg_supp_path"
+            done
         fi
         AC_PATH_PROG(PGCONFIG, pg_config, ,$PATH$pg_supp_path)
         if test -z "$PGCONFIG"; then
-           AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
+            AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
         fi
         POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
         POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
