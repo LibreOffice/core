@@ -106,12 +106,8 @@ struct SbxValues
 
 struct SbxValues;
 
-class SbxValueImpl;
-
 class BASIC_DLLPUBLIC SbxValue : public SbxBase
 {
-    SbxValueImpl* mpSbxValueImplImpl;   // Impl data
-
     // #55226 Transport additional infos
     BASIC_DLLPRIVATE SbxValue* TheRealValue( sal_Bool bObjInObjError ) const;
     BASIC_DLLPRIVATE SbxValue* TheRealValue() const;
