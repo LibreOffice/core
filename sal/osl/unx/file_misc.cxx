@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "osl/file.hxx"
+#include "osl/detail/file.h"
 
 #include "osl/diagnose.h"
 #include "osl/thread.h"
@@ -833,7 +834,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     int DestFileExists=1;
 
     /* mfe: does the source file really exists? */
-    nRet = lstat(pszPath,&aFileStat);
+    nRet = lstat_c(pszPath,&aFileStat);
 
     if ( nRet < 0 )
     {
@@ -1050,13 +1051,23 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
 static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode)
 {
-    int SourceFileFD=0;
+    oslFileHandle SourceFileFH=0;
     int DestFileFD=0;
     int nRet=0;
 
-    SourceFileFD=open(pszSourceFileName,O_RDONLY);
-    if ( SourceFileFD < 0 )
+#ifdef ANDROID
+    volatile int beenhere = 0;
+    if (!beenhere) {
+        beenhere++;
+        fprintf(stderr, "Sleeping NOW, start ndk-gdb!\n");
+        ::sleep(20);
+    }
+#endif
+    if (osl_openFilePath(pszSourceFileName,
+                         &SourceFileFH,
+                         osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl) != osl_File_E_None)
     {
+        // Let's hope errno is still set relevantly after osl_openFilePath...
         nRet=errno;
         return nRet;
     }
@@ -1066,7 +1077,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     if ( DestFileFD < 0 )
     {
         nRet=errno;
-        close(SourceFileFD);
+        osl_closeFile(SourceFileFH);
         return nRet;
     }
 
@@ -1080,15 +1091,17 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         do
         {
             size_t nToRead = std::min( sizeof(pBuffer), nRemains );
-            sal_Bool succeeded = safeRead( SourceFileFD, pBuffer, nToRead );
+            sal_uInt64 nRead;
+            sal_Bool succeeded;
+            if ( osl_readFile( SourceFileFH, pBuffer, nToRead, &nRead ) != osl_File_E_None || nRead > nToRead || nRead == 0 )
+                break;
+
+            succeeded = safeWrite( DestFileFD, pBuffer, nRead );
             if ( !succeeded )
                 break;
 
-            succeeded = safeWrite( DestFileFD, pBuffer, nToRead );
-            if ( !succeeded )
-                break;
-
-            nRemains -= nToRead;
+            // We know nRead <= nToRead, so it must fit in a size_t
+            nRemains -= (size_t) nRead;
         }
         while( nRemains );
     }
@@ -1101,7 +1114,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
             nRet = ENOSPC;
     }
 
-    close( SourceFileFD );
+    osl_closeFile( SourceFileFH );
     if ( close( DestFileFD ) == -1 && nRet == 0 )
         nRet = errno;
 
