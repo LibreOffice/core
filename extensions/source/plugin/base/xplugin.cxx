@@ -751,7 +751,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     fprintf( stderr,
              "new stream \"%s\" of MIMEType \"%s\"\n"
              "for plugin \"%s\"\n"
-             "seekable = %s, length = %"SAL_PRIdINT32"\n",
+             "seekable = %s, length = %" SAL_PRIdINT32 "\n",
              aURL.getStr(), aMIME.getStr(), getPluginComm()->getLibName().getStr(),
              isfile ? "true" : "false", length );
 
@@ -862,7 +862,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
     Guard< Mutex > aGuard( m_aMutex );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "XPlugin_Impl::setPosSize( %"SAL_PRIdINT32", %"SAL_PRIdINT32", %"SAL_PRIdINT32", %"SAL_PRIdINT32", %d )\n",
+    fprintf( stderr, "XPlugin_Impl::setPosSize( %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %d )\n",
              nX_, nY_, nWidth_, nHeight_, nFlags );
 #endif
 

@@ -236,7 +236,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
 
     for ( i = 0; i < mnPages; i++ )
     {
-        DBG(printf( "call ImplCreateSlide( %"SAL_PRIuUINT32" )\n", i));
+        DBG(printf( "call ImplCreateSlide( %" SAL_PRIuUINT32 " )\n", i));
         if ( !CreateSlide( i ) )
             return;
     }
@@ -454,7 +454,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
     if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ), sal_True )
         aAny >>= nLayout;
 
-    DBG(printf("GetLayoutOffset %"SAL_PRIdINT32"\n", nLayout));
+    DBG(printf("GetLayoutOffset %" SAL_PRIdINT32 "\n", nLayout));
 
     return nLayout;
 }
@@ -485,7 +485,7 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
         return pPHLayout[ nOffset ];
 
-    DBG(printf("asked %"SAL_PRIdINT32" for layout outside of 0,%d array scope\n", nOffset, EPP_LAYOUT_SIZE ));
+    DBG(printf("asked %" SAL_PRIdINT32 " for layout outside of 0,%d array scope\n", nOffset, EPP_LAYOUT_SIZE ));
 
     return pPHLayout[ 0 ];
 }

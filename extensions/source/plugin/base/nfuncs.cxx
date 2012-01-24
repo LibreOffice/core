@@ -56,7 +56,7 @@ void TRACE( char const * s )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s\n", t, s );
+        fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s\n", t, s );
         fflush( s_file );
     }
 }
@@ -67,7 +67,7 @@ void TRACEN( char const * s, long n )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s%ld\n", t, s, n );
+        fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s%ld\n", t, s, n );
         fflush( s_file );
     }
 }
@@ -78,7 +78,7 @@ void TRACES( char const* s, char const* s2 )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s %s\n", t, s, s2 );
+        fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s %s\n", t, s, s2 );
         fflush( s_file );
     }
 }
