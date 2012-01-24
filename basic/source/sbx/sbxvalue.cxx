@@ -1272,10 +1272,15 @@ Lbl_OpIsDouble:
                             SetError( SbxERR_NOTIMP );
                     }
                     // Date with "+" or "-" needs special handling that
-                    // forces the Date type ( except if lhs AND rhs are already
-                    // Date types
-                    if( ( eOp == SbxPLUS || eOp == SbxMINUS )&&  ( ( GetType() == SbxDATE || rOp.GetType() == SbxDATE )&&  ( GetType() != rOp.GetType() ) ) )
-                        aL.eType = SbxDATE;
+                    // forces the Date type. If the operation is '+' the
+                    // result is always a Date, if '-' the result is only
+                    // a Date if one of lhs or rhs ( but not both ) is already
+                    // a Date
+                    if( ( GetType() == SbxDATE || rOp.GetType() == SbxDATE ) )
+                    {
+                        if( eOp == SbxPLUS  || ( ( eOp == SbxMINUS ) &&  ( GetType() != rOp.GetType() ) ) )
+                            aL.eType = SbxDATE;
+                    }
 
                 }
             }
