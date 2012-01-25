@@ -50,6 +50,7 @@ class SvxSearchItem;
 
 #include <sfx2/progress.hxx>
 #include <svtools/syntaxhighlight.hxx>
+#include <unotools/options.hxx>
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
@@ -58,10 +59,9 @@ DBG_NAMEEX( ModulWindow )
 
 #define MARKER_NOMARKER 0xFFFF
 
-namespace utl
-{
-    class SourceViewConfig;
-}
+namespace com { namespace sun { namespace star { namespace beans {
+    class XMultiPropertySet;
+} } } }
 
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
@@ -91,18 +91,19 @@ inline void ProgressInfo::StepProgress()
     SetState( ++nCurState );
 }
 
-
-namespace svt {
-class SourceViewConfig;
-}
-
-class EditorWindow : public Window, public SfxListener, public utl::ConfigurationListener
+class EditorWindow : public Window, public SfxListener
 {
 private:
+    class ChangesListener;
+    friend class ChangesListener;
+
     ExtTextView*    pEditView;
     ExtTextEngine*  pEditEngine;
 
-    utl::SourceViewConfig* pSourceViewConfig;
+    rtl::Reference< ChangesListener > listener_;
+    osl::Mutex mutex_;
+    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >
+        notifier_;
 
     long            nCurTextWidth;
 
@@ -139,7 +140,6 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    LoseFocus();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     void            DoSyntaxHighlight( sal_uLong nPara );
     String          GetWordAtCursor();

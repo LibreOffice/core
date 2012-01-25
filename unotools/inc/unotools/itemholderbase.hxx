@@ -97,7 +97,6 @@ enum EItem
     E_SAVEOPTIONS                   ,   //
     E_SEARCHOPT                     ,   //
     E_SECURITYOPTIONS               ,   //
-    E_SOURCEVIEWCONFIG              ,   //
     E_STARTOPTIONS                  ,   //
     E_SYSLOCALEOPTIONS              ,   // 2
 

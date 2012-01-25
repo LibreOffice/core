@@ -40,8 +40,11 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
@@ -52,7 +55,6 @@
 #include <svtools/textwindowpeer.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
-#include <unotools/sourceviewconfig.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -147,6 +149,30 @@ void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rInde
     }
 }
 
+class EditorWindow::ChangesListener:
+    public cppu::WeakImplHelper1< beans::XPropertiesChangeListener >
+{
+public:
+    ChangesListener(EditorWindow & editor): editor_(editor) {}
+
+private:
+    virtual ~ChangesListener() {}
+
+    virtual void disposing(lang::EventObject const &) throw (RuntimeException)
+    {
+        osl::MutexGuard g(editor_.mutex_);
+        editor_.notifier_.clear();
+    }
+
+    virtual void propertiesChange(
+        Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException)
+    {
+        SolarMutexGuard g;
+        editor_.ImplSetFont();
+    }
+
+    EditorWindow & editor_;
+};
 
 EditorWindow::EditorWindow( Window* pParent ) :
     Window( pParent, WB_BORDER )
@@ -156,7 +182,6 @@ EditorWindow::EditorWindow( Window* pParent ) :
     pModulWindow = 0;
     pEditView = 0;
     pEditEngine = 0;
-    pSourceViewConfig = new utl::SourceViewConfig;
     bHighlightning = sal_False;
     pProgress = 0;
     nCurTextWidth = 0;
@@ -165,15 +190,35 @@ EditorWindow::EditorWindow( Window* pParent ) :
     SetPointer( Pointer( POINTER_TEXT ) );
 
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
-    pSourceViewConfig->AddListener(this);
+
+    // Using "this" in ctor is a little fishy, but should work here at least as
+    // long as there are no derivations:
+    listener_ = new ChangesListener(*this);
+    Reference< beans::XMultiPropertySet > n(
+        officecfg::Office::Common::Font::SourceViewFont::get(
+            comphelper::getProcessComponentContext()), UNO_QUERY_THROW);
+    {
+        osl::MutexGuard g(mutex_);
+        notifier_ = n;
+    }
+    Sequence< rtl::OUString > s(2);
+    s[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight"));
+    s[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontName"));
+    n->addPropertiesChangeListener(s, listener_.get());
 }
 
 
 
 EditorWindow::~EditorWindow()
 {
-    pSourceViewConfig->RemoveListener(this);
-    delete pSourceViewConfig;
+    Reference< beans::XMultiPropertySet > n;
+    {
+        osl::MutexGuard g(mutex_);
+        n = notifier_;
+    }
+    if (n.is()) {
+        n->removePropertiesChangeListener(listener_.get());
+    }
 
     aSyntaxIdleTimer.Stop();
 
@@ -704,11 +749,6 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void EditorWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
-{
-    ImplSetFont();
-}
-
 void EditorWindow::SetScrollBarRanges()
 {
     // extra method, not InitScrollBars, because for EditEngine events too
@@ -775,32 +815,34 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 
 void EditorWindow::ImplSetFont()
 {
-    if ( pSourceViewConfig )
+    rtl::OUString sFontName(
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
+            comphelper::getProcessComponentContext() ) );
+    if ( sFontName.isEmpty() )
     {
-        String sFontName = pSourceViewConfig->GetFontName();
-        if ( !sFontName.Len() )
-        {
-            Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
-            sFontName = aTmpFont.GetName();
-        }
-        Size aFontSize( 0, pSourceViewConfig->GetFontHeight() );
-        Font aFont( sFontName, aFontSize );
-        aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
-        SetPointFont( aFont );
-        aFont = GetFont();
+        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
+        sFontName = aTmpFont.GetName();
+    }
+    Size aFontSize(
+        0,
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
+            comphelper::getProcessComponentContext() ) );
+    Font aFont( sFontName, aFontSize );
+    aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
+    SetPointFont( aFont );
+    aFont = GetFont();
 
-        if ( pModulWindow )
-        {
-            pModulWindow->GetBreakPointWindow().SetFont( aFont );
-            pModulWindow->GetLineNumberWindow().SetFont( aFont );
-        }
+    if ( pModulWindow )
+    {
+        pModulWindow->GetBreakPointWindow().SetFont( aFont );
+        pModulWindow->GetLineNumberWindow().SetFont( aFont );
+    }
 
-        if ( pEditEngine )
-        {
-            sal_Bool bModified = pEditEngine->IsModified();
-            pEditEngine->SetFont( aFont );
-            pEditEngine->SetModified( bModified );
-        }
+    if ( pEditEngine )
+    {
+        sal_Bool bModified = pEditEngine->IsModified();
+        pEditEngine->SetFont( aFont );
+        pEditEngine->SetModified( bModified );
     }
 }
 

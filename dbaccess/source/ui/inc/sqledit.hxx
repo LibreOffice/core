@@ -28,10 +28,16 @@
 #ifndef DBAUI_SQLEDIT_HXX
 #define DBAUI_SQLEDIT_HXX
 
+#include "sal/config.h"
+
+#include <rtl/ref.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
-#include <unotools/sourceviewconfig.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans {
+    class XMultiPropertySet;
+} } } }
 
 namespace dbaui
 {
@@ -39,6 +45,9 @@ namespace dbaui
     class OSqlEdit : public MultiLineEditSyntaxHighlight, utl::ConfigurationListener
     {
     private:
+        class ChangesListener;
+        friend class ChangesListener;
+
         Timer                   m_timerInvalidate;
         Timer                   m_timerUndoActionCreation;
         Link                    m_lnkTextModifyHdl;
@@ -46,8 +55,12 @@ namespace dbaui
         OQueryTextView*         m_pView;
         sal_Bool                    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
         sal_Bool                    m_bStopTimer;
-        utl::SourceViewConfig   m_SourceViewConfig;
         svtools::ColorConfig    m_ColorConfig;
+
+        rtl::Reference< ChangesListener > m_listener;
+        osl::Mutex m_mutex;
+        com::sun::star::uno::Reference<
+            com::sun::star::beans::XMultiPropertySet > m_notifier;
 
         DECL_LINK(OnUndoActionTimer, void*);
         DECL_LINK(OnInvalidateTimer, void*);

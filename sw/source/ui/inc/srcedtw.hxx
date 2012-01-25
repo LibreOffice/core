@@ -30,11 +30,14 @@
 
 #include <vcl/window.hxx>
 #include <svl/lstner.hxx>
-#include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
 #include <tools/table.hxx>
 #include <svtools/xtextedt.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans {
+    class XMultiPropertySet;
+} } } }
 
 class ScrollBar;
 class SwSrcView;
@@ -42,11 +45,6 @@ class SwSrcEditWindow;
 class TextEngine;
 class ExtTextView;
 class DataChangedEvent;
-
-namespace utl
-{
-    class SourceViewConfig;
-}
 
 class TextViewOutWin : public Window
 {
@@ -70,10 +68,12 @@ public:
 };
 
 //------------------------------------------------------------
-namespace svt{ class SourceViewConfig;}
-class SwSrcEditWindow : public Window, public SfxListener, public utl::ConfigurationListener
+class SwSrcEditWindow : public Window, public SfxListener
 {
 private:
+    class ChangesListener;
+    friend class ChangesListener;
+
     ExtTextView*    pTextView;
     ExtTextEngine*  pTextEngine;
 
@@ -82,7 +82,11 @@ private:
                     *pVScrollbar;
 
     SwSrcView*      pSrcView;
-    utl::SourceViewConfig* pSourceViewConfig;
+
+    rtl::Reference< ChangesListener > listener_;
+    osl::Mutex mutex_;
+    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >
+        notifier_;
 
     long            nCurTextWidth;
     sal_uInt16          nStartLine;
@@ -116,7 +120,6 @@ protected:
     void            DoSyntaxHighlight( sal_uInt16 nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 

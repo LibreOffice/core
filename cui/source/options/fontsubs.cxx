@@ -26,12 +26,15 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/shl.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/fontsubstconfig.hxx>
-#include <unotools/sourceviewconfig.hxx>
 #include "fontsubs.hrc"
 #include "fontsubs.hxx"
 #include <dialmgr.hxx>
@@ -71,7 +74,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
 
     sAutomatic          (CUI_RES( STR_AUTOMATIC  )),
     pConfig(new SvtFontSubstConfig),
-    pSourceViewConfig(new utl::SourceViewConfig),
 
     sHeader1            (CUI_RES( STR_HEADER1       )),
     sHeader2            (CUI_RES( STR_HEADER2       )),
@@ -192,7 +194,6 @@ SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
 {
     delete pCheckButtonData;
     delete pConfig;
-    delete pSourceViewConfig;
 }
 
 /*********************************************************************/
@@ -230,15 +231,25 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
     if(pConfig->IsModified())
         pConfig->Commit();
     pConfig->Apply();
+    boost::shared_ptr< unotools::ConfigurationChanges > batch(
+        unotools::ConfigurationChanges::create(
+            comphelper::getProcessComponentContext()));
     if(aFontHeightLB.GetSavedValue() != aFontHeightLB.GetSelectEntryPos())
-        pSourceViewConfig->SetFontHeight((sal_Int16)aFontHeightLB.GetSelectEntry().ToInt32());
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< sal_Int16 >(aFontHeightLB.GetSelectEntry().ToInt32()));
     if(aNonPropFontsOnlyCB.GetSavedValue() != aNonPropFontsOnlyCB.IsChecked())
-        pSourceViewConfig->SetShowProportionalFontsOnly(aNonPropFontsOnlyCB.IsChecked());
+        officecfg::Office::Common::Font::SourceViewFont::
+            NonProportionalFontsOnly::set(
+                comphelper::getProcessComponentContext(), batch,
+                aNonPropFontsOnlyCB.IsChecked());
     //font name changes cannot be detected by saved values
-    String sFontName;
+    rtl::OUString sFontName;
     if(aFontNameLB.GetSelectEntryPos())
         sFontName = aFontNameLB.GetSelectEntry();
-    pSourceViewConfig->SetFontName(sFontName);
+    officecfg::Office::Common::Font::SourceViewFont::FontName::set(
+        comphelper::getProcessComponentContext(), batch, sFontName);
+    batch->commit();
 
     return sal_False;
 }
@@ -276,15 +287,22 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     aCheckLB.SetUpdateMode(sal_True);
 
     //fill font name box first
-    aNonPropFontsOnlyCB.Check(pSourceViewConfig->IsShowProportionalFontsOnly());
+    aNonPropFontsOnlyCB.Check(
+        officecfg::Office::Common::Font::SourceViewFont::
+            NonProportionalFontsOnly::get(
+                comphelper::getProcessComponentContext()));
     NonPropFontsHdl(&aNonPropFontsOnlyCB);
-    String sFontName(pSourceViewConfig->GetFontName());
-    if(sFontName.Len())
+    rtl::OUString sFontName(
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
+            comphelper::getProcessComponentContext()));
+    if(!sFontName.isEmpty())
         aFontNameLB.SelectEntry(sFontName);
     else
         aFontNameLB.SelectEntryPos(0);
-    short nFontHeight = pSourceViewConfig->GetFontHeight();
-    aFontHeightLB.SelectEntry(String::CreateFromInt32(nFontHeight));
+    aFontHeightLB.SelectEntry(
+        String::CreateFromInt32(
+            officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
+                comphelper::getProcessComponentContext())));
     aNonPropFontsOnlyCB.SaveValue();
     aFontHeightLB.SaveValue();
 }

@@ -26,11 +26,16 @@
  *
  ************************************************************************/
 
-
+#include "sal/config.h"
 
 #include <hintids.hxx>
 #include <cmdid.h>
 
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -41,7 +46,6 @@
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/txtattr.hxx>
-#include <unotools/sourceviewconfig.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -53,7 +57,11 @@
 #include <helpid.h>
 #include <deque>
 
+namespace {
 
+namespace css = com::sun::star;
+
+}
 
 struct SwTextPortion
 {
@@ -214,6 +222,33 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     }
 }
 
+class SwSrcEditWindow::ChangesListener:
+    public cppu::WeakImplHelper1< css::beans::XPropertiesChangeListener >
+{
+public:
+    ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}
+
+private:
+    virtual ~ChangesListener() {}
+
+    virtual void disposing(css::lang::EventObject const &)
+        throw (css::uno::RuntimeException)
+    {
+        osl::MutexGuard g(editor_.mutex_);
+        editor_.notifier_.clear();
+    }
+
+    virtual void propertiesChange(
+        css::uno::Sequence< css::beans::PropertyChangeEvent > const &)
+        throw (css::uno::RuntimeException)
+    {
+        SolarMutexGuard g;
+        editor_.SetFont();
+    }
+
+    SwSrcEditWindow & editor_;
+};
+
 SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
@@ -224,7 +259,6 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     pVScrollbar(0),
 
     pSrcView(pParentView),
-    pSourceViewConfig(new utl::SourceViewConfig),
 
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
@@ -234,13 +268,34 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
-    pSourceViewConfig->AddListener(this);
+
+    // Using "this" in ctor is a little fishy, but should work here at least as
+    // long as there are no derivations:
+    listener_ = new ChangesListener(*this);
+    css::uno::Reference< css::beans::XMultiPropertySet > n(
+        officecfg::Office::Common::Font::SourceViewFont::get(
+            comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW);
+    {
+        osl::MutexGuard g(mutex_);
+        notifier_ = n;
+    }
+    css::uno::Sequence< rtl::OUString > s(2);
+    s[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight"));
+    s[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontName"));
+    n->addPropertiesChangeListener(s, listener_.get());
 }
 
  SwSrcEditWindow::~SwSrcEditWindow()
 {
-    pSourceViewConfig->RemoveListener(this);
-    delete pSourceViewConfig;
+    css::uno::Reference< css::beans::XMultiPropertySet > n;
+    {
+        osl::MutexGuard g(mutex_);
+        n = notifier_;
+    }
+    if (n.is()) {
+        n->removePropertiesChangeListener(listener_.get());
+    }
     aSyntaxIdleTimer.Stop();
     if ( pTextEngine )
     {
@@ -724,12 +779,6 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
-{
-    if( pBrdCst == pSourceViewConfig)
-        SetFont();
-}
-
 void    SwSrcEditWindow::Invalidate(sal_uInt16 )
 {
     pOutWin->Invalidate();
@@ -928,8 +977,10 @@ sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLangu
 }
 void SwSrcEditWindow::SetFont()
 {
-    String sFontName = pSourceViewConfig->GetFontName();
-    if(!sFontName.Len())
+    rtl::OUString sFontName(
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
+            comphelper::getProcessComponentContext()));
+    if(sFontName.isEmpty())
     {
         LanguageType aLanguages[5] =
         {
@@ -955,7 +1006,10 @@ void SwSrcEditWindow::SetFont()
     Font aFont(aInfo);
     Size aSize(rFont.GetSize());
     //font height is stored in point and set in twip
-    aSize.Height() = pSourceViewConfig->GetFontHeight() * 20;
+    aSize.Height() =
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
+            comphelper::getProcessComponentContext())
+        * 20;
     aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
     GetTextEngine()->SetFont( aFont );
     pOutWin->SetFont(aFont);

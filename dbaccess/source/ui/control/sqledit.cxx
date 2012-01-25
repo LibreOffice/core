@@ -26,6 +26,14 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
+
+#include "com/sun/star/beans/XMultiPropertySet.hpp"
+#include "com/sun/star/beans/XPropertiesChangeListener.hpp"
+#include "comphelper/processfactory.hxx"
+#include "officecfg/Office/Common.hxx"
 #include "sqledit.hxx"
 #include "QueryTextView.hxx"
 #include "querycontainerwindow.hxx"
@@ -38,10 +46,43 @@
 
 #include <svl/smplhint.hxx>
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 // OSqlEdit
 //------------------------------------------------------------------------------
 using namespace dbaui;
+
+class OSqlEdit::ChangesListener:
+    public cppu::WeakImplHelper1< css::beans::XPropertiesChangeListener >
+{
+public:
+    ChangesListener(OSqlEdit & editor): editor_(editor) {}
+
+private:
+    virtual ~ChangesListener() {}
+
+    virtual void disposing(css::lang::EventObject const &)
+        throw (css::uno::RuntimeException)
+    {
+        osl::MutexGuard g(editor_.m_mutex);
+        editor_.m_notifier.clear();
+    }
+
+    virtual void propertiesChange(
+        css::uno::Sequence< css::beans::PropertyChangeEvent > const &)
+        throw (css::uno::RuntimeException)
+    {
+        SolarMutexGuard g;
+        editor_.ImplSetFont();
+    }
+
+    OSqlEdit & editor_;
+};
 
 DBG_NAME(OSqlEdit)
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
@@ -62,8 +103,22 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_timerInvalidate.Start();
 
     ImplSetFont();
-    // listen for change of Font and Color Settings
-    m_SourceViewConfig.AddListener( this );
+    // Listen for change of Font and Color Settings:
+    // Using "this" in ctor is a little fishy, but should work here at least as
+    // long as there are no derivations:
+    m_listener = new ChangesListener(*this);
+    css::uno::Reference< css::beans::XMultiPropertySet > n(
+        officecfg::Office::Common::Font::SourceViewFont::get(
+            comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW);
+    {
+        osl::MutexGuard g(m_mutex);
+        m_notifier = n;
+    }
+    css::uno::Sequence< rtl::OUString > s(2);
+    s[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight"));
+    s[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontName"));
+    n->addPropertiesChangeListener(s, m_listener.get());
     m_ColorConfig.AddListener(this);
 
     //#i97044#
@@ -76,7 +131,14 @@ OSqlEdit::~OSqlEdit()
     DBG_DTOR(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
-    m_SourceViewConfig.RemoveListener(this);
+    css::uno::Reference< css::beans::XMultiPropertySet > n;
+    {
+        osl::MutexGuard g(m_mutex);
+        n = m_notifier;
+    }
+    if (n.is()) {
+        n->removePropertiesChangeListener(m_listener.get());
+    }
     m_ColorConfig.RemoveListener(this);
 }
 //------------------------------------------------------------------------------
@@ -198,23 +260,27 @@ void OSqlEdit::startTimer()
 
 void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, sal_uInt32 )
 {
-    if ( pOption == &m_SourceViewConfig )
-        ImplSetFont();
-    else if ( pOption == &m_ColorConfig )
-        MultiLineEditSyntaxHighlight::UpdateData();
+    assert( pOption == &m_ColorConfig );
+    (void) pOption; // avoid warnings
+    MultiLineEditSyntaxHighlight::UpdateData();
 }
 
 void OSqlEdit::ImplSetFont()
 {
     AllSettings aSettings = GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    String sFontName = m_SourceViewConfig.GetFontName();
-    if ( !sFontName.Len() )
+    rtl::OUString sFontName(
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
+            comphelper::getProcessComponentContext() ) );
+    if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
-    Size aFontSize( 0, m_SourceViewConfig.GetFontHeight() );
+    Size aFontSize(
+        0,
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
+            comphelper::getProcessComponentContext() ) );
     Font aFont( sFontName, aFontSize );
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);

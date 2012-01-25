@@ -59,7 +59,6 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/sourceviewconfig.hxx>
 #include <unotools/startoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/workingsetoptions.hxx>
@@ -261,10 +260,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_SECURITYOPTIONS :
             rItem.pItem = new SvtSecurityOptions();
-            break;
-
-        case E_SOURCEVIEWCONFIG :
-            rItem.pItem = new ::utl::SourceViewConfig();
             break;
 
         case E_STARTOPTIONS :
