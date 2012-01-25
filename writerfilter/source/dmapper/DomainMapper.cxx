@@ -27,15 +27,11 @@
  ************************************************************************/
 #include "PageBordersHandler.hxx"
 
-#include <dmapper/DomainMapper.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
-#include <NumberingManager.hxx>
-#include <ThemeTable.hxx>
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
-#include <OLEHandler.hxx>
 #include <i18npool/mslangid.hxx>
 #include <i18npool/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
@@ -49,25 +45,17 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/text/XTextPortionAppend.hpp>
-#include <com/sun/star/text/XParagraphAppend.hpp>
-#include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
@@ -76,26 +64,13 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/oustringostreaminserter.hxx>
-#include <boost/shared_ptr.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <tools/color.hxx>
-#include <BorderHandler.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
-#include <vector>
-#include <iostream>
-
-#if OSL_DEBUG_LEVEL > 0
-#include <resourcemodel/QNameToString.hxx>
-#endif
-
-#include <resourcemodel/TagLogger.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
