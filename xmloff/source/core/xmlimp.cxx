@@ -905,9 +905,9 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sName;
                 }
-                if( sBaseURI.getLength() && sName.getLength() )
+                if( !sBaseURI.isEmpty() && !sName.isEmpty() )
                 {
-                    if( sRelPath.getLength() )
+                    if( !sRelPath.isEmpty() )
                         mpImpl->aBaseURL.insertName( sRelPath );
                     mpImpl->aBaseURL.insertName( sName );
                 }
@@ -1191,14 +1191,14 @@ sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
             sRet = mxGraphicResolver->resolveGraphicObjectURL( aTmp );
         }
 
-        if( !sRet.getLength() )
+        if( sRet.isEmpty() )
         {
             sRet = msPackageProtocol;
             sRet += rURL;
         }
     }
 
-    if( !sRet.getLength() )
+    if( sRet.isEmpty() )
         sRet = GetAbsoluteReference( rURL );
 
     return sRet;
@@ -1237,7 +1237,7 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
         if ( mxEmbeddedResolver.is() )
         {
             OUString sURL( rURL );
-            if( rClassId.getLength() )
+            if( !rClassId.isEmpty() )
             {
                 sURL += OUString( sal_Unicode('!') );
                 sURL += rClassId;
@@ -1325,7 +1325,7 @@ OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
                                            const OUString& rName ) const
 {
     OUString sName( rName );
-    if( mpStyleMap && rName.getLength() )
+    if( mpStyleMap && !rName.isEmpty() )
     {
         StyleMap::key_type aKey( nFamily, rName );
         StyleMap::const_iterator aIter = mpStyleMap->find( aKey );
@@ -1526,7 +1526,7 @@ const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
 
 OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
 {
-    if( rValue.getLength() == 0 || rValue[0] == '#' )
+    if( rValue.isEmpty() || rValue[0] == '#' )
         return rValue;
 
     INetURLObject aAbsURL;
@@ -1541,7 +1541,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
     // the check returns sal_False only if the storage version could be retrieved
     sal_Bool bResult = sal_True;
 
-    if ( aODFVersion.getLength() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+    if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
     {
         // check the consistency only for the ODF1.2 and later ( according to content.xml )
         // manifest.xml might have no version, it should be checked here and the correct version should be set
@@ -1575,7 +1575,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                     // if not, set it explicitly to be used further ( it will work even for readonly storage )
                     // This workaround is not nice, but I see no other way to handle it, since there are
                     // ODF1.2 documents without version in manifest.xml
-                    if ( aStorVersion.getLength() )
+                    if ( !aStorVersion.isEmpty() )
                         bResult = aODFVersion.equals( aStorVersion );
                     else
                         xStorProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ),
@@ -1821,7 +1821,7 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
         {
             OUString aBuildId;
             mxImportInfo->getPropertyValue( aPropName ) >>= aBuildId;
-            if( aBuildId.getLength() )
+            if( !aBuildId.isEmpty() )
             {
                 sal_Int32 nIndex = aBuildId.indexOf('$');
                 if( nIndex != -1 )
@@ -1869,7 +1869,7 @@ bool SvXMLImport::isGraphicLoadOnDemandSupported() const
 void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
     ::rtl::OUString const & i_rXmlId)
 {
-    if (i_rXmlId.getLength() > 0) {
+    if (!i_rXmlId.isEmpty()) {
         try {
             const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
                 uno::UNO_QUERY);

@@ -527,7 +527,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 }
 
                 SvXMLElementExport aEle( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, sal_True, sal_True );
-                if( rEffect.maSoundURL.getLength() != 0 )
+                if( !rEffect.maSoundURL.isEmpty() )
                 {
                     rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(rEffect.maSoundURL) );
                     rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

@@ -491,7 +491,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
         if( eClickAction == presentation::ClickAction_VANISH || eClickAction == presentation::ClickAction_SOUND )
         {
-            if( ( nFound & FOUND_SOUNDURL ) && aStrSoundURL.getLength() != 0 )
+            if( ( nFound & FOUND_SOUNDURL ) && !aStrSoundURL.isEmpty() )
             {
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStrSoundURL) );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -576,13 +576,13 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
         xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= aTitle;
         xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Description" )) ) >>= aDescription;
 
-        if(aTitle.getLength())
+        if(!aTitle.isEmpty())
         {
             SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, sal_True, sal_False);
             mrExport.Characters( aTitle );
         }
 
-        if(aDescription.getLength())
+        if(!aDescription.isEmpty())
         {
             SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_DESC, sal_True, sal_False );
             mrExport.Characters( aDescription );
@@ -1145,7 +1145,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     nLastIndex = sRequestedName.lastIndexOf( '.' );
                     if ( nLastIndex >= 0 )
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );
-                    if ( sRequestedName.getLength() )
+                    if ( !sRequestedName.isEmpty() )
                     {
                         aResolveURL = aResolveURL.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("?requestedName=")));
                         aResolveURL = aResolveURL.concat( sRequestedName );
@@ -1155,7 +1155,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
-                if( aStr.getLength() )
+                if( !aStr.isEmpty() )
                 {
                     if( aStr[ 0 ] == '#' )
                     {
@@ -1185,7 +1185,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             {
                 SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
 
-                if( sImageURL.getLength() )
+                if( !sImageURL.isEmpty() )
                 {
                     // optional office:binary-data
                     mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
@@ -1619,9 +1619,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 }
 
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
-                if ( !sURL.getLength() )
+                if ( sURL.isEmpty() )
                 {
-                    if( sPersistName.getLength() )
+                    if( !sPersistName.isEmpty() )
                     {
                         sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
                         sURL += sPersistName;
@@ -1631,12 +1631,12 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 if( !bInternal )
                     xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sClassId;
 
-                if( sClassId.getLength() )
+                if( !sClassId.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
                 if(!bExportEmbedded)
                 {
                     // xlink:href
-                    if( sURL.getLength() )
+                    if( !sURL.isEmpty() )
                     {
                         // #96717# in theorie, if we don't have a url we shouldn't even
                         // export this ole shape. But practical its to risky right now
@@ -1661,7 +1661,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
 
-            enum XMLTokenEnum eElem = sClassId.getLength() ? XML_OBJECT_OLE : XML_OBJECT;
+            enum XMLTokenEnum eElem = sClassId.isEmpty() ? XML_OBJECT : XML_OBJECT_OLE ;
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, eElem, sal_True, sal_True );
 
             if(bExportEmbedded && !bIsEmptyPresObj)
@@ -1830,7 +1830,7 @@ void XMLShapeExport::ImpExportFrameShape(
 
         // export name
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameName" ) ) ) >>= aStr;
-        if( aStr.getLength() )
+        if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
 
         // write floating frame
@@ -1866,7 +1866,7 @@ void XMLShapeExport::ImpExportAppletShape(
 
         // export draw:applet-name
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletName" ) ) ) >>= aStr;
-        if( aStr.getLength() )
+        if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
         // export draw:code
@@ -1924,7 +1924,7 @@ void XMLShapeExport::ImpExportPluginShape(
 
         // export mime-type
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ) ) >>= aStr;
-        if(aStr.getLength())
+        if(!aStr.isEmpty())
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
 
         {
@@ -2105,7 +2105,7 @@ void XMLShapeExport::ImpExportMediaShape(
             break;
         }
 
-        if( aZoomValue.getLength() )
+        if( !aZoomValue.isEmpty() )
         {
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );

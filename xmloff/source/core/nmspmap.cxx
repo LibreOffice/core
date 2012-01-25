@@ -194,7 +194,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
     {
         sAttrName.append( sXMLNS  );
         const ::rtl::OUString & prefix( (*aIter).second->sPrefix );
-        if (prefix.getLength()) // not default namespace
+        if (!prefix.isEmpty()) // not default namespace
         {
             sAttrName.append( sal_Unicode(':') );
             sAttrName.append( prefix );
@@ -223,7 +223,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             // don't bother caching this, it rarely happens
             OUStringBuffer sQName;
             sQName.append ( sXMLNS );
-            if (rLocalName.getLength()) // not default namespace
+            if (!rLocalName.isEmpty()) // not default namespace
             {
                 sQName.append ( sal_Unicode(':') );
                 sQName.append ( rLocalName );
@@ -256,7 +256,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     OUStringBuffer sQName;
                     // ...if it's in our map, make the prefix
                     const OUString & prefix( (*aIter).second->sPrefix );
-                    if (prefix.getLength()) // not default namespace
+                    if (!prefix.isEmpty()) // not default namespace
                     {
                         sQName.append( prefix );
                         sQName.append( sal_Unicode(':') );

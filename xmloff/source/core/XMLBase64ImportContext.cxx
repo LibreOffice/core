@@ -68,10 +68,10 @@ void XMLBase64ImportContext::EndElement()
 void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
 {
     OUString sTrimmedChars( rChars. trim() );
-    if( sTrimmedChars.getLength() )
+    if( !sTrimmedChars.isEmpty() )
     {
         OUString sChars;
-        if( sBase64CharsLeft.getLength() )
+        if( !sBase64CharsLeft.isEmpty() )
         {
             sChars = sBase64CharsLeft;
             sChars += sTrimmedChars;

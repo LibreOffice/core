@@ -868,7 +868,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 default:
                                                     break;
                                             }
-                                            if ( aStr.getLength() )
+                                            if ( !aStr.isEmpty() )
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_MODE, aStr );
                                         }
                                     }
@@ -963,7 +963,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 case com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS : aStr = GetXMLToken( XML_SEGMENTS ); break;
                                                 case com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT     : aStr = GetXMLToken( XML_RECTANGLE ); break;
                                             }
-                                            if ( aStr.getLength() )
+                                            if ( !aStr.isEmpty() )
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GLUE_POINT_TYPE, aStr );
                                         }
                                     }
@@ -1105,14 +1105,14 @@ void XMLShapeExport::ImpExportCustomShape(
             if ( xPropSetInfo->hasPropertyByName( sCustomShapeEngine ) )
             {
                 uno::Any aEngine( xPropSet->getPropertyValue( sCustomShapeEngine ) );
-                if ( ( aEngine >>= aStr ) && aStr.getLength() )
+                if ( ( aEngine >>= aStr ) && !aStr.isEmpty() )
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
             }
             const rtl::OUString sCustomShapeData( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeData" ) );
             if ( xPropSetInfo->hasPropertyByName( sCustomShapeData ) )
             {
                 uno::Any aData( xPropSet->getPropertyValue( sCustomShapeData ) );
-                if ( ( aData >>= aStr ) && aStr.getLength() )
+                if ( ( aData >>= aStr ) && !aStr.isEmpty() )
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
             }
         }
@@ -1157,7 +1157,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 if( xTemplate.is() )
                 {
                     const OUString sTemplate( xTemplate->getName() );
-                    if( sTemplate.getLength() )
+                    if( !sTemplate.isEmpty() )
                     {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
 

@@ -76,7 +76,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
                     ( nNumberFormat != -1 ))
                 {
                     rtl::OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
-                    if( sAttrValue.getLength() )
+                    if( !sAttrValue.isEmpty() )
                     {
                         mrSchXMLExport.AddAttribute(
                             aPropMapper->GetEntryNameSpace( iter->mnIndex ),

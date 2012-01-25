@@ -71,7 +71,7 @@ class SAL_DLLPRIVATE RDFaReader
     //FIXME: this is an ugly hack to workaround buggy SvXMLImport::GetAbsolute
     ::rtl::OUString GetAbsoluteReference(::rtl::OUString const & i_rURI) const
     {
-        if (!i_rURI.getLength() || i_rURI[0] == '#')
+        if (i_rURI.isEmpty() || i_rURI[0] == '#')
         {
             return GetImport().GetBaseURL() + i_rURI;
         }
@@ -228,16 +228,16 @@ RDFaReader::ReadCURIEs(::rtl::OUString const & i_rCURIEs) const
     ::rtl::OUString CURIEs(i_rCURIEs);
     do {
       ::rtl::OUString curie( splitAtWS(CURIEs) );
-      if (curie.getLength())
+      if (!curie.isEmpty())
       {
           const ::rtl::OUString uri(ReadCURIE(curie));
-          if (uri.getLength())
+          if (!uri.isEmpty())
           {
               vec.push_back(uri);
           }
       }
     }
-    while (CURIEs.getLength());
+    while (!CURIEs.isEmpty());
     if (!vec.size())
     {
         OSL_TRACE( "ReadCURIEs: invalid CURIEs" );
@@ -383,7 +383,7 @@ void RDFaInserter::InsertRDFaEntry(
     }
 
     uno::Reference<rdf::XURI> xDatatype;
-    if (i_rEntry.m_pRDFaAttributes->m_Datatype.getLength())
+    if (!i_rEntry.m_pRDFaAttributes->m_Datatype.isEmpty())
     {
         xDatatype = MakeURI( i_rEntry.m_pRDFaAttributes->m_Datatype );
     }
@@ -421,7 +421,7 @@ RDFaImportHelper::ParseRDFa(
     ::rtl::OUString const & i_rContent,
     ::rtl::OUString const & i_rDatatype)
 {
-    if (!i_rProperty.getLength())
+    if (i_rProperty.isEmpty())
     {
         OSL_TRACE("AddRDFa: invalid input: xhtml:property empty");
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
@@ -429,7 +429,7 @@ RDFaImportHelper::ParseRDFa(
     // must parse CURIEs here: need namespace declaration context
     RDFaReader reader(GetImport());
     const ::rtl::OUString about( reader.ReadURIOrSafeCURIE(i_rAbout) );
-    if (!about.getLength()) {
+    if (about.isEmpty()) {
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
     const ::std::vector< ::rtl::OUString > properties(
@@ -437,7 +437,7 @@ RDFaImportHelper::ParseRDFa(
     if (!properties.size()) {
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
-    const ::rtl::OUString datatype( i_rDatatype.getLength()
+    const ::rtl::OUString datatype( !i_rDatatype.isEmpty()
         ?   reader.ReadCURIE(i_rDatatype)
         :   ::rtl::OUString() );
     return ::boost::shared_ptr<ParsedRDFaAttributes>(

@@ -543,7 +543,7 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
 
 bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
 {
-    if(!_sValue.getLength() || _sValue[0] != '(')
+    if(_sValue.isEmpty() || _sValue[0] != '(')
         return false;
 
     sal_Int32 nPos(1L);

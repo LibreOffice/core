@@ -302,14 +302,14 @@ void SdXMLGenericPageContext::EndElement()
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->endPage();
 
-    if( maUseHeaderDeclName.getLength() || maUseFooterDeclName.getLength() || maUseDateTimeDeclName.getLength() )
+    if( !maUseHeaderDeclName.isEmpty() || !maUseFooterDeclName.isEmpty() || !maUseDateTimeDeclName.isEmpty() )
     {
         try
         {
             Reference <beans::XPropertySet> xSet(mxShapes, uno::UNO_QUERY_THROW );
             Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
 
-            if( maUseHeaderDeclName.getLength() )
+            if( !maUseHeaderDeclName.isEmpty() )
             {
                 const OUString aStrHeaderTextProp( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) );
                 if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
@@ -317,7 +317,7 @@ void SdXMLGenericPageContext::EndElement()
                                             makeAny( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
             }
 
-            if( maUseFooterDeclName.getLength() )
+            if( !maUseFooterDeclName.isEmpty() )
             {
                 const OUString aStrFooterTextProp( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) );
                 if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
@@ -325,7 +325,7 @@ void SdXMLGenericPageContext::EndElement()
                                         makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
             }
 
-            if( maUseDateTimeDeclName.getLength() )
+            if( !maUseDateTimeDeclName.isEmpty() )
             {
                 const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
                 if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
@@ -341,7 +341,7 @@ void SdXMLGenericPageContext::EndElement()
                     {
                         xSet->setPropertyValue( aStrDateTimeTextProp, makeAny( aText ) );
                     }
-                    else if( aDateTimeFormat.getLength() )
+                    else if( !aDateTimeFormat.isEmpty() )
                     {
                         const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetStylesContext() );
                         if( !pStyles )
@@ -374,7 +374,7 @@ void SdXMLGenericPageContext::EndElement()
 void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
 {
     // set PageProperties?
-    if(rStyleName.getLength())
+    if(!rStyleName.isEmpty())
     {
         try
         {
@@ -439,7 +439,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
 void SdXMLGenericPageContext::SetLayout()
 {
     // set PresentationPageLayout?
-    if(GetSdImport().IsImpress() && maPageLayoutName.getLength())
+    if(GetSdImport().IsImpress() && !maPageLayoutName.isEmpty())
     {
         sal_Int32 nType = -1;
 
@@ -614,7 +614,7 @@ sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException
 
 void SdXMLGenericPageContext::SetNavigationOrder()
 {
-    if( msNavOrder.getLength() != 0 ) try
+    if( !msNavOrder.isEmpty() ) try
     {
         sal_uInt32 nIndex;
         const sal_uInt32 nCount = static_cast< sal_uInt32 >( mxShapes->getCount() );

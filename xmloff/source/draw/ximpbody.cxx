@@ -130,7 +130,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
-    if (sXmlId.getLength())
+    if (!sXmlId.isEmpty())
     {
         uno::Reference< uno::XInterface > const xRef( rShapes.get() );
         GetImport().getInterfaceToIdentifierMapper().registerReference(
@@ -141,7 +141,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);
 
     // set PageName?
-    if(maName.getLength())
+    if(!maName.isEmpty())
     {
         if(xShapeDrawPage.is())
         {
@@ -152,7 +152,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     }
 
     // set MasterPage?
-    if(maMasterPageName.getLength())
+    if(!maMasterPageName.isEmpty())
     {
         // #85906# Code for setting masterpage needs complete rework
         // since GetSdImport().GetMasterStylesContext() gives always ZERO
@@ -181,8 +181,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     {
                         OUString sMasterPageName = xMasterNamed->getName();
 
-                        if(sMasterPageName.getLength() &&
-                            sMasterPageName.equals(sDisplayName))
+                        if(!sMasterPageName.isEmpty() && sMasterPageName.equals(sDisplayName))
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = sal_True;
@@ -197,7 +196,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     SetStyle( maStyleName );
 
-    if( maHREF.getLength() )
+    if( !maHREF.isEmpty() )
     {
         uno::Reference< beans::XPropertySet > xProps( xShapeDrawPage, uno::UNO_QUERY );
         if( xProps.is() )

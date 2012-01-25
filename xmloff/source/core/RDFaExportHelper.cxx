@@ -75,8 +75,8 @@ makeCURIE(SvXMLExport * i_pExport,
     if (!i_xURI.is()) throw uno::RuntimeException();
 
     const ::rtl::OUString Namespace( i_xURI->getNamespace() );
-    OSL_ENSURE(Namespace.getLength(), "makeCURIE: no namespace");
-    if (!Namespace.getLength()) throw uno::RuntimeException();
+    OSL_ENSURE(!Namespace.isEmpty(), "makeCURIE: no namespace");
+    if (Namespace.isEmpty()) throw uno::RuntimeException();
 
     ::rtl::OUStringBuffer buf;
     buf.append( i_pExport->EnsureNamespace(Namespace) );
@@ -140,7 +140,7 @@ RDFaExportHelper::LookupBlankNode(
     if (!i_xBlankNode.is()) throw uno::RuntimeException();
     ::rtl::OUString & rEntry(
         m_BlankNodeMap[ i_xBlankNode->getStringValue() ] );
-    if (!rEntry.getLength())
+    if (rEntry.isEmpty())
     {
         ::rtl::OUStringBuffer buf;
         buf.appendAscii(s_prefix);

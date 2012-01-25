@@ -827,10 +827,10 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= sName;
         }
-        if( msOrigFileName.getLength() && sName.getLength() )
+        if( !msOrigFileName.isEmpty() && !sName.isEmpty() )
         {
             INetURLObject aBaseURL( msOrigFileName );
-            if( sRelPath.getLength() )
+            if( !sRelPath.isEmpty() )
                 aBaseURL.insertName( sRelPath );
             aBaseURL.insertName( sName );
             msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
@@ -875,7 +875,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     {
         const sal_uInt32 nTest =
             EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
-        if( (mnExportFlags & nTest) == nTest && !msOrigFileName.getLength() )
+        if( (mnExportFlags & nTest) == nTest && msOrigFileName.isEmpty() )
         {
             // evaluate descriptor only for flat files and if a base URI
             // has not been provided already
@@ -2180,7 +2180,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 
     OSL_ENSURE( sFilterService.getLength(), "no export filter for own object" );
 
-    if( !sFilterService.getLength() )
+    if( sFilterService.isEmpty() )
         return sal_False;
 
     Reference < XDocumentHandler > xHdl =
@@ -2239,7 +2239,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
     // #i65474# handling of fragment URLs ("#....") is undefined
     // they are stored 'as is'
     uno::Reference< uri::XUriReference > xUriRef;
-    if(sValue.getLength() && sValue.getStr()[0] != '#')
+    if(!sValue.isEmpty() && sValue.getStr()[0] != '#')
     {
         try
         {
@@ -2514,10 +2514,10 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
     if ( xMeta.is() )
     {
         const beans::StringPair mdref( xMeta->getMetadataReference() );
-        if ( mdref.Second.getLength() )
+        if ( !mdref.Second.isEmpty() )
         {
             const ::rtl::OUString streamName( GetStreamName() );
-            if ( streamName.getLength() )
+            if ( !streamName.isEmpty() )
             {
                 if ( streamName.equals(mdref.First) )
                 {
@@ -2564,7 +2564,7 @@ SvXMLExport::AddAttributesRDFa(
 
     const uno::Reference<rdf::XMetadatable> xMeta(
         i_xTextContent, uno::UNO_QUERY);
-    if (!xMeta.is() || !xMeta->getMetadataReference().Second.getLength())
+    if (!xMeta.is() || xMeta->getMetadataReference().Second.isEmpty())
     {
         return; // no xml:id => no RDFa
     }

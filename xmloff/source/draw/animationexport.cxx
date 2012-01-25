@@ -594,7 +594,7 @@ void AnimationsExporterImpl::exportTransitionNode()
 
 
         OUStringBuffer sTmp;
-        if( (nTransition != 0) || (sSoundURL.getLength() != 0) || bStopSound )
+        if( (nTransition != 0) || !sSoundURL.isEmpty() || bStopSound )
         {
             Reference< XInterface > xSource( mxPageProps.get() );
             Event aEvent;
@@ -647,7 +647,7 @@ void AnimationsExporterImpl::exportTransitionNode()
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, XML_STOP_AUDIO );
                 SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
             }
-            else if( sSoundURL.getLength() != 0)
+            else if( !sSoundURL.isEmpty())
             {
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( sSoundURL ) );
 
@@ -681,7 +681,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
                 bStopSound = sal_False;
         }
 
-        if( (nTransition != 0) || (sSoundURL.getLength() != 0) || bStopSound )
+        if( (nTransition != 0) || !sSoundURL.isEmpty() || bStopSound )
         {
             mbHasTransition = true;
             Reference< XInterface > xInt( mxPageProps.get() );
@@ -782,7 +782,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         OUStringBuffer sTmp;
 
         const OUString& rExportIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xNode );
-        if( rExportIdentifier.getLength() )
+        if( !rExportIdentifier.isEmpty() )
         {
             mrExport.AddAttributeIdLegacy(
                 XML_NAMESPACE_ANIMATION, rExportIdentifier);
@@ -958,7 +958,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                     if( xMaster.is() )
                     {
                         const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier(xMaster);
-                        if( rIdentifier.getLength() )
+                        if( !rIdentifier.isEmpty() )
                             mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT, rIdentifier );
                     }
                 }
@@ -1147,7 +1147,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         else
         {
             OUString sTemp( xAnimate->getAttributeName() );
-            if( sTemp.getLength() )
+            if( !sTemp.isEmpty() )
             {
                 ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
                 while( p->mpAPIName )
@@ -1221,7 +1221,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
 
             OUString sTemp( xAnimate->getFormula() );
-            if( sTemp.getLength() )
+            if( !sTemp.isEmpty() )
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_FORMULA, sTemp );
 
             if( (nNodeType != AnimationNodeType::TRANSITIONFILTER) &&
@@ -1376,7 +1376,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
     {
         OUString aSourceURL;
         xAudio->getSource() >>= aSourceURL;
-        if( aSourceURL.getLength() )
+        if( !aSourceURL.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( aSourceURL ) );
 
         const double fVolume = xAudio->getVolume();
@@ -1645,7 +1645,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
     if( xRef.is() )
     {
         const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier(xRef);
-        if( rIdentifier.getLength() )
+        if( !rIdentifier.isEmpty() )
             sTmp.append( rIdentifier );
     }
 }

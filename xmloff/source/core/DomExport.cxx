@@ -227,7 +227,7 @@ OUString DomExport::qualifiedName( const OUString& sPrefix,
                                    const OUString& sLocalName )
 {
     OUStringBuffer sBuffer;
-    if( ( sPrefix.getLength() > 0 ) && ( sURI.getLength() > 0 ) )
+    if( !sPrefix.isEmpty() && !sURI.isEmpty() )
     {
         addNamespace( sPrefix, sURI );
         sBuffer.append( sPrefix );

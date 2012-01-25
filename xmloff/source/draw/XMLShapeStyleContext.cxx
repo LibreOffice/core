@@ -76,7 +76,7 @@ XMLShapeStyleContext::~XMLShapeStyleContext()
 
 void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    if ((0 == m_sControlDataStyleName.getLength()) && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
+    if (m_sControlDataStyleName.isEmpty() && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
     {
         m_sControlDataStyleName = rValue;
     }
@@ -91,7 +91,7 @@ void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const ::rtl::OUS
         if( (XML_NAMESPACE_STYLE == nPrefixKey) &&
             ( IsXMLToken( rLocalName, ::xmloff::token::XML_NAME ) || IsXMLToken( rLocalName, ::xmloff::token::XML_DISPLAY_NAME ) ) )
         {
-            if( GetName().getLength() && GetDisplayName().getLength() && GetName() != GetDisplayName() )
+            if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
             {
                 const_cast< SvXMLImport&>( GetImport() ).
                     AddStyleDisplayName( GetFamily(), GetName(), GetDisplayName() );
@@ -162,7 +162,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         // if we did not find an old list-style-name in the properties, and we need one
         // because we got a style:list-style attribute in the style-style element
         // we generate one
-        if( (property == end) && ( 0 != m_sListStyleName.getLength() ) )
+        if( (property == end) && ( !m_sListStyleName.isEmpty() ) )
         {
             sal_Int32 nIndex = rMapper->FindEntryIndex( CTF_SD_NUMBERINGRULES_NAME );
             DBG_ASSERT( -1 != nIndex, "can't find numbering rules property entry, can't set numbering rule!" );
@@ -177,7 +177,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         // a numbering rule
         if( property != end )
         {
-            if( 0 == m_sListStyleName.getLength() )
+            if( m_sListStyleName.isEmpty() )
             {
                 property->maValue >>= m_sListStyleName;
             }
@@ -301,7 +301,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         }
     }
 
-    if (m_sControlDataStyleName.getLength())
+    if (!m_sControlDataStyleName.isEmpty())
     {   // we had a data-style-name attribute
 
         // set the formatting on the control model of the control shape

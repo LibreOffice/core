@@ -339,7 +339,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         }
     }
 
-    if( aOldChartTypeName.getLength()<= 0 )
+    if( aOldChartTypeName.isEmpty() )
     {
         OSL_FAIL( "need a charttype to create a diagram" );
         //set a fallback value:
@@ -445,8 +445,8 @@ struct NewDonutSeries
             {
                 aPointStyle.msSeriesStyleNameForDonuts = m_aSeriesStyles[nPointIndex];
             }
-            if( aPointStyle.msSeriesStyleNameForDonuts.getLength()
-                || aPointStyle.msStyleName.getLength() )
+            if( !aPointStyle.msSeriesStyleNameForDonuts.isEmpty()
+                || !aPointStyle.msStyleName.isEmpty() )
                 aRet.push_back( aPointStyle );
             ++aPointIt;
             ++nPointIndex;
@@ -634,12 +634,12 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         -1, uno::makeAny( bFirstCellAsLabel ),
         beans::PropertyState_DIRECT_VALUE );
 
-    if( sColTrans.getLength() || sRowTrans.getLength() )
+    if( !sColTrans.isEmpty() || !sRowTrans.isEmpty() )
     {
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SequenceMapping" )),
-            -1, uno::makeAny( sColTrans.getLength()
+            -1, uno::makeAny( !sColTrans.isEmpty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
         beans::PropertyState_DIRECT_VALUE );
@@ -660,7 +660,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
                 aChartOleObjectName = (*aIt).second.get< ::rtl::OUString >();
             }
         }
-        if( aChartOleObjectName.getLength() )
+        if( !aChartOleObjectName.isEmpty() )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
@@ -695,7 +695,7 @@ void SchXMLChartContext::EndElement()
 
     if( xProp.is())
     {
-        if( maMainTitle.getLength())
+        if( !maMainTitle.isEmpty())
         {
             uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getTitle(), uno::UNO_QUERY );
             if( xTitleProp.is())
@@ -712,7 +712,7 @@ void SchXMLChartContext::EndElement()
                 }
             }
         }
-        if( maSubTitle.getLength())
+        if( !maSubTitle.isEmpty())
         {
             uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getSubTitle(), uno::UNO_QUERY );
             if( xTitleProp.is())
@@ -762,7 +762,7 @@ void SchXMLChartContext::EndElement()
         bHasOwnData = true;
     else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bHasOwnData = false;
-    else if( m_aXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
+    else if( !m_aXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
         bHasOwnData = m_bHasTableElement;
     else
         bHasOwnData = !m_bHasRangeAtPlotArea;
@@ -792,7 +792,7 @@ void SchXMLChartContext::EndElement()
         if( mbIsStockChart )
             MergeSeriesForStockChart();
     }
-    else if( msChartAddress.getLength() )
+    else if( !msChartAddress.isEmpty() )
     {
         //own data or only rectangular range available
 
@@ -1066,17 +1066,17 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                 // (which is required in the ODF spec)
                 // Note: For stock charts and donut charts with special handling
                 // the mapping must not be applied!
-                if( !msChartAddress.getLength() && !mbIsStockChart &&
+                if( msChartAddress.isEmpty() && !mbIsStockChart &&
                     !lcl_SpecialHandlingForDonutChartNeeded(
                         maChartTypeServiceName, GetImport()))
                 {
-                    if( msColTrans.getLength() > 0 )
+                    if( !msColTrans.isEmpty() )
                     {
-                        OSL_ASSERT( msRowTrans.getLength() == 0 );
+                        OSL_ASSERT( msRowTrans.isEmpty() );
                         pTableContext->setColumnPermutation( lcl_getNumberSequenceFromString( msColTrans, true ));
                         msColTrans = OUString();
                     }
-                    else if( msRowTrans.getLength() > 0 )
+                    else if( !msRowTrans.isEmpty() )
                     {
                         pTableContext->setRowPermutation( lcl_getNumberSequenceFromString( msRowTrans, true ));
                         msRowTrans = OUString();
@@ -1135,8 +1135,7 @@ void SchXMLChartContext::InitChart(
     }
 
     //  Set the chart type via setting the diagram.
-    if( rChartTypeServiceName.getLength() &&
-        xDoc.is())
+    if( !rChartTypeServiceName.isEmpty() && xDoc.is())
     {
         uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
         if( xFact.is())

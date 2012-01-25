@@ -797,7 +797,7 @@ sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rV
 
     if( bValue )
     {
-        if( rStrExpValue.getLength() )
+        if( !rStrExpValue.isEmpty() )
             rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
 
         rStrExpValue += GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE );
@@ -1288,7 +1288,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FILLBITMAPNAME:
                 {
                     OUString aStr;
-                    if( (property->maValue >>= aStr) && 0 == aStr.getLength() )
+                    if( (property->maValue >>= aStr) && aStr.isEmpty() )
                         property->mnIndex = -1;
                 }
                 break;
@@ -1671,7 +1671,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 {
                     OUString aValue;
                     (*property).maValue >>= aValue;
-                    if( aValue.getLength() == 0 )
+                    if( aValue.isEmpty() )
                         (*property).mnIndex = -1;
                 }
                 break;
@@ -1735,7 +1735,7 @@ void XMLPageExportPropertyMapper::handleElementItem(
         case CTF_PAGE_SOUND_URL:
             {
                 OUString aSoundURL;
-                if( (rProperty.maValue >>= aSoundURL) && aSoundURL.getLength() != 0 )
+                if( (rProperty.maValue >>= aSoundURL) && !aSoundURL.isEmpty() )
                 {
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(aSoundURL) );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

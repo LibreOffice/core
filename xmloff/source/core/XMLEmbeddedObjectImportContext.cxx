@@ -155,7 +155,7 @@ TYPEINIT1( XMLEmbeddedObjectImportContext, SvXMLImportContext );
 sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
         Reference< XComponent >& rComp )
 {
-    if( !rComp.is() || !sFilterService.getLength() )
+    if( !rComp.is() || sFilterService.isEmpty() )
         return sal_False;
 
 
@@ -238,7 +238,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
             }
         }
 
-        if( sClass.getLength() )
+        if( !sClass.isEmpty() )
         {
             const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
             while( pEntry->eClass != XML_TOKEN_INVALID )
@@ -303,7 +303,7 @@ void XMLEmbeddedObjectImportContext::StartElement(
         while( USHRT_MAX != nPos )
         {
             OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
-            if( 0 == xAttrList->getValueByName( aAttrName ).getLength() )
+            if( xAttrList->getValueByName( aAttrName ).isEmpty() )
             {
                 pAttrList->AddAttribute( aAttrName,
                                           rNamespaceMap.GetNameByKey( nPos ) );

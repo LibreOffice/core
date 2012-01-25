@@ -901,7 +901,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         }
     }
 
-    if( !msDisplayName.getLength() )
+    if( msDisplayName.isEmpty() )
         msDisplayName = msName;
     else if( msDisplayName != msName )
         GetImport().AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, msName, msDisplayName );
@@ -909,7 +909,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
 
     // set page name?
-    if(!bHandoutMaster && msDisplayName.getLength() && GetLocalShapesContext().is())
+    if(!bHandoutMaster && !msDisplayName.isEmpty() && GetLocalShapesContext().is())
     {
         uno::Reference < container::XNamed > xNamed(GetLocalShapesContext(), uno::UNO_QUERY);
         if(xNamed.is())
@@ -917,7 +917,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     }
 
     // set page-master?
-    if(msPageMasterName.getLength())
+    if(!msPageMasterName.isEmpty())
     {
         SetPageMaster( msPageMasterName );
     }
@@ -940,7 +940,7 @@ SdXMLMasterPageContext::~SdXMLMasterPageContext()
 void SdXMLMasterPageContext::EndElement()
 {
     // set styles on master-page
-    if(msName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
+    if(!msName.isEmpty() && GetSdImport().GetShapeImport()->GetStylesContext())
     {
         SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
@@ -1453,7 +1453,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
 
-        if(pStyle && pStyle->GetDisplayName().getLength() && (nFamily == pStyle->GetFamily())) try
+        if(pStyle && !pStyle->GetDisplayName().isEmpty() && (nFamily == pStyle->GetFamily())) try
         {
             OUString aStyleName(pStyle->GetDisplayName());
             if( nPrefLen )

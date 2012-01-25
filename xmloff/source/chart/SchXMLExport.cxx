@@ -572,7 +572,7 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
     bool bPrecedeWithSpace = false;
     for( sal_Int32 nIndex=0; nIndex<rSequence.getLength(); ++nIndex )
     {
-        if( rSequence[nIndex].getLength())
+        if( !rSequence[nIndex].isEmpty())
         {
             if( bPrecedeWithSpace )
                 aResult.append( static_cast< sal_Unicode >( ' ' ));
@@ -689,7 +689,7 @@ uno::Sequence< rtl::OUString > lcl_DataSequenceToStringSequence(
                 sal_Int32 nTextCount = aStrings.getLength();
                 for( sal_Int32 j = 0; j < nTextCount; ++j )
                 {
-                    if( aStrings[j].getLength() )
+                    if( !aStrings[j].isEmpty() )
                     {
                         bHasText=true;
                         break;
@@ -874,7 +874,7 @@ lcl_TableData lcl_getDataForLocalTable(
 
         //categories
         lcl_SequenceToVector( aSimpleCategories, rCategories );
-        if( rCategoriesRange.getLength() )
+        if( !rCategoriesRange.isEmpty() )
         {
             OUString aRange(rCategoriesRange);
             if( xRangeConversion.is())
@@ -1018,14 +1018,14 @@ bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequen
         OUString aRange( lcl_ConvertRange( xValues->getSourceRangeRepresentation(), xNewDoc ) );
 
         //work around error in OOo 2.0 (problems with multiple series having a domain element)
-        if( !rFirstRangeForThisDomainIndex.getLength() || !aRange.equals(rFirstRangeForThisDomainIndex) )
+        if( rFirstRangeForThisDomainIndex.isEmpty() || !aRange.equals(rFirstRangeForThisDomainIndex) )
         {
             rExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, aRange);
             SvXMLElementExport aDomain( rExport, XML_NAMESPACE_CHART, XML_DOMAIN, sal_True, sal_True );
             bDomainExported = true;
         }
 
-        if( !rFirstRangeForThisDomainIndex.getLength() )
+        if( rFirstRangeForThisDomainIndex.isEmpty() )
             rFirstRangeForThisDomainIndex = aRange;
     }
     return bDomainExported;
@@ -1319,7 +1319,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
 
         // attributes
         // determine class
-        if( sChartType.getLength())
+        if( !sChartType.isEmpty())
         {
             enum XMLTokenEnum eXMLChartType = SchXMLTools::getTokenByChartType( sChartType, true /* bUseOldNames */ );
 
@@ -1794,7 +1794,7 @@ void SchXMLExportHelper_Impl::exportTable()
             if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
             {
                 // remind the original range to allow a correct re-association when copying via clipboard
-                if ((*aColumnDescriptions_RangeIter).getLength())
+                if (!(*aColumnDescriptions_RangeIter).isEmpty())
                     SchXMLTools::exportRangeToSomewhere( mrExport, *aColumnDescriptions_RangeIter );
                 ++aColumnDescriptions_RangeIter;
             }
@@ -1871,7 +1871,7 @@ void SchXMLExportHelper_Impl::exportTable()
                     ( mbRowSourceColumns || (aColIt == aRowIt->begin()) ) )
                 {
                     // remind the original range to allow a correct re-association when copying via clipboard
-                    if ((*aDataRangeIter).getLength())
+                    if (!(*aDataRangeIter).isEmpty())
                         SchXMLTools::exportRangeToSomewhere( mrExport, *aDataRangeIter );
                     ++aDataRangeIter;
                 }
@@ -1973,7 +1973,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         // write style name
         AddAutoStyleAttribute( aPropertyStates );
 
-        if( msChartAddress.getLength() )
+        if( !msChartAddress.isEmpty() )
         {
             if( !bIncludeTable )
                 mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msChartAddress );
@@ -2017,8 +2017,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
         // #i72973#, #144135# only export table-number-list in OOo format (also for binary)
         Reference< beans::XPropertySet > xExportInfo( mrExport.getExportInfo());
-        if( msTableNumberList.getLength() &&
-            xExportInfo.is())
+        if( !msTableNumberList.isEmpty() && xExportInfo.is())
         {
             try
             {
@@ -2435,7 +2434,7 @@ void SchXMLExportHelper_Impl::exportAxis(
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, eDimension );
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, eAxisName );
         AddAutoStyleAttribute( aPropertyStates ); // write style name
-        if( rCategoriesRange.getLength() )
+        if( !rCategoriesRange.isEmpty() )
             bExportDateScale = lcl_exportAxisType( xChart2Axis, mrExport );
 
         // open axis element
@@ -2466,7 +2465,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     exportAxisTitle( xTitleProps , bExportContent );
 
     // categories if we have a categories chart
-    if( bExportContent && rCategoriesRange.getLength() )
+    if( bExportContent && !rCategoriesRange.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, rCategoriesRange );
         SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
@@ -2664,7 +2663,7 @@ namespace
             sal_Int32 nCount = aStrings.getLength();
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
-                if( aStrings[i].getLength() )
+                if( !aStrings[i].isEmpty() )
                     return true;//have text
             }
         }
@@ -2677,7 +2676,7 @@ namespace
             sal_Int32 nCount = aData.getLength();
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
-                if( (aData[i]>>=aString) && aString.getLength() )
+                if( (aData[i]>>=aString) && !aString.isEmpty() )
                     return true;//have text
             }
         }
@@ -3213,9 +3212,9 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
                         aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM( "values-first" )),  xNewDoc, m_aDataSequencesToExport ));
-                    if( aRanges.second.getLength())
+                    if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
-                    if( aRanges.first.getLength())
+                    if( !aRanges.first.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, aRanges.first );
                     if( nAttachedAxis == chart::ChartAxisAssign::SECONDARY_Y )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
@@ -3230,9 +3229,9 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
                         aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM( "values-min" )),  xNewDoc, m_aDataSequencesToExport ));
-                    if( aRanges.second.getLength())
+                    if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
-                    if( aRanges.first.getLength())
+                    if( !aRanges.first.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, aRanges.first );
                     if( nAttachedAxis == chart::ChartAxisAssign::SECONDARY_Y )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
@@ -3247,9 +3246,9 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
                         aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM( "values-max" )),  xNewDoc, m_aDataSequencesToExport ));
-                    if( aRanges.second.getLength())
+                    if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
-                    if( aRanges.first.getLength())
+                    if( !aRanges.first.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, aRanges.first );
                     if( nAttachedAxis == chart::ChartAxisAssign::SECONDARY_Y )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
@@ -3264,9 +3263,9 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
                         aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM( "values-last" )),  xNewDoc, m_aDataSequencesToExport ));
-                    if( aRanges.second.getLength())
+                    if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
-                    if( aRanges.first.getLength())
+                    if( !aRanges.first.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, aRanges.first );
                     if( nAttachedAxis == chart::ChartAxisAssign::SECONDARY_Y )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
@@ -3507,7 +3506,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 else if( aLastPoint.mnRepeat > 0 )
                 {
                     // write last element
-                    if( aLastPoint.maStyleName.getLength() )
+                    if( !aLastPoint.maStyleName.isEmpty() )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
 
                     if( aLastPoint.mnRepeat > 1 )
@@ -3521,7 +3520,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             // write last element if it hasn't been written in last iteration
             if( aPoint.maStyleName == aLastPoint.maStyleName )
             {
-                if( aLastPoint.maStyleName.getLength() )
+                if( !aLastPoint.maStyleName.isEmpty() )
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
 
                 if( aLastPoint.mnRepeat > 1 )
@@ -3740,7 +3739,7 @@ void SchXMLExport::_ExportContent()
                             maExportHelper.m_pImpl->SetTableNumberList( sTableNumberList );
 
                             // do not include own table if there are external addresses
-                            bIncludeTable = (sChartAddress.getLength() == 0);
+                            bIncludeTable = sChartAddress.isEmpty();
                         }
                         catch( const beans::UnknownPropertyException & )
                         {
@@ -3810,7 +3809,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 // range, where every row number is noe too large, so that older
                 // version can correctly read those files.
                 msChartAddress = (bBrokenRangeAvailable ? sBrokenRange : sCellRange);
-                if( msChartAddress.getLength() > 0 )
+                if( !msChartAddress.isEmpty() )
                 {
                     // convert format to XML-conform one
                     Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );

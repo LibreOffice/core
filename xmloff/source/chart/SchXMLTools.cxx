@@ -104,7 +104,7 @@ rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& 
 rtl::OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XModel >& xChartModel )
 {
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-    if( !aGenerator.getLength() ) //try to get the missing info from the parent document
+    if( aGenerator.isEmpty() ) //try to get the missing info from the parent document
     {
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
         if( xChild.is() )
@@ -367,7 +367,7 @@ XMLTokenEnum getTokenByChartType(
         }
     }
 
-    if( eResult == XML_TOKEN_INVALID && rChartTypeService.getLength() > 0 )
+    if( eResult == XML_TOKEN_INVALID && !rChartTypeService.isEmpty() )
         eResult = XML_ADD_IN;
 
     return eResult;
@@ -414,7 +414,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         OSL_FAIL( "could not create data sequence" );
     }
 
-    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && rRange.getLength() )
+    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && !rRange.isEmpty() )
     {
         //#i103911# switch to internal data in case the parent cannot provide the requested data
         xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
@@ -442,7 +442,7 @@ void CreateCategories(
 {
     try
     {
-        if( xNewDoc.is() && rRangeAddress.getLength())
+        if( xNewDoc.is() && !rRangeAddress.isEmpty())
         {
             if( xDataProvider.is())
             {
@@ -690,7 +690,7 @@ bool getXMLRangePropertyFromDataSequence(
             bResult =
                 ( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ) &&
                   ( xProp->getPropertyValue( aXMLRangePropName ) >>= rOutXMLRange ) &&
-                  rOutXMLRange.getLength());
+                  !rOutXMLRange.isEmpty());
             // clear the property after usage
             if( bClearProp && bResult )
                 xProp->setPropertyValue( aXMLRangePropName, uno::Any( OUString()));
@@ -771,7 +771,7 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
 void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< beans::XPropertySet > xImportInfo )
 {
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
-    if( aGenerator.getLength() )
+    if( !aGenerator.isEmpty() )
         SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
 }
 
@@ -829,7 +829,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
     bool bResult = false;
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
     //if there is a meta stream at the chart object it was not written with an older OpenOffice version < 2.3
-    if( !aGenerator.getLength() )
+    if( aGenerator.isEmpty() )
     {
         //if there is no meta stream at the chart object we need to check whether the parent document is OpenOffice at all
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );

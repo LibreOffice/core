@@ -394,7 +394,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
     if(xPropSet.is())
     {
         // set parameters
-        if(maPoints.getLength() && maViewBox.getLength())
+        if(!maPoints.isEmpty() && !maViewBox.isEmpty())
         {
             SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
             awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());

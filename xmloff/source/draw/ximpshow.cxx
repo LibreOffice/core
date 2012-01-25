@@ -200,7 +200,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
 
 SdXMLShowsContext::~SdXMLShowsContext()
 {
-    if( mpImpl && mpImpl->maCustomShowName.getLength() )
+    if( mpImpl && !mpImpl->maCustomShowName.isEmpty() )
     {
         uno::Any aAny;
         aAny <<= mpImpl->maCustomShowName;
@@ -240,7 +240,7 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix
             }
         }
 
-        if( aName.getLength() != 0 && aPages.getLength() != 0 )
+        if( !aName.isEmpty() && !aPages.isEmpty() )
         {
             Reference< XIndexContainer > xShow( mpImpl->mxShowFactory->createInstance(), UNO_QUERY );
             if( xShow.is() )

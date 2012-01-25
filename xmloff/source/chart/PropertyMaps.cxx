@@ -302,7 +302,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
                 // export as XLink reference into the package
                 // if embedding is off
                 ::rtl::OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
-                if( sTempURL.getLength() )
+                if( !sTempURL.isEmpty() )
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
@@ -321,7 +321,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
 
                     // export as Base64 embedded graphic
                     // if embedding is on
-                    if( aURLStr.getLength())
+                    if( !aURLStr.isEmpty())
                         mrExport.AddEmbeddedGraphicObjectAsBase64( aURLStr );
                 }
             }
@@ -332,7 +332,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
                 ::rtl::OUString aSeparator;
                 rProperty.maValue >>= aSeparator;
 
-                if( aSeparator.getLength() )
+                if( !aSeparator.isEmpty() )
                 {
                     sal_uInt32 nPropIndex = rProperty.mnIndex;
                     SvXMLElementExport aElem( mrExport,

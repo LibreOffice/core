@@ -1331,7 +1331,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
                         break;
                 }
             }
-            if ( aFormulaName.getLength() || aFormula.getLength() )
+            if ( !aFormulaName.isEmpty() || !aFormula.isEmpty() )
             {
                 maEquations.push_back( aFormula );
                 maEquationNames.push_back( aFormulaName );

@@ -122,8 +122,8 @@ SvXMLImportContext * SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, 
 
 void SdXMLLayerContext::EndElement()
 {
-    DBG_ASSERT( msName.getLength(), "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
-    if( msName.getLength() ) try
+    DBG_ASSERT( !msName.isEmpty(), "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
+    if( !msName.isEmpty() ) try
     {
         Reference< XPropertySet > xLayer;
 

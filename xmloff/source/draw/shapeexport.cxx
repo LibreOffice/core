@@ -158,12 +158,12 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
             {
                 rtl::OUString aEngine;
                 xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeEngine" ) ) ) >>= aEngine;
-                if ( !aEngine.getLength() )
+                if ( aEngine.isEmpty() )
                     aEngine = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
 
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
-                if ( aEngine.getLength() && xFactory.is() )
+                if ( !aEngine.isEmpty() && xFactory.is() )
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
@@ -251,7 +251,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if( xPropSet.is() && bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
-        if(xText.is() && xText->getString().getLength())
+        if(xText.is() && !xText->getString().isEmpty())
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
@@ -294,7 +294,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     {
                         OUString aFamilyName;
                         xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
-                        if(aFamilyName.getLength() && !aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics"))))
+                        if(!aFamilyName.isEmpty() && !aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics"))))
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
                 }
@@ -334,7 +334,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     DBG_ASSERT(xControlModel.is(), "XMLShapeExport::collectShapeAutoStyles: no control model on the control shape!");
 
                     ::rtl::OUString sNumberStyle = mrExport.GetFormExport()->getControlNumberStyle(xControlModel);
-                    if (0 != sNumberStyle.getLength())
+                    if (!sNumberStyle.isEmpty())
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
                             // TODO : this retrieval of the index could be moved into the ctor, holding the index
@@ -368,7 +368,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             // try to find this style in AutoStylePool
             aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
 
-            if(!aShapeInfo.msStyleName.getLength())
+            if(aShapeInfo.msStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
                 aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
@@ -428,7 +428,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             {
                 const OUString aEmpty;
                 aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
-                if(!aShapeInfo.msTextStyleName.getLength())
+                if(aShapeInfo.msTextStyleName.isEmpty())
                 {
                     // Style did not exist, add it to AutoStalePool
                     aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
@@ -549,7 +549,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             OUString sURL;
             xSet->getPropertyValue(msBookmark) >>= sURL;
 
-            if( sURL.getLength() )
+            if( !sURL.isEmpty() )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -627,7 +627,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             if( xNamed.is() )
             {
                 const OUString aName( xNamed->getName() );
-                if( aName.getLength() )
+                if( !aName.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
         }
@@ -636,7 +636,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // ------------------
     // export style name
     // ------------------
-    if( aShapeInfo.msStyleName.getLength() != 0 )
+    if( !aShapeInfo.msStyleName.isEmpty() )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
@@ -647,7 +647,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // ------------------
     // export text style name
     // ------------------
-    if( aShapeInfo.msTextStyleName.getLength() != 0 )
+    if( !aShapeInfo.msTextStyleName.isEmpty() )
     {
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
     }
@@ -658,7 +658,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     {
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
-        if( rShapeId.getLength() )
+        if( !rShapeId.isEmpty() )
         {
             mrExport.AddAttributeIdLegacy(XML_NAMESPACE_DRAW, rShapeId);
         }

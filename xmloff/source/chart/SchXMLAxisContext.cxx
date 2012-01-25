@@ -247,7 +247,7 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
         // the line color is black as default, in the model it is a light gray
         xGridProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
                                      uno::makeAny( COL_BLACK ));
-        if( sAutoStyleName.getLength())
+        if( !sAutoStyleName.isEmpty())
         {
             const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
@@ -495,7 +495,7 @@ void SchXMLAxisContext::CreateAxis()
         if( m_bAxisTypeImported )
             m_xAxisProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "AxisType" )), uno::makeAny(m_nAxisType) );
 
-        if( m_aAutoStyleName.getLength())
+        if( !m_aAutoStyleName.isEmpty())
         {
             const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
@@ -599,7 +599,7 @@ void SchXMLAxisContext::CreateAxis()
 
 void SchXMLAxisContext::SetAxisTitle()
 {
-    if( !m_aCurrentAxis.aTitle.getLength() )
+    if( m_aCurrentAxis.aTitle.isEmpty() )
         return;
 
     Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
@@ -766,7 +766,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                           const OUString& rODFVersionOfFile,
                           bool bAxisPositionAttributeImported )
 {
-    if( ( !rODFVersionOfFile.getLength() || rODFVersionOfFile.equalsAscii("1.0")
+    if( ( rODFVersionOfFile.isEmpty() || rODFVersionOfFile.equalsAscii("1.0")
         || rODFVersionOfFile.equalsAscii("1.1")
         || ( rODFVersionOfFile.equalsAscii("1.2") && !bAxisPositionAttributeImported ) ) )
     {

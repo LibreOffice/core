@@ -107,7 +107,7 @@ SvXMLImportContext* XMLSymbolImageContext::CreateChildContext(
     if( xmloff::token::IsXMLToken( rLocalName,
                                    xmloff::token::XML_BINARY_DATA ) )
     {
-        if( ! msURL.getLength() && ! mxBase64Stream.is() )
+        if( msURL.isEmpty() && ! mxBase64Stream.is() )
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
@@ -128,7 +128,7 @@ void XMLSymbolImageContext::EndElement()
 {
     ::rtl::OUString sResolvedURL;
 
-    if( msURL.getLength() )
+    if( !msURL.isEmpty() )
     {
         sResolvedURL = GetImport().ResolveGraphicObjectURL( msURL, sal_False );
     }
@@ -138,7 +138,7 @@ void XMLSymbolImageContext::EndElement()
         mxBase64Stream = 0;
     }
 
-    if( sResolvedURL.getLength())
+    if( !sResolvedURL.isEmpty())
     {
         // aProp is a member of XMLElementPropertyContext
         aProp.maValue <<= sResolvedURL;

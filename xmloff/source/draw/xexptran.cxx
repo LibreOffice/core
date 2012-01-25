@@ -512,7 +512,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
     msString = rNew;
     EmptyList();
 
-    if(msString.getLength())
+    if(!msString.isEmpty())
     {
         const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
         const sal_Int32 nLen(aStr.getLength());
@@ -986,7 +986,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
     msString = rNew;
     EmptyList();
 
-    if(msString.getLength())
+    if(!msString.isEmpty())
     {
         const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
         const sal_Int32 nLen(aStr.getLength());
@@ -1250,7 +1250,7 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
     mnW( 1000L ),
     mnH( 1000L )
 {
-    if(msString.getLength())
+    if(!msString.isEmpty())
     {
         const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
         const sal_Int32 nLen(aStr.getLength());

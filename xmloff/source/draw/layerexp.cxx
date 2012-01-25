@@ -78,14 +78,14 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         {
             Reference< XPropertySet> xLayer( xLayerManager->getByIndex( nIndex ), UNO_QUERY_THROW );
             xLayer->getPropertyValue( strName ) >>= sTmp;
-            if(sTmp.getLength())
+            if(!sTmp.isEmpty())
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, sTmp );
 
             SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
 
             // title property (as <svg:title> element)
             xLayer->getPropertyValue(strTitle) >>= sTmp;
-            if(sTmp.getLength())
+            if(!sTmp.isEmpty())
             {
                 SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SVG, XML_TITLE, sal_True, sal_False);
                 rExport.Characters(sTmp);
@@ -93,7 +93,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
 
             // description property (as <svg:desc> element)
             xLayer->getPropertyValue(strDescription) >>= sTmp;
-            if(sTmp.getLength() > 0)
+            if(!sTmp.isEmpty())
             {
                 SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, sal_True, sal_False);
                 rExport.Characters(sTmp);

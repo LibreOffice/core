@@ -91,7 +91,7 @@ namespace
                                       const SvXMLStylesContext& rStylesContext,
                                       const uno::Reference< beans::XPropertySet >& rPropSet )
 {
-    if( rStyleName.getLength())
+    if( !rStyleName.isEmpty())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)rStylesContext.FindStyleChildContext(
             XML_STYLE_FAMILY_DATA_STYLE, rStyleName, sal_True );

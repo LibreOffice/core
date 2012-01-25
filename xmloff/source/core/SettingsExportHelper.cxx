@@ -189,7 +189,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
 
 void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BOOLEAN );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -205,7 +205,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
 #if 0
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -223,7 +223,7 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -235,7 +235,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUS
 
 void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -247,7 +247,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_LONG );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -258,7 +258,7 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUSt
 
 void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
@@ -270,18 +270,18 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_STRING );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    if (sValue.getLength())
+    if (!sValue.isEmpty())
         m_rContext.Characters( sValue );
     m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
     rtl::OUStringBuffer sBuffer;
@@ -295,7 +295,7 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
                     const uno::Sequence<beans::PropertyValue>& aProps,
                     const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     sal_Int32 nLength(aProps.getLength());
     if(nLength)
     {
@@ -372,7 +372,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
                     const uno::Sequence<sal_Int8>& aProps,
                     const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     sal_Int32 nLength(aProps.getLength());
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BASE64BINARY );
@@ -390,7 +390,7 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
                                         const rtl::OUString& rName,
                                         const sal_Bool bNameAccess) const
 {
-    DBG_ASSERT((bNameAccess && rName.getLength()) || !bNameAccess, "no name");
+    DBG_ASSERT((bNameAccess && !rName.isEmpty()) || !bNameAccess, "no name");
     uno::Sequence<beans::PropertyValue> aProps;
     rAny >>= aProps;
     sal_Int32 nLength = aProps.getLength();
@@ -409,7 +409,7 @@ void XMLSettingsExportHelper::exportNameAccess(
                     const uno::Reference<container::XNameAccess>& aNamed,
                     const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(aNamed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong NameAccess" );
     if(aNamed->hasElements())
@@ -427,7 +427,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
                     const uno::Reference<container::XIndexAccess> aIndexed,
                     const rtl::OUString rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
     rtl::OUString sEmpty;
@@ -515,7 +515,7 @@ void XMLSettingsExportHelper::exportAllSettings(
                     const uno::Sequence<beans::PropertyValue>& aProps,
                     const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(!rName.isEmpty(), "no name");
     exportSequencePropertyValue(aProps, rName);
 }
 

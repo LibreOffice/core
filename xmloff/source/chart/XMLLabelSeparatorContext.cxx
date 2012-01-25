@@ -75,7 +75,7 @@ SvXMLImportContext* XMLLabelSeparatorContext::CreateChildContext(
 
 void XMLLabelSeparatorContext::EndElement()
 {
-    if( m_aSeparator.getLength() )
+    if( !m_aSeparator.isEmpty() )
     {
         // aProp is a member of XMLElementPropertyContext
         aProp.maValue <<= m_aSeparator;

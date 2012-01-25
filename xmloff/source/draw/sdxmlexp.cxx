@@ -1432,14 +1432,14 @@ void SdXMLExport::ImpWritePageMasterInfos()
 
 ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString& rName)
 {
-    if(rName.getLength() && !mpPageMasterInfoList->empty())
+    if(!rName.isEmpty() && !mpPageMasterInfoList->empty())
     {
         for( size_t nCnt = 0; nCnt < mpPageMasterInfoList->size(); nCnt++)
         {
             ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->at(nCnt);
             if(pInfo)
             {
-                if(pInfo->GetMasterPageName().getLength() && rName.equals(pInfo->GetMasterPageName()))
+                if(!pInfo->GetMasterPageName().isEmpty() && rName.equals(pInfo->GetMasterPageName()))
                 {
                     return pInfo;
                 }
@@ -1550,7 +1550,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
         if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
         {
             xSet->getPropertyValue( aStrHeaderTextProp  ) >>= aStrText;
-            if( aStrText.getLength() )
+            if( !aStrText.isEmpty() )
                 aSettings.maStrHeaderDeclName = findOrAppendImpl( maHeaderDeclsVector, aStrText, gpStrHeaderTextPrefix );
         }
 
@@ -1558,7 +1558,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
         if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
         {
             xSet->getPropertyValue( aStrFooterTextProp ) >>= aStrText;
-            if( aStrText.getLength() )
+            if( !aStrText.isEmpty() )
                 aSettings.maStrFooterDeclName = findOrAppendImpl( maFooterDeclsVector, aStrText, gpStrFooterTextPrefix );
         }
 
@@ -1571,7 +1571,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
             xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDateTimeFixed" ) ) ) >>= bFixed;
             xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateTimeFormat" ) ) ) >>= nFormat;
 
-            if( !bFixed || aStrText.getLength() )
+            if( !bFixed || !aStrText.isEmpty() )
             {
                 aSettings.maStrDateTimeDeclName = findOrAppendImpl( maDateTimeDeclsVector, aStrText, bFixed, nFormat, gpStrDateTimeTextPrefix );
                 if( !bFixed )
@@ -1655,13 +1655,13 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
 
 void SdXMLExport::ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings )
 {
-    if( aSettings.maStrHeaderDeclName.getLength() )
+    if( !aSettings.maStrHeaderDeclName.isEmpty() )
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_HEADER_NAME, aSettings.maStrHeaderDeclName );
 
-    if( aSettings.maStrFooterDeclName.getLength() )
+    if( !aSettings.maStrFooterDeclName.isEmpty() )
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_FOOTER_NAME, aSettings.maStrFooterDeclName );
 
-    if( aSettings.maStrDateTimeDeclName.getLength() )
+    if( !aSettings.maStrDateTimeDeclName.isEmpty() )
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_DATE_TIME_NAME, aSettings.maStrDateTimeDeclName );
 }
 
@@ -1714,7 +1714,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage
             // try to find this style in AutoStylePool
             sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
 
-            if(!sStyleName.getLength())
+            if(sStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
                 sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
@@ -1840,7 +1840,7 @@ void SdXMLExport::_ExportContent()
                 AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, xNamed->getName());
 
             // draw:style-name (presentation page attributes AND background attributes)
-            if( maDrawPagesStyleNames[nPageInd].getLength() )
+            if( !maDrawPagesStyleNames[nPageInd].isEmpty() )
                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                         maDrawPagesStyleNames[nPageInd]);
 
@@ -1861,7 +1861,7 @@ void SdXMLExport::_ExportContent()
             }
 
             // presentation:page-layout-name
-            if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd+1].getLength())
+            if( IsImpress() && !maDrawPagesAutoLayoutNames[nPageInd+1].isEmpty())
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[nPageInd+1] );
             }
@@ -1874,7 +1874,7 @@ void SdXMLExport::_ExportContent()
                     OUString aBookmarkURL;
                     xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BookmarkURL" ) ) ) >>= aBookmarkURL;
 
-                    if( aBookmarkURL.getLength() )
+                    if( !aBookmarkURL.isEmpty() )
                     {
                         sal_Int32 nIndex = aBookmarkURL.lastIndexOf( (sal_Unicode)'#' );
                         if( nIndex != -1 )
@@ -1904,7 +1904,7 @@ void SdXMLExport::_ExportContent()
 
 
             OUString sNavigationOrder( getNavigationOrder( xDrawPage ) );
-            if( sNavigationOrder.getLength() != 0 )
+            if( !sNavigationOrder.isEmpty() )
                 AddAttribute ( XML_NAMESPACE_DRAW, XML_NAV_ORDER, sNavigationOrder );
 
             UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
@@ -1935,7 +1935,7 @@ void SdXMLExport::_ExportContent()
 
             // write draw:id
             const OUString aPageId = getInterfaceToIdentifierMapper().getIdentifier( xDrawPage );
-            if( aPageId.getLength() != 0 )
+            if( !aPageId.isEmpty() )
             {
                 AddAttributeIdLegacy(XML_NAMESPACE_DRAW, aPageId);
             }
@@ -1979,7 +1979,7 @@ void SdXMLExport::_ExportContent()
                         Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
                         if(xShapes.is())
                         {
-                            if( maDrawNotesPagesStyleNames[nPageInd].getLength() )
+                            if( !maDrawNotesPagesStyleNames[nPageInd].isEmpty() )
                                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
 
                             ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
@@ -2029,7 +2029,7 @@ void SdXMLExport::exportPresentationSettings()
         {
             OUString aFirstPage;
             xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) >>= aFirstPage;
-            if( aFirstPage.getLength() )
+            if( !aFirstPage.isEmpty() )
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
                 bHasAttr = sal_True;
@@ -2038,7 +2038,7 @@ void SdXMLExport::exportPresentationSettings()
             {
                 OUString aCustomShow;
                 xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) >>= aCustomShow;
-                if( aCustomShow.getLength() )
+                if( !aCustomShow.isEmpty() )
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
                     bHasAttr = sal_True;
@@ -2310,7 +2310,7 @@ void SdXMLExport::_ExportAutoStyles()
                 {
                     aMasterPageNamePrefix = xNamed->getName();
                 }
-                if(aMasterPageNamePrefix.getLength())
+                if(!aMasterPageNamePrefix.isEmpty())
                 {
                     aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                 }
@@ -2375,7 +2375,7 @@ void SdXMLExport::_ExportAutoStyles()
                         }
                     }
                 }
-                if(aMasterPageNamePrefix.getLength())
+                if(!aMasterPageNamePrefix.isEmpty())
                 {
                     aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                 }
@@ -2445,7 +2445,7 @@ void SdXMLExport::_ExportMasterStyles()
             if( xHandoutPage.is() )
             {
                 // presentation:page-layout-name
-                if( IsImpress() && maDrawPagesAutoLayoutNames[0].getLength())
+                if( IsImpress() && !maDrawPagesAutoLayoutNames[0].isEmpty())
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, EncodeStyleName( maDrawPagesAutoLayoutNames[0] ));
                 }
@@ -2458,7 +2458,7 @@ void SdXMLExport::_ExportMasterStyles()
                 }
 
                 // draw:style-name
-                if( maHandoutMasterStyleName.getLength() )
+                if( !maHandoutMasterStyleName.isEmpty() )
                     AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maHandoutMasterStyleName);
 
                 ImplExportHeaderFooterDeclAttributes( maHandoutPageHeaderFooterSettings );
@@ -2503,7 +2503,7 @@ void SdXMLExport::_ExportMasterStyles()
             }
 
             // draw:style-name (background attributes)
-            if( maMasterPagesStyleNames[nMPageId].getLength() )
+            if( !maMasterPagesStyleNames[nMPageId].isEmpty() )
                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                         maMasterPagesStyleNames[nMPageId]);
 
@@ -2691,7 +2691,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
             for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
                 OUString sId( getInterfaceToIdentifierMapper().registerReference( Reference< XInterface >( xNavOrder->getByIndex( nIndex ), UNO_QUERY ) ) );
-                if( sId.getLength() != 0 )
+                if( !sId.isEmpty() )
                 {
                     if( sNavOrder.getLength() != 0 )
                         sNavOrder.append( (sal_Unicode)' ' );
@@ -2720,7 +2720,7 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
             {
                 Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_QUERY_THROW );
                 Reference< XText > xText( xAnnotation->getTextRange() );
-                if(xText.is() && xText->getString().getLength())
+                if(xText.is() && !xText->getString().isEmpty())
                     GetTextParagraphExport()->collectTextAutoStyles( xText );
             }
         }
@@ -2775,7 +2775,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 // author
                 OUString aAuthor( xAnnotation->getAuthor() );
-                if( aAuthor.getLength() )
+                if( !aAuthor.isEmpty() )
                 {
                     SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, sal_True, sal_False );
                     this->Characters(aAuthor);

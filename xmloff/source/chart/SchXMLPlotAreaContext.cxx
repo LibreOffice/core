@@ -329,7 +329,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     // set properties
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( msAutoStyleName.getLength())
+    if( !msAutoStyleName.isEmpty())
     {
         if( xProp.is())
         {
@@ -444,7 +444,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         bCreateInternalDataProvider = true;
     else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bCreateInternalDataProvider = false;
-    else if( m_rXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
+    else if( !m_rXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
         bCreateInternalDataProvider = true;
     else if( !m_rbHasRangeAtPlotArea )
         bCreateInternalDataProvider = true;
@@ -564,7 +564,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 void SchXMLPlotAreaContext::EndElement()
 {
     // set categories
-    if( mrCategoriesAddress.getLength() && mxNewDoc.is())
+    if( !mrCategoriesAddress.isEmpty() && mxNewDoc.is())
     {
         uno::Reference< chart2::data::XDataProvider > xDataProvider(
             mxNewDoc->getDataProvider()  );
@@ -703,7 +703,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
     }
 
-    if( sAutoStyleName.getLength())
+    if( !sAutoStyleName.isEmpty())
     {
         DataRowPointStyle aStyle(
             DataRowPointStyle::DATA_POINT,
@@ -893,7 +893,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
                                                      uno::UNO_QUERY );
         if( xProp.is())
         {
-            if( sAutoStyleName.getLength())
+            if( !sAutoStyleName.isEmpty())
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
                 if( pStylesCtxt )
@@ -949,7 +949,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
             }
         }
 
-        if( sAutoStyleName.getLength())
+        if( !sAutoStyleName.isEmpty())
         {
             // set properties
             uno::Reference< beans::XPropertySet > xProp;
@@ -1028,7 +1028,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 
     // note: regression-curves must get a style-object even if there is no
     // auto-style set, because they can contain an equation
-    if( sAutoStyleName.getLength() || meContextType == CONTEXT_TYPE_REGRESSION_CURVE )
+    if( !sAutoStyleName.isEmpty() || meContextType == CONTEXT_TYPE_REGRESSION_CURVE )
     {
         DataRowPointStyle::StyleType eType = DataRowPointStyle::MEAN_VALUE;
         switch( meContextType )
@@ -1136,7 +1136,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 
-    if( sAutoStyleName.getLength() || bShowEquation || bShowRSquare )
+    if( !sAutoStyleName.isEmpty() || bShowEquation || bShowRSquare )
     {
         uno::Reference< beans::XPropertySet > xEqProp;
         uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
@@ -1145,7 +1145,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionEquation" ))), uno::UNO_QUERY );
         if( xEqProp.is())
         {
-            if( sAutoStyleName.getLength() )
+            if( !sAutoStyleName.isEmpty() )
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
                 if( pStylesCtxt )

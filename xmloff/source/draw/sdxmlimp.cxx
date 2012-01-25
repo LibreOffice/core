@@ -1035,19 +1035,19 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
 
 void SdXMLImport::AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
 {
-    if( rName.getLength() && rText.getLength() )
+    if( !rName.isEmpty() && !rText.isEmpty() )
         maHeaderDeclsMap[rName] = rText;
 }
 
 void SdXMLImport::AddFooterDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
 {
-    if( rName.getLength() && rText.getLength() )
+    if( !rName.isEmpty() && !rText.isEmpty() )
         maFooterDeclsMap[rName] = rText;
 }
 
 void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText, sal_Bool bFixed, const ::rtl::OUString& rDateTimeFormat )
 {
-    if( rName.getLength() && (rText.getLength() || !bFixed) )
+    if( !rName.isEmpty() && (!rText.isEmpty() || !bFixed) )
     {
         DateTimeDeclContextImpl aDecl;
         aDecl.maStrText = rText;

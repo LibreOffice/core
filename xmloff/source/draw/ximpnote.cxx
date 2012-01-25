@@ -96,7 +96,7 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     }
 
     // set page-master?
-    if(msPageMasterName.getLength())
+    if(!msPageMasterName.isEmpty())
     {
         SetPageMaster( msPageMasterName );
     }

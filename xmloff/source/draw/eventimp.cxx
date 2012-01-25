@@ -286,7 +286,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
     }
 
     if( mbValid )
-        mbValid = sEventName.getLength() != 0;
+        mbValid = !sEventName.isEmpty();
 }
 
 SdXMLEventContext::~SdXMLEventContext()

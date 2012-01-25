@@ -470,7 +470,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
         case XML_VISIBILITY:        nType = XML_SD_TYPE_PRESPAGE_VISIBILITY;    break;
 
         default:
-            if( rValue.getLength() )
+            if( !rValue.isEmpty() )
                 aAny <<= rValue;
             return aAny;
         }
@@ -488,7 +488,7 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
     Sequence< Any > aValues;
 
     // do we have any value at all?
-    if( rValue.getLength() )
+    if( !rValue.isEmpty() )
     {
         sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';') + 1; // a non empty string has at least one value
 
@@ -512,7 +512,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
     Any aAny;
 
     // do we have any value at all?
-    if( rValue.getLength() )
+    if( !rValue.isEmpty() )
     {
         // count the values
         sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
@@ -591,7 +591,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
 {
     sal_Int32 nElements = 0;
 
-    if( rValue.getLength() )
+    if( !rValue.isEmpty() )
         nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
 
     Sequence< double > aKeyTimes( nElements );
@@ -611,7 +611,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
 {
     sal_Int32 nElements = 0;
 
-    if( rValue.getLength() )
+    if( !rValue.isEmpty() )
         nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
 
     Sequence< TimeFilterPair > aTimeFilter( nElements );
@@ -1221,7 +1221,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             }
         }
 
-        if (sXmlId.getLength())
+        if (!sXmlId.isEmpty())
         {
             Reference< XInterface > const xRef( mxNode, UNO_QUERY );
             GetImport().getInterfaceToIdentifierMapper().registerReference(
@@ -1244,16 +1244,16 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         // convert values
         if( xAnimate.is() )
         {
-            if( aFrom.getLength() )
+            if( !aFrom.isEmpty() )
                 xAnimate->setFrom( mpHelper->convertValue( meAttributeName, aFrom ) );
 
-            if( aBy.getLength() )
+            if( !aBy.isEmpty() )
                 xAnimate->setBy( mpHelper->convertValue( meAttributeName, aBy ) );
 
-            if( aTo.getLength() )
+            if( !aTo.isEmpty() )
                 xAnimate->setTo( mpHelper->convertValue( meAttributeName, aTo ) );
 
-            if( aValues.getLength() )
+            if( !aValues.isEmpty() )
                 xAnimate->setValues( mpHelper->convertValueSequence( meAttributeName, aValues ) );
         }
     }
@@ -1424,7 +1424,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                         {
                             Reference< XAudio > xAudio( xChildNode, UNO_QUERY_THROW );
                             OUString sSoundURL;
-                            if( (xAudio->getSource() >>= sSoundURL) && (sSoundURL.getLength() != 0) )
+                            if( (xAudio->getSource() >>= sSoundURL) && !sSoundURL.isEmpty() )
                             {
                                 xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ), Any(sSoundURL) );
 

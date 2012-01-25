@@ -99,7 +99,7 @@ sal_Bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
     rtl::OUStringBuffer sValueBuffer;
     if( m_bCrossingValue )
     {
-        if(rStrExpValue.getLength() == 0)
+        if(rStrExpValue.isEmpty())
         {
             double fValue = 0.0;
             rValue >>= fValue;

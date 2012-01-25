@@ -644,7 +644,7 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
-            ( ( (pStyleMember->mpText == NULL) && (rText.getLength() == 0) ) ||
+            ( ( (pStyleMember->mpText == NULL) && (rText.isEmpty()) ) ||
               ( pStyleMember->mpText && (rText.compareToAscii( pStyleMember->mpText )  == 0 )) ) ) )
         {
             mnElements[mnIndex++] = nIndex + 1;

@@ -82,12 +82,12 @@ XMLReplacementImageContext::~XMLReplacementImageContext()
 
 void XMLReplacementImageContext::EndElement()
 {
-    OSL_ENSURE( m_sHRef.getLength() > 0 || m_xBase64Stream.is(),
+    OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
                 "neither URL nor base64 image data given" );
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     OUString sHRef;
-    if( m_sHRef.getLength() )
+    if( !m_sHRef.isEmpty() )
     {
         sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
                               xTxtImport->IsBlockMode() ||

@@ -188,7 +188,7 @@ void XMLImageMapExport::ExportMapEntry(
         Any aAny = rPropertySet->getPropertyValue(msURL);
         OUString sHref;
         aAny >>= sHref;
-        if (sHref.getLength() > 0)
+        if (!sHref.isEmpty())
         {
             mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(sHref));
         }
@@ -198,7 +198,7 @@ void XMLImageMapExport::ExportMapEntry(
         aAny = rPropertySet->getPropertyValue(msTarget);
         OUString sTargt;
         aAny >>= sTargt;
-        if (sTargt.getLength() > 0)
+        if (!sTargt.isEmpty())
         {
             mrExport.AddAttribute(
                 XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargt);
@@ -213,7 +213,7 @@ void XMLImageMapExport::ExportMapEntry(
         aAny = rPropertySet->getPropertyValue(msName);
         OUString sItemName;
         aAny >>= sItemName;
-        if (sItemName.getLength() > 0)
+        if (!sItemName.isEmpty())
         {
             mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
         }
@@ -251,7 +251,7 @@ void XMLImageMapExport::ExportMapEntry(
         // title property (as <svg:title> element)
         OUString sTitle;
         rPropertySet->getPropertyValue(msTitle) >>= sTitle;
-        if(sTitle.getLength())
+        if(!sTitle.isEmpty())
         {
             SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, mbWhiteSpace, sal_False);
             mrExport.Characters(sTitle);
@@ -260,7 +260,7 @@ void XMLImageMapExport::ExportMapEntry(
         // description property (as <svg:desc> element)
         OUString sDescription;
         rPropertySet->getPropertyValue(msDescription) >>= sDescription;
-        if (sDescription.getLength() > 0)
+        if (!sDescription.isEmpty())
         {
             SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, mbWhiteSpace, sal_False);
             mrExport.Characters(sDescription);

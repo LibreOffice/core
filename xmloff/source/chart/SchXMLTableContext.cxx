@@ -125,7 +125,7 @@ void lcl_fillRangeMapping(
         for( size_t nCol = 0; nCol < nTableColCount; ++nCol )
         {
             OUString aRangeId( rRow[nCol].aRangeId );
-            if( aRangeId.getLength())
+            if( !aRangeId.isEmpty())
             {
                 if( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                 {
@@ -203,8 +203,8 @@ bool lcl_tableOfRangeMatches(
     const ::rtl::OUString & rTableName )
 {
     // both strings are non-empty and the table name is part of the range
-    return ( (rRange.getLength() > 0) &&
-             (rTableName.getLength() > 0) &&
+    return ( !rRange.isEmpty() &&
+             !rTableName.isEmpty() &&
              (rRange.indexOf( rTableName ) != -1 ));
 }
 
@@ -491,7 +491,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
             IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
         {
             rtl::OUString aValue = xAttrList->getValueByIndex( i );
-            if( aValue.getLength())
+            if( !aValue.isEmpty())
                 nRepeated = aValue.toInt32();
         }
         else if( nPrefix == XML_NAMESPACE_TABLE &&
@@ -756,9 +756,9 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
 
 void SchXMLTableCellContext::EndElement()
 {
-    if( mbReadText && maCellContent.getLength() ) //apply text from <text:p> element
+    if( mbReadText && !maCellContent.isEmpty() ) //apply text from <text:p> element
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aString = maCellContent;
-    if( maRangeId.getLength())
+    if( !maRangeId.isEmpty())
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
 }
 
@@ -1097,7 +1097,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                     aRange = xLabel->getSourceRangeRepresentation();
                                     sal_Int32 nSearchIndex = 0;
                                     OUString aSecondToken = aRange.getToken( 1, ' ', nSearchIndex );
-                                    if( aSecondToken.getLength() )
+                                    if( !aSecondToken.isEmpty() )
                                         aUsageMap[aSecondToken.toInt32()] = true;
                                 }
                             }

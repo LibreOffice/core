@@ -87,7 +87,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
         {
             if( mpContainer->GetAttrLName(nAttr) == aName &&
-                mpContainer->GetAttrPrefix(nAttr).getLength() == 0L )
+                mpContainer->GetAttrPrefix(nAttr).isEmpty() )
                 return nAttr;
         }
     }
@@ -202,7 +202,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
             const OUString aPrefix( aName.copy( 0L, nPos ));
             const OUString aLName( aName.copy( nPos+1L ));
 
-            if( pData->Namespace.getLength() == 0L )
+            if( pData->Namespace.isEmpty() )
             {
                 if( mpContainer->SetAt( nAttr, aPrefix, aLName, pData->Value ) )
                     return;
@@ -215,7 +215,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
         }
         else
         {
-            if( pData->Namespace.getLength() == 0L )
+            if( pData->Namespace.isEmpty() )
             {
                 if( mpContainer->SetAt( nAttr, aName, pData->Value ) )
                     return;
@@ -245,7 +245,7 @@ throw( lang::IllegalArgumentException, container::ElementExistException, lang::W
         const OUString aPrefix( aName.copy( 0L, nPos ));
         const OUString aLName( aName.copy( nPos+1L ));
 
-        if( pData->Namespace.getLength() == 0L )
+        if( pData->Namespace.isEmpty() )
         {
             if( mpContainer->AddAttr( aPrefix, aLName, pData->Value ) )
                 return;
@@ -258,7 +258,7 @@ throw( lang::IllegalArgumentException, container::ElementExistException, lang::W
     }
     else
     {
-        if( pData->Namespace.getLength() == 0L )
+        if( pData->Namespace.isEmpty() )
         {
             if( mpContainer->AddAttr( aName, pData->Value ) )
                 return;

@@ -579,7 +579,7 @@ void XMLAnimationsEffectContext::EndElement()
         UniReference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
         Any aAny;
 
-        if( maShapeId.getLength() )
+        if( !maShapeId.isEmpty() )
         {
             Reference< XPropertySet > xSet;
             if( mpImpl->maLastShapeId != maShapeId )
@@ -635,7 +635,7 @@ void XMLAnimationsEffectContext::EndElement()
                         xSet->setPropertyValue( mbTextEffect ? mpImpl->msTextEffect : mpImpl->msEffect, makeAny( eEffect ) );
                         xSet->setPropertyValue( mpImpl->msSpeed, makeAny( meSpeed ) );
 
-                        if( eEffect == AnimationEffect_PATH && maPathShapeId.getLength() )
+                        if( eEffect == AnimationEffect_PATH && !maPathShapeId.isEmpty() )
                         {
                             Reference< XShape > xPath( GetImport().getInterfaceToIdentifierMapper().getReference( maPathShapeId ), UNO_QUERY );
                             if( xPath.is() )
@@ -644,7 +644,7 @@ void XMLAnimationsEffectContext::EndElement()
                     }
                 }
             }
-            if( maSoundURL.getLength() != 0 )
+            if( !maSoundURL.isEmpty() )
             {
                 if( xSet.is() )
                 {

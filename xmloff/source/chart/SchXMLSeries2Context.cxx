@@ -227,7 +227,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries
     Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
     Reference< chart2::data::XDataSink > xSeriesSink( xSeries, uno::UNO_QUERY );
 
-    if( !(rRange.getLength() && xChartDoc.is() && xSeriesSource.is() && xSeriesSink.is()) )
+    if( !(!rRange.isEmpty() && xChartDoc.is() && xSeriesSource.is() && xSeriesSink.is()) )
         return xLabeledSeq;
 
     // create a new sequence
@@ -352,7 +352,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     if( XML_NAMESPACE_CHART == nClassPrefix )
                         maSeriesChartTypeName = SchXMLTools::GetChartTypeByClassName( aClassName, false /* bUseOldNames */ );
 
-                    if( ! maSeriesChartTypeName.getLength())
+                    if( maSeriesChartTypeName.isEmpty())
                         maSeriesChartTypeName = aClassName;
                 }
                 break;
@@ -375,7 +375,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
 
         bool bIsCandleStick = maGlobalChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
-        if( maSeriesChartTypeName.getLength() )
+        if( !maSeriesChartTypeName.isEmpty() )
         {
             bIsCandleStick = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
         }
@@ -420,7 +420,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
         // values
         Reference< chart2::data::XDataSequence > xSeq;
-        if( bHasRange && m_aSeriesRange.getLength() )
+        if( bHasRange && !m_aSeriesRange.isEmpty() )
             xSeq = SchXMLTools::CreateDataSequence( m_aSeriesRange, mxNewDoc );
 
         Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
@@ -439,7 +439,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
 
         // label
-        if( bHasLabelRange && m_aSeriesLabelRange.getLength() )
+        if( bHasLabelRange && !m_aSeriesLabelRange.isEmpty() )
         {
             Reference< chart2::data::XDataSequence > xLabelSequence =
                 SchXMLTools::CreateDataSequence( m_aSeriesLabelRange, mxNewDoc );
@@ -472,7 +472,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     //init mbSymbolSizeIsMissingInFile:
     try
     {
-        if( msAutoStyleName.getLength() )
+        if( !msAutoStyleName.isEmpty() )
         {
             const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
@@ -521,7 +521,7 @@ void SchXMLSeries2Context::EndElement()
         bool bCreateXValues = true;
         if( !maDomainAddresses.empty() )
         {
-            if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+            if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() )
             {
                 m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
                 m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
@@ -530,7 +530,7 @@ void SchXMLSeries2Context::EndElement()
             aDomainInfo.nIndexForLocalData = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
         }
-        else if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() && !m_bHasDomainContext && mnSeriesIndex==0 )
+        else if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() && !m_bHasDomainContext && mnSeriesIndex==0 )
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) ) //wrong old chart files:
             {
@@ -551,7 +551,7 @@ void SchXMLSeries2Context::EndElement()
         if( nDomainCount>1 )
         {
             DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-x" )), maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
-            if( !m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
+            if( m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.isEmpty() )
             {
                 //for bubble chart the second domain contains the x values which should become an index smaller than y values for own data table
                 //->so second first
@@ -561,7 +561,7 @@ void SchXMLSeries2Context::EndElement()
             aDomainInfos.push_back( aDomainInfo );
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
         }
-        else if( m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
+        else if( !m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.isEmpty() )
         {
             DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-x" )), m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
             aDomainInfos.push_back( aDomainInfo );
@@ -569,7 +569,7 @@ void SchXMLSeries2Context::EndElement()
         if( nDomainCount>0)
         {
             DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-y" )), maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
-            if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+            if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() )
             {
                 m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
                 m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
@@ -577,7 +577,7 @@ void SchXMLSeries2Context::EndElement()
             aDomainInfos.push_back( aDomainInfo );
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
         }
-        else if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+        else if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() )
         {
             DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM("values-y")), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
             aDomainInfos.push_back( aDomainInfo );
@@ -593,8 +593,7 @@ void SchXMLSeries2Context::EndElement()
     else
     {
         //add style
-        if( msAutoStyleName.getLength() ||
-            mnAttachedAxis != 1 )
+        if( !msAutoStyleName.isEmpty() || mnAttachedAxis != 1 )
         {
             DataRowPointStyle aStyle(
                 DataRowPointStyle::DATA_SERIES,
@@ -800,7 +799,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                         , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
                 }
 
-                if( (iStyle->msStyleName).getLength())
+                if( !(iStyle->msStyleName).isEmpty())
                 {
                     if( ! rCurrStyleName.equals( iStyle->msStyleName ))
                     {
@@ -885,7 +884,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                 if( !xSeriesProp.is() )
                     continue;
 
-                if( (iStyle->msStyleName).getLength())
+                if( !(iStyle->msStyleName).isEmpty())
                 {
                     if( ! rCurrStyleName.equals( iStyle->msStyleName ))
                     {

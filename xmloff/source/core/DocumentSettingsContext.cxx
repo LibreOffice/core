@@ -603,10 +603,10 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
     if (IsXMLToken(msType, XML_BASE64BINARY))
     {
         rtl::OUString sTrimmedChars( rChars.trim() );
-        if( sTrimmedChars.getLength() )
+        if( !sTrimmedChars.isEmpty() )
         {
             rtl::OUString sChars;
-            if( msValue.getLength() )
+            if( !msValue.isEmpty() )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;
