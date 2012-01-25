@@ -219,8 +219,13 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			data = content.getTransferData(flavor)
 			msgattachment.set_payload(data)
 			encode_base64(msgattachment)
+			fname = attachment.ReadableName
+			try:
+				fname.encode('ascii')
+			except:
+				fname = ('utf-8','',fname.encode('utf-8'))
 			msgattachment.add_header('Content-Disposition', 'attachment', \
-				filename=('utf-8','',attachment.ReadableName.encode('utf-8')))
+				filename=fname)
 			msg.attach(msgattachment)
 
 
