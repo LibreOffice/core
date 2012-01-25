@@ -30,8 +30,140 @@
 #include <headless/svpdummies.hxx>
 #include <generic/gendata.hxx>
 #include <android/log.h>
+#include <android/input.h>
 #include <android/looper.h>
+#include <android/native_window.h>
 #include <osl/detail/android.h>
+#include <rtl/strbuf.hxx>
+
+static rtl::OString MotionEdgeFlagsToString(int32_t nFlags)
+{
+    rtl::OStringBuffer aStr;
+    if (nFlags == AMOTION_EVENT_EDGE_FLAG_NONE)
+        aStr.append ("no-edge");
+    if (nFlags & AMOTION_EVENT_EDGE_FLAG_TOP)
+        aStr.append (":top");
+    if (nFlags & AMOTION_EVENT_EDGE_FLAG_BOTTOM)
+        aStr.append (":bottom");
+    if (nFlags & AMOTION_EVENT_EDGE_FLAG_LEFT)
+        aStr.append (":left");
+    if (nFlags & AMOTION_EVENT_EDGE_FLAG_RIGHT)
+        aStr.append (":right");
+    return aStr.makeStringAndClear();
+}
+
+static rtl::OString KeyMetaStateToString(int32_t nFlags)
+{
+    rtl::OStringBuffer aStr;
+    if (nFlags == AMETA_NONE)
+        aStr.append ("no-meta");
+    if (nFlags & AMETA_ALT_ON)
+        aStr.append (":alt");
+    if (nFlags & AMETA_SHIFT_ON)
+        aStr.append (":shift");
+    if (nFlags & AMETA_SYM_ON)
+        aStr.append (":sym");
+    return aStr.makeStringAndClear();
+}
+
+int32_t AMotionEvent_getEdgeFlags(const AInputEvent* motion_event);
+
+extern "C" {
+    void onAppCmd_cb (struct android_app* app, int32_t cmd)
+    {
+        fprintf (stderr, "app cmd for app %p, cmd %d\n", app, cmd);
+        ANativeWindow *pWindow = global_android_app->window;
+        switch (cmd) {
+        case APP_CMD_INIT_WINDOW:
+        {
+            ARect aRect = { 0, 0, 0, 0 };
+            aRect.right = ANativeWindow_getWidth(pWindow);
+            aRect.bottom = ANativeWindow_getHeight(pWindow);
+            fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
+                     pWindow, aRect.right, aRect.bottom,
+                     ANativeWindow_getFormat(pWindow));
+            ANativeWindow_Buffer aBuffer;
+            memset ((void *)&aBuffer, 0, sizeof (aBuffer));
+            int32_t nRet = ANativeWindow_lock(pWindow, &aBuffer, &aRect);
+            fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
+                     "buffer: %dx%d stride %d, format %d, bits %p\n",
+                     nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
+                     aBuffer.width, aBuffer.height, aBuffer.stride,
+                     aBuffer.format, aBuffer.bits);
+            if (aBuffer.bits)
+            {
+                // hard-code / guess at a format ...
+                int32_t *p = (int32_t *)aBuffer.bits;
+                for (int32_t y = 0; y < aBuffer.height; y++)
+                {
+                    for (int32_t x = 0; x < aBuffer.stride / 4; x++)
+                        *p++ = (y << 24) + x;
+                }
+            }
+            ANativeWindow_unlockAndPost(pWindow);
+            fprintf (stderr, "done render!\n");
+            break;
+        }
+        case APP_CMD_WINDOW_RESIZED:
+        {
+            ARect aRect = { 0, 0, 0, 0 };
+            aRect.right = ANativeWindow_getWidth(pWindow);
+            aRect.bottom = ANativeWindow_getHeight(pWindow);
+            fprintf (stderr, "app window resized to ! %p %dx%x (%d)\n",
+                     pWindow, aRect.right, aRect.bottom,
+                     ANativeWindow_getFormat(pWindow));
+            break;
+        }
+
+        case APP_CMD_CONTENT_RECT_CHANGED:
+        {
+            ARect aRect = global_android_app->contentRect;
+            fprintf (stderr, "content rect changed [ k/b popped up etc. ] %d,%d->%d,%d\n",
+                     aRect.left, aRect.top, aRect.right, aRect.bottom);
+            break;
+        }
+        default:
+            fprintf (stderr, "unhandled app cmd %d\n", cmd);
+            break;
+        }
+    }
+
+    int32_t onInputEvent_cb (struct android_app* app, AInputEvent* event)
+    {
+        fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
+                 app, event,
+                 AInputEvent_getType(event),
+                 AInputEvent_getSource(event),
+                 AInputEvent_getDeviceId(event));
+
+        switch (AInputEvent_getType(event))
+        {
+        case AINPUT_EVENT_TYPE_KEY:
+        {
+            int32_t nAction = AKeyEvent_getAction(event);
+            fprintf (stderr, "key event keycode %d '%s' %s\n",
+                     AKeyEvent_getKeyCode(event),
+                     nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
+                     nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
+                     KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr());
+            break;
+        }
+        case AINPUT_EVENT_TYPE_MOTION:
+        {
+            fprintf (stderr, "motion event %d %g %g %s\n",
+                     AMotionEvent_getAction(event),
+                     AMotionEvent_getXOffset(event),
+                     AMotionEvent_getYOffset(event),
+                     MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
+            break;
+        }
+        default:
+            fprintf (stderr, "unknown event type %p %d\n",
+                     event, AInputEvent_getType(event));
+        }
+        return 1; // handled 0 for not ...
+    }
+}
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
@@ -39,6 +171,15 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
              global_android_app,
              global_android_app ? global_android_app->window : NULL);
+    if (global_android_app)
+    {
+        pthread_mutex_lock (&global_android_app->mutex);
+        global_android_app->onAppCmd = onAppCmd_cb;
+        global_android_app->onInputEvent = onInputEvent_cb;
+        if (global_android_app->window != NULL)
+            onAppCmd_cb (global_android_app, APP_CMD_INIT_WINDOW);
+        pthread_mutex_unlock (&global_android_app->mutex);
+    }
 }
 
 AndroidSalInstance::~AndroidSalInstance()
@@ -48,6 +189,7 @@ AndroidSalInstance::~AndroidSalInstance()
 
 void AndroidSalInstance::Wakeup()
 {
+    fprintf (stderr, "Wakeup alooper\n");
     if (global_android_app && global_android_app->looper)
         ALooper_wake (global_android_app->looper);
     else
@@ -58,12 +200,23 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
+    struct android_app *pApp = global_android_app;
 
-    fprintf (stderr, "DoReleaseYield for %d ms\n", nTimeoutMS);
-//    int ALooper_pollOnce(timeoutMs, int* outFd, int* outEvents, void** outData);
+    fprintf (stderr, "DoReleaseYield #2 %d ms\n", nTimeoutMS);
+    void *outData = NULL;
+    int outFd = 0, outEvents = 0;
+    int nRet = ALooper_pollAll(nTimeoutMS, &outFd, &outEvents, &outData);
+    fprintf (stderr, "ret %d %d %d %p\n", nRet, outFd, outEvents, outData);
 
     // acquire yield mutex again
     AcquireYieldMutex(nAcquireCount);
+
+    // FIXME: this is more or less deranged: why can we not
+    // set a callback in the native app glue's ALooper_addFd ?
+    if (nRet == LOOPER_ID_MAIN)
+        pApp->cmdPollSource.process(pApp, &pApp->cmdPollSource);
+    if (nRet == LOOPER_ID_INPUT)
+        pApp->inputPollSource.process(pApp, &pApp->inputPollSource);
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
