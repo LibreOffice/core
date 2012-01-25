@@ -56,46 +56,21 @@
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
-#define JAPANESE_ISO "ja"
-
-
-struct eqstr{
-  sal_Bool operator()(const char* s1, const char* s2) const{
-    return strcmp(s1,s2)==0;
-  }
-};
-
-struct equalByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
-    }
-};
-struct lessByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
-    }
-};
-
-struct hashByteString{
-    size_t operator()( const ByteString& rName ) const{
-        return rtl_str_hashCode_WithLength(rName.GetBuffer(), rName.Len() );
-    }
-};
-
 class PFormEntrys;
 class MergeData;
-typedef std::set<ByteString , lessByteString > ByteStringSet;
+typedef std::set<rtl::OString> ByteStringSet;
 
-typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash>
+    ByteStringHashMap;
 
-typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
-                                ByteStringBoolHashMap;
+typedef boost::unordered_map<rtl::OString, bool, rtl::OStringHash>
+    ByteStringBoolHashMap;
 
-typedef boost::unordered_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
-                                PFormEntrysHashMap;
+typedef boost::unordered_map<rtl::OString, PFormEntrys*, rtl::OStringHash>
+    PFormEntrysHashMap;
 
-typedef boost::unordered_map<ByteString , MergeData* , hashByteString,equalByteString>
-                                MergeDataHashMap;
+typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
+    MergeDataHashMap;
 
 #define SOURCE_LANGUAGE ByteString("en-US")
 #define LIST_REFID  "LIST_REFID"

@@ -44,25 +44,7 @@ typedef ::std::vector< ParserMessage* > Impl_ParserMessageList;
 
 class ParserMessageList;
 
-struct equalByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
-    }
-};
-struct lessByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
-    }
-};
-
-struct hashByteString{
-    size_t operator()( const ByteString& rName ) const{
-                return rtl_str_hashCode(rName.GetBuffer());
-    }
-};
-
-typedef boost::unordered_map<ByteString , String , hashByteString,equalByteString>
-                                StringHashMap;
+typedef boost::unordered_map<rtl::OString, String, rtl::OStringHash> StringHashMap;
 
 class TokenInfo
 {

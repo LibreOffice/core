@@ -185,18 +185,16 @@ public:
 //-------------------------------------------------------------------------
 
 /// Mapping numeric Language code <-> XML Element
-typedef boost::unordered_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
+typedef boost::unordered_map<rtl::OString, XMLElement*, rtl::OStringHash> LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef boost::unordered_map<ByteString , LangHashMap* ,
-                      hashByteString,equalByteString>                   XMLHashMap;
+typedef boost::unordered_map<rtl::OString, LangHashMap*, rtl::OStringHash> XMLHashMap;
 
 /// Mapping iso alpha string code <-> iso numeric code
-typedef boost::unordered_map<ByteString, int, hashByteString,equalByteString>   HashMap;
+typedef boost::unordered_map<rtl::OString, int, rtl::OStringHash> HashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef boost::unordered_map<ByteString , sal_Bool ,
-                      hashByteString,equalByteString>                   TagMap;
+typedef boost::unordered_map<rtl::OString, sal_Bool, rtl::OStringHash> TagMap;
 
 /** Holds information of a XML file, is root node of tree
  */

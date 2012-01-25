@@ -142,7 +142,7 @@ ByteString MergeData::Dump(){
     PFormEntrysHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
     {
-        printf("aMap[ %s ] = " ,idbg->first.GetBuffer());
+        printf("aMap[ %s ] = " ,idbg->first.getStr());
         ( (PFormEntrys*)(idbg->second) )->Dump();
         printf("\n");
     }
@@ -249,7 +249,7 @@ ByteString MergeDataFile::Dump(){
     MergeDataHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
     {
-        printf("aMap[ %s ] = ",idbg->first.GetBuffer());
+        printf("aMap[ %s ] = ",idbg->first.getStr());
         idbg->second->Dump();
         printf("\n");
     }
