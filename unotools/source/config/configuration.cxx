@@ -37,6 +37,7 @@
 #include "com/sun/star/configuration/XReadWriteAccess.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/container/XHierarchicalNameReplace.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/lang/Locale.hpp"
@@ -90,6 +91,13 @@ void unotools::ConfigurationChanges::setPropertyValue(
     access_->replaceByHierarchicalName(path, value);
 }
 
+css::uno::Reference< css::container::XHierarchicalNameReplace >
+unotools::ConfigurationChanges::getGroup(rtl::OUString const & path) const
+{
+    return css::uno::Reference< css::container::XHierarchicalNameReplace >(
+        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+}
+
 css::uno::Reference< css::container::XNameContainer >
 unotools::ConfigurationChanges::getSet(rtl::OUString const & path) const
 {
@@ -137,6 +145,23 @@ void unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(
 {
     assert(batch.get() != 0);
     batch->setPropertyValue(extendLocalizedPath(path), value);
+}
+
+css::uno::Reference< css::container::XHierarchicalNameAccess >
+unotools::detail::ConfigurationWrapper::getGroupReadOnly(
+    rtl::OUString const & path) const
+{
+    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+}
+
+css::uno::Reference< css::container::XHierarchicalNameReplace >
+unotools::detail::ConfigurationWrapper::getGroupReadWrite(
+    boost::shared_ptr< ConfigurationChanges > const & batch,
+    rtl::OUString const & path) const
+{
+    assert(batch.get() != 0);
+    return batch->getGroup(path);
 }
 
 css::uno::Reference< css::container::XNameAccess >

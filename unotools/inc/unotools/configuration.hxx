@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star {
     namespace configuration { class XReadWriteAccess; }
     namespace container {
         class XHierarchicalNameAccess;
+        class XHierarchicalNameReplace;
         class XNameAccess;
         class XNameContainer;
     }
@@ -79,6 +80,10 @@ private:
     SAL_DLLPRIVATE void setPropertyValue(
         rtl::OUString const & path, com::sun::star::uno::Any const & value)
         const;
+
+    SAL_DLLPRIVATE com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameReplace >
+    getGroup(rtl::OUString const & path) const;
 
     SAL_DLLPRIVATE
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
@@ -119,6 +124,16 @@ public:
         boost::shared_ptr< ConfigurationChanges > const & batch,
         rtl::OUString const & path, com::sun::star::uno::Any const & value)
         const;
+
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+    getGroupReadOnly(rtl::OUString const & path) const;
+
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameReplace >
+    getGroupReadWrite(
+        boost::shared_ptr< ConfigurationChanges > const & batch,
+        rtl::OUString const & path) const;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
     getSetReadOnly(rtl::OUString const & path) const;
@@ -228,6 +243,39 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
 private:
     ConfigurationLocalizedProperty(); // not defined
     ~ConfigurationLocalizedProperty(); // not defined
+};
+
+/// A type-safe wrapper around a configuration group.
+///
+/// Automatically generated headers for the various configuration groups derive
+/// from this template and make available its member functions to access each
+/// given configuration group.
+template< typename T > struct ConfigurationGroup: private boost::noncopyable {
+    /// Get read-only access to the given configuration group.
+    static com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context)
+    {
+        return detail::ConfigurationWrapper::get(context).getGroupReadOnly(
+            T::path());
+    }
+
+    /// Get read/write access to the given configuration group, storing any
+    /// modifications via the given changes batch.
+    static com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameReplace >
+    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context,
+        boost::shared_ptr< ConfigurationChanges > const & batch)
+    {
+        return detail::ConfigurationWrapper::get(context).getGroupReadWrite(
+            batch, T::path());
+    }
+
+private:
+    ConfigurationGroup(); // not defined
+    ~ConfigurationGroup(); // not defined
 };
 
 /// A type-safe wrapper around a configuration set.

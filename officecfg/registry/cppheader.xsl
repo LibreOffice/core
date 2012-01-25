@@ -141,9 +141,18 @@
   <xsl:template match="group">
     <xsl:param name="path"/>
     <xsl:if test=".//prop or .//set">
-      <xsl:text>namespace </xsl:text>
-      <xsl:value-of select="translate(@oor:name, '-.', '__')"/>
-      <xsl:text> {&#xA;</xsl:text>
+      <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
+      <xsl:text>struct </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>: public unotools::ConfigurationGroup&lt; </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>&gt; {&#xA;</xsl:text>
+      <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
+      -->RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+      <xsl:value-of select="$path"/>
+      <xsl:text>/</xsl:text>
+      <xsl:value-of select="@oor:name"/>
+      <xsl:text>")); }&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:apply-templates select="group|set|prop">
         <xsl:with-param name="path">
@@ -152,7 +161,14 @@
           <xsl:value-of select="@oor:name"/>
         </xsl:with-param>
       </xsl:apply-templates>
-      <xsl:text>}&#xA;</xsl:text>
+      <xsl:text>private:&#xA;</xsl:text>
+      <xsl:text>    </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>    ~</xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>};&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
     </xsl:if>
   </xsl:template>
