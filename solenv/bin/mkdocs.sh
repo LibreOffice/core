@@ -89,7 +89,7 @@ do
   echo "Ref-Tags:   $DOXYGEN_REF_TAGFILES"
   echo "Title:      $DOXYGEN_PROJECTNAME"
 
-  nice -15 doxygen "$DOXYGEN_CFG"
+  nice -15 doxygen "$DOXYGEN_CFG" || exit 1
 
   # setup referenced tagfiles for next round
   DOXYGEN_REF_TAGFILES="$DOXYGEN_REF_TAGFILES $DOXYGEN_OUR_TAGFILE=$BASE_URL/$PROJECT/html"
