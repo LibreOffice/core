@@ -29,35 +29,39 @@ STD_LIB_FILE( gid_File_Lib_Solver, solver)
 
 #ifdef ADD_ALL_COINMP_LIBRARIES
 File gid_File_Lib_CoinMP
-    Name = SPECIAL_NAME_VER(CoinMP,0);
+    Name = SPECIAL_NAME_VER(CoinMP,1);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_CoinUtils
-    Name = SPECIAL_NAME_VER(CoinUtils,0);
+    Name = SPECIAL_NAME_VER(CoinUtils,3);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_Clp
-    Name = SPECIAL_NAME_VER(Clp,0);
+    Name = SPECIAL_NAME_VER(Clp,1);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_Cbc
-    Name = SPECIAL_NAME_VER(Cbc,0);
+    Name = SPECIAL_NAME_VER(Cbc,3);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_Osi
-    Name = SPECIAL_NAME_VER(Osi,0);
+    Name = SPECIAL_NAME_VER(Osi,1);
+    PACKED_LIB_FILE_BODY;
+End
+File gid_File_Lib_OsiCbc
+    Name = SPECIAL_NAME_VER(OsiCbc,3);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_OsiClp
-    Name = SPECIAL_NAME_VER(OsiClp,0);
+    Name = SPECIAL_NAME_VER(OsiClp,1);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_Cgl
-    Name = SPECIAL_NAME_VER(Cgl,0);
+    Name = SPECIAL_NAME_VER(Cgl,1);
     PACKED_LIB_FILE_BODY;
 End
 File gid_File_Lib_CbcSolver
-    Name = SPECIAL_NAME_VER(CbcSolver,0);
+    Name = SPECIAL_NAME_VER(CbcSolver,3);
     PACKED_LIB_FILE_BODY;
 End
 #else
