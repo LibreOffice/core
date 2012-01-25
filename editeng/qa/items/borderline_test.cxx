@@ -106,7 +106,7 @@ void BorderLineTest::testGuessWidthNoMatch()
     line.GuessLinesWidths( DOUBLE,
             TEST_WIDTH + 1, TEST_WIDTH + 2, TEST_WIDTH + 3 );
     CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
-    CPPUNIT_ASSERT_EQUAL( long( 0 ), line.GetWidth() );
+    CPPUNIT_ASSERT_EQUAL( long( (3 * TEST_WIDTH) + 6 ), line.GetWidth() );
 }
 
 void BorderLineTest::testGuessWidthThinthickSmallgap()
