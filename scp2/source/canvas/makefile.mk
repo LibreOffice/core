@@ -41,11 +41,8 @@ PARFILES= canvascommons.par		\
           vclcanvas.par         \
 		  mtfrenderer.par
 
-.IF "$(GUI)"=="UNX"
-#X11 MacOSX has no cairo-canvas
-.IF "$(OS)" != "MACOSX" || "$(GUIBASE)" == "aqua"
+.IF "$(ENABLE_CAIRO_CANVAS)"=="TRUE"
 PARFILES+= cairocanvas.par
-.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_DIRECTX)" != ""

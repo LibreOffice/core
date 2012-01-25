@@ -209,11 +209,8 @@ SCP1FILES += \
              vclcanvas.par \
 			 mtfrenderer.par
 
-.IF "$(GUI)"=="UNX"
-#X11 MacOSX has no cairo-canvas
-.IF "$(OS)" != "MACOSX" || "$(GUIBASE)" == "aqua"
+.IF "$(ENABLE_CAIRO_CANVAS)"=="TRUE"
 SCP1FILES += cairocanvas.par
-.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_ONLINE_UPDATE)"!=""
