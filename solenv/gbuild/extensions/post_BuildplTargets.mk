@@ -173,8 +173,6 @@ endif # gb_SourceEnvAndRecurse_STAGE=buildpl
 
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
-clean: clean-host clean-build
-
 dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
 
 build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)

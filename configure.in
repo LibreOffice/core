@@ -1940,18 +1940,19 @@ pathmunge ()
 {
     if test -n "$1" ; then
         if test "$build_os" = "cygwin" ; then
-            WinPath "$1"
+            PathFormat "$1"
             new_path=`cygpath -u "$formatted_path"`
         else
             new_path="$1"
         fi
         if ! echo LO_PATH | $EGREP -q "(^|:)$1($|:)" ; then
             if test "$2" = "after" ; then
-                LO_PATH="$LO_PATH:$1"
+                LO_PATH="$LO_PATH:$new_path"
             else
-                LO_PATH="$1:$LO_PATH"
+                LO_PATH="$new_path:$LO_PATH"
             fi
         fi
+        unset new_path
     fi
 }
 
@@ -7037,7 +7038,7 @@ if test "$SYSTEM_MOZILLA" = "YES" ; then
 fi
 
 AC_SUBST(BUILD_MOZAB)
-AC_SUBST(PREBUILT_MOZAB)
+AC_SUBST(PREBUILD_MOZAB)
 AC_SUBST(MOZILLABUILD)
 AC_SUBST(SYSTEM_MOZILLA)
 AC_SUBST(MOZ_FLAVOUR)
@@ -7942,7 +7943,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
             ML_EXE="$assembler"
         fi
     fi
-    FormatPath "$with_asm_home"
+    PathFormat "$with_asm_home"
     ASM_HOME="$formatted_path"
 else
     ASM_HOME=""
@@ -10034,6 +10035,7 @@ EOF
         ANT="$ANT"
     fi
     AC_SUBST(ANT_HOME)
+    AC_SUBST(ANT)
 
     dnl Checking for ant.jar
     if test "$ANT_HOME" != "NO_ANT_HOME"; then
@@ -10630,14 +10632,14 @@ if test "$build_os" = "cygwin"; then
         ILIB="$ILIB;$formatted_path"
     fi
     if test "$CL_X64" = "TRUE" ; then
-        WinPath "$COMPATH/lib"
-        ILIB="$ILIB;$formatted_path"
-        WinPath "$WINDOWS_SDK_HOME/lib"
-        ILIB="$ILIB;$formatted_path"
-    else
         WinPath "$COMPATH/lib/amd64"
         ILIB="$ILIB;$formatted_path"
         WinPath "$WINDOWS_SDK_HOME/lib64"
+        ILIB="$ILIB;$formatted_path"
+    else
+        WinPath "$COMPATH/lib"
+        ILIB="$ILIB;$formatted_path"
+        WinPath "$WINDOWS_SDK_HOME/lib"
         ILIB="$ILIB;$formatted_path"
     fi
     WinPath "$DOTNET_FRAMEWORK_HOME/lib"
@@ -10751,6 +10753,10 @@ AC_SUBST(ATL_INCLUDE)
 AC_SUBST(ATL_LIB)
 AC_SUBST(MFC_INCLUDE)
 AC_SUBST(MFC_LIB)
+AC_SUBST(WIND_FIND)
+AC_SUBST(WIND_GREP)
+AC_SUBST(WIND_LS)
+AC_SUBST(WIND_TOUCH)
 
 AC_SUBST(BUILD_TYPE)
 
@@ -10818,13 +10824,13 @@ else
 
     cygwin*)
         if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
-            pathmunge "$DOTNET_FRAMEWORK_HOME" "before"
+            pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
             pathmunge "$ASM_HOME" "before"
-            pathmunge "$WINDOWS_SDK_HOME" "before"
+            pathmunge "$WINDOWS_SDK_HOME/bin" "before"
             pathmunge "$CSC_PATH" "before"
             pathmunge "$MIDL_PATH" "before"
             pathmunge "$MSPDB_PATH" "before"
-            if test "$CL_X64"="TRUE" ; then
+            if test "$CL_X64" = "TRUE" ; then
                 pathmunge "$COMPATH/bin/amd64" "before"
             else
                 pathmunge "$COMPATH/bin" "before"
