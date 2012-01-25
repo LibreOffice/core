@@ -1238,7 +1238,7 @@ void OutputDevice::SetLineColor()
 
 // -----------------------------------------------------------------------
 
-Color OutputDevice::ImplDrawModeToColor( const Color& rColor )
+Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 {
     Color aColor( rColor );
     sal_uLong  nDrawMode = GetDrawMode();
