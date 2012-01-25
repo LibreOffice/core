@@ -36,8 +36,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  	settings.mk
 
-.IF "$(WITH_MOZILLA)" != "NO"
-
 .IF "$(SYSTEM_MOZILLA_HEADERS)" == "YES"
 INCPRE+=$(MOZILLA_HEADERS_CFLAGS)
 .ELSE
@@ -159,8 +157,6 @@ DEF2EXPORTFILE=exports.dxp
 .IF "$(GUI)"=="WNT"
 DEF2EXPORTFILE=exports_wnt.dxp
 .ENDIF
-
-.ENDIF # $(WITH_MOZILLA) != "NO"
 
 # --- Targets ----------------------------------
 
