@@ -198,23 +198,28 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
        sal_Bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
-       // The width has to be changed
-       if( bHasWidth && USHRT_MAX != nNamedWidth )
+       // fdo#38542: for double borders, do not override the width
+       // set via style:border-line-width{,-left,-right,-top,-bottom}
+       if (!bDouble || !rpLine->GetWidth())
        {
-           if ( bDouble )
-               rpLine->SetStyle( ::editeng::DOUBLE );
-           rpLine->SetWidth( aBorderWidths[nNamedWidth] );
-       }
-       else
-       {
-           if( !bHasWidth )
-               nWidth = rpLine->GetInWidth() + rpLine->GetDistance() +
-                   rpLine->GetOutWidth();
+           // The width has to be changed
+           if (bHasWidth && USHRT_MAX != nNamedWidth)
+           {
+               if (bDouble)
+                   rpLine->SetStyle( ::editeng::DOUBLE );
+               rpLine->SetWidth( aBorderWidths[nNamedWidth] );
+           }
+           else
+           {
+               if (!bHasWidth)
+                   nWidth = rpLine->GetInWidth() + rpLine->GetDistance() +
+                       rpLine->GetOutWidth();
 
-           rpLine->SetWidth( nWidth );
-           if (bDouble)
-           {   // fdo#38542: divide width by 3 for outer line, gap, inner line
-               rpLine->ScaleMetrics(1, 3);
+               rpLine->SetWidth( nWidth );
+               if (bDouble)
+               { // fdo#38542: divide width by 3 for outer line, gap, inner line
+                   rpLine->ScaleMetrics(1, 3);
+               }
            }
        }
        lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
