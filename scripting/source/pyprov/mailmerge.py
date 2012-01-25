@@ -41,6 +41,7 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
 from email.utils import parseaddr
+from socket import _GLOBAL_DEFAULT_TIMEOUT
 
 import sys, smtplib, imaplib, poplib
 dbg = False
@@ -80,20 +81,29 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print("PyMailSMTPService connect", file=dbgout)
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
-			print(server, file=dbgout)
+			print("ServerName: " + server, file=dbgout)
 		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
-			print(port, file=dbgout)
-		self.server = smtplib.SMTP(server, port)
+			print("Port: " + str(port), file=dbgout)
+		tout = xConnectionContext.getValueByName("Timeout")
+		if dbg:
+			print(isinstance(tout,int), file=dbgout)
+		if not isinstance(tout,int):
+			tout = _GLOBAL_DEFAULT_TIMEOUT
+		if dbg:
+			print("Timeout: " + str(tout), file=dbgout)
+		self.server = smtplib.SMTP(server, port,timeout=tout)
+
 		#stderr not available for us under windows, but
 		#set_debuglevel outputs there, and so throw
 		#an exception under windows on debugging mode
 		#with this enabled
 		if dbg and os.name != 'nt':
 			self.server.set_debuglevel(1)
+
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
-			print(connectiontype, file=dbgout)
+			print("ConnectionType: " + connectiontype, file=dbgout)
 		if connectiontype.upper() == 'SSL':
 			self.server.ehlo()
 			self.server.starttls()
@@ -228,7 +238,6 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				filename=fname)
 			msg.attach(msgattachment)
 
-
 		uniquer = {}
 		for key in recipients:
 			uniquer[key] = True
@@ -357,7 +366,14 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		if connectiontype.upper() == 'SSL':
 			self.server = poplib.POP3_SSL(server, port)
 		else:
-			self.server = poplib.POP3(server, port)
+			tout = xConnectionContext.getValueByName("Timeout")
+			if dbg:
+				print(isinstance(tout,int), file=dbgout)
+			if not isinstance(tout,int):
+				tout = _GLOBAL_DEFAULT_TIMEOUT
+			if dbg:
+				print("Timeout: " + str(tout), file=dbgout)
+			self.server = poplib.POP3(server, port, timeout=tout)
 		print("AFTER", file=dbgout)
 			
 		user = xAuthenticator.getUserName()
