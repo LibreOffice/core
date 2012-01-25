@@ -251,10 +251,12 @@ define dmake_module_rules
 .PHONY: $(1) $(1).all $(1).deliver $(1).clean
 
 $(1): bootstrap fetch
-	cd $(1) && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+	cd $(1) && unset MAKEFLAGS && \
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
 
 $(1).all: bootstrap fetch
-	cd $(1) && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	cd $(1) && unset MAKEFLAGS && \
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 $(1).deliver: bootstrap fetch
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
@@ -272,7 +274,7 @@ endef
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	cd instsetoo_native && \
+	cd instsetoo_native && unset MAKEFLAGS && \
 	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 cross-toolset:
