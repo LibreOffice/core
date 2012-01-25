@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_xsd_XDataType_idl__
-#define __com_sun_star_xsd_XDataType_idl__
+#ifndef __com_sun_star_xsd_WhiteSpaceTreatment_idl__
+#define __com_sun_star_xsd_WhiteSpaceTreatment_idl__
 
 //=============================================================================
 module com {  module sun {  module star {  module xsd {
