@@ -212,6 +212,10 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                    rpLine->GetOutWidth();
 
            rpLine->SetWidth( nWidth );
+           if (bDouble)
+           {   // fdo#38542: divide width by 3 for outer line, gap, inner line
+               rpLine->ScaleMetrics(1, 3);
+           }
        }
        lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
