@@ -134,8 +134,7 @@ void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
 // #111840#
 void SwFmtFld::SetFld(SwField * _pField)
 {
-    if (NULL != pField)
-        delete pField;
+    delete pField;
 
     pField = _pField;
     Broadcast( SwFmtFldHint( this, SWFMTFLD_CHANGED ) );

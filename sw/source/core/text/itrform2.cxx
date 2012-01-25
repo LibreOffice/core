@@ -1629,8 +1629,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
 
     // delete master copy of rest portion
-    if ( pSaveFld )
-        delete pSaveFld;
+    delete pSaveFld;
 
     xub_StrLen nNewStart = nStartPos + pCurr->GetLen();
 

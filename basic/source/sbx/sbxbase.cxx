@@ -55,8 +55,7 @@ SbxAppData& GetSbxData_Impl()
 
 SbxAppData::~SbxAppData()
 {
-    if( pBasicFormater )
-        delete pBasicFormater;
+    delete pBasicFormater;
 }
 
 

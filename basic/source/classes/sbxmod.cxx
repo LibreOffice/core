@@ -541,13 +541,10 @@ SbModule::SbModule( const String& rName,  sal_Bool bVBACompat )
 SbModule::~SbModule()
 {
     OSL_TRACE("Module named %s is destructing", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    if( pImage )
-        delete pImage;
-    if( pBreaks )
-        delete pBreaks;
-    if( pClassData )
-        delete pClassData;
-        mxWrapper = NULL;
+    delete pImage;
+    delete pBreaks;
+    delete pClassData;
+    mxWrapper = NULL;
 }
 
 uno::Reference< script::XInvocation >

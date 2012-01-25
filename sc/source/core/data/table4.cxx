@@ -564,8 +564,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if ( bGetPattern )
             {
-                if ( pNewPattern )
-                    delete pNewPattern;
+                delete pNewPattern;
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
                     pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
                 else                // rInner&:=nCol, rOuter&:=nRow

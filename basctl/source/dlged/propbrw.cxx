@@ -308,8 +308,7 @@ Sequence< Reference< XInterface > >
             // next element
             pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
-        if (pGroupIterator)
-            delete pGroupIterator;
+        delete pGroupIterator;
     }
 
     sal_Int32 nCount = aInterfaces.size();

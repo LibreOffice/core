@@ -197,8 +197,7 @@ void ManageLanguageDialog::ClearLanguageBox()
     for ( i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData(i) );
-        if ( pEntry )
-            delete pEntry;
+        delete pEntry;
     }
     m_aLanguageLB.Clear();
 }

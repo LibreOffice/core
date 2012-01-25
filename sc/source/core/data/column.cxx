@@ -93,7 +93,7 @@ ScColumn::ScColumn() :
 ScColumn::~ScColumn()
 {
     FreeAll();
-    if (pAttrArray) delete pAttrArray;
+    delete pAttrArray;
 }
 
 

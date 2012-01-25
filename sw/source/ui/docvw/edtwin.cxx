@@ -4602,11 +4602,7 @@ SwEditWin::~SwEditWin()
     delete pApplyTempl;
     rView.SetDrawFuncPtr(NULL);
 
-    if(pUserMarker)
-    {
-        delete pUserMarker;
-    }
-
+    delete pUserMarker;
     delete pAnchorMarker;
 }
 
@@ -5468,7 +5464,7 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     bIsTip = rCpy.bIsTip;
     bIsAutoText = rCpy.bIsAutoText;
 
-    if( pCETID ) delete pCETID;
+    delete pCETID;
     pCETID = rCpy.pCETID;
     rCpy.pCETID = 0;
 

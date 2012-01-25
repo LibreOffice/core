@@ -273,8 +273,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
         }
     }
 
-    if (pDBCollection)
-        delete pDBCollection;
+    delete pDBCollection;
 
     pDBCollection = pNewDBCollection;
 }
