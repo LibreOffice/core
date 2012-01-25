@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
+#include <svtools/miscopt.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -161,6 +162,11 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& /*r
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
+    // Use the old rtf importer by default for paste, till the new one supports
+    // undo stack and PaM.
+    SvtMiscOptions aMiscOptions;
+    if (!aMiscOptions.IsExperimentalMode())
+        return new RtfReader();
     return new SwRTFReader();
 }
 
