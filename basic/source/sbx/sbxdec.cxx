@@ -428,7 +428,6 @@ bool SbxDecimal::getString( ::rtl::OUString& rString )
 
 SbxDecimal* ImpCreateDecimal( SbxValues* p )
 {
-#ifdef WIN32
     if( !p )
         return NULL;
 
@@ -439,15 +438,10 @@ SbxDecimal* ImpCreateDecimal( SbxValues* p )
         rpDecimal->addRef();
     }
     return rpDecimal;
-#else
-    (void)p;
-    return NULL;
-#endif
 }
 
 SbxDecimal* ImpGetDecimal( const SbxValues* p )
 {
-#ifdef WIN32
     SbxValues aTmp;
     SbxDecimal* pnDecRes;
 
@@ -563,16 +557,10 @@ start:
             SbxBase::SetError( SbxERR_CONVERSION ); pnDecRes->setShort( 0 );
     }
     return pnDecRes;
-#else
-    (void)p;
-    return NULL;
-#endif
 }
-
 
 void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec )
 {
-#ifdef WIN32
     if( !pDec )
         return;
 
@@ -739,10 +727,6 @@ start:
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
-#else
-    (void)p;
-    (void)pDec;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
