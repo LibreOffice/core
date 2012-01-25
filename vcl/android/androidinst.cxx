@@ -30,12 +30,18 @@
 #include <headless/svpdummies.hxx>
 #include <generic/gendata.hxx>
 #include <android/log.h>
-#include <android/input.h>
 #include <android/looper.h>
-#include <android/native_window.h>
 #include <lo-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
+
+class AndroidSalData : public SalGenericData
+{
+public:
+    AndroidSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_ANDROID, pInstance ) {}
+    virtual void ErrorTrapPush() {}
+    virtual bool ErrorTrapPop( bool ) { return false; }
+};
 
 static rtl::OString MotionEdgeFlagsToString(int32_t nFlags)
 {
@@ -67,13 +73,62 @@ static rtl::OString KeyMetaStateToString(int32_t nFlags)
     return aStr.makeStringAndClear();
 }
 
-int32_t AMotionEvent_getEdgeFlags(const AInputEvent* motion_event);
-
-extern "C" {
-    void onAppCmd_cb (struct android_app* app, int32_t cmd)
+static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
+                                    const basebmp::BitmapDeviceSharedPtr& /* aDev */,
+                                    const ARect &aSrcRect,
+                                    int nDestX, int nDestY)
+{
+    fprintf (stderr, "Blit frame src %d,%d->%d,%d to positoon %d, %d\n",
+             aSrcRect.left, aSrcRect.top, aSrcRect.right, aSrcRect.bottom,
+             nDestX, nDestY);
+#if 1
+    ARect aRect;
+    ANativeWindow_Buffer aBuffer;
+    memset ((void *)&aBuffer, 0, sizeof (aBuffer));
+    int32_t nRet = ANativeWindow_lock(pWindow, &aBuffer, &aRect);
+    fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
+             "buffer: %dx%d stride %d, format %d, bits %p\n",
+             nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
+             aBuffer.width, aBuffer.height, aBuffer.stride,
+             aBuffer.format, aBuffer.bits);
+    if (aBuffer.bits)
     {
+        // hard-code / guess at a format ...
+        int32_t *p = (int32_t *)aBuffer.bits;
+        for (int32_t y = 0; y < aBuffer.height; y++)
+        {
+            for (int32_t x = 0; x < aBuffer.stride / 4; x++)
+                *p++ = (y << 24) + x;
+        }
+    }
+    ANativeWindow_unlockAndPost(pWindow);
+    fprintf (stderr, "done render!\n");
+#endif
+
+}
+
+void AndroidSalInstance::BlitFrameToWindow(ANativeWindow *pWindow,
+                                           const basebmp::BitmapDeviceSharedPtr& aDev)
+{
+    basegfx::B2IVector aDevSize = aDev->getSize();
+    ARect aWhole = { 0, 0, aDevSize.getX(), aDevSize.getY() };
+    BlitFrameRegionToWindow(pWindow, aDev, aWhole, 0, 0);
+}
+
+void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
+{
+    std::list< SalFrame* >::const_iterator it;
+    for ( it = getFrames().begin(); it != getFrames().end(); it++ )
+    {
+        SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
+        BlitFrameToWindow (pWindow, pFrame->getDevice());
+    }
+}
+
+void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
+{
         fprintf (stderr, "app cmd for app %p, cmd %d\n", app, cmd);
-        ANativeWindow *pWindow = app->window;
+        ANativeWindow *pWindow = mpApp->window;
         switch (cmd) {
         case APP_CMD_INIT_WINDOW:
         {
@@ -83,26 +138,8 @@ extern "C" {
             fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
-            ANativeWindow_Buffer aBuffer;
-            memset ((void *)&aBuffer, 0, sizeof (aBuffer));
-            int32_t nRet = ANativeWindow_lock(pWindow, &aBuffer, &aRect);
-            fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
-                     "buffer: %dx%d stride %d, format %d, bits %p\n",
-                     nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
-                     aBuffer.width, aBuffer.height, aBuffer.stride,
-                     aBuffer.format, aBuffer.bits);
-            if (aBuffer.bits)
-            {
-                // hard-code / guess at a format ...
-                int32_t *p = (int32_t *)aBuffer.bits;
-                for (int32_t y = 0; y < aBuffer.height; y++)
-                {
-                    for (int32_t x = 0; x < aBuffer.stride / 4; x++)
-                        *p++ = (y << 24) + x;
-                }
-            }
-            ANativeWindow_unlockAndPost(pWindow);
-            fprintf (stderr, "done render!\n");
+
+            RedrawWindows(pWindow);
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -113,12 +150,19 @@ extern "C" {
             fprintf (stderr, "app window resized to ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
+            RedrawWindows(pWindow);
+            break;
+        }
+
+        case APP_CMD_WINDOW_REDRAW_NEEDED:
+        {
+            RedrawWindows(pWindow);
             break;
         }
 
         case APP_CMD_CONTENT_RECT_CHANGED:
         {
-            ARect aRect = app->contentRect;
+            ARect aRect = mpApp->contentRect;
             fprintf (stderr, "content rect changed [ k/b popped up etc. ] %d,%d->%d,%d\n",
                      aRect.left, aRect.top, aRect.right, aRect.bottom);
             break;
@@ -127,10 +171,10 @@ extern "C" {
             fprintf (stderr, "unhandled app cmd %d\n", cmd);
             break;
         }
-    }
+}
 
-    int32_t onInputEvent_cb (struct android_app* app, AInputEvent* event)
-    {
+int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
+{
         fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
                  app, event,
                  AInputEvent_getType(event),
@@ -163,24 +207,43 @@ extern "C" {
                      event, AInputEvent_getType(event));
         }
         return 1; // handled 0 for not ...
+}
+
+AndroidSalInstance *AndroidSalInstance::getInstance()
+{
+    AndroidSalData *pData = static_cast<AndroidSalData *>(ImplGetSVData()->mpSalData);
+    if (!pData)
+        return NULL;
+    return static_cast<AndroidSalInstance *>(pData->m_pInstance);
+}
+
+extern "C" {
+    void onAppCmd_cb (struct android_app* app, int32_t cmd)
+    {
+        AndroidSalInstance::getInstance()->onAppCmd(app, cmd);
+    }
+
+    int32_t onInputEvent_cb (struct android_app* app, AInputEvent* event)
+    {
+        return AndroidSalInstance::getInstance()->onInputEvent(app, event);
     }
 }
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
-    app = lo_get_app();
+    mpApp = lo_get_app();
     fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
-             app,
-             app ? app->window : NULL);
-    if (app)
+             mpApp,
+             mpApp ? mpApp->window : NULL);
+    if (mpApp)
     {
-        pthread_mutex_lock (&app->mutex);
-        app->onAppCmd = onAppCmd_cb;
-        app->onInputEvent = onInputEvent_cb;
-        if (app->window != NULL)
-            onAppCmd_cb (app, APP_CMD_INIT_WINDOW);
-        pthread_mutex_unlock (&app->mutex);
+        pthread_mutex_lock (&mpApp->mutex);
+        mpApp->onAppCmd = onAppCmd_cb;
+        mpApp->onInputEvent = onInputEvent_cb;
+        if (mpApp->window != NULL)
+            onAppCmd_cb (mpApp, APP_CMD_INIT_WINDOW);
+        pthread_mutex_unlock (&mpApp->mutex);
     }
 }
 
@@ -192,8 +255,8 @@ AndroidSalInstance::~AndroidSalInstance()
 void AndroidSalInstance::Wakeup()
 {
     fprintf (stderr, "Wakeup alooper\n");
-    if (app && app->looper)
-        ALooper_wake (app->looper);
+    if (mpApp && mpApp->looper)
+        ALooper_wake (mpApp->looper);
     else
         fprintf (stderr, "busted - no global looper\n");
 }
@@ -215,9 +278,9 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // FIXME: this is more or less deranged: why can we not
     // set a callback in the native app glue's ALooper_addFd ?
     if (nRet == LOOPER_ID_MAIN)
-        app->cmdPollSource.process(app, &app->cmdPollSource);
+        mpApp->cmdPollSource.process(mpApp, &mpApp->cmdPollSource);
     if (nRet == LOOPER_ID_INPUT)
-        app->inputPollSource.process(app, &app->inputPollSource);
+        mpApp->inputPollSource.process(mpApp, &mpApp->inputPollSource);
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
@@ -225,7 +288,7 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
     (void) nType;
     // FIXME: ideally we should check the input queue to avoid being busy ...
     fprintf (stderr, "FIXME: AnyInput returns true\n");
-    // app->inputQueue ? ...
+    // mpApp->inputQueue ? ...
     return true;
 }
 
@@ -250,14 +313,6 @@ SalSystem *AndroidSalInstance::CreateSalSystem()
 {
     return new AndroidSalSystem();
 }
-
-class AndroidSalData : public SalGenericData
-{
-public:
-    AndroidSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_ANDROID, pInstance ) {}
-    virtual void ErrorTrapPush() {}
-    virtual bool ErrorTrapPop( bool ) { return false; }
-};
 
 // All the interesting stuff is slaved from the AndroidSalInstance
 void InitSalData()   {}
