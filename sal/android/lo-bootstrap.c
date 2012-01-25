@@ -641,7 +641,8 @@ lo_dlneeds(const char *library)
     int i, fd;
     int n_needed;
     char **result;
-    char *shstrtab, *dynstr;
+    char *shstrtab;
+    char *dynstr = NULL;
     Elf32_Ehdr hdr;
     Elf32_Shdr shdr;
     Elf32_Dyn dyn;
@@ -767,7 +768,8 @@ lo_dlneeds(const char *library)
             }
 
             close(fd);
-            free(dynstr);
+            if (dynstr)
+                free(dynstr);
             free(shstrtab);
             result[n_needed] = NULL;
             return result;
@@ -1402,7 +1404,7 @@ extract_files(const char *prefix)
 
             apkentry = lo_apkentry(filename, &size);
             if (apkentry == NULL) {
-                LOGE("extract_files: Could not find %s in .apk", newfilename);
+                LOGE("extract_files: Could not find %s in .apk", filename);
                 free(filename);
                 continue;
             }
