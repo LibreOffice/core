@@ -1174,13 +1174,6 @@ ScDPObject* createDPFromSourceDesc(
     ScDPObject* pDPObj = new ScDPObject(pDoc);
     pDPObj->SetSheetDesc(rDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
-    ScPivotParam aParam;
-    pDPObj->FillOldParam(aParam);
-    for (size_t i = 0; i < nFieldCount; ++i)
-    {
-        vector<ScDPLabelData::Member> aMembers;
-        pDPObj->GetMembers(i, 0, aMembers);
-    }
 
     ScDPSaveData aSaveData;
     // Set data pilot table output options.
@@ -1423,6 +1416,30 @@ void Test::testPivotTable()
 
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more data cache.",
                            pDPs->GetSheetCaches().size() == 0);
+
+    // Insert a brand new pivot table object once again, but this time, don't
+    // create the output to avoid creating a data cache.
+    m_pDoc->DeleteTab(1);
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+    CPPUNIT_ASSERT_MESSAGE("Data cache shouldn't exist yet before creating the table output.",
+                           pDPs->GetSheetCaches().size() == 0);
+
+    // Now, "refresh" the table.  This should still return a reference to self
+    // even with the absence of data cache.
+    aRefs.clear();
+    pDPs->ReloadCache(pDPObj, aRefs);
+    CPPUNIT_ASSERT_MESSAGE("It should return the same object as a reference.",
+                           aRefs.size() == 1 && *aRefs.begin() == pDPObj);
+
+    pDPs->FreeTable(pDPObj);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
