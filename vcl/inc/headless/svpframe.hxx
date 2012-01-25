@@ -41,9 +41,9 @@ class SvpSalGraphics;
 class SvpSalFrame : public SalFrame, public SvpElement
 {
     SvpSalInstance*                     m_pInstance;
-    SvpSalFrame*                    m_pParent;       // pointer to parent frame
+    SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    sal_uLong                         m_nStyle;
+    sal_uLong                           m_nStyle;
     bool                                m_bVisible;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
