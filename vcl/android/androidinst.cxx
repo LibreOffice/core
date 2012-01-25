@@ -74,44 +74,70 @@ static rtl::OString KeyMetaStateToString(int32_t nFlags)
 }
 
 static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
-                                    const basebmp::BitmapDeviceSharedPtr& /* aDev */,
-                                    const ARect &aSrcRect,
+                                    const basebmp::BitmapDeviceSharedPtr& aDev,
+                                    const ARect &rSrcRect,
                                     int nDestX, int nDestY)
 {
-    fprintf (stderr, "Blit frame src %d,%d->%d,%d to positoon %d, %d\n",
-             aSrcRect.left, aSrcRect.top, aSrcRect.right, aSrcRect.bottom,
+    fprintf (stderr, "Blit frame src %d,%d->%d,%d to position %d, %d\n",
+             rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
-#if 1
     ARect aRect;
-    ANativeWindow_Buffer aBuffer;
-    memset ((void *)&aBuffer, 0, sizeof (aBuffer));
-    int32_t nRet = ANativeWindow_lock(pWindow, &aBuffer, &aRect);
+    ANativeWindow_Buffer aOutBuffer;
+    memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
+    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
     fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
              nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
-             aBuffer.width, aBuffer.height, aBuffer.stride,
-             aBuffer.format, aBuffer.bits);
-    if (aBuffer.bits)
+             aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
+             aOutBuffer.format, aOutBuffer.bits);
+    if (aOutBuffer.bits == NULL)
     {
-        // hard-code / guess at a format ...
-        int32_t *p = (int32_t *)aBuffer.bits;
-        for (int32_t y = 0; y < aBuffer.height; y++)
+        fprintf (stderr, "no buffer for locked window\n");
+        ANativeWindow_unlockAndPost(pWindow);
+        return;
+    }
+
+    // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
+    ARect aSrcRect = rSrcRect;
+    sal_Int32 nStride = aDev->getScanlineStride();
+    basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
+    unsigned char *pSrc = aSrcData.get();
+
+    for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
+    {
+        unsigned char *sp = ( pSrc + nStride * (y + aSrcRect.top) +
+                              aSrcRect.left * 3 /* src pixel size */ );
+        unsigned char *dp = ( (unsigned char *)aOutBuffer.bits +
+                              aOutBuffer.stride * (y + nDestY) +
+                              nDestX * 4 /* dest pixel size */ );
+        for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
         {
-            for (int32_t x = 0; x < aBuffer.stride / 4; x++)
-                *p++ = (y << 24) + x;
+            dp[x*4 + 0] = sp[x*3 + 0]; // B
+            dp[x*4 + 1] = sp[x*3 + 1]; // G
+            dp[x*4 + 2] = sp[x*3 + 2]; // R
+            dp[x*4 + 3] = 255; // A
         }
     }
-    ANativeWindow_unlockAndPost(pWindow);
-    fprintf (stderr, "done render!\n");
+    fprintf (stderr, "done blit!\n");
+#if 0
+    // hard-code / guess at a format ...
+    int32_t *p = (int32_t *)aBuffer.bits;
+    for (int32_t y = 0; y < aBuffer.height; y++)
+    {
+        for (int32_t x = 0; x < aBuffer.stride / 4; x++)
+            *p++ = (y << 24) + x;
+    }
 #endif
 
+    ANativeWindow_unlockAndPost(pWindow);
+    fprintf (stderr, "done render!\n");
 }
 
 void AndroidSalInstance::BlitFrameToWindow(ANativeWindow *pWindow,
                                            const basebmp::BitmapDeviceSharedPtr& aDev)
 {
     basegfx::B2IVector aDevSize = aDev->getSize();
-    ARect aWhole = { 0, 0, aDevSize.getX(), aDevSize.getY() };
+    ARect aWhole = { 0, 0, 400, 400 }; // FIXME: aDevSize.getX(), aDevSize.getY() };
     BlitFrameRegionToWindow(pWindow, aDev, aWhole, 0, 0);
 }
 
@@ -211,6 +237,8 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
 
 AndroidSalInstance *AndroidSalInstance::getInstance()
 {
+    if (!ImplGetSVData())
+        return NULL;
     AndroidSalData *pData = static_cast<AndroidSalData *>(ImplGetSVData()->mpSalData);
     if (!pData)
         return NULL;
@@ -299,14 +327,7 @@ public:
     virtual int ShowNativeDialog( const rtl::OUString& rTitle,
                                   const rtl::OUString& rMessage,
                                   const std::list< rtl::OUString >& rButtons,
-                                  int nDefButton )
-    {
-        (void)rButtons; (void)nDefButton;
-        __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
-                            rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                            rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
-        return 0;
-    }
+                                  int nDefButton );
 };
 
 SalSystem *AndroidSalInstance::CreateSalSystem()
@@ -355,6 +376,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
+    fprintf (stderr, "Android: CreateSalInstance!\n");
     AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
     return pInstance;
@@ -364,6 +386,33 @@ void DestroySalInstance( SalInstance *pInst )
 {
     pInst->ReleaseYieldMutex();
     delete pInst;
+}
+
+#include <vcl/msgbox.hxx>
+
+int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
+                                        const rtl::OUString& rMessage,
+                                        const std::list< rtl::OUString >& rButtons,
+                                        int nDefButton )
+{
+    (void)rButtons; (void)nDefButton;
+    fprintf (stderr, "LibreOffice native dialog '%s': '%s'\n",
+             rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+             rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+    __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
+                        rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+                        rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+
+    if (AndroidSalInstance::getInstance() != NULL)
+    {
+        // Does Android have a native dialog ? if not,. we have to do this ...
+        ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
+        aVclErrBox.SetText( rMessage );
+        aVclErrBox.Execute();
+    }
+    else
+        fprintf (stderr, "VCL not initialized\n");
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
