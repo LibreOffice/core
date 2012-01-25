@@ -207,6 +207,8 @@ private:
     ScInputBarGroup& mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
+    long mnTextHeight;
+    long mnBorderHeight;
     bool mbInvalidate;
 };
 
