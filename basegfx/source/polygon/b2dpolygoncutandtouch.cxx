@@ -1033,20 +1033,6 @@ namespace basegfx
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rMask, const B2DPolyPolygon& rCandidate)
-        {
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(addPointsAtCutsAndTouches(rMask, rCandidate.getB2DPolygon(a)));
-            }
-
-            return aRetval;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd)
         {
             const sal_uInt32 nCount(rCandidate.count());
@@ -1092,18 +1078,6 @@ namespace basegfx
             }
 
             return rCandidate;
-        }
-
-        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd)
-        {
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
-            {
-                aRetval.append(addPointsAtCuts(rCandidate.getB2DPolygon(a), rStart, rEnd));
-            }
-
-            return aRetval;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1189,18 +1163,6 @@ namespace basegfx
             return rCandidate;
         }
 
-        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rMask)
-        {
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
-            {
-                aRetval.append(addPointsAtCuts(rCandidate.getB2DPolygon(a), rMask));
-            }
-
-            return aRetval;
-        }
-
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate)
         {
             if(rCandidate.count())
@@ -1210,80 +1172,6 @@ namespace basegfx
                 findCuts(rCandidate, aTempPoints);
 
                 return mergeTemporaryPointsAndPolygon(rCandidate, aTempPoints);
-            }
-            else
-            {
-                return rCandidate;
-            }
-        }
-
-        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, bool bSelfIntersections)
-        {
-            const sal_uInt32 nCount(rCandidate.count());
-
-            if(nCount)
-            {
-                B2DPolyPolygon aRetval;
-
-                if(1 == nCount)
-                {
-                    if(bSelfIntersections)
-                    {
-                        // remove self intersections
-                        aRetval.append(addPointsAtCuts(rCandidate.getB2DPolygon(0)));
-                    }
-                    else
-                    {
-                        // copy source
-                        aRetval = rCandidate;
-                    }
-                }
-                else
-                {
-                    // first solve self cuts for all contained single polygons
-                    temporaryPolygonData *pTempData = new temporaryPolygonData[nCount];
-                    sal_uInt32 a, b;
-
-                    for(a = 0; a < nCount; a++)
-                    {
-                        if(bSelfIntersections)
-                        {
-                            // use polygons with solved self intersections
-                            pTempData[a].setPolygon(addPointsAtCuts(rCandidate.getB2DPolygon(a)));
-                        }
-                        else
-                        {
-                            // copy given polygons
-                            pTempData[a].setPolygon(rCandidate.getB2DPolygon(a));
-                        }
-                    }
-
-                    // now cuts and touches between the polygons
-                    for(a = 0; a < nCount; a++)
-                    {
-                        for(b = 0; b < nCount; b++)
-                        {
-                            if(a < b)
-                            {
-                                // look for cuts, compare each edge polygon to following ones
-                                if(pTempData[a].getRange().overlaps(pTempData[b].getRange()))
-                                {
-                                    findCuts(pTempData[a].getPolygon(), pTempData[b].getPolygon(), pTempData[a].getTemporaryPointVector(), pTempData[b].getTemporaryPointVector());
-                                }
-                            }
-                        }
-                    }
-
-                    // consolidate the result
-                    for(a = 0L; a < nCount; a++)
-                    {
-                        aRetval.append(mergeTemporaryPointsAndPolygon(pTempData[a].getPolygon(), pTempData[a].getTemporaryPointVector()));
-                    }
-
-                    delete[] pTempData;
-                }
-
-                return aRetval;
             }
             else
             {

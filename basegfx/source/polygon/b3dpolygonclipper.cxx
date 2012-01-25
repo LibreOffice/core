@@ -306,18 +306,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B3DPolyPolygon clipPolyPolygonOnRange(const B3DPolyPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke)
-        {
-            B3DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(clipPolygonOnRange(rCandidate.getB3DPolygon(a), rRange, bInside, bStroke));
-            }
-
-            return aRetval;
-        }
-
         B3DPolyPolygon clipPolygonOnRange(const B3DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke)
         {
             B3DPolyPolygon aRetval;
@@ -404,18 +392,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B3DPolyPolygon clipPolyPolygonOnRange(const B3DPolyPolygon& rCandidate, const B3DRange& rRange, bool bInside, bool bStroke)
-        {
-            B3DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(clipPolygonOnRange(rCandidate.getB3DPolygon(a), rRange, bInside, bStroke));
-            }
-
-            return aRetval;
-        }
-
         B3DPolyPolygon clipPolygonOnRange(const B3DPolygon& rCandidate, const B3DRange& rRange, bool bInside, bool bStroke)
         {
             B3DPolyPolygon aRetval;
@@ -480,84 +456,6 @@ namespace basegfx
                             }
                         }
                     }
-                }
-            }
-
-            return aRetval;
-        }
-
-        B3DPolyPolygon clipPolygonOnPlane(const B3DPolygon& rCandidate, const B3DPoint& rPointOnPlane, const B3DVector& rPlaneNormal, bool bClipPositive, bool bStroke)
-        {
-            B3DPolyPolygon aRetval;
-
-            if(rPlaneNormal.equalZero())
-            {
-                // not really a plane definition, return polygon
-                aRetval.append(rCandidate);
-            }
-            else if(rCandidate.count())
-            {
-                // build transform to project planeNormal on X-Axis and pointOnPlane to null point
-                B3DHomMatrix aMatrixTransform;
-                aMatrixTransform.translate(-rPointOnPlane.getX(), -rPointOnPlane.getY(), -rPointOnPlane.getZ());
-                const double fRotInXY(atan2(rPlaneNormal.getY(), rPlaneNormal.getX()));
-                const double fRotInXZ(atan2(-rPlaneNormal.getZ(), rPlaneNormal.getXYLength()));
-                if(!fTools::equalZero(fRotInXY) || !fTools::equalZero(fRotInXZ))
-                {
-                    aMatrixTransform.rotate(0.0, fRotInXZ, fRotInXY);
-                }
-
-                // transform polygon to clip scenario
-                B3DPolygon aCandidate(rCandidate);
-                aCandidate.transform(aMatrixTransform);
-
-                // clip on YZ plane
-                aRetval = clipPolygonOnOrthogonalPlane(aCandidate, tools::B3DORIENTATION_X, bClipPositive, 0.0, bStroke);
-
-                if(aRetval.count())
-                {
-                    // if there is a result, it needs to be transformed back
-                    aMatrixTransform.invert();
-                    aRetval.transform(aMatrixTransform);
-                }
-            }
-
-            return aRetval;
-        }
-
-        B3DPolyPolygon clipPolyPolygonOnPlane(const B3DPolyPolygon& rCandidate, const B3DPoint& rPointOnPlane, const B3DVector& rPlaneNormal, bool bClipPositive, bool bStroke)
-        {
-            B3DPolyPolygon aRetval;
-
-            if(rPlaneNormal.equalZero())
-            {
-                // not really a plane definition, return polygon
-                aRetval = rCandidate;
-            }
-            else if(rCandidate.count())
-            {
-                // build transform to project planeNormal on X-Axis and pointOnPlane to null point
-                B3DHomMatrix aMatrixTransform;
-                aMatrixTransform.translate(-rPointOnPlane.getX(), -rPointOnPlane.getY(), -rPointOnPlane.getZ());
-                const double fRotInXY(atan2(rPlaneNormal.getY(), rPlaneNormal.getX()));
-                const double fRotInXZ(atan2(-rPlaneNormal.getZ(), rPlaneNormal.getXYLength()));
-                if(!fTools::equalZero(fRotInXY) || !fTools::equalZero(fRotInXZ))
-                {
-                    aMatrixTransform.rotate(0.0, fRotInXZ, fRotInXY);
-                }
-
-                // transform polygon to clip scenario
-                aRetval = rCandidate;
-                aRetval.transform(aMatrixTransform);
-
-                // clip on YZ plane
-                aRetval = clipPolyPolygonOnOrthogonalPlane(aRetval, tools::B3DORIENTATION_X, bClipPositive, 0.0, bStroke);
-
-                if(aRetval.count())
-                {
-                    // if there is a result, it needs to be transformed back
-                    aMatrixTransform.invert();
-                    aRetval.transform(aMatrixTransform);
                 }
             }
 

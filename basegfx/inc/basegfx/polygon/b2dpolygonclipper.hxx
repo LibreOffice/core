@@ -57,13 +57,6 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnRange(const B2DPolyPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolygonOnRange(const B2DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
 
-        // Clip given PolyPolygon against the endless edge (ray) defined by the given two points. bAbove defines on which side
-        // of the edge the result will be together with the definition of the edge. If the edge is seen as a vector
-        // from A to B and bAbove is true, the result will contain the geometry left of the vector.
-        // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
-        BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnEdge(const B2DPolyPolygon& rCandidate, const B2DPoint& rPointA, const B2DPoint& rPointB, bool bAbove, bool bStroke);
-        BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolygonOnEdge(const B2DPolygon& rCandidate, const B2DPoint& rPointA, const B2DPoint& rPointB, bool bAbove, bool bStroke);
-
         // Clip given PolyPolygon against given clipping polygon.
         // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
         // With stroke polygons, You get all line snippets inside rCip.

@@ -62,25 +62,11 @@ namespace basegfx
         // version for Polygons
         BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnOrthogonalPlane(const B3DPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke);
 
-        // Clip the given PolyPolygon against the given range. bInside defines if the result will contain the
-        // parts which are contained in the range or vice versa.
-        // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolyPolygonOnRange(const B3DPolyPolygon& rCandidate, const B3DRange& rRange, bool bInside, bool bStroke);
-
         // version for Polygons
         BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnRange(const B3DPolygon& rCandidate, const B3DRange& rRange, bool bInside, bool bStroke);
 
         // versions for B2DRange, clips only against X,Y
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolyPolygonOnRange(const B3DPolyPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
         BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnRange(const B3DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
-
-        // Clip the given PolyPolygon against given plane in 3D. The plane is defined by a plane normal and a point on the plane.
-        // The value bClipPositive defines on which side the return value will be (true -> on positive side of plane).
-        // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolyPolygonOnPlane(const B3DPolyPolygon& rCandidate, const B3DPoint& rPointOnPlane, const B3DVector& rPlaneNormal, bool bClipPositive, bool bStroke);
-
-        // version for Polygons
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnPlane(const B3DPolygon& rCandidate, const B3DPoint& rPointOnPlane, const B3DVector& rPlaneNormal, bool bClipPositive, bool bStroke);
 
     } // end of namespace tools
 } // end of namespace basegfx
