@@ -1470,6 +1470,13 @@ lo_get_javavm(void)
 }
 
 __attribute__ ((visibility("default")))
+struct android_app *
+lo_get_app(void)
+{
+    return app;
+}
+
+__attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {

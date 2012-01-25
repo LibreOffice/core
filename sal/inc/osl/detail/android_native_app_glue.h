@@ -30,11 +30,6 @@
 extern "C" {
 #endif
 
-/*
- * Global activity to be hooked by upper layers.
- */
-extern struct android_app *global_android_app;
-
 /**
  * The native activity interface provided by <android/native_activity.h>
  * is based on a set of application-provided callbacks that will be called
@@ -85,6 +80,8 @@ extern struct android_app *global_android_app;
  * See the sample named "native-activity" that comes with the NDK with a
  * full usage example.  Also look at the JavaDoc of NativeActivity.
  */
+
+struct android_app;
 
 /**
  * Data associated with an ALooper fd that will be returned as the "outData"

@@ -31,14 +31,16 @@
 #include <generic/gendata.hxx>
 #include <android/log.h>
 #include <android/looper.h>
-#include <osl/detail/android.h>
+#include <lo-bootstrap.h>
+#include <osl/detail/android_native_app_glue.h>
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
+    app = lo_get_app();
     fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
-             global_android_app,
-             global_android_app ? global_android_app->window : NULL);
+             app,
+             app ? app->window : NULL);
 }
 
 AndroidSalInstance::~AndroidSalInstance()
@@ -48,8 +50,8 @@ AndroidSalInstance::~AndroidSalInstance()
 
 void AndroidSalInstance::Wakeup()
 {
-    if (global_android_app && global_android_app->looper)
-        ALooper_wake (global_android_app->looper);
+    if (app && app->looper)
+        ALooper_wake (app->looper);
     else
         fprintf (stderr, "busted - no global looper\n");
 }
@@ -71,7 +73,7 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
     (void) nType;
     // FIXME: ideally we should check the input queue to avoid being busy ...
     fprintf (stderr, "FIXME: AnyInput returns true\n");
-    // global_android_app->inputQueue ? ...
+    // app->inputQueue ? ...
     return true;
 }
 
