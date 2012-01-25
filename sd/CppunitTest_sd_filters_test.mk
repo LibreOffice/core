@@ -123,7 +123,7 @@ $(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
 $(eval $(call gb_CppunitTest_set_args,sd_filters_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) -env:SVG_DISABLE_FONT_EMBEDDING=YEAH module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool)" \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool)" \
 ))
     # .../spool is required for the (somewhat strange) filter configuration
 
