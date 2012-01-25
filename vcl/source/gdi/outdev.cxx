@@ -1238,38 +1238,36 @@ void OutputDevice::SetLineColor()
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetLineColor( const Color& rColor )
+Color OutputDevice::ImplDrawModeToColor( const Color& rColor )
 {
-    OSL_TRACE( "OutputDevice::SetLineColor( %lx )", rColor.GetColor() );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
     Color aColor( rColor );
+    sal_uLong  nDrawMode = GetDrawMode();
 
-    if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
-                       DRAWMODE_SETTINGSLINE ) )
+    if( nDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
+                      DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
+                      DRAWMODE_SETTINGSLINE ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
-            if( mnDrawMode & DRAWMODE_BLACKLINE )
+            if( nDrawMode & DRAWMODE_BLACKLINE )
             {
                 aColor = Color( COL_BLACK );
             }
-            else if( mnDrawMode & DRAWMODE_WHITELINE )
+            else if( nDrawMode & DRAWMODE_WHITELINE )
             {
                 aColor = Color( COL_WHITE );
             }
-            else if( mnDrawMode & DRAWMODE_GRAYLINE )
+            else if( nDrawMode & DRAWMODE_GRAYLINE )
             {
                 const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
-            else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
+            else if( nDrawMode & DRAWMODE_SETTINGSLINE )
             {
                 aColor = GetSettings().GetStyleSettings().GetFontColor();
             }
 
-            if( mnDrawMode & DRAWMODE_GHOSTEDLINE )
+            if( nDrawMode & DRAWMODE_GHOSTEDLINE )
             {
                 aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
                                 ( aColor.GetGreen() >> 1 ) | 0x80,
@@ -1277,6 +1275,16 @@ void OutputDevice::SetLineColor( const Color& rColor )
             }
         }
     }
+    return aColor;
+}
+
+
+void OutputDevice::SetLineColor( const Color& rColor )
+{
+    OSL_TRACE( "OutputDevice::SetLineColor( %lx )", rColor.GetColor() );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    Color aColor = ImplDrawModeToColor( rColor );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, sal_True ) );

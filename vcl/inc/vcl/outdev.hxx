@@ -547,6 +547,7 @@ public:
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
+    SAL_DLLPRIVATE Color ImplDrawModeToColor( const Color& rColor );
 
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when

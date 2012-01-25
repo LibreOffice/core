@@ -1441,40 +1441,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     OSL_TRACE( "OutputDevice::DrawPixel()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    Color aColor( rColor );
-
-    if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
-                       DRAWMODE_SETTINGSLINE ) )
-    {
-        if( !ImplIsColorTransparent( aColor ) )
-        {
-            if( mnDrawMode & DRAWMODE_BLACKLINE )
-            {
-                aColor = Color( COL_BLACK );
-            }
-            else if( mnDrawMode & DRAWMODE_WHITELINE )
-            {
-                aColor = Color( COL_WHITE );
-            }
-            else if( mnDrawMode & DRAWMODE_GRAYLINE )
-            {
-                const sal_uInt8 cLum = aColor.GetLuminance();
-                aColor = Color( cLum, cLum, cLum );
-            }
-            else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
-            {
-                aColor = GetSettings().GetStyleSettings().GetFontColor();
-            }
-
-            if( mnDrawMode & DRAWMODE_GHOSTEDLINE )
-            {
-                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
-                                ( aColor.GetGreen() >> 1 ) | 0x80,
-                                ( aColor.GetBlue() >> 1 ) | 0x80 );
-            }
-        }
-    }
+    Color aColor = ImplDrawModeToColor( rColor );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
