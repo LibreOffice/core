@@ -70,7 +70,6 @@ class HeapItem
     bool                operator<=(
                             const HeapItem &    i_rOther ) const
                                                 { return ! (i_rOther < *this); }
-    const Simstr &      Value() const;
     const Simstr &      Key() const;
     HeapItem *          Next() const;
 

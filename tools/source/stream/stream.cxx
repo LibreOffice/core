@@ -885,18 +885,6 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const rtl::OUString& rStr,
     return nWritten;
 }
 
-/*************************************************************************
-|*
-|*    Stream::WriteUnicodeText()
-|*
-*************************************************************************/
-
-sal_Bool SvStream::WriteUnicodeText( const String& rStr )
-{
-    write_uInt16s_FromOUString(*this, rStr, rStr.Len());
-    return nError == SVSTREAM_OK;
-}
-
 sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )

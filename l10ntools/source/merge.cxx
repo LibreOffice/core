@@ -238,6 +238,8 @@ MergeDataFile::MergeDataFile(
 
 MergeDataFile::~MergeDataFile()
 {
+    for (MergeDataHashMap::iterator aI = aMap.begin(), aEnd = aMap.end(); aI != aEnd; ++aI)
+        delete aI->second;
 }
 
 ByteString MergeDataFile::Dump(){
@@ -248,7 +250,7 @@ ByteString MergeDataFile::Dump(){
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
     {
         printf("aMap[ %s ] = ",idbg->first.GetBuffer());
-        ((MergeData*) (idbg->second))->Dump();
+        idbg->second->Dump();
         printf("\n");
     }
     printf("\n");

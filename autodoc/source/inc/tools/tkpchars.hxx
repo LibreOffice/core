@@ -96,32 +96,8 @@ class CharacterSource
         bool            IsFinished() const;
 
     private:
-        struct S_SourceState
-        {
-            DYN char *      dpSource;
-            intt            nSourceSize;
-
-            intt            nCurPos;
-            intt            nLastCut;
-            intt            nLastTokenStart;
-            char            cCharAtLastCut;
-
-                            S_SourceState(
-                                DYN char *      dpSource,
-                                intt            nSourceSize,
-                                intt            nCurPos,
-                                intt            nLastCut,
-                                intt            nLastTokenStart,
-                                char            cCharAtLastCut );
-        };
-
         void            BeginSource();
         intt            CurPos() const;
-        char            MoveOn_OverStack();
-
-        // DATA
-        std::stack< S_SourceState >
-                        aSourcesStack;
 
         DYN char *      dpSource;
         intt            nSourceSize;
@@ -142,8 +118,6 @@ if (DEBUG_ShowText())
 }
         if ( nCurPos < nSourceSize-1 )
             return dpSource[++nCurPos];
-        else if ( aSourcesStack.size() > 0 )
-            return MoveOn_OverStack();
         else
             return dpSource[nCurPos = nSourceSize];
     }

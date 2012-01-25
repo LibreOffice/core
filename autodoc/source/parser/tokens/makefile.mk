@@ -45,7 +45,6 @@ PRJINC=$(PRJ)$/source
 # --- Files --------------------------------------------------------
 
 OBJFILES= \
-    $(OBJ)$/stmstarr.obj	\
     $(OBJ)$/stmstate.obj	\
     $(OBJ)$/tkp.obj			\
     $(OBJ)$/tkpcontx.obj	\

@@ -182,12 +182,6 @@ HeapItem::operator<( const HeapItem & i_rOther ) const
 }
 
 const Simstr &
-HeapItem::Value() const
-{
-    return sValue;
-}
-
-const Simstr &
 HeapItem::Key() const
 {
     return sKey;

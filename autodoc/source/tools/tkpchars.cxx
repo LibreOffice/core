@@ -95,45 +95,4 @@ CharacterSource::BeginSource()
     dpSource[nLastCut] = NULCH;
 }
 
-//  KORR_FUTURE:  So far, this works only when tokens do not cross inserted text boundaries.
-char
-CharacterSource::MoveOn_OverStack()
-{
-    while ( aSourcesStack.size() > 0 AND nCurPos >= nSourceSize-1 )
-    {
-        S_SourceState & aState = aSourcesStack.top();
-        delete [] dpSource;
-
-        dpSource = aState.dpSource;
-        nSourceSize = aState.nSourceSize;
-        nCurPos = aState.nCurPos;
-        nLastCut = aState.nLastCut;
-        nLastTokenStart = aState.nLastTokenStart;
-        cCharAtLastCut = aState.cCharAtLastCut;
-
-        aSourcesStack.pop();
-    }
-
-    if ( nLastCut < nCurPos )
-        CutToken();
-
-    return CurChar();
-}
-
-CharacterSource::
-S_SourceState::S_SourceState( DYN char *    dpSource_,
-                              intt          nSourceSize_,
-                              intt          nCurPos_,
-                              intt          nLastCut_,
-                              intt          nLastTokenStart_,
-                              char          cCharAtLastCut_ )
-    :   dpSource(dpSource_),
-        nSourceSize(nSourceSize_),
-        nCurPos(nCurPos_),
-        nLastCut(nLastCut_),
-        nLastTokenStart(nLastTokenStart_),
-        cCharAtLastCut(cCharAtLastCut_)
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

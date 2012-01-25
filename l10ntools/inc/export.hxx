@@ -492,7 +492,7 @@ class MergeDataFile
         sal_Bool bErrorLog;
         ByteString sErrorLog;
         SvFileStream aErrLog;
-    MergeDataHashMap aMap;
+        MergeDataHashMap aMap;
         std::set<ByteString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
