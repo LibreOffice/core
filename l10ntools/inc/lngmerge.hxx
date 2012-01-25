@@ -29,7 +29,7 @@
 #include "export.hxx"
 #include <vector>
 
-typedef ::std::vector< ByteString* > LngLineList;
+typedef ::std::vector< rtl::OString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_FILE_NOTFOUND   0x0001

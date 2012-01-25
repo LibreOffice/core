@@ -67,7 +67,7 @@ LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
                     bFirstLine = false;
                 }
 
-                pLines->push_back( new ByteString( sLine ) );
+                pLines->push_back( new rtl::OString(sLine) );
             }
         }
         else
@@ -79,7 +79,7 @@ LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
 
 LngParser::~LngParser()
 {
-    for ( size_t i = 0, n = pLines->size(); i < n; i++ )
+    for ( size_t i = 0, n = pLines->size(); i < n; ++i )
         delete (*pLines)[ i ];
     pLines->clear();
     delete pLines;
@@ -244,11 +244,11 @@ sal_Bool LngParser::Merge(
 
         while ( nPos < pLines->size() && !bGroup )
         {
-            ByteString sLine( *(*pLines)[ nPos ] );
+            rtl::OString sLine( *(*pLines)[ nPos ] );
             sLine = comphelper::string::stripStart(sLine, ' ');
             sLine = comphelper::string::stripEnd(sLine, ' ');
-            if (( sLine.GetChar( 0 ) == '[' ) &&
-                ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
+            if (( sLine[0] == '[' ) &&
+                ( sLine[sLine.getLength() - 1] == ']' ))
             {
                 sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
                 sGroup = comphelper::string::stripStart(sGroup, ' ');
@@ -280,7 +280,7 @@ sal_Bool LngParser::Merge(
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
 
                         if ( sNewText.Len()) {
-                            ByteString *pLine = (*pLines)[ nPos ];
+                            rtl::OString *pLine = (*pLines)[ nPos ];
 
                             ByteString sText1( sLang );
                             sText1 += " = \"";
@@ -329,9 +329,9 @@ sal_Bool LngParser::Merge(
                         if ( nLastLangPos < pLines->size() ) {
                             LngLineList::iterator it = pLines->begin();
                             ::std::advance( it, nLastLangPos );
-                            pLines->insert( it, new ByteString( sLine ) );
+                            pLines->insert( it, new rtl::OString(sLine) );
                         } else {
-                            pLines->push_back( new ByteString( sLine ) );
+                            pLines->push_back( new rtl::OString(sLine) );
                         }
                     }
                 }
@@ -341,7 +341,7 @@ sal_Bool LngParser::Merge(
         delete pResData;
     }
 
-    for ( size_t i = 0; i < pLines->size(); i++ )
+    for ( size_t i = 0; i < pLines->size(); ++i )
         aDestination.WriteLine( *(*pLines)[ i ] );
 
     aDestination.Close();
