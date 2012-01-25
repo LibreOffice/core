@@ -103,7 +103,7 @@ void XMLBasicImportContext::StartElement(
         while ( nPos != USHRT_MAX )
         {
             ::rtl::OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
-            if ( xAttrList->getValueByName( aAttrName ).getLength() == 0 )
+            if ( xAttrList->getValueByName( aAttrName ).isEmpty() )
                 pAttrList->AddAttribute( aAttrName, rNamespaceMap.GetNameByKey( nPos ) );
             nPos = rNamespaceMap.GetNextKey( nPos );
         }

@@ -298,7 +298,7 @@ sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno:
 {
     sal_Bool bRet = sal_False;
 
-    if( rStrImpValue.getLength() )
+    if( !rStrImpValue.isEmpty() )
     {
         sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
                                         ? FontStrikeout::SLASH

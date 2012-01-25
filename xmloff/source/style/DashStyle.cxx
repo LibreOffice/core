@@ -211,7 +211,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
     rValue <<= aLineDash;
 
-    if( aDisplayName.getLength() )
+    if( !aDisplayName.isEmpty() )
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
                                      rStrName, aDisplayName );
@@ -245,7 +245,7 @@ sal_Bool XMLDashStyleExport::exportXML(
 
     drawing::LineDash aLineDash;
 
-    if( rStrName.getLength() )
+    if( !rStrName.isEmpty() )
     {
         if( rValue >>= aLineDash )
         {

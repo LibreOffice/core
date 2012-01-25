@@ -89,7 +89,7 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any
         rStrExpValue = aOut.makeStringAndClear();
     }
 
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

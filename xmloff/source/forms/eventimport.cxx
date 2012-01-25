@@ -94,7 +94,7 @@ namespace xmloff
                 if ( 0 == sLibrary.compareToAscii( EVENT_STAROFFICE ) )
                     sLibrary = EVENT_APPLICATION;
 
-                if ( sLibrary.getLength() )
+                if ( !sLibrary.isEmpty() )
                 {
                     // for StarBasic, the library is prepended
                     sal_Unicode cLibSeparator = ':';

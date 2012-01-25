@@ -171,7 +171,7 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
 
     // get the UNO representation of the address
     CellAddress aAddress;
-    if ( !_rAddress.getLength() || !convertStringAddress( _rAddress, aAddress ) )
+    if ( _rAddress.isEmpty() || !convertStringAddress( _rAddress, aAddress ) )
         return xBinding;
 
     xBinding = xBinding.query( createDocumentDependentInstance(
@@ -428,7 +428,7 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
     {
         try
         {
-            if ( _rArgumentName.getLength() )
+            if ( !_rArgumentName.isEmpty() )
             {
                 NamedValue aArg;
                 aArg.Name = _rArgumentName;

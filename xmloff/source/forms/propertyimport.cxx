@@ -347,7 +347,7 @@ _rChars
 )
 {
     // ignore them (should be whitespaces only)
-    OSL_ENSURE(0 == _rChars.trim().getLength(), "OPropertyImport::Characters: non-whitespace characters!");
+    OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
 }
 
 //---------------------------------------------------------------------
@@ -488,7 +488,7 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
     }
 
     // the name of the property
-    OSL_ENSURE(aPropValue.Name.getLength(), "OSinglePropertyContext::StartElement: invalid property name!");
+    OSL_ENSURE(!aPropValue.Name.isEmpty(), "OSinglePropertyContext::StartElement: invalid property name!");
 
     // needs to be translated into a ::com::sun::star::uno::Type
     aPropType = PropertyConversion::xmlTypeToUnoType( sType );
@@ -504,7 +504,7 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
     }
 
     // now that we finally have our property value, add it to our parent object
-    if( aPropValue.Name.getLength() )
+    if( !aPropValue.Name.isEmpty() )
         m_xPropertyImporter->implPushBackGenericPropertyValue(aPropValue);
 }
 
@@ -554,10 +554,10 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
 //---------------------------------------------------------------------
 void OListPropertyContext::EndElement()
 {
-    OSL_ENSURE( m_sPropertyName.getLength() && m_sPropertyType.getLength(),
+    OSL_ENSURE( !m_sPropertyName.isEmpty() && !m_sPropertyType.isEmpty(),
         "OListPropertyContext::EndElement: no property name or type!" );
 
-    if ( !m_sPropertyName.getLength() || !m_sPropertyType.getLength() )
+    if ( m_sPropertyName.isEmpty() || m_sPropertyType.isEmpty() )
         return;
 
     Sequence< Any > aListElements( m_aListValues.size() );

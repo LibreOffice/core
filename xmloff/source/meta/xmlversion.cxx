@@ -275,7 +275,7 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
             nDateTokens++;
         pStr++;
     }
-    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
+    if ( nDateTokens > 3 || aDateStr.isEmpty() )
         bSuccess = sal_False;
     else
     {
@@ -297,7 +297,7 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
         }
     }
 
-    if ( bSuccess && aTimeStr.getLength() > 0 )         // time is optional
+    if ( bSuccess && !aTimeStr.isEmpty() )         // time is optional
     {
         pStr = aTimeStr.getStr();
         sal_Int32 nTimeTokens = 1;

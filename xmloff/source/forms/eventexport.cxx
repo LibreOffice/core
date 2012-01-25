@@ -79,7 +79,7 @@ namespace xmloff
                     sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );
                 }
                 // tree property values to describe one event ...
-                rMappedEvent.realloc( sLibrary.getLength() ? 3 : 2 );
+                rMappedEvent.realloc( sLibrary.isEmpty() ? 2 : 3 );
 
                 // ... the type
                 rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
@@ -88,7 +88,7 @@ namespace xmloff
                 rMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
 
                 // the library
-                if ( sLibrary.getLength() )
+                if ( !sLibrary.isEmpty() )
                     rMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
             }
             else

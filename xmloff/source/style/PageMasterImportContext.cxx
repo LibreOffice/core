@@ -168,7 +168,7 @@ void PageStyleContext::FillPropertySet(
             const uno::Reference<beans::XPropertySet > & rPropSet )
 {
     XMLPropStyleContext::FillPropertySet(rPropSet);
-    if (sPageUsage.getLength())
+    if (!sPageUsage.isEmpty())
     {
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;

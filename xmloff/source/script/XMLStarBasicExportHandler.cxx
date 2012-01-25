@@ -87,7 +87,7 @@ void XMLStarBasicExportHandler::Export(
         // else: disregard
     }
 
-    if( sLocation.getLength() )
+    if( !sLocation.isEmpty() )
     {
         OUStringBuffer sTmp( sLocation.getLength() + sName.getLength() + 1 );
         sTmp = sLocation;

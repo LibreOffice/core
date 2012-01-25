@@ -143,7 +143,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
             rValue <<= aSourcePolyPolygon;
         }
 
-        if( aDisplayName.getLength() )
+        if( !aDisplayName.isEmpty() )
         {
             rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID, rStrName,
                                         aDisplayName );
@@ -178,7 +178,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 {
     sal_Bool bRet(sal_False);
 
-    if(rStrName.getLength())
+    if(!rStrName.isEmpty())
     {
         drawing::PolyPolygonBezierCoords aBezier;
 

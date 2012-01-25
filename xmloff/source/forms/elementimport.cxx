@@ -187,14 +187,14 @@ namespace xmloff
         const ::rtl::OUString sControlImplementation = _rxAttrList->getValueByName( sImplNameAttribute );
 
         // retrieve the service name
-        if ( sControlImplementation.getLength() > 0 )
+        if ( !sControlImplementation.isEmpty() )
         {
             ::rtl::OUString sOOoImplementationName;
             const sal_uInt16 nImplPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sControlImplementation, &sOOoImplementationName );
             m_sServiceName = ( nImplPrefix == XML_NAMESPACE_OOO ) ? sOOoImplementationName : sControlImplementation;
         }
 
-        if ( !m_sServiceName.getLength() )
+        if ( m_sServiceName.isEmpty() )
             determineDefaultServiceName();
 
         // create the object *now*. This allows setting properties in the various handleAttribute methods.
@@ -240,13 +240,13 @@ namespace xmloff
             const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
 
             const ::rtl::OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
-            if ( sNumberStyleName.getLength() )
+            if ( !sNumberStyleName.isEmpty() )
                 // the style also has a number (sub) style
                 m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );
         }
 
         // insert the element into the parent container
-        if (!m_sName.getLength())
+        if (m_sName.isEmpty())
         {
             OSL_FAIL("OElementImport::EndElement: did not find a name attribute!");
             m_sName = implGetDefaultName();
@@ -623,7 +623,7 @@ namespace xmloff
 
         if ( token::IsXMLToken( _rLocalName, token::XML_NAME ) )
         {
-            if ( !m_sName.getLength() )
+            if ( m_sName.isEmpty() )
                 // remember the name for later use in EndElement
                 m_sName = _rValue;
             return true;
@@ -651,7 +651,7 @@ namespace xmloff
     Reference< XPropertySet > OElementImport::createElement()
     {
         Reference< XPropertySet > xReturn;
-        if (m_sServiceName.getLength())
+        if (!m_sServiceName.isEmpty())
         {
             Reference< XInterface > xPure = m_rFormImport.getGlobalContext().getServiceFactory()->createInstance(m_sServiceName);
             OSL_ENSURE(xPure.is(),
@@ -756,7 +756,7 @@ namespace xmloff
             }
             else if (XML_NAMESPACE_FORM == _nNamespaceKey)
             {
-                if (!m_sControlId.getLength())
+                if (m_sControlId.isEmpty())
                 {
                     m_sControlId = _rValue;
                 }
@@ -1017,7 +1017,7 @@ namespace xmloff
             return;
 
         // register our control with it's id
-        if (m_sControlId.getLength())
+        if (!m_sControlId.isEmpty())
             m_rFormImport.registerControlId(m_xElement, m_sControlId);
         // it's allowed to have no control id. In this case we're importing a column
 
@@ -1099,19 +1099,19 @@ namespace xmloff
         }
 
         // the external cell binding, if applicable
-        if ( m_xElement.is() && m_sBoundCellAddress.getLength() )
+        if ( m_xElement.is() && !m_sBoundCellAddress.isEmpty() )
             doRegisterCellValueBinding( m_sBoundCellAddress );
 
         // XForms binding, if applicable
-        if ( m_xElement.is() && m_sBindingID.getLength() )
+        if ( m_xElement.is() && !m_sBindingID.isEmpty() )
             doRegisterXFormsValueBinding( m_sBindingID );
 
         // XForms list binding, if applicable
-        if ( m_xElement.is() && m_sListBindingID.getLength() )
+        if ( m_xElement.is() && !m_sListBindingID.isEmpty() )
             doRegisterXFormsListBinding( m_sListBindingID );
 
         // XForms submission, if applicable
-        if ( m_xElement.is() && m_sSubmissionID.getLength() )
+        if ( m_xElement.is() && !m_sSubmissionID.isEmpty() )
             doRegisterXFormsSubmission( m_sSubmissionID );
     }
 
@@ -1119,7 +1119,7 @@ namespace xmloff
     void OControlImport::doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress )
     {
         OSL_PRECOND( m_xElement.is(), "OControlImport::doRegisterCellValueBinding: invalid element!" );
-        OSL_PRECOND( _rBoundCellAddress.getLength(),
+        OSL_PRECOND( !_rBoundCellAddress.isEmpty(),
             "OControlImport::doRegisterCellValueBinding: invalid address!" );
 
         m_rContext.registerCellValueBinding( m_xElement, _rBoundCellAddress );
@@ -1129,7 +1129,7 @@ namespace xmloff
     void OControlImport::doRegisterXFormsValueBinding( const ::rtl::OUString& _rBindingID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( _rBindingID.getLength() > 0, "binding ID is not valid" );
+        OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
 
         m_rContext.registerXFormsValueBinding( m_xElement, _rBindingID );
     }
@@ -1138,7 +1138,7 @@ namespace xmloff
     void OControlImport::doRegisterXFormsListBinding( const ::rtl::OUString& _rBindingID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( _rBindingID.getLength() > 0, "binding ID is not valid" );
+        OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
 
         m_rContext.registerXFormsListBinding( m_xElement, _rBindingID );
     }
@@ -1147,7 +1147,7 @@ namespace xmloff
     void OControlImport::doRegisterXFormsSubmission( const ::rtl::OUString& _rSubmissionID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( _rSubmissionID.getLength() > 0, "binding ID is not valid" );
+        OSL_PRECOND( !_rSubmissionID.isEmpty(), "binding ID is not valid" );
 
         m_rContext.registerXFormsSubmission( m_xElement, _rSubmissionID );
     }
@@ -1249,7 +1249,7 @@ namespace xmloff
         OControlImport::StartElement(_rxAttrList);
 
         // the base class should have created the control, so we can register it
-        if ( m_sReferringControls.getLength() )
+        if ( !m_sReferringControls.isEmpty() )
             m_rFormImport.registerControlReferences(m_xElement, m_sReferringControls);
     }
 
@@ -1363,7 +1363,7 @@ namespace xmloff
                     )
                 );
 
-        if ( bMakeAbsolute && ( _rValue.getLength() > 0  ) )
+        if ( bMakeAbsolute && !_rValue.isEmpty() )
         {
             // make a global URL out of the local one
             ::rtl::OUString sAdjustedValue;
@@ -1723,7 +1723,7 @@ namespace xmloff
         OControlImport::EndElement();
 
         // the external list source, if applicable
-        if ( m_xElement.is() && m_sCellListSource.getLength() )
+        if ( m_xElement.is() && !m_sCellListSource.isEmpty() )
             m_rContext.registerCellRangeListSource( m_xElement, m_sCellListSource );
     }
 
@@ -1876,8 +1876,8 @@ namespace xmloff
         // the label attribute
         ::rtl::OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);
         sal_Bool bNonexistentAttribute = sal_False;
-        if (!sValue.getLength())
-            if (0 == _rxAttrList->getTypeByName(sLabelAttribute).getLength())
+        if (sValue.isEmpty())
+            if (_rxAttrList->getTypeByName(sLabelAttribute).isEmpty())
                 // this attribute does not really exist
                 bNonexistentAttribute = sal_True;
 
@@ -1890,8 +1890,8 @@ namespace xmloff
         // the value attribute
         sValue = _rxAttrList->getValueByName(sValueAttribute);
         bNonexistentAttribute = sal_False;
-        if (!sValue.getLength())
-            if (0 == _rxAttrList->getTypeByName(sValueAttribute).getLength())
+        if (sValue.isEmpty())
+            if (_rxAttrList->getTypeByName(sValueAttribute).isEmpty())
                 // this attribute does not really exist
                 bNonexistentAttribute = sal_True;
 
@@ -2119,7 +2119,7 @@ namespace xmloff
         Sequence< ::rtl::OUString > aList;
 
         // split up the value string
-        if (_rValue.getLength())
+        if (!_rValue.isEmpty())
         {
             // For the moment, we build a vector instead of a Sequence. It's easier to handle because of it's
             // push_back method

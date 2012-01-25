@@ -77,7 +77,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
     OUString sImageURL;
 
-    if( rStrName.getLength() )
+    if( !rStrName.isEmpty() )
     {
         if( rValue >>= sImageURL )
         {
@@ -95,7 +95,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
             // uri
             const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
-            if( aStr.getLength() )
+            if( !aStr.isEmpty() )
             {
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -106,7 +106,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             // Do Write
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
 
-            if( sImageURL.getLength() )
+            if( !sImageURL.isEmpty() )
             {
                 // optional office:binary-data
                 rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
@@ -190,7 +190,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
 
     rValue <<= aStrURL;
 
-    if( aDisplayName.getLength() )
+    if( !aDisplayName.isEmpty() )
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID,
                                      rStrName, aDisplayName );

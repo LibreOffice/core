@@ -367,7 +367,7 @@ SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
         xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
-        if( !sURL.getLength() && !xBase64Stream.is() )
+        if( sURL.isEmpty() && !xBase64Stream.is() )
         {
             xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( xBase64Stream.is() )
@@ -386,7 +386,7 @@ SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
 
 void XMLBackgroundImageContext::EndElement()
 {
-    if( sURL.getLength() )
+    if( !sURL.isEmpty() )
     {
         sURL = GetImport().ResolveGraphicObjectURL( sURL, sal_False );
     }
@@ -396,7 +396,7 @@ void XMLBackgroundImageContext::EndElement()
         xBase64Stream = 0;
     }
 
-    if( !sURL.getLength() )
+    if( sURL.isEmpty() )
         ePos = GraphicLocation_NONE;
     else if( GraphicLocation_NONE == ePos )
         ePos = GraphicLocation_TILED;

@@ -133,7 +133,7 @@ sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -213,7 +213,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
 
     rValue <<= aGradient;
 
-    if( aDisplayName.getLength() )
+    if( !aDisplayName.isEmpty() )
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRADIENT_ID, rStrName,
                                      aDisplayName );
@@ -249,7 +249,7 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
     sal_Bool bRet = sal_False;
     awt::Gradient aGradient;
 
-    if( rStrName.getLength() )
+    if( !rStrName.isEmpty() )
     {
         if( rValue >>= aGradient )
         {

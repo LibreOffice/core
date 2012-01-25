@@ -566,7 +566,7 @@ namespace xmloff
                 if (xCurrentReference.is())
                 {
                     ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
-                    if (sReferencedBy.getLength())
+                    if (!sReferencedBy.isEmpty())
                         // it's not the first _rxObject referring to the xCurrentReference
                         // -> separate the id
                         sReferencedBy += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
@@ -642,7 +642,7 @@ namespace xmloff
                 if ( xColumnPropertiesMeta.is() && xColumnPropertiesMeta->hasPropertyByName( PROPERTY_FORMATKEY ) )
                     sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
 
-                if ( sColumnNumberStyle.getLength() )
+                if ( !sColumnNumberStyle.isEmpty() )
                 {   // the column indeed has a formatting
                     sal_Int32 nStyleMapIndex = m_xStyleExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
                         // TODO: move this to the ctor

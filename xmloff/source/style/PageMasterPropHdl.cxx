@@ -233,7 +233,7 @@ sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
         OUStringBuffer aBuffer( 5 );
         rUnitConverter.convertNumLetterSync( aBuffer, nNumType );
         rStrExpValue = aBuffer.makeStringAndClear();
-        bRet = rStrExpValue.getLength() > 0;
+        bRet = !rStrExpValue.isEmpty();
     }
     return bRet;
 }
@@ -333,7 +333,7 @@ sal_Bool XMLPMPropHdl_Print::exportXML(
 {
     if( getBOOL( rValue ) )
     {
-        if( rStrExpValue.getLength() )
+        if( !rStrExpValue.isEmpty() )
             rStrExpValue += OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
         rStrExpValue += sAttrValue;
     }
@@ -355,7 +355,7 @@ sal_Bool XMLPMPropHdl_CenterHorizontal::importXML(
 {
     sal_Bool bRet = sal_False;
 
-    if (rStrImpValue.getLength())
+    if (!rStrImpValue.isEmpty())
         if (IsXMLToken( rStrImpValue, XML_BOTH) ||
             IsXMLToken( rStrImpValue, XML_HORIZONTAL))
         {
@@ -377,7 +377,7 @@ sal_Bool XMLPMPropHdl_CenterHorizontal::exportXML(
     if ( ::cppu::any2bool( rValue ) )
     {
         bRet = sal_True;
-        if (rStrExpValue.getLength())
+        if (!rStrExpValue.isEmpty())
             rStrExpValue = GetXMLToken(XML_BOTH);
         else
             rStrExpValue = GetXMLToken(XML_HORIZONTAL);
@@ -397,7 +397,7 @@ sal_Bool XMLPMPropHdl_CenterVertical::importXML(
 {
     sal_Bool bRet = sal_False;
 
-    if (rStrImpValue.getLength())
+    if (!rStrImpValue.isEmpty())
         if (IsXMLToken(rStrImpValue, XML_BOTH) ||
             IsXMLToken(rStrImpValue, XML_VERTICAL) )
         {
@@ -418,7 +418,7 @@ sal_Bool XMLPMPropHdl_CenterVertical::exportXML(
     if ( ::cppu::any2bool( rValue ) )
     {
         bRet = sal_True;
-        if (rStrExpValue.getLength())
+        if (!rStrExpValue.isEmpty())
             rStrExpValue = GetXMLToken(XML_BOTH);
         else
             rStrExpValue = GetXMLToken(XML_VERTICAL);

@@ -88,7 +88,7 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
 
     rStrExpValue = aLocale.Language;
 
-    if( !rStrExpValue.getLength() )
+    if( rStrExpValue.isEmpty() )
         rStrExpValue = GetXMLToken( XML_NONE );
 
     return sal_True;
@@ -136,7 +136,7 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
 
     rStrExpValue = aLocale.Country;
 
-    if( !rStrExpValue.getLength() )
+    if( rStrExpValue.isEmpty() )
         rStrExpValue = GetXMLToken( XML_NONE );
 
     return sal_True;

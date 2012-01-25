@@ -90,7 +90,7 @@ SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 void SvXMLMetaExport::SimpleStringElement( const rtl::OUString& rText,
         sal_uInt16 nNamespace, enum XMLTokenEnum eElementName )
 {
-    if ( rText.getLength() ) {
+    if ( !rText.isEmpty() ) {
         SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
                                   sal_True, sal_False );
         mrExport.Characters( rText );
@@ -102,7 +102,7 @@ void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
 {
     if (rDate.Month != 0) { // invalid dates are 0-0-0
         rtl::OUString sValue = GetISODateTimeString( rDate );
-        if ( sValue.getLength() ) {
+        if ( !sValue.isEmpty() ) {
             SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
                                       sal_True, sal_False );
             mrExport.Characters( sValue );
@@ -161,8 +161,8 @@ void SvXMLMetaExport::_MExport()
     {
         const lang::Locale aLocale = mxDocProps->getLanguage();
         ::rtl::OUString sValue = aLocale.Language;
-        if (sValue.getLength()) {
-            if ( aLocale.Country.getLength() )
+        if (!sValue.isEmpty()) {
+            if ( !aLocale.Country.isEmpty() )
             {
                 sValue += rtl::OUString::valueOf((sal_Unicode)'-');
                 sValue += aLocale.Country;
@@ -197,7 +197,7 @@ void SvXMLMetaExport::_MExport()
 
     //  default target
     const ::rtl::OUString sDefTarget = mxDocProps->getDefaultTarget();
-    if ( sDefTarget.getLength() )
+    if ( !sDefTarget.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
                                sDefTarget );
@@ -216,7 +216,7 @@ void SvXMLMetaExport::_MExport()
     //  auto-reload
     const ::rtl::OUString sReloadURL = mxDocProps->getAutoloadURL();
     const sal_Int32 sReloadDelay = mxDocProps->getAutoloadSecs();
-    if (sReloadDelay != 0 || sReloadURL.getLength() != 0)
+    if (sReloadDelay != 0 || !sReloadURL.isEmpty())
     {
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
                               mrExport.GetRelativeReference( sReloadURL ) );
@@ -233,7 +233,7 @@ void SvXMLMetaExport::_MExport()
 
     //  template
     const rtl::OUString sTplPath = mxDocProps->getTemplateURL();
-    if ( sTplPath.getLength() )
+    if ( !sTplPath.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );

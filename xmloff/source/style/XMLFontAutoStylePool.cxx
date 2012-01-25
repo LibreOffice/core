@@ -189,7 +189,7 @@ OUString XMLFontAutoStylePool::Add(
             sName.trim();
         }
 
-        if( !sName.getLength() )
+        if( sName.isEmpty() )
             sName = OUString::valueOf( sal_Unicode( 'F' ) );
 
         if( pNames->Seek_Entry( &sName, 0 ) )
@@ -261,7 +261,7 @@ void XMLFontAutoStylePool::exportXML()
                                       XML_FONT_FAMILY, sTmp );
 
         const OUString& rStyleName = pEntry->GetStyleName();
-        if( rStyleName.getLength() )
+        if( !rStyleName.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_FONT_ADORNMENTS,
                                       rStyleName );

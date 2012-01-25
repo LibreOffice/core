@@ -245,7 +245,7 @@ namespace xmloff
         sal_uInt16 nStyle = 1;
 
         while   (   aTokens.getNextToken(sToken)    // have a new token
-                &&  (0 != sToken.getLength())       // really have a new token
+                &&  (!sToken.isEmpty())       // really have a new token
                 )
         {
             // try interpreting the token as border style
@@ -304,7 +304,7 @@ namespace xmloff
         if ( !bSuccess )
             return sal_False;
 
-        if ( _rStrExpValue.getLength() )
+        if ( !_rStrExpValue.isEmpty() )
             _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
         _rStrExpValue += aOut.makeStringAndClear();
 
@@ -343,7 +343,7 @@ namespace xmloff
         }
         _rStrExpValue = aResult.makeStringAndClear();
 
-        return _rStrExpValue.getLength() != 0;
+        return !_rStrExpValue.isEmpty();
     }
 
     //=====================================================================

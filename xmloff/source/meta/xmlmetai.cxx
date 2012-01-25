@@ -280,7 +280,7 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
         }
     }
 
-    if ( sBuildId.getLength() == 0 )
+    if ( sBuildId.isEmpty() )
     {
         if ((i_rBuildId.compareToAscii(
                 RTL_CONSTASCII_STRINGPARAM("StarOffice 7") ) == 0) ||
@@ -297,7 +297,7 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
         }
     }
 
-    if ( sBuildId.getLength() ) try
+    if ( !sBuildId.isEmpty() ) try
     {
         if( xImportInfo.is() )
         {

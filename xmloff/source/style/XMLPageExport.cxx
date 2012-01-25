@@ -82,7 +82,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
         {
             OUString sParent;
             rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates );
-            if (!rPageMasterName.getLength())
+            if (rPageMasterName.isEmpty())
                 rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
         }
     }
@@ -141,7 +141,7 @@ sal_Bool XMLPageExport::exportStyle(
             OUString sNextName;
             xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
 
-            if( sName != sNextName && sNextName.getLength() )
+            if( sName != sNextName && !sNextName.isEmpty() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
                     GetExport().EncodeStyleName( sNextName ) );

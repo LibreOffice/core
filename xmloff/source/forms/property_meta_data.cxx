@@ -92,7 +92,7 @@ namespace xmloff { namespace metadata
             if ( s_propertyDescriptionsByName.empty() )
             {
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( desc->propertyName.getLength() != 0 )
+                while ( !desc->propertyName.isEmpty() )
                 {
                     s_propertyDescriptionsByName[ desc->propertyName ] = desc;
                     ++desc;
@@ -112,7 +112,7 @@ namespace xmloff { namespace metadata
             if ( s_indexedPropertyGroups.empty() )
             {
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( desc->propertyName.getLength() != 0 )
+                while ( !desc->propertyName.isEmpty() )
                 {
                     if ( desc->propertyGroup != NO_GROUP )
                         s_indexedPropertyGroups[ desc->propertyGroup ].push_back( desc );
@@ -133,7 +133,7 @@ namespace xmloff { namespace metadata
             if ( s_reverseTokenLookup.empty() )
             {
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( desc->propertyName.getLength() != 0 )
+                while ( !desc->propertyName.isEmpty() )
                 {
                     s_reverseTokenLookup[ token::GetXMLToken( desc->attribute.attributeToken ) ] = desc->attribute.attributeToken;
                     ++desc;
@@ -162,7 +162,7 @@ namespace xmloff { namespace metadata
             if ( s_attributeGroups.empty() )
             {
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( desc->propertyName.getLength() != 0 )
+                while ( !desc->propertyName.isEmpty() )
                 {
                     if ( desc->propertyGroup != NO_GROUP )
                         s_attributeGroups.insert( AttributeGroups::value_type( desc->attribute, desc->propertyGroup ) );
@@ -183,7 +183,7 @@ namespace xmloff { namespace metadata
             if ( s_attributesWithoutGroup.empty() )
             {
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( desc->propertyName.getLength() != 0 )
+                while ( !desc->propertyName.isEmpty() )
                 {
                     if ( desc->propertyGroup == NO_GROUP )
                     {

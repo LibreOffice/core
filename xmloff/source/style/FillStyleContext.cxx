@@ -164,7 +164,7 @@ SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefi
     {
         OUString sURL;
         maAny >>= sURL;
-        if( !sURL.getLength() && !mxBase64Stream.is() )
+        if( sURL.isEmpty() && !mxBase64Stream.is() )
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
@@ -186,7 +186,7 @@ void XMLBitmapStyleContext::EndElement()
     OUString sURL;
     maAny >>= sURL;
 
-    if( !sURL.getLength() && mxBase64Stream.is() )
+    if( sURL.isEmpty() && mxBase64Stream.is() )
     {
         sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
         mxBase64Stream = 0;

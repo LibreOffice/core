@@ -316,7 +316,7 @@ namespace xmloff
         // the control id
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
-            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportInnerAttributes: have no control id for the control!");
+            OSL_ENSURE(!m_sControlId.isEmpty(), "OControlExport::exportInnerAttributes: have no control id for the control!");
             m_rContext.getGlobalContext().AddAttributeIdLegacy(
                 XML_NAMESPACE_FORM, m_sControlId);
         #if OSL_DEBUG_LEVEL > 0
@@ -799,7 +799,7 @@ namespace xmloff
         // the target frame
         if (m_nIncludeCommon & CCA_FOR)
         {
-            if (m_sReferringControls.getLength())
+            if (!m_sReferringControls.isEmpty())
             {   // there is at least one control referring to the one we're handling currently
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_FOR),
@@ -1095,7 +1095,7 @@ namespace xmloff
                 else
                     OSL_FAIL( "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
 
-                if ( sPropertyName.getLength() )
+                if ( !sPropertyName.isEmpty() )
                     exportInt32PropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( SCA_STEP_SIZE ),
                         OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ),
@@ -1306,7 +1306,7 @@ namespace xmloff
         DBG_CHECK_PROPERTY_NO_TYPE( PROPERTY_LISTSOURCE );
 
         ::rtl::OUString sListSource = getScalarListSourceValue();
-        if ( sListSource.getLength() )
+        if ( !sListSource.isEmpty() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE),
@@ -1811,19 +1811,19 @@ namespace xmloff
         }
 
         // is control bound to XForms?
-        if( getXFormsBindName( m_xProps ).getLength() > 0 )
+        if( !getXFormsBindName( m_xProps ).isEmpty() )
         {
             m_nIncludeBindings |= BA_XFORMS_BIND;
         }
 
         // is (list-)control bound to XForms list?
-        if( getXFormsListBindName( m_xProps ).getLength() > 0 )
+        if( !getXFormsListBindName( m_xProps ).isEmpty() )
         {
             m_nIncludeBindings |= BA_XFORMS_LISTBIND;
         }
 
         // does the control have an XForms submission?
-        if( getXFormsSubmissionName( m_xProps ).getLength() > 0 )
+        if( !getXFormsSubmissionName( m_xProps ).isEmpty() )
         {
             m_nIncludeBindings |= BA_XFORMS_SUBMISSION;
         }
@@ -2014,7 +2014,7 @@ namespace xmloff
 
                 // for every other type, the list entries are filled with some data obtained
                 // from a database - if and only if the ListSource property is not empty
-                return ( 0 == getScalarListSourceValue().getLength() );
+                return getScalarListSourceValue().isEmpty();
             }
         }
         catch( const Exception& )
@@ -2087,7 +2087,7 @@ namespace xmloff
 
         // the style attribute
         ::rtl::OUString sStyleName = m_rContext.getObjectStyleName( m_xProps );
-        if ( sStyleName.getLength() )
+        if ( !sStyleName.isEmpty() )
         {
             AddAttribute(
                 OAttributeMetaData::getSpecialAttributeNamespace( SCA_COLUMN_STYLE_NAME ),
@@ -2137,9 +2137,9 @@ namespace xmloff
             m_rContext.getGlobalContext().ClearAttrList();
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue; // if set it is a file url
-            if ( !sPropValue.getLength() )
+            if ( sPropValue.isEmpty() )
                 m_xProps->getPropertyValue( PROPERTY_URL ) >>= sPropValue;
-            if ( sPropValue.getLength() )
+            if ( !sPropValue.isEmpty() )
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_LOCATION),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION),
@@ -2193,7 +2193,7 @@ namespace xmloff
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
-            m_bCreateConnectionResourceElement = !sPropValue.getLength();
+            m_bCreateConnectionResourceElement = sPropValue.isEmpty();
             if ( !m_bCreateConnectionResourceElement )
             {
                 INetURLObject aURL(sPropValue);

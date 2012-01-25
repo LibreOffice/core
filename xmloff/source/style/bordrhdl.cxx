@@ -220,7 +220,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     sal_Int32 nColor = 0;
 
     sal_Int32 nTemp;
-    while( aTokens.getNextToken( aToken ) && aToken.getLength() != 0 )
+    while( aTokens.getNextToken( aToken ) && !aToken.isEmpty() )
     {
         if( !bHasWidth &&
             rUnitConverter.convertEnum( nNamedWidth, aToken,

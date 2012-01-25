@@ -172,7 +172,7 @@ sal_Bool XMLHatchStyleImport::importXML(
 
     rValue <<= aHatch;
 
-    if( aDisplayName.getLength() )
+    if( !aDisplayName.isEmpty() )
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_HATCH_ID, rStrName,
                                      aDisplayName );
@@ -207,7 +207,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
     sal_Bool bRet = sal_False;
     drawing::Hatch aHatch;
 
-    if( rStrName.getLength() )
+    if( !rStrName.isEmpty() )
     {
         if( rValue >>= aHatch )
         {

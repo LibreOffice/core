@@ -67,10 +67,10 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
 
     OUString sURL;
     rURL >>= sURL;
-    if( sURL.getLength() && GraphicLocation_NONE != ePos )
+    if( !sURL.isEmpty() && GraphicLocation_NONE != ePos )
     {
         OUString sTempURL( GetExport().AddEmbeddedGraphicObject( sURL ) );
-        if( sTempURL.getLength() )
+        if( !sTempURL.isEmpty() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
@@ -146,7 +146,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         {
             OUString sFilter;
             (*pFilter) >>= sFilter;
-            if( sFilter.getLength() )
+            if( !sFilter.isEmpty() )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME,
                                           sFilter );
         }
@@ -166,7 +166,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
 
     {
         SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
-        if( sURL.getLength() && GraphicLocation_NONE != ePos )
+        if( !sURL.isEmpty() && GraphicLocation_NONE != ePos )
         {
             // optional office:binary-data
             GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );

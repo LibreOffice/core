@@ -263,7 +263,7 @@ void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewCont
 //---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
 {
-    OSL_ENSURE(_rxControlModel.is() && (0 != _rControlNumerStyleName.getLength()),
+    OSL_ENSURE(_rxControlModel.is() && (!_rControlNumerStyleName.isEmpty()),
         "OFormLayerXMLImport_Impl::applyControlNumberStyle: invalid arguments (this will crash)!");
 
     OSL_ENSURE(m_pAutoStyles, "OFormLayerXMLImport_Impl::applyControlNumberStyle: have no auto style context!");
@@ -315,7 +315,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
 //---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rCellAddress )
 {
-    OSL_ENSURE( _rxControlModel.is() && _rCellAddress.getLength(),
+    OSL_ENSURE( _rxControlModel.is() && !_rCellAddress.isEmpty(),
         "OFormLayerXMLImport_Impl::registerCellValueBinding: invalid arguments!" );
     m_aCellValueBindings.push_back( ModelStringPair( _rxControlModel, _rCellAddress ) );
 }
@@ -359,7 +359,7 @@ void OFormLayerXMLImport_Impl::registerXFormsSubmission(
 //---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rCellRangeAddress )
 {
-    OSL_ENSURE( _rxControlModel.is() && _rCellRangeAddress.getLength(),
+    OSL_ENSURE( _rxControlModel.is() && !_rCellRangeAddress.isEmpty(),
         "OFormLayerXMLImport_Impl::registerCellRangeListSource: invalid arguments!" );
     m_aCellRangeListSources.push_back( ModelStringPair( _rxControlModel, _rCellRangeAddress ) );
 }
@@ -395,7 +395,7 @@ void OFormLayerXMLImport_Impl::leaveEventContext()
 void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rId)
 {
     OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::registerControlId: no current page!");
-    OSL_ENSURE(_rId.getLength(), "OFormLayerXMLImport_Impl::registerControlId: invalid (empty) control id!");
+    OSL_ENSURE(!_rId.isEmpty(), "OFormLayerXMLImport_Impl::registerControlId: invalid (empty) control id!");
 
     OSL_ENSURE(m_aCurrentPageIds->second.end() == m_aCurrentPageIds->second.find(_rId), "OFormLayerXMLImport_Impl::registerControlId: control id already used!");
     m_aCurrentPageIds->second[_rId] = _rxControl;
@@ -404,7 +404,7 @@ void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >
 //---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rReferringControls)
 {
-    OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
+    OSL_ENSURE(!_rReferringControls.isEmpty(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
     OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
     m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
 }

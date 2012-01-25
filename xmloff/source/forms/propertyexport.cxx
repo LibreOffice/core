@@ -280,7 +280,7 @@ namespace xmloff
         m_xProps->getPropertyValue( _rPropertyName ) >>= sPropValue;
 
         // add the attribute
-        if ( sPropValue.getLength() )
+        if ( !sPropValue.isEmpty() )
             AddAttribute( _nNamespaceKey, _pAttributeName, sPropValue );
 
         // the property does not need to be handled anymore
@@ -432,7 +432,7 @@ namespace xmloff
         DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
 
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
-        if ( sTargetLocation.getLength() )
+        if ( !sTargetLocation.isEmpty() )
                     // If this isn't a GraphicObject then GetRelativeReference
                     // will be called anyway ( in AddEmbeddedGraphic )
             sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedGraphicObject(sTargetLocation);
@@ -486,7 +486,7 @@ namespace xmloff
             return;
 
         ::rtl::OUString sValue = implConvertAny(aCurrentValue);
-        if (!sValue.getLength() && (TypeClass_STRING == aCurrentValue.getValueTypeClass()))
+        if (sValue.isEmpty() && (TypeClass_STRING == aCurrentValue.getValueTypeClass()))
         {
             // check whether or not the property is allowed to be VOID
             Property aProperty = m_xPropertyInfo->getPropertyByName(sPropertyName);
@@ -516,7 +516,7 @@ namespace xmloff
         // unfortunately the OUString can't append single sal_Unicode characters ...
         const ::rtl::OUString sQuote(&_aQuoteCharacter, 1);
         const ::rtl::OUString sSeparator(&_aListSeparator, 1);
-        const sal_Bool bQuote = 0 != sQuote.getLength();
+        const sal_Bool bQuote = !sQuote.isEmpty();
 
         // concatenate the string items
         const ::rtl::OUString* pItems = aItems.getConstArray();
@@ -542,7 +542,7 @@ namespace xmloff
                 sFinalList += sSeparator;
         }
 
-        if (sFinalList.getLength())
+        if (!sFinalList.isEmpty())
             AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sFinalList);
 
         exportedProperty( _rPropertyName );
@@ -658,7 +658,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
     {
-        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).getLength(),
+        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue);
@@ -667,7 +667,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue )
     {
-        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName( _rName ).getLength(),
+        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName( _rName ).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue );
@@ -676,7 +676,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttributeASCII(sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue)
     {
-        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).getLength(),
+        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).isEmpty(),
             "OPropertyExport::AddAttributeASCII: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue);
@@ -685,7 +685,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue)
     {
-        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).getLength(),
+        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue);
@@ -694,7 +694,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )
     {
-        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).getLength(),
+        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _eValue);
