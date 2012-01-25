@@ -193,6 +193,7 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
                 GroupIDCommandGroupMap[i].nCommandGroup ));
             ++i;
         }
+        bGroupIDMapInitialized = sal_True;
     }
 
     GroupHashMap::const_iterator pIter = mHashMap.find( nGroupID );
