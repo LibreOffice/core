@@ -130,6 +130,13 @@ public:
     void testPivotTableLabels();
 
     /**
+     * Make sure that we set cells displaying date values numeric cells,
+     * rather than text cells.  Grouping by date or number functionality
+     * depends on this.
+     */
+    void testPivotTableDateLabels();
+
+    /**
      * Test for pivot table's filtering functionality by page fields.
      */
     void testPivotTableFilters();
@@ -190,6 +197,7 @@ public:
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testPivotTable);
     CPPUNIT_TEST(testPivotTableLabels);
+    CPPUNIT_TEST(testPivotTableDateLabels);
     CPPUNIT_TEST(testPivotTableFilters);
     CPPUNIT_TEST(testPivotTableNamedSource);
     CPPUNIT_TEST(testSheetCopy);
@@ -1144,13 +1152,13 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
                 bool bEqual = aCheckVal.equals(aVal);
                 if (!bEqual)
                 {
-                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
+                    cout << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
                     bResult = false;
                 }
             }
             else if (!aVal.isEmpty())
             {
-                cerr << "Empty cell expected" << endl;
+                cout << "Empty cell expected" << endl;
                 bResult = false;
             }
         }
@@ -1475,6 +1483,90 @@ void Test::testPivotTableLabels()
         bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    pDPs->FreeTable(pDPObj);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableDateLabels()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW },
+        { "Date",  sheet::DataPilotFieldOrientation_COLUMN },
+        { "Value", sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    const char* aData[][3] = {
+        { "Zena",   "2011-1-1", "30" },
+        { "Yodel",  "2011-1-2", "20" },
+        { "Xavior", "2011-1-3", "45" }
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Value", "Date", 0, 0, 0 },
+            { "Name", "2011-01-01", "2011-01-02", "2011-01-03", "Total Result" },
+            { "Xavior",  0, 0, "45", "45" },
+            { "Yodel",  0, "20", 0, "20" },
+            { "Zena",  "30", 0, 0, "30" },
+            { "Total Result", "30", "20", "45", "95" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    {
+        const char* aChecks[] = {
+            "2011-01-01", "2011-01-02", "2011-01-03"
+        };
+
+        // Make sure those cells that contain dates are numeric.
+        SCROW nRow = aOutRange.aStart.Row() + 1;
+        nCol1 = aOutRange.aStart.Col() + 1;
+        nCol2 = nCol1 + 2;
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            OUString aVal = m_pDoc->GetString(nCol, nRow, 1);
+            CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected.", aVal.equalsAscii(aChecks[nCol-nCol1]));
+            CPPUNIT_ASSERT_MESSAGE("This cell contains a date value and is supposed to be numeric.",
+                                   m_pDoc->HasValueData(nCol, nRow, 1));
+        }
+    }
+
+    pDPs->FreeTable(pDPObj);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
