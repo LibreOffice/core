@@ -40,6 +40,7 @@ from email.Header import Header
 from email.MIMEMultipart import MIMEMultipart
 from email.Utils import formatdate
 from email.Utils import parseaddr
+from socket import _GLOBAL_DEFAULT_TIMEOUT
 
 import sys, smtplib, imaplib, poplib
 
@@ -71,18 +72,31 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		self.connectioncontext = xConnectionContext
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService connect"
+
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
-			print >> sys.stderr, server
+			print >> sys.stderr, "ServerName: %s" % server
+
 		port = xConnectionContext.getValueByName("Port")
 		if dbg:
-			print >> sys.stderr, port
-		self.server = smtplib.SMTP(server, port)
+			print >> sys.stderr, "Port: %d" % port
+
+		tout = xConnectionContext.getValueByName("Timeout")
+		if dbg:
+			print >> sys.stderr, isinstance(tout,int)
+		if not isinstance(tout,int):
+			tout = _GLOBAL_DEFAULT_TIMEOUT
+		if dbg:
+			print >> sys.stderr, "Timeout: %s" % str(tout)
+
+		self.server = smtplib.SMTP(server, port,timeout=tout)
 		if dbg:
 			self.server.set_debuglevel(1)
+
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
-			print >> sys.stderr, connectiontype
+			print >> sys.stderr, "ConnectionType: %s" % connectiontype
+
 		if connectiontype.upper() == 'SSL':
 			self.server.ehlo()
 			self.server.starttls()
@@ -214,7 +228,6 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				filename=fname)
 			msg.attach(msgattachment)
 
-
 		uniquer = {}
 		for key in recipients:
 			uniquer[key] = True
@@ -340,7 +353,14 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		if connectiontype.upper() == 'SSL':
 			self.server = poplib.POP3_SSL(server, port)
 		else:
-			self.server = poplib.POP3(server, port)
+			tout = xConnectionContext.getValueByName("Timeout")
+			if dbg:
+				print >> sys.stderr, isinstance(tout,int)
+			if not isinstance(tout,int):
+				tout = _GLOBAL_DEFAULT_TIMEOUT
+			if dbg:
+				print >> sys.stderr, "Timeout: %s" % str(tout)
+			self.server = poplib.POP3(server, port, timeout=tout)
 		print >> sys.stderr, "AFTER"
 
 		user = xAuthenticator.getUserName().encode('ascii')
