@@ -301,7 +301,8 @@ namespace canvas
                                aSortedSpriteVector.end(),
                                aUpdatableSprites.begin(),
                                aEnd,
-                               ::std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites) );
+                               ::std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites),
+                               aSpriteComparator );
 
         // add each remaining unchanged sprite to connected ranges,
         // marked as "don't need update"
