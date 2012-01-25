@@ -45,6 +45,7 @@ public:
     virtual bool AnyInput( sal_uInt16 nType );
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
+    struct android_app *app;
 };
 
 #endif // ANDROID_SALINST_H

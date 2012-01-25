@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <sys/resource.h>
 
-#include "osl/detail/android.h"
+#include "osl/detail/android_native_app_glue.h"
 #include <android/log.h>
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "threaded_app", __VA_ARGS__))
@@ -236,14 +236,9 @@ static void* android_app_entry(void* param) {
 // --------------------------------------------------------------------
 
 static struct android_app* android_app_create(ANativeActivity* activity,
-        void* savedState, size_t savedStateSize)
-{
+        void* savedState, size_t savedStateSize) {
     struct android_app* android_app = (struct android_app*)malloc(sizeof(struct android_app));
     memset(android_app, 0, sizeof(struct android_app));
-
-    // get this across to VCL.
-    global_android_app = android_app;
-
     android_app->activity = activity;
 
     pthread_mutex_init(&android_app->mutex, NULL);
@@ -419,13 +414,9 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
     android_app_set_input((struct android_app*)activity->instance, NULL);
 }
 
-__attribute__ ((visibility("default"))) struct android_app *global_android_app = NULL;
-
 __attribute__ ((visibility("default"))) void ANativeActivity_onCreate(ANativeActivity* activity,
-        void* savedState, size_t savedStateSize)
-{
+        void* savedState, size_t savedStateSize) {
     LOGI("Creating: %p\n", activity);
-
     activity->callbacks->onDestroy = onDestroy;
     activity->callbacks->onStart = onStart;
     activity->callbacks->onResume = onResume;

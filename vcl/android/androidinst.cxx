@@ -33,7 +33,8 @@
 #include <android/input.h>
 #include <android/looper.h>
 #include <android/native_window.h>
-#include <osl/detail/android.h>
+#include <lo-bootstrap.h>
+#include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 
 static rtl::OString MotionEdgeFlagsToString(int32_t nFlags)
@@ -72,7 +73,7 @@ extern "C" {
     void onAppCmd_cb (struct android_app* app, int32_t cmd)
     {
         fprintf (stderr, "app cmd for app %p, cmd %d\n", app, cmd);
-        ANativeWindow *pWindow = global_android_app->window;
+        ANativeWindow *pWindow = app->window;
         switch (cmd) {
         case APP_CMD_INIT_WINDOW:
         {
@@ -117,7 +118,7 @@ extern "C" {
 
         case APP_CMD_CONTENT_RECT_CHANGED:
         {
-            ARect aRect = global_android_app->contentRect;
+            ARect aRect = app->contentRect;
             fprintf (stderr, "content rect changed [ k/b popped up etc. ] %d,%d->%d,%d\n",
                      aRect.left, aRect.top, aRect.right, aRect.bottom);
             break;
@@ -168,17 +169,18 @@ extern "C" {
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
+    app = lo_get_app();
     fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
-             global_android_app,
-             global_android_app ? global_android_app->window : NULL);
-    if (global_android_app)
+             app,
+             app ? app->window : NULL);
+    if (app)
     {
-        pthread_mutex_lock (&global_android_app->mutex);
-        global_android_app->onAppCmd = onAppCmd_cb;
-        global_android_app->onInputEvent = onInputEvent_cb;
-        if (global_android_app->window != NULL)
-            onAppCmd_cb (global_android_app, APP_CMD_INIT_WINDOW);
-        pthread_mutex_unlock (&global_android_app->mutex);
+        pthread_mutex_lock (&app->mutex);
+        app->onAppCmd = onAppCmd_cb;
+        app->onInputEvent = onInputEvent_cb;
+        if (app->window != NULL)
+            onAppCmd_cb (app, APP_CMD_INIT_WINDOW);
+        pthread_mutex_unlock (&app->mutex);
     }
 }
 
@@ -190,8 +192,8 @@ AndroidSalInstance::~AndroidSalInstance()
 void AndroidSalInstance::Wakeup()
 {
     fprintf (stderr, "Wakeup alooper\n");
-    if (global_android_app && global_android_app->looper)
-        ALooper_wake (global_android_app->looper);
+    if (app && app->looper)
+        ALooper_wake (app->looper);
     else
         fprintf (stderr, "busted - no global looper\n");
 }
@@ -200,7 +202,6 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
-    struct android_app *pApp = global_android_app;
 
     fprintf (stderr, "DoReleaseYield #2 %d ms\n", nTimeoutMS);
     void *outData = NULL;
@@ -214,9 +215,9 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // FIXME: this is more or less deranged: why can we not
     // set a callback in the native app glue's ALooper_addFd ?
     if (nRet == LOOPER_ID_MAIN)
-        pApp->cmdPollSource.process(pApp, &pApp->cmdPollSource);
+        app->cmdPollSource.process(app, &app->cmdPollSource);
     if (nRet == LOOPER_ID_INPUT)
-        pApp->inputPollSource.process(pApp, &pApp->inputPollSource);
+        app->inputPollSource.process(app, &app->inputPollSource);
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
@@ -224,7 +225,7 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
     (void) nType;
     // FIXME: ideally we should check the input queue to avoid being busy ...
     fprintf (stderr, "FIXME: AnyInput returns true\n");
-    // global_android_app->inputQueue ? ...
+    // app->inputQueue ? ...
     return true;
 }
 
