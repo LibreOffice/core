@@ -34,7 +34,7 @@
 
 module com { module sun { module star { module configuration {
 
-/* Provides easy read/write access to the complete configuration.
+/* Provides easy read-only access to the complete configuration.
 
    <p>This singleton is still unpublished and unstable.</p>
 
