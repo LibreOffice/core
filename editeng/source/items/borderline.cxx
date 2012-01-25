@@ -263,16 +263,14 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
             THICKTHIN_LARGEGAP
         };
 
-
-        int i = 0, len = sizeof( aDoubleStyles ) / sizeof( SvxBorderStyle );
+        size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
         long nWidth = 0;
         SvxBorderStyle nTestStyle(NO_STYLE);
-        while ( i < len && nWidth == 0 )
+        for (size_t i = 0; i < len && nWidth == 0; ++i)
         {
             nTestStyle = aDoubleStyles[i];
             BorderWidthImpl aWidthImpl = getWidthImpl( nTestStyle );
             nWidth = aWidthImpl.GuessWidth( nOut, nIn, nDist );
-            i++;
         }
 
         // If anything matched, then set it
