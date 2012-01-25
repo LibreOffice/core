@@ -1311,9 +1311,9 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     {
         sal_uInt16 nFact = pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = static_cast< sal_uInt16 >(Max( 20, basegfx::zoomtools::zoomOut( nFact )));
+            nFact = static_cast< sal_uInt16 >(Max( 20, basegfx::zoomtools::zoomOut( static_cast<int>(nFact) )));
         else
-            nFact = static_cast< sal_uInt16 >(Min( 600, basegfx::zoomtools::zoomIn( nFact )));
+            nFact = static_cast< sal_uInt16 >(Min( 600, basegfx::zoomtools::zoomIn( static_cast<int>(nFact) )));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;
