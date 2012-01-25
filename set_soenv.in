@@ -1102,6 +1102,9 @@ ToFile( "ENV_SCRIPT", "$outfile", "e" );
 #
 print OUT "export $exportvars$newline";
 print OUT "unset $unsetvars$newline";
+# unset may return a non-zero value and make the initial
+# make(1) processes terminate with an error
+print OUT "true $newline";
 
 #
 #---------------------------
