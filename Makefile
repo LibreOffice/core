@@ -26,6 +26,11 @@
 #
 #*************************************************************************
 
+# The real targets are in solenv/gbuild/Module.mk, resp.
+# solenv/gbuild/extensions/post_BuildplTargets.mk, this file only forwards
+# the calls - please look there if you want to edit what this toplevel
+# Makefile does.
+
 SRCDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 
 ifeq ($(strip $(gb_SourceEnvAndRecurse_STAGE)),)
