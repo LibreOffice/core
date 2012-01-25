@@ -38,6 +38,7 @@ buildrcs:
 	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 # - this looks useful but breaks more than it fixes ...
 #	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
+
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
@@ -70,6 +71,22 @@ buildrcs:
 	echo "InstallMode=<installmode>" >> assets/program/bootstraprc
 	echo "ProductKey=LibreOffice 3.5" >> assets/program/bootstraprc
 	echo "UserInstallation=file://$(APP_DATA_PATH)/files/.libreoffice" >> assets/program/bootstraprc
+
+# versionrc ini ...
+	echo "[Version]" > assets/program/versionrc
+	echo "AllLanguages=en-US" >> assets/program/versionrc
+	echo "BuildVersion=" >> assets/program/versionrc
+	echo "buildid=dead-beef" >> assets/program/versionrc
+	echo "ExtensionUpdateURL=http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update" >> assets/program/versionrc
+	echo "ProductBuildid=3" >> assets/program/versionrc
+	echo "ProductMajor=360" >> assets/program/versionrc
+	echo "ProductMinor=1" >> assets/program/versionrc
+	echo "ProductSource=OOO350" >> assets/program/versionrc
+	echo "ReferenceOOoMajorMinor=3.6" >> assets/program/versionrc
+	echo "UpdateID=LibreOffice_3_en-US" >> assets/program/versionrc
+	echo "UpdateURL=" >> assets/program/versionrc
+	echo "UpdateUserAgent=<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})" >> assets/program/versionrc
+	echo "Vendor=SelfCompiledGit" >> assets/program/versionrc
 
 copy-stuff: buildrcs
 #
