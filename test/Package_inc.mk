@@ -43,5 +43,6 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilottable.hxx,te
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilotfieldgrouping.hxx,test/sheet/xdatapilotfieldgrouping.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/datapilotfield.hxx,test/sheet/datapilotfield.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheets2.hxx,test/sheet/xspreadsheets2.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/util/xsearchable.hxx,test/util/xsearchable.hxx))
 
 # vim: set noet sw=4 ts=4:
