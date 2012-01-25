@@ -1,3 +1,6 @@
+THIS DIRECTORY IS UNMAINTAINED AND PRESUMABLY BROKEN ALREADY
+
+
 include ../../../config_host.mk
 
 # The package of this app
