@@ -156,10 +156,10 @@ bool HelpParser::CreateSDF(
     const OUString sOUGsi1( rGsi1.GetBuffer() , rGsi1.Len() , RTL_TEXTENCODING_ASCII_US );
 
     Export::InitLanguages( false );
-    std::vector<ByteString> aLanguages = Export::GetLanguages();
+    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
 
-    std::vector<ByteString> order = file->getOrder();
-    std::vector<ByteString>::iterator pos;
+    std::vector<rtl::OString> order = file->getOrder();
+    std::vector<rtl::OString>::iterator pos;
     XMLHashMap::iterator posm;
 
     for( pos = order.begin(); pos != order.end() ; ++pos )
@@ -276,8 +276,8 @@ bool ByteStringLess( const ByteString& rKey1, const ByteString& rKey2 )  {
      return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
 }
 
-void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile ){
-    std::vector<ByteString> aTmp;
+void HelpParser::parse_languages( std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile ){
+    std::vector<rtl::OString> aTmp;
 
     const ByteString ENUS   ("en-US");
 
@@ -290,13 +290,13 @@ void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDat
 
         if( !Export::sForcedLanguages.isEmpty() )
         {
-            std::vector<ByteString> aFL = Export::GetForcedLanguages();
+            std::vector<rtl::OString> aFL = Export::GetForcedLanguages();
             std::copy( aFL.begin() ,
                        aFL.end() ,
                        back_inserter( aLanguages )
                      );
             std::sort(   aLanguages.begin() , aLanguages.end() , ByteStringLess );
-            std::vector<ByteString>::iterator unique_iter =  std::unique( aLanguages.begin() , aLanguages.end() , ByteStringEqual );
+            std::vector<rtl::OString>::iterator unique_iter =  std::unique( aLanguages.begin() , aLanguages.end() , ByteStringEqual );
             std::copy( aLanguages.begin() , unique_iter , back_inserter( aTmp ) );
             aLanguages = aTmp;
         }
@@ -309,7 +309,7 @@ void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDat
 
 bool HelpParser::Merge(
     const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO ,
-    const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir )
+    const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir )
 {
 
 

@@ -51,7 +51,7 @@ private:
     sal_Bool bDBIsUTF8;
     sal_Bool bULF;
     bool bQuiet;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 
     bool isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in);
     void ReadLine(const rtl::OString &rLine_in,

@@ -60,14 +60,14 @@ public:
     static bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in,
                            const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1 );
 
-    static  void parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
+    static  void parse_languages( std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile );
 
 /// Method merges the String from the SDFfile into XMLfile. Both Strings must
 /// point to existing files.
     bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in ,
         const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
     bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
-        , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
+        , const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
     static ByteString makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in );

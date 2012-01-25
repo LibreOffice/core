@@ -124,23 +124,23 @@ ByteString Export::DumpMap(const rtl::OString& rMapName,
 }
 
 /*****************************************************************************/
-void Export::SetLanguages( std::vector<ByteString> val ){
+void Export::SetLanguages( std::vector<rtl::OString> val ){
 /*****************************************************************************/
     aLanguages = val;
     isInitialized = true;
 }
 /*****************************************************************************/
-std::vector<ByteString> Export::GetLanguages(){
+std::vector<rtl::OString> Export::GetLanguages(){
 /*****************************************************************************/
     return aLanguages;
 }
 /*****************************************************************************/
-std::vector<ByteString> Export::GetForcedLanguages(){
+std::vector<rtl::OString> Export::GetForcedLanguages(){
 /*****************************************************************************/
     return aForcedLanguages;
 }
-std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
-std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
+std::vector<rtl::OString> Export::aLanguages       = std::vector<rtl::OString>();
+std::vector<rtl::OString> Export::aForcedLanguages = std::vector<rtl::OString>();
 
 /*****************************************************************************/
 void Export::QuotHTML( ByteString &rString )

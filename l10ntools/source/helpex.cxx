@@ -237,7 +237,7 @@ int _cdecl main( int argc, char *argv[] )
             rtl::OString sHelpFile; // dummy
             MergeDataFile aMergeDataFile( sSDFFile, sHelpFile, sal_False );
 
-            std::vector<ByteString> aLanguages;
+            std::vector<rtl::OString> aLanguages;
             HelpParser::parse_languages( aLanguages , aMergeDataFile );
 
             bool bCreateDir = true;

@@ -127,7 +127,7 @@ protected:
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
     void AddText(
         ByteString &rText,
         const ByteString &rIsoLang,
@@ -164,7 +164,7 @@ class CfgExport : public CfgOutputParser
 private:
     ByteString sPrj;
     ByteString sPath;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 protected:
     virtual void WorkOnText(
         ByteString &rText,
@@ -190,7 +190,7 @@ class CfgMerge : public CfgOutputParser
 {
 private:
     MergeDataFile *pMergeDataFile;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
     ResData *pResData;
 
     rtl::OString sFilename;

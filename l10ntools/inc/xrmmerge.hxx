@@ -47,7 +47,7 @@ private:
     ByteString sCurrentOpenTag;
     ByteString sCurrentCloseTag;
     ByteString sCurrentText;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 
 protected:
     ByteString GetAttribute( const ByteString &rToken, const ByteString &rAttribute );
@@ -90,7 +90,7 @@ public:
 class XRMResOutputParser : public XRMResParser
 {
 private:
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 protected:
     SvFileStream *pOutputStream;
 public:
@@ -108,7 +108,7 @@ private:
     ResData *pResData;
     ByteString sPrj;
     ByteString sPath;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 
 protected:
     void WorkOnDesc(
@@ -144,7 +144,7 @@ private:
     MergeDataFile *pMergeDataFile;
     ByteString sFilename;
     ResData *pResData;
-    std::vector<ByteString> aLanguages;
+    std::vector<rtl::OString> aLanguages;
 
 protected:
     void WorkOnDesc(

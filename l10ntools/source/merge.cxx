@@ -257,8 +257,8 @@ ByteString MergeDataFile::Dump(){
     return sRet;
 }
 
-std::vector<ByteString> MergeDataFile::GetLanguages(){
-    return std::vector<ByteString>(aLanguageSet.begin(),aLanguageSet.end());
+std::vector<rtl::OString> MergeDataFile::GetLanguages(){
+    return std::vector<rtl::OString>(aLanguageSet.begin(),aLanguageSet.end());
 }
 
 MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )

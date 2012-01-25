@@ -325,10 +325,10 @@ public:
     static bool skipProject( ByteString sPrj ) ;
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
-    static std::vector<ByteString> GetLanguages();
-    static std::vector<ByteString> GetForcedLanguages();
+    static std::vector<rtl::OString> GetLanguages();
+    static std::vector<rtl::OString> GetForcedLanguages();
 
-    static void SetLanguages( std::vector<ByteString> val );
+    static void SetLanguages( std::vector<rtl::OString> val );
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
     static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
@@ -343,7 +343,7 @@ public:
     static bool isSourceLanguage( const ByteString &sLanguage );
     static bool isAllowed( const ByteString &sLanguage );
 
-    static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
+    static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
     static void getCurrentDir( std::string& dir );
 
@@ -358,8 +358,8 @@ public:
         ByteStringHashMap& aMap);
 
 private:
-    static std::vector<ByteString> aLanguages;
-    static std::vector<ByteString> aForcedLanguages;
+    static std::vector<rtl::OString> aLanguages;
+    static std::vector<rtl::OString> aForcedLanguages;
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
@@ -493,7 +493,7 @@ class MergeDataFile
         ByteString sErrorLog;
         SvFileStream aErrLog;
         MergeDataHashMap aMap;
-        std::set<ByteString> aLanguageSet;
+        std::set<rtl::OString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
         void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
@@ -508,7 +508,7 @@ class MergeDataFile
         ~MergeDataFile();
 
 
-        std::vector<ByteString> GetLanguages();
+        std::vector<rtl::OString> GetLanguages();
 
         PFormEntrys *GetPFormEntrys( ResData *pResData );
         PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );

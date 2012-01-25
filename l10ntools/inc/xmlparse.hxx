@@ -211,7 +211,7 @@ public:
     XMLFile( const XMLFile& obj ) ;
     ~XMLFile();
 
-    ByteString* GetGroupID(std::deque<ByteString> &groupid);
+    ByteString* GetGroupID(std::deque<rtl::OString> &groupid);
     void        Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
@@ -230,7 +230,7 @@ public:
     const String &GetName() { return sFileName; }
     void          SetName( const String &rFilename ) { sFileName = rFilename; }
     void          SetFullName( const String &rFullFilename ) { sFullName = rFullFilename; }
-    const std::vector<ByteString> getOrder(){ return order; }
+    const std::vector<rtl::OString> getOrder(){ return order; }
 
 protected:
     // writes a string as UTF8 with dos line ends to a given stream
@@ -250,7 +250,7 @@ protected:
     TagMap      nodes_localize;
     XMLHashMap* XMLStrings;
 
-    std::vector <ByteString> order;
+    std::vector <rtl::OString> order;
 };
 
 /// An Utility class for XML
