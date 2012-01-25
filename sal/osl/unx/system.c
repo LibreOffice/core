@@ -33,7 +33,7 @@
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined(MACOSX) || defined(IOS) || defined(OPENBSD)
+#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD)
 
 extern int h_errno;
 
@@ -124,7 +124,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
       return res;
 }
-#endif // OSX || IOS || OPENBSD
+#endif // OSX || IOS || OPENBSD || NETBSD
 
 #if defined(MACOSX)
 /*
