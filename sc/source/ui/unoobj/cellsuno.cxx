@@ -3907,10 +3907,8 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                     *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
                 if (bFound)
                 {
-                    ScRangeList aNewRanges;
-                    aMark.FillRangeListWithMarks( &aNewRanges, sal_True );
                     //  bei findAll immer CellRanges, egal wieviel gefunden wurde
-                    xRet.set(new ScCellRangesObj( pDocShell, aNewRanges ));
+                    xRet.set(new ScCellRangesObj( pDocShell, aMatchedRanges ));
                 }
             }
         }
