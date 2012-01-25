@@ -1128,6 +1128,15 @@ ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh
         mnLastExpandedLines( INPUTWIN_MULTILINES ),
         mbInvalidate( false )
 {
+    // Calculate the text height, need to set a font for that. Probably we could set the font
+    // here ( on this Window ) and avoid the temp Window. OTOH vcl is such a mystery I prefer
+    // to minimise possible unexpected side-affects this way
+    Window aTmp(this, WB_BORDER );
+    aTmp.SetFont(aTextFont);
+    mnTextHeight = LogicToPixel(Size(0,aTmp.GetTextHeight())).Height() ;
+    Size aBorder;
+    aBorder = CalcWindowSize( aBorder);
+    mnBorderHeight = aBorder.Height();
     nTextStartPos = TEXT_MULTI_STARTPOS;
 }
 
@@ -1158,13 +1167,8 @@ EditView* ScMultiTextWnd::GetEditView()
 
 long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
 {
-    long height = ( LogicToPixel(Size(0,GetTextHeight())).Height() );
-    // need to figure out why GetTextHeight is not set up when I need it
-    // some initialisation timing issue ?
-    height = Max ( long( 14 ), height );
-    // add padding ( for the borders of the window I guess ) otherwise we
-    // chop slightly the top and bottom of whatever is in the inputbox
-    return ( nLines *  height ) + 4;
+    // add padding ( for the borders of the window )
+    return ( nLines *  mnTextHeight ) + mnBorderHeight;
 }
 
 void ScMultiTextWnd::SetNumLines( long nLines )
