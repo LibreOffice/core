@@ -109,6 +109,7 @@ copy-stuff: buildrcs
 		  bootstrap.uno \
 		  comphelpgcc3 \
 		  configmgr.uno \
+		  deployment \
 		  deploymentmisclo \
 		  fileacc \
 		  fontconfig \
