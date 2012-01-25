@@ -373,6 +373,14 @@ AVAILABLE TARGETS
        showdeliverables show the targets delivered to OUTDIR and their source
        debugrun         starts the dev-install instance and allows tests to be run
                         against it
+       <module>         build the named module
+       <module>.clean   clean the named module
+       <module>.all     for dmake modules only, build the named module and
+                        the pre-requisite modules for this module
+       <module>.deliver for dmake modules only, deliver the named module
+       cmd              execute the command contained in the variable cmd=""
+                        in a shell with config_host.mk or config_build.mk
+                        environement set. (see gb_SIDE)
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).
@@ -400,7 +408,9 @@ INTERACTIVE VARIABLES:
        gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
        gb_COLOR        Use ASCII color output.
        gb_TITLES       Show progress in terminal title.
-
+       gb_Side         Either "host" of "build" (default to "host").
+                       determine if config_host.mk or config_build.mk is used to
+                       set the build environment.
 endef
 
 .PHONY: help
