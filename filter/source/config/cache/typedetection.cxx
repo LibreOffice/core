@@ -814,9 +814,9 @@ namespace
         if (rA == rB)
             return false;
         if (rA.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
-            return true;
-        if (rB.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
             return false;
+        if (rB.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
+            return true;
         return rA < rB;
     }
 }
