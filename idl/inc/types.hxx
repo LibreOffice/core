@@ -230,7 +230,6 @@ public:
     rtl::OString        GetCString() const;
     void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    void                AppendParserString (ByteString &rString);
 
     sal_uLong           MakeSfx( rtl::OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
