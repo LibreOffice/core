@@ -29,8 +29,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _WORDPERFECTIMPORTFILTER_HXX
-#define _WORDPERFECTIMPORTFILTER_HXX
+#ifndef _LOTUSWORDPROIMPORTFILTER_HXX
+#define _LOTUSWORDPROIMPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

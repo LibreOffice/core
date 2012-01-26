@@ -27,8 +27,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _WORDPERFECTIMPORTFILTER_HXX
-#define _WORDPERFECTIMPORTFILTER_HXX
+#ifndef _MSWORKSIMPORTFILTER_HXX
+#define _MSWORKSIMPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
