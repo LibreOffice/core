@@ -59,6 +59,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -952,8 +953,7 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine( ::editeng::SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
     //  Calc needs Twips, and there are 1/100mm in the Uno structure
-    const table::BorderLine2& rBorder2 = static_cast< const table::BorderLine2& >( rStruct );
-    rLine.SetStyle( ::editeng::SvxBorderStyle( rBorder2.LineStyle ) );
+    rLine.SetStyle( ::editeng::SvxBorderStyle( table::BorderLineStyle::SOLID ) );
     rLine.GuessLinesWidths( rLine.GetStyle(),
         (sal_uInt16)HMMToTwips( rStruct.OuterLineWidth ),
         (sal_uInt16)HMMToTwips( rStruct.InnerLineWidth ),
