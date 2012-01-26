@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all bootstrap fetch build clean clean-build clean-host
+.PHONY : all autogen bootstrap fetch build clean clean-build clean-host
 all: build
 
 SHELL=/usr/bin/env bash
@@ -326,9 +326,27 @@ cmd:
 endif
 
 #
+# autogen
+#
+autogen: Makefile
+
+# I don't like to touch stuff that are supposed to be
+# in the source tree, hence read-only
+# but I couldn't find a way to get make to
+# restart after an autogen. and we _have_ to
+# restart since autogen can have changed
+# config_host.k which is included in this
+# Makefile
+Makefile: config_host.mk
+	touch $@
+
+config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
+	./autogen.sh
+
+#
 # Bootstap
 #
-$(WORKDIR)/bootstrap:
+$(WORKDIR)/bootstrap: autogen
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
@@ -339,8 +357,8 @@ bootstrap: $(WORKDIR)/bootstrap
 #
 fetch: src.downloaded
 
-src.downloaded : ooo.lst download
-ifeq (@DO_FETCH_TARBALLS@,YES)
+src.downloaded : autogen ooo.lst download
+ifeq ($(DO_FETCH_TARBALLS),YES)
 	./download $(SRCDIR)/ooo.lst && touch $@
 else
 	@echo "Automatic fetching of external tarballs is disabled."
