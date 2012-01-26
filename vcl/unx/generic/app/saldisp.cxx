@@ -954,16 +954,13 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
             aRet = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
         else
         {
-            aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
-            if( aRet.isEmpty() )
-            {
-                const char *pString = XKeysymToString( nKeySym );
-                int n = strlen( pString );
-                if( n > 2 && pString[n-2] == '_' )
-                    aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
-                else
-                    aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
-            }
+            const char *pString = XKeysymToString( nKeySym );
+            int n = strlen( pString );
+
+            if( n > 2 && pString[n-2] == '_' )
+                aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+            else
+                aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
         }
     }
     return aRet;

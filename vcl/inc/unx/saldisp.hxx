@@ -470,17 +470,6 @@ public:
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 
-/*----------------------------------------------------------
- keep track of correct size of the initial window
- */
-// get foreign key names
-namespace vcl_sal {
-    rtl::OUString getKeysymReplacementName(
-        const char* pKeyboard,
-        KeySym nSymbol );
-}
-
-
 #endif // _SV_SALDISP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
