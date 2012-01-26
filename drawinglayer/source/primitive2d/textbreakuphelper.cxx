@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/CharType.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -35,28 +36,25 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextBreakupHelper::TextBreakupHelper(const Primitive2DReference& rxSource)
-        :   mxSource(rxSource),
+        TextBreakupHelper::TextBreakupHelper(const TextSimplePortionPrimitive2D& rSource)
+        :   mrSource(rSource),
             mxResult(),
-            mpSource(dynamic_cast< const TextSimplePortionPrimitive2D* >(rxSource.get())),
             maTextLayouter(),
             maDecTrans(),
             mbNoDXArray(false)
         {
-            if(mpSource)
-            {
-                maDecTrans = mpSource->getTextTransform();
-                mbNoDXArray = mpSource->getDXArray().empty();
+            OSL_ENSURE(dynamic_cast< const TextSimplePortionPrimitive2D* >(&mrSource), "TextBreakupHelper with illegal primitive created (!)");
+            maDecTrans = mrSource.getTextTransform();
+            mbNoDXArray = mrSource.getDXArray().empty();
 
-                if(mbNoDXArray)
-                {
-                    // init TextLayouter when no dxarray
-                    maTextLayouter.setFontAttribute(
-                        mpSource->getFontAttribute(),
-                        maDecTrans.getScale().getX(),
-                        maDecTrans.getScale().getY(),
-                        mpSource->getLocale());
-                }
+            if(mbNoDXArray)
+            {
+                // init TextLayouter when no dxarray
+                maTextLayouter.setFontAttribute(
+                    mrSource.getFontAttribute(),
+                    maDecTrans.getScale().getX(),
+                    maDecTrans.getScale().getY(),
+                    mrSource.getLocale());
             }
         }
 
@@ -64,21 +62,21 @@ namespace drawinglayer
         {
         }
 
-        void TextBreakupHelper::breakupPortion(Primitive2DVector& rTempResult, sal_uInt32 nIndex, sal_uInt32 nLength)
+        void TextBreakupHelper::breakupPortion(Primitive2DVector& rTempResult, sal_uInt32 nIndex, sal_uInt32 nLength, bool bWordLineMode)
         {
-            if(mpSource && nLength && !(nIndex == mpSource->getTextPosition() && nLength == mpSource->getTextLength()))
+            if(nLength && !(nIndex == mrSource.getTextPosition() && nLength == mrSource.getTextLength()))
             {
                 // prepare values for new portion
                 basegfx::B2DHomMatrix aNewTransform;
                 ::std::vector< double > aNewDXArray;
-                const bool bNewStartIsNotOldStart(nIndex > mpSource->getTextPosition());
+                const bool bNewStartIsNotOldStart(nIndex > mrSource.getTextPosition());
 
                 if(!mbNoDXArray)
                 {
                     // prepare new DXArray for the single word
                     aNewDXArray = ::std::vector< double >(
-                        mpSource->getDXArray().begin() + (nIndex - mpSource->getTextPosition()),
-                        mpSource->getDXArray().begin() + ((nIndex + nLength) - mpSource->getTextPosition()));
+                        mrSource.getDXArray().begin() + (nIndex - mrSource.getTextPosition()),
+                        mrSource.getDXArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
                 }
 
                 if(bNewStartIsNotOldStart)
@@ -89,13 +87,13 @@ namespace drawinglayer
                     if(mbNoDXArray)
                     {
                         // evaluate using TextLayouter
-                        fOffset = maTextLayouter.getTextWidth(mpSource->getText(), mpSource->getTextPosition(), nIndex);
+                        fOffset = maTextLayouter.getTextWidth(mrSource.getText(), mrSource.getTextPosition(), nIndex);
                     }
                     else
                     {
                         // get from DXArray
-                        const sal_uInt32 nIndex2(static_cast< sal_uInt32 >(nIndex - mpSource->getTextPosition()));
-                        fOffset = mpSource->getDXArray()[nIndex2 - 1];
+                        const sal_uInt32 nIndex2(static_cast< sal_uInt32 >(nIndex - mrSource.getTextPosition()));
+                        fOffset = mrSource.getDXArray()[nIndex2 - 1];
                     }
 
                     // need offset without FontScale for building the new transformation. The
@@ -136,7 +134,7 @@ namespace drawinglayer
                 {
                     // check if we have a decorated primitive as source
                     const TextDecoratedPortionPrimitive2D* pTextDecoratedPortionPrimitive2D =
-                        dynamic_cast< const TextDecoratedPortionPrimitive2D* >(mpSource);
+                        dynamic_cast< const TextDecoratedPortionPrimitive2D* >(&mrSource);
 
                     if(pTextDecoratedPortionPrimitive2D)
                     {
@@ -144,13 +142,13 @@ namespace drawinglayer
                         rTempResult.push_back(
                             new TextDecoratedPortionPrimitive2D(
                                 aNewTransform,
-                                mpSource->getText(),
+                                mrSource.getText(),
                                 nIndex,
                                 nLength,
                                 aNewDXArray,
-                                mpSource->getFontAttribute(),
-                                mpSource->getLocale(),
-                                mpSource->getFontColor(),
+                                mrSource.getFontAttribute(),
+                                mrSource.getLocale(),
+                                mrSource.getFontColor(),
 
                                 pTextDecoratedPortionPrimitive2D->getOverlineColor(),
                                 pTextDecoratedPortionPrimitive2D->getTextlineColor(),
@@ -158,7 +156,10 @@ namespace drawinglayer
                                 pTextDecoratedPortionPrimitive2D->getFontUnderline(),
                                 pTextDecoratedPortionPrimitive2D->getUnderlineAbove(),
                                 pTextDecoratedPortionPrimitive2D->getTextStrikeout(),
-                                pTextDecoratedPortionPrimitive2D->getWordLineMode(),
+
+                                // reset WordLineMode when BreakupUnit_word is executed; else copy original
+                                bWordLineMode ? false : pTextDecoratedPortionPrimitive2D->getWordLineMode(),
+
                                 pTextDecoratedPortionPrimitive2D->getTextEmphasisMark(),
                                 pTextDecoratedPortionPrimitive2D->getEmphasisMarkAbove(),
                                 pTextDecoratedPortionPrimitive2D->getEmphasisMarkBelow(),
@@ -171,13 +172,13 @@ namespace drawinglayer
                         rTempResult.push_back(
                             new TextSimplePortionPrimitive2D(
                                 aNewTransform,
-                                mpSource->getText(),
+                                mrSource.getText(),
                                 nIndex,
                                 nLength,
                                 aNewDXArray,
-                                mpSource->getFontAttribute(),
-                                mpSource->getLocale(),
-                                mpSource->getFontColor()));
+                                mrSource.getFontAttribute(),
+                                mrSource.getLocale(),
+                                mrSource.getFontColor()));
                     }
                 }
             }
@@ -190,7 +191,7 @@ namespace drawinglayer
 
         void TextBreakupHelper::breakup(BreakupUnit aBreakupUnit)
         {
-            if(mpSource && mpSource->getTextLength())
+            if(mrSource.getTextLength())
             {
                 Primitive2DVector aTempResult;
                 static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIterator;
@@ -203,10 +204,10 @@ namespace drawinglayer
 
                 if(xBreakIterator.is())
                 {
-                    const rtl::OUString& rTxt = mpSource->getText();
-                    const sal_Int32 nTextLength(mpSource->getTextLength());
-                    const ::com::sun::star::lang::Locale& rLocale = mpSource->getLocale();
-                    const sal_Int32 nTextPosition(mpSource->getTextPosition());
+                    const rtl::OUString& rTxt = mrSource.getText();
+                    const sal_Int32 nTextLength(mrSource.getTextLength());
+                    const ::com::sun::star::lang::Locale& rLocale = mrSource.getLocale();
+                    const sal_Int32 nTextPosition(mrSource.getTextPosition());
                     sal_Int32 nCurrent(nTextPosition);
 
                     switch(aBreakupUnit)
@@ -221,13 +222,13 @@ namespace drawinglayer
                             {
                                 if(a == nNextCellBreak)
                                 {
-                                    breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                                    breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                                     nCurrent = a;
                                     nNextCellBreak = xBreakIterator->nextCharacters(rTxt, a, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                 }
                             }
 
-                            breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                            breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                             break;
                         }
                         case BreakupUnit_word:
@@ -239,13 +240,31 @@ namespace drawinglayer
                             {
                                 if(a == nNextWordBoundary.endPos)
                                 {
-                                    breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                                    if(a > nCurrent)
+                                    {
+                                        breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
+                                    }
+
                                     nCurrent = a;
+
+                                    // skip spaces (maybe enhanced with a bool later if needed)
+                                    {
+                                        const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, ::com::sun::star::i18n::CharType::SPACE_SEPARATOR));
+
+                                        if(nEndOfSpaces > a)
+                                        {
+                                            nCurrent = nEndOfSpaces;
+                                        }
+                                    }
+
                                     nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                 }
                             }
 
-                            breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                            if(a > nCurrent)
+                            {
+                                breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
+                            }
                             break;
                         }
                         case BreakupUnit_sentence:
@@ -257,13 +276,13 @@ namespace drawinglayer
                             {
                                 if(a == nNextSentenceBreak)
                                 {
-                                    breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                                    breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                                     nCurrent = a;
                                     nNextSentenceBreak = xBreakIterator->endOfSentence(rTxt, a + 1, rLocale);
                                 }
                             }
 
-                            breakupPortion(aTempResult, nCurrent, a - nCurrent);
+                            breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                             break;
                         }
                     }
@@ -275,11 +294,7 @@ namespace drawinglayer
 
         const Primitive2DSequence& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
         {
-            if(mxResult.hasElements())
-            {
-                return mxResult;
-            }
-            else if(mpSource)
+            if(!mxResult.hasElements())
             {
                 const_cast< TextBreakupHelper* >(this)->breakup(aBreakupUnit);
             }

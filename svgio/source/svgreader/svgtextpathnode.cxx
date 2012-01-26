@@ -67,7 +67,7 @@ namespace svgio
 
         public:
             pathTextBreakupHelper(
-                const drawinglayer::primitive2d::Primitive2DReference& rxSource,
+                const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
                 const basegfx::B2DPolygon& rPolygon,
                 const double fBasegfxPathLength,
                 const double fUserToBasegfx,
@@ -135,13 +135,13 @@ namespace svgio
         }
 
         pathTextBreakupHelper::pathTextBreakupHelper(
-            const drawinglayer::primitive2d::Primitive2DReference& rxSource,
+            const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
             const basegfx::B2DPolygon& rPolygon,
             const double fBasegfxPathLength,
             const double fUserToBasegfx,
             double fPosition,
             const basegfx::B2DPoint& rTextStart)
-        :   drawinglayer::primitive2d::TextBreakupHelper(rxSource),
+        :   drawinglayer::primitive2d::TextBreakupHelper(rSource),
             mrPolygon(rPolygon),
             mfBasegfxPathLength(fBasegfxPathLength),
             mfUserToBasegfx(fUserToBasegfx),
@@ -169,17 +169,17 @@ namespace svgio
         {
             bool bRetval(false);
 
-            if(mfPosition < mfBasegfxPathLength && nLength && getCastedSource() && mnIndex < mnMaxIndex)
+            if(mfPosition < mfBasegfxPathLength && nLength && mnIndex < mnMaxIndex)
             {
                 const double fSnippetWidth(
                     getTextLayouter().getTextWidth(
-                        getCastedSource()->getText(),
+                        getSource().getText(),
                         nIndex,
                         nLength));
 
                 if(basegfx::fTools::more(fSnippetWidth, 0.0))
                 {
-                    const ::rtl::OUString aText(getCastedSource()->getText());
+                    const ::rtl::OUString aText(getSource().getText());
                     const ::rtl::OUString aTrimmedChars(aText.copy(nIndex, nLength).trim());
                     const double fEndPos(mfPosition + fSnippetWidth);
 
@@ -478,8 +478,8 @@ namespace svgio
 
                                     if(pCandidate)
                                     {
-                                        pathTextBreakupHelper aPathTextBreakupHelper(
-                                            xReference,
+                                        const pathTextBreakupHelper aPathTextBreakupHelper(
+                                            *pCandidate,
                                             aPolygon,
                                             fBasegfxPathLength,
                                             fUserToBasegfx,

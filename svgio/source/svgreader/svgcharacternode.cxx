@@ -177,9 +177,9 @@ namespace svgio
 
         public:
             localTextBreakupHelper(
-                const drawinglayer::primitive2d::Primitive2DReference& rxSource,
+                const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
                 SvgTextPosition& rSvgTextPosition)
-            :   drawinglayer::primitive2d::TextBreakupHelper(rxSource),
+            :   drawinglayer::primitive2d::TextBreakupHelper(rSource),
                 mrSvgTextPosition(rSvgTextPosition)
             {
             }
@@ -486,17 +486,27 @@ namespace svgio
                 else
                 {
                     // need to apply rotations to each character as given
-                    localTextBreakupHelper alocalTextBreakupHelper(xRef, rSvgTextPosition);
-                    const drawinglayer::primitive2d::Primitive2DSequence aResult(
-                        alocalTextBreakupHelper.getResult(drawinglayer::primitive2d::BreakupUnit_character));
+                    const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate =
+                        dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(xRef.get());
 
-                    if(aResult.hasElements())
+                    if(pCandidate)
                     {
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
-                    }
+                        const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
+                        const drawinglayer::primitive2d::Primitive2DSequence aResult(
+                            alocalTextBreakupHelper.getResult(drawinglayer::primitive2d::BreakupUnit_character));
 
-                    // also consume for the implied single space
-                    rSvgTextPosition.consumeRotation();
+                        if(aResult.hasElements())
+                        {
+                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
+                        }
+
+                        // also consume for the implied single space
+                        rSvgTextPosition.consumeRotation();
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Used primitive is not a text primitive (!)");
+                    }
                 }
             }
         }

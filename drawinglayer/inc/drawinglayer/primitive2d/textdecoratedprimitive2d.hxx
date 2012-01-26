@@ -81,13 +81,6 @@ namespace drawinglayer
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
-            void impCorrectTextBoundary(
-                ::com::sun::star::i18n::Boundary& rNextWordBoundary) const;
-
-            void impSplitSingleWords(
-                std::vector< Primitive2DReference >& rTarget,
-                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans) const;
-
         protected:
             /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
@@ -133,6 +126,10 @@ namespace drawinglayer
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
+
+            /// check if this needs to be a TextDecoratedPortionPrimitive2D or
+            /// if a TextSimplePortionPrimitive2D would be suficcient
+            bool decoratedIsNeeded() const;
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
