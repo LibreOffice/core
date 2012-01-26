@@ -363,7 +363,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
         aError = rtl::OUString::createFromAscii("Unknown application error");
     ::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
-    __android_log_print(ANDROID_LOG_INFO, "SalAbort: '%s'",
+    __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "SalAbort: '%s'",
                         rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
     if( bDumpCore )
         abort();
@@ -414,7 +414,7 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
     fprintf (stderr, "LibreOffice native dialog '%s': '%s'\n",
              rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
              rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
-    __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
+    __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Dialog '%s': '%s'",
                         rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
                         rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
 
