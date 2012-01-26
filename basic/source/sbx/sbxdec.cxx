@@ -608,7 +608,7 @@ start:
         }
         case SbxSINGLE:
         {
-            float f;
+            float f(0.0);
             pDec->getSingle( f );
             p->nSingle = f;
             break;
@@ -616,7 +616,7 @@ start:
         case SbxDATE:
         case SbxDOUBLE:
         {
-            double d;
+            double d(0.0);
             pDec->getDouble( d );
             p->nDouble = d;
             break;
