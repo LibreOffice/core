@@ -1420,8 +1420,15 @@ void PivotTable::finalizeImport()
 
                 // all data fields
                 for( DataFieldVector::iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
+                {
+                    if( const PivotCacheField* pCacheField = getCacheField( aIt->mnField  ) )
+                    {
+                        if ( pCacheField-> getGroupBaseField() != -1 )
+                            aIt->mnField = pCacheField-> getGroupBaseField();
+                    }
                     if( PivotTableField* pField = getTableField( aIt->mnField ) )
                         pField->convertDataField( *aIt );
+                }
 
                 // filters
                 maFilters.forEachMem( &PivotTableFilter::finalizeImport );
