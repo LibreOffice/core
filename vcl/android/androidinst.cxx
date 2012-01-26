@@ -152,6 +152,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
         SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
         BlitFrameToWindow (pWindow, pFrame->getDevice());
     }
+    mbQueueReDraw = false;
 }
 
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
@@ -167,7 +168,6 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
-            mbQueueReDraw = true;
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -178,12 +178,12 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "app window resized to ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
-            mbQueueReDraw = true;
             break;
         }
 
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
+            fprintf (stderr, "redraw needed\n");
             mbQueueReDraw = true;
             break;
         }
@@ -248,14 +248,20 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
 }
 
 extern "C" {
-    void onAppCmd_cb (struct android_app* app, int32_t cmd)
+    void onAppCmd_cb (struct android_app *app, int32_t cmd)
     {
         AndroidSalInstance::getInstance()->onAppCmd(app, cmd);
     }
 
-    int32_t onInputEvent_cb (struct android_app* app, AInputEvent* event)
+    int32_t onInputEvent_cb (struct android_app *app, AInputEvent *event)
     {
         return AndroidSalInstance::getInstance()->onInputEvent(app, event);
+    }
+    void onNativeWindowRedrawNeeded_cb(ANativeActivity * /* activity */,
+                                       ANativeWindow *pWindow)
+    {
+        fprintf (stderr, "onNativeWindowRedrawNeeded_cb\n");
+        AndroidSalInstance::getInstance()->RedrawWindows (pWindow);
     }
 }
 
@@ -275,6 +281,7 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
         mpApp->onInputEvent = onInputEvent_cb;
         if (mpApp->window != NULL)
             onAppCmd_cb (mpApp, APP_CMD_INIT_WINDOW);
+        mpApp->activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded_cb;
         pthread_mutex_unlock (&mpApp->mutex);
     }
 }
@@ -317,8 +324,6 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         mpApp->cmdPollSource.process(mpApp, &mpApp->cmdPollSource);
     else if (nRet == LOOPER_ID_INPUT)
         mpApp->inputPollSource.process(mpApp, &mpApp->inputPollSource);
-    else if (mbQueueReDraw)
-        RedrawWindows (mpApp->window);
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )

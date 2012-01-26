@@ -37,7 +37,6 @@
 
 class AndroidSalInstance : public SvpSalInstance
 {
-    void RedrawWindows(ANativeWindow *pWindow);
     void BlitFrameToWindow(ANativeWindow *pWindow,
                            const basebmp::BitmapDeviceSharedPtr& aDev);
 public:
@@ -54,6 +53,7 @@ public:
     // incoming android event handlers:
     void    onAppCmd     (struct android_app* app, int32_t cmd);
     int32_t onInputEvent (struct android_app* app, AInputEvent* event);
+    void    RedrawWindows(ANativeWindow *pWindow);
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
     struct android_app *mpApp;
