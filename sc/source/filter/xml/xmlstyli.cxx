@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
+
 
 #include "xmlstyli.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -173,13 +173,9 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
                 table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
-				printf("OuterLineWidth %f\n", aBorderLineWidth.OuterLineWidth);
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
-				printf("InnerLineWidth %f\n", aBorderLineWidth.InnerLineWidth);
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-				printf("LineDistance %f\n", aBorderLineWidth.LineDistance);
                 aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
-				printf("LineWidth %f\n", aBorderLineWidth.LineWidth);
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
