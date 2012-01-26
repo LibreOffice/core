@@ -35,6 +35,7 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -339,7 +340,7 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon createAreaGeometryForEdge(
+        B2DPolygon createAreaGeometryForEdge(
             const B2DCubicBezier& rEdge,
             double fHalfLineWidth,
             bool bStartRound,
@@ -354,7 +355,6 @@ namespace basegfx
             if(rEdge.isBezier())
             {
                 // prepare target and data common for upper and lower
-                B2DPolyPolygon aRetval;
                 B2DPolygon aBezierPolygon;
                 const B2DVector aPureEdgeVector(rEdge.getEndPoint() - rEdge.getStartPoint());
                 const double fEdgeLength(aPureEdgeVector.getLength());
@@ -386,49 +386,39 @@ namespace basegfx
 
                 // check if cut happens
                 const bool bCut(bCutA || bCutB);
+                B2DPoint aCutPoint;
 
                 // create left edge
                 if(bStartRound || bStartSquare)
                 {
-                    basegfx::B2DPolygon aStartPolygon;
-
                     if(bStartRound)
                     {
-                        aStartPolygon = tools::createHalfUnitCircle();
+                        basegfx::B2DPolygon aStartPolygon(tools::createHalfUnitCircle());
+
                         aStartPolygon.transform(
                             tools::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
                                 atan2(aTangentA.getY(), aTangentA.getX()) + F_PI2,
                                 rEdge.getStartPoint().getX(), rEdge.getStartPoint().getY()));
+                        aBezierPolygon.append(aStartPolygon);
                     }
                     else // bStartSquare
                     {
                         const basegfx::B2DPoint aStart(rEdge.getStartPoint() - (aTangentA * fHalfLineWidth));
 
-                        if(bCut)
+                        if(bCutB)
                         {
-                            aStartPolygon.append(rEdge.getStartPoint() + aPerpendStartB);
+                            aBezierPolygon.append(rEdge.getStartPoint() + aPerpendStartB);
                         }
 
-                        aStartPolygon.append(aStart + aPerpendStartB);
-                        aStartPolygon.append(aStart + aPerpendStartA);
+                        aBezierPolygon.append(aStart + aPerpendStartB);
+                        aBezierPolygon.append(aStart + aPerpendStartA);
 
-                        if(bCut)
+                        if(bCutA)
                         {
-                            aStartPolygon.append(rEdge.getStartPoint() + aPerpendStartA);
+                            aBezierPolygon.append(rEdge.getStartPoint() + aPerpendStartA);
                         }
-                    }
-
-                    if(bCut)
-                    {
-                        aStartPolygon.append(rEdge.getStartPoint());
-                        aStartPolygon.setClosed(true);
-                        aRetval.append(aStartPolygon);
-                    }
-                    else
-                    {
-                        aBezierPolygon.append(aStartPolygon);
                     }
                 }
                 else
@@ -442,7 +432,7 @@ namespace basegfx
                     if(bCutA)
                     {
                         // calculate cut point and add
-                        const B2DPoint aCutPoint(rEdge.getStartPoint() + (aPerpendStartA * fCutA));
+                        aCutPoint = rEdge.getStartPoint() + (aPerpendStartA * fCutA);
                         aBezierPolygon.append(aCutPoint);
                     }
                     else
@@ -464,45 +454,34 @@ namespace basegfx
                 // create right edge
                 if(bEndRound || bEndSquare)
                 {
-                    basegfx::B2DPolygon aEndPolygon;
-
                     if(bEndRound)
                     {
-                        aEndPolygon = tools::createHalfUnitCircle();
+                        basegfx::B2DPolygon aEndPolygon(tools::createHalfUnitCircle());
+
                         aEndPolygon.transform(
                             tools::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
                                 atan2(aTangentB.getY(), aTangentB.getX()) - F_PI2,
                                 rEdge.getEndPoint().getX(), rEdge.getEndPoint().getY()));
+                        aBezierPolygon.append(aEndPolygon);
                     }
                     else // bEndSquare
                     {
                         const basegfx::B2DPoint aEnd(rEdge.getEndPoint() + (aTangentB * fHalfLineWidth));
 
-                        if(bCut)
+                        if(bCutA)
                         {
-                            aEndPolygon.append(rEdge.getEndPoint() + aPerpendEndA);
+                            aBezierPolygon.append(rEdge.getEndPoint() + aPerpendEndA);
                         }
 
-                        aEndPolygon.append(aEnd + aPerpendEndA);
-                        aEndPolygon.append(aEnd + aPerpendEndB);
+                        aBezierPolygon.append(aEnd + aPerpendEndA);
+                        aBezierPolygon.append(aEnd + aPerpendEndB);
 
-                        if(bCut)
+                        if(bCutB)
                         {
-                            aEndPolygon.append(rEdge.getEndPoint() + aPerpendEndB);
+                            aBezierPolygon.append(rEdge.getEndPoint() + aPerpendEndB);
                         }
-                    }
-
-                    if(bCut)
-                    {
-                        aEndPolygon.append(rEdge.getEndPoint());
-                        aEndPolygon.setClosed(true);
-                        aRetval.append(aEndPolygon);
-                    }
-                    else
-                    {
-                        aBezierPolygon.append(aEndPolygon);
                     }
                 }
                 else
@@ -516,7 +495,7 @@ namespace basegfx
                     if(bCutB)
                     {
                         // calculate cut point and add
-                        const B2DPoint aCutPoint(rEdge.getEndPoint() + (aPerpendEndB * fCutB));
+                        aCutPoint = rEdge.getEndPoint() + (aPerpendEndB * fCutB);
                         aBezierPolygon.append(aCutPoint);
                     }
                     else
@@ -535,11 +514,69 @@ namespace basegfx
                     }
                 }
 
-                // close and return
+                // close
                 aBezierPolygon.setClosed(true);
-                aRetval.append(aBezierPolygon);
 
-                return aRetval;
+                if(bStartRound || bEndRound)
+                {
+                    // double points possible when round caps are used at start or end
+                    aBezierPolygon.removeDoublePoints();
+                }
+
+                if(bCut && ((bStartRound || bStartSquare) && (bEndRound || bEndSquare)))
+                {
+                    // When cut exists and both ends are extended with caps, a self-intersecting polygon
+                    // is created; one cut point is known, but there is a 2nd one in the caps geometry.
+                    // Solve by using tooling.
+                    // Remark: This nearly never happens due to curve preparations to extreme points
+                    // and maximum angle turning, but I constructed a test case and checkd that it is
+                    // working propery.
+                    const B2DPolyPolygon aTemp(tools::solveCrossovers(aBezierPolygon));
+                    const sal_uInt32 nTempCount(aTemp.count());
+
+                    if(nTempCount)
+                    {
+                        if(nTempCount > 1)
+                        {
+                            // as expected, multiple polygons (with same orientation). Remove
+                            // the one which contains aCutPoint, or better take the one without
+                            for (sal_uInt32 a(0); a < nTempCount; a++)
+                            {
+                                aBezierPolygon = aTemp.getB2DPolygon(a);
+
+                                const sal_uInt32 nCandCount(aBezierPolygon.count());
+
+                                for(sal_uInt32 b(0); b < nCandCount; b++)
+                                {
+                                    if(aCutPoint.equal(aBezierPolygon.getB2DPoint(b)))
+                                    {
+                                        aBezierPolygon.clear();
+                                        break;
+                                    }
+                                }
+
+                                if(aBezierPolygon.count())
+                                {
+                                    break;
+                                }
+                            }
+
+                            OSL_ENSURE(aBezierPolygon.count(), "Error in line geometry creation, could not solve self-intersection (!)");
+                        }
+                        else
+                        {
+                            // none found, use result
+                            aBezierPolygon = aTemp.getB2DPolygon(0);
+                        }
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Error in line geometry creation, could not solve self-intersection (!)");
+                    }
+                }
+
+                // return
+                return aBezierPolygon;
             }
             else
             {
@@ -636,7 +673,7 @@ namespace basegfx
                 // close and return
                 aEdgePolygon.setClosed(true);
 
-                return B2DPolyPolygon(aEdgePolygon);
+                return aEdgePolygon;
             }
         }
 
