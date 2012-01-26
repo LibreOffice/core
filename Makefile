@@ -1,6 +1,11 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
 .PHONY : all autogen bootstrap fetch build clean clean-build clean-host
+
+ifeq ($(MAKECMDGOALS),)
+MAKECMDGOALS:=all
+endif
+
 all: build
 
 SHELL=/usr/bin/env bash
@@ -325,6 +330,7 @@ cmd:
 
 endif
 
+ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 # autogen
 #
@@ -350,7 +356,7 @@ $(WORKDIR)/bootstrap: autogen
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
-bootstrap: $(WORKDIR)/bootstrap
+bootstrap: $(WORKDIR)/bootstrap autogen
 
 #
 # Fetch
@@ -414,5 +420,8 @@ gb_SourceEnvAndRecurse_STAGE=buildpl
 include $(SOLARENV)/gbuild/gbuild.mk
 $(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
 endif
+
+endif # not clean or distclean
+
 
 # vim: set noet sw=4 ts=4:
