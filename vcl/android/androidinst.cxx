@@ -155,9 +155,35 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     mbQueueReDraw = false;
 }
 
+static const char *app_cmd_name(int cmd)
+{
+    switch (cmd) {
+    case APP_CMD_INPUT_CHANGED: return "INPUT_CHANGED";
+    case APP_CMD_INIT_WINDOW: return "INIT_WINDOW";
+    case APP_CMD_TERM_WINDOW: return "TERM_WINDOW";
+    case APP_CMD_WINDOW_RESIZED: return "WINDOW_RESIZED";
+    case APP_CMD_WINDOW_REDRAW_NEEDED: return "WINDOW_REDRAW_NEEDED";
+    case APP_CMD_CONTENT_RECT_CHANGED: return "CONTENT_RECT_CHANGED";
+    case APP_CMD_GAINED_FOCUS: return "GAINED_FOCUS";
+    case APP_CMD_LOST_FOCUS: return "LOST_FOCUS";
+    case APP_CMD_CONFIG_CHANGED: return "CONFIG_CHANGED";
+    case APP_CMD_LOW_MEMORY: return "LOW_MEMORY";
+    case APP_CMD_START: return "START";
+    case APP_CMD_RESUME: return "RESUME";
+    case APP_CMD_SAVE_STATE: return "SAVE_STATE";
+    case APP_CMD_PAUSE: return "PAUSE";
+    case APP_CMD_STOP: return "STOP";
+    case APP_CMD_DESTROY: return "DESTROY";
+    default:
+        static char buf[10];
+        sprintf(buf, "%d", cmd);
+        return buf;
+    }
+}
+
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 {
-        fprintf (stderr, "app cmd for app %p, cmd %d\n", app, cmd);
+        fprintf (stderr, "app cmd for app %p: %s\n", app, app_cmd_name(cmd));
         ANativeWindow *pWindow = mpApp->window;
         switch (cmd) {
         case APP_CMD_INIT_WINDOW:
