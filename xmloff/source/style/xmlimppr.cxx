@@ -374,7 +374,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
         if( nIdx == -1 )
             continue;
         pProps->Name = maPropMapper->GetEntryAPIName( nIdx );
-        if( pProps->Name.getLength() )
+        if( !pProps->Name.isEmpty() )
         {
             pProps->Value <<= rProp.maValue;
             ++pProps;

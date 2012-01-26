@@ -165,7 +165,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 
     OUString sServiceName(
         ((SvXMLStylesContext *)&mxStyles)->GetServiceName( GetFamily() ) );
-    if( sServiceName.getLength() )
+    if( !sServiceName.isEmpty() )
     {
         Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
                                                     UNO_QUERY );
@@ -209,7 +209,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                     PropertyValue *pProps = aValues.getArray() + nLen;
                     pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
                     OUString sParent( GetParentName() );
-                    if( sParent.getLength() )
+                    if( !sParent.isEmpty() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
                         sParent =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
@@ -240,7 +240,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     else
     {
         const OUString& rName = GetDisplayName();
-        if( 0 == rName.getLength() || IsDefaultStyle() )
+        if( rName.isEmpty() || IsDefaultStyle() )
             return;
 
         Reference < XNameContainer > xFamilies =
@@ -354,9 +354,9 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 
         // connect parent
         OUString sParent( GetParentName() );
-        if( sParent.getLength() )
+        if( !sParent.isEmpty() )
             sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
-        if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
+        if( !sParent.isEmpty() && !xFamilies->hasByName( sParent ) )
             sParent = OUString();
 
         if( sParent != mxStyle->getParentStyle() )
@@ -392,9 +392,9 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 
         // connect follow
         OUString sFollow( GetFollow() );
-        if( sFollow.getLength() )
+        if( !sFollow.isEmpty() )
             sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );
-        if( !sFollow.getLength() || !xFamilies->hasByName( sFollow ) )
+        if( sFollow.isEmpty() || !xFamilies->hasByName( sFollow ) )
             sFollow = mxStyle->getName();
 
         Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );

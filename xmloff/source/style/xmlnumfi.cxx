@@ -973,7 +973,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     aNumInfo.fDisplayFactor = fAttrDouble;
                 break;
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
-                if ( sValue.getLength() > 0 )
+                if ( !sValue.isEmpty() )
                     aNumInfo.bDecReplace = sal_True;    // only a default string is supported
                 else
                     aNumInfo.bVarDecimals = sal_True;   // empty replacement string: variable decimals
@@ -1010,7 +1010,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         }
     }
 
-    if ( sLanguage.getLength() || sCountry.getLength() )
+    if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
     {
         nElementLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
         if ( nElementLang == LANGUAGE_DONTKNOW )
@@ -1044,7 +1044,7 @@ void SvXMLNumFmtElementContext::Characters( const rtl::OUString& rChars )
 
 void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const rtl::OUString& rContent )
 {
-    if ( rContent.getLength() )
+    if ( !rContent.isEmpty() )
     {
         SvXMLEmbeddedElement* pObj = new SvXMLEmbeddedElement( nFormatPos, rContent );
         if ( !aNumInfo.aEmbeddedElements.Insert( pObj ) )
@@ -1357,14 +1357,14 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         }
     }
 
-    if ( sLanguage.getLength() || sCountry.getLength() )
+    if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
     {
         nFormatLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
         if ( nFormatLang == LANGUAGE_DONTKNOW )
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for invalid locales?
     }
 
-    if ( aNatNumAttr.Format.getLength() )
+    if ( !aNatNumAttr.Format.isEmpty() )
     {
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
@@ -1613,7 +1613,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-    if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND && sFormat.getLength() )
+    if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND && !sFormat.isEmpty() )
     {
         //  insert by format string
 
@@ -1662,7 +1662,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-    if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && sFormatTitle.getLength())
+    if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && !sFormatTitle.isEmpty())
     {
         SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
         if (pFormat)
@@ -1848,7 +1848,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
 {
     sal_Bool bAutomatic = sal_False;
     OUString aSymbol = rContent;
-    if ( aSymbol.getLength() == 0 )
+    if ( aSymbol.isEmpty())
     {
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
@@ -2146,7 +2146,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const rtl::OUString& rNewCalendar )
     if ( rNewCalendar != sCalendar )
     {
         sCalendar = rNewCalendar;
-        if ( sCalendar.getLength() )
+        if ( !sCalendar.isEmpty() )
         {
             aFormatCode.appendAscii( "[~" );            // intro for calendar code
             aFormatCode.append( sCalendar );

@@ -60,7 +60,7 @@ namespace
         // obtain the data style name
         ::rtl::OUString sDataStyleName;
         _rProperty.maValue >>= sDataStyleName;
-        DBG_ASSERT( sDataStyleName.getLength(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
+        DBG_ASSERT( !sDataStyleName.isEmpty(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
 
         // add the attribute
         _rExport.AddAttribute(

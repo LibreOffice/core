@@ -131,14 +131,14 @@ sal_Bool XMLStyleExport::exportStyle(
                                    sName);
 
     // style:family="..."
-    if( rXMLFamily.getLength() > 0 )
+    if( !rXMLFamily.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, rXMLFamily);
 
     // style:parent-style-name="..."
     OUString sParentString(rStyle->getParentStyle());
     OUString sParent;
 
-    if(sParentString.getLength())
+    if(!sParentString.isEmpty())
     {
         if(pPrefix)
             sParent = *pPrefix;
@@ -147,7 +147,7 @@ sal_Bool XMLStyleExport::exportStyle(
     else
         sParent = sPoolStyleName;
 
-    if( sParent.getLength() )
+    if( !sParent.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
                                     GetExport().EncodeStyleName( sParent ) );
 
@@ -223,7 +223,7 @@ sal_Bool XMLStyleExport::exportStyle(
                    this information is lost and causes an error, if the parent
                    style has a list style set. (#i69523#)
                 */
-                if ( !sListName.getLength() )
+                if ( sListName.isEmpty() )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_LIST_STYLE_NAME,
@@ -259,7 +259,7 @@ sal_Bool XMLStyleExport::exportStyle(
                         }
                     }
 
-                    if ( sListName.getLength() && !bSuppressListStyle )
+                    if ( !sListName.isEmpty() && !bSuppressListStyle )
                     {
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_LIST_STYLE_NAME,
@@ -278,8 +278,7 @@ sal_Bool XMLStyleExport::exportStyle(
             while ( xStyle.is() )
             {
                 OUString aParentStyle( xStyle->getParentStyle() );
-                if ( aParentStyle.getLength() == 0 ||
-                    !xStyles->hasByName( aParentStyle ) )
+                if ( aParentStyle.isEmpty() || !xStyles->hasByName( aParentStyle ) )
                 {
                     break;
                 }
@@ -356,7 +355,7 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
 
     {
         // style:family="..."
-        if( rXMLFamily.getLength() > 0 )
+        if( !rXMLFamily.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY,
                                       rXMLFamily );
         // <style:style>
@@ -491,8 +490,7 @@ void XMLStyleExport::exportStyleFamily(
 
                 if( !xPropSetInfo->hasPropertyByName( sFollowStyle ) )
                 {
-                    DBG_ASSERT( 0==sFollowStyle.getLength(),
-                                "no follow style???" );
+                    DBG_ASSERT( sFollowStyle.isEmpty(), "no follow style???" );
                     continue;
                 }
 

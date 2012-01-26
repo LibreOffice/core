@@ -329,7 +329,7 @@ OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart
 
 void SvXMLNumFmtExport::AddCalendarAttr_Impl( const OUString& rCalendar )
 {
-    if ( rCalendar.getLength() )
+    if ( !rCalendar.isEmpty() )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_CALENDAR, rCalendar );
     }
@@ -358,9 +358,9 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
         OUString aLangStr, aCountryStr;
         MsLangId::convertLanguageToIsoNames( (LanguageType)nLang, aLangStr, aCountryStr );
 
-        if (aLangStr.getLength())
+        if (!aLangStr.isEmpty())
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_LANGUAGE, aLangStr );
-        if (aCountryStr.getLength())
+        if (!aCountryStr.isEmpty())
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_COUNTRY, aCountryStr );
     }
 }
@@ -407,7 +407,7 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
 {
     FinishTextElement_Impl();
 
-    if ( rExt.getLength() )
+    if ( !rExt.isEmpty() )
     {
         sal_Int32 nLang = rExt.toInt32(16);     // hex
         if ( nLang < 0 )                        // extension string may contain "-" separator
@@ -586,7 +586,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     }
 
     //  decimal replacement (dashes) or variable decimals (#)
-    if ( rDashStr.getLength() || bVarDecimals )
+    if ( !rDashStr.isEmpty() || bVarDecimals )
     {
         //  variable decimals means an empty replacement string
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,
@@ -1033,7 +1033,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  title (comment)
     //  titles for builtin formats are not written
     sAttrValue = rFormat.GetComment();
-    if ( sAttrValue.getLength() && bUserDef && bDefPart )
+    if ( !sAttrValue.isEmpty() && bUserDef && bDefPart )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TITLE, sAttrValue );
     }
@@ -1099,7 +1099,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //
     ::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
     rFormat.GetNatNumXml( aAttr, nPart );
-    if ( aAttr.Format.getLength() )
+    if ( !aAttr.Format.isEmpty() )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,
                               aAttr.Format );
@@ -1213,7 +1213,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_KEY_EEC:
                 case NF_KEY_R:
                 case NF_KEY_RR:
-                    if (!aCalendar.getLength())
+                    if (aCalendar.isEmpty())
                         aCalendar = lcl_GetDefaultCalendar( pFormatter, nLang );
                     break;
             }
@@ -1474,7 +1474,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_AAA || nElemType == NF_KEY_AAAA )
                         {
                             //  calendar attribute for AAA and AAAA is switched only for this element
-                            if (!aCalAttr.getLength())
+                            if (aCalAttr.isEmpty())
                                 aCalAttr = lcl_GetDefaultCalendar( pFormatter, nLang );
                         }
 

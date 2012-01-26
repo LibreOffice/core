@@ -164,7 +164,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         {
             OUString sValue;
             rProp.Value >>= sValue;
-            if( sValue.getLength() > 0 )
+            if( !sValue.isEmpty() )
             {
                 cBullet = (sal_Unicode)sValue[0];
             }
@@ -294,17 +294,17 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     // #i116149#: neither prefix/suffix
     if (NumberingType::BITMAP != eType)
     {
-        if (sTextStyleName.getLength() > 0)
+        if (!sTextStyleName.isEmpty())
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                     GetExport().EncodeStyleName( sTextStyleName ) );
         }
-        if (sPrefix.getLength() > 0)
+        if (!sPrefix.isEmpty())
         {
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
                     sPrefix );
         }
-        if (sSuffix.getLength() > 0)
+        if (!sSuffix.isEmpty())
         {
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
                     sSuffix );
@@ -337,10 +337,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         eElem = XML_LIST_LEVEL_STYLE_IMAGE;
 
 
-        if( sImageURL.getLength() )
+        if( !sImageURL.isEmpty() )
         {
             OUString sURL( GetExport().AddEmbeddedGraphicObject( sImageURL ) );
-            if( sURL.getLength() )
+            if( !sURL.isEmpty() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
 
@@ -562,7 +562,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
         if( NumberingType::CHAR_SPECIAL == eType )
         {
-            if( sBulletFontName.getLength() )
+            if( !sBulletFontName.isEmpty() )
             {
                 OUString sStyleName =
                     GetExport().GetFontAutoStylePool()->Find(
@@ -570,7 +570,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                         eBulletFontFamily, eBulletFontPitch,
                         eBulletFontEncoding );
 
-                if( sStyleName.getLength() )
+                if( !sStyleName.isEmpty() )
                 {
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_FONT_NAME,
@@ -589,7 +589,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                         GetExport().AddAttribute( XML_NAMESPACE_FO,
                                                   XML_FONT_FAMILY, sTemp );
 
-                    if( sBulletFontStyleName.getLength() )
+                    if( !sBulletFontStyleName.isEmpty() )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_FONT_STYLE_NAME,
                                                   sBulletFontStyleName );
@@ -644,7 +644,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_TEXT_PROPERTIES, sal_True, sal_True );
         }
-        if( NumberingType::BITMAP == eType && sImageURL.getLength() )
+        if( NumberingType::BITMAP == eType && !sImageURL.isEmpty() )
         {
             // optional office:binary-data
             GetExport().AddEmbeddedGraphicObjectAsBase64( sImageURL );
@@ -702,7 +702,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     GetExport().CheckAttrList();
 
     // style:name="..."
-    if( rName.getLength() )
+    if( !rName.isEmpty() )
     {
         sal_Bool bEncoded = sal_False;
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
@@ -802,7 +802,7 @@ void SvxXMLNumRuleExport::exportOutline()
                 {
                     // style:name="..."
                     GetExport().CheckAttrList();
-                    if ( sOutlineStyleName.getLength() > 0 )
+                    if ( !sOutlineStyleName.isEmpty() )
                      {
                         sal_Bool bEncoded = sal_False;
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,

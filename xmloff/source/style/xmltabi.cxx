@@ -147,7 +147,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
             }
             break;
         case XML_TOK_TABSTOP_CHAR:
-            if( 0 != rValue.getLength() )
+            if( !rValue.isEmpty() )
                 aTabStop.DecimalChar = rValue[0];
             break;
         case XML_TOK_TABSTOP_LEADER_STYLE:
@@ -159,7 +159,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
                 aTabStop.FillChar = '_';
             break;
         case XML_TOK_TABSTOP_LEADER_TEXT:
-            if( 0 != rValue.getLength() )
+            if( !rValue.isEmpty() )
                 cTextFillChar = rValue[0];
             break;
         }

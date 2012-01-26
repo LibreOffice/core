@@ -110,7 +110,7 @@ sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ sal_Bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::
     rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ sal_Bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

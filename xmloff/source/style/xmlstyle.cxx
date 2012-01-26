@@ -776,7 +776,7 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
         break;
     }
-    if( !xStyles.is() && sName.getLength() )
+    if( !xStyles.is() && !sName.isEmpty() )
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                         GetImport().GetModel(), UNO_QUERY );

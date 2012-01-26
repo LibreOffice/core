@@ -164,14 +164,14 @@ sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const un
     sal_Int32 nValue = 0;
     if( rValue >>= nValue )
     {
-        if( rStrExpValue.getLength() )
+        if( !rStrExpValue.isEmpty() )
             aOut.append( sal_Unicode(' '));
 
         ::sax::Converter::convertPercent( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength() != 0;
+    return !rStrExpValue.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

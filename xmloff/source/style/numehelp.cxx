@@ -142,7 +142,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             if (!bWasSetTypeAttribute)
             {
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_CURRENCY);
-                if (rCurrency.getLength() > 0)
+                if (!rCurrency.isEmpty())
                     rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CURRENCY, rCurrency);
                 bWasSetTypeAttribute = sal_True;
             }
@@ -258,7 +258,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
                     rtl::OUString sCurrencyAbbreviation;
                     if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))) >>= sCurrencyAbbreviation)
                     {
-                        if ( sCurrencyAbbreviation.getLength() != 0 )
+                        if ( !sCurrencyAbbreviation.isEmpty())
                             sCurrencySymbol = sCurrencyAbbreviation;
                         else
                         {
@@ -323,7 +323,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
 {
     if (bExportTypeAttribute)
         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-    if (bExportValue && rValue.getLength() && (rValue != rCharacters))
+    if (bExportValue && !rValue.isEmpty() && (rValue != rCharacters))
         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, rValue);
 }
 
@@ -342,7 +342,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
                 rtl::OUString sCurrencyAbbreviation;
                 if ( xNumberPropertySet->getPropertyValue(msCurrencyAbbreviation) >>= sCurrencyAbbreviation)
                 {
-                    if ( sCurrencyAbbreviation.getLength() != 0 )
+                    if ( !sCurrencyAbbreviation.isEmpty())
                         rCurrencySymbol = sCurrencyAbbreviation;
                     else
                     {
@@ -425,7 +425,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             if (!bWasSetTypeAttribute)
             {
                 pExport->AddAttribute(sAttrValueType, XML_CURRENCY);
-                if (rCurrency.getLength() > 0)
+                if (!rCurrency.isEmpty())
                     pExport->AddAttribute(sAttrCurrency, rCurrency);
                 bWasSetTypeAttribute = sal_True;
             }
@@ -548,7 +548,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     {
         if (bExportTypeAttribute)
             pExport->AddAttribute(sAttrValueType, XML_STRING);
-        if (bExportValue && rValue.getLength() && (rValue != rCharacters))
+        if (bExportValue && !rValue.isEmpty() && (rValue != rCharacters))
             pExport->AddAttribute(sAttrStringValue, rValue);
     }
     else {

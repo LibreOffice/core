@@ -390,7 +390,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                         XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
                 }
 
-                if( aExpStyles[i].mpParent->getLength() )
+                if( !aExpStyles[i].mpParent->isEmpty() )
                 {
                     GetExport().AddAttribute(
                         XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,

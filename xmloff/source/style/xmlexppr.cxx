@@ -976,7 +976,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 if( nColonPos != -1 )
                     sPrefix = pAttribName->copy( 0, nColonPos );
 
-                if( sPrefix.getLength() )
+                if( !sPrefix.isEmpty() )
                 {
                     OUString sNamespace( aData.Namespace );
 
@@ -1044,9 +1044,9 @@ void SvXMLExportPropertyMapper::_exportXML(
                     }
                 }
                 OUString sOldValue( rAttrList.getValueByName( sAttribName ) );
-                OSL_ENSURE( sOldValue.getLength() == 0, "alien attribute exists already" );
+                OSL_ENSURE( sOldValue.isEmpty(), "alien attribute exists already" );
                 OSL_ENSURE(aData.Type == GetXMLToken(XML_CDATA), "different type to our default type which should be written out");
-                if( !sOldValue.getLength() )
+                if( sOldValue.isEmpty() )
                     rAttrList.AddAttribute( sAttribName, aData.Value );
             }
 

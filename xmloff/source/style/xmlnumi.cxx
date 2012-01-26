@@ -436,7 +436,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
     else if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
-        if( bImage && !sImageURL.getLength() && !xBase64Stream.is() )
+        if( bImage && sImageURL.isEmpty() && !xBase64Stream.is() )
         {
             xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( xBase64Stream.is() )
@@ -469,7 +469,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         eType = NumberingType::BITMAP;
         nCount = 15;
 
-        if( (sImageURL.getLength() > 0L) || xBase64Stream.is() )
+        if( !sImageURL.isEmpty() || xBase64Stream.is() )
             nCount++;
     }
     if( bNum )
@@ -488,7 +488,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         nCount++;
     }
 
-    if (bBullet && sSuffix.getLength())
+    if (bBullet && !sSuffix.isEmpty())
     {
         sal_uInt16 const nVersion(GetImport().getGeneratorVersion());
         sal_Int32 nUPD;
@@ -556,7 +556,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
         OUString sStyleName = sDisplayTextStyleName;
-        if( sStyleName.getLength() && pI18NMap )
+        if( !sStyleName.isEmpty() && pI18NMap )
             sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
         pProps[nPos].Name =
                 OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME ));
@@ -566,7 +566,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         {
             awt::FontDescriptor aFDesc;
             aFDesc.Name = sBulletFontName;
-            if( sBulletFontName.getLength() )
+            if( !sBulletFontName.isEmpty() )
             {
                 aFDesc.StyleName = sBulletFontStyleName;
                 aFDesc.Family = eBulletFontFamily;
@@ -607,7 +607,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         if( bImage )
         {
             OUString sStr( sImageURL );
-            if( sImageURL.getLength() )
+            if( !sImageURL.isEmpty() )
             {
                 sStr = GetImport().ResolveGraphicObjectURL( sImageURL,
                                                                  sal_False );
@@ -617,7 +617,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 sStr = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
             }
 
-            if( sStr.getLength() )
+            if( !sStr.isEmpty() )
             {
                 pProps[nPos].Name =
                         OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_GRAPHICURL ));
@@ -773,7 +773,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 rListLevel.SetMinLabelDist( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN:
-            if( rValue.getLength() )
+            if( !rValue.isEmpty() )
             {
                 sal_Int16 eAdjust = HoriOrientation::LEFT;
                 if( IsXMLToken( rValue, XML_CENTER ) )
@@ -845,7 +845,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
     }
 
-    if( sFontName.getLength() )
+    if( !sFontName.isEmpty() )
     {
         const XMLFontStylesContext *pFontDecls =
             GetImport().GetTextImport()->GetFontDecls();
@@ -886,7 +886,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             }
         }
     }
-    if( sFontFamily.getLength() )
+    if( !sFontFamily.isEmpty() )
     {
         String sEmpty;
         Any aAny;
@@ -900,7 +900,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
 
         XMLFontFamilyPropHdl aFamilyHdl;
-        if( sFontFamilyGeneric.getLength() &&
+        if( !sFontFamilyGeneric.isEmpty() &&
             aFamilyHdl.importXML( sFontFamilyGeneric, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;
@@ -908,11 +908,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             rListLevel.SetBulletFontFamily( nTmp );
         }
 
-        if( sFontStyleName.getLength() )
+        if( !sFontStyleName.isEmpty() )
             rListLevel.SetBulletFontStyleName( sFontStyleName );
 
         XMLFontPitchPropHdl aPitchHdl;
-        if( sFontPitch.getLength() &&
+        if( !sFontPitch.isEmpty() &&
             aPitchHdl.importXML( sFontPitch, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;
@@ -921,7 +921,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
 
         XMLFontEncodingPropHdl aEncHdl;
-        if( sFontCharset.getLength() &&
+        if( !sFontCharset.isEmpty() &&
             aEncHdl.importXML( sFontCharset, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;
@@ -931,14 +931,14 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     }
 
     sal_Int16 eVertOrient = VertOrientation::LINE_CENTER;
-    if( sVerticalPos.getLength() )
+    if( !sVerticalPos.isEmpty() )
     {
         if( IsXMLToken( sVerticalPos, XML_TOP ) )
             eVertOrient = VertOrientation::LINE_TOP;
         else if( IsXMLToken( sVerticalPos, XML_BOTTOM ) )
             eVertOrient = VertOrientation::LINE_BOTTOM;
     }
-    if( sVerticalRel.getLength() )
+    if( !sVerticalRel.isEmpty() )
     {
         if( IsXMLToken( sVerticalRel, XML_BASELINE ) )
         {
@@ -1234,7 +1234,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
     {
         Reference < XStyle > xStyle;
         const OUString& rName = GetDisplayName();
-        if( 0 == rName.getLength() )
+        if( rName.isEmpty() )
         {
             SetValid( sal_False );
             return;
@@ -1312,7 +1312,7 @@ void SvxXMLListStyleContext::CreateAndInsertAuto() const
     DBG_ASSERT( !xNumRules.is(), "Numbering Rule is existing already" );
 
     const OUString& rName = GetName();
-    if( bOutline || xNumRules.is() || 0 == rName.getLength() )
+    if( bOutline || xNumRules.is() || rName.isEmpty() )
     {
         ((SvxXMLListStyleContext *)this)->SetValid( sal_False );
         return;
