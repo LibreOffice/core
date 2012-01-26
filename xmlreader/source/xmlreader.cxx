@@ -72,7 +72,9 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
         css::container::NoSuchElementException, css::uno::RuntimeException)):
     fileUrl_(fileUrl)
 {
-    switch (osl_openFile(fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read))
+    oslFileError e = osl_openFile(
+        fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read);
+    switch (e)
     {
     case osl_File_E_None:
         break;
@@ -82,10 +84,11 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
     default:
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot open ")) +
-             fileUrl_),
+             fileUrl_ + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) +
+             rtl::OUString::valueOf(static_cast< sal_Int32 >(e))),
             css::uno::Reference< css::uno::XInterface >());
     }
-    oslFileError e = osl_getFileSize(fileHandle_, &fileSize_);
+    e = osl_getFileSize(fileHandle_, &fileSize_);
     if (e == osl_File_E_None) {
         e = osl_mapFile(
             fileHandle_, &fileAddress_, fileSize_, 0,
