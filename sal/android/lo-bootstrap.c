@@ -1491,6 +1491,8 @@ android_main(struct android_app* state)
         sleep(sleep_time);
     }
 
+    (*(*state->activity->vm)->AttachCurrentThread)(state->activity->vm, &env, 0);
+
     app = state;
 
     memset(&engine, 0, sizeof(engine));
