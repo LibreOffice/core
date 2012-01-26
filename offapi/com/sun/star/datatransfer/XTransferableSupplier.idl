@@ -36,7 +36,7 @@
 
 module com { module sun { module star { module datatransfer {
 
-published interface XTransferableSupplier
+interface XTransferableSupplier
 {
     //-------------------------------------------------------------------------
     /** To get access to a transferable representation of a selected part of an object.

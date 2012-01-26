@@ -34,7 +34,7 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-published interface XConfiguration;
+interface XConfiguration;
 
 /** A single explicit request for a configuration change.
 
@@ -50,7 +50,7 @@ published interface XConfiguration;
     <p>This interface is typically used internally by the
     <type>XConfigurationController</type></p> @see XConfigurationController
 */
-published interface XConfigurationChangeRequest
+interface XConfigurationChangeRequest
 {
     /** Commit the configuration change request represented by the called
         object to the given configuration.

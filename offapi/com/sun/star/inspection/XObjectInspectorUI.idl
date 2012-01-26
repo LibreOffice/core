@@ -36,7 +36,7 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-published interface XPropertyControlObserver;
+interface XPropertyControlObserver;
 
 //-----------------------------------------------------------------------------
 /** grants access to certain aspects of the user interface of an object
@@ -52,7 +52,7 @@ published interface XPropertyControlObserver;
 
     @since OOo 2.0.3
 */
-published interface XObjectInspectorUI
+interface XObjectInspectorUI
 {
     /** enables or disables all components belonging to the UI representation of a property
 

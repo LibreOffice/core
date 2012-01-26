@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** gives access to spreadsheet compiler token interns.
  */
-published interface XFormulaOpCodeMapper
+interface XFormulaOpCodeMapper
 {
     //-------------------------------------------------------------------------
 

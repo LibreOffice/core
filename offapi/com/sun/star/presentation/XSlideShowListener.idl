@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module presentation {
 
     @since OOo 3.0
  */
-published interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
+interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
 {
     /** Notify that the slide show is paused
     */

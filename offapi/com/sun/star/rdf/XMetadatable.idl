@@ -60,7 +60,7 @@ module com {   module sun {   module star {   module rdf {
     @see XRepository
     @see XDocumentMetadataAccess
  */
-published interface XMetadatable : XURI
+interface XMetadatable : XURI
 {
     //-------------------------------------------------------------------------
     /** a metadata reference, comprising the stream name and the XML ID.

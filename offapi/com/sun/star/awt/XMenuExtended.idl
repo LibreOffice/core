@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt {
 /** specifies extended menu functions.
  */
 
-published interface XMenuExtended: com::sun::star::uno::XInterface
+interface XMenuExtended: com::sun::star::uno::XInterface
 {
     /** sets the command string for the menu item.
 

@@ -38,7 +38,7 @@
 /** Specifies how to group data.
     @see XGroup
  */
-published constants GroupOn
+constants GroupOn
 {
     //-------------------------------------------------------------------------
 

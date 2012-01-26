@@ -43,7 +43,7 @@ module com { module sun { module star { module drawing { module framework {
     reference them.</p>
     <p>The URL prefix of views is <code>private:resource/view</code></p>
 */
-published interface XView
+interface XView
 {
     interface XResource;
 };

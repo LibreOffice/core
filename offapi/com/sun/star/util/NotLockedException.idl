@@ -38,7 +38,7 @@ module com { module sun { module star { module util {
 
 /** is raised when attempt is made to unlock a lockable component which actually is not locked.
  */
-published exception NotLockedException : ::com::sun::star::util::InvalidStateException
+exception NotLockedException : ::com::sun::star::util::InvalidStateException
 {
 };
 

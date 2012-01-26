@@ -43,7 +43,7 @@
 
     @since OOo 3.0
  */
-published interface XUnitConversion: com::sun::star::uno::XInterface
+interface XUnitConversion: com::sun::star::uno::XInterface
 {
     /** converts the given <type>Point</type>, which is specified in pixels, into the given logical unit
 

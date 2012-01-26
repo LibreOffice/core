@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module frame {
 
     @since OOo 2.0
  */
-published interface XLayoutManagerListener : com::sun::star::lang::XEventListener
+interface XLayoutManagerListener : com::sun::star::lang::XEventListener
 {
     //=============================================================================
     /** is invoked when a layout manager has made a certain operation.

@@ -43,7 +43,7 @@ module com { module sun { module star { module awt {
 /** provides dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-published interface XDialogProvider : ::com::sun::star::uno::XInterface {
+interface XDialogProvider : ::com::sun::star::uno::XInterface {
 
     //-------------------------------------------------------------------------
 

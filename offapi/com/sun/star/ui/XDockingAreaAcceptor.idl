@@ -56,7 +56,7 @@ module com { module sun { module star { module ui {
 */
 
 
-published interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
+interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
 {
     /** provide the container window where the layout manager can request border
         space for docking windows.

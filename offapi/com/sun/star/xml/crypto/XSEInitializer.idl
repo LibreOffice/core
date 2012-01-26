@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+//i20156 - new file for xmlsecurity module
+
+/** -- idl definition -- **/
+
 #ifndef __com_sun_star_xml_crypto_xseinitializer_idl_
 #define __com_sun_star_xml_crypto_xseinitializer_idl_
 
@@ -34,12 +38,12 @@
 
 module com { module sun { module star { module xml { module crypto {
 
-published interface XXMLSecurityContext;
+interface XXMLSecurityContext;
 
 /**
  * Interface to manipulate Security Environment
  */
-published interface XSEInitializer : com::sun::star::uno::XInterface
+interface XSEInitializer : com::sun::star::uno::XInterface
 {
     /**
        Creates a security context.

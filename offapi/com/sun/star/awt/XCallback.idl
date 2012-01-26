@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 /** specifies an interface which can be used to call back
     an implementation
  */
-published interface XCallback
+interface XCallback
 {
     //-------------------------------------------------------------------------
 

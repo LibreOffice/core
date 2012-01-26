@@ -45,7 +45,7 @@ module com { module sun { module star { module document {
     @see XDocumentEventBroadcaster
     @since OOo 3.1
  */
-published interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
+interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
 {
     /** is called whenever a document event occurred
     */

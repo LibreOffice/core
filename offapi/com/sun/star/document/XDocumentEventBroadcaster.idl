@@ -37,7 +37,7 @@
 
 module com { module sun { module star { module document {
 
-published interface XDocumentEventListener;
+interface XDocumentEventListener;
 
 //=============================================================================
 
@@ -50,7 +50,7 @@ published interface XDocumentEventListener;
     @see DocumentEvent
     @since OOo 3.1
 */
-published interface XDocumentEventBroadcaster
+interface XDocumentEventBroadcaster
 {
     /** registers a listener which is notified about document events
 

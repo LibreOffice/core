@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-published interface XMapping2D : ::com::sun::star::uno::XInterface
+interface XMapping2D : ::com::sun::star::uno::XInterface
 {
     /** Forward 2D mapping function
      */

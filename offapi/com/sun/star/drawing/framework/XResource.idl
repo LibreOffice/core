@@ -33,12 +33,12 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-published interface XResourceId;
+interface XResourceId;
 
 /** Base interface that provides functionality shared by all resource types
     of the drawing framework.
 */
-published interface XResource
+interface XResource
 {
     /** Return an <type>XResourceId</type> object for the called resource.
         The returned id unambiguously identifies the resource.

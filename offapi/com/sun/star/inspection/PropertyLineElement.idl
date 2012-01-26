@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-published constants PropertyLineElement
+constants PropertyLineElement
 {
     /// specifies the input control in a group of controls related to a single property
     const short InputControl    = 0x01;

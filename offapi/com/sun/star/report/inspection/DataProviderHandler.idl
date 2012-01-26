@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module report { module inspection {
 
     @see com::sun::star::inspection::XPropertyHandler
 */
-published service DataProviderHandler
+service DataProviderHandler
 {
     interface com::sun::star::inspection::XPropertyHandler;
 };

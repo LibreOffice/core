@@ -46,17 +46,17 @@
 
 
 module com {  module sun {  module star {  module geometry {
-    published interface XMapping2D;
+    interface XMapping2D;
 }; }; }; };
 
 module com { module sun { module star { module rendering {
 
-published interface XCanvasFont;
-published interface XPolyPolygon2D;
-published interface XCachedPrimitive;
-published interface XBitmap;
-published interface XGraphicDevice;
-published interface XTextLayout;
+interface XCanvasFont;
+interface XPolyPolygon2D;
+interface XCachedPrimitive;
+interface XBitmap;
+interface XGraphicDevice;
+interface XTextLayout;
 
 /** Central interface for rendering.<p>
 
@@ -120,7 +120,7 @@ published interface XTextLayout;
 
     @since OOo 2.0
  */
-published interface XCanvas : ::com::sun::star::uno::XInterface
+interface XCanvas : ::com::sun::star::uno::XInterface
 {
     /** Clear the whole canvas area.<p>
 
@@ -132,7 +132,7 @@ published interface XCanvas : ::com::sun::star::uno::XInterface
 
      /** Draw a point in device resolution on the device.
 
-        @param aPoint
+         @param aPoint
         The point to draw.
 
         @param aViewState
@@ -153,10 +153,10 @@ published interface XCanvas : ::com::sun::star::uno::XInterface
     /** Draw a line in device resolution width (i.e. one device pixel
         wide).
 
-        @param aStartPoint
+         @param aStartPoint
         The start point of the line to draw.
 
-        @param aEndPoint
+         @param aEndPoint
         The end point of the line to draw.
 
         @param aViewState
@@ -372,7 +372,7 @@ published interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XPolyPolygon2D          queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
+    XPolyPolygon2D      queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------

@@ -49,7 +49,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published interface XBezierPolyPolygon2D : XPolyPolygon2D
+interface XBezierPolyPolygon2D : XPolyPolygon2D
 {
     /** Query subset of this poly-polygon.<p>
 

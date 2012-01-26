@@ -40,7 +40,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
+interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
 {
     /** Add the specified poly-polygon at the given position.
 

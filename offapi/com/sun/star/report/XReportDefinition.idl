@@ -55,8 +55,8 @@ published interface XConnection;
 
  module com {  module sun {  module star {  module report {
 
-     published interface XSection;
-     published interface XGroups;
+     interface XSection;
+     interface XGroups;
 //=============================================================================
 
 /** identifies a <type>XReportComponent</type> as being a (sub-) report.
@@ -70,7 +70,7 @@ published interface XConnection;
 
     @see XReportComponent
  */
-published interface XReportDefinition
+interface XReportDefinition
 {
     /** allows the access to the model embedded in the database storage.
     */

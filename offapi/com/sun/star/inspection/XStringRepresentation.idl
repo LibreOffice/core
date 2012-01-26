@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module inspection {
 /** handles string representations of property values.
     @see
 */
-published interface XStringRepresentation
+interface XStringRepresentation
 {
     /** converts a  into a string.
         @param PropertyValue

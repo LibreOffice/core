@@ -38,7 +38,7 @@
 /** specifies the type of a menu item, as returned by
     <member scope="com::sun::star::awt">XMenuExtended2::getItemType()</member>.
  */
-published enum MenuItemType
+enum MenuItemType
 {
     /** specifies that the menu item type is unknown.
     */

@@ -47,7 +47,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 3.4
  */
-published interface XAnimatedImages
+interface XAnimatedImages
 {
     /** specifies the time in milliseconds between two animation steps.
 

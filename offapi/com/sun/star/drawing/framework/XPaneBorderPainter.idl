@@ -50,7 +50,7 @@ module com { module sun { module star { module drawing { module framework {
     left corner bitmap is painted with its lower right at the upper left of
     the center box.</p>
 */
-published interface XPaneBorderPainter
+interface XPaneBorderPainter
 {
     /** Enlarge the given rectangle by the size of the specified part of the
         border.  This method can be used to convert an inner bounding box

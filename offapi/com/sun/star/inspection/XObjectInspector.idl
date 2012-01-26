@@ -36,8 +36,8 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-published interface XObjectInspectorModel;
-published interface XObjectInspectorUI;
+interface XObjectInspectorModel;
+interface XObjectInspectorUI;
 
 //-----------------------------------------------------------------------------
 /** describes the main interface of an <type>ObjectInspector</type>.
@@ -46,7 +46,7 @@ published interface XObjectInspectorUI;
 
     @since OOo 2.0.3
 */
-published interface XObjectInspector
+interface XObjectInspector
 {
     /** allows to plug the inspector into an <type scope="com::sun::star::frame">XFrame</type>
 

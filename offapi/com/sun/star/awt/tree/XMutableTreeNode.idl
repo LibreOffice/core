@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module awt { module tree {
 
 /** Represents a mutable tree node as used by the <type>MutableTreeDataModel</type>
  */
-published interface XMutableTreeNode : XTreeNode
+interface XMutableTreeNode : XTreeNode
 {
     /** appends <var>ChildNode</var> to this instance.
 

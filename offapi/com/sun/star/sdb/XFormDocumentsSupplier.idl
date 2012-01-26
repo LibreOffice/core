@@ -38,7 +38,7 @@
 /** provides the access to a container of database forms.
     @see Forms
  */
-published interface XFormDocumentsSupplier: com::sun::star::uno::XInterface
+interface XFormDocumentsSupplier: com::sun::star::uno::XInterface
 {
 
     /** returns the container of forms.

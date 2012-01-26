@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** An error specifying an invalid certificate.
 */
-published exception CertificateValidationRequest: com::sun::star::task::ClassifiedInteractionRequest
+exception CertificateValidationRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
     //-------------------------------------------------------------------------
     /** This value describes the validity of the certificate.
@@ -50,9 +50,6 @@ published exception CertificateValidationRequest: com::sun::star::task::Classifi
      */
     com::sun::star::security::XCertificate Certificate;
 
-    //-------------------------------------------------------------------------
-    /** The host name.
-     */
     string HostName;
 
 };

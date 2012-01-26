@@ -33,13 +33,13 @@
 
 module com { module sun { module star { module awt {
 
-    published interface XStyleSettings;
+    interface XStyleSettings;
 
 //==================================================================================================================
 
 /** provides access to the style settings of a component
  */
-published interface XStyleSettingsSupplier
+interface XStyleSettingsSupplier
 {
     [attribute, readonly] XStyleSettings StyleSettings;
 };

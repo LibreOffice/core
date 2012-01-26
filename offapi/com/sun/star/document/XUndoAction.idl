@@ -39,7 +39,7 @@ module com { module sun { module star { module document {
 
 /** represents a single (undoable) action on a document
  */
-published interface XUndoAction
+interface XUndoAction
 {
     /** reverts the action represented by the instance
 

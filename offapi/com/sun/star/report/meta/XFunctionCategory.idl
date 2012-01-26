@@ -35,12 +35,12 @@
 //=============================================================================
 module com {  module sun {  module star {  module report { module meta {
 
-published interface XFunctionDescription;
+interface XFunctionDescription;
 /** identifies a <type>XFunctionCategory</type> which allows to retrieve the meta data of all supported functions.
 
 */
 
-published interface XFunctionCategory
+interface XFunctionCategory
 {
     /** gives access to the properties.
     */

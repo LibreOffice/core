@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+/** -- idl definition -- **/
+
 #ifndef __com_sun_star_security_CertificateContainerStatus_idl_
 #define __com_sun_star_security_CertificateContainerStatus_idl_
 
@@ -38,7 +40,7 @@ module com { module sun { module star { module security {
  * Constant definition of a certificate container status.
  *
  */
-published enum CertificateContainerStatus
+enum CertificateContainerStatus
 {
     /**
      * The certificate was not found.

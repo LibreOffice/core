@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-published struct IntegerSize2D
+struct IntegerSize2D
 {
     /// Amount of space occupied in the x direction.
     long Width;

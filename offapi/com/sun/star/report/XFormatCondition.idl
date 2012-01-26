@@ -35,7 +35,7 @@
 //=============================================================================
 /** specifies a format condition for a control.
 */
-published interface XFormatCondition
+interface XFormatCondition
 {
     interface XReportControlFormat;
 

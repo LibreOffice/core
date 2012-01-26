@@ -43,7 +43,7 @@
     @see XReportDefinition
     @see XGroups
  */
-published interface XGroup
+interface XGroup
 {
     /** allows access to the groups collection of the report.
     */

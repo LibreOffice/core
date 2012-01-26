@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module awt {  module tree {
     @see XTreeControl::addTreeExpansionListener
     @see XTreeControl::removeTreeExpansionListener
  */
-published interface XTreeExpansionListener: com::sun::star::lang::XEventListener
+interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 {
     /** Invoked when a node with children on demand is about to be expanded.
 

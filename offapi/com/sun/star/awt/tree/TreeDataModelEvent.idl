@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module awt { module tree {
     @see XTreeControl
     @see XTreeDataModelListener
  */
-published struct TreeDataModelEvent : ::com::sun::star::lang::EventObject
+struct TreeDataModelEvent : ::com::sun::star::lang::EventObject
 {
     /** contains the changed, added or removed nodes.
         <p> All nodes must have <member>ParentNode</member> as parent. */

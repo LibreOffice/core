@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module view {
     <p>Adding an object more than once to a selection should not toggle the
     selection for that object but only select it once</p>
  */
-published interface XMultiSelectionSupplier: XSelectionSupplier
+interface XMultiSelectionSupplier: XSelectionSupplier
 {
     //-------------------------------------------------------------------------
 

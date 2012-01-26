@@ -33,7 +33,7 @@
 
 module com { module sun { module star { module rendering {
 
-published interface XPolyPolygon2D;
+interface XPolyPolygon2D;
 
 /** This structure contains information passed to each
     <type>XCanvas</type> render operation.<p>
@@ -44,7 +44,7 @@ published interface XPolyPolygon2D;
 
     @since OOo 2.0
  */
-published struct RenderState
+struct RenderState
 {
     /** The affine transform associated with this render
         operation.<p>

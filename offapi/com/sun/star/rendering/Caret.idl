@@ -37,7 +37,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published struct Caret
+struct Caret
 {
     /** This contains the main caret index.<p>
 

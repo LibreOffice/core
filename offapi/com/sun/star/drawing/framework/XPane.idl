@@ -42,7 +42,7 @@ module com { module sun { module star { module drawing { module framework {
     parts like title, menu, closer button.</p>
     <p>The URL prefix of panes is <code>private:resource/floater</code></p>
 */
-published interface XPane
+interface XPane
 {
     interface XResource;
 

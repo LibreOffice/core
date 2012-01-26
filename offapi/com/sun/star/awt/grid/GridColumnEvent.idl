@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-published struct GridColumnEvent: com::sun::star::lang::EventObject
+struct GridColumnEvent: com::sun::star::lang::EventObject
 {
     /** Contains the name of the attributes whose value changed. **/
     string AttributeName;

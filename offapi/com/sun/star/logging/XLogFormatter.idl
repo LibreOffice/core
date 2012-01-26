@@ -44,7 +44,7 @@ module com { module sun { module star { module logging {
 
     @since OOo 2.3
 */
-published interface XLogFormatter
+interface XLogFormatter
 {
     /** returns the header string for the log
 

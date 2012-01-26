@@ -35,7 +35,7 @@
 module com {  module sun {  module star {  module sdb { module tools {
 //=============================================================================
 
-published interface XDataSourceMetaData
+interface XDataSourceMetaData
 {
     /** determines whether the data source supports queries in the <code>FROM</code>
         part of a <code>SELECT</code> statement.

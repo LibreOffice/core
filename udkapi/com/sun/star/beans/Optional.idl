@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module beans {
    also be useful in other situations, for example as the return type of an
    interface method.</p>
  */
-published struct Optional<T> {
+struct Optional<T> {
     /**
        Marks this structure instance as having an actual value.
      */

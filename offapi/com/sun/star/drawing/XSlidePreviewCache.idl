@@ -36,6 +36,7 @@
 #include <com/sun/star/rendering/XCanvas.idl>
 #include <com/sun/star/drawing/XSlidePreviewCacheListener.idl>
 
+
 module com { module sun { module star { module drawing {
 
 /** A cache of preview bitmaps for the slides of one Impress or Draw
@@ -49,7 +50,7 @@ module com { module sun { module star { module drawing {
     order to allow multiple references to a single slide (custom
     presentations).
 */
-published interface XSlidePreviewCache
+interface XSlidePreviewCache
 {
     /** Set the set of slides for which the cache will provide the
         previews.  All slides in the given XIndexAccess are required to come

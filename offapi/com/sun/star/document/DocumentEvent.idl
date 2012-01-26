@@ -48,7 +48,7 @@ module com { module sun { module star { module document {
     @see XDocumentEventBroadcaster
     @since OOo 3.1
  */
-published struct DocumentEvent : ::com::sun::star::lang::EventObject
+struct DocumentEvent : ::com::sun::star::lang::EventObject
 {
     /** specifies the name of the event.
 

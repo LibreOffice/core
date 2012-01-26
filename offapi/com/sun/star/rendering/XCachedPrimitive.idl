@@ -42,7 +42,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published interface XCachedPrimitive : ::com::sun::star::uno::XInterface
+interface XCachedPrimitive : ::com::sun::star::uno::XInterface
 {
     /** Redraw the cached primitive.<p>
 

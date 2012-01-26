@@ -36,7 +36,7 @@
 
 module com { module sun { module star { module awt {
 
-published interface XStyleChangeListener;
+interface XStyleChangeListener;
 
 //==================================================================================================================
 
@@ -54,7 +54,7 @@ published interface XStyleChangeListener;
     while the text is drawn by OpenOffice.org. In this case, the button respects the
     <code>ButtonRolloverTextColor</code> when painting its text.</p>
  */
-published interface XStyleSettings
+interface XStyleSettings
 {
     /// specifies the color of the border of active windows
     [attribute] ::com::sun::star::util::Color ActiveBorderColor;

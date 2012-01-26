@@ -65,7 +65,7 @@ module com {   module sun {   module star {   module rdf {
     @see XURI
     @see XLiteral
  */
-published interface XNode
+interface XNode
 {
     /// the string value of the node.
     [readonly, attribute] string StringValue;

@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 /** describes a listener for changes in a item list
     @see XListItems
  */
-published interface XItemListListener : ::com::sun::star::lang::XEventListener
+interface XItemListListener : ::com::sun::star::lang::XEventListener
 {
     /** is called when an item is inserted into the list
     */

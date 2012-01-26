@@ -35,9 +35,9 @@
 
 module com { module sun { module star { module rendering {
 
-published interface XSprite;
-published interface XAnimatedSprite;
-published interface XCustomSprite;
+interface XSprite;
+interface XAnimatedSprite;
+interface XCustomSprite;
 
 /** Specialization of a XBitmapCanvas, where moving, animated objects
     (called sprites) are supported.<p>
@@ -55,7 +55,7 @@ published interface XCustomSprite;
     you don't need sprite functionality, and don't want the
     updateScreen hassle, simply use the XBitmapCanvas.
  */
-published interface XSpriteCanvas : XBitmapCanvas
+interface XSpriteCanvas : XBitmapCanvas
 {
     /** Create a sprite object from the specified animation
         sequence. A sprite is a back-buffered object with its own,
@@ -123,7 +123,7 @@ published interface XSpriteCanvas : XBitmapCanvas
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Tells the sprite canvas to now update the screen
-        representation.
+         representation.
 
         Required to display rendered changes to the canvas, and
         updates to stopped animations and XCustomSprites in

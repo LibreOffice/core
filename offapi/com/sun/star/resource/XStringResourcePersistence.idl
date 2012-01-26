@@ -45,7 +45,7 @@ module com { module sun { module star { module resource {
 
     @see <type>XStringResourceManager</type>.
 */
-published interface XStringResourcePersistence: com::sun::star::resource::XStringResourceManager
+interface XStringResourcePersistence: com::sun::star::resource::XStringResourceManager
 {
     /**
         Stores all string table data respectively all data modified since

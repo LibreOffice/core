@@ -42,7 +42,7 @@
 
 /** This is the service provided by a presentation document.
  */
-published service PresentationDocument
+service PresentationDocument
 {
     /** This is a basic service for a drawing document.
 

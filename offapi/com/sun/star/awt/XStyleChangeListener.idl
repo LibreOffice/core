@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 
     @see XStyleSettings
  */
-published interface XStyleChangeListener : ::com::sun::star::lang::XEventListener
+interface XStyleChangeListener : ::com::sun::star::lang::XEventListener
 {
     /// called when the style settings of the observed component changed
     void    styleSettingsChanged( [in] com::sun::star::lang::EventObject Event );

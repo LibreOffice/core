@@ -35,7 +35,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published enum FillRule
+enum FillRule
 {
     /** Fill every area, where, when traveling along a line, the
         summed winding number (that is, -1 for a

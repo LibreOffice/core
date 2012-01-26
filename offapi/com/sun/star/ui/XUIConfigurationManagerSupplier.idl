@@ -39,7 +39,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-published interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
+interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
 {
     //----------------------------------------------------------------------
     /** returns the user interface configuration manager related to the

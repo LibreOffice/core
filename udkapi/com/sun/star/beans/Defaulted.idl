@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module beans {
    have the <const
    scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>.</p>
  */
-published struct Defaulted<T> {
+struct Defaulted<T> {
     /**
        The underlying value of this structure instance.
 

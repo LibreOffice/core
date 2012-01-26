@@ -35,7 +35,7 @@
 module com { module sun { module star { module rendering {
 
 /// ARGB color quad
-published struct ARGBColor
+struct ARGBColor
 {
     /** Alpha component.<p>
 

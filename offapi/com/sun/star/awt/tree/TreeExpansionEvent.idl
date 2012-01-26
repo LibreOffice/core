@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module awt { module tree {
     @see XTreeExpansionListener
     @see XTreeControl
  */
-published struct TreeExpansionEvent : ::com::sun::star::lang::EventObject
+struct TreeExpansionEvent : ::com::sun::star::lang::EventObject
 {
     /* The node that has been expanded/collapsed.*/
     com::sun::star::awt::tree::XTreeNode Node;

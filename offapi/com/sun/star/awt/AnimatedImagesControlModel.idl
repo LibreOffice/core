@@ -34,7 +34,7 @@
 
 module com { module sun { module star { module awt {
 
-published interface XAnimatedImages;
+interface XAnimatedImages;
 
 //======================================================================================================================
 
@@ -42,7 +42,7 @@ published interface XAnimatedImages;
 
     @since OOo 3.4
  */
-published service AnimatedImagesControlModel
+service AnimatedImagesControlModel
 {
     service com::sun::star::awt::UnoControlModel;
 

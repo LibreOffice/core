@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 3.4
  */
-published interface XAnimation
+interface XAnimation
 {
     /** starts the animation
     */

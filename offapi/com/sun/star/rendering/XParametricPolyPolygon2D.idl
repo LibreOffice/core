@@ -43,7 +43,7 @@ module com { module sun { module star { module rendering {
     [0,1]x[0,1] rectangle. At least that is the dimension expected at
     other places. e.g. <type>Texture</type>.
  */
-published interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
+interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
 {
     /** Query the polygonal outline at the specified value.
 
@@ -58,7 +58,7 @@ published interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
         with t (unless singularities in e.g. the resulting gradient
         are desired).
      */
-    XPolyPolygon2D                  getOutline( [in] double t )
+    XPolyPolygon2D              getOutline( [in] double t )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------

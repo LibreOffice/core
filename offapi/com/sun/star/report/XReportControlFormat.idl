@@ -43,7 +43,7 @@
 //=============================================================================
 /** specifies a format condition for a control.
 */
-published interface XReportControlFormat
+interface XReportControlFormat
 {
     /** specifies the background color (RGB) of the control.
      */

@@ -34,13 +34,13 @@
 
 module com { module sun { module star { module document {
 
-published interface XUndoManager;
+interface XUndoManager;
 
 //==================================================================================================================
 
 /** provides access to an XUndoManager.
  */
-published interface XUndoManagerSupplier
+interface XUndoManagerSupplier
 {
     /** returns the Undo manager associated with the component.
     */

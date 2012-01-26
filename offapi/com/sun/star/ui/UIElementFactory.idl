@@ -51,7 +51,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-published service UIElementFactory
+service UIElementFactory
 {
     /** this interface provides a function to create and initialize new
         instances of user interface elements.

@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module view {
 
 /** Specifies a selection type for a view that supports a selection model.
  */
-published enum SelectionType
+enum SelectionType
 {
     //-------------------------------------------------------------------------
 

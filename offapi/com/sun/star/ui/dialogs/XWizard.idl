@@ -38,7 +38,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 //==================================================================================================================
 
-published interface XWizardPage;
+interface XWizardPage;
 
 /** is the main interface implemented by the <type>Wizard</type> services.
 
@@ -80,7 +80,7 @@ published interface XWizardPage;
     @see XWizardController
     @see XWizardPage
  */
-published interface XWizard
+interface XWizard
 {
     interface   XExecutableDialog;
 

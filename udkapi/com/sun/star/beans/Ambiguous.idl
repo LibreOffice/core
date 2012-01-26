@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module beans {
    have the <const
    scope="com::sun::star::beans">PropertyAttribute::MAYBEAMBIGUOUS</const>.</p>
  */
-published struct Ambiguous<T> {
+struct Ambiguous<T> {
     /**
        The underlying value of this structure instance.
 

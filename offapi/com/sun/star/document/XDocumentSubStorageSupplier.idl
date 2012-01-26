@@ -46,7 +46,7 @@ module com {   module sun {   module star {   module document {
     @see DocumentInfo
     @see StandaloneDocumentInfo
  */
-published interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
+interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** provides the access to a substorage with specified name

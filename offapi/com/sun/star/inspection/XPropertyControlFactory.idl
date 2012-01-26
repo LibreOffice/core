@@ -34,14 +34,14 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-published interface XPropertyControl;
+interface XPropertyControl;
 
 //-----------------------------------------------------------------------------
 /** a factory for <type>XPropertyControl</type>s
 
     @since OOo 2.0.3
 */
-published interface XPropertyControlFactory
+interface XPropertyControlFactory
 {
     /** creates a <type>XPropertyControl</type>
 

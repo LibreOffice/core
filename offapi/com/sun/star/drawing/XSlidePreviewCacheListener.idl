@@ -41,7 +41,7 @@ module com { module sun { module star { module drawing {
     implementor may then call <method>getSlidePreview()</method> a second
     time to get the up-to-date version of the preview.
 */
-published interface XSlidePreviewCacheListener
+interface XSlidePreviewCacheListener
 {
     /** Called by a <interface>XSlidePreviewCache</interface> object when a
         preview has been created for the slide with the given index.

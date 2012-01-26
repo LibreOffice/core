@@ -32,7 +32,7 @@
 
 module com { module sun { module star { module rendering {
 
-published interface XPolyPolygon2D;
+interface XPolyPolygon2D;
 
 /** This structure contains information considered the view state.<p>
 
@@ -42,7 +42,7 @@ published interface XPolyPolygon2D;
 
     @since OOo 2.0
  */
-published struct ViewState
+struct ViewState
 {
     /** The affine transform associated with the view.<p>
 

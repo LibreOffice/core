@@ -53,7 +53,7 @@ module com { module sun { module star { module ui {
     </p>
 */
 
-published interface XUIElement : com::sun::star::uno::XInterface
+interface XUIElement : com::sun::star::uno::XInterface
 {
     /** returns an interface to get access to user interface type specific functions.
 

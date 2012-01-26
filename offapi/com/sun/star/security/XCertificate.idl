@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+//i20156 - new file for xmlsecurity module
+
+/** -- idl definition -- **/
+
 #ifndef __com_sun_star_security_XCertificate_idl_
 #define __com_sun_star_security_XCertificate_idl_
 
@@ -40,7 +44,7 @@ module com { module sun { module star { module security {
  *
  * <p>This interface represents a x509 certificate.</p>
  */
-published interface XCertificate : com::sun::star::uno::XInterface
+interface XCertificate : com::sun::star::uno::XInterface
 {
     /**
      * the version number attribute of the certificate.

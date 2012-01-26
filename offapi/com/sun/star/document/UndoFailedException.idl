@@ -41,7 +41,7 @@ module com { module sun { module star { module document {
     @see XUndoAction::undo
     @see XUndoManager::undo
  */
-published exception UndoFailedException : ::com::sun::star::uno::Exception
+exception UndoFailedException : ::com::sun::star::uno::Exception
 {
     /** describes the reason why the operation failed. Usually, this member will carry an exception.
     */

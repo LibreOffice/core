@@ -53,7 +53,7 @@ module com { module sun { module star { module rendering {
     e.g. <type>XIntegerBitmapColorSpace</type>, which use sequences of
     integers for color representation.<p>
  */
-published interface XColorSpace
+interface XColorSpace
 {
     /** Query type of this color space.<p>
 
