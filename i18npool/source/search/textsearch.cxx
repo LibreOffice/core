@@ -63,7 +63,7 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
-static const sal_Int32 SIMPLE_TRANS_MASK = ~(COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_WIDTH) | TransliterationModules_FULLWIDTH_HALFWIDTH;
+static const sal_Int32 SIMPLE_TRANS_MASK = TransliterationModules_HIRAGANA_KATAKANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
 static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
