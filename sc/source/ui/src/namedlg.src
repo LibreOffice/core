@@ -95,15 +95,15 @@ ModelessDialog RID_SCDLG_NAMES
     Edit ED_NAME2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 140 ) ;
-        Size = MAP_APPFONT ( 168 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 140 ) ;
+        Size = MAP_APPFONT ( 155 , 12 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_SCOPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 170 ) ;
-        Size = MAP_APPFONT ( 168 , 80 ) ;
+        Pos = MAP_APPFONT ( 60 , 170 ) ;
+        Size = MAP_APPFONT ( 155 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -112,8 +112,8 @@ ModelessDialog RID_SCDLG_NAMES
     {
         HelpID = "sc:Edit:RID_SCDLG_NAMES:ED_ASSIGN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 155 ) ;
-        Size = MAP_APPFONT ( 152 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 155 ) ;
+        Size = MAP_APPFONT ( 142 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
