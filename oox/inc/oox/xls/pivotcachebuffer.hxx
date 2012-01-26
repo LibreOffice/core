@@ -99,10 +99,13 @@ public:
     inline const ::com::sun::star::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
     ::rtl::OUString     getName() const;
+    /** Returns true if the item is unused. */
+    inline bool         isUnused() const { return mbUnused; }
 
 private:
     ::com::sun::star::uno::Any maValue;     /// Value of the item.
     sal_Int32           mnType;             /// Value type (OOXML token identifier).
+    bool                mbUnused;
 };
 
 // ----------------------------------------------------------------------------
@@ -285,6 +288,8 @@ public:
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all shared or group items. */
     void                getCacheItemNames( ::std::vector< ::rtl::OUString >& orItemNames ) const;
+    /** Returns shared or group items. */
+    PivotCacheItemList  getCacheItems() const;
 
     /** Creates inplace numeric grouping settings. */
     void                convertNumericGrouping(
@@ -295,6 +300,7 @@ public:
     /** Creates a new grouped DataPilot field and returns its name. */
     ::rtl::OUString     createParentGroupField(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames ) const;
 
     /** Writes the title of the field into the passed sheet at the passed address. */

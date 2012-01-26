@@ -173,7 +173,7 @@ void lclAdjustBinDateTime( DateTime& orDateTime )
 // ============================================================================
 
 PivotCacheItem::PivotCacheItem() :
-    mnType( XML_m )
+    mnType( XML_m ), mbUnused( false )
 {
 }
 
@@ -187,6 +187,7 @@ void PivotCacheItem::readNumeric( const AttributeList& rAttribs )
 {
     maValue <<= rAttribs.getDouble( XML_v, 0.0 );
     mnType = XML_n;
+    mbUnused = rAttribs.getBool( XML_u, false );
 }
 
 void PivotCacheItem::readDate( const AttributeList& rAttribs )
@@ -760,6 +761,13 @@ void PivotCacheField::getCacheItemNames( ::std::vector< OUString >& orItemNames 
         maSharedItems.getCacheItemNames( orItemNames );
 }
 
+PivotCacheItemList PivotCacheField::getCacheItems() const
+{
+    if( hasGroupItems() )
+        return maGroupItems;
+    return maSharedItems;
+}
+
 void PivotCacheField::convertNumericGrouping( const Reference< XDataPilotField >& rxDPField ) const
 {
     OSL_ENSURE( hasGroupItems() && hasNumericGrouping(), "PivotCacheField::convertNumericGrouping - not a numeric group field" );
@@ -822,7 +830,7 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
     return xFieldName.is() ? xFieldName->getName() : OUString();
 }
 
-OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotField >& rxBaseDPField, PivotCacheGroupItemVector& orItemNames ) const
+OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotField >& rxBaseDPField, const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames ) const
 {
     OSL_ENSURE( hasGroupItems() && !maDiscreteItems.empty(), "PivotCacheField::createParentGroupField - not a group field" );
     OSL_ENSURE( maDiscreteItems.size() == orItemNames.size(), "PivotCacheField::createParentGroupField - number of item names does not match grouping info" );
@@ -834,16 +842,25 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     typedef ::std::vector< GroupItemList > GroupItemMap;
     GroupItemMap aItemMap( maGroupItems.size() );
     for( IndexVector::const_iterator aBeg = maDiscreteItems.begin(), aIt = aBeg, aEnd = maDiscreteItems.end(); aIt != aEnd; ++aIt )
+    {
         if( GroupItemList* pItems = ContainerHelper::getVectorElementAccess( aItemMap, *aIt ) )
+        {
+            if ( const PivotCacheItem* pItem = rBaseCacheField.getCacheItems().getCacheItem( aIt - aBeg ) )
+            {
+                // Skip unspecified or ununsed entries or errors
+                if ( pItem->isUnused() || ( pItem->getType() == XML_m ) ||  ( pItem->getType() == XML_e ) )
+                    continue;
+            }
             pItems->push_back( static_cast< sal_Int32 >( aIt - aBeg ) );
+        }
+    }
 
     // process all groups
     Reference< XDataPilotField > xDPGroupField;
     for( GroupItemMap::iterator aBeg = aItemMap.begin(), aIt = aBeg, aEnd = aItemMap.end(); aIt != aEnd; ++aIt )
     {
         OSL_ENSURE( !aIt->empty(), "PivotCacheField::createParentGroupField - item/group should not be empty" );
-        // if the item count is greater than 1, the item is a group of items
-        if( aIt->size() > 1 )
+        if( !aIt->empty() )
         {
             /*  Insert the names of the items that are part of this group. Calc
                 expects the names of the members of the field whose members are
@@ -860,7 +877,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
             /*  Check again, that this is not just a group that is not grouped
                 further with other items. */
-            if( aMembers.size() > 1 ) try
+            if( !aMembers.empty() ) try
             {
                 // only the first call of createNameGroup() returns the new field
                 Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( ContainerHelper::vectorToSequence( aMembers ) );

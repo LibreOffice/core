@@ -579,13 +579,13 @@ void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotFie
     }
 }
 
-void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, PivotCacheGroupItemVector& orItemNames )
+void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,  const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames )
 {
     if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
-            maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, orItemNames );
+            maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
             // on success, try to create nested group fields
             Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
             if( xDPField.is() )
@@ -1455,7 +1455,7 @@ void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField 
 {
     // try to create parent group fields that group the items of the passed base field
     if( PivotTableField* pParentTableField = maFields.get( rBaseCacheField.getParentGroupField() ).get() )
-        pParentTableField->finalizeParentGroupingImport( rxBaseDPField, orItemNames );
+        pParentTableField->finalizeParentGroupingImport( rxBaseDPField, rBaseCacheField, orItemNames );
 }
 
 Reference< XDataPilotField > PivotTable::getDataPilotField( const OUString& rFieldName ) const

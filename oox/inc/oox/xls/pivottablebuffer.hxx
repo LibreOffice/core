@@ -170,6 +170,7 @@ public:
     /** Finalizes the grouped field after import. */
     void                finalizeParentGroupingImport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
 
     /** Returns the name of the DataPilot field in the fields collection. */
