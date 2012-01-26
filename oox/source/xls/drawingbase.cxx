@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
+#include "oox/helper/propertyset.hxx"
 
 namespace oox {
 namespace xls {
@@ -279,6 +280,35 @@ Rectangle ShapeAnchor::calcAnchorRectHmm( const Size& rPageSizeHmm ) const
 {
     EmuRectangle aAnchorRect = calcAnchorRectEmu( rPageSizeHmm );
     return Rectangle( lclEmuToHmm( aAnchorRect.X ), lclEmuToHmm( aAnchorRect.Y ), lclEmuToHmm( aAnchorRect.Width ), lclEmuToHmm( aAnchorRect.Height ) );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+ShapeAnchor::getToCell() const
+{
+    CellAddress aAddress;
+    aAddress.Sheet = getSheetIndex();
+    aAddress.Row = maTo.mnRow;
+    aAddress.Column = maTo.mnCol;
+    return getCell( aAddress );
+}
+::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+ShapeAnchor::getFromCell() const
+{
+    CellAddress aAddress;
+    aAddress.Sheet = getSheetIndex();
+    aAddress.Row = maFrom.mnRow;
+    aAddress.Column = maFrom.mnCol;
+    return getCell( aAddress );
+}
+
+void
+ShapeAnchor::applyToXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape )
+{
+    if ( ( meAnchorType == ANCHOR_TWOCELL || meAnchorType ==  ANCHOR_ONECELL ) && getFromCell().is() )
+    {
+        PropertySet aShapeProp( rxShape );
+        aShapeProp.setProperty( PROP_Anchor, getFromCell() );
+    }
 }
 
 // private --------------------------------------------------------------------

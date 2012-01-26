@@ -32,6 +32,9 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/table/XCell.hpp>
+
 namespace oox {
 namespace xls {
 
@@ -108,7 +111,12 @@ public:
     /** Calculates the resulting shape anchor in 1/100 mm. */
     ::com::sun::star::awt::Rectangle calcAnchorRectHmm(
                             const ::com::sun::star::awt::Size& rPageSizeHmm ) const;
-
+    /** Returns the 'to' cell if it exists */
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > getToCell() const;
+    /** Returns the 'from' cell if it exists */
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > getFromCell() const;
+    /** Applies Cell Anchor to an XShape if needed*/
+    void applyToXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape );
 private:
     /** Converts the passed anchor to an absolute position in EMUs. */
     ::oox::drawingml::EmuPoint calcCellAnchorEmu( const CellAnchorModel& rModel ) const;
