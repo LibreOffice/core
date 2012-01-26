@@ -42,7 +42,6 @@
 #include "unotools/pathoptions.hxx"
 #include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
-#include "unotools/inetoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svl/svarray.hxx"
 #include "svtools/svtabbx.hxx"

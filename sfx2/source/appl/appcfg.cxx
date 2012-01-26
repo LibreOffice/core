@@ -51,6 +51,7 @@
 
 #include <svl/isethint.hxx>
 
+#include <officecfg/Inet.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/saveopt.hxx>
@@ -58,7 +59,6 @@
 #include <unotools/undoopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/inetoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -171,7 +171,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
-    SvtInetOptions aInetOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
@@ -395,33 +394,54 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 #endif
                     break;
                 case SID_INET_PROXY_TYPE :
-                {
-                    if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                        (sal_uInt16)aInetOptions.GetProxyType() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxUInt16Item(
+                                rPool.GetWhich(SID_INET_PROXY_TYPE),
+                                officecfg::Inet::Settings::ooInetProxyType::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
-                }
                 case SID_INET_HTTP_PROXY_NAME :
-                {
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
-                        aInetOptions.GetProxyHttpName() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxStringItem(
+                                rPool.GetWhich(SID_INET_HTTP_PROXY_NAME),
+                                officecfg::Inet::Settings::ooInetHTTPProxyName::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
-                }
                 case SID_INET_HTTP_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
-                        aInetOptions.GetProxyHttpPort() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxInt32Item(
+                                rPool.GetWhich(SID_INET_HTTP_PROXY_PORT),
+                                officecfg::Inet::Settings::ooInetHTTPProxyPort::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
                 case SID_INET_FTP_PROXY_NAME :
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
-                        aInetOptions.GetProxyFtpName() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxStringItem(
+                                rPool.GetWhich(SID_INET_FTP_PROXY_NAME),
+                                officecfg::Inet::Settings::ooInetFTPProxyName::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
                 case SID_INET_FTP_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
-                        aInetOptions.GetProxyFtpPort() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxInt32Item(
+                                rPool.GetWhich(SID_INET_FTP_PROXY_PORT),
+                                officecfg::Inet::Settings::ooInetFTPProxyPort::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
                 case SID_INET_SECURITY_PROXY_NAME :
                 case SID_INET_SECURITY_PROXY_PORT :
@@ -430,9 +450,14 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 #endif
                     break;
                 case SID_INET_NOPROXY :
-                    if( rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
-                        aInetOptions.GetProxyNoProxy() )))
-                            bRet = sal_True;
+                    if (rSet.Put(
+                            SfxStringItem(
+                                rPool.GetWhich( SID_INET_NOPROXY),
+                                officecfg::Inet::Settings::ooInetNoProxy::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
                 case SID_ATTR_PATHNAME :
                 case SID_ATTR_PATHGROUP :
@@ -510,8 +535,10 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtPathOptions aPathOptions;
-    SvtInetOptions aInetOptions;
     SvtMiscOptions aMiscOptions;
+    boost::shared_ptr< unotools::ConfigurationChanges > batch(
+        unotools::ConfigurationChanges::create(
+            comphelper::getProcessComponentContext()));
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), sal_True, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -724,33 +751,45 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), sal_True, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
+        officecfg::Inet::Settings::ooInetProxyType::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxUInt16Item const * >(pItem)->GetValue());
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-        aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
+        officecfg::Inet::Settings::ooInetHTTPProxyName::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxStringItem const * >(pItem)->GetValue());
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-        aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        officecfg::Inet::Settings::ooInetHTTPProxyPort::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxInt32Item const * >(pItem)->GetValue());
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-        aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
+        officecfg::Inet::Settings::ooInetFTPProxyName::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxStringItem const * >(pItem)->GetValue());
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-        aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        officecfg::Inet::Settings::ooInetFTPProxyPort::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxInt32Item const * >(pItem)->GetValue());
     }
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
+        officecfg::Inet::Settings::ooInetNoProxy::set(
+            comphelper::getProcessComponentContext(), batch,
+            static_cast< SfxStringItem const * >(pItem)->GetValue());
     }
 
     // Secure-Referers
@@ -786,7 +825,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Store changed data
-    aInetOptions.flush();
+    batch->commit();
 }
 
 //--------------------------------------------------------------------

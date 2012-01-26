@@ -71,7 +71,6 @@ enum EItem
     E_HELPOPTIONS                   ,   // 2
     E_HISTORYOPTIONS                ,   //
 
-    E_INETOPTIONS                   ,   //
     E_INTERNALOPTIONS               ,   //
 
     E_JAVAOPTIONS                   ,   //

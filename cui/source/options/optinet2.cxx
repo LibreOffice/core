@@ -43,7 +43,6 @@
 #include <tools/inetdef.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/cntwids.hrc>
-#include <unotools/inetoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/bootstrap.hxx>
