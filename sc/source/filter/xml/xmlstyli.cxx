@@ -170,12 +170,14 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             pBorders[i]->maValue >>= aBorderLine;
             if( pBorderWidths[i] )
             {
+                // Merge style:border-line-width values to fo:border values. Do
+                // not override fo:border line width or line style with an
+                // empty value!
                 table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -194,7 +196,6 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
             pDiagBorders[i]->maValue <<= aBorderLine;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->mnIndex = -1;
