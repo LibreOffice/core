@@ -1482,8 +1482,14 @@ __attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {
+    JNIEnv *env;
     struct engine engine;
     Dl_info lo_main_info;
+
+    if (sleep_time != 0) {
+        LOGI("android_main: Sleeping for %d seconds, start ndk-gdb NOW if that is your intention", sleep_time);
+        sleep(sleep_time);
+    }
 
     app = state;
 
@@ -1494,9 +1500,6 @@ android_main(struct android_app* state)
     if (lo_dladdr(lo_main, &lo_main_info) != 0) {
         lo_main_argv[0] = lo_main_info.dli_fname;
     }
-
-    if (sleep_time != 0)
-        sleep(sleep_time);
 
     patch_libgnustl_shared();
 
