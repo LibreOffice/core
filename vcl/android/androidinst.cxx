@@ -421,6 +421,13 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
     if (AndroidSalInstance::getInstance() != NULL)
     {
         // Does Android have a native dialog ? if not,. we have to do this ...
+
+        // Of course it has. android.app.AlertDialog seems like a good
+        // choice, it even has one, two or three buttons. Naturally,
+        // it intended to be used from Java, so some verbose JNI
+        // horror would be needed to use it directly here. Probably we
+        // want some easier to use magic wrapper, hmm.
+
         ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
         aVclErrBox.SetText( rMessage );
         aVclErrBox.Execute();
