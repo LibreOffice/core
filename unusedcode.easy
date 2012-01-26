@@ -1651,7 +1651,6 @@ std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
-svt::table::TableControl::GoTo(int, int)
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
 svxform::DataNavigatorManager::GetChildWindowId()
 svxform::FmFilterNavigatorWinMgr::GetChildWindowId()
