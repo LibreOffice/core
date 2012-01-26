@@ -1289,7 +1289,7 @@ AC_MSG_CHECKING([whether to enable category B components])
 #   rhino (rhino)
 #   beanshell (beanshell)
 #   graphite (silgraphite)
-if test "$enable_category_b" == "yes"; then
+if test "$enable_category_b" = "yes"; then
 #   enable_mozilla="yes"
 #   enable_nss_module="yes"
    enable_hunspell="yes"
