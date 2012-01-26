@@ -41,7 +41,6 @@
 #include <i18npool/mslangid.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/useroptions.hxx>
-#include <unotools/cacheoptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/startoptions.hxx>

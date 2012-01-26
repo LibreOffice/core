@@ -32,7 +32,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/accessiblerelationse
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/accessiblestatesethelper.hxx,unotools/accessiblestatesethelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/atom.hxx,unotools/atom.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/bootstrap.hxx,unotools/bootstrap.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/cacheoptions.hxx,unotools/cacheoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/calendarwrapper.hxx,unotools/calendarwrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/caserotate.hxx,unotools/caserotate.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/charclass.hxx,unotools/charclass.hxx))

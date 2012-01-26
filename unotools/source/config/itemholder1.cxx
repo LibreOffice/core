@@ -38,7 +38,6 @@
 #include <unotools/undoopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/accelcfg.hxx>
-#include <unotools/cacheoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/defaultoptions.hxx>

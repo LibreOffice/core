@@ -26,9 +26,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include "editeng/forbiddencharacterstable.hxx"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include "officecfg/Office/Common.hxx"
 #include <svx/svdetc.hxx>
 #include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
@@ -41,7 +44,6 @@
 #include <vcl/bmpacc.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
-#include <unotools/cacheoptions.hxx>
 #include <svl/whiter.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/colritem.hxx>
@@ -106,9 +108,8 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 OLEObjCache::OLEObjCache()
 :   Container( 0 )
 {
-    SvtCacheOptions aCacheOptions;
-
-    nSize = aCacheOptions.GetDrawingEngineOLE_Objects();
+    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get(
+        comphelper::getProcessComponentContext());
     pTimer = new AutoTimer();
     Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 

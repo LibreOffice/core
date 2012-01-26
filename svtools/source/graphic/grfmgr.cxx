@@ -26,9 +26,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <algorithm>
 
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -38,7 +41,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
-#include <unotools/cacheoptions.hxx>
 #include <svtools/grfmgr.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
@@ -176,11 +178,14 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const rtl
             {
                 if( !mpGlobalMgr )
                 {
-                    SvtCacheOptions aCacheOptions;
-
-                    mpGlobalMgr = new GraphicManager( aCacheOptions.GetGraphicManagerTotalCacheSize(),
-                                                      aCacheOptions.GetGraphicManagerObjectCacheSize() );
-                    mpGlobalMgr->SetCacheTimeout( aCacheOptions.GetGraphicManagerObjectReleaseTime() );
+                    mpGlobalMgr = new GraphicManager(
+                        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get(
+                            comphelper::getProcessComponentContext()),
+                        officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get(
+                            comphelper::getProcessComponentContext()));
+                    mpGlobalMgr->SetCacheTimeout(
+                        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
+                            comphelper::getProcessComponentContext()));
                 }
 
                 mpMgr = mpGlobalMgr;

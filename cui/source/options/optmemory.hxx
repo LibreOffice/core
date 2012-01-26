@@ -66,7 +66,7 @@ private:
 
     DECL_LINK( GraphicCacheConfigHdl, NumericField* );
 
-    inline long         GetNfGraphicCacheVal( void ) const;                 // returns # of Bytes
+    sal_Int32 GetNfGraphicCacheVal() const; // returns # of Bytes
     inline void         SetNfGraphicCacheVal( long nSizeInBytes );
 
     long                GetNfGraphicObjectCacheVal( void ) const;           // returns # of Bytes

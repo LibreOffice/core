@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/accessibility/accessiblestatesethelper \
     unotools/source/config/accelcfg \
     unotools/source/config/bootstrap \
-    unotools/source/config/cacheoptions \
     unotools/source/config/cmdoptions \
     unotools/source/config/compatibility \
     unotools/source/config/configitem \

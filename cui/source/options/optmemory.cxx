@@ -26,6 +26,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <algorithm>
+
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
@@ -39,7 +45,6 @@
 #include <rtl/math.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/useroptions.hxx>
-#include <unotools/cacheoptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/startoptions.hxx>
@@ -80,9 +85,9 @@ using namespace ::sfx2;
 #define BYTES2NF        (1.0/NF2BYTES)                  // 10/2^20
 
 
-inline long OfaMemoryOptionsPage::GetNfGraphicCacheVal( void ) const
+sal_Int32 OfaMemoryOptionsPage::GetNfGraphicCacheVal() const
 {
-    return static_cast<long>(aNfGraphicCache.GetValue() << 20);
+    return aNfGraphicCache.GetValue() << 20;
 }
 
 inline void OfaMemoryOptionsPage::SetNfGraphicCacheVal( long nSizeInBytes )
@@ -180,30 +185,45 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    SvtCacheOptions aCacheOptions;
-
     // Undo-Schritte
     if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
         SvtUndoOptions().SetUndoCount((sal_uInt16)aUndoEdit.GetValue());
 
-    // GraphicCache
-    aCacheOptions.SetGraphicManagerTotalCacheSize( GetNfGraphicCacheVal() );
-    aCacheOptions.SetGraphicManagerObjectCacheSize( GetNfGraphicObjectCacheVal() );
+    boost::shared_ptr< unotools::ConfigurationChanges > batch(
+        unotools::ConfigurationChanges::create(
+            comphelper::getProcessComponentContext()));
 
-       const Time aTime( aTfGraphicObjectTime.GetTime() );
-    aCacheOptions.SetGraphicManagerObjectReleaseTime( aTime.GetSec() + aTime.GetMin() * 60 + aTime.GetHour() * 3600 );
+    // GraphicCache
+    sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
+    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(
+        comphelper::getProcessComponentContext(), batch, totalCacheSize);
+    sal_Int32 objectCacheSize = GetNfGraphicObjectCacheVal();
+    officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::set(
+        comphelper::getProcessComponentContext(), batch, objectCacheSize);
+
+    const Time aTime( aTfGraphicObjectTime.GetTime() );
+    sal_Int32 objectReleaseTime =
+        aTime.GetSec() + aTime.GetMin() * 60 + aTime.GetHour() * 3600;
+    officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
+        comphelper::getProcessComponentContext(), batch, objectReleaseTime);
 
     // create a dummy graphic object to get access to the common GraphicManager
     GraphicObject       aDummyObject;
     GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
 
-    rGrfMgr.SetMaxCacheSize( aCacheOptions.GetGraphicManagerTotalCacheSize() );
-    rGrfMgr.SetMaxObjCacheSize( aCacheOptions.GetGraphicManagerObjectCacheSize(), sal_True );
-    rGrfMgr.SetCacheTimeout( aCacheOptions.GetGraphicManagerObjectReleaseTime() );
+    rGrfMgr.SetMaxCacheSize(totalCacheSize);
+    rGrfMgr.SetMaxObjCacheSize(objectCacheSize, true);
+    rGrfMgr.SetCacheTimeout(objectReleaseTime);
 
     // OLECache
-    aCacheOptions.SetWriterOLE_Objects( static_cast<long>(aNfOLECache.GetValue()) );
-    aCacheOptions.SetDrawingEngineOLE_Objects( static_cast<long>(aNfOLECache.GetValue()) );
+    officecfg::Office::Common::Cache::Writer::OLE_Objects::set(
+        comphelper::getProcessComponentContext(), batch,
+        aNfOLECache.GetValue());
+    officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(
+        comphelper::getProcessComponentContext(), batch,
+        aNfOLECache.GetValue());
+
+    batch->commit();
 
     if( aQuickLaunchCB.IsChecked() != aQuickLaunchCB.GetSavedValue())
     {
@@ -218,7 +238,6 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
 void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 {
-    SvtCacheOptions     aCacheOptions;
     const SfxPoolItem*  pItem;
 
     // Undo-Schritte
@@ -226,18 +245,31 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     aUndoEdit.SaveValue();
 
     // GraphicCache
-    long    n = aCacheOptions.GetGraphicManagerTotalCacheSize();
+    long n =
+        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get(
+            comphelper::getProcessComponentContext());
     SetNfGraphicCacheVal( n );
-    SetNfGraphicObjectCacheVal( Min( static_cast<sal_Int32>(GetNfGraphicCacheVal()), aCacheOptions.GetGraphicManagerObjectCacheSize() ) );
+    SetNfGraphicObjectCacheVal(
+        std::min(
+            GetNfGraphicCacheVal(),
+            officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get(
+                comphelper::getProcessComponentContext())));
 
-    sal_Int32 nTime = aCacheOptions.GetGraphicManagerObjectReleaseTime();
+    sal_Int32 nTime =
+        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
+            comphelper::getProcessComponentContext());
     Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
     aTfGraphicObjectTime.SetTime( aTime );
 
     GraphicCacheConfigHdl( &aNfGraphicCache );
 
     // OLECache
-    aNfOLECache.SetValue( Max( aCacheOptions.GetWriterOLE_Objects(), aCacheOptions.GetDrawingEngineOLE_Objects() ) );
+    aNfOLECache.SetValue(
+        std::max(
+            officecfg::Office::Common::Cache::Writer::OLE_Objects::get(
+                comphelper::getProcessComponentContext()),
+            officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get(
+                comphelper::getProcessComponentContext())));
 
     SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, sal_False, &pItem );
     if ( SFX_ITEM_SET == eState )
@@ -256,7 +288,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG )
 {
-    long    n = GetNfGraphicCacheVal();
+    sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );
     SetNfGraphicObjectCacheLast( n );
 
