@@ -150,7 +150,7 @@ SAL_CALL createSingleComponentFactory(
     ::rtl::OUString const & rImplementationName,
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = 0 )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Creates a single service factory which holds the instance created only once.
 
@@ -167,7 +167,7 @@ createOneInstanceComponentFactory(
     ::rtl::OUString const & rImplementationName,
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = 0 )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Deprecated.  The type of the instanciate function used as argument of the create*Fcatory functions.
 
@@ -198,7 +198,7 @@ createSingleFactory(
     ComponentInstantiation pCreateFunction,
     const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = 0  )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Deprecated.  Creates a factory wrapping another one.
     This means the methods of the interfaces XServiceProvider, XServiceInfo and
@@ -218,7 +218,7 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::X
 createFactoryProxy(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > & rFactory )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Deprecated.  Creates a single service factory which holds the instance created only once.
 
@@ -240,7 +240,7 @@ createOneInstanceFactory(
     ComponentInstantiation pCreateFunction,
     const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = 0  )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Deprecated.  Creates a single service factory based on a registry.
 
@@ -256,7 +256,7 @@ createSingleRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Deprecated.  Creates a single service factory which holds the instance created only once
     based on a registry.
@@ -275,7 +275,7 @@ createOneInstanceRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 }
 

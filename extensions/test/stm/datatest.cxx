@@ -337,7 +337,7 @@ XInterfaceRef ODataStreamTest_CreateInstance( const XMultiServiceFactoryRef & rS
     return xService;
 }
 
-Sequence<UString> ODataStreamTest_getSupportedServiceNames( int i) THROWS( () )
+Sequence<UString> ODataStreamTest_getSupportedServiceNames( int i) THROWS(())
 {
     Sequence<UString> aRet(1);
 
@@ -347,7 +347,7 @@ Sequence<UString> ODataStreamTest_getSupportedServiceNames( int i) THROWS( () )
     return aRet;
 }
 
-UString     ODataStreamTest_getServiceName( int i) THROWS( () )
+UString     ODataStreamTest_getServiceName( int i) THROWS(())
 {
     if( 1 == i ) {
         return L"test.com.sun.star.io.DataInputStream";
@@ -357,7 +357,7 @@ UString     ODataStreamTest_getServiceName( int i) THROWS( () )
     }
 }
 
-UString     ODataStreamTest_getImplementationName( int i) THROWS( () )
+UString     ODataStreamTest_getImplementationName( int i) THROWS(())
 {
     if( 1 == i ) {
         return L"test.com.sun.star.comp.extensions.stm.DataInputStream";
@@ -622,19 +622,19 @@ XInterfaceRef OMyPersistObject_CreateInstance( const XMultiServiceFactoryRef & r
     return xService;
 }
 
-Sequence<UString> OMyPersistObject_getSupportedServiceNames( ) THROWS( () )
+Sequence<UString> OMyPersistObject_getSupportedServiceNames( ) THROWS(())
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OMyPersistObject_getImplementationName();
     return aRet;
 }
 
-UString     OMyPersistObject_getServiceName( ) THROWS( () )
+UString     OMyPersistObject_getServiceName( ) THROWS(())
 {
     return L"test.com.sun.star.io.PersistTest";
 }
 
-UString     OMyPersistObject_getImplementationName( ) THROWS( () )
+UString     OMyPersistObject_getImplementationName( ) THROWS(())
 {
     return L"test.com.sun.star.io.PersistTest";
 }
@@ -1038,14 +1038,14 @@ XInterfaceRef OObjectStreamTest_CreateInstance( const XMultiServiceFactoryRef & 
     return xService;
 }
 
-Sequence<UString> OObjectStreamTest_getSupportedServiceNames( int i) THROWS( () )
+Sequence<UString> OObjectStreamTest_getSupportedServiceNames( int i) THROWS(())
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OObjectStreamTest_getImplementationName( i);
     return aRet;
 }
 
-UString     OObjectStreamTest_getServiceName( int i) THROWS( () )
+UString     OObjectStreamTest_getServiceName( int i) THROWS(())
 {
     if( 1 == i ) {
         return L"test.com.sun.star.io.ObjectInputStream";
@@ -1055,7 +1055,7 @@ UString     OObjectStreamTest_getServiceName( int i) THROWS( () )
     }
 }
 
-UString     OObjectStreamTest_getImplementationName( int i) THROWS( () )
+UString     OObjectStreamTest_getImplementationName( int i) THROWS(())
 {
     if( 1 == i ) {
         return L"test.com.sun.star.comp.extensions.stm.ObjectInputStream";

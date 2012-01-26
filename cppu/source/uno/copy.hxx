@@ -64,13 +64,13 @@ void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () );
+    SAL_THROW (());
 //--------------------------------------------------------------------------------------------------
 inline void _copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
+    SAL_THROW (())
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -143,7 +143,7 @@ inline void _copyConstructUnion(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
+    SAL_THROW (())
 {
     typelib_TypeDescriptionReference * pSetType = _unionGetSetType( pSource, pTypeDescr );
     if (mapping)
@@ -175,7 +175,7 @@ inline void _copyConstructAnyFromData(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
+    SAL_THROW (())
 {
     TYPE_ACQUIRE( pType );
     pDestAny->pType = pType;
@@ -339,7 +339,7 @@ inline void _copyConstructAny(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
+    SAL_THROW (())
 {
     if (typelib_TypeClass_VOID == pType->eTypeClass)
     {
@@ -718,7 +718,7 @@ inline void _copyConstructData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW ( () )
+    SAL_THROW (())
 {
     switch (pType->eTypeClass)
     {

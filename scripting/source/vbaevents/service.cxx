@@ -44,7 +44,7 @@ namespace evtlstner
 
     uno::Reference< XInterface > SAL_CALL create(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // -----------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ namespace ooevtdescgen
 
     uno::Reference< XInterface > SAL_CALL create(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // -----------------------------------------------------------------------------
 

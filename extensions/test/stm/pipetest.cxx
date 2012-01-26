@@ -106,8 +106,8 @@ public: // refcounting
     void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
-    static UString              getImplementationName_Static() THROWS( () );
+    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS(());
+    static UString              getImplementationName_Static() THROWS(());
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
@@ -425,7 +425,7 @@ XInterfaceRef OPipeTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) 
 
 
 
-Sequence<UString> OPipeTest_getSupportedServiceNames(void) THROWS( () )
+Sequence<UString> OPipeTest_getSupportedServiceNames(void) THROWS(())
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OPipeTest_getImplementationName();
@@ -433,12 +433,12 @@ Sequence<UString> OPipeTest_getSupportedServiceNames(void) THROWS( () )
     return aRet;
 }
 
-UString     OPipeTest_getServiceName() THROWS( () )
+UString     OPipeTest_getServiceName() THROWS(())
 {
     return SERVICE_NAME;
 }
 
-UString     OPipeTest_getImplementationName() THROWS( () )
+UString     OPipeTest_getImplementationName() THROWS(())
 {
     return IMPLEMENTATION_NAME;
 }

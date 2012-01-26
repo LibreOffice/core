@@ -70,10 +70,10 @@ struct ModuleImport
 
 public:
     inline ModuleImport( ModuleDescriptor& rModuleDesc )
-        SAL_THROW( () )
+        SAL_THROW(())
         : mrModuleDesc( rModuleDesc ) {}
     virtual ~ModuleImport()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -110,9 +110,9 @@ public:
         OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes,
         ModuleElement * pParent, ModuleImport * pImport )
-        SAL_THROW( () );
+        SAL_THROW(());
     virtual ~ModuleElement()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XElement
     virtual Reference< xml::input::XElement > SAL_CALL getParent()

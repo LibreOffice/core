@@ -228,13 +228,13 @@ namespace connectivity
             free();
         }
 
-        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW(())
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW(())
             {  }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);

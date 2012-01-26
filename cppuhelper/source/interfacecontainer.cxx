@@ -49,7 +49,7 @@ namespace cppu
  * Reallocate the sequence.
  */
 static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewLen )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     rSeq.realloc( nNewLen );
 }
@@ -58,7 +58,7 @@ static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewL
  * Remove an element from an interface sequence.
  */
 static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq, sal_Int32 index )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     sal_Int32 nNewLen = rSeq.getLength() - 1;
 
@@ -79,7 +79,7 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
 #endif
 
 OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     : rCont( rCont_ )
 {
     MutexGuard aGuard( rCont.rMutex );
@@ -102,7 +102,7 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
         nRemain = 0;
 }
 
-OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
+OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW(())
 {
     sal_Bool bShared;
     {
@@ -127,7 +127,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
     }
 }
 
-XInterface * OInterfaceIteratorHelper::next() SAL_THROW( () )
+XInterface * OInterfaceIteratorHelper::next() SAL_THROW(())
 {
     if( nRemain )
     {
@@ -142,7 +142,7 @@ XInterface * OInterfaceIteratorHelper::next() SAL_THROW( () )
     return 0;
 }
 
-void OInterfaceIteratorHelper::remove() SAL_THROW( () )
+void OInterfaceIteratorHelper::remove() SAL_THROW(())
 {
     if( bIsList )
     {
@@ -158,14 +158,14 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
     }
 }
 
-OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
+OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW(())
     : rMutex( rMutex_ )
     , bInUse( sal_False )
     , bIsList( sal_False )
 {
 }
 
-OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW( () )
+OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW(())
 {
     OSL_ENSURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
     if( bIsList )
@@ -174,7 +174,7 @@ OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW( () )
         aData.pAsInterface->release();
 }
 
-sal_Int32 OInterfaceContainerHelper::getLength() const SAL_THROW( () )
+sal_Int32 OInterfaceContainerHelper::getLength() const SAL_THROW(())
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
@@ -184,7 +184,7 @@ sal_Int32 OInterfaceContainerHelper::getLength() const SAL_THROW( () )
     return 0;
 }
 
-Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const SAL_THROW( () )
+Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const SAL_THROW(())
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
@@ -197,7 +197,7 @@ Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
     return Sequence< Reference< XInterface > >();
 }
 
-void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
+void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW(())
 {
     OSL_ENSURE( bInUse, "OInterfaceContainerHelper not in use" );
     if( bInUse )
@@ -213,7 +213,7 @@ void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
     }
 }
 
-sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
+sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener ) SAL_THROW(())
 {
     OSL_ASSERT( rListener.is() );
     MutexGuard aGuard( rMutex );
@@ -247,7 +247,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
     }
 }
 
-sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
+sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener ) SAL_THROW(())
 {
     OSL_ASSERT( rListener.is() );
     MutexGuard aGuard( rMutex );
@@ -303,7 +303,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
     return aData.pAsInterface ? 1 : 0;
 }
 
-void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_THROW( () )
+void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_THROW(())
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
@@ -333,7 +333,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
 }
 
 
-void OInterfaceContainerHelper::clear() SAL_THROW( () )
+void OInterfaceContainerHelper::clear() SAL_THROW(())
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
@@ -354,13 +354,13 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
 typedef ::std::vector< std::pair < Type , void* > > t_type2ptr;
 
 OMultiTypeInterfaceContainerHelper::OMultiTypeInterfaceContainerHelper( Mutex & rMutex_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     : rMutex( rMutex_ )
 {
     m_pMap = new t_type2ptr();
 }
 OMultiTypeInterfaceContainerHelper::~OMultiTypeInterfaceContainerHelper()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_type2ptr * pMap = (t_type2ptr *)m_pMap;
     t_type2ptr::iterator iter = pMap->begin();
@@ -375,7 +375,7 @@ OMultiTypeInterfaceContainerHelper::~OMultiTypeInterfaceContainerHelper()
     delete pMap;
 }
 Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_type2ptr * pMap = (t_type2ptr *)m_pMap;
     t_type2ptr::size_type nSize;
@@ -423,7 +423,7 @@ static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
 }
 
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelper::getContainer( const Type & rKey ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -435,7 +435,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelper::getContainer( co
 }
 sal_Int32 OMultiTypeInterfaceContainerHelper::addInterface(
     const Type & rKey, const Reference< XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     t_type2ptr * pMap = (t_type2ptr *)m_pMap;
@@ -451,7 +451,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper::addInterface(
 }
 sal_Int32 OMultiTypeInterfaceContainerHelper::removeInterface(
     const Type & rKey, const Reference< XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -466,7 +466,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper::removeInterface(
     return 0;
 }
 void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_type2ptr::size_type nSize = 0;
     OInterfaceContainerHelper ** ppListenerContainers = NULL;
@@ -503,7 +503,7 @@ void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rE
     delete [] ppListenerContainers;
 }
 void OMultiTypeInterfaceContainerHelper::clear()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     t_type2ptr * pMap = (t_type2ptr *)m_pMap;
@@ -536,14 +536,14 @@ static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
 }
 
 OMultiTypeInterfaceContainerHelperInt32::OMultiTypeInterfaceContainerHelperInt32( Mutex & rMutex_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_pMap( NULL )
     , rMutex( rMutex_ )
 {
     // delay pMap allocation until necessary.
 }
 OMultiTypeInterfaceContainerHelperInt32::~OMultiTypeInterfaceContainerHelperInt32()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (!m_pMap)
         return;
@@ -561,7 +561,7 @@ OMultiTypeInterfaceContainerHelperInt32::~OMultiTypeInterfaceContainerHelperInt3
     delete pMap;
 }
 Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes() const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_long2ptr * pMap = (t_long2ptr *)m_pMap;
     t_long2ptr::size_type nSize;
@@ -594,7 +594,7 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
     return ::com::sun::star::uno::Sequence< sal_Int32 >();
 }
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContainer( const sal_Int32 & rKey ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -608,7 +608,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContaine
 }
 sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(
     const sal_Int32 & rKey, const Reference< XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     if (!m_pMap)
@@ -626,7 +626,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(
 }
 sal_Int32 OMultiTypeInterfaceContainerHelperInt32::removeInterface(
     const sal_Int32 & rKey, const Reference< XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -643,7 +643,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::removeInterface(
     return 0;
 }
 void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject & rEvt )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_long2ptr::size_type nSize = 0;
     OInterfaceContainerHelper ** ppListenerContainers = NULL;
@@ -682,7 +682,7 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
     delete [] ppListenerContainers;
 }
 void OMultiTypeInterfaceContainerHelperInt32::clear()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     if (!m_pMap)

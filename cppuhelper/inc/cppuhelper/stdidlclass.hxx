@@ -44,7 +44,7 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::reflection::XIdlClass * SAL_CALL createSt
     const ::rtl::OUString & sImplementationName ,
     const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > & rSuperClass,
     const ::com::sun::star::uno::Sequence < ::rtl::OUString > &seq )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 
 
@@ -69,7 +69,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 					 	const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > & ,
                          const Interface1 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -85,7 +85,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface1 *,
                          const Interface2 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -104,7 +104,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface2 *,
                          const Interface3 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -124,7 +124,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface3 *,
                          const Interface4 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -147,7 +147,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface4 *,
                          const Interface5 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -169,7 +169,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface5 *,
                          const Interface6 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -193,7 +193,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface6 *,
                          const Interface7 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -219,7 +219,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface7 *,
                          const Interface8 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -244,7 +244,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface8 *,
                          const Interface9 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }
@@ -268,7 +268,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface9 *,
                          const Interface10 *
                      )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return 0;
 }

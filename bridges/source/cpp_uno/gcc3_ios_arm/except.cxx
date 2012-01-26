@@ -61,7 +61,7 @@ void dummy_can_throw_anything( char const * )
 }
 
 //==================================================================================================
-static OUString toUNOname( char const * p ) SAL_THROW( () )
+static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     char const * start = p;
@@ -110,24 +110,24 @@ class RTTI
     void * m_hApp;
 
 public:
-    RTTI() SAL_THROW( () );
-    ~RTTI() SAL_THROW( () );
+    RTTI() SAL_THROW(());
+    ~RTTI() SAL_THROW(());
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW( () );
+    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
 //__________________________________________________________________________________________________
-RTTI::RTTI() SAL_THROW( () )
+RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
 }
 //__________________________________________________________________________________________________
-RTTI::~RTTI() SAL_THROW( () )
+RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
 //__________________________________________________________________________________________________
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW( () )
+type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
 

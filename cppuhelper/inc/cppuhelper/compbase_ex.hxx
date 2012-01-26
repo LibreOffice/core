@@ -59,20 +59,20 @@ protected:
 
         @param rMutex mutex to sync upon disposing
     */
-    WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
+    WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW(());
 public:
     /** Destructor
     */
-    virtual ~WeakComponentImplHelperBase() SAL_THROW( () );
+    virtual ~WeakComponentImplHelperBase() SAL_THROW(());
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
         {}
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -106,18 +106,18 @@ protected:
     */
     virtual void SAL_CALL disposing();
 
-    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
+    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW(());
 public:
-    virtual ~WeakAggComponentImplHelperBase() SAL_THROW( () );
+    virtual ~WeakAggComponentImplHelperBase() SAL_THROW(());
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
         {}
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

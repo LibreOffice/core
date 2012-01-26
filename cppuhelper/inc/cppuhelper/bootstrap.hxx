@@ -52,7 +52,7 @@ namespace cppu
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createSimpleRegistry(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Creates a nested registry service instance.
 
@@ -62,7 +62,7 @@ SAL_CALL createSimpleRegistry(
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createNestedRegistry(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Installs type description manager instance, i.e. registers a callback at cppu core.
 
@@ -71,7 +71,7 @@ SAL_CALL createNestedRegistry(
 */
 CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 /** Bootstraps an initial component context with service manager upon a given registry.
     This includes insertion of initial services:

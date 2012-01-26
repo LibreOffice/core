@@ -100,9 +100,9 @@ protected:
 
 public:
     FilePolicy( Reference< XComponentContext > const & xComponentContext )
-        SAL_THROW( () );
+        SAL_THROW(());
     virtual ~FilePolicy()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(
@@ -123,7 +123,7 @@ public:
 };
 //__________________________________________________________________________________________________
 FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( () )
+    SAL_THROW(())
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
     , m_ac( xComponentContext )
@@ -133,7 +133,7 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
 }
 //__________________________________________________________________________________________________
 FilePolicy::~FilePolicy()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -194,22 +194,22 @@ class PolicyReader
 
     sal_Unicode get()
         SAL_THROW( (RuntimeException) );
-    inline void back( sal_Unicode c ) SAL_THROW( () )
+    inline void back( sal_Unicode c ) SAL_THROW(())
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW( () )
+    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW(())
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
 
-    inline bool isCharToken( sal_Unicode c ) const SAL_THROW( () )
+    inline bool isCharToken( sal_Unicode c ) const SAL_THROW(())
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
     PolicyReader( OUString const & file, AccessControl & ac )
         SAL_THROW( (RuntimeException) );
     ~PolicyReader()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     void error( OUString const & msg )
         SAL_THROW( (RuntimeException) );
@@ -425,7 +425,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
 }
 //__________________________________________________________________________________________________
 PolicyReader::~PolicyReader()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if ( ::osl_closeFile( m_file ) != osl_File_E_None ) {
         OSL_ASSERT( false );
@@ -585,14 +585,14 @@ Reference< XInterface > SAL_CALL filepolicy_create(
     return (OWeakObject *)new stoc_sec::FilePolicy( xComponentContext );
 }
 //--------------------------------------------------------------------------------------------------
-Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () )
+Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW(())
 {
     Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
     return aSNS;
 }
 //--------------------------------------------------------------------------------------------------
-OUString filepolicy_getImplementationName() SAL_THROW( () )
+OUString filepolicy_getImplementationName() SAL_THROW(())
 {
     static OUString s_implName = OUSTR(IMPL_NAME);
     return s_implName;

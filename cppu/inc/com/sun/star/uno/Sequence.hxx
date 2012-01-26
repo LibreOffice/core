@@ -52,7 +52,7 @@ typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
 
 //______________________________________________________________________________
 template< class E >
-inline Sequence< E >::Sequence() SAL_THROW( () )
+inline Sequence< E >::Sequence() SAL_THROW(())
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_construct(
@@ -63,7 +63,7 @@ inline Sequence< E >::Sequence() SAL_THROW( () )
 
 //______________________________________________________________________________
 template< class E >
-inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW( () )
+inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW(())
 {
     ::osl_incrementInterlockedCount( &rSeq._pSequence->nRefCount );
     _pSequence = rSeq._pSequence;
@@ -72,7 +72,7 @@ inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW( () )
 //______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence(
-    uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () )
+    uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW(())
         : _pSequence( pSequence )
 {
 }
@@ -113,7 +113,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 
 //______________________________________________________________________________
 template< class E >
-inline Sequence< E >::~Sequence() SAL_THROW( () )
+inline Sequence< E >::~Sequence() SAL_THROW(())
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_destructData(
@@ -122,7 +122,7 @@ inline Sequence< E >::~Sequence() SAL_THROW( () )
 
 //______________________________________________________________________________
 template< class E >
-inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) SAL_THROW( () )
+inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) SAL_THROW(())
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_assign(
@@ -133,7 +133,7 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) 
 //______________________________________________________________________________
 template< class E >
 inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (_pSequence == rSeq._pSequence)
         return sal_True;
@@ -148,7 +148,7 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
 //______________________________________________________________________________
 template< class E >
 inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return (! operator == ( rSeq ));
 }
@@ -184,7 +184,7 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 //______________________________________________________________________________
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OSL_ENSURE(
         nIndex >= 0 && nIndex < getLength(),
@@ -211,7 +211,7 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
 
 //------------------------------------------------------------------------------
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
-    const ::rtl::ByteSequence & rByteSequence ) SAL_THROW( () )
+    const ::rtl::ByteSequence & rByteSequence ) SAL_THROW(())
 {
     return ::com::sun::star::uno::Sequence< sal_Int8 >(
         * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence ) );
@@ -267,7 +267,7 @@ template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType(
     SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Sequence< E > * )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return ::cppu::getTypeFavourUnsigned(
         static_cast< ::com::sun::star::uno::Sequence< E > * >(0));
@@ -277,7 +277,7 @@ SAL_CALL getCppuType(
 template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! ::com::sun::star::uno::Sequence< E >::s_pType)
     {
@@ -295,7 +295,7 @@ static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char
 
 // char sequence
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCharSequenceCppuType() SAL_THROW( () )
+SAL_CALL getCharSequenceCppuType() SAL_THROW(())
 {
 #if !( defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;

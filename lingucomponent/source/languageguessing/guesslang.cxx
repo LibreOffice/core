@@ -401,7 +401,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
  */
 Reference< XInterface > SAL_CALL LangGuess_Impl_create(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl(xContext) );
 }

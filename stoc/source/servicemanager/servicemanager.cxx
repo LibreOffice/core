@@ -280,7 +280,7 @@ class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
     Sequence< beans::Property > m_properties;
 
 public:
-    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties ) SAL_THROW( () )
+    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties ) SAL_THROW(())
         : m_properties( properties )
         {}
 
@@ -638,7 +638,7 @@ public:
     OServiceManagerWrapper(
         Reference< XComponentContext > const & xContext )
         SAL_THROW( (RuntimeException) );
-    virtual ~OServiceManagerWrapper() SAL_THROW( () );
+    virtual ~OServiceManagerWrapper() SAL_THROW(());
 
     // XUnoTunnel
     sal_Int64 SAL_CALL getSomething( Sequence< sal_Int8 > const & id ) throw (RuntimeException)
@@ -780,7 +780,7 @@ void OServiceManagerWrapper::disposing()
     }
 }
 //__________________________________________________________________________________________________
-OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW( () )
+OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW(())
 {
     if (m_root)
     {

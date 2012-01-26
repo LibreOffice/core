@@ -94,16 +94,16 @@ class acc_Intersection
     inline acc_Intersection(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW( () );
+        SAL_THROW(());
 
 public:
     virtual ~acc_Intersection()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -114,7 +114,7 @@ public:
 inline acc_Intersection::acc_Intersection(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
 {
@@ -122,7 +122,7 @@ inline acc_Intersection::acc_Intersection(
 }
 //__________________________________________________________________________________________________
 acc_Intersection::~acc_Intersection()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -130,7 +130,7 @@ acc_Intersection::~acc_Intersection()
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! x1.is())
         return x2;
@@ -157,16 +157,16 @@ class acc_Union
     inline acc_Union(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW( () );
+        SAL_THROW(());
 
 public:
     virtual ~acc_Union()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -177,7 +177,7 @@ public:
 inline acc_Union::acc_Union(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
 {
@@ -185,7 +185,7 @@ inline acc_Union::acc_Union(
 }
 //__________________________________________________________________________________________________
 acc_Union::~acc_Union()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -193,7 +193,7 @@ acc_Union::~acc_Union()
 inline Reference< security::XAccessControlContext > acc_Union::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! x1.is())
         return Reference< security::XAccessControlContext >(); // unrestricted
@@ -226,9 +226,9 @@ class acc_Policy
 public:
     inline acc_Policy(
         PermissionCollection const & permissions )
-        SAL_THROW( () );
+        SAL_THROW(());
     virtual ~acc_Policy()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -238,14 +238,14 @@ public:
 //__________________________________________________________________________________________________
 inline acc_Policy::acc_Policy(
     PermissionCollection const & permissions )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_permissions( permissions )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 acc_Policy::~acc_Policy()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -271,8 +271,8 @@ public:
     inline acc_CurrentContext(
         Reference< XCurrentContext > const & xDelegate,
         Reference< security::XAccessControlContext > const & xRestriction )
-        SAL_THROW( () );
-    virtual ~acc_CurrentContext() SAL_THROW( () );
+        SAL_THROW(());
+    virtual ~acc_CurrentContext() SAL_THROW(());
 
     // XInterface impl
     virtual void SAL_CALL acquire()
@@ -288,7 +288,7 @@ public:
 inline acc_CurrentContext::acc_CurrentContext(
     Reference< XCurrentContext > const & xDelegate,
     Reference< security::XAccessControlContext > const & xRestriction )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_refcount( 0 )
     , m_xDelegate( xDelegate )
 {
@@ -302,7 +302,7 @@ inline acc_CurrentContext::acc_CurrentContext(
 }
 //__________________________________________________________________________________________________
 acc_CurrentContext::~acc_CurrentContext()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -384,9 +384,9 @@ class cc_reset
 {
     void * m_cc;
 public:
-    inline cc_reset( void * cc ) SAL_THROW( () )
+    inline cc_reset( void * cc ) SAL_THROW(())
         : m_cc( cc ) {}
-    inline ~cc_reset() SAL_THROW( () )
+    inline ~cc_reset() SAL_THROW(())
         { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
 };
 
@@ -425,7 +425,7 @@ class AccessController
 
     ThreadData m_rec;
     typedef vector< pair< OUString, Any > > t_rec_vec;
-    inline void clearPostPoned() SAL_THROW( () );
+    inline void clearPostPoned() SAL_THROW(());
     void checkAndClearPostPoned() SAL_THROW( (RuntimeException) );
 
     PermissionCollection getEffectivePermissions(
@@ -440,7 +440,7 @@ public:
     AccessController( Reference< XComponentContext > const & xComponentContext )
         SAL_THROW( (RuntimeException) );
     virtual ~AccessController()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     //  XInitialization impl
     virtual void SAL_CALL initialize(
@@ -533,7 +533,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 }
 //__________________________________________________________________________________________________
 AccessController::~AccessController()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -599,7 +599,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
 
 #ifdef __DIAGNOSE
 static void dumpPermissions(
-    PermissionCollection const & collection, OUString const & userId = OUString() ) SAL_THROW( () )
+    PermissionCollection const & collection, OUString const & userId = OUString() ) SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     if (!userId.isEmpty())
@@ -628,7 +628,7 @@ static void dumpPermissions(
 
 
 //__________________________________________________________________________________________________
-inline void AccessController::clearPostPoned() SAL_THROW( () )
+inline void AccessController::clearPostPoned() SAL_THROW(())
 {
     delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
     m_rec.setData( 0 );
@@ -1039,14 +1039,14 @@ Reference< XInterface > SAL_CALL ac_create(
     return (OWeakObject *)new stoc_sec::AccessController( xComponentContext );
 }
 //--------------------------------------------------------------------------------------------------
-Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
+Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW(())
 {
     Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
     return aSNS;
 }
 //--------------------------------------------------------------------------------------------------
-OUString ac_getImplementationName() SAL_THROW( () )
+OUString ac_getImplementationName() SAL_THROW(())
 {
     static OUString s_implName = OUSTR(IMPL_NAME);
     return s_implName;
@@ -1056,9 +1056,9 @@ Reference< XInterface > SAL_CALL filepolicy_create(
     Reference< XComponentContext > const & xComponentContext )
     SAL_THROW( (Exception) );
 //--------------------------------------------------------------------------------------------------
-Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () );
+Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
-OUString filepolicy_getImplementationName() SAL_THROW( () );
+OUString filepolicy_getImplementationName() SAL_THROW(());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,8 +66,8 @@ public: // refcounting
     void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
-    static UString              getImplementationName_Static() THROWS( () );
+    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS(());
+    static UString              getImplementationName_Static() THROWS(());
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
@@ -374,7 +374,7 @@ XInterfaceRef OMarkableOutputStreamTest_CreateInstance( const XMultiServiceFacto
 
 
 
-Sequence<UString> OMarkableOutputStreamTest_getSupportedServiceNames(void) THROWS( () )
+Sequence<UString> OMarkableOutputStreamTest_getSupportedServiceNames(void) THROWS(())
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OMarkableOutputStreamTest_getImplementationName();
@@ -382,12 +382,12 @@ Sequence<UString> OMarkableOutputStreamTest_getSupportedServiceNames(void) THROW
     return aRet;
 }
 
-UString     OMarkableOutputStreamTest_getServiceName() THROWS( () )
+UString     OMarkableOutputStreamTest_getServiceName() THROWS(())
 {
     return L"test.com.sun.star.io.MarkableOutputStream";
 }
 
-UString     OMarkableOutputStreamTest_getImplementationName() THROWS( () )
+UString     OMarkableOutputStreamTest_getImplementationName() THROWS(())
 {
     return L"test.com.sun.starextensions.stm.MarkableOutputStream";
 }
@@ -416,8 +416,8 @@ public: // refcounting
     void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
-    static UString              getImplementationName_Static() THROWS( () );
+    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS(());
+    static UString              getImplementationName_Static() THROWS(());
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
@@ -635,7 +635,7 @@ XInterfaceRef OMarkableInputStreamTest_CreateInstance( const XMultiServiceFactor
 
 
 
-Sequence<UString> OMarkableInputStreamTest_getSupportedServiceNames(void) THROWS( () )
+Sequence<UString> OMarkableInputStreamTest_getSupportedServiceNames(void) THROWS(())
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OMarkableInputStreamTest_getImplementationName();
@@ -643,12 +643,12 @@ Sequence<UString> OMarkableInputStreamTest_getSupportedServiceNames(void) THROWS
     return aRet;
 }
 
-UString     OMarkableInputStreamTest_getServiceName() THROWS( () )
+UString     OMarkableInputStreamTest_getServiceName() THROWS(())
 {
     return L"test.com.sun.star.io.MarkableInputStream";
 }
 
-UString     OMarkableInputStreamTest_getImplementationName() THROWS( () )
+UString     OMarkableInputStreamTest_getImplementationName() THROWS(())
 {
     return L"test.com.sun.star.extensions.stm.MarkableInputStream";
 }

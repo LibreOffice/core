@@ -324,7 +324,7 @@ void OOneInstanceComponentFactory::disposing()
 //      ::rtl::OUString const & rImplementationName,
 //      ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
 //      rtl_ModuleCount * pModCount = 0 )
-//      SAL_THROW( () )
+//      SAL_THROW(())
 //  {
 //      return new OOneInstanceComponentFactory( rImplementationName, fptr , rServiceNames);
 //  }

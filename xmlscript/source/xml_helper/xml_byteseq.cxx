@@ -50,7 +50,7 @@ class BSeqInputStream
 
 public:
     inline BSeqInputStream( ByteSequence const & rSeq )
-        SAL_THROW( () )
+        SAL_THROW(())
         : _seq( rSeq )
         , _nPos( 0 )
         {}
@@ -119,7 +119,7 @@ class BSeqOutputStream
 
 public:
     inline BSeqOutputStream( ByteSequence * seq )
-        SAL_THROW( () )
+        SAL_THROW(())
         : _seq( seq )
         {}
 
@@ -157,14 +157,14 @@ void BSeqOutputStream::closeOutput()
 
 //==================================================================================================
 Reference< io::XInputStream > SAL_CALL createInputStream( ByteSequence const & rInData )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new BSeqInputStream( rInData );
 }
 
 //==================================================================================================
 Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutData )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new BSeqOutputStream( pOutData );
 }

@@ -74,7 +74,7 @@ struct Bridge
     Mapping                     m_uno2cli;
     bool                        m_registered_cli2uno;
 
-    ~Bridge() SAL_THROW( () );
+    ~Bridge() SAL_THROW(());
     Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool registered_java2uno );
 
     void acquire() const;

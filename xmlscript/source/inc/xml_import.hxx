@@ -59,7 +59,7 @@ SAL_CALL createDocumentHandler(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse = true )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 }
 

@@ -38,20 +38,20 @@ namespace xmlscript
 
 //__________________________________________________________________________________________________
 void XMLElement::addAttribute( OUString const & rAttrName, OUString const & rValue )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _attrNames.push_back( rAttrName );
     _attrValues.push_back( rValue );
 }
 //__________________________________________________________________________________________________
 void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xElem )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _subElems.push_back( xElem );
 }
 //__________________________________________________________________________________________________
 Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nIndex )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return _subElems[ (size_t)nIndex ];
 }

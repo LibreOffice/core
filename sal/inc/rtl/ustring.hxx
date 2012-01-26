@@ -128,7 +128,7 @@ public:
         @param str
                OUString data
     */
-    inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW( () )
+    inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW(())
         { pData = str; }
 
     /**

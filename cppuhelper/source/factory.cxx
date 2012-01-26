@@ -80,7 +80,7 @@ public:
         ComponentInstantiation pCreateFunction_,
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_ )
-        SAL_THROW( () )
+        SAL_THROW(())
         : xSMgr( rServiceManager )
         , pCreateFunction( pCreateFunction_ )
         , m_fptr( fptr )
@@ -94,7 +94,7 @@ public:
     OSingleFactoryHelper(
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_ )
-        SAL_THROW( () )
+        SAL_THROW(())
         : xSMgr( rServiceManager )
         , pCreateFunction( NULL )
         , m_fptr( 0 )
@@ -292,7 +292,7 @@ public:
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_,
         sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW( () )
+        SAL_THROW(())
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
         , bOneInstance( bOneInstance_ )
@@ -310,7 +310,7 @@ public:
         const Sequence< OUString > * pServiceNames_,
         rtl_ModuleCount * pModCount,
         sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW( () )
+        SAL_THROW(())
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
         , bOneInstance( bOneInstance_ )
@@ -325,7 +325,7 @@ public:
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_,
         sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW( () )
+        SAL_THROW(())
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_ )
         , bOneInstance( bOneInstance_ )
@@ -551,7 +551,7 @@ public:
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_,
         const Reference<XRegistryKey > & xImplementationKey_,
-        sal_Bool bOneInstance_ = sal_False ) SAL_THROW( () )
+        sal_Bool bOneInstance_ = sal_False ) SAL_THROW(())
             : OFactoryComponentHelper(
                 rServiceManager, rImplementationName_, 0, 0, 0, bOneInstance_ ),
               OPropertySetHelper( OComponentHelper::rBHelper ),
@@ -957,7 +957,7 @@ class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleService
 public:
 
     OFactoryProxyHelper( const Reference<XSingleServiceFactory > & rFactory )
-        SAL_THROW( () )
+        SAL_THROW(())
         : xFactory( rFactory )
         {}
 
@@ -1043,7 +1043,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     ComponentInstantiation pCreateFunction,
     const Sequence< OUString > & rServiceNames,
     rtl_ModuleCount *pModCount )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_False );
@@ -1053,7 +1053,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
 Reference<XSingleServiceFactory > SAL_CALL createFactoryProxy(
     SAL_UNUSED_PARAMETER const Reference<XMultiServiceFactory > &,
     const Reference<XSingleServiceFactory > & rFactory )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new OFactoryProxyHelper( rFactory );
 }
@@ -1065,7 +1065,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     ComponentInstantiation pCreateFunction,
     const Sequence< OUString > & rServiceNames,
     rtl_ModuleCount *pModCount )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
@@ -1076,7 +1076,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     const Reference<XRegistryKey > & rImplementationKey )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new ORegistryFactoryHelper(
         rServiceManager, rImplementationName, rImplementationKey, sal_False );
@@ -1087,7 +1087,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     const Reference<XRegistryKey > & rImplementationKey )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new ORegistryFactoryHelper(
         rServiceManager, rImplementationName, rImplementationKey, sal_True );
@@ -1099,7 +1099,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount)
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new OFactoryComponentHelper(
         Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_False );
@@ -1110,7 +1110,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFa
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount)
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return new OFactoryComponentHelper(
         Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_True );

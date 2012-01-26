@@ -1336,7 +1336,7 @@ inline bool equalFont( Style const & style1, Style const & style2 )
 }
 //__________________________________________________________________________________________________
 OUString StyleBag::getStyleId( Style const & rStyle )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! rStyle._set) // nothin set
     {
@@ -1414,7 +1414,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     return pStyle->_id;
 }
 //__________________________________________________________________________________________________
-StyleBag::~StyleBag() SAL_THROW( () )
+StyleBag::~StyleBag() SAL_THROW(())
 {
     for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
     {

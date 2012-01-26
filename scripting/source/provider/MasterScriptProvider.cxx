@@ -885,7 +885,7 @@ Reference< XInterface > SAL_CALL sp_create(
 
 //*************************************************************************
 Sequence< ::rtl::OUString > sp_getSupportedServiceNames( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::rtl::OUString names[3];
 
@@ -901,7 +901,7 @@ Sequence< ::rtl::OUString > sp_getSupportedServiceNames( )
 
 //*************************************************************************
 ::rtl::OUString sp_getImplementationName( )
-SAL_THROW( () )
+SAL_THROW(())
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
         "com.sun.star.script.provider.MasterScriptProvider" ) );
@@ -916,7 +916,7 @@ Reference< XInterface > SAL_CALL urihelper_create(
 }
 
 Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::rtl::OUString serviceNameList[] = {
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -929,7 +929,7 @@ Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
 }
 
 ::rtl::OUString urihelper_getImplementationName( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.script.provider.ScriptURIHelper"));

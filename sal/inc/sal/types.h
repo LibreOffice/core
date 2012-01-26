@@ -376,7 +376,7 @@ typedef struct _sal_Sequence
     use common C++ throw statement for throwing exceptions, e.g.
     throw RuntimeException();
 
-    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
+    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW(())
     SAL_THROW_EXTERN_C() should be used for all C functions
 */
 #ifdef __cplusplus

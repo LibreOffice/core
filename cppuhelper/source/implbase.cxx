@@ -48,14 +48,14 @@ namespace
 namespace cppu
 {
 //==================================================================================================
-Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () )
+Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(())
 {
     return theImplHelperInitMutex::get();
 }
 
 // ClassDataBase
 //__________________________________________________________________________________________________
-ClassDataBase::ClassDataBase() SAL_THROW( () )
+ClassDataBase::ClassDataBase() SAL_THROW(())
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( 0 )
@@ -64,7 +64,7 @@ ClassDataBase::ClassDataBase() SAL_THROW( () )
 {
 }
 //__________________________________________________________________________________________________
-ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW( () )
+ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW(())
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( nClassCode_ )
@@ -73,7 +73,7 @@ ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW( () )
 {
 }
 //__________________________________________________________________________________________________
-ClassDataBase::~ClassDataBase() SAL_THROW( () )
+ClassDataBase::~ClassDataBase() SAL_THROW(())
 {
     delete pTypes;
     delete pId;
@@ -87,7 +87,7 @@ ClassDataBase::~ClassDataBase() SAL_THROW( () )
 
 // ClassData
 //__________________________________________________________________________________________________
-void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THROW( () )
+void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THROW(())
 {
     arType2Offset[nType2Offset].nOffset = nOffset;
 
@@ -107,7 +107,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
 #endif
 }
 //__________________________________________________________________________________________________
-void ClassData::initTypeProvider() SAL_THROW( () )
+void ClassData::initTypeProvider() SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if (! pTypes)
@@ -148,14 +148,14 @@ void ClassData::initTypeProvider() SAL_THROW( () )
     }
 }
 //__________________________________________________________________________________________________
-Sequence< Type > ClassData::getTypes() SAL_THROW( () )
+Sequence< Type > ClassData::getTypes() SAL_THROW(())
 {
     if (! pTypes)
         initTypeProvider();
     return *pTypes;
 }
 //__________________________________________________________________________________________________
-Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW( () )
+Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
 {
     if (! pTypes)
         initTypeProvider();
@@ -165,14 +165,14 @@ Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW( () )
 //--------------------------------------------------------------------------------------------------
 static inline sal_Bool td_equals(
     typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return (pTD->pWeakRef == pType ||
             (pTD->pTypeName->length == pType->pTypeName->length &&
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 //__________________________________________________________________________________________________
-Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THROW( () )
+Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THROW(())
 {
     if (rType == ::getCppuType( (const Reference< XInterface > *)0 ))
         return Any( &pBase, ::getCppuType( (const Reference< XInterface > *)0 ) );
@@ -204,13 +204,13 @@ Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THRO
 // WeakComponentImplHelperBase
 //__________________________________________________________________________________________________
 WeakComponentImplHelperBase::WeakComponentImplHelperBase( Mutex & rMutex )
-    SAL_THROW( () )
+    SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
 //__________________________________________________________________________________________________
 WeakComponentImplHelperBase::~WeakComponentImplHelperBase()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 }
 //__________________________________________________________________________________________________
@@ -330,13 +330,13 @@ void WeakComponentImplHelperBase::removeEventListener(
 // WeakAggComponentImplHelperBase
 //__________________________________________________________________________________________________
 WeakAggComponentImplHelperBase::WeakAggComponentImplHelperBase( Mutex & rMutex )
-    SAL_THROW( () )
+    SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
 //__________________________________________________________________________________________________
 WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 }
 //__________________________________________________________________________________________________

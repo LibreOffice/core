@@ -42,7 +42,7 @@ namespace cppu
 inline void _defaultConstructUnion(
     void * pMem,
     typelib_TypeDescription * pTypeDescr )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::uno_type_constructData(
         (char *)pMem + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
@@ -53,12 +53,12 @@ inline void _defaultConstructUnion(
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
-    SAL_THROW( () );
+    SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
 inline void _defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pTypeDescr )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -161,7 +161,7 @@ inline void _defaultConstructData(
     void * pMem,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     switch (pType->eTypeClass)
     {

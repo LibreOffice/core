@@ -71,10 +71,10 @@ namespace cppu
 {
 
 Reference< security::XAccessController >
-createDefaultAccessController() SAL_THROW( () );
+createDefaultAccessController() SAL_THROW(());
 
 Reference< lang::XSingleComponentFactory >
-create_boostrap_macro_expander_factory() SAL_THROW( () );
+create_boostrap_macro_expander_factory() SAL_THROW(());
 
 OUString const & get_this_libpath();
 
@@ -105,7 +105,7 @@ static Reference< XInterface > SAL_CALL createInstance(
 
 Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
     OUString const & rBootstrapPath )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     try
     {
@@ -136,7 +136,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
 
 Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     OUString const & rBootstrapPath )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     try
     {

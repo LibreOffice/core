@@ -43,7 +43,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static void print_options() SAL_THROW( () )
+static void print_options() SAL_THROW(())
 {
     printf(
         "\nusage: regsingleton [-r|-ra] registry_file singleton_name[=service_name] ...\n\n"

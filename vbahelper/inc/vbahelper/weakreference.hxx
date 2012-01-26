@@ -52,16 +52,16 @@ class WeakReference
 public:
     /** Default constructor. Creates an empty weak reference.
      */
-    inline explicit WeakReference() SAL_THROW( () ) : mpObject( 0 ) {}
+    inline explicit WeakReference() SAL_THROW(()) : mpObject( 0 ) {}
 
     /** Initializes this weak reference with the passed reference to an object.
      */
-    inline explicit WeakReference( const ::rtl::Reference< ObjectType >& rxObject ) SAL_THROW( () ) :
+    inline explicit WeakReference( const ::rtl::Reference< ObjectType >& rxObject ) SAL_THROW(()) :
         mxWeakRef( rxObject.get() ), mpObject( rxObject.get() ) {}
 
     /** Releases this weak reference and takes over the passed reference.
      */
-    inline WeakReference& SAL_CALL operator=( const ::rtl::Reference< ObjectType >& rxObject ) SAL_THROW( () )
+    inline WeakReference& SAL_CALL operator=( const ::rtl::Reference< ObjectType >& rxObject ) SAL_THROW(())
     {
         mxWeakRef = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >( rxObject.get() );
         mpObject = rxObject.get();
@@ -72,7 +72,7 @@ public:
 
         @return  Reference or null, if the weakly referenced object is gone.
      */
-    inline SAL_CALL operator ::rtl::Reference< ObjectType >() SAL_THROW( () )
+    inline SAL_CALL operator ::rtl::Reference< ObjectType >() SAL_THROW(())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak > xRef = mxWeakRef;
         ::rtl::Reference< ObjectType > xObject;

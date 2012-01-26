@@ -732,7 +732,7 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 
 Sequence< ::rtl::OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.script.browse.BrowseNodeFactory"));
@@ -742,7 +742,7 @@ bnf_getSupportedServiceNames( )
 
 ::rtl::OUString SAL_CALL
 bnf_getImplementationName( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.script.browse.BrowseNodeFactory" ));

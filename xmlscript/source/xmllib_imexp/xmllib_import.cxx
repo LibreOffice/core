@@ -106,7 +106,7 @@ LibElementBase::LibElementBase(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     LibElementBase * pParent, LibraryImport * pImport )
-    SAL_THROW( () )
+    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _aLocalName( rLocalName )
@@ -121,7 +121,7 @@ LibElementBase::LibElementBase(
 }
 //__________________________________________________________________________________________________
 LibElementBase::~LibElementBase()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _pImport->release();
 
@@ -214,7 +214,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
 }
 //__________________________________________________________________________________________________
 LibraryImport::~LibraryImport()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "LibraryImport::~LibraryImport()." );

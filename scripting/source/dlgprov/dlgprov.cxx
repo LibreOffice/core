@@ -859,7 +859,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
 
     static Reference< XInterface > SAL_CALL create_DialogProviderImpl(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW( () )
+        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
     }

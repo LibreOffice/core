@@ -157,7 +157,7 @@ class TypeDescr
 
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
-    inline ~TypeDescr() SAL_THROW( () )
+    inline ~TypeDescr() SAL_THROW(())
         { TYPELIB_DANGER_RELEASE( m_td ); }
 
     inline typelib_TypeDescription * get() const

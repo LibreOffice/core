@@ -45,7 +45,7 @@ struct IdContainer
     sal_Sequence *      pCurrentId;
 };
 
-IdContainer * getIdContainer() SAL_THROW( () );
+IdContainer * getIdContainer() SAL_THROW(());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

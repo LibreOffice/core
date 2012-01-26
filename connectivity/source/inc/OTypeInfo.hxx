@@ -73,13 +73,13 @@ namespace connectivity
                 ,bUnsigned(sal_False)
         {}
 
-        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint ) SAL_THROW(())
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW(())
             {  }
 
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }

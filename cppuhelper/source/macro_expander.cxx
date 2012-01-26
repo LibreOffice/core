@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 //---- private forward -----------------------------------------------------------------------------
-Bootstrap const & get_unorc() SAL_THROW( () );
+Bootstrap const & get_unorc() SAL_THROW(());
 }
 
 namespace cppuhelper { namespace detail {
@@ -111,11 +111,11 @@ protected:
     virtual void SAL_CALL disposing();
 
 public:
-    inline Bootstrap_MacroExpander() SAL_THROW( () )
+    inline Bootstrap_MacroExpander() SAL_THROW(())
         : t_uno_impl( m_mutex )
         {}
     virtual ~Bootstrap_MacroExpander()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
@@ -133,7 +133,7 @@ public:
 void Bootstrap_MacroExpander::disposing()
 {}
 //__________________________________________________________________________________________________
-Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW( () )
+Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW(())
 {}
 
 // XServiceInfo impl
@@ -185,7 +185,7 @@ namespace cppu
 {
 
 //##################################################################################################
-Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW( () )
+Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW(())
 {
     Reference< lang::XSingleComponentFactory > free(::cppu::createSingleComponentFactory(
                                                         service_create,

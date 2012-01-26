@@ -64,7 +64,7 @@ struct Style
 
     ::rtl::OUString _id;
 
-    inline Style( short all_ ) SAL_THROW( () )
+    inline Style( short all_ ) SAL_THROW(())
         : _fontRelief( css::awt::FontRelief::NONE )
         , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
         , _all( all_ )
@@ -78,9 +78,9 @@ class StyleBag
     ::std::vector< Style * > _styles;
 
 public:
-    ~StyleBag() SAL_THROW( () );
+    ~StyleBag() SAL_THROW(());
 
-    ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
+    ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW(());
 
     void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
                const & xOut );
@@ -98,7 +98,7 @@ public:
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
         css::uno::Reference< css::beans::XPropertyState > const & xPropState,
         ::rtl::OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
-        SAL_THROW( () )
+        SAL_THROW(())
         : XMLElement( name )
         , _xProps( xProps )
         , _xPropState( xPropState )
@@ -106,7 +106,7 @@ public:
         {}
     inline ElementDescriptor(
         ::rtl::OUString const & name )
-        SAL_THROW( () )
+        SAL_THROW(())
         : XMLElement( name )
         {}
 

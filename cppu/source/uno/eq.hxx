@@ -46,7 +46,7 @@ namespace cppu
 inline sal_Bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pI1 == pI2)
         return sal_True;
@@ -77,13 +77,13 @@ sal_Bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () );
+    SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool _equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription &&
         !equalStruct( pDest, pSource, pTypeDescr->pBaseTypeDescription, queryInterface, release ))
@@ -114,13 +114,13 @@ sal_Bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () );
+    SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool _equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pDest == pSource)
         return sal_True;
@@ -305,7 +305,7 @@ inline sal_Bool _equalData(
     void * pSource,
     typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     typelib_TypeClass eSourceTypeClass, eDestTypeClass;
     while (typelib_TypeClass_ANY == (eDestTypeClass = pDestType->eTypeClass))

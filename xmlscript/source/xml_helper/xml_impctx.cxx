@@ -76,7 +76,7 @@ struct PrefixEntry
 {
     ::std::vector< sal_Int32 > m_Uids;
 
-    inline PrefixEntry() SAL_THROW( () )
+    inline PrefixEntry() SAL_THROW(())
         { m_Uids.reserve( 4 ); }
 };
 
@@ -879,7 +879,7 @@ OUString ExtendedAttributes::getValueByUidName(
 Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
     Reference< xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OSL_ASSERT( xRoot.is() );
     if (xRoot.is())

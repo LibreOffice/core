@@ -58,7 +58,7 @@ inline void * _map(
     void * p,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     void * pRet = 0;
     if (p)
@@ -79,7 +79,7 @@ inline void * _map(
     return pRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW( () )
+inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW(())
 {
     if (p)
     {
@@ -94,7 +94,7 @@ inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW( () )
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW( () )
+inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW(())
 {
     if (p)
     {
@@ -123,14 +123,14 @@ inline sal_uInt32 calcSeqMemSize(
 }
 
 //--------------------------------------------------------------------------------------------------
-inline uno_Sequence * createEmptySequence() SAL_THROW( () )
+inline uno_Sequence * createEmptySequence() SAL_THROW(())
 {
     ::osl_incrementInterlockedCount( &g_emptySeq.nRefCount );
     return &g_emptySeq;
 }
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * _getVoidType()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! g_pVoidType)
     {
@@ -162,7 +162,7 @@ extern "C" void * binuno_queryInterface(
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * _unionGetSetType(
     void * pUnion, typelib_TypeDescription * pTD )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     typelib_TypeDescriptionReference * pRet = 0;
     sal_Int32 nPos;
@@ -188,7 +188,7 @@ inline typelib_TypeDescriptionReference * _unionGetSetType(
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool _type_equals(
     typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return (pType1 == pType2 ||
             (pType1->eTypeClass == pType2->eTypeClass &&

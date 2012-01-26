@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
-inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
+inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW(())
 {
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
@@ -135,16 +135,16 @@ struct LibraryImport
 
 public:
     inline LibraryImport( LibDescriptorArray* pLibArray )
-        SAL_THROW( () )
+        SAL_THROW(())
         : mpLibArray( pLibArray )
         , mpLibDesc( NULL ) {}
     // Single library mode
     inline LibraryImport( LibDescriptor* pLibDesc )
-        SAL_THROW( () )
+        SAL_THROW(())
         : mpLibArray( NULL )
         , mpLibDesc( pLibDesc ) {}
     virtual ~LibraryImport()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -180,9 +180,9 @@ public:
         OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW( () );
+        SAL_THROW(());
     virtual ~LibElementBase()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XElement
     virtual Reference< xml::input::XElement > SAL_CALL getParent()
@@ -230,7 +230,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW( () )
+        SAL_THROW(())
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -255,7 +255,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW( () )
+        SAL_THROW(())
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
     {}
 };

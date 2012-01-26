@@ -56,7 +56,7 @@ struct ContextEntry_Init
 
     /** Default ctor.
     */
-    inline ContextEntry_Init() SAL_THROW( () )
+    inline ContextEntry_Init() SAL_THROW(())
         : bLateInitService( false )
         {}
     /** Ctor.
@@ -72,7 +72,7 @@ struct ContextEntry_Init
     inline ContextEntry_Init(
         ::rtl::OUString const & name_,
         ::com::sun::star::uno::Any const & value_,
-        bool bLateInitService_ = false ) SAL_THROW( () )
+        bool bLateInitService_ = false ) SAL_THROW(())
             : bLateInitService( bLateInitService_ ),
               name( name_ ),
               value( value_ )
@@ -91,7 +91,7 @@ SAL_CALL createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xDelegate =
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 }
 

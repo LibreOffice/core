@@ -124,19 +124,19 @@ class ThreadKey
     oslThreadKeyCallbackFunction _pCallback;
 
 public:
-    inline oslThreadKey getThreadKey() SAL_THROW( () );
+    inline oslThreadKey getThreadKey() SAL_THROW(());
 
-    inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW( () );
-    inline ~ThreadKey() SAL_THROW( () );
+    inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(());
+    inline ~ThreadKey() SAL_THROW(());
 };
 //__________________________________________________________________________________________________
-inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW( () )
+inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
     : _bInit( sal_False )
     , _pCallback( pCallback )
 {
 }
 //__________________________________________________________________________________________________
-inline ThreadKey::~ThreadKey() SAL_THROW( () )
+inline ThreadKey::~ThreadKey() SAL_THROW(())
 {
     if (_bInit)
     {
@@ -144,7 +144,7 @@ inline ThreadKey::~ThreadKey() SAL_THROW( () )
     }
 }
 //__________________________________________________________________________________________________
-inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW( () )
+inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
 {
     if (! _bInit)
     {
@@ -180,7 +180,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
     }
 }
 //==================================================================================================
-IdContainer * getIdContainer() SAL_THROW( () )
+IdContainer * getIdContainer() SAL_THROW(())
 {
     static ThreadKey s_key( delete_IdContainer );
     oslThreadKey aKey = s_key.getThreadKey();

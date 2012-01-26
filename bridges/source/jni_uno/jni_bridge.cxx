@@ -212,7 +212,7 @@ namespace jni_uno
 {
 
 //______________________________________________________________________________
-void Bridge::acquire() const SAL_THROW( () )
+void Bridge::acquire() const SAL_THROW(())
 {
     if (1 == osl_incrementInterlockedCount( &m_ref ))
     {
@@ -234,7 +234,7 @@ void Bridge::acquire() const SAL_THROW( () )
 }
 
 //______________________________________________________________________________
-void Bridge::release() const SAL_THROW( () )
+void Bridge::release() const SAL_THROW(())
 {
     if (! osl_decrementInterlockedCount( &m_ref ))
     {
@@ -278,7 +278,7 @@ Bridge::Bridge(
 }
 
 //______________________________________________________________________________
-Bridge::~Bridge() SAL_THROW( () )
+Bridge::~Bridge() SAL_THROW(())
 {
     (*m_java_env->release)( m_java_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );

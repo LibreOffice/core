@@ -43,19 +43,19 @@ namespace uno
 
 //==================================================================================================
 inline void SAL_CALL cpp_acquire( void * pCppI )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     reinterpret_cast< XInterface * >( pCppI )->acquire();
 }
 //==================================================================================================
 inline void SAL_CALL cpp_release( void * pCppI )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     reinterpret_cast< XInterface * >( pCppI )->release();
 }
 //==================================================================================================
 inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pCppI)
     {

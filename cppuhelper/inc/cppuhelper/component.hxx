@@ -63,7 +63,7 @@ public:
         the mutex used to protect multi-threaded access;
         lifetime must be longer than the lifetime of this object.
     */
-    OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
+    OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW(());
     /** Destructor. If this object was not disposed previously, object will be disposed manually.
     */
     virtual ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
@@ -111,8 +111,8 @@ protected:
     /// @endcond
 
 private:
-    inline OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
-    inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW( () );
+    inline OComponentHelper( const OComponentHelper & ) SAL_THROW(());
+    inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW(());
 };
 
 }

@@ -37,7 +37,7 @@
     @param pTypeDescr type description of type
     @return true if type might relate to an interface, false otherwise
 */
-inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
+inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
 {
     switch (pTypeDescr->eTypeClass)
     {
@@ -111,7 +111,7 @@ inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_
     @param eTypeClass type class of type
     @return true if type is a cpp simple type, false otherwise
 */
-inline bool cppu_isSimpleType( typelib_TypeClass eTypeClass ) SAL_THROW( () )
+inline bool cppu_isSimpleType( typelib_TypeClass eTypeClass ) SAL_THROW(())
 {
     return (eTypeClass <= typelib_TypeClass_ENUM &&
             eTypeClass != typelib_TypeClass_STRING &&
@@ -122,7 +122,7 @@ inline bool cppu_isSimpleType( typelib_TypeClass eTypeClass ) SAL_THROW( () )
     @param pTypeDescr type description of type
     @return true if type is a cpp simple type, false otherwise
 */
-inline bool cppu_isSimpleType( typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
+inline bool cppu_isSimpleType( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
 {
     return cppu_isSimpleType( pTypeDescr->eTypeClass );
 }

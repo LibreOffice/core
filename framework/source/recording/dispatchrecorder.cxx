@@ -81,7 +81,7 @@ DEFINE_INIT_SERVICE(
 void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,
     typelib_CompoundTypeDescription * pTD )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pTD->pBaseTypeDescription)
     {

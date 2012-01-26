@@ -59,7 +59,7 @@ namespace cppu
 
 #if OSL_DEBUG_LEVEL > 1
 //------------------------------------------------------------------------------
-static inline void out( const char * p ) SAL_THROW( () )
+static inline void out( const char * p ) SAL_THROW(())
 {
     printf( "%s\n", p );
 }
@@ -128,7 +128,7 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
+static const ::std::vector< OUString > * getAccessDPath() SAL_THROW(())
 {
     return theAccessDPath::get().getAccessDPath();
 }
@@ -206,7 +206,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
 
 //------------------------------------------------------------------------------
 static inline sal_Int32 endsWith(
-    const OUString & rText, const OUString & rEnd ) SAL_THROW( () )
+    const OUString & rText, const OUString & rEnd ) SAL_THROW(())
 {
     if (rText.getLength() >= rEnd.getLength() &&
         rEnd.equalsIgnoreAsciiCase(

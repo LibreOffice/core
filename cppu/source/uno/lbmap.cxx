@@ -69,39 +69,39 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline explicit Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
-    inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
-    inline ~Mapping() SAL_THROW( () );
-    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
-    inline Mapping & SAL_CALL operator = ( const Mapping & rMapping ) SAL_THROW( () )
+    inline explicit Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW(());
+    inline Mapping( const Mapping & rMapping ) SAL_THROW(());
+    inline ~Mapping() SAL_THROW(());
+    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW(());
+    inline Mapping & SAL_CALL operator = ( const Mapping & rMapping ) SAL_THROW(())
         { return operator = ( rMapping._pMapping ); }
-    inline uno_Mapping * SAL_CALL get() const SAL_THROW( () )
+    inline uno_Mapping * SAL_CALL get() const SAL_THROW(())
         { return _pMapping; }
-    inline sal_Bool SAL_CALL is() const SAL_THROW( () )
+    inline sal_Bool SAL_CALL is() const SAL_THROW(())
         { return (_pMapping != 0); }
 };
 //__________________________________________________________________________________________________
-inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW( () )
+inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW(())
     : _pMapping( pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW( () )
+inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW(())
     : _pMapping( rMapping._pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline Mapping::~Mapping() SAL_THROW( () )
+inline Mapping::~Mapping() SAL_THROW(())
 {
     if (_pMapping)
         (*_pMapping->release)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW( () )
+inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
 {
     if (pMapping)
         (*pMapping->acquire)( pMapping );
@@ -122,7 +122,7 @@ struct MappingEntry
     MappingEntry(
         uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
         const OUString & rMappingName_ )
-        SAL_THROW( () )
+        SAL_THROW(())
         : nRef( 1 )
         , pMapping( pMapping_ )
         , freeMapping( freeMapping_ )
@@ -132,13 +132,13 @@ struct MappingEntry
 //--------------------------------------------------------------------------------------------------
 struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 {
-    size_t operator()( const OUString & rKey ) const SAL_THROW( () )
+    size_t operator()( const OUString & rKey ) const SAL_THROW(())
         { return (size_t)rKey.hashCode(); }
 };
 //--------------------------------------------------------------------------------------------------
 struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
-    size_t operator()( uno_Mapping * pKey ) const SAL_THROW( () )
+    size_t operator()( uno_Mapping * pKey ) const SAL_THROW(())
         { return (size_t)pKey; }
 };
 
@@ -164,7 +164,7 @@ struct MappingsData
     t_OUStringSet       aNegativeLibs;
 };
 //--------------------------------------------------------------------------------------------------
-static MappingsData & getMappingsData() SAL_THROW( () )
+static MappingsData & getMappingsData() SAL_THROW(())
 {
     static MappingsData * s_p = 0;
     if (! s_p)
@@ -200,19 +200,19 @@ struct uno_Mediate_Mapping : public uno_Mapping
         const Environment & rFrom_, const Environment & rTo_,
         const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
         const OUString & rAddPurpose )
-        SAL_THROW( () );
+        SAL_THROW(());
 };
 extern "C"
 {
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL mediate_free( uno_Mapping * pMapping )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     delete static_cast< uno_Mediate_Mapping * >( pMapping );
 }
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (1 == ::osl_incrementInterlockedCount(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
@@ -226,7 +226,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
 }
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL mediate_release( uno_Mapping * pMapping )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (! ::osl_decrementInterlockedCount(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
@@ -239,7 +239,7 @@ static void SAL_CALL mediate_mapInterface(
     uno_Mapping * pMapping,
     void ** ppOut, void * pInterface,
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OSL_ENSURE( pMapping && ppOut, "### null ptr!" );
     if (pMapping && ppOut)
@@ -275,7 +275,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     const Environment & rFrom_, const Environment & rTo_,
     const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
     const OUString & rAddPurpose_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     : nRef( 1 )
     , aFrom( rFrom_ )
     , aTo( rTo_ )
@@ -291,7 +291,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
 //==================================================================================================
 static inline OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OUStringBuffer aKey( 64 );
     aKey.append( rAddPurpose );
@@ -309,7 +309,7 @@ static inline OUString getMappingName(
 //==================================================================================================
 static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OUStringBuffer aBridgeName( 16 );
     if (!rAddPurpose.isEmpty())
@@ -324,7 +324,7 @@ static inline OUString getBridgeName(
 }
 //==================================================================================================
 static inline void setNegativeBridge( const OUString & rBridgeName )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
@@ -332,7 +332,7 @@ static inline void setNegativeBridge( const OUString & rBridgeName )
 }
 //==================================================================================================
 static inline oslModule loadModule( const OUString & rBridgeName )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     sal_Bool bNeg;
     {
@@ -356,7 +356,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 //==================================================================================================
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
@@ -400,7 +400,7 @@ static Mapping loadExternalMapping(
 //==================================================================================================
 static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
@@ -430,7 +430,7 @@ static inline Mapping createMediateMapping(
     const Environment & rFrom, const Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,
     const OUString & rAddPurpose )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     uno_Mapping * pRet = new uno_Mediate_Mapping(
         rFrom, rTo, rFrom2Uno, rUno2To, rAddPurpose ); // ref count initially 1
@@ -443,7 +443,7 @@ static inline Mapping createMediateMapping(
 //==================================================================================================
 static Mapping getMediateMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     Environment aUno;
     Mapping aUno2To;

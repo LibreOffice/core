@@ -93,7 +93,7 @@ OUString const & get_this_libpath()
     return s_path;
 }
 
-Bootstrap const & get_unorc() SAL_THROW( () )
+Bootstrap const & get_unorc() SAL_THROW(())
 {
     static rtlBootstrapHandle s_bstrap = 0;
     if (! s_bstrap)
@@ -142,7 +142,7 @@ Reference< XComponentContext > bootstrapInitialContext(
 Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 Reference< registry::XSimpleRegistry > SAL_CALL createRegistryWrapper(
     const Reference< XComponentContext >& xContext );
@@ -152,7 +152,7 @@ namespace {
 template< class T >
 inline beans::PropertyValue createPropertyValue(
     OUString const & name, T const & value )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return beans::PropertyValue(
         name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );

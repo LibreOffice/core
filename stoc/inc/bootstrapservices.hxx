@@ -59,14 +59,14 @@ namespace stoc_bootstrap
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ac_create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xComponentContext )
     SAL_THROW( (::com::sun::star::uno::Exception) );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > ac_getSupportedServiceNames() SAL_THROW( () );
-    ::rtl::OUString ac_getImplementationName() SAL_THROW( () );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > ac_getSupportedServiceNames() SAL_THROW(());
+    ::rtl::OUString ac_getImplementationName() SAL_THROW(());
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL filepolicy_create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xComponentContext )
     SAL_THROW( (com::sun::star::uno::Exception) );
-    ::com::sun::star::uno::Sequence< rtl::OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () );
-    ::rtl::OUString filepolicy_getImplementationName() SAL_THROW( () );
+    ::com::sun::star::uno::Sequence< rtl::OUString > filepolicy_getSupportedServiceNames() SAL_THROW(());
+    ::rtl::OUString filepolicy_getImplementationName() SAL_THROW(());
 
     //defaultregistry
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL NestedRegistry_CreateInstance(

@@ -732,7 +732,7 @@ class EventListenerImpl
 public:
     inline EventListenerImpl(
         Reference< container::XHierarchicalNameAccess > const & xTDMgr )
-        SAL_THROW( () )
+        SAL_THROW(())
         : m_xTDMgr( xTDMgr )
         {}
 
@@ -754,7 +754,7 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 //==================================================================================================
 sal_Bool SAL_CALL installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment target_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));

@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 
 static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     switch (pTypeDescr->eTypeClass)
     {

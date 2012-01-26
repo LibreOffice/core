@@ -89,15 +89,15 @@ struct CPPUHELPER_DLLPUBLIC ClassDataBase
 
     /** def ctor
     */
-    ClassDataBase() SAL_THROW( () );
+    ClassDataBase() SAL_THROW(());
     /** class code ctor
 
         @param nClassCode class code, see ClassDataBase::nClassCode
     */
-    ClassDataBase( sal_Int32 nClassCode ) SAL_THROW( () );
+    ClassDataBase( sal_Int32 nClassCode ) SAL_THROW(());
     /** dtor
     */
-    ~ClassDataBase() SAL_THROW( () );
+    ~ClassDataBase() SAL_THROW(());
 };
 /** Struct used for inline template implementation helpers:
     There will be versions of this struct with varying arType2Offset[] array sizes, each of which
@@ -113,14 +113,14 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
 
     /** init call for supporting com.sun.star.lang.XTypeProvider
     */
-    void SAL_CALL initTypeProvider() SAL_THROW( () );
+    void SAL_CALL initTypeProvider() SAL_THROW(());
     /** initial writing type offsets for vtables
 
         @param rType type of interface
         @param nOffset offset to vtable entry
     */
     void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     /** Queries for an interface.
 
@@ -130,25 +130,25 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
     */
     ::com::sun::star::uno::Any SAL_CALL query(
         const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase )
-        SAL_THROW( () );
+        SAL_THROW(());
     /** Gets the types for supporting com.sun.star.lang.XTypeProvider
 
         @return sequence of types supported
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        SAL_THROW( () );
+        SAL_THROW(());
     /** Gets the class id of implementation supporting com.sun.star.lang.XTypeProvider
 
         @return class identifier (sequence< byte >)
     */
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        SAL_THROW( () );
+        SAL_THROW(());
 };
 
 /** Shared mutex for implementation helper initialization.
     Not for public use.
 */
-CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
+CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(());
 }
 
 //
@@ -176,7 +176,7 @@ namespace cppu \
 struct ClassData##N : public ClassDataBase \
 { \
     Type_Offset arType2Offset[ N ]; \
-    ClassData##N( sal_Int32 nInClassCode ) SAL_THROW( () ) \
+    ClassData##N( sal_Int32 nInClassCode ) SAL_THROW(()) \
         : ClassDataBase( nInClassCode ) \
         {} \
 }; \
@@ -186,7 +186,7 @@ class SAL_NO_VTABLE ImplHelperBase##N \
     , __PUBLIC_IFC##N \
 { \
 protected: \
-    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () ) \
+    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW(()) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
         if (! rCD.bOffsetsInit) \

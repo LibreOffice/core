@@ -127,7 +127,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _defaultConstructStruct( pMem, pCompType );
 }
@@ -136,7 +136,7 @@ void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
@@ -145,7 +145,7 @@ void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _destructStruct( pValue, pTypeDescr, release );
 }
@@ -154,7 +154,7 @@ sal_Bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
@@ -163,7 +163,7 @@ sal_Bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
@@ -192,7 +192,7 @@ sal_Bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return _equalSequence( pDest, pSource, pElementType, queryInterface, release );
 }

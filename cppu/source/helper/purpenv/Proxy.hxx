@@ -68,7 +68,7 @@ public:
                    rtl::OUString                    const & rOId,
                    cppu::helper::purpenv::ProbeFun        * probeFun,
                    void                                   * pProbeContext)
-        SAL_THROW( () );
+        SAL_THROW(());
     ~Proxy(void);
 
     void acquire(void);

@@ -49,7 +49,7 @@ namespace cppu
 /** Shared mutex for implementation helper initialization.
     Not for public use.
 */
-::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
+::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(());
 
 //--------------------------------------------------------------------------------------------------
 static inline void checkInterface( Type const & rType )
@@ -70,12 +70,12 @@ static inline void checkInterface( Type const & rType )
     }
 }
 //--------------------------------------------------------------------------------------------------
-static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW( () )
+static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW(())
 {
     return (((OUString const *)&pStr)->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) != sal_False);
 }
 //--------------------------------------------------------------------------------------------------
-static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW( () )
+static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW(())
 {
     return (((char *)that) + nOffset);
 }
@@ -83,7 +83,7 @@ static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW(
 static inline bool __td_equals(
     typelib_TypeDescriptionReference const * pTDR1,
     typelib_TypeDescriptionReference const * pTDR2 )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return ((pTDR1 == pTDR2) ||
             ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ) != sal_False);

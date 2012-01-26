@@ -36,7 +36,7 @@ namespace cppu
 
 template< class key , class hashImpl , class equalImpl >
 inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & rMutex_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     : rMutex( rMutex_ )
 {
     m_pMap = new InterfaceMap;
@@ -45,7 +45,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::OMul
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
 inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMultiTypeInterfaceContainerHelperVar()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     typename InterfaceMap::iterator iter = m_pMap->begin();
     typename InterfaceMap::iterator end = m_pMap->end();
@@ -62,7 +62,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
 inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::size_type nSize = m_pMap->size();
@@ -95,7 +95,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainer(
-    const key & rKey ) const SAL_THROW( () )
+    const key & rKey ) const SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -110,7 +110,7 @@ template< class key , class hashImpl , class equalImpl >
 sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::addInterface(
     const key & rKey,
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::iterator iter = find( rKey );
@@ -129,7 +129,7 @@ template< class key , class hashImpl , class equalImpl >
 inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::removeInterface(
     const key & rKey,
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -147,7 +147,7 @@ inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalIm
 template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::disposeAndClear(
     const ::com::sun::star::lang::EventObject & rEvt )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     typename InterfaceMap::size_type nSize = 0;
     OInterfaceContainerHelper ** ppListenerContainers = NULL;
@@ -183,7 +183,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
 
 //===================================================================
 template< class key , class hashImpl , class equalImpl >
-void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear() SAL_THROW( () )
+void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear() SAL_THROW(())
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::iterator iter = m_pMap->begin();

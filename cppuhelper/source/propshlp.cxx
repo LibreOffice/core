@@ -51,15 +51,15 @@ IPropertyArrayHelper::~IPropertyArrayHelper()
 {
 }
 
-inline const ::com::sun::star::uno::Type & getPropertyTypeIdentifier( ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & getPropertyTypeIdentifier( ) SAL_THROW(())
 {
     return ::getCppuType( (Reference< XPropertyChangeListener > *)0 );
 }
-inline const ::com::sun::star::uno::Type & getPropertiesTypeIdentifier() SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & getPropertiesTypeIdentifier() SAL_THROW(())
 {
     return ::getCppuType( (Reference< XPropertiesChangeListener > *)0 );
 }
-inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier() SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier() SAL_THROW(())
 {
     return ::getCppuType( (Reference< XVetoableChangeListener > *)0 );
 }
@@ -84,7 +84,7 @@ class OPropertySetHelperInfo_Impl
     Sequence < Property > aInfos;
 
 public:
-    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW( () );
+    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW(());
 
     // XPropertySetInfo-Methoden
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
@@ -98,7 +98,7 @@ public:
  */
 OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
     IPropertyArrayHelper & rHelper_ )
-    SAL_THROW( () )
+    SAL_THROW(())
     :aInfos( rHelper_.getProperties() )
 {
 }
@@ -169,7 +169,7 @@ public:
 //  class PropertySetHelper
 //  ----------------------------------------------------
 OPropertySetHelper::OPropertySetHelper(
-    OBroadcastHelper  & rBHelper_ ) SAL_THROW( () )
+    OBroadcastHelper  & rBHelper_ ) SAL_THROW(())
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
@@ -208,10 +208,10 @@ OPropertySetHelper2::OPropertySetHelper2(
 /**
  * You must call disposing before.
  */
-OPropertySetHelper::~OPropertySetHelper() SAL_THROW( () )
+OPropertySetHelper::~OPropertySetHelper() SAL_THROW(())
 {
 }
-OPropertySetHelper2::~OPropertySetHelper2() SAL_THROW( () )
+OPropertySetHelper2::~OPropertySetHelper2() SAL_THROW(())
 {
 }
 
@@ -251,7 +251,7 @@ Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rTy
 }
 
 // ComponentHelper
-void OPropertySetHelper::disposing() SAL_THROW( () )
+void OPropertySetHelper::disposing() SAL_THROW(())
 {
     // Create an event with this as sender
     Reference < XPropertySet  > rSource( SAL_STATIC_CAST( XPropertySet * , this ) , UNO_QUERY );
@@ -265,7 +265,7 @@ void OPropertySetHelper::disposing() SAL_THROW( () )
 }
 
 Reference < XPropertySetInfo > OPropertySetHelper::createPropertySetInfo(
-    IPropertyArrayHelper & rProperties ) SAL_THROW( () )
+    IPropertyArrayHelper & rProperties ) SAL_THROW(())
 {
     return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }
@@ -1126,7 +1126,7 @@ static int compare_Property_Impl( const void *arg1, const void *arg2 )
 
 }
 
-void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
+void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW(())
 {
     sal_Int32 i, nElements = aInfos.getLength();
     const Property* pProperties = aInfos.getConstArray();
@@ -1157,7 +1157,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     Property * pProps,
     sal_Int32 nEle,
     sal_Bool bSorted )
-    SAL_THROW( () )
+    SAL_THROW(())
     : aInfos(pProps, nEle)
     , bRightOrdered( sal_False )
 {
@@ -1167,7 +1167,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
 OPropertyArrayHelper::OPropertyArrayHelper(
     const Sequence< Property > & aProps,
     sal_Bool bSorted )
-    SAL_THROW( () )
+    SAL_THROW(())
     : aInfos(aProps)
     , bRightOrdered( sal_False )
 {

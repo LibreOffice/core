@@ -52,7 +52,7 @@ class XCR_DLLPUBLIC XMLElement
 {
 public:
     inline XMLElement( ::rtl::OUString const & name )
-        SAL_THROW( () )
+        SAL_THROW(())
         : _name( name )
         {}
 
@@ -62,14 +62,14 @@ public:
     */
     void SAL_CALL addSubElement(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > const & xElem )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     /** Gets sub element of given index.  The index follows order in which sub elements were added.
 
         @param nIndex index of sub element
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     /** Adds an attribute to elements.
 
@@ -77,14 +77,14 @@ public:
         @param rValue value string of element
     */
     void SAL_CALL addAttribute( ::rtl::OUString const & rAttrName, ::rtl::OUString const & rValue )
-        SAL_THROW( () );
+        SAL_THROW(());
 
     /** Gets the tag name (qname) of element.
 
         @return
                 qname of element
     */
-    inline ::rtl::OUString SAL_CALL getName() SAL_THROW( () )
+    inline ::rtl::OUString SAL_CALL getName() SAL_THROW(())
         { return _name; }
 
     /** Dumps out element (and all sub elements).
@@ -135,13 +135,13 @@ protected:
 XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 //==================================================================================================
 XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
     ::rtl::ByteSequence * pOutData )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 }
 

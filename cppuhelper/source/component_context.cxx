@@ -302,7 +302,7 @@ class DisposingForwarder
     Reference< lang::XComponent > m_xTarget;
 
     inline DisposingForwarder( Reference< lang::XComponent > const & xTarget )
-        SAL_THROW( () )
+        SAL_THROW(())
         : m_xTarget( xTarget )
         { OSL_ASSERT( m_xTarget.is() ); }
 public:
@@ -375,7 +375,7 @@ public:
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
         Reference< XComponentContext > const & xDelegate );
     virtual ~ComponentContext()
-        SAL_THROW( () );
+        SAL_THROW(());
 
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName )
@@ -676,7 +676,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 }
 //__________________________________________________________________________________________________
 ComponentContext::~ComponentContext()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 #ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> destructed context %p\n", this );
@@ -865,7 +865,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
 Reference< XComponentContext > SAL_CALL createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment source_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));

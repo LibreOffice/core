@@ -46,7 +46,7 @@ namespace cppu
 inline void _assignInterface(
     void ** ppDest, void * pSource,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _acquire( pSource, acquire );
     void * const pToBeReleased = *ppDest;
@@ -58,7 +58,7 @@ inline void * _queryInterface(
     void * pSource,
     typelib_TypeDescriptionReference * pDestType,
     uno_QueryInterfaceFunc queryInterface )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pSource)
     {
@@ -73,13 +73,13 @@ sal_Bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () );
+    SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool _assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -237,7 +237,7 @@ inline sal_Bool _assignData(
     void * pSource,
     typelib_TypeDescriptionReference * pSourceType, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     if (pDest == pSource)
         return _type_equals( pDestType, pSourceType );

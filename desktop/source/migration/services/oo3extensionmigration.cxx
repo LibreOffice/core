@@ -549,7 +549,7 @@ void TmpRepositoryCommandEnv::pop() throw (uno::RuntimeException)
 
 Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
     Reference< XComponentContext > const & ctx )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< lang::XTypeProvider * >( new OO3ExtensionMigration(
         ctx) );

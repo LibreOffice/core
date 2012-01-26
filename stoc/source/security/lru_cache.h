@@ -61,57 +61,57 @@ class lru_cache
     Entry * m_block;
     mutable Entry * m_head;
     mutable Entry * m_tail;
-    inline void toFront( Entry * entry ) const SAL_THROW( () );
+    inline void toFront( Entry * entry ) const SAL_THROW(());
 
 public:
     /** Default Ctor.  Does not cache.
     */
-    inline lru_cache() SAL_THROW( () );
+    inline lru_cache() SAL_THROW(());
     /** Ctor.
 
         @param size number of elements to be cached; default param set to 128
     */
-    inline lru_cache( ::std::size_t size ) SAL_THROW( () );
+    inline lru_cache( ::std::size_t size ) SAL_THROW(());
 
     /** Destructor: releases all cached elements and keys.
     */
-    inline ~lru_cache() SAL_THROW( () );
+    inline ~lru_cache() SAL_THROW(());
 
     /** Retrieves a pointer to value in cache.  Returns 0, if none was found.
 
         @param key a key
         @return pointer to value or 0
     */
-    inline t_val const * lookup( t_key const & key ) const SAL_THROW( () );
+    inline t_val const * lookup( t_key const & key ) const SAL_THROW(());
 
     /** Sets a value to be cached for given key.
 
         @param key a key
         @param val a value
     */
-    inline void set( t_key const & key, t_val const & val ) SAL_THROW( () );
+    inline void set( t_key const & key, t_val const & val ) SAL_THROW(());
 
     /** Tests whether a value is cached for given key.
 
         @param key a key
         @return true, if value is cached
     */
-    inline bool has( t_key const & key ) const SAL_THROW( () );
+    inline bool has( t_key const & key ) const SAL_THROW(());
 
     /** Clears the cache, releasing all cached elements and keys.
     */
-    inline void clear() SAL_THROW( () );
+    inline void clear() SAL_THROW(());
 
     /** Sets the number of elements to be cached.  This will clear previous entries.
 
         @param cacheSize number of elements to be cached
     */
-    inline void setSize( ::std::size_t size ) SAL_THROW( () );
+    inline void setSize( ::std::size_t size ) SAL_THROW(());
 };
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
-    ::std::size_t size ) SAL_THROW( () )
+    ::std::size_t size ) SAL_THROW(())
 {
     m_key2element.clear();
     delete [] m_block;
@@ -133,7 +133,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
-    ::std::size_t size ) SAL_THROW( () )
+    ::std::size_t size ) SAL_THROW(())
     : m_size( 0 )
     , m_block( 0 )
 {
@@ -141,7 +141,7 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
 }
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache() SAL_THROW( () )
+inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache() SAL_THROW(())
     : m_size( 0 )
     , m_block( 0 )
 {
@@ -149,14 +149,14 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache() SAL_THROW( 
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::~lru_cache()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     delete [] m_block;
 }
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::toFront(
-    Entry * entry ) const SAL_THROW( () )
+    Entry * entry ) const SAL_THROW(())
 {
     if (entry != m_head)
     {
@@ -179,7 +179,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::toFront(
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
-    t_key const & key ) const SAL_THROW( () )
+    t_key const & key ) const SAL_THROW(())
 {
     typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
     return (iFind != m_key2element.end());
@@ -187,7 +187,7 @@ inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
-    t_key const & key ) const SAL_THROW( () )
+    t_key const & key ) const SAL_THROW(())
 {
     if (0 < m_size)
     {
@@ -213,7 +213,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
-    t_key const & key, t_val const & val ) SAL_THROW( () )
+    t_key const & key, t_val const & val ) SAL_THROW(())
 {
     if (0 < m_size)
     {
@@ -263,7 +263,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 }
 //__________________________________________________________________________________________________
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear() SAL_THROW( () )
+inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear() SAL_THROW(())
 {
     m_key2element.clear();
     for ( ::std::size_t nPos = m_size; nPos--; )

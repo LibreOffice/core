@@ -97,7 +97,7 @@ static ::rtl::OUString getImplementationName_StringResourceImpl()
 
 static Reference< XInterface > SAL_CALL create_StringResourceImpl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourcePersistenceImpl( xContext ) );
 }
@@ -2330,7 +2330,7 @@ static ::rtl::OUString getImplementationName_StringResourceWithStorageImpl()
 
 static Reference< XInterface > SAL_CALL create_StringResourceWithStorageImpl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithStorageImpl( xContext ) );
 }
@@ -2668,7 +2668,7 @@ static ::rtl::OUString getImplementationName_StringResourceWithLocationImpl()
 
 static Reference< XInterface > SAL_CALL create_StringResourceWithLocationImpl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< ::cppu::OWeakObject * >( new StringResourceWithLocationImpl( xContext ) );
 }

@@ -55,7 +55,7 @@ extern Sequence< OUString > SAL_CALL  getSupportedServiceNames_MyService1Impl();
 extern OUString SAL_CALL getImplementationName_MyService1Impl();
 extern Reference< XInterface > SAL_CALL create_MyService1Impl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () );
+    SAL_THROW(());
 
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
@@ -170,7 +170,7 @@ Sequence< OUString > MyService2Impl::getSupportedServiceNames()
 
 Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return static_cast< ::cppu::OWeakObject * >( new MyService2Impl( xContext ) );
 }

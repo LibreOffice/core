@@ -612,13 +612,13 @@ SAL_THROW( ( Exception ) )
 }
 
 //*************************************************************************
-Sequence< OUString > scriptnri_getSupportedServiceNames() SAL_THROW( () )
+Sequence< OUString > scriptnri_getSupportedServiceNames() SAL_THROW(())
 {
     return nrs_serviceNames;
 }
 
 //*************************************************************************
-OUString scriptnri_getImplementationName() SAL_THROW( () )
+OUString scriptnri_getImplementationName() SAL_THROW(())
 {
     return nrs_implName;
 }

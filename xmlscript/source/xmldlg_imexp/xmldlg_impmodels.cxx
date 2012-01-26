@@ -2407,7 +2407,7 @@ BulletinBoardElement::BulletinBoardElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    SAL_THROW( () )
+    SAL_THROW(())
     : ControlElement( rLocalName, xAttributes, pParent, pImport )
 {
     OUString aValue(

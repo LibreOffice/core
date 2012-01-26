@@ -50,7 +50,7 @@ namespace uno
     @return current context or null ref, if none is set
 */
 inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     Reference< XCurrentContext > xRet;
     ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
@@ -64,7 +64,7 @@ inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
 */
 inline bool SAL_CALL setCurrentContext(
     Reference< XCurrentContext > const & xContext )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
     return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, 0 ) != sal_False);
@@ -90,22 +90,22 @@ public:
     */
     inline ContextLayer(
         Reference< XCurrentContext > const & xNewContext = Reference< XCurrentContext >() )
-        SAL_THROW( () );
+        SAL_THROW(());
     /** Destructor: restores the previous context.
     */
-    inline ~ContextLayer() SAL_THROW( () );
+    inline ~ContextLayer() SAL_THROW(());
 
     /** Gets the previously set context.
 
         @return the previously set context
     */
     inline Reference< XCurrentContext > SAL_CALL getPreviousContext() const
-        SAL_THROW( () )
+        SAL_THROW(())
         { return m_xPreviousContext; }
 };
 //__________________________________________________________________________________________________
 inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
-    SAL_THROW( () )
+    SAL_THROW(())
     : m_aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) )
 {
     ::uno_getCurrentContext( (void **)&m_xPreviousContext, m_aEnvTypeName.pData, 0 );
@@ -113,7 +113,7 @@ inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewCont
 }
 //__________________________________________________________________________________________________
 inline ContextLayer::~ContextLayer()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::uno_setCurrentContext( m_xPreviousContext.get(), m_aEnvTypeName.pData, 0 );
 }

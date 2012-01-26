@@ -52,13 +52,13 @@ public:
     inline Permission(
         t_type type,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW( () )
+        SAL_THROW(())
         : m_next( next )
         , m_type( type )
         {}
 
-    virtual bool implies( Permission const & perm ) const SAL_THROW( () ) = 0;
-    virtual ::rtl::OUString toString() const SAL_THROW( () ) = 0;
+    virtual bool implies( Permission const & perm ) const SAL_THROW(()) = 0;
+    virtual ::rtl::OUString toString() const SAL_THROW(()) = 0;
 };
 //==================================================================================================
 class AllPermission : public Permission
@@ -66,12 +66,12 @@ class AllPermission : public Permission
 public:
     inline AllPermission(
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW( () )
+        SAL_THROW(())
         : Permission( ALL, next )
         {}
 
-    virtual bool implies( Permission const & ) const SAL_THROW( () );
-    virtual ::rtl::OUString toString() const SAL_THROW( () );
+    virtual bool implies( Permission const & ) const SAL_THROW(());
+    virtual ::rtl::OUString toString() const SAL_THROW(());
 };
 
 //==================================================================================================
@@ -79,12 +79,12 @@ class PermissionCollection
 {
     ::rtl::Reference< Permission > m_head;
 public:
-    inline PermissionCollection() SAL_THROW( () )
+    inline PermissionCollection() SAL_THROW(())
         {}
-    inline PermissionCollection( PermissionCollection const & collection ) SAL_THROW( () )
+    inline PermissionCollection( PermissionCollection const & collection ) SAL_THROW(())
         : m_head( collection.m_head )
         {}
-    inline PermissionCollection( ::rtl::Reference< Permission > const & single ) SAL_THROW( () )
+    inline PermissionCollection( ::rtl::Reference< Permission > const & single ) SAL_THROW(())
         : m_head( single )
         {}
     PermissionCollection(
@@ -92,7 +92,7 @@ public:
         PermissionCollection const & addition = PermissionCollection() )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 #ifdef __DIAGNOSE
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW( () );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW(());
 #endif
     void checkPermission( ::com::sun::star::uno::Any const & perm ) const
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );

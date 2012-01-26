@@ -90,13 +90,13 @@ protected:
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
         {}
     /// @endcond
 
@@ -104,11 +104,11 @@ public:
     /** Default Constructor.  Sets the reference count to zero.
         Accidentally occurs in msvc mapfile = > had to be outlined.
     */
-    OWeakObject() SAL_THROW( () );
+    OWeakObject() SAL_THROW(());
 #else
     /** Default Constructor.  Sets the reference count to zero.
     */
-    inline OWeakObject() SAL_THROW( () )
+    inline OWeakObject() SAL_THROW(())
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
@@ -117,7 +117,7 @@ public:
 
         @param rObj dummy param
     */
-    inline OWeakObject( const OWeakObject & ) SAL_THROW( () )
+    inline OWeakObject( const OWeakObject & ) SAL_THROW(())
         : com::sun::star::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
@@ -127,7 +127,7 @@ public:
         @return this OWeakObject
     */
     inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
-        SAL_THROW( () )
+        SAL_THROW(())
         { return *this; }
 
     /** Basic queryInterface() implementation supporting \::com::sun::star::uno::XWeak and
@@ -159,7 +159,7 @@ public:
 
         @return XInterface reference
     */
-    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () SAL_THROW( () )
+    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () SAL_THROW(())
         { return this; }
 };
 

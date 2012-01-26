@@ -88,7 +88,7 @@ MasterScriptProviderFactory::getActiveMSPList() const
 
 Sequence< ::rtl::OUString > SAL_CALL
 mspf_getSupportedServiceNames( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.script.provider.MasterScriptProviderFactory"));
@@ -98,7 +98,7 @@ mspf_getSupportedServiceNames( )
 
 ::rtl::OUString SAL_CALL
 mspf_getImplementationName( )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.script.provider.MasterScriptProviderFactory"));

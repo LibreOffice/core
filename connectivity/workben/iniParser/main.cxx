@@ -44,10 +44,10 @@ struct ini_NameValue
     rtl::OUString sName;
     rtl::OUString sValue;
 
-    inline ini_NameValue() SAL_THROW( () )
+    inline ini_NameValue() SAL_THROW(())
         {}
     inline ini_NameValue(
-        OUString const & name, OUString const & value ) SAL_THROW( () )
+        OUString const & name, OUString const & value ) SAL_THROW(())
         : sName( name ),
           sValue( value )
         {}

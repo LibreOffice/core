@@ -132,7 +132,7 @@ class ProviderImpl
 
     com::sun::star::uno::Reference< XComponentContext >              _xContext;
     com::sun::star::uno::WeakReference<XHierarchicalNameAccess> _xTDMgr;
-    com::sun::star::uno::Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW( () );
+    com::sun::star::uno::Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW(());
 
     RegistryKeyList                             _aBaseKeys;
 
@@ -238,7 +238,7 @@ ProviderImpl::TypeDescriptionManagerWrapper::createTypeDescriptionEnumeration(
 
 //__________________________________________________________________________________________________
 com::sun::star::uno::Reference< XHierarchicalNameAccess > ProviderImpl::getTDMgr()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     // harden weak reference:
     com::sun::star::uno::Reference<container::XHierarchicalNameAccess> xTDMgr(

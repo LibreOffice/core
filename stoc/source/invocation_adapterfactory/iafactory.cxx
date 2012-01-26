@@ -116,7 +116,7 @@ public:
 
     FactoryImpl( Reference< XComponentContext > const & xContext )
         SAL_THROW( (RuntimeException) );
-    virtual ~FactoryImpl() SAL_THROW( () );
+    virtual ~FactoryImpl() SAL_THROW(());
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -173,11 +173,11 @@ struct AdapterImpl
         uno_Any * pSource, uno_Any * pExc );
 
     inline void acquire()
-        SAL_THROW( () );
+        SAL_THROW(());
     inline void release()
-        SAL_THROW( () );
+        SAL_THROW(());
     inline ~AdapterImpl()
-        SAL_THROW( () );
+        SAL_THROW(());
     inline AdapterImpl(
         void * key, Reference< script::XInvocation > const & xReceiver,
         const Sequence< Type > & rTypes,
@@ -186,7 +186,7 @@ struct AdapterImpl
 };
 //______________________________________________________________________________
 inline AdapterImpl::~AdapterImpl()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
     {
@@ -200,13 +200,13 @@ inline AdapterImpl::~AdapterImpl()
 }
 //______________________________________________________________________________
 inline void AdapterImpl::acquire()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     ::osl_incrementInterlockedCount( &m_nRef );
 }
 //______________________________________________________________________________
 inline void AdapterImpl::release()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     bool delete_this = false;
     {
@@ -245,7 +245,7 @@ static inline void constructRuntimeException(
 static inline sal_Bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     return (pType1 == pType2 ||
             (pType1->pTypeName->length == pType2->pTypeName->length &&
@@ -780,7 +780,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //______________________________________________________________________________
-FactoryImpl::~FactoryImpl() SAL_THROW( () )
+FactoryImpl::~FactoryImpl() SAL_THROW(())
 {
     ::typelib_typedescription_release( m_pInvokMethodTD );
     ::typelib_typedescription_release( m_pSetValueTD );
@@ -801,7 +801,7 @@ FactoryImpl::~FactoryImpl() SAL_THROW( () )
 static inline AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
     t_ptr_map & map, void * key, Sequence< Type > const & rTypes )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     t_ptr_set & adapters_set = map[ key ];
     *pp_adapter_set = &adapters_set;

@@ -55,7 +55,7 @@ namespace cppu
 
 /** function pointer signature for getCppuType
 */
-typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * ) SAL_THROW( () );
+typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * ) SAL_THROW(());
 
 /** single type + object offset
 */

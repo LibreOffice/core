@@ -89,7 +89,7 @@ ControlElement::ControlElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    SAL_THROW( () )
+    SAL_THROW(())
     : ElementBase(
         pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
 {
@@ -1880,7 +1880,7 @@ ElementBase::ElementBase(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    SAL_THROW( () )
+    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _nUid( nUid )
@@ -1896,7 +1896,7 @@ ElementBase::ElementBase(
 }
 //__________________________________________________________________________________________________
 ElementBase::~ElementBase()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _pImport->release();
 
@@ -1974,7 +1974,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
 }
 //__________________________________________________________________________________________________
 DialogImport::~DialogImport()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "DialogImport::~DialogImport()." );
@@ -2005,7 +2005,7 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
 void DialogImport::addStyle(
     OUString const & rStyleId,
     Reference< xml::input::XElement > const & xStyle )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     (*_pStyleNames).push_back( rStyleId );
     (*_pStyles).push_back( xStyle );
@@ -2013,7 +2013,7 @@ void DialogImport::addStyle(
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > DialogImport::getStyle(
     OUString const & rStyleId ) const
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     for ( size_t nPos = 0; nPos < (*_pStyleNames).size(); ++nPos )
     {

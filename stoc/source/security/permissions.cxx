@@ -59,7 +59,7 @@ namespace stoc_sec
 
 //--------------------------------------------------------------------------------------------------
 static inline sal_Int32 makeMask(
-    OUString const & items, char const * const * strings ) SAL_THROW( () )
+    OUString const & items, char const * const * strings ) SAL_THROW(())
 {
     sal_Int32 mask = 0;
 
@@ -96,7 +96,7 @@ static inline sal_Int32 makeMask(
 }
 //--------------------------------------------------------------------------------------------------
 static inline OUString makeStrings(
-    sal_Int32 mask, char const * const * strings ) SAL_THROW( () )
+    sal_Int32 mask, char const * const * strings ) SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     while (mask)
@@ -129,15 +129,15 @@ class SocketPermission : public Permission
     mutable bool m_resolvedHost;
     bool m_wildCardHost;
 
-    inline bool resolveHost() const SAL_THROW( () );
+    inline bool resolveHost() const SAL_THROW(());
 
 public:
     SocketPermission(
         connection::SocketPermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW( () );
-    virtual bool implies( Permission const & perm ) const SAL_THROW( () );
-    virtual OUString toString() const SAL_THROW( () );
+        SAL_THROW(());
+    virtual bool implies( Permission const & perm ) const SAL_THROW(());
+    virtual OUString toString() const SAL_THROW(());
 };
 //__________________________________________________________________________________________________
 char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", 0 };
@@ -145,7 +145,7 @@ char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "
 SocketPermission::SocketPermission(
     connection::SocketPermission const & perm,
     ::rtl::Reference< Permission > const & next )
-    SAL_THROW( () )
+    SAL_THROW(())
     : Permission( SOCKET, next )
     , m_actions( makeMask( perm.Actions, s_actions ) )
     , m_host( perm.Host )
@@ -184,7 +184,7 @@ SocketPermission::SocketPermission(
     }
 }
 //__________________________________________________________________________________________________
-inline bool SocketPermission::resolveHost() const SAL_THROW( () )
+inline bool SocketPermission::resolveHost() const SAL_THROW(())
 {
     if (m_resolveErr)
         return false;
@@ -210,7 +210,7 @@ inline bool SocketPermission::resolveHost() const SAL_THROW( () )
     return m_resolvedHost;
 }
 //__________________________________________________________________________________________________
-bool SocketPermission::implies( Permission const & perm ) const SAL_THROW( () )
+bool SocketPermission::implies( Permission const & perm ) const SAL_THROW(())
 {
     // check type
     if (SOCKET != perm.m_type)
@@ -252,7 +252,7 @@ bool SocketPermission::implies( Permission const & perm ) const SAL_THROW( () )
     return (sal_False != m_ip.equals( demanded.m_ip ));
 }
 //__________________________________________________________________________________________________
-OUString SocketPermission::toString() const SAL_THROW( () )
+OUString SocketPermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     // host
@@ -300,14 +300,14 @@ public:
     FilePermission(
         io::FilePermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW( () );
-    virtual bool implies( Permission const & perm ) const SAL_THROW( () );
-    virtual OUString toString() const SAL_THROW( () );
+        SAL_THROW(());
+    virtual bool implies( Permission const & perm ) const SAL_THROW(());
+    virtual OUString toString() const SAL_THROW(());
 };
 //__________________________________________________________________________________________________
 char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", 0 };
 //--------------------------------------------------------------------------------------------------
-static OUString const & getWorkingDir() SAL_THROW( () )
+static OUString const & getWorkingDir() SAL_THROW(())
 {
     static OUString * s_workingDir = 0;
     if (! s_workingDir)
@@ -328,7 +328,7 @@ static OUString const & getWorkingDir() SAL_THROW( () )
 FilePermission::FilePermission(
     io::FilePermission const & perm,
     ::rtl::Reference< Permission > const & next )
-    SAL_THROW( () )
+    SAL_THROW(())
     : Permission( FILE, next )
     , m_actions( makeMask( perm.Actions, s_actions ) )
     , m_url( perm.URL )
@@ -370,7 +370,7 @@ FilePermission::FilePermission(
     }
 }
 //__________________________________________________________________________________________________
-bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
+bool FilePermission::implies( Permission const & perm ) const SAL_THROW(())
 {
     // check type
     if (FILE != perm.m_type)
@@ -429,7 +429,7 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
     return false;
 }
 //__________________________________________________________________________________________________
-OUString FilePermission::toString() const SAL_THROW( () )
+OUString FilePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     // url
@@ -453,15 +453,15 @@ public:
     inline RuntimePermission(
         security::RuntimePermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW( () )
+        SAL_THROW(())
         : Permission( RUNTIME, next )
         , m_name( perm.Name )
         {}
-    virtual bool implies( Permission const & perm ) const SAL_THROW( () );
-    virtual OUString toString() const SAL_THROW( () );
+    virtual bool implies( Permission const & perm ) const SAL_THROW(());
+    virtual OUString toString() const SAL_THROW(());
 };
 //__________________________________________________________________________________________________
-bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW( () )
+bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW(())
 {
     // check type
     if (RUNTIME != perm.m_type)
@@ -472,7 +472,7 @@ bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW( () )
     return (sal_False != m_name.equals( demanded.m_name ));
 }
 //__________________________________________________________________________________________________
-OUString RuntimePermission::toString() const SAL_THROW( () )
+OUString RuntimePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     buf.appendAscii(
@@ -485,12 +485,12 @@ OUString RuntimePermission::toString() const SAL_THROW( () )
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-bool AllPermission::implies( Permission const & ) const SAL_THROW( () )
+bool AllPermission::implies( Permission const & ) const SAL_THROW(())
 {
     return true;
 }
 //__________________________________________________________________________________________________
-OUString AllPermission::toString() const SAL_THROW( () )
+OUString AllPermission::toString() const SAL_THROW(())
 {
     return OUSTR("com.sun.star.security.AllPermission");
 }
@@ -542,7 +542,7 @@ PermissionCollection::PermissionCollection(
 }
 #ifdef __DIAGNOSE
 //__________________________________________________________________________________________________
-Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
+Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW(())
 {
     vector< OUString > strings;
     strings.reserve( 8 );
@@ -556,7 +556,7 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
 #endif
 //__________________________________________________________________________________________________
 inline static bool __implies(
-    ::rtl::Reference< Permission > const & head, Permission const & demanded ) SAL_THROW( () )
+    ::rtl::Reference< Permission > const & head, Permission const & demanded ) SAL_THROW(())
 {
     for ( Permission * perm = head.get(); perm; perm = perm->m_next.get() )
     {
@@ -570,7 +570,7 @@ inline static bool __implies(
 //--------------------------------------------------------------------------------------------------
 static void demanded_diag(
     Permission const & perm )
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("demanding ") );

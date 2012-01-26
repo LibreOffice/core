@@ -2588,7 +2588,7 @@ sal_Bool StructureType::dumpHxxFile(
     dumpTemplateHead(o);
     o << "inline " << m_name;
     dumpTemplateParameters(o);
-    o << "::" << m_name << "() SAL_THROW( () )\n";
+    o << "::" << m_name << "() SAL_THROW(())\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -2668,7 +2668,7 @@ sal_Bool StructureType::dumpHxxFile(
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW( () )\n";
+        o << ") SAL_THROW(())\n";
 
         inc();
         first = sal_True;
@@ -3254,7 +3254,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
     o << "\n{\npublic:\n";
     inc();
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name
-      << "() SAL_THROW( () );\n\n";
+      << "() SAL_THROW(());\n\n";
 
     sal_uInt16      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -3289,7 +3289,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW( () );\n\n";
+        o << ") SAL_THROW(());\n\n";
     }
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << "(" << m_name
       << " const &);\n\n"
@@ -3341,7 +3341,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     }
     o << "\n";
 
-    o << "inline " << m_name << "::" << m_name << "() SAL_THROW( () )\n";
+    o << "inline " << m_name << "::" << m_name << "() SAL_THROW(())\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -3421,7 +3421,7 @@ sal_Bool ExceptionType::dumpHxxFile(
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW( () )\n";
+        o << ") SAL_THROW(())\n";
 
         inc();
         first = sal_True;
@@ -3795,7 +3795,7 @@ sal_Bool TypeDefType::dumpHFile(
 //  o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
 //    << "class Type;\n} } } }\n\n";
 //  o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << m_typeName.replace('/', '_')
-//    <<  "_Type( ) SAL_THROW( () );\n\n";
+//    <<  "_Type( ) SAL_THROW(());\n\n";
 
     o << "#endif // "<< headerDefine << "\n";
 

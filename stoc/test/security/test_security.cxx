@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 //--------------------------------------------------------------------------------------------------
-static OUString localhost( OUString const & addition ) SAL_THROW( () )
+static OUString localhost( OUString const & addition ) SAL_THROW(())
 {
     static OUString ip;
     if (! ip.getLength())
@@ -97,7 +97,7 @@ public:
     inline user_CurrentContext(
         Reference< XCurrentContext > const & xDelegate,
         OUString const & userId )
-        SAL_THROW( () )
+        SAL_THROW(())
         : m_refcount( 0 )
         , m_xDelegate( xDelegate )
         , m_userId( makeAny( userId ) )
@@ -371,7 +371,7 @@ class acc_Restr
     Any m_perm;
 
 public:
-    inline acc_Restr( Any const & perm = Any() ) SAL_THROW( () )
+    inline acc_Restr( Any const & perm = Any() ) SAL_THROW(())
         : m_perm( perm )
         {}
 
@@ -401,7 +401,7 @@ class Action
     Any m_arg;
 
 public:
-    inline Action( t_action action, AccessControl & ac, Any const & arg = Any() ) SAL_THROW( () )
+    inline Action( t_action action, AccessControl & ac, Any const & arg = Any() ) SAL_THROW(())
         : m_action( action )
         , m_ac( ac )
         , m_arg( arg )

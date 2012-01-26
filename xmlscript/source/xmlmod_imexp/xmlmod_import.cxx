@@ -106,7 +106,7 @@ ModuleElement::ModuleElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ModuleElement * pParent, ModuleImport * pImport )
-    SAL_THROW( () )
+    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _aLocalName( rLocalName )
@@ -121,7 +121,7 @@ ModuleElement::ModuleElement(
 }
 //__________________________________________________________________________________________________
 ModuleElement::~ModuleElement()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
     _pImport->release();
 
@@ -208,7 +208,7 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
 }
 //__________________________________________________________________________________________________
 ModuleImport::~ModuleImport()
-    SAL_THROW( () )
+    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "ModuleImport::~ModuleImport()." );

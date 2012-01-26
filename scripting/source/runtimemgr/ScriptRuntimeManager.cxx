@@ -368,14 +368,14 @@ static Reference< XInterface > SAL_CALL srm_create(
 
 //*************************************************************************
 static Sequence<OUString> srm_getSupportedServiceNames( )
-SAL_THROW( () )
+SAL_THROW(())
 {
     return s_serviceNames;
 }
 
 //*************************************************************************
 static OUString srm_getImplementationName( )
-SAL_THROW( () )
+SAL_THROW(())
 {
     return s_implName;
 }
@@ -386,35 +386,35 @@ Reference< XInterface > SAL_CALL scriptnri_create(
 SAL_THROW( ( Exception ) );
 
 //*************************************************************************
-Sequence< OUString > scriptnri_getSupportedServiceNames() SAL_THROW( () );
+Sequence< OUString > scriptnri_getSupportedServiceNames() SAL_THROW(());
 
 //*************************************************************************
-OUString scriptnri_getImplementationName() SAL_THROW( () );
+OUString scriptnri_getImplementationName() SAL_THROW(());
 
 //******************** ScriptStorageMangaer defines ***********************
 Reference< XInterface > SAL_CALL ssm_create(
     Reference< XComponentContext > const & xComponentContext )
 SAL_THROW( ( Exception ) );
 //*************************************************************************
-Sequence< OUString > ssm_getSupportedServiceNames() SAL_THROW( () );
+Sequence< OUString > ssm_getSupportedServiceNames() SAL_THROW(());
 //*************************************************************************
-OUString ssm_getImplementationName() SAL_THROW( () );
+OUString ssm_getImplementationName() SAL_THROW(());
 //*************************************************************************
 
 //************ Script Provider defines ************************************
 Reference< XInterface > SAL_CALL sp_create( const Reference< XComponentContext > & xCompC );
 //******************** ScriptProvider defines ***************************
-Sequence< OUString > sp_getSupportedServiceNames( ) SAL_THROW( () );
+Sequence< OUString > sp_getSupportedServiceNames( ) SAL_THROW(());
 //*************************************************************************
-OUString sp_getImplementationName( ) SAL_THROW( () );
+OUString sp_getImplementationName( ) SAL_THROW(());
 //*************************************************************************
 
 //************ ScriptStorage defines **************************************
 Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
 //******************** ScriptProvider defines ***************************
-Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
+Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW(());
 //*************************************************************************
-OUString ss_getImplementationName( ) SAL_THROW( () );
+OUString ss_getImplementationName( ) SAL_THROW(());
 //*************************************************************************
 
 
