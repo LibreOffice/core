@@ -973,11 +973,6 @@ void ScDPOutput::Output()
     if ( bSizeOverflow || bResultsError )   // does output area exceed sheet limits?
         return;                             // nothing
 
-    //  clear whole (new) output area
-    //! when modifying table, clear old area
-    //! include IDF_OBJECTS ???
-    pDoc->DeleteAreaTab( aStartPos.Col(), aStartPos.Row(), nTabEndCol, nTabEndRow, nTab, IDF_ALL );
-
     if ( bDoFilter )
         lcl_DoFilterButton( pDoc, aStartPos.Col(), aStartPos.Row(), nTab );
 
