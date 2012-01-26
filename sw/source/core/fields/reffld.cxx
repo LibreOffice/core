@@ -972,6 +972,26 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
     {
         GetFieldIdsFromDoc( rDestDoc, aIds );
         GetFieldIdsFromDoc( rDoc, aDstIds );
+
+        // Define the mappings now
+        sal_uInt16 nMaxDstId = *aIds.end();
+
+        // Map all the src fields to their value + nMaxDstId
+        for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
+            AddId( nMaxDstId++, *pIt );
+
+        // Change the Sequence number of all the SetExp fields in the destination document
+        SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
+        if( pType )
+        {
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+                if( pF->GetTxtFld() )
+                {
+                    sal_uInt16 n = ((SwSetExpField*)pF->GetFld())->GetSeqNumber( );
+                    ((SwSetExpField*)pF->GetFld())->SetSeqNumber( sequencedIds[ n ] );
+                }
+        }
     }
     else
     {
@@ -1030,21 +1050,8 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             AddId( n, nSeqNo );
             rFld.SetSeqNo( n );
 
-            // und noch die Felder oder Fuss-/EndNote auf die neue
-            // Id umsetzen
-            if( bField )
-            {
-                SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
-                if( pType )
-                {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-                        if( pF->GetTxtFld() && nSeqNo ==
-                            ((SwSetExpField*)pF->GetFld())->GetSeqNumber() )
-                            ((SwSetExpField*)pF->GetFld())->SetSeqNumber( n );
-                }
-            }
-            else
+            // und noch die Fuss-/EndNote auf die neue Id umsetzen
+            if( !bField )
             {
                 SwTxtFtn* pFtnIdx;
                 for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
