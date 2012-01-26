@@ -1719,7 +1719,6 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
     else
     {
         int type = GetType();
-        ByteString aPStr;
 
         if( TYPE_METHOD == type || TYPE_STRUCT == type )
         {
