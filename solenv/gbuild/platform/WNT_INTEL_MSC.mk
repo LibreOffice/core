@@ -673,7 +673,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
 		$(DEFS) $(FLAGS) \
-		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-Fo$(1) \
 		$(RCFILE) )
