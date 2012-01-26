@@ -58,7 +58,7 @@ import com.sun.star.uno.XInterface;
 * </ul>
 * The following files used by this test :
 * <ul>
-*  <li><b> ScDDELinksObj.sdc </b> : the predefined testdocument </li>
+*  <li><b> ScDDELinksObj.ods </b> : the predefined testdocument </li>
 * </ul> <p>
 * @see com.sun.star.sheet.DDELink
 * @see com.sun.star.container.XNamed
@@ -145,7 +145,7 @@ public class ScDDELinkObj extends TestCase {
         XMultiServiceFactory oMSF = (XMultiServiceFactory)Param.getMSF();
 
         // load the predefined testdocument
-        String testdoc = util.utils.getFullTestURL("ScDDELinksObj.sdc");
+        String testdoc = util.utils.getFullTestURL("ScDDELinksObj.ods");
         try {
             oDoc = SOfficeFactory.getFactory(oMSF).loadDocument(testdoc);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -183,7 +183,7 @@ public class ScDDELinkObj extends TestCase {
         log.println("filling some cells");
         String sAppl = "soffice";
         String sItem = "Sheet1.A1";
-        testdoc = util.utils.getFullTestDocName("ScDDELinksObj.sdc");
+        testdoc = util.utils.getFullTestDocName("ScDDELinksObj.ods");
         try {
             oSheet.getCellByPosition(5, 5).setFormula(
                 "=DDE(\""+ sAppl +"\";\""+testdoc+"\";\""+ sItem +"\"");

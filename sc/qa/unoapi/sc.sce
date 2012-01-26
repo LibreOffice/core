@@ -37,8 +37,8 @@
 -o sc.ScChartObj
 -o sc.ScChartsObj
 -o sc.ScConsolidationDescriptor
-# fdo43376 -o sc.ScDDELinkObj
-# fdo43376 -o sc.ScDDELinksObj
+-o sc.ScDDELinkObj
+-o sc.ScDDELinksObj
 -o sc.ScDataPilotFieldGroupItemObj
 -o sc.ScDataPilotFieldGroupObj
 -o sc.ScDataPilotFieldGroupsObj
