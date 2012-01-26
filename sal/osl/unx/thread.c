@@ -37,6 +37,10 @@
 #include <rtl/textenc.h>
 #include <rtl/alloc.h>
 #include <sal/macros.h>
+#ifdef ANDROID
+#include <jni.h>
+#include <osl/detail/android-bootstrap.h>
+#endif
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
 #include <sys/prctl.h>
@@ -288,8 +292,22 @@ static void* osl_thread_start_Impl (void* pData)
 
     if (!terminate)
     {
+#ifdef ANDROID
+        {
+            JNIEnv* env = 0;
+            int res = (*lo_get_javavm())->AttachCurrentThread(lo_get_javavm(), &env, NULL); // res == 0
+            fprintf (stderr, "new sal thread started and attached %d!\n", res);
+        }
+#endif
         /* call worker function */
         pImpl->m_WorkerFunction(pImpl->m_pData);
+
+#ifdef ANDROID
+        {
+            int res = (*lo_get_javavm())->DetachCurrentThread(lo_get_javavm());
+            fprintf (stderr, "detached finished sal thread %d!\n", res);
+        }
+#endif
     }
 
     /* call cleanup handler and leave */

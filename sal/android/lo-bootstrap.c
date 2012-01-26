@@ -48,7 +48,7 @@
 
 #include "uthash.h"
 
-#include "lo-bootstrap.h"
+#include "osl/detail/android-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 

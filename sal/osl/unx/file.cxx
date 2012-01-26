@@ -59,7 +59,7 @@
 #endif /* MACOSX */
 
 #ifdef ANDROID
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #endif
 
 #ifdef DEBUG_OSL_FILE

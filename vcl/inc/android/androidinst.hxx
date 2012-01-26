@@ -57,6 +57,7 @@ public:
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
     struct android_app *mpApp;
+    bool mbQueueReDraw;
 };
 
 #endif // ANDROID_SALINST_H

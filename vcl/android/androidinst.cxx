@@ -29,9 +29,10 @@
 #include <android/androidinst.hxx>
 #include <headless/svpdummies.hxx>
 #include <generic/gendata.hxx>
+#include <jni.h>
 #include <android/log.h>
 #include <android/looper.h>
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 
@@ -78,12 +79,13 @@ static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
                                     const ARect &rSrcRect,
                                     int nDestX, int nDestY)
 {
-    fprintf (stderr, "Blit frame src %d,%d->%d,%d to position %d, %d\n",
+    fprintf (stderr, "Blit frame #2 src %d,%d->%d,%d to position %d, %d\n",
              rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
     ARect aRect;
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
+    fprintf (stderr, "pre lock\n");
     int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
     fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
@@ -110,6 +112,7 @@ static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
         unsigned char *dp = ( (unsigned char *)aOutBuffer.bits +
                               aOutBuffer.stride * (y + nDestY) +
                               nDestX * 4 /* dest pixel size */ );
+        fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
         for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
         {
             dp[x*4 + 0] = sp[x*3 + 0]; // B
@@ -164,8 +167,7 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
-
-            RedrawWindows(pWindow);
+            mbQueueReDraw = true;
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -176,13 +178,13 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "app window resized to ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
-            RedrawWindows(pWindow);
+            mbQueueReDraw = true;
             break;
         }
 
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
-            RedrawWindows(pWindow);
+            mbQueueReDraw = true;
             break;
         }
 
@@ -259,6 +261,8 @@ extern "C" {
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
+    , mpApp( NULL )
+    , mbQueueReDraw( false )
 {
     mpApp = lo_get_app();
     fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
@@ -297,8 +301,12 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     fprintf (stderr, "DoReleaseYield #2 %d ms\n", nTimeoutMS);
     void *outData = NULL;
     int outFd = 0, outEvents = 0;
+
+    if (mbQueueReDraw)
+        nTimeoutMS = 0;
+
     int nRet = ALooper_pollAll(nTimeoutMS, &outFd, &outEvents, &outData);
-    fprintf (stderr, "ret %d %d %d %p\n", nRet, outFd, outEvents, outData);
+    fprintf (stderr, "ret #3 %d %d %d %p\n", nRet, outFd, outEvents, outData);
 
     // acquire yield mutex again
     AcquireYieldMutex(nAcquireCount);
@@ -307,8 +315,10 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // set a callback in the native app glue's ALooper_addFd ?
     if (nRet == LOOPER_ID_MAIN)
         mpApp->cmdPollSource.process(mpApp, &mpApp->cmdPollSource);
-    if (nRet == LOOPER_ID_INPUT)
+    else if (nRet == LOOPER_ID_INPUT)
         mpApp->inputPollSource.process(mpApp, &mpApp->inputPollSource);
+    else if (mbQueueReDraw)
+        RedrawWindows (mpApp->window);
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )

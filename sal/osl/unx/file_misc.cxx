@@ -55,7 +55,7 @@
 #include <algorithm>
 
 #ifdef ANDROID
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #endif
 
 /************************************************************************
@@ -774,7 +774,7 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     int nRet=0;
     struct stat aStat;
 
-    nRet = lstat(pszPath,&aStat);
+    nRet = lstat_c(pszPath,&aStat);
     if ( nRet < 0 )
     {
         nRet=errno;

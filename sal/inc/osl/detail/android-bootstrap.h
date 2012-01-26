@@ -27,6 +27,8 @@
  * instead of those above.
  */
 
+#ifndef ANDROID_BOOSTRAP_H
+#define ANDROID_BOOSTRAP_H
 #if defined(ANDROID)
 
 #include <jni.h>
@@ -72,6 +74,7 @@ struct android_app *lo_get_app(void);
 }
 #endif
 
-#endif
+#endif // ANDROID
+#endif // ANDROID_BOOTSTRAP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
