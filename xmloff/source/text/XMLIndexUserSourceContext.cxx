@@ -194,7 +194,7 @@ void XMLIndexUserSourceContext::EndElement()
     aAny.setValue(&bUseLevelParagraphStyles, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
 
-    if( sIndexName.getLength() > 0 )
+    if( !sIndexName.isEmpty() )
     {
         aAny <<= sIndexName;
         rIndexPropertySet->setPropertyValue(sUserIndexName, aAny);

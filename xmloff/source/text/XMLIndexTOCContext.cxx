@@ -261,7 +261,7 @@ void XMLIndexTOCContext::StartElement(
         aAny.setValue( &bProtected, ::getBooleanCppuType() );
         xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
 
-        if (sIndexName.getLength() > 0)
+        if (!sIndexName.isEmpty())
         {
             aAny <<= sIndexName;
             xTOCPropertySet->setPropertyValue( sName, aAny );

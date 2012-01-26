@@ -157,8 +157,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         pThis->bDropWholeWord = *(sal_Bool *)rProperty.maValue.getValue();
         break;
     case CTF_DROPCAPCHARSTYLE:
-        DBG_ASSERT( !sDropCharStyle.getLength(),
-                    "drop char style is set already!" );
+        DBG_ASSERT( sDropCharStyle.isEmpty(), "drop char style is set already!" );
         rProperty.maValue >>= pThis->sDropCharStyle;
         break;
     case CTF_NUMBERINGSTYLENAME:
@@ -236,7 +235,7 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
 
     OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
                         sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
-    if( sName.getLength() )
+    if( !sName.isEmpty() )
     {
         pFontNameState->maValue <<= sName;
         if( pFontFamilyNameState )
@@ -255,12 +254,12 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
         pFontNameState->mnIndex = -1;
     }
 
-    if( pFontFamilyNameState && (0 == sFamilyName.getLength()) )
+    if( pFontFamilyNameState && sFamilyName.isEmpty() )
     {
         pFontFamilyNameState->mnIndex = -1;
     }
 
-    if( pFontStyleNameState && (0 == sStyleName.getLength()) )
+    if( pFontStyleNameState && sStyleName.isEmpty() )
     {
         pFontStyleNameState->mnIndex = -1;
     }

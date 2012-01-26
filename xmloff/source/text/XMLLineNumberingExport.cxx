@@ -93,7 +93,7 @@ void XMLLineNumberingExport::Export()
             aAny = xLineNumbering->getPropertyValue(sCharStyleName);
             OUString sTmp;
             aAny >>= sTmp;
-            if (sTmp.getLength() > 0)
+            if (!sTmp.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                      rExport.EncodeStyleName( sTmp ));
@@ -189,7 +189,7 @@ void XMLLineNumberingExport::Export()
             aAny = xLineNumbering->getPropertyValue(sSeparatorText);
             OUString sSeparator;
             aAny >>= sSeparator;
-            if (sSeparator.getLength() > 0)
+            if (!sSeparator.isEmpty())
             {
 
                 // SeparatorInterval

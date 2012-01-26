@@ -99,7 +99,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         }
     }
 
-    if( sShow.getLength() && !sTargetFrameName.getLength() )
+    if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
     {
         if( IsXMLToken( sShow, XML_NEW ) )
             sTargetFrameName =

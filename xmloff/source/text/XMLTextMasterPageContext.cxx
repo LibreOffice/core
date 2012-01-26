@@ -116,7 +116,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         }
     }
 
-    if( sDisplayName.getLength() )
+    if( !sDisplayName.isEmpty() )
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sName,
                                      sDisplayName );
@@ -126,7 +126,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sDisplayName = sName;
     }
 
-    if( 0 == sDisplayName.getLength() )
+    if( sDisplayName.isEmpty() )
         return;
 
     Reference < XNameContainer > xPageStyles =
@@ -252,7 +252,7 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
     if( xStyle.is() && (IsNew() || bOverwrite) )
     {
         Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-        if( sPageMasterName.getLength() )
+        if( !sPageMasterName.isEmpty() )
         {
             XMLPropStyleContext* pStyle =
                 GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
@@ -274,7 +274,7 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
             OUString sDisplayFollow(
                 GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_MASTER_PAGE, sFollow ) );
-            if( !sDisplayFollow.getLength() ||
+            if( sDisplayFollow.isEmpty() ||
                 !xPageStyles->hasByName( sDisplayFollow ) )
                 sDisplayFollow = xStyle->getName();
 

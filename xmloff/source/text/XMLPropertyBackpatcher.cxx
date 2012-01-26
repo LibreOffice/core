@@ -61,7 +61,7 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
     A aDef)
 :   sPropertyName(sPropName)
 ,   bDefaultHandling(bDefault)
-,   bPreserveProperty(sPreserveName.getLength()>0)
+,   bPreserveProperty(!sPreserveName.isEmpty())
 ,   sPreservePropertyName(sPreserveName)
 ,   aDefault(aDef)
 {

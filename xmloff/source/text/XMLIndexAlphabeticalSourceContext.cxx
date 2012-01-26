@@ -232,14 +232,13 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
 
 
-    if (sAlgorithm.getLength() > 0)
+    if (!sAlgorithm.isEmpty())
     {
         aAny <<= sAlgorithm;
         rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
     }
 
-    if ( (aLocale.Language.getLength() > 0) &&
-         (aLocale.Country.getLength() > 0)      )
+    if ( !aLocale.Language.isEmpty()  && !aLocale.Country.isEmpty() )
     {
         aAny <<= aLocale;
         rIndexPropertySet->setPropertyValue(sLocale, aAny);

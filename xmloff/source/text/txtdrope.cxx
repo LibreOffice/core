@@ -80,7 +80,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
             ::sax::Converter::convertNumber(sBuffer, (sal_Int32)aFormat.Count);
             sValue = sBuffer.makeStringAndClear();
         }
-        if( sValue.getLength() )
+        if( !sValue.isEmpty() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LENGTH, sValue );
 
         // style:distance
@@ -92,7 +92,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         }
 
         // style:style-name
-        if( rStyleName.getLength() )
+        if( !rStyleName.isEmpty() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
                                   rExport.EncodeStyleName( rStyleName ) );
     }

@@ -400,7 +400,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     }
 
     // if this is not a normal text field, check if its a presentation text field
-    if( sFieldName.getLength() == 0 )
+    if( sFieldName.isEmpty() )
     {
         const OUString* pNames2 = aServices.getConstArray();
         sal_Int32 nCount2 = aServices.getLength();
@@ -417,7 +417,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
             ++pNames2;
         }
 
-        if( sFieldName.getLength() != 0 )
+        if( !sFieldName.isEmpty() )
         {
             if( sFieldName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "Header" ) ) == 0 )
             {
@@ -435,7 +435,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     }
 
     // map postfix of service name to field ID
-    DBG_ASSERT(sFieldName.getLength()>0, "no TextField service found!");
+    DBG_ASSERT(!sFieldName.isEmpty(), "no TextField service found!");
     return MapFieldName(sFieldName, xPropSet);
 }
 
@@ -452,9 +452,9 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
     // a) find prelim. FIELD_ID via aFieldServiceMapping
 
     // check for non-empty service name
-    DBG_ASSERT(sFieldName.getLength()>0, "no valid service name!");
+    DBG_ASSERT(!sFieldName.isEmpty(), "no valid service name!");
     enum FieldIdEnum nToken = FIELD_ID_UNKNOWN;
-    if (sFieldName.getLength() > 0)
+    if (!sFieldName.isEmpty())
     {
         // map name to prelim. ID
         sal_uInt16 nTmp;
@@ -792,7 +792,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // insert this text field master
             OUString sFieldMasterName = GetStringProperty(
                 sPropertyInstanceName, xDepField->getTextFieldMaster());
-            if (sFieldMasterName.getLength() > 0)
+            if (!sFieldMasterName.isEmpty())
                 aMapIter->second.insert( sFieldMasterName );
         }
         // else: no dependent field -> no master -> ignore
@@ -1009,7 +1009,7 @@ void XMLTextFieldExport::ExportField(
     OUString sStyle = GetExport().GetTextParagraphExport()->
         FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, bIsUICharStyle,
                                    bHasAutoStyle, pStates );
-    sal_Bool bHasStyle = (sStyle.getLength() > 0);
+    sal_Bool bHasStyle = !sStyle.isEmpty();
 
     // export hyperlink (if we have one)
     Reference < XPropertySetInfo > xRangePropSetInfo;
@@ -1741,7 +1741,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
         // author
         OUString aAuthor( GetStringProperty(sPropertyAuthor, rPropSet) );
-        if( aAuthor.getLength() )
+        if( !aAuthor.isEmpty() )
         {
             SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_CREATOR, sal_True,
@@ -2268,7 +2268,7 @@ void XMLTextFieldExport::ExportMacro(
 
     // if the ScriptURL property is not empty then this is a Scripting
     // Framework URL, otherwise treat it as a Basic Macro
-    if (sName.getLength() != 0)
+    if (!sName.isEmpty())
     {
         aSeq = Sequence<PropertyValue> (2);
         PropertyValue* pArr = aSeq.getArray();
@@ -2389,7 +2389,7 @@ void XMLTextFieldExport::ProcessValueAndType(
 
                 OUString sDataStyleName =
                     GetExport().getDataStyleName(nFormatKey, bTimeStyle);
-                if( sDataStyleName.getLength() > 0 )
+                if( !sDataStyleName.isEmpty() )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DATA_STYLE_NAME,
@@ -2457,7 +2457,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
         return;
 
     // check for empty string, if applicable
-    if ( bOmitEmpty && (sValue.getLength()==0) )
+    if ( bOmitEmpty && sValue.isEmpty() )
         return;
 
     // write attribute
@@ -2750,7 +2750,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
             OUString sStr;
             aValues[i].Value >>= sStr;
 
-            if (sStr.getLength() > 0)
+            if (!sStr.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      MapBibliographyFieldName(aValues[i].Name),
@@ -2827,19 +2827,19 @@ void XMLTextFieldExport::ExportDataBaseElement(
     OUString sDataBaseURL;
     OUString sStr;
     if( ( rPropertySet->getPropertyValue( sPropertyDataBaseName ) >>= sStr )
-        && ( sStr.getLength() > 0 ) )
+        && !sStr.isEmpty() )
     {
         sDataBaseName = sStr;
     }
     else if( rPropertySetInfo->hasPropertyByName( sPropertyDataBaseURL ) &&
              (rPropertySet->getPropertyValue( sPropertyDataBaseURL ) >>= sStr) &&
-             (sStr.getLength() > 0) )
+             !sStr.isEmpty() )
     {
         sDataBaseURL = sStr;
     }
 
     // add database name property (if present)
-    if( sDataBaseName.getLength() > 0 )
+    if( !sDataBaseName.isEmpty() )
         rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_DATABASE_NAME,
                               sDataBaseName );
     SvXMLElementExport aDataBaseElement( GetExport(),
@@ -2847,7 +2847,7 @@ void XMLTextFieldExport::ExportDataBaseElement(
                                          sal_False, sal_False );
 
     // write URL as children
-    if( sDataBaseURL.getLength() > 0 )
+    if( !sDataBaseURL.isEmpty() )
     {
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sDataBaseURL );
         SvXMLElementExport aDataSourceElement(

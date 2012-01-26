@@ -141,7 +141,7 @@ void XMLTextNumRuleInfo::Set(
         // First try to find the numbering rules in the list auto style pool.
         // If not found, the numbering rules instance has to be named.
         msNumRulesName = rListAutoPool.Find( mxNumRules );
-        if ( msNumRulesName.getLength() == 0 )
+        if ( msNumRulesName.isEmpty() )
         {
             Reference < XNamed > xNamed( mxNumRules, UNO_QUERY );
             DBG_ASSERT( xNamed.is(),
@@ -151,7 +151,7 @@ void XMLTextNumRuleInfo::Set(
                 msNumRulesName = xNamed->getName();
             }
         }
-        DBG_ASSERT( msNumRulesName.getLength() > 0,
+        DBG_ASSERT( !msNumRulesName.isEmpty(),
                     "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect -> please inform OD." );
 
         if( xPropSetInfo->hasPropertyByName( msPropNameListId ) )
@@ -230,8 +230,7 @@ sal_Bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp )
 {
     sal_Bool bRet( sal_True );
     // Currently only the text documents support <ListId>.
-    if ( rCmp.msListId.getLength() > 0 ||
-         msListId.getLength() > 0 )
+    if ( !rCmp.msListId.isEmpty() || !msListId.isEmpty() )
     {
         bRet = rCmp.msListId == msListId;
     }

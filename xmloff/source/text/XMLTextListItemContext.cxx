@@ -84,7 +84,7 @@ XMLTextListItemContext::XMLTextListItemContext(
                   IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
         {
             const ::rtl::OUString sListStyleOverrideName = rValue;
-            if ( sListStyleOverrideName.getLength() > 0 )
+            if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(
                         GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,

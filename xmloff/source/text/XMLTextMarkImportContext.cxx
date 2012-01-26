@@ -102,7 +102,7 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
             sValue = xAttrList->getValueByIndex(nAttr);
         }
     }
-    if (rHelper.hasCurrentFieldCtx() && sName.getLength()>0) {
+    if (rHelper.hasCurrentFieldCtx() && !sName.isEmpty()) {
         rHelper.addFieldParam(sName, sValue);
     }
 }
@@ -185,7 +185,7 @@ void XMLTextMarkImportContext::StartElement(
 
     if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
     {
-        if (m_sBookmarkName.getLength() == 0)
+        if (m_sBookmarkName.isEmpty())
         {
             m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
         }
@@ -206,7 +206,7 @@ void XMLTextMarkImportContext::EndElement()
     static const OUString sAPI_formfieldmark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FormFieldmark"));
 
-    if (m_sBookmarkName.getLength() > 0)
+    if (!m_sBookmarkName.isEmpty())
     {
         sal_uInt16 nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
@@ -397,7 +397,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         }
         else
         {
-            if (sMarkName.getLength())
+            if (!sMarkName.isEmpty())
             {
                 OSL_FAIL("name given, but XNamed not supported?");
                 return 0;

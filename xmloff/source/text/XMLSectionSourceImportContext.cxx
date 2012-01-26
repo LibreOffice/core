@@ -123,7 +123,7 @@ void XMLSectionSourceImportContext::StartElement(
     const OUString sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"));
 
     Any aAny;
-    if ((sURL.getLength() > 0) || (sFilterName.getLength() > 0))
+    if (!sURL.isEmpty() || !sFilterName.isEmpty())
     {
         SectionFileLink aFileLink;
         aFileLink.FileURL = GetImport().GetAbsoluteReference( sURL );
@@ -133,7 +133,7 @@ void XMLSectionSourceImportContext::StartElement(
         rSectionPropertySet->setPropertyValue(sFileLink, aAny);
     }
 
-    if (sSectionName.getLength() > 0)
+    if (!sSectionName.isEmpty())
     {
         aAny <<= sSectionName;
         rSectionPropertySet->setPropertyValue(sLinkRegion, aAny);

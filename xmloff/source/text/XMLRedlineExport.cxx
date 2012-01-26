@@ -483,7 +483,7 @@ void XMLRedlineExport::ExportChangeInfo(
     Any aAny = rPropSet->getPropertyValue(sRedlineAuthor);
     OUString sTmp;
     aAny >>= sTmp;
-    if (sTmp.getLength() > 0)
+    if (!sTmp.isEmpty())
     {
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
                                           XML_CREATOR, sal_True,
@@ -523,7 +523,7 @@ void XMLRedlineExport::ExportChangeInfo(
         {
             OUString sTmp;
             rVal.Value >>= sTmp;
-            if (sTmp.getLength() > 0)
+            if (!sTmp.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, sTmp);
             }
@@ -607,7 +607,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
     if( bIdOK )
     {
-        DBG_ASSERT( sId.getLength() > 0, "Redlines must have IDs" );
+        DBG_ASSERT( !sId.isEmpty(), "Redlines must have IDs" );
 
         // TODO: use GetRedlineID or elimiate that function
         OUStringBuffer sBuffer(sChangePrefix);
@@ -658,7 +658,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
 void XMLRedlineExport::WriteComment(const OUString& rComment)
 {
-    if (rComment.getLength() > 0)
+    if (!rComment.isEmpty())
     {
         // iterate over all string-pieces separated by return (0x0a) and
         // put each inside a paragraph element.

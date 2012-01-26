@@ -439,7 +439,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     OUString sCond;
     aAny >>= sCond;
     enum XMLTokenEnum eDisplay = XML_TOKEN_INVALID;
-    if (sCond.getLength() > 0)
+    if (!sCond.isEmpty())
     {
         OUString sQValue =
             GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOW,
@@ -495,23 +495,23 @@ void XMLSectionExport::ExportRegularSectionStart(
     OUString sRegionName;
     aAny >>= sRegionName;
 
-    if ( (aFileLink.FileURL.getLength() > 0) ||
-         (aFileLink.FilterName.getLength() > 0) ||
-         (sRegionName.getLength() > 0) )
+    if ( !aFileLink.FileURL.isEmpty() ||
+         !aFileLink.FilterName.isEmpty() ||
+         !sRegionName.isEmpty())
     {
-        if (aFileLink.FileURL.getLength() > 0)
+        if (!aFileLink.FileURL.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,
                                      GetExport().GetRelativeReference( aFileLink.FileURL) );
         }
 
-        if (aFileLink.FilterName.getLength() > 0)
+        if (!aFileLink.FilterName.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FILTER_NAME,
                                      aFileLink.FilterName);
         }
 
-        if (sRegionName.getLength() > 0)
+        if (!sRegionName.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_SECTION_NAME,
                                      sRegionName);
@@ -539,9 +539,9 @@ void XMLSectionExport::ExportRegularSectionStart(
             OUString sItem;
             aAny >>= sItem;
 
-            if ( (sApplication.getLength() > 0) ||
-                 (sTopic.getLength() > 0) ||
-                 (sItem.getLength() > 0 )   )
+            if ( !sApplication.isEmpty() ||
+                 !sTopic.isEmpty() ||
+                 !sItem.isEmpty())
             {
                 GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
                                          XML_DDE_APPLICATION, sApplication);
@@ -682,7 +682,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         aAny = rPropertySet->getPropertyValue(sMainEntryCharacterStyleName);
         OUString sStyleName;
         aAny >>= sStyleName;
-        if (sStyleName.getLength())
+        if (!sStyleName.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_MAIN_ENTRY_STYLE_NAME,
@@ -711,7 +711,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         aAny = rPropertySet->getPropertyValue(sSortAlgorithm);
         OUString sAlgorithm;
         aAny >>= sAlgorithm;
-        if (sAlgorithm.getLength() > 0)
+        if (!sAlgorithm.isEmpty())
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SORT_ALGORITHM,
                                       sAlgorithm );
@@ -799,7 +799,7 @@ void XMLSectionExport::ExportBaseIndexStart(
     // index name
     OUString sIndexName;
     rPropertySet->getPropertyValue(sName) >>= sIndexName;
-    if ( sIndexName.getLength() > 0 )
+    if ( !sIndexName.isEmpty() )
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sIndexName);
     }
@@ -1304,7 +1304,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_CHAR_STYLE:
                     // only valid, if not empty
                     rValues[i].Value >>= sCharStyle;
-                    bCharStyleOK = sCharStyle.getLength() > 0;
+                    bCharStyleOK = !sCharStyle.isEmpty();
                     break;
 
                 case TOK_TPARAM_TEXT:
@@ -1496,7 +1496,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             }
 
             // fill char ("leader char")
-            if (bFillCharOK && (sFillChar.getLength() > 0))
+            if (bFillCharOK && !sFillChar.isEmpty())
             {
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                          XML_LEADER_CHAR, sFillChar);
@@ -1705,7 +1705,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             aAny = xPropSet->getPropertyValue(sSortAlgorithm);
             OUString sAlgorithm;
             aAny >>= sAlgorithm;
-            if( sAlgorithm.getLength() > 0 )
+            if( !sAlgorithm.isEmpty() )
             {
                 rExport.AddAttribute( XML_NAMESPACE_TEXT,
                                       XML_SORT_ALGORITHM, sAlgorithm );
@@ -1908,7 +1908,7 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
                 break;
             }
         }
-        if( sStyle.getLength() > 0 )
+        if( !sStyle.isEmpty() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                       GetExport().EncodeStyleName( sStyle ) );

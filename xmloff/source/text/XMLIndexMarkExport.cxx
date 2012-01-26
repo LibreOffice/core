@@ -113,7 +113,7 @@ void XMLIndexMarkExport::ExportIndexMark(
             aAny = xIndexMarkPropSet->getPropertyValue(sAlternativeText);
             OUString sTmp;
             aAny >>= sTmp;
-            DBG_ASSERT(sTmp.getLength() > 0,
+            DBG_ASSERT(!sTmp.isEmpty(),
                        "collapsed index mark without alternative text");
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STRING_VALUE, sTmp);
         }
@@ -203,7 +203,7 @@ void lcl_ExportPropertyString( SvXMLExport& rExport,
     OUString sValue;
     if( rAny >>= sValue )
     {
-        if( sValue.getLength() > 0 )
+        if( !sValue.isEmpty() )
         {
             rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, sValue );
         }

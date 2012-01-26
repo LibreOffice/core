@@ -375,28 +375,28 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
 {
     Any aAny;
 
-    if (sCitationStyle.getLength() > 0)
+    if (!sCitationStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_TEXT_TEXT, sCitationStyle );
         rConfig->setPropertyValue(sPropertyCharStyleName, aAny);
     }
 
-    if (sAnchorStyle.getLength() > 0)
+    if (!sAnchorStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_TEXT_TEXT, sAnchorStyle );
         rConfig->setPropertyValue(sPropertyAnchorCharStyleName, aAny);
     }
 
-    if (sPageStyle.getLength() > 0)
+    if (!sPageStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle );
         rConfig->setPropertyValue(sPropertyPageStyleName, aAny);
     }
 
-    if (sDefaultStyle.getLength() > 0)
+    if (!sDefaultStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_TEXT_PARAGRAPH, sDefaultStyle );

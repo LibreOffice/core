@@ -164,12 +164,12 @@ void XMLSectionFootnoteConfigExport::exportXML(
         if (bNumOwn)
         {
             // prefix and suffix
-            if (sNumPrefix.getLength() > 0)
+            if (!sNumPrefix.isEmpty())
             {
                     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
                                          sNumPrefix);
             }
-            if (sNumSuffix.getLength() > 0)
+            if (!sNumSuffix.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
                                      sNumSuffix);

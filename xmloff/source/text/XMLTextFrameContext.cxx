@@ -214,7 +214,7 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
             }
         }
     }
-    if (sName.getLength() && bFoundValue )
+    if (!sName.isEmpty() && bFoundValue )
         rParamMap[sName] = sValue;
 }
 class XMLTextFrameContourContext_Impl : public SvXMLImportContext
@@ -301,10 +301,9 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );
     Reference < XPropertySetInfo > xPropSetInfo =
         rPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName(
-                                                    sContourPolyPolygon ) &&
+    if( xPropSetInfo->hasPropertyByName(sContourPolyPolygon ) &&
         nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight &&
-        (bPath ? sD : sPoints).getLength() )
+        !(bPath ? sD : sPoints).isEmpty() )
     {
         awt::Point aPoint( 0,  0 );
         awt::Size aSize( nWidth, nHeight );
@@ -482,14 +481,14 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
             if( xBase64Stream.is() )
             {
                 OUString sURL( GetImport().ResolveEmbeddedObjectURLFromBase64() );
-                if( sURL.getLength() )
+                if( !sURL.isEmpty() )
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
                                                         sStyleName,
                                                         sTblName,
                                                         nWidth, nHeight );
             }
-            else if( sHRef.getLength() )
+            else if( !sHRef.isEmpty() )
             {
                 OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
                                                                 OUString() ) );
@@ -535,7 +534,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
         }
         case XML_TEXT_FRAME_PLUGIN:
         {
-            if(sHRef.getLength())
+            if(!sHRef.isEmpty())
                 GetImport().GetAbsoluteReference(sHRef);
             xPropSet = GetImport().GetTextImport()
                             ->createAndInsertPlugin( sMimeType, sHRef,
@@ -584,8 +583,8 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
     if( xNamed.is() )
     {
         OUString sOrigName( xNamed->getName() );
-        if( !sOrigName.getLength() ||
-            (sName.getLength() && sOrigName != sName) )
+        if( sOrigName.isEmpty() ||
+            (!sName.isEmpty() && sOrigName != sName) )
         {
             OUString sOldName( sName );
             sal_Int32 i = 0;
@@ -603,7 +602,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 
     // frame style
     XMLPropStyleContext *pStyle = 0;
-    if( sStyleName.getLength() )
+    if( !sStyleName.isEmpty() )
     {
         pStyle = xTextImportHelper->FindAutoFrameStyle( sStyleName );
         if( pStyle )
@@ -611,7 +610,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
     }
 
     Any aAny;
-    if( sStyleName.getLength() )
+    if( !sStyleName.isEmpty() )
     {
         OUString sDisplayStyleName( GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_SD_GRAPHICS_ID, sStyleName ) );
@@ -711,11 +710,11 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
     if( XML_TEXT_FRAME_GRAPHIC == nType )
     {
         // URL
-        OSL_ENSURE( sHRef.getLength() > 0 || xBase64Stream.is(),
+        OSL_ENSURE( !sHRef.isEmpty() || xBase64Stream.is(),
                     "neither URL nor base64 image data given" );
         UniReference < XMLTextImportHelper > xTxtImport =
             GetImport().GetTextImport();
-        if( sHRef.getLength() )
+        if( !sHRef.isEmpty() )
         {
             sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
                                   xTxtImport->IsBlockMode() ||
@@ -1058,10 +1057,10 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     if( ( (XML_TEXT_FRAME_GRAPHIC == nType ||
            XML_TEXT_FRAME_OBJECT == nType ||
            XML_TEXT_FRAME_OBJECT_OLE == nType) &&
-          !sHRef.getLength() ) ||
-        ( XML_TEXT_FRAME_APPLET  == nType && !sCode.getLength() ) ||
+          sHRef.isEmpty() ) ||
+        ( XML_TEXT_FRAME_APPLET  == nType && sCode.isEmpty() ) ||
         ( XML_TEXT_FRAME_PLUGIN == nType &&
-          sHRef.getLength() == 0 && sMimeType.getLength() == 0 ) )
+          sHRef.isEmpty() && sMimeType.isEmpty() ) )
         return; // no URL: no image or OLE object
 
     Create( sal_True );
@@ -1145,7 +1144,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
                 new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList );
             sFilterService = pEContext->GetFilterServiceName();
-            if( sFilterService.getLength() != 0 )
+            if( !sFilterService.isEmpty() )
             {
                 Create( sal_False );
                 if( xPropSet.is() )
@@ -1179,7 +1178,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
         !xPropSet.is() && !bCreateFailed )
     {
         OUString sTrimmedChars( rChars. trim() );
-        if( sTrimmedChars.getLength() )
+        if( !sTrimmedChars.isEmpty() )
         {
             if( !xBase64Stream.is() )
             {
@@ -1199,7 +1198,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
             if( bOwnBase64Stream && xBase64Stream.is() )
             {
                 OUString sChars;
-                if( sBase64CharsLeft.getLength() )
+                if( !sBase64CharsLeft.isEmpty() )
                 {
                     sChars = sBase64CharsLeft;
                     sChars += sTrimmedChars;
@@ -1350,13 +1349,13 @@ XMLTextFrameContext::XMLTextFrameContext(
              IsXMLToken( aLocalName, XML_STYLE_NAME ) )
         {
             OUString aStyleName = xAttrList->getValueByIndex( i );
-            if( aStyleName.getLength() )
+            if( !aStyleName.isEmpty() )
             {
                 UniReference < XMLTextImportHelper > xTxtImport =
                                                     GetImport().GetTextImport();
                 XMLPropStyleContext* pStyle( 0L );
                 pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
-                if ( pStyle && !pStyle->GetParentName().getLength() )
+                if ( pStyle && pStyle->GetParentName().isEmpty() )
                 {
                     m_HasAutomaticStyleWithoutParentStyle = sal_True;
                 }
@@ -1390,11 +1389,11 @@ void XMLTextFrameContext::EndElement()
     {
         pImpl->CreateIfNotThere();
 
-        if( m_sTitle.getLength() )
+        if( !m_sTitle.isEmpty() )
         {
             pImpl->SetTitle( m_sTitle );
         }
-        if( m_sDesc.getLength() )
+        if( !m_sDesc.isEmpty() )
         {
             pImpl->SetDesc( m_sDesc );
         }

@@ -410,7 +410,7 @@ void XMLTableImportContext::InitColumns()
         {
             boost::shared_ptr< ColumnInfo > xInfo( maColumnInfos[nCol] );
 
-            if( pAutoStyles && xInfo->msStyleName.getLength() )
+            if( pAutoStyles && !xInfo->msStyleName.isEmpty() )
             {
                 const XMLPropStyleContext* pStyle =
                     dynamic_cast< const XMLPropStyleContext* >(
@@ -492,7 +492,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
             }
         }
 
-        if( sStyleName.getLength() )
+        if( !sStyleName.isEmpty() )
         {
             SvXMLStylesContext * pAutoStyles = GetImport().GetShapeImport()->GetAutoStylesContext();
             if( pAutoStyles )
@@ -608,7 +608,7 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
     OUString sStyleName( msDefaultCellStyleName );
 
     // if there is still no style name, try default style name from column
-    if( (sStyleName.getLength() == 0) && (mnCurrentColumn < sal::static_int_cast<sal_Int32>(maColumnInfos.size())) )
+    if( (sStyleName.isEmpty()) && (mnCurrentColumn < sal::static_int_cast<sal_Int32>(maColumnInfos.size())) )
         sStyleName = maColumnInfos[mnCurrentColumn]->msDefaultCellStyleName;
 
     return sStyleName;
@@ -666,10 +666,10 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
     }
 
     // if there is no style name at the cell, try default style name from row
-    if( sStyleName.getLength() == 0 )
+    if( sStyleName.isEmpty() )
         sStyleName = sDefaultCellStyleName;
 
-    if( sStyleName.getLength() )
+    if( !sStyleName.isEmpty() )
     {
         SvXMLStylesContext * pAutoStyles = GetImport().GetShapeImport()->GetAutoStylesContext();
         if( pAutoStyles )

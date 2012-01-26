@@ -251,7 +251,7 @@ XMLTextFieldImportContext::~XMLTextFieldImportContext() {
 
 OUString XMLTextFieldImportContext::GetContent()
 {
-    if (sContent.getLength()==0)
+    if (sContent.isEmpty())
     {
         sContent = sContentBuffer.makeStringAndClear();
     }
@@ -261,7 +261,7 @@ OUString XMLTextFieldImportContext::GetContent()
 
 void XMLTextFieldImportContext::EndElement()
 {
-    DBG_ASSERT(GetServiceName().getLength()>0, "no service name for element!");
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if (bValid)
     {
 
@@ -2011,7 +2011,7 @@ void XMLUserDocInfoImportContext::PrepareField(
         ::com::sun::star::beans::XPropertySet> & xPropertySet)
 {
     uno::Any aAny;
-    if ( aName.getLength() )
+    if ( !aName.isEmpty() )
     {
         aAny <<= aName;
         xPropertySet->setPropertyValue(sPropertyName, aAny);
@@ -3707,7 +3707,7 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
 
 void XMLAnnotationImportContext::EndElement()
 {
-    DBG_ASSERT(GetServiceName().getLength()>0, "no service name for element!");
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if( mxCursor.is() )
     {
         // delete addition newline

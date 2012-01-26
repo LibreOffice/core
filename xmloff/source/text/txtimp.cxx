@@ -957,9 +957,9 @@ XMLTextImportHelper::XMLTextImportHelper(
                     ::rtl::OUString sListId;
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListId;
-                    DBG_ASSERT( sListId.getLength() != 0,
+                    DBG_ASSERT( !sListId.isEmpty(),
                                 "no default list id found at chapter numbering rules instance. Serious defect -> please inform OD." );
-                    if ( sListId.getLength() )
+                    if ( !sListId.isEmpty() )
                     {
                         Reference< XNamed > const xChapterNumNamed(
                             m_pImpl->m_xChapterNumbering, UNO_QUERY);
@@ -1262,7 +1262,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                 XMLTextStyleContext *pStyle = 0;
                 sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                            : XML_STYLE_FAMILY_TEXT_TEXT;
-                if (rStyleName.getLength() && m_pImpl->m_xAutoStyles.Is())
+                if (!rStyleName.isEmpty() && m_pImpl->m_xAutoStyles.Is())
                 {
                     const SvXMLStyleContext* pTempStyle =
                         ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
@@ -1363,7 +1363,7 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
         {
             OUString sListStyle;
             xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
-            if ( sListStyle.getLength() != 0 &&
+            if ( !sListStyle.isEmpty() &&
                  sListStyle == sOutlineStyleName )
             {
                 bRet = sal_False;
@@ -1382,14 +1382,13 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
         while ( xStyle.is() )
         {
             OUString aParentStyle( xStyle->getParentStyle() );
-            if ( aParentStyle.getLength() > 0 )
+            if ( !aParentStyle.isEmpty() )
             {
                 aParentStyle =
                     rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                                                  aParentStyle );
             }
-            if ( aParentStyle.getLength() == 0 ||
-                 !xParaStyles->hasByName( aParentStyle ) )
+            if ( aParentStyle.isEmpty() || !xParaStyles->hasByName( aParentStyle ) )
             {
                 // no list style found
                 break;
@@ -1414,7 +1413,7 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                     {
                         OUString sListStyle;
                         xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
-                        if ( sListStyle.getLength() != 0 &&
+                        if ( !sListStyle.isEmpty() &&
                              sListStyle == sOutlineStyleName )
                         {
                             bRet = sal_False;
@@ -1423,7 +1422,7 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                         /* Check explicitly on certain versions and on import of
                            text documents in OpenOffice.org file format (#i86058#)
                         */
-                        else if ( sListStyle.getLength() == 0 &&
+                        else if ( sListStyle.isEmpty() &&
                                   ( rImport.IsTextDocInOOoFileFormat() ||
                                     ( bBuildIdFound &&
                                       ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
@@ -1486,7 +1485,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
     XMLTextStyleContext *pStyle = 0;
     OUString sStyleName( rStyleName );
-    if (sStyleName.getLength() && m_pImpl->m_xAutoStyles.Is())
+    if (!sStyleName.isEmpty() && m_pImpl->m_xAutoStyles.Is())
     {
         const SvXMLStyleContext* pTempStyle =
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
@@ -1501,7 +1500,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         xPropSet->getPropertySetInfo());
 
     // style
-    if( sStyleName.getLength() )
+    if( !sStyleName.isEmpty() )
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
         const String& rPropName = (bPara) ? s_ParaStyleName : s_CharStyleName;
@@ -1654,7 +1653,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
             if (xPropSetInfo->hasPropertyByName(s_PropNameListId))
             {
-                if (sListId.getLength()) {
+                if (!sListId.isEmpty()) {
                     xPropSet->setPropertyValue(s_PropNameListId,
                         makeAny(sListId) );
                 }
@@ -1678,7 +1677,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 DBG_ASSERT( ( bBuildIdFound && nUPD == 680 ) ||
                             !pStyle ||
                             !pStyle->IsListStyleSet() ||
-                            pStyle->GetListStyle().getLength() == 0,
+                            pStyle->GetListStyle().isEmpty(),
                             "automatic paragraph style with list style name, but paragraph not in list???" );
                 if ( ( bBuildIdFound && nUPD == 680 ) ||
                      !pStyle || !pStyle->IsListStyleSet() )
@@ -1716,7 +1715,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 rImport.GetStyleDisplayName(
                                 XML_STYLE_FAMILY_MASTER_PAGE,
                                 pStyle->GetMasterPageName()) );
-            if( !sDisplayName.getLength() ||
+            if( sDisplayName.isEmpty() ||
                 (m_pImpl->m_xPageStyles.is() &&
                  m_pImpl->m_xPageStyles->hasByName( sDisplayName)))
             {
@@ -1724,7 +1723,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         makeAny(sDisplayName));
             }
         }
-        if( bPara && pStyle->GetDropCapStyleName().getLength() &&
+        if( bPara && !pStyle->GetDropCapStyleName().isEmpty() &&
             m_pImpl->m_xTextStyles.is())
         {
             OUString sDisplayName(
@@ -1771,7 +1770,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         // the selected text has to be removed afterwards
                         m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
 
-                        if( xRange->getString().getLength() )
+                        if( !xRange->getString().isEmpty() )
                         {
                             try
                             {
@@ -1914,7 +1913,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
         RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"));
 
     // style name empty?
-    if( rStyleName.getLength() == 0 )
+    if( rStyleName.isEmpty() )
     {
         // Empty? Then we need o do stuff. Let's do error checking first.
         if (m_pImpl->m_xChapterNumbering.is() &&
@@ -1962,7 +1961,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
 void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
                                                     const OUString& rStyleName )
 {
-    if (rStyleName.getLength()
+    if (!rStyleName.isEmpty()
         && m_pImpl->m_xChapterNumbering.is()
         && (nOutlineLevel > 0)
         && (nOutlineLevel <= m_pImpl->m_xChapterNumbering->getCount()))
@@ -2063,8 +2062,7 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             // Paragraph style assignments in Outline of template lost from second level on (#i107610#)
-            if ( bSetEmptyLevels ||
-                 sChosenStyles[i].getLength() > 0 )
+            if ( bSetEmptyLevels || !sChosenStyles[i].isEmpty() )
             {
                 pProps->Value <<= sChosenStyles[i];
                 m_pImpl->m_xChapterNumbering->replaceByIndex(i,
@@ -2140,7 +2138,7 @@ void XMLTextImportHelper::SetHyperlink(
         OUString sDisplayName(
             rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rStyleName ) );
-        if( sDisplayName.getLength() &&
+        if( !sDisplayName.isEmpty() &&
             xPropSetInfo->hasPropertyByName(s_UnvisitedCharStyleName) &&
             m_pImpl->m_xTextStyles->hasByName(sDisplayName))
         {
@@ -2151,7 +2149,7 @@ void XMLTextImportHelper::SetHyperlink(
         sDisplayName =
             rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rVisitedStyleName );
-        if( sDisplayName.getLength() &&
+        if( !sDisplayName.isEmpty() &&
             xPropSetInfo->hasPropertyByName(s_VisitedCharStyleName) &&
             m_pImpl->m_xTextStyles->hasByName(sDisplayName))
         {
@@ -2182,7 +2180,7 @@ void XMLTextImportHelper::SetRuby(
 
         // the ruby style (ruby-adjust)
         XMLPropStyleContext *pStyle = 0;
-        if (rStyleName.getLength() && m_pImpl->m_xAutoStyles.Is())
+        if (!rStyleName.isEmpty() && m_pImpl->m_xAutoStyles.Is())
         {
             const SvXMLStyleContext* pTempStyle =
                 ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
@@ -2200,7 +2198,7 @@ void XMLTextImportHelper::SetRuby(
             OUString sDisplayName(
                 rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
-            if( (sDisplayName.getLength() > 0) &&
+            if( (!sDisplayName.isEmpty()) &&
                 m_pImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
                 xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
@@ -2243,7 +2241,7 @@ sal_Bool XMLTextImportHelper::HasDrawNameAttribute(
         if( XML_NAMESPACE_DRAW == nPrefix &&
             IsXMLToken( aLocalName, XML_NAME ) )
         {
-            return xAttrList->getValueByIndex(i).getLength() != 0;
+            return !xAttrList->getValueByIndex(i).isEmpty();
         }
     }
 
@@ -2720,10 +2718,10 @@ void XMLTextImportHelper::ConnectFrameChains(
     static ::rtl::OUString s_ChainPrevName(
         RTL_CONSTASCII_USTRINGPARAM("ChainPrevName"));
 
-    if( !rFrmName.getLength() )
+    if( rFrmName.isEmpty() )
         return;
 
-    if( rNextFrmName.getLength() )
+    if( !rNextFrmName.isEmpty() )
     {
         OUString sNextFrmName(GetRenameMap().Get( XML_TEXT_RENAME_TYPE_FRAME,
                                                     rNextFrmName ));

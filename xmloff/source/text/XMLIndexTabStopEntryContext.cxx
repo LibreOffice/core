@@ -109,7 +109,7 @@ void XMLIndexTabStopEntryContext::StartElement(
             {
                 sLeaderChar = sAttr;
                 // valid only, if we have a char!
-                bLeaderCharOK = (sAttr.getLength() > 0);
+                bLeaderCharOK = !sAttr.isEmpty();
             }
             // #i21237#
             else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )

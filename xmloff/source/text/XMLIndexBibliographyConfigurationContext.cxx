@@ -267,14 +267,13 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
                 aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
                 xPropSet->setPropertyValue(sIsSortByPosition, aAny);
 
-                if( (aLocale.Language.getLength() > 0) &&
-                    (aLocale.Country.getLength() > 0)     )
+                if( !aLocale.Language.isEmpty() && !aLocale.Country.isEmpty() )
                 {
                     aAny <<= aLocale;
                     xPropSet->setPropertyValue(sLocale, aAny);
                 }
 
-                if( sAlgorithm.getLength() > 0 )
+                if( !sAlgorithm.isEmpty() )
                 {
                     aAny <<= sAlgorithm;
                     xPropSet->setPropertyValue(sSortAlgorithm, aAny);

@@ -162,12 +162,12 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 {
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListStyleDefaultListId;
-                    DBG_ASSERT( sListStyleDefaultListId.getLength() != 0,
+                    DBG_ASSERT( !sListStyleDefaultListId.isEmpty(),
                                 "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
                 }
             }
         }
-        if ( msListId.getLength() == 0 )  // no text:id property found
+        if ( msListId.isEmpty() )  // no text:id property found
         {
             sal_Int32 nUPD( 0 );
             sal_Int32 nBuild( 0 );
@@ -179,7 +179,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                    use default list id of numbering rules instance, if existing
                    (#i92811#)
                 */
-                if ( sListStyleDefaultListId.getLength() != 0 )
+                if ( !sListStyleDefaultListId.isEmpty() )
                 {
                     msListId = sListStyleDefaultListId;
                     if ( !bIsContinueNumberingAttributePresent &&
@@ -190,7 +190,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                     }
                 }
             }
-            if ( msListId.getLength() == 0 )
+            if ( msListId.isEmpty() )
             {
                 // generate a new list id for the list
                 msListId = rTextListsHelper.GenerateNewListId();
@@ -198,7 +198,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         }
 
         if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
-             msContinueListId.getLength() == 0 )
+             msContinueListId.isEmpty() )
         {
             ::rtl::OUString Last( rTextListsHelper.GetLastProcessedListId() );
             if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
@@ -208,7 +208,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             }
         }
 
-        if ( msContinueListId.getLength() > 0 )
+        if ( !msContinueListId.isEmpty() )
         {
             if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
             {
@@ -220,7 +220,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 // continue the master list.
                 ::rtl::OUString sTmpStr =
                     rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
-                while ( sTmpStr.getLength() > 0 )
+                while ( !sTmpStr.isEmpty() )
                 {
                     msContinueListId = sTmpStr;
 

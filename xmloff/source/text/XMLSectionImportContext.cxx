@@ -165,7 +165,7 @@ void XMLSectionImportContext::StartElement(
                 xNamed->setName(sName);
 
                 // stylename?
-                if (sStyleName.getLength() > 0)
+                if (!sStyleName.isEmpty())
                 {
                     XMLPropStyleContext* pStyle = rHelper->
                         FindSectionStyle(sStyleName);

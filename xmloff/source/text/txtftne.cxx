@@ -143,7 +143,7 @@ void XMLTextParagraphExport::exportTextFootnote(
                              aCharStyleNamesPropInfoCache.hasProperty(
                                                     rPropSet ), bHasAutoStyle,
                 rPropSet, sCharStyleNames );
-            if( sStyle.getLength() )
+            if( !sStyle.isEmpty() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                           GetExport().EncodeStyleName( sStyle ) );
@@ -195,7 +195,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         {
             // handle label vs. automatic numbering
             OUString sLabel = rFootnote->getLabel();
-            if (sLabel.getLength()>0)
+            if (!sLabel.isEmpty())
             {
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_LABEL,
                                          sLabel);
@@ -248,7 +248,7 @@ void lcl_exportString(
     Any aAny = rPropSet->getPropertyValue(sProperty);
     OUString sTmp;
     aAny >>= sTmp;
-    if (!bOmitIfEmpty || (sTmp.getLength() > 0))
+    if (!bOmitIfEmpty || !sTmp.isEmpty())
     {
         if( bEncodeName )
             sTmp = rExport.EncodeStyleName( sTmp );
@@ -368,7 +368,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         aAny = rFootnoteConfig->getPropertyValue(sEndNotice);
         aAny >>= sTmp;
 
-        if (sTmp.getLength() > 0)
+        if (!sTmp.isEmpty())
         {
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD,
@@ -380,7 +380,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         aAny = rFootnoteConfig->getPropertyValue(sBeginNotice);
         aAny >>= sTmp;
 
-        if (sTmp.getLength() > 0)
+        if (!sTmp.isEmpty())
         {
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD,
