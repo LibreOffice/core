@@ -33,12 +33,8 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-#ifndef STRING_LIST
-#define STRING_LIST
 typedef ::std::vector< String* > StringList;
-#endif
-
-typedef ::std::vector< ByteString* > ByteStringList;
+typedef ::std::vector< rtl::OString* > ByteStringList;
 
 class SvCommand
 {

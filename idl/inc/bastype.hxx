@@ -152,30 +152,33 @@ public:
 
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-    ByteString      GetSvIdlString( SvStringHashEntry * pName );
+    rtl::OString    GetSvIdlString( SvStringHashEntry * pName );
 };
 
 
 class SvIdentifier
 {
 private:
-    ByteString m_aStr;
+    rtl::OString m_aStr;
 public:
     SvIdentifier()
     {
     }
-    void setString(const ByteString & rStr)
+    void setString(const rtl::OString& rStr)
     {
         m_aStr = rStr;
     }
-    const ByteString& getString() const
+    const rtl::OString& getString() const
     {
         return m_aStr;
     }
     friend SvStream& operator << (SvStream &, const SvIdentifier &);
     friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
-    sal_Bool        IsSet() const { return m_aStr.Len() != 0; }
+    sal_Bool IsSet() const
+    {
+        return !m_aStr.isEmpty();
+    }
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                             sal_uInt16 nTab );
@@ -207,12 +210,21 @@ public:
 class SvString
 {
 private:
-    ByteString m_aStr;
+    rtl::OString m_aStr;
 public:
     SvString() {}
-    void setString(const ByteString &rStr) { m_aStr = rStr; }
-    const ByteString& getString() const { return m_aStr; }
-    sal_Bool IsSet() const { return m_aStr.Len() != 0; }
+    void setString(const rtl::OString& rStr)
+    {
+        m_aStr = rStr;
+    }
+    const rtl::OString& getString() const
+    {
+        return m_aStr;
+    }
+    sal_Bool IsSet() const
+    {
+        return !m_aStr.isEmpty();
+    }
     friend SvStream& operator << (SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 

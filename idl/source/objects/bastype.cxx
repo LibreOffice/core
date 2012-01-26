@@ -175,18 +175,15 @@ sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
     return sal_True;
 }
 
-ByteString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
+rtl::OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
 {
     if( nVal )
         return pName->GetName();
-    else
-    {
-        ByteString aTmp( pName->GetName() );
-        aTmp += "(FALSE)";
-        return aTmp;
-    }
-}
 
+    return rtl::OStringBuffer(pName->GetName()).
+        append(RTL_CONSTASCII_STRINGPARAM("(FALSE)")).
+        makeStringAndClear();
+}
 
 sal_Bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
@@ -220,7 +217,7 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << '(';
-    rOutStm << getString().GetBuffer() << ')';
+    rOutStm << getString().getStr() << ')';
     return sal_True;
 }
 
@@ -335,7 +332,7 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                            sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << "(\"";
-    rOutStm << m_aStr.GetBuffer() << "\")";
+    rOutStm << m_aStr.getStr() << "\")";
     return sal_True;
 }
 

@@ -389,7 +389,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     if( GetHelpText().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "helpstring(\"" << GetHelpText().getString().GetBuffer() << "\")," << endl;
+        rOutStm << "helpstring(\"" << GetHelpText().getString().getStr() << "\")," << endl;
     }
     if( GetHelpContext().IsSet() )
     {

@@ -375,7 +375,7 @@ SvCommand::SvCommand( int argc, char ** argv )
 
 SvCommand::~SvCommand()
 {
-    // release ByteString list
+    // release String list
     for ( size_t i = 0, n = aInFileList.size(); i < n; ++i )
         delete aInFileList[ i ];
     aInFileList.clear();

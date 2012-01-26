@@ -211,12 +211,12 @@ public:
     void                SetBasicName(const ByteString& rName)
                         { aBasicName.setString(rName); }
 
-    const ByteString &      GetBasicName() const;
-    ByteString              GetBasicPostfix() const;
-    const ByteString &      GetSvName() const;
-    const ByteString &      GetSbxName() const;
-    const ByteString &      GetOdlName() const;
-    const ByteString &      GetCName() const;
+    const rtl::OString& GetBasicName() const;
+    rtl::OString GetBasicPostfix() const;
+    const rtl::OString& GetSvName() const;
+    const rtl::OString& GetSbxName() const;
+    const rtl::OString& GetOdlName() const;
+    const rtl::OString& GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
     virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
@@ -227,7 +227,7 @@ public:
                                     SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    ByteString              GetCString() const;
+    rtl::OString        GetCString() const;
     void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                AppendParserString (ByteString &rString);

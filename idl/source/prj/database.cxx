@@ -88,7 +88,7 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 SvMetaModule * SvIdlDataBase::GetModule( const rtl::OString& rName )
 {
     for( sal_uLong n = 0; n < aModuleList.Count(); n++ )
-        if( aModuleList.GetObject( n )->GetName().getString().Equals(rName) )
+        if( aModuleList.GetObject( n )->GetName().getString().equals(rName) )
             return aModuleList.GetObject( n );
     return NULL;
 }
@@ -411,12 +411,12 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 
     if( pTok->IsIdentifier() )
     {
-        ByteString aName = pTok->GetString();
+        rtl::OString aName = pTok->GetString();
         SvMetaTypeMemberList & rList = GetTypeList();
         SvMetaType * pType = rList.First();
         while( pType )
         {
-            if( pType->GetName().getString() == aName )
+            if( pType->GetName().getString().equals(aName) )
                 break;
             pType = rList.Next();
         }
@@ -485,7 +485,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
                 {
                     SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-                    if( pAttr->GetSlotId().getString() == pTok->GetString() )
+                    if( pAttr->GetSlotId().getString().equals(pTok->GetString()) )
                         return pAttr;
                 }
             }
@@ -528,7 +528,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
         for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
-            if( pClass->GetName().getString() == pTok->GetString() )
+            if( pClass->GetName().getString().equals(pTok->GetString()) )
                 return pClass;
         }
 

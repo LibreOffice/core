@@ -183,7 +183,7 @@ public:
     const SvString &    GetName() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetName().getString().Len() )
+                                    || !SvMetaName::GetName().getString().isEmpty() )
                                 ? SvMetaName::GetName()
                                 : aRef->GetName();
                         }
@@ -191,7 +191,7 @@ public:
     const SvString &    GetHelpText() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetHelpText().getString().Len() )
+                                    || !SvMetaName::GetHelpText().getString().isEmpty() )
                                 ? SvMetaName::GetHelpText()
                                 : aRef->GetHelpText();
                         }
@@ -199,7 +199,7 @@ public:
     const SvString &    GetConfigName() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetConfigName().getString().Len() )
+                                    || !SvMetaName::GetConfigName().getString().isEmpty() )
                                 ? SvMetaName::GetConfigName()
                                 : aRef->GetConfigName();
                         }
@@ -207,7 +207,7 @@ public:
     const SvString &    GetDescription() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetDescription().getString().Len() )
+                                    || !SvMetaName::GetDescription().getString().isEmpty() )
                                 ? SvMetaName::GetDescription()
                                 : aRef->GetDescription();
                         }

@@ -36,11 +36,12 @@
 struct SvSlotElement
 {
     SvMetaSlotRef   xSlot;
-    ByteString          aPrefix;
-            SvSlotElement( SvMetaSlot * pS, const ByteString & rPrefix )
-                : xSlot( pS )
-                , aPrefix( rPrefix )
-             {}
+    rtl::OString aPrefix;
+    SvSlotElement( SvMetaSlot * pS, const rtl::OString& rPrefix )
+    : xSlot( pS )
+    , aPrefix( rPrefix )
+    {
+    }
 };
 typedef std::vector< SvSlotElement* > SvSlotElementList;
 
@@ -51,15 +52,15 @@ SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
     SvBOOL                      aAutomation;
-    ByteString                      aPrefix;
+    rtl::OString                aPrefix;
     SvMetaClassRef              xClass;
 public:
             SV_DECL_PERSIST1( SvClassElement, SvPersistBase, 1 )
             SvClassElement();
 
-    void            SetPrefix( const ByteString & rPrefix )
+    void            SetPrefix( const rtl::OString& rPrefix )
                     { aPrefix = rPrefix; }
-    const ByteString &  GetPrefix() const
+    const rtl::OString&  GetPrefix() const
                     { return aPrefix; }
 
     void            SetAutomation( sal_Bool rAutomation )
@@ -88,14 +89,14 @@ class SvMetaClass : public SvMetaType
 
     sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
-    void                WriteSlotStubs( const ByteString & rShellName,
+    void                WriteSlotStubs( const rtl::OString& rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,
                                         SvStream & rOutStm );
     sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
                                             SvStream & rOutStm );
-    sal_uInt16              WriteSlots( const ByteString & rShellName, sal_uInt16 nCount,
+    sal_uInt16              WriteSlots( const rtl::OString& rShellName, sal_uInt16 nCount,
                                     SvSlotElementList & rSlotList,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
