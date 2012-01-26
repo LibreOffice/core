@@ -37,21 +37,21 @@
 //=============================================================================
 /** an interface representing an entity with a modifyable title.
  */
-published interface XTitle : com::sun::star::uno::XInterface
+interface XTitle : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Returns the title of the object.
      *
-     *  @returns
-     *  The title.
+     * @returns
+     * The title.
      */
     string getTitle ();
 
     //-------------------------------------------------------------------------
     /** Sets the title of the object.
      *
-     *  @param sTitle
-     *  The title.
+     * @param sTitle
+     * The title.
      */
     void setTitle ( [in] string sTitle );
 };

@@ -39,7 +39,7 @@
 
     @deprecated
  */
-published service WebDocument
+service WebDocument
 {
     /** Provides the functionality of such web document. */
     service GenericTextDocument;

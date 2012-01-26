@@ -39,7 +39,7 @@
 
     @deprecated
  */
-published service GlobalDocument
+service GlobalDocument
 {
     /** Provides the functionality of such global document. */
     service GenericTextDocument;

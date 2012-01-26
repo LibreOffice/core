@@ -40,7 +40,7 @@ module com { module sun { module star { module xml { module crypto {
 /**
  * Interface of Security Environment
  */
-published interface XSecurityEnvironment : com::sun::star::uno::XInterface
+interface XSecurityEnvironment : com::sun::star::uno::XInterface
 {
     /**
      * Get personal certificate from the environment

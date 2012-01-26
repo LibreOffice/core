@@ -32,7 +32,7 @@
 #include <com/sun/star/sdbc/SQLException.idl>
 
 module com {  module sun {  module star {  module container {
-published interface XIndexAccess;
+interface XIndexAccess;
 };};};};
 //=============================================================================
 
@@ -47,7 +47,7 @@ published interface XIndexAccess;
     structure of the used query.
     </p>
  */
-published interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
+interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
 {
 
     /** returns the query.

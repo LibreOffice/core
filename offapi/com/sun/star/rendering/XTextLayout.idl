@@ -42,9 +42,9 @@
 
 module com { module sun { module star { module rendering {
 
-published interface XCanvas;
-published interface XCanvasFont;
-published interface XPolyPolygon2D;
+interface XCanvas;
+interface XCanvasFont;
+interface XPolyPolygon2D;
 
 /** This is the central interface for text layouting.<p>
 
@@ -70,7 +70,7 @@ published interface XPolyPolygon2D;
 
     @since OOo 2.0
  */
-published interface XTextLayout : ::com::sun::star::uno::XInterface
+interface XTextLayout : ::com::sun::star::uno::XInterface
 {
     /** Extract the polygonal shapes of the layouted text.<p>
 
