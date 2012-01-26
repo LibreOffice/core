@@ -37,6 +37,8 @@
 //=============================================================================
 
 /** Specify the document service of the global text module.
+
+    @deprecated
  */
 service GlobalDocument
 {

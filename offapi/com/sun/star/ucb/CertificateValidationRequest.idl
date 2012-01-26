@@ -50,6 +50,9 @@ exception CertificateValidationRequest: com::sun::star::task::ClassifiedInteract
      */
     com::sun::star::security::XCertificate Certificate;
 
+    //-------------------------------------------------------------------------
+    /** The host name.
+     */
     string HostName;
 
 };

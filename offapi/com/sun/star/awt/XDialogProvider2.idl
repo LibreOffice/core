@@ -120,12 +120,10 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
         </p>
     */
 
-    XDialog createDialogWithArguments(
-        [in] string URL,
-        [in] sequence< ::com::sun::star::beans::NamedValue > Arguments
-    )
-    raises  (   com::sun::star::lang::IllegalArgumentException
-            );
+    XDialog createDialogWithArguments
+        ( [in] string URL,
+          [in] sequence< ::com::sun::star::beans::NamedValue > Arguments )
+        raises  (   com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================

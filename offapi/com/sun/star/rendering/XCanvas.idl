@@ -132,7 +132,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
      /** Draw a point in device resolution on the device.
 
-         @param aPoint
+        @param aPoint
         The point to draw.
 
         @param aViewState
@@ -153,10 +153,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     /** Draw a line in device resolution width (i.e. one device pixel
         wide).
 
-         @param aStartPoint
+        @param aStartPoint
         The start point of the line to draw.
 
-         @param aEndPoint
+        @param aEndPoint
         The end point of the line to draw.
 
         @param aViewState
