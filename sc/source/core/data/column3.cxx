@@ -35,6 +35,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svl/broadcast.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"
@@ -404,14 +405,25 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             if (bDelete)
             {
                 // try to create a replacement note cell, if note or broadcaster exists
-                ScNoteCell* pNoteCell = 0;
-                if (eCellType != CELLTYPE_NOTE)
+                ScNoteCell* pNoteCell = NULL;
+                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
+                bool bKeepBC = pBC && pBC->HasListeners();
+                if (eCellType == CELLTYPE_NOTE)
+                {
+                    if (bKeepBC)
+                    {
+                        // We need to keep this "note" cell to keep the broadcaster.
+                        pNoteCell = static_cast<ScNoteCell*>(pOldCell);
+                        if (bDeleteNote)
+                            pOldCell->DeleteNote();
+                    }
+                }
+                else
                 {
                     // do not rescue note if it has to be deleted according to passed flags
                     ScPostIt* pNote = bDeleteNote ? 0 : pOldCell->ReleaseNote();
                     // #i99844# do not release broadcaster from old cell, it still has to notify deleted content
-                    SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                    if( pNote || pBC )
+                    if (pNote || bKeepBC)
                         pNoteCell = new ScNoteCell( pNote, pBC );
                 }
 
@@ -437,9 +449,12 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                     aHint.GetAddress().SetRow( nOldRow );
                     aHint.SetCell( pOldCell );
                     pDocument->Broadcast( aHint );
-                    // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by pNoteCell)
-                    pOldCell->ReleaseBroadcaster();
-                    pOldCell->Delete();
+                    if (pNoteCell != pOldCell)
+                    {
+                        // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by pNoteCell)
+                        pOldCell->ReleaseBroadcaster();
+                        pOldCell->Delete();
+                    }
                 }
             }
             else
