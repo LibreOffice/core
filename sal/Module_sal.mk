@@ -47,7 +47,8 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_Module_DLL \
 	CppunitTest_sal_bytesequence \
 	CppunitTest_sal_osl_condition \
-	CppunitTest_sal_osl_file \
+	$(if $(filter $(OS),WNT),, \
+		CppunitTest_sal_osl_file) \
 	CppunitTest_sal_osl_module \
 	CppunitTest_sal_osl_old_test_file \
 	CppunitTest_sal_osl_security \
