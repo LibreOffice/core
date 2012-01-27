@@ -1081,7 +1081,7 @@ new_stat(const char *path,
     struct tm tm;
 
     memset(statp, 0, sizeof(*statp));
-    statp->st_mode = mode | S_IRUSR | S_IRGRP | S_IROTH;
+    statp->st_mode = mode | S_IRUSR;
     statp->st_nlink = 1;
 
     statp->st_uid = getuid();
@@ -1133,7 +1133,7 @@ lo_apk_lstat(const char *path,
     if (*pn == '/') {
         pn++;
         if (!pn[0])
-            return new_stat(path, statp, NULL, S_IFDIR, 1);
+            return new_stat(path, statp, NULL, S_IFDIR | S_IXUSR, 1);
     }
 
     name_size = strlen(pn);
@@ -1149,7 +1149,7 @@ lo_apk_lstat(const char *path,
         if (letoh16(entry->filename_size) == name_size)
             return new_stat(path, statp, entry, S_IFREG, cdir_entries - count + 1);
         else
-            return new_stat(path, statp, entry, S_IFDIR, cdir_entries - count + 1);
+            return new_stat(path, statp, entry, S_IFDIR | S_IXUSR, cdir_entries - count + 1);
     }
 
     errno = ENOENT;
