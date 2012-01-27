@@ -34,7 +34,6 @@ ifneq (IOS,$(OS))
 $(eval $(call gb_Module_add_targets,vbahelper,\
     Library_vbahelper \
     Library_msforms \
-    Package_inc \
 ))
 
 # add any runtime tests (unit tests) here
@@ -47,5 +46,9 @@ $(eval $(call gb_Module_add_targets,vbahelper,\
 #))
 
 endif
+
+$(eval $(call gb_Module_add_targets,vbahelper,\
+    Package_inc \
+))
 
 # vim: set noet sw=4 ts=4:

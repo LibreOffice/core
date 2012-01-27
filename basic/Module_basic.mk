@@ -33,7 +33,6 @@ ifneq (IOS,$(OS))
 $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \
 	Library_sb \
-	Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basic,\
@@ -41,5 +40,9 @@ $(eval $(call gb_Module_add_check_targets,basic,\
 ))
 
 endif
+
+$(eval $(call gb_Module_add_targets,basic,\
+	Package_inc \
+))
 
 # vim: set noet sw=4 ts=4:
