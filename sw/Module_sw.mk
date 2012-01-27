@@ -34,11 +34,18 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_sw \
     Library_swd \
     Library_swui \
-    Library_vbaswobj \
     Package_misc \
     Package_uiconfig \
     Package_xml \
 ))
+
+ifneq (IOS,$(OS))
+
+$(eval $(call gb_Module_add_targets,sw,\
+    Library_vbaswobj \
+))
+
+endif
 
 $(eval $(call gb_Module_add_check_targets,sw,\
     CppunitTest_sw_filters_test \
