@@ -26,8 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -35,7 +37,6 @@
 #include <svx/ruler.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
-#include <unotools/undoopt.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -74,7 +75,6 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pView(0),
     pBindings(pBind),
     aAktTableName(aEmptyStr)
-    , m_nActionCount(0)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)
@@ -157,10 +157,6 @@ void SwInputWindow::CleanupUglyHackWithUndo()
         if (m_bCallUndo)
         {
             pWrtShell->Undo();
-        }
-        if (0 == m_nActionCount)
-        {
-            SW_MOD()->GetUndoOptions().SetUndoCount(0);
         }
         m_bResetUndo = false; // #i117122# once is enough :)
     }
@@ -246,10 +242,10 @@ void SwInputWindow::ShowWin()
             if( bIsTable )
             {
                 m_bResetUndo = true;
-                m_nActionCount = SW_MOD()->GetUndoOptions().GetUndoCount();
-                if (0 == m_nActionCount) { // deactivated? turn it on...
-                    SW_MOD()->GetUndoOptions().SetUndoCount(1);
-                }
+                SAL_WARN_IF(
+                    officecfg::Office::Common::Undo::Steps::get(
+                        comphelper::getProcessComponentContext()) <= 0,
+                    "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
 
                 m_bDoesUndo = pWrtShell->DoesUndo();
                 if( !m_bDoesUndo )

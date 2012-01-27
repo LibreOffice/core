@@ -113,7 +113,6 @@
 #endif
 
 #include <unotools/saveopt.hxx>
-#include <unotools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>

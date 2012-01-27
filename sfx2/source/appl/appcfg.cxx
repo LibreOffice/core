@@ -52,11 +52,11 @@
 #include <svl/isethint.hxx>
 
 #include <officecfg/Inet.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <unotools/undoopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -169,7 +169,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
-    SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
@@ -296,9 +295,14 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = sal_True;
                 break;
                 case SID_ATTR_UNDO_COUNT :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
-                                 (sal_uInt16)aUndoOptions.GetUndoCount() ) ) )
-                        bRet = sal_True;
+                    if (rSet.Put(
+                            SfxUInt16Item (
+                                rPool.GetWhich(SID_ATTR_UNDO_COUNT),
+                                officecfg::Office::Common::Undo::Steps::get(
+                                    comphelper::getProcessComponentContext()))))
+                    {
+                        bRet = true;
+                    }
                     break;
                 case SID_ATTR_QUICKLAUNCHER :
                 {
@@ -531,7 +535,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SfxItemPool &rPool = GetPool();
 
     SvtSaveOptions aSaveOptions;
-    SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtPathOptions aPathOptions;
@@ -703,7 +706,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         sal_uInt16 nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
-        aUndoOptions.SetUndoCount( nUndoCount );
+        officecfg::Office::Common::Undo::Steps::set(
+            comphelper::getProcessComponentContext(), batch, nUndoCount);
 
         // To catch all Undo-Managers: Iterate over all Frames
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();

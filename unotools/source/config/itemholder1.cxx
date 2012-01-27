@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <unotools/misccfg.hxx>
-#include <unotools/undoopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/accelcfg.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -282,10 +281,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_XMLACCELCFG :
             // ??? TODO
-            break;
-
-        case E_UNDOOPTIONS :
-            rItem.pItem = new SvtUndoOptions();
             break;
 
         case E_USEROPTIONS :

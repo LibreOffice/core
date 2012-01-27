@@ -99,7 +99,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/transliterationwrapp
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucbhelper.hxx,unotools/ucbhelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucblockbytes.hxx,unotools/ucblockbytes.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucbstreamhelper.hxx,unotools/ucbstreamhelper.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/undoopt.hxx,unotools/undoopt.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/unotoolsdllapi.h,unotools/unotoolsdllapi.h))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions_const.hxx,unotools/useroptions_const.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions.hxx,unotools/useroptions.hxx))

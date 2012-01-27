@@ -67,7 +67,6 @@ friend class InputEdit;
     SwView*         pView;
     SfxBindings*    pBindings;
     String          aAktTableName, sOldFml;
-    sal_Int32       m_nActionCount;
 
     sal_Bool        bFirst : 1;  // initialisations at first call
     sal_Bool        bActive : 1; // for hide/show when switching documents

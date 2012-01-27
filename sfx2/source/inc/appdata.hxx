@@ -55,7 +55,6 @@ class SfxDdeTriggerTopic_Impl;
 class SfxDocumentTemplates;
 class SfxFrameArr_Impl;
 class SvtSaveOptions;
-class SvtUndoOptions;
 class SvtHelpOptions;
 class SfxObjectFactory;
 class SfxObjectShell;
@@ -115,7 +114,6 @@ public:
     SfxItemPool*                        pPool;
     std::vector<sal_uInt16>*            pDisabledSlotList;
     SvtSaveOptions*                     pSaveOptions;
-    SvtUndoOptions*                     pUndoOptions;
     SvtHelpOptions*                     pHelpOptions;
 
     // "current" functionality

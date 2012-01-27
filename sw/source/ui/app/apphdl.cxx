@@ -32,7 +32,6 @@
 #include <tools/link.hxx>
 #include <svl/svstdarr.hxx>
 #include <svl/urihelper.hxx>
-#include <unotools/undoopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <sfx2/dispatch.hxx>
@@ -770,11 +769,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pUserOptions->RemoveListener(this);
                 DELETEZ(pUserOptions);
             }
-            if( pUndoOptions )
-            {
-                pUndoOptions->RemoveListener(this);
-                DELETEZ(pUndoOptions);
-            }
         }
     }
 }
@@ -784,22 +778,6 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
     if( pBrdCst == pUserOptions )
     {
         bAuthorInitialised = sal_False;
-    }
-    else if( pBrdCst == pUndoOptions )
-    {
-        sal_Int32 const nNew = GetUndoOptions().GetUndoCount();
-        bool const bUndo = (nNew != 0);
-        // switch Undo for all DocShells
-            // Iterate through DocShells and switch undos
-        TypeId aType(TYPE(SwDocShell));
-        SwDocShell * pDocShell =
-            static_cast<SwDocShell *>(SfxObjectShell::GetFirst(&aType));
-        while (pDocShell)
-        {
-            pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
-            pDocShell = static_cast<SwDocShell *>(
-                    SfxObjectShell::GetNext(*pDocShell, &aType));
-        }
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
     {
@@ -900,16 +878,6 @@ SvtUserOptions& SwModule::GetUserOptions()
         pUserOptions->AddListener(this);
     }
     return *pUserOptions;
-}
-
-SvtUndoOptions& SwModule::GetUndoOptions()
-{
-    if(!pUndoOptions)
-    {
-        pUndoOptions = new SvtUndoOptions;
-        pUndoOptions->AddListener(this);
-    }
-    return *pUndoOptions;
 }
 
 const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const

@@ -62,7 +62,6 @@ namespace svtools{ class ColorConfig;}
 class SvtAccessibilityOptions;
 class SvtCTLOptions;
 class SvtUserOptions;
-class SvtUndoOptions;
 
 struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
@@ -94,7 +93,6 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     SvtAccessibilityOptions* pAccessibilityOptions;
     SvtCTLOptions*      pCTLOptions;
     SvtUserOptions*     pUserOptions;
-    SvtUndoOptions*     pUndoOptions;
 
     SfxErrorHandler*    pErrorHdl;
 
@@ -180,7 +178,6 @@ public:
     SvtAccessibilityOptions&    GetAccessibilityOptions();
     SvtCTLOptions&      GetCTLOptions();
     SvtUserOptions&     GetUserOptions();
-    SvtUndoOptions&     GetUndoOptions();
 
     // Iterate over views.
     static SwView*      GetFirstView();

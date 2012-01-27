@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
-#include <unotools/undoopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
@@ -185,13 +184,15 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    // Undo-Schritte
-    if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
-        SvtUndoOptions().SetUndoCount((sal_uInt16)aUndoEdit.GetValue());
-
     boost::shared_ptr< unotools::ConfigurationChanges > batch(
         unotools::ConfigurationChanges::create(
             comphelper::getProcessComponentContext()));
+
+    // Undo-Schritte
+    if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
+        officecfg::Office::Common::Undo::Steps::set(
+            comphelper::getProcessComponentContext(), batch,
+            aUndoEdit.GetValue());
 
     // GraphicCache
     sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
@@ -241,7 +242,9 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem*  pItem;
 
     // Undo-Schritte
-    aUndoEdit.SetValue( SvtUndoOptions().GetUndoCount() );
+    aUndoEdit.SetValue(
+        officecfg::Office::Common::Undo::Steps::get(
+            comphelper::getProcessComponentContext()));
     aUndoEdit.SaveValue();
 
     // GraphicCache

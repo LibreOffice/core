@@ -99,7 +99,6 @@ enum EItem
     E_STARTOPTIONS                  ,   //
     E_SYSLOCALEOPTIONS              ,   // 2
 
-    E_UNDOOPTIONS                   ,   // 2
     E_USEROPTIONS                   ,   // 2
 
     E_VIEWOPTIONS_DIALOG            ,   //

@@ -28,7 +28,9 @@
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <comphelper/processfactory.hxx>
 #include <basic/sbstar.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
@@ -36,8 +38,6 @@
 #include <svtools/itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
-
-#include <unotools/undoopt.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
@@ -486,7 +486,9 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
-        pUndoMgr->SetMaxUndoActionCount( (sal_uInt16) SvtUndoOptions().GetUndoCount() );
+        pUndoMgr->SetMaxUndoActionCount(
+            officecfg::Office::Common::Undo::Steps::get(
+                comphelper::getProcessComponentContext()));
 }
 
 //--------------------------------------------------------------------

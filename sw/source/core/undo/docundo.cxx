@@ -29,8 +29,6 @@
 
 #include <UndoManager.hxx>
 
-#include <unotools/undoopt.hxx>
-
 #include <vcl/wrkwin.hxx>
 
 #include <svx/svdmodel.hxx>

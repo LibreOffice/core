@@ -35,9 +35,10 @@
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/numuno.hxx>
 #include <svl/smplhint.hxx>
-#include <unotools/undoopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -1680,9 +1681,11 @@ void SAL_CALL ScModelObj::setPropertyValue(
         {
             sal_Bool bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             pDoc->EnableUndo( bUndoEnabled );
-            sal_uInt16 nCount = ( bUndoEnabled ?
-                static_cast< sal_uInt16 >( SvtUndoOptions().GetUndoCount() ) : 0 );
-            pDocShell->GetUndoManager()->SetMaxUndoActionCount( nCount );
+            pDocShell->GetUndoManager()->SetMaxUndoActionCount(
+                bUndoEnabled
+                ? officecfg::Office::Common::Undo::Steps::get(
+                    comphelper::getProcessComponentContext())
+                : 0);
         }
         else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
         {

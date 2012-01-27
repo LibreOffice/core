@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/macitem.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbx.hxx>
@@ -48,7 +49,6 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <unotools/undoopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
@@ -182,7 +182,13 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
-            SvtUndoOptions().SetUndoCount( pCountItem->GetValue() );
+            boost::shared_ptr< unotools::ConfigurationChanges > batch(
+                unotools::ConfigurationChanges::create(
+                    comphelper::getProcessComponentContext()));
+            officecfg::Office::Common::Undo::Steps::set(
+                comphelper::getProcessComponentContext(), batch,
+                pCountItem->GetValue());
+            batch->commit();
             break;
         }
 
@@ -245,7 +251,11 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_UNDO_COUNT:
-                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< sal_uInt16 >( SvtUndoOptions().GetUndoCount() ) ) );
+                rSet.Put(
+                    SfxUInt16Item(
+                        SID_ATTR_UNDO_COUNT,
+                        officecfg::Office::Common::Undo::Steps::get(
+                            comphelper::getProcessComponentContext())));
                 break;
 
             case SID_UPDATE_VERSION:
