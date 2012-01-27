@@ -86,19 +86,6 @@ typedef enum  {
 
 extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
-// -=-= SalWM =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-enum SalWM { olwm,      // Open Look
-             mwm,       // Motif
-             kwm,       // KDE Desktop Environment
-             FourDwm,   // SGI
-             vuewm,     // HP
-             dtwm,      // CDE
-             winmgr,    // Oracle NC
-             twm,
-             fvwm,      // ...
-             pmwm,      // SCO
-             otherwm };
-
 // -=-= SalRGB -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // MSB/Bigendian Sicht (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
@@ -294,7 +281,6 @@ protected:
     sal_uLong       nMaxRequestSize_;   // [byte]
 
     srv_vendor_t    meServerVendor;
-    SalWM           eWindowManager_;
 
     // until x bytes
 
