@@ -215,7 +215,6 @@ ScValidationEntries_Impl::Insert(ScValidationEntries_Impl const*, unsigned short
 ScValidationEntries_Impl::Remove(ScValidationData* const&, unsigned short)
 ScValidationEntries_Impl::Remove(unsigned short, unsigned short)
 ScValueCell::ScValueCell()
-ScVbaChart::isSeriesIndexValid(int)
 ScVbaColorFormat::setColorFormat(short)
 ScVbaCommandBarControl::ScVbaCommandBarControl(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, boost::shared_ptr<VbaCommandBarHelper>, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, rtl::OUString const&, int, unsigned char)
 ScVbaCommentShape::ScVbaCommentShape(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::uno::Reference<ooo::vba::excel::XComment> const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, int)

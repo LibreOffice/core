@@ -74,7 +74,6 @@ public:
 
     // Non-interface
     css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() const { return mxDiagramPropertySet; }
-    bool isSeriesIndexValid(sal_Int32 _seriesindex) throw( css::script::BasicErrorException );
     bool is3D() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException );
     // Methods

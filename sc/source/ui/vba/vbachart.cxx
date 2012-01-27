@@ -1028,39 +1028,6 @@ ScVbaChart::assignDiagramAttributes()
     xTwoAxisYSupplier.set( mxDiagramPropertySet, uno::UNO_QUERY_THROW );
 }
 
-bool
-ScVbaChart::isSeriesIndexValid(sal_Int32 _seriesindex) throw( script::BasicErrorException )
-{
-    bool bret = false;
-    try
-    {
-        uno::Reference< chart::XChartDataArray > xChartDataArray( mxChartDocument->getData(), uno::UNO_QUERY_THROW );
-        //TODO I guess we have to differentiate between XlRowCol
-        if ( !xChartDataArray.is() )
-        {
-            if (getPlotBy() == xlRows)
-            {
-                if ((_seriesindex < xChartDataArray->getRowDescriptions().getLength() ) && (_seriesindex >= 0))
-                    bret = true;
-            }
-            else
-            {
-                if ((_seriesindex < xChartDataArray->getColumnDescriptions().getLength() ) && (_seriesindex >= 0))
-                    bret = true;
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-    }
-    if (!bret)
-    {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_OUT_OF_RANGE, rtl::OUString() );
-    }
-    return bret;
-}
-
 
 uno::Reference< beans::XPropertySet >
 ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( script::BasicErrorException )
