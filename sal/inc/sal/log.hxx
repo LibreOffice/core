@@ -180,7 +180,10 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream). \
      str())
 
-/** Basic logging functionality.
+/**
+    @page sal_log Basic logging functionality.
+
+    @short Macros for logging.
 
     SAL_INFO(char const * area, expr),
     SAL_INFO_IF(bool condition, char const * area, expr),
@@ -213,6 +216,8 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     with
 
       <segment> ::= [0-9a-z]+
+
+    For a list of areas used see @ref sal_log_areas "SAL debug areas".
 
     Whether these macros generate any log output is controlled in a two-stage
     process.
@@ -259,27 +264,49 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     change.  The log output is printed to stderr without further text encoding
     conversion.
 
+    @see @ref sal_log_areas
+
     @attention For now, this functionality should only be used internally within
     LibreOffice. It may change again in a future version.
 
     @since LibreOffice 3.5
 */
 
+/**
+  Produce log entry from stream in the given log area.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
 #define SAL_INFO(area, stream) \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, area, \
         SAL_WHERE, stream)
 
+/**
+  Produce log entry from stream in the given log area if condition is true.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
 #define SAL_INFO_IF(condition, area, stream)  \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_INFO && (condition), \
         ::SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, stream)
 
+/**
+  Produce warning entry from stream in the given log area.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
 #define SAL_WARN(area, stream) \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN, area, \
         SAL_WHERE, stream)
 
+/**
+  Produce warning entry from stream in the given log area if condition is true.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
 #define SAL_WARN_IF(condition, area, stream)   \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), \

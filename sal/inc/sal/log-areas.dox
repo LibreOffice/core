@@ -1,0 +1,21 @@
+/**
+@page sal_log_areas SAL debug areas
+ 
+@short List and description of areas for the SAL debug macros
+ 
+This is a list of areas that are used by the SAL_INFO family of macros.
+See @ref sal_log "basic log functionality" for details about this functionality.
+
+If you need use a debug area in some code, first check this list and use
+the appropriate area if it exists. This list is not definite, if you need
+a new area, use it and add it to the list in the proper section with an explanation.
+
+This list should give you an overview of which areas to enable when debugging
+certain functionality.
+
+@section Writer
+
+@li sw.uno - Writer's UNO interfaces
+@li sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
+
+*/
