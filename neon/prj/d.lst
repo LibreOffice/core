@@ -6,3 +6,4 @@ mkdir: %_DEST%\inc\external\neon
 ..\%__SRC%\bin\neon*.dll %_DEST%\bin\neon*.dll
 ..\%__SRC%\lib\libneon*.so %_DEST%\lib\libneon*.so
 ..\%__SRC%\lib\libneon*.dylib %_DEST%\lib\libneon*.dylib
+..\%__SRC%\lib\libneon*.a %_DEST%\lib\libneon*.a
