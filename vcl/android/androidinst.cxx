@@ -36,6 +36,9 @@
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 
+#undef ANDROID_EGL
+#define ANDROID_PIXELS
+
 class AndroidSalData : public SalGenericData
 {
 public:
@@ -74,7 +77,7 @@ static rtl::OString KeyMetaStateToString(int32_t nFlags)
     return aStr.makeStringAndClear();
 }
 
-static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
+static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const basebmp::BitmapDeviceSharedPtr& aDev,
                                     const ARect &rSrcRect,
                                     int nDestX, int nDestY)
@@ -82,22 +85,6 @@ static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
     fprintf (stderr, "Blit frame #2 src %d,%d->%d,%d to position %d, %d\n",
              rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
-    ARect aRect;
-    ANativeWindow_Buffer aOutBuffer;
-    memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
-    fprintf (stderr, "pre lock\n");
-    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
-    fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
-             "buffer: %dx%d stride %d, format %d, bits %p\n",
-             nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
-             aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
-             aOutBuffer.format, aOutBuffer.bits);
-    if (aOutBuffer.bits == NULL)
-    {
-        fprintf (stderr, "no buffer for locked window\n");
-        ANativeWindow_unlockAndPost(pWindow);
-        return;
-    }
 
     // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
     ARect aSrcRect = rSrcRect;
@@ -105,53 +92,125 @@ static void BlitFrameRegionToWindow(ANativeWindow *pWindow,
     basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
     unsigned char *pSrc = aSrcData.get();
 
+    // FIXME: we have WINDOW_FORMAT_RGB_565            = 4 ...
+
     for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
     {
         unsigned char *sp = ( pSrc + nStride * (y + aSrcRect.top) +
                               aSrcRect.left * 3 /* src pixel size */ );
-        unsigned char *dp = ( (unsigned char *)aOutBuffer.bits +
-                              aOutBuffer.stride * (y + nDestY) +
-                              nDestX * 4 /* dest pixel size */ );
-        fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
-        for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
+
+        switch (pOutBuffer->format) {
+        case WINDOW_FORMAT_RGBA_8888:
+        case WINDOW_FORMAT_RGBX_8888:
         {
-            dp[x*4 + 0] = sp[x*3 + 0]; // B
-            dp[x*4 + 1] = sp[x*3 + 1]; // G
-            dp[x*4 + 2] = sp[x*3 + 2]; // R
-            dp[x*4 + 3] = 255; // A
+            unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
+                                  pOutBuffer->stride * 4 * (y + nDestY) +
+                                  nDestX * 4 /* dest pixel size */ );
+            fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
+            for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
+            {
+                dp[x*4 + 0] = sp[x*3 + 0]; // B
+                dp[x*4 + 1] = sp[x*3 + 1]; // G
+                dp[x*4 + 2] = sp[x*3 + 2]; // R
+                dp[x*4 + 3] = 255; // A
+            }
+            break;
+        }
+        case WINDOW_FORMAT_RGB_565:
+        {
+            unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
+                                  pOutBuffer->stride * 2 * (y + nDestY) +
+                                  nDestX * 2 /* dest pixel size */ );
+            fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
+            for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
+            {
+                unsigned char b = sp[x*3 + 0]; // B
+                unsigned char g = sp[x*3 + 1]; // G
+                unsigned char r = sp[x*3 + 2]; // R
+                dp[x*2 + 0] = (r & 0xf8) | (g >> 5);
+                dp[x*2 + 1] = ((g & 0x1c) << 5) | ((b & 0xf8) >> 3);
+            }
+            break;
+        }
+        default:
+            fprintf (stderr, "unknown pixel format %d !\n", pOutBuffer->format);
+            break;
         }
     }
     fprintf (stderr, "done blit!\n");
-#if 0
-    // hard-code / guess at a format ...
-    int32_t *p = (int32_t *)aBuffer.bits;
-    for (int32_t y = 0; y < aBuffer.height; y++)
-    {
-        for (int32_t x = 0; x < aBuffer.stride / 4; x++)
-            *p++ = (y << 24) + x;
-    }
-#endif
-
-    ANativeWindow_unlockAndPost(pWindow);
-    fprintf (stderr, "done render!\n");
 }
 
-void AndroidSalInstance::BlitFrameToWindow(ANativeWindow *pWindow,
+void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
                                            const basebmp::BitmapDeviceSharedPtr& aDev)
 {
     basegfx::B2IVector aDevSize = aDev->getSize();
-    ARect aWhole = { 0, 0, 400, 400 }; // FIXME: aDevSize.getX(), aDevSize.getY() };
-    BlitFrameRegionToWindow(pWindow, aDev, aWhole, 0, 0);
+    ARect aWhole = { 0, 0, aDevSize.getX(), aDevSize.getY() };
+    BlitFrameRegionToWindow(pOutBuffer, aDev, aWhole, 0, 0);
 }
 
 void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
 {
-    std::list< SalFrame* >::const_iterator it;
-    for ( it = getFrames().begin(); it != getFrames().end(); it++ )
+    (void)pWindow;
+#ifdef ANDROID_PIXELS
+    ARect aRect;
+    ANativeWindow_Buffer aOutBuffer;
+    memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
+    fprintf (stderr, "pre lock #3\n");
+#endif
+
+#ifdef ANDROID_EGL
+    if (mxDisplay == EGL_NO_DISPLAY)
     {
-        SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
-        BlitFrameToWindow (pWindow, pFrame->getDevice());
+        fprintf (stderr, "wait for the setup\n");
+        return;
     }
+
+    EGLBoolean nRet = eglMakeCurrent(mxDisplay, mxSurface, mxSurface, mxContext);
+    fprintf (stderr, "make current context %d\n", nRet);
+
+    // Just fill the screen with a color.
+    static int a = 0;
+    a++;
+    glClearColor((a & 0x1) ? 1.0 : 0.0, (a & 0x2) ? 1.0 : 0.0, 0.0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglSwapBuffers(mxDisplay, mxSurface);
+#endif // ANDROID_EGL
+
+#ifdef ANDROID_PIXELS
+    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
+    fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
+             "buffer: %dx%d stride %d, format %d, bits %p\n",
+             nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
+             aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
+             aOutBuffer.format, aOutBuffer.bits);
+
+#if 1 // pre-'clean' the buffer with cruft:
+    // hard-code / guess at a format ...
+    int32_t *p = (int32_t *)aOutBuffer.bits;
+    for (int32_t y = 0; y < aOutBuffer.height; y++)
+    {
+        for (int32_t x = 0; x < aOutBuffer.stride / 2; x++)
+            *p++ = (y << 24) + x;
+    }
+#endif
+
+    if (aOutBuffer.bits != NULL)
+    {
+        std::list< SalFrame* >::const_iterator it;
+        for ( it = getFrames().begin(); it != getFrames().end(); it++ )
+        {
+            SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
+            BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
+        }
+    }
+    else
+        fprintf (stderr, "no buffer for locked window\n");
+
+    ANativeWindow_unlockAndPost(pWindow);
+    fprintf (stderr, "done render!\n");
+#endif // ANDROID_PIXELS
+
     mbQueueReDraw = false;
 }
 
@@ -194,6 +253,61 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
+
+#ifdef ANDROID_EGL
+            const EGLint attribs[] = {
+                EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+                EGL_BLUE_SIZE, 8,
+                EGL_GREEN_SIZE, 8,
+                EGL_RED_SIZE, 8,
+                EGL_NONE
+            };
+            EGLint w, h, format;
+            EGLint numConfigs;
+            EGLConfig config;
+            EGLSurface surface;
+            EGLContext context;
+
+            EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+
+            eglInitialize(display, 0, 0);
+
+            /* Here, the application chooses the configuration it desires. In this
+             * sample, we have a very simplified selection process, where we pick
+             * the first EGLConfig that matches our criteria */
+            eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+
+            /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
+             * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+             * As soon as we picked a EGLConfig, we can safely reconfigure the
+             * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+            eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+
+            ANativeWindow_setBuffersGeometry(mpApp->window, 0, 0, format);
+
+            surface = eglCreateWindowSurface(display, config, mpApp->window, NULL);
+            context = eglCreateContext(display, config, NULL, NULL);
+
+            if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
+                fprintf(stderr, "Unable to eglMakeCurrent");
+                break;
+            }
+
+            eglQuerySurface(display, surface, EGL_WIDTH, &w);
+            eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+
+            mxDisplay = display;
+            mxContext = context;
+            mxSurface = surface;
+
+            // Initialize GL state:
+            // FIXME: surely all this glContext - **per-thread** - !
+
+            glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+            glEnable(GL_CULL_FACE);
+            glShadeModel(GL_SMOOTH);
+            glDisable(GL_DEPTH_TEST);
+#endif
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -210,7 +324,7 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
             fprintf (stderr, "redraw needed\n");
-            mbQueueReDraw = true;
+            AndroidSalInstance::getInstance()->RedrawWindows (pWindow);
             break;
         }
 
@@ -283,31 +397,26 @@ extern "C" {
     {
         return AndroidSalInstance::getInstance()->onInputEvent(app, event);
     }
-    void onNativeWindowRedrawNeeded_cb(ANativeActivity * /* activity */,
-                                       ANativeWindow *pWindow)
-    {
-        fprintf (stderr, "onNativeWindowRedrawNeeded_cb\n");
-        AndroidSalInstance::getInstance()->RedrawWindows (pWindow);
-    }
 }
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
     , mpApp( NULL )
     , mbQueueReDraw( false )
+    , mxDisplay( EGL_NO_DISPLAY )
+    , mxSurface( EGL_NO_SURFACE )
+    , mxContext( EGL_NO_CONTEXT )
 {
     mpApp = lo_get_app();
-    fprintf (stderr, "created Android Sal Instance for app %p window %p\n",
+    fprintf (stderr, "created Android Sal Instance for app %p window %p thread: %d\n",
              mpApp,
-             mpApp ? mpApp->window : NULL);
+             mpApp ? mpApp->window : NULL,
+             (int)pthread_self());
     if (mpApp)
     {
         pthread_mutex_lock (&mpApp->mutex);
         mpApp->onAppCmd = onAppCmd_cb;
         mpApp->onInputEvent = onInputEvent_cb;
-        if (mpApp->window != NULL)
-            onAppCmd_cb (mpApp, APP_CMD_INIT_WINDOW);
-        mpApp->activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded_cb;
         pthread_mutex_unlock (&mpApp->mutex);
     }
 }
@@ -331,7 +440,8 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
-    fprintf (stderr, "DoReleaseYield #2 %d ms\n", nTimeoutMS);
+    fprintf (stderr, "DoReleaseYield #2 %d thread: %d ms\n",
+             nTimeoutMS, (int)pthread_self());
     void *outData = NULL;
     int outFd = 0, outEvents = 0;
 

@@ -30,6 +30,9 @@
 #ifndef ANDROID_SALINST_H
 #define ANDROID_SALINST_H
 
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+
 #include <android/input.h>
 #include <android/native_window.h>
 #include <headless/svpinst.hxx>
@@ -37,7 +40,7 @@
 
 class AndroidSalInstance : public SvpSalInstance
 {
-    void BlitFrameToWindow(ANativeWindow *pWindow,
+    void BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
                            const basebmp::BitmapDeviceSharedPtr& aDev);
 public:
     AndroidSalInstance( SalYieldMutex *pMutex );
@@ -58,6 +61,11 @@ protected:
     virtual void DoReleaseYield( int nTimeoutMS );
     struct android_app *mpApp;
     bool mbQueueReDraw;
+
+private:
+    EGLDisplay mxDisplay;
+    EGLSurface mxSurface;
+    EGLContext mxContext;
 };
 
 #endif // ANDROID_SALINST_H
