@@ -339,36 +339,6 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 }
 
 /*************************************************************************
-|*    SvGlobalName::GetctorName()
-*************************************************************************/
-String SvGlobalName::GetctorName() const
-{
-    rtl::OStringBuffer aStrBuffer;
-
-    sal_Char buf[ 20 ];
-    sal_uInt32 Data1;
-    memcpy(&Data1, pImp->szData, sizeof(sal_uInt32));
-    sprintf( buf, "0x%8.8" SAL_PRIXUINT32, Data1 );
-    aStrBuffer.append(buf);
-    sal_uInt16 i;
-    for( i = 4; i < 8; i += 2 )
-    {
-        aStrBuffer.append(',');
-        sal_uInt16 Data2;
-        memcpy(&Data2, pImp->szData+i, sizeof(sal_uInt16));
-        sprintf( buf, "0x%4.4X", Data2 );
-        aStrBuffer.append(buf);
-    }
-    for( i = 8; i < 16; i++ )
-    {
-        aStrBuffer.append(',');
-        sprintf( buf, "0x%2.2x", pImp->szData[ i ] );
-        aStrBuffer.append(buf);
-    }
-    return rtl::OStringToOUString(aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-}
-
-/*************************************************************************
 |*    SvGlobalName::GetHexName()
 *************************************************************************/
 String SvGlobalName::GetHexName() const

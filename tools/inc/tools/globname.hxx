@@ -100,15 +100,7 @@ public:
 
     void    MakeFromMemory( void * pData );
     sal_Bool    MakeId( const String & rId );
-    String  GetctorName() const;
     String  GetHexName() const;
-    String  GetRegDbName() const
-            {
-                String a = '{';
-                a += GetHexName();
-                a += '}';
-                return a;
-            }
 
                   SvGlobalName( const CLSID & rId );
     const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }
