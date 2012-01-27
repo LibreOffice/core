@@ -32,12 +32,14 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/looper.h>
+#define EGL_EGLEXT_PROTOTYPES
+#include <EGL/eglext.h>
 #include <osl/detail/android-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 
-#undef ANDROID_EGL
-#define ANDROID_PIXELS
+#define ANDROID_EGL
+#undef ANDROID_PIXELS
 
 class AndroidSalData : public SalGenericData
 {
@@ -151,12 +153,8 @@ void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
 void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
 {
     (void)pWindow;
-#ifdef ANDROID_PIXELS
-    ARect aRect;
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
-    fprintf (stderr, "pre lock #3\n");
-#endif
 
 #ifdef ANDROID_EGL
     if (mxDisplay == EGL_NO_DISPLAY)
@@ -171,32 +169,59 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     // Just fill the screen with a color.
     static int a = 0;
     a++;
-    glClearColor((a & 0x1) ? 1.0 : 0.0, (a & 0x2) ? 1.0 : 0.0, 0.0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    //    glClearColor((a & 0x1) ? 1.0 : 0.0, (a & 0x2) ? 1.0 : 0.0, 0.0, 1);
+    //    glClear(GL_COLOR_BUFFER_BIT);
 
-    eglSwapBuffers(mxDisplay, mxSurface);
+    const EGLint aAttribs[] = {
+        EGL_MAP_PRESERVE_PIXELS_KHR, EGL_FALSE,
+        EGL_LOCK_USAGE_HINT_KHR, EGL_WRITE_SURFACE_BIT_KHR,
+        EGL_NONE
+    };
+    fprintf (stderr, "pre-egl-lock\n");
+    nRet = eglLockSurfaceKHR(mxDisplay, mxSurface, aAttribs);
+    fprintf (stderr, "eglLockSurface %d\n", nRet);
+    nRet = eglQuerySurface(mxDisplay, mxSurface,
+                           EGL_BITMAP_POINTER_KHR, (EGLint *)&aOutBuffer.bits);
+    fprintf (stderr, "get bytes %p : %d\n", aOutBuffer.bits, nRet);
+    EGLint nStride = 0;
+    nRet = eglQuerySurface(mxDisplay, mxSurface,
+                           EGL_BITMAP_PITCH_KHR, &nStride);
+    fprintf (stderr, "get stride %ld : %d\n", (long)nStride, nRet);
+
+    EGLint nWidth = 0, nHeight = 0;
+    eglQuerySurface(mxDisplay, mxSurface, EGL_WIDTH, &nWidth);
+    eglQuerySurface(mxDisplay, mxSurface, EGL_HEIGHT, &nHeight);
+    fprintf (stderr, "get width height %ld,%ld\n", (long)nWidth, (long)nHeight);
+
+    aOutBuffer.stride = nStride / 2; // FIXME - assuming 565
+    aOutBuffer.width = nWidth;
+    aOutBuffer.height = nHeight;
+
 #endif // ANDROID_EGL
 
 #ifdef ANDROID_PIXELS
+    ARect aRect;
+    fprintf (stderr, "pre lock #3\n");
     int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
     fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
              nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
              aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
              aOutBuffer.format, aOutBuffer.bits);
-
-#if 1 // pre-'clean' the buffer with cruft:
-    // hard-code / guess at a format ...
-    int32_t *p = (int32_t *)aOutBuffer.bits;
-    for (int32_t y = 0; y < aOutBuffer.height; y++)
-    {
-        for (int32_t x = 0; x < aOutBuffer.stride / 2; x++)
-            *p++ = (y << 24) + x;
-    }
-#endif
+#endif // ANDROID_PIXELS
 
     if (aOutBuffer.bits != NULL)
     {
+#if 1 // pre-'clean' the buffer with cruft:
+        // hard-code / guess at a format ...
+        int32_t *p = (int32_t *)aOutBuffer.bits;
+        for (int32_t y = 0; y < aOutBuffer.height; y++)
+        {
+            for (int32_t x = 0; x < aOutBuffer.stride / 2; x++)
+                *p++ = (y << 24) + x;
+        }
+#endif
+
         std::list< SalFrame* >::const_iterator it;
         for ( it = getFrames().begin(); it != getFrames().end(); it++ )
         {
@@ -207,10 +232,17 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     else
         fprintf (stderr, "no buffer for locked window\n");
 
+#ifdef ANDROID_PIXELS
     ANativeWindow_unlockAndPost(pWindow);
-    fprintf (stderr, "done render!\n");
-#endif // ANDROID_PIXELS
+#endif
 
+#ifdef ANDROID_EGL
+    nRet = eglUnlockSurfaceKHR(mxDisplay, mxSurface);
+    fprintf (stderr, "eGL unlock %d\n", nRet);
+    eglSwapBuffers(mxDisplay, mxSurface);
+#endif
+
+    fprintf (stderr, "done render!\n");
     mbQueueReDraw = false;
 }
 
