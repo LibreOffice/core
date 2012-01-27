@@ -1844,6 +1844,22 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
     if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
 }
 
+namespace
+{
+    rtl::OString getCommonSubPrefix(const rtl::OString &rA, const rtl::OString &rB)
+    {
+        sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
+        sal_Int32 nI = 0;
+        while (nI < nMax)
+        {
+            if (rA[nI] != rB[nI])
+                break;
+            ++nI;
+        }
+        return rA.copy(0, nI);
+    }
+}
+
 void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
                                        SvTokenStream & rInStm )
 {
@@ -1858,9 +1874,11 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
            aPrefix = aEnumVal->GetName().getString();
         else
         {
+            rtl::OString sCommonPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName().getString());
             sal_uInt16 nPos = ByteString(aPrefix).Match( aEnumVal->GetName().getString() );
             if( nPos != aPrefix.getLength() && nPos != STRING_MATCH )
                 aPrefix = aPrefix.copy(0, nPos);
+            assert(sCommonPrefix == aPrefix);
         }
         aEnumValueList.Append( aEnumVal );
     }
