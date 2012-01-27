@@ -261,22 +261,23 @@ SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
     {
         if ( pOptions->IsModified() )
             pOptions->Commit();
-        DELETEZ( pOptions );
+        delete pOptions;
+        pOptions = NULL;
     }
 }
 
-sal_Bool SvtOptionsDialogOptions::IsGroupHidden( const String& _rGroup ) const
+sal_Bool SvtOptionsDialogOptions::IsGroupHidden( const rtl::OUString& _rGroup ) const
 {
     return m_pImp->IsGroupHidden( _rGroup );
 }
 
-sal_Bool SvtOptionsDialogOptions::IsPageHidden( const String& _rPage, const String& _rGroup ) const
+sal_Bool SvtOptionsDialogOptions::IsPageHidden( const rtl::OUString& _rPage, const rtl::OUString& _rGroup ) const
 {
     return m_pImp->IsPageHidden( _rPage, _rGroup );
 }
 
 sal_Bool SvtOptionsDialogOptions::IsOptionHidden(
-    const String& _rOption, const String& _rPage, const String& _rGroup ) const
+    const rtl::OUString& _rOption, const rtl::OUString& _rPage, const rtl::OUString& _rGroup ) const
 {
     return m_pImp->IsOptionHidden( _rOption, _rPage, _rGroup );
 }

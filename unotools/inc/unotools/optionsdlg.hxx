@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_OPTIONSDLG_HXX
 
 #include "unotools/unotoolsdllapi.h"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
 class SvtOptionsDlgOptions_Impl;
@@ -43,12 +43,12 @@ public:
                     SvtOptionsDialogOptions();
                     virtual ~SvtOptionsDialogOptions();
 
-    sal_Bool        IsGroupHidden   (   const String& _rGroup ) const;
-    sal_Bool        IsPageHidden    (   const String& _rPage,
-                                        const String& _rGroup ) const;
-    sal_Bool        IsOptionHidden  (   const String& _rOption,
-                                        const String& _rPage,
-                                        const String& _rGroup ) const;
+    sal_Bool        IsGroupHidden   (   const rtl::OUString& _rGroup ) const;
+    sal_Bool        IsPageHidden    (   const rtl::OUString& _rPage,
+                                        const rtl::OUString& _rGroup ) const;
+    sal_Bool        IsOptionHidden  (   const rtl::OUString& _rOption,
+                                        const rtl::OUString& _rPage,
+                                        const rtl::OUString& _rGroup ) const;
 };
 
 #endif
