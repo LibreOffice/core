@@ -64,9 +64,6 @@ namespace basegfx
         // assignment operator
         B3DPolyPolygon& operator=(const B3DPolyPolygon& rPolyPolygon);
 
-        /// unshare this poly-polygon (and all included polygons) with all internally shared instances
-        void makeUnique();
-
         // compare operators
         bool operator==(const B3DPolyPolygon& rPolyPolygon) const;
         bool operator!=(const B3DPolyPolygon& rPolyPolygon) const;
@@ -92,12 +89,10 @@ namespace basegfx
         bool areTextureCoordinatesUsed() const;
         void clearTextureCoordinates();
 
-        // insert/append single polygon
-        void insert(sal_uInt32 nIndex, const B3DPolygon& rPolygon, sal_uInt32 nCount = 1);
+        // append single polygon
         void append(const B3DPolygon& rPolygon, sal_uInt32 nCount = 1);
 
-        // insert/append multiple polygons
-        void insert(sal_uInt32 nIndex, const B3DPolyPolygon& rPolyPolygon);
+        // append multiple polygons
         void append(const B3DPolyPolygon& rPolyPolygon);
 
         // remove
@@ -108,7 +103,6 @@ namespace basegfx
 
         // closed state
         bool isClosed() const;
-        void setClosed(bool bNew);
 
         // flip polygon direction
         void flip();

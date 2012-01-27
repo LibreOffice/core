@@ -1547,14 +1547,6 @@ namespace basegfx
     {
     }
 
-    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount) :
-        mpPolygon(ImplB3DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
-    {
-        // TODO(P2): one extra temporary here (cow_wrapper copies
-        // given ImplB3DPolygon into its internal impl_t wrapper type)
-        OSL_ENSURE(nIndex + nCount > rPolygon.mpPolygon->count(), "B3DPolygon constructor outside range (!)");
-    }
-
     B3DPolygon::~B3DPolygon()
     {
     }
@@ -1698,42 +1690,10 @@ namespace basegfx
             mpPolygon->clearTextureCoordinates();
     }
 
-    void B3DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
-    {
-        OSL_ENSURE(nIndex <= mpPolygon->count(), "B3DPolygon Insert outside range (!)");
-
-        if(nCount)
-            mpPolygon->insert(nIndex, rPoint, nCount);
-    }
-
     void B3DPolygon::append(const basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
-    }
-
-    void B3DPolygon::insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)
-    {
-        OSL_ENSURE(nIndex <= mpPolygon->count(), "B3DPolygon Insert outside range (!)");
-
-        if(rPoly.count())
-        {
-            if(!nCount)
-            {
-                nCount = rPoly.count();
-            }
-
-            if(0L == nIndex2 && nCount == rPoly.count())
-            {
-                mpPolygon->insert(nIndex, *rPoly.mpPolygon);
-            }
-            else
-            {
-                OSL_ENSURE(nIndex2 + nCount <= rPoly.mpPolygon->count(), "B3DPolygon Insert outside range (!)");
-                ImplB3DPolygon aTempPoly(*rPoly.mpPolygon, nIndex2, nCount);
-                mpPolygon->insert(nIndex, aTempPoly);
-            }
-        }
     }
 
     void B3DPolygon::append(const B3DPolygon& rPoly, sal_uInt32 nIndex, sal_uInt32 nCount)

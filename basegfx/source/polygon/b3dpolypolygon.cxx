@@ -258,12 +258,6 @@ namespace basegfx
         return *this;
     }
 
-    void B3DPolyPolygon::makeUnique()
-    {
-        mpPolyPolygon.make_unique();
-        mpPolyPolygon->makeUnique();
-    }
-
     bool B3DPolyPolygon::operator==(const B3DPolyPolygon& rPolyPolygon) const
     {
         if(mpPolyPolygon.same_object(rPolyPolygon.mpPolyPolygon))
@@ -366,26 +360,10 @@ namespace basegfx
             mpPolyPolygon->clearTextureCoordinates();
     }
 
-    void B3DPolyPolygon::insert(sal_uInt32 nIndex, const B3DPolygon& rPolygon, sal_uInt32 nCount)
-    {
-        OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B3DPolyPolygon Insert outside range (!)");
-
-        if(nCount)
-            mpPolyPolygon->insert(nIndex, rPolygon, nCount);
-    }
-
     void B3DPolyPolygon::append(const B3DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
             mpPolyPolygon->insert(mpPolyPolygon->count(), rPolygon, nCount);
-    }
-
-    void B3DPolyPolygon::insert(sal_uInt32 nIndex, const B3DPolyPolygon& rPolyPolygon)
-    {
-        OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B3DPolyPolygon Insert outside range (!)");
-
-        if(rPolyPolygon.count())
-            mpPolyPolygon->insert(nIndex, rPolyPolygon);
     }
 
     void B3DPolyPolygon::append(const B3DPolyPolygon& rPolyPolygon)
@@ -422,12 +400,6 @@ namespace basegfx
         }
 
         return bRetval;
-    }
-
-    void B3DPolyPolygon::setClosed(bool bNew)
-    {
-        if(bNew != isClosed())
-            mpPolyPolygon->setClosed(bNew);
     }
 
     void B3DPolyPolygon::flip()

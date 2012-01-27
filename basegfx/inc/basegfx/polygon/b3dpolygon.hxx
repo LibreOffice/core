@@ -64,7 +64,6 @@ namespace basegfx
     public:
         B3DPolygon();
         B3DPolygon(const B3DPolygon& rPolygon);
-        B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
         ~B3DPolygon();
 
         // assignment operator
@@ -84,8 +83,7 @@ namespace basegfx
         B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
         void setB3DPoint(sal_uInt32 nIndex, const B3DPoint& rValue);
 
-        // Coordinate insert/append
-        void insert(sal_uInt32 nIndex, const B3DPoint& rPoint, sal_uInt32 nCount = 1);
+        // Coordinate append
         void append(const B3DPoint& rPoint, sal_uInt32 nCount = 1);
 
         // BColor interface
@@ -109,8 +107,7 @@ namespace basegfx
         bool areTextureCoordinatesUsed() const;
         void clearTextureCoordinates();
 
-        // insert/append other 2D polygons
-        void insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
+        // append other 2D polygons
         void append(const B3DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
 
         // remove
