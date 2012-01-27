@@ -76,7 +76,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/i18n_status \
     vcl/unx/generic/app/i18n_wrp \
     vcl/unx/generic/app/i18n_xkb \
-    vcl/unx/generic/app/keysymnames \
     vcl/unx/generic/app/randrwrapper \
     vcl/unx/generic/app/saldata \
     vcl/unx/generic/app/saldisp \

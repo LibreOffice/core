@@ -306,12 +306,6 @@ protected:
     srv_vendor_t    meServerVendor;
     SalWM           eWindowManager_;
 
-#if defined(SOLARIS)
-    sal_Bool            bLocal_;            // Server==Client? Init
-    // in SalDisplay::IsLocal()
-    sal_Bool            mbLocalIsValid;     // bLocal_ is valid ?
-#endif
-
     // until x bytes
 
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
@@ -377,10 +371,6 @@ public:
 
     XLIB_Cursor           GetPointer( int ePointerStyle );
     virtual int           CaptureMouse( SalFrame *pCapture );
-
-#if defined(SOLARIS)
-    sal_Bool            IsLocal();
-#endif
 
     void                  Remove( XEvent   *pEvent );
     virtual ScreenData   *initScreen( SalX11Screen nXScreen ) const;

@@ -126,12 +126,6 @@ GtkSalDisplay::~GtkSalDisplay()
 
 extern "C" {
 
-void signalKeysChanged( GdkKeymap*, gpointer data )
-{
-    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
-#warning signalKeysChanged called
-}
-
 void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
 {
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
@@ -723,8 +717,6 @@ void GtkData::Init()
 #else
 #  warning unwind keyboard extension bits
 #endif
-
-    g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), GetGtkDisplay() );
 
     // add signal handler to notify screen size changes
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
