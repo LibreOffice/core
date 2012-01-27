@@ -1870,15 +1870,13 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
     if( bOk )
     {
         if( 0 == aEnumValueList.Count() )
+        {
            // the first
            aPrefix = aEnumVal->GetName().getString();
+        }
         else
         {
-            rtl::OString sCommonPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName().getString());
-            sal_uInt16 nPos = ByteString(aPrefix).Match( aEnumVal->GetName().getString() );
-            if( nPos != aPrefix.getLength() && nPos != STRING_MATCH )
-                aPrefix = aPrefix.copy(0, nPos);
-            assert(sCommonPrefix == aPrefix);
+            aPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName().getString());
         }
         aEnumValueList.Append( aEnumVal );
     }
