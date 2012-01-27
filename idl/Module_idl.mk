@@ -29,8 +29,12 @@
 
 $(eval $(call gb_Module_Module,idl))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,idl,\
 	Executable_svidl \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
