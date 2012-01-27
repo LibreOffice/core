@@ -116,7 +116,7 @@ TabPage RID_SVXPAGE_BORDER
         First = 25 ;
         Last = 900 ;
         Maximum = 900 ;
-        Minimum = 25 ;
+        Minimum = 5 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_POINT ;
     };
