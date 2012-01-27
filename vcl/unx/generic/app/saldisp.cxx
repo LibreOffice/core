@@ -947,7 +947,15 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
             aRet = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
         else
         {
-            aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
+            // lp#818761: removing the problematic call to GetKeyboardName() as
+            // getKeysymReplacementName only provides the name of the key named
+            // as given by the l10n of the _keyboard_ (not the locale) e.g. a
+            // german keyboard would name "Ctrl" instead as "Strg". Assuming
+            // this change to be safe as getKeysymReplacementName falls back to
+            // English names anyway.
+            // this code is completely removed on master/3.6 anyway, see
+            // commit 2233aa52da14ec85331aee1163b885fe9a9fb507
+            //aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
             if( aRet.isEmpty() )
             {
                 const char *pString = XKeysymToString( nKeySym );
@@ -2166,14 +2174,10 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             }
             break;
         case MappingNotify:
-            if( MappingKeyboard == pEvent->xmapping.request ||
-                MappingModifier == pEvent->xmapping.request )
+            if( MappingModifier == pEvent->xmapping.request )
             {
                 XRefreshKeyboardMapping( &pEvent->xmapping );
-                if( MappingModifier == pEvent->xmapping.request )
-                    ModifierMapping();
-                if( MappingKeyboard == pEvent->xmapping.request ) // refresh mapping
-                    GetKeyboardName( true );
+                ModifierMapping();
             }
             break;
         case ButtonPress:
