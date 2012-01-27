@@ -29,13 +29,11 @@
 $(eval $(call gb_Module_Module,dbaccess))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
-    AllLangResTarget_adabasui \
     AllLangResTarget_dba \
     AllLangResTarget_dbmm \
     AllLangResTarget_dbu \
     AllLangResTarget_sdbt \
     $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
-    Library_adabasui \
     Library_dba \
     Library_dbaxml \
     Library_dbmm \
