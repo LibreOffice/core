@@ -68,6 +68,12 @@ $(eval $(call gb_Library_add_linked_libs,sofficeapp,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_add_cflags,sofficeapp,\
+    $(gb_OBJCFLAGS) \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/app \
     desktop/source/app/appfirststart \
