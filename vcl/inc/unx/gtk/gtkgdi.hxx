@@ -134,9 +134,6 @@ public:
     // will be set when UI theme was changed
     static  sal_Bool        bThemeChanged;
     static  sal_Bool        bNeedPixmapPaint;
-    static  sal_Bool        bGlobalNeedPixmapPaint;
-    static  sal_Bool        bToolbarGripWorkaround;
-    static  sal_Bool        bNeedButtonStyleAsEditBackgroundWorkaround;
 
     // native widget methods
     virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );

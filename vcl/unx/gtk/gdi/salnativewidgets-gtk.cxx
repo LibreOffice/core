@@ -50,9 +50,6 @@ typedef struct _cairo_font_options cairo_font_options_t;
 // initialize statics
 sal_Bool GtkSalGraphics::bThemeChanged = sal_True;
 sal_Bool GtkSalGraphics::bNeedPixmapPaint = sal_False;
-sal_Bool GtkSalGraphics::bGlobalNeedPixmapPaint = sal_False;
-sal_Bool GtkSalGraphics::bToolbarGripWorkaround = sal_False;
-sal_Bool GtkSalGraphics::bNeedButtonStyleAsEditBackgroundWorkaround = sal_False;
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : X11SalGraphics(),
@@ -451,12 +448,12 @@ void GtkData::initNWF( void )
             // KDE 3.3 invented a bug in the qt<->gtk theme engine
             // that makes direct rendering impossible: they totally
             // ignore the clip rectangle passed to the paint methods
-            GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+            GtkSalGraphics::bNeedPixmapPaint = true;
         }
     }
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
-        GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+        GtkSalGraphics::bNeedPixmapPaint = true;
 
     #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "GtkPlugin: using %s NWF\n",
@@ -777,7 +774,7 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         && nType != CTRL_TAB_ITEM
         && nType != CTRL_TAB_PANE
         && nType != CTRL_PROGRESS
-        && ! (bToolbarGripWorkaround && nType == CTRL_TOOLBAR && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
+        && ! (nType == CTRL_TOOLBAR && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
         )
     {
         // make pixmap a little larger since some themes draw decoration
@@ -1948,21 +1945,13 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
     if ( stateType == GTK_STATE_PRELIGHT )
         stateType = GTK_STATE_NORMAL;
 
-    // Blueprint needs to paint entry_bg with a Button widget, not an Entry widget to get
-    // a nice white (or whatever default color) background
-    GtkWidget* pBGWidget = widget;
-    if( GtkSalGraphics::bNeedButtonStyleAsEditBackgroundWorkaround )
-    {
-        NWSetWidgetState( gWidgetData[nScreen].gBtnWidget, nState, stateType );
-        pBGWidget = gWidgetData[nScreen].gBtnWidget;
-    }
     NWSetWidgetState( widget, nState, stateType );
 
     /* This doesn't seem to be necessary, and it causes some weird glitch in
      * murrine (with the elementary theme for instance) but it fixes some issue
      * with Orta, so... */
-    gtk_paint_flat_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
-                        gdkRect, pBGWidget, "entry_bg",
+    gtk_paint_flat_box( widget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
+                        gdkRect, widget, "entry_bg",
                         aEditBoxRect.Left(), aEditBoxRect.Top(),
                         aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
     gtk_paint_shadow( widget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
@@ -3693,37 +3682,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
-
-    gchar* pThemeName = NULL;
-    g_object_get( pSettings, "gtk-theme-name", &pThemeName, (char *)NULL );
-    #if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
-    #endif
-
-    // default behaviour
-    bNeedPixmapPaint = bGlobalNeedPixmapPaint;
-    bToolbarGripWorkaround = false;
-    bNeedButtonStyleAsEditBackgroundWorkaround = false;
-
-    // setup some workarounds for "blueprint" theme
-    if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
-    {
-        bNeedButtonStyleAsEditBackgroundWorkaround = true;
-        if( GetGenericData()->GetSalDisplay()->GetServerVendor() == vendor_sun )
-        {
-            // #i52570#, #i61532# workaround a weird paint issue;
-            // on a Sunray Xserver sometimes painting buttons and edits
-            // won't work when using the blueprint theme
-            // not reproducible with simpler programs or other themes
-            if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
-            {
-                bNeedPixmapPaint = true;
-                bToolbarGripWorkaround = true;
-            }
-        }
-    }
-    // clean up
-    g_free (pThemeName);
 }
 
 
