@@ -79,10 +79,4 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),android)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_svp \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
