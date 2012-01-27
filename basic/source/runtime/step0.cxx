@@ -1175,11 +1175,11 @@ void SbiRuntime::StepINPUT()
 
 void SbiRuntime::StepLINPUT()
 {
-    ByteString aInput;
+    rtl::OString aInput;
     pIosys->Read( aInput );
     Error( pIosys->GetError() );
     SbxVariableRef p = PopVar();
-    p->PutString( String( aInput, osl_getThreadTextEncoding() ) );
+    p->PutString(rtl::OStringToOUString(aInput, osl_getThreadTextEncoding()));
 }
 
 // end of program

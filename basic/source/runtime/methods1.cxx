@@ -3209,7 +3209,7 @@ RTLFUNC(Input)
         return;
     }
 
-    ByteString aByteBuffer;
+    rtl::OString aByteBuffer;
     SbError err = pSbStrm->Read( aByteBuffer, nByteCount, true );
     if( !err )
         err = pIosys->GetError();
@@ -3219,7 +3219,7 @@ RTLFUNC(Input)
         StarBASIC::Error( err );
         return;
     }
-    rPar.Get(0)->PutString( String( aByteBuffer, osl_getThreadTextEncoding() ) );
+    rPar.Get(0)->PutString(rtl::OStringToOUString(aByteBuffer, osl_getThreadTextEncoding()));
 }
 
 RTLFUNC(Me)
