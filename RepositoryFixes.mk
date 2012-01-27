@@ -127,4 +127,11 @@ endif # ifeq ($(COM),GCC)
 
 endif # ifeq ($(OS),WNT)
 
+ifeq ($(OS),IOS)
+
+gb_Library_FILENAMES := $(patsubst sb:libsb%,,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst vbahelper:libvbahelper%,,$(gb_Library_FILENAMES))
+
+endif
+
 # vim: set noet sw=4 ts=4:
