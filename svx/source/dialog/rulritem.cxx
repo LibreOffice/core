@@ -505,7 +505,6 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 ri
 
 SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
     SfxPoolItem( rCopy ),
-      aColumns  ( (sal_uInt8)rCopy.Count() ),
       nLeft     ( rCopy.nLeft ),
       nRight    ( rCopy.nRight ),
       nActColumn( rCopy.nActColumn ),
