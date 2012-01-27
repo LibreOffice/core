@@ -1678,6 +1678,7 @@ unicode::isBase(unsigned short)
 unicode::isPunctuation(unsigned short)
 unicode::isTitle(unsigned short)
 unographic::GraphicDescriptor::isValid() const
+unotools::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<unotools::ConfigurationChanges> const&, rtl::OUString const&) const
 unotools::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<unotools::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
