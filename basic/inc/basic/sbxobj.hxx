@@ -35,7 +35,6 @@
 
 
 class SbxProperty;
-class SvDispatch;
 
 class SbxObjectImpl;
 
@@ -98,8 +97,6 @@ public:
     SbxArray* GetMethods()      { return pMethods;  }
     SbxArray* GetProperties()   { return pProps;    }
     SbxArray* GetObjects()      { return pObjs;     }
-    // Hooks
-    virtual SvDispatch* GetSvDispatch();
     // Debugging
     void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
 };

@@ -38,7 +38,6 @@ class String;
 class SfxObjectShell;
 class SfxStatusBarManager;
 class INetHint;
-class SvDispatch;
 struct SfxProgress_Impl;
 struct PlugInLoadStatus;
 struct SvProgressArg;

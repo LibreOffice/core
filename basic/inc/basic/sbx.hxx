@@ -56,7 +56,6 @@ class SbxDimArray;
 class SbxFactory;
 
 class SfxBroadcaster;
-class SvDispatch;
 
 #ifndef __SBX_SBXPARAMINFO
 #define __SBX_SBXPARAMINFO

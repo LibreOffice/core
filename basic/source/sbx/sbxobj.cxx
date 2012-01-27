@@ -871,11 +871,6 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     --nLevel;
 }
 
-SvDispatch* SbxObject::GetSvDispatch()
-{
-    return NULL;
-}
-
 SbxMethod::SbxMethod( const String& r, SbxDataType t )
     : SbxVariable( t )
 {
