@@ -2170,14 +2170,10 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             }
             break;
         case MappingNotify:
-            if( MappingKeyboard == pEvent->xmapping.request ||
-                MappingModifier == pEvent->xmapping.request )
+            if( MappingModifier == pEvent->xmapping.request )
             {
                 XRefreshKeyboardMapping( &pEvent->xmapping );
-                if( MappingModifier == pEvent->xmapping.request )
-                    ModifierMapping();
-                if( MappingKeyboard == pEvent->xmapping.request ) // refresh mapping
-                    GetKeyboardName( true );
+                ModifierMapping();
             }
             break;
         case ButtonPress:

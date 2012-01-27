@@ -129,12 +129,7 @@ extern "C" {
 void signalKeysChanged( GdkKeymap*, gpointer data )
 {
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
-#if !GTK_CHECK_VERSION(3,0,0)
-    pDisp->GetKeyboardName(true);
-#else
-    (void)pDisp;
-#warning FIXME: impl. / check signalKeysChanged ...
-#endif
+#warning signalKeysChanged called
 }
 
 void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
