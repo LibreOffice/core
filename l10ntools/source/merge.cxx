@@ -134,10 +134,10 @@ void MergeData::Insert(PFormEntrys* pfEntrys )
     aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
 }
 
-ByteString MergeData::Dump(){
-    ByteString sRet( "MergeData\n" );
-
-    printf("MergeData sTyp = %s , sGid = %s , sLid =%s , sFilename = %s\n",sTyp.GetBuffer(),sGID.GetBuffer(),sLID.GetBuffer(), sFilename.GetBuffer() );
+rtl::OString MergeData::Dump()
+{
+    printf("MergeData sTyp = %s , sGid = %s , sLid =%s , sFilename = %s\n",
+        sTyp.getStr(), sGID.getStr(), sLID.getStr(), sFilename.getStr());
 
     PFormEntrysHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
@@ -147,10 +147,11 @@ ByteString MergeData::Dump(){
         printf("\n");
     }
     printf("\n");
-    return sRet;
+    return rtl::OString(RTL_CONSTASCII_STRINGPARAM("MergeData\n"));
 }
 
-PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
+PFormEntrys* MergeData::GetPFObject( const rtl::OString& rPFO )
+{
     if( aMap.find( ByteString("HACK") ) != aMap.end() )
         return aMap[ rPFO ];
     return NULL;

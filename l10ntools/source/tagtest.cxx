@@ -95,7 +95,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     String aDelims( String::CreateFromAscii( " \\=>/" ) );
     String aPortion;
     String aValue;      // store the value of a property
-    ByteString aName;   // store the name of a property/tag
+    rtl::OString aName; // store the name of a property/tag
     sal_Bool bCheckName = sal_False;
     sal_Bool bCheckEmpty = sal_False;
     sal_Unicode cDelim;
@@ -223,14 +223,14 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                             {
                                 if ( !IsPropertyValueValid( aName, aValue ) )
                                 {
-                                    rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' has invalid value '").Append(rtl::OUStringToOString(aValue, RTL_TEXTENCODING_UTF8)).Append("' "), *this );
+                                    rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Property '")).append(aName).append(RTL_CONSTASCII_STRINGPARAM("' has invalid value '")).append(rtl::OUStringToOString(aValue, RTL_TEXTENCODING_UTF8)).append("' ").makeStringAndClear(), *this );
                                     bIsBroken = sal_True;
                                 }
                                 aProperties[ aName ] = aValue;
                             }
                             else
                             {
-                                rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' defined twice "), *this );
+                                rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Property '")).append(aName).append(RTL_CONSTASCII_STRINGPARAM("' defined twice ")).makeStringAndClear(), *this );
                                 bIsBroken = sal_True;
                             }
                         }
@@ -336,10 +336,9 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             {
                 aName = rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8);
                 // "a-zA-Z_-.0-9"
-                xub_StrLen nCount;
                 sal_Bool bBroken = sal_False;
-                const sal_Char* aBuf = aName.GetBuffer();
-                for ( nCount = 0 ; !bBroken && nCount < aName.Len() ; nCount++ )
+                const sal_Char* aBuf = aName.getStr();
+                for (sal_Int32 nCount = 0 ; !bBroken && nCount < aName.getLength() ; ++nCount)
                 {
                     bBroken = ! (   ( aBuf[nCount] >= 'a' && aBuf[nCount] <= 'z' )
                                 ||( aBuf[nCount] >= 'A' && aBuf[nCount] <= 'Z' )
@@ -364,7 +363,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         {
             if ( aPortion.Len() )
             {
-                rErrorList.AddError( 25, ByteString("Found displaced characters '").Append(rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8)).Append("' in Tag "), *this );
+                rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found displaced characters '")).append(rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8)).append(RTL_CONSTASCII_STRINGPARAM("' in Tag ")).makeStringAndClear(), *this );
                 bIsBroken = sal_True;
             }
             bCheckEmpty = sal_False;
@@ -387,46 +386,46 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     }
 }
 
-sal_Bool TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValue ) const
+sal_Bool TokenInfo::IsPropertyRelevant( const rtl::OString &rName, const String &rValue ) const
 {
-    if ( aTagName.EqualsAscii( "alt" ) && aName.Equals( "xml-lang" ) )
+    if ( aTagName.EqualsAscii( "alt" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
         return sal_False;
-    if ( aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "visibility" ) && aValue.EqualsAscii("visible") )
+    if ( aTagName.EqualsAscii( "ahelp" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("visibility")) && rValue.EqualsAscii("visible") )
         return sal_False;
-    if ( aTagName.EqualsAscii( "image" ) && (aName.Equals( "width" ) || aName.Equals( "height" )) )
+    if ( aTagName.EqualsAscii( "image" ) && (rName.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) || rName.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))) )
         return sal_False;
 
     return sal_True;
 }
 
-sal_Bool TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aValue ) const
+sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const String &rValue ) const
 {
 /*  removed due to i56740
-    if ( aTagName.EqualsAscii( "switchinline" ) && aName.Equals( "select" ) )
+    if ( aTagName.EqualsAscii( "switchinline" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
     {
-        return aValue.EqualsAscii("sys") ||
-               aValue.EqualsAscii("appl") ||
-               aValue.EqualsAscii("distrib");
+        return rValue.EqualsAscii("sys") ||
+               rValue.EqualsAscii("appl") ||
+               rValue.EqualsAscii("distrib");
     } */
-    if ( aTagName.EqualsAscii( "caseinline" ) && aName.Equals( "select" ) )
+    if ( aTagName.EqualsAscii( "caseinline" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
     {
-        return /*!aValue.EqualsAscii("OS2") &&  removed due to i56740 */
-               !aValue.EqualsAscii("");
+        return /*!rValue.EqualsAscii("OS2") &&  removed due to i56740 */
+               !rValue.EqualsAscii("");
     }
 
     // we don't know any better so we assume it to be OK
     return sal_True;
 }
 
-sal_Bool TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aValue ) const
+sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const String &rValue ) const
 {
-    if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "name" ) )
+    if ( aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("name")) )
         return sal_False;
-    if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ) )
+    if ( aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")) )
     {   // check for external reference
-        if (  aValue.Copy( 0, 5 ).EqualsIgnoreCaseAscii( "http:" )
-           || aValue.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "https:" )
-           || aValue.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "ftp:" ) )
+        if (  rValue.Copy( 0, 5 ).EqualsIgnoreCaseAscii( "http:" )
+           || rValue.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "https:" )
+           || rValue.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "ftp:" ) )
             return sal_False;
         else
             return sal_True;
@@ -434,15 +433,15 @@ sal_Bool TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &
     return sal_True;
 }
 
-sal_Bool TokenInfo::IsPropertyFixable( const ByteString &aName ) const
+sal_Bool TokenInfo::IsPropertyFixable( const rtl::OString &rName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" ))
-      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ))
-      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" ))
-      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" ))
-      || (aTagName.EqualsAscii( "image" ) && aName.Equals( "src" ))
-      || (aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) ))
+    if ( (aTagName.EqualsAscii( "ahelp" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("hid")))
+      || (aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")))
+      || (aTagName.EqualsAscii( "alt" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+      || (aTagName.EqualsAscii( "variable" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+      || (aTagName.EqualsAscii( "image" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("src")))
+      || (aTagName.EqualsAscii( "image" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")) ))
         return sal_True;
     return sal_False;
 }
@@ -480,10 +479,10 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
                             {
                                 rInfo.aProperties.find( iProp->first )->second = iProp->second;
                                 rInfo.SetHasBeenFixed();
-                                rErrorList.AddWarning( 25, ByteString("Property '").Append(iProp->first).Append("': FIXED different value in Translation "), *this );
+                                rErrorList.AddWarning( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Property '")).append(iProp->first).append(RTL_CONSTASCII_STRINGPARAM("': FIXED different value in Translation ")).makeStringAndClear(), *this );
                             }
                             else
-                                rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("': value different in Translation "), *this );
+                                rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Property '")).append(iProp->first).append(RTL_CONSTASCII_STRINGPARAM("': value different in Translation ")).makeStringAndClear(), *this );
                         }
                         else return sal_False;
                     }
@@ -495,7 +494,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
             if ( IsPropertyRelevant( iProp->first, iProp->second ) )
             {
                 if ( bGenErrors )
-                    rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("' missing in Translation "), *this );
+                    rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Property '")).append(iProp->first).append(RTL_CONSTASCII_STRINGPARAM("' missing in Translation ")).makeStringAndClear(), *this );
                 else return sal_False;
             }
         }
@@ -507,7 +506,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
             if ( IsPropertyRelevant( iProp->first, iProp->second ) )
             {
                 if ( bGenErrors )
-                    rErrorList.AddError( 25, ByteString("Extra Property '").Append(iProp->first).Append("' in Translation "), rInfo );
+                    rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Extra Property '")).append(iProp->first).append(RTL_CONSTASCII_STRINGPARAM("' in Translation ")).makeStringAndClear(), rInfo );
                 else return sal_False;
             }
         }
@@ -548,14 +547,14 @@ String TokenInfo::MakeTag() const
 }
 
 
-void ParserMessageList::AddError( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddError( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
 {
-    maList.push_back( new ParserError( nErrorNr, aErrorText, rTag ) );
+    maList.push_back( new ParserError( nErrorNr, rErrorText, rTag ) );
 }
 
-void ParserMessageList::AddWarning( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddWarning( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
 {
-    maList.push_back( new ParserWarning( nErrorNr, aErrorText, rTag ) );
+    maList.push_back( new ParserWarning( nErrorNr, rErrorText, rTag ) );
 }
 
 sal_Bool ParserMessageList::HasErrors()
@@ -786,7 +785,6 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt
         if ( nEndPos == STRING_NOTFOUND )
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle3StartPos +2;
-            ByteString sTmp( "Tag Start '\\<' without Tag End '\\>': " );
             rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.Copy( nStyle3StartPos-10, 20 ) ) );
             return GetNextTokenString( rErrorList, rTagStartPos );
         }
@@ -1315,37 +1313,38 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
         aExpectedToken.aTokenString.Insert( String::CreateFromAscii( "Close tag for " ), 0 );
     }
 
-    ByteString sTmp( "Expected Symbol" );
+    rtl::OString sTmp(RTL_CONSTASCII_STRINGPARAM("Expected Symbol"));
     if ( aCurrentToken.nId == TAG_NOMORETAGS )
     {
         ParseError( 7, sTmp, aExpectedToken );
     }
     else
     {
-        sTmp += ": ";
-        sTmp += rtl::OUStringToOString(aParser.GetLexem( aExpectedToken ), RTL_TEXTENCODING_UTF8);
-        sTmp += " near ";
-        ParseError( 7, sTmp, aCurrentToken );
+        rtl::OStringBuffer aBuf(sTmp);
+        aBuf.append(": ").
+            append(rtl::OUStringToOString(aParser.GetLexem( aExpectedToken ), RTL_TEXTENCODING_UTF8)).
+            append(RTL_CONSTASCII_STRINGPARAM(" near "));
+        ParseError( 7, aBuf.makeStringAndClear(), aCurrentToken );
     }
     return sal_False;
 }
 
-void TokenParser::ParseError( sal_uInt16 nErrNr, ByteString aErrMsg, const TokenInfo &rTag )
+void TokenParser::ParseError( sal_uInt16 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag )
 {
-    pErrorList->AddError( nErrNr, aErrMsg, rTag);
+    pErrorList->AddError( nErrNr, rErrMsg, rTag);
 
     // Das Fehlerhafte Tag ueberspringen
     aTag = aParser.GetNextToken( *pErrorList );
 }
 
 
-ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag )
+ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag )
         : nErrorNr( PnErrorNr )
         , nTagBegin( 0 )
         , nTagLength( 0 )
 {
     String aLexem( SimpleParser::GetLexem( rTag ) );
-    rtl::OStringBuffer aErrorBuffer(PaErrorText);
+    rtl::OStringBuffer aErrorBuffer(rPaErrorText);
     aErrorBuffer.append(RTL_CONSTASCII_STRINGPARAM(": "));
     aErrorBuffer.append(rtl::OUStringToOString(aLexem, RTL_TEXTENCODING_UTF8));
     if ( rTag.nId == TAG_NOMORETAGS )
@@ -1360,12 +1359,12 @@ ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, cons
     nTagLength = aLexem.Len();
 }
 
-ParserError::ParserError( sal_uInt16 ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
-: ParserMessage( ErrorNr, ErrorText, rTag )
+ParserError::ParserError( sal_uInt16 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
+: ParserMessage( ErrorNr, rErrorText, rTag )
 {}
 
-ParserWarning::ParserWarning( sal_uInt16 ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
-: ParserMessage( ErrorNr, ErrorText, rTag )
+ParserWarning::ParserWarning( sal_uInt16 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
+: ParserMessage( ErrorNr, rErrorText, rTag )
 {}
 
 sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )

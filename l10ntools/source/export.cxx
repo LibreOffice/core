@@ -337,8 +337,9 @@ int GetError()
 
 void ResData::Dump(){
     printf("**************\nResData\n");
-    printf("sPForm = %s , sResTyp = %s , sId = %s , sGId = %s , sHelpId = %s\n",sPForm.GetBuffer()
-        ,sResTyp.GetBuffer(),sId.GetBuffer(),sGId.GetBuffer(),sHelpId.GetBuffer());
+    printf("sPForm = %s , sResTyp = %s , sId = %s , sGId = %s , sHelpId = %s\n",
+        sPForm.getStr(), sResTyp.getStr(), sId.getStr(),
+        sGId.getStr(), sHelpId.getStr());
 
     rtl::OString a("*pStringList");
     rtl::OString b("*pUIEntries");
@@ -373,10 +374,10 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
             SetError();
         }
 
-        if ( sId.Len() > 255 )
+        if ( sId.getLength() > 255 )
         {
             YYWarning( "LocalId > 255 chars, truncating..." );
-            sId.Erase( 255 );
+            sId = sId.copy(0, 255);
             sId = comphelper::string::stripEnd(sId, ' ');
             sId = comphelper::string::stripEnd(sId, '\t');
         }
@@ -656,7 +657,7 @@ int Export::Execute( int nToken, const char * pToken )
             sToken = comphelper::string::stripEnd(sToken, ' ');
             rtl::OString sTLower = getToken(sToken, 0, ' ').toAsciiLowerCase();
             pResData->sResTyp = sTLower;
-            ByteString sId( sToken.Copy( pResData->sResTyp.Len() + 1 ));
+            ByteString sId( sToken.Copy( pResData->sResTyp.getLength() + 1 ));
             ByteString sCondition;
             if ( sId.Search( "#" ) != STRING_NOTFOUND )
             {
@@ -1792,14 +1793,15 @@ sal_Bool Export::PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
                 sLastListLine = "<";
                 sLastListLine += sTmp;
             }
-            if ( pResData->sResTyp.EqualsIgnoreCaseAscii( "pairedlist" ) ){
+            if ( pResData->sResTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")) )
+            {
                pResData->sId = GetPairedListID( sLastListLine );
             }
             else pResData->sId = rtl::OString::valueOf(static_cast<sal_Int32>(nListIndex));
 
-            if ( pResData->sGId.Len())
-                pResData->sGId += ".";
-            pResData->sGId += sOldId;
+            if (!pResData->sGId.isEmpty())
+                pResData->sGId = pResData->sGId + rtl::OString('.');
+            pResData->sGId = pResData->sGId + sOldId;
             nTyp = STRING_TYP_TEXT;
         }
         break;
@@ -2065,9 +2067,9 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                 ByteString sOldId = pResData->sId;
                 ByteString sOldGId = pResData->sGId;
                 ByteString sOldTyp = pResData->sResTyp;
-                if ( pResData->sGId.Len())
-                    pResData->sGId += ".";
-                pResData->sGId += sOldId;
+                if (!pResData->sGId.isEmpty())
+                    pResData->sGId = pResData->sGId + rtl::OString('.');
+                pResData->sGId = pResData->sGId + sOldId;
                 ByteString sSpace;
                 for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
                     sSpace += "\t";

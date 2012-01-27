@@ -577,7 +577,13 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
                         aLangHM->erase( sCur );
                     }
                 }
-            }else if( pResData == NULL ){fprintf(stdout,"Can't find GID=%s LID=%s TYP=%s\n",pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sResTyp.GetBuffer());}
+            }
+            else if( pResData == NULL )
+            {
+                fprintf(stdout,"Can't find GID=%s LID=%s TYP=%s\n",
+                    pResData->sGId.getStr(), pResData->sId.getStr(),
+                    pResData->sResTyp.getStr());
+            }
             pXMLElement->ChangeLanguageTag( String( sCur , RTL_TEXTENCODING_ASCII_US) );
         }
 

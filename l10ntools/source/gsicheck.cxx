@@ -318,11 +318,9 @@ GSIBlock::~GSIBlock()
     maList.clear();
 }
 
-/*****************************************************************************/
-void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
-/*****************************************************************************/
+void GSIBlock::InsertLine( GSILine* pLine, const rtl::OString &rSourceLang)
 {
-    if ( pLine->GetLanguageId().Equals( aSourceLang ) )
+    if ( pLine->GetLanguageId().Equals( rSourceLang ) )
     {
         if ( pSourceLine )
         {
@@ -338,7 +336,7 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
         }
     }
 
-    if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
+    if (!rSourceLang.isEmpty()) // only check blockstructure if source lang is given
     {
         for ( size_t nPos = 0, n = maList.size(); nPos < n; ++nPos )
         {

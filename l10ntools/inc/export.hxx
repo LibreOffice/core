@@ -72,7 +72,7 @@ typedef boost::unordered_map<rtl::OString, PFormEntrys*, rtl::OStringHash>
 typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
     MergeDataHashMap;
 
-#define SOURCE_LANGUAGE ByteString("en-US")
+#define SOURCE_LANGUAGE rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
@@ -139,11 +139,11 @@ public:
 
     sal_Bool bRestMerged;
 
-    ByteString sResTyp;
-    ByteString sId;
-    ByteString sGId;
-    ByteString sHelpId;
-    ByteString sFilename;
+    rtl::OString sResTyp;
+    rtl::OString sId;
+    rtl::OString sGId;
+    rtl::OString sHelpId;
+    rtl::OString sFilename;
 
     ByteStringHashMap sText;
     sal_uInt16 nTextRefId;
@@ -157,7 +157,7 @@ public:
     ByteStringHashMap sTitle;
     sal_uInt16 nTitleRefId;
 
-    ByteString sTextTyp;
+    rtl::OString sTextTyp;
 
     ExportList  *pStringList;
     ExportList  *pUIEntries;
@@ -165,11 +165,11 @@ public:
     ExportList  *pFilterList;
     ExportList  *pPairedList;
 
-    ByteString sPForm;
+    rtl::OString sPForm;
 
     void Dump();
 
-    ResData( const ByteString &rPF, const ByteString &rGId )
+    ResData(const rtl::OString &rPF, const rtl::OString &rGId)
             :
             nWidth( 0 ),
             nChildIndex( 0 ),
@@ -197,9 +197,9 @@ public:
     {
         sGId = comphelper::string::remove(sGId, '\r');
         sPForm = comphelper::string::remove(sPForm, '\r');
-    };
+    }
 
-    ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
+    ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
             :
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
@@ -227,7 +227,7 @@ public:
     {
         sGId = comphelper::string::remove(sGId, '\r');
         sPForm = comphelper::string::remove(sPForm, '\r');
-    };
+    }
 };
 
 
@@ -435,21 +435,21 @@ class MergeData
 {
 friend class MergeDataFile;
 private:
-    ByteString sTyp;
-    ByteString sGID;
-    ByteString sLID;
-    ByteString sFilename;
+    rtl::OString sTyp;
+    rtl::OString sGID;
+    rtl::OString sLID;
+    rtl::OString sFilename;
     PFormEntrysHashMap aMap;
 public:
-    MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID , const ByteString &rFilename )
+    MergeData( const rtl::OString &rTyp, const rtl::OString &rGID, const rtl::OString &rLID , const rtl::OString &rFilename )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
     PFormEntrys* GetPFormEntries();
 
     void Insert( PFormEntrys* pfEntrys );
-    PFormEntrys* GetPFObject( const ByteString& rPFO );
+    PFormEntrys* GetPFObject( const rtl::OString &rPFO );
 
-    ByteString Dump();
+    rtl::OString Dump();
     sal_Bool operator==( ResData *pData );
 };
 

@@ -118,7 +118,7 @@ public:
     ~GSIBlock();
     void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( GSILine* pLine, const ByteString aSourceLang);
+    void InsertLine( GSILine* pLine, const rtl::OString &rSourceLang);
     void SetReferenceLine( GSILine* pLine );
     sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 

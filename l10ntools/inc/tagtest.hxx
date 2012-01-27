@@ -79,18 +79,18 @@ explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr, ParserMessageL
     /**
         Is the property to be ignored or does it have the default value anyways
     **/
-    sal_Bool IsPropertyRelevant( const ByteString &aName, const String &aValue ) const;
-    sal_Bool IsPropertyValueValid( const ByteString &aName, const String &aValue ) const;
+    sal_Bool IsPropertyRelevant( const rtl::OString &rName, const String &rValue ) const;
+    sal_Bool IsPropertyValueValid( const rtl::OString &rName, const String &rValue ) const;
     /**
         Does the property contain the same value for all languages
         e.g.: the href in a link tag
     **/
-    sal_Bool IsPropertyInvariant( const ByteString &aName, const String &aValue ) const;
+    sal_Bool IsPropertyInvariant( const rtl::OString &rName, const String &rValue ) const;
     /**
         a subset of IsPropertyInvariant but containing only those that are fixable
         we dont wat to fix e.g.: ahelp :: visibility
     **/
-    sal_Bool IsPropertyFixable( const ByteString &aName ) const;
+    sal_Bool IsPropertyFixable( const rtl::OString &rName ) const;
     sal_Bool MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, ParserMessageList &rErrorList, sal_Bool bFixTags = sal_False ) const;
 
     sal_Bool IsDone() const { return bDone; }
@@ -108,8 +108,8 @@ private:
 
 public:
     ~ParserMessageList() { clear(); }
-    void AddError( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
-    void AddWarning( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
+    void AddError( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
+    void AddWarning( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
 
     sal_Bool HasErrors();
     bool empty() const { return maList.empty(); }
@@ -212,8 +212,8 @@ private:
     TokenList&   operator =( const TokenList& rList );
 
 public:
-    TokenList() {};
-    ~TokenList(){ clear(); };
+    TokenList() {}
+    ~TokenList(){ clear(); }
 
     size_t size() const { return maList.size(); }
     void clear()
@@ -244,40 +244,40 @@ public:
 class ParserMessage
 {
     sal_uInt16 nErrorNr;
-    ByteString aErrorText;
+    rtl::OString aErrorText;
     sal_uInt16 nTagBegin,nTagLength;
 
 protected:
-    ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+    ParserMessage( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 public:
 
     sal_uInt16 GetErrorNr() { return nErrorNr; }
-    ByteString GetErrorText() { return aErrorText; }
+    rtl::OString GetErrorText() { return aErrorText; }
 
     sal_uInt16 GetTagBegin() { return nTagBegin; }
     sal_uInt16 GetTagLength() { return nTagLength; }
 
     virtual ~ParserMessage() {}
     virtual sal_Bool IsError() =0;
-    virtual ByteString Prefix() =0;
+    virtual rtl::OString Prefix() =0;
 };
 
 class ParserError : public ParserMessage
 {
 public:
-    ParserError( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+    ParserError( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 
-    virtual sal_Bool IsError() {return sal_True;};
-    virtual ByteString Prefix() {return "Error:"; };
+    virtual sal_Bool IsError() {return sal_True;}
+    virtual rtl::OString Prefix() {return rtl::OString(RTL_CONSTASCII_STRINGPARAM("Error:")); }
 };
 
 class ParserWarning : public ParserMessage
 {
 public:
-    ParserWarning( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+    ParserWarning( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 
-    virtual sal_Bool IsError() {return sal_False;};
-    virtual ByteString Prefix() {return "Warning:"; };
+    virtual sal_Bool IsError() {return sal_False;}
+    virtual rtl::OString Prefix() {return rtl::OString(RTL_CONSTASCII_STRINGPARAM("Warning:")); }
 };
 
 class SimpleParser
@@ -304,7 +304,7 @@ class TokenParser
 {
     sal_Bool match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken );
     sal_Bool match( const TokenInfo &aCurrentToken, const TokenInfo &aExpectedToken );
-    void ParseError( sal_uInt16 nErrNr, ByteString aErrMsg, const TokenInfo &rTag );
+    void ParseError( sal_uInt16 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag );
     void Paragraph();
     void PfCase();
     void PfCaseBegin();
