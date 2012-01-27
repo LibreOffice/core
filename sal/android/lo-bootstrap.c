@@ -47,7 +47,7 @@
 #include <android/log.h>
 
 #include "uthash.h"
-
+#include <osl/thread.h>
 #include "osl/detail/android-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
@@ -1482,16 +1482,25 @@ __attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {
-    JNIEnv *env;
+    jint nRet;
+    JNIEnv *pEnv = NULL;
     struct engine engine;
     Dl_info lo_main_info;
+    JavaVMAttachArgs aArgs = {
+        JNI_VERSION_1_2,
+        "LibreOfficeThread",
+        NULL
+    };
+
+    fprintf (stderr, "android_main in thread: %d\n", (int)pthread_self());
 
     if (sleep_time != 0) {
         LOGI("android_main: Sleeping for %d seconds, start ndk-gdb NOW if that is your intention", sleep_time);
         sleep(sleep_time);
     }
 
-    (*(*state->activity->vm)->AttachCurrentThread)(state->activity->vm, &env, 0);
+    nRet = (*(*state->activity->vm)->AttachCurrentThreadAsDaemon)(state->activity->vm, &pEnv, &aArgs);
+    fprintf (stderr, "attach thread returned %d %p\n", nRet, pEnv);
 
     app = state;
 
@@ -1508,8 +1517,7 @@ android_main(struct android_app* state)
     extract_files(UNPACK_TREE);
 
     lo_main(lo_main_argc, lo_main_argv);
-
-    exit(0);
+    fprintf (stderr, "exit android_main\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
