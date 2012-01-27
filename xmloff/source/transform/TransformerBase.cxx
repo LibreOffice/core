@@ -279,7 +279,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
                 nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
 
             const OUString& rRepName = m_pReplaceNamespaceMap->GetNameByKey( nKey );
-            if( rRepName.getLength() )
+            if( !rRepName.isEmpty() )
             {
                 if( !pMutableAttrList )
                 {
@@ -473,7 +473,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
             aAny = m_xPropSet->getPropertyValue(sPropName);
             aAny >>= sName;
         }
-        if( sName.getLength() )
+        if( !sName.isEmpty() )
         {
             m_aExtPathPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("../" ) );
 
@@ -481,7 +481,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
             // additional '../'. If the rel path contains an ':', then it is
             // an absolute URI (or invalid URI, because zip files don't
             // permit ':'), and it will be ignored.
-            if( sRelPath.getLength() )
+            if( !sRelPath.isEmpty() )
             {
                 sal_Int32 nColPos = sRelPath.indexOf( ':' );
                 OSL_ENSURE( -1 == nColPos,
@@ -1293,7 +1293,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( ::rtl::OUString& rURI,
                                         sal_Bool bSupportPackage ) const
 {
     sal_Bool bRet = sal_False;
-    if( m_aExtPathPrefix.getLength() && rURI.getLength() )
+    if( !m_aExtPathPrefix.isEmpty() && !rURI.isEmpty() )
     {
         sal_Bool bRel = sal_False;
         switch( rURI[0] )
@@ -1363,7 +1363,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
                                         sal_Bool bSupportPackage ) const
 {
     sal_Bool bRet = sal_False;
-    if( rURI.getLength() )
+    if( !rURI.isEmpty() )
     {
         sal_Bool bPackage = sal_False;
         switch( rURI[0] )
@@ -1441,7 +1441,7 @@ sal_Bool XMLTransformerBase::RenameAttributeValue(
 // static
 bool XMLTransformerBase::ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime )
 {
-    if( rDateTime.getLength() > 0 &&
+    if( !rDateTime.isEmpty() &&
         rDateTime.indexOf( sal_Unicode('.')) != -1 )
     {
         rDateTime = rDateTime.replace( sal_Unicode('.'), sal_Unicode(','));

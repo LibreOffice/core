@@ -135,7 +135,7 @@ void XMLChartOOoTransformerContext::StartElement(
         }
     }
 
-    if( nClassName != -1 && aAddInName.getLength() > 0 )
+    if( nClassName != -1 && !aAddInName.isEmpty() )
     {
         GetTransformer().AddNamespacePrefix( aAddInName, XML_NAMESPACE_OOO );
         pMutableAttrList->SetValueByIndex( nClassName, aAddInName );

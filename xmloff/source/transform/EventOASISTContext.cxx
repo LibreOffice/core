@@ -386,10 +386,10 @@ void XMLEventOASISTransformerContext::StartElement(
                         aLocation= rDoc;
                         aAttrValue = rAttrValue.copy( rDoc.getLength()+1 );
                     }
-                    if( aAttrValue.getLength() )
+                    if( !aAttrValue.isEmpty() )
                         pMutableAttrList->SetValueByIndex( i,
                     aAttrValue );
-                    if( aLocation.getLength() )
+                    if( !aLocation.isEmpty() )
                     {
                         OUString aAttrQName( GetTransformer().GetNamespaceMap().
                         GetQNameByKey( XML_NAMESPACE_SCRIPT,

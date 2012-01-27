@@ -129,7 +129,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             }
         }
 
-        if( aClass.getLength() )
+        if( !aClass.isEmpty() )
         {
             if( !pMutableAttrList )
             {

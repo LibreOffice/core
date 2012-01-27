@@ -74,7 +74,7 @@ void XMLRenameElemTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );
-    if( m_aAttrQName.getLength() )
+    if( !m_aAttrQName.isEmpty() )
     {
         XMLMutableAttributeList *pMutableAttrList =
             new XMLMutableAttributeList( xAttrList );

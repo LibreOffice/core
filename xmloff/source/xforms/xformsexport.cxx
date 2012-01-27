@@ -254,10 +254,10 @@ void exportXFormsInstance( SvXMLExport& rExport,
             rAny >>= xDoc;
     }
 
-    if( sId.getLength() > 0 )
+    if( !sId.isEmpty() )
         rExport.AddAttribute( XML_NAMESPACE_NONE, XML_ID, sId );
 
-    if( sURL.getLength() > 0 )
+    if( !sURL.isEmpty() )
         rExport.AddAttribute( XML_NAMESPACE_NONE, XML_SRC, sURL );
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_XFORMS, XML_INSTANCE,
@@ -295,7 +295,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     {
         OUString sName;
         xBinding->getPropertyValue( OUSTRING("BindingID") ) >>= sName;
-        if( sName.getLength() == 0 )
+        if( sName.isEmpty() )
         {
             // if we don't have a name yet, generate one on the fly
             OUStringBuffer aBuffer;
@@ -343,7 +343,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
         }
 
         // now that we have the proper type name, write out the attribute
-        if( sTypeName.getLength() > 0 )
+        if( !sTypeName.isEmpty() )
         {
             rExport.AddAttribute( XML_NAMESPACE_NONE, XML_TYPE,
                                   sTypeName );
@@ -471,7 +471,7 @@ void lcl_exportDataTypeFacets( SvXMLExport& rExport,
             OUString sValue = (*pCurrent->aConverter)(
                 rPropertySet->getPropertyValue( sName ) );
 
-            if( sValue.getLength() > 0 )
+            if( !sValue.isEmpty() )
             {
                 rExport.AddAttribute( XML_NAMESPACE_NONE, XML_VALUE, sValue );
                 SvXMLElementExport aFacet(
@@ -632,7 +632,7 @@ void lcl_export( const Reference<XPropertySet>& rPropertySet,
                        OUString::createFromAscii( pCurrent->pPropertyName ) );
         OUString sValue = (*pCurrent->aConverter)( aAny );
 
-        if( sValue.getLength() > 0 )
+        if( !sValue.isEmpty() )
             rExport.AddAttribute(
                 pCurrent->nNamespace,
                 static_cast<XMLTokenEnum>( pCurrent->nToken ),

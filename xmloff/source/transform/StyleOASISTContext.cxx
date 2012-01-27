@@ -319,7 +319,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     eLineThrough = GetTransformer().GetToken( rAttrValue );
                     break;
                 case XML_OPTACTION_LINETHROUGH_TEXT:
-                    if( rAttrValue.getLength() )
+                    if( !rAttrValue.isEmpty() )
                         cLineThroughChar = rAttrValue[0];
                     break;
                 case XML_OPTACTION_INTERPOLATION:
@@ -513,7 +513,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         OUString aToken;
                         while( aTokenEnum.getNextToken( aToken ) )
                         {
-                            if ( aNewAttrValue.getLength() > 0 )
+                            if ( !aNewAttrValue.isEmpty() )
                             {
                                 aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                             }
@@ -606,13 +606,13 @@ void XMLPropertiesTContext_Impl::StartElement(
         }
 
         // #i25616#
-        if(aOpacityValueRemember.getLength() || aImageOpacityValueRemember.getLength())
+        if(!aOpacityValueRemember.isEmpty() || !aImageOpacityValueRemember.isEmpty())
         {
             pAttrList->AddAttribute(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_DRAW,
                         GetXMLToken( XML_TRANSPARENCY ) ),
-                    aImageOpacityValueRemember.getLength()
+                    !aImageOpacityValueRemember.isEmpty()
                     ? aImageOpacityValueRemember : aOpacityValueRemember );
         }
     }

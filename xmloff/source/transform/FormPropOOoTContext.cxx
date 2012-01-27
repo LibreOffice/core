@@ -264,7 +264,7 @@ void XMLFormPropOOoTransformerContext::StartElement(
         }
     }
 
-    if( aValueType.getLength() )
+    if( !aValueType.isEmpty() )
     {
         if( IsXMLToken( aValueType, XML_STRING ) )
             m_eValueToken = XML_STRING_VALUE;

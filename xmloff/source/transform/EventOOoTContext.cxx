@@ -216,7 +216,7 @@ void XMLEventOOoTransformerContext::StartElement(
         }
     }
 
-    if( nMacroName != -1 && aLocation.getLength() > 0 )
+    if( nMacroName != -1 && !aLocation.isEmpty() )
     {
         if( !IsXMLToken( aLocation, XML_APPLICATION ) )
             aLocation = GetXMLToken( XML_DOCUMENT );

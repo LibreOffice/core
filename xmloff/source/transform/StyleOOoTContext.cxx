@@ -926,7 +926,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 OUString aToken;
                 while( aTokenEnum.getNextToken( aToken ) )
                 {
-                    if ( aStyleMirrorAttrValue.getLength() > 0 )
+                    if ( !aStyleMirrorAttrValue.isEmpty() )
                     {
                         aStyleMirrorAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                     }
@@ -999,7 +999,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         aDrawMirrorAttrValue);
     }
 
-    if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
+    if( bMoveProtect || bSizeProtect || !aProtectAttrValue.isEmpty() )
     {
         if( (bMoveProtect ||bSizeProtect) && IsXMLToken( aProtectAttrValue, XML_NONE ) )
             aProtectAttrValue = OUString();
@@ -1007,7 +1007,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         const OUString& rPosition = GetXMLToken( XML_POSITION );
         if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rPosition ) )
         {
-            if( aProtectAttrValue.getLength() )
+            if( !aProtectAttrValue.isEmpty() )
                 aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
             aProtectAttrValue += rPosition;
         }
@@ -1015,7 +1015,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         const OUString& rSize = GetXMLToken( XML_SIZE );
         if( bSizeProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
         {
-            if( aProtectAttrValue.getLength() )
+            if( !aProtectAttrValue.isEmpty() )
                 aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
             aProtectAttrValue += rSize;
         }

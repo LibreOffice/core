@@ -171,7 +171,7 @@ void lcl_fillNamespaceContainer(
         const OUString& sNamespace = aMap.GetNameByKey( nKeyIter );
 
         // as a hack, we will ignore our own 'default' namespaces
-        DBG_ASSERT( sPrefix.getLength() > 0, "no prefix?" );
+        DBG_ASSERT( !sPrefix.isEmpty(), "no prefix?" );
         if( sPrefix.getStr()[0] != sal_Unicode( '_' )  &&
             nKeyIter >= XML_OLD_NAMESPACE_META_IDX )
         {

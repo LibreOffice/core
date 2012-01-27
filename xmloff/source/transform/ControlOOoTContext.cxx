@@ -68,7 +68,7 @@ XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
 {
     XMLTransformerContext *pContext = 0;
 
-    if( !m_aElemQName.getLength() )
+    if( m_aElemQName.isEmpty() )
     {
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName,
@@ -99,7 +99,7 @@ void XMLControlOOoTransformerContext::EndElement()
 void XMLControlOOoTransformerContext::Characters( const OUString& rChars )
 {
     // ignore
-    if( m_aElemQName.getLength() )
+    if( !m_aElemQName.isEmpty() )
         XMLTransformerContext::Characters( rChars );
 }
 

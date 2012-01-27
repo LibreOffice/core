@@ -63,14 +63,14 @@ sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
             IsXMLToken( aLocalName, XML_HREF ) )
         {
             OUString sHRef( rAttrList->getValueByIndex( i ) );
-            if (sHRef.getLength() == 0)
+            if (sHRef.isEmpty())
             {
                 // When the href is empty then the object is not linked but
                 // a placeholder.
                 return sal_False;
             }
             GetTransformer().ConvertURIToOOo( sHRef, sal_True );
-            return !(sHRef.getLength() && '#'==sHRef[0]);
+            return !(!sHRef.isEmpty() && '#'==sHRef[0]);
         }
     }
 
@@ -144,7 +144,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ETACTION_COPY:
-                if( !m_aElemQName.getLength() &&
+                if( m_aElemQName.isEmpty() &&
                     !IsLinkedEmbeddedObject( rLocalName, rAttrList ) )
                 {
                     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
@@ -192,7 +192,7 @@ void XMLFrameOASISTransformerContext::EndElement()
 void XMLFrameOASISTransformerContext::Characters( const OUString& rChars )
 {
     // ignore
-    if( m_aElemQName.getLength() && !m_bIgnoreElement )
+    if( !m_aElemQName.isEmpty() && !m_bIgnoreElement )
         XMLTransformerContext::Characters( rChars );
 }
 

@@ -117,7 +117,7 @@ void SchemaRestrictionContext::CreateDataType()
     if( mxDataType.is() )
         return;
 
-    DBG_ASSERT( msBaseName.getLength() > 0, "no base name?" );
+    DBG_ASSERT( !msBaseName.isEmpty(), "no base name?" );
     DBG_ASSERT( mxRepository.is(), "no repository?" );
 
     try
@@ -364,7 +364,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     // finally, set the property
     CreateDataType();
     if( mxDataType.is()
-        && sPropertyName.getLength() > 0
+        && !sPropertyName.isEmpty()
         && pConvert != NULL
         && mxDataType->getPropertySetInfo()->hasPropertyByName(sPropertyName) )
     {

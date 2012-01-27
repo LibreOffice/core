@@ -1287,7 +1287,7 @@ void XMLBodyTransformerContext_Impl::StartElement(
         new XMLMutableAttributeList( rAttrList );
     Reference< XAttributeList > xAttrList = pMutableAttrList;
     OUString aClass( GetTransformer().GetClass() );
-    if( !aClass.getLength() )
+    if( aClass.isEmpty() )
     {
         aClass = GetXMLToken( XML_TEXT );
     }
@@ -1383,7 +1383,7 @@ void XMLTabStopOOoTContext_Impl::StartElement(
                                                               aNewAttrQName );
                 }
                 if( IsXMLToken( aLocalName, XML_LEADER_CHAR ) &&
-                     rAttrValue.getLength() > 0 &&
+                     !rAttrValue.isEmpty() &&
                     rAttrValue[0] != ' ' )
                 {
                     OUString aNewAttrQName(
@@ -1980,7 +1980,7 @@ void SAL_CALL OOo2OasisTransformer::Initialize(
     OSL_ENSURE( !GetDocHandler().is(), "duplication initialization" );
 
     Reference< XDocumentHandler > xDocHandler;
-    if( m_aSubServiceName.getLength() )
+    if( !m_aSubServiceName.isEmpty() )
     {
         Reference< XMultiServiceFactory > xFactory =
             comphelper::getProcessServiceFactory();

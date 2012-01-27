@@ -130,7 +130,7 @@ void XMLChartOASISTransformerContext::StartElement(
         }
     }
 
-    if( aAddInName.getLength() > 0 )
+    if( !aAddInName.isEmpty() )
     {
         OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_CHART,
