@@ -169,7 +169,7 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aDescription;
 }
 
-sal_Bool SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
+sal_Bool SvMetaName::SetName( const rtl::OString& rName, SvIdlDataBase * )
 {
     aName.setString(rName);
     return sal_True;
@@ -237,16 +237,16 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
     rOutStm << "<DESCRIPTION>" << endl;
 
-    ByteString aDesc( GetDescription().getString() );
-    sal_uInt16 nPos = aDesc.Search( '\n' );
-    while ( nPos != STRING_NOTFOUND )
+    rtl::OString aDesc( GetDescription().getString() );
+    sal_Int32 nPos = aDesc.indexOf('\n');
+    while ( nPos != -1 )
     {
-        rOutStm << aDesc.Copy( 0, nPos ).GetBuffer() << endl;
-        aDesc.Erase(0,nPos+1);
-        nPos = aDesc.Search( '\n' );
+        rOutStm << aDesc.copy( 0, nPos ).getStr() << endl;
+        aDesc = aDesc.copy(nPos+1);
+        nPos = aDesc.indexOf('\n');
     }
 
-    rOutStm << aDesc.GetBuffer() << endl << "</DESCRIPTION>" << endl;
+    rOutStm << aDesc.getStr() << endl << "</DESCRIPTION>" << endl;
 }
 
 void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,

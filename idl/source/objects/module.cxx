@@ -109,7 +109,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm.Seek( nPos );
 }
 
-sal_Bool SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )
+sal_Bool SvMetaModule::SetName( const rtl::OString& rName, SvIdlDataBase * pBase )
 {
     if( pBase )
     {
@@ -231,7 +231,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
         {
-            DirEntry aFullName( String::CreateFromAscii( pTok->GetString().GetBuffer() ) );
+            DirEntry aFullName( String::CreateFromAscii( pTok->GetString().getStr() ) );
             rBase.StartNewFile( aFullName.GetFull() );
             if( aFullName.Find( rBase.GetPath() ) )
             {
@@ -334,14 +334,14 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aBeginName.MakeId( String::CreateFromAscii( pTok->GetString().GetBuffer() ) );
+             bOk = aBeginName.MakeId( String::CreateFromAscii( pTok->GetString().getStr() ) );
     }
     rInStm.ReadDelemiter();
     if( bOk )
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aEndName.MakeId( String::CreateFromAscii( pTok->GetString().GetBuffer() ) );
+             bOk = aEndName.MakeId( String::CreateFromAscii( pTok->GetString().getStr() ) );
     }
     rInStm.ReadDelemiter();
     if( bOk )
@@ -366,7 +366,7 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
 void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                                sal_uInt16 nTab )
 {
-    rOutStm << SvHash_module()->GetName().GetBuffer() << endl
+    rOutStm << SvHash_module()->GetName().getStr() << endl
             << '\"';
     rOutStm.WriteUniOrByteString( aBeginName.GetHexName(), rOutStm.GetStreamCharSet() );
     rOutStm << '\"' << endl << '\"';

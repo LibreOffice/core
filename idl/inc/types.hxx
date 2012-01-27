@@ -115,7 +115,7 @@ public:
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
     sal_uLong           MakeSfx( rtl::OStringBuffer& rAtrrArray );
-    virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
+    virtual void        Insert( SvSlotElementList&, const rtl::OString& rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
@@ -123,7 +123,7 @@ public:
                                   Table * pIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
     void                FillIDTable(Table *pIDTable);
-    ByteString              Compare( SvMetaAttribute *pAttr );
+    rtl::OString        Compare( SvMetaAttribute *pAttr );
 };
 SV_IMPL_REF(SvMetaAttribute)
 SV_IMPL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
@@ -150,7 +150,7 @@ class SvMetaType : public SvMetaExtern
     sal_Bool                        bIsShell;
     char                        cParserChar;
 
-    void    WriteSfxItem( const ByteString & rItemName, SvIdlDataBase & rBase,
+    void    WriteSfxItem( const rtl::OString& rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
 protected:
     sal_Bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
@@ -208,7 +208,7 @@ public:
     void                SetCall1( int e);
     int                 GetCall1() const;
 
-    void                SetBasicName(const ByteString& rName)
+    void                SetBasicName(const rtl::OString& rName)
                         { aBasicName.setString(rName); }
 
     const rtl::OString& GetBasicName() const;
@@ -219,10 +219,10 @@ public:
     const rtl::OString& GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
-    virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
+    virtual sal_Bool    SetName( const rtl::OString& rName, SvIdlDataBase * = NULL );
 
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual sal_Bool    ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
@@ -240,7 +240,7 @@ public:
     void                WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
     rtl::OString GetParserString() const;
     void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                        const ByteString & rChief );
+                                        const rtl::OString& rChief );
 };
 SV_IMPL_REF(SvMetaType)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
@@ -258,10 +258,10 @@ SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeString,SvMetaTypeString *)
 
 class SvMetaEnumValue : public SvMetaName
 {
-    ByteString      aEnumValue;
+    rtl::OString aEnumValue;
 public:
-            SV_DECL_META_FACTORY1( SvMetaEnumValue, SvMetaName, 20 )
-            SvMetaEnumValue();
+    SV_DECL_META_FACTORY1( SvMetaEnumValue, SvMetaName, 20 )
+    SvMetaEnumValue();
 
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
@@ -275,7 +275,7 @@ SV_DECL_IMPL_PERSIST_LIST(SvMetaEnumValue,SvMetaEnumValue *)
 class SvMetaTypeEnum : public SvMetaType
 {
     SvMetaEnumValueMemberList   aEnumValueList;
-    ByteString                      aPrefix;
+    rtl::OString aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
@@ -288,7 +288,7 @@ public:
 
     sal_uInt16              GetMaxValue() const;
     sal_uLong               Count() const { return aEnumValueList.Count(); }
-    const ByteString &      GetPrefix() const { return aPrefix; }
+    const rtl::OString&     GetPrefix() const { return aPrefix; }
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList.GetObject( n ); }
 

@@ -275,10 +275,10 @@ void SvMetaClass::WriteContextSvIdl
     {
         SvClassElement * pEle = aClassList.GetObject( n );
         WriteTab( rOutStm, nTab );
-        rOutStm << SvHash_import()->GetName().GetBuffer() << ' '
+        rOutStm << SvHash_import()->GetName().getStr() << ' '
                 << pEle->GetPrefix().getStr();
         if( pEle->GetAutomation() )
-            rOutStm << " [ " << SvHash_Automation()->GetName().GetBuffer()
+            rOutStm << " [ " << SvHash_Automation()->GetName().getStr()
                     << " ]";
         if( !pEle->GetPrefix().isEmpty() )
             rOutStm << ' ' << pEle->GetPrefix().getStr();

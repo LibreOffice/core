@@ -45,13 +45,13 @@ class BigInt;
 class SvToken
 {
 friend class SvTokenStream;
-    sal_uLong                   nLine, nColumn;
+    sal_uLong               nLine, nColumn;
     SVTOKEN_ENUM            nType;
-    ByteString                  aString;
+    rtl::OString            aString;
     union
     {
-        sal_uLong               nLong;
-        sal_Bool                bBool;
+        sal_uLong           nLong;
+        sal_Bool            bBool;
         char                cChar;
         SvStringHashEntry * pHash;
     };
@@ -61,7 +61,7 @@ public:
             SvToken( sal_uLong n );
             SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
             SvToken( char c );
-            SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr );
+            SvToken( SVTOKEN_ENUM nTypeP, const rtl::OString& rStr );
             SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
@@ -91,7 +91,7 @@ public:
     sal_Bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
     sal_Bool        IsEof() const       { return nType == SVTOKEN_EOF; }
 
-    const ByteString & GetString() const
+    const rtl::OString& GetString() const
                 {
                     return IsIdentifierHash()
                         ? pHash->GetName()
@@ -122,7 +122,7 @@ inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b )
 inline SvToken::SvToken( char c )
     : nType( SVTOKEN_CHAR ), cChar( c ) {}
 
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr )
+inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const rtl::OString& rStr )
     : nType( nTypeP ), aString( rStr ) {}
 
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )

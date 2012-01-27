@@ -638,7 +638,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aSlotType.Is() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << SvHash_SlotType()->GetName().GetBuffer() << '(';
+        rOutStm << SvHash_SlotType()->GetName().getStr() << '(';
         aSlotType->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
         rOutStm << ");" << endl;
     }
@@ -702,105 +702,107 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         rOutStm << ';' << endl;
     }
 
-    ByteString aDel( ", " );
-    ByteString aOut;
+    rtl::OString aDel(RTL_CONSTASCII_STRINGPARAM(", "));
+    rtl::OStringBuffer aOut;
     if( aVolatile )
-        aOut += aVolatile.GetSvIdlString( SvHash_Volatile() );
+        aOut.append(aVolatile.GetSvIdlString( SvHash_Volatile() ));
     else if( !aCachable )
         // because of Default == TRUE, only when no other is set
-        aOut += aCachable.GetSvIdlString( SvHash_Cachable() );
+        aOut.append(aCachable.GetSvIdlString( SvHash_Cachable() ));
     else
-        aDel.Erase();
+        aDel = rtl::OString();
 
     if( aToggle )
     {
-        ( aOut += aDel ) += aToggle.GetSvIdlString( SvHash_Toggle() );
-        aDel = ", ";
+        aOut.append(aDel).append(aToggle.GetSvIdlString( SvHash_Toggle() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aAutoUpdate )
     {
-        (aOut += aDel ) += aAutoUpdate.GetSvIdlString( SvHash_AutoUpdate() );
-        aDel = ", ";
+        aOut.append(aDel).append(aAutoUpdate.GetSvIdlString( SvHash_AutoUpdate() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
 
-    ByteString aDel1( ", " );
+    rtl::OString aDel1(RTL_CONSTASCII_STRINGPARAM(", "));
     if( aAsynchron )
-        ( aOut += aDel ) += aAsynchron.GetSvIdlString( SvHash_Asynchron() );
+        aOut.append(aDel).append(aAsynchron.GetSvIdlString( SvHash_Asynchron() ));
     else if( !aSynchron )
+    {
         // because of Default == TRUE, only when no other is set
-        ( aOut += aDel ) += aSynchron.GetSvIdlString( SvHash_Synchron() );
+        aOut.append(aDel).append(aSynchron.GetSvIdlString( SvHash_Synchron() ));
+    }
     else
         aDel1 = aDel;
 
-    aDel = ", ";
+    aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     if( aRecordManual )
-        ( aOut += aDel1 ) += aRecordManual.GetSvIdlString( SvHash_RecordManual() );
+        aOut.append(aDel1).append(aRecordManual.GetSvIdlString( SvHash_RecordManual() ));
     else if( aNoRecord )
-        ( aOut += aDel1 ) += aNoRecord.GetSvIdlString( SvHash_NoRecord() );
+        aOut.append(aDel1).append(aNoRecord.GetSvIdlString( SvHash_NoRecord() ));
     else if( !aRecordPerSet )
         // because of Default == TRUE, only when no other is set
-        ( aOut += aDel1 ) += aRecordPerSet.GetSvIdlString( SvHash_RecordPerSet() );
+        aOut.append(aDel1).append(aRecordPerSet.GetSvIdlString( SvHash_RecordPerSet() ));
     else if( aRecordPerItem )
-        ( aOut += aDel1 ) += aRecordPerItem.GetSvIdlString( SvHash_RecordPerItem() );
+        aOut.append(aDel1).append(aRecordPerItem.GetSvIdlString( SvHash_RecordPerItem() ));
     else
         aDel = aDel1;
 
     if( aRecordAbsolute )
     {
-        ( aOut += aDel ) += aRecordAbsolute.GetSvIdlString( SvHash_RecordAbsolute() );
-        aDel = ", ";
+        aOut.append(aDel).append(aRecordAbsolute.GetSvIdlString( SvHash_RecordAbsolute() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aHasDialog )
     {
-        ( aOut += aDel ) += aHasDialog.GetSvIdlString( SvHash_HasDialog() );
-        aDel = ", ";
+        aOut.append(aDel).append(aHasDialog.GetSvIdlString( SvHash_HasDialog() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aMenuConfig )
     {
-        ( aOut += aDel ) += aMenuConfig.GetSvIdlString( SvHash_MenuConfig() );
-        aDel = ", ";
+        aOut.append(aDel).append(aMenuConfig.GetSvIdlString( SvHash_MenuConfig() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aToolBoxConfig )
     {
-        ( aOut += aDel ) += aToolBoxConfig.GetSvIdlString( SvHash_ToolBoxConfig() );
-        aDel = ", ";
+        aOut.append(aDel).append(aToolBoxConfig.GetSvIdlString( SvHash_ToolBoxConfig() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aStatusBarConfig )
     {
-        ( aOut += aDel ) += aStatusBarConfig.GetSvIdlString( SvHash_StatusBarConfig() );
-        aDel = ", ";
+        aOut.append(aDel).append(aStatusBarConfig.GetSvIdlString( SvHash_StatusBarConfig() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aAccelConfig )
     {
-        ( aOut += aDel ) += aAccelConfig.GetSvIdlString( SvHash_AccelConfig() );
-        aDel = ", ";
+        aOut.append(aDel).append(aAccelConfig.GetSvIdlString( SvHash_AccelConfig() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aFastCall )
     {
-        ( aOut += aDel ) += aFastCall.GetSvIdlString( SvHash_FastCall() );
-        aDel = ", ";
+        aOut.append(aDel).append(aFastCall.GetSvIdlString( SvHash_FastCall() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aContainer )
     {
-        ( aOut += aDel ) += aContainer.GetSvIdlString( SvHash_Container() );
-        aDel = ", ";
+        aOut.append(aDel).append(aContainer.GetSvIdlString( SvHash_Container() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
     if( aImageRotation )
     {
-        ( aOut += aDel ) += aImageRotation.GetSvIdlString( SvHash_ImageRotation() );
-        aDel = ", ";
+        aOut.append(aDel).append(aImageRotation.GetSvIdlString( SvHash_ImageRotation() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
 
     if( aImageReflection )
     {
-        ( aOut += aDel ) += aImageReflection.GetSvIdlString( SvHash_ImageReflection() );
-        aDel = ", ";
+        aOut.append(aDel).append(aImageReflection.GetSvIdlString( SvHash_ImageReflection() ));
+        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
     }
 
-    if( aOut.Len() )
+    if( aOut.getLength() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << aOut.GetBuffer() << endl;
+        rOutStm << aOut.getStr() << endl;
     }
 }
 
@@ -929,7 +931,7 @@ void SvMetaSlot::Write( SvIdlDataBase & rBase,
 }
 
 
-void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
+void SvMetaSlot::Insert( SvSlotElementList& rList, const rtl::OString& rPrefix,
                         SvIdlDataBase& rBase)
 {
     // get insert position through binary search in slotlist
@@ -1008,14 +1010,14 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         {
             // create SlotId
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
-            ByteString aValName = enumValue->GetName().getString();
+            rtl::OString aValName = enumValue->GetName().getString();
             rtl::OStringBuffer aBuf;
             if( !GetPseudoPrefix().isEmpty() )
                 aBuf.append(GetPseudoPrefix());
             else
                 aBuf.append(GetSlotId().getString());
             aBuf.append('_');
-            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+            aBuf.append(aValName.copy(pEnum->GetPrefix().getLength()));
 
             rtl::OString aSId = aBuf.makeStringAndClear();
 
@@ -1081,7 +1083,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 }
 
 
-static ByteString MakeSlotName( SvStringHashEntry * pEntry )
+static rtl::OString MakeSlotName( SvStringHashEntry * pEntry )
 {
     rtl::OStringBuffer aName(RTL_CONSTASCII_STRINGPARAM("SFX_SLOT_"));
     aName.append(pEntry->GetName());
@@ -1161,9 +1163,9 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
     rOutStm << "// Slot Nr. "
         << rtl::OString::valueOf(static_cast<sal_Int32>(nListPos)).getStr()
         << " : ";
-    ByteString aSlotIdValue(rtl::OString::valueOf(static_cast<sal_Int32>(
+    rtl::OString aSlotIdValue(rtl::OString::valueOf(static_cast<sal_Int32>(
         GetSlotId().GetValue())));
-    rOutStm << aSlotIdValue.GetBuffer() << endl;
+    rOutStm << aSlotIdValue.getStr() << endl;
     WriteTab( rOutStm, 1 );
     if( bIsEnumSlot )
         rOutStm << "SFX_NEW_SLOT_ENUM( ";
@@ -1284,49 +1286,49 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
 
     // write flags
     if( GetHasCoreId() )
-        rOutStm << MakeSlotName( SvHash_HasCoreId() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_HasCoreId() ).getStr() << '|';
     if( GetCachable() )
-        rOutStm << MakeSlotName( SvHash_Cachable() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Cachable() ).getStr() << '|';
     if( GetVolatile() )
-        rOutStm << MakeSlotName( SvHash_Volatile() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Volatile() ).getStr() << '|';
     if( GetToggle() )
-        rOutStm << MakeSlotName( SvHash_Toggle() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Toggle() ).getStr() << '|';
     if( GetAutoUpdate() )
-        rOutStm << MakeSlotName( SvHash_AutoUpdate() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_AutoUpdate() ).getStr() << '|';
     if( GetSynchron() )
-        rOutStm << MakeSlotName( SvHash_Synchron() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Synchron() ).getStr() << '|';
     if( GetAsynchron() )
-        rOutStm << MakeSlotName( SvHash_Asynchron() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Asynchron() ).getStr() << '|';
     if( GetRecordPerItem() )
-        rOutStm << MakeSlotName( SvHash_RecordPerItem() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_RecordPerItem() ).getStr() << '|';
     if( GetRecordPerSet() )
-        rOutStm << MakeSlotName( SvHash_RecordPerSet() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_RecordPerSet() ).getStr() << '|';
     if( GetRecordManual() )
-        rOutStm << MakeSlotName( SvHash_RecordManual() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_RecordManual() ).getStr() << '|';
     if( GetNoRecord() )
-        rOutStm << MakeSlotName( SvHash_NoRecord() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_NoRecord() ).getStr() << '|';
     if( GetRecordAbsolute() )
-        rOutStm << MakeSlotName( SvHash_RecordAbsolute() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_RecordAbsolute() ).getStr() << '|';
     if( GetHasDialog() )
-        rOutStm << MakeSlotName( SvHash_HasDialog() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_HasDialog() ).getStr() << '|';
     if( GetMenuConfig() )
-        rOutStm << MakeSlotName( SvHash_MenuConfig() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_MenuConfig() ).getStr() << '|';
     if( GetToolBoxConfig() )
-        rOutStm << MakeSlotName( SvHash_ToolBoxConfig() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_ToolBoxConfig() ).getStr() << '|';
     if( GetStatusBarConfig() )
-        rOutStm << MakeSlotName( SvHash_StatusBarConfig() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_StatusBarConfig() ).getStr() << '|';
     if( GetAccelConfig() )
-        rOutStm << MakeSlotName( SvHash_AccelConfig() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_AccelConfig() ).getStr() << '|';
     if( GetFastCall() )
-        rOutStm << MakeSlotName( SvHash_FastCall() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_FastCall() ).getStr() << '|';
     if( GetContainer() )
-        rOutStm << MakeSlotName( SvHash_Container() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_Container() ).getStr() << '|';
     if ( GetReadOnlyDoc() )
-        rOutStm << MakeSlotName( SvHash_ReadOnlyDoc() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_ReadOnlyDoc() ).getStr() << '|';
     if( GetImageRotation() )
-        rOutStm << MakeSlotName( SvHash_ImageRotation() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_ImageRotation() ).getStr() << '|';
     if( GetImageReflection() )
-        rOutStm << MakeSlotName( SvHash_ImageReflection() ).GetBuffer() << '|';
+        rOutStm << MakeSlotName( SvHash_ImageReflection() ).getStr() << '|';
     rOutStm << '0';
 
     rOutStm << ',' << endl;
@@ -1508,17 +1510,17 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             << endl << '{' << endl;
 
         WriteTab( rOutStm, 1 );
-        ByteString aStr = GetConfigName().getString();
-        if( !aStr.Len() )
+        rtl::OString aStr = GetConfigName().getString();
+        if( aStr.isEmpty() )
             aStr = GetName().getString();
 
-        rOutStm << "SlotName = \"" << aStr.GetBuffer() << "\";" << endl;
+        rOutStm << "SlotName = \"" << aStr.getStr() << "\";" << endl;
 
         aStr = GetHelpText().getString();
-        if( aStr.Len() )
+        if( !aStr.isEmpty() )
         {
             WriteTab( rOutStm, 1 );
-            rOutStm << "HelpText = \"" << aStr.GetBuffer() << "\";" << endl;
+            rOutStm << "HelpText = \"" << aStr.getStr() << "\";" << endl;
         }
 
         rOutStm << "};" << endl;
@@ -1529,14 +1531,14 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
-            ByteString aValName = pEnum->GetObject( n )->GetName().getString();
+            rtl::OString aValName = pEnum->GetObject( n )->GetName().getString();
             rtl::OStringBuffer aBuf;
             if( !GetPseudoPrefix().isEmpty() )
                 aBuf.append(GetPseudoPrefix());
             else
                 aBuf.append(GetSlotId().getString());
             aBuf.append('_');
-            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+            aBuf.append(aValName.copy(pEnum->GetPrefix().getLength()));
 
             rtl::OString aSId = aBuf.makeStringAndClear();
 
@@ -1556,13 +1558,13 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                         << endl << '{' << endl;
 
                 WriteTab( rOutStm, 1 );
-                rOutStm << "SlotName = \"" << aValName.GetBuffer() << "\";" << endl;
+                rOutStm << "SlotName = \"" << aValName.getStr() << "\";" << endl;
 
-                ByteString aStr = GetHelpText().getString();
-                if( aStr.Len() )
+                rtl::OString aStr = GetHelpText().getString();
+                if (!aStr.isEmpty())
                 {
                     WriteTab( rOutStm, 1 );
-                    rOutStm << "HelpText = \"" << aStr.GetBuffer() << "\";" << endl;
+                    rOutStm << "HelpText = \"" << aStr.getStr() << "\";" << endl;
                 }
                 rOutStm << "};" << endl;
             }
@@ -1585,9 +1587,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
     if( GetPseudoSlots() && pEnum )
     {
-        for( sal_uLong n = 0; n < pEnum->Count(); n++ )
+        for( sal_uLong n = 0; n < pEnum->Count(); ++n )
         {
-            ByteString aValName = pEnum->GetObject( n )->GetName().getString();
+            rtl::OString aValName = pEnum->GetObject( n )->GetName().getString();
 
             rtl::OStringBuffer aBuf;
             if( !GetPseudoPrefix().isEmpty() )
@@ -1595,7 +1597,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             else
                 aBuf.append(GetSlotId().getString());
             aBuf.append('_');
-            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+            aBuf.append(aValName.copy(pEnum->GetPrefix().getLength()));
 
             rtl::OString aSId = aBuf.makeStringAndClear();
 

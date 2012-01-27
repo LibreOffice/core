@@ -70,7 +70,7 @@ public:
     const String &      GetIdlFileName() const { return aIdlFileName; }
     const rtl::OString& GetModulePrefix() const { return aModulePrefix.getString(); }
 
-    virtual sal_Bool    SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
+    virtual sal_Bool    SetName( const rtl::OString& rName, SvIdlDataBase * = NULL  );
 
     const rtl::OString& GetHelpFileName() const { return aHelpFileName.getString(); }
     const rtl::OString& GetTypeLibFileName() const { return aTypeLibFile.getString(); }

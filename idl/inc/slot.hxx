@@ -245,7 +245,7 @@ public:
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
+    virtual void        Insert( SvSlotElementList&, const rtl::OString& rPrefix,
                                 SvIdlDataBase& );
     void                WriteSlotStubs( const rtl::OString& rShellName,
                                     ByteStringList & rList,

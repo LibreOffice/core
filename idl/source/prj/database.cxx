@@ -618,7 +618,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     {
         rtl::OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
         if( !aN.isEmpty() )
-            fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.getStr() );
+            fprintf( stderr, "%s versus %s\n", pTok->GetString().getStr(), aN.getStr() );
     }
 }
 
@@ -640,7 +640,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
             pTok = rInStm.GetToken_Next();
             if( pTok->IsString() )
             {
-                DirEntry aFullName( String::CreateFromAscii( pTok->GetString().GetBuffer() ) );
+                DirEntry aFullName( String::CreateFromAscii( pTok->GetString().getStr() ) );
                 if( aFullName.Find( rPath ) )
                 {
                     this->AddDepFile(aFullName.GetFull());
@@ -718,7 +718,7 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         for ( size_t i = 0, n = aList.size(); i < n; ++i )
         {
             SvStringHashEntry* pEntry = aList[ i ];
-            rOutStm << "#define " << pEntry->GetName().GetBuffer()
+            rOutStm << "#define " << pEntry->GetName().getStr()
                     << '\t'
                     << rtl::OString::valueOf(static_cast<sal_Int64>(
                         pEntry->GetValue())).getStr()

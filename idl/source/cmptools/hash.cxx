@@ -50,7 +50,7 @@ SvHashTable::~SvHashTable()
 {
 }
 
-sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
+sal_Bool SvHashTable::Test_Insert( const rtl::OString& rElement, sal_Bool bInsert,
                                sal_uInt32 * pInsertPos )
 {
     sal_uInt32    nHash;
@@ -60,13 +60,13 @@ sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
     lAsk++;
     lTry++;
 
-    nHash =  HashFunc( pElement );
+    nHash =  HashFunc( rElement );
     nIndex = nHash % nMax;
 
     nLoop = 0;                                      // divide to range
     while( (nMax != nLoop) && IsEntry( nIndex ) )
     {                     // is place occupied
-        if( COMPARE_EQUAL == Compare( pElement, nIndex ) )
+        if( equals( rElement, nIndex ) )
         {
             if( pInsertPos )
                 *pInsertPos = nIndex;               // place of Element
@@ -123,10 +123,10 @@ SvStringHashTable::~SvStringHashTable()
     delete [] pEntries;
 }
 
-sal_uInt32 SvStringHashTable::HashFunc( const void * pElement ) const
+sal_uInt32 SvStringHashTable::HashFunc( const rtl::OString& rElement ) const
 {
     sal_uInt32          nHash = 0;  // hash value
-    const char *    pStr = ((const ByteString * )pElement)->GetBuffer();
+    const char *    pStr = rElement.getStr();
 
     int nShift = 0;
     while( *pStr )
@@ -144,18 +144,18 @@ sal_uInt32 SvStringHashTable::HashFunc( const void * pElement ) const
     return( nHash );
 }
 
-ByteString SvStringHashTable::GetNearString( const ByteString & rName ) const
+rtl::OString SvStringHashTable::GetNearString( const rtl::OString& rName ) const
 {
     for( sal_uInt32 i = 0; i < GetMax(); i++ )
     {
         SvStringHashEntry * pE = Get( i );
         if( pE )
         {
-            if( pE->GetName().EqualsIgnoreCaseAscii( rName ) && !pE->GetName().Equals( rName ) )
+            if( pE->GetName().equalsIgnoreAsciiCase( rName ) && !pE->GetName().equals( rName ) )
                 return pE->GetName();
         }
     }
-    return ByteString();
+    return rtl::OString();
 }
 
 sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
@@ -165,13 +165,13 @@ sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
     return pEntries[ nIndex ].HasId();
 }
 
-sal_Bool SvStringHashTable::Insert( const ByteString & rName, sal_uInt32 * pIndex )
+sal_Bool SvStringHashTable::Insert( const rtl::OString& rName, sal_uInt32 * pIndex )
 {
     sal_uInt32 nIndex;
 
     if( !pIndex ) pIndex = &nIndex;
 
-    if( !SvHashTable::Test_Insert( &rName, sal_True, pIndex ) )
+    if( !SvHashTable::Test_Insert( rName, sal_True, pIndex ) )
         return sal_False;
 
     if( !IsEntry( *pIndex ) )
@@ -179,10 +179,9 @@ sal_Bool SvStringHashTable::Insert( const ByteString & rName, sal_uInt32 * pInde
     return sal_True;
 }
 
-sal_Bool SvStringHashTable::Test( const ByteString & rName, sal_uInt32 * pPos ) const
+sal_Bool SvStringHashTable::Test( const rtl::OString& rName, sal_uInt32 * pPos ) const
 {
-    return ((SvStringHashTable *)this)->SvHashTable::
-                Test_Insert( &rName, sal_False, pPos );
+    return const_cast<SvStringHashTable*>(this)->Test_Insert( rName, sal_False, pPos );
 }
 
 SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
@@ -192,10 +191,10 @@ SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
     return( NULL );
 }
 
-StringCompare SvStringHashTable::Compare( const void * pElement,
+bool SvStringHashTable::equals( const rtl::OString& rElement,
                                           sal_uInt32 nIndex ) const
 {
-    return ((const ByteString *)pElement)->CompareTo( pEntries[ nIndex ].GetName() );
+    return rElement.equals( pEntries[ nIndex ].GetName() );
 }
 
 void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
