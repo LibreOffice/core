@@ -35,7 +35,6 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svl/broadcast.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"
@@ -414,12 +413,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                     SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
                     if( pNote || pBC )
                         pNoteCell = new ScNoteCell( pNote, pBC );
-                }
-                else
-                {
-                    SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                    if (pBC && pBC->HasListeners())
-                        pNoteCell = new ScNoteCell(pOldCell->ReleaseNote(), pBC);
                 }
 
                 // remove cell entry in cell item list
