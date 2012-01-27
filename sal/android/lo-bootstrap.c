@@ -47,7 +47,7 @@
 #include <android/log.h>
 
 #include "uthash.h"
-#include <osl/thread.h>
+
 #include "osl/detail/android-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
