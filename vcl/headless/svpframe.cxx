@@ -373,11 +373,6 @@ rtl::OUString SvpSalFrame::GetKeyName( sal_uInt16 )
     return rtl::OUString();
 }
 
-rtl::OUString SvpSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 )
-{
-    return String();
-}
-
 sal_Bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
 {
     return sal_False;

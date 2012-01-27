@@ -1142,13 +1142,6 @@ rtl::OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString AquaSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
-{
-    return GetKeyName( nKeyCode );
-}
-
-// -----------------------------------------------------------------------
-
 static void getAppleScrollBarVariant(void)
 {
     bool bIsScrollbarDoubleMax = true; // default is DoubleMax

@@ -2579,11 +2579,6 @@ rtl::OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return GetDisplay()->GetKeyName( nKeyCode );
 }
 
-rtl::OUString X11SalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
-{
-  return GetKeyName( nKeyCode );
-}
-
 sal_Bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet

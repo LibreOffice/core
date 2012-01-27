@@ -704,13 +704,6 @@ rtl::OUString IosSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString IosSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
-{
-    return GetKeyName( nKeyCode );
-}
-
-// -----------------------------------------------------------------------
-
 void IosSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
 {
     if( ! mpGraphics )

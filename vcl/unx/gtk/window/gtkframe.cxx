@@ -2362,17 +2362,6 @@ void GtkSalFrame::Sync()
     gdk_display_sync( getGdkDisplay() );
 }
 
-rtl::OUString GtkSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-  return getDisplay()->GetKeyName( nKeyCode );
-#else
-  (void)nKeyCode;
-# warning FIXME - key names
-  return rtl::OUString();
-#endif
-}
-
 rtl::OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
 #if !GTK_CHECK_VERSION(3,0,0)

@@ -144,7 +144,6 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
     virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual rtl::OUString              GetSymbolKeyName( const rtl::OUString& rFontName, sal_uInt16 nKeyCode );
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();

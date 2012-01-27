@@ -213,7 +213,6 @@ public:
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) = 0;
 
     virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode ) = 0;
-    virtual rtl::OUString              GetSymbolKeyName( const rtl::OUString& rFontName, sal_uInt16 nKeyCode ) = 0;
 
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
     // returns sal_False if no mapping exists or function not supported

@@ -2649,13 +2649,6 @@ rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString WinSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
-{
-    return GetKeyName( nKeyCode );
-}
-
-// -----------------------------------------------------------------------
-
 inline Color ImplWinColorToSal( COLORREF nColor )
 {
     return Color( GetRValue( nColor ), GetGValue( nColor ), GetBValue( nColor ) );
