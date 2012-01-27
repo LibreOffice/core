@@ -39,23 +39,6 @@
 
 class Window;
 
-// -------------
-// - Key-Types -
-// -------------
-
-// Logische KeyFunktionen
-/*
-#ifndef ENUM_KEYFUNCTYPE_DECLARED
-#define ENUM_KEYFUNCTYPE_DECLARED
-enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN,
-                   KEYFUNC_SAVE, KEYFUNC_SAVEAS, KEYFUNC_PRINT,
-                   KEYFUNC_CLOSE, KEYFUNC_QUIT,
-                   KEYFUNC_CUT, KEYFUNC_COPY, KEYFUNC_PASTE, KEYFUNC_UNDO,
-                   KEYFUNC_REDO, KEYFUNC_DELETE, KEYFUNC_REPEAT,
-                   KEYFUNC_FIND, KEYFUNC_FINDBACKWARD, KEYFUNC_PROPERTIES,
-                   KEYFUNC_FRONT };
-#endif
-*/
 // -----------
 // - KeyCode -
 // -----------

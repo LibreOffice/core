@@ -473,7 +473,6 @@ private:
     Timer           aSubmenuCloseTimer;
     Timer           aScrollTimer;
     sal_uLong           nSaveFocusId;
-//    long            nStartY;
     sal_uInt16          nHighlightedItem;       // highlighted/selected Item
     sal_uInt16          nMBDownPos;
     sal_uInt16          nScrollerHeight;
@@ -1209,20 +1208,6 @@ void Menu::RemoveEventListener( const Link& rEventListener )
     maEventListeners.removeListener( rEventListener );
 }
 
-// -----------------------------------------------------------------------
-
-//void Menu::AddChildEventListener( const Link& rEventListener )
-//{
-//    mpDummy4_WindowChildEventListeners->push_back( rEventListener );
-//}
-
-// -----------------------------------------------------------------------
-
-//void Menu::RemoveChildEventListener( const Link& rEventListener )
-//{
-//    mpDummy4_WindowChildEventListeners->remove( rEventListener );
-//}
-
 void Menu::InsertItem( sal_uInt16 nItemId, const XubString& rStr, MenuItemBits nItemBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "Menu::InsertItem(): ItemId == 0" );
@@ -1466,7 +1451,6 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
             {
                 PopupMenu* pNewMenu = new PopupMenu( *pSubMenu );
                 pThis->SetPopupMenu( nId, pNewMenu );
-//                SetAutoMenu( pThis, nId, pNewMenu );
             }
             else
                 pThis->SetPopupMenu( nId, pSubMenu );
@@ -2464,9 +2448,6 @@ Size Menu::ImplCalcSize( Window* pWin )
             {
                 long nTextWidth = pWin->GetCtrlTextWidth( pData->aText );
                 long nTextHeight = pWin->GetTextHeight();
-
-//                if ( nTextHeight > pData->aSz.Height() )
-//                    pData->aSz.Height() = nTextHeight;
 
                 if ( bIsMenuBar )
                 {
@@ -3960,7 +3941,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     nMBDownPos          = ITEMPOS_INVALID;
     nPosInParent        = ITEMPOS_INVALID;
     nScrollerHeight     = 0;
-//    nStartY             = 0;
     nBorder             = EXTRASPACEY;
     nFirstEntry         = 0;
     bScrollUp           = sal_False;
@@ -4238,8 +4218,6 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
             }
             pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
             Size MySize = GetOutputSizePixel();
-//          Point MyPos = GetPosPixel();
-//          Point aItemTopLeft( MyPos.X(), MyPos.Y()+nY );
             Point aItemTopLeft( 0, nY );
             Point aItemBottomRight( aItemTopLeft );
             aItemBottomRight.X() += MySize.Width();
@@ -4320,9 +4298,6 @@ void MenuFloatingWindow::Execute()
         Application::Yield();
 
     pSVData->maAppData.mpActivePopupMenu = NULL;
-
-//  while ( bCallingSelect )
-//      Application::Yield();
 }
 
 void MenuFloatingWindow::StopExecute( sal_uLong nFocusId )
@@ -4523,8 +4498,6 @@ void MenuFloatingWindow::ImplScroll( sal_Bool bUp )
 
         long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
 
-//        nStartY += nEntryHeight;
-
         if ( !bScrollDown )
         {
             bScrollDown = sal_True;
@@ -4562,7 +4535,6 @@ void MenuFloatingWindow::ImplScroll( sal_Bool bUp )
             ImplDrawScroller( sal_False );
         }
 
-//        nStartY -= nEntryHeight;
         Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( sal_False ).GetBoundRect(), SCROLL_CLIP );
     }
 
@@ -5357,8 +5329,6 @@ void MenuBarWindow::ImplCreatePopup( sal_Bool bPreSelectFirst )
                 nX += pData->aSz.Width();
             }
             pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
-//          Point MyPos = GetPosPixel();
-//          Point aItemTopLeft( MyPos.X()+nX, MyPos.Y() );
             Point aItemTopLeft( nX, 0 );
             Point aItemBottomRight( aItemTopLeft );
             aItemBottomRight.X() += pData->aSz.Width();
