@@ -148,6 +148,7 @@
 //die RID_??_TP_*  stehen nochmal im offids.hrc
 #define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
 #define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
+#define RID_SW_TP_STD_FONT              (RID_OFA_START + 208)
 #define RID_SW_TP_OPTPRINT_PAGE         (RID_OFA_START + 209)
 #define RID_SW_TP_OPTTABLE_PAGE         (RID_OFA_START + 210)
 #define RID_SW_TP_OPTSHDWCRSR           (RID_OFA_START + 211)
@@ -186,9 +187,11 @@
 #define RID_SW_TP_HTML_OPTGRID_PAGE     (RID_OFA_START + 244)
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define RID_SW_TP_HTML_OPTSHDWCRSR      (RID_OFA_START + 246)
+#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
 #define RID_SC_TP_PRINT                 (RID_OFA_START + 248)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
 #define OFA_TP_MEMORY                   (RID_OFA_START + 250)
+#define RID_SW_TP_STD_FONT_CTL          (RID_OFA_START + 251)
 #define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
 #define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress

@@ -248,6 +248,7 @@
 #define HID_CHAR_URL                                            "SW_HID_CHAR_URL"
 #define HID_CONTENT_OPT                                         "SW_HID_CONTENT_OPT"
 #define HID_LAYOUT_OPT                                          "SW_HID_LAYOUT_OPT"
+#define HID_STD_FONT                                            "SW_HID_STD_FONT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 #define HID_FRM_ADD                                             "SW_HID_FRM_ADD"
 #define HID_TABLE_TEXTFLOW                                      "SW_HID_TABLE_TEXTFLOW"

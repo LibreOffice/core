@@ -248,6 +248,52 @@ RES_POOLCOLL_TEXT_END,
 RES_POOLCOLL_LISTS_BEGIN = COLL_LISTS_BITS,
 
 RES_POOLCOLL_NUMBUL_BASE = RES_POOLCOLL_LISTS_BEGIN,    // Base list.
+
+// Subgroup numberings.
+RES_POOLCOLL_NUM_LEVEL1S,                               // Start 1st level.
+RES_POOLCOLL_NUM_LEVEL1,                                // 1st level.
+RES_POOLCOLL_NUM_LEVEL1E,                               // End 1st level.
+RES_POOLCOLL_NUM_NONUM1,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL2S,                               // Start 2nd level.
+RES_POOLCOLL_NUM_LEVEL2,                                // 2nd level.
+RES_POOLCOLL_NUM_LEVEL2E,                               // End 2nd level.
+RES_POOLCOLL_NUM_NONUM2,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL3S,                               // Start 3rd level.
+RES_POOLCOLL_NUM_LEVEL3,                                // 3rd level.
+RES_POOLCOLL_NUM_LEVEL3E,                               // End 3rd level.
+RES_POOLCOLL_NUM_NONUM3,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL4S,                               // Start 4th level.
+RES_POOLCOLL_NUM_LEVEL4,                                // 4th level.
+RES_POOLCOLL_NUM_LEVEL4E,                               // End 4th level.
+RES_POOLCOLL_NUM_NONUM4,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL5S,                               // Start 5th level.
+RES_POOLCOLL_NUM_LEVEL5,                                // 5th level.
+RES_POOLCOLL_NUM_LEVEL5E,                               // End 5th level.
+RES_POOLCOLL_NUM_NONUM5,                                // No numbering.
+
+
+//Subgroup bullets.
+RES_POOLCOLL_BUL_LEVEL1S,                               // Start 1st level.
+RES_POOLCOLL_BUL_LEVEL1,                                // 1st level.
+RES_POOLCOLL_BUL_LEVEL1E,                               // End 1st level
+RES_POOLCOLL_BUL_NONUM1,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL2S,                               // Start 2nd level.
+RES_POOLCOLL_BUL_LEVEL2,                                // 2nd level.
+RES_POOLCOLL_BUL_LEVEL2E,                               // End 2nd level.
+RES_POOLCOLL_BUL_NONUM2,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL3S,                               // Start 3rd level.
+RES_POOLCOLL_BUL_LEVEL3,                                // 3rd Level.
+RES_POOLCOLL_BUL_LEVEL3E,                               // End 3rd level.
+RES_POOLCOLL_BUL_NONUM3,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL4S,                               // Start 4th level.
+RES_POOLCOLL_BUL_LEVEL4,                                // 4th level.
+RES_POOLCOLL_BUL_LEVEL4E,                               // End 4th level.
+RES_POOLCOLL_BUL_NONUM4,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL5S,                               // Start 5th level.
+RES_POOLCOLL_BUL_LEVEL5,                                // 5th level.
+RES_POOLCOLL_BUL_LEVEL5E,                               // End 5th Level.
+RES_POOLCOLL_BUL_NONUM5,                                // No numbering.
+
 RES_POOLCOLL_LISTS_END,
 
 
