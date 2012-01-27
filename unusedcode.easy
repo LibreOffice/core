@@ -847,10 +847,6 @@ basegfx::B2DHomPoint::setY(double)
 basegfx::B2DPolygon::insert(unsigned int, basegfx::B2DPolygon const&, unsigned int, unsigned int)
 basegfx::B2DVector::isNormalized() const
 basegfx::B2I64Tuple::getEmptyTuple()
-basegfx::B2IVector::angle(basegfx::B2IVector const&) const
-basegfx::B2IVector::cross(basegfx::B2IVector const&) const
-basegfx::B2IVector::getEmptyVector()
-basegfx::B2IVector::getLength() const
 basegfx::B3DPolyPolygon::insert(unsigned int, basegfx::B3DPolyPolygon const&)
 basegfx::B3DPolyPolygon::insert(unsigned int, basegfx::B3DPolygon const&, unsigned int)
 basegfx::B3DPolyPolygon::makeUnique()
@@ -870,9 +866,6 @@ basegfx::exportToSvg(basegfx::B2DHomMatrix const&)
 basegfx::fround(basegfx::B1DRange const&)
 basegfx::fround(basegfx::B2DRange const&)
 basegfx::fround(basegfx::B3DRange const&)
-basegfx::getContinuity(basegfx::B2IVector const&, basegfx::B2IVector const&)
-basegfx::getOrientation(basegfx::B2IVector const&, basegfx::B2IVector const&)
-basegfx::getPerpendicular(basegfx::B2IVector const&)
 basegfx::interpolate(basegfx::B2DHomPoint&, basegfx::B2DHomPoint&, double)
 basegfx::maximum(basegfx::B2DHomPoint const&, basegfx::B2DHomPoint const&)
 basegfx::minimum(basegfx::B2DHomPoint const&, basegfx::B2DHomPoint const&)
