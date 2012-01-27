@@ -48,9 +48,13 @@ typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< ImplFontNameListData* > ImplFontList;
 
+// FIXME: STYLE_* duplicate values from editeng::SvxBorderStyle,
+// which in turn duplicates values from com::sun::star::table::BorderLineStyle:
+// this needs cleaning up on master
 #define STYLE_SOLID                ( ( sal_uInt16 ) 0 )
 #define STYLE_DOTTED               ( ( sal_uInt16 ) 1 )
 #define STYLE_DASHED               ( ( sal_uInt16 ) 2 )
+#define STYLE_NONE                 ( ( sal_uInt16 ) -1)
 
 #define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )
 #define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )

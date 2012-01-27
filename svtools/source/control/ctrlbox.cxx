@@ -854,7 +854,7 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->GetStyle() : STYLE_SOLID;
+    return ( pData ) ? pData->GetStyle() : STYLE_NONE;
 }
 
 // -----------------------------------------------------------------------
