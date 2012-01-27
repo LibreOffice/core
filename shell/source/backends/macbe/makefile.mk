@@ -46,7 +46,7 @@ DLLPRE =
 .IF "$(OS)" != "MACOSX"
 
 dummy:
-    @echo "Nothing to build for OS $(OS)."
+# nothing
 
 .ELSE
 

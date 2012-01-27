@@ -117,13 +117,17 @@ DEF2NAME=   $(SHL2TARGET)
 
 # --- Targets -----------------------------------
 .ELSE		# "$(OS)" == "MACOSX"
+
 dummy:
-    @echo Not using Mac OS X - nothing to build
+# nothing
+
 .ENDIF
 
 .ELSE		# "$(GUI)" == "UNX"
+
 dummy:
-    @echo "Nothing to build for GUI $(GUI)"
+# nothing
+
 .ENDIF
 
 .INCLUDE : $(PRJ)$/target.pmk

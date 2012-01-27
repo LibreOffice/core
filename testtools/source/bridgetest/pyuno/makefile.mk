@@ -40,8 +40,10 @@ my_components = pythonloader
 .INCLUDE :  settings.mk
 
 .IF "$(CROSS_COMPILING)"=="YES"
+
 all:
-    @echo Nothing done when cross-compiling
+# nothing
+
 .ENDIF
 
 # --- Files --------------------------------------------------------

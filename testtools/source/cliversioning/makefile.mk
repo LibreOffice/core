@@ -35,8 +35,10 @@ PACKAGE = cliversion
 .INCLUDE: settings.mk
 
 .IF "$(CROSS_COMPILING)"=="YES"
+
 all:
-    @echo Nothing done when cross-compiling
+# nothing
+
 .ENDIF
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk

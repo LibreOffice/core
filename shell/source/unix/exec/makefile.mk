@@ -41,8 +41,10 @@ TESTAPP1=urltest
 .INCLUDE :  settings.mk
 
 .IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/DESKTOP//)"
+
 ALL:
-    @echo Nothing done for non-desktop OSes
+# nothing
+
 .ENDIF
 
 # --- Files --------------------------------------------------------

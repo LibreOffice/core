@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(GUIBASE)"!="aqua"
 
 dummy:
-    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+# nothing
 
 .ELSE		# "$(GUIBASE)"!="aqua"
 

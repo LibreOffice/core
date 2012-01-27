@@ -37,8 +37,10 @@ CAPTURE_OUTPUT = > $(MISC)$/testhxx.output && $(TOUCH) $(SLO)$/testhxx.obj
 .INCLUDE: settings.mk
 
 .IF "$(CROSS_COMPILING)"=="YES"
+
 all:
-    @echo Nothing done when cross-compiling
+# nothing
+
 .ENDIF
 
 SLOFILES = $(SLO)$/testhxx.obj

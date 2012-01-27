@@ -129,13 +129,17 @@ DEF2NAME=   $(SHL2TARGET)
 
 # --- Targets -----------------------------------
 .ELSE		# "$(ENABLE_KAB)" == "TRUE"
+
 dummy:
-    @echo KDE Addressbook disabled - nothing to build
+# nothing
+
 .ENDIF
 
 .ELSE		# "$(GUI)" == "UNX"
+
 dummy:
-    @echo "Nothing to build for GUI $(GUI)"
+# nothing
+
 .ENDIF
 
 .INCLUDE : $(PRJ)$/target.pmk

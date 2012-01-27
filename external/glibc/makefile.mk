@@ -57,8 +57,10 @@ OUT2INC= \
     posix/config.h
 
 .ELSE
+
 @all:
-    @echo "Nothing to do here."
+# nothing
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------

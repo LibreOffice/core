@@ -37,7 +37,7 @@ TARGET=desktopmacosx
 .IF "$(OS)"!="MACOSX"
 
 dummy:
-        @echo "Nothing to build for OS $(OS)"
+# nothing
 
 .ELSE           # "$(OS)"!="MACOSX"
 

@@ -108,8 +108,10 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 .ELSE
+
 dummy:
-    @echo "Nothing to build for GUI $(GUI)"
+# nothing
+
 .ENDIF # "$(GUI)"=="WNT"
 # --- Targets ----------------------------------
 .INCLUDE : $(PRJ)$/target.pmk
