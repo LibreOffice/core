@@ -252,6 +252,166 @@ String STR_POOLCOLL_HEADLINE10
 {
     Text [ en-US ] = "Heading 10" ;
 };
+String STR_POOLCOLL_NUM_LEVEL1S
+{
+    Text [ en-US ] = "Numbering 1 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL1
+{
+    Text [ en-US ] = "Numbering 1" ;
+};
+String STR_POOLCOLL_NUM_LEVEL1E
+{
+    Text [ en-US ] = "Numbering 1 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM1
+{
+    Text [ en-US ] = "Numbering 1 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL2S
+{
+    Text [ en-US ] = "Numbering 2 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL2
+{
+    Text [ en-US ] = "Numbering 2" ;
+};
+String STR_POOLCOLL_NUM_LEVEL2E
+{
+    Text [ en-US ] = "Numbering 2 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM2
+{
+    Text [ en-US ] = "Numbering 2 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL3S
+{
+    Text [ en-US ] = "Numbering 3 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL3
+{
+    Text [ en-US ] = "Numbering 3" ;
+};
+String STR_POOLCOLL_NUM_LEVEL3E
+{
+    Text [ en-US ] = "Numbering 3 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM3
+{
+    Text [ en-US ] = "Numbering 3 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL4S
+{
+    Text [ en-US ] = "Numbering 4 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL4
+{
+    Text [ en-US ] = "Numbering 4" ;
+};
+String STR_POOLCOLL_NUM_LEVEL4E
+{
+    Text [ en-US ] = "Numbering 4 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM4
+{
+    Text [ en-US ] = "Numbering 4 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL5S
+{
+    Text [ en-US ] = "Numbering 5 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL5
+{
+    Text [ en-US ] = "Numbering 5" ;
+};
+String STR_POOLCOLL_NUM_LEVEL5E
+{
+    Text [ en-US ] = "Numbering 5 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM5
+{
+    Text [ en-US ] = "Numbering 5 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL1S
+{
+    Text [ en-US ] = "List 1 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL1
+{
+    Text [ en-US ] = "List 1" ;
+};
+String STR_POOLCOLL_BUL_LEVEL1E
+{
+    Text [ en-US ] = "List 1 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM1
+{
+    Text [ en-US ] = "List 1 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL2S
+{
+    Text [ en-US ] = "List 2 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL2
+{
+    Text [ en-US ] = "List 2" ;
+};
+String STR_POOLCOLL_BUL_LEVEL2E
+{
+    Text [ en-US ] = "List 2 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM2
+{
+    Text [ en-US ] = "List 2 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL3S
+{
+    Text [ en-US ] = "List 3 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL3
+{
+    Text [ en-US ] = "List 3" ;
+};
+String STR_POOLCOLL_BUL_LEVEL3E
+{
+    Text [ en-US ] = "List 3 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM3
+{
+    Text [ en-US ] = "List 3 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL4S
+{
+    Text [ en-US ] = "List 4 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL4
+{
+    Text [ en-US ] = "List 4" ;
+};
+String STR_POOLCOLL_BUL_LEVEL4E
+{
+    Text [ en-US ] = "List 4 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM4
+{
+    Text [ en-US ] = "List 4 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL5S
+{
+    Text [ en-US ] = "List 5 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL5
+{
+    Text [ en-US ] = "List 5" ;
+};
+String STR_POOLCOLL_BUL_LEVEL5E
+{
+    Text [ en-US ] = "List 5 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM5
+{
+    Text [ en-US ] = "List 5 Cont." ;
+};
 String STR_POOLCOLL_HEADER
 {
     Text [ en-US ] = "Header" ;

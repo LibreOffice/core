@@ -42,6 +42,7 @@
 #include <svx/fntctrl.hxx>
 #include <fontcfg.hxx>
 class SfxPrinter;
+class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
 class SwCompareConfig;
@@ -152,6 +153,90 @@ public:
     void                SetPreview(sal_Bool bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet);
 
+};
+
+class SwStdFontTabPage : public SfxTabPage
+{
+    FixedLine       aStdChrFL  ;
+
+    FixedText       aTypeFT;
+
+    FixedText       aStandardLbl;
+    ComboBox        aStandardBox;
+
+    FixedText       aHeightFT;
+    FontSizeBox     aStandardHeightLB;
+
+    FixedText       aTitleLbl   ;
+    ComboBox        aTitleBox   ;
+    FontSizeBox     aTitleHeightLB;
+
+    FixedText       aListLbl    ;
+    ComboBox        aListBox    ;
+    FontSizeBox     aListHeightLB;
+
+    FixedText       aLabelLbl   ;
+    ComboBox        aLabelBox   ;
+    FontSizeBox     aLabelHeightLB;
+
+    FixedText       aIdxLbl     ;
+    ComboBox        aIdxBox     ;
+    FontSizeBox     aIndexHeightLB;
+
+    CheckBox        aDocOnlyCB  ;
+    PushButton      aStandardPB;
+
+    String          sShellStd;
+    String          sShellTitle;
+    String          sShellList;
+    String          sShellLabel;
+    String          sShellIndex;
+
+    SfxPrinter*         pPrt;
+    FontList*           pFontList;
+    SwStdFontConfig*    pFontConfig;
+    SwWrtShell*         pWrtShell;
+    LanguageType        eLanguage;
+    // only defaults were there? they were signed with the boxes
+    sal_Bool    bListDefault    :1;
+    sal_Bool    bSetListDefault :1;
+    sal_Bool    bLabelDefault   :1;
+    sal_Bool    bSetLabelDefault :1;
+    sal_Bool    bIdxDefault     :1;
+    sal_Bool    bSetIdxDefault  :1;
+    sal_Bool    bDeletePrinter :1;
+
+    sal_Bool    bListHeightDefault    :1;
+    sal_Bool    bSetListHeightDefault :1;
+    sal_Bool    bLabelHeightDefault   :1;
+    sal_Bool    bSetLabelHeightDefault :1;
+    sal_Bool    bIndexHeightDefault     :1;
+    sal_Bool    bSetIndexHeightDefault  :1;
+
+    sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
+
+    String sScriptWestern;
+    String sScriptAsian;
+    String sScriptComplex;
+
+    DECL_LINK( StandardHdl, PushButton * );
+    DECL_LINK( ModifyHdl, ComboBox * );
+    DECL_LINK( ModifyHeightHdl, FontSizeBox * );
+    DECL_LINK( LoseFocusHdl, ComboBox * );
+
+            SwStdFontTabPage( Window* pParent,
+                                       const SfxItemSet& rSet );
+            ~SwStdFontTabPage();
+
+public:
+    static SfxTabPage*  Create( Window* pParent,
+                                const SfxItemSet& rAttrSet );
+
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+
+    void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 class SwTableOptionsTabPage : public SfxTabPage

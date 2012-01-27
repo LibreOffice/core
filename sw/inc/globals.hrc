@@ -206,6 +206,7 @@
 #define TP_LAYOUT_OPT               (RC_GLOBALS_BEGIN +  44)
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_HTML_OPT                 (RC_GLOBALS_BEGIN +  46)
+#define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
 #define TP_CONDCOLL                 (RC_GLOBALS_BEGIN +  48)
 
 #define TP_FRM_WRAP                 (RC_GLOBALS_BEGIN +  49)

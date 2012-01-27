@@ -145,6 +145,9 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "View" ;       RID_SW_TP_CONTENT_OPT   ;> ;
             < "Formatting Aids" ;        RID_SW_TP_OPTSHDWCRSR    ; > ;
             < "Grid" ;        RID_SVXPAGE_GRID        ; > ;
+            < "Basic Fonts (Western)" ;RID_SW_TP_STD_FONT       ; > ;
+            < "Basic Fonts (Asian)" ;RID_SW_TP_STD_FONT_CJK       ; > ;
+            < "Basic Fonts (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
             < "Print" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
             < "Table" ;         RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;

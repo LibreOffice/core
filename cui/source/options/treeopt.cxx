@@ -382,6 +382,9 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "Writer",             "View",                 RID_SW_TP_CONTENT_OPT },
     { "Writer",             "FormattingAids",       RID_SW_TP_OPTSHDWCRSR },
     { "Writer",             "Grid",                 RID_SVXPAGE_GRID },
+    { "Writer",             "BasicFontsWestern",    RID_SW_TP_STD_FONT },
+    { "Writer",             "BasicFontsAsian",      RID_SW_TP_STD_FONT_CJK },
+    { "Writer",             "BasicFontsCTL",        RID_SW_TP_STD_FONT_CTL },
     { "Writer",             "Print",                RID_SW_TP_OPTPRINT_PAGE },
     { "Writer",             "Table",                RID_SW_TP_OPTTABLE_PAGE },
     { "Writer",             "Changes",              RID_SW_TP_REDLINE_OPT },
@@ -1706,7 +1709,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     nPageId = (sal_uInt16)rTextArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-                    if ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() )
+                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aLanguageOptions.IsCJKFontEnabled() ) &&
+                         ( RID_SW_TP_STD_FONT_CTL != nPageId || aLanguageOptions.IsCTLFontEnabled() ) &&
+                         ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
                         AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL

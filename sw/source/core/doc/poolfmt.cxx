@@ -740,7 +740,200 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     break;
 
 
-    case RES_POOLCOLL_DOC_TITEL:            // Document titel
+
+    case RES_POOLCOLL_NUM_LEVEL1S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL1:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL1E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_NUM_NONUM1:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
+                        0, SwNumRule::GetNumIndent( 0 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL2S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL2:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL2E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_NUM_NONUM2:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
+                        0, SwNumRule::GetNumIndent( 1 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL3S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL3:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL3E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_NUM_NONUM3:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
+                        0, SwNumRule::GetNumIndent( 2 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL4S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL4:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL4E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_NUM_NONUM4:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
+                        0, SwNumRule::GetNumIndent( 3 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL5S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL5:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_NUM_LEVEL5E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_NUM_NONUM5:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
+                        0, SwNumRule::GetNumIndent( 4 ), 0, PT_6 );
+        break;
+
+    case RES_POOLCOLL_BUL_LEVEL1S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL1:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL1E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_BUL_NONUM1:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM1,
+                        0, SwNumRule::GetBullIndent( 0 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL2S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL2:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL2E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_BUL_NONUM2:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM2,
+                        0, SwNumRule::GetBullIndent( 1 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL3S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL3:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL3E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_BUL_NONUM3:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM3,
+                        0, SwNumRule::GetBullIndent( 2 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL4S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL4:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL4E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_BUL_NONUM4:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM4,
+                        0, SwNumRule::GetBullIndent( 3 ), 0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL5S:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                        PT_12, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL5:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                        0, PT_6 );
+        break;
+    case RES_POOLCOLL_BUL_LEVEL5E:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                        0, PT_12 );
+        break;
+    case RES_POOLCOLL_BUL_NONUM5:
+        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM5,
+                        0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
+        break;
+
+    case RES_POOLCOLL_DOC_TITEL:            // Document Title
         {
             SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
             SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ) );
@@ -752,7 +945,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitel
+    case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
         {
             SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ));
             SetAllScriptItem( aSet, SvxFontHeightItem( PT_14, 100, RES_CHRATR_FONTSIZE ));

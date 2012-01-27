@@ -462,6 +462,24 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             pRet = SvxGridTabPage::Create(pParent, rSet);
         break;
 
+        case RID_SW_TP_STD_FONT:
+        case RID_SW_TP_STD_FONT_CJK:
+        case RID_SW_TP_STD_FONT_CTL:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+            if(RID_SW_TP_STD_FONT != nId)
+            {
+                aSet.Put (SfxUInt16Item(SID_FONTMODE_TYPE, RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL));
+                pRet->PageCreated(aSet);
+            }
+        }
+        break;
         case RID_SW_TP_HTML_OPTPRINT_PAGE:
         case RID_SW_TP_OPTPRINT_PAGE:
         {

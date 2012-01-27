@@ -173,6 +173,12 @@ sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
+sal_uInt16 SwNumRule::GetBullIndent( sal_uInt8 nLvl )
+{
+    OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    return aDefNumIndents[ nLvl ];
+}
+
 static void lcl_SetRuleChgd( SwTxtNode& rNd, sal_uInt8 nLevel )
 {
     if( rNd.GetActualListLevel() == nLevel )
