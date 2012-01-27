@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <sys/resource.h>
 
+#include "osl/detail/android-bootstrap.h"
 #include "osl/detail/android_native_app_glue.h"
 #include <android/log.h>
 
@@ -143,6 +144,12 @@ void android_app_post_exec_cmd(struct android_app* android_app, int8_t cmd) {
             pthread_cond_broadcast(&android_app->cond);
             pthread_mutex_unlock(&android_app->mutex);
             break;
+        case APP_CMD_WINDOW_REDRAW_NEEDED:
+            LOGI("APP_CMD_WINDOW_REDRAW_NEEDED - post\n");
+            pthread_mutex_lock(&android_app->mutex);
+            pthread_cond_broadcast(&android_app->cond);
+            pthread_mutex_unlock(&android_app->mutex);
+	    break;
 
         case APP_CMD_SAVE_STATE:
             LOGI("APP_CMD_SAVE_STATE\n");
@@ -303,6 +310,17 @@ static void android_app_set_window(struct android_app* android_app, ANativeWindo
     pthread_mutex_unlock(&android_app->mutex);
 }
 
+static void android_app_window_redraw_needed(struct android_app* android_app, ANativeWindow* window) {
+    pthread_mutex_lock(&android_app->mutex);
+    if (window != NULL) {
+        android_app_write_cmd(android_app, APP_CMD_WINDOW_REDRAW_NEEDED);
+    }
+    while (android_app->window != android_app->pendingWindow) {
+        pthread_cond_wait(&android_app->cond, &android_app->mutex);
+    }
+    pthread_mutex_unlock(&android_app->mutex);
+}
+
 static void android_app_set_activity_state(struct android_app* android_app, int8_t cmd) {
     pthread_mutex_lock(&android_app->mutex);
     android_app_write_cmd(android_app, cmd);
@@ -404,6 +422,11 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
     android_app_set_window((struct android_app*)activity->instance, NULL);
 }
 
+static void onNativeWindowRedrawNeeded(ANativeActivity* activity, ANativeWindow* window) {
+    LOGI("onNativeWindowRedrawNeeded: %p -- %p\n", activity, window);
+    android_app_window_redraw_needed((struct android_app*)activity->instance, window);
+}
+
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue) {
     LOGI("InputQueueCreated: %p -- %p\n", activity, queue);
     android_app_set_input((struct android_app*)activity->instance, queue);
@@ -428,6 +451,7 @@ __attribute__ ((visibility("default"))) void ANativeActivity_onCreate(ANativeAct
     activity->callbacks->onWindowFocusChanged = onWindowFocusChanged;
     activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
+    activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded;
     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
 
