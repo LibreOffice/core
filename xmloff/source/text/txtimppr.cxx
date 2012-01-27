@@ -173,7 +173,7 @@ void XMLTextImportPropertyMapper::FontFinished(
     {
         OUString sName;
         pFontFamilyNameState->maValue >>= sName;
-        if( !sName.getLength() )
+        if( sName.isEmpty() )
             pFontFamilyNameState->mnIndex = -1;
     }
     if( !pFontFamilyNameState || pFontFamilyNameState->mnIndex == -1 )

@@ -167,7 +167,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
     msListStyleOfLastProcessedList = sListStyleName;
 
     // Inconsistent behavior regarding lists (#i92811#)
-    if ( sListStyleDefaultListId.getLength() != 0 )
+    if ( !sListStyleDefaultListId.isEmpty())
     {
         if ( mpMapListIdToListStyleDefaultListId == 0 )
         {
@@ -264,14 +264,14 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 ::rtl::OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
 {
     ::rtl::OUString sListBlockListId( rListBlock.GetContinueListId() );
-    if ( sListBlockListId.getLength() == 0 )
+    if ( sListBlockListId.isEmpty() )
     {
         sListBlockListId = rListBlock.GetListId();
     }
 
     if ( mpMapListIdToListStyleDefaultListId != 0 )
     {
-        if ( sListBlockListId.getLength() != 0 )
+        if ( !sListBlockListId.isEmpty() )
         {
             const ::rtl::OUString sListStyleName =
                                 GetListStyleOfProcessedList( sListBlockListId );
@@ -350,14 +350,14 @@ XMLTextListsHelper::GetNumberedParagraphListId(
     const sal_uInt16 i_Level,
     const ::rtl::OUString i_StyleName)
 {
-    if (!i_StyleName.getLength()) {
+    if (i_StyleName.isEmpty()) {
         OSL_FAIL("invalid numbered-paragraph: no style-name");
     }
-    if (i_StyleName.getLength()
+    if (!i_StyleName.isEmpty()
         && (i_Level < mLastNumberedParagraphs.size())
         && (mLastNumberedParagraphs[i_Level].first == i_StyleName) )
     {
-        OSL_ENSURE(mLastNumberedParagraphs[i_Level].second.getLength(),
+        OSL_ENSURE(!mLastNumberedParagraphs[i_Level].second.isEmpty(),
             "internal error: numbered-paragraph style-name but no list-id?");
         return mLastNumberedParagraphs[i_Level].second;
     } else {
@@ -384,8 +384,8 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     const ::rtl::OUString i_ListId,
     sal_Int16 & io_rLevel, const ::rtl::OUString i_StyleName)
 {
-    OSL_ENSURE(i_ListId.getLength(), "inavlid ListId");
-    OSL_ENSURE(io_rLevel >= 0, "inavlid Level");
+    OSL_ENSURE(!i_ListId.isEmpty(), "invalid ListId");
+    OSL_ENSURE(io_rLevel >= 0, "invalid Level");
     NumParaList_t & rNPList( mNPLists[i_ListId] );
     const ::rtl::OUString none; // default
     if ( rNPList.empty() && (0 != io_rLevel)) {
@@ -396,7 +396,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     }
     // create num rule first because this might clamp the level...
     uno::Reference<container::XIndexReplace> xNumRules;
-    if ((0 == io_rLevel) || rNPList.empty() || i_StyleName.getLength()) {
+    if ((0 == io_rLevel) || rNPList.empty() || !i_StyleName.isEmpty()) {
         // no parent to inherit from, or explicit style given => new numrules!
         // index of parent: level - 1, but maybe that does not exist
         const size_t parent( std::min(static_cast<size_t>(io_rLevel),
@@ -449,8 +449,7 @@ XMLTextListsHelper::MakeNumRule(
     static ::rtl::OUString s_NumberingRules(
         RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
-    if ( i_StyleName.getLength() &&
-         i_StyleName != i_ParentStyleName )
+    if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {
         const ::rtl::OUString sDisplayStyleName(
             i_rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,

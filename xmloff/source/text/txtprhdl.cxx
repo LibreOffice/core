@@ -584,7 +584,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::exportXML(
 {
     if( *(sal_Bool *)rValue.getValue() )
     {
-        if( !rStrExpValue.getLength() ||
+        if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
         {
                rStrExpValue = sVal;
@@ -599,7 +599,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::exportXML(
             rStrExpValue = aOut.makeStringAndClear();
         }
     }
-    else if( !rStrExpValue.getLength() )
+    else if( rStrExpValue.isEmpty() )
     {
            rStrExpValue = GetXMLToken( XML_NONE );
     }
@@ -842,7 +842,7 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
 {
     if( *(sal_Bool *)rValue.getValue() )
     {
-        if( !rStrExpValue.getLength() ||
+        if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
         {
                rStrExpValue = sVal;
@@ -867,7 +867,7 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
             rStrExpValue = aOut.makeStringAndClear();
         }
     }
-    else if( !rStrExpValue.getLength() )
+    else if( rStrExpValue.isEmpty() )
     {
            rStrExpValue = GetXMLToken( XML_NONE );
     }
@@ -1015,7 +1015,7 @@ sal_Bool XMLTextCombineCharPropHdl_Impl::importXML(
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue.getLength() )
+    if( !rStrImpValue.isEmpty() )
         rValue <<= rStrImpValue.copy( 0, 1 );
     else
         rValue <<= rStrImpValue;

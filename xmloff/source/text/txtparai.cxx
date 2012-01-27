@@ -418,7 +418,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         }
     }
 
-    if( sShow.getLength() && !pHint->GetTargetFrameName().getLength() )
+    if( !sShow.isEmpty() && pHint->GetTargetFrameName().isEmpty() )
     {
         if( IsXMLToken( sShow, XML_NEW ) )
             pHint->SetTargetFrameName(
@@ -910,7 +910,7 @@ void XMLMetaImportContext::InsertMeta(
 {
     OSL_ENSURE(!m_bHaveAbout == !m_sProperty.getLength(),
         "XMLMetaImportContext::InsertMeta: invalid RDFa?");
-    if (m_XmlId.getLength() || (m_bHaveAbout && m_sProperty.getLength()))
+    if (!m_XmlId.isEmpty() || (m_bHaveAbout && !m_sProperty.isEmpty()))
     {
         // insert mark
         const uno::Reference<rdf::XMetadatable> xMeta(
@@ -989,7 +989,7 @@ void XMLMetaFieldImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
 void XMLMetaFieldImportContext::InsertMeta(
     const Reference<XTextRange> & i_xInsertionRange)
 {
-    if (m_XmlId.getLength()) // valid?
+    if (!m_XmlId.isEmpty()) // valid?
     {
         // insert mark
         const Reference<XPropertySet> xPropertySet(
@@ -1003,7 +1003,7 @@ void XMLMetaFieldImportContext::InsertMeta(
         OSL_ENSURE(xPropertySet.is(), "cannot insert MetaField?");
         if (!xPropertySet.is()) return;
 
-        if (m_DataStyleName.getLength())
+        if (!m_DataStyleName.isEmpty())
         {
             sal_Bool isDefaultLanguage(sal_True);
 
@@ -1144,7 +1144,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             if (CreateMark(xMark, sService))
             {
                 ProcessAttributes(xAttrList, xMark);
-                if (sID.getLength() > 0)
+                if (!sID.isEmpty())
                 {
                     // process only if we find an ID
                     XMLHint_Impl* pHint =
@@ -1165,7 +1165,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
 
             // call process attributes with empty XPropertySet:
             ProcessAttributes(xAttrList, xMark);
-            if (sID.getLength() > 0)
+            if (!sID.isEmpty())
             {
                 // if we have an ID, find the hint and set the end position
                 sal_uInt16 nCount = rHints.Count();
@@ -1596,7 +1596,7 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
             aStyleName = xAttrList->getValueByIndex( i );
     }
 
-    if( aStyleName.getLength() )
+    if( !aStyleName.isEmpty() )
     {
         pHint = new XMLStyleHint_Impl( aStyleName,
                   GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
@@ -1993,9 +1993,9 @@ XMLParaContext::XMLParaContext(
         }
     }
 
-    if( aCondStyleName.getLength() )
+    if( !aCondStyleName.isEmpty() )
         sStyleName = aCondStyleName;
-    else if( sClassNames.getLength() )
+    else if( !sClassNames.isEmpty() )
     {
         sal_Int32 nDummy = 0;
         sStyleName = sClassNames.getToken( 0, ' ', nDummy );
@@ -2015,7 +2015,7 @@ XMLParaContext::~XMLParaContext()
     // paragraph and register it with the given identifier
     // FIXME: this is just temporary, and should be removed when
     // EditEngine paragraphs implement XMetadatable!
-    if (m_sXmlId.getLength())
+    if (!m_sXmlId.isEmpty())
     {
         Reference < XTextCursor > xIdCursor( xTxtImport->GetText()->createTextCursorByRange( xStart ) );
         if( xIdCursor.is() )
@@ -2038,7 +2038,7 @@ XMLParaContext::~XMLParaContext()
     xAttrCursor->gotoRange( xEnd, sal_True );
 
     // xml:id for RDF metadata
-    if (m_sXmlId.getLength() || m_bHaveAbout || m_sProperty.getLength())
+    if (!m_sXmlId.isEmpty() || m_bHaveAbout || !m_sProperty.isEmpty())
     {
         try {
             const uno::Reference<container::XEnumerationAccess> xEA
@@ -2064,7 +2064,7 @@ XMLParaContext::~XMLParaContext()
     }
 
     OUString const sCellParaStyleName(xTxtImport->GetCellParaStyleDefault());
-    if( sCellParaStyleName.getLength() > 0 )
+    if( !sCellParaStyleName.isEmpty() )
     {
         /* Suppress handling of outline and list attributes,
            because of side effects of method <SetStyleAndAttrs(..)> (#i80724#)
@@ -2077,7 +2077,7 @@ XMLParaContext::~XMLParaContext()
     }
 
     // #103445# for headings without style name, find the proper style
-    if( bHeading && (sStyleName.getLength() == 0) )
+    if( bHeading && sStyleName.isEmpty() )
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
@@ -2143,7 +2143,7 @@ XMLParaContext::~XMLParaContext()
                 {
                     const OUString& rStyleName =
                             ((XMLStyleHint_Impl *)pHint)->GetStyleName();
-                    if( rStyleName.getLength() )
+                    if( !rStyleName.isEmpty() )
                         xTxtImport->SetStyleAndAttrs( GetImport(),
                                                       xAttrCursor, rStyleName,
                                                       sal_False );
@@ -2153,7 +2153,7 @@ XMLParaContext::~XMLParaContext()
                 {
                     const OUString& rRefName =
                             ((XMLReferenceHint_Impl *)pHint)->GetRefName();
-                    if( rRefName.getLength() )
+                    if( !rRefName.isEmpty() )
                     {
                         if( !pHint->GetEnd().is() )
                             pHint->SetEnd(xEnd);
@@ -2378,14 +2378,15 @@ XMLNumberedParaContext::XMLNumberedParaContext(
 
     XMLTextListsHelper& rTextListsHelper(
         i_rImport.GetTextImport()->GetTextListHelper() );
-    if (!m_ListId.getLength()) {
+    if (m_ListId.isEmpty())
+      {
         OSL_ENSURE( ! i_rImport.GetODFVersion().equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("1.2") ),
             "invalid numbered-paragraph: no list-id (1.2)");
         m_ListId = rTextListsHelper.GetNumberedParagraphListId(m_Level,
             StyleName);
-        OSL_ENSURE(m_ListId.getLength(), "numbered-paragraph: no ListId");
-        if (!m_ListId.getLength()) {
+        OSL_ENSURE(!m_ListId.isEmpty(), "numbered-paragraph: no ListId");
+        if (m_ListId.isEmpty()) {
             return;
         }
     }
@@ -2403,7 +2404,7 @@ XMLNumberedParaContext::~XMLNumberedParaContext()
 
 void XMLNumberedParaContext::EndElement()
 {
-    if (m_ListId.getLength()) {
+    if (!m_ListId.isEmpty()) {
         GetImport().GetTextImport()->PopListContext();
     }
 }

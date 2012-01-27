@@ -330,11 +330,11 @@ void XMLSetVarFieldImportContext::EndElement()
     //                        call field or master depending on variable
     //                        PrepareMaster() in addition to PrepareField()
 
-    DBG_ASSERT(GetServiceName().getLength()>0, "no service name for element!");
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
 
     if (bValid)
     {
-        DBG_ASSERT(GetName().getLength()>0, "variable name needed!");
+        DBG_ASSERT(!GetName().isEmpty(), "variable name needed!");
 
         // find field master
         Reference<XPropertySet> xMaster;

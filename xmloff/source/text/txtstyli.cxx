@@ -231,7 +231,7 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 
     sal_uInt16 nCategory = ParagraphStyleCategory::TEXT;
     if(  XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() &&
-         sCategoryVal.getLength() && xStyle->isUserDefined() &&
+         !sCategoryVal.isEmpty() && xStyle->isUserDefined() &&
          xPropSetInfo->hasPropertyByName( sCategory ) &&
           SvXMLUnitConverter::convertEnum( nCategory, sCategoryVal, aCategoryMap ) )
     {
@@ -283,7 +283,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     // Consider set empty list style (#i69523#)
     if ( !( mbListStyleSet ||
             nOutlineLevel >= 0 ||
-            sDropCapTextStyleName.getLength() ||
+            !sDropCapTextStyleName.isEmpty() ||
             bHasMasterPageName ) ||
          !xStyle.is() ||
          !( bOverwrite || IsNew() ) )
@@ -335,7 +335,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
 
         if ( bApplyListStyle )
         {
-            if ( !sListStyleName.getLength() )
+            if ( sListStyleName.isEmpty() )
             {
                 Any aAny;
                 aAny <<= sListStyleName /* empty string */;
@@ -363,7 +363,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
         }
     }
 
-    if( sDropCapTextStyleName.getLength() )
+    if( !sDropCapTextStyleName.isEmpty() )
     {
         // change list style name to display name
         OUString sDisplayDropCapTextStyleName(
@@ -390,7 +390,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
         // The families cointaner must exist
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
-        if( ( !sDisplayName.getLength() ||
+        if( ( sDisplayName.isEmpty() ||
               (rPageStyles.is() &&
                rPageStyles->hasByName( sDisplayName )) ) &&
             xPropSetInfo->hasPropertyByName( sPageDescName ) )
@@ -445,7 +445,7 @@ void XMLTextStyleContext::FillPropertySet(
             ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
         {
             bAutomatic = true;
-            if( GetAutoName().getLength() )
+            if( !GetAutoName().isEmpty() )
             {
                 OUString sAutoProp = ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT ) ?
                     OUString( RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName") ):
@@ -526,7 +526,7 @@ void XMLTextStyleContext::FillPropertySet(
                 // if necessary.
                 OUString sFontName;
                 rAny >>= sFontName;
-                if ( sFontName.getLength() > 0 )
+                if ( !sFontName.isEmpty() )
                 {
                     OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM("StarBats" ) );
                     OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM("StarMath" ) );
