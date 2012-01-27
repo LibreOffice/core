@@ -73,7 +73,6 @@ protected:
     Image               maImage;
     sal_uInt16              mnSoundType;
     sal_Bool                mbHelpBtn;
-    sal_Bool                mbSound;
     CheckBox*           mpCheckBox;
     XubString           maCheckBoxText;
     sal_Bool                mbCheck;

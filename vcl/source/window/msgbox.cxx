@@ -71,7 +71,6 @@ void MessBox::ImplInitMessBoxData()
     mpFixedImage        = NULL;
     mnSoundType         = 0;
     mbHelpBtn           = sal_False;
-    mbSound             = sal_True;
     mpCheckBox          = NULL;
     mbCheck             = sal_False;
 }
@@ -424,7 +423,7 @@ void MessBox::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         ImplPosControls();
-        if ( mbSound && mnSoundType )
+        if ( mnSoundType )
             Sound::Beep( (SoundType)(mnSoundType-1), this );
     }
     ButtonDialog::StateChanged( nType );
