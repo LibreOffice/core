@@ -1594,15 +1594,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
                 pData->maRollRect.Left()   = pData->maRollRect.Right()-pData->maRollRect.GetHeight()+1;
                 nRight -= pData->maRollRect.GetWidth();
             }
-
-            if ( pBorderWindow->mbHelpBtn )
-            {
-                pData->maHelpRect.Top()    = nItemTop;
-                pData->maHelpRect.Bottom() = nItemBottom;
-                pData->maHelpRect.Right()  = nRight;
-                pData->maHelpRect.Left()   = pData->maHelpRect.Right()-pData->maHelpRect.GetHeight()+1;
-                nRight -= pData->maHelpRect.GetWidth()+3;
-            }
         }
         else
         {
@@ -1922,7 +1913,6 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     mbDockBtn       = sal_False;
     mbMenuBtn       = sal_False;
     mbHideBtn       = sal_False;
-    mbHelpBtn       = sal_False;
     mbDisplayActive = IsActive();
 
     if ( nTypeStyle & BORDERWINDOW_STYLE_FLOAT )

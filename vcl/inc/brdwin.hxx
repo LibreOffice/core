@@ -118,7 +118,6 @@ private:
     sal_Bool                    mbMenuHide;
     sal_Bool                    mbDockBtn;
     sal_Bool                    mbHideBtn;
-    sal_Bool                    mbHelpBtn;
     sal_Bool                    mbMenuBtn;
     sal_Bool                    mbDisplayActive;
 
