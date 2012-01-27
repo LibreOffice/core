@@ -772,33 +772,51 @@ void MigrationImpl::copyConfig() {
             }
         }
     }
+
+    // check if the shared registrymodifications.xcu file exists
+    bool bRegistryModificationsXcuExists = false;
+    rtl::OUString regFilePath(m_aInfo.userdata);
+    regFilePath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/registrymodifications.xcu"));
+    File regFile(regFilePath);
+    ::osl::FileBase::RC nError = regFile.open(osl_File_OpenFlag_Read);
+    if ( nError == ::osl::FileBase::E_None ) {
+        bRegistryModificationsXcuExists = true;
+        regFile.close();
+    }
+
     for (Components::const_iterator i(comps.begin()); i != comps.end(); ++i) {
         if (!i->second.includedPaths.empty()) {
-            rtl::OUStringBuffer buf(m_aInfo.userdata);
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registry/data"));
-            sal_Int32 n = 0;
-            do {
-                rtl::OUString seg(i->first.getToken(0, '.', n));
-                rtl::OUString enc(
-                    rtl::Uri::encode(
-                        seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
-                        RTL_TEXTENCODING_UTF8));
-                if (enc.isEmpty() && !seg.isEmpty()) {
-                    OSL_TRACE(
-                        ("configuration migration component %s ignored (cannot"
-                         " be encoded as file path)"),
-                        rtl::OUStringToOString(
-                            i->first, RTL_TEXTENCODING_UTF8).getStr());
-                    goto next;
-                }
-                buf.append(sal_Unicode('/'));
-                buf.append(enc);
-            } while (n >= 0);
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
+            if (!bRegistryModificationsXcuExists) {
+                // shared registrymodifications.xcu does not exists
+                // the configuration is split in many registry files
+                // determine the file names from the first element in included paths
+                rtl::OUStringBuffer buf(m_aInfo.userdata);
+                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registry/data"));
+                sal_Int32 n = 0;
+                do {
+                    rtl::OUString seg(i->first.getToken(0, '.', n));
+                    rtl::OUString enc(
+                        rtl::Uri::encode(
+                            seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
+                            RTL_TEXTENCODING_UTF8));
+                    if (enc.isEmpty() && !seg.isEmpty()) {
+                        OSL_TRACE(
+                            ("configuration migration component %s ignored (cannot"
+                            " be encoded as file path)"),
+                            rtl::OUStringToOString(
+                                i->first, RTL_TEXTENCODING_UTF8).getStr());
+                        goto next;
+                    }
+                    buf.append(sal_Unicode('/'));
+                    buf.append(enc);
+                } while (n >= 0);
+                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
+                regFilePath = buf.toString();
+            }
             configuration::Update::get(
                 comphelper::getProcessComponentContext())->
                 insertModificationXcuFile(
-                    buf.makeStringAndClear(), setToSeq(i->second.includedPaths),
+                    regFilePath, setToSeq(i->second.includedPaths),
                     setToSeq(i->second.excludedPaths));
         } else {
             OSL_TRACE(
