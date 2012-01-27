@@ -39,6 +39,7 @@
 #include <rtl/strbuf.hxx>
 
 #define ANDROID_EGL
+#undef ANDROID_EGL_LOCK
 #undef ANDROID_PIXELS
 
 class AndroidSalData : public SalGenericData
@@ -88,11 +89,67 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
              rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
 
+    basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
+    basegfx::B2IVector aDevSize = aDev->getSize();
+    sal_Int32 nStride = aDev->getScanlineStride();
+    unsigned char *pSrc = aSrcData.get();
+
+#ifdef ANDROID_EGL
+    (void)pOutBuffer;
+    GLuint nTexture;
+    glGenTextures (1, &nTexture);
+    glBindTexture(GL_TEXTURE_2D,nTexture);
+    // Pixels to texture:
+    fprintf (stderr, "before create texure '%d'\n", glGetError());
+    glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGB,
+                 nStride / 3, aDevSize.getY(),
+                 0 /* border */, GL_RGB, GL_UNSIGNED_BYTE,
+                 pSrc);
+    fprintf (stderr, "created texure '%d'\n", glGetError());
+
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+
+    glEnable(GL_TEXTURE_2D);
+
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+    glDisable(GL_LIGHTING);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glViewport(0, 0, aDevSize.getX(), aDevSize.getY());
+
+    glBindTexture(GL_TEXTURE_2D,nTexture);
+
+    GLfloat aVertices[] = { 0, 0,
+                            0, aDevSize.getY(),
+                            aDevSize.getX(), aDevSize.getY(),
+                            aDevSize.getX(), 0 };
+    glVertexPointer(2, GL_FLOAT, 0, aVertices);
+    fprintf (stderr, "after set vertex '%d'\n", glGetError());
+    glEnableClientState(GL_VERTEX_ARRAY);
+	glColor4f(0.5f, 0.5f, 1.0f, 1.0f);
+    glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
+//    glTexCoordPointer(2, GL_FLOAT, 0, aVertices);
+    fprintf (stderr, "after draw arrays '%d'\n", glGetError());
+
+//    glDisable(GL_TEXTURE_2D);
+
+    // free the texture
+//    glDeleteTextures(1,&nTexture);
+#endif
+
+#ifdef ANDROID_PIXELS
     // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
     ARect aSrcRect = rSrcRect;
-    sal_Int32 nStride = aDev->getScanlineStride();
-    basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
-    unsigned char *pSrc = aSrcData.get();
 
     // FIXME: we have WINDOW_FORMAT_RGB_565            = 4 ...
 
@@ -139,6 +196,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             break;
         }
     }
+#endif // ANDROID_PIXELS
     fprintf (stderr, "done blit!\n");
 }
 
@@ -172,6 +230,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     //    glClearColor((a & 0x1) ? 1.0 : 0.0, (a & 0x2) ? 1.0 : 0.0, 0.0, 1);
     //    glClear(GL_COLOR_BUFFER_BIT);
 
+#ifdef ANDROID_EGL_LOCK // failed to do anything !
     const EGLint aAttribs[] = {
         EGL_MAP_PRESERVE_PIXELS_KHR, EGL_FALSE,
         EGL_LOCK_USAGE_HINT_KHR, EGL_WRITE_SURFACE_BIT_KHR,
@@ -196,6 +255,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     aOutBuffer.stride = nStride / 2; // FIXME - assuming 565
     aOutBuffer.width = nWidth;
     aOutBuffer.height = nHeight;
+#endif
 
 #endif // ANDROID_EGL
 
@@ -208,10 +268,10 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
              nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
              aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
              aOutBuffer.format, aOutBuffer.bits);
-#endif // ANDROID_PIXELS
-
     if (aOutBuffer.bits != NULL)
     {
+#endif // ANDROID_PIXELS
+
 #if 1 // pre-'clean' the buffer with cruft:
         // hard-code / guess at a format ...
         int32_t *p = (int32_t *)aOutBuffer.bits;
@@ -228,17 +288,19 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
             SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
             BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
         }
+
+#ifdef ANDROID_PIXELS
     }
     else
         fprintf (stderr, "no buffer for locked window\n");
-
-#ifdef ANDROID_PIXELS
     ANativeWindow_unlockAndPost(pWindow);
 #endif
 
 #ifdef ANDROID_EGL
+#ifdef ANDROID_EGL_LOCK
     nRet = eglUnlockSurfaceKHR(mxDisplay, mxSurface);
     fprintf (stderr, "eGL unlock %d\n", nRet);
+#endif
     eglSwapBuffers(mxDisplay, mxSurface);
 #endif
 
