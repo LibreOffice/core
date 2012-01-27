@@ -33,12 +33,12 @@
 
 module com { module sun { module star { module xml { module crypto {
 
-published interface XXMLSecurityContext;
+interface XXMLSecurityContext;
 
 /**
  * Interface to manipulate Security Environment
  */
-published interface XSEInitializer : com::sun::star::uno::XInterface
+interface XSEInitializer : com::sun::star::uno::XInterface
 {
     /**
        Creates a security context.

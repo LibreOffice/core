@@ -39,7 +39,7 @@ module com { module sun { module star { module security {
  *
  * <p>This interface represents a x509 certificate.</p>
  */
-published interface XCertificate : com::sun::star::uno::XInterface
+interface XCertificate : com::sun::star::uno::XInterface
 {
     /**
      * the version number attribute of the certificate.

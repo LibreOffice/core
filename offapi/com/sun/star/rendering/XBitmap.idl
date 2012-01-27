@@ -45,14 +45,14 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published interface XBitmap : ::com::sun::star::uno::XInterface
+interface XBitmap : ::com::sun::star::uno::XInterface
 {
     /** Query the size of the bitmap.<p>
 
         This method queries the bitmap size in pixel.<p>
 
         @return the bitmap size in pixel.
-     */
+      */
     ::com::sun::star::geometry::IntegerSize2D   getSize();
 
     //-------------------------------------------------------------------------
@@ -68,7 +68,7 @@ published interface XBitmap : ::com::sun::star::uno::XInterface
 
         @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
         not.
-     */
+      */
     boolean                                     hasAlpha();
 
     //-------------------------------------------------------------------------

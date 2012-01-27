@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module awt { module tab {
 /** specifies the standard model of a XTabPageModel.
     @since OOo 3.4
  */
-published service UnoControlTabPageModel : XTabPageModel
+service UnoControlTabPageModel : XTabPageModel
 {
     /** Creates a new XTabPageModel with a given ID.
     */

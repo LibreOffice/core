@@ -37,7 +37,7 @@ module com { module sun { module star { module security {
  *
  * <p>This interface represents a x509 certificate.</p>
  */
-published interface XCertificateExtension : com::sun::star::uno::XInterface
+interface XCertificateExtension : com::sun::star::uno::XInterface
 {
     /**
      * Check whether it is a critical extension

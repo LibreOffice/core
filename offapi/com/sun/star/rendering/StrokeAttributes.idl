@@ -37,14 +37,14 @@ module com { module sun { module star { module rendering {
 
     @single #110496#
  */
-published struct StrokeAttributes
+struct StrokeAttributes
 {
     /** Defines the width of the stroke, measured in user
         coordinate space.
 
         This value must be positive (or 0.0)
      */
-    double                  StrokeWidth;
+    double              StrokeWidth;
 
     //-------------------------------------------------------------------------
 

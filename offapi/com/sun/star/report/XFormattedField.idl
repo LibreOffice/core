@@ -40,7 +40,7 @@
     @see com::sun::star::report::XReportControlModel
     @see com::sun::star::util::XNumberFormatsSupplier
 */
-published interface XFormattedField
+interface XFormattedField
 {
     interface XReportControlModel;
 

@@ -50,7 +50,7 @@
 
     @see com::sun::star::sdb::SingleSelectQueryComposer
  */
-published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
+interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 {
     //-------------------------------------------------------------------------
     // FILTER
