@@ -237,17 +237,7 @@ sal_GetServerVendor( Display *p_display )
     } vendor_t;
 
     const vendor_t p_vendorlist[] = {
-        { vendor_xfree,       "The XFree86 Project, Inc",        13 },
         { vendor_sun,         "Sun Microsystems, Inc.",          10 },
-        { vendor_attachmate,  "Attachmate Corporation",          10 },
-        { vendor_excursion,
-            "DECWINDOWS DigitalEquipmentCorporation, eXcursion", 42 },
-        { vendor_hp,          "Hewlett-Packard Company",         17 },
-        { vendor_hummingbird, "Hummingbird Communications Ltd.", 11 },
-        { vendor_ibm,         "International Business Machines", 24 },
-        { vendor_sgi,         "Silicon Graphics",                 9 },
-        { vendor_sco,         "The Santa Cruz Operation",        16 },
-        { vendor_xinside,     "X Inside Inc.",                   10 },
         // allways the last entry: vendor_none to indicate eol
         { vendor_none,        NULL,                               0 },
     };

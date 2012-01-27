@@ -80,17 +80,7 @@ namespace vcl_sal { class WMAdaptor; }
 
 typedef enum  {
     vendor_none = 0,
-    vendor_attachmate,
-    vendor_excursion,
-    vendor_hp,
-    vendor_hummingbird,
-    vendor_ibm,
-    vendor_sco,
-    vendor_sgi,
     vendor_sun,
-    vendor_xfree,
-    vendor_xinside,
-    vendor_xprinter,
     vendor_unknown
 } srv_vendor_t;
 
