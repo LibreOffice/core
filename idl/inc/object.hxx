@@ -141,10 +141,6 @@ public:
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 Table* pTable );
-    virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                 Table * pTable );
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 };
 SV_IMPL_REF(SvMetaClass)
 SV_IMPL_PERSIST_LIST(SvMetaClass,SvMetaClass *)

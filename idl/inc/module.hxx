@@ -97,11 +97,6 @@ public:
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                     Table* pTable );
-    virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                      Table *pIdTable );
-
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 };
 SV_DECL_IMPL_REF(SvMetaModule)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaModule,SvMetaModule *)

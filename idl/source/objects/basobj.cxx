@@ -119,14 +119,6 @@ void SvMetaObject::Write( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */,
 {
 }
 
-void SvMetaObject::WriteCxx( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
-{
-}
-
-void SvMetaObject::WriteHxx( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
-{
-}
-
 SV_IMPL_META_FACTORY1( SvMetaName, SvMetaObject );
 SvMetaName::SvMetaName()
 {

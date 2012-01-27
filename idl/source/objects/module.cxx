@@ -507,35 +507,4 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             Table * pTable )
-{
-    if( !aSlotIdFile.getString().isEmpty() )
-        rOutStm << "//#include <" << aSlotIdFile.getString().getStr() << '>' << endl;
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
-    {
-        aClassList.GetObject( n )->WriteSrc( rBase, rOutStm, pTable );
-    }
-}
-
-void SvMetaModule::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             sal_uInt16 nTab )
-{
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
-    {
-        SvMetaClass * pClass = aClassList.GetObject( n );
-        pClass->WriteHxx( rBase, rOutStm, nTab );
-    }
-}
-
-void SvMetaModule::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             sal_uInt16 nTab )
-{
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
-    {
-        SvMetaClass * pClass = aClassList.GetObject( n );
-        pClass->WriteCxx( rBase, rOutStm, nTab );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

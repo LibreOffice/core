@@ -261,8 +261,6 @@ public:
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
-    virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  Table * pIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
 };
 SV_DECL_IMPL_REF(SvMetaSlot)

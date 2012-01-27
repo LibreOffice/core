@@ -740,10 +740,6 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const rtl::OString&, SvIdlData
 {
 }
 
-void SvMetaAttribute::WriteSrc( SvIdlDataBase &, SvStream &, Table * )
-{
-}
-
 void SvMetaAttribute::WriteHelpId( SvIdlDataBase &, SvStream &, Table * )
 {
 }

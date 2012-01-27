@@ -119,8 +119,6 @@ public:
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
-    virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  Table * pIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
     void                FillIDTable(Table *pIDTable);
     rtl::OString        Compare( SvMetaAttribute *pAttr );

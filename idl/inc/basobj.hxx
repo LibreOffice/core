@@ -89,9 +89,6 @@ public:
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                 WriteType, WriteAttribute = 0 );
-
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 };
 SV_DECL_IMPL_REF(SvMetaObject)
 SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
