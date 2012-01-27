@@ -43,7 +43,6 @@ module com { module sun { module star { module ucb {
     <type>XCommandEnvironment</type> implementation, when executing a command
     using <type>XCommandProcessor</type>.
 */
-/* published */
 interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -63,8 +62,8 @@ interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
         The header value must be an Any containing a string.
     */
     sequence<com::sun::star::beans::NamedValue> getUserRequestHeaders(
-    [in] string aURI,
-    [in] string aMethod);
+        [in] string aURI,
+        [in] string aMethod);
 };
 
 //=============================================================================

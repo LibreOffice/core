@@ -36,7 +36,6 @@ module com { module sun { module star { module uno { interface XInterface; }; };
 module com { module sun { module star { module drawing { module framework {
 
 interface XConfiguration;
-interface XConfigurationController;
 interface XResourceId;
 
 /** Objects of this class are used for notifying changes of the

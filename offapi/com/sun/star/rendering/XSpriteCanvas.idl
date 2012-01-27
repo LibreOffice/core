@@ -123,7 +123,7 @@ interface XSpriteCanvas : XBitmapCanvas
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Tells the sprite canvas to now update the screen
-         representation.
+        representation.
 
         Required to display rendered changes to the canvas, and
         updates to stopped animations and XCustomSprites in

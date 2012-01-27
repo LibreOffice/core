@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_security_CertificateContainerStatus_idl_
 #define __com_sun_star_security_CertificateContainerStatus_idl_
 

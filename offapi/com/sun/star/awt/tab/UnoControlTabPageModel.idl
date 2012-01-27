@@ -45,7 +45,7 @@ service UnoControlTabPageModel : XTabPageModel
     */
     create([in] short tabPageID);
 
-    /** Creates a new XTabPageModel with a given ID and a url which is used to load teh tab page model.
+    /** Creates a new XTabPageModel with a given ID and a url which is used to load the tab page model.
     */
     load([in] short tabPageID,[in] string url);
 };
