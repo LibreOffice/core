@@ -178,6 +178,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
         return ((oslModule)(pLib));
 
 #else   /* NO_DL_FUNCTIONS */
+        (void) nRtldMode;
         printf("No DL Functions\n");
 #endif  /* NO_DL_FUNCTIONS */
     }
