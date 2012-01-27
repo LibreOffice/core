@@ -49,6 +49,9 @@ class WorksheetHelper;
 
 // ============================================================================
 
+typedef ::std::pair< sal_Int32, rtl::OUString > IdCaptionPair;
+typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
+
 class PivotCacheItem
 {
 public:
@@ -103,6 +106,9 @@ public:
     inline bool         isUnused() const { return mbUnused; }
 
 private:
+friend class PivotCacheItemList;
+    // #FIXME hack Sets the value of this item to the given string ( and overwrites type if necessary
+    void                setStringValue( const rtl::OUString& sName );
     ::com::sun::star::uno::Any maValue;     /// Value of the item.
     sal_Int32           mnType;             /// Value type (OOXML token identifier).
     bool                mbUnused;
@@ -131,6 +137,7 @@ public:
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all items. */
     void                getCacheItemNames( ::std::vector< ::rtl::OUString >& orItemNames ) const;
+    void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
 private:
     /** Creates and returns a new item at the end of the items list. */
@@ -262,6 +269,8 @@ public:
     void                importPCDFRangePr( BiffInputStream& rStrm );
     /** Imports the mapping between group items and base items from the PCDFDISCRETEPR record. */
     void                importPCDFDiscretePr( BiffInputStream& rStrm );
+    /** Apply user Captions to imported group data */
+    void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
     /** Returns true, if the field is based on source data, or false if it is grouped or calculated. */
     inline bool         isDatabaseField() const { return maFieldModel.mbDatabaseField; }
@@ -317,7 +326,6 @@ public:
     /** Reads an item index from the PCITEM_INDEXLIST record and writes the item to the passed sheet. */
     void                importPCItemIndex( BiffInputStream& rStrm,
                             WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
-
 
 private:
     /** Tries to write the passed value to the passed sheet position. */

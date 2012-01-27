@@ -49,6 +49,7 @@ struct PTFieldItemModel
 {
     sal_Int32           mnCacheItem;        /// Index to shared item in pivot cache.
     sal_Int32           mnType;             /// Type of the item.
+    rtl::OUString       msCaption;          /// User caption of the item
     bool                mbShowDetails;      /// True = show item details (items of child fields).
     bool                mbHidden;           /// True = item is hidden.
 

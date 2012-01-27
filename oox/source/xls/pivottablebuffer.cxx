@@ -370,6 +370,7 @@ void PivotTableField::importItem( const AttributeList& rAttribs )
     aModel.mnType        = rAttribs.getToken( XML_t, XML_data );
     aModel.mbShowDetails = rAttribs.getBool( XML_sd, true );
     aModel.mbHidden      = rAttribs.getBool( XML_h, false );
+    aModel.msCaption     = rAttribs.getXString( XML_n, OUString() );
     maItems.push_back( aModel );
 }
 
@@ -548,6 +549,7 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
             }
             else if( pCacheField->hasParentGrouping() )
             {
+
                 // create a list of all item names, needed to map between original and group items
                 ::std::vector< OUString > aItems;
                 pCacheField->getCacheItemNames( aItems );
@@ -585,6 +587,17 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
     {
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
+            // data field can have user defined groupname captions, apply them
+            // if they do
+            IdCaptionPairList captionList;
+            for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
+            {
+                if ( aIt->mnType == XML_data  && aIt->msCaption.getLength() )
+                    captionList.push_back( IdCaptionPair( aIt->mnCacheItem, aIt->msCaption ) );
+            }
+            // #FIXME find another way out of this const nightmare prison
+            if ( !captionList.empty() )
+                const_cast<PivotCacheField*>( pCacheField )->applyItemCaptions( captionList );
             maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
             // on success, try to create nested group fields
             Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );

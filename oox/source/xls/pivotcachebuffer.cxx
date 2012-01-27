@@ -302,6 +302,12 @@ void PivotCacheItem::readError( BiffInputStream& rStrm )
     mnType = XML_e;
 }
 
+void PivotCacheItem::setStringValue( const OUString& sString )
+{
+    mnType = XML_s;
+    maValue <<= sString;
+}
+
 OUString PivotCacheItem::getName() const
 {
     switch( mnType )
@@ -391,6 +397,15 @@ void PivotCacheItemList::importItemList( BiffInputStream& rStrm, sal_uInt16 nCou
 const PivotCacheItem* PivotCacheItemList::getCacheItem( sal_Int32 nItemIdx ) const
 {
     return ContainerHelper::getVectorElement( maItems, nItemIdx );
+}
+
+void PivotCacheItemList::applyItemCaptions( const IdCaptionPairList& vCaptions )
+{
+    for( IdCaptionPairList::const_iterator aIt = vCaptions.begin(), aEnd = vCaptions.end(); aIt != aEnd; ++aIt )
+    {
+        if ( static_cast<sal_uInt32>( aIt->first ) < maItems.size() )
+            maItems[ aIt->first ].setStringValue( aIt->second );
+    }
 }
 
 void PivotCacheItemList::getCacheItemNames( ::std::vector< OUString >& orItemNames ) const
@@ -751,6 +766,14 @@ const PivotCacheItem* PivotCacheField::getCacheItem( sal_Int32 nItemIdx ) const
     if( hasSharedItems() )
         return maSharedItems.getCacheItem( nItemIdx );
     return 0;
+}
+
+void PivotCacheField::applyItemCaptions( const IdCaptionPairList& vCaptions )
+{
+    if( hasGroupItems() )
+        maGroupItems.applyItemCaptions( vCaptions );
+    if( hasSharedItems() )
+        maSharedItems.applyItemCaptions( vCaptions );
 }
 
 void PivotCacheField::getCacheItemNames( ::std::vector< OUString >& orItemNames ) const
