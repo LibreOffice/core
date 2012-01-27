@@ -1259,6 +1259,22 @@ ScDPObject* createDPFromRange(
     return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
 }
 
+class AutoCalcSwitch
+{
+    ScDocument* mpDoc;
+    bool mbOldValue;
+public:
+    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
+    {
+        mpDoc->SetAutoCalc(bAutoCalc);
+    }
+
+    ~AutoCalcSwitch()
+    {
+        mpDoc->SetAutoCalc(mbOldValue);
+    }
+};
+
 }
 
 void Test::testPivotTable()
@@ -1655,6 +1671,15 @@ void Test::testPivotTableFilters()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+
+    ScAddress aFormulaAddr = aOutRange.aEnd;
+    aFormulaAddr.IncRow(2);
+    m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B8")));
+    double fTest = m_pDoc->GetValue(aFormulaAddr);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
+
     // Set current page of 'Group2' to 'A'.
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
@@ -1681,6 +1706,9 @@ void Test::testPivotTableFilters()
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    fTest = m_pDoc->GetValue(aFormulaAddr);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 40.0);
 
     // Set query filter.
     ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
@@ -1710,6 +1738,9 @@ void Test::testPivotTableFilters()
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    fTest = m_pDoc->GetValue(aFormulaAddr);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 20.0);
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
