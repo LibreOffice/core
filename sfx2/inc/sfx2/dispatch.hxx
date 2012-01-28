@@ -198,7 +198,6 @@ public:
     SAL_DLLPRIVATE sal_Bool IsUpdated_Impl() const;
     SAL_DLLPRIVATE int GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
                                               sal_Bool bOwnShellsOnly, sal_Bool bModal, sal_Bool bRealSlot=sal_True );
-    SAL_DLLPRIVATE void LockUI_Impl( sal_Bool bLock = sal_True );
     SAL_DLLPRIVATE void SetReadOnly_Impl( sal_Bool  bOn );
     SAL_DLLPRIVATE sal_Bool GetReadOnly_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;

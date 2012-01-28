@@ -1876,9 +1876,6 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
 {
     if ( pViewFrame != pImp->pActiveChild )
     {
-        if ( !pImp->pActiveChild )
-            GetDispatcher()->LockUI_Impl( sal_False );
-
         pImp->pActiveChild = pViewFrame;
 
         Reference< XFramesSupplier > xFrame( GetFrame().GetFrameInterface(), UNO_QUERY );

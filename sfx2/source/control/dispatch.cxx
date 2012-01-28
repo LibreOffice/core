@@ -145,7 +145,6 @@ struct SfxDispatcher_Impl
     std::vector<sal_uInt32> aChildWins;
     sal_uInt16           nActionLevel;  // in EnterAction
     sal_uInt32           nEventId;      // EventId UserEvent
-    sal_Bool             bUILocked;     // Update disconnected (no flicker)
     sal_Bool             bNoUI;         // UI only from Parent Dispatcher
     sal_Bool             bReadOnly;     // Document is ReadOnly
     sal_Bool             bQuiet;        // Only use parent dispatcher
@@ -330,7 +329,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->bLocked = sal_False;
     pImp->bActive = sal_False;
     pImp->pParent = NULL;
-    pImp->bUILocked = sal_False;
     pImp->bNoUI = sal_False;
     pImp->bReadOnly = sal_False;
     pImp->bQuiet = sal_False;
@@ -1305,7 +1303,7 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
 
     Flush();
 
-    if ( !pImp->pFrame || pImp->bUILocked )
+    if ( !pImp->pFrame )
         return;
 
     SFX_APP();  // -Wall is this required???
@@ -2181,14 +2179,6 @@ void SfxDispatcher::Lock( sal_Bool bLock )
 sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
 {
     return pImp->aObjBars[nPos].nResId;
-}
-
-void SfxDispatcher::LockUI_Impl( sal_Bool bLock )
-{
-    sal_Bool bWasLocked = pImp->bUILocked;
-    pImp->bUILocked = bLock;
-    if ( !bLock && bWasLocked )
-        Update_Impl( sal_True );
 }
 
 //-------------------------------------------------------------------------
