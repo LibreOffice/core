@@ -319,13 +319,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 
 void ScTpUserLists::MakeListStr( String& rListStr )
 {
-    String  aInputStr(rListStr);
     String  aStr;
-
-    xub_StrLen  nLen    = aStr.Len();
-    xub_StrLen  c       = 0;
-
-    aInputStr.ConvertLineEnd( LINEEND_LF );
 
     xub_StrLen nToken = comphelper::string::getTokenCount(rListStr, LF);
 
@@ -340,12 +334,12 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
     aStr.EraseLeadingChars( cDelimiter );
     aStr.EraseTrailingChars( cDelimiter );
-    nLen = aStr.Len();
+    xub_StrLen nLen = aStr.Len();
 
     rListStr.Erase();
 
     // Alle Doppelten cDelimiter entfernen:
-    c=0;
+    xub_StrLen c = 0;
     while ( c < nLen )
     {
         rListStr += aStr.GetChar(c);
