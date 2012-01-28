@@ -69,7 +69,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, c
     // getEventHandlerInfo() throws, if unknown event dentifier has been passed
     const EventHandlerInfo& rInfo = getEventHandlerInfo( nEventId );
     // getEventHandlerPath() searches for the macro in the document
-    return getEventHandlerPath( rInfo, rArgs ).getLength() > 0;
+    return !getEventHandlerPath( rInfo, rArgs ).isEmpty();
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
         {
             // search the event handler macro in the document
             OUString aMacroPath = getEventHandlerPath( rInfo, aEventArgs );
-            if( aMacroPath.getLength() > 0 )
+            if( !aMacroPath.isEmpty() )
             {
                 // build the argument list
                 uno::Sequence< uno::Any > aVbaArgs = implBuildArgumentList( rInfo, aEventArgs );
@@ -179,7 +179,7 @@ void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rE
     {
         const util::ElementChange& rChange = rEvent.Changes[ nIndex ];
         OUString aModuleName;
-        if( (rChange.Accessor >>= aModuleName) && (aModuleName.getLength() > 0) ) try
+        if( (rChange.Accessor >>= aModuleName) && !aModuleName.isEmpty() ) try
         {
             // invalidate event handler path map depending on module type
             if( getModuleType( aModuleName ) == script::ModuleType::NORMAL )
@@ -275,7 +275,7 @@ OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo
         // document event: get name of the code module associated to the event sender
         case script::ModuleType::DOCUMENT:
             aModuleName = implGetDocumentModuleName( rInfo, rArgs );
-            if( aModuleName.getLength() == 0 )
+            if( aModuleName.isEmpty() )
                 throw lang::IllegalArgumentException();
         break;
 
@@ -295,7 +295,7 @@ void VbaEventsHelperBase::ensureVBALibrary() throw (uno::RuntimeException)
     if( !mxModuleInfos.is() ) try
     {
         maLibraryName = getDefaultProjectName( mpShell );
-        if( maLibraryName.getLength() == 0 )
+        if( maLibraryName.isEmpty() )
             throw uno::RuntimeException();
         uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
@@ -319,7 +319,7 @@ sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName ) thro
     ensureVBALibrary();
 
     // no module specified: global event handler in standard code modules
-    if( rModuleName.getLength() == 0 )
+    if( rModuleName.isEmpty() )
         return script::ModuleType::NORMAL;
 
     // get module type from module info

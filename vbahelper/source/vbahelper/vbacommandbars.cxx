@@ -143,14 +143,14 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
         }
 
         // nothing found - try to resolve from name
-        if( !aRet.hasValue() && (sResourceUrl.getLength() == 0) )
+        if( !aRet.hasValue() && sResourceUrl.isEmpty() )
         {
             sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sBarName );
             bMenu = sal_False;
         }
     }
 
-    if( sResourceUrl.getLength() )
+    if( !sResourceUrl.isEmpty() )
     {
         xBarSettings = m_pCBarHelper->getSettings( sResourceUrl );
         aRet <<= uno::Reference< XCommandBar >( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, bMenu, sal_False ) );
@@ -174,10 +174,10 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
         Name >>= sName;
 
     rtl::OUString sResourceUrl;
-    if( sName.getLength() )
+    if( !sName.isEmpty() )
     {
         sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sName );
-        if( sResourceUrl.getLength() )
+        if( !sResourceUrl.isEmpty() )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toolbar exists") ), uno::Reference< uno::XInterface >() );
     }
     else

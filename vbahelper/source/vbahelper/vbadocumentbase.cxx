@@ -67,7 +67,7 @@ VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
 VbaDocumentBase::getName() throw (uno::RuntimeException)
 {
     rtl::OUString sName = getModel()->getURL();
-    if ( sName.getLength() )
+    if ( !sName.isEmpty() )
     {
 
         INetURLObject aURL( getModel()->getURL() );
@@ -87,7 +87,7 @@ VbaDocumentBase::getPath() throw (uno::RuntimeException)
     INetURLObject aURL( getModel()->getURL() );
     rtl::OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     rtl::OUString sPath;
-    if( sURL.getLength() > 0 )
+    if( !sURL.isEmpty() )
     {
        sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
        ::osl::File::getSystemPathFromFileURL( sURL, sPath );

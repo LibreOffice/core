@@ -161,7 +161,7 @@ ListControlHelper::Clear(  ) throw (uno::RuntimeException)
 void SAL_CALL
 ListControlHelper::setRowSource( const rtl::OUString& _rowsource ) throw (uno::RuntimeException)
 {
-    if ( _rowsource.getLength() == 0 )
+    if ( _rowsource.isEmpty() )
         Clear();
 }
 

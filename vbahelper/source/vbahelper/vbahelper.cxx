@@ -432,13 +432,13 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
         aArgs.Put( sfxCollate, sfxCollate.Which() );
         SfxInt16Item sfxCopies( SID_PRINT_COPIES, nCopies );
         aArgs.Put( sfxCopies, sfxCopies.Which() );
-        if ( sFileName.getLength() )
+        if ( !sFileName.isEmpty() )
         {
             SfxStringItem sfxFileName( SID_FILE_NAME, sFileName);
             aArgs.Put( sfxFileName, sfxFileName.Which() );
 
         }
-        if (  sRange.getLength() )
+        if (  !sRange.isEmpty() )
         {
             SfxStringItem sfxRange( SID_PRINT_PAGES, sRange );
             aArgs.Put( sfxRange, sfxRange.Which() );

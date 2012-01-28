@@ -288,10 +288,10 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
         // TODO: Support Before and After?
         ::rtl::OUString aNewName;
         StringKey >>= aNewName;
-        if ( !aNewName.getLength() )
+        if ( aNewName.isEmpty() )
         {
             aNewName = aComServiceName;
-            if ( !aNewName.getLength() )
+            if ( aNewName.isEmpty() )
                 aNewName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Control" ) );
 
             sal_Int32 nInd = 0;
@@ -303,7 +303,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
         }
 
         double fDefWidth = 72.0, fDefHeight = 18.0;
-        if ( aComServiceName.getLength() )
+        if ( !aComServiceName.isEmpty() )
         {
             // create a UNO control model based on the passed control type
             uno::Reference< awt::XControlModel > xNewModel;
@@ -464,12 +464,12 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
         uno::Reference< lang::XMultiServiceFactory > xModelFactory( mxDialog->getModel(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameContainer > xDialogContainer( xModelFactory, uno::UNO_QUERY_THROW );
 
-        if ( !( ( StringKeyOrIndex >>= aControlName ) && aControlName.getLength() )
+        if ( !( ( StringKeyOrIndex >>= aControlName ) && !aControlName.isEmpty() )
           && !( ( StringKeyOrIndex >>= nIndex ) && nIndex >= 0 && nIndex < m_xIndexAccess->getCount() ) )
             throw uno::RuntimeException();
 
         uno::Reference< awt::XControl > xControl;
-        if ( aControlName.getLength() )
+        if ( !aControlName.isEmpty() )
         {
             uno::Reference< awt::XControlContainer > xControlContainer( mxDialog, uno::UNO_QUERY_THROW );
             xControl = xControlContainer->getControl( aControlName );
@@ -482,7 +482,7 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
         if ( !xControl.is() )
             throw uno::RuntimeException();
 
-        if ( !aControlName.getLength() )
+        if ( aControlName.isEmpty() )
             aControlName = ControlArrayWrapper::getControlName( xControl );
 
         xDialogContainer->removeByName( aControlName );

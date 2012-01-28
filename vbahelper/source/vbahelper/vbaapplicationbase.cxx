@@ -109,7 +109,7 @@ public:
 
     void Start( const ::rtl::Reference< VbaApplicationBase > xBase, const ::rtl::OUString& aFunction, double nFrom, double nTo )
     {
-        if ( !xBase.is() || !aFunction.getLength() )
+        if ( !xBase.is() || aFunction.isEmpty() )
             throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected arguments!" ) ), uno::Reference< uno::XInterface >() );
 
         m_xBase = xBase;
@@ -347,7 +347,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
 void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const ::rtl::OUString& aFunction, const uno::Any& aLatestTime, const uno::Any& aSchedule )
     throw ( uno::RuntimeException )
 {
-    if ( !aFunction.getLength() )
+    if ( aFunction.isEmpty() )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected function name!" ) ), uno::Reference< uno::XInterface >() );
 
     double nEarliestTime = 0;

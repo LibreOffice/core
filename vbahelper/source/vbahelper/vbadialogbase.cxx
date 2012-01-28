@@ -38,7 +38,7 @@ sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
     if ( m_xModel.is() )
     {
         aURL = mapIndexToName( mnIndex );
-        if( aURL.getLength() == 0  )
+        if( aURL.isEmpty() )
             throw uno::RuntimeException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Unable to open the specified dialog " ) ),
                 uno::Reference< XInterface > () );

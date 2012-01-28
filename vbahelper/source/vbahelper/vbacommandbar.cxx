@@ -50,7 +50,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
     uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")) );
     rtl::OUString sName;
     aName >>= sName;
-    if( sName.getLength() < 1 )
+    if( sName.isEmpty() )
     {
         if( m_bIsMenu )
         {

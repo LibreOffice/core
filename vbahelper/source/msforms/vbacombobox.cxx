@@ -62,7 +62,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
     catch( uno::Exception& )
     {
     }
-    if( sSourceName.getLength() == 0 )
+    if( sSourceName.isEmpty() )
         sSourceName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
 }
 
@@ -110,7 +110,7 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
     {
         rtl::OUString sText = getText();
         sal_Int32 nLen = sItems.getLength();
-        for ( sal_Int32 index = 0; sText.getLength() && index < nLen; ++index )
+        for ( sal_Int32 index = 0; !sText.isEmpty() && index < nLen; ++index )
         {
             if ( sItems[ index ].equals( sText ) )
             {

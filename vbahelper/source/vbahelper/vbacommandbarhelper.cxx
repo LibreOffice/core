@@ -114,7 +114,7 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
         maModuleId = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
     }
 
-    if( maModuleId.getLength() == 0 )
+    if( maModuleId.isEmpty() )
     {
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
     }
@@ -209,7 +209,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
 
     // check if it is an buildin toolbar
     sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
-    if( sResourceUrl.getLength() > 0 )
+    if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
 
     uno::Sequence< ::rtl::OUString > allNames = xNameAccess->getElementNames();
