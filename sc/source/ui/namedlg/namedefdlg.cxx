@@ -346,7 +346,7 @@ void ScNameDefDlg::MorePushed()
     Size nSize = GetSizePixel();
 
     //depending on the state of the button, move all elements below up/down
-    long nPixel = 75;
+    long nPixel = 65;
     if (!maBtnMore.GetState())
     {
         nPixel *= -1;
