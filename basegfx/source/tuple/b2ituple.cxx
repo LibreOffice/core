@@ -42,54 +42,6 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB)
-    {
-        B2ITuple aMin(
-            (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMin;
-    }
-
-    B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB)
-    {
-        B2ITuple aMax(
-            (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMax;
-    }
-
-    B2ITuple absolute(const B2ITuple& rTup)
-    {
-        B2ITuple aAbs(
-            (0 > rTup.getX()) ? -rTup.getX() : rTup.getX(),
-            (0 > rTup.getY()) ? -rTup.getY() : rTup.getY());
-        return aAbs;
-    }
-
-    B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t)
-    {
-        B2DTuple aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
-        return aInt;
-    }
-
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2)
-    {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5);
-        return aAvg;
-    }
-
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3)
-    {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
-        return aAvg;
-    }
-
     B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aSum(rTupA);

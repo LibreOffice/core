@@ -39,31 +39,9 @@ namespace basegfx
         return *this;
     }
 
-
-    double B2IVector::getLength() const
-    {
-        return hypot( mnX, mnY );
-    }
-
     double B2IVector::scalar( const B2IVector& rVec ) const
     {
         return((mnX * rVec.mnX) + (mnY * rVec.mnY));
-    }
-
-    double B2IVector::cross( const B2IVector& rVec ) const
-    {
-        return(mnX * rVec.getY() - mnY * rVec.getX());
-    }
-
-    double B2IVector::angle( const B2IVector& rVec ) const
-    {
-        return atan2(double( mnX * rVec.getY() - mnY * rVec.getX()),
-            double( mnX * rVec.getX() + mnY * rVec.getY()));
-    }
-
-    const B2IVector& B2IVector::getEmptyVector()
-    {
-        return (const B2IVector&) ::basegfx::B2ITuple::getEmptyTuple();
     }
 
     B2IVector& B2IVector::operator*=( const B2DHomMatrix& rMat )
@@ -102,57 +80,12 @@ namespace basegfx
         return ::basegfx::fTools::equalZero(fVal);
     }
 
-    B2VectorOrientation getOrientation( const B2IVector& rVecA, const B2IVector& rVecB )
-    {
-        double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-
-        if(fVal > 0.0)
-        {
-            return ORIENTATION_POSITIVE;
-        }
-
-        if(fVal < 0.0)
-        {
-            return ORIENTATION_NEGATIVE;
-        }
-
-        return ORIENTATION_NEUTRAL;
-    }
-
-    B2IVector getPerpendicular( const B2IVector& rNormalizedVec )
-    {
-        B2IVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX());
-        return aPerpendicular;
-    }
-
     B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec )
     {
         B2IVector aRes( rVec );
         return aRes*=rMat;
     }
 
-    B2VectorContinuity getContinuity(const B2IVector& rBackVector, const B2IVector& rForwardVector )
-    {
-        B2VectorContinuity eRetval(CONTINUITY_NONE);
-
-        if(!rBackVector.equalZero() && !rForwardVector.equalZero())
-        {
-            const B2IVector aInverseForwardVector(-rForwardVector.getX(), -rForwardVector.getY());
-
-            if(rBackVector == aInverseForwardVector)
-            {
-                // same direction and same length -> C2
-                eRetval = CONTINUITY_C2;
-            }
-            else if(areParallel(rBackVector, aInverseForwardVector))
-            {
-                // same direction -> C1
-                eRetval = CONTINUITY_C1;
-            }
-        }
-
-        return eRetval;
-    }
 } // end of namespace basegfx
 
 // eof

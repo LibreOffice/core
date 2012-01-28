@@ -204,13 +204,6 @@ namespace basegfx
     //////////////////////////////////////////////////////////////////////////
     class B2DTuple;
 
-    BASEGFX_DLLPUBLIC B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-    BASEGFX_DLLPUBLIC B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-    BASEGFX_DLLPUBLIC B2ITuple absolute(const B2ITuple& rTup);
-    BASEGFX_DLLPUBLIC B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
-    BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
-    BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
-
     BASEGFX_DLLPUBLIC B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
     BASEGFX_DLLPUBLIC B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
     BASEGFX_DLLPUBLIC B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);

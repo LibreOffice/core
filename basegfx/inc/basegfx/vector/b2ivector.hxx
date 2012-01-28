@@ -113,12 +113,6 @@ namespace basegfx
         */
         B2IVector& operator=( const ::basegfx::B2ITuple& rVec );
 
-        /** Calculate the length of this 2D Vector
-
-            @return The Length of the 2D Vector
-        */
-        double getLength() const;
-
         /** Set the length of this 2D Vector
 
             @param fLen
@@ -136,68 +130,16 @@ namespace basegfx
         */
         double scalar( const B2IVector& rVec ) const;
 
-        /** Calculate the length of the cross product with another 2D Vector
-
-            In 2D, returning an actual vector does not make much
-            sense here. The magnitude, although, can be readily
-            used for tasks such as angle calculations, since for
-            the returned value, the following equation holds:
-            retVal = getLength(this)*getLength(rVec)*sin(theta),
-            with theta being the angle between the two vectors.
-
-            @param rVec
-            The second 2D Vector
-
-            @return
-            The length of the cross product of the two involved 2D Vectors
-        */
-        double cross( const B2IVector& rVec ) const;
-
-        /** Calculate the Angle with another 2D Vector
-
-            @param rVec
-            The second 2D Vector
-
-            @return
-            The Angle value of the two involved 2D Vectors in -pi/2 < return < pi/2
-        */
-        double angle( const B2IVector& rVec ) const;
-
         /** Transform vector by given transformation matrix.
 
             Since this is a vector, translational components of the
             matrix are disregarded.
         */
         B2IVector& operator*=( const B2DHomMatrix& rMat );
-
-        static const B2IVector& getEmptyVector();
     };
 
     // external operators
     //////////////////////////////////////////////////////////////////////////
-
-    /** Calculate the orientation to another 2D Vector
-
-        @param rVecA
-        The first 2D Vector
-
-        @param rVecB
-        The second 2D Vector
-
-        @return
-        The mathematical Orientation of the two involved 2D Vectors
-    */
-    BASEGFX_DLLPUBLIC B2VectorOrientation getOrientation( const B2IVector& rVecA, const B2IVector& rVecB );
-
-    /** Calculate a perpendicular 2D Vector to the given one
-
-        @param rVec
-        The source 2D Vector
-
-        @return
-        A 2D Vector perpendicular to the one given in parameter rVec
-    */
-    BASEGFX_DLLPUBLIC B2IVector getPerpendicular( const B2IVector& rVec );
 
     /** Test two vectors which need not to be normalized for parallelism
 
@@ -219,13 +161,6 @@ namespace basegfx
         matrix are disregarded.
     */
     BASEGFX_DLLPUBLIC B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
-
-    /** Test continuity between given vectors.
-
-        The two given vectors are assumed to describe control points on a
-        common point. Calculate if there is a continuity between them.
-    */
-    BASEGFX_DLLPUBLIC B2VectorContinuity getContinuity( const B2IVector& rBackVector, const B2IVector& rForwardVector );
 
 } // end of namespace basegfx
 
