@@ -2877,11 +2877,11 @@ RTLFUNC(GetAttr)
                     sal_Bool bHidden = xSFI->isHidden( aPath );
                     sal_Bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
-                        nFlags |= 0x0001; // ATTR_READONLY
+                        nFlags |= Sb_ATTR_READONLY;
                     if( bHidden )
-                        nFlags |= 0x0002; // ATTR_HIDDEN
+                        nFlags |= Sb_ATTR_HIDDEN;
                     if( bDirectory )
-                        nFlags |= 0x0010; // ATTR_DIRECTORY
+                        nFlags |= Sb_ATTR_DIRECTORY;
                 }
                 catch(const Exception & )
                 {
@@ -2901,9 +2901,9 @@ RTLFUNC(GetAttr)
             FileStatus::Type aType = aFileStatus.getFileType();
             sal_Bool bDirectory = isFolder( aType );
             if( bReadOnly )
-                nFlags |= 0x0001; // ATTR_READONLY
+                nFlags |= Sb_ATTR_READONLY;
             if( bDirectory )
-                nFlags |= 0x0010; // ATTR_DIRECTORY
+                nFlags |= Sb_ATTR_DIRECTORY;
         }
         rPar.Get(0)->PutInteger( nFlags );
     }
@@ -4259,9 +4259,9 @@ RTLFUNC(SetAttr)
             {
                 try
                 {
-                    sal_Bool bReadOnly = (nFlags & 0x0001) != 0; // ATTR_READONLY
+                    sal_Bool bReadOnly = (nFlags & Sb_ATTR_READONLY) != 0;
                     xSFI->setReadOnly( aStr, bReadOnly );
-                    sal_Bool bHidden   = (nFlags & 0x0002) != 0; // ATTR_HIDDEN
+                    sal_Bool bHidden   = (nFlags & Sb_ATTR_HIDDEN) != 0;
                     xSFI->setHidden( aStr, bHidden );
                 }
                 catch(const Exception & )
