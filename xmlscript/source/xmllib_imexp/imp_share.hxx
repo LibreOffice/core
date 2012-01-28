@@ -70,7 +70,7 @@ inline bool getBoolAttr(
 {
     OUString aValue(
         xAttributes->getValueByUidName( uid, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
         {
@@ -99,7 +99,7 @@ inline bool getStringAttr(
     Reference< xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
     *pRet = xAttributes->getValueByUidName( uid, rAttrName );
-    return (pRet->getLength() > 0);
+    return (!pRet->isEmpty());
 }
 
 inline bool getLongAttr(
@@ -109,7 +109,7 @@ inline bool getLongAttr(
 {
     OUString aValue(
         xAttributes->getValueByUidName( uid, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         *pRet = toInt32( aValue );
         return true;

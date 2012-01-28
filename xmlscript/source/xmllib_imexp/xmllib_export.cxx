@@ -88,7 +88,7 @@ SAL_CALL exportLibraryContainer(
                                     rLib.aName );
 
 
-        if( rLib.aStorageURL.getLength() )
+        if( !rLib.aStorageURL.isEmpty() )
         {
             pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_XLINK_PREFIX ":href") ),
                                         rLib.aStorageURL );

@@ -110,7 +110,7 @@ void Frame::endElement()
     }
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
-    if (_label.getLength())
+    if (!_label.isEmpty())
     {
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                                          makeAny( _label ) );
@@ -645,7 +645,7 @@ void FormattedFieldElement::endElement()
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("value-default") ) ) );
-    if (sDefault.getLength())
+    if (!sDefault.isEmpty())
     {
         double d = sDefault.toDouble();
         if (d != 0.0 ||
@@ -673,7 +673,7 @@ void FormattedFieldElement::endElement()
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
-    if (sFormat.getLength())
+    if (!sFormat.isEmpty())
     {
         lang::Locale locale;
 
@@ -681,7 +681,7 @@ void FormattedFieldElement::endElement()
             _xAttributes->getValueByUidName(
                 _pImport->XMLNS_DIALOGS_UID,
                 OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
-        if (sLocale.getLength())
+        if (!sLocale.isEmpty())
         {
             // split locale
             sal_Int32 semi0 = sLocale.indexOf( ';' );
@@ -1501,7 +1501,7 @@ void TextFieldElement::endElement()
                        OUString( RTL_CONSTASCII_USTRINGPARAM("echochar") ),
                        _xAttributes,
                        _pImport->XMLNS_DIALOGS_UID ) &&
-        aValue.getLength() > 0)
+                       !aValue.isEmpty() )
     {
         OSL_ENSURE( aValue.getLength() == 1, "### more than one character given for echochar!" );
         sal_Int16 nChar = (sal_Int16)aValue[ 0 ];
@@ -1588,7 +1588,7 @@ void TitledBoxElement::endElement()
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
 
-    if (_label.getLength())
+    if (!_label.isEmpty())
     {
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                                          makeAny( _label ) );
@@ -1824,8 +1824,8 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
             xAttributes->getValueByUidName(
                 _pImport->XMLNS_DIALOGS_UID,
                 OUString( RTL_CONSTASCII_USTRINGPARAM("value") ) ) );
-        OSL_ENSURE( aValue.getLength(), "### menuitem has no value?" );
-        if (aValue.getLength())
+        OSL_ENSURE( !aValue.isEmpty(), "### menuitem has no value?" );
+        if (!aValue.isEmpty())
         {
             _itemValues.push_back( aValue );
 
@@ -1833,7 +1833,7 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
                 xAttributes->getValueByUidName(
                     _pImport->XMLNS_DIALOGS_UID,
                     OUString( RTL_CONSTASCII_USTRINGPARAM("selected") ) ) );
-            if (aSel.getLength() && aSel.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
+            if (!aSel.isEmpty() && aSel.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
             {
                 _itemSelected.push_back(
                     static_cast<sal_Int16>(_itemValues.size()) -1 );
@@ -2414,14 +2414,14 @@ BulletinBoardElement::BulletinBoardElement(
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _nBasePosX += toInt32( aValue );
     }
     aValue = _xAttributes->getValueByUidName(
         _pImport->XMLNS_DIALOGS_UID,
         OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _nBasePosY += toInt32( aValue );
     }
@@ -2449,7 +2449,7 @@ void StyleElement::endElement()
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
-    if (aStyleId.getLength())
+    if (!aStyleId.isEmpty())
     {
         _pImport->addStyle( aStyleId, this );
     }

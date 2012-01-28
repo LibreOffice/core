@@ -82,7 +82,7 @@ namespace xmlscript
         if ( xAttributes.is() )
         {
             ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
-            if ( aValue.getLength() )
+            if ( !aValue.isEmpty() )
             {
                 if ( aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) )
                 {
@@ -363,7 +363,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                     m_pImport->XMLNS_UID,
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) ) );
 
-                if ( m_xLib.is() && aName.getLength() )
+                if ( m_xLib.is() && !aName.isEmpty() )
                     xElement.set( new BasicModuleElement( rLocalName, xAttributes, this, m_pImport, m_xLib, aName ) );
             }
         }
@@ -426,7 +426,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
             if ( xAttributes.is() )
             {
-                if ( m_xLib.is() && m_aName.getLength() )
+                if ( m_xLib.is() && !m_aName.isEmpty() )
                     xElement.set( new BasicSourceCodeElement( rLocalName, xAttributes, this, m_pImport, m_xLib, m_aName ) );
             }
         }
@@ -479,7 +479,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     {
         try
         {
-            if ( m_xLib.is() && m_aName.getLength() )
+            if ( m_xLib.is() && !m_aName.isEmpty() )
             {
                 Any aElement;
                 aElement <<= m_aBuffer.makeStringAndClear();

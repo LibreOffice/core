@@ -587,11 +587,11 @@ void ElementDescriptor::addNumberFormatAttr(
     // format-locale
     OUStringBuffer buf( 48 );
     buf.append( locale.Language );
-    if (locale.Country.getLength())
+    if (!locale.Country.isEmpty())
     {
         buf.append( (sal_Unicode)';' );
         buf.append( locale.Country );
-        if (locale.Variant.getLength())
+        if (!locale.Variant.isEmpty())
         {
             buf.append( (sal_Unicode)';' );
             buf.append( locale.Variant );
@@ -794,7 +794,7 @@ void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString c
         rtl::OUString sURL;
         _xProps->getPropertyValue( rPropName ) >>= sURL;
 
-        if ( sURL.getLength() && sURL.compareToAscii( XMLSCRIPT_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( XMLSCRIPT_GRAPHOBJ_URLPREFIX ) ) == 0 )
+        if ( !sURL.isEmpty() && sURL.compareToAscii( XMLSCRIPT_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( XMLSCRIPT_GRAPHOBJ_URLPREFIX ) ) == 0 )
         {
             Reference< document::XStorageBasedDocument > xDocStorage( _xDocument, UNO_QUERY );
             if ( xDocStorage.is() )
@@ -809,7 +809,7 @@ void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString c
                     sURL = xGraphicResolver->resolveGraphicObjectURL( sURL );
             }
         }
-        if ( sURL.getLength() )
+        if ( !sURL.isEmpty() )
                 addAttribute( rAttrName, sURL );
     }
 }
@@ -998,7 +998,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
                 xConvertor->setPropertyValue( OUSTR("Address"), makeAny( aAddress ) );
                 rtl::OUString sAddress;
                 xConvertor->getPropertyValue( OUSTR("PersistentRepresentation") ) >>= sAddress;
-                if ( sAddress.getLength() > 0 )
+                if ( !sAddress.isEmpty() )
                     addAttribute( rAttrName, sAddress );
 
                 OSL_TRACE( "*** Bindable value %s", rtl::OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1027,7 +1027,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
                 xConvertor->getPropertyValue( OUSTR("PersistentRepresentation") ) >>= sAddress;
                 OSL_TRACE("**** cell range source list %s",
                     rtl::OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
-                if ( sAddress.getLength() > 0 )
+                if ( !sAddress.isEmpty() )
                     addAttribute( rAttrName, sAddress );
             }
             catch( uno::Exception& )
@@ -1091,7 +1091,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
         if ( xPersist.is() )
         {
             OUString sCtrlName = xPersist->getServiceName();
-            if ( sCtrlName.getLength() )
+            if ( !sCtrlName.isEmpty() )
                     addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":control-implementation") ), sCtrlName );
         }
     }
@@ -1199,15 +1199,15 @@ void ElementDescriptor::readEvents()
                 script::ScriptEventDescriptor descr;
                 if (xEvents->getByName( pNames[ nPos ] ) >>= descr)
                 {
-                    OSL_ENSURE( descr.ListenerType.getLength() > 0 &&
-                                descr.EventMethod.getLength() > 0 &&
-                                descr.ScriptCode.getLength() > 0 &&
-                                descr.ScriptType.getLength() > 0,
+                    OSL_ENSURE( !descr.ListenerType.isEmpty() &&
+                                !descr.EventMethod.isEmpty() &&
+                                !descr.ScriptCode.isEmpty() &&
+                                !descr.ScriptType.isEmpty() ,
                                 "### invalid event descr!" );
 
                     OUString aEventName;
 
-                    if (! descr.AddListenerParam.getLength())
+                    if (descr.AddListenerParam.isEmpty())
                     {
                         // detection of event-name
                         ::rtl::OString listenerType(
@@ -1234,7 +1234,7 @@ void ElementDescriptor::readEvents()
                     ElementDescriptor * pElem;
                     Reference< xml::sax::XAttributeList > xElem;
 
-                    if (aEventName.getLength()) // script:event
+                    if (!aEventName.isEmpty()) // script:event
                     {
                         pElem = new ElementDescriptor(
                             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":event") ) );
@@ -1257,7 +1257,7 @@ void ElementDescriptor::readEvents()
                             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-method") ),
                             descr.EventMethod );
 
-                        if (descr.AddListenerParam.getLength())
+                        if (!descr.AddListenerParam.isEmpty())
                         {
                             pElem->addAttribute(
                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-param") ),

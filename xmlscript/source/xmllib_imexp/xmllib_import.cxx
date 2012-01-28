@@ -305,7 +305,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
         OUString aValue( xAttributes->getValueByUidName(
             _pImport->XMLNS_LIBRARY_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) ) );
-        if (aValue.getLength())
+        if (!aValue.isEmpty())
             mElements.push_back( aValue );
 
         return new LibElementBase( rLocalName, xAttributes, this, _pImport );

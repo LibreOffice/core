@@ -68,7 +68,7 @@ inline bool getBoolAttr(
     sal_Int32 nUid )
 {
     ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
         {
@@ -96,7 +96,7 @@ inline bool getStringAttr(
     sal_Int32 nUid )
 {
     *pRet = xAttributes->getValueByUidName( nUid, rAttrName );
-    return (pRet->getLength() > 0);
+    return (!pRet->isEmpty());
 }
 
 inline bool getLongAttr(
@@ -105,7 +105,7 @@ inline bool getLongAttr(
     sal_Int32 nUid )
 {
     ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         *pRet = toInt32( aValue );
         return true;

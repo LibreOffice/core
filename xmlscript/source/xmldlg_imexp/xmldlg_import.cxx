@@ -114,7 +114,7 @@ Reference< xml::input::XElement > ControlElement::getStyle(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
-    if (aStyleId.getLength())
+    if (!aStyleId.isEmpty())
     {
         return _pImport->getStyle( aStyleId );
     }
@@ -128,7 +128,7 @@ OUString ControlElement::getControlId(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("id") ) ) );
-    if (! aId.getLength())
+    if (aId.isEmpty())
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("missing id attribute!") ),
@@ -145,7 +145,7 @@ OUString ControlElement::getControlModelName(
     aModel = xAttributes->getValueByUidName(
         _pImport->XMLNS_DIALOGS_UID,
         OUString( RTL_CONSTASCII_USTRINGPARAM("control-implementation") ) );
-    if (! aModel.getLength())
+    if (aModel.isEmpty())
         aModel = rDefaultModel;
     return aModel;
 }
@@ -820,7 +820,7 @@ bool ImportContext::importStringProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( aValue ) );
         return true;
@@ -835,7 +835,7 @@ bool ImportContext::importDoubleProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( aValue.toDouble() ) );
         return true;
@@ -865,7 +865,7 @@ bool ImportContext::importLongProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) ) );
         return true;
@@ -881,7 +881,7 @@ bool ImportContext::importLongProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) + nOffset ) );
         return true;
@@ -896,7 +896,7 @@ bool ImportContext::importHexLongProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) ) );
         return true;
@@ -911,7 +911,7 @@ bool ImportContext::importShortProperty(
     OUString aValue(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aValue.getLength())
+    if (!aValue.isEmpty())
     {
         _xControlModel->setPropertyValue( rPropName, makeAny( (sal_Int16)toInt32( aValue ) ) );
         return true;
@@ -926,7 +926,7 @@ bool ImportContext::importAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aAlign.getLength())
+    if (!aAlign.isEmpty())
     {
         sal_Int16 nAlign;
         if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
@@ -965,7 +965,7 @@ bool ImportContext::importVerticalAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aAlign.getLength())
+    if (!aAlign.isEmpty())
     {
         style::VerticalAlignment eAlign;
 
@@ -999,7 +999,7 @@ bool ImportContext::importImageURLProperty(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     rtl::OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
-    if ( sURL.getLength() )
+    if ( !sURL.isEmpty() )
     {
         Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
 
@@ -1017,7 +1017,7 @@ bool ImportContext::importImageURLProperty(
                 try
                 {
                     aTmp = xGraphicResolver->resolveGraphicObjectURL( aTmp );
-                    if ( aTmp.getLength() )
+                    if ( !aTmp.isEmpty() )
                         sURL = aTmp;
                 }
                 catch( const uno::Exception& )
@@ -1027,7 +1027,7 @@ bool ImportContext::importImageURLProperty(
 
             }
         }
-        if ( sURL.getLength() > 0 )
+        if ( !sURL.isEmpty() )
         {
             Reference< beans::XPropertySet > xProps( getControlModel(), UNO_QUERY );
             if ( xProps.is() )
@@ -1052,10 +1052,10 @@ bool ImportContext::importImageURLProperty(
         sCellRange = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
     bool bRes = false;
     Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
-    if ( xFac.is() && ( sLinkedCell.getLength() ||  sCellRange.getLength() ) )
+    if ( xFac.is() && ( !sLinkedCell.isEmpty() ||  !sCellRange.isEmpty() ) )
     {
         // Set up Celllink
-        if ( sLinkedCell.getLength() )
+        if ( !sLinkedCell.isEmpty() )
         {
             Reference< form::binding::XBindableValue > xBindable( getControlModel(), uno::UNO_QUERY );
             Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
@@ -1077,7 +1077,7 @@ bool ImportContext::importImageURLProperty(
             }
         }
         // Set up CelllRange
-        if ( sCellRange.getLength() )
+        if ( !sCellRange.isEmpty() )
         {
             Reference< form::binding::XListEntrySink  > xListEntrySink( getControlModel(), uno::UNO_QUERY );
             Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
@@ -1109,7 +1109,7 @@ bool ImportContext::importImageAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aAlign.getLength())
+    if (!aAlign.isEmpty())
     {
         sal_Int16 nAlign;
         if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
@@ -1148,7 +1148,7 @@ bool ImportContext::importImagePositionProperty(
     OUString aPosition(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aPosition.getLength())
+    if (!aPosition.isEmpty())
     {
         sal_Int16 nPosition;
         if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-top") ))
@@ -1223,7 +1223,7 @@ bool ImportContext::importButtonTypeProperty(
     OUString buttonType(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (buttonType.getLength())
+    if (!buttonType.isEmpty())
     {
         sal_Int16 nButtonType;
         if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("standard") ))
@@ -1262,7 +1262,7 @@ bool ImportContext::importDateFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aFormat.getLength())
+    if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
         if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short") ))
@@ -1333,7 +1333,7 @@ bool ImportContext::importTimeFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aFormat.getLength())
+    if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
         if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h_short") ))
@@ -1380,7 +1380,7 @@ bool ImportContext::importOrientationProperty(
     OUString aOrient(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aOrient.getLength())
+    if (!aOrient.isEmpty())
     {
         sal_Int32 nOrient;
         if (aOrient.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("horizontal") ))
@@ -1411,7 +1411,7 @@ bool ImportContext::importLineEndFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aFormat.getLength())
+    if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
         if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("carriage-return") ))
@@ -1446,7 +1446,7 @@ bool ImportContext::importSelectionTypeProperty(
     OUString aSelectionType(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (aSelectionType.getLength())
+    if (!aSelectionType.isEmpty())
     {
         view::SelectionType eSelectionType;
 

@@ -289,7 +289,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                     aLibName );
 
                                 ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( aLibName ) );
-                                if ( aLinkURL.getLength() )
+                                if ( !aLinkURL.isEmpty() )
                                 {
                                     // xlink:href attribute
                                     pLibElement->addAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ":href" ) ),

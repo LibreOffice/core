@@ -65,7 +65,7 @@ SAL_CALL exportScriptModule(
                                 rMod.aName );
     pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":language") ),
                                 rMod.aLanguage );
-    if( rMod.aModuleType.getLength()>0 )
+    if( !rMod.aModuleType.isEmpty() )
         pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":moduleType") ),
                                     rMod.aModuleType );
 
