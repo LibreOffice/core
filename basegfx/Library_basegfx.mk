@@ -113,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/point/b3ipoint \
 	basegfx/source/point/b2dpoint \
 	basegfx/source/point/b3dpoint \
-	basegfx/source/point/b2dhompoint \
 	basegfx/source/point/b2ipoint \
 	basegfx/source/curve/b2dbeziertools \
 	basegfx/source/curve/b2dcubicbezier \

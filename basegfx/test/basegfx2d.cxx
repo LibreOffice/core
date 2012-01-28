@@ -703,33 +703,6 @@ public:
 }; // class b2dhommatrix
 
 
-class b2dhompoint : public CppUnit::TestFixture
-{
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    // insert your test code here.
-    void EmptyMethod()
-    {
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    SAL_CPPUNIT_TEST_SUITE(b2dhompoint);
-    CPPUNIT_TEST(EmptyMethod);
-    SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2dhompoint
-
-
 class b2dpoint : public CppUnit::TestFixture
 {
 public:
@@ -1390,7 +1363,6 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolyrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dhommatrix);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dhompoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygontools);

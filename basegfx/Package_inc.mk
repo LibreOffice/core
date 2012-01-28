@@ -90,7 +90,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/matrix/b2dhommatrixtoo
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b3ipoint.hxx,basegfx/point/b3ipoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b3dpoint.hxx,basegfx/point/b3dpoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b2dpoint.hxx,basegfx/point/b2dpoint.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b2dhompoint.hxx,basegfx/point/b2dhompoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b2ipoint.hxx,basegfx/point/b2ipoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/curve/b2dcubicbezier.hxx,basegfx/curve/b2dcubicbezier.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/curve/b2dbeziertools.hxx,basegfx/curve/b2dbeziertools.hxx))

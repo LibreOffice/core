@@ -118,7 +118,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/point/b3ipoint \
 	CustomTarget/basegfx/source/point/b2dpoint \
 	CustomTarget/basegfx/source/point/b3dpoint \
-	CustomTarget/basegfx/source/point/b2dhompoint \
 	CustomTarget/basegfx/source/point/b2ipoint \
 	CustomTarget/basegfx/source/curve/b2dbeziertools \
 	CustomTarget/basegfx/source/curve/b2dcubicbezier \
