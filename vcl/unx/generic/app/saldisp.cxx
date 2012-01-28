@@ -92,14 +92,6 @@ using ::rtl::OUString;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PSEUDOCOLOR12
-#define PSEUDOCOLOR8
-#define TRUECOLOR24
-#define TRUECOLOR16
-#define TRUECOLOR15
-#define TRUECOLOR12
-#define TRUECOLOR8
-
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
@@ -296,10 +288,8 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
         {
             if( pVInfos[i].depth <= 8 )
                 bUsable = sal_True;
-#ifdef PSEUDOCOLOR12
             else if( pVInfos[i].depth == 12 )
                 bUsable = sal_True;
-#endif
         }
         pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
         pWeight[ i ] -= pVInfos[ i ].visualid;
@@ -2803,11 +2793,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
 
         if( m_aPalette.empty()
             && m_hColormap
-#ifdef PSEUDOCOLOR12
             && m_aVisual.GetDepth() <= 12
-#else
-            && m_aVisual.GetDepth() <= 8
-#endif
             && m_aVisual.GetClass() == PseudoColor )
             ((SalColormap*)this)->GetPalette();
     }
@@ -2867,11 +2853,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     {
         if( m_aPalette.empty()
             && m_hColormap
-#ifdef PSEUDOCOLOR12
             && m_aVisual.GetDepth() <= 12
-#else
-            && m_aVisual.GetDepth() <= 8
-#endif
             && m_aVisual.GetClass() == PseudoColor ) // what else ???
             ((SalColormap*)this)->GetPalette();
 
