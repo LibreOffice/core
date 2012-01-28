@@ -1620,7 +1620,7 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
                 break;
 
             case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
-                if (mpOutliner != NULL && mpDoc!=NULL && mpOutliner != NULL && dynamic_cast<Outliner*> ( mpOutliner )->GetIgnoreCurrentPageChangesLevel()==0)
+                if (mpOutliner != NULL && mpDoc!=NULL && dynamic_cast<Outliner*> ( mpOutliner )->GetIgnoreCurrentPageChangesLevel()==0)
                 {
                     if (((mpDoc->GetPageCount()-1)%2) == 0)
                     {
