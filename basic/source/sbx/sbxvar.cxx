@@ -45,7 +45,6 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
 
-extern sal_uInt32 nVarCreator;          // in SBXBASE.CXX, for LoadData()
 #ifdef DBG_UTIL
 static sal_uIntPtr nVar = 0;
 #endif

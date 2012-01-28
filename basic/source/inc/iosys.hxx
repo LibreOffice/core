@@ -38,7 +38,6 @@ class SvStream;
 // implemented at the moment.
 
 #define CHANNELS 256
-#define CONSOLE  0
 
 #define SBSTRM_INPUT    0x0001
 #define SBSTRM_OUTPUT   0x0002
