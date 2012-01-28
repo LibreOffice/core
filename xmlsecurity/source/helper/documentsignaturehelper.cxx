@@ -113,7 +113,7 @@ void ImplFillElementList(
             ::rtl::OUString sEncName = ::rtl::Uri::encode(
                 pNames[n], rtl_UriCharClassRelSegment,
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
-            if (sEncName.getLength() == 0 && pNames[n].getLength() != 0)
+            if (sEncName.isEmpty() && !pNames[n].isEmpty())
                 throw css::uno::Exception(::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("Failed to encode element name of XStorage")), 0);
 
@@ -168,7 +168,7 @@ DocumentSignatureAlgorithm
 DocumentSignatureHelper::getDocumentAlgorithm(
     const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo)
 {
-    OSL_ASSERT(sODFVersion.getLength());
+    OSL_ASSERT(!sODFVersion.isEmpty());
     DocumentSignatureAlgorithm mode = OOo3_2Document;
     if (!isOOo3_2_Signature(sigInfo))
     {

@@ -441,7 +441,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 return -1;
             }
             rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
-            if ( !aCertSerial.getLength() )
+            if ( aCertSerial.isEmpty() )
             {
                 OSL_FAIL( "Error in Certificate, problem with serial number!" );
                 return -1;
@@ -602,7 +602,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
             //First we try to get the certificate which is embedded in the XML Signature
-            if (rInfo.ouX509Certificate.getLength())
+            if (!rInfo.ouX509Certificate.isEmpty())
                 xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
             else {
                 //There must be an embedded certificate because we use it to get the
@@ -752,7 +752,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
         uno::Reference< dcss::security::XCertificate > xCert;
-        if (rInfo.ouX509Certificate.getLength())
+        if (!rInfo.ouX509Certificate.isEmpty())
             xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
         //fallback if no certificate is embedded, get if from store
         if (!xCert.is())

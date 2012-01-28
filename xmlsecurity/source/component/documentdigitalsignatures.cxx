@@ -98,7 +98,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
     //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
     //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
     //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
-    if (m_sODFVersion.getLength() == 0)
+    if (m_sODFVersion.isEmpty())
         m_sODFVersion = ODFVER_010_TEXT;
 }
 
@@ -107,7 +107,7 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent(
     const Reference< css::io::XStream >& xSignStream)
         throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModeDocumentContent, false );
 }
 
@@ -116,7 +116,7 @@ DocumentDigitalSignatures::verifyDocumentContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModeDocumentContent );
 }
 
@@ -124,7 +124,7 @@ void DocumentDigitalSignatures::showDocumentContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModeDocumentContent, true );
 }
 
@@ -138,7 +138,7 @@ sal_Bool DocumentDigitalSignatures::signScriptingContent(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XStream >& xSignStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModeMacros, false );
 }
@@ -148,7 +148,7 @@ DocumentDigitalSignatures::verifyScriptingContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModeMacros );
 }
 
@@ -156,7 +156,7 @@ void DocumentDigitalSignatures::showScriptingContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModeMacros, true );
 }
 
@@ -171,7 +171,7 @@ sal_Bool DocumentDigitalSignatures::signPackage(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XStream >& xSignStream  ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModePackage, false );
 }
 
@@ -180,7 +180,7 @@ DocumentDigitalSignatures::verifyPackageSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModePackage );
 }
 
@@ -188,7 +188,7 @@ void DocumentDigitalSignatures::showPackageSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
-    OSL_ENSURE(m_sODFVersion.getLength(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModePackage, true );
 }
 
@@ -311,7 +311,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             const SignatureInformation& rInfo = aSignInfos[n];
             css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
 
-            if (rInfo.ouX509Certificate.getLength())
+            if (!rInfo.ouX509Certificate.isEmpty())
                rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );

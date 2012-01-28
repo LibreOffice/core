@@ -220,7 +220,7 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
             nDateTokens++;
         pStr++;
     }
-    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
+    if ( nDateTokens > 3 || aDateStr.isEmpty() )
         bSuccess = sal_False;
     else
     {
@@ -235,7 +235,7 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
                 bSuccess = sal_False;
     }
 
-    if ( aTimeStr.getLength() > 0 )           // time is optional
+    if ( !aTimeStr.isEmpty() )           // time is optional
     {
         pStr = aTimeStr.getStr();
         sal_Int32 nTimeTokens = 1;
@@ -1008,7 +1008,7 @@ void XSecController::exportSignature(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_XMLDSIG)));
 
-    if (signatureInfo.ouSignatureId.getLength()>0)
+    if (!signatureInfo.ouSignatureId.isEmpty())
     {
         pAttributeList->AddAttribute(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_ID)),
@@ -1151,7 +1151,7 @@ void XSecController::exportSignature(
                 xDocumentHandler->endElement( tag_X509IssuerSerial );
 
                 /* Write X509Certificate element */
-                if (signatureInfo.ouX509Certificate.getLength()>0)
+                if (!signatureInfo.ouX509Certificate.isEmpty())
                 {
                     xDocumentHandler->startElement(
                         tag_X509Certificate,
@@ -1210,7 +1210,7 @@ void XSecController::exportSignature(
                     //milli seconds (document was signed by an application other than OOo)
                     //and the converted time is written back, then the string looks different
                     //and the signature is broken.
-                    if (signatureInfo.ouDateTime.getLength() > 0)
+                    if (!signatureInfo.ouDateTime.isEmpty())
                         buffer = signatureInfo.ouDateTime;
                     else
                         convertDateTime( buffer, signatureInfo.stDateTime );

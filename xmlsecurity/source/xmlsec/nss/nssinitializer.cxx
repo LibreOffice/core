@@ -208,7 +208,7 @@ void deleteRootsModule()
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
-                if (profile != NULL && profile.getLength()>0)
+                if (profile != NULL && !profile.isEmpty())
                 {
                     ::rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
                     sResult = ::rtl::OUStringToOString( sProfilePath, osl_getThreadTextEncoding() );
@@ -261,7 +261,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
     // there might be no profile
-    if ( sCertDir.getLength() > 0 )
+    if ( !sCertDir.isEmpty() )
     {
         if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
         {

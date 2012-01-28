@@ -193,7 +193,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
 
 uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
 {
-    OSL_ASSERT(rURI.getLength());
+    OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;
 
     sal_Int32 nSepPos = rURI.indexOf( '/' );
@@ -203,7 +203,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         // MBA with think about a better API...
         const ::rtl::OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
-        if (sName.getLength() == 0 && rURI.getLength() != 0)
+        if (sName.isEmpty() && !rURI.isEmpty())
             throw uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "Could not decode URI for stream element.")), 0);
 
@@ -217,7 +217,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     {
         const rtl::OUString aStoreName = ::rtl::Uri::decode(
             rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
-        if (aStoreName.getLength() == 0 && rURI.getLength() != 0)
+        if (aStoreName.isEmpty() && !rURI.isEmpty())
             throw uno::Exception(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "Could not decode URI for stream element.")), 0);
