@@ -291,30 +291,6 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
             nTrueColor = 2048;
             if( pVInfos[i].depth == 24 )
                 bUsable = sal_True;
-#ifdef sal_TrueCOLOR8
-            else if( pVInfos[i].depth == 8 )
-            {
-                nTrueColor = -1; // strongly discourage 8 bit true color
-                bUsable = sal_True;
-            }
-#endif
-#ifdef sal_TrueCOLOR15
-            else if( pVInfos[i].depth == 15 )
-                bUsable = sal_True;
-#endif
-#ifdef sal_TrueCOLOR16
-            else if( pVInfos[i].depth == 16 )
-                bUsable = sal_True;
-#endif
-#ifdef sal_TrueCOLOR32
-            else if( pVInfos[i].depth == 32 )
-            {
-                nTrueColor = 256;
-                // we do not have use for an alpha channel
-                // better use a 24 or 16 bit truecolor visual if possible
-                bUsable = sal_True;
-            }
-#endif
         }
         else if( pVInfos[i].c_class == PseudoColor )
         {
