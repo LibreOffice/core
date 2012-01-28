@@ -32,15 +32,16 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/looper.h>
-#define EGL_EGLEXT_PROTOTYPES
-#include <EGL/eglext.h>
 #include <osl/detail/android-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 
-#define ANDROID_EGL
-#undef ANDROID_EGL_LOCK
-#undef ANDROID_PIXELS
+extern void VCL_DLLPUBLIC plasma_now(const char *msg);
+
+void plasma_now(const char *msg)
+{
+    fprintf (stderr, "Skipped plasma '%s' !\n", msg);
+}
 
 class AndroidSalData : public SalGenericData
 {
@@ -94,60 +95,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
     sal_Int32 nStride = aDev->getScanlineStride();
     unsigned char *pSrc = aSrcData.get();
 
-#ifdef ANDROID_EGL
-    (void)pOutBuffer;
-    GLuint nTexture;
-    glGenTextures (1, &nTexture);
-    glBindTexture(GL_TEXTURE_2D,nTexture);
-    // Pixels to texture:
-    fprintf (stderr, "before create texure '%d'\n", glGetError());
-    glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGB,
-                 nStride / 3, aDevSize.getY(),
-                 0 /* border */, GL_RGB, GL_UNSIGNED_BYTE,
-                 pSrc);
-    fprintf (stderr, "created texure '%d'\n", glGetError());
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-
-    glEnable(GL_TEXTURE_2D);
-
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-    glDisable(GL_LIGHTING);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    glViewport(0, 0, aDevSize.getX(), aDevSize.getY());
-
-    glBindTexture(GL_TEXTURE_2D,nTexture);
-
-    GLfloat aVertices[] = { 0, 0,
-                            0, aDevSize.getY(),
-                            aDevSize.getX(), aDevSize.getY(),
-                            aDevSize.getX(), 0 };
-    glVertexPointer(2, GL_FLOAT, 0, aVertices);
-    fprintf (stderr, "after set vertex '%d'\n", glGetError());
-    glEnableClientState(GL_VERTEX_ARRAY);
-	glColor4f(0.5f, 0.5f, 1.0f, 1.0f);
-    glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
-//    glTexCoordPointer(2, GL_FLOAT, 0, aVertices);
-    fprintf (stderr, "after draw arrays '%d'\n", glGetError());
-
-//    glDisable(GL_TEXTURE_2D);
-
-    // free the texture
-//    glDeleteTextures(1,&nTexture);
-#endif
-
-#ifdef ANDROID_PIXELS
     // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
     ARect aSrcRect = rSrcRect;
 
@@ -165,7 +112,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
                                   pOutBuffer->stride * 4 * (y + nDestY) +
                                   nDestX * 4 /* dest pixel size */ );
-            fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
                 dp[x*4 + 0] = sp[x*3 + 0]; // B
@@ -180,7 +126,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             unsigned char *dp = ( (unsigned char *)pOutBuffer->bits +
                                   pOutBuffer->stride * 2 * (y + nDestY) +
                                   nDestX * 2 /* dest pixel size */ );
-            fprintf (stderr, "y %d, sp %p dp %p\n", y, sp, dp);
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
                 unsigned char b = sp[x*3 + 0]; // B
@@ -196,7 +141,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             break;
         }
     }
-#endif // ANDROID_PIXELS
     fprintf (stderr, "done blit!\n");
 }
 
@@ -214,63 +158,16 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
-#ifdef ANDROID_EGL
-    if (mxDisplay == EGL_NO_DISPLAY)
-    {
-        fprintf (stderr, "wait for the setup\n");
-        return;
-    }
-
-    EGLBoolean nRet = eglMakeCurrent(mxDisplay, mxSurface, mxSurface, mxContext);
-    fprintf (stderr, "make current context %d\n", nRet);
-
-    // Just fill the screen with a color.
-    static int a = 0;
-    a++;
-    //    glClearColor((a & 0x1) ? 1.0 : 0.0, (a & 0x2) ? 1.0 : 0.0, 0.0, 1);
-    //    glClear(GL_COLOR_BUFFER_BIT);
-
-#ifdef ANDROID_EGL_LOCK // failed to do anything !
-    const EGLint aAttribs[] = {
-        EGL_MAP_PRESERVE_PIXELS_KHR, EGL_FALSE,
-        EGL_LOCK_USAGE_HINT_KHR, EGL_WRITE_SURFACE_BIT_KHR,
-        EGL_NONE
-    };
-    fprintf (stderr, "pre-egl-lock\n");
-    nRet = eglLockSurfaceKHR(mxDisplay, mxSurface, aAttribs);
-    fprintf (stderr, "eglLockSurface %d\n", nRet);
-    nRet = eglQuerySurface(mxDisplay, mxSurface,
-                           EGL_BITMAP_POINTER_KHR, (EGLint *)&aOutBuffer.bits);
-    fprintf (stderr, "get bytes %p : %d\n", aOutBuffer.bits, nRet);
-    EGLint nStride = 0;
-    nRet = eglQuerySurface(mxDisplay, mxSurface,
-                           EGL_BITMAP_PITCH_KHR, &nStride);
-    fprintf (stderr, "get stride %ld : %d\n", (long)nStride, nRet);
-
-    EGLint nWidth = 0, nHeight = 0;
-    eglQuerySurface(mxDisplay, mxSurface, EGL_WIDTH, &nWidth);
-    eglQuerySurface(mxDisplay, mxSurface, EGL_HEIGHT, &nHeight);
-    fprintf (stderr, "get width height %ld,%ld\n", (long)nWidth, (long)nHeight);
-
-    aOutBuffer.stride = nStride / 2; // FIXME - assuming 565
-    aOutBuffer.width = nWidth;
-    aOutBuffer.height = nHeight;
-#endif
-
-#endif // ANDROID_EGL
-
-#ifdef ANDROID_PIXELS
-    ARect aRect;
+//    ARect aRect;
     fprintf (stderr, "pre lock #3\n");
-    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, &aRect);
-    fprintf (stderr, "locked window %d returned rect: %d,%d->%d,%d "
+    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
+    fprintf (stderr, "locked window %d returned " // rect:  %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
-             nRet, aRect.left, aRect.top, aRect.right, aRect.bottom,
+             nRet, // aRect.left, aRect.top, aRect.right, aRect.bottom,
              aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
              aOutBuffer.format, aOutBuffer.bits);
     if (aOutBuffer.bits != NULL)
     {
-#endif // ANDROID_PIXELS
 
 #if 1 // pre-'clean' the buffer with cruft:
         // hard-code / guess at a format ...
@@ -286,26 +183,23 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
         for ( it = getFrames().begin(); it != getFrames().end(); it++ )
         {
             SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
-            BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
-        }
 
-#ifdef ANDROID_PIXELS
+            if (pFrame->IsVisible())
+            {
+                // FIXME: force a re-draw - this appears not to happen much otherwis
+                pFrame->PostPaint(true);
+                BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
+            }
+            else // Sucky the frame is invisible - why !?
+                fprintf (stderr, "invisible frame\n");
+        }
     }
     else
         fprintf (stderr, "no buffer for locked window\n");
     ANativeWindow_unlockAndPost(pWindow);
-#endif
-
-#ifdef ANDROID_EGL
-#ifdef ANDROID_EGL_LOCK
-    nRet = eglUnlockSurfaceKHR(mxDisplay, mxSurface);
-    fprintf (stderr, "eGL unlock %d\n", nRet);
-#endif
-    eglSwapBuffers(mxDisplay, mxSurface);
-#endif
 
     fprintf (stderr, "done render!\n");
-    mbQueueReDraw = false;
+    mbQueueReDraw = true; // keep at it ! false;
 }
 
 static const char *app_cmd_name(int cmd)
@@ -348,60 +242,6 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow));
 
-#ifdef ANDROID_EGL
-            const EGLint attribs[] = {
-                EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-                EGL_BLUE_SIZE, 8,
-                EGL_GREEN_SIZE, 8,
-                EGL_RED_SIZE, 8,
-                EGL_NONE
-            };
-            EGLint w, h, format;
-            EGLint numConfigs;
-            EGLConfig config;
-            EGLSurface surface;
-            EGLContext context;
-
-            EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-
-            eglInitialize(display, 0, 0);
-
-            /* Here, the application chooses the configuration it desires. In this
-             * sample, we have a very simplified selection process, where we pick
-             * the first EGLConfig that matches our criteria */
-            eglChooseConfig(display, attribs, &config, 1, &numConfigs);
-
-            /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-             * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-             * As soon as we picked a EGLConfig, we can safely reconfigure the
-             * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-            eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-
-            ANativeWindow_setBuffersGeometry(mpApp->window, 0, 0, format);
-
-            surface = eglCreateWindowSurface(display, config, mpApp->window, NULL);
-            context = eglCreateContext(display, config, NULL, NULL);
-
-            if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-                fprintf(stderr, "Unable to eglMakeCurrent");
-                break;
-            }
-
-            eglQuerySurface(display, surface, EGL_WIDTH, &w);
-            eglQuerySurface(display, surface, EGL_HEIGHT, &h);
-
-            mxDisplay = display;
-            mxContext = context;
-            mxSurface = surface;
-
-            // Initialize GL state:
-            // FIXME: surely all this glContext - **per-thread** - !
-
-            glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-            glEnable(GL_CULL_FACE);
-            glShadeModel(GL_SMOOTH);
-            glDisable(GL_DEPTH_TEST);
-#endif
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -418,7 +258,7 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
             fprintf (stderr, "redraw needed\n");
-            AndroidSalInstance::getInstance()->RedrawWindows (pWindow);
+            mbQueueReDraw = true;
             break;
         }
 
@@ -536,24 +376,43 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 
     fprintf (stderr, "DoReleaseYield #2 %d thread: %d ms\n",
              nTimeoutMS, (int)pthread_self());
-    void *outData = NULL;
+#ifndef PLASMA
+
+    struct android_poll_source *pSource = NULL;
     int outFd = 0, outEvents = 0;
 
     if (mbQueueReDraw)
         nTimeoutMS = 0;
 
-    int nRet = ALooper_pollAll(nTimeoutMS, &outFd, &outEvents, &outData);
-    fprintf (stderr, "ret #3 %d %d %d %p\n", nRet, outFd, outEvents, outData);
+    int nRet;
+    while ((nRet = ALooper_pollAll (nTimeoutMS, &outFd, &outEvents, (void**)&pSource)) >= 0)
+    {
+        fprintf (stderr, "ret #5 %d %d %d %p\n", nRet, outFd, outEvents, pSource);
+        // acquire yield mutex again
+        AcquireYieldMutex(nAcquireCount);
+
+        // Process this event.
+        if (pSource != NULL)
+            pSource->process(mpApp, pSource);
+
+        nAcquireCount = ReleaseYieldMutex();
+    }
 
     // acquire yield mutex again
     AcquireYieldMutex(nAcquireCount);
 
-    // FIXME: this is more or less deranged: why can we not
-    // set a callback in the native app glue's ALooper_addFd ?
-    if (nRet == LOOPER_ID_MAIN)
-        mpApp->cmdPollSource.process(mpApp, &mpApp->cmdPollSource);
-    else if (nRet == LOOPER_ID_INPUT)
-        mpApp->inputPollSource.process(mpApp, &mpApp->inputPollSource);
+    if (mbQueueReDraw)
+        AndroidSalInstance::getInstance()->RedrawWindows (mpApp->window);
+
+#else
+    static int nPlasma = 0;
+    char buffer[128];
+    sprintf (buffer, "yield %d", nPlasma++);
+    plasma_now(buffer);
+
+    // acquire yield mutex again
+    AcquireYieldMutex(nAcquireCount);
+#endif
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
@@ -666,5 +525,6 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
         fprintf (stderr, "VCL not initialized\n");
     return 0;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

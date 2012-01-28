@@ -301,7 +301,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 {
                     // this would be a good time to post a paint
                     const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
-                    pSvpFrame->PostPaint();
+                    pSvpFrame->PostPaint(false);
                 }
             }
         }

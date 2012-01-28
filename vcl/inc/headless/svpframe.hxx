@@ -65,7 +65,7 @@ public:
 
     void GetFocus();
     void LoseFocus();
-    void PostPaint() const;
+    void PostPaint(bool bImmediate) const;
 
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
@@ -126,6 +126,7 @@ public:
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
     virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
+    bool IsVisible() { return m_bVisible; }
 };
 #endif // _SVP_SVPFRAME_HXX
 

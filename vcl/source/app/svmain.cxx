@@ -155,11 +155,15 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
 }
 
+extern void VCL_DLLPUBLIC plasma_now(const char *msg);
+
 // =======================================================================
 int ImplSVMain()
 {
     // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
+
+//    plasma_now("top"); - works here
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -175,6 +179,7 @@ int ImplSVMain()
     {
         // Application-Main rufen
         pSVData->maAppData.mbInAppMain = sal_True;
+//        plasma_now("after vcl init"); - works here
         nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = sal_False;
     }
