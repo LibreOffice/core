@@ -22,4 +22,4 @@
 ;
 ;*************************************************************************
 
-GetShortPathNameW
+GetShortPathNameW PRIVATE
