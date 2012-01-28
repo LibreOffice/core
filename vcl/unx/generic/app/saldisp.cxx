@@ -99,15 +99,6 @@ using ::rtl::OUString;
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-= static variables -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const char* const VisualClassName[] = {
-    "StaticGray",
-    "GrayScale",
-    "StaticColor",
-    "PseudoColor",
-    "TrueColor",
-    "DirectColor"
-};
-
 static const char* const EventNames[] =
 {
     NULL,
@@ -2245,10 +2236,6 @@ void SalDisplay::PrintInfo() const
              GetVisual(m_nXDefaultScreen).red_mask,
              GetVisual(m_nXDefaultScreen).green_mask,
              GetVisual(m_nXDefaultScreen).blue_mask );
-    fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
-             GetVisual(m_nXDefaultScreen).GetDepth(),
-             VisualClassName[ GetVisual(m_nXDefaultScreen).GetClass() ],
-             sal::static_int_cast< unsigned int >(GetVisual(m_nXDefaultScreen).GetVisualId()) );
 }
 
 void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
