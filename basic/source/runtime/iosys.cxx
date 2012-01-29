@@ -876,17 +876,6 @@ void SbiIoSystem::Write(const rtl::OString& rBuf, short n)
         nError = pChan[ nChan ]->Write( rBuf, n );
 }
 
-short SbiIoSystem::NextChannel()
-{
-    for( short i = 1; i < CHANNELS; i++ )
-    {
-        if( !pChan[ i ] )
-            return i;
-    }
-    nError = SbERR_TOO_MANY_FILES;
-    return CHANNELS;
-}
-
 // nChannel == 0..CHANNELS-1
 
 SbiStream* SbiIoSystem::GetStream( short nChannel ) const

@@ -103,7 +103,6 @@ public:
     void  Read(rtl::OString&, short = 0);
     char  Read();
     void  Write(const rtl::OString&, short = 0);
-    short NextChannel();
     // 0 == bad channel or no SvStream (nChannel=0..CHANNELS-1)
     SbiStream* GetStream( short nChannel ) const;
     void  CloseAll(); // JSM
