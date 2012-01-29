@@ -38,6 +38,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
 	$(OUTDIR)/pck \
+	$(OUTDIR)/rdb \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
 
@@ -45,6 +46,7 @@ gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
+gb_TypesRdb_get_outdir_target = $(OUTDIR)/rdb/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 # outdir targets: $(1) is path
@@ -116,7 +118,8 @@ gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
-gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
+gb_TypesRdb_get_target = $(WORKDIR)/TypesRdb/$(1).rdb
+gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).done
 gb_UnoApiOutTarget_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
@@ -171,6 +174,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SdiTarget \
 	SrsTarget \
 	SrsTemplateTarget \
+	TypesRdb \
 	CppunitTest \
 	CustomTarget \
 	ExternalLib \
