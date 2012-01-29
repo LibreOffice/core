@@ -104,23 +104,22 @@ void Export::DumpExportList(const rtl::OString& rListName, ExportList& aList)
     printf("\n");
 }
 
-ByteString Export::DumpMap(const rtl::OString& rMapName,
+void Export::DumpMap(const rtl::OString& rMapName,
     ByteStringHashMap& aMap)
 {
-    ByteStringHashMap::const_iterator idbg;
-    ByteString sReturn;
-
     if( rMapName.getLength() )
         printf("MapName %s\n", rMapName.getStr());
-    if( aMap.size() < 1 ) return ByteString();
-    for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
+    if( aMap.size() < 1 )
+        return;
+    for(ByteStringHashMap::const_iterator idbg = aMap.begin(); idbg != aMap.end(); ++idbg)
+    {
         ByteString a( idbg->first );
         ByteString b( idbg->second );
         printf("[%s]= %s",a.GetBuffer(),b.GetBuffer());
         printf("\n");
     }
     printf("\n");
-    return sReturn;
+    return;
 }
 
 /*****************************************************************************/

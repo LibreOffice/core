@@ -53,13 +53,14 @@ extern void ConvertHalfwitdhToFullwidth( String& rString );
 // class PFormEntrys
 //
 
-ByteString PFormEntrys::Dump()
+rtl::OString PFormEntrys::Dump()
 {
-    ByteString sRet( "PFormEntrys\n" );
-    ByteString a("sText");
     if (sText.size())
+    {
+        rtl::OString a(RTL_CONSTASCII_STRINGPARAM("sText"));
         Export::DumpMap(a , sText);
-    return sRet;
+    }
+    return rtl::OString(RTL_CONSTASCII_STRINGPARAM("PFormEntrys\n"));
 }
 
 sal_Bool PFormEntrys::GetTransex3Text( ByteString &rReturn,
@@ -121,14 +122,14 @@ MergeData::~MergeData()
 
 PFormEntrys* MergeData::GetPFormEntries()
 {
-    if( aMap.find( ByteString("HACK") ) != aMap.end() )
-        return aMap[ ByteString("HACK") ];
+    if( aMap.find( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
+        return aMap[rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK"))];
     return NULL;
 }
 
 void MergeData::Insert(PFormEntrys* pfEntrys )
 {
-    aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
+    aMap.insert( PFormEntrysHashMap::value_type( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) , pfEntrys ) );
 }
 
 rtl::OString MergeData::Dump()
@@ -149,7 +150,7 @@ rtl::OString MergeData::Dump()
 
 PFormEntrys* MergeData::GetPFObject( const rtl::OString& rPFO )
 {
-    if( aMap.find( ByteString("HACK") ) != aMap.end() )
+    if( aMap.find( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
         return aMap[ rPFO ];
     return NULL;
 }
@@ -177,22 +178,22 @@ sal_Bool MergeData::operator==( ResData *pData )
 
 
 MergeDataFile::MergeDataFile(
-    const ByteString &rFileName,
-    const ByteString& sFile,
+    const rtl::OString &rFileName,
+    const rtl::OString &rFile,
     bool bErrLog,
     bool bCaseSensitive)
     : bErrorLog( bErrLog )
 {
-    SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
+    SvFileStream aInputStream(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_ASCII_US), STREAM_STD_READ);
     aInputStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
     rtl::OString sLine;
-    const ByteString sHACK("HACK");
-    const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(sFile));
+    const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));
+    const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(rFile));
     const bool isFileEmpty = !sFileNormalized.isEmpty();
 
     if( !aInputStream.IsOpen() )
     {
-        printf("Warning : Can't open %s\n", rFileName.GetBuffer());
+        printf("Warning : Can't open %s\n", rFileName.getStr());
         return;
     }
     while ( !aInputStream.IsEof())
@@ -207,19 +208,19 @@ MergeDataFile::MergeDataFile(
             if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
             {
                 sal_Int32 rIdx = 0;
-                const ByteString sTYP = sLine.getToken( 3, '\t', rIdx );
-                const ByteString sGID = sLine.getToken( 0, '\t', rIdx ); // 4
-                const ByteString sLID = sLine.getToken( 0, '\t', rIdx ); // 5
-                ByteString sPFO = sLine.getToken( 1, '\t', rIdx ); // 7
+                const rtl::OString sTYP = sLine.getToken( 3, '\t', rIdx );
+                const rtl::OString sGID = sLine.getToken( 0, '\t', rIdx ); // 4
+                const rtl::OString sLID = sLine.getToken( 0, '\t', rIdx ); // 5
+                rtl::OString sPFO = sLine.getToken( 1, '\t', rIdx ); // 7
                 sPFO = sHACK;
-                ByteString nLANG = sLine.getToken( 1, '\t', rIdx ); // 9
+                rtl::OString nLANG = sLine.getToken( 1, '\t', rIdx ); // 9
                 nLANG = comphelper::string::strip(nLANG, ' ');
-                const ByteString sTEXT = sLine.getToken( 0, '\t', rIdx ); // 10
-                const ByteString sQHTEXT = sLine.getToken( 1, '\t', rIdx ); // 12
-                const ByteString sTITLE = sLine.getToken( 0, '\t', rIdx );  // 13
+                const rtl::OString sTEXT = sLine.getToken( 0, '\t', rIdx ); // 10
+                const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', rIdx ); // 12
+                const rtl::OString sTITLE = sLine.getToken( 0, '\t', rIdx );  // 13
 
 
-                if( !nLANG.EqualsIgnoreCaseAscii("en-US") )
+                if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
                 {
                     aLanguageSet.insert(nLANG);
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
@@ -240,8 +241,9 @@ MergeDataFile::~MergeDataFile()
         delete aI->second;
 }
 
-ByteString MergeDataFile::Dump(){
-    ByteString sRet( "MergeDataFile\n" );
+rtl::OString MergeDataFile::Dump()
+{
+    rtl::OString sRet(RTL_CONSTASCII_STRINGPARAM("MergeDataFile\n"));
 
     printf("MergeDataFile\n");
     MergeDataHashMap::const_iterator idbg;
@@ -255,24 +257,25 @@ ByteString MergeDataFile::Dump(){
     return sRet;
 }
 
-std::vector<rtl::OString> MergeDataFile::GetLanguages(){
+std::vector<rtl::OString> MergeDataFile::GetLanguages()
+{
     return std::vector<rtl::OString>(aLanguageSet.begin(),aLanguageSet.end());
 }
 
 MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )
 {
-    ByteString sOldG = pResData->sGId;
-    ByteString sOldL = pResData->sId;
-    ByteString sGID = pResData->sGId;
-    ByteString sLID;
-    if(!sGID.Len())
+    rtl::OString sOldG = pResData->sGId;
+    rtl::OString sOldL = pResData->sId;
+    rtl::OString sGID = pResData->sGId;
+    rtl::OString sLID;
+    if (sGID.isEmpty())
         sGID = pResData->sId;
     else
         sLID = pResData->sId;
     pResData->sGId = sGID;
     pResData->sId = sLID;
 
-    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
+    rtl::OString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
     if(aMap.find( sKey ) != aMap.end())
     {
@@ -305,17 +308,17 @@ PFormEntrys *MergeDataFile::GetPFormEntrysCaseSensitive( ResData *pResData )
 }
 
 void MergeDataFile::InsertEntry(
-    const ByteString &rTYP, const ByteString &rGID,
-    const ByteString &rLID, const ByteString &rPFO,
-    const ByteString &nLANG, const ByteString &rTEXT,
-    const ByteString &rQHTEXT, const ByteString &rTITLE ,
-    const ByteString &rInFilename , bool bCaseSensitive
+    const rtl::OString &rTYP, const rtl::OString &rGID,
+    const rtl::OString &rLID, const rtl::OString &rPFO,
+    const rtl::OString &nLANG, const rtl::OString &rTEXT,
+    const rtl::OString &rQHTEXT, const rtl::OString &rTITLE ,
+    const rtl::OString &rInFilename , bool bCaseSensitive
     )
 {
     MergeData *pData;
 
     // search for MergeData
-    ByteString sKey = CreateKey( rTYP , rGID , rLID , rInFilename , bCaseSensitive );
+    rtl::OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
     MergeDataHashMap::const_iterator mit;
     mit = aMap.find( sKey );
     if( mit != aMap.end() )
@@ -343,7 +346,8 @@ void MergeDataFile::InsertEntry(
     pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 }
 
-ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive )
+rtl::OString MergeDataFile::CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
+    const rtl::OString& rLID, const rtl::OString& rFilename, bool bCaseSensitive)
 {
     static const ::rtl::OString sStroke('-');
     ::rtl::OString sKey( rTYP );

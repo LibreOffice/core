@@ -329,7 +329,7 @@ public:
 
     static void DumpExportList(const rtl::OString& rListName,
         ExportList& aList);
-    static ByteString DumpMap(const rtl::OString& rMapName,
+    static void DumpMap(const rtl::OString& rMapName,
         ByteStringHashMap& aMap);
 
 private:
@@ -400,7 +400,7 @@ private:
 
 public:
     PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
-    ByteString Dump();
+    rtl::OString Dump();
     void InsertEntry(
                     const ByteString &nId ,
                     const ByteString &rText,
@@ -471,15 +471,15 @@ class MergeDataFile
         std::set<rtl::OString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
-        void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-            const ByteString &rPFO,
-            const ByteString &nLang, const ByteString &rTEXT,
-            const ByteString &rQHTEXT, const ByteString &rTITLE,
-            const ByteString &sFilename, bool bCaseSensitive
-            );
-        ByteString Dump();
+        void InsertEntry(const rtl::OString &rTYP, const rtl::OString &rGID,
+            const rtl::OString &rLID, const rtl::OString &rPFO,
+            const rtl::OString &nLang, const rtl::OString &rTEXT,
+            const rtl::OString &rQHTEXT, const rtl::OString &rTITLE,
+            const rtl::OString &sFilename, bool bCaseSensitive);
+        rtl::OString Dump();
     public:
-        explicit MergeDataFile( const ByteString &rFileName, const ByteString& rFile, bool bErrLog, bool bCaseSensitive = false );
+        explicit MergeDataFile(const rtl::OString &rFileName,
+            const rtl::OString& rFile, bool bErrLog, bool bCaseSensitive = false);
         ~MergeDataFile();
 
 
@@ -488,7 +488,8 @@ class MergeDataFile
         PFormEntrys *GetPFormEntrys( ResData *pResData );
         PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
-        static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
+        static rtl::OString CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
+            const rtl::OString& rLID, const rtl::OString& rFilename , bool bCaseSensitive = false);
 };
 
 
