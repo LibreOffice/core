@@ -1,5 +1,5 @@
 /*****************************************************************************
- * HIDRemoteControlDevice.h
+ * GlobalKeyboardDevice.h
  * RemoteControlWrapper
  *
  * Created by Martin Kahr on 11.03.06 under a MIT-style license.
@@ -18,7 +18,7 @@
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED ‚ÄúAS IS‚Äù, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -28,39 +28,26 @@
  *
  *****************************************************************************/
 
-#import "RemoteControl.h"
+#import <apple_remote/RemoteControl.h>
 
-#import <IOKit/hid/IOHIDLib.h>
+#import <Carbon/Carbon.h>
+
 
 /*
-    Base class for HID based remote control devices
+ This class registers for a number of global keyboard shortcuts to simulate a remote control
  */
-@interface HIDRemoteControlDevice : RemoteControl {
-    IOHIDDeviceInterface** hidDeviceInterface; // see IOKit/hid/IOHIDLib.h
-    IOHIDQueueInterface**  queue;  // IOKit/hid/IOHIDLib.h
-    NSMutableArray*        allCookies;
-    NSMutableDictionary*   cookieToButtonMapping;
-    CFRunLoopSourceRef     eventSource;
 
-    BOOL fixSecureEventInputBug;
-    BOOL openInExclusiveMode;
-    BOOL processesBacklog;
+@interface GlobalKeyboardDevice : RemoteControl {
 
-    int supportedButtonEvents;
+    NSMutableDictionary* hotKeyRemoteEventMapping;
+    EventHandlerRef eventHandlerRef;
+
 }
 
-// When your application needs to much time on the main thread when processing an event other events
-// may already be received which are put on a backlog. As soon as your main thread
-// has some spare time this backlog is processed and may flood your delegate with calls.
-// Backlog processing is turned off by default.
-- (BOOL) processesBacklog;
-- (void) setProcessesBacklog: (BOOL) value;
+- (void) mapRemoteButton: (RemoteControlEventIdentifier) remoteButtonIdentifier defaultKeycode: (unsigned int) defaultKeycode defaultModifiers: (unsigned int) defaultModifiers;
 
-// methods that should be overwritten by subclasses
-- (void) setCookieMappingInDictionary: (NSMutableDictionary*) cookieToButtonMapping;
+- (BOOL)registerHotKeyCode: (unsigned int) keycode modifiers: (unsigned int) modifiers remoteEventIdentifier: (RemoteControlEventIdentifier) identifier;
 
-- (void) sendRemoteButtonEvent: (RemoteControlEventIdentifier) event pressedDown: (BOOL) pressedDown;
 
-+ (BOOL) isRemoteAvailable;
 
 @end
