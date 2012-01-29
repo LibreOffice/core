@@ -828,7 +828,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
             nSet =  SQL_SENSITIVE;
             break;
         default:
-            fprintf(stderr, "_par0=%d\n", _par0);
+            fprintf(stderr, "_par0=%d\n", (int) _par0);
             OSL_FAIL( "OStatement_Base::setResultSetType: invalid result set type!" );
             break;
     }
