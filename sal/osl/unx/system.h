@@ -124,7 +124,6 @@
 #       ifndef ETIME
 #     define  ETIME ETIMEDOUT
 #       endif
-#   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <netdb.h>
 #   include <sys/sem.h>
@@ -182,7 +181,6 @@
 
 #ifdef OPENBSD
 #   define  ETIME ETIMEDOUT
-#   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <sys/sem.h>
 #   include <semaphore.h>
