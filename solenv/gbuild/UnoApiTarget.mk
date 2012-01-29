@@ -35,7 +35,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDI
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview$(gb_Executable_EXT_for_build)
 gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
-$(call gb_UnoApiOutTarget_get_target,%) :
+$(call gb_UnoApiTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$(call gb_TypesRdb_get_target,$*),$@)
 
 define gb_UnoApiTarget_autopackage_inc
@@ -56,10 +56,9 @@ endef
 
 define gb_UnoApiTarget_UnoApiTarget
 $(call gb_TypesRdb_TypesRdb,$(1))
-$$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
-$(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_TypesRdb_get_outdir_target,$(1))
-$(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
+$$(eval $$(call gb_Module_register_target,$(call gb_UnoApiTarget_get_outdir_target,$(1)),$(call gb_UnoApiTarget_get_clean_target,$(1))))
+$(call gb_UnoApiTarget_get_outdir_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_outdir_target,$(1)) : $(call gb_TypesRdb_get_outdir_target,$(1))
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_TypesRdb_get_target,$(1))
 $(call gb_UnoApiTarget_get_clean_target,$(1)) : $(call gb_TypesRdb_get_clean_target,$(1))
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
@@ -177,16 +176,12 @@ $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE := $(2)
 
 endef
 
-.PHONY : $(call gb_UnoApiOutTarget_get_clean_target,%)
-$(call gb_UnoApiOutTarget_get_clean_target,%) :
-	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UnoApiOutTarget_get_target,$*))
-
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,2)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UnoApiTarget_get_target,$*))
+		rm -f $(call gb_UnoApiTarget_get_target,$*) \
+			$(call gb_UnoApiTarget_get_outdir_target,$*))
 	-rm -rf $(call gb_UnoApiTarget_get_header_target,$*)\
 			$(call gb_UnoApiTarget_get_dep_target,$*) \
 			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \

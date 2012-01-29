@@ -47,6 +47,7 @@ gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_TypesRdb_get_outdir_target = $(OUTDIR)/rdb/$(1).rdb
+gb_UnoApiTarget_get_outdir_target = $(OUTDIR)/bin/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 # outdir targets: $(1) is path
@@ -120,7 +121,6 @@ gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_TypesRdb_get_target = $(WORKDIR)/TypesRdb/$(1).rdb
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).done
-gb_UnoApiOutTarget_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
@@ -195,7 +195,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
 	Library \
 	StaticLibrary \
-	UnoApiOutTarget \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
