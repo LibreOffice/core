@@ -66,6 +66,9 @@ $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPS :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 gb_UnoApiTarget_HPPFILES_$(1) :=
 gb_UnoApiTarget_IDLFILES_$(1) :=
+
+$(call gb_Deliver_add_deliverable,$(call gb_UnoApiTarget_get_outdir_target,$(1)),$(call gb_TypesRdb_get_target,$(1)),$(1))
+
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_UnoApiTarget_get_dep_target,$(1))
 endif
