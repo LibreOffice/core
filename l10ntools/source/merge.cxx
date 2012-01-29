@@ -66,7 +66,6 @@ sal_Bool PFormEntrys::GetTransex3Text( ByteString &rReturn,
     sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel )
 {
     sal_Bool rc = GetText( rReturn , nTyp , nLangIndex , bDel );
-    ByteString test( rReturn );
     for( sal_uInt16 idx = 0; idx < rReturn.Len(); idx++ )
     {
         if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
@@ -74,8 +73,6 @@ sal_Bool PFormEntrys::GetTransex3Text( ByteString &rReturn,
             rReturn.Erase( idx-1 , 1 );
         }
     }
-    //if( !rReturn.Equals( test ) )
-    //    printf("*CHANGED******************\n%s\n%s\n",test.GetBuffer(),rReturn.GetBuffer());
     return rc;
 }
 /*****************************************************************************/
