@@ -143,8 +143,8 @@ REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, 
 
 sal_Bool SAL_CALL SdUnoModule::supportsService( const ::rtl::OUString& sServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )

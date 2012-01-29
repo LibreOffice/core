@@ -152,8 +152,8 @@ REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
 
 sal_Bool SAL_CALL SwUnoModule::supportsService( const ::rtl::OUString& sServiceName ) throw(uno::RuntimeException)
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )

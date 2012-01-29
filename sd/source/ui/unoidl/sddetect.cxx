@@ -489,16 +489,16 @@ SdFilterDetect::~SdFilterDetect()
 SFX_IMPL_SINGLEFACTORY( SdFilterDetect )
 
 /* XServiceInfo */
-UNOOUSTRING SAL_CALL SdFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+rtl::OUString SAL_CALL SdFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SdFilterDetect::supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SdFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -510,23 +510,23 @@ sal_Bool SAL_CALL SdFilterDetect::supportsService( const UNOOUSTRING& sServiceNa
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+UNOSEQUENCE< rtl::OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SdFilterDetect::impl_getStaticSupportedServiceNames()
+UNOSEQUENCE< rtl::OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
+    seqServiceNames.getArray() [0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-UNOOUSTRING SdFilterDetect::impl_getStaticImplementationName()
+rtl::OUString SdFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.FormatDetector" ));
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.FormatDetector" ));
 }
 
 /* Helper for registry */
