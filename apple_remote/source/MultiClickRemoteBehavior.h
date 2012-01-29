@@ -29,7 +29,7 @@
  *****************************************************************************/
 
 
-#import "RemoteControl.h"
+#import <apple_remote/RemoteControl.h>
 
 /**
     A behavior that adds multiclick and hold events on top of a device.

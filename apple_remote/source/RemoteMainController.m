@@ -1,13 +1,13 @@
 /*****************************************************************************
  * RemoteMainController.m
  *
- * Created by Martin Kahr on 11.03.06 under a MIT-style license. 
+ * Created by Martin Kahr on 11.03.06 under a MIT-style license.
  * Copyright (c) 2006 martinkahr.com. All rights reserved.
  *
- * Code modified and adapted to OpenOffice.org 
+ * Code modified and adapted to OpenOffice.org
  * by Eric Bachard on 11.08.2008 under the same License
  *
- * Permission is hereby granted, free of charge, to any person obtaining a 
+ * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -19,7 +19,7 @@
  *
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -27,7 +27,7 @@
  *
  *****************************************************************************/
 
-#import "RemoteMainController.h"
+#import <apple_remote/RemoteMainController.h>
 #import "AppleRemote.h"
 #import "KeyspanFrontRowControl.h"
 #import "GlobalKeyboardDevice.h"
@@ -41,15 +41,15 @@
 @implementation MainController
 
 - (id) init {
-    self = [super init];  // because we redefined our own init instead of use the fu..nny awakeFromNib 
+    self = [super init];  // because we redefined our own init instead of use the fu..nny awakeFromNib
     if (self != nil) {
 
         // 1. instantiate the desired behavior for the remote control device
-        remoteControlBehavior = [[MultiClickRemoteBehavior alloc] init];	
+        remoteControlBehavior = [[MultiClickRemoteBehavior alloc] init];
 
         // 2. configure the behavior
         [remoteControlBehavior setDelegate: self];
-		
+
         // 3. a Remote Control Container manages a number of devices and conforms to the RemoteControl interface
         //    Therefore you can enable or disable all the devices of the container with a single "startListening:" call.
         RemoteControlContainer* container = [[RemoteControlContainer alloc] initWithDelegate: remoteControlBehavior];
@@ -70,21 +70,21 @@
         else {
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] failed");
 #endif
-        }	
+        }
         // to give the binding mechanism a chance to see the change of the attribute
-        [self setValue: container forKey: @"remoteControl"];	
+        [self setValue: container forKey: @"remoteControl"];
 #ifdef DEBUG
             NSLog(@"MainController init done");
 #endif
     }
-    else 
+    else
         NSLog(@"MainController init failed");
     return self;
 }
 
 - (void) postTheEvent: (short int)buttonIdentifier modifierFlags:(int)modifierFlags
 {
-    [NSApp postEvent: 
+    [NSApp postEvent:
     [NSEvent    otherEventWithType:NSApplicationDefined
                 location:NSZeroPoint
                 modifierFlags:modifierFlags
@@ -92,7 +92,7 @@
                 windowNumber:[[NSApp keyWindow] windowNumber]
                 context:nil
                 subtype:AppleRemoteControlEvent
-                data1: buttonIdentifier 
+                data1: buttonIdentifier
                 data2: 0]
     atStart: NO];
 }
@@ -100,6 +100,7 @@
 
 - (void) remoteButton: (RemoteControlEventIdentifier)buttonIdentifier pressedDown: (BOOL) pressedDown clickCount: (unsigned int)clickCount
 {
+    (void)clickCount;
     NSString* pressed = @"";
 #ifdef DEBUG
     NSString* buttonName = nil;
@@ -109,7 +110,7 @@
         pressed = @"(pressed)";
 
 #ifdef DEBUG
-        switch(buttonIdentifier) 
+        switch(buttonIdentifier)
         {
             case kRemoteButtonPlus:         buttonName = @"Volume up";              break;  // MEDIA_COMMAND_VOLUME_UP  ( see vcl/inc/vcl/cmdevt.hxx )
             case kRemoteButtonMinus:        buttonName = @"Volume down";            break;  // MEDIA_COMMAND_VOLUME_DOWN

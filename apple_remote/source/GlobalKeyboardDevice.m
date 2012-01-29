@@ -2,13 +2,13 @@
  * GlobalKeyboardDevice.m
  * RemoteControlWrapper
  *
- * Created by Martin Kahr on 11.03.06 under a MIT-style license. 
+ * Created by Martin Kahr on 11.03.06 under a MIT-style license.
  * Copyright (c) 2006 martinkahr.com. All rights reserved.
  *
- * Code modified and adapted to OpenOffice.org 
+ * Code modified and adapted to OpenOffice.org
  * by Eric Bachard on 11.08.2008 under the same license
  *
- * Permission is hereby granted, free of charge, to any person obtaining a 
+ * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -20,7 +20,7 @@
  *
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -41,7 +41,7 @@
 
 /*
  the following default keys are read and shall be used to change the keyboard mapping
- 
+
  mac.remotecontrols.GlobalKeyboardDevice.plus_modifiers
  mac.remotecontrols.GlobalKeyboardDevice.plus_keycode
  mac.remotecontrols.GlobalKeyboardDevice.minus_modifiers
@@ -62,19 +62,19 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 
 @implementation GlobalKeyboardDevice
 
-- (id) initWithDelegate: (id) _remoteControlDelegate {	
+- (id) initWithDelegate: (id) _remoteControlDelegate {
 	if ( (self = [super initWithDelegate: _remoteControlDelegate]) ) {
 		hotKeyRemoteEventMapping = [[NSMutableDictionary alloc] init];
-		
+
 		unsigned int modifiers = cmdKey + shiftKey /*+ optionKey*/ + controlKey;
-				
+
 		[self mapRemoteButton:kRemoteButtonPlus			defaultKeycode:F1 defaultModifiers:modifiers];
 		[self mapRemoteButton:kRemoteButtonMinus		defaultKeycode:F2 defaultModifiers:modifiers];
 		[self mapRemoteButton:kRemoteButtonPlay			defaultKeycode:F3 defaultModifiers:modifiers];
 		[self mapRemoteButton:kRemoteButtonLeft			defaultKeycode:F4 defaultModifiers:modifiers];
 		[self mapRemoteButton:kRemoteButtonRight		defaultKeycode:F5 defaultModifiers:modifiers];
 		[self mapRemoteButton:kRemoteButtonMenu			defaultKeycode:F6 defaultModifiers:modifiers];
-		[self mapRemoteButton:kRemoteButtonPlay_Hold	defaultKeycode:F7 defaultModifiers:modifiers];		
+		[self mapRemoteButton:kRemoteButtonPlay_Hold	defaultKeycode:F7 defaultModifiers:modifiers];
 	}
 	return self;
 }
@@ -85,48 +85,48 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 }
 
 - (void) mapRemoteButton: (RemoteControlEventIdentifier) remoteButtonIdentifier defaultKeycode: (unsigned int) defaultKeycode defaultModifiers: (unsigned int) defaultModifiers {
-	NSString* defaultsKey = NULL;	
-	
+	NSString* defaultsKey = NULL;
+
 	switch(remoteButtonIdentifier) {
 		case kRemoteButtonPlus:
 			defaultsKey = @"plus";
 			break;
 		case kRemoteButtonMinus:
 			defaultsKey = @"minus";
-			break;			
+			break;
 		case kRemoteButtonMenu:
 			defaultsKey = @"menu";
-			break;			
+			break;
 		case kRemoteButtonPlay:
 			defaultsKey = @"play";
 			break;
 		case kRemoteButtonRight:
 			defaultsKey = @"right";
-			break;			
-		case kRemoteButtonLeft:			
+			break;
+		case kRemoteButtonLeft:
 			defaultsKey = @"left";
 			break;
 		case kRemoteButtonPlay_Hold:
 			defaultsKey = @"playhold";
-			break;			
-		default: 
+			break;
+		default:
 #ifdef DEBUG
 			NSLog(@"Unknown global keyboard defaults key for remote button identifier %d", remoteButtonIdentifier);
 #endif
             break;
 	}
-	
+
 	NSNumber* modifiersCfg = [[NSUserDefaults standardUserDefaults] objectForKey: [NSString stringWithFormat: @"mac.remotecontrols.GlobalKeyboardDevice.%@_modifiers", defaultsKey]];
 	NSNumber* keycodeCfg   = [[NSUserDefaults standardUserDefaults] objectForKey: [NSString stringWithFormat: @"mac.remotecontrols.GlobalKeyboardDevice.%@_keycode", defaultsKey]];
-	
+
 	unsigned int modifiers = defaultModifiers;
 	if (modifiersCfg) modifiers = [modifiersCfg unsignedIntValue];
-	
+
 	unsigned int keycode = defaultKeycode;
 	if (keycodeCfg) keycode = [keycodeCfg unsignedIntValue];
-				  
+
     [self registerHotKeyCode: keycode  modifiers: modifiers remoteEventIdentifier: remoteButtonIdentifier];
-}	
+}
 
 - (void) setListeningToRemote: (BOOL) value {
 	if (value == [self isListeningToRemote]) return;
@@ -136,26 +136,29 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 		[self stopListening: self];
 	}
 }
-- (BOOL) isListeningToRemote {	
+- (BOOL) isListeningToRemote {
 	return (eventHandlerRef!=NULL);
 }
 
 - (void) startListening: (id) sender {
-	
+
 	if (eventHandlerRef) return;
-		
+
 	EventTypeSpec eventSpec[2] = {
 		{ kEventClassKeyboard, kEventHotKeyPressed },
 		{ kEventClassKeyboard, kEventHotKeyReleased }
-	};    
-	
+	};
+
 	InstallEventHandler( GetEventDispatcherTarget(),
-						 (EventHandlerProcPtr)hotKeyEventHandler, 
-						 2, eventSpec, self, &eventHandlerRef);	
+						 (EventHandlerProcPtr)hotKeyEventHandler,
+						 2, eventSpec, self, &eventHandlerRef);
+    (void)sender;
 }
+
 - (void) stopListening: (id) sender {
 	RemoveEventHandler(eventHandlerRef);
 	eventHandlerRef = NULL;
+    (void)sender;
 }
 
 - (BOOL) sendsEventForButtonIdentifier: (RemoteControlEventIdentifier) identifier {
@@ -171,21 +174,21 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 	return "Keyboard";
 }
 
-- (BOOL)registerHotKeyCode: (unsigned int) keycode modifiers: (unsigned int) modifiers remoteEventIdentifier: (RemoteControlEventIdentifier) identifier {	
+- (BOOL)registerHotKeyCode: (unsigned int) keycode modifiers: (unsigned int) modifiers remoteEventIdentifier: (RemoteControlEventIdentifier) identifier {
 	OSStatus err;
 	EventHotKeyID hotKeyID;
 	EventHotKeyRef carbonHotKey;
 
 	hotKeyID.signature = 'PTHk';
 	hotKeyID.id = (long)keycode;
-	
+
 	err = RegisterEventHotKey(keycode, modifiers, hotKeyID, GetEventDispatcherTarget(), 0, &carbonHotKey );
-	
+
 	if( err )
 		return NO;
-	
+
 	[hotKeyRemoteEventMapping setObject: [NSNumber numberWithInt:identifier] forKey: [NSNumber numberWithUnsignedInt: hotKeyID.id]];
-	
+
 	return YES;
 }
 /*
@@ -194,21 +197,21 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 	OSStatus err;
 	EventHotKeyRef carbonHotKey;
 	NSValue* key;
-	
+
 	if( [[self allHotKeys] containsObject: hotKey] == NO )
 		return;
-	
+
 	carbonHotKey = [self _carbonHotKeyForHotKey: hotKey];
 	NSAssert( carbonHotKey != nil, @"" );
-	
+
 	err = UnregisterEventHotKey( carbonHotKey );
 	//Watch as we ignore 'err':
-	
+
 	key = [NSValue valueWithPointer: carbonHotKey];
 	[mHotKeys removeObjectForKey: key];
-	
+
 	[self _updateEventHandler];
-	
+
 	//See that? Completely ignored
 }
 */
@@ -227,13 +230,14 @@ static RemoteControlEventIdentifier lastEvent;
 
 static OSStatus hotKeyEventHandler(EventHandlerCallRef inHandlerRef, EventRef inEvent, void* userData )
 {
+    (void)inHandlerRef;
 	GlobalKeyboardDevice* keyboardDevice = (GlobalKeyboardDevice*) userData;
 	EventHotKeyID hkCom;
 	GetEventParameter(inEvent,kEventParamDirectObject,typeEventHotKeyID,NULL,sizeof(hkCom),NULL,&hkCom);
 
 	RemoteControlEventIdentifier identifier = [keyboardDevice remoteControlEventIdentifierForID:hkCom.id];
 	if (identifier == 0) return noErr;
-	
+
 	BOOL pressedDown = YES;
 	if (identifier != lastEvent) {
 		lastEvent = identifier;
@@ -242,7 +246,7 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef inHandlerRef, EventRef in
 	    pressedDown = NO;
 	}
 	[keyboardDevice sendRemoteButtonEvent: identifier pressedDown: pressedDown];
-	
+
 	return noErr;
 }
 
