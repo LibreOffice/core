@@ -34,8 +34,6 @@
 
 #include <comphelper/sequenceasvector.hxx>
 
-#include <tools/string.hxx> // for GetAbsoluteReference
-
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>

@@ -45,7 +45,6 @@
 #include "ximpshow.hxx"
 #include "PropertySetMerger.hxx"
 #include "animationimport.hxx"
-#include <tools/string.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -208,7 +207,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 OUString aBookmarkName( maHREF.copy( nIndex+1 ) );
 
                 maHREF = GetImport().GetAbsoluteReference( aFileName );
-                maHREF += String( (sal_Unicode)'#' );
+                maHREF += OUString(static_cast<sal_Unicode>('#'));
                 maHREF += aBookmarkName;
             }
 

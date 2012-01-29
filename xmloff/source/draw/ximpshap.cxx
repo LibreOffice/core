@@ -86,7 +86,6 @@
 #include "XMLEmbeddedObjectImportContext.hxx"
 #include "xmloff/xmlerror.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 

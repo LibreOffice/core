@@ -66,7 +66,6 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/math.hxx>
-#include <tools/string.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
 #include "xmloff/xmlnmspe.hxx"
@@ -155,7 +154,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< rtl::OUStrin
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        rtl::OUString aStr( String( 'f' ) );
+        rtl::OUString aStr(static_cast<sal_Unicode>('f'));
         aStr += rtl::OUString::valueOf( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
@@ -167,7 +166,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< rtl::OUStrin
             if ( nIndex != -1 )
             {
                 rtl::OUString aNew( aStr.copy( 0, nIndex + 1 ) );
-                aNew += String( 'f' );
+                aNew += rtl::OUString(static_cast<sal_Unicode>('f'));
                 aNew += aStr.copy( nIndex + 1, ( aStr.getLength() - nIndex ) - 1 );
                 aStr = aNew;
                 nIndex++;

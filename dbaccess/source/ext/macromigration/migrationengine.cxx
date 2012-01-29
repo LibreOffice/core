@@ -75,7 +75,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
@@ -255,7 +254,7 @@ namespace dbmm
         //----------------------------------------------------------------
         ::rtl::OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
-            ::rtl::OUString sObjectName = String( MacroMigrationResId( _rDocument.eType == eForm ? STR_FORM : STR_REPORT ) );
+            ::rtl::OUString sObjectName = ResId::toString(MacroMigrationResId( _rDocument.eType == eForm ? STR_FORM : STR_REPORT));
             ::comphelper::string::searchAndReplaceAsciiI( sObjectName, "$name$", _rDocument.sHierarchicalName );
             return sObjectName;
         }
@@ -1026,7 +1025,7 @@ namespace dbmm
 
         // initialize global progress
         sal_Int32 nOverallRange( m_aSubDocs.size() );
-        String sProgressSkeleton = String( MacroMigrationResId( STR_OVERALL_PROGRESS ) );
+        String sProgressSkeleton = ResId::toString(MacroMigrationResId( STR_OVERALL_PROGRESS));
         sProgressSkeleton.SearchAndReplaceAscii( "$overall$", String::CreateFromInt32( nOverallRange ) );
 
         m_rProgress.start( nOverallRange );
@@ -1154,7 +1153,7 @@ namespace dbmm
 
         // -----------------
         // migrate the libraries
-        ProgressDelegator aDelegator( m_rProgress, sObjectName, String( MacroMigrationResId( STR_MIGRATING_LIBS ) ) );
+        ProgressDelegator aDelegator(m_rProgress, sObjectName, ResId::toString(MacroMigrationResId(STR_MIGRATING_LIBS)));
         ProgressMixer aProgressMixer( aDelegator );
         aProgressMixer.registerPhase( PHASE_JAVASCRIPT, 1 );
         aProgressMixer.registerPhase( PHASE_BEANSHELL, 1 );
@@ -1928,7 +1927,7 @@ namespace dbmm
             const ScriptType _eScriptType, const ::rtl::OUString& _rLibraryName ) const
     {
         // a human-readable description of the affected library
-        ::rtl::OUString sLibraryDescription( String(
+        ::rtl::OUString sLibraryDescription( ResId::toString(
             MacroMigrationResId( STR_LIBRARY_TYPE_AND_NAME ) ) );
         ::comphelper::string::searchAndReplaceAsciiI( sLibraryDescription, "$type$",
             getScriptTypeDisplayName( _eScriptType ) );

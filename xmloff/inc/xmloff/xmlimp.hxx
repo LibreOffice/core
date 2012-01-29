@@ -397,8 +397,8 @@ public:
 
     sal_Bool IsTextDocInOOoFileFormat() const;
 
-    String GetBaseURL() const;
-    String GetDocumentBase() const;
+    ::rtl::OUString GetBaseURL() const;
+    ::rtl::OUString GetDocumentBase() const;
 
     /// name of stream in package, e.g., "content.xml"
     ::rtl::OUString GetStreamName() const;

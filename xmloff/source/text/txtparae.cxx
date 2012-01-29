@@ -35,7 +35,6 @@
 #include <vector>
 #include <list>
 #include <boost/unordered_map.hpp>
-#include <tools/string.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1267,7 +1266,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                              GetExport() );
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
-    OUString aPrefix( String( 'P' ) );
+    OUString aPrefix(static_cast<sal_Unicode>('P'));
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               xParaPropMapper, aPrefix );
 
@@ -1275,7 +1274,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = OUString( GetXMLToken(XML_TEXT) );
-    aPrefix = OUString( String( 'T' ) );
+    aPrefix = OUString(static_cast<sal_Unicode>('T'));
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
                               xTextPropMapper, aPrefix );
 
@@ -2064,7 +2063,7 @@ void XMLTextParagraphExport::exportParagraph(
                     }
 
                     {
-                        String sParaIsNumberingRestart
+                        rtl::OUString sParaIsNumberingRestart
                             (RTL_CONSTASCII_USTRINGPARAM
                              ("ParaIsNumberingRestart"));
                         bool bIsRestartNumbering = false;
@@ -2087,7 +2086,7 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_RESTART_NUMBERING,
                                                      XML_TRUE);
 
-                            String sNumberingStartValue
+                            rtl::OUString sNumberingStartValue
                                 (RTL_CONSTASCII_USTRINGPARAM
                                  ("NumberingStartValue"));
 

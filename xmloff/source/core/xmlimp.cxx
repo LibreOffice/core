@@ -59,7 +59,6 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/logfile.hxx>
-#include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1779,12 +1778,12 @@ SvXMLImport::GetComponentContext() const
     return mpImpl->mxComponentContext;
 }
 
-String SvXMLImport::GetBaseURL() const
+::rtl::OUString SvXMLImport::GetBaseURL() const
 {
     return mpImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-String SvXMLImport::GetDocumentBase() const
+::rtl::OUString SvXMLImport::GetDocumentBase() const
 {
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }

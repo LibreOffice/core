@@ -78,7 +78,6 @@
 #include "layerexp.hxx"
 
 #include "XMLNumberStylesExport.hxx"
-#include <tools/string.hxx>
 
 #include <xmloff/animationexport.hxx>
 
@@ -1883,7 +1882,7 @@ void SdXMLExport::_ExportContent()
                             OUString aBookmarkName( aBookmarkURL.copy( nIndex+1 ) );
 
                             aBookmarkURL = GetRelativeReference( aFileName );
-                            aBookmarkURL += String( '#' );
+                            aBookmarkURL += rtl::OUString(static_cast<sal_Unicode>('#'));
                             aBookmarkURL += aBookmarkName;
                         }
 
