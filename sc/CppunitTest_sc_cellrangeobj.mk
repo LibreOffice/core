@@ -100,6 +100,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    i18npool/source/search/i18nsearch \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \

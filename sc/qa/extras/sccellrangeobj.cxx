@@ -29,6 +29,8 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/cellproperties.hxx>
+#include <test/util/xreplaceable.hxx>
+#include <test/util/xsearchable.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -36,11 +38,14 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 8
+#define NUMBER_OF_TESTS 12
 
-class ScCellRangeObj : public UnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties
+class ScCellRangeObj : public UnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties,
+                        apitest::XSearchable, apitest::XReplaceable
 {
 public:
+    ScCellRangeObj();
+
     virtual void setUp();
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
@@ -55,6 +60,10 @@ public:
     CPPUNIT_TEST(testQueryVisibleCells);
     CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST(testRotateReference);
+    CPPUNIT_TEST(testFindAll);
+    CPPUNIT_TEST(testFindFirst);
+    CPPUNIT_TEST(testReplaceAll);
+    CPPUNIT_TEST(testCreateReplaceDescriptor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -64,6 +73,13 @@ private:
 
 sal_Int32 ScCellRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
+
+ScCellRangeObj::ScCellRangeObj():
+        apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), 1),
+        apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("35")))
+{
+
+}
 
 uno::Reference< uno::XInterface > ScCellRangeObj::init()
 {
