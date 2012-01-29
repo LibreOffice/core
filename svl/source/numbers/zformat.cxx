@@ -1764,18 +1764,18 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
 {
     CharSet eStream = rStream.GetStreamCharSet();
-    ByteString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+    rtl::OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
-    if ( aStr.Search( cStream ) == STRING_NOTFOUND )
+    if (aStr.indexOf(cStream) == -1)
     {   // simple conversion to unicode
-        rStr = UniString( aStr, eStream );
+        rStr = rtl::OStringToOUString(aStr, eStream);
     }
     else
     {
         sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-        register const sal_Char* p = aStr.GetBuffer();
-        register const sal_Char* const pEnd = p + aStr.Len();
-        register sal_Unicode* pUni = rStr.AllocBuffer( aStr.Len() );
+        register const sal_Char* p = aStr.getStr();
+        register const sal_Char* const pEnd = p + aStr.getLength();
+        register sal_Unicode* pUni = rStr.AllocBuffer(aStr.getLength());
         while ( p < pEnd )
         {
             if ( *p == cStream )

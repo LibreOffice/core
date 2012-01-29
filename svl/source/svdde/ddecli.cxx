@@ -436,7 +436,6 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
-//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
     nType = XTYP_POKE;
 }
@@ -456,7 +455,6 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
                 DdeTransaction( d, String(), n )
 {
-//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }
