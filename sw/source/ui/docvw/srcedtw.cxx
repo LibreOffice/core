@@ -231,14 +231,14 @@ public:
 private:
     virtual ~ChangesListener() {}
 
-    virtual void disposing(css::lang::EventObject const &)
+    virtual void SAL_CALL disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException)
     {
         osl::MutexGuard g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
-    virtual void propertiesChange(
+    virtual void SAL_CALL propertiesChange(
         css::uno::Sequence< css::beans::PropertyChangeEvent > const &)
         throw (css::uno::RuntimeException)
     {

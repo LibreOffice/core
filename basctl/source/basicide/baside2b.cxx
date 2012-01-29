@@ -158,13 +158,13 @@ public:
 private:
     virtual ~ChangesListener() {}
 
-    virtual void disposing(lang::EventObject const &) throw (RuntimeException)
+    virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException)
     {
         osl::MutexGuard g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
-    virtual void propertiesChange(
+    virtual void SAL_CALL propertiesChange(
         Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException)
     {
         SolarMutexGuard g;
