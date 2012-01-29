@@ -81,7 +81,6 @@ namespace comphelper
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define UNOTYPE                     ::com::sun::star::uno::Type
-#define OUSTRING                    ::rtl::OUString
 #define OINTERFACECONTAINERHELPER   ::cppu::OInterfaceContainerHelper
 
 //--------------------------------------------------------------------------------------------------------
@@ -94,7 +93,7 @@ class SvxMacro;
 
 class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameReplace, ::com::sun::star::document::XEventListener  >
 {
-    SEQUENCE< OUSTRING >            maEventNames;
+    SEQUENCE< ::rtl::OUString >     maEventNames;
     SEQUENCE< ANY >                 maEventData;
     REFERENCE< XEVENTBROADCASTER >  mxBroadcaster;
     ::osl::Mutex                    maMutex;
@@ -108,16 +107,16 @@ public:
                                ~SfxEvents_Impl();
 
     //  --- XNameReplace ---
-    virtual void SAL_CALL       replaceByName( const OUSTRING & aName, const ANY & aElement )
+    virtual void SAL_CALL       replaceByName( const ::rtl::OUString & aName, const ANY & aElement )
                                     throw( ILLEGALARGUMENTEXCEPTION, NOSUCHELEMENTEXCEPTION,
                                            WRAPPEDTARGETEXCEPTION, RUNTIMEEXCEPTION );
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
-    virtual ANY SAL_CALL        getByName( const OUSTRING& aName )
+    virtual ANY SAL_CALL        getByName( const ::rtl::OUString& aName )
                                     throw( NOSUCHELEMENTEXCEPTION, WRAPPEDTARGETEXCEPTION,
                                            RUNTIMEEXCEPTION );
-    virtual SEQUENCE< OUSTRING > SAL_CALL getElementNames() throw ( RUNTIMEEXCEPTION );
-    virtual sal_Bool SAL_CALL   hasByName( const OUSTRING& aName ) throw ( RUNTIMEEXCEPTION );
+    virtual SEQUENCE< ::rtl::OUString > SAL_CALL getElementNames() throw ( RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL   hasByName( const ::rtl::OUString& aName ) throw ( RUNTIMEEXCEPTION );
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
     virtual UNOTYPE SAL_CALL    getElementType() throw ( RUNTIMEEXCEPTION );

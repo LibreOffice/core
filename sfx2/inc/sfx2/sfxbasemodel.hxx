@@ -162,7 +162,6 @@
 #define PROPERTYVALUE           ::com::sun::star::beans::PropertyValue
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define MUTEX                   ::osl::Mutex
-#define OUSTRING                ::rtl::OUString
 #define UNOTYPE                 ::com::sun::star::uno::Type
 #define XVIEWDATASUPPLIER       ::com::sun::star::document::XViewDataSupplier
 #define XINDEXACCESS            ::com::sun::star::container::XIndexAccess
@@ -416,21 +415,21 @@ public:
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL createLibrary( const OUSTRING& LibName, const OUSTRING& Password,
-        const OUSTRING& ExternalSourceURL, const OUSTRING& LinkTargetURL )
+    virtual void SAL_CALL createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
+        const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
             throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL addModule( const OUSTRING& LibraryName, const OUSTRING& ModuleName,
-        const OUSTRING& Language, const OUSTRING& Source )
+    virtual void SAL_CALL addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
+        const ::rtl::OUString& Language, const ::rtl::OUString& Source )
             throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL addDialog( const OUSTRING& LibraryName, const OUSTRING& DialogName,
+    virtual void SAL_CALL addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
         const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
             throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION);
 
@@ -579,7 +578,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL attachResource(   const   OUSTRING&                   sURL    ,
+    virtual sal_Bool SAL_CALL attachResource(   const   ::rtl::OUString& sURL,
                                                 const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   aArgs   )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -596,7 +595,7 @@ public:
         @onerror    -
     */
 
-    virtual OUSTRING SAL_CALL getURL() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getURL() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -933,7 +932,7 @@ public:
         @onerror    -
     */
 
-    virtual OUSTRING SAL_CALL getLocation() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLocation() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -978,7 +977,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL storeAsURL(   const   OUSTRING&                   sURL            ,
+    virtual void SAL_CALL storeAsURL(   const   ::rtl::OUString& sURL,
                                         const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
 
@@ -995,7 +994,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL storeToURL(   const   OUSTRING&                   sURL            ,
+    virtual void SAL_CALL storeToURL(   const   ::rtl::OUString& sURL,
                                         const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
@@ -1533,7 +1532,7 @@ private:
     SAL_DLLPRIVATE void ListenForStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
 
-    SAL_DLLPRIVATE void impl_store( const   OUSTRING&                   sURL            ,
+    SAL_DLLPRIVATE void impl_store( const ::rtl::OUString& sURL,
                         const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
 

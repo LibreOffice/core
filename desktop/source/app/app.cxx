@@ -756,7 +756,7 @@ sal_Bool Desktop::QueryExit()
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< ::com::sun::star::frame::XDesktop >
-            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 UNO_QUERY );
 
     Reference < ::com::sun::star::beans::XPropertySet > xPropertySet( xDesktop, UNO_QUERY );
@@ -764,7 +764,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_True;
-        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
 
     sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
@@ -774,7 +774,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_False;
-        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
     else
     {
@@ -2488,11 +2488,11 @@ void Desktop::OpenClients()
         try
         {
             Reference< XDispatch > xRecovery(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             Reference< XURLTransformer > xParser(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             css::util::URL aCmd;
@@ -2537,7 +2537,7 @@ void Desktop::OpenClients()
                     May be we can check the desktop if some documents are existing there.
                  */
                 Reference< XFramesSupplier > xTasksSupplier(
-                        ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                         ::com::sun::star::uno::UNO_QUERY_THROW );
                 Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
                 if ( xList->hasElements() )
@@ -2665,7 +2665,7 @@ void Desktop::OpenClients()
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
     Reference< XFramesSupplier > xTasksSupplier(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY_THROW );
     Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
     if ( xList->hasElements() || rArgs.IsServer() )
@@ -2799,7 +2799,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             // find active task - the active task is always a visible task
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                  xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                  xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                             ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
@@ -2925,7 +2925,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
             com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
-                xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 ::com::sun::star::uno::UNO_QUERY );
 
             // check provider ... we know it's weak reference only

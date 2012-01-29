@@ -72,7 +72,7 @@ using ::com::sun::star::beans::PropertyValue;
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
 //--------------------------------------------------------------------------------------------------------
-void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY & rElement )
+void SAL_CALL SfxEvents_Impl::replaceByName( const rtl::OUString & aName, const ANY & rElement )
                                 throw( ILLEGALARGUMENTEXCEPTION, NOSUCHELEMENTEXCEPTION,
                                        WRAPPEDTARGETEXCEPTION, RUNTIMEEXCEPTION )
 {
@@ -130,7 +130,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 //--------------------------------------------------------------------------------------------------------
 //  --- XNameAccess ---
 //--------------------------------------------------------------------------------------------------------
-ANY SAL_CALL SfxEvents_Impl::getByName( const OUSTRING& aName )
+ANY SAL_CALL SfxEvents_Impl::getByName( const rtl::OUString& aName )
                                 throw( NOSUCHELEMENTEXCEPTION, WRAPPEDTARGETEXCEPTION,
                                        RUNTIMEEXCEPTION )
 {
@@ -150,13 +150,13 @@ ANY SAL_CALL SfxEvents_Impl::getByName( const OUSTRING& aName )
 }
 
 //--------------------------------------------------------------------------------------------------------
-SEQUENCE< OUSTRING > SAL_CALL SfxEvents_Impl::getElementNames() throw ( RUNTIMEEXCEPTION )
+SEQUENCE< rtl::OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( RUNTIMEEXCEPTION )
 {
     return maEventNames;
 }
 
 //--------------------------------------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUSTRING& aName ) throw ( RUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const rtl::OUString& aName ) throw ( RUNTIMEEXCEPTION )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -198,11 +198,11 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
     SEQUENCE < PROPERTYVALUE > aProperties;
     if ( aEventData >>= aProperties )
     {
-        OUSTRING        aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-        OUSTRING        aType;
-        OUSTRING        aScript;
-        OUSTRING        aLibrary;
-        OUSTRING        aMacroName;
+        rtl::OUString aPrefix = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+        rtl::OUString aType;
+        rtl::OUString aScript;
+        rtl::OUString aLibrary;
+        rtl::OUString aMacroName;
 
         sal_Int32 nCount = aProperties.getLength();
 
@@ -304,7 +304,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
     // get the event name, find the coresponding data, execute the data
 
-    OUSTRING    aName   = aEvent.EventName;
+    rtl::OUString aName   = aEvent.EventName;
     long        nCount  = maEventNames.getLength();
     long        nIndex  = 0;
     sal_Bool    bFound  = sal_False;
@@ -377,10 +377,10 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
     if ( aAny >>= aProperties )
     {
-        OUSTRING        aType;
-        OUSTRING        aScriptURL;
-        OUSTRING        aLibrary;
-        OUSTRING        aMacroName;
+        rtl::OUString aType;
+        rtl::OUString aScriptURL;
+        rtl::OUString aLibrary;
+        rtl::OUString aMacroName;
 
         long nCount = aProperties.getLength();
         long nIndex = 0;
@@ -468,7 +468,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
                 if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
                 {
-                    OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+                    rtl::OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if (aBasMgrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
                         aLibrary = pDoc->GetTitle();
                     else
@@ -485,13 +485,13 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         }
         else if ( !aMacroName.isEmpty() )
         {
-            aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+            aScript = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
                 aScript += String('.');
 
             aScript += String('/');
             aScript += aMacroName;
-            aScript += OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
+            aScript += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
         }
         else
             // wrong properties

@@ -76,7 +76,6 @@
 #define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
 #define UNOTYPE                 ::com::sun::star::uno::Type
 #define UNOURL                  ::com::sun::star::util::URL
-#define OUSTRING                ::rtl::OUString
 #define XCONTEXTMENUINTERCEPTOR ::com::sun::star::ui::XContextMenuInterceptor
 
 //________________________________________________________________________________________________________
@@ -286,7 +285,7 @@ public:
     */
 
     virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL &            aURL            ,
-                                                            const   OUSTRING &          sTargetFrameName,
+                                                            const   ::rtl::OUString &   sTargetFrameName,
                                                                     FrameSearchFlags    eSearchFlags    ) throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________

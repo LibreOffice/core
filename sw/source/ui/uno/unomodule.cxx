@@ -130,7 +130,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SwUnoModule::queryDispatches(
 
 // XDispatchProvider
 REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
-    const UNOURL& aURL, const OUSTRING& /*sTargetFrameName*/,
+    const UNOURL& aURL, const rtl::OUString& /*sTargetFrameName*/,
     sal_Int32 /*eSearchFlags*/    ) throw( uno::RuntimeException )
 {
     REFERENCE< XDISPATCH > xReturn;

@@ -65,7 +65,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 
-#define OUSTRING                    ::rtl::OUString
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
 #define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
 #define OWEAKOBJECT                 ::cppu::OWeakObject

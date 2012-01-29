@@ -122,7 +122,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SdUnoModule::queryDispatches( const 
 }
 
 // XDispatchProvider
-REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const OUSTRING&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
+REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const rtl::OUString&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
 {
     SolarMutexGuard aGuard;
     SdDLL::Init();

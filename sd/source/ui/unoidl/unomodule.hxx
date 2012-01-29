@@ -64,7 +64,6 @@ namespace com
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define XDISPATCH               ::com::sun::star::frame::XDispatch
 #define XNOTIFYINGDISPATCH      ::com::sun::star::frame::XNotifyingDispatch
-#define OUSTRING                ::rtl::OUString
 #define UNOURL                  ::com::sun::star::util::URL
 #define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
 
@@ -88,7 +87,7 @@ public:
     // XDispatchProvider
     virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
     virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL &            aURL            ,
-                                                            const   OUSTRING &          sTargetFrameName,
+                                                            const   ::rtl::OUString &   sTargetFrameName,
                                                                     sal_Int32   eSearchFlags    ) throw( RUNTIMEEXCEPTION ) ;
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
