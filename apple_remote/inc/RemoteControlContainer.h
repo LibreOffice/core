@@ -28,7 +28,7 @@
  *
  *****************************************************************************/
 
-#import <apple_remote/RemoteControl.h>
+#import "RemoteControl.h"
 
 @interface RemoteControlContainer : RemoteControl {
     NSMutableArray* remoteControls;

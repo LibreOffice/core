@@ -2,13 +2,13 @@
  * RemoteControl.m
  * RemoteControlWrapper
  *
- * Created by Martin Kahr on 11.03.06 under a MIT-style license.
+ * Created by Martin Kahr on 11.03.06 under a MIT-style license. 
  * Copyright (c) 2006 martinkahr.com. All rights reserved.
  *
- * Code modified and adapted to OpenOffice.org
+ * Code modified and adapted to OpenOffice.org 
  * by Eric Bachard on 11.08.2008 under the same License
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
+ * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -20,17 +20,17 @@
  *
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
  *****************************************************************************/
+ 
+#import "RemoteControl.h"
 
-#import <apple_remote/RemoteControl.h>
-
-// notifaction names that are being used to signal that an application wants to
+// notifaction names that are being used to signal that an application wants to 
 // have access to the remote control device or if the application has finished
 // using the remote control device
 NSString* REQUEST_FOR_REMOTE_CONTROL_NOTIFCATION     = @"mac.remotecontrols.RequestForRemoteControl";
@@ -47,14 +47,14 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 @implementation RemoteControl
 
 // returns nil if the remote control device is not available
-- (id) initWithDelegate: (id) _remoteControlDelegate {
+- (id) initWithDelegate: (id) _remoteControlDelegate {	
 	if ( (self = [super init]) ) {
-        delegate = [_remoteControlDelegate retain];
+		delegate = [_remoteControlDelegate retain];
 #ifdef DEBUG
         NSLog(@"RemoteControl initWithDelegate ok");
 #endif
     }
-    return self;
+	return self;
 }
 
 - (void) dealloc {
@@ -66,38 +66,33 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 #ifdef DEBUG
         NSLog(@"setListeningToRemote ok");
 #endif
-    (void)value;
 }
 - (BOOL) isListeningToRemote {
-    return NO;
+	return NO;
 }
 
 - (void) startListening: (id) sender {
 #ifdef DEBUG
             NSLog(@"startListening ok");
 #endif
-    (void)sender;
 }
 - (void) stopListening: (id) sender {
 #ifdef DEBUG
             NSLog(@"stopListening ok");
 #endif
-    (void)sender;
 }
 
 - (BOOL) isOpenInExclusiveMode {
-    return YES;
+	return YES;
 }
 - (void) setOpenInExclusiveMode: (BOOL) value {
-    (void)value;
 }
 
 - (BOOL) sendsEventForButtonIdentifier: (RemoteControlEventIdentifier) identifier {
 #ifdef DEBUG
-    NSLog(@"sending event for button identifier \n");
+   NSLog(@"sending event for button identifier \n");
 #endif
-    (void)identifier;
-    return YES;
+	return YES;
 }
 
 + (void) sendDistributedNotification: (NSString*) notificationName targetBundleIdentifier: (NSString*) targetIdentifier
@@ -111,7 +106,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
                             kTargetApplicationIdentifier /*targetBundleIdentifier -> does not appear, since the peer is nil*/,
                             nil];
 #ifdef DEBUG
-    // Debug purpose: returns all the existing dictionary keys.
+    // Debug purpose: returns all the existing dictionary keys. 
     NSString *s;
     NSEnumerator *e = [userInfo keyEnumerator];
     while ( (s = [e nextObject]) ) {
@@ -124,10 +119,10 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
     NSLog(@"sendDistributedNotification ...");
 #endif
 
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:notificationName
-                                                     object:nil
-                                                     userInfo:userInfo
-                                                     deliverImmediately:YES];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:notificationName
+																   object:nil
+																 userInfo:userInfo
+													   deliverImmediately:YES];	
     }
 }
 
@@ -145,7 +140,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 }
 
 + (const char*) remoteControlDeviceName {
-    return NULL;
+	return NULL;
 }
 
 @end

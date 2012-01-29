@@ -2,13 +2,13 @@
  * RemoteControlContainer.m
  * RemoteControlWrapper
  *
- * Created by Martin Kahr on 11.03.06 under a MIT-style license.
+ * Created by Martin Kahr on 11.03.06 under a MIT-style license. 
  * Copyright (c) 2006 martinkahr.com. All rights reserved.
  *
- * Code modified and adapted to OpenOffice.org
+ * Code modified and adapted to OpenOffice.org 
  * by Eric Bachard on 11.08.2008 under the same License
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
+ * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -20,7 +20,7 @@
  *
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -33,23 +33,23 @@
 @implementation RemoteControlContainer
 
 - (id) initWithDelegate: (id) _remoteControlDelegate {
-    if ( (self = [super initWithDelegate:_remoteControlDelegate]) ) {
-        remoteControls = [[NSMutableArray alloc] init];
+	if ( (self = [super initWithDelegate:_remoteControlDelegate]) ) {
+		remoteControls = [[NSMutableArray alloc] init];
 #ifdef DEBUG
         NSLog(@"RemoteControlContainer initWithDelegate ok");
-    }
+	}
     else {
         NSLog(@"RemoteControlContainer initWithDelegate failed");
 #endif
     }
 
-    return self;
+	return self;
 }
 
 - (void) dealloc {
-    [self stopListening: self];
-    [remoteControls release];
-    [super dealloc];
+	[self stopListening: self];
+	[remoteControls release];
+	[super dealloc];
 }
 
 - (BOOL) instantiateAndAddRemoteControlDeviceWithClass: (Class) clazz {
@@ -58,87 +58,83 @@
     if (remoteControl) {
         [remoteControls addObject: remoteControl];
         [remoteControl addObserver: self forKeyPath:@"listeningToRemote" options:NSKeyValueObservingOptionNew context:nil];
-        toReturn = YES;
+        toReturn = YES;		
     }
 #ifdef DEBUG
     else {
         NSLog(@"RemoteControlContainer instantiateAndAddRemoteControlDeviceWithClass failed");
-        toReturn = NO;
+        toReturn = NO;	
     }
 #endif
     return toReturn;
 }
 
 - (unsigned int) count {
-    return [remoteControls count];
+	return [remoteControls count];
 }
 
 - (void) reset {
-    [self willChangeValueForKey:@"listeningToRemote"];
-    [self didChangeValueForKey:@"listeningToRemote"];
+	[self willChangeValueForKey:@"listeningToRemote"];
+	[self didChangeValueForKey:@"listeningToRemote"];
 #ifdef DEBUG
-    // debug purpose
+	// debug purpose
     NSLog(@"reset... (after listening to remote)");
 #endif
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self reset];
-    (void)keyPath;
-    (void)object;
-    (void)change;
-    (void)context;
+	[self reset];
 }
 
 - (void) setListeningToRemote: (BOOL) value {
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        [[remoteControls objectAtIndex: i] setListeningToRemote: value];
-    }
-    if (value && value != [self isListeningToRemote]) [self performSelector:@selector(reset) withObject:nil afterDelay:0.01];
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		[[remoteControls objectAtIndex: i] setListeningToRemote: value];
+	}
+	if (value && value != [self isListeningToRemote]) [self performSelector:@selector(reset) withObject:nil afterDelay:0.01];
 }
 - (BOOL) isListeningToRemote {
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        if ([[remoteControls objectAtIndex: i] isListeningToRemote]) {
-            return YES;
-        }
-    }
-    return NO;
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		if ([[remoteControls objectAtIndex: i] isListeningToRemote]) {
+			return YES;
+		}
+	}
+	return NO;
 }
 
 - (void) startListening: (id) sender {
 #ifdef DEBUG
-    NSLog(@"startListening to events... ");
+	NSLog(@"startListening to events... ");
 #endif
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        [[remoteControls objectAtIndex: i] startListening: sender];
-    }
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		[[remoteControls objectAtIndex: i] startListening: sender];
+	}	
 }
 - (void) stopListening: (id) sender {
 #ifdef DEBUG
-    NSLog(@"stopListening to events... ");
+	NSLog(@"stopListening to events... ");
 #endif
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        [[remoteControls objectAtIndex: i] stopListening: sender];
-    }
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		[[remoteControls objectAtIndex: i] stopListening: sender];
+	}	
 }
 
 - (BOOL) isOpenInExclusiveMode {
-    BOOL mode = YES;
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        mode = mode && ([[remoteControls objectAtIndex: i] isOpenInExclusiveMode]);
-    }
-    return mode;
+	BOOL mode = YES;
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		mode = mode && ([[remoteControls objectAtIndex: i] isOpenInExclusiveMode]);
+	}
+	return mode;	
 }
 - (void) setOpenInExclusiveMode: (BOOL) value {
-    unsigned int i;
-    for(i=0; i < [remoteControls count]; i++) {
-        [[remoteControls objectAtIndex: i] setOpenInExclusiveMode:value];
-    }
+	int i;
+	for(i=0; i < [remoteControls count]; i++) {
+		[[remoteControls objectAtIndex: i] setOpenInExclusiveMode:value];
+	}	
 }
 
 @end
