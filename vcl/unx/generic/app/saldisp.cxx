@@ -241,13 +241,6 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
                              XVisualInfo &rVI )
 {
     VisualID nDefVID = XVisualIDFromVisual( DefaultVisual( pDisplay, nScreen ) );
-    VisualID    nVID = 0;
-    char       *pVID = getenv( "SAL_VISUAL" );
-    if( pVID )
-        sscanf( pVID, "%li", &nVID );
-
-    if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
-        return rVI.visualid == nDefVID;
 
     XVisualInfo aVI;
     aVI.screen = nScreen;
@@ -255,49 +248,9 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
     int nVisuals;
     XVisualInfo* pVInfos = XGetVisualInfo( pDisplay, VisualScreenMask,
                                            &aVI, &nVisuals );
-    // pVInfos should contain at least one visual, otherwise
-    // we're in trouble
-    int* pWeight = (int*)alloca( sizeof(int)*nVisuals );
-    int i;
-    for( i = 0; i < nVisuals; i++ )
-    {
-        sal_Bool bUsable = sal_False;
-        int nTrueColor = 1;
 
-        if ( pVInfos[i].screen != nScreen )
-        {
-            bUsable = sal_False;
-        }
-        else
-        if( pVInfos[i].c_class == TrueColor )
-        {
-            nTrueColor = 2048;
-            if( pVInfos[i].depth == 24 )
-                bUsable = sal_True;
-        }
-        else if( pVInfos[i].c_class == PseudoColor )
-        {
-            if( pVInfos[i].depth <= 8 )
-                bUsable = sal_True;
-            else if( pVInfos[i].depth == 12 )
-                bUsable = sal_True;
-        }
-        pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
-        pWeight[ i ] -= pVInfos[ i ].visualid;
-    }
-
-    int nBestVisual = 0;
-    int nBestWeight = -1024;
-    for( i = 0; i < nVisuals; i++ )
-    {
-        if( pWeight[ i ] > nBestWeight )
-        {
-            nBestWeight = pWeight[ i ];
-            nBestVisual = i;
-        }
-    }
-
-    rVI = pVInfos[ nBestVisual ];
+    // HACK
+    rVI = pVInfos[ 0 ];
 
     XFree( pVInfos );
     return rVI.visualid == nDefVID;
