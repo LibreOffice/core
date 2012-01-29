@@ -65,10 +65,8 @@ void TkResMgr::ensureImplExists()
 
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-    ByteString sResMgrName( "tk" );
-
-    m_pSimpleResMgr = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
-    m_pResMgr = ResMgr::CreateResMgr( sResMgrName.GetBuffer() );
+    m_pSimpleResMgr = SimpleResMgr::Create( "tk", aLocale );
+    m_pResMgr = ResMgr::CreateResMgr( "tk" );
 
     if (m_pSimpleResMgr)
     {
