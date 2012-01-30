@@ -163,7 +163,6 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
@@ -199,7 +198,6 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
