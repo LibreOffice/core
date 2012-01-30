@@ -43,7 +43,11 @@
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
+#if defined(__x86_64) || defined(__i386)
 #define USE_MEMORY_ALIGNMENT 64
+#else
+#define USE_MEMORY_ALIGNMENT 4
+#endif
 #else /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define CORE_BIG_ENDIAN 1
@@ -369,10 +373,10 @@ struct hash
 
 static unsigned int hash_compute( struct hash* hash, const char* key, int length)
 {
-unsigned int a;
-unsigned int b;
-unsigned int c;                                          /* internal state */
-const unsigned char* uk = (const unsigned char*)key;
+    unsigned int a;
+    unsigned int b;
+    unsigned int c;                                          /* internal state */
+    const unsigned char* uk = (const unsigned char*)key;
 
     /* Set up the internal state */
     a = b = c = 0xdeadbeef + (length << 2);
