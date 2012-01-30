@@ -940,4 +940,17 @@ TabPage RID_SCPAGE_DEFAULTS
         Spin = TRUE ;
         Repeat = TRUE ;
     };
+    FixedText FT_SHEETPREFIX
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "Prefix name for new worksheet";
+    };
+    Edit ED_SHEETPREFIX
+    {
+        HelpID = "sc:Edit:RID_SCPAGE_CALC:ED_SHEETPREFIX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 32 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+    };
 };

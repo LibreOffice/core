@@ -44,6 +44,7 @@
 #include "sc.hrc"
 #include "miscuno.hxx"
 #include "global.hxx"
+#include "globstr.hrc"
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -88,6 +89,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
             nInitTabCount( rCpy.nInitTabCount ),
+            aInitTabPrefix( rCpy.aInitTabPrefix ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
             eKeyBindingType( rCpy.eKeyBindingType ),
             nDay( rCpy.nDay ),
@@ -124,6 +126,7 @@ void ScDocOptions::ResetDocOptions()
     bIsIter             = false;
     nIterCount          = 100;
     nInitTabCount       = 3;
+    aInitTabPrefix      = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
     eKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
@@ -290,7 +293,8 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 
 #define CFGPATH_DEFAULTS    "Office.Calc/Defaults"
 #define SCDEFAULTSOPT_TAB_COUNT     0
-#define SCDEFAULTSOPT_COUNT         1
+#define SCDEFAULTSOPT_TAB_PREFIX    1
+#define SCDEFAULTSOPT_COUNT         2
 
 
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
@@ -372,7 +376,8 @@ Sequence<OUString> ScDocCfg::GetDefaultsPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/TabCount"             // SCDEFAULTSOPT_COUNT_TAB_COUNT
+        "Sheet/SheetCount",            // SCDEFAULTSOPT_TAB_COUNT
+        "Sheet/SheetPrefix"            // SCDEFAULTSOPT_TAB_PREFIX
     };
     Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -595,6 +600,11 @@ ScDocCfg::ScDocCfg() :
                 if (pValues[nProp] >>= nIntVal)
                     SetInitTabCount( static_cast<SCTAB>(nIntVal) );
                 break;
+            case SCDEFAULTSOPT_TAB_PREFIX:
+                OUString aPrefix;
+                if (pValues[nProp] >>= aPrefix)
+                    SetInitTabPrefix(aPrefix);
+                break;
             }
         }
     }
@@ -755,6 +765,9 @@ IMPL_LINK( ScDocCfg, DefaultsCommitHdl, void *, EMPTYARG )
         {
         case SCDEFAULTSOPT_TAB_COUNT:
             pValues[nProp] <<= static_cast<sal_Int32>(GetInitTabCount());
+        break;
+        case SCDEFAULTSOPT_TAB_PREFIX:
+            pValues[nProp] <<= GetInitTabPrefix();
         break;
         }
     }

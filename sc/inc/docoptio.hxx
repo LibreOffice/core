@@ -42,7 +42,8 @@ class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // epsilon value dazu
     sal_uInt16 nIterCount;              // number
-    SCTAB nInitTabCount;            // number of Tabs for new Spreadssheet doc
+    SCTAB nInitTabCount;            // number of Tabs for new Spreadsheet doc
+    ::rtl::OUString aInitTabPrefix;   // The Tab prefix name in new Spreadsheet doc
     sal_uInt16 nPrecStandardFormat; // precision for standard format
     ScOptionsUtil::KeyBindingType eKeyBindingType;
     sal_uInt16 nDay;                    // Null date:
@@ -83,6 +84,8 @@ public:
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
     SCTAB GetInitTabCount() const           { return nInitTabCount; }
     void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
+    void   SetInitTabPrefix( ::rtl::OUString& aPrefix) { aInitTabPrefix = aPrefix; }
+    ::rtl::OUString GetInitTabPrefix() const			{ return aInitTabPrefix; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
@@ -139,6 +142,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bIsIter             = rCpy.bIsIter;
     nIterCount          = rCpy.nIterCount;
     nInitTabCount       = rCpy.nInitTabCount;
+    aInitTabPrefix      = rCpy.aInitTabPrefix;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
     eKeyBindingType     = rCpy.eKeyBindingType;
@@ -168,6 +172,7 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bIsIter                == bIsIter
             &&  rOpt.nIterCount             == nIterCount
             &&  rOpt.nInitTabCount          == nInitTabCount
+            &&  rOpt.aInitTabPrefix         == aInitTabPrefix
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
             &&  rOpt.eKeyBindingType        == eKeyBindingType

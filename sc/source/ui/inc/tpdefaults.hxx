@@ -53,15 +53,20 @@ private:
     virtual ~ScTpDefaultsOptions();
 
     void CheckNumSheets();
+    void CheckPrefix();
 
     DECL_LINK( NumModifiedHdl, NumericField* );
+    DECL_LINK( PrefixModifiedHdl, Edit* );
 
 private:
     FixedLine     aFLInitSpreadSheet;
     FixedText     aFtNSheets;
     NumericField  aEdNSheets;
+    FixedText     aFtSheetPrefix;
+    Edit          aEdSheetPrefix;
 
-    ::boost::shared_ptr<ScDocOptions> mpLocalOptions;
+    ::boost::shared_ptr<ScDocOptions> mpOldOptions;
+    ::boost::shared_ptr<ScDocOptions> mpNewOptions;
 };
 
 #endif

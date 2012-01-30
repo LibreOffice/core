@@ -95,6 +95,7 @@
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
 #include "stlalgorithm.hxx"
+#include "docoptio.hxx"
 
 #include <map>
 #include <limits>
@@ -142,7 +143,10 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
-        rtl::OUString aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
+        // Get Custom prefix
+        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+        rtl::OUString aString = rDocOpt.GetInitTabPrefix();
+
         aString += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
@@ -308,7 +312,10 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
     {
         // Find new one
 
-        const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
+        // Get Custom prefix
+        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+        rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+
         bool         bOk   = false;
 
         // First test if the prefix is valid, if so only avoid doubles
@@ -353,7 +360,10 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
 {
     aNames.clear();//ensure that the vector is empty
 
-    const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
+    // Get Custom prefix
+    const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+    rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+
     rtl::OUStringBuffer rName;
     bool         bOk   = false;
 

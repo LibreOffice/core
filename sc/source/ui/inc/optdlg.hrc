@@ -198,3 +198,5 @@
 #define FL_INIT_SPREADSHEET  1
 #define FT_NSHEETS           2
 #define ED_NSHEETS           3
+#define FT_SHEETPREFIX       4
+#define ED_SHEETPREFIX       5

@@ -1610,17 +1610,24 @@
 	  <info>
 		<desc>Contains various defaults settings.</desc>
 	  </info>
-	  <group oor:name="Other">
+	  <group oor:name="Sheet">
 		<info>
-			  <desc>Other Program defaults</desc>
+			  <desc>Sheet defaults</desc>
 		</info>
-		<prop oor:name="TabCount" oor:type="xs:int" oor:nillable="false">
+		<prop oor:name="SheetCount" oor:type="xs:int" oor:nillable="false">
 			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
 			  <info>
 				<author>Albert Thuswaldner</author>
 				<desc>Option to set initial number of sheet tabs</desc>
 			  </info>
 		  <value>3</value>
+		</prop>
+		<prop oor:name="SheetPrefix" oor:type="xs:string">
+			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+			  <info>
+				<author>Albert Thuswaldner</author>
+				<desc>Option to set the prefix name for new sheet tabs</desc>
+			  </info>
 		</prop>
 	  </group>
 	</group>

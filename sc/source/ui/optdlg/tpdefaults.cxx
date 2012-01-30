@@ -29,26 +29,36 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <vcl/msgbox.hxx>
+
 #include "tpdefaults.hxx"
 #include "optdlg.hrc"
 #include "scresid.hxx"
 #include "scmod.hxx"
 #include "docoptio.hxx"
+#include "document.hxx"
+#include "global.hxx"
+#include "globstr.hrc"
 
 #define INIT_SHEETS_MIN 1
 #define INIT_SHEETS_MAX 1024
+
+using ::rtl::OUString;
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreAttrs),
     aFLInitSpreadSheet ( this, ScResId( FL_INIT_SPREADSHEET ) ),
     aFtNSheets         ( this, ScResId( FT_NSHEETS ) ),
-    aEdNSheets         ( this, ScResId( ED_NSHEETS ) )
+    aEdNSheets 		   ( this, ScResId( ED_NSHEETS ) ),
+    aFtSheetPrefix 	   ( this, ScResId( FT_SHEETPREFIX ) ),
+    aEdSheetPrefix 	   ( this, ScResId( ED_SHEETPREFIX ) )
 {
     FreeResource();
 
     const ScTpCalcItem& rItem = static_cast<const ScTpCalcItem&>(
         rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
-    mpLocalOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
+    mpOldOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
+    mpNewOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
 
     long nTxtW = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
     long nCtrlW = aFtNSheets.GetSizePixel().Width();
@@ -62,6 +72,7 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
         aEdNSheets.SetPosPixel( aNewPoint );
     }
     aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
+    aEdSheetPrefix.SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
 }
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
@@ -76,12 +87,14 @@ SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCore
 sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
     SCTAB nTabCount = static_cast<SCTAB>(aEdNSheets.GetValue());
+    OUString aSheetPrefix = aEdSheetPrefix.GetText();
 
-    if (mpLocalOptions->GetInitTabCount() != nTabCount)
+    mpNewOptions->SetInitTabCount( nTabCount );
+    mpNewOptions->SetInitTabPrefix( aSheetPrefix );
+
+    if (*mpNewOptions != *mpOldOptions)
     {
-        mpLocalOptions->SetInitTabCount( nTabCount );
-
-        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpLocalOptions));
+        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpNewOptions));
         return sal_True;
     }
     else
@@ -90,8 +103,8 @@ sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 
 void ScTpDefaultsOptions::Reset(const SfxItemSet& /*rCoreAttrs*/)
 {
-    aEdNSheets.SetValue( static_cast<sal_uInt16>(mpLocalOptions->GetInitTabCount()) );
-    CheckNumSheets();
+    aEdNSheets.SetValue( static_cast<sal_uInt16>(mpOldOptions->GetInitTabCount()) );
+    aEdSheetPrefix.SetText( mpOldOptions->GetInitTabPrefix() );
 }
 
 int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
@@ -108,9 +121,26 @@ void ScTpDefaultsOptions::CheckNumSheets()
         aEdNSheets.SetValue(INIT_SHEETS_MIN);
 }
 
+void ScTpDefaultsOptions::CheckPrefix()
+{
+    OUString aSheetPrefix = aEdSheetPrefix.GetText();
+
+    if ( !ScDocument::ValidTabName( aSheetPrefix ) )
+    {
+         ErrorBox(this,WinBits(WB_OK|WB_DEF_OK), ScGlobal::GetRscString(STR_INVALIDTABNAME) ).Execute();
+    }
+}
+
+
 IMPL_LINK( ScTpDefaultsOptions, NumModifiedHdl, NumericField*, EMPTYARG )
 {
     CheckNumSheets();
+    return 0;
+}
+
+IMPL_LINK( ScTpDefaultsOptions, PrefixModifiedHdl, Edit*, EMPTYARG )
+{
+    CheckPrefix();
     return 0;
 }
 
