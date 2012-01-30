@@ -687,7 +687,7 @@ Resource RID_GLOBSTR
     };
     String STR_INVALIDTABNAME
     {
-        Text [ en-US ] = "Invalid sheet name." ;
+        Text [ en-US ] = "Invalid sheet name.\nThe sheet name must not be a duplicate of an existing name \nand may not contain the characters [ ] * ? / \\" ;
     };
     String STR_SCENARIO
     {
