@@ -858,6 +858,13 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
             qx = (qx < path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : qx;
             qy = (qy < path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : qy;
         }
+        if(path[k]["libwpg:path-action"]->getStr() == "Q")
+        {
+            px = (px > path[k]["svg:x1"]->getDouble()) ? path[k]["svg:x1"]->getDouble() : px;
+            py = (py > path[k]["svg:y1"]->getDouble()) ? path[k]["svg:y1"]->getDouble() : py;
+            qx = (qx < path[k]["svg:x1"]->getDouble()) ? path[k]["svg:x1"]->getDouble() : qx;
+            qy = (qy < path[k]["svg:y1"]->getDouble()) ? path[k]["svg:y1"]->getDouble() : qy;
+        }
         if(path[k]["libwpg:path-action"]->getStr() == "A")
         {
             double xmin, xmax, ymin, ymax;
@@ -921,6 +928,13 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
             sElement.sprintf("C%i %i %i %i %i %i", (unsigned)((path[i]["svg:x1"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x2"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y2"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
+                             (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
+            sValue.append(sElement);
+        }
+        else if (path[i]["libwpg:path-action"]->getStr() == "Q")
+        {
+            sElement.sprintf("Q%i %i %i %i", (unsigned)((path[i]["svg:x1"]->getDouble()-px)*2540),
+                             (unsigned)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
