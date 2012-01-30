@@ -292,6 +292,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFormField(false),
     m_bWasInFrame(false),
     m_bIsInFrame(false),
+    m_bHasPage(false),
     m_aUnicodeBuffer()
 {
     OSL_ASSERT(xInputStream.is());
@@ -1317,8 +1318,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bWasInFrame = inFrame();
                 if (!m_bWasInFrame)
                     m_bNeedPar = false;
-                // this has to be reset even without a pard, since it's a symbol in RTF terms
-                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFPageBreakBefore);
+                if (m_bHasPage)
+                {
+                    // this has to be reset even without a pard, since it's a symbol in RTF terms
+                    m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFPageBreakBefore);
+                    m_bHasPage = false;
+                }
             }
             break;
         case RTF_SECT:
@@ -1444,6 +1449,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pValue(new RTFValue(1));
                 dispatchSymbol(RTF_PAR);
                 m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PFPageBreakBefore, pValue));
+                m_bHasPage = true;
             }
             break;
         default:
@@ -1662,7 +1668,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_KEEP: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_INTBL: m_pCurrentBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
-        case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
+        case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; m_bHasPage = false; break;
         default: break;
     }
     if (nParam >= 0)
