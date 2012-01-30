@@ -21,6 +21,7 @@ certain functionality.
 
 @li sw.uno - Writer's UNO interfaces
 @li sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
+@li sw.rtf - .rtf export filter
 
 @section StarMath
 
