@@ -136,10 +136,10 @@ extern SgfFontLst* pSgfFonts;
 //                EscBold, EscLSlnt,EscRSlnt,EscUndln,EscDbUnd,EscKaptF,EscStrik,EscDbStk,
 //                EscSupSc,EscSubSc,Esc2DShd,Esc3DShd,Esc4DShd];
 // Justify muss spaetestens am Anfang des Absatzes stehen
-#define  EscSet    '' /* Flag setzen                                               */
-#define  EscReset  '' /* Flag loeschen                                             */
+#define  EscSet    '\x1e' /* Flag setzen                                               */
+#define  EscReset  '\x1f' /* Flag loeschen                                             */
 #define  EscDeflt  '\x11' /* Flag auf default setzen                                */
-#define  EscToggl  '' /* Flag Toggeln                                              */
+#define  EscToggl  '\x1d' /* Flag Toggeln                                              */
 #define  EscRelat  '%'
 #define  EscNoFlg  0
 #define  EscNoVal  -2147483647 /* -MaxLongInt */
