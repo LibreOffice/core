@@ -1978,10 +1978,11 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    sal_Size nRemainingSize = pSt->remainingSize();
 
-    bool bValid = checkSeek(*pSt, nFilePos) && (nRemainingSize >= nValidMin) &&
-        (nPLCF >= nValidMin);
+    bool bValid = checkSeek(*pSt, nFilePos);
+    sal_Size nRemainingSize = pSt->remainingSize();
+    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+        bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
 
     // Pointer auf Pos- u. Struct-Array
@@ -2136,9 +2137,7 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 {
     sal_Size nOldPos = rSt.Tell();
-    sal_Size nRemainingSize = rSt.remainingSize();
-
-    bool bValid = checkSeek(rSt, nFilePos) && (nRemainingSize >= nPLCF);
+    bool bValid = checkSeek(rSt, nFilePos) && (rSt.remainingSize() >= nPLCF);
 
     if (bValid)
     {
@@ -2317,10 +2316,11 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    sal_Size nRemainingSize = pSt->remainingSize();
 
-    bool bValid = checkSeek(*pSt, nFilePos) && (nRemainingSize >= nValidMin) &&
-        (nPLCF >= nValidMin);
+    bool bValid = checkSeek(*pSt, nFilePos);
+    sal_Size nRemainingSize = pSt->remainingSize();
+    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+        bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
