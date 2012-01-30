@@ -124,6 +124,7 @@ AWK*=awk
 # for fbsd for now, but for all other platforms it is set.
 GNUCOPY*=cp
 GNUPATCH*=patch
+GPERF*=gperf
 DEREFERENCE=-L
 .ENDIF			# "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"

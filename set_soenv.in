@@ -2094,9 +2094,9 @@ if ( $platform =~ m/cygwin/ ) {
 if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
+  ToFile( "GPERF", "@GPERF@",	"e");
 }
 ToFile( "GNUCOPY",	"@GNUCP@",	"e");
-ToFile( "GPERF", "@GPERF@",	"e");
 # OS/2 define .pl as executable for 4os2
 # use - as switch char for dmake (os2/switchar.c)
 if ($platform =~ m/os2/)
