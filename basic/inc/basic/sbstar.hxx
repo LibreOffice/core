@@ -82,7 +82,7 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
-    sal_Bool            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
+    sal_Bool            CError( SbError, const ::rtl::OUString&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:
     BASIC_DLLPRIVATE sal_Bool           RTError( SbError, xub_StrLen, xub_StrLen, xub_StrLen );
     BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const String& rMsg, xub_StrLen, xub_StrLen, xub_StrLen );
@@ -154,7 +154,7 @@ public:
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
-    static void     MakeErrorText( SbError, const String& aMsg );
+    static void     MakeErrorText( SbError, const ::rtl::OUString& aMsg );
     static const    String& GetErrorText();
     static SbError  GetErrorCode();
     static sal_Bool     IsCompilerError();

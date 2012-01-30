@@ -1575,7 +1575,7 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
+void StarBASIC::MakeErrorText( SbError nId, const ::rtl::OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
@@ -1612,7 +1612,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 }
 
 sal_Bool StarBASIC::CError
-    ( SbError code, const String& rMsg, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+    ( SbError code, const ::rtl::OUString& rMsg, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1634,8 +1634,8 @@ sal_Bool StarBASIC::CError
     MakeErrorText( code, rMsg );
 
     // Implementation of the code for the string transport to SFX-Error
-    if( rMsg.Len() )
-        code = (sal_uIntPtr)*new StringErrorInfo( code, String(rMsg) );
+    if( !rMsg.isEmpty() )
+        code = (sal_uIntPtr)*new StringErrorInfo( code, rMsg );
 
     SetErrorData( code, l, c1, c2 );
     GetSbData()->bCompiler = sal_True;

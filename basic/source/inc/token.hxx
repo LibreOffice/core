@@ -164,7 +164,7 @@ public:
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
     void Error( SbError, const char* );
-    void Error( SbError, String );
+    void Error( SbError, const ::rtl::OUString &);
 
     void Keywords( sal_Bool b ) { bKeywords = b; }
 

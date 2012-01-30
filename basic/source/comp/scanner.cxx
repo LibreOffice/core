@@ -369,7 +369,7 @@ bool SbiScanner::NextSym()
         aSym = p; bNumber = true;
 
         if( comma > 1 || exp > 1 )
-        {   aError = '.';
+        {   aError = ::rtl::OUString('.');
             GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
 
         // #57844 use localized function
@@ -437,7 +437,7 @@ bool SbiScanner::NextSym()
                 *p++ = ch;
             else
             {
-                aError = ch;
+                aError = ::rtl::OUString(ch);
                 GenError( SbERR_BAD_CHAR_IN_NUMBER );
             }
         }
@@ -474,7 +474,7 @@ bool SbiScanner::NextSym()
             {
                 pLine++; nCol++;
                 if( *pLine != cSep || cSep == ']' ) break;
-            } else aError = cSep, GenError( SbERR_EXPECTED );
+            } else aError = ::rtl::OUString(cSep), GenError( SbERR_EXPECTED );
         }
         // If VBA Interop then doen't eat the [] chars
         if ( cSep == ']' && bVBASupportOn )

@@ -244,11 +244,11 @@ void SbiTokenizer::Push( SbiToken t )
 
 void SbiTokenizer::Error( SbError code, const char* pMsg )
 {
-    aError = String::CreateFromAscii( pMsg );
+    aError = ::rtl::OUString::createFromAscii( pMsg );
     Error( code );
 }
 
-void SbiTokenizer::Error( SbError code, String aMsg )
+void SbiTokenizer::Error( SbError code, const ::rtl::OUString &aMsg )
 {
     aError = aMsg;
     Error( code );

@@ -29,12 +29,11 @@
 #ifndef _SCANNER_HXX
 #define _SCANNER_HXX
 
-#include <tools/string.hxx>
 #include <basic/sberrors.hxx>
 
 // The scanner is stand-alone, i. e. it can be used from everywhere.
 // A BASIC-instance is necessary for error messages. Without BASIC
-// the errors are only counted. Also the BASICC is necessary when an
+// the errors are only counted. Also the BASIC is necessary when an
 // advanced SBX-variable shall be used for data type recognition etc.
 
 class StarBASIC;
@@ -51,7 +50,7 @@ class SbiScanner
     bool readLine();
 protected:
     ::rtl::OUString aSym;
-    String aError;
+    ::rtl::OUString aError;
     SbxDataType eScanType;
     StarBASIC* pBasic;                  // instance for error callbacks
     double nVal;                        // numeric value
