@@ -1317,6 +1317,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bWasInFrame = inFrame();
                 if (!m_bWasInFrame)
                     m_bNeedPar = false;
+                // this has to be reset even without a pard, since it's a symbol in RTF terms
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFPageBreakBefore);
             }
             break;
         case RTF_SECT:
@@ -1436,6 +1438,13 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_CHFTN:
             // Nothing to do, dmapper assumes this is the default.
+            break;
+        case RTF_PAGE:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                dispatchSymbol(RTF_PAR);
+                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PFPageBreakBefore, pValue));
+            }
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
