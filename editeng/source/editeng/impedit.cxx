@@ -1310,8 +1310,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
                         ::rtl::OUString aTmpText;
                         aData >>= aTmpText;
-                        String aText( aTmpText );
-                        aText.ConvertLineEnd( LINEEND_LF );
+                        String aText(convertLineEnd(aTmpText, LINEEND_LF));
                         aText.SearchAndReplaceAll( LINE_SEP, ' ' );
                         aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
                     }

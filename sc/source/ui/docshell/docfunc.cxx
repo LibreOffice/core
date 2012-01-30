@@ -1139,8 +1139,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, sal_Boo
         return false;
     }
 
-    String aNewText = rText;
-    aNewText.ConvertLineEnd();      //! ist das noetig ???
+    String aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
 
     if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote( rPos ) )
         pNote->SetText( rPos, aNewText );

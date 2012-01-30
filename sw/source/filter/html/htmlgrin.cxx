@@ -424,7 +424,7 @@ IMAGE_SETEVENT:
                     String sTmp( rOption.GetString() );
                     if( sTmp.Len() )
                     {
-                        sTmp.ConvertLineEnd();
+                        sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
                         String sScriptType;
                         if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
@@ -1110,7 +1110,7 @@ ANCHOR_SETEVENT:
                     String sTmp( rOption.GetString() );
                     if( sTmp.Len() )
                     {
-                        sTmp.ConvertLineEnd();
+                        sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
                         String sScriptType;
                         if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;

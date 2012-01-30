@@ -2126,7 +2126,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
     else
     {
         // convert line endings for Description
-        aContent.ConvertLineEnd();
+        aContent = convertLineEnd(aContent, GetSystemLineEnd());
     }
 
 

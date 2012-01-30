@@ -650,7 +650,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         {
             //  get size from string the same way as in ScDdeLink::DataChanged
 
-            aDataStr.ConvertLineEnd(LINEEND_LF);
+            aDataStr = convertLineEnd(aDataStr, LINEEND_LF);
             xub_StrLen nLen = aDataStr.Len();
             if (nLen && aDataStr.GetChar(nLen-1) == '\n')
                 aDataStr.Erase(nLen-1);

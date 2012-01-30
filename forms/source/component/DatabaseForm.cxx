@@ -969,10 +969,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
     ::rtl::OUString aResult;
 
     // Zeilenendezeichen werden als CR dargestellt
-    UniString sConverter = rString;
-    sConverter.ConvertLineEnd( LINEEND_CR );
-    rString = sConverter;
-
+    rString = convertLineEnd(rString, LINEEND_CR);
 
     // Jeden einzelnen Character ueberpruefen
     sal_Int32 nStrLen = rString.getLength();

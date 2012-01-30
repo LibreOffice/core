@@ -2700,8 +2700,7 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
     if ( GetStatus().DoOnlineSpelling() )
         aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
-    XubString aText( rStr );
-    aText.ConvertLineEnd( LINEEND_LF );
+    XubString aText(convertLineEnd(rStr, LINEEND_LF));
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
 
     // Converts to linesep = \n
@@ -3485,8 +3484,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     uno::Reference< datatransfer::XTransferable > xDataObj;
     xDataObj = pDataObj;
 
-    XubString aText( GetSelected( aSelection ) );
-    aText.ConvertLineEnd(); // System specific
+    XubString aText(convertLineEnd(GetSelected(aSelection), GetSystemLineEnd())); // System specific
     pDataObj->GetString() = aText;
 
     SvxFontItem::EnableStoreUnicodeNames( sal_True );

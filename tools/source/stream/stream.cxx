@@ -2388,4 +2388,96 @@ rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
     return pStr ? rtl::OUString(pStr, SAL_NO_ACQUIRE) : rtl::OUString();
 }
 
+namespace
+{
+    template <typename T, typename O> T tmpl_convertLineEnd(const T &rIn, LineEnd eLineEnd)
+    {
+        // Zeilenumbrueche ermitteln und neue Laenge berechnen
+        bool            bConvert    = false;       	   // Muss konvertiert werden
+        sal_Int32       nStrLen     = rIn.getLength();
+        sal_Int32       nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
+        sal_Int32       nLen        = 0;               // Ziel-Laenge
+        sal_Int32       i           = 0;               // Source-Zaehler
+
+        while (i < nStrLen)
+        {
+            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            {
+                nLen = nLen + nLineEndLen;
+
+                // Wenn schon gesetzt, dann brauchen wir keine aufwendige Abfrage
+                if ( !bConvert )
+                {
+                    // Muessen wir Konvertieren
+                    if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == _LF)) ||
+                         ((eLineEnd == LINEEND_CRLF) && (rIn[i+1] != _LF)) ||
+                         ((eLineEnd == LINEEND_LF) &&
+                          ((rIn[i] == _CR) || (rIn[i+1] == _CR))) ||
+                         ((eLineEnd == LINEEND_CR) &&
+                          ((rIn[i] == _LF) || (rIn[i+1] == _LF))) )
+                        bConvert = true;
+                }
+
+                // \r\n oder \n\r, dann Zeichen ueberspringen
+                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                     (rIn[i] != rIn[i+1]) )
+                    ++i;
+            }
+            else
+                ++nLen;
+            ++i;
+        }
+
+        if (!bConvert)
+            return rIn;
+
+        // Zeilenumbrueche konvertieren
+        // Neuen String anlegen
+        O aNewData(nLen);
+        i = 0;
+        while (i < nStrLen)
+        {
+            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            {
+                if ( eLineEnd == LINEEND_CRLF )
+                {
+                    aNewData.append(_CR);
+                    aNewData.append(_LF);
+                }
+                else
+                {
+                    if ( eLineEnd == LINEEND_CR )
+                        aNewData.append(_CR);
+                    else
+                        aNewData.append(_LF);
+                }
+
+                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                     (rIn[i] != rIn[i+1]) )
+                    ++i;
+            }
+            else
+            {
+                aNewData.append(rIn[i]);
+            }
+
+            ++i;
+        }
+
+        return aNewData.makeStringAndClear();
+    }
+}
+
+rtl::OString convertLineEnd(const rtl::OString &rIn, LineEnd eLineEnd)
+{
+    return tmpl_convertLineEnd<rtl::OString, rtl::OStringBuffer>(rIn, eLineEnd);
+}
+
+rtl::OUString convertLineEnd(const rtl::OUString &rIn, LineEnd eLineEnd)
+{
+    return tmpl_convertLineEnd<rtl::OUString, rtl::OUStringBuffer>(rIn, eLineEnd);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

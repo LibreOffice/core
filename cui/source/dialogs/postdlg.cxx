@@ -112,7 +112,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     }
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
-    String aAuthorStr, aDateStr, aTextStr;
+    String aAuthorStr, aDateStr;
 
     if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
@@ -140,6 +140,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
 
+    rtl::OUString aTextStr;
     if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxPostItTextItem& rText =
@@ -148,7 +149,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     }
 
     ShowLastAuthor(aAuthorStr, aDateStr);
-    aEditED.SetText( aTextStr.ConvertLineEnd() );
+    aEditED.SetText(convertLineEnd(aTextStr, GetSystemLineEnd()));
 
     if ( !bNew )
         SetText( CUI_RESSTR( STR_NOTIZ_EDIT ) );
@@ -235,8 +236,9 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
     aStr += aLocaleWrapper.getTime(aTime, sal_False, sal_False);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ----\n" ) );
 
+    aStr = convertLineEnd(aStr, GetSystemLineEnd());
 
-    aEditED.SetText( aStr.ConvertLineEnd() );
+    aEditED.SetText(aStr);
     xub_StrLen nLen = aStr.Len();
     aEditED.GrabFocus();
     aEditED.SetSelection( Selection( nLen, nLen ) );

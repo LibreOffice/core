@@ -610,8 +610,7 @@ namespace toolkitform
             // --------------------------------
             // text line ends
             // some controls may (always or dependent on other settings) return UNIX line ends
-            String aConverter( _rpDescriptor->Text );
-            _rpDescriptor->Text = aConverter.ConvertLineEnd( LINEEND_CRLF );
+            _rpDescriptor->Text = convertLineEnd(_rpDescriptor->Text, LINEEND_CRLF);
         }
         catch( const Exception& )
         {

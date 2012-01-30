@@ -95,7 +95,7 @@ void SwHTMLParser::EndScript()
     }
 
     bIgnoreRawData = sal_False;
-    aScriptSource.ConvertLineEnd();
+    aScriptSource = convertLineEnd(aScriptSource, GetSystemLineEnd());
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
@@ -254,8 +254,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
     if( !pDocSh )
         return;
 
-    String sEvent( rName );
-    sEvent.ConvertLineEnd();
+    String sEvent(convertLineEnd(rName, GetSystemLineEnd()));
     String sScriptType;
     if( EXTENDED_STYPE == eScrType )
         sScriptType = rScrType;

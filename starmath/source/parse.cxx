@@ -2443,8 +2443,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 {
     ClearUsedSymbols();
 
-    m_aBufferString = rBuffer;
-    m_aBufferString.ConvertLineEnd( LINEEND_LF );
+    m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
     m_Row           = 1;
@@ -2468,8 +2467,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 
 SmNode *SmParser::ParseExpression(const String &rBuffer)
 {
-    m_aBufferString = rBuffer;
-    m_aBufferString.ConvertLineEnd( LINEEND_LF );
+    m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
     m_Row           = 1;

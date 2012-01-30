@@ -306,8 +306,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
             aEntryListStr += String(pList->GetSubStr(i));
         }
 
-        aEntryListStr.ConvertLineEnd();
-        aEdEntries.SetText( aEntryListStr );
+        aEdEntries.SetText(convertLineEnd(aEntryListStr, GetSystemLineEnd()));
     }
     else
     {

@@ -134,7 +134,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     aEditED.SetReadOnly( !bEnable );
 
     if( aStr.Len() )
-        aEditED.SetText( aStr.ConvertLineEnd() );
+        aEditED.SetText(convertLineEnd(aStr, GetSystemLineEnd()));
     FreeResource();
 }
 

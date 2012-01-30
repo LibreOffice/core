@@ -2140,8 +2140,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 ::rtl::OUString aOUString;
                 aData >>= aOUString;
-                aText = aOUString;
-                aText.ConvertLineEnd( LINEEND_LF );
+                aText = convertLineEnd(aOUString, LINEEND_LF);
             }
         }
 

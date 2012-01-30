@@ -226,7 +226,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
             aTypeName += '\n';
 
         aTypeName += aSourceName;
-        aTypeName.ConvertLineEnd();
+        aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
     }
 
     ObjectSource().SetText( aTypeName );

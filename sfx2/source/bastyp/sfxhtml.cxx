@@ -176,7 +176,7 @@ IMAPOBJ_SETEVENT:
                 String sTmp( rOption.GetString() );
                 if( sTmp.Len() )
                 {
-                    sTmp.ConvertLineEnd();
+                    sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
                     aMacroTbl.Insert( nEvent,
                         new SvxMacro( sTmp, sEmpty, eScrpType ));
                 }

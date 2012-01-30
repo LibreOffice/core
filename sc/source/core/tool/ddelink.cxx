@@ -140,7 +140,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
     String aLinkStr;
     ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
-    aLinkStr.ConvertLineEnd(LINEEND_LF);
+    aLinkStr = convertLineEnd(aLinkStr, LINEEND_LF);
 
     //  wenn String mit Zeilenende aufhoert, streichen:
 

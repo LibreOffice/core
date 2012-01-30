@@ -1079,7 +1079,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_NOEMBED_OFF:
-                aContents.ConvertLineEnd();
+                aContents = convertLineEnd(aContents, GetSystemLineEnd());
                 InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
                 aContents.Erase();
                 bCallNextToken = sal_False;

@@ -6428,8 +6428,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
-                    aLastLine.ConvertLineEnd( LINEEND_LF );
+                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // Alle LineFeed's durch Spaces ersetzen
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )

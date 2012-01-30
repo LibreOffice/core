@@ -356,8 +356,8 @@ sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 void SwEnvPage::Reset(const SfxItemSet& rSet)
 {
     SwEnvItem aItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAddrEdit  .SetText(String(aItem.aAddrText).ConvertLineEnd());
-    aSenderEdit.SetText(String(aItem.aSendText).ConvertLineEnd());
+    aAddrEdit  .SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
+    aSenderEdit.SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
     aSenderBox .Check  (aItem.bSend);
     aSenderBox.GetClickHdl().Call(&aSenderBox);
 }

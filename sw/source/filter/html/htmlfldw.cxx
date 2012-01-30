@@ -475,8 +475,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
              rComment.Copy( rComment.Len()-3, 3 ).EqualsAscii( "-->" )) )
         {
             // META-Tags direkt ausgeben
-            String sComment( rComment );
-            sComment.ConvertLineEnd( GetSystemLineEnd() );
+            String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             // TODO: HTML-Tags are written without entitities, that for,
             // characters not contained in the destination encoding are lost!
             rtl::OString sTmp(rtl::OUStringToOString(sComment,
@@ -492,7 +491,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             sComment.EraseLeadingChars();
             if( '<' == sComment.GetChar(0) )
             {
-                sComment.ConvertLineEnd( GetSystemLineEnd() );
+                sComment = convertLineEnd(sComment, GetSystemLineEnd());
                 // TODO: HTML-Tags are written without entitities, that for,
                 // characters not contained in the destination encoding are
                 // lost!
@@ -506,8 +505,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( !bWritten )
         {
-            String sComment( rComment );
-            sComment.ConvertLineEnd( GetSystemLineEnd() );
+            String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             rtl::OStringBuffer sOut;
             // TODO: ???
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)

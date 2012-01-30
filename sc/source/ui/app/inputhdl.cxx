@@ -321,7 +321,7 @@ void lcl_RemoveTabs(String& rStr)
 
 void lcl_RemoveLineEnd(String& rStr)
 {
-    rStr.ConvertLineEnd(LINEEND_LF);
+    rStr = convertLineEnd(rStr, LINEEND_LF);
     xub_StrLen nPos;
     while ( (nPos=rStr.Search('\n')) != STRING_NOTFOUND )
         rStr.SetChar( nPos, ' ' );

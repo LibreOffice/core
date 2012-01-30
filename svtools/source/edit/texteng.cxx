@@ -826,8 +826,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
     else
         aPaM = rCurSel.GetEnd();
 
-    XubString aText( rStr );
-    aText.ConvertLineEnd( LINEEND_LF );
+    XubString aText(convertLineEnd(rStr, LINEEND_LF));
 
     sal_uInt16 nStart = 0;
     while ( nStart < aText.Len() )

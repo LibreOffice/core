@@ -405,8 +405,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
     }
     else
     {
-        XubString aText( rText );
-        aText.ConvertLineEnd( LINEEND_LF );
+        XubString aText(convertLineEnd(rText, LINEEND_LF));
 
         if( aText.GetChar( aText.Len()-1 ) == '\x0A' )
             aText.Erase( aText.Len()-1, 1 ); // Delete the last break

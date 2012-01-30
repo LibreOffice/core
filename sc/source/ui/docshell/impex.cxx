@@ -1471,7 +1471,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                                 if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
                                     aCell.SearchAndReplaceAll( _LF, ' ' );
                                 else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                    aCell.ConvertLineEnd();
+                                    aCell = convertLineEnd(aCell, GetSystemLineEnd());
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
@@ -1503,7 +1503,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                             if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
                                 aCell.SearchAndReplaceAll( _LF, ' ' );
                             else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                aCell.ConvertLineEnd();
+                                aCell = convertLineEnd(aCell, GetSystemLineEnd());
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )

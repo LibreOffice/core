@@ -402,13 +402,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
                 */
 
-                String sComment;
                 const SwRedline *pRedline = rSh.GetCurrRedline();
 
                 if (pRedline)
                 {
-                    sComment = pRedline->GetComment();
-
+                    rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
                     sal_Bool bTravel = sal_False;
 
@@ -417,7 +415,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
                     OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
-                    aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
+                    aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
 
                     aSet.Put( SvxPostItDateItem( GetAppLangDateTimeString(
@@ -780,8 +778,6 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
-    String sComment;
-
     if (pRedline)
     {
         // Traveling nur bei mehr als einem Feld
@@ -809,9 +805,9 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->SwapPam();
 
         pRedline = pSh->GetCurrRedline();
-        sComment = pRedline->GetComment();
+        rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
-        pDlg->SetNote( sComment.ConvertLineEnd() );
+        pDlg->SetNote(sComment);
         pDlg->ShowLastAuthor( pRedline->GetAuthorString(),
                     GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
@@ -835,8 +831,6 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
-    String sComment;
-
     if (pRedline)
     {
         // Traveling nur bei mehr als einem Feld
@@ -858,9 +852,9 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
         pDlg->EnableTravel(sal_True, bEnable);
 
         pRedline = pSh->GetCurrRedline();
-        sComment = pRedline->GetComment();
+        rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
-        pDlg->SetNote(sComment.ConvertLineEnd());
+        pDlg->SetNote(sComment);
         pDlg->ShowLastAuthor(pRedline->GetAuthorString(),
                 GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));

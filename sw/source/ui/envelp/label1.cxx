@@ -356,9 +356,9 @@ IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
     String aWriting;
 
     if ( aAddrBox.IsChecked() )
-        aWriting = MakeSender();
+        aWriting = convertLineEnd(MakeSender(), GetSystemLineEnd());
 
-    aWritingEdit.SetText( aWriting.ConvertLineEnd() );
+    aWritingEdit.SetText( aWriting );
     aWritingEdit.GrabFocus();
     return 0;
 }
@@ -570,10 +570,10 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
     String sDBName  = aItem.sDBName;
 
-    String aWriting( aItem.aWriting );
+    String aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
 
     aAddrBox    .Check      ( aItem.bAddr );
-    aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
+    aWritingEdit.SetText    ( aWriting );
 
     for(std::vector<rtl::OUString>::const_iterator i = GetParent()->Makes().begin(); i != GetParent()->Makes().end(); ++i)
     {

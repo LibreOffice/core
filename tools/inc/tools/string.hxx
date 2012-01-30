@@ -36,6 +36,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include "tools/toolsdllapi.h"
+#include "tools/lineend.hxx"
 
 /*******************************************************************************
  *
@@ -79,21 +80,6 @@ class UniString;
 typedef rtl_TextEncoding CharSet;
 
 #endif // ENUM_CHARSET_DECLARED
-
-// -----------
-// - LineEnd -
-// -----------
-
-enum LineEnd  { LINEEND_CR, LINEEND_LF, LINEEND_CRLF };
-
-inline LineEnd GetSystemLineEnd()
-{
-#if defined UNX
-    return LINEEND_LF;
-#else
-    return LINEEND_CRLF;
-#endif
-}
 
 // -----------------------------------------------------------------------
 
@@ -226,10 +212,6 @@ public:
     ByteString&         Replace( xub_StrLen nIndex, xub_StrLen nCount, const ByteString& rStr );
     ByteString&         Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     ByteString          Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
-
-    ByteString&         ConvertLineEnd( LineEnd eLineEnd );
-    ByteString&         ConvertLineEnd()
-                            { return ConvertLineEnd( GetSystemLineEnd() ); }
 
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
@@ -479,10 +461,6 @@ public:
     UniString&          EraseLeadingChars( sal_Unicode c = ' ' );
     UniString&          EraseTrailingChars( sal_Unicode c = ' ' );
     UniString&          Reverse();
-
-    UniString&          ConvertLineEnd( LineEnd eLineEnd );
-    UniString&          ConvertLineEnd()
-                            { return ConvertLineEnd( GetSystemLineEnd() ); }
 
     UniString&          ToLowerAscii();
     UniString&          ToUpperAscii();

@@ -1084,7 +1084,6 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
             {
                 case MN_EDIT_COMMENT:
                 {
-                    String sComment;
                     if (pEntry)
                     {
                         if (pTable->GetParent(pEntry))
@@ -1101,14 +1100,14 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
 
-                        sComment = rRedline.GetComment();
+                        rtl::OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
                         OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 
-                        aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
+                        aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
                         aSet.Put(SvxPostItAuthorItem(rRedline.GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
 
                         aSet.Put(SvxPostItDateItem( GetAppLangDateTimeString(

@@ -1389,7 +1389,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
             String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
-                sEvent.ConvertLineEnd();
+                sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 String aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
@@ -1621,7 +1621,7 @@ void SwHTMLParser::InsertInput()
             String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
-                sEvent.ConvertLineEnd();
+                sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 String aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
@@ -2088,7 +2088,7 @@ void SwHTMLParser::NewTextArea()
             String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
-                sEvent.ConvertLineEnd();
+                sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
                 aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType,
@@ -2368,7 +2368,7 @@ void SwHTMLParser::NewSelect()
             String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
-                sEvent.ConvertLineEnd();
+                sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
                 aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType,

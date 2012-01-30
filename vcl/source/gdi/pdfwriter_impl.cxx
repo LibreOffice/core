@@ -7794,8 +7794,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
-                    aLastLine.ConvertLineEnd( LINEEND_LF );
+                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )

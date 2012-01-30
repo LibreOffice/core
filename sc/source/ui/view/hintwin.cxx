@@ -45,10 +45,8 @@
 ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& rMsg ) :
     Window( pParent, WinBits( WB_BORDER ) ),
     aTitle( rTit ),
-    aMessage( rMsg )
+    aMessage( convertLineEnd(rMsg, LINEEND_CR) )
 {
-    aMessage.ConvertLineEnd( LINEEND_CR );
-
     //  Hellgelb, wie Notizen in detfunc.cxx
     Color aYellow( 255,255,192 );           // hellgelb
     SetBackground( aYellow );

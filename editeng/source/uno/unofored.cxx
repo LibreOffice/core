@@ -67,9 +67,7 @@ sal_uInt16 SvxEditEngineForwarder::GetTextLen( sal_uInt16 nParagraph ) const
 
 String SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
 {
-    String aRet = rEditEngine.GetText( rSel, LINEEND_LF );
-    aRet.ConvertLineEnd();
-    return aRet;
+    return convertLineEnd(rEditEngine.GetText(rSel, LINEEND_LF), GetSystemLineEnd());
 }
 
 SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const

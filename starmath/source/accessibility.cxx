@@ -1009,8 +1009,7 @@ String SmTextForwarder::GetText( const ESelection& rSel ) const
     String aRet;
     if (pEditEngine)
         aRet = pEditEngine->GetText( rSel, LINEEND_LF );
-    aRet.ConvertLineEnd();
-    return aRet;
+    return convertLineEnd(aRet, GetSystemLineEnd());
 }
 
 SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const

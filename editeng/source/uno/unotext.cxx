@@ -371,8 +371,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     {
         CheckSelection( maSelection, pForwarder );
 
-        String aConverted( aString );
-        aConverted.ConvertLineEnd( LINEEND_LF );  // Simply count the number of line endings
+        String aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
 
         pForwarder->QuickInsertText( aConverted, maSelection );
         mpEditSource->UpdateData();
