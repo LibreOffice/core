@@ -2035,6 +2035,9 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             const Point aNewAnchorPos( ( aCurrAnchorPos + rOffset ) );
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
+
+            // clear contour cache
+            ClrContourCache( pAnchoredDrawObj->GetDrawObj() );
         }
         // #i92511#
         // cache for object rectangle inclusive spaces has to be invalidated.
