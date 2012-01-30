@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*********** **************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
@@ -46,6 +47,8 @@
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"
+#include <comphelper/configuration.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <set>
 
@@ -122,6 +125,7 @@ private:
                                 m_xListener;
     bool                        m_bInExecuteAsync;
     bool                        m_bHasFilename;
+    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
     DECL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox* );
     DECL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton* );
@@ -130,6 +134,12 @@ private:
     DECL_LINK       (                CancelHdl_Impl, void* );
     DECL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void* );
     DECL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void* );
+
+    DECL_STATIC_LINK( SvtFileDialog, URLBoxModifiedHdl_Impl, void* );
+    DECL_STATIC_LINK( SvtFileDialog, ConnectToServerPressed_Hdl, void* );
+
+    DECL_STATIC_LINK( SvtFileDialog, AddPlacePressed_Hdl, void* );
+    DECL_STATIC_LINK( SvtFileDialog, RemovePlacePressed_Hdl, void* );
 
     void                        Init_Impl( WinBits nBits );
     /** find a filter with the given wildcard
@@ -157,6 +167,7 @@ private:
     DECL_LINK(AutoExtensionHdl_Impl, void *);
     DECL_LINK( ClickHdl_Impl, CheckBox* );
     DECL_LINK(PlayButtonHdl_Impl, void *);
+
 
     // removes a filter with wildcards from the path and returns it
     sal_Bool IsolateFilterFromPath_Impl( String& rPath, String& rFilter );
@@ -255,6 +266,8 @@ public:
 
     void                        onAsyncOperationStarted();
     void                        onAsyncOperationFinished();
+
+    void                        RemovablePlaceSelected(bool enable = true);
 
     void                        displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
     void                        simulateAccessDenied( const String& _rURL )
@@ -357,6 +370,8 @@ private:
                                         String& _rFileName,
                                         const String& _rFilterDefaultExtension,
                                         const String& _rFilterExtensions);
+
+    void                        initDefaultPlaces( );
 };
 
 //***************************************************************************

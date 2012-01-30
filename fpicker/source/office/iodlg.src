@@ -64,11 +64,11 @@ ModalDialog DLG_SVT_EXPLORERFILE
     Sizeable = TRUE;
     HelpId = HID_EXPLORERDLG_FILE ;
     Size = MAP_APPFONT ( 280 , 174 ) ;
-    FixedText FT_EXPLORERFILE_CURRENTPATH
+    Edit ED_EXPLORERFILE_CURRENTPATH
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        NoLabel = TRUE ;
+        Size = MAP_APPFONT ( 90 , 14 ) ;
+        Border = TRUE ;
     };
     ImageButton BTN_EXPLORERFILE_NEWFOLDER
     {
@@ -92,11 +92,45 @@ ModalDialog DLG_SVT_EXPLORERFILE
         Pos = MAP_APPFONT ( 59 , 6 ) ;
         QuickHelpText [ en-US ] = "Default Directory" ;
     };
+    ListBox LB_EXPLORERFILE_PLACES_LISTBOX
+    {
+        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_PLACES_LISTBOX";
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 50 , 75 ) ;
+        DropDown = FALSE ;
+        AutoSize = FALSE ;
+        AutoHScroll = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton BTN_EXPLORERFILE_CONNECT_TO_SERVER
+    {
+        HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
+        Pos = MAP_APPFONT ( 94 , 6 ) ;
+        Size = MAP_APPFONT ( 15 , 10 ) ;
+        Text [ en-US ] = "..." ;
+        QuickHelpText [ en-US ] = "Connect To Server" ;
+    };
+    PushButton BTN_EXPLORERFILE_ADD_PLACE
+    {
+      HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_ADD_PLACE";
+      Pos = MAP_APPFONT ( 6 , 101 ) ;
+      Size = MAP_APPFONT ( 10 , 10 ) ;
+      Text [ en-US ] = "+" ;
+      QuickHelpText [ en-US ] = "Bookmark This Place" ;
+    };
+    PushButton BTN_EXPLORERFILE_REMOVE_PLACE
+    {
+      HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_REMOVE_PLACE";
+      Pos = MAP_APPFONT ( 19 , 101 ) ;
+      Size = MAP_APPFONT ( 10 , 10 ) ;
+      Text [ en-US ] = "-" ;
+      QuickHelpText [ en-US ] = "Remove Selected Bookmark" ;
+    };
     Control CTL_EXPLORERFILE_FILELIST
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 26 ) ;
-        Size = MAP_APPFONT ( 268 , 85 ) ;
+        Pos = MAP_APPFONT ( 59 , 26 ) ;
+        Size = MAP_APPFONT ( 215 , 85 ) ;
         Border = TRUE ;
     };
     FixedText FT_EXPLORERFILE_FILENAME
@@ -218,9 +252,117 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Text [ en-US ] = "File Preview";
     };
+    String STR_MY_DOCUMENTS
+    {
+        Text [ en-US ] = "My Documents" ;
+    };
+};
+
+// Add Place Dialog --------------------------------------------------------------
+
+ModalDialog DLG_SVT_ADDPLACE
+{
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE;
+    HelpId = HID_EXPLORERDLG_FILE ;
+    Size = MAP_APPFONT ( 200 , 140 ) ;
+    FixedText FT_ADDPLACE_SERVERURL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Server Url" ;
+    };
+    FixedText FT_ADDPLACE_SERVERNAME
+    {
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Server Name" ;
+    };
+    FixedText FT_ADDPLACE_SERVERTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 54 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Type" ;
+    };
+    FixedText FT_ADDPLACE_SERVERLOGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text [ en-US ] = "Login" ;
+    };
+    FixedText FT_ADDPLACE_SERVERPASSWORD
+    {
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Password" ;
+    };
+    Edit ED_ADDPLACE_SERVERURL
+    {
+        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
+        Pos = MAP_APPFONT ( 62, 12 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Border = TRUE ;
+        //Left = TRUE ;
+    };
+    Edit ED_ADDPLACE_SERVERNAME
+    {
+        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
+        Pos = MAP_APPFONT ( 62, 32 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Border = TRUE ;
+        //Left = TRUE ;
+    };
+    Edit ED_ADDPLACE_SERVERTYPE
+    {
+        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
+        Pos = MAP_APPFONT ( 62, 52 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Border = TRUE ;
+        //Left = TRUE ;
+    };
+    Edit ED_ADDPLACE_SERVERLOGIN
+    {
+        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
+        Pos = MAP_APPFONT ( 62, 72 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Border = TRUE ;
+        //Left = TRUE ;
+    };
+    Edit ED_ADDPLACE_SERVERPASSWORD
+    {
+        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
+        Pos = MAP_APPFONT ( 62, 92 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Border = TRUE ;
+        //Left = TRUE ;
+    };
+    OKButton BT_ADDPLACE_OK
+    {
+        Pos = MAP_APPFONT ( 80 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_ADDPLACE_CANCEL
+    {
+        Pos = MAP_APPFONT ( 140, 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    PushButton BT_ADDPLACE_DELETE
+    {
+        //HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
+        Pos = MAP_APPFONT ( 10 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Delete" ;
+        //QuickHelpText [ en-US ] = "Connect To Server" ;
+    };
 };
 
 // QueryFolderNameDialog ----------------------------------------------------------
+
 ModalDialog DLG_SVT_QUERYFOLDERNAME
 {
     HelpID = "fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME";
@@ -229,7 +371,7 @@ ModalDialog DLG_SVT_QUERYFOLDERNAME
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Text = "Ordner" ;
-    Size = MAP_APPFONT ( 218 , 45 ) ;
+    Size = MAP_APPFONT ( 100 , 45 ) ;
     FixedText FT_SVT_QUERYFOLDERNAME_DLG_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;

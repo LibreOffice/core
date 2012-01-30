@@ -360,9 +360,13 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pBtnNewFolder      ( NULL ),
     _pBtnStandard       ( NULL ),
     _pCbPassword        ( NULL ),
-    _pFtCurrentPath     ( NULL ),
+    _pEdCurrentPath     ( NULL ),
     _pCbAutoExtension   ( NULL ),
     _pCbOptions         ( NULL ),
+    _pPlaces            ( NULL ),
+    _pBtnConnectToServer( NULL ),
+    _pBtnAddPlace       ( NULL ),
+    _pBtnRemovePlace    ( NULL ),
     _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
     _bDoubleClick       ( sal_False ),
@@ -378,7 +382,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
-    delete _pFtCurrentPath;
+    delete _pEdCurrentPath;
     delete _pCbPassword;
     delete _pCbAutoExtension;
     delete _pCbOptions;
@@ -400,6 +404,10 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
     delete _pFtFileName;
     delete _pUserFilter;
     delete _pFilter;
+    delete _pPlaces;
+    delete _pBtnConnectToServer;
+    delete _pBtnAddPlace;
+    delete _pBtnRemovePlace;
 }
 
 //*****************************************************************************

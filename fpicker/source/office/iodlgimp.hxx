@@ -28,6 +28,8 @@
 #ifndef _IODLGIMP_HXX
 #define _IODLGIMP_HXX
 
+#include <PlacesListBox.hxx>
+
 #include <tools/string.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -184,9 +186,14 @@ public:
     ImageButton*                    _pBtnNewFolder;
     SvtTravelButton_Impl*           _pBtnStandard;
     CheckBox*                       _pCbPassword;
-    FixedText*                      _pFtCurrentPath;
+    SvtURLBox*                      _pEdCurrentPath;
     CheckBox*                       _pCbAutoExtension;
     CheckBox*                       _pCbOptions;
+
+    PlacesListBox*                  _pPlaces;
+    PushButton*                     _pBtnConnectToServer;
+    PushButton*                     _pBtnAddPlace;
+    PushButton*                     _pBtnRemovePlace;
 
     SvtFileDlgMode                  _eMode;
     SvtFileDlgType                  _eDlgType;
