@@ -452,10 +452,16 @@ GtkPrintDialog::impl_initDialog()
     }
 
     m_pWrapper->print_unix_dialog_set_manual_capabilities(GTK_PRINT_UNIX_DIALOG(m_pDialog),
-        GtkPrintCapabilities(GTK_PRINT_CAPABILITY_COPIES | GTK_PRINT_CAPABILITY_COLLATE |
-//        GTK_PRINT_CAPABILITY_REVERSE|GTK_PRINT_CAPABILITY_GENERATE_PDF|GTK_PRINT_CAPABILITY_GENERATE_PS |
-        GTK_PRINT_CAPABILITY_REVERSE|GTK_PRINT_CAPABILITY_GENERATE_PS |
-        GTK_PRINT_CAPABILITY_NUMBER_UP | GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT
+        GtkPrintCapabilities(GTK_PRINT_CAPABILITY_COPIES
+            | GTK_PRINT_CAPABILITY_COLLATE
+            | GTK_PRINT_CAPABILITY_REVERSE
+            | GTK_PRINT_CAPABILITY_GENERATE_PS
+#if GTK_CHECK_VERSION(2,12,0)
+            | GTK_PRINT_CAPABILITY_NUMBER_UP
+#endif
+#if GTK_CHECK_VERSION(2,14,0)
+            | GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT
+#endif
        ));
 }
 
@@ -805,9 +811,11 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
                 ePrintPages = GTK_PRINT_PAGES_RANGES;
                 break;
             case 2:
+#if GTK_CHECK_VERSION(2,14,0)
                 if (m_pWrapper->supportsPrintSelection())
                     ePrintPages = GTK_PRINT_PAGES_SELECTION;
                 else
+#endif
                     SAL_INFO("vcl.gtk", "the application wants to print a selection, but the present gtk version does not support it");
                 break;
             default:
