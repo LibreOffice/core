@@ -35,6 +35,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 
 #include "components.hxx"
 #include "node.hxx"
@@ -77,6 +78,9 @@ css::uno::Any PropertyNode::getValue(Components & components) {
         }
         externalDescriptor_ = rtl::OUString(); // must not throw
     }
+    SAL_WARN_IF(
+        !(value_.hasValue() || nillable_), "configmgr",
+        "non-nillable property without value");
     return value_;
 }
 

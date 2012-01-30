@@ -54,7 +54,7 @@
             the logger. Plain properties below the HandlerSettings node are passed to
             the log handler upon creation, as sequence of NamedValues.</desc>
         </info>
-        <prop oor:name="FileURL" oor:type="xs:string">
+        <prop oor:name="FileURL" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the file URL for the log handler. The default value here will expand to a file
             with the same name as the logger for which the handler is used, with extension &quot;.log&quot;.
@@ -84,21 +84,21 @@
 		<author>b_michaelsen</author>
         <desc>specifies settings for the logging of userinterface events.</desc>
       </info>
-      <prop oor:name="EnablingAllowed" oor:type="xs:boolean">
+      <prop oor:name="EnablingAllowed" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>only if this is true, usage tracking is allowed and its options will be shown
           </desc>
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="LogPath" oor:type="xs:string">
+      <prop oor:name="LogPath" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>directory where the logs will get saved
           </desc>
         </info>
         <value>$(user)/temp/Feedback</value>
       </prop>
-      <prop oor:name="IdleTimeout" oor:type="xs:int">
+      <prop oor:name="IdleTimeout" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>idle time in minutes. If two log event are separated by a longer
           time, the log will be rotated.</desc>

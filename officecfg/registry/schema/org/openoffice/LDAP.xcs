@@ -36,7 +36,7 @@
             <info><desc>Specifies LDAP server settings</desc></info>
             <prop oor:name="Server" oor:type="xs:string"><info><desc>Host name of LDAP Server</desc></info>
             </prop>
-            <prop oor:name="Port" oor:type="xs:int"><info><desc>Port number of the LDAP Server</desc></info>
+            <prop oor:name="Port" oor:type="xs:int" oor:nillable="false"><info><desc>Port number of the LDAP Server</desc></info>
     			<value>389</value>
             </prop>
             <prop oor:name="BaseDN" oor:type="xs:string"><info><desc>Root entry of the LDAP server</desc></info>

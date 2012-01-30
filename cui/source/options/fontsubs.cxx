@@ -248,7 +248,8 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
     if(aFontNameLB.GetSelectEntryPos())
         sFontName = aFontNameLB.GetSelectEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
-        comphelper::getProcessComponentContext(), batch, sFontName);
+        comphelper::getProcessComponentContext(), batch,
+        boost::optional< rtl::OUString >(sFontName));
     batch->commit();
 
     return sal_False;
@@ -294,7 +295,8 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     NonPropFontsHdl(&aNonPropFontsOnlyCB);
     rtl::OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext()));
+            comphelper::getProcessComponentContext()).
+        get_value_or(rtl::OUString()));
     if(!sFontName.isEmpty())
         aFontNameLB.SelectEntry(sFontName);
     else

@@ -35,7 +35,7 @@
 			<info>
 				<desc>Contains settings which specifies how the help in Office should work.</desc>
 			</info>
-			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
+			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true" oor:nillable="false">
 				<!-- OldLocation: hlpagent.ini -->
 				<info>
 					<author>PB</author>

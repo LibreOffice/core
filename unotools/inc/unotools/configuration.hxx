@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "boost/optional.hpp"
 #include "boost/shared_ptr.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -155,6 +156,40 @@ private:
         com::sun::star::container::XHierarchicalNameAccess > access_;
 };
 
+/// @internal
+template< typename T > struct Convert: private boost::noncopyable {
+    static com::sun::star::uno::Any toAny(T const & value)
+    { return com::sun::star::uno::makeAny(value); }
+
+    static T fromAny(com::sun::star::uno::Any const & value)
+    { return value.get< T >(); }
+
+private:
+    Convert(); // not defined
+    ~Convert(); // not defined
+};
+
+/// @internal
+template< typename T > struct Convert< boost::optional< T > >:
+    private boost::noncopyable
+{
+    static com::sun::star::uno::Any toAny(boost::optional< T > const & value) {
+        return value
+            ? com::sun::star::uno::makeAny(value.get())
+            : com::sun::star::uno::Any();
+    }
+
+    static boost::optional< T > fromAny(com::sun::star::uno::Any const & value)
+    {
+        return value.hasValue()
+            ? boost::optional< T >(value.get< T >()) : boost::optional< T >();
+    }
+
+private:
+    Convert(); // not defined
+    ~Convert(); // not defined
+};
+
 }
 
 /// A type-safe wrapper around a (non-localized) configuration property.
@@ -177,7 +212,7 @@ template< typename T, typename U > struct ConfigurationProperty:
         com::sun::star::uno::Any a(
             detail::ConfigurationWrapper::get(context).getPropertyValue(
                 T::path()));
-        return a.get< U >();
+        return detail::Convert< U >::fromAny(a);
     }
 
     /// Set the value of the given (non-localized) configuration property, via a
@@ -191,7 +226,7 @@ template< typename T, typename U > struct ConfigurationProperty:
         U const & value)
     {
         detail::ConfigurationWrapper::get(context).setPropertyValue(
-            batch, T::path(), com::sun::star::uno::makeAny(value));
+            batch, T::path(), detail::Convert< U >::toAny(value));
     }
 
 private:
@@ -221,7 +256,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
         com::sun::star::uno::Any a(
             detail::ConfigurationWrapper::get(context).
             getLocalizedPropertyValue(T::path()));
-        return a.get< U >();
+        return detail::Convert< U >::fromAny(a);
     }
 
     /// Set the value of the given localized configuration property, for the
@@ -237,7 +272,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
         U const & value)
     {
         detail::ConfigurationWrapper::get(context).setLocalizedPropertyValue(
-            batch, T::path(), com::sun::star::uno::makeAny(value));
+            batch, T::path(), detail::Convert< U >::toAny(value));
     }
 
 private:

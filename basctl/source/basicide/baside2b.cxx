@@ -817,7 +817,8 @@ void EditorWindow::ImplSetFont()
 {
     rtl::OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext() ) );
+            comphelper::getProcessComponentContext() ).
+        get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );

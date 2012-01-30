@@ -88,7 +88,7 @@
 				<author>MAV</author>
                 <desc>The session shutdown related information.</desc>
             </info>
-            <prop oor:name="DocumentStoreUIEnabled" oor:type="xs:boolean">
+            <prop oor:name="DocumentStoreUIEnabled" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>MAV</author>
                     <desc>Determines if the office is allowed to show request to store modified documents on session shutdown.</desc>
@@ -100,19 +100,19 @@
             <info>
                 <desc> </desc>
             </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean">
+            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <desc>Determines if the recovery feature should be enabled or disabled</desc>
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="Crashed" oor:type="xs:boolean">
+            <prop oor:name="Crashed" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <desc> </desc>
                 </info>
                 <value>false</value>
             </prop>
-            <prop oor:name="SessionData" oor:type="xs:boolean">
+            <prop oor:name="SessionData" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <desc> </desc>
                 </info>
@@ -123,7 +123,7 @@
             <info>
                 <desc>Settings for the crash reporter.</desc>
             </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean">
+            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <desc>Specifies if the crash reporter should be enabled or disabled.</desc>
                 </info>
@@ -134,25 +134,25 @@
             <info>
                 <desc> </desc>
             </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean">
+            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <desc> </desc>
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="TimeIntervall" oor:type="xs:int">
+            <prop oor:name="TimeIntervall" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc> </desc>
                 </info>
                 <value>15</value>
             </prop>
-            <prop oor:name="MinSpaceDocSave" oor:type="xs:int">
+            <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less then 1 will be ignored.</desc>
                 </info>
                 <value>5</value>
             </prop>
-            <prop oor:name="MinSpaceConfigSave" oor:type="xs:int">
+            <prop oor:name="MinSpaceConfigSave" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less then 1 will be ignored.</desc>
                 </info>

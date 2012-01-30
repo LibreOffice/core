@@ -979,7 +979,8 @@ void SwSrcEditWindow::SetFont()
 {
     rtl::OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext()));
+            comphelper::getProcessComponentContext()).
+        get_value_or(rtl::OUString()));
     if(sFontName.isEmpty())
     {
         LanguageType aLanguages[5] =

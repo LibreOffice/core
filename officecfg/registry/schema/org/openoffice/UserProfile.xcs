@@ -35,7 +35,7 @@
 			<info>
 				<desc>Contains user-related information, such as name and address.</desc>
 			</info>
-			<prop oor:name="o" oor:type="xs:string">
+			<prop oor:name="o" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -46,7 +46,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="givenname" oor:type="xs:string">
+			<prop oor:name="givenname" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -57,7 +57,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="sn" oor:type="xs:string">
+			<prop oor:name="sn" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -68,7 +68,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="initials" oor:type="xs:string">
+			<prop oor:name="initials" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -79,7 +79,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="street" oor:type="xs:string">
+			<prop oor:name="street" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -90,7 +90,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="l" oor:type="xs:string">
+			<prop oor:name="l" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -101,7 +101,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="st" oor:type="xs:string">
+			<prop oor:name="st" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -112,7 +112,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="postalcode" oor:type="xs:string">
+			<prop oor:name="postalcode" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -123,7 +123,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="c" oor:type="xs:string">
+			<prop oor:name="c" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -134,7 +134,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="title" oor:type="xs:string">
+			<prop oor:name="title" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -145,7 +145,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="position" oor:type="xs:string">
+			<prop oor:name="position" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -156,7 +156,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="homephone" oor:type="xs:string">
+			<prop oor:name="homephone" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -167,7 +167,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="telephonenumber" oor:type="xs:string">
+			<prop oor:name="telephonenumber" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -178,7 +178,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="facsimiletelephonenumber" oor:type="xs:string">
+			<prop oor:name="facsimiletelephonenumber" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -189,7 +189,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="mail" oor:type="xs:string">
+			<prop oor:name="mail" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -200,7 +200,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="UserGroup" oor:type="xs:string">
+			<prop oor:name="UserGroup" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
@@ -210,7 +210,7 @@
 				</info>
 				<value>UserGroup</value>
 			</prop>
-			<prop oor:name="fathersname" oor:type="xs:string">
+			<prop oor:name="fathersname" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>rail</author>
@@ -218,7 +218,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="apartment" oor:type="xs:string">
+			<prop oor:name="apartment" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>pb</author>

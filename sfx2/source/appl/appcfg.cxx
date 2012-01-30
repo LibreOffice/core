@@ -401,8 +401,9 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxUInt16Item(
                                 rPool.GetWhich(SID_INET_PROXY_TYPE),
-                                officecfg::Inet::Settings::ooInetProxyType::get(
-                                    comphelper::getProcessComponentContext()))))
+                                (officecfg::Inet::Settings::ooInetProxyType::get(
+                                    comphelper::getProcessComponentContext()).
+                                 get_value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -421,8 +422,9 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_HTTP_PROXY_PORT),
-                                officecfg::Inet::Settings::ooInetHTTPProxyPort::get(
-                                    comphelper::getProcessComponentContext()))))
+                                (officecfg::Inet::Settings::ooInetHTTPProxyPort::get(
+                                    comphelper::getProcessComponentContext()).
+                                 get_value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -441,8 +443,9 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_FTP_PROXY_PORT),
-                                officecfg::Inet::Settings::ooInetFTPProxyPort::get(
-                                    comphelper::getProcessComponentContext()))))
+                                (officecfg::Inet::Settings::ooInetFTPProxyPort::get(
+                                    comphelper::getProcessComponentContext()).
+                                 get_value_or(0)))))
                     {
                         bRet = true;
                     }

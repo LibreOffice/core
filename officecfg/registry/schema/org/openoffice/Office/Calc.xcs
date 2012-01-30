@@ -93,7 +93,7 @@
 				<info>
 					<desc>Specifies which contents are displayed in a spreadsheet.</desc>
 				</info>
-				<prop oor:name="Formula" oor:type="xs:boolean">
+				<prop oor:name="Formula" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -104,7 +104,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ZeroValue" oor:type="xs:boolean">
+				<prop oor:name="ZeroValue" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -115,7 +115,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="NoteTag" oor:type="xs:boolean">
+				<prop oor:name="NoteTag" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -126,7 +126,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ValueHighlighting" oor:type="xs:boolean">
+				<prop oor:name="ValueHighlighting" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -137,7 +137,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Anchor" oor:type="xs:boolean">
+				<prop oor:name="Anchor" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -148,7 +148,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="TextOverflow" oor:type="xs:boolean">
+				<prop oor:name="TextOverflow" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
@@ -159,7 +159,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ObjectGraphic" oor:type="xs:int">
+				<prop oor:name="ObjectGraphic" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
@@ -187,7 +187,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Chart" oor:type="xs:int">
+				<prop oor:name="Chart" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
@@ -215,7 +215,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="DrawingObject" oor:type="xs:int">
+				<prop oor:name="DrawingObject" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
@@ -244,7 +244,7 @@
 					<value>0</value>
 				</prop>
 			</group>
-			<group oor:name="Update">
+			<group oor:name="Update" oor:nillable="false">
 				<info>
 					<desc>Contains settings that specify how contents are updated.</desc>
 				</info>
@@ -286,7 +286,7 @@
 				<info>
 					<desc>Contains settings that control visual aids.</desc>
 				</info>
-				<prop oor:name="GridLine" oor:type="xs:boolean">
+				<prop oor:name="GridLine" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -297,7 +297,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-                <prop oor:name="GridOnColoredCells" oor:type="xs:boolean">
+                <prop oor:name="GridOnColoredCells" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Visual Aids -->
                     <info>
                         <author>André Schnabel</author>
@@ -306,7 +306,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-				<prop oor:name="GridLineColor" oor:type="xs:int">
+				<prop oor:name="GridLineColor" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -318,7 +318,7 @@
 					</info>
 					<value>12632256</value>
 				</prop>
-				<prop oor:name="PageBreak" oor:type="xs:boolean">
+				<prop oor:name="PageBreak" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -329,7 +329,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Guide" oor:type="xs:boolean">
+				<prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -340,7 +340,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
+				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -351,7 +351,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
+				<prop oor:name="LargeControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
@@ -367,7 +367,7 @@
 				<info>
 					<desc>Contains settings that control which windows are shown around the editing window.</desc>
 				</info>
-				<prop oor:name="ColumnRowHeader" oor:type="xs:boolean">
+				<prop oor:name="ColumnRowHeader" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
@@ -378,7 +378,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
+				<prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
@@ -389,7 +389,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="VerticalScroll" oor:type="xs:boolean">
+				<prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
@@ -400,7 +400,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="SheetTab" oor:type="xs:boolean">
+				<prop oor:name="SheetTab" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
@@ -411,7 +411,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="OutlineSymbol" oor:type="xs:boolean">
+				<prop oor:name="OutlineSymbol" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
@@ -427,7 +427,7 @@
 				<info>
 					<desc>Contains other layout settings.</desc>
 				</info>
-				<prop oor:name="StatusbarFunction" oor:type="xs:int">
+				<prop oor:name="StatusbarFunction" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
@@ -484,14 +484,14 @@
 						<desc>Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
 						<label>Tab stops</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the tabulator distance with locales that use the metric system.</desc>
 							<label/>
 						</info>
 						<value>1250</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
 							<label/>
@@ -508,7 +508,7 @@
 						<desc>Specifies the measurement unit to be used in the user interface.</desc>
 						<label>Measurement unit</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the measurement unit that is used with locales that use the metric system.</desc>
 						</info>
@@ -541,7 +541,7 @@
 						</constraints>
 						<value>2</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 						</info>
@@ -580,7 +580,7 @@
 				<info>
 					<desc>Specifies the zoom for new spreadsheet documents.</desc>
 				</info>
-				<prop oor:name="Type" oor:type="xs:int">
+				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
@@ -608,7 +608,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Value" oor:type="xs:int">
+				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
@@ -619,7 +619,7 @@
 					</info>
 					<value>100</value>
 				</prop>
-                <prop oor:name="Synchronize" oor:type="xs:boolean">
+                <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options - Spreadsheets - View - [Section] Zoom -->
                     <info>
                         <author>NN</author>
@@ -634,7 +634,7 @@
 			<info>
 				<desc>Contains settings that affect cell input.</desc>
 			</info>
-			<prop oor:name="MoveSelection" oor:type="xs:boolean">
+			<prop oor:name="MoveSelection" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -645,7 +645,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="MoveSelectionDirection" oor:type="xs:int">
+			<prop oor:name="MoveSelectionDirection" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -678,7 +678,7 @@
 				</constraints>
 				<value>0</value>
 			</prop>
-			<prop oor:name="SwitchToEditMode" oor:type="xs:boolean">
+			<prop oor:name="SwitchToEditMode" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -689,7 +689,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="ExpandFormatting" oor:type="xs:boolean">
+			<prop oor:name="ExpandFormatting" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -700,7 +700,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="ShowReference" oor:type="xs:boolean">
+			<prop oor:name="ShowReference" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -711,7 +711,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="ExpandReference" oor:type="xs:boolean">
+			<prop oor:name="ExpandReference" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -722,7 +722,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="HighlightSelection" oor:type="xs:boolean">
+			<prop oor:name="HighlightSelection" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
@@ -733,7 +733,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="UseTabCol" oor:type="xs:boolean">
+			<prop oor:name="UseTabCol" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: only API (see UseTabCol) -->
@@ -744,7 +744,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="UsePrinterMetrics" oor:type="xs:boolean">
+			<prop oor:name="UsePrinterMetrics" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<info>
 					<author>NN</author>
@@ -753,7 +753,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean">
+			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<info>
 					<author>NN</author>
@@ -762,7 +762,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="LastFunctions" oor:type="oor:int-list">
+			<prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<info>
@@ -799,7 +799,7 @@
 				</constraints>
 				<value>224 226 222 223 6</value>
 			</prop>
-			<prop oor:name="AutoInput" oor:type="xs:boolean">
+			<prop oor:name="AutoInput" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools  Cell Contents  AutoInput -->
@@ -810,7 +810,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="DetectiveAuto" oor:type="xs:boolean">
+			<prop oor:name="DetectiveAuto" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools  Detective  AutoRefresh -->
@@ -830,7 +830,7 @@
 				<info>
 					<desc>Contains settings that control the behavior of the grid.</desc>
 				</info>
-				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
+				<prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
@@ -841,7 +841,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SizeToGrid" oor:type="xs:boolean">
+				<prop oor:name="SizeToGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
@@ -852,7 +852,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="VisibleGrid" oor:type="xs:boolean">
+				<prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
@@ -863,7 +863,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Synchronize" oor:type="xs:boolean">
+				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
@@ -884,14 +884,14 @@
 						<desc>Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
 						<label>X axis</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that use the metric system.</desc>
 							<label/>
 						</info>
 						<value>1000</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label/>
@@ -909,14 +909,14 @@
 						<desc>Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
 						<label>Y axis</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that use the metric system.</desc>
 							<label/>
 						</info>
 						<value>1000</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label/>
@@ -939,14 +939,14 @@
 						<desc>Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
 						<label>X Axis Resolution</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that use the metric system.</desc>
 							<label/>
 						</info>
 						<value>1000</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label/>
@@ -964,14 +964,14 @@
 						<desc>Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
 						<label>Y Axis Resolution</label>
 					</info>
-					<prop oor:name="Metric" oor:type="xs:int">
+					<prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that use the metric system.</desc>
 							<label/>
 						</info>
 						<value>1000</value>
 					</prop>
-					<prop oor:name="NonMetric" oor:type="xs:int">
+					<prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
 						<info>
 							<desc>Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label/>
@@ -984,7 +984,7 @@
 				<info>
 					<desc>Specifies how the grid is divided.</desc>
 				</info>
-				<prop oor:name="XAxis" oor:type="xs:int">
+				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
@@ -995,7 +995,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int">
+				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
@@ -1012,7 +1012,7 @@
 			<info>
 				<desc>Contains the sort list settings.</desc>
 			</info>
-			<prop oor:name="List" oor:type="oor:string-list">
+			<prop oor:name="List" oor:type="oor:string-list" oor:nillable="false">
 				<!-- OldPath: Calc/Sort_Lists -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Spreadsheet  Sort lists  [List box] Lists -->
@@ -1033,7 +1033,7 @@
                 <info>
                     <desc>Contains settings for DBF Import dialog</desc>
                 </info>
-                <prop oor:name="CharSet" oor:type="xs:int">
+                <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Charset/Language</desc>
@@ -1046,7 +1046,7 @@
                 <info>
                     <desc>Contains settings for DBF Export dialog</desc>
                 </info>
-                <prop oor:name="CharSet" oor:type="xs:int">
+                <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Charset/Language</desc>
@@ -1059,7 +1059,7 @@
                 <info>
                     <desc>Contains setting for Text CSV Import</desc>
                 </info>
-                <prop oor:name="MergeDelimiters" oor:type="xs:boolean">
+                <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Merge Delimiter check box status</desc>
@@ -1067,7 +1067,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-                <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean">
+                <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>kyoshida</author>
                         <desc>If true, quoted field is always imported as text 
@@ -1076,7 +1076,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-                <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean">
+                <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>kyoshida</author>
                         <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
@@ -1084,7 +1084,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-                <prop oor:name="Language" oor:type="xs:int">
+                <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
                     <info>
                         <author>kyoshida</author>
                         <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
@@ -1092,7 +1092,7 @@
                     </info>
                     <value>0</value>
                 </prop>
-                <prop oor:name="Separators" oor:type="xs:string">
+                <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>List of Separators - as a String</desc>
@@ -1100,7 +1100,7 @@
                     </info>
                     <value>;    </value>
                 </prop>
-                <prop oor:name="TextSeparators" oor:type="xs:string">
+                <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Text Separators</desc>
@@ -1108,7 +1108,7 @@
                     </info>
                     <value>"</value>
                 </prop>
-                <prop oor:name="FixedWidth" oor:type="xs:boolean">
+                <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Fixed width</desc>
@@ -1116,7 +1116,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-                <prop oor:name="FromRow" oor:type="xs:int">
+                <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>From Row</desc>
@@ -1124,7 +1124,7 @@
                     </info>
                     <value>1</value>
                 </prop>
-                <prop oor:name="CharSet" oor:type="xs:int">
+                <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Char Set</desc>
@@ -1132,7 +1132,7 @@
                     </info>
                     <value>-1</value>
                 </prop>
-                <prop oor:name="FixedWidthList" oor:type="xs:string">
+                <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
                     <info>
                         <author>muthusuba</author>
                         <desc>Fixed Width List of separators</desc>
@@ -1150,7 +1150,7 @@
 				<info>
 					<desc>Contains settings for iterative calculation of circular references.</desc>
 				</info>
-				<prop oor:name="Iteration" oor:type="xs:boolean">
+				<prop oor:name="Iteration" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
@@ -1161,7 +1161,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Steps" oor:type="xs:int">
+				<prop oor:name="Steps" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
@@ -1172,7 +1172,7 @@
 					</info>
 					<value>100</value>
 				</prop>
-				<prop oor:name="MinimumChange" oor:type="xs:double">
+				<prop oor:name="MinimumChange" oor:type="xs:double" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
@@ -1188,7 +1188,7 @@
 				<info>
 					<desc>Contains other calculation settings.</desc>
 				</info>
-				<prop oor:name="CaseSensitive" oor:type="xs:boolean">
+				<prop oor:name="CaseSensitive" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Case sensitive -->
@@ -1199,7 +1199,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Precision" oor:type="xs:boolean">
+				<prop oor:name="Precision" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Precision as shown -->
@@ -1210,7 +1210,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SearchCriteria" oor:type="xs:boolean">
+				<prop oor:name="SearchCriteria" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&gt; must apply to whole cells -->
@@ -1221,7 +1221,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="FindLabel" oor:type="xs:boolean">
+				<prop oor:name="FindLabel" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Automatically find column and row labels -->
@@ -1232,7 +1232,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="DecimalPlaces" oor:type="xs:int">
+				<prop oor:name="DecimalPlaces" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Combo box] Decimal places -->
@@ -1243,7 +1243,7 @@
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="RegularExpressions" oor:type="xs:boolean">
+				<prop oor:name="RegularExpressions" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
 					<info>
 						<author>NN</author>
@@ -1316,7 +1316,7 @@
                         </enumeration>
                     </constraints>
                 </prop>
-                <prop oor:name="EnglishFunctionName" oor:type="xs:boolean">
+                <prop oor:name="EnglishFunctionName" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
                         <author>kyoshida</author>
@@ -1324,7 +1324,7 @@
                     </info>
                     <value>false</value>
                 </prop>
-                <prop oor:name="SeparatorArg" oor:type="xs:string">
+                <prop oor:name="SeparatorArg" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
                         <author>kyoshida</author>
@@ -1332,7 +1332,7 @@
                     </info>
                     <value></value>
                 </prop>
-                <prop oor:name="SeparatorArrayRow" oor:type="xs:string">
+                <prop oor:name="SeparatorArrayRow" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
                         <author>kyoshida</author>
@@ -1340,7 +1340,7 @@
                     </info>
                     <value></value>
                 </prop>
-                <prop oor:name="SeparatorArrayCol" oor:type="xs:string">
+                <prop oor:name="SeparatorArrayCol" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
                         <author>kyoshida</author>
@@ -1358,7 +1358,7 @@
 				<info>
 					<desc>Specifies the colors for revision marking.</desc>
 				</info>
-				<prop oor:name="Change" oor:type="xs:int">
+				<prop oor:name="Change" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
@@ -1370,7 +1370,7 @@
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="Deletion" oor:type="xs:int">
+				<prop oor:name="Deletion" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
@@ -1382,7 +1382,7 @@
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="Insertion" oor:type="xs:int">
+				<prop oor:name="Insertion" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
@@ -1394,7 +1394,7 @@
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="MovedEntry" oor:type="xs:int">
+				<prop oor:name="MovedEntry" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
@@ -1420,7 +1420,7 @@
 					<info>
 						<desc>Specifies how VBA macros are treated in Excel files.</desc>
 					</info>
-					<prop oor:name="Load" oor:type="xs:boolean">
+					<prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
@@ -1431,7 +1431,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-          <prop oor:name="Executable" oor:type="xs:boolean">
+          <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <author>AB</author>
               <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
@@ -1439,7 +1439,7 @@
             </info>
             <value>true</value>
           </prop>
-          <prop oor:name="Save" oor:type="xs:boolean">
+          <prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
@@ -1455,7 +1455,7 @@
 					<info>
 						<desc>Contains settings for Lotus 1-2-3 import.</desc>
 					</info>
-					<prop oor:name="WK3" oor:type="xs:boolean">
+					<prop oor:name="WK3" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
@@ -1470,7 +1470,7 @@
 					<info>
 						<desc>Contains settings for MS Excel import.</desc>
 					</info>
-					<prop oor:name="ColScale" oor:type="xs:double">
+					<prop oor:name="ColScale" oor:type="xs:double" oor:nillable="false">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
@@ -1487,7 +1487,7 @@
 						</constraints>
 						<value>1.0</value>
 					</prop>
-					<prop oor:name="RowScale" oor:type="xs:double">
+					<prop oor:name="RowScale" oor:type="xs:double" oor:nillable="false">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
@@ -1516,7 +1516,7 @@
 				<info>
 					<desc>Contains settings that affect which pages are printed.</desc>
 				</info>
-				<prop oor:name="EmptyPages" oor:type="xs:boolean">
+				<prop oor:name="EmptyPages" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies whether empty pages are printed.</desc>
 						<label>Printing Empty Pages</label>
@@ -1528,7 +1528,7 @@
 				<info>
 					<desc>Contains other print settings.</desc>
 				</info>
-				<prop oor:name="AllSheets" oor:type="xs:boolean">
+				<prop oor:name="AllSheets" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies whether all sheets are printed instead of only the selected sheets.</desc>
 						<label>Print all Sheets</label>
@@ -1547,14 +1547,14 @@
 					<desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 					<label>Default Object Size</label>
 				</info>
-				<prop oor:name="Width" oor:type="xs:int">
+				<prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies the default width in 1/100th millimeters.</desc>
 						<label/>
 					</info>
 					<value>8000</value>
 				</prop>
-				<prop oor:name="Height" oor:type="xs:int">
+				<prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies the default height in 1/100th millimeters.</desc>
 						<label/>
@@ -1568,7 +1568,7 @@
                     <desc>Contains settings for shared documents.</desc>
                     <label>Shared document</label>
                 </info>
-                <prop oor:name="ShowWarning" oor:type="xs:boolean">
+                <prop oor:name="ShowWarning" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <desc>Specifies whether the warning box for shared documents is shown.</desc>
                         <label>Show warning box</label>
@@ -1614,7 +1614,7 @@
 		<info>
 			  <desc>Other Program defaults</desc>
 		</info>
-		<prop oor:name="TabCount" oor:type="xs:int">
+		<prop oor:name="TabCount" oor:type="xs:int" oor:nillable="false">
 			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
 			  <info>
 				<author>Albert Thuswaldner</author>

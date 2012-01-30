@@ -50,7 +50,7 @@
 			        <desc>Specifies the UNO service to use for the specified tuple Command and Module</desc>
                 </info>
             </prop>
-            <prop oor:name="Value" oor:type="xs:string">
+            <prop oor:name="Value" oor:type="xs:string" oor:nillable="false">
                 <info>
                     <desc>Specifies a controller specific value which is provided to every controller instance during initialization.</desc>
                 </info>

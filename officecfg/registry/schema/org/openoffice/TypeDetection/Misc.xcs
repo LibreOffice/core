@@ -34,14 +34,14 @@
     <templates>
         <group oor:name="FrameLoader">
             <info><desc>Can load a type as visible component into a com.sun.star.frame.Frame.</desc></info>
-            <prop oor:name="Types" oor:type="oor:string-list">
+            <prop oor:name="Types" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>List of internal type names, which can be interpreted by this loader implementation.</desc></info>
 				<value/>
             </prop>
 		</group>
         <group oor:name="ContentHandler">
             <info><desc>Can load a type as non visible component, e.g. sounds.</desc></info>
-            <prop oor:name="Types" oor:type="oor:string-list">
+            <prop oor:name="Types" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>List of internal type names, which can be interpreted by this handler implementation.</desc></info>
 				<value/>
             </prop>
@@ -56,11 +56,11 @@
         </set>
 		<group oor:name="Defaults">
             <info><desc>Contains default objects that are used if no specialized service was registered or values which specify special behaviour of type/filter environment.</desc></info>
-			<prop oor:name="DefaultFrameLoader" oor:type="xs:string">
+			<prop oor:name="DefaultFrameLoader" oor:type="xs:string" oor:nillable="false">
                 <info><desc>Specify a generic frame loader, which can use filter services for loading documents into frames.</desc></info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
-            <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean">
+            <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean" oor:nillable="false">
                 <info><author>OS</author><desc>Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc></info>
                 <value>true</value>
             </prop>

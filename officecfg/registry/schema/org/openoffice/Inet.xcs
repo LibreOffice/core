@@ -34,7 +34,7 @@
 			<info>
 				<desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
-			<prop oor:name="ooInetDNSServer" oor:type="xs:string">
+			<prop oor:name="ooInetDNSServer" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/DNS -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - Internet - Protocol -->
@@ -46,7 +46,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooInetNoProxy" oor:type="xs:string">
+			<prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/NoProxy -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
@@ -83,7 +83,7 @@
 					</enumeration>
 				</constraints>
 			</prop>
-			<prop oor:name="ooInetFTPProxyName" oor:type="xs:string">
+			<prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/FTPProxyName -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
@@ -115,7 +115,7 @@
 					</maxInclusive>
 				</constraints>
 			</prop>
-			<prop oor:name="ooInetHTTPProxyName" oor:type="xs:string">
+			<prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/HTTPProxyName -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
@@ -147,7 +147,7 @@
 					</maxInclusive>
 				</constraints>
 			</prop>
-			<prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string">
+			<prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/HTTPSProxyName -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
@@ -179,7 +179,7 @@
 					</maxInclusive>
 				</constraints>
 			</prop>
-			<prop oor:name="ooInetSOCKSProxyName" oor:type="xs:string">
+			<prop oor:name="ooInetSOCKSProxyName" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/SOCKSProxyName -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->

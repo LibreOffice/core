@@ -37,7 +37,7 @@
                 <author>CD</author>
 				<desc>Describes properties of a wizard tab page option.</desc>
 			</info>
-			<prop oor:name="Visible" oor:type="xs:boolean">
+			<prop oor:name="Visible" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>CD</author>
                     <desc>Determine if an option is visible or not.</desc>

@@ -367,7 +367,7 @@
                     <label>Data table or query name</label>
                 </info>
             </prop>
-            <prop oor:name="DataCommandType" oor:type="xs:short">
+            <prop oor:name="DataCommandType" oor:type="xs:short" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>CommandType of the data source.</desc>
@@ -750,7 +750,7 @@
             <info>
                <desc>Contains the most recently opened documents.</desc>
             </info>
-            <prop oor:name="Paths" oor:type="oor:string-list">
+            <prop oor:name="Paths" oor:type="oor:string-list" oor:nillable="false">
                 <info>
                     <desc>Lists the file global templates loaded when importing writer documents.</desc>
                 </info>
@@ -761,7 +761,7 @@
             <info>
                 <desc>Settings of the mail merge wizard.</desc>
             </info>
-            <prop oor:name="OutputToLetter" oor:type="xs:boolean">
+            <prop oor:name="OutputToLetter" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether the document output is a letter, not an e-mail.</desc>
@@ -769,7 +769,7 @@
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="IncludeCountry" oor:type="xs:boolean">
+            <prop oor:name="IncludeCountry" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether the country/region is included into the address block. If yes the ExcludeCountry property may never be included.</desc>
@@ -777,7 +777,7 @@
                 </info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ExcludeCountry" oor:type="xs:string">
+            <prop oor:name="ExcludeCountry" oor:type="xs:string" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>If the property IncludeCountry is true it all countries/regions are included into the address block except for this country or region.</desc>
@@ -793,7 +793,7 @@
                     <label>Saved documents</label>
                 </info>
             </prop>
-            <prop oor:name="AddressBlockSettings" oor:type="oor:string-list">
+            <prop oor:name="AddressBlockSettings" oor:type="oor:string-list" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Contains a list of settings for address blocks. It is a sequence of address column positions separated with breaks (\n) and spaces. The column positions start at 0 and after 9 follows a, b, c and they are equivalent to the following parts of an address: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL</desc>
@@ -802,7 +802,7 @@
                 <value oor:separator=";">&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;</value>
 
             </prop>
-            <prop oor:name="IsAddressBlock" oor:type="xs:boolean">
+            <prop oor:name="IsAddressBlock" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether the document should have an address block.</desc>
@@ -810,7 +810,7 @@
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="CurrentAddressBlock" oor:type="xs:int">
+            <prop oor:name="CurrentAddressBlock" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines the currently used address block.</desc>
@@ -818,7 +818,7 @@
                 </info>
                 <value>0</value>
             </prop>
-            <prop oor:name="IsHideEmptyParagraphs" oor:type="xs:boolean">
+            <prop oor:name="IsHideEmptyParagraphs" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether address block lines should be hidden if there's no content.</desc>
@@ -826,7 +826,7 @@
                 </info>
                 <value>false</value>
             </prop>
-            <prop oor:name="IsGreetingLine" oor:type="xs:boolean">
+            <prop oor:name="IsGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether the document should have a greeting line.</desc>
@@ -834,7 +834,7 @@
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="IsEMailGreetingLine" oor:type="xs:boolean">
+            <prop oor:name="IsEMailGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether an e-mail should have a greeting line.</desc>
@@ -842,7 +842,7 @@
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="IsIndividualGreetingLine" oor:type="xs:boolean">
+            <prop oor:name="IsIndividualGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether an individual greeting line is used instead of a neutral one.</desc>
@@ -850,7 +850,7 @@
                 </info>
                 <value>true</value>
             </prop>
-            <prop oor:name="IsEMailIndividualGreetingLine" oor:type="xs:boolean">
+            <prop oor:name="IsEMailIndividualGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>OS</author>
                     <desc>Determines whether in an e-mail an individual greeting line is used instead of a neutral one.</desc>
@@ -1055,7 +1055,7 @@
 				<info>
 					<desc>Contains settings for the visibility of various elements.</desc>
 				</info>
-				<prop oor:name="GraphicObject" oor:type="xs:boolean">
+				<prop oor:name="GraphicObject" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
@@ -1066,7 +1066,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean">
+				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
@@ -1077,7 +1077,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="DrawingControl" oor:type="xs:boolean">
+				<prop oor:name="DrawingControl" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
@@ -1088,7 +1088,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="FieldCode" oor:type="xs:boolean">
+				<prop oor:name="FieldCode" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
@@ -1099,7 +1099,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Note" oor:type="xs:boolean">
+				<prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
@@ -1110,7 +1110,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="PreventTips" oor:type="xs:boolean">
+				<prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Not accessible via user interface -->
 					<info>
 						<author>OS</author>
@@ -1124,7 +1124,7 @@
 				<info>
 					<desc>Contains settings for the visibility of various non-printing characters.</desc>
 				</info>
-				<prop oor:name="MetaCharacters" oor:type="xs:boolean">
+				<prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: View - Nonprinting Characters -->
 					<info>
 						<author>OS</author>
@@ -1133,7 +1133,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
+				<prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1144,7 +1144,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="OptionalHyphen" oor:type="xs:boolean">
+				<prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1155,7 +1155,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Space" oor:type="xs:boolean">
+				<prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1166,7 +1166,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ProtectedSpace" oor:type="xs:boolean">
+				<prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1177,7 +1177,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Tab" oor:type="xs:boolean">
+				<prop oor:name="Tab" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1188,7 +1188,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Break" oor:type="xs:boolean">
+				<prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1199,7 +1199,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="HiddenText" oor:type="xs:boolean">
+				<prop oor:name="HiddenText" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1210,7 +1210,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="HiddenParagraph" oor:type="xs:boolean">
+				<prop oor:name="HiddenParagraph" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
@@ -1221,7 +1221,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-                <prop oor:name="HiddenCharacter" oor:type="xs:boolean">
+                <prop oor:name="HiddenCharacter" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display of -->
                     <info>
                         <author>OS</author>
@@ -1235,7 +1235,7 @@
 				<info>
 					<desc>Contains settings for the automatic update of some elements.</desc>
 				</info>
-				<prop oor:name="Link" oor:type="xs:int">
+				<prop oor:name="Link" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Other/Update -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
@@ -1263,7 +1263,7 @@
 					</constraints>
 					<value>1</value>
 				</prop>
-				<prop oor:name="Field" oor:type="xs:boolean">
+				<prop oor:name="Field" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Other/Update -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
@@ -1274,7 +1274,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Chart" oor:type="xs:boolean">
+				<prop oor:name="Chart" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Other/Update -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
@@ -1295,7 +1295,7 @@
 				<info>
 					<desc>Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
 				</info>
-				<prop oor:name="Guide" oor:type="xs:boolean">
+				<prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
@@ -1306,7 +1306,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
+				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
@@ -1317,7 +1317,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
+				<prop oor:name="LargeControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
@@ -1333,7 +1333,7 @@
 				<info>
 					<desc>Contains various window settings such as scrollbars, rules, etc.</desc>
 				</info>
-				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
+				<prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
@@ -1344,7 +1344,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="VerticalScroll" oor:type="xs:boolean">
+				<prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
@@ -1355,7 +1355,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ShowRulers" oor:type="xs:boolean">
+				<prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
 						<author>OS</author>
@@ -1364,7 +1364,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="HorizontalRuler" oor:type="xs:boolean">
+				<prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
@@ -1431,7 +1431,7 @@
 						</enumeration>
 					</constraints>
 				</prop>
-				<prop oor:name="VerticalRuler" oor:type="xs:boolean">
+				<prop oor:name="VerticalRuler" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
@@ -1442,7 +1442,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean">
+				<prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
 						<author>OS</author>
@@ -1507,7 +1507,7 @@
 						</enumeration>
 					</constraints>
 				</prop>
-				<prop oor:name="SmoothScroll" oor:type="xs:boolean">
+				<prop oor:name="SmoothScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
@@ -1523,7 +1523,7 @@
 				<info>
 					<desc>Contains miscellaneous settings.</desc>
 				</info>
-				<prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean">
+				<prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: none yet -->
 					<info>
 						<author>TL</author>
@@ -1589,7 +1589,7 @@
 						</enumeration>
 					</constraints>
 				</prop>
-				<prop oor:name="TabStop" oor:type="xs:int">
+				<prop oor:name="TabStop" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Tab stops -->
@@ -1601,7 +1601,7 @@
 					</info>
 					<value>1250</value>
 				</prop>
-				<prop oor:name="IsSquaredPageMode" oor:type="xs:boolean">
+				<prop oor:name="IsSquaredPageMode" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specified which kind of paper mode is used in the whole document </desc>
 						<label>Use squared paper mode</label>
@@ -1609,7 +1609,7 @@
 					<value>true</value>
 				</prop>
                 <!-- added for apply char unit 2006-12-1 -->
-                <prop oor:name="ApplyCharUnit" oor:type="xs:boolean">
+                <prop oor:name="ApplyCharUnit" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldPath: Writer/Layout -->
                     <!-- OldLocation: Soffice.cfg -->
                     <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
@@ -1625,7 +1625,7 @@
 				<info>
 					<desc>Contains zoom settings.</desc>
 				</info>
-				<prop oor:name="Type" oor:type="xs:int">
+				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>OS</author>
@@ -1651,7 +1651,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Value" oor:type="xs:int">
+				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>OS</author>
@@ -1665,7 +1665,7 @@
 				<info>
 					<desc>Contains view layout settings.</desc>
 				</info>
-                                <prop oor:name="Columns" oor:type="xs:int">
+                                <prop oor:name="Columns" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>FME</author>
@@ -1674,7 +1674,7 @@
 					</info>
 					<value>0</value>
 				</prop>
-                                <prop oor:name="BookMode" oor:type="xs:boolean">
+                                <prop oor:name="BookMode" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>FME</author>
@@ -1693,7 +1693,7 @@
 				<info>
 					<desc>Contains options for the grid.</desc>
 				</info>
-				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
+				<prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
@@ -1704,7 +1704,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="VisibleGrid" oor:type="xs:boolean">
+				<prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
@@ -1715,7 +1715,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Synchronize" oor:type="xs:boolean">
+				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
@@ -1731,7 +1731,7 @@
 				<info>
 					<desc>Contains settings for specifying the grid resolution.</desc>
 				</info>
-				<prop oor:name="XAxis" oor:type="xs:int">
+				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
@@ -1742,7 +1742,7 @@
 					</info>
 					<value>1000</value>
 				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int">
+				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
@@ -1758,7 +1758,7 @@
 				<info>
 					<desc>Contains settings for specifying the subdivision of the grid.</desc>
 				</info>
-				<prop oor:name="XAxis" oor:type="xs:int">
+				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
@@ -1769,7 +1769,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int">
+				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
@@ -1876,7 +1876,7 @@
                     <label>IndexHeight</label>
                 </info>
             </prop>
-            <prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts -->
@@ -1972,7 +1972,7 @@
                     <label>IndexHeight</label>
                 </info>
             </prop>
-            <prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -2066,7 +2066,7 @@
                     <label>IndexHeight</label>
                 </info>
             </prop>
-            <prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
@@ -2084,7 +2084,7 @@
 				<info>
 					<desc>Contains settings specifying which content types are printed.</desc>
 				</info>
-				<prop oor:name="Graphic" oor:type="xs:boolean">
+				<prop oor:name="Graphic" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2095,7 +2095,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean">
+				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2106,7 +2106,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Drawing" oor:type="xs:boolean">
+				<prop oor:name="Drawing" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2117,7 +2117,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Control" oor:type="xs:boolean">
+				<prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2128,7 +2128,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Background" oor:type="xs:boolean">
+				<prop oor:name="Background" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2139,7 +2139,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="PrintBlack" oor:type="xs:boolean">
+				<prop oor:name="PrintBlack" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
@@ -2150,7 +2150,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-                                <prop oor:name="PrintHiddenText" oor:type="xs:boolean">
+                                <prop oor:name="PrintHiddenText" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
                                         <info>
                                                 <author>OS</author>
@@ -2159,7 +2159,7 @@
                                         </info>
                                         <value>false</value>
                                 </prop>
-                                <prop oor:name="PrintPlaceholders" oor:type="xs:boolean">
+                                <prop oor:name="PrintPlaceholders" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
                                         <info>
                                                 <author>OS</author>
@@ -2168,7 +2168,7 @@
                                         </info>
                                         <value>false</value>
                                 </prop>
-				<prop oor:name="Note" oor:type="xs:int">
+				<prop oor:name="Note" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
@@ -2205,7 +2205,7 @@
 				<info>
 					<desc>Specifies which pages are printed or how pages are printed.</desc>
 				</info>
-				<prop oor:name="LeftPage" oor:type="xs:boolean">
+				<prop oor:name="LeftPage" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -2216,7 +2216,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="RightPage" oor:type="xs:boolean">
+				<prop oor:name="RightPage" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -2227,7 +2227,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Reversed" oor:type="xs:boolean">
+				<prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -2238,7 +2238,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Brochure" oor:type="xs:boolean">
+				<prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -2249,7 +2249,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="BrochureRightToLeft" oor:type="xs:boolean">
+				<prop oor:name="BrochureRightToLeft" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -2265,7 +2265,7 @@
 				<info>
 					<desc>Contains other output settings.</desc>
 				</info>
-				<prop oor:name="SinglePrintJob" oor:type="xs:boolean">
+				<prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Output -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Output -->
@@ -2276,7 +2276,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Fax" oor:type="xs:string">
+				<prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Print - [Section] Fax -->
@@ -2293,7 +2293,7 @@
 				<info>
 					<desc>Contains settings for printers with multiple paper trays.</desc>
 				</info>
-				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
+				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Print/Papertray -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Paper tray -->
@@ -2305,7 +2305,7 @@
 					<value>false</value>
 				</prop>
 			</group>
-                        <prop oor:name="EmptyPages" oor:type="xs:boolean">
+                        <prop oor:name="EmptyPages" oor:type="xs:boolean" oor:nillable="false">
                                 <!-- UIHints: Tools - Options - Text document - Print - Other - Print automatically inserted blank pages -->
                                 <info>
                                         <author>FME</author>
@@ -2324,7 +2324,7 @@
 				<info>
 					<desc>Contains settings used when shifting table rows/columns.</desc>
 				</info>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Table/Shift -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
@@ -2336,7 +2336,7 @@
 					</info>
 					<value>500</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Table/Shift -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
@@ -2353,7 +2353,7 @@
 				<info>
 					<desc>Contains settings used when inserting table rows/columns.</desc>
 				</info>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Table/Insert -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
@@ -2365,7 +2365,7 @@
 					</info>
 					<value>500</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Table/Insert -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
@@ -2382,7 +2382,7 @@
 				<info>
 					<desc>Contains settings specifying the effect to the table when modifying rows/columns.</desc>
 				</info>
-				<prop oor:name="Effect" oor:type="xs:int">
+				<prop oor:name="Effect" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Table -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Effect -->
@@ -2414,7 +2414,7 @@
 				<info>
 					<desc>Contains settings used when inputting text or data in tables.</desc>
 				</info>
-				<prop oor:name="NumberRecognition" oor:type="xs:boolean">
+				<prop oor:name="NumberRecognition" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
@@ -2425,7 +2425,7 @@
 					</info>
                     <value>false</value>
 				</prop>
-				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
+				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
@@ -2436,7 +2436,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Alignment" oor:type="xs:boolean">
+				<prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
@@ -2457,7 +2457,7 @@
 				<info>
 					<desc>Contains settings for the Direct Cursor.</desc>
 				</info>
-				<prop oor:name="UseDirectCursor" oor:type="xs:boolean">
+				<prop oor:name="UseDirectCursor" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Cursor/DirectCursor -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
@@ -2468,7 +2468,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Insert" oor:type="xs:int">
+				<prop oor:name="Insert" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Cursor/DirectCursor -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
@@ -2506,7 +2506,7 @@
 				<info>
 					<desc>Contains miscellaneous options.</desc>
 				</info>
-				<prop oor:name="ProtectedArea" oor:type="xs:boolean">
+				<prop oor:name="ProtectedArea" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Cursor/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Options -->
@@ -2531,7 +2531,7 @@
 					<info>
 						<desc>Contains settings for new inserted text.</desc>
 					</info>
-					<prop oor:name="Attribute" oor:type="xs:int">
+					<prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Insert -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2593,7 +2593,7 @@
 						</constraints>
 						<value>3</value>
 					</prop>
-					<prop oor:name="Color" oor:type="xs:int">
+					<prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Insert -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2609,7 +2609,7 @@
 					<info>
 						<desc>Contains settings for displaying changes when text is deleted.</desc>
 					</info>
-					<prop oor:name="Attribute" oor:type="xs:int">
+					<prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Delete -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2666,7 +2666,7 @@
 						</constraints>
 						<value>3</value>
 					</prop>
-					<prop oor:name="Color" oor:type="xs:int">
+					<prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Delete -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2682,7 +2682,7 @@
 					<info>
 						<desc>Contains settings for displaying modified text attributes.</desc>
 					</info>
-					<prop oor:name="Attribute" oor:type="xs:int">
+					<prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2744,7 +2744,7 @@
 						</constraints>
 						<value>1</value>
 					</prop>
-					<prop oor:name="Color" oor:type="xs:int">
+					<prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
@@ -2761,7 +2761,7 @@
 				<info>
 					<desc>Contains settings for defining how lines with changed text are displayed.</desc>
 				</info>
-				<prop oor:name="Mark" oor:type="xs:int">
+				<prop oor:name="Mark" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Changes/Lines_changed -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
@@ -2798,7 +2798,7 @@
 					</constraints>
 					<value>3</value>
 				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
+				<prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Changes//Lines_changed -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
@@ -2858,7 +2858,7 @@
                                                 <label>Caption order: Numbering first</label>
                                         </info>
                                 </prop>
-				<prop oor:name="Automatic" oor:type="xs:boolean">
+				<prop oor:name="Automatic" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies how tables, graphics, frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
 						<label>Automatic</label>
@@ -2874,7 +2874,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for tables.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a table in a text document.</desc>
 								<label>Writer Table</label>
@@ -2891,7 +2891,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -2935,7 +2935,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -2949,7 +2949,7 @@
 								</info>
 								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -2968,7 +2968,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document</desc>
 									<label>Level</label>
@@ -2987,7 +2987,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3007,7 +3007,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for frames.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a frame in a text document.</desc>
 								<label>Writer Frame</label>
@@ -3024,7 +3024,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3068,7 +3068,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3081,7 +3081,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3100,7 +3100,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3119,7 +3119,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3139,7 +3139,7 @@
 						<info>
 							<desc>Settings for insertion of captions for graphics.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a graphic in a text document.</desc>
 								<label>Writer Graphic</label>
@@ -3156,7 +3156,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3200,7 +3200,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3213,7 +3213,7 @@
 									<label>CaptionText</label>
 								</info>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3232,14 +3232,14 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
 								</info>
 								<value>.</value>
 							</prop>
-                            <prop oor:name="Position" oor:type="xs:int">
+                            <prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
                                 <info>
                                     <desc>Specifies the position of the caption field.</desc>
                                     <label>Position</label>
@@ -3282,7 +3282,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for Calc documents.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a Spreadsheet object.</desc>
 								<label>Spreadsheet</label>
@@ -3299,7 +3299,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3343,7 +3343,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3356,7 +3356,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3375,7 +3375,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3394,7 +3394,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3420,7 +3420,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for Draw documents.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a Drawing object.</desc>
 								<label>Drawing</label>
@@ -3437,7 +3437,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3481,7 +3481,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3494,7 +3494,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3513,7 +3513,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3532,7 +3532,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3558,7 +3558,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for Chart documents.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a Chart object.</desc>
 								<label>Chart</label>
@@ -3575,7 +3575,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3619,7 +3619,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3632,7 +3632,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3651,7 +3651,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3670,7 +3670,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3696,7 +3696,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for Image documents.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for an Image object.</desc>
 								<label>Image</label>
@@ -3713,7 +3713,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3757,7 +3757,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3770,7 +3770,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3789,7 +3789,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the feadings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3808,7 +3808,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3834,7 +3834,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for formula documents.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a Formula object.</desc>
 								<label>Formula</label>
@@ -3851,7 +3851,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -3895,7 +3895,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -3908,7 +3908,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -3927,7 +3927,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -3946,7 +3946,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -3972,7 +3972,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for Impress objects.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for a Presentation object.</desc>
 								<label>Presentation</label>
@@ -3989,7 +3989,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -4033,7 +4033,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -4046,7 +4046,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -4065,7 +4065,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label>Level</label>
@@ -4084,7 +4084,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -4110,7 +4110,7 @@
 						<info>
 							<desc>Specifies the settings for inserting captions for other OLE objects.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
 								<desc>Determines if the caption settings are valid for further OLE objects.</desc>
 								<label>Further OLE objects</label>
@@ -4127,7 +4127,7 @@
 									<label>Category</label>
 								</info>
 							</prop>
-							<prop oor:name="Numbering" oor:type="xs:int">
+							<prop oor:name="Numbering" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the numbering of the caption field.</desc>
 									<label>Numbering</label>
@@ -4171,7 +4171,7 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true" oor:nillable="false">
                                                                 <info>
                                                                         <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
                                                                         <label>Numbering separator</label>
@@ -4184,7 +4184,7 @@
 									<label>CaptionText</label>
 								</info>
                             </prop>
-							<prop oor:name="Position" oor:type="xs:int">
+							<prop oor:name="Position" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
 									<label>Position</label>
@@ -4203,7 +4203,7 @@
 								</constraints>
 								<value>1</value>
 							</prop>
-							<prop oor:name="Level" oor:type="xs:int">
+							<prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
 								<info>
 									<desc>Specifies the headings or chapter levels where the numbering starts in the document</desc>
 									<label>Level</label>
@@ -4222,7 +4222,7 @@
 								</constraints>
 								<value>0</value>
 							</prop>
-							<prop oor:name="Delimiter" oor:type="xs:string">
+							<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 								<info>
 									<desc>Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label>Separator</label>
@@ -4253,28 +4253,28 @@
 					<author>OS</author>
 					<desc>Specifies the default settings for tables to be inserted.</desc>
 				</info>
-				<prop oor:name="Header" oor:type="xs:boolean">
+				<prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies if the table has a header.</desc>
 						<label>Header</label>
 					</info>
                                         <value>false</value>
 				</prop>
-				<prop oor:name="RepeatHeader" oor:type="xs:boolean">
+				<prop oor:name="RepeatHeader" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header = True.</desc>
 						<label>Repeat header</label>
 					</info>
                                         <value>false</value>
 				</prop>
-				<prop oor:name="Split" oor:type="xs:boolean">
+				<prop oor:name="Split" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies if tables can be split with a page break or not.</desc>
 						<label>Don&apos;t split</label>
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Border" oor:type="xs:boolean">
+				<prop oor:name="Border" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies if table cells have a border by default.</desc>
 						<label>Border</label>
@@ -4291,7 +4291,7 @@
 				<info>
 					<desc>Contains settings for MS Word compatibility.</desc>
 				</info>
-				<prop oor:name="AddBetween" oor:type="xs:boolean">
+				<prop oor:name="AddBetween" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Other/Compatibility -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
@@ -4302,7 +4302,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="AddToStart" oor:type="xs:boolean">
+				<prop oor:name="AddToStart" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Other/Compatibility -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
@@ -4323,7 +4323,7 @@
 				<info>
 					<desc>Specifies settings for &apos;Auto Text&apos;.</desc>
 				</info>
-				<prop oor:name="FileLinks" oor:type="xs:boolean">
+				<prop oor:name="FileLinks" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/AutoText -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Save Links relative -->
@@ -4334,7 +4334,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="InternetLinks" oor:type="xs:boolean">
+				<prop oor:name="InternetLinks" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/AutoText -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Save Links relative -->
@@ -4345,7 +4345,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ShowPreview" oor:type="xs:boolean">
+				<prop oor:name="ShowPreview" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/AutoText -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Show preview -->
@@ -4356,7 +4356,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ShowToolTip" oor:type="xs:boolean">
+				<prop oor:name="ShowToolTip" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/AutoText -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  display remainder ... -->
@@ -4367,7 +4367,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-                                <prop oor:name="SearchInAllCategories" oor:type="xs:boolean">
+                                <prop oor:name="SearchInAllCategories" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- #b6633427# -->
                                         <info>
                                                 <author>OS</author>
@@ -4385,7 +4385,7 @@
 					<info>
 						<desc>Specifies options for &apos;Auto Correct/Auto Format&apos;.</desc>
 					</info>
-					<prop oor:name="UseReplacementTable" oor:type="xs:boolean">
+					<prop oor:name="UseReplacementTable" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
@@ -4396,7 +4396,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
+					<prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
@@ -4407,7 +4407,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean">
+					<prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
@@ -4418,7 +4418,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean">
+					<prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold* and _underline_ -->
@@ -4429,7 +4429,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="SetInetAttribute" oor:type="xs:boolean">
+					<prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
@@ -4440,7 +4440,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean">
+					<prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
@@ -4451,7 +4451,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeDash" oor:type="xs:boolean">
+					<prop oor:name="ChangeDash" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
@@ -4462,7 +4462,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean">
+					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
@@ -4473,7 +4473,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean">
+					<prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Remove blank paragraphs -->
@@ -4484,7 +4484,7 @@
 						</info>
 						<value>false</value>
 					</prop>
-					<prop oor:name="ReplaceUserStyle" oor:type="xs:boolean">
+					<prop oor:name="ReplaceUserStyle" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace custom styles -->
@@ -4495,7 +4495,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="CombineParagraphs" oor:type="xs:boolean">
+					<prop oor:name="CombineParagraphs" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater -->
@@ -4506,7 +4506,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="CombineValue" oor:type="xs:int">
+					<prop oor:name="CombineValue" oor:type="xs:int" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater... / Edit/Combine/Minimum size-->
@@ -4517,7 +4517,7 @@
 						</info>
 						<value>50</value>
 					</prop>
-					<prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean">
+					<prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
 						<info>
@@ -4527,7 +4527,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="DelSpacesBetween" oor:type="xs:boolean">
+					<prop oor:name="DelSpacesBetween" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs between Lineend and -begin -->
 						<info>
@@ -4541,7 +4541,7 @@
 						<info>
 							<desc>Specifies the settings for the automatic replacement of enumeration characters (dash, plus, and so on) into bullets.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<!-- OldPath: Writer/AutoFormat/Options -->
 							<!-- OldLocation: Soffice.cfg -->
 							<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4556,7 +4556,7 @@
 							<info>
 								<desc>Specifies the character to be used.</desc>
 							</info>
-							<prop oor:name="Char" oor:type="xs:int">
+							<prop oor:name="Char" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4566,7 +4566,7 @@
 								</info>
 								<value>8226</value>
 							</prop>
-							<prop oor:name="Font" oor:type="xs:string">
+							<prop oor:name="Font" oor:type="xs:string" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4576,7 +4576,7 @@
 								</info>
 								<value>StarSymbol</value>
 							</prop>
-							<prop oor:name="FontFamily" oor:type="xs:int">
+							<prop oor:name="FontFamily" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4587,7 +4587,7 @@
 								</info>
 								<value>0</value>
 							</prop>
-							<prop oor:name="FontCharset" oor:type="xs:int">
+							<prop oor:name="FontCharset" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4598,7 +4598,7 @@
 								</info>
 								<value>10</value>
 							</prop>
-							<prop oor:name="FontPitch" oor:type="xs:int">
+							<prop oor:name="FontPitch" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
@@ -4616,7 +4616,7 @@
 					<info>
 						<desc>Contains settings than can be applied while typing text.</desc>
 					</info>
-					<prop oor:name="Enable" oor:type="xs:boolean">
+					<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: AutoCorrect/Options/All -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - AutoFormat while typing -->
@@ -4627,7 +4627,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeDash" oor:type="xs:boolean">
+					<prop oor:name="ChangeDash" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
@@ -4638,7 +4638,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeToBorders" oor:type="xs:boolean">
+					<prop oor:name="ChangeToBorders" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/ByInput -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply border -->
@@ -4649,7 +4649,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeToTable" oor:type="xs:boolean">
+					<prop oor:name="ChangeToTable" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/ByInput -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Create table -->
@@ -4660,7 +4660,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ReplaceStyle" oor:type="xs:boolean">
+					<prop oor:name="ReplaceStyle" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Writer/AutoFormat/ByInput -->
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
@@ -4671,7 +4671,7 @@
 						</info>
 						<value>false</value>
 					</prop>
-					<prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean">
+					<prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
 						<info>
@@ -4681,7 +4681,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="DelSpacesBetween" oor:type="xs:boolean">
+					<prop oor:name="DelSpacesBetween" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect Options  Delete Blanks and Tabs between Lineend and -begin -->
 						<info>
@@ -4695,7 +4695,7 @@
 						<info>
 							<desc>Contains settings for automatic numbering.</desc>
 						</info>
-						<prop oor:name="Enable" oor:type="xs:boolean">
+						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<!-- OldPath: Writer/AutoFormat/ByInput -->
 							<!-- OldLocation: Soffice.cfg -->
 							<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
@@ -4710,7 +4710,7 @@
 							<info>
 								<desc>Defines the character to be used.</desc>
 							</info>
-							<prop oor:name="Char" oor:type="xs:int">
+							<prop oor:name="Char" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
@@ -4720,7 +4720,7 @@
 								</info>
 								<value>8226</value>
 							</prop>
-							<prop oor:name="Font" oor:type="xs:string">
+							<prop oor:name="Font" oor:type="xs:string" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
@@ -4730,7 +4730,7 @@
 								</info>
 								<value>StarSymbol</value>
 							</prop>
-							<prop oor:name="FontFamily" oor:type="xs:int">
+							<prop oor:name="FontFamily" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
@@ -4741,7 +4741,7 @@
 								</info>
 								<value>0</value>
 							</prop>
-							<prop oor:name="FontCharset" oor:type="xs:int">
+							<prop oor:name="FontCharset" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
@@ -4752,7 +4752,7 @@
 								</info>
 								<value>10</value>
 							</prop>
-							<prop oor:name="FontPitch" oor:type="xs:int">
+							<prop oor:name="FontPitch" oor:type="xs:int" oor:nillable="false">
 								<!-- OldPath: Writer/AutoFormat/Options -->
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
@@ -4771,7 +4771,7 @@
 				<info>
 					<desc>Contains settings relevant for the word completion (&apos;Auto Completion&apos;).</desc>
 				</info>
-				<prop oor:name="Enable" oor:type="xs:boolean">
+				<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show suggestions -->
@@ -4782,7 +4782,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="MinWordLen" oor:type="xs:int">
+				<prop oor:name="MinWordLen" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  min. word length -->
@@ -4793,7 +4793,7 @@
 					</info>
                     <value>10</value>
 				</prop>
-				<prop oor:name="MaxListLen" oor:type="xs:int">
+				<prop oor:name="MaxListLen" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  max. entries -->
@@ -4804,7 +4804,7 @@
 					</info>
 					<value>500</value>
 				</prop>
-				<prop oor:name="CollectWords" oor:type="xs:boolean">
+				<prop oor:name="CollectWords" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Collect suggestions -->
@@ -4815,7 +4815,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="EndlessList" oor:type="xs:boolean">
+				<prop oor:name="EndlessList" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: no UI available anymore -->
@@ -4826,7 +4826,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="AppendBlank" oor:type="xs:boolean">
+				<prop oor:name="AppendBlank" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Append blanc -->
@@ -4837,7 +4837,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ShowAsTip" oor:type="xs:boolean">
+				<prop oor:name="ShowAsTip" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show as tip -->
@@ -4848,7 +4848,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="AcceptKey" oor:type="xs:int">
+				<prop oor:name="AcceptKey" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Accept with -->
@@ -4881,7 +4881,7 @@
 					</constraints>
 					<value>1280</value>
 				</prop>
-				<prop oor:name="KeepList" oor:type="xs:boolean">
+				<prop oor:name="KeepList" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  When closing a document, save the list for later use ... -->
 					<info>
 						<author>OS</author>
@@ -4900,7 +4900,7 @@
 				<info>
 					<desc>Contains settings for the inscription of the labels text field.</desc>
 				</info>
-				<prop oor:name="UseAddress" oor:type="xs:boolean">
+				<prop oor:name="UseAddress" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4911,7 +4911,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Address" oor:type="xs:string">
+				<prop oor:name="Address" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4923,7 +4923,7 @@
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
-				<prop oor:name="Database" oor:type="xs:string">
+				<prop oor:name="Database" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4940,7 +4940,7 @@
 				<info>
 					<desc>Contains settings for the media type used for the label.</desc>
 				</info>
-				<prop oor:name="Continous" oor:type="xs:boolean">
+				<prop oor:name="Continous" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4951,7 +4951,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Brand" oor:type="xs:string">
+				<prop oor:name="Brand" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4963,7 +4963,7 @@
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
-				<prop oor:name="Type" oor:type="xs:string">
+				<prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
@@ -4980,7 +4980,7 @@
 				<info>
 					<desc>Contains settings for the label format.</desc>
 				</info>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -4991,7 +4991,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5002,7 +5002,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="HorizontalDistance" oor:type="xs:int">
+				<prop oor:name="HorizontalDistance" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5013,7 +5013,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="VerticalDistance" oor:type="xs:int">
+				<prop oor:name="VerticalDistance" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5024,7 +5024,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="Width" oor:type="xs:int">
+				<prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5035,7 +5035,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="Height" oor:type="xs:int">
+				<prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5046,7 +5046,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="LeftMargin" oor:type="xs:int">
+				<prop oor:name="LeftMargin" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5057,7 +5057,7 @@
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="TopMargin" oor:type="xs:int">
+				<prop oor:name="TopMargin" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
@@ -5073,7 +5073,7 @@
 				<info>
 					<desc>Contains miscellaneous options for labels.</desc>
 				</info>
-				<prop oor:name="Synchronize" oor:type="xs:boolean">
+				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
@@ -5084,7 +5084,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Page" oor:type="xs:boolean">
+				<prop oor:name="Page" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
@@ -5095,7 +5095,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
@@ -5106,7 +5106,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Labels/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
@@ -5127,7 +5127,7 @@
 				<info>
 					<desc>Contains settings for the media type used.</desc>
 				</info>
-				<prop oor:name="Continous" oor:type="xs:boolean">
+				<prop oor:name="Continous" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
@@ -5138,7 +5138,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Brand" oor:type="xs:string">
+				<prop oor:name="Brand" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
@@ -5150,7 +5150,7 @@
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
-				<prop oor:name="Type" oor:type="xs:string">
+				<prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
@@ -5167,7 +5167,7 @@
 				<info>
 					<desc>Contains settings for the page format.</desc>
 				</info>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5178,7 +5178,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5189,7 +5189,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="HorizontalDistance" oor:type="xs:int">
+				<prop oor:name="HorizontalDistance" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5200,7 +5200,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="VerticalDistance" oor:type="xs:int">
+				<prop oor:name="VerticalDistance" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5211,7 +5211,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="Width" oor:type="xs:int">
+				<prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5222,7 +5222,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="Height" oor:type="xs:int">
+				<prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5233,7 +5233,7 @@
 					</info>
 					<value>10000</value>
 				</prop>
-				<prop oor:name="LeftMargin" oor:type="xs:int">
+				<prop oor:name="LeftMargin" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5244,7 +5244,7 @@
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="TopMargin" oor:type="xs:int">
+				<prop oor:name="TopMargin" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
@@ -5260,7 +5260,7 @@
 				<info>
 					<desc>Contains miscellaneous settings.</desc>
 				</info>
-				<prop oor:name="Synchronize" oor:type="xs:boolean">
+				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
@@ -5271,7 +5271,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Page" oor:type="xs:boolean">
+				<prop oor:name="Page" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
@@ -5282,7 +5282,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
@@ -5293,7 +5293,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Options -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
@@ -5673,31 +5673,31 @@
 					<author>OS</author>
 					<desc>Specifies which type of object bars are visible.</desc>
 				</info>
-				<prop oor:name="Graphic" oor:type="xs:int">
+				<prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Graphic Object Bar or the Text Object Bar is visible when a graphic is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:int">
+				<prop oor:name="Table" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Table Object Bar or the Text Object Bar is the visible when a table is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="NumberedList" oor:type="xs:int">
+				<prop oor:name="NumberedList" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Numbering Object Bar or the Text Object Bar is visible when a numbering/list paragraph is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="NumberedList_InTable" oor:type="xs:int">
+				<prop oor:name="NumberedList_InTable" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar is visible when a numbering/list selection is made in a table.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="BezierObject" oor:type="xs:int">
+				<prop oor:name="BezierObject" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Bezier Object Bar or the Draw Object Bar is visible toolbar when a Bezier object is selected in edit mode.</desc>
 					</info>
@@ -5709,7 +5709,7 @@
                 	<info>
                         	<desc>Contains settings for comments</desc>
                 	</info>
-                	<prop oor:name="ShowAnkor" oor:type="xs:boolean">
+                	<prop oor:name="ShowAnkor" oor:type="xs:boolean" oor:nillable="false">
                		<info>
                         	<author>mod</author>
                         	<desc>configures if comment anchor should be shown or hidden when display is off</desc>
@@ -5722,7 +5722,7 @@
 			<info>
 				<desc>Contains settings for the Navigator.</desc>
 			</info>
-			<prop oor:name="ShowListBox" oor:type="xs:boolean">
+			<prop oor:name="ShowListBox" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5733,7 +5733,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="GlobalDocMode" oor:type="xs:boolean">
+			<prop oor:name="GlobalDocMode" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5744,7 +5744,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="RootType" oor:type="xs:int">
+			<prop oor:name="RootType" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5755,7 +5755,7 @@
 				</info>
 				<value>-1</value>
 			</prop>
-			<prop oor:name="SelectedPosition" oor:type="xs:int">
+			<prop oor:name="SelectedPosition" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5765,7 +5765,7 @@
 				</info>
 				<value>0</value>
 			</prop>
-			<prop oor:name="OutlineLevel" oor:type="xs:int">
+			<prop oor:name="OutlineLevel" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5788,7 +5788,7 @@
 				</constraints>
 				<value>10</value>
 			</prop>
-			<prop oor:name="InsertMode" oor:type="xs:int">
+			<prop oor:name="InsertMode" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5816,7 +5816,7 @@
 				</constraints>
 				<value>0</value>
 			</prop>
-			<prop oor:name="ActiveBlock" oor:type="xs:int">
+			<prop oor:name="ActiveBlock" oor:type="xs:int" oor:nillable="false">
 				<!-- OldPath: Writer/PIs/Navigator -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
@@ -5835,7 +5835,7 @@
 				<info>
 					<desc>Contains inscription settings.</desc>
 				</info>
-				<prop oor:name="Addressee" oor:type="xs:string">
+				<prop oor:name="Addressee" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
@@ -5857,7 +5857,7 @@
 						<label>Sender</label>
 					</info>
 				</prop>
-				<prop oor:name="UseSender" oor:type="xs:boolean">
+				<prop oor:name="UseSender" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
@@ -5868,7 +5868,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Database" oor:type="xs:string">
+				<prop oor:name="Database" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
@@ -5885,7 +5885,7 @@
 				<info>
 					<desc>Contains format settings.</desc>
 				</info>
-				<prop oor:name="AddresseeFromLeft" oor:type="xs:int">
+				<prop oor:name="AddresseeFromLeft" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format //  old twips: 6463 / 2-->
@@ -5896,7 +5896,7 @@
 					</info>
 					<value>5700</value>
 				</prop>
-				<prop oor:name="AddresseeFromTop" oor:type="xs:int">
+				<prop oor:name="AddresseeFromTop" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format  // old twips: 6463 / 2-->
@@ -5907,7 +5907,7 @@
 					</info>
 					<value>5700</value>
 				</prop>
-				<prop oor:name="SenderFromLeft" oor:type="xs:int">
+				<prop oor:name="SenderFromLeft" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
@@ -5918,7 +5918,7 @@
 					</info>
 					<value>1000</value>
 				</prop>
-				<prop oor:name="SenderFromTop" oor:type="xs:int">
+				<prop oor:name="SenderFromTop" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
@@ -5929,7 +5929,7 @@
 					</info>
 					<value>1000</value>
 				</prop>
-				<prop oor:name="Width" oor:type="xs:int">
+				<prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
@@ -5940,7 +5940,7 @@
 					</info>
 					<value>11400</value>
 				</prop>
-				<prop oor:name="Height" oor:type="xs:int">
+				<prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Format -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
@@ -5956,7 +5956,7 @@
 				<info>
 					<desc>Contains settings for printing.</desc>
 				</info>
-				<prop oor:name="Alignment" oor:type="xs:int">
+				<prop oor:name="Alignment" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
@@ -5999,7 +5999,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="FromAbove" oor:type="xs:boolean">
+				<prop oor:name="FromAbove" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
@@ -6010,7 +6010,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Right" oor:type="xs:int">
+				<prop oor:name="Right" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
@@ -6021,7 +6021,7 @@
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Down" oor:type="xs:int">
+				<prop oor:name="Down" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/Dialog/Envelope/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
@@ -6060,7 +6060,7 @@
 					<info>
 						<desc>Contains settings for importing VBA Basic.</desc>
 					</info>
-					<prop oor:name="Load" oor:type="xs:boolean">
+					<prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Filter/MS_Office/Basic/Word -->
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
@@ -6071,7 +6071,7 @@
 						</info>
 						<value>true</value>
 					</prop>
-                    <prop oor:name="Executable" oor:type="xs:boolean">
+                    <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
                         <info>
                             <author>pflin</author>
                             <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
@@ -6079,7 +6079,7 @@
                          </info>
                         <value>true</value>
                     </prop>
-					<prop oor:name="Save" oor:type="xs:boolean">
+					<prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
 						<!-- OldPath: Filter/MS_Office/Basic/Word -->
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
@@ -6101,7 +6101,7 @@
 				<info>
 					<desc>Contains settings for graphics used for bullets.</desc>
 				</info>
-				<prop oor:name="KeepRatio" oor:type="xs:boolean">
+				<prop oor:name="KeepRatio" oor:type="xs:boolean" oor:nillable="false">
 					<!--OldLocation: Soffice.cfg -->
 					<!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
 					<info>
@@ -6301,7 +6301,7 @@
 				<info>
 					<desc>Contains word number settings.</desc>
 				</info>
-				<prop oor:name="Delimiter" oor:type="xs:string">
+				<prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
 					<!--OldLocation: Soffice.cfg -->
 					<!--UIHints: File - Properties - Statistics - Word number - Separator-->
 					<info>
@@ -6316,7 +6316,7 @@
 			<info>
 				<desc>Contains settings for indices.</desc>
 			</info>
-			<prop oor:name="ShowPreview" oor:type="xs:boolean">
+			<prop oor:name="ShowPreview" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldLocation: Soffice.cfg -->
 				<!--UIHints: Insert - Indexes - Show preview -->
 				<info>
@@ -6335,7 +6335,7 @@
 				<info>
 					<desc>Specifies the settings for form letter output to printer.</desc>
 				</info>
-				<prop oor:name="SinglePrintJobs" oor:type="xs:boolean">
+				<prop oor:name="SinglePrintJobs" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Form letter - Printer output - Single print jobs-->
 					<info>
@@ -6344,7 +6344,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-                <prop oor:name="AskForMerge" oor:type="xs:boolean">
+                <prop oor:name="AskForMerge" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>OS</author>
                         <desc>Determines whether printing a document that contains database fields triggers a 'do you want to call mailmerge' query</desc>
@@ -6391,7 +6391,7 @@
 				<info>
 					<desc>Specifies the settings for outputting a form letter to a file.</desc>
 				</info>
-				<prop oor:name="Path" oor:type="xs:string">
+				<prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
 					<!-- OldLocation: Soffice.cfg -->
 					<!--UIHints: Form letter - File output - Path-->
 					<info>
@@ -6432,7 +6432,7 @@
 			<info>
 				<desc>Contains miscellaneous settings.</desc>
 			</info>
-			<prop oor:name="GraphicToGalleryAsLink" oor:type="xs:boolean">
+			<prop oor:name="GraphicToGalleryAsLink" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldLocation: Soffice.cfg -->
 				<!--UIHints: context menu of readonly loaded documents-->
 				<info>
@@ -6451,25 +6451,25 @@
 				<info>
 					<desc>Contains settings for the Excel/Lotus filter.</desc>
 				</info>
-				<prop oor:name="MinRow" oor:type="xs:long">
+				<prop oor:name="MinRow" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the minimum number of rows that can be imported.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="MaxRow" oor:type="xs:long">
+				<prop oor:name="MaxRow" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the maximum number of rows that can be imported.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="MinCol" oor:type="xs:long">
+				<prop oor:name="MinCol" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the minimum number of columns that can be imported.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="MaxCol" oor:type="xs:long">
+				<prop oor:name="MaxCol" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the maximum number of columns that can be imported.</desc>
 					</info>
@@ -6480,19 +6480,19 @@
 				<info>
 					<desc>Contains settings for the Word4Word filter.</desc>
 				</info>
-				<prop oor:name="W4WHD" oor:type="xs:long">
+				<prop oor:name="W4WHD" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the minimum height for the header. If this flag is not set, a default height of 5 mm is applied.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="W4WFT" oor:type="xs:long">
+				<prop oor:name="W4WFT" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the minimum height of the footer. If this flag is not set, a default height of 5 mm is applied.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="W4W000" oor:type="xs:long">
+				<prop oor:name="W4W000" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies a Word for Word filter flag entry. If W4W000 is set, the flag is valid for all W4W filters that are not specified in detail. To specify a filter, replace &quot;000&quot; with the corresponding filter ID.</desc>
 					</info>
@@ -6580,7 +6580,7 @@
 				<info>
 					<desc>Contains settings for the WinWord filter.</desc>
 				</info>
-				<prop oor:name="WW1F" oor:type="xs:long">
+				<prop oor:name="WW1F" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the flags for controlling the import of WinWord 1.0 documents.</desc>
 					</info>
@@ -6608,7 +6608,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WW" oor:type="xs:long">
+				<prop oor:name="WW" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the flags for importing WinWord documents.</desc>
 					</info>
@@ -6736,7 +6736,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WW8" oor:type="xs:long">
+				<prop oor:name="WW8" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the flags for importing WinWord 8 documents.</desc>
 					</info>
@@ -6759,7 +6759,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWF" oor:type="xs:long">
+				<prop oor:name="WWF" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the flags for controlling the import of fields in WW6 documents. The key WWF stands for &quot;WinWord Field&quot;.</desc>
 					</info>
@@ -6817,61 +6817,61 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFA0" oor:type="xs:long">
+				<prop oor:name="WWFA0" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Enables the tagging of fields for every field type. Controls the field types 0 to 31.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFA1" oor:type="xs:long">
+				<prop oor:name="WWFA1" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Enables the tagging of fields for every field type.Controls the field types 32 to 63.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFA2" oor:type="xs:long">
+				<prop oor:name="WWFA2" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Enables the tagging of fields for every field type.Controls the field types 64 to 95.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFB0" oor:type="xs:long">
+				<prop oor:name="WWFB0" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields.Controls the field types 0 to 31.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFB1" oor:type="xs:long">
+				<prop oor:name="WWFB1" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. Controls the field types 32 to 63.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFB2" oor:type="xs:long">
+				<prop oor:name="WWFB2" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. Controls the field types 64 to 95.</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFLX" oor:type="xs:long">
+				<prop oor:name="WWFLX" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the X offset for text frames [UNIT=1/100 mm].</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFLY" oor:type="xs:long">
+				<prop oor:name="WWFLY" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the Y offset for text frames [UNIT=1/100 mm].</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWFT" oor:type="xs:long">
+				<prop oor:name="WWFT" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
 					</info>
 					<value>0</value>
 				</prop>
-				<prop oor:name="WWWR" oor:type="xs:long">
+				<prop oor:name="WWWR" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies several flags for exporting (for debugging).</desc>
 					</info>
@@ -6899,7 +6899,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-                                <prop oor:name="RegardHindiDigits" oor:type="xs:long">
+                                <prop oor:name="RegardHindiDigits" oor:type="xs:long" oor:nillable="false">
                                         <info>
                                                 <desc>If true yields to digits marked as CTL script to be imported as Hindi digits.</desc>
                                         </info>
@@ -6910,7 +6910,7 @@
 				<info>
 					<desc>Contains settings for the Writer filter.</desc>
 				</info>
-				<prop oor:name="SW3Imp" oor:type="xs:long">
+				<prop oor:name="SW3Imp" oor:type="xs:long" oor:nillable="false">
 					<info>
 						<desc>Specifies the flags for the Writer filter.</desc>
 					</info>

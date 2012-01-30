@@ -48,7 +48,7 @@
             <info>
                 <desc>Information about repositories for extensions.</desc>
             </info>
-            <prop oor:name="WebsiteLink" oor:type="xs:string">
+            <prop oor:name="WebsiteLink" oor:type="xs:string" oor:nillable="false">
                 <info>
                     <desc>This links is used from the Extension Manager. A user can click on the &amp;Download extensions...&amp;
                         control so that a browser is opened which displayed the website to which directs this URL.

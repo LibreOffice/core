@@ -100,7 +100,7 @@
         <info>
           <desc>Contains general properties of the graphical object representation of screen displays.</desc>
         </info>
-        <prop oor:name="Ruler" oor:type="xs:boolean">
+        <prop oor:name="Ruler" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
@@ -110,7 +110,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Helpline" oor:type="xs:boolean">
+        <prop oor:name="Helpline" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
@@ -120,7 +120,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Guide" oor:type="xs:boolean">
+        <prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
@@ -130,7 +130,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Bezier" oor:type="xs:boolean">
+        <prop oor:name="Bezier" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
@@ -140,7 +140,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Contour" oor:type="xs:boolean">
+        <prop oor:name="Contour" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
@@ -165,14 +165,14 @@
             <desc>Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
             <label>Tab stops</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
               <label/>
             </info>
             <value>1250</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
               <label/>
@@ -188,7 +188,7 @@
             <desc>Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
             <label>Measurement unit</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the measurement unit to be used when the metric system is selected.</desc>
               <label>Measurement unit</label>
@@ -222,7 +222,7 @@
             </constraints>
             <value>2</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the measurement unit to be used when the non-metric system is selected.</desc>
               <label>Measurement unit</label>
@@ -267,7 +267,7 @@
         <info>
           <desc>Contains configuration items related to the display of Impress documents.</desc>
         </info>
-        <prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
+        <prop oor:name="PicturePlaceholder" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
@@ -277,7 +277,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="ContourMode" oor:type="xs:boolean">
+        <prop oor:name="ContourMode" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
@@ -287,7 +287,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="TextPlaceholder" oor:type="xs:boolean">
+        <prop oor:name="TextPlaceholder" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
@@ -297,7 +297,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="LineContour" oor:type="xs:boolean">
+        <prop oor:name="LineContour" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
@@ -313,7 +313,7 @@
       <info>
         <desc>Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
       </info>
-      <prop oor:name="BackgroundCache" oor:type="xs:boolean">
+      <prop oor:name="BackgroundCache" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
@@ -323,7 +323,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="CopyWhileMoving" oor:type="xs:boolean">
+      <prop oor:name="CopyWhileMoving" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
@@ -333,7 +333,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="ObjectMoveable" oor:type="xs:boolean">
+      <prop oor:name="ObjectMoveable" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
@@ -343,7 +343,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="NoDistort" oor:type="xs:boolean">
+      <prop oor:name="NoDistort" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
@@ -353,7 +353,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="DclickTextedit" oor:type="xs:boolean">
+      <prop oor:name="DclickTextedit" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Option Bar -->
@@ -363,7 +363,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="RotateClick" oor:type="xs:boolean">
+      <prop oor:name="RotateClick" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Option Bar -->
@@ -373,7 +373,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="Preview" oor:type="xs:double">
+      <prop oor:name="Preview" oor:type="xs:double" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Menu: view - preview mode -->
@@ -400,7 +400,7 @@
         </constraints>
         <value>0</value>
       </prop>
-      <prop oor:name="ShowComments" oor:type="xs:boolean">
+      <prop oor:name="ShowComments" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <author>CL</author>
           <desc>Indicates whether to show comments (true) or hide them (false).</desc>
@@ -408,7 +408,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
+      <prop oor:name="ModifyWithAttributes" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Optionbar -->
@@ -419,7 +419,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="ShowUndoDeleteWarning" oor:type="xs:boolean">
+      <prop oor:name="ShowUndoDeleteWarning" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: UNDO stack delete warnng dialog -->
@@ -430,7 +430,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="SlideshowRespectZOrder" oor:type="xs:boolean">
+      <prop oor:name="SlideshowRespectZOrder" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Slideshow Z order for animations -->
@@ -441,7 +441,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="TransitionFiles" oor:type="oor:string-list">
+      <prop oor:name="TransitionFiles" oor:type="oor:string-list" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: List of files containing transition effects -->
@@ -457,7 +457,7 @@
         </info>
         <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
       </prop>
-      <prop oor:name="EffectFiles" oor:type="oor:string-list">
+      <prop oor:name="EffectFiles" oor:type="oor:string-list" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: List of files containing object effects -->
@@ -473,7 +473,7 @@
         </info>
         <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/effects.xml</value>
       </prop>
-      <prop oor:name="PreviewNewEffects" oor:type="xs:boolean">
+      <prop oor:name="PreviewNewEffects" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview checkbox in create new effect dialog -->
@@ -484,7 +484,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="PreviewChangedEffects" oor:type="xs:boolean">
+      <prop oor:name="PreviewChangedEffects" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview in custom animation panel -->
@@ -495,7 +495,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="PreviewTransitions" oor:type="xs:boolean">
+      <prop oor:name="PreviewTransitions" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview in slide transtion panel -->
@@ -506,7 +506,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="Display" oor:type="xs:int">
+      <prop oor:name="Display" oor:type="xs:int" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: slide show settings display listbox -->
@@ -517,7 +517,7 @@
         </info>
         <value>0</value>
       </prop>
-      <prop oor:name="PenColor" oor:type="xs:int">
+      <prop oor:name="PenColor" oor:type="xs:int" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: slide show context menu -->
@@ -528,7 +528,7 @@
         </info>
         <value>16711680</value>
       </prop>
-      <prop oor:name="PenWidth" oor:type="xs:double">
+      <prop oor:name="PenWidth" oor:type="xs:double" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: slide show context menu -->
@@ -544,7 +544,7 @@
         <info>
           <desc>Contains text editing related configuration items.</desc>
         </info>
-        <prop oor:name="QuickEditing" oor:type="xs:boolean">
+        <prop oor:name="QuickEditing" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Text objects -->
@@ -554,7 +554,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Selectable" oor:type="xs:boolean">
+        <prop oor:name="Selectable" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Text objects -->
@@ -570,7 +570,7 @@
           <desc>Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
           <label>Start with AutoPilots</label>
         </info>
-        <prop oor:name="AutoPilot" oor:type="xs:boolean">
+        <prop oor:name="AutoPilot" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/New_Doc -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
@@ -580,7 +580,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Layout" oor:type="xs:boolean">
+        <prop oor:name="Layout" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/New_Doc -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
@@ -595,7 +595,7 @@
         <info>
           <desc>Specifies configuration items governing behavior when starting a presentation.</desc>
         </info>
-        <prop oor:name="CurrentPage" oor:type="xs:boolean">
+        <prop oor:name="CurrentPage" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/Start -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Start presentation -->
@@ -611,7 +611,7 @@
           <desc>Contains the group of options that control the compatibility to other applications.</desc>
           <label>Compatibility options.</label>
         </info>
-        <prop oor:name="AddBetween" oor:type="xs:boolean">
+        <prop oor:name="AddBetween" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Other/Compatibility -->
           <!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
           <info>
@@ -621,7 +621,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="PrinterIndependentLayout" oor:type="xs:short">
+        <prop oor:name="PrinterIndependentLayout" oor:type="xs:short" oor:nillable="false">
           <!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
           <info>
             <author>AF</author>
@@ -640,14 +640,14 @@
           <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
           <label>Default Object Size</label>
         </info>
-        <prop oor:name="Width" oor:type="xs:int">
+        <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>[UNIT=1/100 mm]</desc>
             <label/>
           </info>
           <value>8000</value>
         </prop>
-        <prop oor:name="Height" oor:type="xs:int">
+        <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>[UNIT=1/100 mm]</desc>
             <label/>
@@ -664,7 +664,7 @@
         <info>
           <desc>Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
         </info>
-        <prop oor:name="Grid" oor:type="xs:boolean">
+        <prop oor:name="Grid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -674,7 +674,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="SnapLine" oor:type="xs:boolean">
+        <prop oor:name="SnapLine" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -684,7 +684,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="PageMargin" oor:type="xs:boolean">
+        <prop oor:name="PageMargin" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -694,7 +694,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="ObjectFrame" oor:type="xs:boolean">
+        <prop oor:name="ObjectFrame" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -704,7 +704,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="ObjectPoint" oor:type="xs:boolean">
+        <prop oor:name="ObjectPoint" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -714,7 +714,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Range" oor:type="xs:int">
+        <prop oor:name="Range" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
@@ -741,7 +741,7 @@
         <info>
           <desc>Specifies constraints regarding the creation and modification of graphical objects.</desc>
         </info>
-        <prop oor:name="CreatingMoving" oor:type="xs:boolean">
+        <prop oor:name="CreatingMoving" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
@@ -751,7 +751,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="ExtendEdges" oor:type="xs:boolean">
+        <prop oor:name="ExtendEdges" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
@@ -761,7 +761,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Rotating" oor:type="xs:boolean">
+        <prop oor:name="Rotating" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
@@ -771,7 +771,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="RotatingValue" oor:type="xs:int">
+        <prop oor:name="RotatingValue" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
@@ -793,7 +793,7 @@
           </constraints>
           <value>1500</value>
         </prop>
-        <prop oor:name="PointReduction" oor:type="xs:int">
+        <prop oor:name="PointReduction" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
@@ -825,7 +825,7 @@
         <info>
           <desc>Specifies switches regarding use and display of the snap grid.</desc>
         </info>
-        <prop oor:name="SnapToGrid" oor:type="xs:boolean">
+        <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
@@ -835,7 +835,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="VisibleGrid" oor:type="xs:boolean">
+        <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
@@ -845,7 +845,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Synchronize" oor:type="xs:boolean">
+        <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
@@ -869,14 +869,14 @@
             <desc>Defines the horizontal distance between adjacent grid points.</desc>
             <label>X Axis Resolution</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
               <label/>
             </info>
             <value>2000</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
@@ -893,14 +893,14 @@
             <desc>Defines the vertical distance between adjacent grid points.</desc>
             <label>Y Axis Resolution</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
               <label/>
             </info>
             <value>2000</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
@@ -913,7 +913,7 @@
         <info>
           <desc>Specifies the subdivision of the grid.</desc>
         </info>
-        <prop oor:name="XAxis" oor:type="xs:double">
+        <prop oor:name="XAxis" oor:type="xs:double" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
@@ -924,7 +924,7 @@
           </info>
           <value>9</value>
         </prop>
-        <prop oor:name="YAxis" oor:type="xs:double">
+        <prop oor:name="YAxis" oor:type="xs:double" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
@@ -940,7 +940,7 @@
         <info>
           <desc>Contains the specifications of the snap grid.</desc>
         </info>
-        <prop oor:name="Size" oor:type="xs:boolean">
+        <prop oor:name="Size" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Snap grid -->
@@ -959,14 +959,14 @@
             <desc>Defines the horizontal distance between adjacent points of the snap grid.</desc>
             <label>X axis</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
               <label/>
             </info>
             <value>100</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
               <label/>
@@ -983,14 +983,14 @@
             <desc>Defines the vertical distance between adjacent points of the snap grid.</desc>
             <label>Y axis</label>
           </info>
-          <prop oor:name="Metric" oor:type="xs:int">
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
               <label/>
             </info>
             <value>100</value>
           </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int">
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
               <label/>
@@ -1008,7 +1008,7 @@
         <info>
           <desc>Defines options regarding the printing of document content.</desc>
         </info>
-        <prop oor:name="Presentation" oor:type="xs:boolean">
+        <prop oor:name="Presentation" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
@@ -1018,7 +1018,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Note" oor:type="xs:boolean">
+        <prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
@@ -1028,7 +1028,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Handout" oor:type="xs:boolean">
+        <prop oor:name="Handout" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
@@ -1038,7 +1038,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Outline" oor:type="xs:boolean">
+        <prop oor:name="Outline" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
@@ -1053,7 +1053,7 @@
         <info>
           <desc>Specifies how and which pages will be printed.</desc>
         </info>
-        <prop oor:name="PageSize" oor:type="xs:boolean">
+        <prop oor:name="PageSize" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
@@ -1063,7 +1063,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="PageTile" oor:type="xs:boolean">
+        <prop oor:name="PageTile" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
@@ -1073,7 +1073,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Booklet" oor:type="xs:boolean">
+        <prop oor:name="Booklet" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
@@ -1083,7 +1083,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="BookletFront" oor:type="xs:boolean">
+        <prop oor:name="BookletFront" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
@@ -1093,7 +1093,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="BookletBack" oor:type="xs:boolean">
+        <prop oor:name="BookletBack" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
@@ -1108,7 +1108,7 @@
         <info>
           <desc>Specifies general printing related issues.</desc>
         </info>
-        <prop oor:name="PageName" oor:type="xs:boolean">
+        <prop oor:name="PageName" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
@@ -1118,7 +1118,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Date" oor:type="xs:boolean">
+        <prop oor:name="Date" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
@@ -1128,7 +1128,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Time" oor:type="xs:boolean">
+        <prop oor:name="Time" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
@@ -1138,7 +1138,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="HiddenPage" oor:type="xs:boolean">
+        <prop oor:name="HiddenPage" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
@@ -1148,7 +1148,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Quality" oor:type="xs:int">
+        <prop oor:name="Quality" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Quality -->
@@ -1174,7 +1174,7 @@
           </constraints>
           <value>0</value>
         </prop>
-        <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
+        <prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print  [Check box] From printer setup -->
@@ -1184,7 +1184,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="HandoutHorizontal" oor:type="xs:boolean">
+        <prop oor:name="HandoutHorizontal" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: File - Print - [Section] Print content - [Radio buttons] Horizontal(TRUE)/Vertical(FALSE) -->
           <info>
             <desc>Indicates whether the slide thumbnails on the printed handouts are ordered horizontal or vertical</desc>
@@ -1192,7 +1192,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="PagesPerHandout" oor:type="xs:int">
+        <prop oor:name="PagesPerHandout" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: File - Print - [Section] Print content - [ListBox] Slides per page -->
           <info>
             <desc>Specifies the number of slide thumbnails printed on each handout page.</desc>
@@ -1249,7 +1249,7 @@
             <desc>Contains the group of options that control the behavior of the VBA filter.</desc>
             <label>VBA Filter</label>
           </info>
-          <prop oor:name="Load" oor:type="xs:boolean">
+          <prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
@@ -1260,7 +1260,7 @@
             </info>
             <value>true</value>
           </prop>
-          <prop oor:name="Save" oor:type="xs:boolean">
+          <prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
@@ -1412,7 +1412,7 @@
             <desc>Values for tuning the preview cache of the slide sorter.</desc>
             <label>Preview Cache Options</label>
           </info>
-          <prop oor:name="CacheSize" oor:type="xs:int">
+          <prop oor:name="CacheSize" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
                 Maximal size of the cache that stores slide
@@ -1425,7 +1425,7 @@
             </info>
             <value>4194304</value>
           </prop>
-          <prop oor:name="CompactionPolicy" oor:type="xs:string">
+          <prop oor:name="CompactionPolicy" oor:type="xs:string" oor:nillable="false">
             <info>
               <desc>Technique of how to reduce the memory used by the cache.</desc>
               <label>Compaction Policy</label>
@@ -1447,7 +1447,7 @@
             </constraints>
             <value>Compress</value>
           </prop>
-          <prop oor:name="CompressionPolicy" oor:type="xs:string">
+          <prop oor:name="CompressionPolicy" oor:type="xs:string" oor:nillable="false">
             <info>
               <desc>
                 Technique of how to compress preview bitmaps for
@@ -1486,7 +1486,7 @@
             </constraints>
             <value>ResolutionReduction</value>
           </prop>
-          <prop oor:name="TimeBetweenHighPriorityRequests" oor:type="xs:int">
+          <prop oor:name="TimeBetweenHighPriorityRequests" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
                 Time in milli seconds to wait between processing
@@ -1496,7 +1496,7 @@
             </info>
             <value>10</value>
           </prop>
-          <prop oor:name="TimeBetweenLowPriorityRequests" oor:type="xs:int">
+          <prop oor:name="TimeBetweenLowPriorityRequests" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
                 Time in milli seconds to wait between processing
@@ -1506,7 +1506,7 @@
             </info>
             <value>100</value>
           </prop>
-          <prop oor:name="TimeBetweenRequestsDuringShow" oor:type="xs:int">
+          <prop oor:name="TimeBetweenRequestsDuringShow" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
                 Time in milli seconds to wait between processing

@@ -67,7 +67,7 @@
 				<info>
 					<desc>Specifies the settings for the documents boundaries.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of anchors (true = visible).</desc>
 					</info>
@@ -93,7 +93,7 @@
 				<info>
 					<desc>Specifies the settings for object boundaries.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of object boundaries (true = visible).</desc>
 					</info>
@@ -109,7 +109,7 @@
 				<info>
 					<desc>Specifies the settings for table boundaries.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of table boundaries (true = visible).</desc>
 					</info>
@@ -135,7 +135,7 @@
 				<info>
 					<desc>Specifies the settings for unvisited links.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of unvisited links (true = visible).</desc>
 					</info>
@@ -151,7 +151,7 @@
 				<info>
 					<desc>Specifies the settings for visited links.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of visited links (true = visible).</desc>
 					</info>
@@ -187,7 +187,7 @@
 				<info>
 					<desc>Specifies the settings for shadows.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of shadows (true = visible).</desc>
 					</info>
@@ -213,7 +213,7 @@
 				<info>
 					<desc>Specifies the settings for field shadings in Writer.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of field shadings (true = visible).</desc>
 					</info>
@@ -229,7 +229,7 @@
 				<info>
 					<desc>Specifies the settings for index and table shadings in Writer.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of index and table shadings (true = visible).</desc>
 					</info>
@@ -245,7 +245,7 @@
 				<info>
 					<desc>Specifies the settings for the direct cursor in Writer.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of direct cursor (true = visible).</desc>
 					</info>
@@ -271,7 +271,7 @@
 				<info>
 					<desc>Specifies the settings for section boundaries in Writer.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of section boundaries (true = visible).</desc>
 					</info>
@@ -427,7 +427,7 @@
 				<info>
 					<desc>Specifies the settings used for the grid in Draw/Impress.</desc>
 				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
+				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
 					<info>
 						<desc>Specifies the visibility of the grid (true = visible).</desc>
 					</info>
@@ -591,7 +591,7 @@
 				<info>
 					<desc>Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
 				</info>
-				<prop oor:name="Order" oor:type="oor:string-list">
+				<prop oor:name="Order" oor:type="oor:string-list" oor:nillable="false">
 					<info>
 						<desc>List specifying the order of the global filters within their group.</desc>
 					</info>
@@ -637,7 +637,7 @@
 				<author>FS</author>
 				<desc>Specifies various settings for the internal file/folder picker dialog.</desc>
 			</info>
-			<prop oor:name="FillAsynchronously" oor:type="xs:boolean">
+			<prop oor:name="FillAsynchronously" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be usefull for instance for mounted, but dead NFS devices.</desc>
 				</info>
@@ -648,7 +648,7 @@
 					<desc>Specifies the timeouts to be used when the file view is to be filled asynchronously.
 These settings are not evaluated if the FillAsynchronously property is false.</desc>
 				</info>
-				<prop oor:name="Min" oor:type="xs:int">
+				<prop oor:name="Min" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies the minimum timeout in milliseconds. When the file view is filled, the dialog will wait at least this time before the user is allowed to cancel the operation.</desc>
 					</info>
@@ -661,7 +661,7 @@ These settings are not evaluated if the FillAsynchronously property is false.</d
 					</constraints>
 					<value>1000</value>
 				</prop>
-				<prop oor:name="Max" oor:type="xs:int">
+				<prop oor:name="Max" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies the maximum timeout in milliseconds. When the file view is being filled, and its content could not be completely obtained within the time frame given here, the operation is cancelled automatically.</desc>
 					</info>

@@ -35,7 +35,7 @@
 				<author>THB</author>
 				<desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
 			</info>
-			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
+			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list" oor:nillable="false">
 				<info>
 					<desc>Sequence of 8 integers per device/driver
 					   combination, that uniquely mark them as not being compatible with the
@@ -50,7 +50,7 @@
 				</info>
 				<value>0</value>
 			</prop>
- 			<prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
+ 			<prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<desc>Indicates whether the current DirectX device
                           ids should get blacklisted. When true, a
@@ -61,7 +61,7 @@
 				</info>
 				<value>false</value>
 			</prop>
- 			<prop oor:name="MaxTextureSize" oor:type="xs:int">
+ 			<prop oor:name="MaxTextureSize" oor:type="xs:int" oor:nillable="false">
 				<info>
 					<desc>If present, limits the size of the textures
 						  that get requested from the DX runtime. If
@@ -86,7 +86,7 @@
                 <desc>List of preferred implementation names, for each given canvas service.</desc>
             </info>
 		</set>
-		<prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean">
+		<prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean" oor:nillable="false">
 			<info>
 				<author>THB</author>
 				<desc>When true, force canvas factory to use the last
@@ -99,7 +99,7 @@
 			</info>
 			<value>false</value>
 		</prop>
-		<prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean">
+		<prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean" oor:nillable="false">
 			<info>
 				<author>THB</author>
 				<desc>When true, suggest canvas factory to use a
@@ -110,7 +110,7 @@
 			</info>
 			<value>true</value>
 		</prop>
-		<prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean">
+		<prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean" oor:nillable="false">
 			<info>
 				<author>THB</author>
 				<desc>When true, suggest canvas factory to use a
