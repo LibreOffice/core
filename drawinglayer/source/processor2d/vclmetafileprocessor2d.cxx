@@ -1904,9 +1904,20 @@ namespace drawinglayer
                                 (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
                                 (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
                             const Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
-                            const Size aSizePixel(aRectPixel.GetSize());
+                            Size aSizePixel(aRectPixel.GetSize());
                             const Point aEmptyPoint;
                             VirtualDevice aBufferDevice;
+                            const sal_uInt32 nMaxQuadratPixels(500000);
+                            const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
+                            double fReduceFactor(1.0);
+
+                            if(nViewVisibleArea > nMaxQuadratPixels)
+                            {
+                                // reduce render size
+                                fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
+                                aSizePixel = Size(basegfx::fround((double)aSizePixel.getWidth() * fReduceFactor),
+                                    basegfx::fround((double)aSizePixel.getHeight() * fReduceFactor));
+                            }
 
                             if(aBufferDevice.SetOutputSizePixel(aSizePixel))
                             {
@@ -1928,6 +1939,12 @@ namespace drawinglayer
                                 if(!basegfx::fTools::equal(fDPIXChange, 1.0) || !basegfx::fTools::equal(fDPIYChange, 1.0))
                                 {
                                     aViewTransform.scale(fDPIXChange, fDPIYChange);
+                                }
+
+                                // also take scaling from Size reduction into acount
+                                if(!basegfx::fTools::equal(fReduceFactor, 1.0))
+                                {
+                                    aViewTransform.scale(fReduceFactor, fReduceFactor);
                                 }
 
                                 // create view information and pixel renderer. Reuse known ViewInformation
