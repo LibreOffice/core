@@ -6819,7 +6819,7 @@ Use "./download" to download.])
                 -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}runtime.zip" ; then
             AC_MSG_RESULT([Found])
             PREBUILD_MOZAB="YES"
-            if test "$_os" = "cygwin" ; then
+            if test "$_os" = "WINNT" ; then
                 AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
                 if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
                         -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
