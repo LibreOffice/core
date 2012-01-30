@@ -32,6 +32,7 @@
 #include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 
 using namespace oox;
 using namespace oox::formulaimport;
@@ -88,7 +89,7 @@ OUString SmOoxmlImport::handleStream()
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
     ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{ }", "{}" );
-//    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO( "starmath.ooxml", "Formula: " << ret );
     return ret;
 }
 
@@ -232,7 +233,7 @@ OUString SmOoxmlImport::handleAcc()
             break;
         default:
             acc = STR( "acute" );
-//            fprintf( stderr, "Unknown m:chr in m:acc '%d'\n", accChr );
+            SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << accChr << "\'" );
             break;
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
@@ -558,7 +559,7 @@ OUString SmOoxmlImport::handleNary()
             ret = STR( "sum" );
             break;
         default:
-//            fprintf( stderr, "Unknown m:nary chr '%d'\n", chr );
+            SAL_WARN( "starmath.ooxml", "Unknown m:nary chr \'" << chr << "\'" );
             break;
     }
     if( !subHide )
