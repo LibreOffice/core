@@ -69,8 +69,6 @@
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
-#include <iostream>
-
 namespace oox {
 namespace xls {
 
@@ -394,7 +392,6 @@ Reference< XNamedRange > WorkbookGlobals::createLocalNamedRangeObject( OUString&
         Reference< XSpreadsheet > xSheet (xSheets->getByIndex(nTab), UNO_QUERY_THROW);
         Reference< com::sun::star::container::XNamed > xNamed(xSheet, UNO_QUERY_THROW);
         rtl::OUString aName = xNamed->getName();
-        std::cout << "sheetName: " << rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         PropertySet aSheetProps( xSheet );
         Reference< XNamedRanges > xNamedRanges( aSheetProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
         Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
