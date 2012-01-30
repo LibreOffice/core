@@ -429,6 +429,7 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, S
     pDocument->SetNoListening( true );  // noch falsche Referenzen
     ScAddress aAddr( nDestCol, nDestRow, nTab );
     ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
+    pDestCell->ResetFormulaResult(); // formula cell is interpreted later during fill.
     aCol[nDestCol].Insert(nDestRow, pDestCell);
 
     if ( bLast && pDestCell->GetMatrixFlag() )

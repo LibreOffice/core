@@ -117,6 +117,8 @@ public:
                                         mpToken->DecRef();
                                 }
 
+    inline void Reset();
+
     /** Well, guess what ... */
     inline  ScFormulaResult &   operator=( const ScFormulaResult & r );
 
@@ -216,6 +218,16 @@ public:
     inline ScMatrixFormulaCellToken* GetMatrixFormulaCellTokenNonConst();
 };
 
+inline void ScFormulaResult::Reset()
+{
+    ResetToDefaults();
+
+    if (mbToken && mpToken)
+        mpToken->DecRef();
+
+    mbToken = true;
+    mpToken = NULL;
+}
 
 inline void ScFormulaResult::ResetToDefaults()
 {

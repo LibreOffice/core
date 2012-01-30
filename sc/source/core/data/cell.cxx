@@ -2041,6 +2041,11 @@ void ScFormulaCell::MaybeInterpret()
         Interpret();
 }
 
+void ScFormulaCell::ResetFormulaResult()
+{
+    aResult.Reset();
+}
+
 EditTextObject* ScFormulaCell::CreateURLObject()
 {
     String aCellText;
