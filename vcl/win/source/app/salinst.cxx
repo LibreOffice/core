@@ -332,27 +332,10 @@ bool WinSalInstance::CheckYieldMutex()
     bool bRet = true;
     SalData*    pSalData = GetSalData();
     DWORD       nCurThreadId = GetCurrentThreadId();
-    if ( pSalData->mnAppThreadId != nCurThreadId )
+    if ( pSalData->mpFirstInstance )
     {
-        if ( pSalData->mpFirstInstance )
-        {
-            SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-            if ( pYieldMutex->mnThreadId != nCurThreadId )
-            {
-                bRet = false;
-            }
-        }
-    }
-    else
-    {
-        if ( pSalData->mpFirstInstance )
-        {
-            SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-            if ( pYieldMutex->mnThreadId != nCurThreadId )
-            {
-                bRet = false;
-            }
-        }
+        SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
+        bRet = (pYieldMutex->mnThreadId == nCurThreadId);
     }
     return bRet;
 }
