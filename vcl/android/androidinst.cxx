@@ -81,6 +81,123 @@ static rtl::OString KeyMetaStateToString(int32_t nFlags)
     return aStr.makeStringAndClear();
 }
 
+static sal_uInt16 KeyMetaStateToCode(AInputEvent *event)
+{
+    sal_uInt16 nCode = 0;
+    int32_t nFlags = AKeyEvent_getMetaState(event);
+    if (nFlags & AMETA_SHIFT_ON)
+        nCode |= KEY_SHIFT;
+    if (nFlags & AMETA_SYM_ON)
+        nCode |= KEY_MOD1;
+    if (nFlags & AMETA_ALT_ON)
+        nCode |= KEY_MOD2;
+    return nCode;
+}
+
+static sal_uInt16 KeyToCode(AInputEvent *event)
+{
+    sal_uInt16 nCode = 0;
+    switch (AKeyEvent_getKeyCode(event)) {
+#define MAP(a,b)                                 \
+    case AKEYCODE_##a: nCode = KEY_##b; break
+#define MAP_SAME(a) MAP(a,a)
+
+    MAP_SAME(HOME);
+    MAP_SAME(0); MAP_SAME(1); MAP_SAME(2); MAP_SAME(3); MAP_SAME(4);
+    MAP_SAME(5); MAP_SAME(6); MAP_SAME(7); MAP_SAME(8); MAP_SAME(9);
+
+    MAP_SAME(A); MAP_SAME(B); MAP_SAME(C); MAP_SAME(D);
+    MAP_SAME(E); MAP_SAME(F); MAP_SAME(G); MAP_SAME(H);
+    MAP_SAME(I); MAP_SAME(J); MAP_SAME(K); MAP_SAME(L);
+    MAP_SAME(M); MAP_SAME(N); MAP_SAME(O); MAP_SAME(P);
+    MAP_SAME(Q); MAP_SAME(R); MAP_SAME(S); MAP_SAME(T);
+    MAP_SAME(U); MAP_SAME(V); MAP_SAME(W); MAP_SAME(X);
+    MAP_SAME(Y); MAP_SAME(Z);
+
+    MAP_SAME(TAB); MAP_SAME(SPACE); MAP_SAME(COMMA);
+
+    MAP(ENTER,RETURN);
+    MAP(PAGE_UP, PAGEUP);
+    MAP(PAGE_DOWN, PAGEDOWN);
+    MAP(DEL, DELETE);
+    MAP(PERIOD, POINT);
+
+    case AKEYCODE_BACK: // escape ?
+    case AKEYCODE_UNKNOWN:
+    case AKEYCODE_SOFT_LEFT:
+    case AKEYCODE_SOFT_RIGHT:
+    case AKEYCODE_CALL:
+    case AKEYCODE_ENDCALL:
+    case AKEYCODE_STAR:
+    case AKEYCODE_POUND:
+    case AKEYCODE_DPAD_UP:
+    case AKEYCODE_DPAD_DOWN:
+    case AKEYCODE_DPAD_LEFT:
+    case AKEYCODE_DPAD_RIGHT:
+    case AKEYCODE_DPAD_CENTER:
+    case AKEYCODE_VOLUME_UP:
+    case AKEYCODE_VOLUME_DOWN:
+    case AKEYCODE_POWER:
+    case AKEYCODE_CAMERA:
+    case AKEYCODE_CLEAR:
+    case AKEYCODE_ALT_LEFT:
+    case AKEYCODE_ALT_RIGHT:
+    case AKEYCODE_SHIFT_LEFT:
+    case AKEYCODE_SHIFT_RIGHT:
+    case AKEYCODE_SYM:
+    case AKEYCODE_EXPLORER:
+    case AKEYCODE_ENVELOPE:
+    case AKEYCODE_GRAVE:
+    case AKEYCODE_MINUS:
+    case AKEYCODE_EQUALS:
+    case AKEYCODE_LEFT_BRACKET:
+    case AKEYCODE_RIGHT_BRACKET:
+    case AKEYCODE_BACKSLASH:
+    case AKEYCODE_SEMICOLON:
+    case AKEYCODE_APOSTROPHE:
+    case AKEYCODE_SLASH:
+    case AKEYCODE_AT:
+    case AKEYCODE_NUM:
+    case AKEYCODE_HEADSETHOOK:
+    case AKEYCODE_FOCUS: // not widget, but camera focus
+    case AKEYCODE_PLUS:
+    case AKEYCODE_MENU:
+    case AKEYCODE_NOTIFICATION:
+    case AKEYCODE_SEARCH:
+    case AKEYCODE_MEDIA_PLAY_PAUSE:
+    case AKEYCODE_MEDIA_STOP:
+    case AKEYCODE_MEDIA_NEXT:
+    case AKEYCODE_MEDIA_PREVIOUS:
+    case AKEYCODE_MEDIA_REWIND:
+    case AKEYCODE_MEDIA_FAST_FORWARD:
+    case AKEYCODE_MUTE:
+    case AKEYCODE_PICTSYMBOLS:
+    case AKEYCODE_SWITCH_CHARSET:
+    case AKEYCODE_BUTTON_A:
+    case AKEYCODE_BUTTON_B:
+    case AKEYCODE_BUTTON_C:
+    case AKEYCODE_BUTTON_X:
+    case AKEYCODE_BUTTON_Y:
+    case AKEYCODE_BUTTON_Z:
+    case AKEYCODE_BUTTON_L1:
+    case AKEYCODE_BUTTON_R1:
+    case AKEYCODE_BUTTON_L2:
+    case AKEYCODE_BUTTON_R2:
+    case AKEYCODE_BUTTON_THUMBL:
+    case AKEYCODE_BUTTON_THUMBR:
+    case AKEYCODE_BUTTON_START:
+    case AKEYCODE_BUTTON_SELECT:
+    case AKEYCODE_BUTTON_MODE:
+        fprintf (stderr, "un-mapped keycode %d\n", nCode);
+        nCode = 0;
+        break;
+#undef MAP_SAME
+#undef MAP
+    }
+    fprintf (stderr, "mapped %d -> %d\n", AKeyEvent_getKeyCode(event), nCode);
+    return nCode;
+}
+
 static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const basebmp::BitmapDeviceSharedPtr& aDev,
                                     const ARect &rSrcRect,
@@ -174,8 +291,8 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
         int32_t *p = (int32_t *)aOutBuffer.bits;
         for (int32_t y = 0; y < aOutBuffer.height; y++)
         {
-            for (int32_t x = 0; x < aOutBuffer.stride / 2; x++)
-                *p++ = (y << 24) + x;
+            for (int32_t x = 0; x < aOutBuffer.stride; x++)
+                *p++ = (y << 24) + (x << 10) + 0xff ;
         }
 #endif
 
@@ -199,7 +316,12 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     ANativeWindow_unlockAndPost(pWindow);
 
     fprintf (stderr, "done render!\n");
-    mbQueueReDraw = true; // keep at it ! false;
+    mbQueueReDraw = false;
+}
+
+SalFrame *AndroidSalInstance::getFocusFrame() const
+{
+    return !getFrames().empty() ? *getFrames().begin() : NULL;
 }
 
 static const char *app_cmd_name(int cmd)
@@ -280,38 +402,60 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 
 int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
 {
-        fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
-                 app, event,
-                 AInputEvent_getType(event),
-                 AInputEvent_getSource(event),
-                 AInputEvent_getDeviceId(event));
+    bool bHandled;
+    fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
+             app, event,
+             AInputEvent_getType(event),
+             AInputEvent_getSource(event),
+             AInputEvent_getDeviceId(event));
 
-        switch (AInputEvent_getType(event))
-        {
-        case AINPUT_EVENT_TYPE_KEY:
-        {
-            int32_t nAction = AKeyEvent_getAction(event);
-            fprintf (stderr, "key event keycode %d '%s' %s\n",
-                     AKeyEvent_getKeyCode(event),
-                     nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
-                     nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
-                     KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr());
-            break;
-        }
-        case AINPUT_EVENT_TYPE_MOTION:
-        {
-            fprintf (stderr, "motion event %d %g %g %s\n",
-                     AMotionEvent_getAction(event),
-                     AMotionEvent_getXOffset(event),
-                     AMotionEvent_getYOffset(event),
-                     MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
-            break;
-        }
-        default:
-            fprintf (stderr, "unknown event type %p %d\n",
-                     event, AInputEvent_getType(event));
-        }
-        return 1; // handled 0 for not ...
+    switch (AInputEvent_getType(event))
+    {
+    case AINPUT_EVENT_TYPE_KEY:
+    {
+        int32_t nAction = AKeyEvent_getAction(event);
+        fprintf (stderr, "key event keycode %d '%s' %s\n",
+                 AKeyEvent_getKeyCode(event),
+                 nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
+                 nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
+                 KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr());
+
+        // FIXME: the whole SALEVENT_KEYMODCHANGE stuff is going to be interesting
+        // can we really emit that ? no input method madness required though.
+        sal_uInt16 nEvent;
+        SalKeyEvent aEvent;
+        int64_t nNsTime = AKeyEvent_getEventTime(event);
+
+        nEvent = (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_UP ?
+                  SALEVENT_KEYUP : SALEVENT_KEYINPUT);
+        aEvent.mnTime = nNsTime / (1000 * 1000);
+        aEvent.mnCode = KeyToCode(event);
+        aEvent.mnCode |= KeyMetaStateToCode(event);
+        aEvent.mnCharCode = 'a'; // the unicode of it all ...
+        aEvent.mnRepeat = AKeyEvent_getRepeatCount(event);
+
+        SalFrame *pFocus = getFocusFrame();
+        if (pFocus)
+            bHandled = pFocus->CallCallback( nEvent, &aEvent );
+        else
+            fprintf (stderr, "no focused frame to emit event on\n");
+        break;
+    }
+    case AINPUT_EVENT_TYPE_MOTION:
+    {
+        fprintf (stderr, "motion event %d %g %g %s\n",
+                 AMotionEvent_getAction(event),
+                 AMotionEvent_getXOffset(event),
+                 AMotionEvent_getYOffset(event),
+                 MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
+        break;
+    }
+    default:
+        fprintf (stderr, "unknown input event type %p %d\n",
+                 event, AInputEvent_getType(event));
+        break;
+    }
+    return bHandled ? 1 : 0;
 }
 
 AndroidSalInstance *AndroidSalInstance::getInstance()
