@@ -70,13 +70,13 @@ public:
         , const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
-    static ByteString makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in );
+    static rtl::OString makeAbsolutePath(const rtl::OString& sHelpFile , const rtl::OString& rRoot_in);
 
     ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
     bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
 
     void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
-    void MakeDir( const ByteString& sPath );
+    void MakeDir(const rtl::OString& rPath);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

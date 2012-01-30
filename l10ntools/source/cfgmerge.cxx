@@ -38,8 +38,8 @@
 
 using comphelper::string::getToken;
 
-extern "C" { int yyerror( char * ); }
-extern "C" { int YYWarning( char * ); }
+extern "C" { int yyerror(const char *); }
+extern "C" { int YYWarning(const char *); }
 
 // defines to parse command line
 #define STATE_NON       0x0001
@@ -63,7 +63,7 @@ ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
 ByteString sActFileName;
-ByteString sFullEntry;
+rtl::OString sFullEntry;
 rtl::OString sOutputFile;
 rtl::OString sMergeSrc;
 String sUsedTempFile;
@@ -240,8 +240,8 @@ extern FILE *GetCfgFile()
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-//            printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
-            sActFileName = sFullEntry.Copy( sPrjEntry.getLength() + 1 );
+//            printf("sFullEntry = %s\n",sFullEntry.getStr());
+            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
@@ -552,34 +552,29 @@ int CfgParser::Execute( int nToken, char * pToken )
     return ExecuteAnalyzedToken( nToken, pToken );
 }
 
-
-/*****************************************************************************/
-void CfgParser::Error( const ByteString &rError )
-/*****************************************************************************/
+void CfgParser::Error(const rtl::OString& rError)
 {
-    yyerror(( char * ) rError.GetBuffer());
+    yyerror(rError.getStr());
 }
-
 
 //
 // class CfgOutputParser
 //
 
-/*****************************************************************************/
-CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
-/*****************************************************************************/
+CfgOutputParser::CfgOutputParser(const rtl::OString &rOutputFile)
 {
     pOutputStream =
         new SvFileStream(
-            String( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
+            rtl::OStringToOUString(rOutputFile, RTL_TEXTENCODING_ASCII_US),
             STREAM_STD_WRITE | STREAM_TRUNC
         );
     pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
 
-    if ( !pOutputStream->IsOpen()) {
-        ByteString sError( "ERROR: Unable to open output file: " );
-        sError += rOutputFile;
-        Error( sError );
+    if ( !pOutputStream->IsOpen())
+    {
+        rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("ERROR: Unable to open output file: "));
+        sError.append(rOutputFile);
+        Error(sError.makeStringAndClear());
         delete pOutputStream;
         pOutputStream = NULL;
         exit( -13 );

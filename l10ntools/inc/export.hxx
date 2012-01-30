@@ -306,23 +306,23 @@ public:
     static void SetLanguages( std::vector<rtl::OString> val );
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
     static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
-    static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
-    static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
+    static void RemoveUTF8ByteOrderMarkerFromFile(const rtl::OString &rFilename);
+    static bool fileHasUTF8ByteOrderMarker(const rtl::OString &rString);
     static void QuotHTML( ByteString &rString );
-    static bool CopyFile( const ByteString& source , const ByteString& dest );
+    static bool CopyFile(const rtl::OString& rSource , const rtl::OString& rDest);
 
     static void UnquotHTML( ByteString &rString );
 
     static const char* GetEnv( const char *pVar );
 
-    static bool isSourceLanguage( const ByteString &sLanguage );
-    static bool isAllowed( const ByteString &sLanguage );
+    static bool isSourceLanguage(const rtl::OString &rLanguage);
+    static bool isAllowed(const rtl::OString &rLanguage);
 
     static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
-    static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
+    static rtl::OString getRandomName(const rtl::OString& rPrefix, const rtl::OString & sPostfix);
     static void getCurrentDir( std::string& dir );
 
-    static ByteString GetTimeStamp();
+    static rtl::OString GetTimeStamp();
     static sal_Bool ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
@@ -338,19 +338,19 @@ private:
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const ByteString &rTyp, sal_Bool bCreateNew = sal_False );
+                        const rtl::OString &rTyp, sal_Bool bCreateNew = sal_False );
 
     ByteString MergePairedList( ByteString& sLine , ByteString& sText );
 
-    ByteString FullId();                    // creates cur. GID
+    rtl::OString FullId();                    // creates cur. GID
 
-    ByteString GetPairedListID      ( const ByteString& sText );
-    ByteString GetPairedListString  ( const ByteString& sText );
-    ByteString StripList    ( const ByteString& sText );
+    rtl::OString GetPairedListID(const rtl::OString & rText);
+    rtl::OString GetPairedListString(const rtl::OString& rText);
+    rtl::OString StripList(const rtl::OString& rText);
 
-    void InsertListEntry( const ByteString &rText, const ByteString &rLine );
+    void InsertListEntry(const rtl::OString &rText, const rtl::OString &rLine);
     void CleanValue( ByteString &rValue );
-    ByteString GetText( const ByteString &rSource, int nToken );
+    rtl::OString GetText(const rtl::OString &rSource, int nToken);
 
     sal_Bool PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
         rtl::OString &rLangIndex, ResData *pResData);
@@ -358,17 +358,17 @@ private:
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText );
 
-      void WriteToMerged( const ByteString &rText , bool bSDFContent );
+    void WriteToMerged(const rtl::OString &rText , bool bSDFContent);
     void SetChildWithText();
 
     void CutComment( ByteString &rText );
 
 public:
-    Export( const ByteString &rOutput, sal_Bool bWrite,
-            const ByteString &rPrj, const ByteString &rPrjRoot , const ByteString& rFile );
-    Export( const ByteString &rOutput, sal_Bool bWrite,
-            const ByteString &rPrj, const ByteString &rPrjRoot,
-            const ByteString &rMergeSource , const ByteString& rFile );
+    Export(const rtl::OString &rOutput, sal_Bool bWrite,
+            const rtl::OString &rPrj, const rtl::OString &rPrjRoot, const rtl::OString& rFile);
+    Export(const rtl::OString &rOutput, sal_Bool bWrite,
+            const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
+            const rtl::OString &rMergeSource, const rtl::OString& rFile );
     ~Export();
 
     void Init();
@@ -401,23 +401,19 @@ private:
 public:
     PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
     rtl::OString Dump();
-    void InsertEntry(
-                    const ByteString &nId ,
-                    const ByteString &rText,
-                    const ByteString &rQuickHelpText,
-                    const ByteString &rTitle
-                    )
-        {
+    void InsertEntry(const rtl::OString &rId, const rtl::OString &rText,
+        const rtl::OString &rQuickHelpText, const rtl::OString &rTitle)
+    {
 
-            sText[ nId ] = rText;
-            bTextFirst[ nId ] = true;
-            sQuickHelpText[ nId ] = rQuickHelpText;
-            bQuickHelpTextFirst[ nId ] = true;
-            sTitle[ nId ] = rTitle;
-            bTitleFirst[ nId ] = true;
-        }
-     sal_Bool GetText( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
-     sal_Bool GetTransex3Text( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
+        sText[ rId ] = rText;
+        bTextFirst[ rId ] = true;
+        sQuickHelpText[ rId ] = rQuickHelpText;
+        bQuickHelpTextFirst[ rId ] = true;
+        sTitle[ rId ] = rTitle;
+        bTitleFirst[ rId ] = true;
+    }
+    sal_Bool GetText( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
+    sal_Bool GetTransex3Text( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
 
 };
 
@@ -496,9 +492,12 @@ class MergeDataFile
 class QueueEntry
 {
 public:
-    QueueEntry( int nTypVal , ByteString sLineVal ): nTyp( nTypVal ) , sLine( sLineVal ){};
+    QueueEntry(int nTypVal, const rtl::OString &rLineVal)
+        : nTyp(nTypVal), sLine(rLineVal)
+    {
+    }
     int nTyp;
-    ByteString sLine;
+    rtl::OString sLine;
 };
 
 class ParserQueue

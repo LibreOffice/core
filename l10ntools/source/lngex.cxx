@@ -45,16 +45,16 @@
 #define STATE_LANGUAGES 0x000B
 
 // set of global variables
-ByteString sInputFile;
+rtl::OString sInputFile;
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
 sal_Bool bErrorLog;
 sal_Bool bUTF8;
 sal_Bool bULF; // ULF = Unicode Language File
-ByteString sPrj;
-ByteString sPrjRoot;
-ByteString sOutputFile;
-ByteString sMergeSrc;
+rtl::OString sPrj;
+rtl::OString sPrjRoot;
+rtl::OString sOutputFile;
+rtl::OString sMergeSrc;
 
 /*****************************************************************************/
 sal_Bool ParseCommandLine( int argc, char* argv[])
@@ -74,31 +74,26 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        ByteString sSwitch( argv[ i ] );
-        sSwitch.ToUpperAscii();
-        if ( sSwitch == "-I" ) {
+        rtl::OString sSwitch(rtl::OString(argv[i]).toAsciiUpperCase());
+        if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-I")))
             nState = STATE_INPUT; // next tokens specifies source files
-        }
-        else if ( sSwitch  == "-O" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-O")))
             nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( sSwitch == "-P" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-P")))
             nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if ( sSwitch == "-R" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-R")))
             nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( sSwitch == "-M" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-M")))
             nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if ( sSwitch == "-E" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-E")))
+        {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
         }
-        else if ( sSwitch == "-L" ) {
+        else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-L")))
             nState = STATE_LANGUAGES;
-        }
-        else {
+        else
+        {
             switch ( nState ) {
                 case STATE_NON: {
                     return sal_False;   // no valid command line
@@ -173,7 +168,8 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
 
-    if ( sOutputFile.Len()) {
+    if (!sOutputFile.isEmpty())
+    {
         LngParser aParser( sInputFile, bUTF8, bULF );
         if ( bMergeMode )
             aParser.Merge(sMergeSrc, sOutputFile);

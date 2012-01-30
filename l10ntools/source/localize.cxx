@@ -204,7 +204,7 @@ private:
         const ByteString &rParameter,
         const ByteString &rCollectMode
     );
-    void WorkOnDirectory( const ByteString &rDirectory );
+    void WorkOnDirectory(const rtl::OString &rDirectory);
 public:
     SourceTreeLocalizer(const ByteString &rRoot, bool skip_links);
     ~SourceTreeLocalizer();
@@ -212,7 +212,7 @@ public:
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
     int getFileCnt();
-    sal_Bool Extract( const ByteString &rDestinationFile );
+    sal_Bool Extract(const rtl::OString &rDestinationFile);
     int GetFileCnt();
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
@@ -478,11 +478,9 @@ void SourceTreeLocalizer::WorkOnFileType(
     }
 }
 
-/*****************************************************************************/
-void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
-/*****************************************************************************/
+void SourceTreeLocalizer::WorkOnDirectory(const rtl::OString &rDirectory)
 {
-    //printf("Working on Directory %s\n",rDirectory.GetBuffer());
+    //printf("Working on Directory %s\n",rDirectory.getStr());
     sal_uLong nIndex = 0;
     ByteString sExtension( ExeTable[ nIndex ][ 0 ] );
     ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
@@ -507,32 +505,32 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
     }
 }
 
-void SourceTreeLocalizer::OnExecuteDirectory( const rtl::OUString &aDirectory )
+void SourceTreeLocalizer::OnExecuteDirectory(const rtl::OUString &aDirectory)
 {
-    ByteString rDirectory( rtl::OUStringToOString( aDirectory , RTL_TEXTENCODING_UTF8 , aDirectory.getLength() ) ) ;
-    if ( nMode == LOCALIZE_NONE ){
-    }
-    else
+    if ( nMode != LOCALIZE_NONE )
+    {
+        rtl::OString rDirectory(rtl::OUStringToOString(aDirectory, RTL_TEXTENCODING_UTF8));
         WorkOnDirectory( rDirectory );
+    }
 }
 
-/*****************************************************************************/
-sal_Bool SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
-/*****************************************************************************/
+sal_Bool SourceTreeLocalizer::Extract(const rtl::OString &rDestinationFile)
 {
     nMode = LOCALIZE_EXTRACT;
 
-    aSDF.Open( String( rDestinationFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_STD_WRITE );
+    aSDF.Open(rtl::OStringToOUString(rDestinationFile, RTL_TEXTENCODING_ASCII_US) , STREAM_STD_WRITE);
     aSDF.SetLineDelimiter( LINEEND_CRLF );
 
     sal_Bool bReturn = aSDF.IsOpen();
-    if ( bReturn ) {
+    if ( bReturn )
+    {
         aSDF.Seek( STREAM_SEEK_TO_END );
         bReturn = StartExecute();
         aSDF.Close();
     }
-    else{
-        printf("ERROR: Can't create file %s\n", rDestinationFile.GetBuffer() );
+    else
+    {
+        printf("ERROR: Can't create file %s\n", rDestinationFile.getStr());
     }
     nMode = LOCALIZE_NONE;
     aSDF.Close();
@@ -580,20 +578,18 @@ int _cdecl main( int argc, char *argv[] )
 
     bool bSkipLinks = false;
 
-    ByteString sLanguages;
-    ByteString sFileName;
+    rtl::OString sFileName;
 
-    sLanguages = ByteString( "en-US" );
+    rtl::OString sLanguages(RTL_CONSTASCII_STRINGPARAM("en-US"));
 
-    ByteString sSwitch( argv[ 1 ] );
-    sSwitch.ToUpperAscii();
+    rtl::OString sSwitch(rtl::OString(argv[1]).toAsciiUpperCase());
 
-    if ( ( argc == 3 ) && sSwitch.Equals( "-F" ) )
-        sFileName = ByteString( argv[ 2 ] );
+    if ( ( argc == 3 ) && sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-F")) )
+        sFileName = rtl::OString( argv[ 2 ] );
     else
         return Error();
 
-    DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry(rtl::OStringToOUString(sFileName, RTL_TEXTENCODING_ASCII_US));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
     rtl::OString sFileABS(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));

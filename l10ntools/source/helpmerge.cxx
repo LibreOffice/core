@@ -216,9 +216,9 @@ bool HelpParser::CreateSDF(
     return sal_True;
 }
 
-ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in )
+rtl::OString HelpParser::makeAbsolutePath(const rtl::OString& sHelpFile, const rtl::OString& rRoot_in)
 {
-    DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry(rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
@@ -357,7 +357,8 @@ bool HelpParser::Merge(
         ByteString sFilepath;
         if( bISO )  sFilepath = GetOutpath( rPathX , sCur , rPathY );
         else        sFilepath = rPathX;
-        if( bCreateDir ) MakeDir( sFilepath );
+        if( bCreateDir )
+            MakeDir(sFilepath);
 
         XMLFile* file = new XMLFile( *xmlfile );
         sFilepath.Append( sHelpFile );
@@ -408,9 +409,9 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     ByteString sTargetFile( sPath );
     ByteString sTempFileCopy;
 
-    static const ByteString INPATH = Export::GetEnv( "INPATH" );
-    Export::getRandomName( sPath , sTempFile , INPATH );
-    Export::getRandomName( sPath , sTempFileCopy , INPATH );
+    static const rtl::OString INPATH = Export::GetEnv("INPATH");
+    sTempFile = Export::getRandomName(sPath, INPATH);
+    sTempFileCopy = Export::getRandomName(sPath, INPATH);
     // Write in the temp file
     bool hasNoError = file->Write ( sTempFile );
     if( !hasNoError )
@@ -517,11 +518,11 @@ ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& 
     return testpath;
 }
 
-void HelpParser::MakeDir( const ByteString& sPath )
+void HelpParser::MakeDir(const rtl::OString& rPath)
 {
-    ByteString sTPath( sPath );
-    rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-    sTPath.SearchAndReplaceAll( sDelimiter , rtl::OString('/') );
+    rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(),
+        RTL_TEXTENCODING_ASCII_US));
+    rtl::OString sTPath(comphelper::string::replace(rPath, sDelimiter, rtl::OString('/')));
     sal_uInt16 cnt = comphelper::string::getTokenCount(sTPath, '/');
     rtl::OStringBuffer sCreateDir;
     for (sal_uInt16 i = 0; i < cnt; ++i)

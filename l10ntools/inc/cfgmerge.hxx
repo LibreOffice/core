@@ -123,7 +123,7 @@ protected:
 
     virtual void Output(const rtl::OString & rOutput)=0;
 
-    void Error( const ByteString &rError );
+    void Error(const rtl::OString &rError);
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
@@ -151,7 +151,7 @@ class CfgOutputParser : public CfgParser
 protected:
     SvFileStream *pOutputStream;
 public:
-    CfgOutputParser ( const ByteString &rOutputFile );
+    CfgOutputParser(const rtl::OString &rOutputFile);
     virtual ~CfgOutputParser();
 };
 

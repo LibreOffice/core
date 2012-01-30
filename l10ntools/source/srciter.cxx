@@ -29,6 +29,7 @@
 
 #include "srciter.hxx"
 #include <stdio.h>
+#include <rtl/strbuf.hxx>
 #include <tools/fsys.hxx>
 
 //
@@ -83,16 +84,16 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
         rtl::OUString sDirNameTmp = aDirectory.getFullName();
-        ByteString sDirNameTmpB( rtl::OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+        rtl::OStringBuffer sDirNameTmpB( rtl::OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
 #ifdef WNT
-        sDirNameTmpB.Append( ByteString("\\no_localization") );
+        sDirNameTmpB.append(RTL_CONSTASCII_STRINGPARAM("\\no_localization"));
 #else
-        sDirNameTmpB.Append( ByteString("/no_localization") );
+        sDirNameTmpB.append(RTL_CONSTASCII_STRINGPARAM("/no_localization"));
 #endif
         //printf("**** %s \n", OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
-        DirEntry aDE( sDirNameTmpB.GetBuffer() );
+        DirEntry aDE(sDirNameTmpB.getStr());
         if( aDE.Exists() )
         {
             //printf("#### no_localization file found ... skipping");

@@ -95,9 +95,10 @@ rtl::OString Export::sForcedLanguages;
 void Export::DumpExportList(const rtl::OString& rListName, ExportList& aList)
 {
     printf( "%s\n", rListName.getStr() );
-    ByteString l("");
+    rtl::OString l;
     ExportListEntry* aEntry;
-    for( unsigned int x = 0; x < aList.size() ; x++ ){
+    for( unsigned int x = 0; x < aList.size() ; ++x )
+    {
         aEntry = (ExportListEntry*) aList[ x ];
         Export::DumpMap( l , *aEntry );
     }
@@ -205,9 +206,9 @@ bool Export::hasUTF8ByteOrderMarker( const rtl::OString &rString )
            rString[1] == '\xBB' && rString[2] == '\xBF' ;
 }
 
-bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString )
+bool Export::fileHasUTF8ByteOrderMarker(const rtl::OString &rString)
 {
-    SvFileStream aFileIn( String( rString , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
+    SvFileStream aFileIn(rtl::OStringToOUString(rString, RTL_TEXTENCODING_ASCII_US), STREAM_READ);
     rtl::OString sLine;
     if( !aFileIn.IsEof() )
     {
@@ -220,9 +221,9 @@ bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString )
     return false;
 }
 
-void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename )
+void Export::RemoveUTF8ByteOrderMarkerFromFile(const rtl::OString &rFilename)
 {
-    SvFileStream aFileIn( String( rFilename , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
+    SvFileStream aFileIn(rtl::OStringToOUString(rFilename , RTL_TEXTENCODING_ASCII_US) , STREAM_READ );
     rtl::OString sLine;
     if( !aFileIn.IsEof() )
     {
@@ -244,31 +245,31 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename )
             }
             if( aFileIn.IsOpen() ) aFileIn.Close();
             if( aNewFile.IsOpen() ) aNewFile.Close();
-            DirEntry aEntry( rFilename.GetBuffer() );
+            DirEntry aEntry( rFilename.getStr() );
             aEntry.Kill();
-            DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.GetBuffer() ) );
+            DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.getStr() ) );
         }
     }
     if( aFileIn.IsOpen() )
         aFileIn.Close();
 }
 
-bool Export::CopyFile( const ByteString& source , const ByteString& dest )
+bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
 {
     const int BUFFERSIZE    = 8192;
     char buf[ BUFFERSIZE ];
 
-    FILE* IN_FILE = fopen( source.GetBuffer() , "r" );
+    FILE* IN_FILE = fopen( rSource.getStr() , "r" );
     if( IN_FILE == NULL )
     {
-        cerr << "Export::CopyFile WARNING: Could not open " << source.GetBuffer() << "\n";
+        cerr << "Export::CopyFile WARNING: Could not open " << rSource.getStr() << "\n";
         return false;
     }
 
-    FILE* OUT_FILE = fopen( dest.GetBuffer() , "w" );
+    FILE* OUT_FILE = fopen( rDest.getStr() , "w" );
     if( OUT_FILE == NULL )
     {
-        cerr << "Export::CopyFile WARNING: Could not open/create " << dest.GetBuffer() << " for writing\n";
+        cerr << "Export::CopyFile WARNING: Could not open/create " << rDest.getStr() << " for writing\n";
         fclose( IN_FILE );
         return false;
     }
@@ -277,7 +278,7 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
     {
         if( fputs( buf , OUT_FILE ) == EOF )
         {
-            cerr << "Export::CopyFile WARNING: Write problems " << source.GetBuffer() << "\n";
+            cerr << "Export::CopyFile WARNING: Write problems " << rSource.getStr() << "\n";
             fclose( IN_FILE );
             fclose( OUT_FILE );
             return false;
@@ -285,7 +286,7 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
     }
     if( ferror( IN_FILE ) )
     {
-        cerr << "Export::CopyFile WARNING: Read problems " << dest.GetBuffer() << "\n";
+        cerr << "Export::CopyFile WARNING: Read problems " << rDest.getStr() << "\n";
         fclose( IN_FILE );
         fclose( OUT_FILE );
         return false;
@@ -337,12 +338,15 @@ void Export::UnquotHTML( ByteString &rString )
     }
     rString = sReturn.makeStringAndClear();
 }
-bool Export::isSourceLanguage( const ByteString &sLanguage )
+
+bool Export::isSourceLanguage(const rtl::OString &rLanguage)
 {
-    return !isAllowed( sLanguage );
+    return !isAllowed(rLanguage);
 }
-bool Export::isAllowed( const ByteString &sLanguage ){
-    return ! ( sLanguage.EqualsIgnoreCaseAscii("en-US") );
+
+bool Export::isAllowed(const rtl::OString &rLanguage)
+{
+    return !rLanguage.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US"));
 }
 
 bool Export::isInitialized = false;
@@ -392,9 +396,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     while ( nIndex >= 0 );
 }
 
-/*****************************************************************************/
-ByteString Export::GetTimeStamp()
-/*****************************************************************************/
+rtl::OString Export::GetTimeStamp()
 {
 //  return "xx.xx.xx";
     char buf[20];
@@ -402,7 +404,7 @@ ByteString Export::GetTimeStamp()
 
     snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date( Date::SYSTEM).GetDate()),
         int(aTime.GetHour()), int(aTime.GetMin()), int(aTime.GetSec()));
-    return ByteString(buf);
+    return rtl::OString(buf);
 }
 
 /*****************************************************************************/
@@ -479,11 +481,12 @@ void Export::getCurrentDir( string& dir )
 
 #define RAND_NAME_LENGTH 6
 
-void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix )
+rtl::OString Export::getRandomName(const rtl::OString& rPrefix, const rtl::OString& rPostfix)
 {
     static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     static const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
-    sRandStr.Append( sPrefix );
+
+    rtl::OStringBuffer sRandStr(rPrefix);
 
     static sal_uInt64 value;
     char     buffer[RAND_NAME_LENGTH];
@@ -501,14 +504,15 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
 
     v = value;
 
-    for (i = 0; i < RAND_NAME_LENGTH; i++)
+    for (i = 0; i < RAND_NAME_LENGTH; ++i)
     {
         buffer[i] = LETTERS[v % COUNT_OF_LETTERS];
         v        /= COUNT_OF_LETTERS;
     }
 
-    sRandStr.Append( buffer , RAND_NAME_LENGTH );
-    sRandStr.Append( sPostfix );
+    sRandStr.append(buffer , RAND_NAME_LENGTH);
+    sRandStr.append(rPostfix);
+    return sRandStr.makeStringAndClear();
 }
 
 /*****************************************************************************/

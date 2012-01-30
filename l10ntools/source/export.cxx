@@ -297,12 +297,11 @@ int Parse( int nTyp, const char *pTokenText ){
 void Close(){
     pExport->pParseQueue->Close();
 }
-/*****************************************************************************/
+
 int WorkOnTokenSet( int nTyp, char *pTokenText )
-/*****************************************************************************/
 {
 
-    pExport->pParseQueue->Push( QueueEntry( nTyp , ByteString( pTokenText ) ) );
+    pExport->pParseQueue->Push( QueueEntry( nTyp , rtl::OString(pTokenText) ) );
     return 1;
 }
 
@@ -392,9 +391,9 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 // class Export
 //
 
-Export::Export(const ByteString &rOutput, sal_Bool bWrite,
-    const ByteString &rPrj, const ByteString &rPrjRoot,
-    const ByteString& rFile)
+Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
+    const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
+    const rtl::OString& rFile)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -425,7 +424,7 @@ Export::Export(const ByteString &rOutput, sal_Bool bWrite,
     if ( bEnableExport ) {
         aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
         if( !aOutput.IsOpen() ) {
-            fprintf(stderr, "ERROR : Can't open file %s\n",rOutput.GetBuffer());
+            fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
             exit ( -1 );
         }
         aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
@@ -434,11 +433,9 @@ Export::Export(const ByteString &rOutput, sal_Bool bWrite,
     }
 }
 
-/*****************************************************************************/
-Export::Export( const ByteString &rOutput, sal_Bool bWrite,
-                const ByteString &rPrj, const ByteString &rPrjRoot,
-                const ByteString &rMergeSource , const ByteString& rFile )
-/*****************************************************************************/
+Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
+                const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
+                const rtl::OString &rMergeSource, const rtl::OString& rFile)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -761,7 +758,7 @@ int Export::Execute( int nToken, const char * pToken )
             sKey = sKey.toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
             {
-                ByteString sId(comphelper::string::remove(sValue, '\t'));
+                rtl::OString sId(comphelper::string::remove(sValue, '\t'));
                 sId = comphelper::string::remove(sId, ' ');
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
@@ -1286,18 +1283,22 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
     }
     return sal_True;
 }
-ByteString Export::GetPairedListID( const ByteString& sText ){
+
+rtl::OString Export::GetPairedListID(const rtl::OString& rText)
+{
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sIdent = getToken(sText, 1, ';');
+    ByteString sIdent = getToken(rText, 1, ';');
     sIdent.ToUpperAscii();
     while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
     sIdent = comphelper::string::stripEnd(sIdent, ' ');
     sIdent = comphelper::string::stripStart(sIdent, ' ');
     return sIdent;
 }
-ByteString Export::GetPairedListString( const ByteString& sText ){
+
+rtl::OString Export::GetPairedListString(const rtl::OString& rText)
+{
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sString = getToken(sText, 0, ';');
+    ByteString sString = getToken(rText, 0, ';');
     while( sString.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
     sString = comphelper::string::stripEnd(sString, ' ');
     ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
@@ -1306,15 +1307,15 @@ ByteString Export::GetPairedListString( const ByteString& sText ){
     sString = comphelper::string::stripStart(sString, ' ');
     return sString;
 }
-ByteString Export::StripList( const ByteString& sText ){
-    ByteString s1 = sText.Copy( sText.Search( '\"' ) + 1 );
-    return s1.Copy( 0 , s1.SearchBackward( '\"' ) );
+
+rtl::OString Export::StripList(const rtl::OString & rText)
+{
+    rtl::OString s1 = rText.copy( rText.indexOf('\"') + 1);
+    return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
-/*****************************************************************************/
-sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const ByteString &rTyp, sal_Bool bCreateNew )
-/*****************************************************************************/
+sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
+    const rtl::OString &rTyp, sal_Bool bCreateNew)
 {
     ByteString sGID = pResData->sGId;
     if ( !sGID.Len())
@@ -1342,7 +1343,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                     ByteString sText((*pEntry)[ SOURCE_LANGUAGE ] );
 
                     // Strip PairList Line String
-                    if( rTyp.EqualsIgnoreCaseAscii("pairedlist") )
+                    if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
                     {
                         sLID = GetPairedListID( sText );
                         if (!(*pEntry)[ sCur ].isEmpty())
@@ -1356,20 +1357,21 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                             sText = "\"";
                     }
 
-                    ByteString sOutput( sProject ); sOutput += "\t";
+                    rtl::OStringBuffer sOutput(sProject);
+                    sOutput.append('\t');
                     if ( sRoot.Len())
-                        sOutput += sActFileName;
-                    sOutput += "\t0\t";
-                    sOutput += rTyp; sOutput += "\t";
-                    sOutput += sGID; sOutput += "\t";
-                    sOutput += sLID; sOutput += "\t\t";
-                    sOutput += pResData->sPForm; sOutput += "\t0\t";
-                    sOutput += sCur; sOutput += "\t";
+                        sOutput.append(sActFileName);
+                    sOutput.append("\t0\t");
+                    sOutput.append(rTyp).append('\t');
+                    sOutput.append(sGID).append('\t');
+                    sOutput.append(sLID).append("\t\t");
+                    sOutput.append(pResData->sPForm).append("\t0\t");
+                    sOutput.append(sCur).append('\t');
 
-                    sOutput += sText; sOutput += "\t\t\t\t";
-                    sOutput += sTimeStamp;
+                    sOutput.append(sText).append("\t\t\t\t");
+                    sOutput.append(sTimeStamp);
 
-                    aOutput.WriteLine( sOutput );
+                    aOutput.WriteLine(sOutput.makeStringAndClear());
 
                 }
             }
@@ -1383,34 +1385,30 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
     return sal_True;
 }
 
-/*****************************************************************************/
-ByteString Export::FullId()
-/*****************************************************************************/
+rtl::OString Export::FullId()
 {
-    ByteString sFull;
-    if ( nLevel > 1 ) {
-        sFull = aResStack[ 0 ]->sId;
-        for ( size_t i = 1; i < nLevel - 1; i++ ) {
-            ByteString sToAdd = aResStack[ i ]->sId;
-            if ( sToAdd.Len()) {
-                sFull += ".";
-                sFull += sToAdd;
-            }
+    rtl::OStringBuffer sFull;
+    if ( nLevel > 1 )
+    {
+        sFull.append(aResStack[ 0 ]->sId);
+        for ( size_t i = 1; i < nLevel - 1; ++i )
+        {
+            rtl::OString sToAdd = aResStack[ i ]->sId;
+            if (!sToAdd.isEmpty())
+                sFull.append('.').append(sToAdd);
         }
     }
-    if ( sFull.Len() > 255 )
+    if (sFull.getLength() > 255)
     {
         rtl::OString sError(RTL_CONSTASCII_STRINGPARAM("GroupId > 255 chars"));
-        printf("GroupID = %s\n", sFull.GetBuffer());
+        printf("GroupID = %s\n", sFull.getStr());
         yyerror(sError.getStr());
     }
 
-    return sFull;
+    return sFull.makeStringAndClear();
 }
 
-/*****************************************************************************/
-void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
-/*****************************************************************************/
+void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLine)
 {
     ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
 
@@ -1509,13 +1507,11 @@ void Export::CleanValue( ByteString &rValue )
     }
 }
 
-
-/*****************************************************************************/
-ByteString Export::GetText( const ByteString &rSource, int nToken )
-/*****************************************************************************/
 #define TXT_STATE_NON   0x000
 #define TXT_STATE_TEXT  0x001
 #define TXT_STATE_MACRO 0x002
+
+rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
 {
     ByteString sReturn;
     switch ( nToken )
@@ -1523,7 +1519,7 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
         case TEXTLINE:
         case LONGTEXTLINE:
         {
-            ByteString sTmp( rSource.Copy( rSource.Search( "=" )));
+            ByteString sTmp(rSource.copy(rSource.indexOf("=")));
             CleanValue( sTmp );
             sTmp = comphelper::string::remove(sTmp, '\n');
             sTmp = comphelper::string::remove(sTmp, '\r');
@@ -1588,11 +1584,10 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
     return sReturn;
 }
 
-/*****************************************************************************/
-void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
-/*****************************************************************************/
+void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
 {
-    if ( !bDontWriteOutput || !bUnmerge ) {
+    if ( !bDontWriteOutput || !bUnmerge )
+    {
         ByteString sText( rText );
         while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
         if( pParseQueue->bNextIsM && bSDFContent && sText.Len() > 2 ){
@@ -2314,15 +2309,16 @@ void Export::SetChildWithText()
     }
 }
 
-void ParserQueue::Push( const QueueEntry& aEntry ){
-    sal_uInt16 nLen = aEntry.sLine.Len();
+void ParserQueue::Push( const QueueEntry& aEntry )
+{
+    sal_Int32 nLen = aEntry.sLine.getLength();
 
     if( !bStart ){
         aQueueCur->push( aEntry );
-        if( nLen > 1 && aEntry.sLine.GetChar( nLen-1 ) == '\n' )
+        if( nLen > 1 && aEntry.sLine[nLen-1] == '\n' )
             bStart = true;
         else if ( aEntry.nTyp != IGNOREDTOKENS ){
-            if( nLen > 1 && ( aEntry.sLine.GetChar( nLen-1 ) == '\\') ){
+            if( nLen > 1 && ( aEntry.sLine[nLen-1] == '\\') ){
                 // Next is Macro
                 bCurrentIsM = true;
              }else{
@@ -2333,8 +2329,8 @@ void ParserQueue::Push( const QueueEntry& aEntry ){
     }
     else{
         aQueueNext->push( aEntry );
-        if( nLen > 1 && aEntry.sLine.GetChar( nLen-1 ) != '\n' ){
-            if( nLen > 1 && ( aEntry.sLine.GetChar( nLen-1  ) == '\\') ){
+        if( nLen > 1 && aEntry.sLine[nLen-1] != '\n' ){
+            if( nLen > 1 && ( aEntry.sLine[nLen-1] == '\\') ){
                 // Next is Macro
                 bNextIsM = true;
             }
@@ -2342,9 +2338,9 @@ void ParserQueue::Push( const QueueEntry& aEntry ){
                 // Next is no Macro
                 bNextIsM = false;
             }
-        }else if( nLen > 2 && aEntry.sLine.GetChar( nLen-1 ) == '\n' ){
+        }else if( nLen > 2 && aEntry.sLine[nLen-1] == '\n' ){
             if( aEntry.nTyp != IGNOREDTOKENS ){
-                if( nLen > 2 && ( aEntry.sLine.GetChar( nLen-2  ) == '\\') ){
+                if( nLen > 2 && ( aEntry.sLine[nLen-2] == '\\') ){
                     // Next is Macro
                     bNextIsM = true;
                 }
@@ -2389,13 +2385,17 @@ void ParserQueue::Close(){
     bNextIsM = false;
     Pop( *aQueueNext );
 };
-void ParserQueue::Pop( std::queue<QueueEntry>& aQueue ){
-    while( !aQueue.empty() ){
+
+void ParserQueue::Pop( std::queue<QueueEntry>& aQueue )
+{
+    while (!aQueue.empty())
+    {
         QueueEntry aEntry = aQueue.front();
         aQueue.pop();
-        aExport.Execute( aEntry.nTyp , (char*) aEntry.sLine.GetBuffer() );
+        aExport.Execute(aEntry.nTyp, aEntry.sLine.getStr());
     }
 }
+
 ParserQueue::ParserQueue( Export& aExportObj )
         :
           bCurrentIsM( false ),
