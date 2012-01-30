@@ -329,15 +329,13 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount )
 
 bool WinSalInstance::CheckYieldMutex()
 {
-    bool bRet = true;
     SalData*    pSalData = GetSalData();
-    DWORD       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mpFirstInstance )
     {
         SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-        bRet = (pYieldMutex->mnThreadId == nCurThreadId);
+        return (pYieldMutex->mnThreadId == (GetCurrentThreadId()));
     }
-    return bRet;
+    return true;
 }
 
 // =======================================================================
