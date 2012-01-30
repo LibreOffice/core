@@ -144,9 +144,9 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         return false;
 
 #if defined  OSL_BIGENDIAN
-    pMfp->mm = SWAPSHORT( pMfp->mm );
-    pMfp->xExt = SWAPSHORT( pMfp->xExt );
-    pMfp->yExt = SWAPSHORT( pMfp->yExt );
+    pMfp->mm = OSL_SWAPWORD( pMfp->mm );
+    pMfp->xExt = OSL_SWAPWORD( pMfp->xExt );
+    pMfp->yExt = OSL_SWAPWORD( pMfp->yExt );
 #endif // OSL_BIGENDIAN
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )

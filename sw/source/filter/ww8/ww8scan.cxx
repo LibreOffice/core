@@ -7434,7 +7434,7 @@ bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 void swapEndian(sal_Unicode *pString)
 {
     for (sal_Unicode *pWork = pString; *pWork; ++pWork)
-        *pWork = SWAPSHORT(*pWork);
+        *pWork = OSL_SWAPWORD(*pWork);
 }
 #endif
 

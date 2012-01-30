@@ -28,22 +28,17 @@
 #ifndef _CONVERT_HXX
 #define _CONVERT_HXX
 
-/*
-#define _SWAPSHORT(x) ((((x) & 0xFF00)>>8) | (((x) & 0x00FF)<<8))
-#define _SWAPLONG(x)  ((((x) & 0xFF000000)>>24) | (((x) & 0x00FF0000)>>8) |  \
-                      (((x) & 0x0000FF00)<<8) | (((x) & 0x000000FF)<<24))
-*/
 class Convert
 {
 public:
     static void     Swap( long & nValue )
-                    { nValue = SWAPLONG( nValue ); }
+                    { nValue = OSL_SWAPDWORD( nValue ); }
     static void     Swap( ULONG & nValue )
-                    { nValue = SWAPLONG( nValue ); }
+                    { nValue = OSL_SWAPDWORD( nValue ); }
     static void     Swap( short & nValue )
-                    { nValue = SWAPSHORT( nValue ); }
+                    { nValue = OSL_SWAPWORD( nValue ); }
     static void     Swap( USHORT & nValue )
-                    { nValue = SWAPSHORT( nValue ); }
+                    { nValue = OSL_SWAPWORD( nValue ); }
     static void     Swap( Point & aPtr )
                     { Swap( aPtr.X() ); Swap( aPtr.Y() ); }
     static void     Swap( Size & aSize )

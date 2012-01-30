@@ -39,50 +39,50 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #define SWAPPOINT(p) {  \
-    p.x=SWAPSHORT(p.x); \
-    p.y=SWAPSHORT(p.y); }
+    p.x=OSL_SWAPWORD(p.x); \
+    p.y=OSL_SWAPWORD(p.y); }
 
 #define SWAPPAGE(p) {                         \
-    p.Next   =SWAPLONG (p.Next   );           \
-    p.nList  =SWAPLONG (p.nList  );           \
-    p.ListEnd=SWAPLONG (p.ListEnd);           \
-    p.Paper.Size.x=SWAPSHORT(p.Paper.Size.x); \
-    p.Paper.Size.y=SWAPSHORT(p.Paper.Size.y); \
-    p.Paper.RandL =SWAPSHORT(p.Paper.RandL ); \
-    p.Paper.RandR =SWAPSHORT(p.Paper.RandR ); \
-    p.Paper.RandO =SWAPSHORT(p.Paper.RandO ); \
-    p.Paper.RandU =SWAPSHORT(p.Paper.RandU ); \
+    p.Next   =OSL_SWAPDWORD (p.Next   );           \
+    p.nList  =OSL_SWAPDWORD (p.nList  );           \
+    p.ListEnd=OSL_SWAPDWORD (p.ListEnd);           \
+    p.Paper.Size.x=OSL_SWAPWORD(p.Paper.Size.x); \
+    p.Paper.Size.y=OSL_SWAPWORD(p.Paper.Size.y); \
+    p.Paper.RandL =OSL_SWAPWORD(p.Paper.RandL ); \
+    p.Paper.RandR =OSL_SWAPWORD(p.Paper.RandR ); \
+    p.Paper.RandO =OSL_SWAPWORD(p.Paper.RandO ); \
+    p.Paper.RandU =OSL_SWAPWORD(p.Paper.RandU ); \
     SWAPPOINT(p.U);                           \
     sal_uInt16 iTemp;                             \
     for (iTemp=0;iTemp<20;iTemp++) {          \
-        rPage.HlpLnH[iTemp]=SWAPSHORT(rPage.HlpLnH[iTemp]);       \
-        rPage.HlpLnV[iTemp]=SWAPSHORT(rPage.HlpLnV[iTemp]);      }}
+        rPage.HlpLnH[iTemp]=OSL_SWAPWORD(rPage.HlpLnH[iTemp]);       \
+        rPage.HlpLnV[iTemp]=OSL_SWAPWORD(rPage.HlpLnV[iTemp]);      }}
 
 #define SWAPOBJK(o) {                 \
-    o.Last    =SWAPLONG (o.Last    ); \
-    o.Next    =SWAPLONG (o.Next    ); \
-    o.MemSize =SWAPSHORT(o.MemSize ); \
+    o.Last    =OSL_SWAPDWORD (o.Last    ); \
+    o.Next    =OSL_SWAPDWORD (o.Next    ); \
+    o.MemSize =OSL_SWAPWORD(o.MemSize ); \
     SWAPPOINT(o.ObjMin);              \
     SWAPPOINT(o.ObjMax);              }
 
 #define SWAPLINE(l) {             \
-    l.LMSize=SWAPSHORT(l.LMSize); \
-    l.LDicke=SWAPSHORT(l.LDicke); }
+    l.LMSize=OSL_SWAPWORD(l.LMSize); \
+    l.LDicke=OSL_SWAPWORD(l.LDicke); }
 
 #define SWAPAREA(a) {               \
-    a.FDummy2=SWAPSHORT(a.FDummy2); \
-    a.FMuster=SWAPSHORT(a.FMuster); }
+    a.FDummy2=OSL_SWAPWORD(a.FDummy2); \
+    a.FMuster=OSL_SWAPWORD(a.FMuster); }
 
 #define SWAPTEXT(t) {               \
     SWAPLINE(t.L);                  \
     SWAPAREA(t.F);                  \
-    t.FontLo =SWAPSHORT(t.FontLo ); \
-    t.FontHi =SWAPSHORT(t.FontHi ); \
-    t.Grad   =SWAPSHORT(t.Grad   ); \
-    t.Breite =SWAPSHORT(t.Breite ); \
-    t.Schnitt=SWAPSHORT(t.Schnitt); \
-    t.LnFeed =SWAPSHORT(t.LnFeed ); \
-    t.Slant  =SWAPSHORT(t.Slant  ); \
+    t.FontLo =OSL_SWAPWORD(t.FontLo ); \
+    t.FontHi =OSL_SWAPWORD(t.FontHi ); \
+    t.Grad   =OSL_SWAPWORD(t.Grad   ); \
+    t.Breite =OSL_SWAPWORD(t.Breite ); \
+    t.Schnitt=OSL_SWAPWORD(t.Schnitt); \
+    t.LnFeed =OSL_SWAPWORD(t.LnFeed ); \
+    t.Slant  =OSL_SWAPWORD(t.Slant  ); \
     SWAPLINE(t.ShdL);               \
     SWAPAREA(t.ShdF);               \
     SWAPPOINT(t.ShdVers);           \
@@ -223,9 +223,9 @@ SvStream& operator>>(SvStream& rInp, RectType& rRect)
     SWAPAREA (rRect.F);
     SWAPPOINT(rRect.Pos1);
     SWAPPOINT(rRect.Pos2);
-    rRect.Radius  =SWAPSHORT(rRect.Radius  );
-    rRect.DrehWink=SWAPSHORT(rRect.DrehWink);
-    rRect.Slant   =SWAPSHORT(rRect.Slant   );
+    rRect.Radius  =OSL_SWAPWORD(rRect.Radius  );
+    rRect.DrehWink=OSL_SWAPWORD(rRect.DrehWink);
+    rRect.Slant   =OSL_SWAPWORD(rRect.Slant   );
 #endif
     return rInp;
 }
@@ -236,7 +236,7 @@ SvStream& operator>>(SvStream& rInp, PolyType& rPoly)
     SWAPOBJK (rPoly);
     SWAPLINE (rPoly.L);
     SWAPAREA (rPoly.F);
-    // rPoly.EckP=SWAPLONG(rPoly.EckP);
+    // rPoly.EckP=OSL_SWAPDWORD(rPoly.EckP);
 #endif
     return rInp;
 }
@@ -247,7 +247,7 @@ SvStream& operator>>(SvStream& rInp, SplnType& rSpln)
     SWAPOBJK (rSpln);
     SWAPLINE (rSpln.L);
     SWAPAREA (rSpln.F);
-    // rSpln.EckP=SWAPLONG(rSpln.EckP);
+    // rSpln.EckP=OSL_SWAPDWORD(rSpln.EckP);
 #endif
     return rInp;
 }
@@ -260,9 +260,9 @@ SvStream& operator>>(SvStream& rInp, CircType& rCirc)
     SWAPAREA (rCirc.F);
     SWAPPOINT(rCirc.Radius);
     SWAPPOINT(rCirc.Center);
-    rCirc.DrehWink =SWAPSHORT(rCirc.DrehWink );
-    rCirc.StartWink=SWAPSHORT(rCirc.StartWink);
-    rCirc.RelWink  =SWAPSHORT(rCirc.RelWink  );
+    rCirc.DrehWink =OSL_SWAPWORD(rCirc.DrehWink );
+    rCirc.StartWink=OSL_SWAPWORD(rCirc.StartWink);
+    rCirc.RelWink  =OSL_SWAPWORD(rCirc.RelWink  );
 #endif
     return rInp;
 }
@@ -274,14 +274,14 @@ SvStream& operator>>(SvStream& rInp, TextType& rText)
     SWAPTEXT (rText.T);
     SWAPPOINT(rText.Pos1);
     SWAPPOINT(rText.Pos2);
-    rText.TopOfs  =SWAPSHORT(rText.TopOfs  );
-    rText.DrehWink=SWAPSHORT(rText.DrehWink);
-    rText.BoxSlant=SWAPSHORT(rText.BoxSlant);
-    rText.BufSize =SWAPSHORT(rText.BufSize );
-    //rText.Buf     =SWAPLONG (rText.Buf     );
-    //rText.Ext     =SWAPLONG (rText.Ext     );
+    rText.TopOfs  =OSL_SWAPWORD(rText.TopOfs  );
+    rText.DrehWink=OSL_SWAPWORD(rText.DrehWink);
+    rText.BoxSlant=OSL_SWAPWORD(rText.BoxSlant);
+    rText.BufSize =OSL_SWAPWORD(rText.BufSize );
+    //rText.Buf     =OSL_SWAPDWORD (rText.Buf     );
+    //rText.Ext     =OSL_SWAPDWORD (rText.Ext     );
     SWAPPOINT(rText.FitSize);
-    rText.FitBreit=SWAPSHORT(rText.FitBreit);
+    rText.FitBreit=OSL_SWAPWORD(rText.FitBreit);
 #endif
     rText.Buffer=NULL;
     return rInp;
@@ -294,8 +294,8 @@ SvStream& operator>>(SvStream& rInp, BmapType& rBmap)
     SWAPAREA (rBmap.F);
     SWAPPOINT(rBmap.Pos1);
     SWAPPOINT(rBmap.Pos2);
-    rBmap.DrehWink=SWAPSHORT(rBmap.DrehWink);
-    rBmap.Slant   =SWAPSHORT(rBmap.Slant   );
+    rBmap.DrehWink=OSL_SWAPWORD(rBmap.DrehWink);
+    rBmap.Slant   =OSL_SWAPWORD(rBmap.Slant   );
     SWAPPOINT(rBmap.PixSize);
 #endif
     return rInp;
@@ -305,12 +305,12 @@ SvStream& operator>>(SvStream& rInp, GrupType& rGrup)
     rInp.Read((char*)&rGrup.Last,GrupSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rGrup);
-    rGrup.SbLo     =SWAPSHORT(rGrup.SbLo     );
-    rGrup.SbHi     =SWAPSHORT(rGrup.SbHi     );
-    rGrup.UpLo     =SWAPSHORT(rGrup.UpLo     );
-    rGrup.UpHi     =SWAPSHORT(rGrup.UpHi     );
-    rGrup.ChartSize=SWAPSHORT(rGrup.ChartSize);
-    rGrup.ChartPtr =SWAPLONG (rGrup.ChartPtr );
+    rGrup.SbLo     =OSL_SWAPWORD(rGrup.SbLo     );
+    rGrup.SbHi     =OSL_SWAPWORD(rGrup.SbHi     );
+    rGrup.UpLo     =OSL_SWAPWORD(rGrup.UpLo     );
+    rGrup.UpHi     =OSL_SWAPWORD(rGrup.UpHi     );
+    rGrup.ChartSize=OSL_SWAPWORD(rGrup.ChartSize);
+    rGrup.ChartPtr =OSL_SWAPDWORD (rGrup.ChartPtr );
 #endif
     return rInp;
 }

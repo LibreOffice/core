@@ -173,7 +173,7 @@ inline long SwapLong( long n )
 inline short SwapShort( short n )
 {
 #ifndef OSL_LITENDIAN
-    return SWAPSHORT( n );
+    return OSL_SWAPWORD( n );
 #else
     return n;
 #endif

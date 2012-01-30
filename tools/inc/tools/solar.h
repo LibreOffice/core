@@ -144,10 +144,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 
 /*** standard macros *****************************************/
 
-#define SWAPSHORT(x) ((((x) >> 8) & 0x00FF) | (((x) & 0x00FF) << 8))
-#define SWAPLONG(x)  ((((x) >> 24) & 0x000000FF) | (((x) & 0x00FF0000) >> 8) | \
-                      (((x) & 0x0000FF00) <<  8) | (((x) & 0x000000FF) << 24))
-
 #ifndef __cplusplus
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))

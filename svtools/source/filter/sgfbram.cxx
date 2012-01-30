@@ -45,17 +45,17 @@ SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 {
     rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);
 #if defined OSL_BIGENDIAN
-    rHead.Magic  =SWAPSHORT(rHead.Magic  );
-    rHead.Version=SWAPSHORT(rHead.Version);
-    rHead.Typ    =SWAPSHORT(rHead.Typ    );
-    rHead.Xsize  =SWAPSHORT(rHead.Xsize  );
-    rHead.Ysize  =SWAPSHORT(rHead.Ysize  );
-    rHead.Xoffs  =SWAPSHORT(rHead.Xoffs  );
-    rHead.Yoffs  =SWAPSHORT(rHead.Yoffs  );
-    rHead.Planes =SWAPSHORT(rHead.Planes );
-    rHead.SwGrCol=SWAPSHORT(rHead.SwGrCol);
-    rHead.OfsLo  =SWAPSHORT(rHead.OfsLo  );
-    rHead.OfsHi  =SWAPSHORT(rHead.OfsHi  );
+    rHead.Magic  =OSL_SWAPWORD(rHead.Magic  );
+    rHead.Version=OSL_SWAPWORD(rHead.Version);
+    rHead.Typ    =OSL_SWAPWORD(rHead.Typ    );
+    rHead.Xsize  =OSL_SWAPWORD(rHead.Xsize  );
+    rHead.Ysize  =OSL_SWAPWORD(rHead.Ysize  );
+    rHead.Xoffs  =OSL_SWAPWORD(rHead.Xoffs  );
+    rHead.Yoffs  =OSL_SWAPWORD(rHead.Yoffs  );
+    rHead.Planes =OSL_SWAPWORD(rHead.Planes );
+    rHead.SwGrCol=OSL_SWAPWORD(rHead.SwGrCol);
+    rHead.OfsLo  =OSL_SWAPWORD(rHead.OfsLo  );
+    rHead.OfsHi  =OSL_SWAPWORD(rHead.OfsHi  );
 #endif
     return rIStream;
 }
@@ -82,12 +82,12 @@ SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
 {
     rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);
 #if defined OSL_BIGENDIAN
-    rEntr.Typ  =SWAPSHORT(rEntr.Typ  );
-    rEntr.iFrei=SWAPSHORT(rEntr.iFrei);
-    rEntr.lFreiLo=SWAPSHORT (rEntr.lFreiLo);
-    rEntr.lFreiHi=SWAPSHORT (rEntr.lFreiHi);
-    rEntr.OfsLo=SWAPSHORT(rEntr.OfsLo);
-    rEntr.OfsHi=SWAPSHORT(rEntr.OfsHi);
+    rEntr.Typ  =OSL_SWAPWORD(rEntr.Typ  );
+    rEntr.iFrei=OSL_SWAPWORD(rEntr.iFrei);
+    rEntr.lFreiLo=OSL_SWAPWORD (rEntr.lFreiLo);
+    rEntr.lFreiHi=OSL_SWAPWORD (rEntr.lFreiHi);
+    rEntr.OfsLo=OSL_SWAPWORD(rEntr.OfsLo);
+    rEntr.OfsHi=OSL_SWAPWORD(rEntr.OfsHi);
 #endif
     return rIStream;
 }
@@ -105,11 +105,11 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 {
     rIStream.Read((char*)&rVect,sizeof(rVect));
 #if defined OSL_BIGENDIAN
-    rVect.Flag =SWAPSHORT(rVect.Flag );
-    rVect.x    =SWAPSHORT(rVect.x    );
-    rVect.y    =SWAPSHORT(rVect.y    );
-    rVect.OfsLo=SWAPLONG (rVect.OfsLo);
-    rVect.OfsHi=SWAPLONG (rVect.OfsHi);
+    rVect.Flag =OSL_SWAPWORD(rVect.Flag );
+    rVect.x    =OSL_SWAPWORD(rVect.x    );
+    rVect.y    =OSL_SWAPWORD(rVect.y    );
+    rVect.OfsLo=OSL_SWAPDWORD (rVect.OfsLo);
+    rVect.OfsHi=OSL_SWAPDWORD (rVect.OfsHi);
 #endif
     return rIStream;
 }
@@ -123,23 +123,23 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
 {
 #if defined OSL_BIGENDIAN
-    rHead.Typ     =SWAPSHORT(rHead.Typ     );
-    rHead.SizeLo  =SWAPSHORT(rHead.SizeLo  );
-    rHead.SizeHi  =SWAPSHORT(rHead.SizeHi  );
-    rHead.Reserve1=SWAPSHORT(rHead.Reserve1);
-    rHead.Reserve2=SWAPSHORT(rHead.Reserve2);
-    rHead.OfsLo   =SWAPSHORT(rHead.OfsLo   );
-    rHead.OfsHi   =SWAPSHORT(rHead.OfsHi   );
+    rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
+    rHead.SizeLo  =OSL_SWAPWORD(rHead.SizeLo  );
+    rHead.SizeHi  =OSL_SWAPWORD(rHead.SizeHi  );
+    rHead.Reserve1=OSL_SWAPWORD(rHead.Reserve1);
+    rHead.Reserve2=OSL_SWAPWORD(rHead.Reserve2);
+    rHead.OfsLo   =OSL_SWAPWORD(rHead.OfsLo   );
+    rHead.OfsHi   =OSL_SWAPWORD(rHead.OfsHi   );
 #endif
     rOStream.Write((char*)&rHead,sizeof(rHead));
 #if defined OSL_BIGENDIAN
-    rHead.Typ     =SWAPSHORT(rHead.Typ     );
-    rHead.SizeLo  =SWAPSHORT(rHead.SizeLo  );
-    rHead.SizeHi  =SWAPSHORT(rHead.SizeHi  );
-    rHead.Reserve1=SWAPSHORT(rHead.Reserve1);
-    rHead.Reserve2=SWAPSHORT(rHead.Reserve2);
-    rHead.OfsLo   =SWAPSHORT(rHead.OfsLo   );
-    rHead.OfsHi   =SWAPSHORT(rHead.OfsHi   );
+    rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
+    rHead.SizeLo  =OSL_SWAPWORD(rHead.SizeLo  );
+    rHead.SizeHi  =OSL_SWAPWORD(rHead.SizeHi  );
+    rHead.Reserve1=OSL_SWAPWORD(rHead.Reserve1);
+    rHead.Reserve2=OSL_SWAPWORD(rHead.Reserve2);
+    rHead.OfsLo   =OSL_SWAPWORD(rHead.OfsLo   );
+    rHead.OfsHi   =OSL_SWAPWORD(rHead.OfsHi   );
 #endif
     return rOStream;
 }
@@ -169,31 +169,31 @@ sal_uInt32 BmpFileHeader::GetOfs()
 SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
 #if defined OSL_BIGENDIAN
-    rInfo.Size    =SWAPLONG (rInfo.Size    );
-    rInfo.Width   =SWAPLONG (rInfo.Width   );
-    rInfo.Hight   =SWAPLONG (rInfo.Hight   );
-    rInfo.Planes  =SWAPSHORT(rInfo.Planes  );
-    rInfo.PixBits =SWAPSHORT(rInfo.PixBits );
-    rInfo.Compress=SWAPLONG (rInfo.Compress);
-    rInfo.ImgSize =SWAPLONG (rInfo.ImgSize );
-    rInfo.xDpmm   =SWAPLONG (rInfo.xDpmm   );
-    rInfo.yDpmm   =SWAPLONG (rInfo.yDpmm   );
-    rInfo.ColUsed =SWAPLONG (rInfo.ColUsed );
-    rInfo.ColMust =SWAPLONG (rInfo.ColMust );
+    rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
+    rInfo.Width   =OSL_SWAPDWORD (rInfo.Width   );
+    rInfo.Hight   =OSL_SWAPDWORD (rInfo.Hight   );
+    rInfo.Planes  =OSL_SWAPWORD(rInfo.Planes  );
+    rInfo.PixBits =OSL_SWAPWORD(rInfo.PixBits );
+    rInfo.Compress=OSL_SWAPDWORD (rInfo.Compress);
+    rInfo.ImgSize =OSL_SWAPDWORD (rInfo.ImgSize );
+    rInfo.xDpmm   =OSL_SWAPDWORD (rInfo.xDpmm   );
+    rInfo.yDpmm   =OSL_SWAPDWORD (rInfo.yDpmm   );
+    rInfo.ColUsed =OSL_SWAPDWORD (rInfo.ColUsed );
+    rInfo.ColMust =OSL_SWAPDWORD (rInfo.ColMust );
 #endif
     rOStream.Write((char*)&rInfo,sizeof(rInfo));
 #if defined OSL_BIGENDIAN
-    rInfo.Size    =SWAPLONG (rInfo.Size    );
-    rInfo.Width   =SWAPLONG (rInfo.Width   );
-    rInfo.Hight   =SWAPLONG (rInfo.Hight   );
-    rInfo.Planes  =SWAPSHORT(rInfo.Planes  );
-    rInfo.PixBits =SWAPSHORT(rInfo.PixBits );
-    rInfo.Compress=SWAPLONG (rInfo.Compress);
-    rInfo.ImgSize =SWAPLONG (rInfo.ImgSize );
-    rInfo.xDpmm   =SWAPLONG (rInfo.xDpmm   );
-    rInfo.yDpmm   =SWAPLONG (rInfo.yDpmm   );
-    rInfo.ColUsed =SWAPLONG (rInfo.ColUsed );
-    rInfo.ColMust =SWAPLONG (rInfo.ColMust );
+    rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
+    rInfo.Width   =OSL_SWAPDWORD (rInfo.Width   );
+    rInfo.Hight   =OSL_SWAPDWORD (rInfo.Hight   );
+    rInfo.Planes  =OSL_SWAPWORD(rInfo.Planes  );
+    rInfo.PixBits =OSL_SWAPWORD(rInfo.PixBits );
+    rInfo.Compress=OSL_SWAPDWORD (rInfo.Compress);
+    rInfo.ImgSize =OSL_SWAPDWORD (rInfo.ImgSize );
+    rInfo.xDpmm   =OSL_SWAPDWORD (rInfo.xDpmm   );
+    rInfo.yDpmm   =OSL_SWAPDWORD (rInfo.yDpmm   );
+    rInfo.ColUsed =OSL_SWAPDWORD (rInfo.ColUsed );
+    rInfo.ColMust =OSL_SWAPDWORD (rInfo.ColMust );
 #endif
     return rOStream;
 }

@@ -114,7 +114,7 @@ public:
                     char* pTo = (char*)&nVal;
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
-                    return bSwap ? SWAPSHORT( nVal ) : nVal;
+                    return bSwap ? OSL_SWAPWORD( nVal ) : nVal;
                 }
     sal_uInt32  GetLong( sal_uInt32 nPos )
                 {
@@ -125,7 +125,7 @@ public:
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
-                    return bSwap ? SWAPLONG( nVal ) : nVal;
+                    return bSwap ? OSL_SWAPDWORD( nVal ) : nVal;
                 }
     char *      GetUTF8( sal_uInt32 nPos )
                 {
@@ -212,7 +212,7 @@ public:
     void        PutAt( sal_uInt32 nPos, sal_uInt16 nVal )
                 {
                     if( bSwap )
-                        nVal = SWAPSHORT( nVal );
+                        nVal = OSL_SWAPWORD( nVal );
                     char* pTo = GetPointer( nPos );
                     char* pFrom = (char*)&nVal;
                     *pTo++ = *pFrom++;

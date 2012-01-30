@@ -289,7 +289,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             sal_uInt8*      pLast4Bytes = (sal_uInt8*) GetBuffer() + ( nScanSize - 4 );
 
 #ifdef OSL_LITENDIAN
-            nMask = SWAPLONG( nMask );
+            nMask = OSL_SWAPDWORD( nMask );
 #endif
             for( sal_uInt32 i = 0; i < nHeight; i++, pLast4Bytes += nScanSize )
                 ( *(sal_uInt32*) pLast4Bytes ) &= nMask;

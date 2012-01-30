@@ -40,6 +40,7 @@
 #include "boost/static_assert.hpp"
 
 #include <tools/solar.h>
+#include <osl/endian.h>
 
 #include <comphelper/string.hxx>
 
@@ -62,17 +63,17 @@ DBG_NAME( Stream )
 
 // !!! Nicht inline, wenn Operatoren <<,>> inline sind
 inline static void SwapUShort( sal_uInt16& r )
-    {   r = SWAPSHORT(r);   }
+    {   r = OSL_SWAPWORD(r);   }
 inline static void SwapShort( short& r )
-    {   r = SWAPSHORT(r);   }
+    {   r = OSL_SWAPWORD(r);   }
 inline static void SwapLong( long& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapULong( sal_uInt32& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapLongInt( sal_Int32& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapLongUInt( unsigned int& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 
 inline static void SwapUInt64( sal_uInt64& r )
     {
@@ -87,8 +88,8 @@ inline static void SwapUInt64( sal_uInt64& r )
         s.c[1] ^= s.c[0];
         s.c[0] ^= s.c[1];
         // swap the bytes in the words
-        s.c[0] = SWAPLONG(s.c[0]);
-        s.c[1] = SWAPLONG(s.c[1]);
+        s.c[0] = OSL_SWAPDWORD(s.c[0]);
+        s.c[1] = OSL_SWAPDWORD(s.c[1]);
         r = s.n;
     }
 
@@ -105,8 +106,8 @@ inline static void SwapInt64( sal_Int64& r )
         s.c[1] ^= s.c[0];
         s.c[0] ^= s.c[1];
         // swap the bytes in the words
-        s.c[0] = SWAPLONG(s.c[0]);
-        s.c[1] = SWAPLONG(s.c[1]);
+        s.c[0] = OSL_SWAPDWORD(s.c[0]);
+        s.c[1] = OSL_SWAPDWORD(s.c[1]);
         r = s.n;
     }
 
@@ -120,7 +121,7 @@ inline static void SwapFloat( float& r )
         } s;
 
         s.f = r;
-        s.c = SWAPLONG( s.c );
+        s.c = OSL_SWAPDWORD( s.c );
         r = s.f;
     }
 
@@ -142,8 +143,8 @@ inline static void SwapDouble( double& r )
             s.c[0] ^= s.c[1]; // zwei 32-Bit-Werte in situ vertauschen
             s.c[1] ^= s.c[0];
             s.c[0] ^= s.c[1];
-            s.c[0] = SWAPLONG(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
-            s.c[1] = SWAPLONG(s.c[1]);
+            s.c[0] = OSL_SWAPDWORD(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
+            s.c[1] = OSL_SWAPDWORD(s.c[1]);
             r = s.d;
         }
     }
@@ -2380,7 +2381,7 @@ rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
         if (rStrm.IsEndianSwap())
         {
             for (sal_Int32 i = 0; i < pStr->length; ++i)
-                pStr->buffer[i] = SWAPSHORT(pStr->buffer[i]);
+                pStr->buffer[i] = OSL_SWAPWORD(pStr->buffer[i]);
         }
     }
 

@@ -281,7 +281,7 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
     {
         sal_uInt32 nType = aBeg->nType;
     #if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
-        nType = SWAPLONG( nType );
+        nType = OSL_SWAPDWORD( nType );
     #endif
         sal_uInt32 nCRC = rtl_crc32( 0, &nType, 4 );
         sal_uInt32 nDataSize = aBeg->aData.size();

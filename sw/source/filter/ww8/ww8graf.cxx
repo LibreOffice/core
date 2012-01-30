@@ -1310,7 +1310,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
 #ifdef OSL_BIGENDIAN
-    nGrouped = (sal_Int16)SWAPSHORT( nGrouped );
+    nGrouped = (sal_Int16)OSL_SWAPWORD( nGrouped );
 #endif
 
     nDrawXOfs = nDrawXOfs + (sal_Int16)SVBT16ToShort( pHd->xa );
