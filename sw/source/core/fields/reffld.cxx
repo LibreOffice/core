@@ -974,11 +974,13 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
         GetFieldIdsFromDoc( rDoc, aDstIds );
 
         // Define the mappings now
-        sal_uInt16 nMaxDstId = *aIds.end();
+        sal_uInt16 nMaxDstId = -1;
+        if ( !aIds.empty() )
+            nMaxDstId = *aIds.rbegin();
 
         // Map all the src fields to their value + nMaxDstId
         for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
-            AddId( nMaxDstId++, *pIt );
+            AddId( ++nMaxDstId, *pIt );
 
         // Change the Sequence number of all the SetExp fields in the destination document
         SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
