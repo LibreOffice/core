@@ -243,18 +243,14 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
     VisualID nDefVID = XVisualIDFromVisual( DefaultVisual( pDisplay, nScreen ) );
 
     XVisualInfo aVI;
-//    aVI.visualid = nDefVID;
     aVI.screen = nScreen;
     // get all visuals
     int nVisuals;
     XVisualInfo* pVInfos = XGetVisualInfo( pDisplay, VisualScreenMask,
                                            &aVI, &nVisuals );
 
-    if (!pVInfos)
-        return sal_False;
-
     // HACK
-    rVI = *pVInfos;
+    rVI = pVInfos[ 0 ];
 
     XFree( pVInfos );
     return rVI.visualid == nDefVID;
@@ -438,11 +434,10 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
     if( SalDisplay::BestVisual( pDisp_, nXScreen.getXScreen(), aVI ) ) // DefaultVisual
         aColMap = DefaultColormap( pDisp_, nXScreen.getXScreen() );
     else
-        fprintf( stderr, "HACK: XCreateColormap would be called...\n" );
-//        aColMap = XCreateColormap( pDisp_,
-//                                   RootWindow( pDisp_, nXScreen.getXScreen() ),
-//                                   aVI.visual,
-//                                   AllocNone );
+        aColMap = XCreateColormap( pDisp_,
+                                   RootWindow( pDisp_, nXScreen.getXScreen() ),
+                                   aVI.visual,
+                                   AllocNone );
 
     Screen* pScreen = ScreenOfDisplay( pDisp_, nXScreen.getXScreen() );
 
