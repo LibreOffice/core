@@ -515,6 +515,139 @@ namespace basegfx
 
             return true;
         }
+
+        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char nNumber, bool bLitSegments)
+        {
+            // config here
+            // {
+            const double fTotalSize=1.0;
+            const double fPosMiddleSegment=0.6;
+            const double fSegmentEndChopHoriz=0.08;
+            const double fSegmentEndChopVert =0.04;
+            // }
+            // config here
+
+            const double fLeft=0.0;
+            const double fRight=fTotalSize;
+            const double fTop=0.0;
+            const double fMiddle=fPosMiddleSegment;
+            const double fBottom=fTotalSize;
+
+            // from 0 to 5: pair of segment corner coordinates
+            //
+            // segment corner indices are these:
+            //
+            //   0 - 1
+            //   |   |
+            //   2 - 3
+            //   |   |
+            //   4 - 5
+            //
+            static const double corners[] =
+            {
+                fLeft,  fTop,
+                fRight, fTop,
+                fLeft,  fMiddle,
+                fRight, fMiddle,
+                fLeft,  fBottom,
+                fRight, fBottom
+            };
+
+            // from 0 to 9: which segments are 'lit' for this number?
+            //
+            // array denotes graph edges to traverse, with -1 means
+            // stop (the vertices are the corner indices from above):
+            //     0
+            //     -
+            // 1 |   | 2
+            //     - 3
+            // 4 |   | 5
+            //     -
+            //     6
+            //
+            static const int numbers[] =
+            {
+                1, 1, 1, 0, 1, 1, 1, // 0
+                0, 0, 1, 0, 0, 1, 0, // 1
+                1, 0, 1, 1, 1, 0, 1, // 2
+                1, 0, 1, 1, 0, 1, 1, // 3
+                0, 1, 1, 1, 0, 1, 0, // 4
+                1, 1, 0, 1, 0, 1, 1, // 5
+                1, 1, 0, 1, 1, 1, 1, // 6
+                1, 0, 1, 0, 0, 1, 0, // 1
+                1, 1, 1, 1, 1, 1, 1, // 8
+                1, 1, 1, 1, 0, 1, 1, // 9
+                0, 0, 0, 1, 0, 0, 0, // '-'
+                1, 1, 0, 1, 1, 0, 1, // 'E'
+            };
+
+            // maps segment index to two corner ids:
+            static const int index2corner[] =
+            {
+                0, 2,  // 0
+                0, 4,  // 1
+                2, 6,  // 2
+                4, 6,  // 3
+                4, 8,  // 4
+                6, 10, // 5
+                8, 10, // 6
+            };
+
+            B2DPolyPolygon aRes;
+            if( nNumber == '-' )
+            {
+                nNumber = 10;
+            }
+            else if( nNumber == 'E' )
+            {
+                nNumber = 11;
+            }
+            else if( nNumber == '.' )
+            {
+                if( bLitSegments )
+                    aRes.append(createPolygonFromCircle(B2DPoint(fTotalSize/2, fTotalSize),
+                                                        fSegmentEndChopHoriz));
+                return aRes;
+            }
+            else
+            {
+                nNumber=clamp<sal_uInt32>(nNumber,'0','9') - '0';
+            }
+
+            B2DPolygon aCurrSegment;
+            const size_t sliceSize=sizeof(numbers)/sizeof(*numbers)/12;
+            const int* pCurrSegment=numbers + nNumber*sliceSize;
+            for( size_t i=0; i<sliceSize; i++, pCurrSegment++)
+            {
+                if( !(*pCurrSegment ^ bLitSegments) )
+                {
+                    const size_t j=2*i;
+                    aCurrSegment.clear();
+                    B2DPoint start(corners[index2corner[j]],
+                                   corners[index2corner[j]+1]  );
+                    B2DPoint end  (corners[index2corner[j+1]],
+                                   corners[index2corner[j+1]+1]);
+
+                    if( start.getX() == end.getX() )
+                    {
+                        start.setY(start.getY()+fSegmentEndChopVert);
+                        end.setY(end.getY()-fSegmentEndChopVert);
+                    }
+                    else
+                    {
+                        start.setX(start.getX()+fSegmentEndChopHoriz);
+                        end.setX(end.getX()-fSegmentEndChopHoriz);
+                    }
+
+                    aCurrSegment.append(start);
+                    aCurrSegment.append(end);
+                }
+                aRes.append(aCurrSegment);
+            }
+
+            return aRes;
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 

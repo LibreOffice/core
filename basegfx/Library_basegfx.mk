@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/tools/canvastools \
     basegfx/source/tools/gradienttools \
     basegfx/source/tools/keystoplerp \
+    basegfx/source/tools/numbertools \
     basegfx/source/tools/tools \
     basegfx/source/tools/unopolypolygon \
     basegfx/source/tools/unotools \

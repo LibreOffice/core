@@ -220,6 +220,26 @@ namespace basegfx
         // #i76891# Try to remove existing curve segments if they are simply edges
         BASEGFX_DLLPUBLIC B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
+        /** Creates polypolygon for seven-segment display number
+
+            This function takes an integer number between 0 and 9 and
+            convert it into the well-known seven-segment display
+            number (like most digital clocks show their numbers). The
+            digit will exactly fit the unit rectangle. The polypolygon
+            will be a line polygon, i.e. if you need the segment parts
+            to have width, use createAreaGeometry() on the result.
+
+            @param cNumber
+            Number from '0' to '9' as ASCII char, or '-', 'E' and '.'
+            to convert to 7 segment code
+
+            @param bLitSegments
+            When true, return a polygon containing the segments that
+            are 'lit' for the given number. Return un-lit segments
+            otherwise.
+         */
+        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char cNumber, bool bLitSegments=true);
+
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values

@@ -27,6 +27,7 @@ namespace basegfx
 {
     class B2DPoint;
     class B2DRange;
+    class B2DPolyPolygon;
 
     namespace tools
     {
@@ -94,6 +95,30 @@ namespace basegfx
                                             ::basegfx::B2DPoint&        io_rRightBottom,
                                             const ::basegfx::B2DRange&  rFitTarget  );
 
+        /** Creates polypolygon with the given number as seven-segment
+            digits
+
+            @param fVal
+            Value to convert
+
+            @param nTotalDigits
+            Total number of digits to display. If less is needed for
+            given number, fill space with blanks.
+
+            @param nDecPlaces
+            Decimal places to show. When 0, display as integer. When
+            negative, fill given number of before-the-decimal point
+            with zero.
+
+            @param bLitSegments
+            When true, return a polygon containing the segments that
+            are 'lit' for the given number. Return un-lit segments
+            otherwise.
+         */
+        BASEGFX_DLLPUBLIC B2DPolyPolygon number2PolyPolygon(double    fVal,
+                                                            sal_Int32 nTotalDigits,
+                                                            sal_Int32 nDecPlaces,
+                                                            bool      bLitSegments=true);
     }
 }
 
