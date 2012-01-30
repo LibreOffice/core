@@ -1461,6 +1461,14 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
         // unnecessary banding
         mpImplRegion->mpPolyPoly->Clip( rRect );
 
+        // The clipping above may lead to empty ClipRegion
+        if(!mpImplRegion->mpPolyPoly->Count())
+        {
+            // react on empty ClipRegion; ImplRegion already is unique (see above)
+            delete mpImplRegion;
+            mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+        }
+
         return sal_True;
     }
     else if( mpImplRegion->mpB2DPolyPoly )
@@ -1473,10 +1481,24 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
         }
 
         *mpImplRegion->mpB2DPolyPoly =
-        basegfx::tools::clipPolyPolygonOnRange( *mpImplRegion->mpB2DPolyPoly,
-                                                basegfx::B2DRange( rRect.Left(), rRect.Top(),
-                                                                   rRect.Right(), rRect.Bottom() ),
-                                                true, false );
+            basegfx::tools::clipPolyPolygonOnRange(
+                *mpImplRegion->mpB2DPolyPoly,
+                basegfx::B2DRange(
+                    rRect.Left(),
+                    rRect.Top(),
+                    rRect.Right() + 1,
+                    rRect.Bottom() + 1),
+                true,
+                false);
+
+        // The clipping above may lead to empty ClipRegion
+        if(!mpImplRegion->mpB2DPolyPoly->count())
+        {
+            // react on empty ClipRegion; ImplRegion already is unique (see above)
+            delete mpImplRegion;
+            mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+        }
+
         return sal_True;
     }
     else
@@ -2083,10 +2105,19 @@ Rectangle Region::GetBoundRect() const
         return mpImplRegion->mpPolyPoly->GetBoundRect();
     if( mpImplRegion->mpB2DPolyPoly )
     {
-        const basegfx::B2DRange aRange = basegfx::tools::getRange( *mpImplRegion->mpB2DPolyPoly );
-        aRect.SetPos( Point( (int)aRange.getMinX(), (int)aRange.getMinY() ) );
-        aRect.SetSize( Size( (int)aRange.getWidth(), (int)aRange.getHeight() ) );
-        return aRect;
+        const basegfx::B2DRange aRange(basegfx::tools::getRange(*mpImplRegion->mpB2DPolyPoly));
+
+        if(aRange.isEmpty())
+        {
+            // emulate PolyPolygon::GetBoundRect() when empty polygon
+            return Rectangle();
+        }
+        else
+        {
+            return Rectangle(
+                static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
+                static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
+        }
     }
 
     // no band in the list? -> region is empty!

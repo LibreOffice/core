@@ -998,7 +998,16 @@ void OutputDevice::ImplInitClipRegion()
                                              mnOutOffY+GetOutputHeightPixel()-1 );
                     aRegion.Intersect( aDeviceBounds );
                 }
-                ImplSelectClipRegion( aRegion );
+
+                if ( aRegion.IsEmpty() )
+                {
+                    mbOutputClipped = sal_True;
+                }
+                else
+                {
+                    mbOutputClipped = sal_False;
+                    ImplSelectClipRegion( aRegion );
+                }
             }
 
             mbClipRegionSet = sal_True;
