@@ -256,7 +256,7 @@ public class ScTableSheetObj extends TestCase {
         tEnv.addObjRelation("XSheetAuditing.DependentCellAddress", new CellAddress((short)0, 9, 6));
 
         // add an existing sheet for linking
-        tEnv.addObjRelation("XSheetLinkable.LinkSheet", "ScSheetLinksObj.sdc");
+        tEnv.addObjRelation("XSheetLinkable.LinkSheet", "ScSheetLinksObj.ods");
 
         //adding Scenario and with that a ScenarioSheet-Relation for Scenario and XScenarioEnhanced
         XScenariosSupplier scene = (XScenariosSupplier) UnoRuntime.queryInterface(

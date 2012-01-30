@@ -146,7 +146,7 @@ public class ScSheetLinkObj extends TestCase {
 
         // creating link. Doesn't matter that it refers to unexistant object.
         // this is for proper work of XAccess tests.
-        String sURL = utils.getFullTestDocName("ScSheetLinksObj.sdc");
+        String sURL = utils.getFullTestDocName("ScSheetLinksObj.ods");
         SL.link(sURL, "Sheet1", "", "", com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.

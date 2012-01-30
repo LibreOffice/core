@@ -94,7 +94,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
         XMultiServiceFactory oMSF = (XMultiServiceFactory)Param.getMSF();
 
         // load the predefined testdocument
-        String testdoc = utils.getFullTestURL("ScDDELinksObj.sdc");
+        String testdoc = utils.getFullTestURL("ScDDELinksObj.ods");
         try {
             oDoc = SOfficeFactory.getFactory(oMSF).loadDocument(testdoc);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -129,7 +129,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
 
-        testdoc = utils.getFullTestDocName("ScDDELinksObj.sdc");
+        testdoc = utils.getFullTestDocName("ScDDELinksObj.ods");
         log.println("filling some cells");
         try {
             oSheet.getCellByPosition(5, 5).setFormula(
