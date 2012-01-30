@@ -35,8 +35,6 @@ my_components = \
     calc \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
-    component/basctl/util/basctl \
-    component/basic/util/sb \
     component/chart2/source/controller/chartcontroller \
     component/chart2/source/model/chartmodel \
     component/chart2/source/tools/charttools \
@@ -93,17 +91,9 @@ my_components = \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
-    component/sc/util/vbaobj \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
     component/sccomp/source/solver/solver \
-    component/scripting/source/basprov/basprov \
-    component/scripting/source/dlgprov/dlgprov \
-    component/scripting/source/protocolhandler/protocolhandler \
-    component/scripting/source/pyprov/mailmerge \
-    component/scripting/source/stringresource/stringresource \
-    component/scripting/source/vbaevents/vbaevents \
-    component/scripting/util/scriptframe \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -123,7 +113,6 @@ my_components = \
     component/sw/util/msword \
     component/sw/util/sw \
     component/sw/util/swd \
-    component/sw/util/vbaswobj \
     component/toolkit/util/tk \
     component/ucb/source/sorter/srtrs1 \
     component/ucb/source/core/ucb1 \
@@ -141,7 +130,6 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/uui/util/uui \
-    component/vbahelper/util/msforms \
     component/writerfilter/util/writerfilter \
     component/writerperfect/util/msworksfilter \
     component/writerperfect/util/visiofilter \
@@ -186,6 +174,24 @@ my_components += \
     syssh \
     tvhlp1 \
     ucpchelp1 \
+
+.ENDIF
+
+.IF "$(OS)" != "IOS"
+
+my_components += \
+    component/basctl/util/basctl \
+    component/basic/util/sb \
+    component/sc/util/vbaobj \
+    component/scripting/source/basprov/basprov \
+    component/scripting/source/dlgprov/dlgprov \
+    component/scripting/source/protocolhandler/protocolhandler \
+    component/scripting/source/pyprov/mailmerge \
+    component/scripting/source/stringresource/stringresource \
+    component/scripting/source/vbaevents/vbaevents \
+    component/scripting/util/scriptframe \
+    component/sw/util/vbaswobj \
+    component/vbahelper/util/msforms
 
 .ENDIF
 
