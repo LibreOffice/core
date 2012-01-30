@@ -102,7 +102,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
 
     for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
     {
-        unsigned char *sp = ( pSrc + nStride * (y + aSrcRect.top) +
+        unsigned char *sp = ( pSrc + nStride * (aSrcRect.bottom - aSrcRect.top - y - 1) +
                               aSrcRect.left * 3 /* src pixel size */ );
 
         switch (pOutBuffer->format) {
@@ -238,10 +238,13 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             ARect aRect = { 0, 0, 0, 0 };
             aRect.right = ANativeWindow_getWidth(pWindow);
             aRect.bottom = ANativeWindow_getHeight(pWindow);
-            fprintf (stderr, "we have an app window ! %p %dx%x (%d)\n",
+            int nRet = ANativeWindow_setBuffersGeometry(
+                                pWindow, ANativeWindow_getWidth(pWindow),
+                                ANativeWindow_getHeight(pWindow),
+                                WINDOW_FORMAT_RGBA_8888);
+            fprintf (stderr, "we have an app window ! %p %dx%x (%d) set %d\n",
                      pWindow, aRect.right, aRect.bottom,
-                     ANativeWindow_getFormat(pWindow));
-
+                     ANativeWindow_getFormat(pWindow), nRet);
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
