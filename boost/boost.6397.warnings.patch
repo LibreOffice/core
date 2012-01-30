@@ -169,6 +169,18 @@
     } else {
       std::fill_n(index_base_list_.begin(),NumDims,0);
     }
+@@ -622,9 +622,9 @@
+   // This is only supplied to support multi_array's default constructor
+   explicit multi_array_ref(T* base,
+                            const storage_order_type& so,
+-                           const index* index_bases,
++                           const index* index_bases_,
+                            const size_type* extents) :
+-    super_type(base,so,index_bases,extents) { }
++    super_type(base,so,index_bases_,extents) { }
+ 
+ };
+ 
 --- misc/boost_1_44_0/boost/multi_array/storage_order.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/storage_order.hpp	2012-01-12 20:30:57.667472937 +0000
 @@ -34,10 +34,10 @@
@@ -199,7 +211,19 @@
 +    base_(base), extents_(extents), strides_(i_strides),
      index_base_(index_base) {
    }
+
+@@ -369,9 +369,9 @@
  
+   sub_array (T* base,
+             const size_type* extents,
+-            const index* strides,
++            const index* _strides,
+             const index* index_base) :
+-    super_type(base,extents,strides,index_base) {
++    super_type(base,extents,_strides,index_base) {
+   }
+ 
+ };
 --- misc/boost_1_44_0/boost/multi_array/view.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/view.hpp	2012-01-12 20:26:36.350945110 +0000
 @@ -231,7 +231,7 @@
@@ -220,3 +244,14 @@
  
      // Calculate the array size
      num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
+@@ -441,8 +441,8 @@
+   template <typename ExtentList, typename Index>
+   explicit multi_array_view(T* base,
+                             const ExtentList& extents,
+-                            const boost::array<Index,NumDims>& strides) :
+-    super_type(base,extents,strides) { }
++                            const boost::array<Index,NumDims>& _strides) :
++    super_type(base,extents,_strides) { }
+ 
+ };
+ 
