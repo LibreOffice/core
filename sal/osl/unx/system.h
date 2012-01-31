@@ -135,11 +135,6 @@
 #   include <netinet/tcp.h>
 #   include <dlfcn.h>
 #   include <machine/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN_OO
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN_OO
-#   endif
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
@@ -339,24 +334,6 @@ int macxp_resolveAlias(char *path, int buflen);
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
     !defined(IOS) && !defined(ANDROID)
 #   error "Target platform not specified!"
-#endif
-
-#if defined(NETBSD)
-#if defined _LITTLE_ENDIAN_OO
-#   define _OSL_BIGENDIAN
-#elif defined _BIG_ENDIAN_OO
-#   define _OSL_LITENDIAN
-#else
-#   error undetermined endianess
-#endif
-#else
-#if defined _LITTLE_ENDIAN
-#   define _OSL_BIGENDIAN
-#elif defined _BIG_ENDIAN
-#   define _OSL_LITENDIAN
-#else
-#   error undetermined endianess
-#endif
 #endif
 
 #ifndef PTR_FD_SET
