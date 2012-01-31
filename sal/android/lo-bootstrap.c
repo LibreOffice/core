@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -815,6 +816,8 @@ lo_dlopen(const char *library)
     int i;
     int found;
 
+    struct timeval tv0, tv1, tvdiff;
+
     rover = loaded_libraries;
     while (rover != NULL &&
            strcmp(rover->name, library) != 0)
@@ -869,8 +872,13 @@ lo_dlopen(const char *library)
     }
     free_ptrarray((void **) needed);
 
+    gettimeofday(&tv0, NULL);
     p = dlopen(full_name, RTLD_LOCAL);
-    LOGI("dlopen(%s) = %p", full_name, p);
+    gettimeofday(&tv1, NULL);
+    timersub(&tv1, &tv0, &tvdiff);
+    LOGI("dlopen(%s) = %p, %ld.%03lds",
+         full_name, p,
+         (long) tvdiff.tv_sec, (long) tvdiff.tv_usec / 1000);
     free(full_name);
     if (p == NULL)
         LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
