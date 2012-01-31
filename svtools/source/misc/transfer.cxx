@@ -2008,7 +2008,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                     rtl::OString aDesc( pFDesc->fgd[ 0 ].cFileName );
                     rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
 
-                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.Len() - 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL")) )
+                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL")) )
                     {
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( String( aDesc, eTextEncoding ) ).GetMainURL( INetURLObject::NO_DECODE ),
                                                                                   STREAM_STD_READ );
@@ -2041,7 +2041,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                                 else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("URL=")))
                                 {
                                     rBmk = INetBookmark( String( aLine.copy(4), eTextEncoding ),
-                                                         String( aDesc.Erase( aDesc.Len() - 4 ), eTextEncoding ) );
+                                                         String( aDesc.copy(0, aDesc.getLength() - 4), eTextEncoding ) );
                                     bRet = sal_True;
                                     break;
                                 }
