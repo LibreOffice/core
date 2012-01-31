@@ -620,6 +620,9 @@ sub searchprog
 
 sub searchMacOffice
 {
+    if (-d "/Applications/LibreOffice.app" ) {
+        return "/Applications/LibreOffice.app"
+    }
     if (-d "/Applications/OpenOffice.org.app" ) {
         return "/Applications/OpenOffice.org.app"
     }
