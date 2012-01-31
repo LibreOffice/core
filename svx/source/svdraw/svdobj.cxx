@@ -3027,6 +3027,11 @@ SvxShape* SdrObject::getSvxShape() const
     return xShape;
 }
 
+void SdrObject::setUnoShape(const uno::Reference<uno::XInterface >& _rxUnoShape)
+{
+    impl_setUnoShape( _rxUnoShape );
+}
+
 ::svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
 {
     DBG_TESTSOLARMUTEX();

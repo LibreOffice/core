@@ -1014,22 +1014,10 @@ public:
 
     static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
 
-    // helper struct for granting access exclusive to SvxShape
-    struct GrantXShapeAccess
-    {
-        friend class SvxShape;
-    private:
-        GrantXShapeAccess() { }
-    };
-
     // setting the UNO representation is allowed for the UNO representation itself only!
     void setUnoShape(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
-            GrantXShapeAccess /*aGrant*/
-        )
-    {
-        impl_setUnoShape( _rxUnoShape );
-    }
+            const com::sun::star::uno::Reference<
+                com::sun::star::uno::XInterface>& _rxUnoShape);
 
     /** retrieves the instance responsible for notifying changes in the properties of the shape associated with
         the SdrObject

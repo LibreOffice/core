@@ -257,7 +257,7 @@ SvxShape::~SvxShape() throw()
         mpImpl->mpMaster->dispose();
 
     if ( mpObj.is() )
-        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(NULL);
 
     if( HasSdrObjectOwnership() && mpObj.is() )
     {
@@ -385,7 +385,7 @@ void SvxShape::impl_initFromSdrObject()
 
     osl_incrementInterlockedCount( &m_refCount );
     {
-        mpObj->setUnoShape( *this, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(*this);
     }
     osl_decrementInterlockedCount( &m_refCount );
 
@@ -1382,7 +1382,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
             }
         }
 
-        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(NULL);
 
         if ( bFreeSdrObject )
         {
