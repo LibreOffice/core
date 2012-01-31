@@ -215,28 +215,20 @@ protected:
     sal_uInt16                      nVersion;
 
 private:
-    SVX_DLLPRIVATE void operator=(const SdrObjUserData& rData);        // nicht implementiert
-    SVX_DLLPRIVATE sal_Bool operator==(const SdrObjUserData& rData) const; // nicht implementiert
-    SVX_DLLPRIVATE sal_Bool operator!=(const SdrObjUserData& rData) const; // nicht implementiert
+    SVX_DLLPRIVATE void operator=(const SdrObjUserData& rData);        // not implemented
+    SVX_DLLPRIVATE bool operator==(const SdrObjUserData& rData) const; // not implemented
+    SVX_DLLPRIVATE bool operator!=(const SdrObjUserData& rData) const; // not implemented
 
 public:
     TYPEINFO();
 
-    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer)
-    :   nInventor(nInv),
-        nIdentifier(nId),
-        nVersion(nVer)
-    {}
-    SdrObjUserData(const SdrObjUserData& rData)
-    :   nInventor(rData.nInventor),
-        nIdentifier(rData.nIdentifier),
-        nVersion(rData.nVersion)
-    {}
+    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer);
+    SdrObjUserData(const SdrObjUserData& rData);
     virtual ~SdrObjUserData();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    sal_uInt32  GetInventor() const { return nInventor; }
-    sal_uInt16  GetId() const { return nIdentifier; }
+    sal_uInt32 GetInventor() const;
+    sal_uInt16 GetId() const;
 
     virtual bool HasMacro (const SdrObject* pObj) const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
@@ -252,20 +244,18 @@ public:
 
 class SdrObjUserDataList
 {
-    Container                   aList;
+    Container aList;
 
 public:
-    SdrObjUserDataList()
-    :   aList(1024,4,4)
-    {}
-    ~SdrObjUserDataList() { Clear(); }
+    SdrObjUserDataList();
+    ~SdrObjUserDataList();
 
     void Clear();
-    sal_uInt16 GetUserDataCount() const { return sal_uInt16(aList.Count()); }
-    SdrObjUserData* GetUserData(sal_uInt16 nNum) const { return (SdrObjUserData*)aList.GetObject(nNum); }
-    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF) { aList.Insert(pData,nPos); }
-    SdrObjUserData* RemoveUserData(sal_uInt16 nNum) { return (SdrObjUserData*)aList.Remove(nNum);}
-    void DeleteUserData(sal_uInt16 nNum) { delete RemoveUserData(nNum); }
+    sal_uInt16 GetUserDataCount() const;
+    SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
+    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF);
+    SdrObjUserData* RemoveUserData(sal_uInt16 nNum);
+    void DeleteUserData(sal_uInt16 nNum);
 };
 
 //************************************************************

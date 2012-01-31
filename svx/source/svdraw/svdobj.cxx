@@ -141,8 +141,26 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 
 TYPEINIT0(SdrObjUserData);
 
-SdrObjUserData::~SdrObjUserData()
+SdrObjUserData::SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer) :
+    nInventor(nInv),
+    nIdentifier(nId),
+    nVersion(nVer) {}
+
+SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
+    nInventor(rData.nInventor),
+    nIdentifier(rData.nIdentifier),
+    nVersion(rData.nVersion) {}
+
+SdrObjUserData::~SdrObjUserData() {}
+
+sal_uInt32 SdrObjUserData::GetInventor() const
 {
+    return nInventor;
+}
+
+sal_uInt16 SdrObjUserData::GetId() const
+{
+    return nIdentifier;
 }
 
 bool SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
@@ -199,6 +217,11 @@ XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/
     return String();
 }
 
+SdrObjUserDataList::SdrObjUserDataList() :
+    aList(1024,4,4) {}
+
+SdrObjUserDataList::~SdrObjUserDataList() { Clear(); }
+
 void SdrObjUserDataList::Clear()
 {
     sal_uInt16 nAnz=GetUserDataCount();
@@ -206,6 +229,31 @@ void SdrObjUserDataList::Clear()
         delete GetUserData(i);
     }
     aList.Clear();
+}
+
+sal_uInt16 SdrObjUserDataList::GetUserDataCount() const
+{
+    return sal_uInt16(aList.Count());
+}
+
+SdrObjUserData* SdrObjUserDataList::GetUserData(sal_uInt16 nNum) const
+{
+    return (SdrObjUserData*)aList.GetObject(nNum);
+}
+
+void SdrObjUserDataList::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
+{
+    aList.Insert(pData,nPos);
+}
+
+SdrObjUserData* SdrObjUserDataList::RemoveUserData(sal_uInt16 nNum)
+{
+    return (SdrObjUserData*)aList.Remove(nNum);
+}
+
+void SdrObjUserDataList::DeleteUserData(sal_uInt16 nNum)
+{
+    delete RemoveUserData(nNum);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
