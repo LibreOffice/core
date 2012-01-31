@@ -483,8 +483,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KEYID,                 "qtz", ""   },   // key id pseudolanguage used for UI testing
     { LANGUAGE_USER_PALI_LATIN,            "pli", ""   },   // Pali with Latin script
     { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN" },
-    { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", ""   },
-    { LANGUAGE_USER_KOMI_PERMYAK,          "koi", ""   },
+    { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU" },
+    { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
