@@ -885,7 +885,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         { m_xSMGR.clear(); }
 }
@@ -1021,7 +1021,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
                 xAccMgr->removeKeyEvent(aAWTKey);
         }
         catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+            { throw; }
         catch(const css::uno::Exception&)
             {}
 
@@ -1299,7 +1299,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
         }
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
@@ -1401,7 +1401,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
         }
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
@@ -1438,7 +1438,7 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
         m_xAct->store();
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw;  }
     catch(const css::uno::Exception&)
         { return sal_False; }
 
@@ -1527,7 +1527,7 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
         }
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
