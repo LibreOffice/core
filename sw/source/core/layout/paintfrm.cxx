@@ -2850,6 +2850,22 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
+    // Hide all page break controls before showing them again
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+    if ( pWrtSh )
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+        const SwPageFrm* pHiddenPage = pPage;
+        while ( pHiddenPage->GetPrev() != NULL )
+        {
+            pHiddenPage = static_cast< const SwPageFrm* >( pHiddenPage->GetPrev() );
+            SwFrameControlPtr pControl = rMngr.GetControl( PageBreak, pHiddenPage );
+            if ( pControl.get() )
+                pControl->ShowAll( false );
+        }
+    }
+
     // #i76669#
     SwViewObjectContactRedirector aSwRedirector( *pSh );
 
