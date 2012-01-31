@@ -511,7 +511,7 @@ public:
     TYPEINFO();
     SdrObject();
 
-    /** fres the SdrObject pointed to by the argument
+    /** frees the SdrObject pointed to by the argument
 
         In case the object has an SvxShape, which has the ownership of the object, it
         is actually *not* deleted.
@@ -522,18 +522,18 @@ public:
     virtual void SetBoundRectDirty();
 
     virtual void SetObjList(SdrObjList* pNewObjList);
-    SdrObjList* GetObjList() const { return pObjList; }
+    SdrObjList* GetObjList() const;
 
     virtual void SetPage(SdrPage* pNewPage);
-    SdrPage* GetPage() const { return pPage; }
+    SdrPage* GetPage() const;
 
     virtual void SetModel(SdrModel* pNewModel);
-    SdrModel* GetModel() const { return pModel; }
+    SdrModel* GetModel() const;
     SdrItemPool* GetObjectItemPool() const;
 
     void AddListener(SfxListener& rListener);
     void RemoveListener(SfxListener& rListener);
-    const SfxBroadcaster* GetBroadcaster() const { return pPlusData!=NULL ? pPlusData->pBroadcast : NULL; }
+    const SfxBroadcaster* GetBroadcaster() const;
 
     virtual void AddReference(SdrVirtObj& rVrtObj);
     virtual void DelReference(SdrVirtObj& rVrtObj);
@@ -549,8 +549,8 @@ public:
     virtual void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
 
     // UserCall interface
-    void SetUserCall(SdrObjUserCall* pUser) { pUserCall=pUser; }
-    SdrObjUserCall* GetUserCall() const { return pUserCall; }
+    void SetUserCall(SdrObjUserCall* pUser);
+    SdrObjUserCall* GetUserCall() const;
     void SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const;
 
     // Ein solcher Referenzpunkt ist z.B. der Punkt eines Symbols, der
@@ -572,7 +572,7 @@ public:
     rtl::OUString GetDescription() const;
 
     // Fuer Gruppenobjekte
-    bool IsGroupObject() const { return GetSubList()!=NULL; }
+    bool IsGroupObject() const;
     virtual SdrObjList* GetSubList() const;
     SdrObject* GetUpGroup() const;
 
@@ -586,11 +586,11 @@ public:
 
     // Diese Methode sollte nur verwendet werden, wenn man ganz  genau weiss,
     // was man macht:
-    sal_uInt32 GetOrdNumDirect() const { return nOrdNum; }
+    sal_uInt32 GetOrdNumDirect() const;
 
     // Das Setzen der Ordnungsnummer sollte nur vom Model bzw. von der Page
     // geschehen.
-    void SetOrdNum(sal_uInt32 nNum) { nOrdNum=nNum; }
+    void SetOrdNum(sal_uInt32 nNum);
 
     /** Return the position in the navigation order for the called object.
         Note that this method may update the navigation position of the
@@ -751,7 +751,7 @@ public:
     virtual void NbcSetRelativePos(const Point& rPnt);
     virtual void SetRelativePos(const Point& rPnt);
     virtual Point GetRelativePos() const;
-    void ImpSetAnchorPos(const Point& rPnt) { aAnchor=rPnt; }
+    void ImpSetAnchorPos(const Point& rPnt);
     virtual void NbcSetAnchorPos(const Point& rPnt);
     virtual void SetAnchorPos(const Point& rPnt);
     virtual const Point& GetAnchorPos() const;
@@ -856,7 +856,7 @@ public:
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
-    bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
+    bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;
 
     // Konnektoren. (siehe auch Dokumentation in SvdoEdge.HXX, SdrEdgeObj
     //               sowie SvdGlue.HXX und SvdGlEV.HXX)
@@ -954,43 +954,43 @@ public:
     SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
 
     // TRUE: Referenz auf ein Obj
-    bool IsVirtualObj() const { return bVirtObj; }
+    bool IsVirtualObj() const;
 
     // true=Obj kann warsch. gefuellt werden; false=Obj kann warsch. Linienenden haben.
     // ungueltig, wenn es sich um ein GroupObj handelt.
-    bool IsClosedObj() const { return bClosedObj; }
+    bool IsClosedObj() const;
 
-    bool IsEdgeObj() const { return bIsEdge; }
-    bool Is3DObj() const { return bIs3DObj; }
-    bool IsUnoObj() const { return bIsUnoObj; }
-    bool IsMasterCachable() const { return !bNotMasterCachable; }
-    bool ShareLock() { bool r=!bNetLock; bNetLock=true; return r; }
-    void ShareUnlock() { bNetLock=false; }
-    bool IsShareLock() const { return bNetLock; }
-    void SetMarkProtect(bool bProt) { bMarkProt=bProt; }
-    bool IsMarkProtect() const { return bMarkProt; }
+    bool IsEdgeObj() const;
+    bool Is3DObj() const;
+    bool IsUnoObj() const;
+    bool IsMasterCachable() const;
+    bool ShareLock();
+    void ShareUnlock();
+    bool IsShareLock() const;
+    void SetMarkProtect(bool bProt);
+    bool IsMarkProtect() const;
     void SetInserted(bool bIns);
-    bool IsInserted() const { return bInserted; }
-    void SetGrouped(bool bGrp) { bGrouped=bGrp; }
-    bool IsGrouped() const { return bGrouped; }
+    bool IsInserted() const;
+    void SetGrouped(bool bGrp);
+    bool IsGrouped() const;
     void SetMoveProtect(bool bProt);
-    bool IsMoveProtect() const { return bMovProt; }
+    bool IsMoveProtect() const;
     void SetResizeProtect(bool bProt);
-    bool IsResizeProtect() const { return bSizProt; }
+    bool IsResizeProtect() const;
     void SetPrintable(bool bPrn);
-    bool IsPrintable() const { return !bNoPrint; }
+    bool IsPrintable() const;
     void SetVisible(bool bVisible);
-    bool IsVisible() const { return mbVisible; }
-    void SetEmptyPresObj(bool bEpt) { bEmptyPresObj=bEpt; }
-    bool IsEmptyPresObj() const { return bEmptyPresObj; }
-    void SetNotVisibleAsMaster(bool bFlg) { bNotVisibleAsMaster=bFlg; }
-    bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster; }
+    bool IsVisible() const;
+    void SetEmptyPresObj(bool bEpt);
+    bool IsEmptyPresObj() const;
+    void SetNotVisibleAsMaster(bool bFlg);
+    bool IsNotVisibleAsMaster() const;
 
     // #i25616#
-    bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry; }
+    bool LineIsOutsideGeometry() const;
 
     // #i25616#
-    bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange; }
+    bool DoesSupportTextIndentingOnLineWidthChange() const;
 
     // applikationsspeziefische Daten
     sal_uInt16 GetUserDataCount() const;

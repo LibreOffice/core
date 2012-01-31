@@ -568,9 +568,19 @@ void SdrObject::SetModel(SdrModel* pNewModel)
     pModel = pNewModel;
 }
 
+SdrModel* SdrObject::GetModel() const
+{
+    return pModel;
+}
+
 void SdrObject::SetObjList(SdrObjList* pNewObjList)
 {
     pObjList=pNewObjList;
+}
+
+SdrObjList* SdrObject::GetObjList() const
+{
+    return pObjList;
 }
 
 void SdrObject::SetPage(SdrPage* pNewPage)
@@ -581,6 +591,11 @@ void SdrObject::SetPage(SdrPage* pNewPage)
         if (pMod!=pModel && pMod!=NULL) {
             SetModel(pMod);
         }}
+}
+
+SdrPage* SdrObject::GetPage() const
+{
+    return pPage;
 }
 
 // init global static itempool
@@ -684,6 +699,11 @@ void SdrObject::RemoveListener(SfxListener& rListener)
     }
 }
 
+const SfxBroadcaster* SdrObject::GetBroadcaster() const
+{
+    return pPlusData!=NULL ? pPlusData->pBroadcast : NULL;
+}
+
 void SdrObject::AddReference(SdrVirtObj& rVrtObj)
 {
     AddListener(rVrtObj);
@@ -706,6 +726,11 @@ Point SdrObject::GetRefPoint() const
 
 void SdrObject::SetRefPoint(const Point& /*rPnt*/)
 {
+}
+
+bool SdrObject::IsGroupObject() const
+{
+    return GetSubList()!=NULL;
 }
 
 SdrObjList* SdrObject::GetSubList() const
@@ -858,6 +883,16 @@ sal_uInt32 SdrObject::GetOrdNum() const
         }
     } else ((SdrObject*)this)->nOrdNum=0;
     return nOrdNum;
+}
+
+sal_uInt32 SdrObject::GetOrdNumDirect() const
+{
+    return nOrdNum;
+}
+
+void SdrObject::SetOrdNum(sal_uInt32 nNum)
+{
+    nOrdNum = nNum;
 }
 
 sal_uInt32 SdrObject::GetNavigationPosition (void)
@@ -1597,6 +1632,11 @@ Point SdrObject::GetRelativePos() const
     return GetSnapRect().TopLeft()-aAnchor;
 }
 
+void SdrObject::ImpSetAnchorPos(const Point& rPnt)
+{
+    aAnchor = rPnt;
+}
+
 void SdrObject::NbcSetAnchorPos(const Point& rPnt)
 {
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
@@ -1857,6 +1897,11 @@ rtl::OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) con
         return pData->GetMacroPopupComment(rRec,this);
     }
     return rtl::OUString();
+}
+
+bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const
+{
+    return CheckMacroHit(rRec) != NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2525,6 +2570,128 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
     return pRet;
 }
 
+bool SdrObject::IsVirtualObj() const
+{
+    return bVirtObj;
+}
+
+bool SdrObject::IsClosedObj() const
+{
+    return bClosedObj;
+}
+
+bool SdrObject::IsEdgeObj() const
+{
+    return bIsEdge;
+}
+
+bool SdrObject::Is3DObj() const
+{
+    return bIs3DObj;
+}
+
+bool SdrObject::IsUnoObj() const
+{
+    return bIsUnoObj;
+}
+
+bool SdrObject::IsMasterCachable() const
+{
+    return !bNotMasterCachable;
+}
+
+bool SdrObject::ShareLock()
+{
+    bool r = !bNetLock;
+    bNetLock = true;
+    return r;
+}
+
+void SdrObject::ShareUnlock()
+{
+    bNetLock = false;
+}
+
+bool SdrObject::IsShareLock() const
+{
+    return bNetLock;
+}
+
+void SdrObject::SetMarkProtect(bool bProt)
+{
+    bMarkProt = bProt;
+}
+
+bool SdrObject::IsMarkProtect() const
+{
+    return bMarkProt;
+}
+
+bool SdrObject::IsInserted() const
+{
+    return bInserted;
+}
+
+void SdrObject::SetGrouped(bool bGrp)
+{
+    bGrouped = bGrp;
+}
+
+bool SdrObject::IsGrouped() const
+{
+    return bGrouped;
+}
+
+bool SdrObject::IsMoveProtect() const
+{
+    return bMovProt;
+}
+
+bool SdrObject::IsResizeProtect() const
+{
+    return bSizProt;
+}
+
+bool SdrObject::IsPrintable() const
+{
+    return !bNoPrint;
+}
+
+bool SdrObject::IsVisible() const
+{
+    return mbVisible;
+}
+
+void SdrObject::SetEmptyPresObj(bool bEpt)
+{
+    bEmptyPresObj = bEpt;
+}
+
+bool SdrObject::IsEmptyPresObj() const
+{
+    return bEmptyPresObj;
+}
+
+void SdrObject::SetNotVisibleAsMaster(bool bFlg)
+{
+    bNotVisibleAsMaster=bFlg;
+}
+
+bool SdrObject::IsNotVisibleAsMaster() const
+{
+    return bNotVisibleAsMaster;
+}
+
+bool SdrObject::LineIsOutsideGeometry() const
+{
+    return mbLineIsOutsideGeometry;
+}
+
+bool SdrObject::DoesSupportTextIndentingOnLineWidthChange() const
+{
+    return mbSupportTextIndentingOnLineWidthChange;
+}
+
 // convert this path object to contour object, even when it is a group
 SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
 {
@@ -2708,6 +2875,16 @@ void SdrObject::DeleteUserData(sal_uInt16 nNum)
     } else {
         OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");
     }
+}
+
+void SdrObject::SetUserCall(SdrObjUserCall* pUser)
+{
+    pUserCall = pUser;
+}
+
+SdrObjUserCall* SdrObject::GetUserCall() const
+{
+    return pUserCall;
 }
 
 void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const
