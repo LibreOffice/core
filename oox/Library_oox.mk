@@ -41,9 +41,9 @@ $(eval $(call gb_Library_set_include,oox,\
 ))
 
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
-#Debian Linux ia64 fails at compile time on
-#oox/source/drawingml/customshapepresets*.cxx which are apparently too large
-#for the toolchain to handle with default optimization
+# at least Debian Linux ia64 fails at compile time on
+# link libooxlo.so which is apparently too large
+# for the toolchain to handle with default optimization
 $(eval $(call gb_Library_add_cxxflags,oox,\
     -Os \
 ))
