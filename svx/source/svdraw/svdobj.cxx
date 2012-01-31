@@ -137,6 +137,13 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 {
 }
 
+SdrObjMacroHitRec::SdrObjMacroHitRec() :
+    pOut(NULL),
+    pVisiLayer(NULL),
+    pPageView(NULL),
+    nTol(0),
+    bDown(false) {}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT0(SdrObjUserData);

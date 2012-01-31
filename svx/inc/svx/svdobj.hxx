@@ -178,7 +178,7 @@ public:
 //   Hilfsklasse SdrObjMacroHitRec
 //************************************************************
 
-class SdrObjMacroHitRec
+class SVX_DLLPUBLIC SdrObjMacroHitRec
 {
 public:
     Point                       aPos;
@@ -186,17 +186,10 @@ public:
     OutputDevice*               pOut;
     const SetOfByte*            pVisiLayer;
     const SdrPageView*          pPageView;
-    sal_uInt16                      nTol;
+    sal_uInt16                  nTol;
     bool                        bDown;
 
-public:
-    SdrObjMacroHitRec()
-    :   pOut(NULL),
-        pVisiLayer(NULL),
-        pPageView(NULL),
-        nTol(0),
-        bDown(false)
-    {}
+    SdrObjMacroHitRec();
 };
 
 //************************************************************
