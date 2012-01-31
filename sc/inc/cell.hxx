@@ -535,8 +535,6 @@ public:
     bool            IsMultilineResult();
 
     void            MaybeInterpret();
-
-    void            ResetFormulaResult();
 };
 
 //          Iterator for references in a formula cell
