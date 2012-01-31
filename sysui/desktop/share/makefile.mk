@@ -52,7 +52,8 @@ ULFFILES= \
     launcher_genericname.ulf \
     launcher_name.ulf
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin qstart startcenter javafilter
+LAUNCHERLIST_APPS = writer calc draw impress math base printeradmin startcenter
+LAUNCHERLIST = $(LAUNCHERLIST_APPS) qstart javafilter binfilter
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
@@ -126,9 +127,9 @@ MIMEICONLIST = \
     extension
 
 ICONDEPN = \
-    ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST:s/qstart//:s/javafilter//)}.png \
+	   ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST_APPS)}.png \
     ../icons/hicolor/{16x16 32x32 48x48}/mimetypes/{$(MIMEICONLIST)}.png \
-    ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//:s/javafilter//)}.png \
+    ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST_APPS)}.png \
     ../icons/locolor/{16x16 32x32}/mimetypes/{$(MIMEICONLIST)}.png
 
 # --- Targets ------------------------------------------------------
