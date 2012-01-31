@@ -38,6 +38,7 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xelementaccess.hxx
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamed.hxx,test/container/xnamed.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xindexaccess.hxx,test/container/xindexaccess.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamecontainer.hxx,test/container/xnamecontainer.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamereplace.hxx,test/container/xnamereplace.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/cellproperties.hxx,test/sheet/cellproperties.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilottable.hxx,test/sheet/xdatapilottable.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilotfieldgrouping.hxx,test/sheet/xdatapilotfieldgrouping.hxx))
