@@ -104,13 +104,19 @@ copy-stuff: buildrcs
 # Libs and UNO components that we need.
 #
 	for F in $(strip \
+		  analysislo \
+		  avmedialo \
 		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
+		  canvastoolslo \
 		  comphelpgcc3 \
 		  configmgr.uno \
+		  cppcanvaslo \
 		  deployment \
 		  deploymentmisclo \
+		  drawinglayerlo \
+		  editenglo \
 		  fileacc \
 		  fontconfig \
 		  forlo \
@@ -139,6 +145,7 @@ copy-stuff: buildrcs
 		  msfilterlo \
 		  ooxlo \
 		  package2 \
+		  reflection.uno \
 		  reg \
 		  saxlo \
 		  sblo \
@@ -150,6 +157,8 @@ copy-stuff: buildrcs
 		  store \
 		  svllo \
 		  svtlo \
+		  svxlo \
+		  svxcorelo \
 		  test \
 		  tklo \
 		  tllo \
@@ -170,6 +179,11 @@ copy-stuff: buildrcs
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
+		  xolo \
+		  xstor \
+		  \
+		  swlo \
+		  swdlo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
