@@ -4578,14 +4578,14 @@ const XubString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 
     if ( pItem )
     {
-        if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommandStr.Len() ))
+        if ( !pItem->maHelpText.Len() && ( !pItem->maHelpId.isEmpty() || pItem->maCommandStr.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if ( pItem->maCommandStr.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
-                if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+                if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
                     pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
@@ -4654,7 +4654,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             String aCommand = GetItemCommand( nItemId );
             rtl::OString  aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || aHelpId.getLength() )
+            if ( aCommand.Len() || !aHelpId.isEmpty() )
             {
                 // If help is available then trigger it
                 Help* pHelp = Application::GetHelp();
@@ -4662,7 +4662,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 {
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
-                    else if ( aHelpId.getLength() )
+                    else if ( !aHelpId.isEmpty() )
                         pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;

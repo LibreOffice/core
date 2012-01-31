@@ -1762,7 +1762,7 @@ rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 
     if ( pItem )
     {
-        if ( pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpId.isEmpty() )
             aRet = pItem->maHelpId;
         else
             aRet = ::rtl::OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );

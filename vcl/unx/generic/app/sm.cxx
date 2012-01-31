@@ -472,7 +472,7 @@ void SessionManagerClient::open()
                                             SmcSaveCompleteProcMask         |
                                             SmcShutdownCancelledProcMask    ,
                                             &aCallbacks,
-                                            rPrevId.getLength() ? const_cast<char*>(rPrevId.getStr()) : NULL,
+                                            rPrevId.isEmpty() ? NULL : const_cast<char*>(rPrevId.getStr()),
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );

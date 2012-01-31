@@ -873,7 +873,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
             String aCommand = GetItemCommand( nItemId );
             rtl::OString aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || aHelpId.getLength() )
+            if ( aCommand.Len() || !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -881,7 +881,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
                 {
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
-                    else if ( aHelpId.getLength() )
+                    else if ( !aHelpId.isEmpty() )
                         pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;
@@ -1266,14 +1266,14 @@ const XubString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
         ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommand.Len() ))
+        if ( !pItem->maHelpText.Len() && ( !pItem->maHelpId.isEmpty() || pItem->maCommand.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if ( pItem->maCommand.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
-                if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+                if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
                     pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
@@ -1329,7 +1329,7 @@ rtl::OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
         ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        if ( pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpId.isEmpty() )
             aRet = pItem->maHelpId;
         else
             aRet = ::rtl::OUStringToOString( pItem->maCommand, RTL_TEXTENCODING_UTF8 );

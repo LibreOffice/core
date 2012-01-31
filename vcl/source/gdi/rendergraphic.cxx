@@ -66,7 +66,7 @@ RenderGraphic::RenderGraphic( const rtl::OUString& rGraphicDataMimeType,
     mnGraphicDataLength( nGraphicDataLength ),
     maGraphicDataMimeType( rGraphicDataMimeType )
 {
-    if( rGraphicDataMimeType.getLength( ) && nGraphicDataLength )
+    if( !rGraphicDataMimeType.isEmpty( ) && nGraphicDataLength )
     {
         maGraphicData.reset( new sal_uInt8[ nGraphicDataLength ] );
 
@@ -113,7 +113,7 @@ bool RenderGraphic::operator==(const RenderGraphic& rRenderGraphic ) const
 
 bool RenderGraphic::operator!() const
 {
-    return( ( 0 == maGraphicDataMimeType.getLength( ) ) ||
+    return( ( maGraphicDataMimeType.isEmpty( ) ) ||
             ( 0 == mnGraphicDataLength ) ||
             !maGraphicData.get( ) );
 }

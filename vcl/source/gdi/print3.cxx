@@ -359,7 +359,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         rtl::OUString aPagesVal;
         pPagesVal->Value >>= aPagesVal;
-        if( aPagesVal.getLength() )
+        if( !aPagesVal.isEmpty() )
         {
             // "Pages" attribute from API is now equivalent to "PageRange"
             // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
@@ -384,7 +384,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 rtl::OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
-                if( aRange.getLength() == 0 )
+                if( aRange.isEmpty() )
                 {
                     sal_Int32 nPages = i_pController->getPageCount();
                     if( nPages > 0 )
@@ -442,7 +442,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( aDlg.isPrintToFile() )
             {
                 rtl::OUString aFile = queryFile( pController->getPrinter().get() );
-                if( ! aFile.getLength() )
+                if( aFile.isEmpty() )
                 {
                     i_pController->abortJob();
                     return;
@@ -526,7 +526,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     {
         rtl::OUString aFile;
         pFileValue->Value >>= aFile;
-        if( aFile.getLength() )
+        if( !aFile.isEmpty() )
         {
             mbPrintFile = sal_True;
             maPrintFile = aFile;
@@ -1336,7 +1336,7 @@ void PrinterController::setValue( const beans::PropertyValue& i_rValue )
 
 void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
 {
-    DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
+    DBG_ASSERT( mpImplData->maUIOptions.isEmpty(), "setUIOptions called twice !" );
 
     mpImplData->maUIOptions = i_rOptions;
 
@@ -1390,7 +1390,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             {
                 mpImplData->maUIPropertyEnabled[ it->second ] = bIsEnabled;
             }
-            if( aDep.maDependsOnName.getLength() > 0 )
+            if( !aDep.maDependsOnName.isEmpty() )
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
             if( aChoicesDisabled.getLength() > 0 )
                 mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
@@ -1707,15 +1707,15 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 {
     sal_Int32 nElements =
         1                                                               // ControlType
-        + (i_rTitle.getLength() ? 1 : 0)                                // Text
+        + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
         + (i_rHelpIds.getLength() ? 1 : 0)                              // HelpId
         + (i_pVal ? 1 : 0)                                              // Property
         + i_rControlOptions.maAddProps.getLength()                      // additional props
-        + (i_rControlOptions.maGroupHint.getLength() ? 1 : 0)           // grouping
+        + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
         + (i_rControlOptions.mbInternalOnly ? 1 : 0)                    // internal hint
         + (i_rControlOptions.mbEnabled ? 0 : 1)                         // enabled
         ;
-    if( i_rControlOptions.maDependsOnName.getLength() )
+    if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
         nElements += 1;
         if( i_rControlOptions.mnDependsOnEntry != -1 )
@@ -1726,7 +1726,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 
     Sequence< PropertyValue > aCtrl( nElements );
     sal_Int32 nUsed = 0;
-    if( i_rTitle.getLength() )
+    if( !i_rTitle.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
@@ -1743,7 +1743,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
         aCtrl[nUsed++].Value = makeAny( *i_pVal );
     }
-    if( i_rControlOptions.maDependsOnName.getLength() )
+    if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
         aCtrl[nUsed++].Value = makeAny( i_rControlOptions.maDependsOnName );
@@ -1758,7 +1758,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mbAttachToDependency );
         }
     }
-    if( i_rControlOptions.maGroupHint.getLength() )
+    if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
         aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
         aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
@@ -1786,7 +1786,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1800,7 +1800,7 @@ Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
                                                  )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1817,7 +1817,7 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
                                              )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1876,7 +1876,7 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
     }
 
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1900,7 +1900,7 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                                            )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;

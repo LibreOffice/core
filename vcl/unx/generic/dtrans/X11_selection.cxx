@@ -377,7 +377,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
 
         OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
 
-        m_pDisplay = XOpenDisplay( aDisplayName.getLength() ? aDisplayName.getStr() : NULL );
+        m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? NULL : aDisplayName.getStr());
 
         if( m_pDisplay )
         {
@@ -611,7 +611,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
          *  in these encodings the directly converted text does the
          *  trick, also.
          */
-        if( ! aRet.getLength() && rText.getLength() )
+        if( aRet.isEmpty() && !rText.isEmpty() )
             aRet = OUStringToOString( rText, osl_getThreadTextEncoding() );
 #endif
     }
@@ -708,7 +708,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
     osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
     OUString aDisplayName( rDisplayName );
-    if( ! aDisplayName.getLength() )
+    if( aDisplayName.isEmpty() )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = NULL;
 

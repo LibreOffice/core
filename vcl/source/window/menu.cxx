@@ -844,7 +844,7 @@ static sal_Bool ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, sal_uInt1
             // use help-index
             String aCommand = pMenu->GetItemCommand( nId );
             rtl::OString aHelpId(  pMenu->GetHelpId( nId ) );
-            if( ! aHelpId.getLength() )
+            if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
             if ( aCommand.Len() )
@@ -2012,7 +2012,7 @@ const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
     if ( pData )
     {
         if ( !pData->aHelpText.Len() &&
-             (( pData->aHelpId.getLength()  ) || ( pData->aCommandStr.Len() )))
+             (( !pData->aHelpId.isEmpty()  ) || ( pData->aCommandStr.Len() )))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -2020,7 +2020,7 @@ const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
                 if ( pData->aCommandStr.Len() )
                     pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
-                if( !pData->aHelpText.Len() && pData->aHelpId.getLength() )
+                if( !pData->aHelpText.Len() && !pData->aHelpId.isEmpty() )
                     pData->aHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
             }
         }
@@ -2070,7 +2070,7 @@ rtl::OString Menu::GetHelpId( sal_uInt16 nItemId ) const
 
     if ( pData )
     {
-        if ( pData->aHelpId.getLength() )
+        if ( !pData->aHelpId.isEmpty() )
             aRet = pData->aHelpId;
         else
             aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );

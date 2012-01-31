@@ -8321,10 +8321,10 @@ uno::Reference< XDragSource > Window::GetDragSource()
                         aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
                         aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
-                        if( aDragSourceSN.getLength() )
+                        if( !aDragSourceSN.isEmpty() )
                             mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
 
-                        if( aDropTargetSN.getLength() )
+                        if( !aDropTargetSN.isEmpty() )
                             mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
                     }
                 }

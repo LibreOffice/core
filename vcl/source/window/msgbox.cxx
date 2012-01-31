@@ -222,7 +222,7 @@ MessBox::~MessBox()
 
 void MessBox::ImplPosControls()
 {
-    if ( GetHelpId().getLength() )
+    if ( !GetHelpId().isEmpty() )
     {
         if ( !mbHelpBtn )
         {
