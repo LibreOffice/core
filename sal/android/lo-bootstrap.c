@@ -960,6 +960,19 @@ lo_dladdr(void *addr,
 }
 
 __attribute__ ((visibility("default")))
+int
+lo_dlclose(void *handle)
+{
+    /* As we don't know when the reference count for a dlopened shared
+     * object drops to zero, we wouldn't know when to remove it from
+     * our list, so we can't call dlclose().
+     */
+    LOGI("lo_dlclose(%p)", handle);
+
+    return 0;
+}
+
+__attribute__ ((visibility("default")))
 void *
 lo_apkentry(const char *filename,
             size_t *size)
