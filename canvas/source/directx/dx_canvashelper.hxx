@@ -21,6 +21,8 @@
 #define _DXCANVAS_CANVASHELPER_HXX_
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2dsize.hxx>

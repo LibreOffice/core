@@ -21,6 +21,7 @@
 #include "SlideRenderer.hxx"
 #include "sdpage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppcanvas/vclfactory.hxx>

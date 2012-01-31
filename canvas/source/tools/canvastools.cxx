@@ -387,7 +387,7 @@ namespace canvas
                             *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                             *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                             *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
-                            *pOut++ = vcl::unotools::toDoubleColor(255-*pIn++);
+                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
                         }
                         return aRes;
                     }
@@ -452,7 +452,7 @@ namespace canvas
                     for( sal_Size i=0; i<nLen; i+=4 )
                     {
                         *pOut++ = rendering::ARGBColor(
-                            vcl::unotools::toDoubleColor(255-pIn[3]),
+                            vcl::unotools::toDoubleColor(pIn[3]),
                             vcl::unotools::toDoubleColor(pIn[0]),
                             vcl::unotools::toDoubleColor(pIn[1]),
                             vcl::unotools::toDoubleColor(pIn[2]));
@@ -473,7 +473,7 @@ namespace canvas
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for( sal_Size i=0; i<nLen; i+=4 )
                     {
-                        const sal_Int8 nAlpha( 255-pIn[3] );
+                        const sal_Int8 nAlpha( pIn[3] );
                         *pOut++ = rendering::ARGBColor(
                             vcl::unotools::toDoubleColor(nAlpha),
                             vcl::unotools::toDoubleColor(nAlpha*pIn[0]),
@@ -514,7 +514,7 @@ namespace canvas
                         *pColors++ = vcl::unotools::toByteColor(pIn->Red);
                         *pColors++ = vcl::unotools::toByteColor(pIn->Green);
                         *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
-                        *pColors++ = 255-vcl::unotools::toByteColor(pIn->Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Alpha);
                         ++pIn;
                     }
                     return aRes;
@@ -532,7 +532,7 @@ namespace canvas
                         *pColors++ = vcl::unotools::toByteColor(pIn->Red/pIn->Alpha);
                         *pColors++ = vcl::unotools::toByteColor(pIn->Green/pIn->Alpha);
                         *pColors++ = vcl::unotools::toByteColor(pIn->Blue/pIn->Alpha);
-                        *pColors++ = 255-vcl::unotools::toByteColor(pIn->Alpha);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Alpha);
                         ++pIn;
                     }
                     return aRes;

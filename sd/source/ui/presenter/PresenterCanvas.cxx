@@ -790,17 +790,6 @@ sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
 
 
 
-Reference<rendering::XBitmapCanvas> SAL_CALL PresenterCanvas::queryBitmapCanvas (void)
-    throw (RuntimeException)
-{
-    ThrowIfDisposed();
-
-    return this;
-}
-
-
-
-
 Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
     const css::geometry::RealSize2D& rNewSize,
     sal_Bool bFast)

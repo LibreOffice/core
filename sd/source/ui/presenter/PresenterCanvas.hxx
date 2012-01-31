@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase4.hxx>
@@ -371,9 +372,6 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL hasAlpha (void)
-        throw (css::uno::RuntimeException);
-
-    virtual css::uno::Reference<css::rendering::XBitmapCanvas> SAL_CALL queryBitmapCanvas (void)
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(

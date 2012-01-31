@@ -28,6 +28,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include "waitsymbol.hxx"
 #include "eventmultiplexer.hxx"
@@ -103,13 +104,13 @@ void WaitSymbol::setVisible( const bool bVisible )
 basegfx::B2DPoint WaitSymbol::calcSpritePos(
     UnoViewSharedPtr const & rView ) const
 {
-    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
-                                                      uno::UNO_QUERY_THROW );
-    const geometry::IntegerSize2D realSize( xBitmap->getSize() );
+    const awt::Rectangle aViewArea( rView->getUnoView()->getCanvasArea() );
     return basegfx::B2DPoint(
-        std::min<sal_Int32>( realSize.Width, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height - mxBitmap->getSize().Height
-                                                - LOWER_BORDER_SPACE ) );
+        aViewArea.X + std::min<sal_Int32>( aViewArea.Width, LEFT_BORDER_SPACE ),
+        aViewArea.X + std::max<sal_Int32>( 0,
+                                           aViewArea.Height
+                                            - mxBitmap->getSize().Height
+                                            - LOWER_BORDER_SPACE ) );
 }
 
 void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )

@@ -909,6 +909,11 @@ void SlideView::clearAll() const
     if( !mxView.is() || !mpCanvas )
         return;
 
+    mpCanvas->clear(); // this is unnecessary, strictly speaking. but
+                       // it makes the SlideView behave exactly like a
+                       // sprite-based SlideViewLayer, because those
+                       // are created from scratch after a resize
+
     // clear whole view
     mxView->clear();
 }
@@ -1126,10 +1131,6 @@ void SlideView::updateCanvas()
     if( !mpCanvas || !mxView.is())
         return;
 
-    mpCanvas->clear(); // this is unnecessary, strictly speaking. but
-                       // it makes the SlideView behave exactly like a
-                       // sprite-based SlideViewLayer, because those
-                       // are created from scratch after a resize
     clearAll();
     mpCanvas->setTransformation( getTransformation() );
     mpCanvas->setClip(

@@ -28,7 +28,7 @@
 #include <boost/shared_ptr.hpp>
 
 
-#include <cppcanvas/bitmapcanvas.hxx>
+#include <cppcanvas/canvas.hxx>
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/customsprite.hxx>
 
@@ -49,7 +49,7 @@ namespace cppcanvas
 
     /** SpriteCanvas interface
      */
-    class SpriteCanvas : public virtual BitmapCanvas, private boost::noncopyable
+    class SpriteCanvas : public virtual Canvas, private boost::noncopyable
     {
     public:
         virtual bool                    updateScreen( bool bUpdateAll ) const = 0;

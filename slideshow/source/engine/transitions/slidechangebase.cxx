@@ -231,6 +231,7 @@ void SlideChangeBase::end()
 
             const SlideBitmapSharedPtr pSlideBitmap( getEnteringBitmap( *aCurr ));
             pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
+            aCurr->mpView->clearAll();
             renderBitmap( pSlideBitmap,
                           aCurr->mpView->getCanvas() );
 

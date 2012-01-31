@@ -21,6 +21,7 @@
 #define _CAIROCANVAS_CANVASHELPER_HXX_
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <basegfx/vector/b2isize.hxx>

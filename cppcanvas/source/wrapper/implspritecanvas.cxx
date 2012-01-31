@@ -51,8 +51,6 @@ namespace cppcanvas
         ImplSpriteCanvas::ImplSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :
             ImplCanvas( uno::Reference< rendering::XCanvas >(rCanvas,
                                                              uno::UNO_QUERY) ),
-            ImplBitmapCanvas( uno::Reference< rendering::XBitmapCanvas >(rCanvas,
-                                                                         uno::UNO_QUERY) ),
             mxSpriteCanvas( rCanvas ),
             mpTransformArbiter( new TransformationArbiter() )
         {
@@ -61,10 +59,8 @@ namespace cppcanvas
 
         ImplSpriteCanvas::ImplSpriteCanvas(const ImplSpriteCanvas& rOrig) :
             Canvas(),
-            BitmapCanvas(),
             SpriteCanvas(),
             ImplCanvas( rOrig ),
-            ImplBitmapCanvas( rOrig ),
             mxSpriteCanvas( rOrig.getUNOSpriteCanvas() ),
             mpTransformArbiter( new TransformationArbiter() )
         {

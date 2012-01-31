@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
