@@ -1836,7 +1836,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 // be a result of GetGluePointList and thus the list is copied
                 if(pPlusData)
                 {
-                    *pPlusData->pGluePoints = aNewList;
+                    pPlusData->SetGluePoints(aNewList);
                 }
             }
         }

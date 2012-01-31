@@ -304,7 +304,6 @@ class SdrObjPlusData
 {
     friend class                SdrObject;
 
-public:
     SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=true). Auch fuer Konnektoren etc.
     SdrObjUserDataList*         pUserDataList; // applikationsspeziefische Daten
     SdrGluePointList*           pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
@@ -320,6 +319,8 @@ public:
     SdrObjPlusData();
     virtual ~SdrObjPlusData();
     virtual SdrObjPlusData* Clone(SdrObject* pObj1) const;
+
+    void SetGluePoints(const SdrGluePointList& rPts);
 };
 
 //************************************************************
@@ -329,7 +330,7 @@ public:
 //
 //************************************************************
 
-class SdrObjTransformInfoRec
+class SVX_DLLPUBLIC SdrObjTransformInfoRec
 {
 public:
     bool bSelectAllowed : 1;     // false=Obj kann nicht selektiert werden

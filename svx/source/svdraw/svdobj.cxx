@@ -277,6 +277,11 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     return pNeuPlusData;
 }
 
+void SdrObjPlusData::SetGluePoints(const SdrGluePointList& rPts)
+{
+    return *pGluePoints = rPts;
+}
+
 SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bSelectAllowed(true),
     bMoveAllowed(true),
