@@ -228,8 +228,8 @@ namespace
     void appendOneKeyColumnClause( const ::rtl::OUString &tblName, const ::rtl::OUString &colName, ::rtl::OUStringBuffer &o_buf )
     {
         static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
-        static ::rtl::OUString s_sParam0(RTL_CONSTASCII_USTRINGPARAM(" ( TRUE = ? AND "));
-        static ::rtl::OUString s_sParam1(RTL_CONSTASCII_USTRINGPARAM(" = ? OR TRUE = ? AND "));
+        static ::rtl::OUString s_sParam0(RTL_CONSTASCII_USTRINGPARAM(" ( 1 = ? AND "));
+        static ::rtl::OUString s_sParam1(RTL_CONSTASCII_USTRINGPARAM(" = ? OR 1 = ? AND "));
         static ::rtl::OUString s_sParam2(RTL_CONSTASCII_USTRINGPARAM(" IS NULL ) "));
         o_buf.append(s_sParam0);
         o_buf.append(tblName);
@@ -247,16 +247,16 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 {
     if ( _rValue.isNull() )
     {
-        _xParameter->setBoolean( nPos++, false );
+        _xParameter->setByte( nPos++, 0 );
         // We do the full call so that the right sqlType is passed to setNull
         setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
-        _xParameter->setBoolean( nPos++, true );
+        _xParameter->setByte( nPos++, 1 );
     }
     else
     {
-        _xParameter->setBoolean( nPos++, true );
+        _xParameter->setByte( nPos++, 1 );
         setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
-        _xParameter->setBoolean( nPos++, false );
+        _xParameter->setByte( nPos++, 0 );
     }
 }
 
