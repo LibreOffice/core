@@ -34,7 +34,6 @@ Installation gid_Installation_Ooo
     UserDirProductVersion = "${USERDIRPRODUCTVERSION}";
     SxwFormatName = "OpenOffice.org";
     SxwFormatVersion = "1.1";
-    VendorName = "OpenOffice.org";
   #ifdef WNT
     DefaultDestPath = "<winprogpath>\${PRODUCTNAME}${PRODUCTVERSION}";
   #else
