@@ -39,7 +39,6 @@ public abstract class ControlScroller
 
     protected WizardDialog CurUnoDialog;
     protected XMultiServiceFactory xMSF;
-    private Object oImgControl;
     protected int ncurfieldcount;
     protected int nblockincrement;
     private int nlineincrement;
@@ -113,17 +112,6 @@ public abstract class ControlScroller
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "imgBackground");
-        oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
-                new String[]
-                {
-                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
-                },
-                new Object[]
-                {
-                    new Short("1"), new Integer(iCompHeight), ICompPosX, new Integer(iCompPosY), IStep, ICompWidth
-                });
-        oImgControl = CurUnoDialog.xDlgContainer.getControl("imgBackground" + sIncSuffix);
-        setComponentMouseTransparent();
         xScrollBar = CurUnoDialog.insertScrollBar("TitleScrollBar" + sIncSuffix, 0,
                 new AdjustmentListenerImpl(),
                 new String[]
@@ -141,17 +129,6 @@ public abstract class ControlScroller
             insertControlGroup(i, ypos);
             ypos += linedistance;
         }
-    }
-
-    public void setComponentMouseTransparent()
-    {
-        CurUnoDialog.getPeerConfiguration().setPeerProperties(oImgControl, new String[]
-                {
-                    "MouseTransparent"
-                }, new Boolean[]
-                {
-                    Boolean.TRUE
-                });
     }
 
     protected void setScrollBarOrientationHorizontal()
