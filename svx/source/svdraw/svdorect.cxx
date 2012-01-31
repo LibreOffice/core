@@ -518,7 +518,7 @@ bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
     return SdrTextObj::DoMacro(rRec);
 }
 
-XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+rtl::OUString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     return SdrTextObj::GetMacroPopupComment(rRec);
 }

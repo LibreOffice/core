@@ -219,9 +219,9 @@ bool SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pOb
     return false;
 }
 
-XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
+rtl::OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
 {
-    return String();
+    return rtl::OUString();
 }
 
 SdrObjUserDataList::SdrObjUserDataList() {}
@@ -1850,13 +1850,13 @@ bool SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
     return false;
 }
 
-XubString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+rtl::OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
     if (pData!=NULL) {
         return pData->GetMacroPopupComment(rRec,this);
     }
-    return String();
+    return rtl::OUString();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

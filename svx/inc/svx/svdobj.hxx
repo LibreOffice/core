@@ -230,7 +230,7 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
-    virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
 //************************************************************
@@ -855,7 +855,7 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
-    virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
 
     // Konnektoren. (siehe auch Dokumentation in SvdoEdge.HXX, SdrEdgeObj
