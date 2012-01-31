@@ -143,6 +143,9 @@ public class Bootstrap extends NativeActivity
             argv = Arrays.copyOfRange(argv, 1, argv.length-1);
         }
 
+        // TMPDIR is used by osl_getTempDirURL()
+        putenv("TMPDIR=" + getCacheDir().getAbsolutePath());
+
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
         // pathname of the mainLibrary.
         String[] newargv = new String[argv.length + 1];
