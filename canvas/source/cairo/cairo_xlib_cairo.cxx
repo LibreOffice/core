@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <utility>
 
 #include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
@@ -267,7 +268,7 @@ namespace cairo
         aSystemGraphicsData.pXRenderFormat = getRenderFormat();
 
         return boost::shared_ptr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, getDepth() ));
+            new VirtualDevice( &aSystemGraphicsData, std::max( getDepth(), 0 ) ));
     }
 
     /**
