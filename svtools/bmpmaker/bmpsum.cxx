@@ -298,7 +298,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
     if( aIStm.IsOpen() && aOStm.IsOpen() )
     {
         rtl::OString aReadLine;
-        ::std::set< ByteString >    aFileNameSet;
+        ::std::set<rtl::OString> aFileNameSet;
 
         while( aIStm.ReadLine( aReadLine ) )
         {
@@ -345,13 +345,13 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
         aIStm.Close();
 
-        ::std::set< ByteString >::iterator aIter( aFileNameSet.begin() );
-        ::std::map< sal_uInt64, ::std::vector< ByteString > > aFileNameMap;
+        ::std::set< rtl::OString >::iterator aIter( aFileNameSet.begin() );
+        ::std::map< sal_uInt64, ::std::vector< rtl::OString > > aFileNameMap;
 
         while( aIter != aFileNameSet.end() )
         {
-            ByteString      aStr( *aIter++ );
-            SvFileStream    aBmpStm( String( aStr.GetBuffer(), RTL_TEXTENCODING_ASCII_US ), STREAM_READ );
+            rtl::OString aStr( *aIter++ );
+            SvFileStream    aBmpStm(rtl::OStringToOUString(aStr, RTL_TEXTENCODING_ASCII_US), STREAM_READ);
             sal_uInt64      nCRC = 0;
 
             if( aBmpStm.IsOpen() )
@@ -375,7 +375,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
                            nCRC = GetCRC( aBmpEx );
 
                     else
-                        fprintf( stderr, "%s could not be opened\n", aStr.GetBuffer() );
+                        fprintf( stderr, "%s could not be opened\n", aStr.getStr() );
                }
 
                 aBmpStm.Close();
@@ -383,36 +383,36 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
             if( nCRC )
             {
-                ::std::map< sal_uInt64, ::std::vector< ByteString > >::iterator aFound( aFileNameMap.find( nCRC ) );
+                ::std::map< sal_uInt64, ::std::vector< rtl::OString > >::iterator aFound( aFileNameMap.find( nCRC ) );
 
                 if( aFound != aFileNameMap.end() )
                     (*aFound).second.push_back( aStr );
                 else
                 {
-                    ::std::vector< ByteString > aVector( 1, aStr );
+                    ::std::vector< rtl::OString > aVector( 1, aStr );
                     aFileNameMap[ nCRC ]  = aVector;
                 }
 
             }
             else
             {
-                ::std::vector< ByteString > aVector( 1, aStr );
+                ::std::vector< rtl::OString > aVector( 1, aStr );
                 aFileNameMap[ nCRC ]  = aVector;
             }
         }
 
-        ::std::map< sal_uInt64, ::std::vector< ByteString > >::iterator aMapIter( aFileNameMap.begin() );
+        ::std::map< sal_uInt64, ::std::vector< rtl::OString > >::iterator aMapIter( aFileNameMap.begin() );
         sal_uInt32 nFileCount = 0;
 
         while( aMapIter != aFileNameMap.end() )
         {
-            ::std::pair< const sal_uInt64, ::std::vector< ByteString > > aPair( *aMapIter++ );
-            ::std::vector< ByteString > aFileNameVector( aPair.second );
+            ::std::pair< const sal_uInt64, ::std::vector< rtl::OString > > aPair( *aMapIter++ );
+            ::std::vector< rtl::OString > aFileNameVector( aPair.second );
 
             // write new entries
             for( sal_uInt32 i = 0; i < aFileNameVector.size(); ++i )
             {
-                ByteString aFileName( aFileNameVector[ i ] );
+                rtl::OString aFileName( aFileNameVector[ i ] );
                 DirEntry    aSrcFile( aFileName );
 
                 rtl::OStringBuffer aStr;
@@ -423,10 +423,11 @@ void BmpSum::ProcessFileList( const String& rInFileList,
                 // copy bitmap
                 if( rOutPath.Len() )
                 {
-                    if( aFileName.Search( ":\\" ) != STRING_NOTFOUND )
-                        aFileName.Erase( 0, aFileName.Search( ":\\" ) + 2 );
+                    sal_Int32 nIndex = aFileName.indexOf(":\\");
+                    if (nIndex != -1)
+                        aFileName = aFileName.copy(nIndex + 2);
 
-                    aFileName.SearchAndReplaceAll( '\\', '/' );
+                    aFileName = aFileName.replace('\\', '/');
 
                     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFileName, '/');
                     DirEntry    aNewDir( aBaseDir );
