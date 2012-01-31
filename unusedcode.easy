@@ -1228,9 +1228,6 @@ canvas::tools::mergeViewAndRenderState(com::sun::star::rendering::ViewState&, co
 canvas::tools::prependToViewState(com::sun::star::rendering::ViewState&, basegfx::B2DHomMatrix const&)
 canvas::tools::verifyInput(com::sun::star::geometry::RealSize2D const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
 canvas::tools::verifyInput(com::sun::star::rendering::FloatingPointBitmapLayout const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
-chart::EquidistantTickIter::getCurrentIndex() const
-chart::EquidistantTickIter::getMaxIndex() const
-chart::EquidistantTickIter::gotoIndex(int)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
 comphelper::AccessibleEventNotifier::getEventListeners(unsigned int)

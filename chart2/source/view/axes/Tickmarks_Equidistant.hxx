@@ -60,11 +60,6 @@ public:
 
     sal_Int32   getCurrentDepth() const { return m_nCurrentDepth; }
 
-protected:
-    bool        gotoIndex( sal_Int32 nTickIndex );
-    sal_Int32   getCurrentIndex() const;
-    sal_Int32   getMaxIndex() const;
-
 private: //methods
     sal_Int32   getIntervalCount( sal_Int32 nDepth );
     bool        isAtLastPartTick();
