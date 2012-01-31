@@ -117,7 +117,7 @@ public:
             return -1;
         sal_Int32 n = ((sal_Int32*) pData )[ nOff ];
 #ifdef OSL_BIGENDIAN
-        return SWAPLONG(n);
+        return OSL_SWAPDWORD(n);
 #else
         return n;
 #endif
