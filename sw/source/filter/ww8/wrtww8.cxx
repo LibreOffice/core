@@ -1055,7 +1055,7 @@ bool WW8_WrFkp::Combine()
                                 // werden
     sal_uInt32* p;
     for( i = 0, p = (sal_uInt32*)pFkp; i <= nIMax; i++, p++ )
-        *p = SWAPLONG( *p );
+        *p = OSL_SWAPDWORD( *p );
 #endif // ifdef OSL_BIGENDIAN
 
     return true;
