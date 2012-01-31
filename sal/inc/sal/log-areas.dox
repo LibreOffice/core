@@ -19,6 +19,7 @@ certain functionality.
 
 @section VCL
 
+@li vcl.gdi - the GDI part of VCL: devices, bitmaps, etc.
 @li vcl.gtk - Gtk+ 2/3 plugin
 
 @section Writer
