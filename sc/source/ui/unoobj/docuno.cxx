@@ -35,7 +35,6 @@
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/numuno.hxx>
 #include <svl/smplhint.hxx>
@@ -1683,9 +1682,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             pDoc->EnableUndo( bUndoEnabled );
             pDocShell->GetUndoManager()->SetMaxUndoActionCount(
                 bUndoEnabled
-                ? officecfg::Office::Common::Undo::Steps::get(
-                    comphelper::getProcessComponentContext())
-                : 0);
+                ? officecfg::Office::Common::Undo::Steps::get() : 0);
         }
         else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
         {

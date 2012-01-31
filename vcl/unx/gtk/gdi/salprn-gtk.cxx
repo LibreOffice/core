@@ -183,9 +183,8 @@ lcl_getGtkSalInstance()
 bool
 lcl_useSystemPrintDialog()
 {
-    uno::Reference<uno::XComponentContext> const xCtxt(comphelper::getProcessComponentContext());
-    return officecfg::Office::Common::Misc::UseSystemPrintDialog::get(xCtxt)
-        && officecfg::Office::Common::Misc::ExperimentalMode::get(xCtxt)
+    return officecfg::Office::Common::Misc::UseSystemPrintDialog::get()
+        && officecfg::Office::Common::Misc::ExperimentalMode::get()
         && lcl_getGtkSalInstance().getPrintWrapper()->supportsPrinting();
 }
 

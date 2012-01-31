@@ -30,7 +30,6 @@
 
 #include <algorithm>
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -179,13 +178,13 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const rtl
                 if( !mpGlobalMgr )
                 {
                     mpGlobalMgr = new GraphicManager(
-                        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get(
-                            comphelper::getProcessComponentContext()),
-                        officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get(
-                            comphelper::getProcessComponentContext()));
+                        (officecfg::Office::Common::Cache::GraphicManager::
+                         TotalCacheSize::get()),
+                        (officecfg::Office::Common::Cache::GraphicManager::
+                         ObjectCacheSize::get()));
                     mpGlobalMgr->SetCacheTimeout(
-                        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
-                            comphelper::getProcessComponentContext()));
+                        officecfg::Office::Common::Cache::GraphicManager::
+                        ObjectReleaseTime::get());
                 }
 
                 mpMgr = mpGlobalMgr;

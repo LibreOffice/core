@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include "comphelper/processfactory.hxx"
-
 #include "officecfg/Office/Common.hxx"
 
 #include "osl/module.h"
@@ -58,7 +56,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
 #ifndef ANDROID
     // Disable gtk3 plugin load except in experimental mode for now.
     if( rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
-        !officecfg::Office::Common::Misc::ExperimentalMode::get( comphelper::getProcessComponentContext() ) )
+        !officecfg::Office::Common::Misc::ExperimentalMode::get() )
         return NULL;
 #endif
     OUStringBuffer aModName( 128 );

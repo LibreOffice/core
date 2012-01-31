@@ -62,7 +62,6 @@
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -298,8 +297,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxUInt16Item (
                                 rPool.GetWhich(SID_ATTR_UNDO_COUNT),
-                                officecfg::Office::Common::Undo::Steps::get(
-                                    comphelper::getProcessComponentContext()))))
+                                officecfg::Office::Common::Undo::Steps::get())))
                     {
                         bRet = true;
                     }
@@ -401,9 +399,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxUInt16Item(
                                 rPool.GetWhich(SID_INET_PROXY_TYPE),
-                                (officecfg::Inet::Settings::ooInetProxyType::get(
-                                    comphelper::getProcessComponentContext()).
-                                 get_value_or(0)))))
+                                (officecfg::Inet::Settings::ooInetProxyType::
+                                 get().get_value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -412,8 +409,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxStringItem(
                                 rPool.GetWhich(SID_INET_HTTP_PROXY_NAME),
-                                officecfg::Inet::Settings::ooInetHTTPProxyName::get(
-                                    comphelper::getProcessComponentContext()))))
+                                officecfg::Inet::Settings::ooInetHTTPProxyName::
+                                get())))
                     {
                         bRet = true;
                     }
@@ -422,9 +419,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_HTTP_PROXY_PORT),
-                                (officecfg::Inet::Settings::ooInetHTTPProxyPort::get(
-                                    comphelper::getProcessComponentContext()).
-                                 get_value_or(0)))))
+                                (officecfg::Inet::Settings::
+                                 ooInetHTTPProxyPort::get().get_value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -433,8 +429,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxStringItem(
                                 rPool.GetWhich(SID_INET_FTP_PROXY_NAME),
-                                officecfg::Inet::Settings::ooInetFTPProxyName::get(
-                                    comphelper::getProcessComponentContext()))))
+                                officecfg::Inet::Settings::ooInetFTPProxyName::
+                                get())))
                     {
                         bRet = true;
                     }
@@ -443,9 +439,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxInt32Item(
                                 rPool.GetWhich(SID_INET_FTP_PROXY_PORT),
-                                (officecfg::Inet::Settings::ooInetFTPProxyPort::get(
-                                    comphelper::getProcessComponentContext()).
-                                 get_value_or(0)))))
+                                (officecfg::Inet::Settings::ooInetFTPProxyPort::
+                                 get().get_value_or(0)))))
                     {
                         bRet = true;
                     }
@@ -460,8 +455,8 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxStringItem(
                                 rPool.GetWhich( SID_INET_NOPROXY),
-                                officecfg::Inet::Settings::ooInetNoProxy::get(
-                                    comphelper::getProcessComponentContext()))))
+                                (officecfg::Inet::Settings::ooInetNoProxy::
+                                 get()))))
                     {
                         bRet = true;
                     }
@@ -543,8 +538,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtPathOptions aPathOptions;
     SvtMiscOptions aMiscOptions;
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
-        comphelper::ConfigurationChanges::create(
-            comphelper::getProcessComponentContext()));
+        comphelper::ConfigurationChanges::create());
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), sal_True, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -709,8 +703,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         sal_uInt16 nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
-        officecfg::Office::Common::Undo::Steps::set(
-            comphelper::getProcessComponentContext(), batch, nUndoCount);
+        officecfg::Office::Common::Undo::Steps::set(nUndoCount, batch);
 
         // To catch all Undo-Managers: Iterate over all Frames
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
@@ -759,44 +752,38 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
         officecfg::Inet::Settings::ooInetProxyType::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxUInt16Item const * >(pItem)->GetValue());
+            static_cast< SfxUInt16Item const * >(pItem)->GetValue(), batch);
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         officecfg::Inet::Settings::ooInetHTTPProxyName::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxStringItem const * >(pItem)->GetValue());
+            static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         officecfg::Inet::Settings::ooInetHTTPProxyPort::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxInt32Item const * >(pItem)->GetValue());
+            static_cast< SfxInt32Item const * >(pItem)->GetValue(), batch);
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         officecfg::Inet::Settings::ooInetFTPProxyName::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxStringItem const * >(pItem)->GetValue());
+            static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         officecfg::Inet::Settings::ooInetFTPProxyPort::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxInt32Item const * >(pItem)->GetValue());
+            static_cast< SfxInt32Item const * >(pItem)->GetValue(), batch);
     }
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         officecfg::Inet::Settings::ooInetNoProxy::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< SfxStringItem const * >(pItem)->GetValue());
+            static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
 
     // Secure-Referers

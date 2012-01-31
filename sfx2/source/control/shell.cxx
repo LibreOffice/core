@@ -28,7 +28,6 @@
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
-#include <comphelper/processfactory.hxx>
 #include <basic/sbstar.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/oustringostreaminserter.hxx>
@@ -487,8 +486,7 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
         pUndoMgr->SetMaxUndoActionCount(
-            officecfg::Office::Common::Undo::Steps::get(
-                comphelper::getProcessComponentContext()));
+            officecfg::Office::Common::Undo::Steps::get());
 }
 
 //--------------------------------------------------------------------

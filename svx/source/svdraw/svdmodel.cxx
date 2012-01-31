@@ -87,7 +87,6 @@
 #include <editeng/outlobj.hxx>
 #include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -179,7 +178,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbAddExtLeading = sal_False;
     mnHandoutPageCount = 0;
 
-    mnCharCompressType = officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get(comphelper::getProcessComponentContext());
+    mnCharCompressType =
+        officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
+        get();
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;

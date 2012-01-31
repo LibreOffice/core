@@ -28,7 +28,6 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -183,11 +182,9 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
             boost::shared_ptr< comphelper::ConfigurationChanges > batch(
-                comphelper::ConfigurationChanges::create(
-                    comphelper::getProcessComponentContext()));
+                comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Undo::Steps::set(
-                comphelper::getProcessComponentContext(), batch,
-                pCountItem->GetValue());
+                pCountItem->GetValue(), batch);
             batch->commit();
             break;
         }
@@ -254,8 +251,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 rSet.Put(
                     SfxUInt16Item(
                         SID_ATTR_UNDO_COUNT,
-                        officecfg::Office::Common::Undo::Steps::get(
-                            comphelper::getProcessComponentContext())));
+                        officecfg::Office::Common::Undo::Steps::get()));
                 break;
 
             case SID_UPDATE_VERSION:

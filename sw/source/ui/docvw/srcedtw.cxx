@@ -33,7 +33,6 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/oustringostreaminserter.hxx>
@@ -273,8 +272,7 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     // long as there are no derivations:
     listener_ = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
-        officecfg::Office::Common::Font::SourceViewFont::get(
-            comphelper::getProcessComponentContext()),
+        officecfg::Office::Common::Font::SourceViewFont::get(),
         css::uno::UNO_QUERY_THROW);
     {
         osl::MutexGuard g(mutex_);
@@ -978,8 +976,7 @@ sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLangu
 void SwSrcEditWindow::SetFont()
 {
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext()).
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
         get_value_or(rtl::OUString()));
     if(sFontName.isEmpty())
     {
@@ -1008,9 +1005,7 @@ void SwSrcEditWindow::SetFont()
     Size aSize(rFont.GetSize());
     //font height is stored in point and set in twip
     aSize.Height() =
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-            comphelper::getProcessComponentContext())
-        * 20;
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
     aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
     GetTextEngine()->SetFont( aFont );
     pOutWin->SetFont(aFont);

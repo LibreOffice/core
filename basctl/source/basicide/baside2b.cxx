@@ -195,8 +195,8 @@ EditorWindow::EditorWindow( Window* pParent ) :
     // long as there are no derivations:
     listener_ = new ChangesListener(*this);
     Reference< beans::XMultiPropertySet > n(
-        officecfg::Office::Common::Font::SourceViewFont::get(
-            comphelper::getProcessComponentContext()), UNO_QUERY_THROW);
+        officecfg::Office::Common::Font::SourceViewFont::get(),
+        UNO_QUERY_THROW);
     {
         osl::MutexGuard g(mutex_);
         notifier_ = n;
@@ -816,8 +816,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 void EditorWindow::ImplSetFont()
 {
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext() ).
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
         get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
@@ -825,9 +824,7 @@ void EditorWindow::ImplSetFont()
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(
-        0,
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-            comphelper::getProcessComponentContext() ) );
+        0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
     Font aFont( sFontName, aFontSize );
     aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
     SetPointFont( aFont );

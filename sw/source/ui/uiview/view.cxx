@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
@@ -948,8 +947,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
     SAL_WARN_IF(
-        officecfg::Office::Common::Undo::Steps::get(
-            comphelper::getProcessComponentContext()) <= 0,
+        officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
     pWrtShell->DoUndo( true );
 

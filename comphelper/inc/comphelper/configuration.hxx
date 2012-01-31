@@ -38,6 +38,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "comphelper/comphelperdllapi.h"
+#include "comphelper/processfactory.hxx"
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {
@@ -67,7 +68,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
 public:
     static boost::shared_ptr< ConfigurationChanges > create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context);
+            const & context = comphelper::getProcessComponentContext());
 
     ~ConfigurationChanges();
 
@@ -205,7 +206,7 @@ template< typename T, typename U > struct ConfigurationProperty:
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context)
+            const & context = comphelper::getProcessComponentContext())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
@@ -220,10 +221,10 @@ template< typename T, typename U > struct ConfigurationProperty:
     ///
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
+        U const & value,
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        U const & value)
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context = comphelper::getProcessComponentContext())
     {
         detail::ConfigurationWrapper::get(context).setPropertyValue(
             batch, T::path(), detail::Convert< U >::toAny(value));
@@ -249,7 +250,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context)
+            const & context = comphelper::getProcessComponentContext())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
@@ -266,10 +267,10 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     ///
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
+        U const & value,
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        U const & value)
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context = comphelper::getProcessComponentContext())
     {
         detail::ConfigurationWrapper::get(context).setLocalizedPropertyValue(
             batch, T::path(), detail::Convert< U >::toAny(value));
@@ -290,7 +291,7 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context)
+            const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getGroupReadOnly(
             T::path());
@@ -300,9 +301,9 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
     /// modifications via the given changes batch.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
-    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
-        boost::shared_ptr< ConfigurationChanges > const & batch)
+    get(boost::shared_ptr< ConfigurationChanges > const & batch,
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getGroupReadWrite(
             batch, T::path());
@@ -323,7 +324,7 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
     get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context)
+            const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getSetReadOnly(
             T::path());
@@ -333,9 +334,9 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
     /// modifications via the given changes batch.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
-    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
-        boost::shared_ptr< ConfigurationChanges > const & batch)
+    get(boost::shared_ptr< ConfigurationChanges > const & batch,
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getSetReadWrite(
             batch, T::path());

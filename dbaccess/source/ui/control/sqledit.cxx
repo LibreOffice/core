@@ -32,7 +32,6 @@
 
 #include "com/sun/star/beans/XMultiPropertySet.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
-#include "comphelper/processfactory.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "sqledit.hxx"
 #include "QueryTextView.hxx"
@@ -108,8 +107,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     // long as there are no derivations:
     m_listener = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
-        officecfg::Office::Common::Font::SourceViewFont::get(
-            comphelper::getProcessComponentContext()),
+        officecfg::Office::Common::Font::SourceViewFont::get(),
         css::uno::UNO_QUERY_THROW);
     {
         osl::MutexGuard g(m_mutex);
@@ -270,8 +268,7 @@ void OSqlEdit::ImplSetFont()
     AllSettings aSettings = GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext() ).
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
         get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
@@ -279,9 +276,7 @@ void OSqlEdit::ImplSetFont()
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(
-        0,
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-            comphelper::getProcessComponentContext() ) );
+        0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
     Font aFont( sFontName, aFontSize );
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);

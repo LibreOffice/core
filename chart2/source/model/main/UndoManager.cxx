@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 /** === end UNO includes === **/
 
-#include <comphelper/processfactory.hxx>
 #include <framework/undomanagerhelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/undo.hxx>
@@ -87,8 +86,7 @@ namespace chart
                 ,m_aUndoHelper( *this )
             {
                 m_aUndoManager.SetMaxUndoActionCount(
-                    officecfg::Office::Common::Undo::Steps::get(
-                        comphelper::getProcessComponentContext()));
+                    officecfg::Office::Common::Undo::Steps::get());
             }
 
             virtual ~UndoManager_Impl()

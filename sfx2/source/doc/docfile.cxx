@@ -205,7 +205,7 @@ sal_Bool IsOOoLockFileUsed()
 
 bool IsLockingUsed()
 {
-    return officecfg::Office::Common::Misc::UseLocking::get(comphelper::getProcessComponentContext());
+    return officecfg::Office::Common::Misc::UseLocking::get();
 }
 
 } // anonymous namespace
