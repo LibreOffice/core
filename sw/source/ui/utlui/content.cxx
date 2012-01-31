@@ -434,7 +434,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName().Len() )
+                    if (!pTemp->GetName().isEmpty())
                         nMemberCount++;
                 }
             }
@@ -766,7 +766,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName().Len() )
+                    if (!pTemp->GetName().isEmpty())
                     {
                         SwContact* pContact = (SwContact*)pTemp->GetUserCall();
                         long nYPos = 0;
@@ -3052,7 +3052,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName() == pCnt->GetName() )
+                    if (pTemp->GetName().equals(pCnt->GetName()))
                     {
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if( pPV )

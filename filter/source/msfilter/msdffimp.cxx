@@ -4375,7 +4375,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         if ( pRet && bGrfRead && !aVisArea.IsEmpty() )
             pRet->SetBLIPSizeRectangle( aVisArea );
 
-        if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
+        if (pRet->GetName().isEmpty())                   // SJ 22.02.00 : PPT OLE IMPORT:
         {                                               // name is already set in ImportOLE !!
             // JP 01.12.99: SetName before SetModel - because in the other order the Bug 70098 is active
             if ( ( eFlags & mso_blipflagType ) != mso_blipflagComment )

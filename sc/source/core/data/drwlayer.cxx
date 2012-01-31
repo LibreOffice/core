@@ -1648,7 +1648,7 @@ inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
 
-    return ( pObj->GetName() == rName ||
+    return ( pObj->GetName().equals(rName) ||
             ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
               static_cast<SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
@@ -1725,7 +1725,7 @@ void ScDrawLayer::EnsureGraphicNames()
 
             while (pObject)
             {
-                if ( pObject->GetObjIdentifier() == OBJ_GRAF && pObject->GetName().Len() == 0 )
+                if ( pObject->GetObjIdentifier() == OBJ_GRAF && pObject->GetName().isEmpty())
                     pObject->SetName( GetNewGraphicName( &nCounter ) );
 
                 pObject = aIter.Next();
