@@ -66,16 +66,9 @@ OStoreLockBytes::OStoreLockBytes (void)
  */
 OStoreLockBytes::~OStoreLockBytes (void)
 {
-    if (m_xManager.is())
+    if (m_xManager.is() && m_xNode.is())
     {
-        if (m_xNode.is())
-        {
-            OStorePageDescriptor aDescr (m_xNode->m_aDescr);
-            if (m_bWriteable)
-                m_xManager->releasePage (aDescr);
-            else
-                m_xManager->releasePage (aDescr);
-        }
+        m_xManager->releasePage(m_xNode->m_aDescr);
     }
 }
 
