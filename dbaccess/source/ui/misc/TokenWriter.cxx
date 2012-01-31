@@ -418,7 +418,6 @@ sal_Bool ORTFImportExport::Write()
         rtl::OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
         aFonts = rtl::OUStringToOString(aName, eDestEnc);
     }
-    ByteString aFontNr;
 
     (*m_pStream)    << "{\\fonttbl";
     xub_StrLen nTokenCount = comphelper::string::getTokenCount(aFonts, ';');
