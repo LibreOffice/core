@@ -113,10 +113,9 @@ copy-stuff: buildrcs
 		  comphelpgcc3 \
 		  configmgr.uno \
 		  cppcanvaslo \
-		  deployment \
-		  deploymentmisclo \
 		  drawinglayerlo \
 		  editenglo \
+		  expwrap.uno \
 		  fileacc \
 		  fontconfig \
 		  forlo \
@@ -125,6 +124,7 @@ copy-stuff: buildrcs
 		  fwelo \
 		  fwilo \
 		  fwklo \
+		  fsstorage.uno \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
@@ -187,6 +187,9 @@ copy-stuff: buildrcs
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
+#		  deployment \
+#		  deploymentmisclo \
+
 #
 # Then the shared GNU C++ library
 	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
@@ -218,6 +221,8 @@ copy-stuff: buildrcs
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
+# shell / splash images
+	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
