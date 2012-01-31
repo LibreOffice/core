@@ -103,9 +103,9 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="FREEBSD"
 COPYRECURSE=-R
-.ELSE #"$(OS)"=="MACOSX"
+.ELSE # Not BSD based
 COPYRECURSE=-r
 .ENDIF
 .IF "$(OS)"=="SOLARIS"

@@ -30,7 +30,7 @@ AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
 AC_ARG_WITH(gnu-cp,
-[  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
+[  --with-gnu-cp           Specify location of GNU cp on Solaris
 ],,)
 AC_ARG_WITH(gperf,
 [  --with-gperf           Specify location of gperf on Solaris or FreeBSD
@@ -5575,7 +5575,7 @@ fi
 dnl We also need to check for --with-gnu-cp
 
 if test -z "$with_gnu_cp"; then
-   # check the place where the good stuff is hidden on Solaris...
+   # check the place where the GNU stuff is hidden on Solaris...
    if test -x /usr/gnu/bin/cp; then
       GNUCP=/usr/gnu/bin/cp
    else
@@ -5601,7 +5601,7 @@ else
 fi
 
 if test -z "$GNUCP"; then
-   if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+   if test "$_os" = "SunOS"; then
       AC_MSG_ERROR([no, GNU cp from coreutils is needed. install or specify with --with-gnu-cp=/path/to/it])
    else
       AC_MSG_RESULT([no GNU cp from coreutils found - using the system's cp command])
