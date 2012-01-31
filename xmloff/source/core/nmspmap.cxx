@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -75,13 +77,6 @@ void SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
 
 SvXMLNamespaceMap::~SvXMLNamespaceMap()
 {
-    QNameCache::iterator aIter = aQNameCache.begin(), aEnd = aQNameCache.end();
-    while ( aIter != aEnd )
-    {
-        const OUString *pString = (*aIter).first.second;
-        ++aIter;
-        delete pString;
-    }
 }
 
 int SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
@@ -243,7 +238,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         {
             QNameCache::const_iterator aQCacheIter;
             if (bCache)
-                aQCacheIter = aQNameCache.find ( QNamePair ( nKey, &rLocalName ) );
+                aQCacheIter = aQNameCache.find ( QNamePair ( nKey, rLocalName ) );
             else
                 aQCacheIter = aQNameCache.end();
             if ( aQCacheIter != aQNameCache.end() )
@@ -265,8 +260,9 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     if (bCache)
                     {
                         OUString sString(sQName.makeStringAndClear());
-                        OUString *pString = new OUString ( rLocalName );
-                        const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = sString;
+                        aQNameCache.insert(
+                            QNameCache::value_type(
+                                QNamePair(nKey, rLocalName), sString));
                         return sString;
                     }
                     else
@@ -357,10 +353,9 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
             nKey = xEntry->nKey = XML_NAMESPACE_NONE;
 
         if (bCache)
-    {
-        typedef std::pair< const rtl::OUString, rtl::Reference<NameSpaceEntry> > value_type;
-        (void) const_cast<NameSpaceHash*>(&aNameCache)->insert (value_type (rAttrName, xEntry));
-    }
+        {
+            aNameCache.insert(NameSpaceHash::value_type(rAttrName, xEntry));
+        }
     }
 
     return nKey;
