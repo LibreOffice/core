@@ -120,28 +120,7 @@
 #endif
 
 #ifdef NETBSD
-#   include <sys/param.h>
-#       ifndef ETIME
-#     define  ETIME ETIMEDOUT
-#       endif
-#   include <pthread.h>
-#   include <netdb.h>
-#   include <sys/sem.h>
-#   include <sys/exec.h>
-#   include <sys/filio.h>
-#   include <sys/ioctl.h>
-#   include <sys/time.h>
-#   include <sys/un.h>
-#   include <netinet/tcp.h>
-#   include <dlfcn.h>
-#   include <machine/endian.h>
-#   define  IORESOURCE_TRANSFER_BSD
-#   define  IOCHANNEL_TRANSFER_BSD_RENO
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_PRIORITY
-#     define  NO_PTHREAD_SEMAPHORES
 #   define  NO_PTHREAD_RTL
-#   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 
 #ifdef FREEBSD
@@ -199,7 +178,7 @@
 #       define  PTHREAD_SIGACTION                       pthread_sigaction
 #endif
 
-#ifdef DRAGONFLY
+#if defined(DRAGONFLY) || defined(NETBSD)
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
