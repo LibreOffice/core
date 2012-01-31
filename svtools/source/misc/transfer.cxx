@@ -2005,10 +2005,10 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                 if( pFDesc->cItems )
                 {
-                    ByteString          aDesc( pFDesc->fgd[ 0 ].cFileName );
+                    rtl::OString aDesc( pFDesc->fgd[ 0 ].cFileName );
                     rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
 
-                    if( ( aDesc.Len() > 4 ) && aDesc.Copy( aDesc.Len() - 4 ).EqualsIgnoreCaseAscii( ".URL" ) )
+                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.Len() - 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL")) )
                     {
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( String( aDesc, eTextEncoding ) ).GetMainURL( INetURLObject::NO_DECODE ),
                                                                                   STREAM_STD_READ );
@@ -2031,16 +2031,16 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                         if( pStream )
                         {
-                            ByteString  aLine;
+                            rtl::OString aLine;
                             sal_Bool    bSttFnd = sal_False;
 
                             while( pStream->ReadLine( aLine ) )
                             {
-                                if( aLine.EqualsIgnoreCaseAscii( "[InternetShortcut]" ) )
+                                if (aLine.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("[InternetShortcut]")))
                                     bSttFnd = sal_True;
-                                else if( bSttFnd && aLine.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "URL=" ) )
+                                else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("URL=")))
                                 {
-                                    rBmk = INetBookmark( String( aLine.Erase( 0, 4 ), eTextEncoding ),
+                                    rBmk = INetBookmark( String( aLine.copy(4), eTextEncoding ),
                                                          String( aDesc.Erase( aDesc.Len() - 4 ), eTextEncoding ) );
                                     bRet = sal_True;
                                     break;

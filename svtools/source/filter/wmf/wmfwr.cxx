@@ -660,16 +660,13 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
-    const ByteString & rByteString, const sal_Int32 * pDXAry )
+    const rtl::OString& rByteString, const sal_Int32 * pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
-    sal_uInt16 nNewTextLen = rByteString.Len();
+    sal_uInt16 nNewTextLen = static_cast<sal_uInt16>(rByteString.getLength());
     *pWMF << nNewTextLen << (sal_uInt16)0;
-
-    sal_uInt16 i;
-    for ( i = 0; i < nNewTextLen; i++ )
-        *pWMF << (sal_uInt8)rByteString.GetChar( i );
+    write_uInt8s_FromOString(*pWMF, rByteString, nNewTextLen);
     if ( nNewTextLen & 1 )
         *pWMF << (sal_uInt8)0;
 
@@ -677,11 +674,11 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
     sal_Int16* pConvertedDXAry = new sal_Int16[ nOriginalTextLen ];
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
-    for ( i = 1; i < ( nOriginalTextLen - 1 ); i++ )
+    for (sal_uInt16 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
         pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] );
     pConvertedDXAry[ j ] = (sal_Int16)ScaleWidth( pDXAry[ nOriginalTextLen - 2 ] / ( nOriginalTextLen - 1 ) );
 
-    for ( i = 0; i < nOriginalTextLen; i++ )
+    for (sal_uInt16 i = 0; i < nOriginalTextLen; ++i)
     {
         sal_Int16 nDx = pConvertedDXAry[ i ];
         *pWMF << nDx;
@@ -949,15 +946,12 @@ void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
     TrueTextOut(rPoint, aString);
 }
 
-void WMFWriter::TrueTextOut(const Point & rPoint, const ByteString& rString)
+void WMFWriter::TrueTextOut(const Point & rPoint, const rtl::OString& rString)
 {
-    sal_uInt16 nLen,i;
-
     WriteRecordHeader(0,W_META_TEXTOUT);
-    nLen=rString.Len();
-    *pWMF << nLen;
-    for ( i = 0; i < nLen; i++ )
-        *pWMF << (sal_uInt8)rString.GetChar( i );
+
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(*pWMF, rString);
+    sal_Int32 nLen = rString.getLength();
     if ((nLen&1)!=0) *pWMF << (sal_uInt8)0;
     WritePointYX(rPoint);
     UpdateRecordHeader();

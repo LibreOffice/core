@@ -1160,28 +1160,26 @@ SgfFontOne::SgfFontOne()
     SVWidth=40;
 }
 
-void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
+void SgfFontOne::ReadOne( const rtl::OString& rID, rtl::OString& Dsc )
 {
-    sal_uInt16 i,j;
-
-    if ( Dsc.Len() < 4 || ( Dsc.GetChar( 0 ) != '(' ) )
+    if ( Dsc.getLength() < 4 || ( Dsc[0] != '(' ) )
         return;
-    i=1;   // Erster Buchstabe des IF-Fontnamen. Davor ist eine '('
-    while ( i < Dsc.Len() && ( Dsc.GetChar( i ) !=')' ) )
+    sal_Int32 i=1;   // Erster Buchstabe des IF-Fontnamen. Davor ist eine '('
+    while ( i < Dsc.getLength() && ( Dsc[i] !=')' ) )
         i++;
-    Dsc.Erase(0,i+1);                                // IF-Fontname loeschen inkl. ()
+    Dsc = Dsc.copy(i+1);                                // IF-Fontname loeschen inkl. ()
 
-    if ( Dsc.Len() < 2 || ( Dsc.GetChar( Dsc.Len() - 1 ) !=')' ) )
+    if ( Dsc.getLength() < 2 || ( Dsc[Dsc.getLength() - 1] !=')' ) )
         return;
-    i=Dsc.Len()-2;                                   // hier ist die ')' des SV-Fontnames
-    j=0;
-    while ( i > 0 && ( Dsc.GetChar( i ) != '(' ) )
+    i=Dsc.getLength()-2;                                // hier ist die ')' des SV-Fontnames
+    sal_Int32 j=0;
+    while ( i > 0 && ( Dsc[i] != '(' ) )
     {
         i--;
         j++;
     }
     SVFName=String(Dsc,i+1,j);                       // SV-Fontname rausholen
-    Dsc.Erase(i,j);
+    Dsc = rtl::OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
 
     IFID = (sal_uInt32)rID.toInt32();
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(Dsc, ' ');
@@ -1261,7 +1259,7 @@ void SgfFontLst::ReadList()
         sal_uInt16 Anz=aCfg.GetKeyCount();
         sal_uInt16 i;
         rtl::OString FID;
-        ByteString Dsc;
+        rtl::OString Dsc;
 
         for (i=0;i<Anz;i++)
         {
