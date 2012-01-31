@@ -144,10 +144,16 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 
         if( xPage.is() )
         {
-            SvxDrawPage* pPage = SvxDrawPage::getImplementation(  xPage );
+            SvxDrawPage* pPage = SvxDrawPage::getImplementation( xPage );
             if(pPage)
-                ::std::remove(mpSdCustomShow->PagesVector().begin(), mpSdCustomShow->PagesVector().end(),
+            {
+                SdCustomShow::PageVec::iterator it = std::find(
+                    mpSdCustomShow->PagesVector().begin(),
+                    mpSdCustomShow->PagesVector().end(),
                     pPage->GetSdrPage());
+                if (it != mpSdCustomShow->PagesVector().end())
+                    mpSdCustomShow->PagesVector().erase(it);
+            }
         }
     }
 

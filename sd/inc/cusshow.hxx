@@ -71,6 +71,7 @@ public:
 
     PageVec& PagesVector();
     void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
+    void RemovePage( const SdPage* pPage );
 
     void   SetName(const String& rName);
     String GetName() const;
