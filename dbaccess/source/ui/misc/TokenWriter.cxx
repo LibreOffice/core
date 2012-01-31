@@ -412,8 +412,8 @@ sal_Bool ORTFImportExport::Write()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     ::Color aColor(nColor);
 
-    ByteString aFonts(rtl::OUStringToOString(m_aFont.Name, eDestEnc));
-    if(!aFonts.Len())
+    rtl::OString aFonts(rtl::OUStringToOString(m_aFont.Name, eDestEnc));
+    if (aFonts.isEmpty())
     {
         rtl::OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
         aFonts = rtl::OUStringToOString(aName, eDestEnc);
