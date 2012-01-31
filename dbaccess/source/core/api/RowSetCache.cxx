@@ -452,12 +452,17 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
     else if (m_nStartPos < m_nPosition && m_nPosition <= m_nEndPos)
     {
         sal_Int32 nNewSt = -1;
-        fillMatrix(nNewSt,_nSize);
+        _nSize += m_nStartPos;
+        fillMatrix(nNewSt, _nSize);
         if (nNewSt >= 0)
         {
             m_nStartPos = nNewSt;
-            m_nEndPos =  nNewSt + _nSize;
+            m_nEndPos =  _nSize;
             m_aMatrixIter = calcPosition();
+        }
+        else
+        {
+            m_nEndPos = m_nStartPos + m_nFetchSize;
         }
     }
     else
@@ -746,7 +751,7 @@ sal_Bool ORowSetCache::afterLast(  )
     return sal_True;
 }
 
-sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos)
+sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
 {
     OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
     // If _nNewStartPos >= 0, then fill the whole window with new data
@@ -791,7 +796,16 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
             }
             const ORowSetMatrix::iterator aEnd = aIter;
             ORowSetMatrix::iterator aRealEnd = m_pMatrix->end();
-            sal_Int32 nPos = (m_nRowCount > m_nFetchSize) ? (m_nRowCount - m_nFetchSize) : 0;
+            sal_Int32 nPos;
+            if (m_nRowCount >= m_nFetchSize)
+            {
+                nPos = m_nRowCount - m_nFetchSize;
+            }
+            else
+            {
+                nPos = 0;
+                _nNewEndPos = m_nRowCount;
+            }
             _nNewStartPos = nPos;
             ++nPos;
             bCheck = m_pCacheSet->absolute(nPos);
@@ -1655,6 +1669,7 @@ void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 
 sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
+    OSL_ENSURE( _nNewEndPos - _nNewStartPos == m_nFetchSize, "reFillMatrix called with Start/EndPos not m_nFetchSize apart");
     const TOldRowSetRows::const_iterator aOldRowEnd = m_aOldRows.end();
     for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
     {
@@ -1664,8 +1679,7 @@ sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPo
     sal_Int32 nNewSt = _nNewStartPos;
     sal_Bool bRet = fillMatrix(nNewSt,_nNewEndPos);
     m_nStartPos = nNewSt;
-    m_nEndPos = nNewSt + (_nNewEndPos - _nNewStartPos);
-    OSL_ENSURE( _nNewEndPos - _nNewStartPos == m_nFetchSize, "reFillMatrix called with Start/EndPos not m_nFetchSize apart");
+    m_nEndPos = _nNewEndPos;
     rotateCacheIterator(static_cast<ORowSetMatrix::difference_type>(m_nFetchSize+1)); // invalidate every iterator
     return bRet;
 }

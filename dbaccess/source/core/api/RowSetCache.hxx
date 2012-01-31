@@ -111,7 +111,7 @@ namespace dbaccess
 
         sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::const_iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
         sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
-        sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
+        sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 &_nNewEndPos);
         sal_Bool moveWindow();
         // returns true when a keyset needs to be created.
         sal_Bool impl_createBookmarkSet_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs);
