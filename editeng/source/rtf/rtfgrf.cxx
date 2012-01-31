@@ -164,7 +164,7 @@ static sal_uInt8 aPal8[ 256 * 4 ] =
 inline long SwapLong( long n )
 {
 #ifndef OSL_LITENDIAN
-    return SWAPLONG( n );
+    return OSL_SWAPDWORD( n );
 #else
     return n;
 #endif
