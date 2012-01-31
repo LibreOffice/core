@@ -40,7 +40,10 @@ $(eval $(call gb_Library_set_include,oox,\
     -I$(realpath $(SRCDIR)/oox/inc) \
 ))
 
-ifeq ($(CPUNAME),IA64)
+ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
+#Debian Linux ia64 fails at compile time on
+#oox/source/drawingml/customshapepresets*.cxx which are apparently too large
+#for the toolchain to handle with default optimization
 $(eval $(call gb_Library_add_cxxflags,oox,\
     -Os \
 ))
