@@ -1863,9 +1863,9 @@ int Desktop::Main()
                 ::plasma_now("pre hit execute!");
 
                 // For some reason we're not getting a desktop frame or component [odd]
-                ErrorBox aKickStartVCL( NULL, WB_OK, rtl::OUString::createFromAscii("Title!") );
-                aKickStartVCL.SetText( rtl::OUString::createFromAscii("Foo") );
-                aKickStartVCL.Execute();
+                ErrorBox aKickStartVCL( NULL, WB_OK, rtl::OUString::createFromAscii("My very own title!") );
+                aKickStartVCL.SetText( rtl::OUString::createFromAscii("Delphic Utterance") );
+                aKickStartVCL.Show(); // don't execute - just leave it lying around ....
 
                 ::plasma_now("hit execute!");
 
