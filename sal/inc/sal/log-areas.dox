@@ -17,6 +17,10 @@ certain functionality.
 
 @li oox.xmlstream - XmlStream class
 
+@section VCL
+
+@li vcl.gtk - Gtk+ 2/3 plugin
+
 @section Writer
 
 @li sw.uno - Writer's UNO interfaces
