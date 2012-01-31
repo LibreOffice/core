@@ -480,7 +480,7 @@ protected:
     // Fuer GetDragComment
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0) const;
 
-    void ImpForcePlusData() { if (pPlusData==NULL) pPlusData=NewPlusData(); }
+    void ImpForcePlusData();
 
     String GetWinkStr(long nWink, bool bNoDegChar = false) const;
     String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;

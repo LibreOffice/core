@@ -1123,6 +1123,12 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, s
     }
 }
 
+void SdrObject::ImpForcePlusData()
+{
+    if (!pPlusData)
+        pPlusData = NewPlusData();
+}
+
 XubString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
 {
     XubString aStr;
