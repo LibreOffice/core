@@ -875,7 +875,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             if ( nEscLen <= ( nRecSize * 2 ) )
                             {
 #ifdef OSL_BIGENDIAN
-                                sal_uInt32 nTmp = SWAPLONG( nEsc );
+                                sal_uInt32 nTmp = OSL_SWAPDWORD( nEsc );
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );

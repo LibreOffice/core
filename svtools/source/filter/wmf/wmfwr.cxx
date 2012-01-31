@@ -523,7 +523,7 @@ bool IsStarSymbol(const String &rStr)
 void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData )
 {
 #ifdef OSL_BIGENDIAN
-    sal_uInt32 nTmp = SWAPLONG( nEsc );
+    sal_uInt32 nTmp = OSL_SWAPDWORD( nEsc );
     sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
     sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
