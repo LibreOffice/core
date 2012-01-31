@@ -1055,14 +1055,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     int DestFileFD=0;
     int nRet=0;
 
-#ifdef ANDROID
-    volatile int beenhere = 0;
-    if (!beenhere) {
-        beenhere++;
-        fprintf(stderr, "Sleeping NOW, start ndk-gdb!\n");
-        ::sleep(20);
-    }
-#endif
     if (osl_openFilePath(pszSourceFileName,
                          &SourceFileFH,
                          osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl) != osl_File_E_None)
