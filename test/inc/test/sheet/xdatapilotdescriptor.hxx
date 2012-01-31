@@ -60,8 +60,6 @@ private:
     static std::vector<rtl::OUString> maFieldNames;
 };
 
-std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

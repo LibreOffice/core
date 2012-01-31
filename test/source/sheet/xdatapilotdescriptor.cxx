@@ -41,6 +41,8 @@ using namespace com::sun::star::uno;
 
 namespace apitest {
 
+std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
+
 void XDataPilotDescriptor::testTag()
 {
     rtl::OUString aTag(RTL_CONSTASCII_USTRINGPARAM("DataPilotDescriptor_Tag"));
