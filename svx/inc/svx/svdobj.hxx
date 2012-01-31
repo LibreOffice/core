@@ -254,7 +254,6 @@ public:
     sal_uInt16 GetUserDataCount() const;
     SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
     void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF);
-    SdrObjUserData* RemoveUserData(sal_uInt16 nNum);
     void DeleteUserData(sal_uInt16 nNum);
 };
 

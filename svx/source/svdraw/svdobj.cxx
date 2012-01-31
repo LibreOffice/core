@@ -246,14 +246,9 @@ void SdrObjUserDataList::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
     aList.Insert(pData,nPos);
 }
 
-SdrObjUserData* SdrObjUserDataList::RemoveUserData(sal_uInt16 nNum)
-{
-    return (SdrObjUserData*)aList.Remove(nNum);
-}
-
 void SdrObjUserDataList::DeleteUserData(sal_uInt16 nNum)
 {
-    delete RemoveUserData(nNum);
+    delete (SdrObjUserData*)aList.Remove(nNum);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
