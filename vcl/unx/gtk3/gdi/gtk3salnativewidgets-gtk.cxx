@@ -1174,15 +1174,24 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // background colors
     GdkRGBA background_color;
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &background_color);
+
     ::Color aBackColor = getColor( background_color );
-    ::Color aBackFieldColor = getColor( background_color  );
     aStyleSet.Set3DColors( aBackColor );
     aStyleSet.SetFaceColor( aBackColor );
     aStyleSet.SetDialogColor( aBackColor );
     aStyleSet.SetWorkspaceColor( aBackColor );
-    aStyleSet.SetFieldColor( aBackFieldColor );
-    aStyleSet.SetWindowColor( aBackFieldColor );
     aStyleSet.SetCheckedColorSpecialCase( );
+
+    GdkRGBA field_background_color;
+    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
+    ::Color aBackFieldColor = getColor( field_background_color );
+    // FIXME: we really need some work getting the right style contexts.
+    // it seems a window has a rather different background color from what we want.
+    aBackFieldColor = ::Color( COL_WHITE );
+    aStyleSet.SetFieldColor( aBackFieldColor );
+    // This baby is the default page/paper color
+    aStyleSet.SetWindowColor( aBackFieldColor );
+
     // highlighting colors
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
     ::Color aHighlightColor = getColor( text_color );
