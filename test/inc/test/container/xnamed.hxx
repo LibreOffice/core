@@ -38,6 +38,7 @@ class OOO_DLLPUBLIC_TEST XNamed
 {
 public:
     XNamed(const rtl::OUString& rName): maName(rName) {}
+    virtual ~XNamed();
 
     void testGetName();
     void testSetName();

@@ -40,6 +40,7 @@ class OOO_DLLPUBLIC_TEST XDataPilotTable
 {
 public:
     virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual ~XDataPilotTable();
 
     void testGetOutputRange();
     void testRefresh();
