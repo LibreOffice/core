@@ -232,7 +232,7 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     FixedText FT_GENERALUSERNAME
     {
         Pos = MAP_APPFONT (START_X , 62 ) ;
-        Size = MAP_APPFONT ( AUTHENTEDIT_X - START_X  , FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( AUTHENTEDIT_X - START_X - 1 , FIXEDTEXT_HEIGHT ) ;
         Text[ en-US ] = "~User name" ;
     };
 
