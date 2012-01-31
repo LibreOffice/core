@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <algorithm>
+
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -100,7 +102,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
     if( bDisposing )
         throw lang::DisposedException();
 
-    if( Index < 0 || Index > (sal_Int32)( mpSdCustomShow ? mpSdCustomShow->Count() : 0 ) )
+    if( Index < 0 || Index > (sal_Int32)( mpSdCustomShow ? mpSdCustomShow->PagesVector().size() : 0 ) )
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference< drawing::XDrawPage > xPage;
@@ -119,7 +121,8 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
         if( NULL != mpModel && NULL == mpSdCustomShow && mpModel->GetDoc() )
             mpSdCustomShow = new SdCustomShow( mpModel->GetDoc() );
 
-        mpSdCustomShow->Insert(pPage->GetSdrPage(), Index);
+        mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
+            (SdPage*) pPage->GetSdrPage());
     }
 
     if( mpModel )
@@ -143,7 +146,8 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
         {
             SvxDrawPage* pPage = SvxDrawPage::getImplementation(  xPage );
             if(pPage)
-                mpSdCustomShow->Remove(pPage->GetSdrPage());
+                ::std::remove(mpSdCustomShow->PagesVector().begin(), mpSdCustomShow->PagesVector().end(),
+                    pPage->GetSdrPage());
         }
     }
 
@@ -185,7 +189,7 @@ sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
     if( bDisposing )
         throw lang::DisposedException();
 
-    return mpSdCustomShow?mpSdCustomShow->Count():0;
+    return mpSdCustomShow ? mpSdCustomShow->PagesVector().size() : 0;
 }
 
 uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
@@ -196,13 +200,13 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     if( bDisposing )
         throw lang::DisposedException();
 
-    if( Index < 0 || Index >= (sal_Int32)mpSdCustomShow->Count() )
+    if( Index < 0 || Index >= (sal_Int32)mpSdCustomShow->PagesVector().size() )
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;
     if(mpSdCustomShow )
     {
-        SdrPage* pPage = (SdrPage*)mpSdCustomShow->GetObject(Index);
+        SdrPage* pPage = (SdrPage*)mpSdCustomShow->PagesVector()[Index];
 
         if( pPage )
         {

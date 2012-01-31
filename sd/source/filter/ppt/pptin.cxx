@@ -1301,7 +1301,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
                                                 if ( pPage )
                                                 {
-                                                    pSdCustomShow->Insert( pPage, LIST_APPEND );
+                                                    pSdCustomShow->PagesVector().push_back( pPage );
                                                     nFound++;
                                                 }
                                             }

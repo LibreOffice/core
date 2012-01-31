@@ -29,7 +29,7 @@
 #ifndef _SD_CUSSHOW_HXX
 #define _SD_CUSSHOW_HXX
 
-#include <tools/list.hxx>
+#include <vector>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -43,9 +43,13 @@ class SdPage;
 |* CustomShow
 |*
 \************************************************************************/
-class SD_DLLPUBLIC SdCustomShow : public List
+class SD_DLLPUBLIC SdCustomShow
 {
+public:
+    typedef ::std::vector<const SdPage*> PageVec;
+
 private:
+    PageVec       maPages;
     String          aName;
     SdDrawDocument* pDoc;
 
@@ -65,13 +69,13 @@ public:
     // @@@ copy ctor, but no copy assignment? @@@
     SdCustomShow( const SdCustomShow& rShow );
 
+    PageVec& PagesVector();
+    void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
+
     void   SetName(const String& rName);
     String GetName() const;
 
     SdDrawDocument* GetDoc() const { return pDoc; }
-
-    void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
-    void RemovePage( const SdPage* pPage );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };

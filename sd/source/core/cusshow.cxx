@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc)
-  : List(),
+  : maPages(),
   pDoc(pDrawDoc)
 {
 }
@@ -56,14 +56,14 @@ SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc)
 |*
 \************************************************************************/
 SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
-    : List( rShow )
+    : maPages(rShow.maPages)
 {
     aName = rShow.GetName();
     pDoc = rShow.GetDoc();
 }
 
 SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow )
-  : List(),
+  : maPages(),
   pDoc(pDrawDoc),
   mxUnoCustomShow( xShow )
 {
@@ -97,28 +97,20 @@ uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
     return xShow;
 }
 
+SdCustomShow::PageVec& SdCustomShow::PagesVector()
+{
+    return maPages;
+}
+
 void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 {
     if( !pNewPage )
     {
-        RemovePage( pOldPage );
+        ::std::remove(maPages.begin(), maPages.end(), pOldPage);
     }
     else
     {
-        sal_uLong nPos;
-        while( (nPos = GetPos( (void*)pOldPage )) != CONTAINER_ENTRY_NOTFOUND  )
-        {
-            Replace( (void*)pNewPage, nPos );
-        }
-    }
-}
-
-void SdCustomShow::RemovePage( const SdPage* pPage )
-{
-    sal_uLong nPos;
-    while( (nPos = GetPos( (void*)pPage )) != CONTAINER_ENTRY_NOTFOUND  )
-    {
-        Remove( nPos );
+        ::std::replace(maPages.begin(), maPages.end(), pOldPage, pNewPage);
     }
 }
 

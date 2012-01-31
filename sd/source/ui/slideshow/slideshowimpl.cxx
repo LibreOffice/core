@@ -2485,7 +2485,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
         // create animation slide controller
         AnimationSlideController::Mode eMode =
-            ( pCustomShow && pCustomShow->Count() ) ? AnimationSlideController::CUSTOM :
+            ( pCustomShow && pCustomShow->PagesVector().size() ) ? AnimationSlideController::CUSTOM :
                 (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
@@ -2546,11 +2546,11 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
                     mpSlideController->insertSlideNumber( (sal_uInt16) nSlide );
             }
 
-            void* pCustomSlide;
-            sal_Int32 nSlideIndex;
-            for( pCustomSlide = pCustomShow->First(),nSlideIndex=0; pCustomSlide; pCustomSlide = pCustomShow->Next(), nSlideIndex++ )
+            sal_Int32 nSlideIndex = 0;
+            for( SdCustomShow::PageVec::iterator it = pCustomShow->PagesVector().begin();
+                 it != pCustomShow->PagesVector().end(); ++it, nSlideIndex++ )
             {
-                const sal_uInt16 nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNum() - 1 ) / 2;
+                const sal_uInt16 nSdSlide = ( ( (SdPage*) (*it) )->GetPageNum() - 1 ) / 2;
 
                 if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );

@@ -356,12 +356,11 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
         aEdtName.SetText( aOldName );
 
         // ListBox mit CustomShow-Seiten fuellen
-        for( pPage = (SdPage*) rpCustomShow->First();
-             pPage != NULL;
-             pPage = (SdPage*) rpCustomShow->Next() )
+        for( SdCustomShow::PageVec::iterator it = rpCustomShow->PagesVector().begin();
+             it != rpCustomShow->PagesVector().end(); ++it )
         {
-            SvLBoxEntry* pEntry = aLbCustomPages.InsertEntry( pPage->GetName() );
-            pEntry->SetUserData( pPage );
+            SvLBoxEntry* pEntry = aLbCustomPages.InsertEntry( (*it)->GetName() );
+            pEntry->SetUserData( (SdPage*) (*it) );
         }
     }
     else
@@ -473,22 +472,23 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     SvLBoxEntry* pEntry = NULL;
 
     // Anzahl vergleichen
-    if( rpCustomShow->Count() != aLbCustomPages.GetEntryCount() )
+    if( rpCustomShow->PagesVector().size() != aLbCustomPages.GetEntryCount() )
     {
-        rpCustomShow->Clear();
+        rpCustomShow->PagesVector().clear();
         bDifferent = sal_True;
     }
 
     // Seiten-Pointer vergleichen
     if( !bDifferent )
     {
-        for( pPage = (SdPage*) rpCustomShow->First(), pEntry = aLbCustomPages.First();
-             pPage != NULL && pEntry != NULL && !bDifferent;
-             pPage = (SdPage*) rpCustomShow->Next(), pEntry = aLbCustomPages.Next( pEntry ) )
+        SdCustomShow::PageVec::iterator it1 = rpCustomShow->PagesVector().begin();
+        pEntry = aLbCustomPages.First();
+        for( ; it1 != rpCustomShow->PagesVector().end() && pEntry != NULL && !bDifferent;
+             ++it1, pEntry = aLbCustomPages.Next( pEntry ) )
         {
-            if( pPage != pEntry->GetUserData() )
+            if( *it1 != pEntry->GetUserData() )
             {
-                rpCustomShow->Clear();
+                rpCustomShow->PagesVector().clear();
                 bDifferent = sal_True;
             }
         }
@@ -502,7 +502,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
              pEntry = aLbCustomPages.Next( pEntry ) )
         {
             pPage = (SdPage*) pEntry->GetUserData();
-            rpCustomShow->Insert( pPage, LIST_APPEND );
+            rpCustomShow->PagesVector().push_back( pPage );
         }
         bModified = sal_True;
     }

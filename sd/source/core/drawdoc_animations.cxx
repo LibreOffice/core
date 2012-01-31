@@ -44,7 +44,8 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
         {
             SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
             if( pNewPage == 0 )
-                pCustomShow->RemovePage(pOldPage);
+                ::std::remove(pCustomShow->PagesVector().begin(), pCustomShow->PagesVector().end(),
+                    pOldPage);
             else
                 pCustomShow->ReplacePage(pOldPage,pNewPage);
         }
