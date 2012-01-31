@@ -53,11 +53,13 @@ copy-stuff:
 # Libs and UNO components that the tests need.
 #
 	for F in $(strip \
+		  analysislo \
 		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
 		  comphelpgcc3 \
 		  configmgr.uno \
+		  expwrap.uno \
 		  fileacc \
 		  fontconfig \
 		  forlo \
@@ -84,6 +86,7 @@ copy-stuff:
 		  mergedlo \
 		  msfilterlo \
 		  ooxlo \
+		  reflection.uno \
 		  reg \
 		  saxlo \
 		  sblo \
@@ -115,6 +118,7 @@ copy-stuff:
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
+		  xstor \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
