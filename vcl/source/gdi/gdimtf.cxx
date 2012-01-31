@@ -406,29 +406,32 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
 
-        for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
-        {
-            if( !Hook() )
+        OSL_TRACE("GDIMetaFile::Play on device of size: %d x %d", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
+
+        if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSizePixel() ) ) {
+            for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
-                MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
-                if( pAction->GetType() == META_COMMENT_ACTION &&
-                    pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("DELEGATE_PLUGGABLE_RENDERER")) )
+                if( !Hook() )
                 {
-                    ImplDelegate2PluggableRenderer(pCommentAct, pOut);
-                }
-                else
-                {
-                    pAction->Execute( pOut );
+                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                    if( pAction->GetType() == META_COMMENT_ACTION &&
+                        pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("DELEGATE_PLUGGABLE_RENDERER")) )
+                    {
+                        ImplDelegate2PluggableRenderer(pCommentAct, pOut);
+                    }
+                    else
+                    {
+                        pAction->Execute( pOut );
+                    }
+
+                    // flush output from time to time
+                    if( i++ > nSyncCount )
+                        ( (Window*) pOut )->Flush(), i = 0;
                 }
 
-                // flush output from time to time
-                if( i++ > nSyncCount )
-                    ( (Window*) pOut )->Flush(), i = 0;
+                pAction = NextAction();
             }
-
-            pAction = NextAction();
         }
-
         pOut->Pop();
     }
 }
@@ -437,6 +440,9 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 
 bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize )
 {
+    if (!bUseCanvas)
+        return false;
+
     const Window* win = dynamic_cast <Window*> ( pOut );
 
     if (!win)
@@ -608,7 +614,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     {
         GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
 
-        if( bUseCanvas && !pMtf && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
+        if( ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
             return;
 
         Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
@@ -2042,6 +2048,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
     aMtf.aPrefSize = aPrefSize;
     aMtf.aPrefMapMode = aPrefMapMode;
+    aMtf.bUseCanvas = bUseCanvas;
 
     for( MetaAction* pAction = FirstAction(); pAction; pAction = NextAction() )
     {
