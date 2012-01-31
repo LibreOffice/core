@@ -47,6 +47,8 @@
 #include "svx/svxdllapi.h"
 #include "svx/shapeproperty.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 //************************************************************
 //   Vorausdeklarationen
 //************************************************************
@@ -244,17 +246,19 @@ public:
 
 class SdrObjUserDataList
 {
-    Container aList;
+    typedef boost::ptr_vector<SdrObjUserData> ListType;
+    ListType maList;
 
 public:
     SdrObjUserDataList();
     ~SdrObjUserDataList();
 
-    void Clear();
-    sal_uInt16 GetUserDataCount() const;
-    SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
-    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF);
-    void DeleteUserData(sal_uInt16 nNum);
+    size_t GetUserDataCount() const;
+    const SdrObjUserData* GetUserData(size_t nNum) const;
+    SdrObjUserData* GetUserData(size_t nNum);
+    void InsertUserData(SdrObjUserData* pData, size_t nPos);
+    void AppendUserData(SdrObjUserData* pData);
+    void DeleteUserData(size_t nNum);
 };
 
 //************************************************************

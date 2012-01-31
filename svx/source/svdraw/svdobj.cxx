@@ -217,38 +217,37 @@ XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/
     return String();
 }
 
-SdrObjUserDataList::SdrObjUserDataList() :
-    aList(1024,4,4) {}
+SdrObjUserDataList::SdrObjUserDataList() {}
+SdrObjUserDataList::~SdrObjUserDataList() {}
 
-SdrObjUserDataList::~SdrObjUserDataList() { Clear(); }
-
-void SdrObjUserDataList::Clear()
+size_t SdrObjUserDataList::GetUserDataCount() const
 {
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        delete GetUserData(i);
-    }
-    aList.Clear();
+    return static_cast<sal_uInt16>(maList.size());
 }
 
-sal_uInt16 SdrObjUserDataList::GetUserDataCount() const
+const SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum) const
 {
-    return sal_uInt16(aList.Count());
+    return &maList.at(nNum);
 }
 
-SdrObjUserData* SdrObjUserDataList::GetUserData(sal_uInt16 nNum) const
+SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum)
 {
-    return (SdrObjUserData*)aList.GetObject(nNum);
+    return &maList.at(nNum);
 }
 
-void SdrObjUserDataList::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
+void SdrObjUserDataList::InsertUserData(SdrObjUserData* pData, size_t nPos)
 {
-    aList.Insert(pData,nPos);
+    maList.insert(maList.begin()+nPos, pData);
 }
 
-void SdrObjUserDataList::DeleteUserData(sal_uInt16 nNum)
+void SdrObjUserDataList::AppendUserData(SdrObjUserData* pData)
 {
-    delete (SdrObjUserData*)aList.Remove(nNum);
+    maList.push_back(pData);
+}
+
+void SdrObjUserDataList::DeleteUserData(size_t nNum)
+{
+    maList.erase(maList.begin()+nNum);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,7 +300,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
             for (sal_uInt16 i=0; i<nAnz; i++) {
                 SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i)->Clone(pObj1);
                 if (pNeuUserData!=NULL) {
-                    pNeuPlusData->pUserDataList->InsertUserData(pNeuUserData);
+                    pNeuPlusData->pUserDataList->AppendUserData(pNeuUserData);
                 } else {
                     OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() returns NULL.");
                 }
@@ -2673,11 +2672,19 @@ SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
 
 void SdrObject::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
 {
-    if (pData!=NULL) {
+    if (pData!=NULL)
+    {
         ImpForcePlusData();
-        if (pPlusData->pUserDataList==NULL) pPlusData->pUserDataList=new SdrObjUserDataList;
-        pPlusData->pUserDataList->InsertUserData(pData,nPos);
-    } else {
+        if (!pPlusData->pUserDataList)
+            pPlusData->pUserDataList = new SdrObjUserDataList;
+
+        if (nPos == 0xFFFF)
+            pPlusData->pUserDataList->AppendUserData(pData);
+        else
+            pPlusData->pUserDataList->InsertUserData(pData, nPos);
+    }
+    else
+    {
         OSL_FAIL("SdrObject::InsertUserData(): pData is NULL pointer.");
     }
 }
