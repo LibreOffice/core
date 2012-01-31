@@ -136,10 +136,7 @@ public class Bootstrap extends NativeActivity
 
         String[] argv = CommandLine.split(cmdLine);
 
-        // Handle env var assignments in the command line. Actually
-        // not sure if this works, are environments per-thread in
-        // Android? This code runs in a different thread than that in
-        // which lo_main etc will run.
+        // Handle env var assignments in the command line.
         while (argv.length > 0 &&
                argv[0].matches("[A-Z_]+=.*")) {
             putenv(argv[0]);
