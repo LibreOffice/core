@@ -443,11 +443,19 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
     }
     case AINPUT_EVENT_TYPE_MOTION:
     {
-        fprintf (stderr, "motion event %d %g %g %s\n",
+        size_t nPoints = AMotionEvent_getPointerCount(event);
+        fprintf (stderr, "motion event %d %g,%g %d points: %s\n",
                  AMotionEvent_getAction(event),
                  AMotionEvent_getXOffset(event),
                  AMotionEvent_getYOffset(event),
+                 (int)nPoints,
                  MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
+        for (size_t i = 0; i < nPoints; i++)
+            fprintf(stderr, "\t%d: %g,%g - pressure %g\n",
+                    (int)i,
+                    AMotionEvent_getX(event, i),
+                    AMotionEvent_getY(event, i),
+                    AMotionEvent_getPressure(event, i));
         break;
     }
     default:
