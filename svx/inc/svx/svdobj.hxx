@@ -193,7 +193,7 @@ public:
         pVisiLayer(NULL),
         pPageView(NULL),
         nTol(0),
-        bDown(sal_False)
+        bDown(false)
     {}
 };
 
@@ -281,10 +281,10 @@ public:
     Rectangle                   aBoundRect;
     Point                       aAnchor;
     SdrGluePointList*           pGPL;
-    sal_Bool                        bMovProt;
-    sal_Bool                        bSizProt;
-    sal_Bool                        bNoPrint;
-    sal_Bool                        bClosedObj;
+    bool                        bMovProt;
+    bool                        bSizProt;
+    bool                        bNoPrint;
+    bool                        bClosedObj;
     bool                        mbVisible;
     SdrLayerID                  mnLayerID;
 
@@ -305,15 +305,15 @@ class SdrObjPlusData
     friend class                SdrObject;
 
 public:
-    SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=sal_True). Auch fuer Konnektoren etc.
+    SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=true). Auch fuer Konnektoren etc.
     SdrObjUserDataList*         pUserDataList; // applikationsspeziefische Daten
     SdrGluePointList*           pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
 
     // #i68101#
     // object name, title and description
-    String                      aObjName;
-    String                      aObjTitle;
-    String                      aObjDescription;
+    rtl::OUString aObjName;
+    rtl::OUString aObjTitle;
+    rtl::OUString aObjDescription;
 
 public:
     TYPEINFO();
@@ -332,50 +332,28 @@ public:
 class SdrObjTransformInfoRec
 {
 public:
-    unsigned                    bSelectAllowed : 1;     // sal_False=Obj kann nicht selektiert werden
-    unsigned                    bMoveAllowed : 1;       // sal_False=Obj kann nicht verschoben werden
-    unsigned                    bResizeFreeAllowed : 1; // sal_False=Obj kann nicht frei resized werden
-    unsigned                    bResizePropAllowed : 1; // sal_False=Obj kann nichtmal proportional resized werden
-    unsigned                    bRotateFreeAllowed : 1; // sal_False=Obj kann nicht frei gedreht werden
-    unsigned                    bRotate90Allowed : 1;   // sal_False=Obj kann nichtmal im 90deg Raster gedreht werden
-    unsigned                    bMirrorFreeAllowed : 1; // sal_False=Obj kann nicht frei gespiegelt werden
-    unsigned                    bMirror45Allowed : 1;   // sal_False=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
-    unsigned                    bMirror90Allowed : 1;   // sal_False=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
-    unsigned                    bTransparenceAllowed : 1; // sal_False=Obj does not have an interactive transparence control
-    unsigned                    bGradientAllowed : 1; // sal_False=Obj dooes not have an interactive gradient control
-    unsigned                    bShearAllowed : 1;      // sal_False=Obj kann nicht verzerrt werden
-    unsigned                    bEdgeRadiusAllowed : 1;
-    unsigned                    bNoOrthoDesired : 1;    // sal_True bei Rect; ... sal_False bei BMP,MTF;
-    unsigned                    bNoContortion : 1;      // sal_False=Kein verzerren (bei Crook) moeglich (nur sal_True bei PathObj und Gruppierten PathObjs)
-    unsigned                    bCanConvToPath : 1;     // sal_False=Keine Konvertierung in PathObj moeglich
-    unsigned                    bCanConvToPoly : 1;     // sal_False=Keine Konvertierung in PolyObj moeglich
-    unsigned                    bCanConvToContour : 1;     // sal_False=no conversion down to whole contour possible
-    unsigned                    bCanConvToPathLineToArea : 1; // sal_False=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
-    unsigned                    bCanConvToPolyLineToArea : 1; // sal_False=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
+    bool bSelectAllowed : 1;     // false=Obj kann nicht selektiert werden
+    bool bMoveAllowed : 1;       // false=Obj kann nicht verschoben werden
+    bool bResizeFreeAllowed : 1; // false=Obj kann nicht frei resized werden
+    bool bResizePropAllowed : 1; // false=Obj kann nichtmal proportional resized werden
+    bool bRotateFreeAllowed : 1; // false=Obj kann nicht frei gedreht werden
+    bool bRotate90Allowed : 1;   // false=Obj kann nichtmal im 90deg Raster gedreht werden
+    bool bMirrorFreeAllowed : 1; // false=Obj kann nicht frei gespiegelt werden
+    bool bMirror45Allowed : 1;   // false=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
+    bool bMirror90Allowed : 1;   // false=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
+    bool bTransparenceAllowed : 1; // false=Obj does not have an interactive transparence control
+    bool bGradientAllowed : 1; // false=Obj dooes not have an interactive gradient control
+    bool bShearAllowed : 1;      // false=Obj kann nicht verzerrt werden
+    bool bEdgeRadiusAllowed : 1;
+    bool bNoOrthoDesired : 1;    // true bei Rect; ... false bei BMP,MTF;
+    bool bNoContortion : 1;      // false=Kein verzerren (bei Crook) moeglich (nur true bei PathObj und Gruppierten PathObjs)
+    bool bCanConvToPath : 1;     // false=Keine Konvertierung in PathObj moeglich
+    bool bCanConvToPoly : 1;     // false=Keine Konvertierung in PolyObj moeglich
+    bool bCanConvToContour : 1;     // false=no conversion down to whole contour possible
+    bool bCanConvToPathLineToArea : 1; // false=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
+    bool bCanConvToPolyLineToArea : 1; // false=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
 
-public:
-    SdrObjTransformInfoRec()
-    :   bSelectAllowed(sal_True),
-        bMoveAllowed(sal_True),
-        bResizeFreeAllowed(sal_True),
-        bResizePropAllowed(sal_True),
-        bRotateFreeAllowed(sal_True),
-        bRotate90Allowed(sal_True),
-        bMirrorFreeAllowed(sal_True),
-        bMirror45Allowed(sal_True),
-        bMirror90Allowed(sal_True),
-        bTransparenceAllowed(sal_True),
-        bGradientAllowed(sal_True),
-        bShearAllowed(sal_True),
-        bEdgeRadiusAllowed(sal_True),
-        bNoOrthoDesired(sal_True),
-        bNoContortion(sal_True),
-        bCanConvToPath(sal_True),
-        bCanConvToPoly(sal_True),
-        bCanConvToContour(sal_False),
-        bCanConvToPathLineToArea(sal_True),
-        bCanConvToPolyLineToArea(sal_True)
-    {}
+    SdrObjTransformInfoRec();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -461,42 +439,42 @@ protected:
     SdrLayerID                  mnLayerID;
 
     // Objekt zeigt nur auf ein Anderes
-    unsigned                    bVirtObj : 1;
-    unsigned                    bSnapRectDirty : 1;
-    unsigned                    bNetLock : 1;   // ni
-    unsigned                    bInserted : 1;  // nur wenn sal_True gibt's RepaintBroadcast & SetModify
-    unsigned                    bGrouped : 1;   // Member eines GroupObjektes?
+    bool                        bVirtObj : 1;
+    bool                        bSnapRectDirty : 1;
+    bool                        bNetLock : 1;   // ni
+    bool                        bInserted : 1;  // nur wenn true gibt's RepaintBroadcast & SetModify
+    bool                        bGrouped : 1;   // Member eines GroupObjektes?
 
     // Die folgende Flags werden gestreamt
-    unsigned                    bMovProt : 1; // If true, the position is protected
-    unsigned                    bSizProt : 1; // If true, the size is protected
-    unsigned                    bNoPrint : 1; // If true, the object is not printed.
-    unsigned                    mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
-    // Wenn bEmptyPresObj sal_True ist, handelt es sich um ein
+    bool                        bMovProt : 1; // If true, the position is protected
+    bool                        bSizProt : 1; // If true, the size is protected
+    bool                        bNoPrint : 1; // If true, the object is not printed.
+    bool                        mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
+    // Wenn bEmptyPresObj true ist, handelt es sich um ein
     // Praesentationsobjekt, dem noch kein Inhalt zugewiesen
     // wurde. Default ist das Flag auf FALSE. Die Verwaltung
     // uebernimmt die Applikation. Im Zuweisungsoperator sowie
     // beim Clone wird das Flag nicht mitkopiert!
     // Das Flag ist persistent.
-    unsigned                    bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
+    bool                        bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
 
-    // sal_True=Objekt ist als Objekt der MasterPage nicht sichtbar
-    unsigned                    bNotVisibleAsMaster : 1;
+    // true=Objekt ist als Objekt der MasterPage nicht sichtbar
+    bool                        bNotVisibleAsMaster : 1;
 
-    // sal_True=Es handelt sich hierbei um ein geschlossenes Objekt, also nicht Linie oder Kreisbogen ...
-    unsigned                    bClosedObj : 1;
+    // true=Es handelt sich hierbei um ein geschlossenes Objekt, also nicht Linie oder Kreisbogen ...
+    bool                        bClosedObj : 1;
 
-    unsigned                    bIsEdge : 1;
-    unsigned                    bIs3DObj : 1;
-    unsigned                    bMarkProt : 1;  // Markieren verboten. Persistent
-    unsigned                    bIsUnoObj : 1;
-    unsigned                    bNotMasterCachable : 1;
-
-    // #i25616#
-    unsigned                    mbLineIsOutsideGeometry : 1;
+    bool                        bIsEdge : 1;
+    bool                        bIs3DObj : 1;
+    bool                        bMarkProt : 1;  // Markieren verboten. Persistent
+    bool                        bIsUnoObj : 1;
+    bool                        bNotMasterCachable : 1;
 
     // #i25616#
-    unsigned                    mbSupportTextIndentingOnLineWidthChange : 1;
+    bool                        mbLineIsOutsideGeometry : 1;
+
+    // #i25616#
+    bool                        mbSupportTextIndentingOnLineWidthChange : 1;
 
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // in this case the following member is initialized as nonempty rectangle
@@ -520,11 +498,11 @@ protected:
     String GetWinkStr(long nWink, bool bNoDegChar = false) const;
     String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
-    // bNotMyself=sal_True bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
+    // bNotMyself=true bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
     // Wird z.B. benoetigt fuer NbcMove, denn da movt man SnapRect und aOutRect
     // i.d.R. gleich mit um die Neuberechnung zu sparen.
 public:
-    virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
+    virtual void SetRectsDirty(sal_Bool bNotMyself = false);
 protected:
 
     // ueberladen, wenn man sich von SdrObjPlusData abgeleitet hat:
@@ -599,15 +577,15 @@ public:
     // An object may have a user-set Name (Get/SetName()), e.g SdrGrafObj, SdrObjGroup
     // or SdrOle2Obj.
     // It may also have a Title and a Description for accessibility purposes.
-    void SetName(const String& rStr);
-    String GetName() const;
-    void SetTitle(const String& rStr);
-    String GetTitle() const;
-    void SetDescription(const String& rStr);
-    String GetDescription() const;
+    void SetName(const rtl::OUString& rStr);
+    rtl::OUString GetName() const;
+    void SetTitle(const rtl::OUString& rStr);
+    rtl::OUString GetTitle() const;
+    void SetDescription(const rtl::OUString& rStr);
+    rtl::OUString GetDescription() const;
 
     // Fuer Gruppenobjekte
-    sal_Bool IsGroupObject() const { return GetSubList()!=NULL; }
+    bool IsGroupObject() const { return GetSubList()!=NULL; }
     virtual SdrObjList* GetSubList() const;
     SdrObject* GetUpGroup() const;
 
@@ -669,8 +647,8 @@ public:
 
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
-    sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
-    sal_Bool LineGeometryUsageIsNecessary() const;
+    bool SingleObjectPainter(OutputDevice& rOut) const;
+    bool LineGeometryUsageIsNecessary() const;
 
     /**
       Returns a copy of the object. Every inherited class must reimplement this (in class Foo
@@ -704,7 +682,7 @@ public:
     // Polygon wird das wohl ein einfacher Selektionshandle sein, bei einer
     // Bezierkurve dagegen koennen das schon bis zu 3 Handles werden (inkl Gewichte).
     // GetHdl() und GetPlusHdl() muessen Handleinstanzen mit new erzeugen!
-    // Ein Objekt, das bei HasSpacialDrag() sal_True liefert muss diese Methoden
+    // Ein Objekt, das bei HasSpacialDrag() true liefert muss diese Methoden
     // zur Verfuegung stellen (inkl. FillHdlList).
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
@@ -718,8 +696,8 @@ public:
     // Stuetzstellen bei Splines, Gewichte bei Bezierkurven und Pointer von
     // Labelobjekten muss vom Objekt selbst gehandled werden. Um das Model
     // Statusfrei zu halten werden die Statusdaten an der View gehalten und dem
-    // Objekt dann uebergeben. EndDrag liefrt im Normalfall sal_True fuer Erfolg.
-    // sal_False kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
+    // Objekt dann uebergeben. EndDrag liefrt im Normalfall true fuer Erfolg.
+    // false kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
     // veraendert hat, wobei dir evtl. Tatsache das die Maus nicht bewegt wurde
     // bereits von der View abgefangen wird.
     virtual bool hasSpecialDrag() const;
@@ -743,14 +721,14 @@ public:
     // BegCreate()-Methode gerufen. Bei jedem MausMode wird dann MovCreate
     // gerufen. BrkCreate() bedeutet, dass der User die interaktive Objekt-
     // erzeugung abgebrochen hat. EndCreate() wird gerufen beim MouseUp-Event.
-    // Liefert EndCreate() ein sal_True, so ist die Objekterzeugung abgeschlossen;
+    // Liefert EndCreate() ein true, so ist die Objekterzeugung abgeschlossen;
     // das Objekt wird in die entsprechende Liste eingefuegt. Andernfalls
-    // (EndCreate()==sal_False) gehe ich davon aus, dass weitere Punkte zur
+    // (EndCreate()==false) gehe ich davon aus, dass weitere Punkte zur
     // Objekterzeugung notwendig sind (Polygon,...). Der Parameter eCmd
     // enthaelt die Anzahl der Mausklicks (so die App diese durchreicht).
     // BckCreate() -> Letztes EndCreate() rueckgaengig machen (z.B. letzten
     // Polygonpunkt wieder loeschen).
-    // RetrunCode: sal_True=Weiter gehts, sal_False=Create dadurch abgebrochen.
+    // RetrunCode: true=Weiter gehts, false=Create dadurch abgebrochen.
     virtual bool BegCreate(SdrDragStat& rStat);
     virtual bool MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
@@ -842,7 +820,7 @@ public:
     const SfxItemSet& GetMergedItemSet() const;
     void SetMergedItem(const SfxPoolItem& rItem);
     void ClearMergedItem(const sal_uInt16 nWhich = 0);
-    void SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+    void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
     const SfxPoolItem& GetMergedItem(const sal_uInt16 nWhich) const;
 
     // internal versions
@@ -854,7 +832,7 @@ protected:
 
 public:
     // syntactical sugar for ItemSet accesses
-    void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+    void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems = false);
 
     // NotPersistAttr fuer Layer, ObjName, geometrische Transformationen, ...
     void TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const;
@@ -863,7 +841,7 @@ public:
 
     // bDontRemoveHardAttr=FALSE: alle in der Vorlage gesetzten Attribute werden am
     // Zeichenobjekt auf Default gesetzt; TRUE: alle harten Attribute bleiben erhalten.
-    void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+    void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
     virtual void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
     SfxStyleSheet* GetStyleSheet() const;
 
@@ -891,7 +869,7 @@ public:
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
-    sal_Bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
+    bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
 
     // Konnektoren. (siehe auch Dokumentation in SvdoEdge.HXX, SdrEdgeObj
     //               sowie SvdGlue.HXX und SvdGlEV.HXX)
@@ -963,9 +941,9 @@ public:
     // Bezierkurve (oder beides) zu verwandeln, dann sollten die folgenden
     // Methoden ueberladen werden.
     // Z.B. Ein RectObj mit Strichstaerke 10, SOLID_PEN in Polygon wandeln:
-    // Im Modus bLineToArea=sal_False soll ein PolyObj mit 4 Stuetzstellen,
+    // Im Modus bLineToArea=false soll ein PolyObj mit 4 Stuetzstellen,
     // Strichstaerke 10 und SOLiD_PEN erzeugt werden.
-    // Im Modus bLineToArea=sal_True dagegen soll das generierte Obj immer ein
+    // Im Modus bLineToArea=true dagegen soll das generierte Obj immer ein
     // LinienAttribut NULL_PEN haben, und die Linie (auch Linienmuster) selbst
     // durch Polygonflaechen emuliert werden, die dadurch anschliessend vom
     // Anwender manipuliert werden koennen. Das RectObj kann sich somit also
@@ -977,55 +955,55 @@ public:
     // Der Returnwert ist jeweils ein SdrObject*, da als Rueckgabe zur Not
     // auch Gruppenobjekte erlaubt sind (z.B. fuer SdrTextObj).
     // Bei der Konvertierung von TextObj nach PathObj wird es wohl so sein,
-    // dass beide Modi (bLineToArea=sal_True/sal_False) identisch sind.
+    // dass beide Modi (bLineToArea=true/false) identisch sind.
     // Defaulted sind diese Methoden auf "Ich kann das nicht" (FALSE/NULL).
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
-    SdrObject* ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) const;
+    SdrObject* ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even
     // when there is no filled new polygon created from line-to-polygon conversion,
     // specially used for XLINE_DASH and 3D conversion
-    SdrObject* ConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash = sal_False) const;
-    SdrObject* ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash = sal_False) const;
+    SdrObject* ConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
+    SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
 
     // TRUE: Referenz auf ein Obj
-    sal_Bool IsVirtualObj() const { return bVirtObj; }
+    bool IsVirtualObj() const { return bVirtObj; }
 
-    // sal_True=Obj kann warsch. gefuellt werden; sal_False=Obj kann warsch. Linienenden haben.
+    // true=Obj kann warsch. gefuellt werden; false=Obj kann warsch. Linienenden haben.
     // ungueltig, wenn es sich um ein GroupObj handelt.
-    sal_Bool IsClosedObj() const { return bClosedObj; }
+    bool IsClosedObj() const { return bClosedObj; }
 
-    sal_Bool IsEdgeObj() const { return bIsEdge; }
-    sal_Bool Is3DObj() const { return bIs3DObj; }
-    sal_Bool IsUnoObj() const { return bIsUnoObj; }
-    sal_Bool IsMasterCachable() const { return !bNotMasterCachable; }
-    sal_Bool ShareLock() { sal_Bool r=!bNetLock; bNetLock=sal_True; return r; }
-    void ShareUnlock() { bNetLock=sal_False; }
-    sal_Bool IsShareLock() const { return bNetLock; }
-    void SetMarkProtect(sal_Bool bProt) { bMarkProt=bProt; }
-    sal_Bool IsMarkProtect() const { return bMarkProt; }
-    void SetInserted(sal_Bool bIns);
-    sal_Bool IsInserted() const { return bInserted; }
-    void SetGrouped(sal_Bool bGrp) { bGrouped=bGrp; }
-    sal_Bool IsGrouped() const { return bGrouped; }
-    void SetMoveProtect(sal_Bool bProt);
-    sal_Bool IsMoveProtect() const { return bMovProt; }
-    void SetResizeProtect(sal_Bool bProt);
-    sal_Bool IsResizeProtect() const { return bSizProt; }
-    void SetPrintable(sal_Bool bPrn);
-    sal_Bool IsPrintable() const { return !bNoPrint; }
-    void SetVisible(sal_Bool bVisible);
-    sal_Bool IsVisible() const { return mbVisible; }
-    void SetEmptyPresObj(sal_Bool bEpt) { bEmptyPresObj=bEpt; }
-    sal_Bool IsEmptyPresObj() const { return bEmptyPresObj; }
-    void SetNotVisibleAsMaster(sal_Bool bFlg) { bNotVisibleAsMaster=bFlg; }
-    sal_Bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster; }
-
-    // #i25616#
-    sal_Bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry; }
+    bool IsEdgeObj() const { return bIsEdge; }
+    bool Is3DObj() const { return bIs3DObj; }
+    bool IsUnoObj() const { return bIsUnoObj; }
+    bool IsMasterCachable() const { return !bNotMasterCachable; }
+    bool ShareLock() { bool r=!bNetLock; bNetLock=true; return r; }
+    void ShareUnlock() { bNetLock=false; }
+    bool IsShareLock() const { return bNetLock; }
+    void SetMarkProtect(bool bProt) { bMarkProt=bProt; }
+    bool IsMarkProtect() const { return bMarkProt; }
+    void SetInserted(bool bIns);
+    bool IsInserted() const { return bInserted; }
+    void SetGrouped(bool bGrp) { bGrouped=bGrp; }
+    bool IsGrouped() const { return bGrouped; }
+    void SetMoveProtect(bool bProt);
+    bool IsMoveProtect() const { return bMovProt; }
+    void SetResizeProtect(bool bProt);
+    bool IsResizeProtect() const { return bSizProt; }
+    void SetPrintable(bool bPrn);
+    bool IsPrintable() const { return !bNoPrint; }
+    void SetVisible(bool bVisible);
+    bool IsVisible() const { return mbVisible; }
+    void SetEmptyPresObj(bool bEpt) { bEmptyPresObj=bEpt; }
+    bool IsEmptyPresObj() const { return bEmptyPresObj; }
+    void SetNotVisibleAsMaster(bool bFlg) { bNotVisibleAsMaster=bFlg; }
+    bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster; }
 
     // #i25616#
-    sal_Bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange; }
+    bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry; }
+
+    // #i25616#
+    bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange; }
 
     // applikationsspeziefische Daten
     sal_uInt16 GetUserDataCount() const;
@@ -1103,7 +1081,7 @@ public:
 
     // #116168#
     // Give info if object is in destruction
-    sal_Bool IsInDestruction() const;
+    bool IsInDestruction() const;
 
     // return if fill is != XFILL_NONE
     bool HasFillStyle() const;

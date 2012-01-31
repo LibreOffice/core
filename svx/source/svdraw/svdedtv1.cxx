@@ -749,7 +749,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bO
     sal_Bool bPrintable =sal_True ,bPrintableDC=sal_False;
     sal_Bool bVisible = sal_True, bVisibleDC=sal_False;
     SdrLayerID nLayerId=0; sal_Bool bLayerDC=sal_False;
-    XubString aObjName;     sal_Bool bObjNameDC=sal_False,bObjNameSet=sal_False;
+    rtl::OUString aObjName;
+    sal_Bool bObjNameDC=sal_False,bObjNameSet=sal_False;
     long nSnapPosX=0;      sal_Bool bSnapPosXDC=sal_False;
     long nSnapPosY=0;      sal_Bool bSnapPosYDC=sal_False;
     long nSnapWdt=0;       sal_Bool bSnapWdtDC=sal_False;
@@ -809,7 +810,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bO
             if (!bObjNameSet) {
                 aObjName=pObj->GetName();
             } else {
-                if (aObjName!=pObj->GetName()) bObjNameDC=sal_True;
+                if (!aObjName.equals(pObj->GetName()))
+                    bObjNameDC = true;
             }
         }
     }
