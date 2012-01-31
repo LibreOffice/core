@@ -137,7 +137,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 {
     SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
                 "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
@@ -150,7 +150,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 {
     SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
                 "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
@@ -163,7 +163,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 {
     SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
                 "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_INFO( "vcl.gdi",
+            "VirtualDevice::VirtualDevice( " << nBitCount << ", " << nAlphaBitCount << " )" );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
@@ -177,7 +178,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
@@ -186,7 +187,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 
 VirtualDevice::~VirtualDevice()
 {
-    OSL_TRACE( "VirtualDevice::~VirtualDevice()" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::~VirtualDevice()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -211,7 +212,9 @@ VirtualDevice::~VirtualDevice()
 
 sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
 {
-    OSL_TRACE( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
+    SAL_INFO( "vcl.gdi",
+            "VirtualDevice::ImplSetOutputSizePixel( " << rNewSize.Width() << ", "
+            << rNewSize.Height() << ", " << bErase << " )" );
 
     if ( !mpVirDev )
         return sal_False;
