@@ -45,6 +45,8 @@ certain functionality.
 @li @c canvas.cairo
 @li @c canvas.directx
 @li @c canvas.vcl
+@li @c canvas.null
+@li @c canvas.ogl
 
 @section chart2
 

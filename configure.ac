@@ -978,7 +978,7 @@ AC_ARG_ENABLE(cairo-canvas,
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
-        [Determines whether to build the OpenGL 3D slide transitions component.]))
+        [Determines whether to build the OpenGL 3D slide transitions and canvas component.]))
 
 AC_ARG_ENABLE(opencl,
     AS_HELP_STRING([--disable-opencl],

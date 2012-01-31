@@ -32,6 +32,12 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Module_add_targets,canvas,\
+	Library_oglcanvas \
+))
+endif
+
 ifneq ($(ENABLE_DIRECTX),)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_directx9canvas \

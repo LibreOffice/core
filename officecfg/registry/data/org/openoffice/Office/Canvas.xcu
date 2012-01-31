@@ -54,6 +54,7 @@
       <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
         <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
                                  com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                                 com.sun.star.comp.rendering.SpriteCanvas.OGL,
                                  com.sun.star.comp.rendering.SpriteCanvas.Cairo,
                                  com.sun.star.comp.rendering.SpriteCanvas.GL,
                                  com.sun.star.comp.rendering.SpriteCanvas.Java,
