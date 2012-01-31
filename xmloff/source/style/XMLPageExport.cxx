@@ -255,6 +255,9 @@ void XMLPageExport::exportDefaultStyle()
 
             if( bExport )
             {
+                assert(GetExport().getDefaultVersion()
+                        >= SvtSaveOptions::ODFVER_012);
+
                 //<style:default-page-layout>
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                           XML_DEFAULT_PAGE_LAYOUT,
