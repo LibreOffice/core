@@ -44,7 +44,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/configitem.hxx,unoto
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/configmgr.hxx,unotools/configmgr.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/confignode.hxx,unotools/confignode.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/configpathes.hxx,unotools/configpathes.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/configuration.hxx,unotools/configuration.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/configvaluecontainer.hxx,unotools/configvaluecontainer.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/datetime.hxx,unotools/datetime.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/defaultoptions.hxx,unotools/defaultoptions.hxx))

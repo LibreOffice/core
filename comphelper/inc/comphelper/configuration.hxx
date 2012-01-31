@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_UNOTOOLS_CONFIGURATION_HXX
-#define INCLUDED_UNOTOOLS_CONFIGURATION_HXX
+#ifndef INCLUDED_COMPHELPER_CONFIGURATION_HXX
+#define INCLUDED_COMPHELPER_CONFIGURATION_HXX
 
 #include "sal/config.h"
 
@@ -37,8 +37,8 @@
 #include "boost/shared_ptr.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
+#include "comphelper/comphelperdllapi.h"
 #include "sal/types.h"
-#include "unotools/unotoolsdllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace configuration { class XReadWriteAccess; }
@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
-namespace unotools {
+namespace comphelper {
 
 namespace detail { class ConfigurationWrapper; }
 
@@ -63,7 +63,7 @@ namespace detail { class ConfigurationWrapper; }
 ///
 /// This is the only class from this header file that client code should use
 /// directly.
-class UNOTOOLS_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
+class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
 public:
     static boost::shared_ptr< ConfigurationChanges > create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -99,7 +99,7 @@ private:
 namespace detail {
 
 /// @internal
-class UNOTOOLS_DLLPUBLIC ConfigurationWrapper: private boost::noncopyable {
+class COMPHELPER_DLLPUBLIC ConfigurationWrapper: private boost::noncopyable {
 public:
     static ConfigurationWrapper const & get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >

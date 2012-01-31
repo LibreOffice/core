@@ -231,8 +231,8 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
     if(pConfig->IsModified())
         pConfig->Commit();
     pConfig->Apply();
-    boost::shared_ptr< unotools::ConfigurationChanges > batch(
-        unotools::ConfigurationChanges::create(
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create(
             comphelper::getProcessComponentContext()));
     if(aFontHeightLB.GetSavedValue() != aFontHeightLB.GetSelectEntryPos())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(

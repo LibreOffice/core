@@ -41,6 +41,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "comphelper/configuration.hxx"
 #include "comphelper/processfactory.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "rtl/oustringostreaminserter.hxx"
@@ -50,7 +51,6 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "svl/asiancfg.hxx"
-#include "unotools/configuration.hxx"
 
 namespace {
 
@@ -84,12 +84,12 @@ rtl::OUString toString(css::lang::Locale const & locale) {
 struct SvxAsianConfig::Impl: private boost::noncopyable {
     Impl():
         context(comphelper::getProcessComponentContext()),
-        batch(unotools::ConfigurationChanges::create(context))
+        batch(comphelper::ConfigurationChanges::create(context))
     {}
 
     css::uno::Reference< css::uno::XComponentContext > context;
 
-    boost::shared_ptr< unotools::ConfigurationChanges > batch;
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch;
 };
 
 SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}

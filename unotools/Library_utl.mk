@@ -80,7 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/configmgr \
     unotools/source/config/confignode \
     unotools/source/config/configpathes \
-    unotools/source/config/configuration \
     unotools/source/config/configvaluecontainer \
     unotools/source/config/defaultoptions \
     unotools/source/config/docinfohelper \

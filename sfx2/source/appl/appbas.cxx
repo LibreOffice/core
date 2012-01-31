@@ -182,8 +182,8 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
-            boost::shared_ptr< unotools::ConfigurationChanges > batch(
-                unotools::ConfigurationChanges::create(
+            boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                comphelper::ConfigurationChanges::create(
                     comphelper::getProcessComponentContext()));
             officecfg::Office::Common::Undo::Steps::set(
                 comphelper::getProcessComponentContext(), batch,

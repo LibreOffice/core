@@ -184,8 +184,8 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    boost::shared_ptr< unotools::ConfigurationChanges > batch(
-        unotools::ConfigurationChanges::create(
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create(
             comphelper::getProcessComponentContext()));
 
     // Undo-Schritte

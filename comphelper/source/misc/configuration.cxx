@@ -45,13 +45,13 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "comphelper/configuration.hxx"
 #include "rtl/instance.hxx"
 #include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/log.hxx"
-#include "unotools/configuration.hxx"
 
 namespace {
 
@@ -59,73 +59,73 @@ namespace css = com::sun::star;
 
 struct TheConfigurationWrapper:
     public rtl::StaticWithArg<
-        unotools::detail::ConfigurationWrapper,
+        comphelper::detail::ConfigurationWrapper,
         css::uno::Reference< css::uno::XComponentContext >,
         TheConfigurationWrapper >
 {};
 
 }
 
-boost::shared_ptr< unotools::ConfigurationChanges >
-unotools::ConfigurationChanges::create(
+boost::shared_ptr< comphelper::ConfigurationChanges >
+comphelper::ConfigurationChanges::create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return TheConfigurationWrapper::get(context).createChanges();
 }
 
 
-unotools::ConfigurationChanges::~ConfigurationChanges() {}
+comphelper::ConfigurationChanges::~ConfigurationChanges() {}
 
-void unotools::ConfigurationChanges::commit() const {
+void comphelper::ConfigurationChanges::commit() const {
     access_->commitChanges();
 }
 
-unotools::ConfigurationChanges::ConfigurationChanges(
+comphelper::ConfigurationChanges::ConfigurationChanges(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     access_(css::configuration::ReadWriteAccess::create(context))
 {}
 
-void unotools::ConfigurationChanges::setPropertyValue(
+void comphelper::ConfigurationChanges::setPropertyValue(
     rtl::OUString const & path, css::uno::Any const & value) const
 {
     access_->replaceByHierarchicalName(path, value);
 }
 
 css::uno::Reference< css::container::XHierarchicalNameReplace >
-unotools::ConfigurationChanges::getGroup(rtl::OUString const & path) const
+comphelper::ConfigurationChanges::getGroup(rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameReplace >(
         access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
 }
 
 css::uno::Reference< css::container::XNameContainer >
-unotools::ConfigurationChanges::getSet(rtl::OUString const & path) const
+comphelper::ConfigurationChanges::getSet(rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameContainer >(
         access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
 }
 
-unotools::detail::ConfigurationWrapper const &
-unotools::detail::ConfigurationWrapper::get(
+comphelper::detail::ConfigurationWrapper const &
+comphelper::detail::ConfigurationWrapper::get(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return TheConfigurationWrapper::get(context);
 }
 
-unotools::detail::ConfigurationWrapper::ConfigurationWrapper(
+comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context), access_(css::configuration::ReadOnlyAccess::get(context))
 {}
 
-unotools::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
+comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
 
-css::uno::Any unotools::detail::ConfigurationWrapper::getPropertyValue(
+css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
     rtl::OUString const & path) const
 {
     return access_->getByHierarchicalName(path);
 }
 
-void unotools::detail::ConfigurationWrapper::setPropertyValue(
+void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     boost::shared_ptr< ConfigurationChanges > const & batch,
     rtl::OUString const & path, com::sun::star::uno::Any const & value) const
 {
@@ -133,13 +133,14 @@ void unotools::detail::ConfigurationWrapper::setPropertyValue(
     batch->setPropertyValue(path, value);
 }
 
-css::uno::Any unotools::detail::ConfigurationWrapper::getLocalizedPropertyValue(
+css::uno::Any
+comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
     rtl::OUString const & path) const
 {
     return access_->getByHierarchicalName(extendLocalizedPath(path));
 }
 
-void unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(
+void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     boost::shared_ptr< ConfigurationChanges > const & batch,
     rtl::OUString const & path, com::sun::star::uno::Any const & value) const
 {
@@ -148,7 +149,7 @@ void unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
-unotools::detail::ConfigurationWrapper::getGroupReadOnly(
+comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
     rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
@@ -156,7 +157,7 @@ unotools::detail::ConfigurationWrapper::getGroupReadOnly(
 }
 
 css::uno::Reference< css::container::XHierarchicalNameReplace >
-unotools::detail::ConfigurationWrapper::getGroupReadWrite(
+comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     boost::shared_ptr< ConfigurationChanges > const & batch,
     rtl::OUString const & path) const
 {
@@ -165,7 +166,7 @@ unotools::detail::ConfigurationWrapper::getGroupReadWrite(
 }
 
 css::uno::Reference< css::container::XNameAccess >
-unotools::detail::ConfigurationWrapper::getSetReadOnly(
+comphelper::detail::ConfigurationWrapper::getSetReadOnly(
     rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameAccess >(
@@ -173,7 +174,7 @@ unotools::detail::ConfigurationWrapper::getSetReadOnly(
 }
 
 css::uno::Reference< css::container::XNameContainer >
-unotools::detail::ConfigurationWrapper::getSetReadWrite(
+comphelper::detail::ConfigurationWrapper::getSetReadWrite(
     boost::shared_ptr< ConfigurationChanges > const & batch,
     rtl::OUString const & path) const
 {
@@ -181,13 +182,13 @@ unotools::detail::ConfigurationWrapper::getSetReadWrite(
     return batch->getSet(path);
 }
 
-boost::shared_ptr< unotools::ConfigurationChanges >
-unotools::detail::ConfigurationWrapper::createChanges() const {
+boost::shared_ptr< comphelper::ConfigurationChanges >
+comphelper::detail::ConfigurationWrapper::createChanges() const {
     return boost::shared_ptr< ConfigurationChanges >(
         new ConfigurationChanges(context_));
 }
 
-rtl::OUString unotools::detail::ConfigurationWrapper::extendLocalizedPath(
+rtl::OUString comphelper::detail::ConfigurationWrapper::extendLocalizedPath(
     rtl::OUString const & path) const
 {
     rtl::OUStringBuffer buf(path);
@@ -198,20 +199,20 @@ rtl::OUString unotools::detail::ConfigurationWrapper::extendLocalizedPath(
             css::uno::UNO_QUERY_THROW)->
         getLocale());
     SAL_WARN_IF(
-        locale.Language.indexOf('-') == -1, "unotools",
+        locale.Language.indexOf('-') == -1, "comphelper",
         "Locale language \"" << locale.Language << "\" contains \"-\"");
     assert(locale.Language.indexOf('&') == -1);
     assert(locale.Language.indexOf('"') == -1);
     assert(locale.Language.indexOf('\'') == -1);
     buf.append(locale.Language);
     SAL_WARN_IF(
-        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "unotools",
+        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "comphelper",
         "Locale has empty country but non-empty variant \"" << locale.Variant
             << '"');
     if (!locale.Country.isEmpty()) {
         buf.append('-');
         SAL_WARN_IF(
-            locale.Country.indexOf('-') == -1, "unotools",
+            locale.Country.indexOf('-') == -1, "comphelper",
             "Locale language \"" << locale.Country << "\" contains \"-\"");
         assert(locale.Country.indexOf('&') == -1);
         assert(locale.Country.indexOf('"') == -1);
