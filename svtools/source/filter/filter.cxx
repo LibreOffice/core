@@ -1961,7 +1961,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                                         if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
                                         {
                                             std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();
-                                            if ( rChunkData.size() )
+                                            if ( !rChunkData.empty() )
                                             {
                                                 sal_uInt32 nChunkLen = aByteSeq.getLength();
 
