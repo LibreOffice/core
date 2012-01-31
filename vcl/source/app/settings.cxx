@@ -735,7 +735,7 @@ sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) 
 */
 void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
 {
-    if ( rName.getLength() > 0 )
+    if ( !rName.isEmpty() )
     {
         ::rtl::OUString rNameLowCase( rName.toAsciiLowerCase() );
 
@@ -1776,7 +1776,7 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 
     mpData->maLocale = rLocale;
 
-    if ( !rLocale.Language.getLength() )
+    if ( rLocale.Language.isEmpty() )
         mpData->meLanguage = LANGUAGE_SYSTEM;
     else
         mpData->meLanguage = MsLangId::convertLocaleToLanguage( rLocale );
@@ -1878,7 +1878,7 @@ sal_Bool AllSettings::GetLayoutRTL() const
 
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
-    if ( !mpData->maLocale.Language.getLength() )
+    if ( mpData->maLocale.Language.isEmpty() )
         mpData->maLocale = mpData->maSysLocale.GetLocale();
 
     return mpData->maLocale;
@@ -1889,7 +1889,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
     // the UILocale is never changed
-    if ( !mpData->maUILocale.Language.getLength() )
+    if ( mpData->maUILocale.Language.isEmpty() )
         mpData->maUILocale = mpData->maSysLocale.GetUILocale();
 
     return mpData->maUILocale;

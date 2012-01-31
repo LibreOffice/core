@@ -977,7 +977,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         // at this point now we will insert the non-empty text 'normally' some lines below...
     }
 
-    if ( aNewText.getLength() )
+    if ( !aNewText.isEmpty() )
         maText.Insert( String( aNewText ), (xub_StrLen)aSelection.Min() );
 
     if ( !pNewSel )

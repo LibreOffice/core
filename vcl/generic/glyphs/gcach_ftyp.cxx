@@ -600,7 +600,7 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr,
     const ExtraKernInfo* pExtraKernInfo )
 {
-    if( !rNormalizedName.getLength() )
+    if( rNormalizedName.isEmpty() )
         return;
 
     if( maFontList.find( nFontId ) != maFontList.end() )

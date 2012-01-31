@@ -61,7 +61,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
 
     const rtl::OUString& GetHostname()
     {
-        if (!m_aHostname.getLength())
+        if (m_aHostname.isEmpty())
             osl_getLocalHostname( &m_aHostname.pData );
         return m_aHostname;
     }

@@ -210,13 +210,13 @@ bool ImplImageTree::doLoadImage(
             css::lang::Locale const & loc =
                 Application::GetSettings().GetUILocale();
             paths.push_back(createPath(name, pos, loc.Language));
-            if (loc.Country.getLength() != 0) {
+            if (!loc.Country.isEmpty()) {
                 rtl::OUStringBuffer b(loc.Language);
                 b.append(sal_Unicode('-'));
                 b.append(loc.Country);
                 rtl::OUString p(createPath(name, pos, b.makeStringAndClear()));
                 paths.push_back(p);
-                if (loc.Variant.getLength() != 0) {
+                if (!loc.Variant.isEmpty()) {
                     b.append(p);
                     b.append(sal_Unicode('-'));
                     b.append(loc.Variant);
@@ -251,7 +251,7 @@ void ImplImageTree::shutDown() {
 }
 
 void ImplImageTree::setStyle(rtl::OUString const & style) {
-    OSL_ASSERT(style.getLength() != 0); // empty m_style means "not initialized"
+    OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
     if (style != m_style) {
         m_style = style;
         resetZips();

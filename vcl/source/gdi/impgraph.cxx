@@ -1043,7 +1043,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                 ::utl::TempFile     aTempFile;
                 const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-                if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+                if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
                 {
                     SvStream* pOStm = NULL;
                     try
@@ -1257,7 +1257,7 @@ sal_Bool ImpGraphic::ImplSwapOut()
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-            if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+            if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
             {
                 SvStream* pOStm = NULL;
                 try

@@ -277,7 +277,7 @@ PrinterJob::~PrinterJob ()
     delete mpJobTrailer;
 
     // XXX should really call osl::remove routines
-    if( maSpoolDirName.getLength() )
+    if( !maSpoolDirName.isEmpty() )
         removeSpoolDir (maSpoolDirName);
 
     // osl::Directory::remove (maSpoolDirName);
@@ -391,7 +391,7 @@ PrinterJob::StartJob (
     }
 
     maJobTitle = aFilterWS;
-    if( aTitle.getLength() )
+    if( !aTitle.isEmpty() )
     {
         WritePS (mpJobHeader, "%%Title: (");
         WritePS (mpJobHeader, aTitle);
@@ -461,7 +461,7 @@ PrinterJob::EndJob ()
     FILE* pDestFILE = NULL;
 
     /* create a destination either as file or as a pipe */
-    sal_Bool bSpoolToFile = maFileName.getLength() > 0 ? sal_True : sal_False;
+    sal_Bool bSpoolToFile = !maFileName.isEmpty();
     if (bSpoolToFile)
     {
         const rtl::OString aFileName = rtl::OUStringToOString (maFileName,
