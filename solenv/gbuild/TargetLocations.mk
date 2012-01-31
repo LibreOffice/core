@@ -49,7 +49,8 @@ gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 # outdir targets: $(1) is path
 gb_Configuration_registry = $(OUTDIR)/xml/registry
-gb_XcsTarget_get_outdir_target = $(gb_Configuration_registry)/schema/$(1)
+gb_XcsTarget_get_outdir_target = \
+    $(gb_Configuration_registry)/schema$(if $(1),/)$(1)
 gb_XcuDataTarget_get_outdir_target = $(gb_Configuration_registry)/data/$(1)
 gb_XcuLangpackTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
