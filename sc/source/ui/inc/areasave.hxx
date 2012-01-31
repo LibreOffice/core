@@ -78,7 +78,6 @@ public:
 
     const ScAreaLinkSaver* operator[](size_t nIndex) const;
     size_t size() const;
-    void clear();
     void push_back(ScAreaLinkSaver* p);
 };
 

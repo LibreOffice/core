@@ -120,7 +120,6 @@ class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static sal_uInt16*      GetRanges();
 
 private:
     ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -132,7 +131,6 @@ class ScLeftHeaderEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static sal_uInt16*      GetRanges();
 
 private:
     ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -144,7 +142,6 @@ class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static sal_uInt16*      GetRanges();
 
 private:
     ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -156,7 +153,6 @@ class ScLeftFooterEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static sal_uInt16*      GetRanges();
 
 private:
     ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );

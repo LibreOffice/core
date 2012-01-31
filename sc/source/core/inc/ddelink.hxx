@@ -87,7 +87,6 @@ public:
     const String&   GetItem() const     { return aItem; }
     sal_uInt8           GetMode() const     { return nMode; }
 
-    void            ResetValue();           // Wert zuruecksetzen
     void            TryUpdate();
 
     sal_Bool            NeedsUpdate() const { return bNeedUpdate; }

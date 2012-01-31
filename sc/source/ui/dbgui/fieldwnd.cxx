@@ -254,11 +254,6 @@ size_t ScDPFieldControlBase::GetSelectedField() const
     return mnFieldSelected;
 }
 
-void ScDPFieldControlBase::SetSelectedField(size_t nSelected)
-{
-    mnFieldSelected = nSelected;
-}
-
 vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNames()
 {
     return maFieldNames;

@@ -30,15 +30,6 @@
 #include "cellmergeoption.hxx"
 #include "address.hxx"
 
-ScCellMergeOption::ScCellMergeOption() :
-    mnStartCol(0),
-    mnStartRow(0),
-    mnEndCol(0),
-    mnEndRow(0),
-    mbCenter(false)
-{
-}
-
 ScCellMergeOption::ScCellMergeOption(const ScRange& rRange) :
     mnStartCol(rRange.aStart.Col()),
     mnStartRow(rRange.aStart.Row()),

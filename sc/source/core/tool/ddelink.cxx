@@ -228,17 +228,6 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     return SUCCESS;
 }
 
-void ScDdeLink::ResetValue()
-{
-    pResult.reset();
-
-    //  Es hat sich was getan...
-    //  Tracking, FID_DATACHANGED etc. passiert von aussen
-
-    if (HasListeners())
-        Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
-}
-
 void ScDdeLink::ListenersGone()
 {
     sal_Bool bWas = bIsInUpdate;

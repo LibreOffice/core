@@ -214,11 +214,6 @@ size_t ScAreaLinkSaveCollection::size() const
     return maData.size();
 }
 
-void ScAreaLinkSaveCollection::clear()
-{
-    maData.clear();
-}
-
 void ScAreaLinkSaveCollection::push_back(ScAreaLinkSaver* p)
 {
     maData.push_back(p);

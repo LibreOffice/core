@@ -65,25 +65,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static sal_uInt16 pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
-                                           SID_SCATTR_PAGE_HEADERRIGHT,
-                                           0 };
-
-static sal_uInt16 pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
-                                           SID_SCATTR_PAGE_FOOTERRIGHT,
-                                           0 };
-
-static sal_uInt16 pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
-                                           SID_SCATTR_PAGE_HEADERLEFT,
-                                           0 };
-
-static sal_uInt16 pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
-                                           SID_SCATTR_PAGE_FOOTERLEFT,
-                                           0 };
-
-
 static ScEditWindow* pActiveEdWnd = NULL;
-
 
 //========================================================================
 // class ScHFEditPage
@@ -927,14 +909,8 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScRightHeaderEditPage::GetRanges()
-    { return pPageRightHeaderRanges; }
-
-// -----------------------------------------------------------------------
-
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
-
 
 //========================================================================
 // class ScLeftHeaderEditPage
@@ -944,11 +920,6 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_HL, rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT ), true )
     {}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16* ScLeftHeaderEditPage::GetRanges()
-    { return pPageLeftHeaderRanges; }
 
 // -----------------------------------------------------------------------
 
@@ -966,11 +937,6 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScRightFooterEditPage::GetRanges()
-    { return pPageRightFooterRanges; }
-
-// -----------------------------------------------------------------------
-
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
@@ -982,11 +948,6 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_FL, rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT ), false )
     {}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16* ScLeftFooterEditPage::GetRanges()
-    { return pPageLeftFooterRanges; }
 
 // -----------------------------------------------------------------------
 

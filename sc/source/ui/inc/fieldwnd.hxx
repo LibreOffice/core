@@ -149,7 +149,6 @@ public:
     void            GetExistingIndex( const Point& rPos, size_t& rnIndex );
 
     size_t GetSelectedField() const;
-    void SetSelectedField(size_t nSelected);
 
     /** Selects the next field. Called i.e. after moving a field from SELECT area. */
     void            SelectNext();

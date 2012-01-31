@@ -312,16 +312,6 @@ void ScDLL::Init()
     //  StarOne Services are now handled in the registry
 }
 
-void ScDLL::Exit()
-{
-    // the SxxModule must be destroyed
-    ScModule **ppShlPtr = (ScModule**) GetAppData(SHL_CALC);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-
-    //  ScGlobal::Clear ist schon im Module-dtor
-}
-
 //------------------------------------------------------------------
 //  Statusbar
 //------------------------------------------------------------------
