@@ -677,14 +677,6 @@ void ImpPathDialog::SetPath( UniString const & rPath )
     pSvPathDialog->LeaveWait();
 }
 
-void ImpPathDialog::SetPath( Edit const & rEdit )
-{
-    UniString aPresetText = rEdit.GetText();
-    if( aPresetText.Len() )
-        SetPath( aPresetText );
-}
-
-
 UniString ImpPathDialog::GetPath() const
 {
     DirEntry aFile( pEdit->GetText() );

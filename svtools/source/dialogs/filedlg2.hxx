@@ -112,7 +112,6 @@ public:
     virtual             ~ImpPathDialog();
 
     virtual void        SetPath( const String& rPath );
-    virtual void        SetPath( const Edit& rEdit );
     virtual String      GetPath() const;
 
     virtual void        PreExecute();

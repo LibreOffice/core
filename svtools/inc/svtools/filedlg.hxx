@@ -56,7 +56,6 @@ public:
     virtual long        OK();
 
     void                SetPath( const UniString& rNewPath );
-    void                SetPath( const Edit& rEdit );
     UniString               GetPath() const;
 
     void                SetOKHdl( const Link& rLink ) { aOKHdlLink = rLink; }

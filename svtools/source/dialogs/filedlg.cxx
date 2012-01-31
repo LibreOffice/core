@@ -59,11 +59,6 @@ void PathDialog::SetPath( const UniString& rPath )
     pImpFileDlg->GetDialog()->SetPath( rPath );
 }
 
-void PathDialog::SetPath( const Edit& rEdit )
-{
-  pImpFileDlg->GetDialog()->SetPath( rEdit );
-}
-
 long PathDialog::OK()
 {
     if( aOKHdlLink.IsSet() )

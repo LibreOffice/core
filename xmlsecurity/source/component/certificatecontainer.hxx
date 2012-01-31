@@ -73,9 +73,6 @@ class CertificateContainer : public ::cppu::WeakImplHelper2< ::com::sun::star::l
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
-                    impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager ) throw(::com::sun::star::uno::RuntimeException);
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                     impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
 

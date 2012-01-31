@@ -155,18 +155,4 @@ Reference< XInterface > SAL_CALL CertificateContainer::impl_createInstance( cons
     return Reference< XInterface >( *new CertificateContainer( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
-
-Reference< XSingleServiceFactory > SAL_CALL
-CertificateContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager )
-    throw(RuntimeException)
-{
-    Reference< XSingleServiceFactory > xReturn( ::cppu::createOneInstanceFactory( ServiceManager,
-        CertificateContainer::impl_getStaticImplementationName(),
-        CertificateContainer::impl_createInstance,
-        CertificateContainer::impl_getStaticSupportedServiceNames()));
-
-    return xReturn;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

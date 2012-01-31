@@ -542,9 +542,6 @@ public:
         sal_Int32 nId,
         const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams);
 
-    /** return list of errors */
-    XMLErrors* GetErrors();
-
     /** return current error flags (logical 'or' of all error flags so far) */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
 

@@ -4703,16 +4703,6 @@ const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 }
 
 //------------------------------------------------------------------------------
-FmXFilterCell* FmXFilterCell::getImplementation(const Reference< ::com::sun::star::awt::XControl >& _rxObject)
-{
-    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
-        _rxObject, UNO_QUERY);
-    if (xTunnel.is())
-        return reinterpret_cast<FmXFilterCell*>(xTunnel->getSomething(getUnoTunnelId()));
-    return NULL;
-}
-
-//------------------------------------------------------------------------------
 void FmXFilterCell::PaintCell( OutputDevice& rDev, const Rectangle& rRect )
 {
     static_cast< DbFilterField* >( m_pCellControl )->PaintCell( rDev, rRect );

@@ -2427,12 +2427,6 @@ void SvXMLExport::SetError(
     SetError( nId, rMsgParams, sEmpty, NULL );
 }
 
-
-XMLErrors* SvXMLExport::GetErrors()
-{
-    return mpXMLErrors;
-}
-
 void SvXMLExport::DisposingModel()
 {
     mxModel.clear();

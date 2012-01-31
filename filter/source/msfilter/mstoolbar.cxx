@@ -52,18 +52,6 @@ using namespace com::sun::star;
 
 int TBBase::nIndent = 0;
 
-void CustomToolBarImportHelper::showToolbar( const rtl::OUString& rName )
-{
-    try
-    {
-        uno::Reference< frame::XController > xCntrller( mrDocSh.GetModel()->getCurrentController(), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xProps( xCntrller->getFrame(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XLayoutManager > xLayoutMgr( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LayoutManager") ) ), uno::UNO_QUERY_THROW );
-        xLayoutMgr->showElement( rName );
-    }
-    catch( const uno::Exception& ) {}
-}
-
 void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >& xGraphic, long nNewSize )
 {
     Graphic aGraphic( xGraphic );

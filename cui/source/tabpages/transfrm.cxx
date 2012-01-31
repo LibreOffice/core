@@ -1226,22 +1226,6 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeSizeProtectHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosXHdl, void *, EMPTYARG )
-{
-    return( 0L );
-}
-IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosXHdl, void *, EMPTYARG )
-
-//------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosYHdl, void *, EMPTYARG )
-{
-    return( 0L );
-}
-IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosYHdl, void *, EMPTYARG )
-
-//------------------------------------------------------------------------
-
 void SvxPositionSizeTabPage::SetMinMaxPosition()
 {
     // position
