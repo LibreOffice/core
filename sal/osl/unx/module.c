@@ -236,7 +236,11 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     if (hModule)
     {
 #ifndef NO_DL_FUNCTIONS
+#ifdef ANDROID
+        int nRet = lo_dlclose(hModule);
+#else
         int nRet = dlclose(hModule);
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
         if (nRet != 0)
