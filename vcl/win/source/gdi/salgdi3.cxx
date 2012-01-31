@@ -1011,45 +1011,6 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
-{
-    String aFontName( ImplSalGetUniString( rLogFont.lfFaceName ) );
-    if ( aFontName.Len() )
-    {
-        rFont.SetName( aFontName );
-        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
-
-        long nFontHeight = rLogFont.lfHeight;
-        if ( nFontHeight < 0 )
-            nFontHeight = -nFontHeight;
-        long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-        if( !nDPIY )
-            nDPIY = 600;
-        nFontHeight *= 72;
-        nFontHeight += nDPIY/2;
-        nFontHeight /= nDPIY;
-        rFont.SetSize( Size( 0, nFontHeight ) );
-        rFont.SetOrientation( (short)rLogFont.lfEscapement );
-        if ( rLogFont.lfItalic )
-            rFont.SetItalic( ITALIC_NORMAL );
-        else
-            rFont.SetItalic( ITALIC_NONE );
-        if ( rLogFont.lfUnderline )
-            rFont.SetUnderline( UNDERLINE_SINGLE );
-        else
-            rFont.SetUnderline( UNDERLINE_NONE );
-        if ( rLogFont.lfStrikeOut )
-            rFont.SetStrikeout( STRIKEOUT_SINGLE );
-        else
-            rFont.SetStrikeout( STRIKEOUT_NONE );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
     XubString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );

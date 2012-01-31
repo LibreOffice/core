@@ -239,7 +239,6 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
 // \WIN\SOURCE\GDI\SALGDI3.CXX
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont );
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
 bool ImplIsFontAvailable( HDC hDC, const UniString& rName );
 
