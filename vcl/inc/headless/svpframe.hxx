@@ -74,7 +74,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual sal_Bool            PostEvent( void* pData );
 
     virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );

@@ -572,11 +572,11 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
 {
-    (void) nType;
-    // FIXME: ideally we should check the input queue to avoid being busy ...
-    fprintf (stderr, "FIXME: AnyInput returns true\n");
-    // mpApp->inputQueue ? ...
-    return true;
+    if( (nType & VCL_INPUT_TIMER) != 0 )
+        return CheckTimeout( false );
+    // FIXME: ideally we should check our input queue here ...
+    fprintf (stderr, "FIXME: AnyInput returns false\n");
+    return false;
 }
 
 class AndroidSalSystem : public SvpSalSystem {
