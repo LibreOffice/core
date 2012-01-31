@@ -48,9 +48,6 @@ using namespace ::com::sun::star::uno;
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
-    DBG_ASSERT( nBitCount <= 1,
-                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
-
     if ( nDX < 1 )
         nDX = 1;
 
@@ -138,6 +135,8 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
     OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
@@ -149,6 +148,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
     OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
@@ -160,6 +161,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
     OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
