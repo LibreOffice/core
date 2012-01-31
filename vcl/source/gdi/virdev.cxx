@@ -168,7 +168,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
-    // #110958# Enable alpha channel
+    // Enable alpha channel
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
