@@ -291,9 +291,11 @@ void ScFiltersTest::testRangeName()
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
+
+        xDocSh->DoHardRecalc(true);
+
         ScDocument* pDoc = xDocSh->GetDocument();
         testRangeNameImpl(pDoc);
 
@@ -357,9 +359,11 @@ void ScFiltersTest::testContent()
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.*", xDocSh.Is());
+
+        xDocSh->DoHardRecalc(true);
+
         ScDocument* pDoc = xDocSh->GetDocument();
         testContentImpl(pDoc);
         xDocSh->DoClose();
