@@ -50,12 +50,13 @@ typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 
 static oslModule pCloseModule = NULL;
 
-static SalInstance* tryInstance( const OUString& rModuleBase )
+static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     SalInstance* pInst = NULL;
 #ifndef ANDROID
     // Disable gtk3 plugin load except in experimental mode for now.
-    if( rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
+    if( !bForce &&
+        rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
         !officecfg::Office::Common::Misc::ExperimentalMode::get() )
         return NULL;
 #endif
@@ -232,7 +233,7 @@ SalInstance *CreateSalInstance()
     pInst = check_headless_plugin();
 
     if( !pInst && pUsePlugin && *pUsePlugin )
-        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
+        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ), true );
 
     if( ! pInst )
         pInst = autodetect_plugin();
