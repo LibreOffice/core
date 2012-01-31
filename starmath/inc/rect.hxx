@@ -31,6 +31,7 @@
 
 #include <new>
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
@@ -39,9 +40,9 @@
 
 
 bool SmGetGlyphBoundRect(const OutputDevice &rDev,
-                         const XubString &rText, Rectangle &rRect);
+                         const rtl::OUString &rText, Rectangle &rRect);
 
-bool SmIsMathAlpha(const XubString &rText);
+bool SmIsMathAlpha(const rtl::OUString &rText);
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
@@ -109,9 +110,9 @@ class SmRect
 
 protected:
             void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const XubString &rText, sal_uInt16 nBorderWidth);
+                            const rtl::OUString &rText, sal_uInt16 nBorderWidth);
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                      const XubString &rText, sal_uInt16 nBorderWidth);
+                      const rtl::OUString &rText, sal_uInt16 nBorderWidth);
 
             void ClearBaseline()    { bHasBaseline = false; };
     inline  void CopyMBL(const SmRect& rRect);
@@ -122,7 +123,7 @@ protected:
 public:
             SmRect();
             SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                   const XubString &rText, long nBorderWidth);
+                   const rtl::OUString &rText, long nBorderWidth);
             SmRect(long nWidth, long nHeight);
             SmRect(const SmRect &rRect);
 

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#include <tools/string.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -60,14 +57,14 @@ static xub_Unicode const aMathAlpha[] =
     xub_Unicode('\0')
 };
 
-bool SmIsMathAlpha(const XubString &rText)
+bool SmIsMathAlpha(const rtl::OUString &rText)
     // true iff symbol (from StarMath Font) should be treated as letter
 {
-    if (rText.Len() == 0)
+    if (rText.isEmpty())
         return false;
 
-    OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
-    xub_Unicode cChar = rText.GetChar(0);
+    OSL_ENSURE(rText.getLength() == 1, "Sm : string must be exactly one character long");
+    xub_Unicode cChar = rText[0];
 
     // is it a greek symbol?
     if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
@@ -138,7 +135,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 
 
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                       const XubString &rText, sal_uInt16 nBorder)
+                       const rtl::OUString &rText, sal_uInt16 nBorder)
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
@@ -227,13 +224,13 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     if (nLoAttrFence > GetBottom())
         nLoAttrFence = GetBottom();
 
-    OSL_ENSURE(rText.Len() == 0  ||  !IsEmpty(),
+    OSL_ENSURE(rText.isEmpty() || !IsEmpty(),
                "Sm: empty rectangle created");
 }
 
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                  const XubString &rText, sal_uInt16 nEBorderWidth)
+                  const rtl::OUString &rText, sal_uInt16 nEBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
     BuildRect(rDev, pFormat, rText, nEBorderWidth);
@@ -241,7 +238,7 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-               const XubString &rText, long nEBorderWidth)
+               const rtl::OUString &rText, long nEBorderWidth)
 {
     OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
@@ -613,14 +610,14 @@ SmRect SmRect::AsGlyphRect() const
 }
 
 bool SmGetGlyphBoundRect(const OutputDevice &rDev,
-                         const XubString &rText, Rectangle &rRect)
+                         const rtl::OUString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
 {
     // handle special case first
-    xub_StrLen nLen = rText.Len();
-    if (nLen == 0)
-    {   rRect.SetEmpty();
+    if (rText.isEmpty())
+    {
+        rRect.SetEmpty();
         return true;
     }
 
