@@ -40,6 +40,10 @@ $(eval $(call gb_Library_set_include,oox,\
     -I$(realpath $(SRCDIR)/oox/inc) \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,oox,\
+    -Os \
+))
+
 $(eval $(call gb_Library_add_defs,oox,\
     -DOOX_DLLIMPLEMENTATION \
 ))
