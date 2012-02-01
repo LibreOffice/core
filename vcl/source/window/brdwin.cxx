@@ -2342,4 +2342,37 @@ Rectangle ImplBorderWindow::GetMenuRect() const
     return mpBorderView->GetMenuRect();
 }
 
+Size ImplBorderWindow::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Size(mnMaxWidth, mnMaxHeight);
+    if (eType == WINDOWSIZE_MINIMUM)
+        return Size(mnMinWidth, mnMinHeight);
+    Size aRet(0, 0);
+    Window* pClientWindow = ImplGetClientWindow();
+    if (pClientWindow)
+        aRet = pClientWindow->GetOptimalSize(eType);
+    sal_Int32 nLeftBorder, nTopBorder, nRightBorder, nBottomBorder;
+    GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
+    aRet.Width() += nLeftBorder+nRightBorder;
+    aRet.Height() += nTopBorder+nBottomBorder;
+    return aRet;
+}
+
+void ImplBorderWindow::setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue)
+{
+    Window* pClientWindow = ImplGetClientWindow();
+    if (pClientWindow)
+        pClientWindow->setChildAnyProperty(rString, rValue);
+}
+
+::com::sun::star::uno::Any ImplBorderWindow::getWidgetAnyProperty(const rtl::OString &rString) const
+{
+    ::com::sun::star::uno::Any aAny;
+    Window* pClientWindow = ImplGetClientWindow();
+    if (pClientWindow)
+        aAny = pClientWindow->getWidgetAnyProperty(rString);
+    return aAny;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

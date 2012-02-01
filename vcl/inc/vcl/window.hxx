@@ -1066,21 +1066,27 @@ public:
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     void queueResize();
+
+    virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
+    virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;
+
     template <typename T> T getWidgetProperty(const rtl::OString &rString, const T &rDefaultValue = T()) const
     {
         T nValue = rDefaultValue;
-        ChildPropertyMap::const_iterator aI = m_aWidgetProperties.find(rString);
-        if (aI != m_aWidgetProperties.end())
-            aI->second >>= nValue;
+        ::com::sun::star::uno::Any aAny = getWidgetAnyProperty(rString);
+        if (aAny.hasValue())
+            aAny >>= nValue;
         return nValue;
     }
     template <typename T> void setChildProperty(const rtl::OString &rString, const T &rValue)
     {
-        m_aWidgetProperties[rString] <<= rValue;
+        ::com::sun::star::uno::Any aAny;
+        aAny <<= rValue;
+        setChildAnyProperty(rString, aAny);
     }
     void setChildProperty(const rtl::OString &rString, const bool &rValue)
     {
-        m_aWidgetProperties[rString] <<= static_cast<sal_Bool>(rValue);
+        setChildProperty<sal_Bool>(rString, rValue);
     }
     bool getWidgetProperty(const rtl::OString &rString, const bool &rValue = false) const
     {

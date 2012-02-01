@@ -186,6 +186,12 @@ public:
     long                    CalcTitleWidth() const;
 
     Rectangle               GetMenuRect() const;
+
+    virtual Size            GetOptimalSize(WindowSizeType eType) const;
+    virtual void            setChildAnyProperty(const rtl::OString &rString,
+                                                const ::com::sun::star::uno::Any &rValue);
+    virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;
+
 };
 
 // =======================================================================

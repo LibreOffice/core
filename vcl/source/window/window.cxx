@@ -9590,12 +9590,30 @@ void Window::queueResize()
             //To-Do: honour explicit sizes ?
             const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
             Size aSize = pContainer->GetOptimalSize(WINDOWSIZE_PREFERRED);
-            aSize.Width(), aSize.Height();
+
+            Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);
+            aSize.Width() = std::min(aMax.Width(), aSize.Width());
+            aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
             pParent->SetMinOutputSizePixel(aSize);
             pParent->SetSizePixel(aSize);
             pParent->Resize();
         }
     }
+}
+
+void Window::setChildAnyProperty(const rtl::OString &rString, const Any &rValue)
+{
+    m_aWidgetProperties[rString] <<= rValue;
+}
+
+uno::Any Window::getWidgetAnyProperty(const rtl::OString &rString) const
+{
+    uno::Any aAny;
+    ChildPropertyMap::const_iterator aI = m_aWidgetProperties.find(rString);
+    if (aI != m_aWidgetProperties.end())
+        aAny = aI->second;
+    return aAny;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
