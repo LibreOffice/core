@@ -418,7 +418,7 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
  *
  *  Value container for toolbars detailing the grip position
  */
-class ToolbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ToolbarValue : public ImplControlValue
 {
 public:
     ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, BUTTONVALUE_DONTKNOW, 0 )
@@ -434,7 +434,7 @@ public:
  *
  *  Value container for menubars specifying height of adjacent docking area
  */
-class MenubarValue : public ImplControlValue
+class VCL_DLLPUBLIC MenubarValue : public ImplControlValue
 {
 public:
     MenubarValue() : ImplControlValue( CTRL_MENUBAR, BUTTONVALUE_DONTKNOW, 0 )
@@ -449,7 +449,7 @@ public:
  * Value container for menu items; specifies the rectangle for the whole item which
  * may be useful when drawing parts with a smaller rectangle.
  */
-class MenupopupValue : public ImplControlValue
+class VCL_DLLPUBLIC MenupopupValue : public ImplControlValue
 {
 public:
     MenupopupValue() : ImplControlValue( CTRL_MENU_POPUP, BUTTONVALUE_DONTKNOW, 0 )
@@ -467,7 +467,7 @@ public:
  *
  *  Value container for pushbuttons specifying additional drawing hints
  */
-class PushButtonValue : public ImplControlValue
+class VCL_DLLPUBLIC PushButtonValue : public ImplControlValue
 {
 public:
     PushButtonValue()
