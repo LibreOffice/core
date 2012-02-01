@@ -176,7 +176,4 @@ void SanExtensionImpl :: setCertExtn( unsigned char* value, unsigned int vlen, u
     m_critical = critical ;
 }
 
-void SanExtensionImpl :: extractCertExt () {
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

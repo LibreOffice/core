@@ -177,7 +177,6 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( AddFilesHdl, sfx2::FileDialogHelper* );
 
     sal_Bool        DontDelete_Impl( SvLBoxEntry* pEntry );
-    void        OkHdl( Button* );
 
 public:
     SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent, SfxDocumentTemplates* pTempl );
@@ -1992,17 +1991,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AccelSelect_Impl, Accelerator *, pAccel )
     return pEntry && ( pAccel->GetCurItemId() == ID_NEW  || !DontDelete_Impl( pEntry ) ) ?
         Dispatch_Impl( pAccel->GetCurItemId(), NULL ) : 0;
 }
-
-//-------------------------------------------------------------------------
-
-void SfxOrganizeDlg_Impl::OkHdl(Button *pButton)
-{
-    if(pFocusBox && pFocusBox->IsEditingActive())
-        pFocusBox->EndEditing(sal_False);
-    pButton->Click();
-}
-
-
 
 IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
 

@@ -122,10 +122,8 @@ SalGraphics::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&,
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)
 SalGraphics::drawPolyLine(basegfx::B2DPolygon const&, double, basegfx::B2DVector const&, basegfx::B2DLineJoin)
 SalGraphics::drawPolyPolygon(basegfx::B2DPolyPolygon const&, double)
-SanExtensionImpl::extractCertExt()
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-SbiExpression::VBA_Imp()
 SbiRuntime::GetParams()
 SbiSymPool::Clear()
 SbxDecimal::getByte(unsigned char&)
@@ -278,7 +276,6 @@ SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
 SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
 SfxOleString16Property::SfxOleString16Property(int, String const&)
-SfxOrganizeDlg_Impl::OkHdl(Button*)
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPasswordDialog::SetMaxLen(unsigned short)
 SfxPopupWindow::LinkStubDelete(void*, void*)
@@ -384,9 +381,6 @@ SvXMLTokenMap_Impl::Insert(SvXMLTokenMapEntry_Impl* const*, unsigned short)
 SvXMLTokenMap_Impl::Insert(SvXMLTokenMap_Impl const*, unsigned short, unsigned short)
 SvXMLTokenMap_Impl::Remove(SvXMLTokenMapEntry_Impl* const&, unsigned short)
 SvXMLTokenMap_Impl::Remove(unsigned short, unsigned short)
-SvXMLUnitConverter::GetCoreMeasureUnit() const
-SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
-SvXMLUnitConverter::convertMeasureToXML(rtl::OUStringBuffer&, int, short) const
 SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
 SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
@@ -396,7 +390,6 @@ SvtListenerIter::GoEnd()
 SvtListenerIter::GoPrev()
 SvtListenerIter::GoRoot()
 SvtListenerIter::Next()
-SvtResId::SvtResId(unsigned short, com::sun::star::lang::Locale)
 SvtScriptedTextHelper::GetText() const
 SvtScriptedTextHelper::GetTextHeight() const
 SvtScriptedTextHelper::GetTextWidth() const
@@ -478,7 +471,6 @@ SvxSearchDialog::GetReplaceItems(SfxItemSet&)
 SvxSearchDialog::GetSearchItems(SfxItemSet&)
 SvxSearchDialog::SvxSearchDialog(Window*, SfxBindings&)
 SvxSelectionModeControl::GetDefItemWidth(StatusBar const&)
-SvxShapePolyPolygonBezier::GetPolygonKind() const
 SvxShapeText::SvxShapeText()
 SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer&, ResId const&)
 SvxTabStopArr::Insert(SvxTabStop const&, unsigned short&)
@@ -1256,6 +1248,9 @@ comphelper::PropertySetHelper::setInfo(comphelper::PropertySetInfo*)
 comphelper::PropertySetInfo::add(comphelper::PropertyMapEntry*, int)
 comphelper::ResourceBasedEventLogger::ResourceBasedEventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&, rtl::OUString const&)
 comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
+comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
+comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
+comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
 comphelper::string::isalnumAsciiString(rtl::OUString const&)
 comphelper::string::islowerAsciiString(rtl::OUString const&)
@@ -1359,8 +1354,6 @@ jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)
 jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
 libcdr::CDRDocument::generateSVG(WPXInputStream*, WPXString&)
-libcdr::CDRInternalStream::CDRInternalStream(unsigned char const*, unsigned long)
-libcdr::readDouble(WPXInputStream*)
 libcmis::SessionFactory::getRepositories(std::__debug::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
@@ -1631,9 +1624,6 @@ unicode::isBase(unsigned short)
 unicode::isPunctuation(unsigned short)
 unicode::isTitle(unsigned short)
 unographic::GraphicDescriptor::isValid() const
-unotools::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<unotools::ConfigurationChanges> const&, rtl::OUString const&) const
-unotools::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
-unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<unotools::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::OConfigurationValueContainer::getServiceFactory() const

@@ -789,24 +789,6 @@ SbiExprNode* SbiExpression::VBA_Eqv()
     return pNd;
 }
 
-SbiExprNode* SbiExpression::VBA_Imp()
-{
-    SbiExprNode* pNd = VBA_Eqv();
-    if( m_eMode != EXPRMODE_EMPTY_PAREN )
-    {
-        for( ;; )
-        {
-            SbiToken eTok = pParser->Peek();
-            if( eTok != IMP )
-                break;
-            eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Eqv() );
-        }
-    }
-    return pNd;
-
-}
-
 SbiExprNode* SbiExpression::Like()
 {
     SbiExprNode* pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();
