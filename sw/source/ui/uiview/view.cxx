@@ -836,7 +836,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
         if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
             aUsrPref.setBrowseMode( sal_True );
-        else if( rDoc.IsLoaded() )
+        else
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
