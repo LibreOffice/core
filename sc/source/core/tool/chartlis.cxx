@@ -549,11 +549,6 @@ ScChartListenerCollection::ListenersType& ScChartListenerCollection::GetListener
     return maListeners;
 }
 
-size_t ScChartListenerCollection::GetCount() const
-{
-    return maListeners.size();
-}
-
 rtl::OUString ScChartListenerCollection::GetUniqueName(const rtl::OUString& rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.

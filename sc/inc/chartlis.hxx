@@ -186,7 +186,6 @@ public:
 
     const ListenersType& GetListeners() const;
     ListenersType& GetListeners();
-    size_t GetCount() const;
 
     rtl::OUString GetUniqueName(const rtl::OUString& rPrefix) const;
 
