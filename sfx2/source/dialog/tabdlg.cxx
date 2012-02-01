@@ -525,7 +525,6 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
 
     aTabCtrl.setChildProperty(sFill, true);
     aTabCtrl.setChildProperty(sExpand, true);
-    aTabCtrl.SetControlBackground(Color(0xff, 0x00, 0x00));
 
     aOKBtn.SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );

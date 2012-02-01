@@ -432,7 +432,6 @@ void  FixedText::FillLayoutData() const
 
 void FixedText::SetText( const XubString& rStr )
 {
-    fprintf(stderr, "FixedText::SetText changed\n");
     Window::SetText(rStr);
     //Text changed, tell possibly existing layout that size requisition has changed
     queueResize();
