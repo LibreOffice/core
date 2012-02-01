@@ -996,9 +996,7 @@ public:
     sal_uInt16 GetUserDataCount() const;
     SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
 
-    // Insert uebernimmt den auf dem Heap angelegten Record in den Besitz
-    // des Zeichenobjekts
-    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF);
+    void AppendUserData(SdrObjUserData* pData);
 
     // Delete entfernt den Record aus der Liste und ruft
     // ein delete (FreeMem+Dtor).

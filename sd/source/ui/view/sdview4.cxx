@@ -150,7 +150,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             }
 
             if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
@@ -229,7 +229,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             // replace object
             if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
             Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
             Size aPickObjSize(aPickObjRect.GetSize());
@@ -272,7 +272,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
 
             if( pImageMap )
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
         }
     }
 

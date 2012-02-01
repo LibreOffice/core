@@ -1059,7 +1059,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     if( (pRet == 0) && bCreate )
     {
         pRet = new SdAnimationInfo( rObject );
-        rObject.InsertUserData( pRet);
+        rObject.AppendUserData( pRet);
     }
 
     return pRet;

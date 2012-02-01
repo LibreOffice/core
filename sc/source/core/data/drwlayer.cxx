@@ -1836,7 +1836,7 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, sal_Bool bCreate )
     if( pObj && bCreate )
     {
         ScDrawObjData* pData = new ScDrawObjData;
-        pObj->InsertUserData( pData, 0 );
+        pObj->AppendUserData(pData);
         return pData;
     }
     return 0;
@@ -1945,7 +1945,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )
     if ( bCreate )
     {
         ScMacroInfo* pData = new ScMacroInfo;
-        pObj->InsertUserData( pData, 0 );
+        pObj->AppendUserData(pData);
         return pData;
     }
     return 0;

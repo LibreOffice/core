@@ -676,7 +676,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         else
                         {
                             // insert new user data with image map
-                            pObj->InsertUserData(new SdIMapInfo(aImageMap) );
+                            pObj->AppendUserData(new SdIMapInfo(aImageMap) );
                         }
                     }
                 }

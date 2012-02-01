@@ -470,7 +470,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             else
             {
                 // insert new user data with image map
-                pObj->InsertUserData(new ScIMapInfo(aImageMap) );
+                pObj->AppendUserData(new ScIMapInfo(aImageMap) );
             }
         }
     }

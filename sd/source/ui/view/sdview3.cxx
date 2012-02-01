@@ -967,7 +967,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
-                        pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
+                        pObj->AppendUserData( new SdIMapInfo( *pImageMap ) );
 
                     if ( pObj && pObj->IsChart() )
                     {
@@ -1137,7 +1137,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
-                        pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
+                        pObj->AppendUserData( new SdIMapInfo( *pImageMap ) );
 
                     // let the object stay in loaded state after insertion
                     pObj->Unload();

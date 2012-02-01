@@ -2842,23 +2842,19 @@ SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
     return pPlusData->pUserDataList->GetUserData(nNum);
 }
 
-void SdrObject::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
+void SdrObject::AppendUserData(SdrObjUserData* pData)
 {
-    if (pData!=NULL)
+    if (!pData)
     {
-        ImpForcePlusData();
-        if (!pPlusData->pUserDataList)
-            pPlusData->pUserDataList = new SdrObjUserDataList;
+        OSL_FAIL("SdrObject::AppendUserData(): pData is NULL pointer.");
+        return;
+    }
 
-        if (nPos == 0xFFFF)
-            pPlusData->pUserDataList->AppendUserData(pData);
-        else
-            pPlusData->pUserDataList->InsertUserData(pData, nPos);
-    }
-    else
-    {
-        OSL_FAIL("SdrObject::InsertUserData(): pData is NULL pointer.");
-    }
+    ImpForcePlusData();
+    if (!pPlusData->pUserDataList)
+        pPlusData->pUserDataList = new SdrObjUserDataList;
+
+    pPlusData->pUserDataList->AppendUserData(pData);
 }
 
 void SdrObject::DeleteUserData(sal_uInt16 nNum)

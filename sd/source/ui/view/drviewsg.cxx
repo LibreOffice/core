@@ -76,7 +76,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
                 SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
-                    pSdrObj->InsertUserData( new SdIMapInfo( rImageMap ) );
+                    pSdrObj->AppendUserData( new SdIMapInfo( rImageMap ) );
                 else
                     pIMapInfo->SetImageMap( rImageMap );
 
