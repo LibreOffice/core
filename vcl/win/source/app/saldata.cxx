@@ -53,31 +53,6 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-rtl::OString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName )
-{
-    rtl_TextEncoding eEncoding = ImplSalGetSystemEncoding();
-    if ( bFileName )
-    {
-        return rtl::OUStringToOString( rStr, eEncoding,
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE |
-                           RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE |
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR |
-                           RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 );
-    }
-    else
-    {
-        return rtl::OUStringToOString( rStr, eEncoding,
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
-                           RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
-                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR |
-                           RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
 {
     return UniString( pStr, nLen, ImplSalGetSystemEncoding(),
