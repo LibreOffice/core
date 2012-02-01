@@ -40,7 +40,9 @@
 #include <memory>
 #include <vector>
 #include <list>
+
 #include <boost/unordered_set.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScChartUnoData;
@@ -71,14 +73,14 @@ public:
 
 private:
 
-    ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
-    ::std::auto_ptr< ::std::vector<ScTokenRef> >  mpTokens;
+    boost::scoped_ptr<ExternalRefListener> mpExtRefListener;
+    boost::scoped_ptr<std::vector<ScTokenRef> > mpTokens;
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
-    bool            bUsed;  // for ScChartListenerCollection::FreeUnused
-    bool            bDirty;
-    bool            bSeriesRangesScheduled;
+    bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
+    bool            bDirty:1;
+    bool            bSeriesRangesScheduled:1;
 
                     // not implemented
     ScChartListener& operator=( const ScChartListener& );
