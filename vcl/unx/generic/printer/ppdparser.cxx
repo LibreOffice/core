@@ -138,7 +138,7 @@ namespace psp
         )
     {
         com::sun::star::lang::Locale aLoc( i_rLocale );
-        if( bInsertDefault && aLoc.Language.getLength() == 0 )
+        if( bInsertDefault && aLoc.Language.isEmpty() )
         {
             // empty locale requested, fill in application UI locale
             aLoc = Application::GetSettings().GetUILocale();
@@ -175,17 +175,17 @@ namespace psp
     {
         rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
         aKey.append( i_rKey );
-        if( i_rOption.getLength() || i_rValue.getLength() )
+        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rOption );
         }
-        if( i_rValue.getLength() )
+        if( !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
         }
-        if( aKey.getLength() && i_rTranslation.getLength() )
+        if( aKey.getLength() && !i_rTranslation.isEmpty() )
         {
             rtl::OUString aK( aKey.makeStringAndClear() );
             com::sun::star::lang::Locale aLoc;
@@ -207,12 +207,12 @@ namespace psp
 
         rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
         aKey.append( i_rKey );
-        if( i_rOption.getLength() || i_rValue.getLength() )
+        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rOption );
         }
-        if( i_rValue.getLength() )
+        if( !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
@@ -1159,9 +1159,9 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         pValue->m_eType = eType;
         pValue->m_aValue = aValue;
 
-        if( aOptionTranslation.getLength() )
+        if( !aOptionTranslation.isEmpty() )
             m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
-        if( aValueTranslation.getLength() )
+        if( !aValueTranslation.isEmpty() )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
@@ -1511,7 +1511,7 @@ rtl::OUString PPDParser::translateKey( const rtl::OUString& i_rKey,
                                        const com::sun::star::lang::Locale& i_rLocale ) const
 {
     rtl::OUString aResult( m_pTranslator->translateKey( i_rKey, i_rLocale ) );
-    if( aResult.getLength() == 0 )
+    if( aResult.isEmpty() )
         aResult = i_rKey;
     return aResult;
 }
@@ -1521,7 +1521,7 @@ rtl::OUString PPDParser::translateOption( const rtl::OUString& i_rKey,
                                           const com::sun::star::lang::Locale& i_rLocale ) const
 {
     rtl::OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, i_rLocale ) );
-    if( aResult.getLength() == 0 )
+    if( aResult.isEmpty() )
         aResult = i_rOption;
     return aResult;
 }

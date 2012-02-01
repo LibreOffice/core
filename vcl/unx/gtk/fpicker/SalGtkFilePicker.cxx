@@ -600,7 +600,7 @@ void SalGtkFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrent
         m_pFilterList = new FilterList;
 
         // set the first filter to the current filter
-        if ( !m_aCurrentFilter.getLength() )
+        if ( m_aCurrentFilter.isEmpty() )
             m_aCurrentFilter = _rInitialCurrentFilter;
     }
 }
@@ -867,7 +867,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                         {
                             if( aListIter->getFilter().equalsIgnoreAsciiCase( aStarDot+sExtension ) )
                             {
-                                if( !aNewFilter.getLength() )
+                                if( aNewFilter.isEmpty() )
                                     aNewFilter = aListIter->getTitle();
 
                                 if( aOldFilter == aListIter->getTitle() )
@@ -1388,7 +1388,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
     if (nControlId == ExtendedFilePickerElementIds::PUSHBUTTON_PLAY)
     {
 #ifdef GTK_STOCK_MEDIA_PLAY
-        if (!msPlayLabel.getLength())
+        if (msPlayLabel.isEmpty())
             msPlayLabel = rLabel;
         if (msPlayLabel == rLabel)
             gtk_button_set_label(GTK_BUTTON(pWidget), GTK_STOCK_MEDIA_PLAY);
@@ -1871,9 +1871,9 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             aToken = rType.getToken( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
             aToken = aToken.copy( aToken.lastIndexOf( aStarDot ) + 2 );
-            if (aToken.getLength())
+            if (!aToken.isEmpty())
             {
-                if (aTokens.getLength())
+                if (!aTokens.isEmpty())
                     aTokens += OUString(RTL_CONSTASCII_USTRINGPARAM(","));
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
@@ -1923,7 +1923,7 @@ void SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const S
 
 void SalGtkFilePicker::SetFilters()
 {
-    if (!m_aInitialFilter.getLength())
+    if (m_aInitialFilter.isEmpty())
         m_aInitialFilter = m_aCurrentFilter;
 
     rtl::OUString sPseudoFilter;
@@ -1956,7 +1956,7 @@ void SalGtkFilePicker::SetFilters()
             std::set<OUString>::const_iterator aEnd = aAllFormats.end();
             for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
             {
-                if (sAllFilter.getLength())
+                if (!sAllFilter.isEmpty())
                     sAllFilter += OUString(sal_Unicode(';'));
                 sAllFilter += *aIter;
             }
@@ -1995,9 +1995,9 @@ void SalGtkFilePicker::SetFilters()
         gtk_widget_hide( m_pFilterExpander );
 
     // set the default filter
-    if (sPseudoFilter.getLength())
+    if (!sPseudoFilter.isEmpty())
         SetCurFilter( sPseudoFilter );
-    else if(m_aCurrentFilter.getLength())
+    else if(!m_aCurrentFilter.isEmpty())
         SetCurFilter( m_aCurrentFilter );
 
     OSL_TRACE( "end setting filters");

@@ -2160,7 +2160,7 @@ void X11SalFrame::updateWMClass()
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                             SalGenericSystem::getFrameClassName();
 
     pClass->res_class = const_cast<char*>(pResClass);
@@ -3099,7 +3099,7 @@ void X11SalFrame::beginUnicodeSequence()
     rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     DeletionListener aDeleteWatch( this );
 
-    if( rSeq.getLength() )
+    if( !rSeq.isEmpty() )
         endUnicodeSequence();
 
     rSeq = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "u" ) );
@@ -3124,7 +3124,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 {
     bool bRet = false;
     rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
-    if( rSeq.getLength() > 0 )
+    if( !rSeq.isEmpty() )
     {
         // range check
         if( (c >= sal_Unicode('0') && c <= sal_Unicode('9')) ||
@@ -3181,7 +3181,7 @@ bool X11SalFrame::endUnicodeSequence()
             CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
         }
     }
-    bool bWasInput = rSeq.getLength() > 0;
+    bool bWasInput = !rSeq.isEmpty();
     rSeq = rtl::OUString();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
         CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);

@@ -54,7 +54,7 @@ JobData& JobData::operator=(const JobData& rRight)
     m_nPDFDevice            = rRight.m_nPDFDevice;
     m_nColorDevice          = rRight.m_nColorDevice;
 
-    if( ! m_pParser && m_aPrinterName.getLength() )
+    if( !m_pParser && !m_aPrinterName.isEmpty() )
     {
         PrinterInfoManager& rMgr = PrinterInfoManager::get();
         rMgr.setupJobContextData( *this );

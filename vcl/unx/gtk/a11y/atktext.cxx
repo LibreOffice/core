@@ -80,7 +80,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
     rtl::OUString aString;
     gint start = 0, end = 0;
 
-    if( rTextSegment.SegmentText.getLength() > 0 )
+    if( !rTextSegment.SegmentText.isEmpty() )
     {
         switch(boundary_type)
         {
@@ -112,7 +112,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
             // Determine the start index of the next segment
             aTextSegment = pText->getTextBehindIndex(rTextSegment.SegmentEnd,
                                                      text_type_from_boundary(boundary_type));
-            if( aTextSegment.SegmentText.getLength() > 0 )
+            if( !aTextSegment.SegmentText.isEmpty() )
                 end = aTextSegment.SegmentStart;
             else
                 end = pText->getCharacterCount();
@@ -126,7 +126,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
             // Determine the end index of the previous segment
             aTextSegment = pText->getTextBeforeIndex(rTextSegment.SegmentStart,
                                                      text_type_from_boundary(boundary_type));
-            if( aTextSegment.SegmentText.getLength() > 0 )
+            if( !aTextSegment.SegmentText.isEmpty() )
                 start = aTextSegment.SegmentEnd;
             else
                 start = 0;

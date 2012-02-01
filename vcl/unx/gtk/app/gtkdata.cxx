@@ -653,7 +653,7 @@ void GtkData::Init()
 
     // Set consistant name of the root accessible
     rtl::OUString aAppName = Application::GetAppName();
-    if( aAppName.getLength() > 0 )
+    if( !aAppName.isEmpty() )
     {
         rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
         g_set_prgname(aPrgName.getStr());

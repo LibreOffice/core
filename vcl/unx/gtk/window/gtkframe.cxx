@@ -1949,7 +1949,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 void GtkSalFrame::updateWMClass()
 {
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                                                     SalGenericSystem::getFrameClassName();
     Display *display;
 
@@ -4112,7 +4112,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
         rtl::OUString sAllText = xText->getText();
-        if (!sAllText.getLength())
+        if (sAllText.isEmpty())
             return sal_False;
     rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
     rtl::OUString sCursorText(sAllText.copy(0, nPosition));
