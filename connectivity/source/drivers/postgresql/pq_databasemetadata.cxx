@@ -1389,16 +1389,11 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
     return ret;
 }
 
-static bool isSystemColumn( const OUString &columnName )
+namespace {
+inline bool isSystemColumn( sal_Int16 attnum )
 {
-    return
-        columnName.compareToAscii( "oid" ) == 0 ||
-        columnName.compareToAscii( "tableoid" ) == 0 ||
-        columnName.compareToAscii( "xmin" ) == 0 ||
-        columnName.compareToAscii( "cmin" ) == 0 ||
-        columnName.compareToAscii( "xmax" ) == 0 ||
-        columnName.compareToAscii( "cmax" ) == 0 ||
-        columnName.compareToAscii( "ctid" ) == 0;
+    return attnum <= 0;
+}
 }
 
 // is not exported by the postgres header
@@ -1593,7 +1588,8 @@ static void columnMetaData2DatabaseTypeDescription(
             "pg_type.typtype, "              // 8
             "pg_attrdef.adsrc, "             // 9
             "pg_description.description, "   // 10
-            "pg_type.typbasetype "           // 11
+            "pg_type.typbasetype, "          // 11
+            "pg_attribute.attnum "           // 12
             "FROM pg_class, "
                  "pg_attribute LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND pg_attribute.attnum = pg_attrdef.adnum "
                               "LEFT JOIN pg_description ON pg_attribute.attrelid = pg_description.objoid AND pg_attribute.attnum=pg_description.objsubid,"
@@ -1627,8 +1623,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     while( rs->next() )
     {
-        OUString columnName = xRow->getString(3);
-        if( m_pSettings->showSystemColumns || ! isSystemColumn( columnName ) )
+        if( m_pSettings->showSystemColumns || ! isSystemColumn( xRow->getShort( 12 ) ) )
         {
             OUString sNewSchema( xRow->getString(1) );
             OUString sNewTable(  xRow->getString(2) );
@@ -1645,7 +1640,7 @@ static void columnMetaData2DatabaseTypeDescription(
             row[0] <<= m_pSettings->catalog;
             row[1] <<= sNewSchema;
             row[2] <<= sNewTable;
-            row[3] <<= columnName;
+            row[3] <<= xRow->getString(3);
             if( xRow->getString(8).equalsAscii( "d" ) )
             {
                 DatabaseTypeDescription desc( domainMap[xRow->getInt(11)] );
@@ -1662,7 +1657,7 @@ static void columnMetaData2DatabaseTypeDescription(
             // row[7] BUFFER_LENGTH not used
             row[8] <<= scale;
             // row[9] RADIX TODO
-            if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getString(3)) )
+            if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getInt( 12 )) )
             {
                 row[10] <<= OUString::valueOf(com::sun::star::sdbc::ColumnValue::NO_NULLS);
                 row[17] <<= statics.NO;
