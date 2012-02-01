@@ -344,7 +344,7 @@ namespace accessibility
     {
         // Keep 'invalid' values at the TextSegment
         if( aTextSegment.SegmentStart != -1 &&
-            aTextSegment.SegmentStart != -1 )
+            aTextSegment.SegmentEnd != -1 )
         {
             // #112814# Correct TextSegment by paragraph offset
             sal_Int32 nOffset(0);

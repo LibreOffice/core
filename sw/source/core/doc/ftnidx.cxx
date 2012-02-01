@@ -192,10 +192,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
             if( nSectNo )
             {
-                if( rFtn.IsEndNote() )
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-                else
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
             }
         }
     }
@@ -281,10 +278,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
             if( nSectNo )
             {
-                if( rFtn.IsEndNote() )
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-                else
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
             }
         }
     }
