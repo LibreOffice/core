@@ -180,6 +180,7 @@ DatabaseMetaData::DatabaseMetaData(
     m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?" )) )
 {
     init_getReferences_stmt();
+    init_getPrivs_stmt();
 }
 
 sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException)
@@ -1696,14 +1697,31 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
-    (void) catalog; (void) schema; (void) table; (void) columnNamePattern;
-    //LEM TODO: implement! See JDBC driver
-    // In the meantime, maybe better to throw exception SQLException with
-    // SQLState == "IM001"
+    (void) catalog;
+
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+
+    if( isLog( m_pSettings, LogLevel::INFO ) )
+    {
+        rtl::OUStringBuffer buf( 128 );
+        buf.appendAscii( "DatabaseMetaData::getColumnPrivileges got called with " );
+        buf.append( schema );
+        buf.appendAscii( "." );
+        buf.append( table );
+        buf.appendAscii( "." );
+        buf.append( columnNamePattern );
+        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+    }
+
+    Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
+    parameters->setString( 1 , schema );
+    parameters->setString( 2 , table );
+    parameters->setString( 3 , columnNamePattern );
+
+    Reference< XResultSet > rs = m_getColumnPrivs_stmt->executeQuery();
+
+    return rs;
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
@@ -1725,41 +1743,11 @@ static void columnMetaData2DatabaseTypeDescription(
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 
-    rtl::OUStringBuffer sSQL(260);
-    sSQL.append( ASCII_STR(
-            " SELECT * FROM ("
-            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
-            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
-            "  FROM information_schema.table_privileges") );
-    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
-        // information_schema.table_privileges does not fill in default ACLs when no ACL
-        // assume default ACL is "owner has all privileges" and add it
-        sSQL.append( ASCII_STR(
-            " UNION "
-            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
-            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
-            "  FROM pg_catalog.pg_class c,"
-            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege),"
-            "       pg_catalog.pg_roles ro,"
-            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
-            "         UNION ALL"
-            "          VALUES (0::oid, 'PUBLIC')"
-            "       ) AS rg (oid, rolname),"
-            "       pg_catalog.pg_namespace pn"
-            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
-            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
-    sSQL.append( ASCII_STR(
-            " ) s"
-            " WHERE table_schem LIKE ? AND table_name LIKE ? "
-            " ORDER BY table_schem, table_name, privilege" ) );
-
-    Reference< XPreparedStatement > statement = m_origin->prepareStatement( sSQL.makeStringAndClear() );
-
-    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
+    Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
-    Reference< XResultSet > rs = statement->executeQuery();
+    Reference< XResultSet > rs = m_getTablePrivs_stmt->executeQuery();
 
     return rs;
 }
@@ -2077,6 +2065,68 @@ void DatabaseMetaData::init_getReferences_stmt ()
     m_getReferences_stmt[13] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_SOME_SOME ));
     m_getReferences_stmt[14] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_SOME_SOME ));
     m_getReferences_stmt[15] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_SOME ));
+}
+
+void DatabaseMetaData::init_getPrivs_stmt ()
+{
+    rtl::OUStringBuffer sSQL(300);
+    sSQL.append( ASCII_STR(
+            " SELECT * FROM ("
+            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
+            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
+            "  FROM information_schema.table_privileges") );
+    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
+        // information_schema.table_privileges does not fill in default ACLs when no ACL
+        // assume default ACL is "owner has all privileges" and add it
+        sSQL.append( ASCII_STR(
+            " UNION "
+            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
+            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
+            "  FROM pg_catalog.pg_class c,"
+            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege),"
+            "       pg_catalog.pg_roles ro,"
+            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
+            "         UNION ALL"
+            "          VALUES (0::oid, 'PUBLIC')"
+            "       ) AS rg (oid, rolname),"
+            "       pg_catalog.pg_namespace pn"
+            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
+    sSQL.append( ASCII_STR(
+            " ) s"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? "
+            " ORDER BY table_schem, table_name, privilege" ) );
+
+    m_getTablePrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
+
+    sSQL.append( ASCII_STR(
+            " SELECT * FROM ("
+            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name, column_name,"
+            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
+            "  FROM information_schema.column_privileges") );
+    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
+        // information_schema.table_privileges does not fill in default ACLs when no ACL
+        // assume default ACL is "owner has all privileges" and add it
+        sSQL.append( ASCII_STR(
+            " UNION "
+            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME, a.attname AS column_name,"
+            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
+            "  FROM pg_catalog.pg_class c, pg_catalog.pg_attribute a,"
+            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('REFERENCES')) p (privilege),"
+            "       pg_catalog.pg_roles ro,"
+            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
+            "         UNION ALL"
+            "          VALUES (0::oid, 'PUBLIC')"
+            "       ) AS rg (oid, rolname),"
+            "       pg_catalog.pg_namespace pn"
+            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid AND a.attrelid = c.oid AND a.attnum > 0") );
+    sSQL.append( ASCII_STR(
+            " ) s"
+            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? "
+            " ORDER BY column_name, privilege" ) );
+
+    m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(

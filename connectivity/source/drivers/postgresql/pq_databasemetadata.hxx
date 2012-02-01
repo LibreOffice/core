@@ -74,6 +74,8 @@ class DatabaseMetaData :
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_origin;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getIntSetting_stmt;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getReferences_stmt[16];
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getTablePrivs_stmt;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getColumnPrivs_stmt;
 
     void checkClosed() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getIntSetting(::rtl::OUString settingName) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -84,6 +86,7 @@ class DatabaseMetaData :
         const ::com::sun::star::uno::Any& foreignCatalog, const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     void init_getReferences_stmt ();
+    void init_getPrivs_stmt ();
 
 public:
     DatabaseMetaData(
