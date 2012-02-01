@@ -54,6 +54,8 @@ private:
     SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
+    Size m_aInitialSize;
+
 public:
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
     virtual             ~SvxFontPrevWindow();
@@ -94,6 +96,8 @@ public:
 
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter = false );
+
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif // #ifndef _SVX_FNTCTRL_HXX
