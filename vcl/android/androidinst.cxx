@@ -271,7 +271,9 @@ void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
 
 void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
 {
-    (void)pWindow;
+    if (!pWindow)
+        return;
+
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
@@ -439,6 +441,9 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
             bHandled = pFocus->CallCallback( nEvent, &aEvent );
         else
             fprintf (stderr, "no focused frame to emit event on\n");
+
+        // FIXME: queueing full re-draw on key events ...
+        mbQueueReDraw = true;
         break;
     }
     case AINPUT_EVENT_TYPE_MOTION:
@@ -529,9 +534,8 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
-    fprintf (stderr, "DoReleaseYield #2 %d thread: %d ms\n",
+    fprintf (stderr, "DoReleaseYield #3 %d thread: %d ms\n",
              nTimeoutMS, (int)pthread_self());
-#ifndef PLASMA
 
     struct android_poll_source *pSource = NULL;
     int outFd = 0, outEvents = 0;
@@ -540,34 +544,21 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         nTimeoutMS = 0;
 
     int nRet;
-    while ((nRet = ALooper_pollAll (nTimeoutMS, &outFd, &outEvents, (void**)&pSource)) >= 0)
-    {
-        fprintf (stderr, "ret #5 %d %d %d %p\n", nRet, outFd, outEvents, pSource);
-        // acquire yield mutex again
-        AcquireYieldMutex(nAcquireCount);
+    nRet = ALooper_pollAll (nTimeoutMS, &outFd, &outEvents, (void**)&pSource);
+    fprintf (stderr, "ret #6 %d %d %d %p\n", nRet, outFd, outEvents, pSource);
 
+    // acquire yield mutex again
+    AcquireYieldMutex(nAcquireCount);
+
+    if (nRet >= 0)
+    {
         // Process this event.
         if (pSource != NULL)
             pSource->process(mpApp, pSource);
-
-        nAcquireCount = ReleaseYieldMutex();
     }
 
-    // acquire yield mutex again
-    AcquireYieldMutex(nAcquireCount);
-
-    if (mbQueueReDraw)
+    if (mbQueueReDraw && mpApp->window)
         AndroidSalInstance::getInstance()->RedrawWindows (mpApp->window);
-
-#else
-    static int nPlasma = 0;
-    char buffer[128];
-    sprintf (buffer, "yield %d", nPlasma++);
-    plasma_now(buffer);
-
-    // acquire yield mutex again
-    AcquireYieldMutex(nAcquireCount);
-#endif
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
