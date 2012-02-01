@@ -80,7 +80,7 @@ public:
     TYPEINFO();
 
     View (
-        SdDrawDocument* pDrawDoc,
+        SdDrawDocument& rDrawDoc,
         OutputDevice* pOutDev,
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
@@ -126,7 +126,7 @@ public:
     void                    UpdateSelectionClipboard( sal_Bool bForceDeselect );
 
     inline DrawDocShell* GetDocSh (void) const;
-    inline SdDrawDocument* GetDoc (void) const;
+    inline SdDrawDocument& GetDoc (void) const;
     inline ViewShell* GetViewShell (void) const;
 
     virtual sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
@@ -214,7 +214,7 @@ protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
 
-    SdDrawDocument*         mpDoc;
+    SdDrawDocument&         mrDoc;
     DrawDocShell*           mpDocSh;
     ViewShell*              mpViewSh;
     SdrMarkList*            mpDragSrcMarkList;
@@ -247,9 +247,9 @@ DrawDocShell* View::GetDocSh (void) const
 {
     return mpDocSh;
 }
-SdDrawDocument* View::GetDoc (void) const
+SdDrawDocument& View::GetDoc (void) const
 {
-    return mpDoc;
+    return mrDoc;
 }
 
 ViewShell* View::GetViewShell (void) const

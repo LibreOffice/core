@@ -125,17 +125,13 @@ TextObjectBar::TextObjectBar (
         }
         else
         {
-            SdDrawDocument* pDoc = mpView->GetDoc();
-            if( pDoc )
+            DrawDocShell* pDocShell = mpView->GetDoc().GetDocSh();
+            if( pDocShell )
             {
-                DrawDocShell* pDocShell = pDoc->GetDocSh();
-                if( pDocShell )
-                {
-                    SetUndoManager(pDocShell->GetUndoManager());
-                    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pSdViewSh );
-                    if ( pDrawViewShell )
-                        SetRepeatTarget(pSdView);
-                }
+                SetUndoManager(pDocShell->GetUndoManager());
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pSdViewSh );
+                if ( pDrawViewShell )
+                    SetRepeatTarget(pSdView);
             }
         }
     }
@@ -166,7 +162,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
-    SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
+    SfxItemSet          aAttrSet( mpView->GetDoc().GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
     sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
@@ -514,8 +510,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 // The case for the superordinate object is missing.
                 case FRMDIR_ENVIRONMENT:
                 {
-                    SdDrawDocument* pDoc = mpView->GetDoc();
-                    ::com::sun::star::text::WritingMode eMode = pDoc->GetDefaultWritingMode();
+                    SdDrawDocument& rDoc = mpView->GetDoc();
+                    ::com::sun::star::text::WritingMode eMode = rDoc.GetDefaultWritingMode();
                     sal_Bool bIsLeftToRight(sal_False);
 
                     if(::com::sun::star::text::WritingMode_LR_TB == eMode

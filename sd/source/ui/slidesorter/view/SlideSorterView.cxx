@@ -147,7 +147,7 @@ TYPEINIT1(SlideSorterView, ::sd::View);
 
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-          rSlideSorter.GetModel().GetDocument(),
+          *rSlideSorter.GetModel().GetDocument(),
           rSlideSorter.GetContentWindow().get(),
           rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),

@@ -252,8 +252,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             pP->InsertObject(pNewGrafObj);
             if( bUndo )
             {
-                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
-                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
+                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
             }
             pP->RemoveObject(pPickObj->GetOrdNum());
 
@@ -295,7 +295,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     else
     {
         uno::Reference<frame::XModel> const xModel(
-                GetDoc()->GetObjectShell()->GetModel());
+                GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return 0; }
     }
@@ -444,12 +444,12 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                         aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
                     {
                         ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                        SfxRequest      aReq(SID_INSERTFILE, 0, mpDoc->GetItemPool());
+                        SfxRequest      aReq(SID_INSERTFILE, 0, mrDoc.GetItemPool());
                         SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
-                        FuInsertFile::Create( mpViewSh, pWin, this, mpDoc, aReq );
+                        FuInsertFile::Create( mpViewSh, pWin, this, &mrDoc, aReq );
                         bOK = sal_True;
                     }
                 }

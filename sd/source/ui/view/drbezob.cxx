@@ -122,7 +122,7 @@ BezierObjectBar::~BezierObjectBar()
 
 void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
-    SfxItemSet aAttrSet( mpView->GetDoc()->GetPool() );
+    SfxItemSet aAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, sal_False); // <- sal_False, damit DontCare-Status uebernommen wird
 

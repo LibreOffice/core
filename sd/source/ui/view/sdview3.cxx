@@ -298,7 +298,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
-        pPage = (SdPage*) mpDoc->GetPage( nPage );
+        pPage = (SdPage*) mrDoc.GetPage( nPage );
 
     SdTransferable* pOwnData = NULL;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
@@ -372,7 +372,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( nLayer != SDRLAYER_NOTFOUND )
                 {
                     // drop on layer tab bar
-                    SdrLayerAdmin&  rLayerAdmin = mpDoc->GetLayerAdmin();
+                    SdrLayerAdmin&  rLayerAdmin = mrDoc.GetLayerAdmin();
                     SdrLayer*       pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                     SdrPageView*    pPV = GetSdrPageView();
                     String          aLayer( pLayer->GetName() );
@@ -715,8 +715,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pWorkPage->InsertObject( pNewObj );
                             if( bUndo )
                             {
-                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
-                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj2 ) );
+                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj2 ) );
                             }
                             pWorkPage->RemoveObject( pPickObj2->GetOrdNum() );
 
@@ -733,14 +733,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         }
                         else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
                         {
-                            SfxItemSet aSet( mpDoc->GetPool() );
+                            SfxItemSet aSet( mrDoc.GetPool() );
 
                             // set new attributes to object
                             const bool bUndo = IsUndoEnabled();
                             if( bUndo )
                             {
                                 BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             }
                             aSet.Put( pObj->GetMergedItemSet() );
 
@@ -755,14 +755,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
                             {
                                 // Zusaetzlich 3D Attribute handeln
-                                SfxItemSet aNewSet( mpDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
-                                SfxItemSet aOldSet( mpDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+                                SfxItemSet aNewSet( mrDoc.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+                                SfxItemSet aOldSet( mrDoc.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
 
                                 aOldSet.Put(pPickObj->GetMergedItemSet());
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo( new E3dAttributesUndoAction( *mpDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, sal_False ) );
+                                    AddUndo( new E3dAttributesUndoAction( mrDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, sal_False ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
@@ -831,10 +831,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
               aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ) )
         {
-            if( mpDoc->GetDocSh() && ( mpDoc->GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
+            if( mrDoc.GetDocSh() && ( mrDoc.GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
                 uno::Reference < embed::XStorage > xStore( ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm ) );
-                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, sal_True, mpDoc->GetDocumentType() ) );
+                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, sal_True, mrDoc.GetDocumentType() ) );
 
                 // mba: BaseURL doesn't make sense for clipboard functionality
                 SfxMedium *pMedium = new SfxMedium( xStore, String() );
@@ -945,7 +945,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                     }
 
-                    Size aMaxSize( mpDoc->GetMaxObjSize() );
+                    Size aMaxSize( mrDoc.GetMaxObjSize() );
 
                     maDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
                     maDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
@@ -1115,7 +1115,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                     }
 
-                    Size aMaxSize( mpDoc->GetMaxObjSize() );
+                    Size aMaxSize( mrDoc.GetMaxObjSize() );
 
                     maDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
                     maDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
@@ -1250,7 +1250,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) )
         {
-            XFillExchangeData aFillData( XFillAttrSetItem( &mpDoc->GetPool() ) );
+            XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
             *xStm >> aFillData;
 
@@ -1270,7 +1270,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 const XFillColorItem&   rColItem = (XFillColorItem&) rSet.Get( XATTR_FILLCOLOR );
                 Color                   aColor( rColItem.GetColorValue() );
                 String                  aName( rColItem.GetName() );
-                SfxItemSet              aSet( mpDoc->GetPool() );
+                SfxItemSet              aSet( mrDoc.GetPool() );
                 sal_Bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
                 sal_uInt16 nHitLog = (sal_uInt16) pWin->PixelToLogic(

@@ -282,7 +282,7 @@ void SdTransferable::CreateData()
 
         mpVDev = new VirtualDevice( *Application::GetDefaultDevice() );
         mpVDev->SetMapMode( MapMode( mpSdDrawDocumentIntern->GetScaleUnit(), Point(), mpSdDrawDocumentIntern->GetScaleFraction(), mpSdDrawDocumentIntern->GetScaleFraction() ) );
-        mpSdViewIntern = new ::sd::View( mpSdDrawDocumentIntern, mpVDev );
+        mpSdViewIntern = new ::sd::View( *mpSdDrawDocumentIntern, mpVDev );
         mpSdViewIntern->EndListening(*mpSdDrawDocumentIntern );
         mpSdViewIntern->hideMarkHandles();
         SdrPageView* pPageView = mpSdViewIntern->ShowSdrPage(pPage);
@@ -518,12 +518,10 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
             if( mpSdViewIntern )
             {
-                SdDrawDocument* pInternDoc = mpSdViewIntern->GetDoc();
-                if( pInternDoc )
-                    pInternDoc->CreatingDataObj(this);
+                SdDrawDocument& rInternDoc = mpSdViewIntern->GetDoc();
+                rInternDoc.CreatingDataObj(this);
                 SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( mpSdViewIntern->GetAllMarkedModel() );
-                if( pInternDoc )
-                    pInternDoc->CreatingDataObj(0);
+                rInternDoc.CreatingDataObj(0);
 
                 bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
 

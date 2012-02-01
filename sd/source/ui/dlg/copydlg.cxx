@@ -95,7 +95,7 @@ CopyDlg::CopyDlg(
       maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
       mrOutAttrs           ( rInAttrs ),
       mpColorList          ( pColList ),
-      maUIScale(pInView->GetDoc()->GetUIScale()),
+      maUIScale(pInView->GetDoc().GetUIScale()),
       mpView               ( pInView )
 {
     FreeResource();

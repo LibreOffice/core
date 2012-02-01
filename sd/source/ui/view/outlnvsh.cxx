@@ -153,7 +153,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
     GetActiveWindow()->SetMinZoom( MIN_ZOOM );
     GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
     InitWindows(aViewOrigin, aSize, aWinPos);
-    pOlView = new OutlineView(GetDocSh(), GetActiveWindow(), this);
+    pOlView = new OutlineView(*GetDocSh(), GetActiveWindow(), *this);
     mpView = pOlView;            // Pointer of base class ViewShell
 
     SetPool( &GetDoc()->GetPool() );
