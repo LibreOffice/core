@@ -2171,8 +2171,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 BasicErrorException aBasicErrExp(message, Reference<XInterface>(), nErrorCode, message);
                 throw InvocationTargetException(message, Reference<XInterface>(), makeAny(aBasicErrExp));
                 // End add
-
-                break;
             }
         case DISP_E_MEMBERNOTFOUND:
             message = OUSTR("[automation bridge]: A function with the name \"")

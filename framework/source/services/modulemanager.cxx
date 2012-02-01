@@ -378,7 +378,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         { xCfg.clear(); }
 

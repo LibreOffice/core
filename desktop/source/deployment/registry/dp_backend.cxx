@@ -309,7 +309,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
         //In case the folder containing all the data folder does not
         //exist yet, we ignore the exception
         if (e.Code != ucb::IOErrorCode_NOT_EXISTING)
-            throw e;
+            throw;
     }
 
 }

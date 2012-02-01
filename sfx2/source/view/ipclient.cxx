@@ -281,7 +281,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             }
             catch ( const uno::RuntimeException& e )
             {
-                throw e;
+                throw;
             }
             catch ( uno::Exception& )
             {
@@ -311,7 +311,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     }
     catch ( const uno::RuntimeException& e )
     {
-        throw e;
+        throw;
     }
     catch ( uno::Exception& )
     {

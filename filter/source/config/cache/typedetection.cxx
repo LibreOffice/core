@@ -966,7 +966,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
             xSeek->seek(0);
         }
         catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+            { throw; }
         catch(const css::uno::Exception&)
             {}
     }

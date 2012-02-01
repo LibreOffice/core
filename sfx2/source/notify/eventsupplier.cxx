@@ -811,7 +811,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventO
             xJobExecutor->notifyEvent(aEvent);
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }
@@ -833,7 +833,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::docume
         Execute(aAny, aEvent, 0);
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }

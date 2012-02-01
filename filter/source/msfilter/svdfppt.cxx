@@ -7319,7 +7319,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     }
 }
 
-void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 > vPositions, sal_Int32 nColumns )
+void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
 {
     try
     {
