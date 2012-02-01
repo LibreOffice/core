@@ -236,7 +236,7 @@ const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
 
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
 {
-    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); it++ )
+    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); ++it )
         (*this)[it->first] = it->second;
 }
 
