@@ -91,9 +91,7 @@ class SvxCharNamePage : public SvxCharBasePage
 
 private:
     VBox m_aBox;
-    Grid *m_pWestGrid;
-    Grid *m_pEastGrid;
-    Grid *m_pCTLGrid;
+    Grid *m_pGrid;
 
     FixedLine*          m_pWestLine;
     FixedText*          m_pWestFontNameFT;

@@ -327,8 +327,6 @@ Grid::array_type Grid::assembleGrid() const
     rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
     rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
 
-    int i = 0;
-
     for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -376,6 +374,9 @@ void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector
     rWidths.resize(nMaxX);
     rHeights.resize(nMaxY);
 
+    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
+    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
+
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -384,8 +385,14 @@ void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector
             if (!pChild)
                 continue;
             Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
-            rWidths[x] = std::max(rWidths[x], aChildSize.Width());
-            rHeights[y] = std::max(rHeights[y], aChildSize.Height());
+
+            sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+            for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                rWidths[x+nSpanX] = std::max(rWidths[x+nSpanX], aChildSize.Width()/nWidth);
+
+            sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                rHeights[y+nSpanY] = std::max(rHeights[y+nSpanY], aChildSize.Height()/nHeight);
         }
     }
 }
@@ -397,7 +404,6 @@ Size Grid::GetOptimalSize(WindowSizeType eType) const
     return calculateRequisition();
 }
 
-//To-Do, col/row spanning ignored for now
 Size Grid::calculateRequisition() const
 {
     array_type A = assembleGrid();
@@ -483,6 +489,9 @@ void Grid::setAllocation(const Size& rAllocation)
             aHeights[y] += nExtraHeight;
     }
 
+    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
+    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
+
     Point aPosition(0, 0);
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
@@ -490,7 +499,11 @@ void Grid::setAllocation(const Size& rAllocation)
         {
             Window *pChild = A[x][y];
             if (pChild)
-                pChild->SetPosSizePixel(aPosition, Size(aWidths[x], aHeights[y]));
+            {
+                sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+                sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+                pChild->SetPosSizePixel(aPosition, Size(aWidths[x]*nWidth, aHeights[y]*nHeight));
+            }
             aPosition.Y() += aHeights[y] + get_row_spacing();
         }
         aPosition.X() += aWidths[x] + get_column_spacing();

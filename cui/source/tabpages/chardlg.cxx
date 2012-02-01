@@ -294,6 +294,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
     rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
     rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
 
     m_aBox.setChildProperty(sFill, true);
     m_aBox.setChildProperty(sExpand, true);
@@ -304,33 +305,35 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
 
-    m_pWestLine = new FixedLine(&m_aBox, CUI_RES(FL_WEST));
-    m_pWestLine->setChildProperty(sFill, true);
+    m_pGrid = new Grid(&m_aBox);
+    m_pGrid->setChildProperty(sFill, true);
+    m_pGrid->setChildProperty(sExpand, true);
 
-    m_pWestGrid = new Grid(&m_aBox);
-    m_pWestGrid->setChildProperty(sFill, true);
-    m_pWestGrid->setChildProperty(sExpand, true);
+    m_pWestLine = new FixedLine(m_pGrid, CUI_RES(FL_WEST));
+    m_pWestLine->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pWestLine->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pWestLine->setChildProperty<sal_Int32>(sWidth, 4);
 
-    m_pWestFontNameFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
+    m_pWestFontNameFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
     m_pWestFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pWestFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pWestFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 1);
 
-    m_pWestFontNameLB = new FontNameBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
+    m_pWestFontNameLB = new FontNameBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
     m_pWestFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pWestFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
-    m_pWestFontStyleFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
     m_pWestFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pWestFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pWestFontStyleLB = new FontStyleBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
     m_pWestFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pWestFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pWestFontSizeFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
+    m_pWestFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 2);
+    m_pWestFontSizeFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
     m_pWestFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pWestFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pWestFontSizeLB = new FontSizeBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
     m_pWestFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pWestFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
     if( !bCJK )
     {
@@ -339,74 +342,72 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
         m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
     }
 
-    m_pWestFontLanguageFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
     m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pWestFontLanguageLB = new SvxLanguageBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
     m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
-    m_pEastLine             = new FixedLine(&m_aBox, CUI_RES( FL_EAST ) );
+    m_pEastLine = new FixedLine(m_pGrid, CUI_RES( FL_EAST ) );
+    m_pEastLine->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pEastLine->setChildProperty<sal_Int32>(sTopAttach, 3);
+    m_pEastLine->setChildProperty<sal_Int32>(sWidth, 4);
 
-    m_pEastGrid = new Grid(&m_aBox);
-    m_pEastGrid->setChildProperty(sFill, true);
-    m_pEastGrid->setChildProperty(sExpand, true);
-
-    m_pEastFontNameFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_NAME ) );
+    m_pEastFontNameFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_NAME ) );
     m_pEastFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pEastFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pEastFontNameLB = new FontNameBox(m_pEastGrid, CUI_RES( LB_EAST_NAME ) );
+    m_pEastFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 4);
+    m_pEastFontNameLB = new FontNameBox(m_pGrid, CUI_RES( LB_EAST_NAME ) );
     m_pEastFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pEastFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pEastFontStyleFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_STYLE ) );
+    m_pEastFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 5);
+    m_pEastFontStyleFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_STYLE ) );
     m_pEastFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pEastFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pEastFontStyleLB = new FontStyleBox(m_pEastGrid, CUI_RES( LB_EAST_STYLE ) );
+    m_pEastFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 4);
+    m_pEastFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( LB_EAST_STYLE ) );
     m_pEastFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pEastFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pEastFontSizeFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_SIZE ) );
+    m_pEastFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 5);
+    m_pEastFontSizeFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_SIZE ) );
     m_pEastFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pEastFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pEastFontSizeLB = new FontSizeBox(m_pEastGrid, CUI_RES( LB_EAST_SIZE ) );
+    m_pEastFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 4);
+    m_pEastFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( LB_EAST_SIZE ) );
     m_pEastFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pEastFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pEastFontLanguageFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_LANG ) );
+    m_pEastFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 5);
+    m_pEastFontLanguageFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_LANG ) );
     m_pEastFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pEastFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pEastFontLanguageLB = new SvxLanguageBox(m_pEastGrid, CUI_RES( LB_EAST_LANG ) );
+    m_pEastFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 4);
+    m_pEastFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( LB_EAST_LANG ) );
     m_pEastFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pEastFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pEastFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 5);
 
-    m_pCTLLine              = new FixedLine(&m_aBox, CUI_RES( FL_CTL ) );
+    m_pCTLLine = new FixedLine(m_pGrid, CUI_RES( FL_CTL ) );
+    m_pCTLLine->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pCTLLine->setChildProperty<sal_Int32>(sTopAttach, 6);
+    m_pCTLLine->setChildProperty<sal_Int32>(sWidth, 4);
 
-    m_pCTLGrid = new Grid(&m_aBox);
-    m_pCTLGrid->setChildProperty(sFill, true);
-    m_pCTLGrid->setChildProperty(sExpand, true);
-
-    m_pCTLFontNameFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_NAME ) );
+    m_pCTLFontNameFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_NAME ) );
     m_pCTLFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pCTLFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pCTLFontNameLB = new FontNameBox(m_pCTLGrid, CUI_RES( LB_CTL_NAME ) );
+    m_pCTLFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 7);
+    m_pCTLFontNameLB = new FontNameBox(m_pGrid, CUI_RES( LB_CTL_NAME ) );
     m_pCTLFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
-    m_pCTLFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pCTLFontStyleFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_STYLE ) );
+    m_pCTLFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 8);
+    m_pCTLFontStyleFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_STYLE ) );
     m_pCTLFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pCTLFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pCTLFontStyleLB = new FontStyleBox(m_pCTLGrid, CUI_RES( LB_CTL_STYLE ) );
+    m_pCTLFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 7);
+    m_pCTLFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( LB_CTL_STYLE ) );
     m_pCTLFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
-    m_pCTLFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pCTLFontSizeFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_SIZE ) );
+    m_pCTLFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 8);
+    m_pCTLFontSizeFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_SIZE ) );
     m_pCTLFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pCTLFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pCTLFontSizeLB = new FontSizeBox(m_pCTLGrid, CUI_RES( LB_CTL_SIZE ) );
+    m_pCTLFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 7);
+    m_pCTLFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( LB_CTL_SIZE ) );
     m_pCTLFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
-    m_pCTLFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pCTLFontLanguageFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_LANG ) );
+    m_pCTLFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 8);
+    m_pCTLFontLanguageFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_LANG ) );
     m_pCTLFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pCTLFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
-    m_pCTLFontLanguageLB = new SvxLanguageBox(m_pCTLGrid, CUI_RES( LB_CTL_LANG ) );
+    m_pCTLFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 7);
+    m_pCTLFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( LB_CTL_LANG ) );
     m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 8);
 
     if( bCJK )
     {
@@ -506,8 +507,6 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pWestFontLanguageFT;
     delete m_pWestFontLanguageLB;
 
-    delete m_pWestGrid;
-
     delete m_pEastLine;
     delete m_pEastFontNameFT;
     delete m_pEastFontNameLB;
@@ -517,8 +516,6 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pEastFontSizeLB;
     delete m_pEastFontLanguageFT;
     delete m_pEastFontLanguageLB;
-
-    delete m_pEastGrid;
 
     delete m_pCTLLine;
     delete m_pCTLFontNameFT;
@@ -530,7 +527,7 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pCTLFontLanguageFT;
     delete m_pCTLFontLanguageLB;
 
-    delete m_pCTLGrid;
+    delete m_pGrid;
 
     delete m_pColorFL;
     delete m_pColorFT;
