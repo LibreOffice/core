@@ -357,6 +357,11 @@ void ScDocument::StopTemporaryChartLock()
         apTemporaryChartLock->StopLocking();
 }
 
+ScChartListenerCollection* ScDocument::GetChartListenerCollection() const
+{
+    return pChartListenerCollection;
+}
+
 void ScDocument::SetChartListenerCollection(
             ScChartListenerCollection* pNewChartListenerCollection,
             bool bSetChartRangeLists )

@@ -1559,8 +1559,7 @@ public:
     bool            GetNoListening() const { return bNoListening; }
     ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
 
-    ScChartListenerCollection* GetChartListenerCollection() const
-                        { return pChartListenerCollection; }
+    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const;
     void            SetChartListenerCollection( ScChartListenerCollection*,
                         bool bSetChartRangeLists = false );
     void            UpdateChart( const rtl::OUString& rName );
