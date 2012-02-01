@@ -326,7 +326,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
             // can avoid potential driver crashes as their jobsetups are often not compatible
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
-            ByteString aPrinterNameA= ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
             HANDLE hPrn;
             LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
@@ -392,7 +391,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
 static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
                                    sal_Bool bIn, WinSalFrame* pVisibleDlgParent )
 {
-    ByteString aPrinterNameA = ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
     HANDLE hPrn;
     LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
