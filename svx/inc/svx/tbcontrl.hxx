@@ -104,7 +104,7 @@
         Note:           Analysis of BrushItem:
                         Brush-FillColor() is misused as switch,
                         to distinguish whether a new style
-			or a new color has been set
+                        or a new color has been set
 
                         GetFillColor() == COL_BLACK -> GetStyle() ,
                         GetFillColor() == COL_WHITE -> GetColor()
@@ -319,6 +319,7 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
     //  SfxStatusForwarder          aForward;
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
     Color                               mLastColor;
+    sal_Bool                            bChoiceFromPalette;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

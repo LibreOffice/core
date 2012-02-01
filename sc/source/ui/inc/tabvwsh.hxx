@@ -108,6 +108,7 @@ private:
     static sal_uInt16           nInsertCtrlState;
     static sal_uInt16           nInsCellsCtrlState;
     static sal_uInt16           nInsObjCtrlState;
+    static Color                aBackgroundColor;
 
     SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
@@ -422,6 +423,9 @@ public:
     sal_Bool    HasAccessibilityObjects();
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
+
+    void    SetBackgroundColor( const Color& aCol ) { aBackgroundColor = aCol; }
+    Color   GetBackgroundColor()                    { return aBackgroundColor; }
 
     using ScTabView::ShowCursor;
 
