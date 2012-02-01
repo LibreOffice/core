@@ -1403,6 +1403,9 @@ static bool isSystemColumn( const OUString &columnName )
 // is not exported by the postgres header
 const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
 
+// Oh, quelle horreur
+// LEM TODO: Need to severely rewrite that!
+// should probably just "do the same" as ODBC or JDBC drivers...
 static void extractPrecisionAndScale(
     sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
 {
@@ -1506,7 +1509,6 @@ static void columnMetaData2DatabaseTypeDescription(
 {
     (void) catalog;
     // LEM TODO: review in comparison with JDBC driver
-    //           OK, confirmed it does not return consecutive values in ORDINAL_POSITION; needs to be fixed.
     Statics &statics = getStatics();
 
     // continue !
@@ -1526,7 +1528,9 @@ static void columnMetaData2DatabaseTypeDescription(
     }
 
     // ignore catalog, as a single pq connection
-    // does not support multiple catalogs eitherway
+    // does not support multiple catalogs anyway
+    // We don't use information_schema.columns because it contains
+    // only the columns the current user has any privilege over.
 
     //  1. TABLE_CAT string => table catalog (may be NULL)
     //               => not supported
@@ -1557,9 +1561,7 @@ static void columnMetaData2DatabaseTypeDescription(
     //                      NULLABLE_UNKNOWN - nullability unknown
     //               => pg_attribute.attnotnull
     //  12. REMARKS string => comment describing column (may be NULL )
-    //               => Don't know, there does not seem to exist something like
-    //                  that in postgres
-    //               LEM TODO: comments exist, find how to retrieve them easily
+    //               => pg_description.description
     //  13. COLUMN_DEF string => default value (may be NULL)
     //               => pg_type.typdefault
     //  14. SQL_DATA_TYPE long => unused
@@ -1587,11 +1589,10 @@ static void columnMetaData2DatabaseTypeDescription(
             "pg_attribute.atttypmod, "       // 5
             "pg_attribute.attnotnull, "      // 6
             "pg_type.typdefault, "           // 7
-            "pg_attribute.attnum, "          // 8
-            "pg_type.typtype, "              // 9
-            "pg_attrdef.adsrc, "             // 10
-            "pg_description.description, "    // 11
-            "pg_type.typbasetype "           // 12
+            "pg_type.typtype, "              // 8
+            "pg_attrdef.adsrc, "             // 9
+            "pg_description.description, "   // 10
+            "pg_type.typbasetype "           // 11
             "FROM pg_class, "
                  "pg_attribute LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND pg_attribute.attnum = pg_attrdef.adnum "
                               "LEFT JOIN pg_description ON pg_attribute.attrelid = pg_description.objoid AND pg_attribute.attnum=pg_description.objsubid,"
@@ -1599,6 +1600,7 @@ static void columnMetaData2DatabaseTypeDescription(
             "WHERE pg_attribute.attrelid = pg_class.oid "
                    "AND pg_attribute.atttypid = pg_type.oid "
                    "AND pg_class.relnamespace = pg_namespace.oid "
+                   "AND NOT pg_attribute.attisdropped "
                    "AND pg_namespace.nspname LIKE ? "
                    "AND pg_class.relname LIKE ? "
                    "AND pg_attribute.attname LIKE ? "
@@ -1618,31 +1620,47 @@ static void columnMetaData2DatabaseTypeDescription(
     Reference< XStatement > domainTypeStmt = m_origin->createStatement();
     columnMetaData2DatabaseTypeDescription( domainMap, rs, domainTypeStmt );
 
+    unsigned int colNum;
+    OUString sSchema( ASCII_STR("#invalid#") );
+    OUString sTable(  ASCII_STR("#invalid#") );
+
     while( rs->next() )
     {
         OUString columnName = xRow->getString(3);
         if( m_pSettings->showSystemColumns || ! isSystemColumn( columnName ) )
         {
+            OUString sNewSchema( xRow->getString(1) );
+            OUString sNewTable(  xRow->getString(2) );
+            if ( sNewSchema != sSchema || sNewTable != sTable )
+            {
+                colNum = 1;
+                sSchema = sNewSchema;
+                sTable = sNewTable;
+            }
+            else
+                ++colNum;
             sal_Int32 precision, scale, type;
             Sequence< Any > row( 18 );
             row[0] <<= m_pSettings->catalog;
-            row[1] <<= xRow->getString(1);  //
-            row[2] <<= xRow->getString(2);
+            row[1] <<= sNewSchema;
+            row[2] <<= sNewTable;
             row[3] <<= columnName;
-            if( xRow->getString(9).equalsAscii( "d" ) )
+            if( xRow->getString(8).equalsAscii( "d" ) )
             {
-                DatabaseTypeDescription desc( domainMap[xRow->getInt(12)] );
+                DatabaseTypeDescription desc( domainMap[xRow->getInt(11)] );
                 type = typeNameToDataType( desc.typeName, desc.typeType );
             }
             else
             {
-                type = typeNameToDataType( xRow->getString(4), xRow->getString(9) );
+                type = typeNameToDataType( xRow->getString(4), xRow->getString(8) );
             }
             extractPrecisionAndScale( type, xRow->getInt(5) , &precision, &scale );
             row[4] <<= type;
             row[5] <<= xRow->getString(4);
             row[6] <<= precision;
+            // row[7] BUFFER_LENGTH not used
             row[8] <<= scale;
+            // row[9] RADIX TODO
             if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getString(3)) )
             {
                 row[10] <<= OUString::valueOf(com::sun::star::sdbc::ColumnValue::NO_NULLS);
@@ -1654,12 +1672,13 @@ static void columnMetaData2DatabaseTypeDescription(
                 row[17] <<= statics.YES;
             }
 
-            row[11] <<= xRow->getString( 11 ); // comment
-            row[12] <<= xRow->getString(10); // COLUMN_DEF = pg_type.typdefault
+            row[11] <<= xRow->getString( 10 ); // comment
+            row[12] <<= xRow->getString( 9 ); // COLUMN_DEF = pg_type.typdefault
+            // row[13] SQL_DATA_TYPE    not used
+            // row[14] SQL_DATETIME_SUB not used
             row[15] <<= precision;
-            row[16] <<= xRow->getString(8) ;
+            row[16] <<= colNum ;
 
-            // no description in postgresql AFAIK
             vec.push_back( row );
         }
     }
