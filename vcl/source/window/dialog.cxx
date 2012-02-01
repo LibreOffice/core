@@ -969,12 +969,16 @@ bool Dialog::isLayoutEnabled() const
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
 {
-    if (eType == WINDOWSIZE_MAXIMUM)
+    if (!isLayoutEnabled())
         return SystemWindow::GetOptimalSize(eType);
-    Size aSize;
-    if (isLayoutEnabled())
-        aSize = GetChild(0)->GetOptimalSize(eType);
-    return Window::CalcWindowSize(aSize);
+
+    Size aMax(785, 630); //holy product management, TODO
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return aMax;
+
+    Size aSize = GetChild(0)->GetOptimalSize(eType);
+    aSize = Window::CalcWindowSize(aSize);
+    return Size(std::min(aMax.Width(), aSize.Width()), std::min(aMax.Height(), aSize.Height()));
 }
 
 void Dialog::Resize()
