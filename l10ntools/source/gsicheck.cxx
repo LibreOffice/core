@@ -178,44 +178,10 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
             NotOK();
         }
     }
-    else    // allow tabs in gsi files
+    else
     {
-        aFormat = FORMAT_GSI;
-        ByteString sTmp( rLine );
-        sal_uInt16 nPos = sTmp.Search( "($$)" );
-        sal_uInt16 nStart = 0;
-        if ( nPos != STRING_NOTFOUND )
-        {
-            aUniqId = sTmp.Copy( nStart, nPos - nStart );
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = sTmp.Search( "($$)", nStart );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            aLineType = sTmp.Copy( nStart, nPos - nStart );
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = sTmp.Search( "($$)", nStart );
-            aUniqId.Append( "/" );
-            aUniqId.Append( aLineType );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            aLangId = sTmp.Copy( nStart, nPos - nStart );
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = sTmp.Search( "($$)", nStart );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            nStart = nPos + 4;  // + length of the delemiter
-        }
-        if ( nPos != STRING_NOTFOUND )
-            aText = sTmp.Copy( nStart );
-        else
-            aFormat = FORMAT_UNKNOWN;
-    }
-
-    if ( FORMAT_UNKNOWN == GetLineFormat() )
         NotOK();
+    }
 }
 
 /*****************************************************************************/
@@ -251,38 +217,6 @@ void GSILine::ReassembleLine()
             aReassemble.Append( GetToken( i, '\t' ) );
         }
         *(ByteString*)this = aReassemble;
-    }
-    else if ( GetLineFormat() == FORMAT_GSI )
-    {
-        sal_uInt16 nPos = Search( "($$)" );
-        sal_uInt16 nStart = 0;
-        if ( nPos != STRING_NOTFOUND )
-        {
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = Search( "($$)", nStart );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = Search( "($$)", nStart );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            nStart = nPos + 4;  // + length of the delemiter
-            nPos = Search( "($$)", nStart );
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            nStart = nPos + 4;  // + length of the delemiter
-        }
-        if ( nPos != STRING_NOTFOUND )
-        {
-            aReassemble = Copy( 0, nStart );
-            aReassemble += aText;
-            *(ByteString*)this = aReassemble;
-        }
-        else
-            PrintError( "Cannot reassemble GSI line (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );
     }
     else
         PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );

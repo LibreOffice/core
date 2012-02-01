@@ -35,7 +35,7 @@
 //
 // class GSILine
 //
-enum LineFormat { FORMAT_GSI, FORMAT_SDF, FORMAT_UNKNOWN };
+enum LineFormat { FORMAT_SDF, FORMAT_UNKNOWN };
 
 class GSILine : public ByteString
 {
