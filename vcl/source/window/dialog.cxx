@@ -987,20 +987,18 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
-    if (isLayoutEnabled())
-    {
-        Size aSize = GetSizePixel();
-        aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;
-        aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder;
-        Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
-        GetChild(0)->SetPosSizePixel(aPos, aSize);
-    }
+    assert(isLayoutEnabled());
+    Size aSize = GetSizePixel();
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder;
+    Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
+    GetChild(0)->SetPosSizePixel(aPos, aSize);
     return 0;
 }
 
 void Dialog::Resize()
 {
-    if (hasPendingLayout())
+    if (hasPendingLayout() || !isLayoutEnabled())
         return;
     maLayoutTimer.Start();
 }
