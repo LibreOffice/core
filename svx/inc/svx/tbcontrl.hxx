@@ -30,130 +30,133 @@
 
 /*--------------------------------------------------------------*\
 
-    Beschreibung:
+    Description:
     -------------
-    ToolBox-Controler fuer:
-        Font-Name, Font-Hoehe, Font-Farbe
-        Vorder-/Hintergrundfarbe /-Muster
-        Rahmen, Linien
-        (Absatz-)Vorlagen
+    ToolBox-Controller for:
+        Font-Name, Font-Height, Font-Color
+        Fore-/Background color /-patterns
+        Frames, Lines
+        (indentation-)templates
 
-    Bedienung:
+    Use:
     ----------
         SvxFontNameToolBoxControl
         -------------------------
-        Item-Typ:       SvxFontItem
+        Item type:      SvxFontItem
         Execute-Id:     SID_ATTR_CHAR_FONT
                         -> SvxFontItem
-        Zusatzdaten
-        aus DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
+        Additional information
+        from DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
         SvxFontHeightToolBoxControl
         ---------------------------
-        Item-Typ:       SvxFontHeightItem
+        Item type:      SvxFontHeightItem
         Execute-Id:     SID_ATTR_CHAR_FONTHEIGHT
                         -> SvxFontHeightItem
-        Zusatzdaten
-        aus DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
+        Additional information
+        from DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
         SvxFontColorToolBoxControl
         --------------------------
-        Item-Typ:       SvxFontColorItem
+        Item type:      SvxFontColorItem
         Execute-Id:     SID_ATTR_CHAR_COLOR
                         -> SvxFontColorItem
-        Zusatzdaten
-        aus DocShell:   z.Zt. keine
-                        in Zukunft: Farbpalette
+        Additional information
+        from DocShell:  presently none
+                        in future: color palette
 
         class SvxFontColorExtToolBoxControl
         -----------------------------------
-        fuer die Zeichenfarbe
-        Item-Typ        SvxColorItem
+        for font color
+        Item type:      SvxColorItem
                     und SfxBoolItem
-        Execute-Id      SID_ATTR_CHAR_COLOR
+        Execute-Id      SID_ATTR_CHAR_COLOR2
                     und SID_ATTR_CHAR_COLOR_EXT
 
-        fuer den Zeichenhintergrund
+        for character background color (writer)
         Item-Typ        SvxColorItem
                     und SfxBoolItem
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
                     und SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 
+        for  cell background color (calc)
+        Item-Typ        SvxColorItem
+                    und SfxBoolItem
+        Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
+
         SvxColorToolBoxControl
         --------------------------------
-        Item-Typ:       SvxBrushItem
+        Item type:      SvxBrushItem
         Execute-Id:     SID_BACKGROUND_COLOR
                         -> SvxColorItem
-        Zusatzdaten
-        aus DocShell:   z.Zt. keine
-                        in Zukunft: Farbpalette
+        Additional information
+        from DocShell:   presently none
+                        in future: color palette
 
         SvxPatternToolBoxControl
         ------------------------
-        Item-Typ:       SvxBrushItem
+        Item type:      SvxBrushItem
         Execute-Id:     SID_BACKGROUND_PATTERN
                         -> SvxBrushItem
-        Zusatzdaten
-        aus DocShell:   z.Zt. keine
-                        in Zukunft: Farbpalette
-        Bemerkung:      Auswertung des BrushItems:
-                        Die Brush-FillColor() wird als Schalter
-                        missbraucht, um zu unterscheiden, ob ein
-                        neuer Style oder eine neue Farbe
-                        gesetzt wurde:
+        Additional information
+        from DocShell:   presently none
+                        in future: color palette
+        Note:           Analysis of BrushItem:
+                        Brush-FillColor() is misused as switch,
+                        to distinguish whether a new style
+			or a new color has been set
 
-                        GetFillColor() == COL_BLACK -> GetStyle() auswerten,
-                        GetFillColor() == COL_WHITE -> GetColor() auswerten
+                        GetFillColor() == COL_BLACK -> GetStyle() ,
+                        GetFillColor() == COL_WHITE -> GetColor()
 
         SvxFrameToolBoxControl
         ----------------------
-        Item-Typ:       SvxBoxItem
+        Item type:      SvxBoxItem
         Execute-Id:     SID_ATTR_BORDER
                         -> SvxBoxItem & SvxBoxInfoItem
-        Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      liefert je nach gewaehltem ValueSet-Item
-                        nur SvxBoxItem oder zusaetzlich SvxBoxInfoItem
-                        Wird dem Controller ein SfxUInt16Item mit einem
-                        Wert != 0 geschickt, so wird der Paragraph-Mode
-                        eingeschaltet, d.h. die letzte Zeile wird
-                        ausgeblendet. Ein Wert == 0 schaltet wieder in
-                        den Tabellenmodus.
+        Additional information
+        from DocShell:  none
+        Bemerkung:      provides dependant of chosen ValueSet-Item
+                        only SvxBoxItem or additionally SvxBoxInfoItem
+                        If the Controller ein SfxUInt16Item receives a
+                        value != 0, paragraph mode will be switched on,
+                        i.e. the last line will be hidden.
+                        A value == 0 switches again to Tabel mode.
 
         SvxFrameLineStyleToolBoxControl
         -------------------------------
-        Item-Typ:       SvxLineItem
+        Item type:      SvxLineItem
         Execute-Id:     SID_FRAME_LINESTYLE
                         -> SvxLineItem
-        Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      liefert ein SvxLineItem, welches eine SvxBorderLine
-                        ohne Farbinformation liefert.
+        Additional information
+        from DocShell:  none
+        Bemerkung:      provides a SvxLineItem, which provides a SvxBorderLine
+                        without color information.
 
         SvxFrameLineColorToolBoxControl
         -------------------------------
-        Item-Typ:       SvxColorItem
+        Item type:      SvxColorItem
         Execute-Id:     SID_FRAME_LINECOLOR
                         -> SvxColorItem
-        Zusatzdaten
-        aus DocShell:   keine
+        Additional information
+        from DocShell:   none
 
         SvxStyleToolBoxControl
         ----------------------
-        Item-Typ:       SfxTemplateItem
+        Item type:      SfxTemplateItem
         Execute-Id:     SID_TEMPLATE_APPLY
                         -> StyleName (SfxStringItem)
                         -> eStyleFamily (SfxUInt16Item)
-        Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      Umschalten der Familie ueber Invalidate
-                        an den Bindings (->SfxStyleControllerItem)
+        Additional information
+        from DocShell:  none
+        Bemerkung:      Switch family by Invalidate
+                        at the Bindings (->SfxStyleControllerItem)
 
 \*--------------------------------------------------------------*/
 
 // include ---------------------------------------------------------------
 
-// ITEMID_...-Defines im *.cxx
+// ITEMID_...-Defines i *.cxx
 
 #include <rsc/rscsfx.hxx>
 #include <svl/lstner.hxx>
@@ -163,7 +166,7 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-// wichtig im mit HeDaBu erzeugtem tbxctrls.hxx!!!
+// important im tbxctrls.hxx created HeDaBu !!!
 class SvxLineItem;
 class SvxBoxInfoItem;
 class SvxFontItem;
@@ -214,9 +217,9 @@ private:
     SfxStyleControllerItem_Impl*        pBoundItems [MAX_FAMILIES];
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xBoundItems[MAX_FAMILIES];
     SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
-    sal_uInt16                              nActFamily; // Id in der ToolBox = Position - 1
+    sal_uInt16                              nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16                              nActFilter; // FilterIdx
-    sal_uInt16                              nAppFilter; // Filter, den die App gesetzt hat
+    sal_uInt16                              nAppFilter; // Filter, that the App has set
     String                              aCurSel;
     sal_Bool                                bListening;
     Impl*                               pImpl;
