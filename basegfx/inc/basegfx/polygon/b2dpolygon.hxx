@@ -187,26 +187,6 @@ namespace basegfx
         */
         B2DRange getB2DRange() const;
 
-        /** insert other 2D polygons
-
-            The default (with nIndex2 == 0 && nCount == 0) inserts the whole
-            rPoly at position nIndex
-
-            @param nIndex
-            Target index for points to be inserted
-
-            @param rPoly
-            The source for new points
-
-            @param nIndex2
-            The index to the first source point into rPoly
-
-            @param nCount
-            How many points to add from rPoly to this polygon. Null
-            means to copy all (starting from nIndex2)
-        */
-        void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
-
         /** append other 2D polygons
 
             The default (nIndex ==0 && nCount == 0) will append

@@ -33,23 +33,6 @@
 
 namespace basegfx
 {
-    B3DRange::B3DRange(const B3IRange& rRange) :
-        maRangeX(),
-        maRangeY(),
-        maRangeZ()
-    {
-        if( !rRange.isEmpty() )
-        {
-            maRangeX = rRange.getMinX();
-            maRangeY = rRange.getMinY();
-            maRangeZ = rRange.getMinZ();
-
-            maRangeX.expand( rRange.getMaxX() );
-            maRangeY.expand( rRange.getMaxY() );
-            maRangeZ.expand( rRange.getMaxZ() );
-        }
-    }
-
     void B3DRange::transform(const B3DHomMatrix& rMatrix)
     {
         if(!isEmpty() && !rMatrix.isIdentity())
@@ -65,18 +48,6 @@ namespace basegfx
             expand(rMatrix * B3DPoint(aSource.getMinX(), aSource.getMaxY(), aSource.getMaxZ()));
             expand(rMatrix * B3DPoint(aSource.getMaxX(), aSource.getMaxY(), aSource.getMaxZ()));
         }
-    }
-
-    B3IRange fround(const B3DRange& rRange )
-    {
-        return rRange.isEmpty() ?
-            B3IRange() :
-            B3IRange(fround(rRange.getMinX()),
-                     fround(rRange.getMinY()),
-                     fround(rRange.getMinZ()),
-                     fround(rRange.getMaxX()),
-                     fround(rRange.getMaxY()),
-                     fround(rRange.getMaxZ()));
     }
 
 } // end of namespace basegfx

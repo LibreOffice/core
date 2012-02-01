@@ -226,9 +226,6 @@ namespace basegfx
         };
     } // end of namespace tools
 
-    /// Returns a string with svg's "matrix(m00,m10,m01,m11,m02,m12)" representation
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix );
-
 } // end of namespace basegfx
 
 ///////////////////////////////////////////////////////////////////////////////

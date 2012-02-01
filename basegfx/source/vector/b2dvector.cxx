@@ -135,14 +135,6 @@ namespace basegfx
         return *this;
     }
 
-    bool B2DVector::isNormalized() const
-    {
-        const double fOne(1.0);
-        const double fScalar(scalar(*this));
-
-        return fTools::equal(fOne, fScalar);
-    }
-
     bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
     {
         const double fValA(rVecA.getX() * rVecB.getY());

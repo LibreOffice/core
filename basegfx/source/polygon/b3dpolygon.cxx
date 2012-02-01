@@ -1557,11 +1557,6 @@ namespace basegfx
         return *this;
     }
 
-    void B3DPolygon::makeUnique()
-    {
-        mpPolygon.make_unique();
-    }
-
     bool B3DPolygon::operator==(const B3DPolygon& rPolygon) const
     {
         if(mpPolygon.same_object(rPolygon.mpPolygon))

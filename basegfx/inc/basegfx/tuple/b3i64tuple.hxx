@@ -206,12 +206,6 @@ namespace basegfx
             return B3I64Tuple(-mnX, -mnY, -mnZ);
         }
 
-        bool equalZero() const
-        {
-            return (this == &getEmptyTuple() ||
-                (mnX == 0 && mnY == 0 && mnZ == 0));
-        }
-
         bool operator==( const B3I64Tuple& rTup ) const
         {
             return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY && rTup.mnZ == mnZ);
@@ -229,8 +223,6 @@ namespace basegfx
             mnZ = rTup.mnZ;
             return *this;
         }
-
-        static const B3I64Tuple& getEmptyTuple();
     };
 
     // external operators

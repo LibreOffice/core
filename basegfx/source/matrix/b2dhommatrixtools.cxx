@@ -34,32 +34,6 @@
 
 namespace basegfx
 {
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix )
-    {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.appendAscii("matrix(");
-
-        aStrBuf.append(rMatrix.get(0,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,2));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,2));
-        aStrBuf.appendAscii(")");
-
-        return aStrBuf.makeStringAndClear();
-    }
-
     namespace tools
     {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)

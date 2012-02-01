@@ -101,9 +101,6 @@ namespace basegfx
         // reset to empty state
         void clear();
 
-        // closed state
-        bool isClosed() const;
-
         // flip polygon direction
         void flip();
 

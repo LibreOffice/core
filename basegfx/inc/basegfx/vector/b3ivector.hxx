@@ -220,11 +220,6 @@ namespace basegfx
             matrix are disregarded.
         */
         B3IVector& operator*=( const B3DHomMatrix& rMat );
-
-        static const B3IVector& getEmptyVector()
-        {
-            return (const B3IVector&) ::basegfx::B3ITuple::getEmptyTuple();
-        }
     };
 
     // external operators

@@ -60,13 +60,6 @@ namespace basegfx
         }
     }
 
-    B2IRange fround(const B2DRange& rRange)
-    {
-        return rRange.isEmpty() ?
-            B2IRange() :
-            B2IRange(fround(rRange.getMinimum()),
-                     fround(rRange.getMaximum()));
-    }
 } // end of namespace basegfx
 
 // eof

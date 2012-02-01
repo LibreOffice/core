@@ -69,9 +69,6 @@ namespace basegfx
         // assignment operator
         B3DPolygon& operator=(const B3DPolygon& rPolygon);
 
-        /// unshare this polygon with all internally shared instances
-        void makeUnique();
-
         // compare operators
         bool operator==(const B3DPolygon& rPolygon) const;
         bool operator!=(const B3DPolygon& rPolygon) const;

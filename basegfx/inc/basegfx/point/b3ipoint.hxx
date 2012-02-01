@@ -130,11 +130,6 @@ namespace basegfx
             contrast to B3DVector, applied.
         */
         B3IPoint& operator*=( const ::basegfx::B3DHomMatrix& rMat );
-
-        static const B3IPoint& getEmptyPoint()
-        {
-            return (const B3IPoint&) ::basegfx::B3ITuple::getEmptyTuple();
-        }
     };
 } // end of namespace basegfx
 

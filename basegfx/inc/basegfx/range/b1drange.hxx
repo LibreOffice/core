@@ -71,8 +71,6 @@ namespace basegfx
             expand(fStartValue2);
         }
 
-        BASEGFX_DLLPUBLIC explicit B1DRange( const B1IRange& rRange );
-
         /** Check if the interval set is empty
 
             @return false, if no value is in this set - having a
@@ -176,12 +174,6 @@ namespace basegfx
             maRange.grow(fValue);
         }
     };
-
-    /** Round double to nearest integer for 1D range
-
-        @return the nearest integer for this range
-    */
-    BASEGFX_DLLPUBLIC B1IRange fround(const B1DRange& rRange);
 
 } // end of namespace basegfx
 

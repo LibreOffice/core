@@ -165,20 +165,10 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromIntegerSize2D( const ::com::sun::star::geometry::IntegerSize2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::awt::Size       awtSizeFromB2ISize( const ::basegfx::B2IVector& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::awt::Point          awtPointFromB2IPoint( const ::basegfx::B2IPoint& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::awt::Rectangle  awtRectangleFromB2IRectangle( const ::basegfx::B2IRange& );
-
-        BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromAwtSize( const ::com::sun::star::awt::Size& );
-        BASEGFX_DLLPUBLIC ::basegfx::B2IPoint       b2IPointFromAwtPoint( const ::com::sun::star::awt::Point& );
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromAwtRectangle( const ::com::sun::star::awt::Rectangle& );
 
         // Geometry comparisons
         // ===================================================================
-
-        BASEGFX_DLLPUBLIC bool awtSizeAreEqual( const ::com::sun::star::awt::Size& rA, const ::com::sun::star::awt::Size& rB );
-        BASEGFX_DLLPUBLIC bool awtPointAreEqual( const ::com::sun::star::awt::Point& rA, const ::com::sun::star::awt::Point& rB );
-        BASEGFX_DLLPUBLIC bool awtRectangleAreEqual( const ::com::sun::star::awt::Rectangle& rA, const ::com::sun::star::awt::Rectangle& rB );
 
         /** Return smalltest integer range, which completely contains
             given floating point range.

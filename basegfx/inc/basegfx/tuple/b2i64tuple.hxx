@@ -198,8 +198,6 @@ namespace basegfx
             mnY = rTup.mnY;
             return *this;
         }
-
-        static const B2I64Tuple& getEmptyTuple();
     };
 
     // external operators
