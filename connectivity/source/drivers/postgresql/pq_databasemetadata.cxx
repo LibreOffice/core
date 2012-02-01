@@ -1605,7 +1605,7 @@ static void columnMetaData2DatabaseTypeDescription(
                    "AND pg_namespace.nspname LIKE ? "
                    "AND pg_class.relname LIKE ? "
                    "AND pg_attribute.attname LIKE ? "
-            "ORDER BY pg_namespace.nspname || pg_class.relname || pg_attribute.attnum"
+            "ORDER BY pg_namespace.nspname, pg_class.relname, pg_attribute.attnum"
             ) );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
