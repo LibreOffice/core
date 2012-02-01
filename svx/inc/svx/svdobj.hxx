@@ -478,7 +478,7 @@ protected:
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // Fuer GetDragComment
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rStr, sal_uInt16 nVal=0) const;
 
     void ImpForcePlusData();
 

@@ -1096,31 +1096,23 @@ void SdrObject::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal) const
+void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rStr, sal_uInt16 nVal) const
 {
     rStr = ImpGetResStr(nStrCacheID);
-
-    sal_Char aSearchText1[] = "%1";
-    sal_Char aSearchText2[] = "%2";
-    xub_StrLen nPos = rStr.SearchAscii(aSearchText1);
-
-    if(nPos != STRING_NOTFOUND)
+    sal_Int32 nPos = rStr.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%1")));
+    if (nPos >= 0)
     {
-        rStr.Erase(nPos, 2);
-
+        // Replace '%1' with the object name.
         XubString aObjName;
-
         TakeObjNameSingul(aObjName);
-        rStr.Insert(aObjName, nPos);
+        rStr = rStr.replaceAt(nPos, 2, aObjName);
     }
 
-    nPos = rStr.SearchAscii(aSearchText2);
-
-    if(nPos != STRING_NOTFOUND)
-    {
-        rStr.Erase(nPos, 2);
-        rStr.Insert(UniString::CreateFromInt32(nVal), nPos);
-    }
+    nPos = rStr.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%2")));
+    if (nPos >= 0)
+        // Replace '%2' with the passed value.
+        rStr = rStr.replaceAt(
+            nPos, 2, rtl::OUString::valueOf(static_cast<sal_Int32>(nVal)));
 }
 
 void SdrObject::ImpForcePlusData()

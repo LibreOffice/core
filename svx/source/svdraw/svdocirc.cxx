@@ -570,8 +570,9 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
     if(bCreateComment)
     {
-        XubString aStr;
+        rtl::OUString aStr;
         ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
+        rtl::OUStringBuffer aBuf(aStr);
         const sal_uInt32 nPntAnz(rDrag.GetPointAnz());
 
         if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
@@ -579,7 +580,7 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
             sal_Int32 nWink;
 
-            aStr.AppendAscii(" (");
+            aBuf.appendAscii(" (");
 
             if(3 == nPntAnz)
             {
@@ -590,11 +591,11 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nWink = pU->nEnd;
             }
 
-            aStr += GetWinkStr(nWink,sal_False);
-            aStr += sal_Unicode(')');
+            aBuf.append(GetWinkStr(nWink,false));
+            aBuf.append(sal_Unicode(')'));
         }
 
-        return aStr;
+        return aBuf.makeStringAndClear();
     }
     else
     {
@@ -602,15 +603,16 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
         if(bWink)
         {
-            XubString aStr;
             const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
 
+            rtl::OUString aStr;
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
-            aStr.AppendAscii(" (");
-            aStr += GetWinkStr(nWink,sal_False);
-            aStr += sal_Unicode(')');
+            rtl::OUStringBuffer aBuf(aStr);
+            aBuf.appendAscii(" (");
+            aBuf.append(GetWinkStr(nWink,false));
+            aBuf.append(sal_Unicode(')'));
 
-            return aStr;
+            return aBuf.makeStringAndClear();
         }
         else
         {

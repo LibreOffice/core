@@ -448,14 +448,14 @@ String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             if(nRad < 0)
                 nRad = 0;
 
-            XubString aStr;
-
+            rtl::OUString aStr;
             ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
-            aStr.AppendAscii(" (");
-            aStr += GetMetrStr(nRad);
-            aStr += sal_Unicode(')');
+            rtl::OUStringBuffer aBuf(aStr);
+            aBuf.appendAscii(" (");
+            aBuf.append(GetMetrStr(nRad));
+            aBuf.append(sal_Unicode(')'));
 
-            return aStr;
+            return aBuf.makeStringAndClear();
         }
         else
         {
