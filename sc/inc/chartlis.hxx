@@ -187,6 +187,10 @@ public:
     const ListenersType& getListeners() const;
     ListenersType& getListeners();
 
+    /**
+     * Create a unique name that's not taken by any existing chart listener
+     * objects.  The name consists of a prefix given followed by a number.
+     */
     rtl::OUString getUniqueName(const rtl::OUString& rPrefix) const;
 
     void            ChangeListening( const String& rName,
