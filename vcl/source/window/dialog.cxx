@@ -284,6 +284,10 @@ void Dialog::ImplInitDialogData()
     mbModalMode             = sal_False;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
+
+    //To-Do, reuse maResizeTimer
+    maLayoutTimer.SetTimeout(50);
+    maLayoutTimer.SetTimeoutHdl( LINK( this, Dialog, ImplHandleLayoutTimerHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -981,7 +985,7 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
     return Size(std::min(aMax.Width(), aSize.Width()), std::min(aMax.Height(), aSize.Height()));
 }
 
-void Dialog::Resize()
+IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     if (isLayoutEnabled())
     {
@@ -991,6 +995,14 @@ void Dialog::Resize()
         Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
         GetChild(0)->SetPosSizePixel(aPos, aSize);
     }
+    return 0;
+}
+
+void Dialog::Resize()
+{
+    if (hasPendingLayout())
+        return;
+    maLayoutTimer.Start();
 }
 
 // -----------------------------------------------------------------------

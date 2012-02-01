@@ -2477,6 +2477,9 @@ void Window::ImplPostPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
+    if (IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
+        return 0;
+
     // save paint events until resizing is done
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
@@ -9577,29 +9580,27 @@ Selection Window::GetSurroundingTextSelection() const
 void Window::queueResize()
 {
     Dialog *pParent = GetParentDialog();
-    if (pParent && pParent->isLayoutEnabled())
+    if (!pParent)
+        return;
+    if (!pParent->isLayoutEnabled())
+        return;
+    if (!pParent->IsReallyShown())
     {
-        //To-Do: integrate with mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
-        if (pParent->IsReallyShown())
-        {
-            pParent->Resize();
-        }
-        else
-        {
-            //resize dialog to fit requisition
-            //To-Do: honour explicit sizes ?
-            const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
-            Size aSize = pContainer->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        //resize dialog to fit requisition
+        //To-Do: honour explicit sizes ?
+        const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
+        Size aSize = pContainer->GetOptimalSize(WINDOWSIZE_PREFERRED);
 
-            Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);
-            aSize.Width() = std::min(aMax.Width(), aSize.Width());
-            aSize.Height() = std::min(aMax.Height(), aSize.Height());
+        Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);
+        aSize.Width() = std::min(aMax.Width(), aSize.Width());
+        aSize.Height() = std::min(aMax.Height(), aSize.Height());
 
-            pParent->SetMinOutputSizePixel(aSize);
-            pParent->SetSizePixel(aSize);
-            pParent->Resize();
-        }
+        pParent->SetMinOutputSizePixel(aSize);
+        pParent->SetSizePixel(aSize);
     }
+    if (pParent->hasPendingLayout())
+        return;
+    pParent->Resize();
 }
 
 void Window::setChildAnyProperty(const rtl::OString &rString, const Any &rValue)

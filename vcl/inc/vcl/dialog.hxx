@@ -32,6 +32,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
+#include <vcl/timer.hxx>
 
 // parameter to pass to the dialogue constructor if really no parent is wanted
 // whereas NULL chooses the deafult dialogue parent
@@ -40,7 +41,6 @@
 // ----------
 // - Dialog -
 // ----------
-
 struct DialogImpl;
 
 class VCL_DLLPUBLIC Dialog : public SystemWindow
@@ -54,6 +54,7 @@ private:
     sal_Bool            mbOldSaveBack;
     sal_Bool            mbInClose;
     sal_Bool            mbModalMode;
+    Timer           maLayoutTimer;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -63,6 +64,7 @@ private:
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
 
     DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
+    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
@@ -70,6 +72,7 @@ protected:
 
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
+    SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
 
 protected:
                     Dialog( WindowType nType );
