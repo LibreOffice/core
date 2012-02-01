@@ -602,10 +602,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.9.0 (c)1999 - 2006 by SUN Microsystems\n" );
-    fprintf( stdout, "=========================================================\n" );
-    fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
+    fprintf( stdout, "gsicheck checks the syntax of tags in SDF-Files\n" );
     fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
     fprintf( stdout, "         checks tags in Online Help\n" );
     fprintf( stdout, "         relax GID/LID length to %s\n",
@@ -627,7 +624,7 @@ void Help()
     fprintf( stdout, "-t    Check only Translation language(s). Should be used before merging.\n" );
     fprintf( stdout, "-e    disable encoding checks. E.g.: double questionmark \'??\' which may be the\n" );
     fprintf( stdout, "      result of false conversions\n" );
-    fprintf( stdout, "-l    ISO Languagecode or numerical 2 digits Identifier of the source language.\n" );
+    fprintf( stdout, "-l    ISO language code of the source language.\n" );
     fprintf( stdout, "      Default is en-US. Use \"\" (empty string) or 'none'\n" );
     fprintf( stdout, "      to disable source language dependent checks\n" );
     fprintf( stdout, "-r    Reference filename to check that source language entries\n" );
