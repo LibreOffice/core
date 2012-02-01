@@ -69,8 +69,14 @@ public:
     // @@@ copy ctor, but no copy assignment? @@@
     SdCustomShow( const SdCustomShow& rShow );
 
+    /** Provides a direct access to the collection of the SdPage objects. */
     PageVec& PagesVector();
+    /**
+     * Replaces all occurences of pOldPage with pNewPage.
+     * If pNewPage is 0 then removes all occurences of pOldPage.
+     */
     void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
+    /** Removes all occurences of pPage. */
     void RemovePage( const SdPage* pPage );
 
     void   SetName(const String& rName);
