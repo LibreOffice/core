@@ -22,7 +22,8 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := gmktemp -t gbuild.XXXXXX
+# BSD mktemp -t expects a prefix, not a pattern
+gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
 
 gb_CC := cc
 gb_CXX := c++
