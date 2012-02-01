@@ -301,15 +301,14 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                      ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
                      bDisableDataTableDialog )
                 {
-                    ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
-                    ScRange aEmptyRange;
-                    ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
-                    sal_uInt16 nIndex = 0;
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
-                    if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
+                    if (pCollection)
                     {
-                        ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
-                        if ( pListener )
+                        ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
+                        ScRange aEmptyRange;
+                        ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
+                        const ScChartListener* pListener = pCollection->Find(aSearcher);
+                        if (pListener)
                         {
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
                             if ( rRangeList.Is() )
@@ -398,9 +397,8 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 {
                                     ScRange aEmptyRange;
                                     ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                                    sal_uInt16 nIndex = 0;
                                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                                    if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
+                                    if (pCollection && !pCollection->Find(aSearcher))
                                     {
                                         ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
                                         ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );

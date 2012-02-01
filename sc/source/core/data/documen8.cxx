@@ -1464,7 +1464,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
 // TimerDelays etc.
 void ScDocument::KeyInput( const KeyEvent& )
 {
-    if ( pChartListenerCollection->GetCount() )
+    if ( pChartListenerCollection->HasListeners() )
         pChartListenerCollection->StartTimer();
     if( apTemporaryChartLock.get() )
         apTemporaryChartLock->StartOrContinueLocking();

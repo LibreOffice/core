@@ -503,11 +503,11 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
     if (!pDrawLayer)
         return;
 
-    sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
-    for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+    ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->GetListeners();
+    ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
+    for (; it != itEnd; ++it)
     {
-        ScChartListener* pChartListener =
-            (ScChartListener*) (pChartListenerCollection->At(nIndex));
+        ScChartListener* pChartListener = it->second;
         ScRangeListRef aRLR( pChartListener->GetRangeList() );
         ScRangeListRef aNewRLR( new ScRangeList );
         bool bChanged = false;
@@ -556,7 +556,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 // UNO broadcasts are done after UpdateChartRef, so the chart will get this
                 // reference change.
 
-                uno::Reference< embed::XEmbeddedObject > xIPObj = FindOleObjectByName( pChartListener->GetString() );
+                uno::Reference<embed::XEmbeddedObject> xIPObj =
+                    FindOleObjectByName(pChartListener->GetName());
+
                 svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
                 // After the change, chart keeps track of its own data source ranges,
@@ -715,13 +717,10 @@ void ScDocument::UpdateChartListenerCollection()
                 continue;
 
             rtl::OUString aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
-            aCLSearcher.SetString( aObjName );
-            sal_uInt16 nIndex;
-            if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
-            {
-                ((ScChartListener*) (pChartListenerCollection->
-                    At( nIndex )))->SetUsed( true );
-            }
+            aCLSearcher.SetName(aObjName);
+            ScChartListener* pListener = pChartListenerCollection->Find(aCLSearcher);
+            if (pListener)
+                pListener->SetUsed(true);
             else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
             {
                 // non-chart OLE object -> don't touch

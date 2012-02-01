@@ -602,41 +602,40 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
     switch ( nHandle )
     {
         case PROP_HANDLE_RELATED_CELLRANGES:
+        {
+            ScDocument* pDoc = ( pDocShell ? pDocShell->GetDocument() : NULL );
+            if (!pDoc)
+                break;
+
+            ScRange aEmptyRange;
+            ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
+            if (!pCollection)
+                break;
+
+            ScChartListener aSearcher(aChartName, pDoc, aEmptyRange);
+            ScChartListener* pListener = pCollection->Find(aSearcher);
+            if (!pListener)
+                break;
+
+            const ScRangeListRef& rRangeList = pListener->GetRangeList();
+            if (!rRangeList.Is())
+                break;
+
+            size_t nCount = rRangeList->size();
+            uno::Sequence<table::CellRangeAddress> aCellRanges(nCount);
+            table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
+            for (size_t i = 0; i < nCount; ++i)
             {
-                ScDocument* pDoc = ( pDocShell ? pDocShell->GetDocument() : NULL );
-                if ( pDoc )
-                {
-                    ScRange aEmptyRange;
-                    sal_uInt16 nIndex = 0;
-                    ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                    ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                    if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
-                    {
-                        ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
-                        if ( pListener )
-                        {
-                            const ScRangeListRef& rRangeList = pListener->GetRangeList();
-                            if ( rRangeList.Is() )
-                            {
-                                size_t nCount = rRangeList->size();
-                                uno::Sequence< table::CellRangeAddress > aCellRanges( nCount );
-                                table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
-                                for ( size_t i = 0; i < nCount; ++i )
-                                {
-                                    ScRange aRange( *(*rRangeList)[i] );
-                                    table::CellRangeAddress aCellRange;
-                                    ScUnoConversion::FillApiRange( aCellRange, aRange );
-                                    pCellRanges[ i ] = aCellRange;
-                                }
-                                rValue <<= aCellRanges;
-                            }
-                        }
-                    }
-                }
+                ScRange aRange(*(*rRangeList)[i]);
+                table::CellRangeAddress aCellRange;
+                ScUnoConversion::FillApiRange(aCellRange, aRange);
+                pCellRanges[i] = aCellRange;
             }
-            break;
+            rValue <<= aCellRanges;
+        }
+        break;
         default:
-            break;
+            ;
     }
 }
 

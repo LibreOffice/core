@@ -3467,13 +3467,15 @@ void ScDocument::CalcAfterLoad()
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = true;
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CalcAfterLoad();
-    for (it = maTabs.begin(); it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->SetDirtyAfterLoad();
+    {
+        TableContainer::iterator it = maTabs.begin();
+        for (; it != maTabs.end(); ++it)
+            if (*it)
+                (*it)->CalcAfterLoad();
+        for (it = maTabs.begin(); it != maTabs.end(); ++it)
+            if (*it)
+                (*it)->SetDirtyAfterLoad();
+    }
     bCalcingAfterLoad = false;
 
     SetDetectiveDirty(false);   // noch keine wirklichen Aenderungen
@@ -3483,11 +3485,12 @@ void ScDocument::CalcAfterLoad()
     // similar to ScMyShapeResizer::CreateChartListener for loading own files (i104899).
     if (pChartListenerCollection)
     {
-        sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
-        for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+        const ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->GetListeners();
+        ScChartListenerCollection::ListenersType::const_iterator it = rListeners.begin(), itEnd = rListeners.end();
+        for (; it != itEnd; ++it)
         {
-            ScChartListener* pChartListener = static_cast<ScChartListener*>(pChartListenerCollection->At(nIndex));
-            InterpretDirtyCells(*pChartListener->GetRangeList());
+            const ScChartListener* p = it->second;
+            InterpretDirtyCells(*p->GetRangeList());
         }
     }
 }

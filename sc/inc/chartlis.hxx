@@ -43,13 +43,14 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ScDocument;
 class ScChartUnoData;
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
-class SC_DLLPUBLIC ScChartListener : public StrData, public SvtListener
+class SC_DLLPUBLIC ScChartListener : public SvtListener
 {
 public:
     class ExternalRefListener : public ScExternalRefManager::LinkListener
@@ -76,6 +77,7 @@ private:
     boost::scoped_ptr<ExternalRefListener> mpExtRefListener;
     boost::scoped_ptr<std::vector<ScTokenRef> > mpTokens;
 
+    rtl::OUString maName;
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
@@ -86,15 +88,17 @@ private:
     ScChartListener& operator=( const ScChartListener& );
 
 public:
-                    ScChartListener( const String& rName, ScDocument* pDoc,
-                                     const ScRange& rRange );
-                    ScChartListener( const String& rName, ScDocument* pDoc,
-                                     const ScRangeListRef& rRangeListRef );
-                    ScChartListener( const String& rName, ScDocument* pDoc,
-                                     ::std::vector<ScTokenRef>* pTokens );
-                    ScChartListener( const ScChartListener& );
-    virtual         ~ScChartListener();
-    virtual ScDataObject*   Clone() const;
+    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
+                     const ScRange& rRange );
+    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
+                     const ScRangeListRef& rRangeListRef );
+    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
+                     ::std::vector<ScTokenRef>* pTokens );
+    ScChartListener( const ScChartListener& );
+    ~ScChartListener();
+
+    const rtl::OUString& GetName() const;
+    void SetName(const rtl::OUString& rName);
 
     void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -127,9 +131,8 @@ public:
     ExternalRefListener* GetExtRefListener();
     void            SetUpdateQueue();
 
-    bool            operator==( const ScChartListener& );
-    bool            operator!=( const ScChartListener& r )
-                        { return !operator==( r ); }
+    bool operator==( const ScChartListener& ) const;
+    bool operator!=( const ScChartListener& r ) const;
 };
 
 // ============================================================================
@@ -144,7 +147,7 @@ public:
 
 // ============================================================================
 
-class ScChartListenerCollection : public ScStrCollection
+class ScChartListenerCollection
 {
 public:
     struct RangeListenerItem
@@ -154,7 +157,10 @@ public:
         explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
     };
 
+    typedef boost::ptr_map<rtl::OUString, ScChartListener> ListenersType;
+
 private:
+    ListenersType maListeners;
     ::std::list<RangeListenerItem> maHiddenListeners;
 
     Timer           aTimer;
@@ -165,17 +171,24 @@ private:
                     // not implemented
     ScChartListenerCollection& operator=( const ScChartListenerCollection& );
 
-    using ScStrCollection::operator==;
-
 public:
-                    ScChartListenerCollection( ScDocument* pDoc );
-                    ScChartListenerCollection( const ScChartListenerCollection& );
-    virtual ScDataObject*   Clone() const;
-
-    virtual         ~ScChartListenerCollection();
+    ScChartListenerCollection( ScDocument* pDoc );
+    ScChartListenerCollection( const ScChartListenerCollection& );
+    ~ScChartListenerCollection();
 
                     // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
+
+    SC_DLLPUBLIC void Insert(ScChartListener* pListener);
+    ScChartListener* Find(const ScChartListener& rListener);
+    const ScChartListener* Find(const ScChartListener& rListener) const;
+    bool HasListeners() const;
+
+    const ListenersType& GetListeners() const;
+    ListenersType& GetListeners();
+    size_t GetCount() const;
+
+    rtl::OUString GetUniqueName(const rtl::OUString& rPrefix) const;
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
@@ -186,7 +199,7 @@ public:
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
-    void SC_DLLPUBLIC SetDirty();
+    SC_DLLPUBLIC void SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
                         bool bSetChartRangeLists = false );
 
@@ -195,7 +208,8 @@ public:
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
 
-    bool            operator==( const ScChartListenerCollection& );
+    bool operator==( const ScChartListenerCollection& r ) const;
+    bool operator!=( const ScChartListenerCollection& r ) const;
 
     /**
      * Start listening on hide/show change within specified cell range.  A

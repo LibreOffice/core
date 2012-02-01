@@ -3062,12 +3062,11 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                         xShapeProps->getPropertyValue( sPersistName ) >>= aChartName;
                         ScRange aEmptyRange;
                         ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                        sal_uInt16 nIndex = 0;
                         ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                        if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
+                        if (pCollection)
                         {
-                            ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
-                            if ( pListener )
+                            ScChartListener* pListener = pCollection->Find(aSearcher);
+                            if (pListener)
                             {
                                 const ScRangeListRef& rRangeList = pListener->GetRangeList();
                                 if ( rRangeList.Is() )

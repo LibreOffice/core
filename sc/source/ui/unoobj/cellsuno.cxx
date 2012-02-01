@@ -3246,42 +3246,21 @@ void ScCellRangesBase::ForceChartListener_Impl()
     //  call Update immediately so the caller to setData etc. can
     //  regognize the listener call
 
-    if ( pDocShell )
-    {
-        ScChartListenerCollection* pColl = pDocShell->GetDocument()->GetChartListenerCollection();
-        if ( pColl )
-        {
-            sal_uInt16 nCollCount = pColl->GetCount();
-            for ( sal_uInt16 nIndex = 0; nIndex < nCollCount; nIndex++ )
-            {
-                ScChartListener* pChartListener = (ScChartListener*)pColl->At(nIndex);
-                if ( pChartListener &&
-                        pChartListener->GetUnoSource() == static_cast<chart::XChartData*>(this) &&
-                        pChartListener->IsDirty() )
-                    pChartListener->Update();
-            }
-        }
-    }
-}
+    if (!pDocShell)
+        return;
 
-String lcl_UniqueName( ScStrCollection& rColl, const String& rPrefix )
-{
-    long nNumber = 1;
-    sal_uInt16 nCollCount = rColl.GetCount();
-    while (sal_True)
+    ScChartListenerCollection* pColl = pDocShell->GetDocument()->GetChartListenerCollection();
+    if (!pColl)
+        return;
+
+    ScChartListenerCollection::ListenersType& rListeners = pColl->GetListeners();
+    ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
+    for (; it != itEnd; ++it)
     {
-        String aName(rPrefix);
-        aName += String::CreateFromInt32( nNumber );
-        sal_Bool bFound = false;
-        for (sal_uInt16 i=0; i<nCollCount; i++)
-            if ( rColl[i]->GetString() == aName )
-            {
-                bFound = sal_True;
-                break;
-            }
-        if (!bFound)
-            return aName;
-        ++nNumber;
+        ScChartListener* p = it->second;
+        OSL_ASSERT(p);
+        if (p->GetUnoSource() == static_cast<chart::XChartData*>(this) && p->IsDirty())
+            p->Update();
     }
 }
 
@@ -3297,8 +3276,11 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
         ScChartListenerCollection* pColl = pDoc->GetChartListenerCollection();
-        String aName(lcl_UniqueName( *pColl,
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("__Uno")) ));
+        rtl::OUString aName = pColl->GetUniqueName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("__Uno")));
+        if (aName.isEmpty())
+            // failed to create unique name.
+            return;
+
         ScChartListener* pListener = new ScChartListener( aName, pDoc, aRangesRef );
         pListener->SetUno( aListener, this );
         pColl->Insert( pListener );
