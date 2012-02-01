@@ -1129,18 +1129,18 @@ void SdrObject::ImpForcePlusData()
         pPlusData = NewPlusData();
 }
 
-XubString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
+rtl::OUString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
 {
-    XubString aStr;
+    rtl::OUString aStr;
     if (pModel!=NULL) {
         pModel->TakeWinkStr(nWink,aStr,bNoDegChar);
     }
     return aStr;
 }
 
-XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
+rtl::OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
 {
-    XubString aStr;
+    rtl::OUString aStr;
     if (pModel!=NULL) {
         pModel->TakeMetricStr(nVal,aStr,bNoUnitChars);
     }

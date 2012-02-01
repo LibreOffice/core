@@ -482,8 +482,8 @@ protected:
 
     void ImpForcePlusData();
 
-    String GetWinkStr(long nWink, bool bNoDegChar = false) const;
-    String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
+    rtl::OUString GetWinkStr(long nWink, bool bNoDegChar = false) const;
+    rtl::OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
     // bNotMyself=true bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
     // Wird z.B. benoetigt fuer NbcMove, denn da movt man SnapRect und aOutRect

@@ -419,8 +419,8 @@ public:
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void             TakeMetricStr(long nVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    void             TakeWinkStr(long nWink, String& rStr, bool bNoDegChar = false) const;
+    void             TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
+    void             TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.

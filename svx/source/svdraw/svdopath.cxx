@@ -954,36 +954,36 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         aNow -= aPrev;
         aStr.AppendAscii(" (");
 
-        XubString aMetr;
+        rtl::OUString aMetr;
 
         if(pU->bCircle)
         {
             mrSdrPathObject.GetModel()->TakeWinkStr(Abs(pU->nCircRelWink), aMetr);
-            aStr += aMetr;
+            aStr.Append(aMetr);
             aStr.AppendAscii(" r=");
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, sal_True);
-            aStr += aMetr;
+            aStr.Append(aMetr);
         }
 
         aStr.AppendAscii("dx=");
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, sal_True);
-        aStr += aMetr;
+        aStr.Append(aMetr);
 
         aStr.AppendAscii(" dy=");
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, sal_True);
-        aStr += aMetr;
+        aStr.Append(aMetr);
 
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
             aStr.AppendAscii("  l=");
             mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
-            aStr += aMetr;
+            aStr.Append(aMetr);
 
             sal_Int32 nWink(GetAngle(aNow));
             aStr += sal_Unicode(' ');
             mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
-            aStr += aMetr;
+            aStr.Append(aMetr);
         }
 
         aStr += sal_Unicode(')');
@@ -1029,18 +1029,18 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         // dx=0.00 dy=0.00                -- both sides bezier
         // dx=0.00 dy=0.00  l=0.00 0.00°  -- one bezier/lever on one side, a start, or an ending
         // dx=0.00 dy=0.00  l=0.00 0.00° / l=0.00 0.00° -- in between
-        XubString aMetr;
+        rtl::OUString aMetr;
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());
 
         aStr = String();
         aStr.AppendAscii("dx=");
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, sal_True);
-        aStr += aMetr;
+        aStr.Append(aMetr);
 
         aStr.AppendAscii(" dy=");
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, sal_True);
-        aStr += aMetr;
+        aStr.Append(aMetr);
 
         if(!pDragData->IsMultiPointDrag())
         {
@@ -1067,12 +1067,12 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
                 sal_Int32 nLen(GetLen(aNow));
                 aStr.AppendAscii("  l=");
                 mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
-                aStr += aMetr;
+                aStr.Append(aMetr);
 
                 sal_Int32 nWink(GetAngle(aNow));
                 aStr += sal_Unicode(' ');
                 mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
-                aStr += aMetr;
+                aStr.Append(aMetr);
             }
             else if(nPntAnz > 1)
             {
