@@ -104,7 +104,6 @@ private:
     sal_Bool bCheckSourceLang;
     sal_Bool bCheckTranslationLang;
     sal_Bool bReference;
-    sal_Bool bAllowKeyIDs;
     sal_Bool bAllowSuspicious;
 
     sal_Bool bHasBlockError;
@@ -114,7 +113,7 @@ private:
     sal_Bool HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 
 public:
-    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp );
+    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowSusp );
     ~GSIBlock();
     void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );

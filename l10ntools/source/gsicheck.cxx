@@ -226,7 +226,7 @@ void GSILine::ReassembleLine()
 // class GSIBlock
 //
 /*****************************************************************************/
-GSIBlock::GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp )
+GSIBlock::GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowSusp )
 /*****************************************************************************/
             : pSourceLine( NULL )
             , pReferenceLine( NULL )
@@ -234,7 +234,6 @@ GSIBlock::GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, 
             , bCheckSourceLang( bSource )
             , bCheckTranslationLang( bTrans )
             , bReference( bRef )
-            , bAllowKeyIDs( bAllowKID )
             , bAllowSuspicious( bAllowSusp )
             , bHasBlockError( sal_False )
 {
@@ -358,93 +357,6 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
     {
         bHasBeenFixed = sal_False;
         aFixed.Erase();
-    }
-
-    if ( !bAllowKeyIDs )
-    {
-        sal_Bool bIsKeyID = sal_False;
-        sal_Bool bNewId = sal_False;
-        ByteString aID( aTestee );
-        sal_uInt16 nAfterID = 0;
-
-        if ( aTestee.Equals( "{&", 0, 2 ) )
-        {   // check for strings from instset_native like "{&Tahoma8}335795.Installation Wiza ..."
-            sal_uInt16 nTagEnd = aTestee.Search( '}' );
-            if ( nTagEnd != STRING_NOTFOUND )
-            {
-                if ( bFixTags )
-                    aFixed = aTestee.Copy( 0, nTagEnd+1 );
-                nErrorPos = nTagEnd+1;
-                aID = aTestee.Copy( nTagEnd+1 );
-                nAfterID = nTagEnd+1;
-            }
-        }
-
-        rtl::OString aDelimiter(rtl::OUStringToOString(String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8));
-
-        if ( aID.Equals( aDelimiter, 6, aDelimiter.getLength() ) )
-        {   // New KeyId     6 Letters, digits and spechial chars followed by delimiter
-            bNewId = sal_True;
-            nErrorPos = 1;
-            aID = aID.Copy( 0, 6 );
-            nAfterID += 6;
-            nAfterID = nAfterID + aDelimiter.getLength();
-        }
-        else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.getLength() ) )
-        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress
-            bNewId = sal_True;
-            nErrorPos = 1;
-            aID = aID.Copy( 0, 6 );
-            nAfterID += 7;
-            nAfterID = nAfterID + aDelimiter.getLength();
-        }
-        else if ( getTokenCount(aID, '.') > 1 )
-        {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
-            bNewId = sal_False;
-            nErrorPos = 1;
-            aID = getToken(aID, 0, '.');
-            nAfterID = nAfterID + aID.Len();
-        }
-        else
-        {
-            aID.Erase();
-        }
-
-        if ( bNewId )
-            {
-                if ( aID.Len() == 6 )
-                {
-                    bIsKeyID = sal_True;
-                    ByteString aDigits("0123456789abcdefghijklmnopqrstuvwxyz+-<=>");
-                    for ( sal_uInt16 i=0 ; i < aID.Len() ;i++ )
-                    {
-                        if ( aDigits.Search( aID.GetChar(i) ) == STRING_NOTFOUND )
-                            bIsKeyID = sal_False;
-                    }
-                }
-            }
-        else
-        {
-            if ( aID.Len() > 0 && aID.GetChar(aID.Len()-1) == '*' )
-                aID.Erase( aID.Len()-1 );
-
-            if (comphelper::string::isdigitAsciiString(aID) && aID.Len() >= 5)
-                bIsKeyID = sal_True;
-        }
-
-        if ( bIsKeyID )
-        {
-            aErrorMsg = ByteString( "String contains KeyID" );
-            if ( bFixTags )
-            {
-                aFixed += aTestee.Copy( nAfterID );
-                bHasBeenFixed = sal_True;
-                aErrorMsg = ByteString( "FIXED String containing KeyID" );
-            }
-            else
-                aErrorMsg = ByteString( "String contains KeyID" );
-            return sal_False;
-        }
     }
 
     return sal_True;
@@ -696,7 +608,7 @@ void Help()
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
     fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
     fprintf( stdout, "         checks tags in Online Help\n" );
-    fprintf( stdout, "         checks for *new* KeyIDs and relax GID/LID length to %s\n",
+    fprintf( stdout, "         relax GID/LID length to %s\n",
         rtl::OString::valueOf(static_cast<sal_Int32>(MAX_GID_LID_LEN)).getStr() );
     fprintf( stdout, "\n" );
     fprintf( stdout, "Syntax: gsicheck [ -c ] [-f] [ -we ] [ -wef ErrorFilename ] [ -wc ]\n" );
@@ -713,7 +625,6 @@ void Help()
     fprintf( stdout, "-wcf  Same as above but give own filename\n" );
     fprintf( stdout, "-s    Check only source language. Should be used before handing out to vendor.\n" );
     fprintf( stdout, "-t    Check only Translation language(s). Should be used before merging.\n" );
-    fprintf( stdout, "-k    Allow KeyIDs to be present in strings\n" );
     fprintf( stdout, "-e    disable encoding checks. E.g.: double questionmark \'??\' which may be the\n" );
     fprintf( stdout, "      result of false conversions\n" );
     fprintf( stdout, "-l    ISO Languagecode or numerical 2 digits Identifier of the source language.\n" );
@@ -741,7 +652,6 @@ int _cdecl main( int argc, char *argv[] )
     sal_Bool bWriteCorrect = sal_False;
     sal_Bool bWriteFixed = sal_False;
     sal_Bool bFixTags = sal_False;
-    sal_Bool bAllowKID = sal_False;
     sal_Bool bAllowSuspicious = sal_False;
     String aErrorFilename;
     String aCorrectFilename;
@@ -857,11 +767,6 @@ int _cdecl main( int argc, char *argv[] )
                 case 'f':
                     {
                         bFixTags = sal_True;
-                    }
-                    break;
-                case 'k':
-                    {
-                        bAllowKID = sal_True;
                     }
                     break;
                 case 'e':
@@ -1036,7 +941,7 @@ int _cdecl main( int argc, char *argv[] )
 
                         delete pBlock;
                     }
-                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile, bAllowKID, bAllowSuspicious );
+                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile, bAllowSuspicious );
 
                     aOldId = aId;
 
