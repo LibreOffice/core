@@ -1812,8 +1812,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         break;  // sprmPOutLvl
     case NS_sprm::LN_PFBiDi:
-            rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( text::WritingMode2::RL_TB ));
-            rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+        {
+            if (nIntValue != 0)
+            {
+                rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( text::WritingMode2::RL_TB ));
+                rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+            }
+        }
 
         break;  // sprmPFBiDi
     case NS_ooxml::LN_EG_SectPrContents_bidi:
