@@ -76,8 +76,6 @@ SdPresLayoutDlg::SdPresLayoutDlg(
 {
     FreeResource();
 
-    mpLayoutNames = new List;
-
     maVS.SetDoubleClickHdl(LINK(this, SdPresLayoutDlg, ClickLayoutHdl));
     maBtnLoad.SetClickHdl(LINK(this, SdPresLayoutDlg, ClickLoadHdl));
 
@@ -92,14 +90,6 @@ SdPresLayoutDlg::SdPresLayoutDlg(
 
 SdPresLayoutDlg::~SdPresLayoutDlg()
 {
-    String* pName = (String*)mpLayoutNames->First();
-    while (pName)
-    {
-        delete pName;
-        pName = (String*)mpLayoutNames->Next();
-    }
-
-    delete mpLayoutNames;
 }
 
 /*************************************************************************
@@ -131,10 +121,10 @@ void SdPresLayoutDlg::Reset()
 
     FillValueSet();
 
-    mnLayoutCount = mpLayoutNames->Count();
+    mnLayoutCount = maLayoutNames.size();
     for( nName = 0; nName < mnLayoutCount; nName++ )
     {
-        if (*((String*)mpLayoutNames->GetObject(nName)) == maName)
+        if (maLayoutNames[nName] == maName)
             break;
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden");
@@ -161,11 +151,11 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maName;
         aLayoutName.Append( DOCUMENT_TOKEN );
-        aLayoutName.Append( *(String*)mpLayoutNames->GetObject( nId - 1 ) );
+        aLayoutName.Append( maLayoutNames[ nId - 1 ] );
     }
     else
     {
-        aLayoutName = *(String*)mpLayoutNames->GetObject( nId - 1 );
+        aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
             aLayoutName.Erase(); //  so wird "- keine -" codiert (s.u.)
     }
@@ -202,10 +192,10 @@ void SdPresLayoutDlg::FillValueSet()
         {
             String aLayoutName(pMaster->GetLayoutName());
             aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-            mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
+            maLayoutNames.push_back(new String(aLayoutName));
 
             Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
-            maVS.InsertItem((sal_uInt16)mpLayoutNames->Count(), aBitmap, aLayoutName);
+            maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
         }
     }
 
@@ -274,21 +264,20 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     {
         // Pruefen, ob Vorlage schon vorhanden
         sal_Bool bExists = sal_False;
-        String* pName = (String*)mpLayoutNames->First();
         String aCompareStr( maName );
         if( maName.Len() == 0 )
             aCompareStr = maStrNone;
 
-        while( pName && !bExists )
+        sal_uInt16 aPos = 0;
+        for (boost::ptr_vector<String>::iterator it = maLayoutNames.begin();
+	          it != maLayoutNames.end() && !bExists; ++it, ++aPos)
         {
-            if( aCompareStr == *pName )
+            if( aCompareStr == *it )
             {
                 bExists = sal_True;
                 // Vorlage selektieren
-                sal_uInt16 nId = (sal_uInt16) mpLayoutNames->GetCurPos() + 1;
-                maVS.SelectItem( nId );
+                maVS.SelectItem( aPos + 1 );
             }
-            pName = (String*)mpLayoutNames->Next();
         }
 
         if( !bExists )
@@ -313,10 +302,10 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                         {
                             String aLayoutName(pMaster->GetLayoutName());
                             aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-                            mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
+                            maLayoutNames.push_back(new String(aLayoutName));
 
                             Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
-                            maVS.InsertItem((sal_uInt16)mpLayoutNames->Count(), aBitmap, aLayoutName);
+                            maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
                         }
                     }
                 }
@@ -330,15 +319,15 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
             else
             {
                 // leeres Layout
-                mpLayoutNames->Insert( new String( maStrNone ), LIST_APPEND );
-                maVS.InsertItem( (sal_uInt16) mpLayoutNames->Count(),
+                maLayoutNames.push_back( new String( maStrNone ) );
+                maVS.InsertItem( (sal_uInt16) maLayoutNames.size(),
                         Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
             }
 
             if (!bCancel)
             {
                 // Vorlage selektieren
-                maVS.SelectItem( (sal_uInt16) mpLayoutNames->Count() );
+                maVS.SelectItem( (sal_uInt16) maLayoutNames.size() );
             }
         }
     }
