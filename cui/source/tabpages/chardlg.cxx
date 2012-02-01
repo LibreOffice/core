@@ -306,8 +306,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
 
     m_pGrid = new Grid(&m_aBox);
-    m_pGrid->setChildProperty(sFill, true);
-    m_pGrid->setChildProperty(sExpand, true);
 
     m_pWestLine = new FixedLine(m_pGrid, CUI_RES(FL_WEST));
     m_pWestLine->setChildProperty<sal_Int32>(sLeftAttach, 0);
