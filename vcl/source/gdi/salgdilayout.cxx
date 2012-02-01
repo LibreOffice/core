@@ -51,6 +51,7 @@
 #include <svdata.hxx>
 #include <outdata.hxx>
 
+#include <boost/scoped_ptr.hpp>
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
@@ -691,19 +692,19 @@ sal_Bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rIsInside );
 }
 
-void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
 {
     switch( rVal.getType() )
     {
         case CTRL_SLIDER:
         {
-            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&rVal));
+            SliderValue* pSlVal = static_cast<SliderValue*>(&rVal);
             mirror(pSlVal->maThumbRect,pOutDev,bBack);
         }
         break;
         case CTRL_SCROLLBAR:
         {
-            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(&rVal);
             mirror(pScVal->maThumbRect,pOutDev,bBack);
             mirror(pScVal->maButton1Rect,pOutDev,bBack);
             mirror(pScVal->maButton2Rect,pOutDev,bBack);
@@ -712,14 +713,14 @@ void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const Outp
         case CTRL_SPINBOX:
         case CTRL_SPINBUTTONS:
         {
-            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&rVal));
+            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(&rVal);
             mirror(pSpVal->maUpperRect,pOutDev,bBack);
             mirror(pSpVal->maLowerRect,pOutDev,bBack);
         }
         break;
         case CTRL_TOOLBAR:
         {
-            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            ToolbarValue* pTVal = static_cast<ToolbarValue*>(&rVal);
             mirror(pTVal->maGripRect,pOutDev,bBack);
         }
         break;
@@ -734,9 +735,9 @@ sal_Bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, c
     {
         Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, aValue, pOutDev );
-        sal_Bool bRet = drawNativeControl( nType, nPart, rgn, nState, aValue, aCaption );
-        mirror( nType, aValue, pOutDev, true );
+        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
+        mirror( *mirrorValue, pOutDev );
+        sal_Bool bRet = drawNativeControl( nType, nPart, rgn, nState, *mirrorValue, aCaption );
         return bRet;
     }
     else
@@ -751,9 +752,9 @@ sal_Bool SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPar
     {
         Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, aValue, pOutDev );
-        sal_Bool bRet = drawNativeControlText( nType, nPart, rgn, nState, aValue, aCaption );
-        mirror( nType, aValue, pOutDev, true );
+        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
+        mirror( *mirrorValue, pOutDev );
+        sal_Bool bRet = drawNativeControlText( nType, nPart, rgn, nState, *mirrorValue, aCaption );
         return bRet;
     }
     else
@@ -768,20 +769,16 @@ sal_Bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPa
     {
         Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, aValue, pOutDev );
-        if( getNativeControlRegion( nType, nPart, rgn, nState, aValue, aCaption,
+        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
+        mirror( *mirrorValue, pOutDev );
+        if( getNativeControlRegion( nType, nPart, rgn, nState, *mirrorValue, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion ) )
         {
             mirror( rNativeBoundingRegion, pOutDev, true );
             mirror( rNativeContentRegion, pOutDev, true );
-            mirror( nType, aValue, pOutDev, true );
             return sal_True;
         }
-        else
-        {
-            mirror( nType, aValue, pOutDev, true );
-            return sal_False;
-        }
+        return sal_False;
     }
     else
         return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, aCaption,

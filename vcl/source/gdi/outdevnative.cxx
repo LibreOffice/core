@@ -63,36 +63,90 @@ ImplControlValue::~ImplControlValue()
 {
 }
 
+ImplControlValue* ImplControlValue::clone() const
+{
+    assert( typeid( const ImplControlValue ) == typeid( *this ));
+    return new ImplControlValue( *this );
+}
+
 ScrollbarValue::~ScrollbarValue()
 {
+}
+
+ScrollbarValue* ScrollbarValue::clone() const
+{
+    assert( typeid( const ScrollbarValue ) == typeid( *this ));
+    return new ScrollbarValue( *this );
 }
 
 SliderValue::~SliderValue()
 {
 }
 
+SliderValue* SliderValue::clone() const
+{
+    assert( typeid( const SliderValue ) == typeid( *this ));
+    return new SliderValue( *this );
+}
+
 TabitemValue::~TabitemValue()
 {
+}
+
+TabitemValue* TabitemValue::clone() const
+{
+    assert( typeid( const TabitemValue ) == typeid( *this ));
+    return new TabitemValue( *this );
 }
 
 SpinbuttonValue::~SpinbuttonValue()
 {
 }
 
+SpinbuttonValue* SpinbuttonValue::clone() const
+{
+    assert( typeid( const SpinbuttonValue ) == typeid( *this ));
+    return new SpinbuttonValue( *this );
+}
+
 ToolbarValue::~ToolbarValue()
 {
+}
+
+ToolbarValue* ToolbarValue::clone() const
+{
+    assert( typeid( const ToolbarValue ) == typeid( *this ));
+    return new ToolbarValue( *this );
 }
 
 MenubarValue::~MenubarValue()
 {
 }
 
+MenubarValue* MenubarValue::clone() const
+{
+    assert( typeid( const MenubarValue ) == typeid( *this ));
+    return new MenubarValue( *this );
+}
+
 MenupopupValue::~MenupopupValue()
 {
 }
 
+MenupopupValue* MenupopupValue::clone() const
+{
+    assert( typeid( const MenupopupValue ) == typeid( *this ));
+    return new MenupopupValue( *this );
+}
+
 PushButtonValue::~PushButtonValue()
 {
+}
+
+PushButtonValue* PushButtonValue::clone() const
+{
+    assert( typeid( const PushButtonValue ) == typeid( *this ));
+    return new PushButtonValue( *this );
 }
 
 // -----------------------------------------------------------------------

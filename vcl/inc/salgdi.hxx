@@ -351,7 +351,7 @@ public:
     sal_Bool                    mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                    mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
-    void                    mirror( ControlType,const ImplControlValue&,const OutputDevice*,bool bBack = false) const;
+    void                    mirror( ImplControlValue&, const OutputDevice*, bool bBack = false ) const;
     basegfx::B2DPoint       mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolygon     mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolyPolygon mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
