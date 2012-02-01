@@ -188,7 +188,7 @@ void ScDocument::UpdateAllCharts()
 
                                 ScChartListener* pCL = new ScChartListener(
                                     aIPName, this, pChartObj->GetRangeList() );
-                                pChartListenerCollection->Insert( pCL );
+                                pChartListenerCollection->insert( pCL );
                                 pCL->StartListeningTo();
                             }
                         }
@@ -503,7 +503,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
     if (!pDrawLayer)
         return;
 
-    ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->GetListeners();
+    ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
     ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
     for (; it != itEnd; ++it)
     {
@@ -696,9 +696,6 @@ void ScDocument::UpdateChartListenerCollection()
     if (!pDrawLayer)
         return;
 
-    ScRange aRange;
-    // Range for searching is not important
-    ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
     for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
     {
         if (!maTabs[nTab])
@@ -717,8 +714,7 @@ void ScDocument::UpdateChartListenerCollection()
                 continue;
 
             rtl::OUString aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
-            aCLSearcher.SetName(aObjName);
-            ScChartListener* pListener = pChartListenerCollection->Find(aCLSearcher);
+            ScChartListener* pListener = pChartListenerCollection->findByName(aObjName);
             if (pListener)
                 pListener->SetUsed(true);
             else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )

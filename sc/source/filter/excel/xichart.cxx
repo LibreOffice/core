@@ -4013,7 +4013,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
             SAL_WNODEPRECATED_DECLARATIONS_POP
             xListener->SetUsed( true );
             xListener->StartListeningTo();
-            pChartCollection->Insert( xListener.release() );
+            pChartCollection->insert( xListener.release() );
         }
     }
 }

@@ -305,9 +305,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                     if (pCollection)
                     {
                         ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
-                        ScRange aEmptyRange;
-                        ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
-                        const ScChartListener* pListener = pCollection->Find(aSearcher);
+                        const ScChartListener* pListener = pCollection->findByName(aChartName);
                         if (pListener)
                         {
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
@@ -395,15 +393,13 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             {
                                 if ( bSameDoc )
                                 {
-                                    ScRange aEmptyRange;
-                                    ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
                                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                                    if (pCollection && !pCollection->Find(aSearcher))
+                                    if (pCollection && !pCollection->findByName(aChartName))
                                     {
                                         ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
                                         ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
                                         ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
-                                        pCollection->Insert( pChartListener );
+                                        pCollection->insert( pChartListener );
                                         pChartListener->StartListeningTo();
                                     }
                                 }

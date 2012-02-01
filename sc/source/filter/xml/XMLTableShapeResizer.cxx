@@ -114,7 +114,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
             pDoc->InterpretDirtyCells( *pCL->GetRangeList() );
         }
 
-        pCollection->Insert( pCL );
+        pCollection->insert( pCL );
         pCL->StartListeningTo();
     }
 }

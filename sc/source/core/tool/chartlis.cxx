@@ -502,54 +502,40 @@ void ScChartListenerCollection::StartAllListeners()
         it->second->StartListeningTo();
 }
 
-void ScChartListenerCollection::Insert(ScChartListener* pListener)
+void ScChartListenerCollection::insert(ScChartListener* pListener)
 {
     rtl::OUString aName = pListener->GetName();
     maListeners.insert(aName, pListener);
 }
 
-ScChartListener* ScChartListenerCollection::Find(const ScChartListener& rListener)
+ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName)
 {
-    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
-    for (; it != itEnd; ++it)
-    {
-        ScChartListener* p = it->second;
-        OSL_ASSERT(p);
-        if (*p == rListener)
-            return p;
-    }
-    return NULL;
+    ListenersType::iterator it = maListeners.find(rName);
+    return it == maListeners.end() ? NULL : it->second;
 }
 
-const ScChartListener* ScChartListenerCollection::Find(const ScChartListener& rListener) const
+const ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName) const
 {
-    ListenersType::const_iterator it = maListeners.begin(), itEnd = maListeners.end();
-    for (; it != itEnd; ++it)
-    {
-        const ScChartListener* p = it->second;
-        OSL_ASSERT(p);
-        if (*p == rListener)
-            return p;
-    }
-    return NULL;
+    ListenersType::const_iterator it = maListeners.find(rName);
+    return it == maListeners.end() ? NULL : it->second;
 }
 
-bool ScChartListenerCollection::HasListeners() const
+bool ScChartListenerCollection::hasListeners() const
 {
     return !maListeners.empty();
 }
 
-const ScChartListenerCollection::ListenersType& ScChartListenerCollection::GetListeners() const
+const ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners() const
 {
     return maListeners;
 }
 
-ScChartListenerCollection::ListenersType& ScChartListenerCollection::GetListeners()
+ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners()
 {
     return maListeners;
 }
 
-rtl::OUString ScChartListenerCollection::GetUniqueName(const rtl::OUString& rPrefix) const
+rtl::OUString ScChartListenerCollection::getUniqueName(const rtl::OUString& rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
     {
@@ -565,8 +551,7 @@ rtl::OUString ScChartListenerCollection::GetUniqueName(const rtl::OUString& rPre
 void ScChartListenerCollection::ChangeListening( const String& rName,
         const ScRangeListRef& rRangeListRef, bool bDirty )
 {
-    ScChartListener aCLSearcher( rName, pDoc, rRangeListRef );
-    ScChartListener* pCL = Find(aCLSearcher);
+    ScChartListener* pCL = findByName(rName);
     if (pCL)
     {
         pCL->EndListeningTo();
@@ -574,8 +559,8 @@ void ScChartListenerCollection::ChangeListening( const String& rName,
     }
     else
     {
-        pCL = new ScChartListener( aCLSearcher );
-        Insert( pCL );
+        pCL = new ScChartListener(rName, pDoc, rRangeListRef);
+        insert(pCL);
     }
     pCL->StartListeningTo();
     if ( bDirty )
@@ -716,7 +701,7 @@ void ScChartListenerCollection::SetDiffDirty(
     {
         ScChartListener* pCL = it->second;
         OSL_ASSERT(pCL);
-        const ScChartListener* pCLCmp = rCmp.Find(*pCL);
+        const ScChartListener* pCLCmp = rCmp.findByName(pCL->GetName());
         if (!pCLCmp || *pCL != *pCLCmp)
         {
             if ( bSetChartRangeLists )

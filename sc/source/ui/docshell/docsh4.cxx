@@ -1223,7 +1223,7 @@ void ScDocShell::DoRecalc( bool bApi )
         //  doppelt gepainted werden.
 
         ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
-        if ( pCharts && pCharts->HasListeners() )
+        if ( pCharts && pCharts->hasListeners() )
             PostPaintGridAll();
         else
             PostDataChanged();

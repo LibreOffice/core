@@ -1113,7 +1113,7 @@ sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         using XCellRangeData::setDataArray() significantly. */
     bool bDoubleAlloc = ScColumn::bDoubleAlloc;
     ScColumn::bDoubleAlloc = true;
-    
+
     sal_Bool bError = false;
     SCROW nDocRow = nStartRow;
     for (long nRow=0; nRow<nRows; nRow++)
@@ -3253,7 +3253,7 @@ void ScCellRangesBase::ForceChartListener_Impl()
     if (!pColl)
         return;
 
-    ScChartListenerCollection::ListenersType& rListeners = pColl->GetListeners();
+    ScChartListenerCollection::ListenersType& rListeners = pColl->getListeners();
     ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
     for (; it != itEnd; ++it)
     {
@@ -3276,14 +3276,14 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
         ScChartListenerCollection* pColl = pDoc->GetChartListenerCollection();
-        rtl::OUString aName = pColl->GetUniqueName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("__Uno")));
+        rtl::OUString aName = pColl->getUniqueName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("__Uno")));
         if (aName.isEmpty())
             // failed to create unique name.
             return;
 
         ScChartListener* pListener = new ScChartListener( aName, pDoc, aRangesRef );
         pListener->SetUno( aListener, this );
-        pColl->Insert( pListener );
+        pColl->insert( pListener );
         pListener->StartListeningTo();
     }
 }

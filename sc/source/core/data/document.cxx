@@ -3485,7 +3485,7 @@ void ScDocument::CalcAfterLoad()
     // similar to ScMyShapeResizer::CreateChartListener for loading own files (i104899).
     if (pChartListenerCollection)
     {
-        const ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->GetListeners();
+        const ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
         ScChartListenerCollection::ListenersType::const_iterator it = rListeners.begin(), itEnd = rListeners.end();
         for (; it != itEnd; ++it)
         {

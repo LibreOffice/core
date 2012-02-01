@@ -287,7 +287,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
             ScChartListener* pChartListener =
                 new ScChartListener( aObjName, pDoc, xNewRanges );
-            pDoc->GetChartListenerCollection()->Insert( pChartListener );
+            pDoc->GetChartListenerCollection()->insert( pChartListener );
             pChartListener->StartListeningTo();
 
             SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aObjName, aInsRect );
@@ -607,13 +607,11 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
             if (!pDoc)
                 break;
 
-            ScRange aEmptyRange;
             ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
             if (!pCollection)
                 break;
 
-            ScChartListener aSearcher(aChartName, pDoc, aEmptyRange);
-            ScChartListener* pListener = pCollection->Find(aSearcher);
+            ScChartListener* pListener = pCollection->findByName(aChartName);
             if (!pListener)
                 break;
 

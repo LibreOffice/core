@@ -179,15 +179,15 @@ public:
                     // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
-    SC_DLLPUBLIC void Insert(ScChartListener* pListener);
-    ScChartListener* Find(const ScChartListener& rListener);
-    const ScChartListener* Find(const ScChartListener& rListener) const;
-    bool HasListeners() const;
+    SC_DLLPUBLIC void insert(ScChartListener* pListener);
+    ScChartListener* findByName(const rtl::OUString& rName);
+    const ScChartListener* findByName(const rtl::OUString& rName) const;
+    bool hasListeners() const;
 
-    const ListenersType& GetListeners() const;
-    ListenersType& GetListeners();
+    const ListenersType& getListeners() const;
+    ListenersType& getListeners();
 
-    rtl::OUString GetUniqueName(const rtl::OUString& rPrefix) const;
+    rtl::OUString getUniqueName(const rtl::OUString& rPrefix) const;
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
