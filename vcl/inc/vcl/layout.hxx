@@ -30,6 +30,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <boost/multi_array.hpp>
 
 enum VclPackType
 {
@@ -246,6 +247,67 @@ protected:
     {
         rPos.setY(nPos);
     }
+};
+
+class VCL_DLLPUBLIC Grid : public Window
+{
+private:
+    bool m_bRowHomogeneous;
+    bool m_bColumnHomogeneous;
+    int m_nRowSpacing;
+    int m_nColumnSpacing;
+    typedef boost::multi_array<Window*, 2> array_type;
+
+    array_type assembleGrid() const;
+    bool isNullGrid(const array_type& A) const;
+    void calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const;
+
+    Size calculateRequisition() const;
+    void setAllocation(const Size &rAllocation);
+public:
+    Grid(Window *pParent)
+        : Window(pParent)
+        , m_bRowHomogeneous(false), m_bColumnHomogeneous(false)
+        , m_nRowSpacing(0), m_nColumnSpacing(0)
+    {
+        Show();
+    }
+    void set_row_homogeneous(bool bHomogeneous)
+    {
+        m_bRowHomogeneous = bHomogeneous;
+    }
+    void set_column_homogeneous(bool bHomogeneous)
+    {
+        m_bColumnHomogeneous = bHomogeneous;
+    }
+    bool get_row_homogeneous() const
+    {
+        return m_bRowHomogeneous;
+    }
+    bool get_column_homogeneous() const
+    {
+        return m_bColumnHomogeneous;
+    }
+    void set_row_spacing(int nSpacing)
+    {
+        m_nRowSpacing = nSpacing;
+    }
+    void set_column_spacing(int nSpacing)
+    {
+        m_nColumnSpacing = nSpacing;
+    }
+    int get_row_spacing() const
+    {
+        return m_nRowSpacing;
+    }
+    int get_column_spacing() const
+    {
+        return m_nColumnSpacing;
+    }
+public:
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    using Window::SetPosSizePixel;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 };
 
 //Get a Size which is large enough to contain all children with

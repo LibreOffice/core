@@ -318,6 +318,186 @@ void ButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
+Grid::array_type Grid::assembleGrid() const
+{
+    array_type A;
+
+    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
+    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
+    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
+
+    int i = 0;
+
+    for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
+        pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        if (!pChild->IsVisible())
+            continue;
+
+        sal_Int32 nLeftAttach = pChild->getWidgetProperty<sal_Int32>(sLeftAttach);
+        sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+        sal_Int32 nMaxXPos = nLeftAttach+nWidth-1;
+
+        sal_Int32 nTopAttach = pChild->getWidgetProperty<sal_Int32>(sTopAttach);
+        sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+        sal_Int32 nMaxYPos = nTopAttach+nHeight-1;
+
+        sal_Int32 nCurrentMaxXPos = A.shape()[0]-1;
+        sal_Int32 nCurrentMaxYPos = A.shape()[1]-1;
+        if (nMaxXPos > nCurrentMaxXPos || nMaxYPos > nCurrentMaxYPos)
+        {
+            nCurrentMaxXPos = std::max(nMaxXPos, nCurrentMaxXPos);
+            nCurrentMaxYPos = std::max(nMaxYPos, nCurrentMaxYPos);
+            A.resize(boost::extents[nCurrentMaxXPos+1][nCurrentMaxYPos+1]);
+        }
+
+        A[nLeftAttach][nTopAttach] = pChild;
+    }
+
+    return A;
+}
+
+bool Grid::isNullGrid(const array_type &A) const
+{
+    sal_Int32 nMaxX = A.shape()[0];
+    sal_Int32 nMaxY = A.shape()[1];
+
+    if (!nMaxX || !nMaxY)
+        return true;
+    return false;
+}
+
+void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const
+{
+    sal_Int32 nMaxX = A.shape()[0];
+    sal_Int32 nMaxY = A.shape()[1];
+
+    rWidths.resize(nMaxX);
+    rHeights.resize(nMaxY);
+
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            const Window *pChild = A[x][y];
+            if (!pChild)
+                continue;
+            Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+            rWidths[x] = std::max(rWidths[x], aChildSize.Width());
+            rHeights[y] = std::max(rHeights[y], aChildSize.Height());
+        }
+    }
+}
+
+Size Grid::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Window::GetOptimalSize(eType);
+    return calculateRequisition();
+}
+
+//To-Do, col/row spanning ignored for now
+Size Grid::calculateRequisition() const
+{
+    array_type A = assembleGrid();
+
+    if (isNullGrid(A))
+        return Size();
+
+    std::vector<long> aWidths;
+    std::vector<long> aHeights;
+    calcMaxs(A, aWidths, aHeights);
+
+    long nTotalWidth = 0;
+    if (get_column_homogeneous())
+    {
+        nTotalWidth = *std::max_element(aWidths.begin(), aWidths.end());
+        nTotalWidth *= aWidths.size();
+    }
+    else
+    {
+        nTotalWidth = std::accumulate(aWidths.begin(), aWidths.end(), 0);
+    }
+
+    nTotalWidth += get_column_spacing() * (aWidths.size()-1);
+
+    long nTotalHeight = 0;
+    if (get_row_homogeneous())
+    {
+        nTotalHeight = *std::max_element(aHeights.begin(), aHeights.end());
+        nTotalHeight *= aHeights.size();
+    }
+    else
+    {
+        nTotalHeight = std::accumulate(aHeights.begin(), aHeights.end(), 0);
+    }
+
+    nTotalHeight += get_row_spacing() * (aHeights.size()-1);
+
+    return Size(nTotalWidth, nTotalHeight);
+}
+
+void Grid::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+{
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
+    setAllocation(rAllocation);
+}
+
+void Grid::setAllocation(const Size& rAllocation)
+{
+    array_type A = assembleGrid();
+
+    if (isNullGrid(A))
+        return;
+
+    sal_Int32 nMaxX = A.shape()[0];
+    sal_Int32 nMaxY = A.shape()[1];
+
+    Size aRequisition;
+    std::vector<long> aWidths(nMaxX);
+    std::vector<long> aHeights(nMaxY);
+    if (!get_column_homogeneous() || !get_row_homogeneous())
+    {
+        aRequisition = calculateRequisition();
+        calcMaxs(A, aWidths, aHeights);
+    }
+
+    long nAvailableWidth = rAllocation.Width() - (get_column_spacing() * nMaxX);
+    if (get_column_homogeneous())
+        std::fill(aWidths.begin(), aWidths.end(), nAvailableWidth/nMaxX);
+    else
+    {
+        long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
+        for (sal_Int32 x = 0; x < nMaxX; ++x)
+            aWidths[x] += nExtraWidth;
+    }
+
+    long nAvailableHeight = rAllocation.Height() - (get_row_spacing() * nMaxY);
+    if (get_row_homogeneous())
+        std::fill(aHeights.begin(), aHeights.end(), nAvailableHeight/nMaxY);
+    else
+    {
+        long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+            aHeights[y] += nExtraHeight;
+    }
+
+    Point aPosition(0, 0);
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            Window *pChild = A[x][y];
+            if (pChild)
+                pChild->SetPosSizePixel(aPosition, Size(aWidths[x], aHeights[y]));
+            aPosition.Y() += aHeights[y] + get_row_spacing();
+        }
+        aPosition.X() += aWidths[x] + get_column_spacing();
+        aPosition.Y() = 0;
+    }
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;
