@@ -36,11 +36,25 @@ TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
 
 PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch ios.patch cppunit-1.12.1-unused-parameters.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
-    #  aid=2912590&group_id=11795&atid=311795>
+    #  aid=2912590&group_id=11795&atid=311795>; upstreamed as
+    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
+    #  a76125c7dd07f79c82f3fed9be5c0a5627089e00>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
-    #  aid=2912630&group_id=11795&atid=311795>
+    #  aid=2912630&group_id=11795&atid=311795>; upstreamed as
+    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
+    #  9cfcff6c2195ae25be4022654990c9eea6fbb2f8>
+    # windows.patch: TOOD
+    # ldflags.patch: upstreamed as <http://cgit.freedesktop.org/libreoffice/
+    #  cppunit/commit/?id=3acfc24e54a9f6d1b2121dda1942e882549870e4>
+    # aix.patch: TODO
+    # avoid-synthetised-destructor.patch: upstreamed as
+    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
+    #  05b202fc3edce92d8343cb0964d9d15134cd8f1d>
+    # ios.patch: TODO
     # cppunit-1.12.1-unused-parameters.patch: help static analysis tools (see
-    #  SAL_UNUSED_PARAMETER in sal/types.h)
+    #  SAL_UNUSED_PARAMETER in sal/types.h); upstreamed as
+    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
+    #  7a09bf3a88e99d85c4dec2ad296309dbec2987c3>
 
 .IF "$(OS)" == "ANDROID"
 PATCH_FILES += android.patch
