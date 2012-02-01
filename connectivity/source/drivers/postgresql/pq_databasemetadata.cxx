@@ -1559,6 +1559,7 @@ static void columnMetaData2DatabaseTypeDescription(
     //  12. REMARKS string => comment describing column (may be NULL )
     //               => Don't know, there does not seem to exist something like
     //                  that in postgres
+    //               LEM TODO: comments exist, find how to retrieve them easily
     //  13. COLUMN_DEF string => default value (may be NULL)
     //               => pg_type.typdefault
     //  14. SQL_DATA_TYPE long => unused
@@ -1575,7 +1576,6 @@ static void columnMetaData2DatabaseTypeDescription(
     //                            allow NULL values. An empty string means
     //                            nobody knows.
     //               => pg_attribute.attnotnull
-// select objoid,description,objsubid,pg_attribute.attname from pg_attribute LEFT JOIN pg_description ON pg_attribute.attrelid=pg_description.objoid and pg_attribute.attnum = pg_description.objsubid
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
         ASCII_STR(
@@ -1706,49 +1706,38 @@ static void columnMetaData2DatabaseTypeDescription(
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 
-    Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-        ASCII_STR(
-            "  WITH RECURSIVE roles AS ("
-            "      SELECT oid, rolname, rolinherit, rolsuper FROM pg_catalog.pg_roles"
-            "    UNION ALL"
-            "      VALUES (0, 'PUBLIC', TRUE, FALSE)"
-            "  ), direct_privs_oids AS ("
-            "      SELECT c.relname, c.relnamespace, c.relowner, (aclexplode(c.relacl)).*"
-            "      FROM pg_catalog.pg_class c"
-            "      WHERE c.relkind IN ('r', 'v') AND c.relname LIKE ?"
-            "    UNION ALL"
-            "      SELECT c.relname, c.relnamespace, c.relowner, c.relowner, c.relowner, p.privilege, TRUE"
-            "      FROM pg_catalog.pg_class c,"
-            "           (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege)"
-            "      WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND c.relname LIKE ?"
-            "  ), direct_privs AS ("
-            "    SELECT dpo.relname, pn.nspname, dpo.relowner, pr_grantor.rolname AS grantor, dpo.grantee, dpo.privilege_type, dpo.is_grantable"
-            "    FROM direct_privs_oids dpo INNER JOIN roles pr_grantor ON dpo.grantor = pr_grantor.oid"
-            "       INNER JOIN pg_catalog.pg_namespace pn ON pn.oid = dpo.relnamespace"
-            "    WHERE pn.nspname LIKE ?"
-            "  ), memberships(roleid, membership) AS ("
-            "      SELECT pr.oid, 0"
-            "      FROM pg_catalog.pg_roles pr"
-            "    UNION"
-            "      SELECT pr.oid, pr.oid"
-            "      FROM roles pr"
-            "    UNION"
-            "      SELECT m.roleid, pam.roleid"
-            "      FROM roles pr INNER JOIN pg_catalog.pg_auth_members pam ON pr.oid = pam.member"
-            "           INNER JOIN memberships m ON pam.member = m.membership"
-            "      WHERE pr.rolinherit"
-            "  )"
-            "  SELECT current_database() AS TABLE_CAT, dp.nspname AS TABLE_SCHEM, dp.relname AS TABLE_NAME,"
-            "         dp.grantor AS GRANTOR, pr_grantee.rolname AS GRANTEE, dp.privilege_type AS PRIVILEGE,"
-            "         CASE WHEN dp.is_grantable OR (dp.relowner = pr_grantee.oid) THEN 'YES' ELSE 'NO' END AS IS_GRANTABLE"
-            "  FROM direct_privs dp INNER JOIN memberships m ON dp.grantee = m. membership"
-            "       INNER JOIN roles pr_grantee ON pr_grantee.oid = m.roleid"
-            "  ORDER BY dp.nspname, dp.relname, dp.privilege_type"
-        ));
+    rtl::OUStringBuffer sSQL(260);
+    sSQL.append( ASCII_STR(
+            " SELECT * FROM ("
+            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
+            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
+            "  FROM information_schema.table_privileges") );
+    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
+        // information_schema.table_privileges does not fill in default ACLs when no ACL
+        // assume default ACL is "owner has all privileges" and add it
+        sSQL.append( ASCII_STR(
+            " UNION "
+            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
+            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
+            "  FROM pg_catalog.pg_class c,"
+            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege),"
+            "       pg_catalog.pg_roles ro,"
+            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
+            "         UNION ALL"
+            "          VALUES (0::oid, 'PUBLIC')"
+            "       ) AS rg (oid, rolname),"
+            "       pg_catalog.pg_namespace pn"
+            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
+    sSQL.append( ASCII_STR(
+            " ) s"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? "
+            " ORDER BY table_schem, table_name, privilege" ) );
+
+    Reference< XPreparedStatement > statement = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
-    parameters->setString( 3 , schemaPattern );
-    parameters->setString( 1 , tableNamePattern );
+    parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
     Reference< XResultSet > rs = statement->executeQuery();
