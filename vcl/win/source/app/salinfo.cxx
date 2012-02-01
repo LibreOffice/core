@@ -67,9 +67,9 @@ static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
 
 sal_Bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_IntPtr )
 {
-    MONITORINFOEXW aInfo;
+    MONITORINFOEX aInfo;
     aInfo.cbSize = sizeof( aInfo );
-    if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
+    if( GetMonitorInfo( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
     {
         aInfo.szDevice[CCHDEVICENAME-1] = 0;
         rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aInfo.szDevice) );
@@ -127,7 +127,7 @@ bool WinSalSystem::initMonitors()
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
         boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
-        while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
+        while( EnumDisplayDevices( NULL, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
                 && !(aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) ) // sort out non/disabled monitors
@@ -236,7 +236,7 @@ int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::O
         nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
 
     ImplHideSplash();
-    return MessageBoxW(
+    return MessageBox(
         0,
         reinterpret_cast<LPCWSTR>(rMessage.getStr()),
         reinterpret_cast<LPCWSTR>(rTitle.getStr()),

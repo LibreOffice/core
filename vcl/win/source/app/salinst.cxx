@@ -89,13 +89,13 @@ void SalAbort( const rtl::OUString& rErrorText, bool )
     {
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        FatalAppExitW( 0, L"Application Error" );
+        FatalAppExit( 0, L"Application Error" );
     }
     else
     {
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        FatalAppExitW( 0, rErrorText.getStr() );
+        FatalAppExit( 0, rErrorText.getStr() );
     }
 }
 
@@ -521,32 +521,32 @@ SalInstance* CreateSalInstance()
         aWndClassEx.lpszMenuName    = 0;
         aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
         ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
-        if ( !RegisterClassExW( &aWndClassEx ) )
+        if ( !RegisterClassEx( &aWndClassEx ) )
             return NULL;
 
         aWndClassEx.hIcon           = 0;
         aWndClassEx.hIconSm         = 0;
         aWndClassEx.style          |= CS_SAVEBITS;
         aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
+        if ( !RegisterClassEx( &aWndClassEx ) )
             return NULL;
 
         // shadow effect for popups on XP
         if( aSalShlData.mbWXP )
             aWndClassEx.style       |= CS_DROPSHADOW;
         aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
+        if ( !RegisterClassEx( &aWndClassEx ) )
             return NULL;
 
         aWndClassEx.style           = 0;
         aWndClassEx.lpfnWndProc     = SalComWndProcW;
         aWndClassEx.cbWndExtra      = 0;
         aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
+        if ( !RegisterClassEx( &aWndClassEx ) )
             return NULL;
     }
 
-    HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
+    HWND hComWnd = CreateWindowEx( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
                                L"", WS_POPUP, 0, 0, 0, 0, 0, 0,
                                pSalData->mhInst, NULL );
     if ( !hComWnd )
@@ -870,7 +870,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
-            nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
+            nRet = DefWindowProc( hWnd, nMsg, wParam, lParam );
     }
     return nRet;
 }
