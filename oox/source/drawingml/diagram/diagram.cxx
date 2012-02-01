@@ -340,7 +340,8 @@ void Diagram::addTo( const ShapePtr & pParentShape )
 
     // create Shape hierarchy
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
-    mpLayout->getNode()->accept(aCreationVisitor);
+    if( mpLayout->getNode() )
+        mpLayout->getNode()->accept( aCreationVisitor );
 }
 
 OUString Diagram::getLayoutId() const
