@@ -87,16 +87,15 @@ void SalAbort( const rtl::OUString& rErrorText, bool )
 
     if ( rErrorText.isEmpty() )
     {
-        // #112255# make sure crash reporter is triggered
+        // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        FatalAppExit( 0, "Application Error" );
+        FatalAppExitW( 0, L"Application Error" );
     }
     else
     {
-        // #112255# make sure crash reporter is triggered
+        // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        ByteString aErrorText( ImplSalGetWinAnsiString( rErrorText ) );
-        FatalAppExit( 0, aErrorText.GetBuffer() );
+        FatalAppExitW( 0, rErrorText.getStr() );
     }
 }
 
