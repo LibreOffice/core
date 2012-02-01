@@ -661,7 +661,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     }
     else
     {
-        // Default pathes
+        // Default paths
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 

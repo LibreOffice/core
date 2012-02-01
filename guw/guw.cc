@@ -473,7 +473,7 @@ void myCygpath(string &path, int shortname /* =1 */ )
 
   // Only use cygwin_conv_to_win32_path() on absolute paths as it errors
   // out if its path doen't exist. Unfortunatelt there are a lot of not
-  // existing relative pathes used as parameters during an OOo build.
+  // existing relative paths used as parameters during an OOo build.
   if( path.find("/", 0) == 0) {
     err = cygwin_conv_to_win32_path( path.c_str(), convpath );
   }

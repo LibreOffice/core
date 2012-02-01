@@ -118,7 +118,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             /// this special path is used to generate feature depending content there
             ::rtl::OUString sWritePath;
 
-            /// indicates real single pathes, which uses WritePath property only
+            /// indicates real single paths, which uses WritePath property only
             sal_Bool bIsSinglePath;
 
             /// simple handling of finalized/mandatory states ... => we know one state READONLY only .-)

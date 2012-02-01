@@ -1051,7 +1051,7 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 
 /*-****************************************************************************************************//**
     @short      activate frame in hierarchy
-    @descr      This feature is used to mark active pathes in our frame hierarchy.
+    @descr      This feature is used to mark active paths in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
     @seealso    method deactivate()
@@ -1151,7 +1151,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 
 /*-****************************************************************************************************//**
     @short      deactivate frame in hierarchy
-    @descr      This feature is used to deactive pathes in our frame hierarchy.
+    @descr      This feature is used to deactive paths in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
     @seealso    method activate()

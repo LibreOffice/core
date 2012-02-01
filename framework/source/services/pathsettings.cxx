@@ -304,7 +304,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
-        // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
+        // all states simple as READONLY ! But because all realy needed paths are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
         aPathVal.bIsReadonly = bFinalized;
     }
@@ -323,7 +323,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 
     // try to replace path-parts with well known and uspported variables.
     // So an office can be moved easialy to another location without loosing
-    // it's related pathes.
+    // it's related paths.
     PathInfo aResubstPath(aPath);
     impl_subst(aResubstPath, sal_True);
 
@@ -348,7 +348,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     // on loading time realy represent an user setting !!!
 
     // Check if the given path exists inside the old configuration.
-    // Because our new configuration knows more then the list of old pathes ... !
+    // Because our new configuration knows more then the list of old paths ... !
     if (xCfgOld->hasByName(aResubstPath.sPathName))
     {
         css::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, css::uno::UNO_QUERY_THROW);
@@ -408,7 +408,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         aPath = impl_readNewFormat(sPath);
         aPath.sPathName = sPath;
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(aPath, sal_False);
@@ -427,7 +427,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         // can be disabled for a new major
         OUStringList lOldVals = impl_readOldFormat(sPath);
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(lOldVals, fa_getSubstitution(), sal_False);
@@ -893,7 +893,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -913,7 +913,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -968,7 +968,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
     // allow empty path to reset a path.
-// idea by LLA to support empty pathes
+// idea by LLA to support empty paths
 //    if (sPath.getLength() == 0)
 //    {
 //        return sal_True;

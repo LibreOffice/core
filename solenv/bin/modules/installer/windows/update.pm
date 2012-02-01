@@ -313,7 +313,7 @@ sub readdatabase
     if ( ! $allvariables->{'UPDATE_DATABASE_LISTNAME'} ) { installer::exiter::exit_program("ERROR: If \"UPDATE_DATABASE\" is set, \"UPDATE_DATABASE_LISTNAME\" is required.", "Main"); }
     my $listfilename = $allvariables->{'UPDATE_DATABASE_LISTNAME'};
 
-    # Searching the list in the include pathes
+    # Searching the list in the include paths
     my $listname = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$listfilename, $includepatharrayref, 1);
     if ( $$listname eq "" ) { installer::exiter::exit_program("ERROR: List file not found: $listfilename !", "readdatabase"); }
     my $completelistname = $$listname;

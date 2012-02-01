@@ -295,7 +295,7 @@ void StorageHolder::closePath(const ::rtl::OUString& rPath)
     ::rtl::OUString sNormedPath = StorageHolder::impl_st_normPath(rPath);
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
-    /* convert list of pathes in the following way:
+    /* convert list of paths in the following way:
         [0] = "path_1" => "path_1
         [1] = "path_2" => "path_1/path_2"
         [2] = "path_3" => "path_1/path_2/path_3"

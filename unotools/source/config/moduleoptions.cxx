@@ -144,7 +144,7 @@ struct FactoryInfo
 
         //---------------------------------------------------------------------------------------------------------
         // returns list of properties, which has changed only!
-        // We use given value of sNodeBase to build full qualified pathes ...
+        // We use given value of sNodeBase to build full qualified paths ...
         // Last sign of it must be "/". Beacuse we use it directly, without any additional things!
         css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const ::rtl::OUString& sNodeBase )
         {
@@ -926,7 +926,7 @@ sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sN
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString >& lFactories )
 {
-    // Expand every set node name in lFactories to full qualified pathes to his properties
+    // Expand every set node name in lFactories to full qualified paths to his properties
     // and get right values from configuration.
     const css::uno::Sequence< ::rtl::OUString > lProperties = impl_ExpandSetNames( lFactories  );
     const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties( lProperties );

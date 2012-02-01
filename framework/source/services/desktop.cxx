@@ -555,7 +555,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
 /*-************************************************************************************************************//**
     @interface  XDesktop
     @short      return the current active frame in hierarchy
-    @descr      There can be more then one different active pathes in our frame hierarchy. But only one of them
+    @descr      There can be more then one different active paths in our frame hierarchy. But only one of them
                 could be the most active frame (normal he has the focus).
                 Don't mix it with getActiveFrame()! That will return our current active frame, which must be
                 a direct child of us and should be a part(!) of an active path.

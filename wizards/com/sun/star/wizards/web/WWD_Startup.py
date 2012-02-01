@@ -255,7 +255,7 @@ class WWD_Startup(WWD_General):
             WWD_General.settings.readConfiguration(
                 confRoot, CONFIG_READ_PARAM)
             configSet = WWD_General.settings.cp_DefaultSession.cp_Publishing
-            # now if path variables are used in publisher pathes, they
+            # now if path variables are used in publisher paths, they
             # are getting replaced here...
             for i in xrange(configSet.getSize()):
                 p = configSet.getElementAt(i)

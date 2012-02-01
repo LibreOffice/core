@@ -203,7 +203,7 @@ sub set_temp_path
 }
 
 #############################################
-# Setting output pathes to temp directory
+# Setting output paths to temp directory
 # This are the:
 # unpackpath and the loggingdir
 #############################################
@@ -217,7 +217,7 @@ sub set_output_pathes_to_temp
 }
 
 #############################################
-# Setting the minor into the pathes. This is
+# Setting the minor into the paths. This is
 # required, if the original installation set
 # was created without minor
 # Value is always saved in
@@ -241,15 +241,15 @@ sub set_minor_into_pathes
         return;
     }
 
-    # Affected pathes:
+    # Affected paths:
     # $contenthash{'installlogdir'}
     # $contenthash{'includepatharray'}
     # $installer::globals::unpackpath
     # $installer::globals::idttemplatepath
     # $installer::globals::idtlanguagepath
 
-    installer::logger::include_header_into_logfile("Changing saved pathes to add the minor");
-    my $infoline = "Old pathes:\n";
+    installer::logger::include_header_into_logfile("Changing saved paths to add the minor");
+    my $infoline = "Old paths:\n";
     push( @installer::globals::logfileinfo, $infoline);
     $infoline = "\$followmeinfohash->{'installlogdir'}: $followmeinfohash->{'installlogdir'}\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -259,7 +259,7 @@ sub set_minor_into_pathes
     push( @installer::globals::logfileinfo, $infoline);
     $infoline = "\$installer::globals::idtlanguagepath: $installer::globals::idtlanguagepath\n";
     push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "Include pathes:\n";
+    $infoline = "Include paths:\n";
     push( @installer::globals::logfileinfo, $infoline);
     foreach my $path ( @{$followmeinfohash->{'includepatharray'}} ) { push( @installer::globals::logfileinfo, $path); }
 
@@ -304,7 +304,7 @@ sub set_minor_into_pathes
     if ( $installer::globals::idtlanguagepath =~ /\Q$srcpath\E/ ) { $installer::globals::idtlanguagepath =~ s/\Q$srcpath\E/$newsrcpath/; }
     foreach my $path ( @{$followmeinfohash->{'includepatharray'}} ) { if ( $path =~ /\Q$srcpath\E/ ) { $path =~ s/\Q$srcpath\E/$newsrcpath/; } }
 
-    $infoline = "\nNew pathes:\n";
+    $infoline = "\nNew paths:\n";
     push( @installer::globals::logfileinfo, $infoline);
     $infoline = "\$followmeinfohash->{'installlogdir'}: $followmeinfohash->{'installlogdir'}\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -314,7 +314,7 @@ sub set_minor_into_pathes
     push( @installer::globals::logfileinfo, $infoline);
     $infoline = "\$installer::globals::idtlanguagepath: $installer::globals::idtlanguagepath\n";
     push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "Include pathes:\n";
+    $infoline = "Include paths:\n";
     push( @installer::globals::logfileinfo, $infoline);
     foreach my $path ( @{$followmeinfohash->{'includepatharray'}} ) { push( @installer::globals::logfileinfo, $path); }
 }

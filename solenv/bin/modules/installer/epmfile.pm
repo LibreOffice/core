@@ -58,7 +58,7 @@ sub read_packagemap
     my $infoline = "\n\nCollected abbreviations and package names:\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-    # Can be a comma separated list. All files have to be found in include pathes
+    # Can be a comma separated list. All files have to be found in include paths
     my $allpackagemapnames = installer::converter::convert_stringlist_into_hash(\$packagemapname, ",");
     foreach my $onepackagemapname ( keys %{$allpackagemapnames} )
     {

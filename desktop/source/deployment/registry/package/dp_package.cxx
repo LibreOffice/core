@@ -1565,7 +1565,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 {
     ::ucbhelper::Content ucbContent( url, xCmdEnv );
 
-    // check for platform pathes:
+    // check for platform paths:
     const OUString title( ucbContent.getPropertyValue(
                               StrTitle::get() ).get<OUString>() );
     if (title.endsWithIgnoreAsciiCaseAsciiL(

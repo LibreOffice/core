@@ -129,7 +129,7 @@ class SvtPathOptions_Impl
     public:
                         SvtPathOptions_Impl();
 
-        // get the pathes, not const because of using a mutex
+        // get the paths, not const because of using a mutex
         const String&   GetPath( SvtPathOptions::Pathes );
         const String&   GetAddinPath() { return GetPath( SvtPathOptions::PATH_ADDIN ); }
         const String&   GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
@@ -156,7 +156,7 @@ class SvtPathOptions_Impl
         const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
         const String&   GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
 
-        // set the pathes
+        // set the paths
         void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
         void            SetAddinPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_ADDIN, rPath ); }
         void            SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }

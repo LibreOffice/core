@@ -334,9 +334,9 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                 || (aText.Len() > 1 && aText.Copy( aText.Len() - 2, 2 ).CompareToAscii( "/." ) == COMPARE_EQUAL)
                 || (aText.Len() > 2 && aText.Copy( aText.Len() - 3, 3 ).CompareToAscii( "/.." ) == COMPARE_EQUAL);
 
-    // for pure home pathes ( ~username ) the '.' at the end of rMatch
+    // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
-    // this is done only for file contents since home pathes parsing is usefull only for them
+    // this is done only for file contents since home paths parsing is usefull only for them
     if ( bPureHomePath && rMatch.Equals( String::CreateFromAscii( "file:///." ) ) )
     {
         // a home that refers to /

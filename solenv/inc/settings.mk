@@ -1012,7 +1012,7 @@ JAVA*:=$(JAVAINTERPRETER)
 .EXPORT : JAVA JAVAI
 
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
-# pathes. (See iz57443)
+# paths. (See iz57443)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip

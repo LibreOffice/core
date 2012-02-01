@@ -175,7 +175,7 @@ sub create_unique_directorynames
 
         if ( ! $allvariables->{'NOSHORTDIRECTORYNAMES'} )
         {
-            # This process does not work for SDK, because of its long and similar pathes
+            # This process does not work for SDK, because of its long and similar paths
             $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
         }
 

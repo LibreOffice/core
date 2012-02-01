@@ -76,7 +76,7 @@ public:
     SvtPathOptions();
     virtual ~SvtPathOptions();
 
-    // get the pathes, not const because of using a mutex
+    // get the paths, not const because of using a mutex
     const String&   GetAddinPath() const;
     const String&   GetAutoCorrectPath() const;
     const String&   GetAutoTextPath() const;
@@ -102,7 +102,7 @@ public:
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
 
-    // set the pathes
+    // set the paths
     void            SetAddinPath( const String& rPath );
     void            SetAutoCorrectPath( const String& rPath );
     void            SetAutoTextPath( const String& rPath );
