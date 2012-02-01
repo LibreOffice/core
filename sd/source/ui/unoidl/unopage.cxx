@@ -3015,7 +3015,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
 }
 
 // XNamed
-void SAL_CALL SdMasterPage::setName( const OUString& aName )
+void SAL_CALL SdMasterPage::setName( const OUString& rName )
     throw(uno::RuntimeException)
 {
     ::SolarMutexGuard aGuard;
@@ -3024,11 +3024,18 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
 
     if(SvxFmDrawPage::mpPage && GetPage()->GetPageKind() != PK_NOTES)
     {
-        String aNewName( aName );
+        SdDrawDocument* pDoc = GetModel()->GetDoc();
+        sal_Bool bOutDummy;
+        String aNewName( rName );
+
+        // Slide Name has to be unique
+        if( pDoc && pDoc->GetPageByName( aNewName, bOutDummy ) != SDRPAGE_NOTFOUND )
+            return; // throw Exception ?
+
         GetPage()->SetName( aNewName );
 
-        if(GetModel()->GetDoc())
-            GetModel()->GetDoc()->RenameLayoutTemplate(GetPage()->GetLayoutName(), aNewName);
+        if( pDoc )
+            pDoc->RenameLayoutTemplate( GetPage()->GetLayoutName(), aNewName );
 
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
