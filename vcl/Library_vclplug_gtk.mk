@@ -65,9 +65,11 @@ endif
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,	\
     $$(LDFLAGS)						\
     $(filter-out -l%,$(GTK_LIBS))			\
+    $(filter-out -l%,$(GTHREAD_LIBS)) \
 ))
 $(eval $(call gb_Library_add_external_libs,vclplug_gtk,	\
     $(patsubst -l%,%, $(filter -l%, $(GTK_LIBS)))	\
+    $(patsubst -l%,%, $(filter -l%, $(GTHREAD_LIBS))) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
