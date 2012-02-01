@@ -34,6 +34,7 @@
 #include <svx/fntctrl.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/layout.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -55,14 +56,16 @@ class FontList;
 class SvxCharBasePage : public SfxTabPage
 {
 protected:
-    SvxFontPrevWindow   m_aPreviewWin;
-    FixedInfo           m_aFontTypeFT;
+    SvxFontPrevWindow*  m_pPreviewWin;
+    FixedInfo*          m_pFontTypeFT;
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
-                        SvxCharBasePage( Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&,
-                                            sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
+    SvxCharBasePage(Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&);
     virtual             ~SvxCharBasePage();
+
+    void makeWidgets(Window *pParent, const ResId& rResId,
+        sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -87,6 +90,11 @@ class SvxCharNamePage : public SvxCharBasePage
 {
 
 private:
+    VBox m_aBox;
+    Grid *m_pWestGrid;
+    Grid *m_pEastGrid;
+    Grid *m_pCTLGrid;
+
     FixedLine*          m_pWestLine;
     FixedText*          m_pWestFontNameFT;
     FontNameBox*        m_pWestFontNameLB;

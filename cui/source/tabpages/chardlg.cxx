@@ -169,44 +169,50 @@ inline sal_Bool StateToAttr( TriState aState )
 
 inline SvxFont& SvxCharBasePage::GetPreviewFont()
 {
-    return m_aPreviewWin.GetFont();
+    return m_pPreviewWin->GetFont();
 }
 
 // -----------------------------------------------------------------------
 
 inline SvxFont& SvxCharBasePage::GetPreviewCJKFont()
 {
-    return m_aPreviewWin.GetCJKFont();
+    return m_pPreviewWin->GetCJKFont();
 }
 // -----------------------------------------------------------------------
 
 inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 {
-    return m_aPreviewWin.GetCTLFont();
+    return m_pPreviewWin->GetCTLFont();
 }
 
 // -----------------------------------------------------------------------
 
-SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset,
-                                 sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT ):
-    SfxTabPage( pParent, rResId, rItemset ),
-    m_aPreviewWin( this, ResId( nResIdPrewievWin, *rResId.GetResMgr() ) ),
-    m_aFontTypeFT( this, ResId( nResIdFontTypeFT, *rResId.GetResMgr() ) ),
-    m_bPreviewBackgroundToCharacter( sal_False )
+SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset)
+    : SfxTabPage( pParent, rResId, rItemset )
+    , m_bPreviewBackgroundToCharacter( sal_False )
 {
+}
+
+void SvxCharBasePage::makeWidgets(Window *pParent, const ResId& rResId,
+    sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT)
+{
+    m_pFontTypeFT = new FixedInfo(pParent, ResId( nResIdFontTypeFT, *rResId.GetResMgr()));
+    m_pPreviewWin = new SvxFontPrevWindow(pParent, ResId( nResIdPrewievWin, *rResId.GetResMgr()));
 }
 
 // -----------------------------------------------------------------------
 
 SvxCharBasePage::~SvxCharBasePage()
 {
+    delete m_pPreviewWin;
+    delete m_pFontTypeFT;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 {
-    m_aPreviewWin.SetFromItemSet( rSet, m_bPreviewBackgroundToCharacter );
+    m_pPreviewWin->SetFromItemSet( rSet, m_bPreviewBackgroundToCharacter );
 }
 
 
@@ -218,7 +224,7 @@ void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SvxCharScaleWidthItem &rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
-        m_aPreviewWin.SetFontWidthScale( rItem.GetValue() );
+        m_pPreviewWin->SetFontWidthScale( rItem.GetValue() );
     }
 }
 
@@ -242,7 +248,7 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
     setPrevFontEscapement(GetPreviewFont(),nProp,nEscProp,nEsc);
     setPrevFontEscapement(GetPreviewCJKFont(),nProp,nEscProp,nEsc);
     setPrevFontEscapement(GetPreviewCTLFont(),nProp,nEscProp,nEsc);
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
 }
 
 // SvxCharNamePage_Impl --------------------------------------------------
@@ -277,60 +283,136 @@ struct SvxCharNamePage_Impl
 
 // class SvxCharNamePage -------------------------------------------------
 
-SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
-
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_NAME ), rInSet, WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE ),
-    m_pImpl                 ( new SvxCharNamePage_Impl )
+SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
+    : SvxCharBasePage(pParent, CUI_RES( RID_SVXPAGE_CHAR_NAME ), rInSet)
+    , m_aBox(this, false, 7)
+    , m_pImpl(new SvxCharNamePage_Impl)
 {
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
+    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
+    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
+    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+
+    m_aBox.setChildProperty(sFill, true);
+    m_aBox.setChildProperty(sExpand, true);
+
     m_pImpl->m_aNoStyleText = String( CUI_RES( STR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( CUI_RES( STR_CHARNAME_TRANSPARENT ) );
 
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
 
-    m_pWestLine         = new FixedLine( this, CUI_RES( FL_WEST ) );
-    m_pWestFontNameFT   = new FixedText( this, CUI_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
-    m_pWestFontNameLB   = new FontNameBox( this, CUI_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
-    m_pWestFontStyleFT  = new FixedText( this, CUI_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
-    m_pWestFontStyleLB  = new FontStyleBox( this, CUI_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
-    m_pWestFontSizeFT   = new FixedText( this, CUI_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
-    m_pWestFontSizeLB   = new FontSizeBox( this, CUI_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestLine = new FixedLine(&m_aBox, CUI_RES(FL_WEST));
+    m_pWestLine->setChildProperty(sFill, true);
+
+    m_pWestGrid = new Grid(&m_aBox);
+    m_pWestGrid->setChildProperty(sFill, true);
+    m_pWestGrid->setChildProperty(sExpand, true);
+
+    m_pWestFontNameFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
+    m_pWestFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pWestFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+
+    m_pWestFontNameLB = new FontNameBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
+    m_pWestFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pWestFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+
+    m_pWestFontStyleFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pWestFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pWestFontStyleLB = new FontStyleBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pWestFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontSizeFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pWestFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pWestFontSizeLB = new FontSizeBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pWestFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
 
     if( !bCJK )
     {
-        m_pColorFL  = new FixedLine( this, CUI_RES( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText( this, CUI_RES( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox( this, CUI_RES( LB_COLOR2 ) );
+        m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
+        m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
+        m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
     }
 
-    m_pWestFontLanguageFT   = new FixedText( this, CUI_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
-    m_pWestFontLanguageLB   = new SvxLanguageBox( this, CUI_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT = new FixedText(m_pWestGrid, CUI_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pWestFontLanguageLB = new SvxLanguageBox(m_pWestGrid, CUI_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
 
-    m_pEastLine             = new FixedLine( this, CUI_RES( FL_EAST ) );
-    m_pEastFontNameFT       = new FixedText( this, CUI_RES( FT_EAST_NAME ) );
-    m_pEastFontNameLB       = new FontNameBox( this, CUI_RES( LB_EAST_NAME ) );
-    m_pEastFontStyleFT      = new FixedText( this, CUI_RES( FT_EAST_STYLE ) );
-    m_pEastFontStyleLB      = new FontStyleBox( this, CUI_RES( LB_EAST_STYLE ) );
-    m_pEastFontSizeFT       = new FixedText( this, CUI_RES( FT_EAST_SIZE ) );
-    m_pEastFontSizeLB       = new FontSizeBox( this, CUI_RES( LB_EAST_SIZE ) );
-    m_pEastFontLanguageFT   = new FixedText( this, CUI_RES( FT_EAST_LANG ) );
-    m_pEastFontLanguageLB   = new SvxLanguageBox( this, CUI_RES( LB_EAST_LANG ) );
+    m_pEastLine             = new FixedLine(&m_aBox, CUI_RES( FL_EAST ) );
 
-    m_pCTLLine              = new FixedLine( this, CUI_RES( FL_CTL ) );
-    m_pCTLFontNameFT        = new FixedText( this, CUI_RES( FT_CTL_NAME ) );
-    m_pCTLFontNameLB        = new FontNameBox( this, CUI_RES( LB_CTL_NAME ) );
-    m_pCTLFontStyleFT       = new FixedText( this, CUI_RES( FT_CTL_STYLE ) );
-    m_pCTLFontStyleLB       = new FontStyleBox( this, CUI_RES( LB_CTL_STYLE ) );
-    m_pCTLFontSizeFT        = new FixedText( this, CUI_RES( FT_CTL_SIZE ) );
-    m_pCTLFontSizeLB        = new FontSizeBox( this, CUI_RES( LB_CTL_SIZE ) );
-    m_pCTLFontLanguageFT    = new FixedText( this, CUI_RES( FT_CTL_LANG ) );
-    m_pCTLFontLanguageLB    = new SvxLanguageBox( this, CUI_RES( LB_CTL_LANG ) );
+    m_pEastGrid = new Grid(&m_aBox);
+    m_pEastGrid->setChildProperty(sFill, true);
+    m_pEastGrid->setChildProperty(sExpand, true);
+
+    m_pEastFontNameFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_NAME ) );
+    m_pEastFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pEastFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pEastFontNameLB = new FontNameBox(m_pEastGrid, CUI_RES( LB_EAST_NAME ) );
+    m_pEastFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pEastFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pEastFontStyleFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_STYLE ) );
+    m_pEastFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pEastFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pEastFontStyleLB = new FontStyleBox(m_pEastGrid, CUI_RES( LB_EAST_STYLE ) );
+    m_pEastFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pEastFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pEastFontSizeFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_SIZE ) );
+    m_pEastFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pEastFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pEastFontSizeLB = new FontSizeBox(m_pEastGrid, CUI_RES( LB_EAST_SIZE ) );
+    m_pEastFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pEastFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pEastFontLanguageFT = new FixedText(m_pEastGrid, CUI_RES( FT_EAST_LANG ) );
+    m_pEastFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pEastFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pEastFontLanguageLB = new SvxLanguageBox(m_pEastGrid, CUI_RES( LB_EAST_LANG ) );
+    m_pEastFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pEastFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+
+    m_pCTLLine              = new FixedLine(&m_aBox, CUI_RES( FL_CTL ) );
+
+    m_pCTLGrid = new Grid(&m_aBox);
+    m_pCTLGrid->setChildProperty(sFill, true);
+    m_pCTLGrid->setChildProperty(sExpand, true);
+
+    m_pCTLFontNameFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_NAME ) );
+    m_pCTLFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pCTLFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pCTLFontNameLB = new FontNameBox(m_pCTLGrid, CUI_RES( LB_CTL_NAME ) );
+    m_pCTLFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
+    m_pCTLFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pCTLFontStyleFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_STYLE ) );
+    m_pCTLFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pCTLFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pCTLFontStyleLB = new FontStyleBox(m_pCTLGrid, CUI_RES( LB_CTL_STYLE ) );
+    m_pCTLFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
+    m_pCTLFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pCTLFontSizeFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_SIZE ) );
+    m_pCTLFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pCTLFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pCTLFontSizeLB = new FontSizeBox(m_pCTLGrid, CUI_RES( LB_CTL_SIZE ) );
+    m_pCTLFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
+    m_pCTLFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pCTLFontLanguageFT = new FixedText(m_pCTLGrid, CUI_RES( FT_CTL_LANG ) );
+    m_pCTLFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pCTLFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 0);
+    m_pCTLFontLanguageLB = new SvxLanguageBox(m_pCTLGrid, CUI_RES( LB_CTL_LANG ) );
+    m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
+    m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 1);
 
     if( bCJK )
     {
-        m_pColorFL  = new FixedLine( this, CUI_RES( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText( this, CUI_RES( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox( this, CUI_RES( LB_COLOR2 ) );
+        m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
+        m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
+        m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
     }
 
     //In MacOSX the standard dialogs name font-name, font-style as
@@ -395,6 +477,10 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pCTLFontLanguageFT   ->Show( bShowCTL );
     m_pCTLFontLanguageLB   ->Show( bShowCTL );
 
+    makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_NAME), WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE);
+    m_pPreviewWin->setChildProperty(sFill, true);
+    m_pPreviewWin->setChildProperty(sExpand, true);
+
     FreeResource();
 
     m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  sal_True, sal_False, sal_True );
@@ -420,6 +506,8 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pWestFontLanguageFT;
     delete m_pWestFontLanguageLB;
 
+    delete m_pWestGrid;
+
     delete m_pEastLine;
     delete m_pEastFontNameFT;
     delete m_pEastFontNameLB;
@@ -429,6 +517,8 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pEastFontSizeLB;
     delete m_pEastFontLanguageFT;
     delete m_pEastFontLanguageLB;
+
+    delete m_pEastGrid;
 
     delete m_pCTLLine;
     delete m_pCTLFontNameFT;
@@ -440,9 +530,14 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pCTLFontLanguageFT;
     delete m_pCTLFontLanguageLB;
 
+    delete m_pCTLGrid;
+
     delete m_pColorFL;
     delete m_pColorFT;
     delete m_pColorLB;
+
+    delete m_pPreviewWin, m_pPreviewWin = NULL;
+    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -633,8 +728,8 @@ void SvxCharNamePage::UpdatePreview_Impl()
 
     calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,m_pCTLFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
 
-    m_aPreviewWin.Invalidate();
-    m_aFontTypeFT.SetText( pFontList->GetFontMapText( aFontInfo ) );
+    m_pPreviewWin->Invalidate();
+    m_pFontTypeFT->SetText( pFontList->GetFontMapText( aFontInfo ) );
 }
 
 // -----------------------------------------------------------------------
@@ -911,7 +1006,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     if ( Western == eLangGrp )
-        m_aFontTypeFT.SetText( pFontList->GetFontMapText(
+        m_pFontTypeFT->SetText( pFontList->GetFontMapText(
             pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
 
     // save these settings
@@ -1228,7 +1323,7 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
             rFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            m_aPreviewWin.Invalidate();
+            m_pPreviewWin->Invalidate();
             sal_uInt16 nSelPos = m_pColorLB->GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_pColorLB->GetEntryPos( m_pImpl->m_aTransparentText );
@@ -1286,7 +1381,7 @@ IMPL_LINK( SvxCharNamePage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
     rFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
     rCJKFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
     rCTLFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
     return 0;
 }
 
@@ -1447,7 +1542,7 @@ void SvxCharNamePage::PageCreated (SfxAllItemSet aSet)
 
 SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet, WIN_EFFECTS_PREVIEW, FT_EFFECTS_FONTTYPE ),
+    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet ),
 
     m_aFontColorFT          ( this, CUI_RES( FT_FONTCOLOR ) ),
     m_aFontColorLB          ( this, CUI_RES( LB_FONTCOLOR ) ),
@@ -1490,6 +1585,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
 
 {
     m_aEffectsLB.Hide();
+    makeWidgets(this, CUI_RES(STR_CHARNAME_TRANSPARENT), WIN_EFFECTS_PREVIEW, FT_EFFECTS_FONTTYPE);
     FreeResource();
     Initialize();
 }
@@ -1613,11 +1709,11 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rFont.SetUnderline( eUnderline );
     rCJKFont.SetUnderline( eUnderline );
     rCTLFont.SetUnderline( eUnderline );
-    m_aPreviewWin.SetTextLineColor( m_aUnderlineColorLB.GetSelectEntryColor() );
+    m_pPreviewWin->SetTextLineColor( m_aUnderlineColorLB.GetSelectEntryColor() );
     rFont.SetOverline( eOverline );
     rCJKFont.SetOverline( eOverline );
     rCTLFont.SetOverline( eOverline );
-    m_aPreviewWin.SetOverlineColor( m_aOverlineColorLB.GetSelectEntryColor() );
+    m_pPreviewWin->SetOverlineColor( m_aOverlineColorLB.GetSelectEntryColor() );
     rFont.SetStrikeout( eStrikeout );
     rCJKFont.SetStrikeout( eStrikeout );
     rCTLFont.SetStrikeout( eStrikeout );
@@ -1660,7 +1756,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetWordLineMode( bWordLine );
     rCTLFont.SetWordLineMode( bWordLine );
 
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -1716,7 +1812,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
 
-            m_aPreviewWin.Invalidate();
+            m_pPreviewWin->Invalidate();
             sal_uInt16 nSelPos = m_aFontColorLB.GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_aFontColorLB.GetEntryPos( m_aTransparentColorName );
@@ -1858,7 +1954,7 @@ IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
     rCJKFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
     rCTLFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
 
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -2311,7 +2407,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     ResetColor_Impl( rSet );
 
     // preview update
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
 
     // save this settings
     m_aUnderlineLB.SaveValue();
@@ -2711,7 +2807,7 @@ void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 
 SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet, WIN_POS_PREVIEW, FT_POS_FONTTYPE ),
+    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet ),
 
     m_aPositionLine     ( this, CUI_RES( FL_POSITION ) ),
     m_aHighPosBtn       ( this, CUI_RES( RB_HIGHPOS ) ),
@@ -2744,6 +2840,7 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_nSuperProp        ( (sal_uInt8)DFLT_ESC_PROP ),
     m_nSubProp          ( (sal_uInt8)DFLT_ESC_PROP )
 {
+    makeWidgets(this, CUI_RES(RID_SVXPAGE_CHAR_POSITION), WIN_POS_PREVIEW, FT_POS_FONTTYPE);
     FreeResource();
     Initialize();
 }
@@ -2911,7 +3008,7 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
             nVal = m_nScaleWidthItemSetVal;
         m_aScaleWidthMF.SetValue( nVal );
 
-        m_aPreviewWin.SetFontWidthScale( nVal );
+        m_pPreviewWin->SetFontWidthScale( nVal );
     }
     return 0;
 }
@@ -2970,7 +3067,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
     rFont.SetFixKerning( (short)nKern );
     rCJKFont.SetFixKerning( (short)nKern );
     rCTLFont.SetFixKerning( (short)nKern );
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->Invalidate();
     return 0;
 }
 
@@ -3012,7 +3109,7 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl)
 {
-    m_aPreviewWin.SetFontWidthScale( sal_uInt16( m_aScaleWidthMF.GetValue() ) );
+    m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_aScaleWidthMF.GetValue() ) );
 
     return 0;
 }
@@ -3477,7 +3574,7 @@ void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet, WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE ),
+    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet ),
 
     m_aSwitchOnLine     ( this, CUI_RES( FL_SWITCHON ) ),
     m_aTwoLinesBtn      ( this, CUI_RES( CB_TWOLINES ) ),
@@ -3490,6 +3587,7 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     m_nStartBracketPosition( 0 ),
     m_nEndBracketPosition( 0 )
 {
+    makeWidgets(this, CUI_RES(RID_SVXPAGE_CHAR_TWOLINES), WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE);
     FreeResource();
     Initialize();
 }
@@ -3712,9 +3810,9 @@ void    SvxCharTwoLinesPage::UpdatePreview_Impl()
         ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;
     sal_Unicode cEnd = m_aEndBracketLB.GetSelectEntryPos() > 0
         ? m_aEndBracketLB.GetSelectEntry().GetChar(0) : 0;
-    m_aPreviewWin.SetBrackets(cStart, cEnd);
-    m_aPreviewWin.SetTwoLines(m_aTwoLinesBtn.IsChecked());
-    m_aPreviewWin.Invalidate();
+    m_pPreviewWin->SetBrackets(cStart, cEnd);
+    m_pPreviewWin->SetTwoLines(m_aTwoLinesBtn.IsChecked());
+    m_pPreviewWin->Invalidate();
 }
 // -----------------------------------------------------------------------
 void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
