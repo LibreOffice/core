@@ -232,8 +232,8 @@ protected:
 
     ScBigRange          aBigRange;          // Ins/Del/MoveTo/ContentPos
     DateTime            aDateTime;          //! UTC
-    String              aUser;              // who?
-    String              aComment;           // user comment
+    rtl::OUString       aUser;              // who?
+    rtl::OUString       aComment;           // user comment
     ScChangeAction*     pNext;              // next in linked list
     ScChangeAction*     pPrev;              // previous in linked list
     ScChangeActionLinkEntry*    pLinkAny;   // arbitrary links
@@ -246,8 +246,7 @@ protected:
     ScChangeActionType  eType;
     ScChangeActionState eState;
 
-    ScChangeAction( ScChangeActionType,
-                    const ScRange& );
+    ScChangeAction( ScChangeActionType, const ScRange& );
 
     // only to be used in the XML import
     ScChangeAction( ScChangeActionType,
@@ -256,20 +255,20 @@ protected:
                     const sal_uLong nRejectAction,
                     const ScChangeActionState eState,
                     const DateTime& aDateTime,
-                    const String& aUser,
-                    const String& aComment );
+                    const rtl::OUString& aUser,
+                    const rtl::OUString& aComment );
+
     // only to be used in the XML import
-    ScChangeAction( ScChangeActionType,
-                    const ScBigRange&,
-                    const sal_uLong nAction);
+    ScChangeAction( ScChangeActionType, const ScBigRange&, const sal_uLong nAction);
 
     virtual ~ScChangeAction();
 
-    String GetRefString( const ScBigRange&, ScDocument*, bool bFlag3D = false ) const;
+    rtl::OUString GetRefString(
+        const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D = false) const;
 
     void SetActionNumber( sal_uLong n ) { nAction = n; }
     void SetRejectAction( sal_uLong n ) { nRejectAction = n; }
-    void SetUser( const String& r ) { aUser = r; }
+    void SetUser( const rtl::OUString& r );
     void SetType( ScChangeActionType e ) { eType = e; }
     void SetState( ScChangeActionState e ) { eState = e; }
     void SetRejected();
@@ -325,7 +324,7 @@ protected:
                      sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
     void Accept();
-    virtual sal_Bool Reject( ScDocument* ) = 0;
+    virtual bool Reject(ScDocument* pDoc) = 0;
     void RejectRestoreContents( ScChangeTrack*, SCsCOL nDx, SCsROW nDy );
 
     // used in Reject() instead of IsRejectable()
@@ -384,8 +383,6 @@ public:
     SC_DLLPUBLIC DateTime GetDateTime() const;        // local time
     const DateTime&     GetDateTimeUTC() const      // UTC time
                             { return aDateTime; }
-    const String&       GetUser() const { return aUser; }
-    const String&       GetComment() const { return aComment; }
     ScChangeActionType  GetType() const { return eType; }
     ScChangeActionState GetState() const { return eState; }
     sal_uLong               GetActionNumber() const { return nAction; }
@@ -423,9 +420,11 @@ public:
     void                SetDateTimeUTC( const DateTime& rDT )
                             { aDateTime = rDT; }
 
-                        // set user comment
-    void                SetComment( const String& rStr )
-                            { aComment = rStr; }
+    SC_DLLPUBLIC const rtl::OUString& GetUser() const;
+    const rtl::OUString& GetComment() const;
+
+    // set user comment
+    void SetComment( const rtl::OUString& rStr );
 
                         // only to be used in the XML import
     void                SetDeletedInThis( sal_uLong nActionNumber,
@@ -448,7 +447,7 @@ class ScChangeActionIns : public ScChangeAction
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
 
-    virtual sal_Bool                Reject( ScDocument* );
+    virtual bool Reject(ScDocument* pDoc);
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
@@ -546,7 +545,7 @@ class ScChangeActionDel : public ScChangeAction
                                     UpdateRefMode, const ScBigRange&,
                                     sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual sal_Bool                Reject( ScDocument* );
+    virtual bool Reject(ScDocument* pDoc);
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
@@ -641,7 +640,7 @@ class ScChangeActionMove : public ScChangeAction
                                     UpdateRefMode, const ScBigRange&,
                                     sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual sal_Bool                Reject( ScDocument* );
+    virtual bool Reject(ScDocument* pDoc);
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
@@ -765,7 +764,7 @@ class ScChangeActionContent : public ScChangeAction
                                     UpdateRefMode, const ScBigRange&,
                                     sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual sal_Bool                Reject( ScDocument* );
+    virtual bool Reject(ScDocument* pDoc);
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
@@ -906,7 +905,7 @@ class ScChangeActionReject : public ScChangeAction
     virtual void AddContent( ScChangeActionContent* ) {}
     virtual void DeleteCellEntries() {}
 
-    virtual sal_Bool Reject( ScDocument* ) { return false; }
+    virtual bool Reject(ScDocument* pDoc);
 
     virtual const ScChangeTrack* GetChangeTrack() const { return 0; }
 
@@ -962,10 +961,10 @@ enum ScChangeTrackMergeState
 class ScChangeTrack : public utl::ConfigurationListener
 {
     friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCsCOL, SCsROW );
-    friend sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc );
+    friend bool ScChangeActionDel::Reject( ScDocument* pDoc );
     friend void ScChangeActionDel::DeleteCellEntries();
     friend void ScChangeActionMove::DeleteCellEntries();
-    friend sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc );
+    friend bool ScChangeActionMove::Reject( ScDocument* pDoc );
 
     static  const SCROW         nContentRowsPerSlot;
     static  const SCSIZE        nContentSlots;

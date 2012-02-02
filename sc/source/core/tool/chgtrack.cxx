@@ -83,11 +83,11 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange
     aDateTime.ConvertToUTC();
 }
 
-ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRange,
-                        const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
-                        const ScChangeActionState eTempState, const DateTime& aTempDateTime,
-                        const String& aTempUser,  const String& aTempComment)
-        :
+ScChangeAction::ScChangeAction(
+    ScChangeActionType eTypeP, const ScBigRange& rRange,
+    const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
+    const ScChangeActionState eTempState, const DateTime& aTempDateTime,
+    const rtl::OUString& aTempUser,  const rtl::OUString& aTempComment) :
         aBigRange( rRange ),
         aDateTime( aTempDateTime ),
         aUser( aTempUser ),
@@ -480,13 +480,13 @@ void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
 }
 
 
-String ScChangeAction::GetRefString(
+rtl::OUString ScChangeAction::GetRefString(
     const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D ) const
 {
-    String aStr;
+    rtl::OUStringBuffer aBuf;
     sal_uInt16 nFlags = ( rRange.IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( !nFlags )
-        aStr = ScGlobal::GetRscString( STR_NOREF_STR );
+        aBuf.append(ScGlobal::GetRscString(STR_NOREF_STR));
     else
     {
         ScRange aTmpRange( rRange.MakeRange() );
@@ -498,12 +498,12 @@ String ScChangeAction::GetRefString(
                 {
                     rtl::OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aStr = aTmp;
-                    aStr += '.';
+                    aBuf.append(aTmp);
+                    aBuf.append(sal_Unicode('.'));
                 }
-                aStr += ::ScColToAlpha( aTmpRange.aStart.Col() );
-                aStr += ':';
-                aStr += ::ScColToAlpha( aTmpRange.aEnd.Col() );
+                aBuf.append(ScColToAlpha(aTmpRange.aStart.Col()));
+                aBuf.append(sal_Unicode(':'));
+                aBuf.append(ScColToAlpha(aTmpRange.aEnd.Col()));
             break;
             case SC_CAT_INSERT_ROWS :
             case SC_CAT_DELETE_ROWS :
@@ -511,27 +511,51 @@ String ScChangeAction::GetRefString(
                 {
                     rtl::OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aStr = aTmp;
-                    aStr += '.';
+                    aBuf.append(aTmp);
+                    aBuf.append(sal_Unicode('.'));
                 }
-                aStr += String::CreateFromInt32( aTmpRange.aStart.Row() + 1 );
-                aStr += ':';
-                aStr += String::CreateFromInt32( aTmpRange.aEnd.Row() + 1 );
+                aBuf.append(static_cast<sal_Int32>(aTmpRange.aStart.Row()+1));
+                aBuf.append(sal_Unicode(':'));
+                aBuf.append(static_cast<sal_Int32>(aTmpRange.aEnd.Row()+1));
             break;
             default:
+            {
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= SCA_TAB_3D;
-                aTmpRange.Format( aStr, nFlags, pDoc, pDoc->GetAddressConvention() );
+
+                rtl::OUString aTmp;
+                aTmpRange.Format(aTmp, nFlags, pDoc, pDoc->GetAddressConvention());
+                aBuf.append(aTmp);
+            }
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )
         {
-            aStr.Insert( '(', 0 );
-            aStr += ')';
+            aBuf.insert(0, sal_Unicode('('));
+            aBuf.append(sal_Unicode(')'));
         }
     }
-    return aStr;
+    return aBuf.makeStringAndClear();
 }
 
+const rtl::OUString& ScChangeAction::GetUser() const
+{
+    return aUser;
+}
+
+void ScChangeAction::SetUser( const rtl::OUString& r )
+{
+    aUser = r;
+}
+
+const rtl::OUString& ScChangeAction::GetComment() const
+{
+    return aComment;
+}
+
+void ScChangeAction::SetComment( const rtl::OUString& rStr )
+{
+    aComment = rStr;
+}
 
 void ScChangeAction::GetRefString(
     String& rStr, ScDocument* pDoc, bool bFlag3D ) const
@@ -696,7 +720,7 @@ void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
 }
 
 
-sal_Bool ScChangeActionIns::Reject( ScDocument* pDoc )
+bool ScChangeActionIns::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -937,7 +961,7 @@ void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
 }
 
 
-sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc )
+bool ScChangeActionDel::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) && GetType() != SC_CAT_DELETE_TABS )
         return false;
@@ -1186,7 +1210,7 @@ void ScChangeActionMove::GetRefString(
 }
 
 
-sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc )
+bool ScChangeActionMove::Reject( ScDocument* pDoc )
 {
     if ( !(aBigRange.IsValid( pDoc ) && aFromRange.IsValid( pDoc )) )
         return false;
@@ -1497,7 +1521,7 @@ void ScChangeActionContent::GetRefString(
 }
 
 
-sal_Bool ScChangeActionContent::Reject( ScDocument* pDoc )
+bool ScChangeActionContent::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -2023,6 +2047,11 @@ ScChangeActionReject::ScChangeActionReject(const sal_uLong nActionNumber, const 
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
+}
+
+bool ScChangeActionReject::Reject(ScDocument* /*pDoc*/)
+{
+    return false;
 }
 
 
@@ -4182,7 +4211,7 @@ bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
         pMap = new ScChangeActionMap;
         GetDependents( pAct, *pMap, false, true );
     }
-    sal_Bool bRejected = Reject( pAct, pMap, false );
+    bool bRejected = Reject( pAct, pMap, false );
     if ( pMap )
         delete pMap;
     return bRejected;
@@ -4232,7 +4261,8 @@ bool ScChangeTrack::Reject(
         {
             bTabDel = true;
             aDelRange = pAct->GetBigRange();
-            bOk = bTabDelOk = pAct->Reject( pDoc );
+            bTabDelOk = pAct->Reject( pDoc );
+            bOk = bTabDelOk;
             if ( bOk )
             {
                 pAct = pAct->GetPrev();
