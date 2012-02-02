@@ -2501,6 +2501,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         sal_Int16 nPage = 0;
         rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
+        SAL_WARN_IF(nPage <= 0, "xmloff",
+                "ERROR: writing invalid anchor-page-number 0");
         ::sax::Converter::convertNumber( sValue, (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
                                   sValue.makeStringAndClear() );
