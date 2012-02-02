@@ -56,11 +56,43 @@ inline sal_Int32 searchAndReplace(
     return i;
 }
 
+inline void searchAndReplaceAll(
+    rtl::OString * text, rtl::OString const & search,
+    rtl::OString const & replace)
+{
+    assert(text != 0);
+    for (sal_Int32 i = 0;;) {
+        i = text->indexOf(search, i);
+        if (i == -1) {
+            break;
+        }
+        *text = text->replaceAt(i, search.getLength(), replace);
+        i += replace.getLength();
+    }
+}
+
 inline rtl::OString getToken(
     rtl::OString const & text, sal_Int32 token, char separator)
 {
     sal_Int32 i = 0;
     return text.getToken(token, separator, i);
+}
+
+inline sal_Int32 indexOfAnyAsciiL(
+    rtl::OUString const & text, char const * chars, sal_Int32 charsLen,
+    sal_Int32 index = 0)
+{
+    for (; index != text.getLength(); ++index) {
+        sal_Unicode c = text[index];
+        if (c <= 0x7F
+            && (rtl_str_indexOfChar_WithLength(
+                    chars, charsLen, static_cast< char >(c))
+                != -1))
+        {
+            return index;
+        }
+    }
+    return -1;
 }
 
 }

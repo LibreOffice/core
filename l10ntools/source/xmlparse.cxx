@@ -287,7 +287,7 @@ sal_Bool XMLFile::Write( rtl::OString const &aFilename )
     exit( -1 );
 }
 
-void XMLFile::WriteString( ofstream &rStream, const String &sString )
+void XMLFile::WriteString( ofstream &rStream, const rtl::OUString &sString )
 {
     rtl::OString sText(rtl::OUStringToOString(sString, RTL_TEXTENCODING_UTF8));
     rStream << sText.getStr();
@@ -312,7 +312,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                 if ( pElement->GetAttributeList())
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
-                        String sData( (*pElement->GetAttributeList())[ j ]->GetName() );
+                        rtl::OUString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
                         XMLUtil::QuotHTML( sData );
                         WriteString( rStream , sData );
                         rStream << "=\"";
@@ -335,7 +335,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                String sData( pData->GetData());
+                rtl::OUString sData( pData->GetData());
                 XMLUtil::QuotHTML( sData );
                 WriteString( rStream, sData );
             }
@@ -745,7 +745,7 @@ XMLElement& XMLElement::operator=(const XMLElement& obj){
 }
 
 /*****************************************************************************/
-void XMLElement::AddAttribute( const String &rAttribute, const String &rValue )
+void XMLElement::AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue )
 /*****************************************************************************/
 {
     if ( !pAttributes )
@@ -754,7 +754,7 @@ void XMLElement::AddAttribute( const String &rAttribute, const String &rValue )
 }
 
 /*****************************************************************************/
-void XMLElement::ChangeLanguageTag( const String &rValue )
+void XMLElement::ChangeLanguageTag( const rtl::OUString &rValue )
 {
     SetLanguageId(rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
     if ( pAttributes )
@@ -842,8 +842,6 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    //YD FIXME somewhere COMMENT is defined as 4!
-    static const String _COMMENT = String::CreateFromAscii("comment");
     static const OUString XML_LANG ( RTL_CONSTASCII_USTRINGPARAM("xml-lang") );
 
     if(pCur!=NULL){
@@ -865,7 +863,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                if(  !pElement->GetName().EqualsIgnoreCaseAscii( _COMMENT ) ){
+                if( !pElement->GetName().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("comment")) ){
                     buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\<")) );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
@@ -946,7 +944,7 @@ XMLData& XMLData::operator=(const XMLData& obj){
     return *this;
 }
 /*****************************************************************************/
-void XMLData::AddData( const String &rData) {
+void XMLData::AddData( const rtl::OUString &rData) {
 /*****************************************************************************/
     sData += rData;
 }
@@ -1118,11 +1116,11 @@ void SimpleXMLParser::CharacterData(
 /*****************************************************************************/
 {
     if ( !pCurData ){
-        String x=String( XML_CHAR_N_TO_OUSTRING( s, len ));
+        rtl::OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
         XMLUtil::UnQuotHTML(x);
         pCurData = new XMLData( x , pCurNode );
     }else{
-        String x=String( XML_CHAR_N_TO_OUSTRING( s, len ));
+        rtl::OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
         XMLUtil::UnQuotHTML(x);
         pCurData->AddData( x );
 
@@ -1149,10 +1147,9 @@ void SimpleXMLParser::Default(
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const String &rFullFileName , const String &rFileName, XMLFile* pXMLFileIn )
+XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rtl::OUString &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
-//  printf("DBG: SimpleXMLParser::Execute( %s )", ByteString( rFileName , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
@@ -1193,7 +1190,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
-    if ( pXMLFile->GetName().Len()) {
+    if ( !pXMLFile->GetName().isEmpty()) {
         aErrorInformation.sMessage = String::CreateFromAscii( "File " );
         aErrorInformation.sMessage += pXMLFile->GetName();
         aErrorInformation.sMessage += String::CreateFromAscii( " parsed successfully" );
@@ -1209,7 +1206,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
         aErrorInformation.nColumn = XML_GetErrorColumnNumber( aParser );
 
         aErrorInformation.sMessage = String::CreateFromAscii( "ERROR: " );
-        if ( pXMLFile->GetName().Len())
+        if ( !pXMLFile->GetName().isEmpty())
             aErrorInformation.sMessage += pXMLFile->GetName();
         else
             aErrorInformation.sMessage += String::CreateFromAscii( "XML-File" );
@@ -1256,108 +1253,79 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
 }
 
 /*****************************************************************************/
-void XMLUtil::QuotHTML( String &rString )
+void XMLUtil::QuotHTML( rtl::OUString &rString )
 /*****************************************************************************/
 {
     OUStringBuffer sReturn;
-    static const String LT(String::CreateFromAscii("<"));
-    static const String QLT(String::CreateFromAscii("&lt;"));
-    static const String GT(String::CreateFromAscii(">"));
-    static const String QGT(String::CreateFromAscii("&gt;"));
-    static const String QUOT(String::CreateFromAscii("\\"));
-    static const String QQUOT(String::CreateFromAscii("&quot;"));
-    static const String APOS(String::CreateFromAscii("\""));
-    static const String QAPOS(String::CreateFromAscii("&apos;"));
-    static const String AMP(String::CreateFromAscii("&"));
-    static const String QAMP(String::CreateFromAscii("&amp;"));
-    static const String SLASH(String::CreateFromAscii("\\"));
-
-    for ( sal_uInt16 i = 0; i < rString.Len(); i++) {
-        if ( i < rString.Len()) {
-            switch ( rString.GetChar( i )) {
-                case '\\': if( i+1 <= rString.Len() ){
-                            switch( rString.GetChar( i+1 ) ){
-                             case '<':  sReturn.append( LT );i++;break;
-                             case '>':  sReturn.append( GT );i++;break;
-                             case '\\': sReturn.append( QUOT );i++;break;
-                             case '\"': sReturn.append( APOS );i++;break;
-                             default:   sReturn.append( SLASH );break;
-
-                           }
-                          }
-                        break;
-
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
+        switch (rString[i]) {
+        case '\\':
+            if (i < rString.getLength()) {
+                switch (rString[i + 1]) {
+                case '"':
                 case '<':
-                    sReturn.append( QLT );
-                    break;
-
                 case '>':
-                    sReturn.append( QGT );
+                case '\\':
+                    ++i;
                     break;
-
-                case '\"':
-                    sReturn.append( QQUOT );
-                    break;
-
-                case '&':
-                    if (
-                          ( ( i + 4 ) < rString.Len()) &&
-                          ( String( rString.Copy( i, 5 ) ).Equals( QAMP ) )
-                       )
-                        sReturn.append( rString.GetChar( i ) );
-                    else
-                        sReturn.append( QAMP );
-                break;
-
-                default:
-                    sReturn.append( rString.GetChar( i ) );
-                break;
+                }
             }
+            // fall through
+        default:
+            sReturn.append(rString[i]);
+            break;
+
+        case '<':
+            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&lt;"));
+            break;
+
+        case '>':
+            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&gt;"));
+            break;
+
+        case '"':
+            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
+            break;
+
+        case '&':
+            if (rString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
+                sReturn.append('&');
+            else
+                sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+            break;
         }
     }
-    rString = String( sReturn.makeStringAndClear() );
+    rString = sReturn.makeStringAndClear();
 }
 
-void XMLUtil::UnQuotHTML( String &rString ){
-    UnQuotData( rString );
-}
-
-void XMLUtil::UnQuotData( String &rString_in )
-{
+void XMLUtil::UnQuotHTML( rtl::OUString &rString ){
     rtl::OStringBuffer sReturn;
-    ByteString sString(rtl::OUStringToOString(rString_in , RTL_TEXTENCODING_UTF8));
-    while (sString.Len())
-    {
-        if ( sString.Copy( 0, 1 ) == "\\" ) {
-            sReturn.append("\\\\");
-            sString.Erase( 0, 1 );
-        }
-        else if ( sString.Copy( 0, 5 ) == "&amp;" ) {
+    rtl::OString sString(rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    for (sal_Int32 i = 0; i != sString.getLength();) {
+        if (sString[i] == '\\') {
+            sReturn.append(RTL_CONSTASCII_STRINGPARAM("\\\\"));
+            ++i;
+        } else if (sString.match("&amp;", i)) {
             sReturn.append('&');
-            sString.Erase( 0, 5 );
-        }
-        else if ( sString.Copy( 0, 4 ) == "&lt;" ) {
+            i += RTL_CONSTASCII_LENGTH("&amp;");
+        } else if (sString.match("&lt;", i)) {
             sReturn.append('<');
-            sString.Erase( 0, 4 );
-        }
-        else if ( sString.Copy( 0, 4 ) == "&gt;" ) {
+            i += RTL_CONSTASCII_LENGTH("&lt;");
+        } else if (sString.match("&gt;", i)) {
             sReturn.append('>');
-            sString.Erase( 0, 4 );
-        }
-        else if ( sString.Copy( 0, 6 ) == "&quot;" ) {
-            sReturn.append('\"');
-            sString.Erase( 0, 6 );
-        }
-        else if ( sString.Copy( 0, 6 ) == "&apos;" ) {
+            i += RTL_CONSTASCII_LENGTH("&gt;");
+        } else if (sString.match("&quot;", i)) {
+            sReturn.append('"');
+            i += RTL_CONSTASCII_LENGTH("&quot;");
+        } else if (sString.match("&apos;", i)) {
             sReturn.append('\'');
-            sString.Erase( 0, 6 );
-        }
-        else {
-            sReturn.append(sString.GetChar(0));
-            sString.Erase( 0, 1 );
+            i += RTL_CONSTASCII_LENGTH("&apos;");
+        } else {
+            sReturn.append(sString[i]);
+            ++i;
         }
     }
-    rString_in = rtl::OStringToOUString(sReturn.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    rString = rtl::OStringToOUString(sReturn.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

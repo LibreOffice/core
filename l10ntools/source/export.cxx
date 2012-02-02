@@ -58,7 +58,7 @@ Export *pExport = 0L;
 #define STATE_LANGUAGES 0X000A
 
 // set of global variables
-typedef ::std::vector< ByteString* > FileList;
+typedef ::std::vector< rtl::OString > FileList;
 FileList aInputFileList;
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
@@ -102,7 +102,7 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        ByteString sSwitch( argv[ i ] );
+        rtl::OString sSwitch( argv[ i ] );
 
         if (sSwitch == "-i"  || sSwitch == "-I" ) {
             nState = STATE_INPUT; // next tokens specifies source files
@@ -142,7 +142,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                     return NULL;    // no valid command line
                 }
                 case STATE_INPUT: {
-                    aInputFileList.push_back( new ByteString( argv[ i ] ) );
+                    aInputFileList.push_back( argv[ i ] );
                     bInput = sal_True; // min. one source file found
                 }
                 break;
@@ -216,7 +216,7 @@ int EndExport()
 
 extern const char* getFilename()
 {
-    return (*(aInputFileList[ 0 ])).GetBuffer();
+    return aInputFileList[0].getStr();
 }
 /*****************************************************************************/
 extern FILE *GetNextFile()
@@ -226,7 +226,7 @@ extern FILE *GetNextFile()
     if ( !sTempFile.isEmpty())
     {
         fclose( pTempFile );
-        String sTemp(rtl::OStringToOUString(sTempFile,
+        rtl::OUString sTemp(rtl::OStringToOUString(sTempFile,
             RTL_TEXTENCODING_ASCII_US));
         DirEntry aTemp( sTemp );
         aTemp.Kill();
@@ -234,15 +234,14 @@ extern FILE *GetNextFile()
 
     while ( !aInputFileList.empty() )
     {
-        ByteString sFileName( *(aInputFileList[ 0 ]) );
+        rtl::OString sFileName(aInputFileList[0]);
 
         rtl::OString sOrigFile( sFileName );
 
         sFileName = Export::GetNativeFile( sFileName );
-        delete aInputFileList[ 0 ];
         aInputFileList.erase( aInputFileList.begin() );
 
-        if ( sFileName == "" ) {
+        if ( sFileName.isEmpty() ) {
             fprintf( stderr, "ERROR: Could not precompile File %s\n",
                 sOrigFile.getStr());
             return GetNextFile();
@@ -252,10 +251,10 @@ extern FILE *GetNextFile()
         Export::RemoveUTF8ByteOrderMarkerFromFile( sFileName );
 
         // able to open file?
-        FILE *pFile = fopen( sFileName.GetBuffer(), "r" );
+        FILE *pFile = fopen( sFileName.getStr(), "r" );
         if ( !pFile )
             fprintf( stderr, "Error: Could not open File %s\n",
-                sFileName.GetBuffer());
+                sFileName.getStr());
         else {
             pTempFile = pFile;
 
@@ -266,7 +265,7 @@ extern FILE *GetNextFile()
             aEntry.ToAbs();
             rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(),
                 RTL_TEXTENCODING_ASCII_US));
-            aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
+            aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
             aEntry += DirEntry( sPrjRoot );
             rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
                 RTL_TEXTENCODING_ASCII_US));
@@ -423,7 +422,7 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
 
     // open output stream
     if ( bEnableExport ) {
-        aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
+        aOutput.Open( rtl::OStringToOUString( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
         if( !aOutput.IsOpen() ) {
             fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
             exit ( -1 );
@@ -465,7 +464,7 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
 
     // open output stream
     if ( bEnableExport ) {
-        aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
+        aOutput.Open( rtl::OStringToOUString( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
         aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
         aOutput.SetLineDelimiter( LINEEND_CRLF );
     }
@@ -647,7 +646,6 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            ByteString sBackup( sToken );
             sToken = comphelper::string::remove(sToken, '\n');
             sToken = comphelper::string::remove(sToken, '\r');
             sToken = comphelper::string::remove(sToken, '{');
@@ -656,19 +654,19 @@ int Export::Execute( int nToken, const char * pToken )
             rtl::OString sTLower = getToken(sToken, 0, ' ').toAsciiLowerCase();
             pResData->sResTyp = sTLower;
             rtl::OString sId( sToken.copy( pResData->sResTyp.getLength() + 1 ));
-            ByteString sCondition;
+            rtl::OString sCondition;
             if ( sId.indexOf( '#' ) != -1 )
             {
                 // between ResTyp, Id and paranthes is a precomp. condition
                 sCondition = "#";
-                sCondition += ByteString(getToken(sId, 1, '#'));
+                sCondition += getToken(sId, 1, '#');
                 sId = getToken(sId, 0, '#');
             }
             sId = getToken(sId, 0, '/');
             CleanValue( sId );
             sId = comphelper::string::remove(sId, '\t');
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
-            if ( sCondition.Len())
+            if (!sCondition.isEmpty())
             {
                 Execute( CONDITION, "");  // execute the precomp. condition
             }
@@ -705,7 +703,7 @@ int Export::Execute( int nToken, const char * pToken )
                 break;
 
             bDontWriteOutput = sal_False;
-            ByteString sLowerTyp;
+            rtl::OString sLowerTyp;
             if ( pResData )
                 sLowerTyp = "unknown";
             nLevel++;
@@ -803,11 +801,11 @@ int Export::Execute( int nToken, const char * pToken )
         case LISTASSIGNMENT:
         {
             bDontWriteOutput = sal_False;
-            ByteString sTmpToken(comphelper::string::remove(sToken, ' '));
-            sal_uInt16 nPos = 0;
-            nPos = sTmpToken.ToLowerAscii().Search("[en-us]=");
-            if( nPos != STRING_NOTFOUND ) {
-                rtl::OString sKey = sTmpToken.Copy( 0 , nPos );
+            rtl::OString sTmpToken(
+                comphelper::string::remove(sToken, ' ').toAsciiLowerCase());
+            sal_Int32 nPos = sTmpToken.indexOf("[en-us]=");
+            if (nPos != -1) {
+                rtl::OString sKey(sTmpToken.copy(0 , nPos));
                 sKey = comphelper::string::remove(sKey, ' ');
                 sKey = comphelper::string::remove(sKey, '\t');
                 rtl::OString sValue = getToken(sToken, 1, '=');
@@ -888,7 +886,7 @@ int Export::Execute( int nToken, const char * pToken )
             // this is an entry for a String- or FilterList
             if ( nList ) {
                 SetChildWithText();
-                ByteString sEntry(getToken(sToken, 1, '\"'));
+                rtl::OString sEntry(getToken(sToken, 1, '\"'));
                 if ( getTokenCount(sToken, '\"') > 3 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
@@ -912,7 +910,7 @@ int Export::Execute( int nToken, const char * pToken )
                 rtl::OString sKey = getToken(getToken(sToken, 0, '='), 0, '[');
                 sKey = comphelper::string::remove(sKey, ' ');
                 sKey = comphelper::string::remove(sKey, '\t');
-                ByteString sText( GetText( sToken, nToken ));
+                rtl::OString sText( GetText( sToken, nToken ));
                 rtl::OString sLang;
                 if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
                 {
@@ -920,8 +918,8 @@ int Export::Execute( int nToken, const char * pToken )
                     CleanValue( sLang );
                 }
                 rtl::OString sLangIndex = sLang;
-                ByteString sOrigKey = sKey;
-                if ( sText.Len() && !sLang.isEmpty() )
+                rtl::OString sOrigKey = sKey;
+                if ( !sText.isEmpty() && !sLang.isEmpty() )
                 {
                     sKey = sKey.toAsciiUpperCase();
                     if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("TEXT")) ||
@@ -1050,14 +1048,14 @@ int Export::Execute( int nToken, const char * pToken )
             while( helper::searchAndReplace(&sToken, "\r", " " ) != -1 ) {};
             while( helper::searchAndReplace(&sToken, "\t", " " ) != -1 ) {};
             while( helper::searchAndReplace(&sToken, "  ", " " ) != -1 ) {};
-            ByteString sCondition = getToken(sToken, 0, ' ');
+            rtl::OString sCondition(getToken(sToken, 0, ' '));
             if ( sCondition == "#ifndef" ) {
                 sActPForm = "!defined ";
-                sActPForm += ByteString(getToken(sToken, 1, ' '));
+                sActPForm += getToken(sToken, 1, ' ');
             }
             else if ( sCondition == "#ifdef" ) {
                 sActPForm = "defined ";
-                sActPForm += ByteString(getToken(sToken, 1, ' '));
+                sActPForm += getToken(sToken, 1, ' ');
             }
             else if ( sCondition == "#if" ) {
                 sActPForm = sToken.copy( 4 );
@@ -1124,24 +1122,17 @@ int Export::Execute( int nToken, const char * pToken )
 void Export::CutComment( rtl::OString &rText )
 /*****************************************************************************/
 {
-    if ( rText.indexOf( "//" ) != -1 ) {
-        ByteString sWork( rText );
-        sWork.SearchAndReplaceAll( "\\\"", "XX" );
-        sal_uInt16 i = 0;
-        sal_Bool bInner = sal_False;
-
-        while ( i < sWork.Len() - 1 ) {
-            if ( sWork.GetChar( i ) == '\"' )
+    if (rText.indexOf("//") != -1) {
+        rtl::OString sWork(rText);
+        helper::searchAndReplaceAll(&sWork, "\\\"", "XX");
+        bool bInner = false;
+        for (sal_Int32 i = 0; i < sWork.getLength() - 1; ++i) {
+            if (sWork[i] == '"') {
                 bInner = !bInner;
-            else if
-                (( sWork.GetChar( i ) == '/' ) &&
-                ( !bInner ) &&
-                ( sWork.GetChar( i + 1 ) == '/' ))
-            {
+            } else if (sWork[i] == '/' && !bInner && sWork[i + 1] == '/' ) {
                 rText = rText.copy(0, i);
-                return;
+                break;
             }
-            i++;
         }
     }
 }
@@ -1169,24 +1160,24 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         (  !pResData->sTitle[ SOURCE_LANGUAGE ].isEmpty()))
 
        {
-        ByteString sGID = pResData->sGId;
-        ByteString sLID;
-        if ( !sGID.Len())
+        rtl::OString sGID = pResData->sGId;
+        rtl::OString sLID;
+        if (sGID.isEmpty())
             sGID = pResData->sId;
         else
             sLID = pResData->sId;
 
-        ByteString sXText;
-        ByteString sXHText;
-        ByteString sXQHText;
-        ByteString sXTitle;
+        rtl::OString sXText;
+        rtl::OString sXHText;
+        rtl::OString sXQHText;
+        rtl::OString sXTitle;
 
-        ByteString sTimeStamp( Export::GetTimeStamp());
-        ByteString sCur;
+        rtl::OString sTimeStamp(Export::GetTimeStamp());
+        rtl::OString sCur;
 
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
-                if ( !sCur.EqualsIgnoreCaseAscii("x-comment") ){
+                if (!sCur.equalsIgnoreAsciiCase("x-comment") ){
                     if (!pResData->sText[ sCur ].isEmpty())
                         sXText = pResData->sText[ sCur ];
                     else {
@@ -1210,10 +1201,10 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                     else
                         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
 
-                    if ( !sXText.Len())
+                    if (sXText.isEmpty())
                         sXText = "-";
 
-                    if ( !sXHText.Len())
+                    if (sXHText.isEmpty())
                     {
                         if (!pResData->sHelpText[ SOURCE_LANGUAGE ].isEmpty())
                             sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
@@ -1223,7 +1214,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                     sXText = pResData->sText[ sCur ];
 
                 if ( bEnableExport ) {
-                    ByteString sOutput( sProject ); sOutput += "\t";
+                    rtl::OString sOutput( sProject ); sOutput += "\t";
                     if ( !sRoot.isEmpty())
                         sOutput += sActFileName;
                     sOutput += "\t0\t";
@@ -1232,7 +1223,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                     sOutput += sLID; sOutput += "\t";
                     sOutput += pResData->sHelpId; sOutput   += "\t";
                     sOutput += pResData->sPForm; sOutput    += "\t";
-                    sOutput += ByteString(rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth))); sOutput += "\t";
+                    sOutput += rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth)); sOutput += "\t";
                     sOutput += sCur; sOutput += "\t";
 
 
@@ -1254,31 +1245,31 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
             }
     }
     if ( pResData->pStringList ) {
-        ByteString sList( "stringlist" );
+        rtl::OString sList( "stringlist" );
         WriteExportList( pResData, pResData->pStringList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pStringList = 0;
     }
     if ( pResData->pFilterList ) {
-        ByteString sList( "filterlist" );
+        rtl::OString sList( "filterlist" );
         WriteExportList( pResData, pResData->pFilterList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pFilterList = 0;
     }
     if ( pResData->pItemList ) {
-        ByteString sList( "itemlist" );
+        rtl::OString sList( "itemlist" );
         WriteExportList( pResData, pResData->pItemList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pItemList = 0;
     }
     if ( pResData->pPairedList ) {
-        ByteString sList( "pairedlist" );
+        rtl::OString sList( "pairedlist" );
         WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pItemList = 0;
     }
     if ( pResData->pUIEntries ) {
-        ByteString sList( "uientries" );
+        rtl::OString sList( "uientries" );
         WriteExportList( pResData, pResData->pUIEntries, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pUIEntries = 0;
@@ -1289,9 +1280,8 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 rtl::OString Export::GetPairedListID(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sIdent = getToken(rText, 1, ';');
-    sIdent.ToUpperAscii();
-    while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
+    rtl::OString sIdent(
+        getToken(rText, 1, ';').toAsciiUpperCase().replace('\t', ' '));
     sIdent = comphelper::string::stripEnd(sIdent, ' ');
     sIdent = comphelper::string::stripStart(sIdent, ' ');
     return sIdent;
@@ -1300,11 +1290,10 @@ rtl::OString Export::GetPairedListID(const rtl::OString& rText)
 rtl::OString Export::GetPairedListString(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sString = getToken(rText, 0, ';');
-    while( sString.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
+    rtl::OString sString(getToken(rText, 0, ';').replace('\t', ' '));
     sString = comphelper::string::stripEnd(sString, ' ');
-    ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
-    sString = s1.Copy( 0 , s1.SearchBackward( '\"' ) );
+    rtl::OString s1(sString.copy(sString.indexOf('"') + 1));
+    sString = s1.copy(0, s1.lastIndexOf('"'));
     sString = comphelper::string::stripEnd(sString, ' ');
     sString = comphelper::string::stripStart(sString, ' ');
     return sString;
@@ -1319,8 +1308,8 @@ rtl::OString Export::StripList(const rtl::OString & rText)
 sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
     const rtl::OString &rTyp, sal_Bool bCreateNew)
 {
-    ByteString sGID = pResData->sGId;
-    if ( !sGID.Len())
+    rtl::OString sGID(pResData->sGId);
+    if (sGID.isEmpty())
         sGID = pResData->sId;
     else {
         sGID += ".";
@@ -1328,13 +1317,13 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         sGID = comphelper::string::stripEnd(sGID, '.');
     }
 
-    ByteString sTimeStamp( Export::GetTimeStamp());
-    ByteString sCur;
+    rtl::OString sTimeStamp(Export::GetTimeStamp());
+    rtl::OString sCur;
     for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
     {
         ExportListEntry *pEntry = (*pExportList)[  i ];
 
-        ByteString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
+        rtl::OString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
         for (unsigned int n = 0; n < aLanguages.size(); ++n)
         {
             sCur = aLanguages[ n ];
@@ -1342,7 +1331,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
             {
                 if ( bEnableExport )
                 {
-                    ByteString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+                    rtl::OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
 
                     // Strip PairList Line String
                     if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
@@ -1515,7 +1504,7 @@ void Export::CleanValue( rtl::OString &rValue )
 
 rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
 {
-    ByteString sReturn;
+    rtl::OString sReturn;
     switch ( nToken )
     {
         case TEXTLINE:
@@ -1526,38 +1515,29 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
             sTmp = comphelper::string::remove(sTmp, '\n');
             sTmp = comphelper::string::remove(sTmp, '\r');
 
-            while ( helper::searchAndReplace(&sTmp, "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"" )
-                != -1 ) {}
-            while ( helper::searchAndReplace(&sTmp, "\\\"", "-=<[Hochkomma]>=-" )
-                != -1 ) {}
-            while ( helper::searchAndReplace(&sTmp, "\\", "-=<[0x7F]>=-" )
-                != -1 ) {}
-            while ( helper::searchAndReplace(&sTmp, "\\0x7F", "-=<[0x7F]>=-" )
-                != -1 ) {}
+            helper::searchAndReplaceAll(
+                &sTmp, "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"");
+            helper::searchAndReplaceAll(&sTmp, "\\\"", "-=<[Hochkomma]>=-");
+            helper::searchAndReplaceAll(&sTmp, "\\", "-=<[0x7F]>=-");
+            helper::searchAndReplaceAll(&sTmp, "\\0x7F", "-=<[0x7F]>=-");
 
-            sal_uInt16 nStart = 0;
-            sal_uInt16 nState = TXT_STATE_MACRO;
-
-            nState = TXT_STATE_TEXT;
-            nStart = 1;
-
-
-            for ( sal_uInt16 i = nStart; i < getTokenCount(sTmp, '\"'); ++i )
+            sal_uInt16 nState = TXT_STATE_TEXT;
+            for (sal_Int32 i = 0; i < getTokenCount(sTmp, '\"'); ++i)
             {
-                ByteString sToken = getToken(sTmp, i, '\"');
-                if ( sToken.Len()) {
+                rtl::OString sToken(getToken(sTmp, i, '"'));
+                if (!sToken.isEmpty()) {
                     if ( nState == TXT_STATE_TEXT ) {
                         sReturn += sToken;
                         nState = TXT_STATE_MACRO;
                     }
                     else {
-                        while( sToken.SearchAndReplace( "\t", " " ) !=
-                            STRING_NOTFOUND ) {};
-                        while( sToken.SearchAndReplace( "  ", " " ) !=
-                            STRING_NOTFOUND ) {};
+                        sToken = sToken.replace('\t', ' ');
+                        while (helper::searchAndReplace(&sToken, "  ", " ")
+                               != -1)
+                        {}
                         sToken = comphelper::string::stripStart(sToken, ' ');
                         sToken = comphelper::string::stripEnd(sToken, ' ');
-                        if ( sToken.Len()) {
+                        if (!sToken.isEmpty()) {
                             sReturn += "\\\" ";
                             sReturn += sToken;
                             sReturn += " \\\"";
@@ -1567,19 +1547,13 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
                 }
             }
 
-            while ( sReturn.SearchAndReplace( "-=<[0x7F]>=-", "" )
-                != STRING_NOTFOUND ) {};
-            while ( sReturn.SearchAndReplace( "-=<[Hochkomma]>=-", "\"" )
-                != STRING_NOTFOUND ) {};
-            while ( sReturn.SearchAndReplace( "-=<[BSlashBSlashHKom]>=-", "\\\\" )
-                != STRING_NOTFOUND ) {};
-
-
-            while ( sReturn.SearchAndReplace( "\\\\", "-=<[BSlashBSlash]>=-" )
-                != STRING_NOTFOUND ) {};
-            while ( sReturn.SearchAndReplace( "-=<[BSlashBSlash]>=-", "\\" )
-                != STRING_NOTFOUND ) {};
-
+            helper::searchAndReplaceAll(&sReturn, "-=<[0x7F]>=-", "");
+            helper::searchAndReplaceAll(&sReturn, "-=<[Hochkomma]>=-", "\"");
+            helper::searchAndReplaceAll(
+                &sReturn, "-=<[BSlashBSlashHKom]>=-", "\\\\");
+            helper::searchAndReplaceAll(
+                &sReturn, "\\\\", "-=<[BSlashBSlash]>=-");
+            helper::searchAndReplaceAll(&sReturn, "-=<[BSlashBSlash]>=-", "\\");
         }
         break;
     }
@@ -1590,50 +1564,44 @@ void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
 {
     if ( !bDontWriteOutput || !bUnmerge )
     {
-        ByteString sText( rText );
-        while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
-        if( pParseQueue->bNextIsM && bSDFContent && sText.Len() > 2 ){
-            for( sal_uInt16 n = 0 ; n < sText.Len() ; n++ ){
-                if( sText.GetChar( n ) == '\n' && sText.GetChar( n-1 ) != '\\'){
-                    sText.Insert('\\' , n++ );
-
+        rtl::OString sText(rText);
+        while (helper::searchAndReplace(&sText, " \n", "\n") != -1) {}
+        if (pParseQueue->bNextIsM && bSDFContent && sText.getLength() > 2) {
+            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+                if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                    sText = sText.replaceAt(n++, 0, "\\");
                 }
             }
-        }
-        else if( pParseQueue->bLastWasM && sText.Len() > 2 ){
-            for( sal_uInt16 n = 0 ; n < sText.Len() ; n++ ){
-                if( sText.GetChar( n ) == '\n' && sText.GetChar( n-1 ) != '\\'){
-                    sText.Insert('\\' , n++ );
+        } else if (pParseQueue->bLastWasM && sText.getLength() > 2) {
+            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+                if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                    sText = sText.replaceAt(n++, 0, "\\");
                 }
-                if( sText.GetChar( n ) == '\n' )pParseQueue->bMflag=true;
-            }
-        }
-        else if( pParseQueue->bCurrentIsM && bSDFContent && sText.Len() > 2 ){
-            for( sal_uInt16 n = 0 ; n < sText.Len() ; n++ ){
-                if( sText.GetChar( n ) == '\n' && sText.GetChar( n-1 ) != '\\'){
-                    sText.Insert('\\' , n++ );
-                    pParseQueue->bMflag=true;
+                if (sText[n] == '\n') {
+                    pParseQueue->bMflag = true;
                 }
             }
-        }
-        else if( pParseQueue->bMflag ){
-            for( sal_uInt16 n = 1 ; n < sText.Len() ; n++ ){
-                if( sText.GetChar( n ) == '\n' && sText.GetChar( n-1 ) != '\\'){
-                    sText.Insert('\\' , n++ );
-                }
-            }
-        }
-        for (sal_uInt16 i = 0; i < sText.Len(); ++i)
+        } else if (pParseQueue->bCurrentIsM && bSDFContent
+                   && sText.getLength() > 2)
         {
-            if ( sText.GetChar( i ) != '\n' )
-            {
-                sal_Char cChar = sText.GetChar(i);
-                aOutput.Write(&cChar, 1);
-
+            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+                if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                    sText = sText.replaceAt(n++, 0, "\\");
+                    pParseQueue->bMflag = true;
+                }
             }
-            else
-            {
-                aOutput.WriteLine( ByteString());
+        } else if (pParseQueue->bMflag) {
+            for (sal_Int32 n = 1; n < sText.getLength(); ++n) {
+                if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                    sText = sText.replaceAt(n++, 0, "\\");
+                }
+            }
+        } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
+            if (sText[i] == '\n') {
+                aOutput.WriteLine(rtl::OString());
+            } else {
+                char cChar = sText[i];
+                aOutput.Write(&cChar, 1);
             }
         }
     }
@@ -1698,7 +1666,7 @@ void Export::ConvertMergeContent( rtl::OString &rText )
     rText = sNew.makeStringAndClear();
 
     if ( bNoOpen ) {
-        ByteString sTmp( rText );
+        rtl::OString sTmp( rText );
         rText = "\"";
         rText += sTmp;
     }
@@ -1712,11 +1680,11 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     // position to merge in:
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = 0;
-    ByteString sOldId = pResData->sId;
-    ByteString sOldGId = pResData->sGId;
-    ByteString sOldTyp = pResData->sResTyp;
+    rtl::OString sOldId = pResData->sId;
+    rtl::OString sOldGId = pResData->sGId;
+    rtl::OString sOldTyp = pResData->sResTyp;
 
-    ByteString sOrigText( rText );
+    rtl::OString sOrigText( rText );
 
     switch ( nTyp ) {
         case LIST_STRING :
@@ -1785,7 +1753,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
             if (( sLastListLine.indexOf( '>' ) != -1 ) &&
                 ( sLastListLine.indexOf( '<' ) == -1 ))
             {
-                ByteString sTmp = sLastListLine;
+                rtl::OString sTmp = sLastListLine;
                 sLastListLine = "<";
                 sLastListLine += sTmp;
             }
@@ -1850,8 +1818,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
 
         // Init Languages
-        ByteString sTmp = Export::sLanguages;
-        if( sTmp.ToUpperAscii().Equals("ALL") )
+        if( Export::sLanguages.equalsIgnoreAsciiCase("ALL") )
             SetLanguages( pMergeDataFile->GetLanguages() );
         else if( !isInitialized )InitLanguages();
 
@@ -1878,7 +1845,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     if (Export::isSourceLanguage(rLangIndex))
         return sal_False;
 
-    ByteString sPostFix( rText.copy( ++nEnd ));
+    rtl::OString sPostFix( rText.copy( ++nEnd ));
     rText = rText.copy(0, nStart);
 
     ConvertMergeContent( sContent );
@@ -1900,8 +1867,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
         pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
 
         // Init Languages
-        ByteString sTmp = Export::sLanguages;
-        if( sTmp.ToUpperAscii().Equals("ALL") )
+        if (Export::sLanguages.equalsIgnoreAsciiCase("ALL"))
             SetLanguages( pMergeDataFile->GetLanguages() );
         else if( !isInitialized )InitLanguages();
 
@@ -1915,16 +1881,14 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 
                 sal_Bool bAddSemikolon = sal_False;
                 sal_Bool bFirst = sal_True;
-                ByteString sCur;
-                ByteString sTmp = Export::sLanguages;
-
+                rtl::OString sCur;
                 for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                     sCur = aLanguages[ n ];
 
                     rtl::OString sText;
                     sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_TEXT, sCur , sal_True );
                     if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        ByteString sOutput;
+                        rtl::OString sOutput;
                         if ( bNextMustBeDefineEOL)  {
                             if ( bFirst )
                                 sOutput += "\t\\\n";
@@ -1960,7 +1924,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 
 
                 if ( bAddSemikolon ) {
-                    ByteString sOutput( ";" );
+                    rtl::OString sOutput( ";" );
                     WriteToMerged( sOutput , false );
                 }
             }
@@ -1968,7 +1932,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             if ( pEntry && pResData->bQuickHelpText ) {
                 sal_Bool bAddSemikolon = sal_False;
                 sal_Bool bFirst = sal_True;
-                ByteString sCur;
+                rtl::OString sCur;
 
                 for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                     sCur = aLanguages[ n ];
@@ -1976,7 +1940,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     rtl::OString sText;
                     sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_QUICKHELPTEXT, sCur, sal_True );
                     if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        ByteString sOutput;
+                        rtl::OString sOutput;
                         if ( bNextMustBeDefineEOL)  {
                             if ( bFirst )
                                 sOutput += "\t\\\n";
@@ -2006,7 +1970,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     }
                 }
                 if ( bAddSemikolon ) {
-                    ByteString sOutput( ";" );
+                    rtl::OString sOutput( ";" );
                     WriteToMerged( sOutput , false );
                 }
             }
@@ -2014,7 +1978,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             if ( pEntry && pResData->bTitle ) {
                 sal_Bool bAddSemikolon = sal_False;
                 sal_Bool bFirst = sal_True;
-                ByteString sCur;
+                rtl::OString sCur;
 
                 for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                     sCur = aLanguages[ n ];
@@ -2022,7 +1986,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     rtl::OString sText;
                     sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_TITLE, sCur, sal_True );
                     if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        ByteString sOutput;
+                        rtl::OString sOutput;
                         if ( bNextMustBeDefineEOL)  {
                             if ( bFirst )
                                 sOutput += "\t\\\n";
@@ -2052,7 +2016,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     }
                 }
                 if ( bAddSemikolon ) {
-                    ByteString sOutput( ";" );
+                    rtl::OString sOutput( ";" );
                     WriteToMerged( sOutput ,false);
                 }
             }
@@ -2060,13 +2024,13 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 
             if ( pResData->bList ) {
                 bool bPairedList = false;
-                ByteString sOldId = pResData->sId;
-                ByteString sOldGId = pResData->sGId;
-                ByteString sOldTyp = pResData->sResTyp;
+                rtl::OString sOldId = pResData->sId;
+                rtl::OString sOldGId = pResData->sGId;
+                rtl::OString sOldTyp = pResData->sResTyp;
                 if (!pResData->sGId.isEmpty())
                     pResData->sGId = pResData->sGId + rtl::OString('.');
                 pResData->sGId = pResData->sGId + sOldId;
-                ByteString sSpace;
+                rtl::OString sSpace;
                 for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
                     sSpace += "\t";
                 for ( sal_uInt16 nT = LIST_STRING; nT <= LIST_UIENTRIES; nT++ ) {
@@ -2090,7 +2054,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                             pResData->sId = GetPairedListID ( (*pListE)[ SOURCE_LANGUAGE ] );
                         }
                         else
-                            pResData->sId = ByteString("1");
+                            pResData->sId = "1";
 
                         PFormEntrys *pEntrys;
                         sal_uLong nLIndex = 0;
@@ -2169,7 +2133,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 sal_Int32 nStart, nEnd;
                                 nStart = sLine.indexOf( '"' );
 
-                                ByteString sPostFix;
+                                rtl::OString sPostFix;
                                 if( !bPairedList ){
                                     nEnd = sLine.lastIndexOf( '"' );
                                     sPostFix = sLine.copy( ++nEnd );
@@ -2188,7 +2152,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                     sLine += sPostFix;
                                 }
 
-                                ByteString sText1( "\t" );
+                                rtl::OString sText1( "\t" );
                                 sText1 += sLine;
                                 if ( bDefine || bNextMustBeDefineEOL )
                                     sText1 += " ;\\\n";
@@ -2218,7 +2182,10 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 pEntrys = oldEntry;
                         }
                         if ( nIdx > 1 ) {
-                            ByteString sFooter( sSpace.Copy( 1 ));
+                            rtl::OString sFooter;
+                            if (!sSpace.isEmpty()) {
+                                sFooter = sSpace.copy(1);
+                            }
                             if ( bNextMustBeDefineEOL )
                                 sFooter += "};";
                             else if ( !bDefine )
@@ -2270,7 +2237,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             }
 
             while( PrepareTextToMerge( sLine, nList, m_sListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
-                ByteString sText( "\t" );
+                rtl::OString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
                 sText += "\n";

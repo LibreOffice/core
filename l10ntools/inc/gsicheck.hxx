@@ -71,7 +71,7 @@ public:
     rtl::OString  const GetQuickHelpText() const { return aQuickHelpText; }
     rtl::OString  const GetTitle()      const    { return aTitle; }
 
-    void SetUText( String &aNew ) { aText = rtl::OUStringToOString(aNew, RTL_TEXTENCODING_UTF8); ReassembleLine(); }
+    void SetUText( rtl::OUString const &aNew ) { aText = rtl::OUStringToOString(aNew, RTL_TEXTENCODING_UTF8); ReassembleLine(); }
     void        SetText( rtl::OString const &aNew ) { aText = aNew; ReassembleLine(); }
     void        SetQuickHelpText( rtl::OString const &aNew ) { aQuickHelpText = aNew; ReassembleLine(); }
     void        SetTitle( rtl::OString const &aNew ) { aTitle = aNew; ReassembleLine(); }
@@ -109,7 +109,7 @@ private:
 
     sal_Bool bHasBlockError;
 
-    sal_Bool IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const;
+    sal_Bool IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_Int32 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const;
     sal_Bool TestUTF8( GSILine* pTestee, sal_Bool bFixTags );
     sal_Bool HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 

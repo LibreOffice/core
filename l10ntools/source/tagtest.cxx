@@ -35,6 +35,7 @@
 #endif
 
 #include "gsicheck.hxx"
+#include "helper.hxx"
 
 #define HAS_FLAG( nFlags, nFlag )       ( ( nFlags & nFlag ) != 0 )
 #define SET_FLAG( nFlags, nFlag )       ( nFlags |= nFlag )
@@ -42,7 +43,7 @@
 
 
 
-TokenInfo::TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr, ParserMessageList &rErrorList )
+TokenInfo::TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList )
 : bClosed(sal_False)
 , bCloseTag(sal_False)
 , bIsBroken(sal_False)
@@ -90,9 +91,9 @@ CLOSETAG_HAS_TAG_NAME  '>' ->  FINISHED
 */
 void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 {
-    sal_uInt16 nLastPos = 2;    // skip initial  \<
-    sal_uInt16 nCheckPos = nLastPos;
-    String aDelims( String::CreateFromAscii( " \\=>/" ) );
+    sal_Int32 nLastPos = 2;    // skip initial  \<
+    sal_Int32 nCheckPos = nLastPos;
+    static char const aDelims[] = " \\=>/";
     String aPortion;
     String aValue;      // store the value of a property
     rtl::OString aName; // store the name of a property/tag
@@ -102,18 +103,19 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     tagcheck aState = TC_START;
 
     // skip blanks
-    while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
+    while ( nLastPos < aTokenString.getLength() && aTokenString[nLastPos] == ' ')
         nLastPos++;
 
-    nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
-    while ( nCheckPos != STRING_NOTFOUND && !( aState == TC_FINISHED || aState == TC_ERROR ) )
+    nCheckPos = helper::indexOfAnyAsciiL(
+        aTokenString, RTL_CONSTASCII_STRINGPARAM(aDelims), nLastPos);
+    while ( nCheckPos != -1 && !( aState == TC_FINISHED || aState == TC_ERROR ) )
     {
-        aPortion = aTokenString.Copy( nLastPos, nCheckPos-nLastPos );
+        aPortion = aTokenString.copy( nLastPos, nCheckPos-nLastPos );
 
-        if ( aTokenString.GetChar( nCheckPos ) == '\\' )
+        if ( aTokenString[nCheckPos] == '\\' )
             nCheckPos++;
 
-        cDelim = aTokenString.GetChar( nCheckPos );
+        cDelim = aTokenString[nCheckPos];
         nCheckPos++;
 
         switch ( aState )
@@ -374,10 +376,11 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 
         // skip further blanks
         if ( cDelim == ' ' && aState != TC_INSIDE_STRING )
-            while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
+            while ( nLastPos < aTokenString.getLength() && aTokenString[nLastPos] == ' ')
                 nLastPos++;
 
-        nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
+        nCheckPos = helper::indexOfAnyAsciiL(
+            aTokenString, RTL_CONSTASCII_STRINGPARAM(aDelims), nLastPos);
     }
     if ( aState != TC_FINISHED )
     {
@@ -386,19 +389,19 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     }
 }
 
-sal_Bool TokenInfo::IsPropertyRelevant( const rtl::OString &rName, const String &rValue ) const
+sal_Bool TokenInfo::IsPropertyRelevant( const rtl::OString &rName, const rtl::OUString &rValue ) const
 {
-    if ( aTagName.EqualsAscii( "alt" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("alt")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
         return sal_False;
-    if ( aTagName.EqualsAscii( "ahelp" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("visibility")) && rValue.EqualsAscii("visible") )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ahelp")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("visibility")) && rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("visible")) )
         return sal_False;
-    if ( aTagName.EqualsAscii( "image" ) && (rName.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) || rName.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))) )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && (rName.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) || rName.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))) )
         return sal_False;
 
     return sal_True;
 }
 
-sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const String &rValue ) const
+sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const rtl::OUString &rValue ) const
 {
 /*  removed due to i56740
     if ( aTagName.EqualsAscii( "switchinline" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
@@ -407,28 +410,28 @@ sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const Strin
                rValue.EqualsAscii("appl") ||
                rValue.EqualsAscii("distrib");
     } */
-    if ( aTagName.EqualsAscii( "caseinline" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("caseinline")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
     {
-        return /*!rValue.EqualsAscii("OS2") &&  removed due to i56740 */
-               !rValue.EqualsAscii("");
+        return !rValue.isEmpty();
     }
 
     // we don't know any better so we assume it to be OK
     return sal_True;
 }
 
-sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const String &rValue ) const
+sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const rtl::OUString &rValue ) const
 {
-    if ( aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("name")) )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("name")) )
         return sal_False;
-    if ( aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")) )
+    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")) )
     {   // check for external reference
-        if (  rValue.Copy( 0, 5 ).EqualsIgnoreCaseAscii( "http:" )
-           || rValue.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "https:" )
-           || rValue.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "ftp:" ) )
-            return sal_False;
-        else
-            return sal_True;
+        return
+            !(rValue.matchIgnoreAsciiCaseAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM("http:"))
+              || rValue.matchIgnoreAsciiCaseAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM("https:"))
+              || rValue.matchIgnoreAsciiCaseAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM("ftp:")));
     }
     return sal_True;
 }
@@ -436,12 +439,12 @@ sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const String
 sal_Bool TokenInfo::IsPropertyFixable( const rtl::OString &rName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( (aTagName.EqualsAscii( "ahelp" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("hid")))
-      || (aTagName.EqualsAscii( "link" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")))
-      || (aTagName.EqualsAscii( "alt" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
-      || (aTagName.EqualsAscii( "variable" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
-      || (aTagName.EqualsAscii( "image" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("src")))
-      || (aTagName.EqualsAscii( "image" ) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")) ))
+    if ( (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ahelp")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("hid")))
+         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")))
+         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("alt")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("variable")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("src")))
+         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")) ))
         return sal_True;
     return sal_False;
 }
@@ -455,7 +458,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
     if ( nId != rInfo.nId )
         return sal_False;
 
-    if ( !aTagName.Equals( rInfo.aTagName ) )
+    if ( aTagName != rInfo.aTagName )
         return sal_False;
 
     // If one of the tags has formating errors already it does make no sense to check here, so return right away
@@ -471,7 +474,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
             {
                 if ( IsPropertyInvariant( iProp->first, iProp->second ) )
                 {
-                    if ( !rInfo.aProperties.find( iProp->first )->second.Equals( iProp->second ) )
+                    if ( rInfo.aProperties.find( iProp->first )->second != iProp->second )
                     {
                         if ( bGenErrors )
                         {
@@ -518,12 +521,12 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
     return sal_True;
 }
 
-String TokenInfo::GetTagName() const
+rtl::OUString TokenInfo::GetTagName() const
 {
     return aTagName;
 }
 
-String TokenInfo::MakeTag() const
+rtl::OUString TokenInfo::MakeTag() const
 {
     String aRet;
     aRet.AppendAscii("\\<");
@@ -574,7 +577,7 @@ void ParserMessageList::clear()
 
 struct Tag
 {
-    String GetName() const { return String::CreateFromAscii( pName ); };
+    rtl::OUString GetName() const { return rtl::OUString::createFromAscii( pName ); };
     const char* pName;
     TokenId nTag;
 };
@@ -662,11 +665,11 @@ SimpleParser::SimpleParser()
 {
 }
 
-void SimpleParser::Parse( String PaSource )
+void SimpleParser::Parse( rtl::OUString const & PaSource )
 {
     aSource = PaSource;
     nPos = 0;
-    aLastToken.Erase();
+    aLastToken = rtl::OUString();
     aNextTag = TokenInfo( TAG_NOMORETAGS, TOK_INVALIDPOS );
     aTokenList.clear();
 };
@@ -683,18 +686,21 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
     else
     {
         aLastToken = GetNextTokenString( rErrorList, nTokenStartPos );
-        if ( aLastToken.Len() == 0 )
+        if ( aLastToken.isEmpty() )
             return TokenInfo( TAG_NOMORETAGS, TOK_INVALIDPOS );
 
         // do we have a \< ... \> style tag?
-        if ( aLastToken.Copy(0,2).EqualsAscii( "\\<" ) )
+        if (aLastToken.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("\\<")))
         {
             // check for paired \" \"
             bool bEven = true;
-            sal_uInt16 nQuotePos = 0;
-            sal_uInt16 nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"" );
-            sal_uInt16 nQuotedBackPos = aLastToken.SearchAscii( "\\\\" );    // this is only to kick out quoted backslashes
-            while ( nQuotedQuotesPos != STRING_NOTFOUND )
+            sal_Int32 nQuotePos = 0;
+            sal_Int32 nQuotedQuotesPos =
+                aLastToken.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("\\\""));
+            sal_Int32 nQuotedBackPos = aLastToken.indexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("\\\\"));
+                // this is only to kick out quoted backslashes
+            while (nQuotedQuotesPos != -1)
             {
                 if ( nQuotedBackPos <= nQuotedQuotesPos )
                     nQuotePos = nQuotedBackPos+2;
@@ -703,8 +709,11 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
                     nQuotePos = nQuotedQuotesPos+2;
                     bEven = !bEven;
                 }
-                nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"", nQuotePos );
-                nQuotedBackPos = aLastToken.SearchAscii( "\\\\", nQuotePos );    // this is only to kick out quoted backslashes
+                nQuotedQuotesPos = aLastToken.indexOfAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("\\\""), nQuotePos);
+                nQuotedBackPos = aLastToken.indexOfAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("\\\\"), nQuotePos);
+                    // this is only to kick out quoted backslashes
             }
             if ( !bEven )
             {
@@ -712,19 +721,18 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
             }
 
             // check if we have an end-tag or a start-tag
-            sal_uInt16 nNonBlankStartPos,nNonBlankEndPos;
-            nNonBlankStartPos = 2;
-            while ( aLastToken.GetChar(nNonBlankStartPos) == ' ' )
+            sal_Int32 nNonBlankStartPos = 2;
+            while (aLastToken[nNonBlankStartPos] == ' ')
                 nNonBlankStartPos++;
-            if ( aLastToken.GetChar(nNonBlankStartPos) == '/' )
+            if (aLastToken[nNonBlankStartPos] == '/')
                 aResult = TokenInfo( TAG_COMMONEND, nTokenStartPos, aLastToken, rErrorList );
             else
             {
                 aResult = TokenInfo( TAG_COMMONSTART, nTokenStartPos, aLastToken, rErrorList );
-                nNonBlankEndPos = aLastToken.Len() -3;
-                while ( aLastToken.GetChar(nNonBlankEndPos) == ' ' )
+                sal_Int32 nNonBlankEndPos = aLastToken.getLength() - 3;
+                while (aLastToken[nNonBlankEndPos] == ' ')
                     nNonBlankEndPos--;
-                if ( aLastToken.GetChar( nNonBlankEndPos ) == '/' )
+                if (aLastToken[nNonBlankEndPos] == '/')
                     aNextTag = TokenInfo( TAG_COMMONEND, nTokenStartPos, String::CreateFromAscii("\\</").Append(aResult.GetTagName()).AppendAscii("\\>"), rErrorList );
             }
         }
@@ -744,15 +752,19 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
     return aResult;
 }
 
-String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTagStartPos )
+rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTagStartPos )
 {
-    sal_uInt16 nStyle2StartPos = aSource.SearchAscii( "$[", nPos );
-    sal_uInt16 nStyle3StartPos = aSource.SearchAscii( "\\<", nPos );
-    sal_uInt16 nStyle4StartPos = aSource.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
+    sal_Int32 nStyle2StartPos = aSource.indexOfAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("$["), nPos );
+    sal_Int32 nStyle3StartPos = aSource.indexOfAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("\\<"), nPos);
+    sal_Int32 nStyle4StartPos = aSource.indexOfAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("\\\\"), nPos);
+        // this is only to kick out quoted backslashes
 
     rTagStartPos = 0;
 
-    if ( STRING_NOTFOUND == nStyle2StartPos && STRING_NOTFOUND == nStyle3StartPos )
+    if (nStyle2StartPos == -1 && nStyle3StartPos == -1)
         return String();  // no more tokens
 
     if ( nStyle4StartPos < nStyle2StartPos && nStyle4StartPos <= nStyle3StartPos )  // <= to make sure \\ is always handled first
@@ -763,42 +775,48 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt
 
     if ( nStyle2StartPos < nStyle3StartPos )
     {   // test for $[ ... ] style tokens
-        sal_uInt16 nEndPos = aSource.SearchAscii( "]", nStyle2StartPos);
-        if ( nEndPos == STRING_NOTFOUND )
+        sal_Int32 nEndPos = aSource.indexOf(']', nStyle2StartPos);
+        if (nEndPos == -1)
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle2StartPos +2;
             return GetNextTokenString( rErrorList, rTagStartPos );
         }
         nPos = nEndPos;
         rTagStartPos = nStyle2StartPos;
-        return aSource.Copy( nStyle2StartPos, nEndPos-nStyle2StartPos +1 );
+        return aSource.copy(nStyle2StartPos, nEndPos - nStyle2StartPos + 1);
     }
     else
     {   // test for \< ... \> style tokens
-        sal_uInt16 nEndPos = aSource.SearchAscii( "\\>", nStyle3StartPos);
-        sal_uInt16 nQuotedBackPos = aSource.SearchAscii( "\\\\", nStyle3StartPos );    // this is only to kick out quoted backslashes
-        while ( nQuotedBackPos <= nEndPos && nQuotedBackPos != STRING_NOTFOUND )
+        sal_Int32 nEndPos = aSource.indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("\\>"), nStyle3StartPos);
+        sal_Int32 nQuotedBackPos = aSource.indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("\\\\"), nStyle3StartPos);
+            // this is only to kick out quoted backslashes
+        while (nQuotedBackPos <= nEndPos && nQuotedBackPos != -1)
         {
-            nEndPos = aSource.SearchAscii( "\\>", nQuotedBackPos +2);
-            nQuotedBackPos = aSource.SearchAscii( "\\\\", nQuotedBackPos +2 );    // this is only to kick out quoted backslashes
+            nEndPos = aSource.indexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("\\>"), nQuotedBackPos + 2);
+            nQuotedBackPos = aSource.indexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("\\\\"), nQuotedBackPos + 2);
+                // this is only to kick out quoted backslashes
         }
-        if ( nEndPos == STRING_NOTFOUND )
+        if (nEndPos == -1)
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle3StartPos +2;
-            rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.Copy( nStyle3StartPos-10, 20 ) ) );
+            rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.copy(nStyle3StartPos - 10, 20) ) );
             return GetNextTokenString( rErrorList, rTagStartPos );
         }
         // check for paired quoted "    -->   \"sometext\"
 
         nPos = nEndPos;
         rTagStartPos = nStyle3StartPos;
-        return aSource.Copy( nStyle3StartPos, nEndPos-nStyle3StartPos +2 );
+        return aSource.copy(nStyle3StartPos, nEndPos-nStyle3StartPos + 2);
     }
 }
 
-String SimpleParser::GetLexem( TokenInfo const &aToken )
+rtl::OUString SimpleParser::GetLexem( TokenInfo const &aToken )
 {
-    if ( aToken.aTokenString.Len() )
+    if ( !aToken.aTokenString.isEmpty() )
         return aToken.aTokenString;
     else
     {
@@ -815,7 +833,7 @@ TokenParser::TokenParser()
 : pErrorList( NULL )
 {}
 
-void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
+void TokenParser::Parse( const rtl::OUString &aCode, ParserMessageList* pList )
 {
     pErrorList = pList;
 
@@ -1300,7 +1318,7 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
     if ( aCurrentToken.nId == aExpectedToken.nId )
     {
         if ( ( aCurrentToken.nId == TAG_COMMONEND
-               && aCurrentToken.GetTagName().Equals( aExpectedToken.GetTagName() ) )
+               && aCurrentToken.GetTagName() == aExpectedToken.GetTagName() )
              || aCurrentToken.nId != TAG_COMMONEND )
         {
             aTag = aParser.GetNextToken( *pErrorList );
@@ -1310,7 +1328,9 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
 
     if ( aExpectedToken.nId == TAG_COMMONEND )
     {
-        aExpectedToken.aTokenString.Insert( String::CreateFromAscii( "Close tag for " ), 0 );
+        aExpectedToken.aTokenString =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Close tag for "))
+            + aExpectedToken.aTokenString;
     }
 
     rtl::OString sTmp(RTL_CONSTASCII_STRINGPARAM("Expected Symbol"));
@@ -1537,7 +1557,7 @@ void LingTest::CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool 
             if ( aTesteeTokens[ --i ].HasBeenFixed() )
             {
                 bFixesDone = sal_True;
-                aFixedTestee.Replace( aTesteeTokens[ i ].nPos, aTesteeTokens[ i ].aTokenString.Len(), aTesteeTokens[ i ].MakeTag() );
+                aFixedTestee = aFixedTestee.replaceAt( aTesteeTokens[ i ].nPos, aTesteeTokens[ i ].aTokenString.getLength(), aTesteeTokens[ i ].MakeTag() );
             }
         }
         if ( bFixesDone )

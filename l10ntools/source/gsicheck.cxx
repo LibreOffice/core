@@ -64,9 +64,9 @@ void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
-sal_Bool LanguageOK( ByteString aLang )
+sal_Bool LanguageOK( rtl::OString const & aLang )
 {
-    if ( !aLang.Len() )
+    if (aLang.isEmpty())
         return sal_False;
 
     using comphelper::string::isdigitAsciiString;
@@ -80,11 +80,11 @@ sal_Bool LanguageOK( ByteString aLang )
         return islowerAsciiString(aLang);
     else if ( getTokenCount(aLang, '-') == 2 )
     {
-        ByteString aTok0( getToken(aLang, 0, '-') );
-        ByteString aTok1( getToken(aLang, 1, '-') );
-        return  aTok0.Len() && islowerAsciiString(aTok0)
-             && aTok1.Len() && isupperAsciiString(aTok1)
-             && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
+        rtl::OString aTok0( getToken(aLang, 0, '-') );
+        rtl::OString aTok1( getToken(aLang, 1, '-') );
+        return  !aTok0.isEmpty() && islowerAsciiString(aTok0)
+             && !aTok1.isEmpty() && isupperAsciiString(aTok1)
+             && !aTok1.equalsIgnoreAsciiCase( aTok0 );
     }
 
     return sal_False;
@@ -99,7 +99,7 @@ class LazySvFileStream : public SvFileStream
 {
 
 private:
-    String aFileName;
+    rtl::OUString aFileName;
     sal_Bool bOpened;
     StreamMode eOpenMode;
 
@@ -110,7 +110,7 @@ public:
     , eOpenMode( 0 )
     {};
 
-    void SetOpenParams( const String& rFileName, StreamMode eOpenModeP )
+    void SetOpenParams( const rtl::OUString& rFileName, StreamMode eOpenModeP )
     {
         aFileName = rFileName;
         eOpenMode = eOpenModeP;
@@ -207,28 +207,27 @@ void GSILine::NotOK()
 void GSILine::ReassembleLine()
 /*****************************************************************************/
 {
-    ByteString aReassemble;
     if ( GetLineFormat() == FORMAT_SDF )
     {
-        sal_uInt16 i;
-        for ( i = 0 ; i < 10 ; i++ )
+        rtl::OStringBuffer aReassemble;
+        for (sal_Int32 i = 0; i < 10; ++i)
         {
-            aReassemble.Append( helper::getToken( data_, i, '\t' ) );
-            aReassemble.Append( "\t" );
+            aReassemble.append( helper::getToken( data_, i, '\t' ) );
+            aReassemble.append( "\t" );
         }
-        aReassemble.Append( aText );
-        aReassemble.Append( "\t" );
-        aReassemble.Append( helper::getToken( data_, 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
-        aReassemble.Append( "\t" );
-        aReassemble.Append( aQuickHelpText );
-        aReassemble.Append( "\t" );
-        aReassemble.Append( aTitle );
-        for ( i = 14 ; i < 15 ; i++ )
+        aReassemble.append( aText );
+        aReassemble.append( "\t" );
+        aReassemble.append( helper::getToken( data_, 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
+        aReassemble.append( "\t" );
+        aReassemble.append( aQuickHelpText );
+        aReassemble.append( "\t" );
+        aReassemble.append( aTitle );
+        for (sal_Int32 i = 14; i < 15; ++i)
         {
-            aReassemble.Append( "\t" );
-            aReassemble.Append( helper::getToken( data_, i, '\t' ) );
+            aReassemble.append( "\t" );
+            aReassemble.append( helper::getToken( data_, i, '\t' ) );
         }
-        *(ByteString*)this = aReassemble;
+        data_ = aReassemble.makeStringAndClear();
     }
     else
         PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );
@@ -329,7 +328,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, rtl::OString const & aPrefix
     for ( size_t i = 0 ; i < pList->size() ; i++ )
     {
         ParserMessage *pMsg = (*pList)[ i ];
-        ByteString aContext;
+        rtl::OString aContext;
         if ( bPrintContext )
         {
             if ( pMsg->GetTagBegin() == STRING_NOTFOUND )
@@ -345,21 +344,28 @@ void GSIBlock::PrintList( ParserMessageList *pList, rtl::OString const & aPrefix
 }
 
 /*****************************************************************************/
-sal_Bool GSIBlock::IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const
+sal_Bool GSIBlock::IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_Int32 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const
 /*****************************************************************************/
 {
-    String aUTF8Tester(rtl::OStringToOUString(aTestee, RTL_TEXTENCODING_UTF8));
-    if ( STRING_MATCH != (nErrorPos = ByteString(rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8)).Match( aTestee )) )
+    rtl::OUString aUTF8Tester(
+        rtl::OStringToOUString(aTestee, RTL_TEXTENCODING_UTF8));
+    nErrorPos = rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8).
+        indexOf(aTestee);
+    if (nErrorPos != -1)
     {
-        aUTF8Tester = String( aTestee.getStr(), nErrorPos, RTL_TEXTENCODING_UTF8 );
-        nErrorPos = aUTF8Tester.Len();
+        aUTF8Tester = rtl::OUString(
+            aTestee.getStr(), nErrorPos, RTL_TEXTENCODING_UTF8);
+        nErrorPos = aUTF8Tester.getLength();
         aErrorMsg = "UTF8 Encoding seems to be broken";
         return sal_False;
     }
 
-    nErrorPos = aUTF8Tester.SearchChar( String::CreateFromAscii( "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0b\x0c\x0e\x0f"
-                "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x7f" ).GetBuffer() );
-    if ( nErrorPos != STRING_NOTFOUND )
+    nErrorPos = helper::indexOfAnyAsciiL(
+        aUTF8Tester,
+        RTL_CONSTASCII_STRINGPARAM(
+            "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0b\x0c\x0e\x0f\x10\x11\x12"
+            "\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x7f"));
+    if (nErrorPos != -1)
     {
         aErrorMsg = "String contains illegal character";
         return sal_False;
@@ -378,16 +384,16 @@ sal_Bool GSIBlock::IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_u
 sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
 /*****************************************************************************/
 {
-    sal_uInt16 nErrorPos = 0;
+    sal_Int32 nErrorPos = 0;
     rtl::OString aErrorMsg;
     sal_Bool bError = sal_False;
     rtl::OString aFixed;
     sal_Bool bHasBeenFixed = sal_False;
     if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        ByteString aContext( pTestee->GetText().copy( nErrorPos, 20 ) );
+        rtl::OString aContext( pTestee->GetText().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Text at Position "))
-             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+             .append(nErrorPos).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
@@ -400,7 +406,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     {
         rtl::OString aContext( pTestee->GetQuickHelpText().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in QuickHelpText at Position "))
-             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+             .append(nErrorPos).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
@@ -413,7 +419,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     {
         rtl::OString aContext( pTestee->GetTitle().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Title at Position "))
-             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+             .append(nErrorPos).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
@@ -436,11 +442,13 @@ sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
     if ( !bAllowSuspicious && ( nPos = pTestee->GetText().indexOf("??")) != -1 )
         if ( pSource->GetText().indexOf("??") == -1 )
         {
-            String aUTF8Tester = String( pTestee->GetText(), 0, nPos, RTL_TEXTENCODING_UTF8 );
-            sal_uInt16 nErrorPos = aUTF8Tester.Len();
+            rtl::OUString aUTF8Tester(
+                rtl::OStringToOUString(
+                    pTestee->GetText().copy(0, nPos), RTL_TEXTENCODING_UTF8));
+            sal_Int32 nErrorPos = aUTF8Tester.getLength();
             rtl::OString aContext( pTestee->GetText().copy( nPos, 20 ) );
             PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found double questionmark in translation only. Looks like an encoding problem at Position "))
-                 .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+                 .append(nErrorPos).getStr(),
                 "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
             pTestee->NotOK();
             return sal_True;
@@ -494,10 +502,10 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
         {
             if ( pSourceLine && pSourceLine->data_ != pReferenceLine->data_ )
             {
-                xub_StrLen nPos = ByteString(pSourceLine->data_).Match( pReferenceLine->data_ );
-                ByteString aContext( pReferenceLine->data_.copy( nPos - 5, 15) );
-                aContext.Append( "\" --> \"" ).Append( pSourceLine->data_.copy( nPos - 5, 15) );
-                PrintError( "Source Language Entry has changed.", "File format", aContext, pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
+                sal_Int32 nPos = pSourceLine->data_.indexOf( pReferenceLine->data_ );
+                rtl::OStringBuffer aContext( pReferenceLine->data_.copy( nPos - 5, 15) );
+                aContext.append( "\" --> \"" ).append( pSourceLine->data_.copy( nPos - 5, 15) );
+                PrintError( "Source Language Entry has changed.", "File format", aContext.makeStringAndClear(), pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
                 pSourceLine->NotOK();
                 bHasError = sal_True;
             }
@@ -662,13 +670,13 @@ int _cdecl main( int argc, char *argv[] )
     sal_Bool bWriteFixed = sal_False;
     sal_Bool bFixTags = sal_False;
     sal_Bool bAllowSuspicious = sal_False;
-    String aErrorFilename;
-    String aCorrectFilename;
-    String aFixedFilename;
+    rtl::OUString aErrorFilename;
+    rtl::OUString aCorrectFilename;
+    rtl::OUString aFixedFilename;
     sal_Bool bFileHasError = sal_False;
     rtl::OString aSourceLang( "en-US" );     // English is default
-    ByteString aFilename;
-    ByteString aReferenceFilename;
+    rtl::OString aFilename;
+    rtl::OString aReferenceFilename;
     sal_Bool bReferenceFile = sal_False;
     for ( sal_uInt16 i = 1 ; i < argc ; i++ )
     {
@@ -685,7 +693,10 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aErrorFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
+                                    aErrorFilename = rtl::OUString(
+                                        argv[i + 1],
+                                        rtl_str_getLength(argv[i + 1]),
+                                        RTL_TEXTENCODING_ASCII_US);
                                     bWriteError = sal_True;
                                     i++;
                                 }
@@ -701,7 +712,10 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aCorrectFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
+                                    aCorrectFilename = rtl::OUString(
+                                        argv[i + 1],
+                                        rtl_str_getLength(argv[i + 1]),
+                                        RTL_TEXTENCODING_ASCII_US);
                                     bWriteCorrect = sal_True;
                                     i++;
                                 }
@@ -716,7 +730,10 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aFixedFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
+                                    aFixedFilename = rtl::OUString(
+                                        argv[i + 1],
+                                        rtl_str_getLength(argv[i + 1]),
+                                        RTL_TEXTENCODING_ASCII_US);
                                     bWriteFixed = sal_True;
                                     bFixTags = sal_True;
                                     i++;
@@ -790,8 +807,8 @@ int _cdecl main( int argc, char *argv[] )
         }
         else
         {
-            if  ( !aFilename.Len())
-                aFilename = ByteString( argv[ i ] );
+            if  (aFilename.isEmpty())
+                aFilename = argv[i];
             else
             {
                 fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n");
@@ -801,7 +818,7 @@ int _cdecl main( int argc, char *argv[] )
     }
 
 
-    if ( !aFilename.Len() || bError )
+    if (aFilename.isEmpty() || bError)
     {
         Help();
         exit ( 0 );
@@ -823,42 +840,42 @@ int _cdecl main( int argc, char *argv[] )
 
 
 
-    DirEntry aSource = DirEntry( String( aFilename, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aSource = DirEntry( rtl::OStringToOUString( aFilename, RTL_TEXTENCODING_ASCII_US ));
     if ( !aSource.Exists()) {
-        fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.GetBuffer() );
+        fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.getStr() );
         exit ( 2 );
     }
 
-    SvFileStream aGSI( String( aFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
+    SvFileStream aGSI( rtl::OStringToOUString( aFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     if ( !aGSI.IsOpen()) {
-        fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.GetBuffer() );
+        fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.getStr() );
         exit ( 3 );
     }
 
     SvFileStream aReferenceGSI;
     if ( bReferenceFile )
     {
-        DirEntry aReferenceSource = DirEntry( String( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ));
+        DirEntry aReferenceSource = DirEntry( rtl::OStringToOUString( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ));
         if ( !aReferenceSource.Exists()) {
-            fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.GetBuffer() );
+            fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.getStr() );
             exit ( 2 );
         }
 
-        aReferenceGSI.Open( String( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
+        aReferenceGSI.Open( rtl::OStringToOUString( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
         if ( !aReferenceGSI.IsOpen()) {
-            fprintf( stderr, "\nERROR: Could not open Input-File %s!\n\n", aFilename.GetBuffer() );
+            fprintf( stderr, "\nERROR: Could not open Input-File %s!\n\n", aFilename.getStr() );
             exit ( 3 );
         }
     }
 
     LazySvFileStream aOkOut;
-    String aBaseName = aSource.GetBase();
+    rtl::OUString aBaseName(aSource.GetBase());
     if ( bWriteCorrect )
     {
-        if ( !aCorrectFilename.Len() )
+        if (aCorrectFilename.isEmpty())
         {
-            String sTmpBase( aBaseName );
-            sTmpBase += String( "_ok", RTL_TEXTENCODING_ASCII_US );
+            rtl::OUString sTmpBase(aBaseName);
+            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_ok"));
             aSource.SetBase( sTmpBase );
             aCorrectFilename = aSource.GetFull();
         }
@@ -868,10 +885,10 @@ int _cdecl main( int argc, char *argv[] )
     LazySvFileStream aErrOut;
     if ( bWriteError )
     {
-        if ( !aErrorFilename.Len() )
+        if (aErrorFilename.isEmpty())
         {
-            String sTmpBase( aBaseName );
-            sTmpBase += String( "_err", RTL_TEXTENCODING_ASCII_US );
+            rtl::OUString sTmpBase(aBaseName);
+            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_err"));
             aSource.SetBase( sTmpBase );
             aErrorFilename = aSource.GetFull();
         }
@@ -881,10 +898,10 @@ int _cdecl main( int argc, char *argv[] )
     LazySvFileStream aFixOut;
     if ( bWriteFixed )
     {
-        if ( !aFixedFilename.Len() )
+        if (aFixedFilename.isEmpty())
         {
-            String sTmpBase( aBaseName );
-            sTmpBase += String( "_fix", RTL_TEXTENCODING_ASCII_US );
+            rtl::OUString sTmpBase(aBaseName);
+            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_fix"));
             aSource.SetBase( sTmpBase );
             aFixedFilename = aSource.GetFull();
         }
@@ -894,7 +911,6 @@ int _cdecl main( int argc, char *argv[] )
 
     rtl::OString sReferenceLine;
     GSILine* pReferenceLine = NULL;
-    ByteString aOldReferenceId("No Valid ID");   // just set to something which can never be an ID
     sal_uLong nReferenceLine = 0;
 
     rtl::OString sGSILine;

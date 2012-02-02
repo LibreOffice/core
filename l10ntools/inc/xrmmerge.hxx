@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// global includes
-#include <tools/string.hxx>
-
 //
 // XRMResParser
 //
@@ -36,42 +33,42 @@
 class XRMResParser
 {
 private:
-    ByteString sGID;
-    ByteString sLID;
+    rtl::OString sGID;
+    rtl::OString sLID;
 
     sal_Bool bError;
     sal_Bool bText;
 
     bool sLocalized;
 
-    ByteString sCurrentOpenTag;
-    ByteString sCurrentCloseTag;
-    ByteString sCurrentText;
+    rtl::OString sCurrentOpenTag;
+    rtl::OString sCurrentCloseTag;
+    rtl::OString sCurrentText;
     std::vector<rtl::OString> aLanguages;
 
 protected:
-    ByteString GetAttribute( const ByteString &rToken, const ByteString &rAttribute );
-    void Error( const ByteString &rError );
+    rtl::OString GetAttribute( const rtl::OString &rToken, const rtl::OString &rAttribute );
+    void Error( const rtl::OString &rError );
 
-    virtual void Output( const ByteString& rOutput )=0;
+    virtual void Output( const rtl::OString& rOutput )=0;
     virtual void WorkOnDesc(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     )=0;
     virtual void WorkOnText(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     )=0;
     virtual void EndOfText(
-        const ByteString &rOpenTag,
-        const ByteString &rCloseTag
+        const rtl::OString &rOpenTag,
+        const rtl::OString &rCloseTag
     )=0;
 
-    ByteString GetGID() { return sGID; }
-    ByteString GetLID() { return sLID; }
+    rtl::OString GetGID() { return sGID; }
+    rtl::OString GetLID() { return sLID; }
 
-    void ConvertStringToDBFormat( ByteString &rString );
-    void ConvertStringToXMLFormat( ByteString &rString );
+    void ConvertStringToDBFormat( rtl::OString &rString );
+    void ConvertStringToXMLFormat( rtl::OString &rString );
 
 public:
     XRMResParser();
@@ -94,7 +91,7 @@ private:
 protected:
     SvFileStream *pOutputStream;
 public:
-    XRMResOutputParser ( const ByteString &rOutputFile );
+    XRMResOutputParser ( const rtl::OString &rOutputFile );
     virtual ~XRMResOutputParser();
 };
 
@@ -106,30 +103,30 @@ class XRMResExport : public XRMResOutputParser
 {
 private:
     ResData *pResData;
-    ByteString sPrj;
-    ByteString sPath;
+    rtl::OString sPrj;
+    rtl::OString sPath;
     std::vector<rtl::OString> aLanguages;
 
 protected:
     void WorkOnDesc(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     );
     void WorkOnText(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     );
     void EndOfText(
-        const ByteString &rOpenTag,
-        const ByteString &rCloseTag
+        const rtl::OString &rOpenTag,
+        const rtl::OString &rCloseTag
     );
-    void Output( const ByteString& rOutput );
+    void Output( const rtl::OString& rOutput );
 
 public:
     XRMResExport(
-        const ByteString &rOutputFile,
-        const ByteString &rProject,
-        const ByteString &rFilePath
+        const rtl::OString &rOutputFile,
+        const rtl::OString &rProject,
+        const rtl::OString &rFilePath
     );
     virtual ~XRMResExport();
 };
@@ -142,29 +139,29 @@ class XRMResMerge : public XRMResOutputParser
 {
 private:
     MergeDataFile *pMergeDataFile;
-    ByteString sFilename;
+    rtl::OString sFilename;
     ResData *pResData;
     std::vector<rtl::OString> aLanguages;
 
 protected:
     void WorkOnDesc(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     );
     void WorkOnText(
-        const ByteString &rOpenTag,
-        ByteString &rText
+        const rtl::OString &rOpenTag,
+        rtl::OString &rText
     );
     void EndOfText(
-        const ByteString &rOpenTag,
-        const ByteString &rCloseTag
+        const rtl::OString &rOpenTag,
+        const rtl::OString &rCloseTag
     );
-    void Output( const ByteString& rOutput );
+    void Output( const rtl::OString& rOutput );
 public:
     XRMResMerge(
-        const ByteString &rMergeSource,
-        const ByteString &rOutputFile,
-        ByteString &rFilename
+        const rtl::OString &rMergeSource,
+        const rtl::OString &rOutputFile,
+        const rtl::OString &rFilename
     );
     virtual ~XRMResMerge();
 };

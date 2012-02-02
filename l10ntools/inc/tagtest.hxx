@@ -29,7 +29,6 @@
 #ifndef _TAGTEST_HXX_
 #define _TAGTEST_HXX_
 
-#include <tools/string.hxx>
 #include <boost/unordered_map.hpp>
 #include <vector>
 
@@ -44,14 +43,14 @@ typedef ::std::vector< ParserMessage* > Impl_ParserMessageList;
 
 class ParserMessageList;
 
-typedef boost::unordered_map<rtl::OString, String, rtl::OStringHash> StringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OUString, rtl::OStringHash> StringHashMap;
 
 class TokenInfo
 {
 private:
     void SplitTag( ParserMessageList &rErrorList );
 
-    String aTagName;
+    rtl::OUString aTagName;
     StringHashMap aProperties;
     sal_Bool bClosed;    // tag is closed  <sdnf/>
     sal_Bool bCloseTag;  // tag is close Tag  </sdnf>
@@ -63,29 +62,29 @@ private:
 
 public:
 
-    String aTokenString;
+    rtl::OUString aTokenString;
     TokenId nId;
     sal_uInt16 nPos;            // Position in String
 
     TokenInfo():bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),nId( 0 ){;}
 explicit    TokenInfo( TokenId pnId, sal_uInt16 nP ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),nId( pnId ),nPos(nP){;}
-explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),aTokenString( paStr ),nId( pnId ),nPos(nP) {;}
-explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr, ParserMessageList &rErrorList );
+    explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),aTokenString( paStr ),nId( pnId ),nPos(nP) {;}
+    explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList );
 
-    String GetTagName() const;
+    rtl::OUString GetTagName() const;
 
-    String MakeTag() const;
+    rtl::OUString MakeTag() const;
 
     /**
         Is the property to be ignored or does it have the default value anyways
     **/
-    sal_Bool IsPropertyRelevant( const rtl::OString &rName, const String &rValue ) const;
-    sal_Bool IsPropertyValueValid( const rtl::OString &rName, const String &rValue ) const;
+    sal_Bool IsPropertyRelevant( const rtl::OString &rName, const rtl::OUString &rValue ) const;
+    sal_Bool IsPropertyValueValid( const rtl::OString &rName, const rtl::OUString &rValue ) const;
     /**
         Does the property contain the same value for all languages
         e.g.: the href in a link tag
     **/
-    sal_Bool IsPropertyInvariant( const rtl::OString &rName, const String &rValue ) const;
+    sal_Bool IsPropertyInvariant( const rtl::OString &rName, const rtl::OUString &rValue ) const;
     /**
         a subset of IsPropertyInvariant but containing only those that are fixable
         we dont wat to fix e.g.: ahelp :: visibility
@@ -284,19 +283,19 @@ class SimpleParser
 {
 private:
     sal_uInt16 nPos;
-    String aSource;
-    String aLastToken;
+    rtl::OUString aSource;
+    rtl::OUString aLastToken;
     TokenList aTokenList;
 
     TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
 
-    String GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTokeStartPos );
+    rtl::OUString GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTokeStartPos );
 
 public:
     SimpleParser();
-    void Parse( String PaSource );
+    void Parse( rtl::OUString const & PaSource );
     TokenInfo GetNextToken( ParserMessageList &rErrorList );
-    static String GetLexem( TokenInfo const &aToken );
+    static rtl::OUString GetLexem( TokenInfo const &aToken );
     TokenList& GetTokenList(){ return aTokenList; }
 };
 
@@ -328,7 +327,7 @@ class TokenParser
 
 public:
     TokenParser();
-    void Parse( const String &aCode, ParserMessageList* pList );
+    void Parse( const rtl::OUString &aCode, ParserMessageList* pList );
     TokenList& GetTokenList(){ return aParser.GetTokenList(); }
 };
 
@@ -340,7 +339,7 @@ private:
     ParserMessageList aCompareWarningList;
     void CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bFixTags );
     sal_Bool IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens );
-    String aFixedTestee;
+    rtl::OUString aFixedTestee;
 public:
     void CheckReference( GSILine *aReference );
     void CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool bFixTags );
@@ -348,7 +347,7 @@ public:
     ParserMessageList& GetCompareWarnings(){ return aCompareWarningList; }
     sal_Bool HasCompareWarnings(){ return ( !aCompareWarningList.empty() ); }
 
-    String GetFixedTestee(){ return aFixedTestee; }
+    rtl::OUString GetFixedTestee(){ return aFixedTestee; }
 };
 
 #endif

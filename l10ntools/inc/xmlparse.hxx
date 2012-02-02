@@ -33,7 +33,6 @@
 #include <expat.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include "export.hxx"
 #include "xmlutil.hxx"
@@ -224,23 +223,20 @@ public:
     virtual sal_uInt16  GetNodeType();
 
     /// returns file name
-    const String &GetName() { return sFileName; }
-    void          SetName( const String &rFilename ) { sFileName = rFilename; }
-    void          SetFullName( const String &rFullFilename ) { sFullName = rFullFilename; }
+    rtl::OUString GetName() { return sFileName; }
+    void          SetName( const rtl::OUString &rFilename ) { sFileName = rFilename; }
+    void          SetFullName( const rtl::OUString &rFullFilename ) { sFullName = rFullFilename; }
     const std::vector<rtl::OString> getOrder(){ return order; }
 
 protected:
     // writes a string as UTF8 with dos line ends to a given stream
-    void        WriteString( ofstream &rStream, const String &sString );
-
-    // quotes the given text for writing to a file
-    void        QuotHTML( String &rString );
+    void        WriteString( ofstream &rStream, const rtl::OUString &sString );
 
     void        InsertL10NElement( XMLElement* pElement);
 
     // DATA
-    String      sFileName;
-    String      sFullName;
+    rtl::OUString      sFileName;
+    rtl::OUString      sFullName;
 
     const rtl::OString ID, OLDREF, XML_LANG;
 
@@ -256,13 +252,10 @@ class XMLUtil{
 
 public:
     /// Quot the XML characters and replace \n \t
-    static void         QuotHTML( String &rString );
+    static void         QuotHTML( rtl::OUString &rString );
 
     /// UnQuot the XML characters and restore \n \t
-    static void         UnQuotHTML  ( String &rString );
-private:
-    static void UnQuotData( String &rString );
-    static void UnQuotTags( String &rString );
+    static void         UnQuotHTML  ( rtl::OUString &rString );
 };
 
 
@@ -274,7 +267,7 @@ private:
 class XMLElement : public XMLParentNode
 {
 private:
-    String sElementName;
+    rtl::OUString sElementName;
     XMLAttributeList *pAttributes;
     rtl::OString   project,
                  filename,
@@ -290,7 +283,7 @@ public:
     /// create a element node
     XMLElement(){}
     XMLElement(
-        const String &rName,    // the element name
+        const rtl::OUString &rName,    // the element name
         XMLParentNode *Parent   // parent node of this element
     ):          XMLParentNode( Parent ),
                 sElementName( rName ),
@@ -312,15 +305,15 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns element name
-    const String &GetName() { return sElementName; }
+    rtl::OUString GetName() { return sElementName; }
 
     /// returns list of attributes of this element
     XMLAttributeList *GetAttributeList() { return pAttributes; }
 
     /// adds a new attribute to this element, typically used by parser
-    void AddAttribute( const String &rAttribute, const String &rValue );
+    void AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue );
 
-    void ChangeLanguageTag( const String &rValue );
+    void ChangeLanguageTag( const rtl::OUString &rValue );
     // Return a ASCII String representation of this object
     OString ToOString();
 
@@ -359,18 +352,18 @@ public:
 class XMLData : public XMLChildNode
 {
 private:
-    String sData;
+    rtl::OUString sData;
     bool   isNewCreated;
 
 public:
     /// create a data node
     XMLData(
-        const String &rData,    // the initial data
+        const rtl::OUString &rData,    // the initial data
         XMLParentNode *Parent   // the parent node of this data, typically a element node
     )
                 : XMLChildNode( Parent ), sData( rData ) , isNewCreated ( false ){}
     XMLData(
-        const String &rData,    // the initial data
+        const rtl::OUString &rData,    // the initial data
         XMLParentNode *Parent,  // the parent node of this data, typically a element node
         bool newCreated
     )
@@ -382,12 +375,12 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the data
-    const String &GetData() { return sData; }
+    rtl::OUString GetData() { return sData; }
 
     bool isNew() { return isNewCreated; }
     /// adds new character data to the existing one
     void AddData(
-        const String &rData // the new data
+        const rtl::OUString &rData // the new data
     );
 
 
@@ -401,12 +394,12 @@ public:
 class XMLComment : public XMLChildNode
 {
 private:
-    String sComment;
+    rtl::OUString sComment;
 
 public:
     /// create a comment node
     XMLComment(
-        const String &rComment, // the comment
+        const rtl::OUString &rComment, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sComment( rComment ) {}
@@ -418,7 +411,7 @@ public:
     XMLComment& operator=(const XMLComment& obj);
 
     /// returns the comment
-    const String &GetComment()  { return sComment; }
+    rtl::OUString GetComment()  { return sComment; }
 };
 
 //-------------------------------------------------------------------------
@@ -428,12 +421,12 @@ public:
 class XMLDefault : public XMLChildNode
 {
 private:
-    String sDefault;
+    rtl::OUString sDefault;
 
 public:
     /// create a comment node
     XMLDefault(
-        const String &rDefault, // the comment
+        const rtl::OUString &rDefault, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sDefault( rDefault ) {}
@@ -446,7 +439,7 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the comment
-    const String &GetDefault()  { return sDefault; }
+    rtl::OUString GetDefault()  { return sDefault; }
 };
 
 //-------------------------------------------------------------------------
@@ -457,7 +450,7 @@ struct XMLError {
     XML_Error eCode;    // the error code
     sal_uLong nLine;        // error line number
     sal_uLong nColumn;      // error column number
-    String sMessage;    // readable error message
+    rtl::OUString sMessage;    // readable error message
 };
 
 //-------------------------------------------------------------------------
@@ -498,8 +491,8 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
-        const String &rFullFileName,
-        const String &rFileName,    // the file name
+        const rtl::OUString &rFullFileName,
+        const rtl::OUString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
     );
 

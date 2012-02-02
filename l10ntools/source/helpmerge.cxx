@@ -57,7 +57,7 @@ void HelpParser::Dump(XMLHashMap* rElem_in)
 
 void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
 {
-    ByteString x;
+    rtl::OString x;
     OString y;
     fprintf(stdout,"+------------%s-----------+\n",sKey_in.getStr() );
     for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
@@ -111,15 +111,13 @@ bool HelpParser::CreateSDF(
         sXmlFile = String( sHelpFile , RTL_TEXTENCODING_ASCII_US );
     }
 
-//    ByteString fullFilePath;
-    //DirEntry aFile( sXmlFile );
-    //makeAbsolutePath( sHelpFile , rRoot_in);
-    ByteString fullFilePath = rPrj_in;
-    fullFilePath.Append( "\\" );
-    fullFilePath.Append( makeAbsolutePath( sHelpFile , rRoot_in ) );
-    fullFilePath.SearchAndReplaceAll( "\\", "/" );
+    rtl::OString fullFilePath = rPrj_in;
+    fullFilePath += "\\";
+    fullFilePath += makeAbsolutePath( sHelpFile , rRoot_in );
+    fullFilePath = fullFilePath.replace('\\', '/');
 
-    String strFullPath( fullFilePath.GetBuffer() , RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString strFullPath(
+        rtl::OStringToOUString(fullFilePath, RTL_TEXTENCODING_ASCII_US));
 
     //printf( "%s\n", fullFilePath.GetBuffer() );
     std::auto_ptr <XMLFile> file ( aParser.Execute( strFullPath , sXmlFile, pXmlFile ) );
@@ -147,8 +145,9 @@ bool HelpParser::CreateSDF(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    ByteString sTimeStamp( Export::GetTimeStamp() );
-    OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
+    OUString sOUTimeStamp(
+        rtl::OStringToOUString(
+            Export::GetTimeStamp(), RTL_TEXTENCODING_ASCII_US));
 
     OUStringBuffer sBuffer;
     const OUString sOUPrj( rPrj_in.getStr() , rPrj_in.getLength() , RTL_TEXTENCODING_ASCII_US );

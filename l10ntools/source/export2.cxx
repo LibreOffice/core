@@ -114,9 +114,9 @@ void Export::DumpMap(const rtl::OString& rMapName,
         return;
     for(OStringHashMap::const_iterator idbg = aMap.begin(); idbg != aMap.end(); ++idbg)
     {
-        ByteString a( idbg->first );
-        ByteString b( idbg->second );
-        printf("[%s]= %s",a.GetBuffer(),b.GetBuffer());
+        rtl::OString a( idbg->first );
+        rtl::OString b( idbg->second );
+        printf("[%s]= %s",a.getStr(),b.getStr());
         printf("\n");
     }
     printf("\n");
@@ -343,7 +343,7 @@ void Export::InitLanguages( bool bMergeMode ){
 /*****************************************************************************/
     if( !isInitialized )
     {
-        ByteString sTmp;
+        rtl::OString sTmp;
         OStringBoolHashMap aEnvLangs;
 
         sal_Int32 nIndex = 0;
@@ -353,7 +353,7 @@ void Export::InitLanguages( bool bMergeMode ){
             sTmp = getToken(aToken, 0, '=');
             sTmp = comphelper::string::strip(sTmp, ' ');
             if( bMergeMode && !isAllowed( sTmp ) ){}
-            else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
+            else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){
                 aLanguages.push_back( sTmp );
             }
         }
@@ -366,7 +366,7 @@ void Export::InitLanguages( bool bMergeMode ){
 /*****************************************************************************/
 void Export::InitForcedLanguages( bool bMergeMode ){
 /*****************************************************************************/
-    ByteString sTmp;
+    rtl::OString sTmp;
     OStringBoolHashMap aEnvLangs;
 
     sal_Int32 nIndex = 0;
@@ -377,7 +377,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
         sTmp = getToken(aToken, 0, '=');
         sTmp = comphelper::string::strip(sTmp, ' ');
         if( bMergeMode && isAllowed( sTmp ) ){}
-        else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
+        else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) )
             aForcedLanguages.push_back( sTmp );
     }
     while ( nIndex >= 0 );
@@ -399,8 +399,8 @@ sal_Bool Export::ConvertLineEnds(
     rtl::OString const & sSource, rtl::OString const & sDestination )
 /*****************************************************************************/
 {
-    String sSourceFile( sSource, RTL_TEXTENCODING_ASCII_US );
-    String sDestinationFile( sDestination, RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString sSourceFile(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
+    rtl::OUString sDestinationFile(rtl::OStringToOUString(sDestination, RTL_TEXTENCODING_ASCII_US));
 
     SvFileStream aSource( sSourceFile, STREAM_READ );
     if ( !aSource.IsOpen())
@@ -512,10 +512,10 @@ DirEntry Export::GetTempFile()
     int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
     if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
 
-    String strTmp( *sTempFilename  );
+    rtl::OUString strTmp( *sTempFilename  );
 
     INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
-    String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
+    rtl::OUString sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
     rtl::OString sTmp(rtl::OUStringToOString(sDecodedStr , RTL_TEXTENCODING_UTF8));
 
 #if defined(WNT)

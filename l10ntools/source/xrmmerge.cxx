@@ -33,6 +33,7 @@
 
 // local includes
 #include "export.hxx"
+#include "helper.hxx"
 #include "xrmmerge.hxx"
 #include "tokens.h"
 #include <iostream>
@@ -302,7 +303,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
     switch ( nToken ) {
         case XRM_TEXT_START:{
-                ByteString sNewLID = GetAttribute( rToken, "id" );
+                rtl::OString sNewLID = GetAttribute( rToken, "id" );
                 if ( sNewLID != sLID ) {
                     sLID = sNewLID;
                 }
@@ -404,7 +405,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 }
 
 /*****************************************************************************/
-ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteString &rAttribute )
+rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::OString &rAttribute )
 /*****************************************************************************/
 {
     ByteString sTmp( rToken );
@@ -426,17 +427,17 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
 
 
 /*****************************************************************************/
-void XRMResParser::Error( const ByteString &rError )
+void XRMResParser::Error( const rtl::OString &rError )
 /*****************************************************************************/
 {
-    yyerror(( char * ) rError.GetBuffer());
+    yyerror(( char * ) rError.getStr());
 }
 
 /*****************************************************************************/
-void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
+void XRMResParser::ConvertStringToDBFormat( rtl::OString &rString )
 /*****************************************************************************/
 {
-    ByteString sResult;
+    rtl::OString sResult;
     do {
         sResult = rString;
         rString = comphelper::string::stripStart(rString, _LF);
@@ -444,14 +445,14 @@ void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
         rString = comphelper::string::stripEnd(rString, '\t');
     } while ( sResult != rString );
 
-    rString.SearchAndReplaceAll( "\t", "\\t" );
+    helper::searchAndReplaceAll(&rString, "\t", "\\t");
 }
 
 /*****************************************************************************/
-void XRMResParser::ConvertStringToXMLFormat( ByteString &rString )
+void XRMResParser::ConvertStringToXMLFormat( rtl::OString &rString )
 /*****************************************************************************/
 {
-    rString.SearchAndReplaceAll( "\\t", "\t" );
+    helper::searchAndReplaceAll(&rString, "\\t", "\t");
 }
 
 
@@ -461,7 +462,7 @@ void XRMResParser::ConvertStringToXMLFormat( ByteString &rString )
 //
 
 /*****************************************************************************/
-XRMResOutputParser::XRMResOutputParser ( const ByteString &rOutputFile )
+XRMResOutputParser::XRMResOutputParser ( const rtl::OString &rOutputFile )
 /*****************************************************************************/
 {
     aLanguages = Export::GetLanguages();
@@ -496,8 +497,8 @@ XRMResOutputParser::~XRMResOutputParser()
 
 /*****************************************************************************/
 XRMResExport::XRMResExport(
-    const ByteString &rOutputFile, const ByteString &rProject,
-    const ByteString &rFilePath )
+    const rtl::OString &rOutputFile, const rtl::OString &rProject,
+    const rtl::OString &rFilePath )
 /*****************************************************************************/
                 : XRMResOutputParser( rOutputFile ),
                 pResData( NULL ),
@@ -514,16 +515,12 @@ XRMResExport::~XRMResExport()
     delete pResData;
 }
 
-void XRMResExport::Output( const ByteString& rOutput )
-{
-    // Dummy to suppress warnings caused by poor class design
-    (void) rOutput;
-}
+void XRMResExport::Output( const rtl::OString& ) {}
 
 /*****************************************************************************/
 void XRMResExport::WorkOnDesc(
-    const ByteString &rOpenTag,
-    ByteString &rText
+    const rtl::OString &rOpenTag,
+    rtl::OString &rText
 )
 /*****************************************************************************/
 {
@@ -543,7 +540,7 @@ void XRMResExport::WorkOnDesc(
         file.close();
         memblock[size] = '\0';
         rText = ByteString(memblock);
-        rText.SearchAndReplaceAll( "\n", "\\n" );
+        helper::searchAndReplaceAll(&rText, "\n", "\\n");
         delete[] memblock;
      }
     WorkOnText( rOpenTag, rText );
@@ -552,8 +549,8 @@ void XRMResExport::WorkOnDesc(
 
 //*****************************************************************************/
 void XRMResExport::WorkOnText(
-    const ByteString &rOpenTag,
-    ByteString &rText
+    const rtl::OString &rOpenTag,
+    rtl::OString &rText
 )
 /*****************************************************************************/
 {
@@ -566,22 +563,18 @@ void XRMResExport::WorkOnText(
         pResData->sId = GetLID();
     }
 
-    ByteString sText(rText);
+    rtl::OString sText(rText);
     ConvertStringToDBFormat(sText);
     pResData->sText[sLang] = sText;
 }
 
 /*****************************************************************************/
 void XRMResExport::EndOfText(
-    const ByteString &rOpenTag,
-    const ByteString &rCloseTag
+    const rtl::OString &,
+    const rtl::OString &
 )
 /*****************************************************************************/
 {
-
-    (void) rOpenTag;        // FIXME
-    (void) rCloseTag;       // FIXME
-
     if ( pResData && pOutputStream )
     {
         ByteString sTimeStamp( Export::GetTimeStamp());
@@ -627,15 +620,15 @@ void XRMResExport::EndOfText(
 
 /*****************************************************************************/
 XRMResMerge::XRMResMerge(
-    const ByteString &rMergeSource, const ByteString &rOutputFile,
-    ByteString &rFilename)
+    const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
+    const rtl::OString &rFilename)
 /*****************************************************************************/
                 : XRMResOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 sFilename( rFilename ) ,
                 pResData( NULL )
 {
-    if ( rMergeSource.Len())
+    if (!rMergeSource.isEmpty())
         pMergeDataFile = new MergeDataFile(
             rMergeSource, sInputFileName, bErrorLog);
     if( Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
@@ -657,8 +650,8 @@ XRMResMerge::~XRMResMerge()
 
 /*****************************************************************************/
 void XRMResMerge::WorkOnDesc(
-    const ByteString &rOpenTag,
-    ByteString &rText
+    const rtl::OString &rOpenTag,
+    rtl::OString &rText
 )
 /*****************************************************************************/
 {
@@ -721,8 +714,8 @@ void XRMResMerge::WorkOnDesc(
 
 /*****************************************************************************/
 void XRMResMerge::WorkOnText(
-    const ByteString &rOpenTag,
-    ByteString &rText
+    const rtl::OString &rOpenTag,
+    rtl::OString &rText
 )
 /*****************************************************************************/
 {
@@ -753,18 +746,18 @@ void XRMResMerge::WorkOnText(
 }
 
 /*****************************************************************************/
-void XRMResMerge::Output( const ByteString& rOutput )
+void XRMResMerge::Output( const rtl::OString& rOutput )
 /*****************************************************************************/
 {
     //printf("W: %s\n",rOutput.GetBuffer());
-    if ( pOutputStream && rOutput.Len() > 0 )
-        pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
+    if ( pOutputStream && !rOutput.isEmpty() )
+        pOutputStream->Write( rOutput.getStr(), rOutput.getLength());
 }
 
 /*****************************************************************************/
 void XRMResMerge::EndOfText(
-    const ByteString &rOpenTag,
-    const ByteString &rCloseTag
+    const rtl::OString &rOpenTag,
+    const rtl::OString &rCloseTag
 )
 /*****************************************************************************/
 {
