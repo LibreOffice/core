@@ -298,6 +298,22 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
     else
     {
         SetStyle( nStyle );
+        if (nOut == 0 && nIn > 0)
+        {
+            // If only inner width is given swap inner and outer widths for
+            // single line styles, otherwise GuessWidth() marks this as invalid
+            // and returns a 0 width.
+            switch (nStyle)
+            {
+                case SOLID:
+                case DOTTED:
+                case DASHED:
+                    ::std::swap( nOut, nIn);
+                    break;
+                default:
+                    ;   // nothing
+            }
+        }
         m_nWidth = m_aWidthImpl.GuessWidth( nOut, nIn, nDist );
     }
 }
