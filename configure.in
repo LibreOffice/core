@@ -1669,10 +1669,6 @@ AC_ARG_WITH(krb5,
          By default automatically enabled on platforms
          where a good system Kerberos 5 is available.]),
 ,)
-#AC_ARG_WITH(system-redland,
-#    AS_HELP_STRING([--with-system-redland],
-#        [Use redland library already on system.]),,
-#    [with_system_redland="$with_system_libs"])
 
 AC_ARG_WITH(gssapi,
     AS_HELP_STRING([--with-gssapi],
@@ -6153,6 +6149,19 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
         fi
         ;;
+    Linux|GNU|*BSD)
+        if test "$with_krb5" != "no"; then
+            WITH_KRB5=YES
+            AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+        fi
+        if test "$with_gssapi" != "no"; then
+            WITH_GSSAPI=YES
+            AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+        fi
     *)
         if test "$with_krb5" = "yes"; then
             WITH_KRB5=YES
