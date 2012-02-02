@@ -95,7 +95,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool )
     {
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        FatalAppExitW( 0, rErrorText.getStr() );
+        FatalAppExitW( 0, reinterpret_cast<LPCWSTR>(rErrorText.getStr()) );
     }
 }
 
