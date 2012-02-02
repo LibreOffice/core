@@ -263,7 +263,8 @@ protected:
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
         sal_Bool bShape,
-        ::rtl::OUString *pMinHeightValue = 0 );
+        ::rtl::OUString *pMinHeightValue = 0,
+        ::rtl::OUString *pMinWidthValue = 0 );
 
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
