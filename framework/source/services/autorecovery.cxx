@@ -1336,7 +1336,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
             nRetry = 0;
         }
-        catch(const css::uno::Exception& ex)
+        catch(const css::uno::Exception&)
             {
                 // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
                 // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
@@ -1355,7 +1355,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
                     nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
                 else
                 if (nRetry <= GIVE_UP_RETRY)
-                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+                    throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
                 --nRetry;
             }
@@ -2374,7 +2374,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
             bError = sal_False;
             nRetry = 0;
         }
-        catch(const css::uno::Exception& ex)
+        catch(const css::uno::Exception&)
             {
                 bError = sal_True;
 
@@ -2395,7 +2395,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
                     nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
                 else
                 if (nRetry <= GIVE_UP_RETRY)
-                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+                    throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
                 --nRetry;
             }
@@ -3444,7 +3444,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
         }
     }
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 

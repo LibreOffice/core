@@ -501,8 +501,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
                 xUser  = m_lDocumentStorages.openPath(sRelPathUser , eUserMode );
                 xShare = xUser;
             }
-            catch(const css::uno::RuntimeException& exRun)
-                { throw exRun; }
+            catch(const css::uno::RuntimeException&)
+                { throw; }
             catch(const css::uno::Exception&)
                 { xShare.clear(); xUser.clear(); }
         }
@@ -822,8 +822,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
         else
             xPath = m_aSharedStorages->m_lStoragesUser.openPath(sPath, eMode);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { xPath.clear(); }
     return xPath;
@@ -921,8 +921,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
             if (xFolder->isStorageElement(pNames[i]))
                 lSubFolders.push_back(pNames[i]);
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             {}
     }
