@@ -6162,6 +6162,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                 [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
         fi
+        ;;
     *)
         if test "$with_krb5" = "yes"; then
             WITH_KRB5=YES
