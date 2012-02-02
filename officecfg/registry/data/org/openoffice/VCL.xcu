@@ -132,13 +132,13 @@
         <value>Cumberland AMT;Cumberland;Courier New;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Segoe UI;Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;WarpSans;Geneva;Helv;Dialog;Lucida;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Segoe UI;Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;Geneva;Dialog;Lucida;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
 
     <node oor:name="ar" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;Geneva;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
      </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
@@ -161,7 +161,7 @@
     </node>
     <node oor:name="he" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Lucida;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;Geneva;Tahoma;Dialog;Lucida;Helvetica;Helmet;Interface System;Sans Serif</value>
      </prop>
      <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
         <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
@@ -257,7 +257,7 @@
         <value>方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-tw" oor:op="replace">
@@ -286,7 +286,7 @@
         <value>文泉驛等寬微米黑;細明體;MingLiU;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-mo" oor:op="replace">
@@ -315,7 +315,7 @@
         <value>文泉驛等寬微米黑;細明體;MingLiU;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-hk" oor:op="replace">
@@ -344,7 +344,7 @@
         <value>文泉驛等寬微米黑;細明體;MingLiU;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>文泉驛微米黑;黑體-繁;Heiti TC;儷黑 Pro;LiHei Pro;微軟正黑體;新細明體;PMingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-sg" oor:op="replace">
@@ -373,7 +373,7 @@
         <value>方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light TC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="ko-kr" oor:op="replace">
@@ -431,7 +431,7 @@
     </node>
     <node oor:name="bn" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;Geneva;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
         <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
