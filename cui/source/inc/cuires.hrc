@@ -435,4 +435,6 @@
 #define RID_SVXSTR_EVENT_CALCULATE                          (RID_SVX_START + 1193)
 #define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
 
+#define RID_CUI_DIALOG_COLORPICKER                          (RID_SVX_START + 3)
+
 #endif

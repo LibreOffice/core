@@ -43,6 +43,7 @@ CFLAGS+= -DBUILD_VER_STRING="$(BUILD_VER_STRING)"
 SRS1NAME=dialogs
 SRC1FILES =  \
         about.src \
+        colorpicker.src \
         charmap.src \
         commonlingui.src \
         cuiimapdlg.src \
@@ -74,6 +75,7 @@ SRC1FILES =  \
 
 SLOFILES+=\
         $(SLO)$/about.obj \
+        $(SLO)$/colorpicker.obj \
         $(SLO)$/commonlingui.obj \
         $(SLO)$/cuicharmap.obj \
         $(SLO)$/cuifmsearch.obj \

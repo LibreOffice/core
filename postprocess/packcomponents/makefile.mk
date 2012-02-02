@@ -51,6 +51,7 @@ my_components = \
     charttools \
     chartview \
     component/comphelper/util/comphelp \
+    component/cui/util/cui \
     component/drawinglayer/drawinglayer \
     component/framework/util/fwk \
     component/framework/util/fwl \

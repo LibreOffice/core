@@ -19,47 +19,45 @@
  *
  *************************************************************/
 
+#ifndef _CUI_COLORPICKER_HRC_
+#define _CUI_COLORPICKER_HRC_
 
-#define DLG_COLOR 996
+#include <cuires.hrc>
 
-#define VAL_SET_COLOR 2
-#define BTN_1 1
-#define BTN_2 2
-#define BTN_3 3
-#define BTN_4 4
-#define FT_RGB 12
+#define FT_BOTTOMLINE   1
+#define BTN_OK          2
+#define BTN_CANCEL      3
+#define BTN_HELP        4
 
-#define CTL_COLOR 1
+#define CT_COLORFIELD   5
+#define CT_COLORSLIDER  6
+#define CT_PREVIEW      7
+#define CT_PREVIOUS     8
 
-#define FT_RED 1
-#define NUM_RED 1
-#define FT_GREEN 2
-#define NUM_GREEN 2
-#define FT_BLUE 3
-#define NUM_BLUE 3
+#define FL_RGB          9
+#define CT_RED          10
+#define CT_GREEN        11
+#define CT_BLUE         12
+#define CT_HEX          13
 
-#define FT_CYAN 7
-#define NUM_CYAN 7
-#define FT_MAGENTA 8
-#define NUM_MAGENTA 8
-#define FT_YELLOW 9
-#define NUM_YELLOW 9
-#define FT_KEY 10
-#define NUM_KEY 10
+#define FL_HSB          14
+#define CT_HUE          15
+#define CT_SATURATION   16
+#define CT_BRIGHTNESS   17
 
-#define FT_HUE 4
-#define NUM_HUE 4
-#define FT_SATURATION 5
-#define NUM_SATURATION 5
-#define FT_LUMINANCE 6
-#define NUM_LUMINANCE 6
+#define FL_CMYK         18
+#define CT_CYAN         19
+#define CT_MAGENTA      20
+#define CT_YELLOW       21
+#define CT_KEY          22
 
-#define CTL_PREVIEW 3
-#define CTL_PREVIEW_OLD 4
+#define PB_PICKER       23
 
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
+#define CT_LEFT_SLIDER  24
+#define CT_RIGHT_SLIDER 25
 
-//IAccessibility2 Implementation 2009-----
-#define STR_COLORDES 3001
+#define CT_SLIDERIMG    26
+
+#endif
+
+// eof

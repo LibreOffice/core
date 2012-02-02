@@ -48,10 +48,13 @@ SHL1LIBS=	\
             $(SLB)$/customize.lib  \
             $(SLB)$/dialogs.lib  \
             $(SLB)$/tabpages.lib \
-            $(SLB)$/factory.lib
+            $(SLB)$/factory.lib \
+            $(SLB)$/services.lib
 
 
 SHL1STDLIBS= \
+            $(SAXLIB) \
+            $(SOTLIB) \
             $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SVXLIB) \
@@ -97,6 +100,14 @@ RESLIB1IMAGES=$(SOLARSRC)/$(RSCDEFIMG)/svx/res
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 # --- Targets -------------------------------------------------------
+
+ALLTAR : $(MISC)/cui.component
+
+$(MISC)/cui.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        cui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt cui.component
 
 .INCLUDE :  target.mk
 

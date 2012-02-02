@@ -6,3 +6,5 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 
+mkdir: %COMMON_DEST%\xml%_EXT%\component\cui\util
+..\%__SRC%\misc\cui.component %_DEST%\xml%_EXT%\component\cui\util\cui.component

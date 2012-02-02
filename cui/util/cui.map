@@ -1,7 +1,9 @@
 UDK_3_0_0 {
     global:
     CreateDialogFactory;
-        GetSpecialCharsForEdit;
+    GetSpecialCharsForEdit;
+    component_getImplementationEnvironment;
+    component_getFactory;
     local:
         *;
 };
