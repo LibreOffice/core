@@ -265,14 +265,6 @@ void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
     Modify_Impl( NULL, NULL, &aContStr, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
-void ScNamedRangeObj::SetContentWithGrammar( const ::rtl::OUString& aContent,
-                                    const formula::FormulaGrammar::Grammar eGrammar )
-                                throw(::com::sun::star::uno::RuntimeException)
-{
-    String aContStr(aContent);
-    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL, eGrammar );
-}
-
 table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
                                                 throw(uno::RuntimeException)
 {

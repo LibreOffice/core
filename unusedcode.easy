@@ -176,7 +176,6 @@ ScMyCellInfo::ScMyCellInfo()
 ScMyStyleRanges::SetStylesToRanges(ScRangeList*, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScMyStyleRanges::SetStylesToRanges(ScRangeListRef, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScNameDefDlg::LinkStubEdModifyHdl(void*, void*)
-ScNamedRangeObj::SetContentWithGrammar(rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScNamedRangeObj::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine*) const
 ScRTFColTwips::Insert(ScRTFColTwips const*, unsigned short, unsigned short)
