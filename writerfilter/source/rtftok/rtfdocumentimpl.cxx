@@ -409,12 +409,25 @@ void RTFDocumentImpl::checkNeedPap()
 {
     if (m_bNeedPap)
     {
+        m_bNeedPap = false; // reset early, so we can avoid recursion when calling ourselves
         if (!m_pCurrentBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
                     new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
                     );
+
+            // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
+            bool hasBreakBeforeFrame = m_aStates.top().aFrame.hasProperties() &&
+                m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PFPageBreakBefore).get();
+            if (hasBreakBeforeFrame)
+            {
+                dispatchSymbol(RTF_PAR);
+                m_bNeedPap = false;
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFPageBreakBefore);
+            }
             Mapper().props(pParagraphProperties);
+            if (hasBreakBeforeFrame)
+                dispatchSymbol(RTF_PAR);
 
             if (m_aStates.top().aFrame.hasProperties())
             {
@@ -428,7 +441,6 @@ void RTFDocumentImpl::checkNeedPap()
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
             m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
         }
-        m_bNeedPap = false;
     }
 }
 
