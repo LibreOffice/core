@@ -155,13 +155,13 @@ LIB2OBJFILES= \
 
 
 SHL2STDLIBS= \
+        $(POSTGRESQL_LIB)	\
+        $(LIBPQ_LINK)		\
+        $(LIBPQ_DEP_LIBS)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
-        $(SALHELPERLIB)		\
-        $(POSTGRESQL_LIB)	\
-        $(LIBPQ_LINK)		\
-        $(LIBPQ_DEP_LIBS)
+        $(SALHELPERLIB)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)/$(SHL2TARGET).def
