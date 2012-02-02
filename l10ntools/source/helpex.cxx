@@ -209,7 +209,7 @@ int _cdecl main( int argc, char *argv[] )
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
         }
         else
-            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( '0' ), "help" );
+            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( rtl::OUString('0') ), "help" );
     }else if ( sOutputFileX.getLength() && sOutputFileY.getLength() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
 

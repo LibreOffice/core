@@ -55,11 +55,11 @@ void HelpParser::Dump(XMLHashMap* rElem_in)
     }
 }
 
-void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in)
+void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
 {
     ByteString x;
     OString y;
-    fprintf(stdout,"+------------%s-----------+\n",sKey_in.GetBuffer() );
+    fprintf(stdout,"+------------%s-----------+\n",sKey_in.getStr() );
     for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
     {
         x=posn->first;
@@ -70,7 +70,7 @@ void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in)
 }
 #endif
 
-HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInputList  )
+HelpParser::HelpParser( const rtl::OString &rHelpFile, bool rUTF8 , bool rHasInputList  )
         : sHelpFile( rHelpFile ),
           bUTF8    ( rUTF8     ),
           bHasInputList( rHasInputList )
@@ -79,8 +79,8 @@ HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInput
 /*****************************************************************************/
 bool HelpParser::CreateSDF(
 /*****************************************************************************/
-    const ByteString &rSDFFile_in, const ByteString &rPrj_in,const ByteString &rRoot_in,
-    const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1){
+    const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in,const rtl::OString &rRoot_in,
+    const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1){
     // GSI File constants
     static const String GSI_SEQUENCE1( String::CreateFromAscii("\t0\t") );
     static const String GSI_SEQUENCE2( String::CreateFromAscii("\t\t\t0\t")     );
@@ -137,11 +137,11 @@ bool HelpParser::CreateSDF(
         STREAM_STD_WRITE | STREAM_TRUNC );
 
     if ( !aSDFStream.IsOpen()) {
-        fprintf(stdout,"Can't open file %s\n",rSDFFile_in.GetBuffer());
+        fprintf(stdout,"Can't open file %s\n",rSDFFile_in.getStr());
         return false;
     }
 
-    ByteString sActFileName = makeAbsolutePath( sHelpFile , rRoot_in );
+    rtl::OString sActFileName = makeAbsolutePath( sHelpFile , rRoot_in );
 
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
@@ -151,9 +151,9 @@ bool HelpParser::CreateSDF(
     OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
 
     OUStringBuffer sBuffer;
-    const OUString sOUPrj( rPrj_in.GetBuffer() , rPrj_in.Len() , RTL_TEXTENCODING_ASCII_US );
-    const OUString sOUActFileName(sActFileName.GetBuffer() , sActFileName.Len() , RTL_TEXTENCODING_ASCII_US );
-    const OUString sOUGsi1( rGsi1.GetBuffer() , rGsi1.Len() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUPrj( rPrj_in.getStr() , rPrj_in.getLength() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUActFileName(sActFileName.getStr() , sActFileName.getLength() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUGsi1( rGsi1.getStr() , rGsi1.getLength() , RTL_TEXTENCODING_ASCII_US );
 
     Export::InitLanguages( false );
     std::vector<rtl::OString> aLanguages = Export::GetLanguages();
@@ -183,7 +183,7 @@ bool HelpParser::CreateSDF(
                 data = OUString( sTmp );
                 sBuffer.append( sOUPrj );
                 sBuffer.append( GSI_TAB );              //"\t";
-                if ( rRoot_in.Len())
+                if ( !rRoot_in.isEmpty())
                     sBuffer.append( sOUActFileName );
                    sBuffer.append( GSI_SEQUENCE1 );     //"\t0\t";
                    sBuffer.append( sOUGsi1 );               //"help";
@@ -230,7 +230,7 @@ rtl::OString HelpParser::makeAbsolutePath(const rtl::OString& sHelpFile, const r
     return sActFileName.replace('/', '\\');
 }
 
-bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile  ,
+bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDestinationFile  ,
     const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
 
@@ -259,7 +259,7 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
     String fullFilePath;
     DirEntry aFile( sXmlFile );
 
-    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( rtl::OUString('0') ) ) );
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
@@ -308,7 +308,7 @@ void HelpParser::parse_languages( std::vector<rtl::OString>& aLanguages , MergeD
 }
 
 bool HelpParser::Merge(
-    const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO ,
+    const rtl::OString &rSDFFile, const rtl::OString &rPathX , const rtl::OString &rPathY , bool bISO ,
     const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir )
 {
 
@@ -340,7 +340,7 @@ bool HelpParser::Merge(
       String fullFilePath;
     DirEntry aFile( sXmlFile );
 
-    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( rtl::OUString('0') ) ) );
     xmlfile->Extract();
 
     if( xmlfile == NULL)
@@ -377,8 +377,8 @@ bool HelpParser::Merge(
     return hasNoError;
 }
 
-bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage ,
-                                  ByteString sPath )
+bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage ,
+                                  rtl::OString const & sPath )
 {
     file->Extract();
 
@@ -501,7 +501,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     return true;
 }
 
-ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY )
+rtl::OString HelpParser::GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY )
 {
     ByteString testpath = rPathX;
     static const rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
@@ -539,7 +539,7 @@ void HelpParser::MakeDir(const rtl::OString& rPath)
 
 
 /* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
-void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
+void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
        PFormEntrys   *pEntrys    = NULL;
@@ -551,7 +551,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
 
     pEntrys = NULL;
 
-    if( !sCur.EqualsIgnoreCaseAscii("en-US") ){
+    if( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) ){
         pXMLElement = (*aLangHM)[ "en-US" ];
         if( pXMLElement == NULL )
         {
@@ -565,7 +565,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
             pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
             if( pEntrys != NULL)
             {
-                ByteString sNewText;
+                rtl::OString sNewText;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
                 sNewdata = String(  sNewText , RTL_TEXTENCODING_UTF8 );
                 if ( sNewdata.Len())

@@ -29,11 +29,10 @@
 #ifndef _CFG_MERGE_HXX
 #define _CFG_MERGE_HXX
 
-#include <tools/string.hxx>
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> OStringHashMap;
 
 
 //
@@ -54,7 +53,7 @@ private:
     rtl::OString sTextTag;
     rtl::OString sEndTextTag;
 
-    ByteStringHashMap sText;
+    OStringHashMap sText;
 public:
     CfgStackData(const rtl::OString &rTag, const rtl::OString &rId)
         : sTagType( rTag ), sIdentifier( rId )
@@ -106,7 +105,7 @@ class CfgParser
 protected:
     rtl::OString sCurrentResTyp;
     rtl::OString sCurrentIsoLang;
-    ByteString sCurrentText;
+    rtl::OString sCurrentText;
 
     rtl::OString sLastWhitespace;
 
@@ -116,7 +115,7 @@ protected:
     sal_Bool bLocalize;
 
     virtual void WorkOnText(
-        ByteString &rText,
+        rtl::OString &rText,
         const rtl::OString &rLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
@@ -129,9 +128,9 @@ private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
     std::vector<rtl::OString> aLanguages;
     void AddText(
-        ByteString &rText,
-        const ByteString &rIsoLang,
-        const ByteString &rResTyp );
+        rtl::OString &rText,
+        const rtl::OString &rIsoLang,
+        const rtl::OString &rResTyp );
 
     sal_Bool IsTokenClosed(const rtl::OString &rToken);
 
@@ -162,12 +161,12 @@ public:
 class CfgExport : public CfgOutputParser
 {
 private:
-    ByteString sPrj;
-    ByteString sPath;
+    rtl::OString sPrj;
+    rtl::OString sPath;
     std::vector<rtl::OString> aLanguages;
 protected:
     virtual void WorkOnText(
-        ByteString &rText,
+        rtl::OString &rText,
         const rtl::OString &rIsoLang
         );
 
@@ -175,9 +174,9 @@ protected:
     void Output(const rtl::OString& rOutput);
 public:
     CfgExport(
-        const ByteString &rOutputFile,
-        const ByteString &rProject,
-        const ByteString &rFilePath
+        const rtl::OString &rOutputFile,
+        const rtl::OString &rProject,
+        const rtl::OString &rFilePath
     );
     ~CfgExport();
 };
@@ -197,7 +196,7 @@ private:
     sal_Bool bEnglish;
 
 protected:
-    virtual void WorkOnText(ByteString &rText, const rtl::OString &rLangIndex);
+    virtual void WorkOnText(rtl::OString &rText, const rtl::OString &rLangIndex);
 
     void WorkOnRessourceEnd();
 

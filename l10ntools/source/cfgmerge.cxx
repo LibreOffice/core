@@ -26,256 +26,216 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-#include <comphelper/string.hxx>
-#include <tools/string.hxx>
-#include <tools/fsys.hxx>
+#include "sal/config.h"
 
-// local includes
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include "boost/scoped_ptr.hpp"
+#include "osl/process.h"
+#include "rtl/uri.hxx"
+
+#include <comphelper/string.hxx>
+
+#include "helper.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
 
 using comphelper::string::getToken;
 
-extern "C" { int yyerror(const char *); }
-extern "C" { int YYWarning(const char *); }
+extern "C" { int yyerror(char const *); }
 
-// defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_UTF8      0x0008
-#define STATE_LANGUAGES 0X0009
-#define STATE_FORCE     0x000B
+namespace {
 
-// set of global variables
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bForce;
-sal_Bool bUTF8;
-ByteString sPrj;
-ByteString sPrjRoot;
-ByteString sInputFileName;
-ByteString sActFileName;
-rtl::OString sFullEntry;
-rtl::OString sOutputFile;
-rtl::OString sMergeSrc;
-String sUsedTempFile;
+namespace global {
 
-CfgParser *pParser;
+bool mergeMode = false;
+bool errorLog = true;
+char const * prj = 0;
+char const * prjRoot = 0;
+char const * inputPathname = 0;
+char const * outputPathname = 0;
+char const * mergeSrc;
+boost::scoped_ptr< CfgParser > parser;
 
-extern "C" {
-// the whole interface to lexer is in this extern "C" section
+}
 
-/*****************************************************************************/
-extern char *GetOutputFile( int argc, char* argv[])
-/*****************************************************************************/
-{
-    bEnableExport   = sal_False;
-    bMergeMode      = sal_False;
-    bErrorLog       = sal_True;
-    bForce          = sal_False;
-    bUTF8           = sal_True;
-    sPrj            = "";
-    sPrjRoot        = "";
-    sInputFileName  = "";
-    sActFileName    = "";
+void badArguments() {
+}
 
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
-
-    // parse command line
-    for( int i = 1; i < argc; i++ ) {
-        ByteString sSwitch( argv[ i ] );
-        sSwitch.ToUpperAscii();
-
-        if ( sSwitch == "-I" ) {
-            nState = STATE_INPUT; // next token specifies source file
-        }
-        else if ( sSwitch == "-O" ) {
-            nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( sSwitch == "-P" ) {
-            nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if ( sSwitch == "-R" ) {
-            nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( sSwitch == "-M" ) {
-            nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if ( sSwitch == "-E" ) {
-            nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
-        }
-        else if ( sSwitch == "-F" ) {
-            nState = STATE_FORCE;
-            bForce = sal_True;
-        }
-        else if ( sSwitch == "-L" ) {
-            nState = STATE_LANGUAGES;
-        }
-        else {
-            switch ( nState ) {
-                case STATE_NON: {
-                    return NULL;    // no valid command line
-                }
-                case STATE_INPUT: {
-                    sInputFileName = argv[ i ];
-                    bInput = sal_True; // source file found
-                }
+void handleArguments(int argc, char ** argv) {
+    enum State {
+        STATE_NONE, STATE_INPUT, STATE_OUTPUT, STATE_PRJ, STATE_ROOT,
+        STATE_MERGESRC, STATE_LANGUAGES };
+    State state = STATE_NONE;
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "-i") == 0) {
+            state = STATE_INPUT;
+        } else if (std::strcmp(argv[i], "-o") == 0) {
+            state = STATE_OUTPUT;
+        } else if (std::strcmp(argv[i], "-p") == 0) {
+            state = STATE_PRJ;
+        } else if (std::strcmp(argv[i], "-r") == 0) {
+            state = STATE_ROOT;
+        } else if (std::strcmp(argv[i], "-m") == 0) {
+            state = STATE_MERGESRC;
+        } else if (std::strcmp(argv[i], "-e") == 0) {
+            state = STATE_NONE;
+            global::errorLog = false;
+        } else if (std::strcmp(argv[i], "-l") == 0) {
+            state = STATE_LANGUAGES;
+        } else {
+            switch (state) {
+            default:
+                global::inputPathname = 0; // no valid command line
+                goto done;
+            case STATE_INPUT:
+                global::inputPathname = argv[i];
                 break;
-                case STATE_OUTPUT: {
-                    sOutputFile = argv[ i ]; // the dest. file
-                }
+            case STATE_OUTPUT:
+                global::outputPathname = argv[i];
                 break;
-                case STATE_PRJ: {
-                    sPrj = ByteString( argv[ i ]);
-//                  sPrj.ToLowerAscii(); // the project
-                }
+            case STATE_PRJ:
+                global::prj = argv[i];
                 break;
-                case STATE_ROOT: {
-                    sPrjRoot = ByteString( argv[ i ]); // path to project root
-                }
+            case STATE_ROOT:
+                global::prjRoot = argv[i];
                 break;
-                case STATE_MERGESRC: {
-                    sMergeSrc = rtl::OString(argv[i]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
-                }
+            case STATE_MERGESRC:
+                global::mergeSrc = argv[i];
+                global::mergeMode = true;
                 break;
-                case STATE_LANGUAGES: {
-                    Export::sLanguages = ByteString( argv[ i ]);
-                }
+            case STATE_LANGUAGES:
+                Export::sLanguages = argv[i];
                 break;
             }
+            state = STATE_NONE;
         }
     }
-
-    if ( bInput ) {
-        // command line is valid
-        bEnableExport = sal_True;
-        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
-        return pReturn;
+done:
+    if (global::inputPathname == 0 || global::outputPathname == 0) {
+        std::fprintf(
+            stderr,
+            ("Syntax: cfgex [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
+             " [-m DataBase] [-e] [-l l1,l2,...]\n"
+             " Prj:      Project\n"
+             " PrjRoot:  Path to project root (../.. etc.)\n"
+             " FileIn:   Source files (*.src)\n"
+             " FileOut:  Destination file (*.*)\n"
+             " DataBase: Mergedata (*.sdf)\n"
+             " -e: Disable writing errorlog\n"
+             " -l: Restrict the handled languages; l1, l2, ... are elements of"
+             " (de, en-US, ...)\n"));
+        std::exit(EXIT_FAILURE);
     }
-
-    // command line is not valid
-    return NULL;
-}
-
-int InitCfgExport( char *pOutput , char* pFilename )
-{
-    // instanciate Export
-    rtl::OString sOutput( pOutput );
-    ByteString sFilename( pFilename );
     Export::InitLanguages();
-
-    if ( bMergeMode )
-        pParser = new CfgMerge( sMergeSrc, sOutputFile, sFilename );
-    else if ( sOutputFile.getLength())
-        pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
-
-    return 1;
 }
 
-/*****************************************************************************/
-int EndCfgExport()
-/*****************************************************************************/
-{
-    delete pParser;
-
-    return 1;
 }
 
-void removeTempFile(){
-    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
-        DirEntry aTempFile( sUsedTempFile );
-        aTempFile.Kill();
+extern "C" {
+
+FILE * init(int argc, char ** argv) {
+    handleArguments(argc, argv);
+
+    FILE * pFile = std::fopen(global::inputPathname, "r");
+    if (pFile == 0) {
+        std::fprintf(
+            stderr, "Error: Cannot open file \"%s\"\n",
+            global::inputPathname);
+        std::exit(EXIT_FAILURE);
     }
-}
-extern const char* getFilename()
-{
-    return sInputFileName.GetBuffer();
-}
-/*****************************************************************************/
-extern FILE *GetCfgFile()
-/*****************************************************************************/
-{
-    FILE *pFile = 0;
-    // look for valid filename
-    if ( sInputFileName.Len()) {
-        if( Export::fileHasUTF8ByteOrderMarker( sInputFileName ) ){
-            DirEntry aTempFile = Export::GetTempFile();
-            DirEntry aSourceFile( String( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
-            aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-            String sTempFile = aTempFile.GetFull();
-            Export::RemoveUTF8ByteOrderMarkerFromFile( rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US) );
-            pFile = fopen(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US).getStr(), "r");
-            sUsedTempFile = sTempFile;
-        }else{
-            // able to open file?
-            pFile = fopen( sInputFileName.GetBuffer(), "r" );
-            sUsedTempFile = String::CreateFromAscii("");
-        }
-        if ( !pFile ){
-            fprintf( stderr, "Error: Could not open file %s\n",
-                sInputFileName.GetBuffer());
-            exit( -13 );
-        }
-        else {
-            // this is a valid file which can be opened, so
-            // create path to project root
-            DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
-            aEntry.ToAbs();
-            sFullEntry = rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US);
-            aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
-            aEntry += DirEntry( sPrjRoot );
-            rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
-            // create file name, beginnig with project root
-            // (e.g.: source\ui\src\menue.src)
-//            printf("sFullEntry = %s\n",sFullEntry.getStr());
-            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
-//            printf("sActFileName = %s\n",sActFileName.GetBuffer());
-
-            sActFileName.SearchAndReplaceAll( "/", "\\" );
-
-            return pFile;
-        }
+    // Skip UTF-8 BOM:
+    unsigned char buf[3];
+    if (std::fread(buf, 1, 3, pFile) != 3 ||
+        buf[0] != 0xEF || buf[1] != 0xBB || buf[2] != 0xBF)
+    {
+        std::rewind(pFile);
     }
-    // this means the file could not be opened
-    return NULL;
+
+    if (global::mergeMode) {
+        global::parser.reset(
+            new CfgMerge(
+                global::mergeSrc, global::outputPathname,
+                global::inputPathname));
+    } else {
+        rtl::OUString cwd;
+        if (osl_getProcessWorkingDir(&cwd.pData) != osl_Process_E_None) {
+            std::fprintf(stderr, "Error: Cannot determine cwd\n");
+            std::exit(EXIT_FAILURE);
+        }
+        rtl::OUString full;
+        if (!rtl_convertStringToUString(
+                &full.pData, global::inputPathname,
+                rtl_str_getLength(global::inputPathname),
+                osl_getThreadTextEncoding(),
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+        {
+            std::fprintf(
+                stderr, "Error: Cannot convert input pathname to UTF-16\n");
+            std::exit(EXIT_FAILURE);
+        }
+        if (osl::FileBase::getAbsoluteFileURL(cwd, full, full)
+            != osl::FileBase::E_None)
+        {
+            std::fprintf(
+                stderr,
+                "Error: Cannot convert input pathname to absolute URL\n");
+            std::exit(EXIT_FAILURE);
+        }
+        if (global::prjRoot == 0) {
+            std::fprintf(stderr, "Error: No project root argument\n");
+            std::exit(EXIT_FAILURE);
+        }
+        rtl::OUString base;
+        if (!rtl_convertStringToUString(
+                &base.pData, global::prjRoot,
+                rtl_str_getLength(global::prjRoot),
+                osl_getThreadTextEncoding(),
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+        {
+            std::fprintf(
+                stderr, "Error: Cannot convert project root to UTF-16\n");
+            std::exit(EXIT_FAILURE);
+        }
+        base = rtl::Uri::convertRelToAbs(full, base);
+        if (full.getLength() <= base.getLength() || base.isEmpty()
+            || base[base.getLength() - 1] != '/'
+            || full[base.getLength() - 1] != '/')
+        {
+            std::fprintf(
+                stderr, "Error: Cannot extract suffix from input pathname\n");
+            std::exit(EXIT_FAILURE);
+        }
+        full = full.copy(base.getLength()).replace('/', '\\');
+        rtl::OString suffix;
+        if (!full.convertToString(
+                &suffix, osl_getThreadTextEncoding(),
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+        {
+            std::fprintf(
+                stderr, "Error: Cannot convert suffix from UTF-16\n");
+            std::exit(EXIT_FAILURE);
+        }
+        global::parser.reset(
+            new CfgExport(global::outputPathname, global::prj, suffix));
+    }
+
+    return pFile;
 }
 
-/*****************************************************************************/
-int WorkOnTokenSet( int nTyp, char *pTokenText )
-/*****************************************************************************/
-{
-    pParser->Execute( nTyp, pTokenText );
-
-    return 1;
+void workOnTokenSet(int nTyp, char * pTokenText) {
+    global::parser->Execute( nTyp, pTokenText );
 }
 
-
-/*****************************************************************************/
-int SetError()
-/*****************************************************************************/
-{
-    return 1;
-}
-
-/*****************************************************************************/
-int GetError()
-/*****************************************************************************/
-{
-    return 0;
-}
 }
 
 //
@@ -356,19 +316,19 @@ sal_Bool CfgParser::IsTokenClosed(const rtl::OString &rToken)
 
 /*****************************************************************************/
 void CfgParser::AddText(
-    ByteString &rText,
-    const ByteString &rIsoLang,
-    const ByteString &rResTyp
+    rtl::OString &rText,
+    const rtl::OString &rIsoLang,
+    const rtl::OString &rResTyp
 )
 /*****************************************************************************/
 {
-        sal_uInt16 nTextLen = 0;
-        while ( rText.Len() != nTextLen ) {
-            nTextLen = rText.Len();
-            rText.SearchAndReplaceAll( "\n", " " );
-            rText.SearchAndReplaceAll( "\r", " " );
-            rText.SearchAndReplaceAll( "\t", " " );
-            rText.SearchAndReplaceAll( "  ", " " );
+        sal_Int32 nTextLen = 0;
+        while ( rText.getLength() != nTextLen ) {
+            nTextLen = rText.getLength();
+            rText = rText.replace( '\n', ' ' );
+            rText = rText.replace( '\r', ' ' );
+            rText = rText.replace( '\t', ' ' );
+            while (helper::searchAndReplace(&rText, "  ", " ") != -1) {}
         }
         pStackData->sResTyp = rResTyp;
         WorkOnText( rText, rIsoLang );
@@ -380,13 +340,13 @@ void CfgParser::AddText(
 int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 /*****************************************************************************/
 {
-    ByteString sToken( pToken );
+    rtl::OString sToken( pToken );
 
     if ( sToken == " " || sToken == "\t" )
         sLastWhitespace += sToken;
 
     rtl::OString sTokenName;
-    ByteString sTokenId;
+    rtl::OString sTokenId;
 
     sal_Bool bOutput = sal_True;
 
@@ -404,7 +364,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             sTokenName = getToken(getToken(getToken(sToken, 1, '<'), 0, '>'), 0, ' ');
 
               if ( !IsTokenClosed( sToken )) {
-                ByteString sSearch;
+                rtl::OString sSearch;
                 switch ( nToken ) {
                     case CFG_TOKEN_PACKAGE:
                         sSearch = "package-id=";
@@ -428,15 +388,15 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnRessourceEnd();
-                            ByteString sCur;
+                            rtl::OString sCur;
                             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                                 sCur = aLanguages[ n ];
-                                pStackData->sText[ sCur ] = ByteString("");
+                                pStackData->sText[ sCur ] = rtl::OString();
                             }
                          }
                         sCurrentResTyp = sTokenName;
 
-                        ByteString sTemp = sToken.Copy( sToken.Search( "xml:lang=" ));
+                        rtl::OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
                         sCurrentIsoLang = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
@@ -448,27 +408,26 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     }
                     break;
                 }
-                if ( sSearch.Len())
+                if ( !sSearch.isEmpty())
                 {
-                    rtl::OString sTemp = sToken.Copy( sToken.Search( sSearch ));
+                    rtl::OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
                     sTokenId = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
                 if ( sSearch == "cfg:name=" ) {
-                    ByteString sTemp( sToken );
-                    sTemp.ToUpperAscii();
-                    bLocalize = (( sTemp.Search( "CFG:TYPE=\"STRING\"" ) != STRING_NOTFOUND ) &&
-                        ( sTemp.Search( "CFG:LOCALIZED=\"sal_True\"" ) != STRING_NOTFOUND ));
+                    rtl::OString sTemp( sToken.toAsciiUpperCase() );
+                    bLocalize = (( sTemp.indexOf( "CFG:TYPE=\"STRING\"" ) != -1 ) &&
+                        ( sTemp.indexOf( "CFG:LOCALIZED=\"sal_True\"" ) != -1 ));
                 }
             }
             else if ( sTokenName == "label" ) {
                 if ( sCurrentResTyp != sTokenName ) {
                     WorkOnRessourceEnd();
-                    ByteString sCur;
+                    rtl::OString sCur;
                     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                         sCur = aLanguages[ n ];
-                        pStackData->sText[ sCur ] = ByteString("");
+                        pStackData->sText[ sCur ] = rtl::OString();
                     }
                 }
                 sCurrentResTyp = sTokenName;
@@ -479,20 +438,20 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             sTokenName = getToken(getToken(getToken(sToken, 1, '/'), 0, '>'), 0, ' ');
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
-                if (!sCurrentText.Len())
+                if (sCurrentText.isEmpty())
                     WorkOnRessourceEnd();
                 aStack.Pop();
                 pStackData = aStack.GetStackData();
             }
             else
             {
-                ByteString sError( "Misplaced close tag: " );
-                ByteString sInFile(" in file ");
+                rtl::OString sError( "Misplaced close tag: " );
+                rtl::OString sInFile(" in file ");
                 sError += sToken;
                 sError += sInFile;
-                sError += sFullEntry;
+                sError += global::inputPathname;
                 Error( sError );
-                exit ( 13 );
+                std::exit(EXIT_FAILURE);
             }
         break;
 
@@ -506,11 +465,11 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
     }
 
-    if ( sCurrentText.Len() && nToken != CFG_TEXTCHAR )
+    if ( !sCurrentText.isEmpty() && nToken != CFG_TEXTCHAR )
     {
         AddText( sCurrentText, sCurrentIsoLang, sCurrentResTyp );
         Output( sCurrentText );
-        sCurrentText = "";
+        sCurrentText = rtl::OString();
         pStackData->sEndTextTag = sToken;
     }
 
@@ -531,21 +490,21 @@ void CfgExport::Output(const rtl::OString&)
 int CfgParser::Execute( int nToken, char * pToken )
 /*****************************************************************************/
 {
-    ByteString sToken( pToken );
+    rtl::OString sToken( pToken );
 
     switch ( nToken ) {
         case CFG_TAG:
-            if ( sToken.Search( "package-id=" ) != STRING_NOTFOUND )
+            if ( sToken.indexOf( "package-id=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_PACKAGE, pToken );
-            else if ( sToken.Search( "component-id=" ) != STRING_NOTFOUND )
+            else if ( sToken.indexOf( "component-id=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_COMPONENT, pToken );
-            else if ( sToken.Search( "template-id=" ) != STRING_NOTFOUND )
+            else if ( sToken.indexOf( "template-id=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_TEMPLATE, pToken );
-            else if ( sToken.Search( "cfg:name=" ) != STRING_NOTFOUND )
+            else if ( sToken.indexOf( "cfg:name=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
-            else if ( sToken.Search( "oor:name=" ) != STRING_NOTFOUND )
+            else if ( sToken.indexOf( "oor:name=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
-            else if ( sToken.Search( "oor:value=" ) != STRING_NOTFOUND )
+            else if ( sToken.indexOf( "oor:value=" ) != -1 )
                 return ExecuteAnalyzedToken( CFG_TOKEN_OORVALUE, pToken );
         break;
     }
@@ -577,7 +536,7 @@ CfgOutputParser::CfgOutputParser(const rtl::OString &rOutputFile)
         Error(sError.makeStringAndClear());
         delete pOutputStream;
         pOutputStream = NULL;
-        exit( -13 );
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -597,9 +556,9 @@ CfgOutputParser::~CfgOutputParser()
 
 /*****************************************************************************/
 CfgExport::CfgExport(
-        const ByteString &rOutputFile,
-        const ByteString &rProject,
-        const ByteString &rFilePath
+        const rtl::OString &rOutputFile,
+        const rtl::OString &rProject,
+        const rtl::OString &rFilePath
 )
 /*****************************************************************************/
                 : CfgOutputParser( rOutputFile ),
@@ -621,15 +580,11 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-    if (( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength()
-        ) ||
-            ( bForce &&
-                ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("de"))].getLength() ||
-                    pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )))
+    if ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
         {
-            ByteString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
-            ByteString sLocalId = pStackData->sIdentifier;
-            ByteString sGroupId;
+            rtl::OString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
+            rtl::OString sLocalId = pStackData->sIdentifier;
+            rtl::OString sGroupId;
             if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
@@ -638,19 +593,19 @@ void CfgExport::WorkOnRessourceEnd()
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            ByteString sTimeStamp( Export::GetTimeStamp());
+            rtl::OString sTimeStamp( Export::GetTimeStamp());
 
             for (size_t n = 0; n < aLanguages.size(); n++)
             {
-                ByteString sCur = aLanguages[ n ];
+                rtl::OString sCur = aLanguages[ n ];
 
-                ByteString sText = pStackData->sText[ sCur ];
-                if ( !sText.Len())
+                rtl::OString sText = pStackData->sText[ sCur ];
+                if ( sText.isEmpty())
                     sText = sFallback;
 
-                Export::UnquotHTML( sText );
+                sText = Export::UnquoteHTML( sText );
 
-                ByteString sOutput( sPrj ); sOutput += "\t";
+                rtl::OString sOutput( sPrj ); sOutput += "\t";
                 sOutput += sPath;
                 sOutput += "\t0\t";
                 sOutput += pStackData->sResTyp; sOutput += "\t";
@@ -669,11 +624,11 @@ void CfgExport::WorkOnRessourceEnd()
 }
 
 void CfgExport::WorkOnText(
-    ByteString &rText,
+    rtl::OString &rText,
     const rtl::OString &rIsoLang
 )
 {
-    if( rIsoLang.getLength() ) Export::UnquotHTML( rText );
+    if( rIsoLang.getLength() ) rText = Export::UnquoteHTML( rText );
 }
 
 
@@ -693,7 +648,7 @@ CfgMerge::CfgMerge(
     if (rMergeSource.getLength())
     {
         pMergeDataFile = new MergeDataFile(
-        rMergeSource, sInputFileName, bErrorLog, true );
+            rMergeSource, global::inputPathname, global::errorLog, true );
         if (Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
         {
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
@@ -713,22 +668,22 @@ CfgMerge::~CfgMerge()
     delete pResData;
 }
 
-void CfgMerge::WorkOnText(ByteString &rText, const rtl::OString& rLangIndex)
+void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
 {
 
     if ( pMergeDataFile && bLocalize ) {
         if ( !pResData ) {
-            ByteString sLocalId = pStackData->sIdentifier;
-            ByteString sGroupId;
+            rtl::OString sLocalId = pStackData->sIdentifier;
+            rtl::OString sGroupId;
             if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
-                sLocalId = "";
+                sLocalId = rtl::OString();
             }
             else {
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            ByteString sPlatform( "" );
+            rtl::OString sPlatform;
 
             pResData = new ResData( sPlatform, sGroupId , sFilename );
             pResData->sId = sLocalId;
@@ -740,13 +695,13 @@ void CfgMerge::WorkOnText(ByteString &rText, const rtl::OString& rLangIndex)
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
-            ByteString sContent;
+            rtl::OString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
 
             if ( Export::isAllowed( rLangIndex ) &&
-                ( sContent != "-" ) && ( sContent.Len()))
+                ( sContent != "-" ) && !sContent.isEmpty())
             {
-                Export::QuotHTML( rText );
+                rText = Export::QuoteHTML( rText );
             }
         }
     }
@@ -763,41 +718,40 @@ void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
 
-    if ( pMergeDataFile && pResData && bLocalize && (( bEnglish ) || bForce )) {
+    if ( pMergeDataFile && pResData && bLocalize && bEnglish ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
-            ByteString sCur;
+            rtl::OString sCur;
 
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
 
-                ByteString sContent;
+                rtl::OString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
                 if (
-                    ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
+                    ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) ) &&
 
-                    ( sContent != "-" ) && ( sContent.Len()))
+                    ( sContent != "-" ) && !sContent.isEmpty())
                 {
 
-                    ByteString sText = sContent;
-                    Export::QuotHTML( sText );
+                    rtl::OString sText = Export::QuoteHTML( sContent);
 
-                    ByteString sAdditionalLine( "\t" );
+                    rtl::OString sAdditionalLine( "\t" );
 
-                    ByteString sTextTag = pStackData->sTextTag;
-                    ByteString sTemp = sTextTag.Copy( sTextTag.Search( "xml:lang=" ));
+                    rtl::OString sTextTag = pStackData->sTextTag;
+                    rtl::OString sTemp = sTextTag.copy( sTextTag.indexOf( "xml:lang=" ));
 
-                    ByteString sSearch = getToken(sTemp, 0, '\"');
+                    rtl::OString sSearch = getToken(sTemp, 0, '\"');
                     sSearch += "\"";
                     sSearch += getToken(sTemp, 1, '\"');
                     sSearch += "\"";
 
-                    ByteString sReplace = getToken(sTemp, 0, '\"');
+                    rtl::OString sReplace = getToken(sTemp, 0, '\"');
                     sReplace += "\"";
                     sReplace += sCur;
                     sReplace += "\"";
 
-                    sTextTag.SearchAndReplace( sSearch, sReplace );
+                    helper::searchAndReplace(&sTextTag, sSearch, sReplace);
 
                     sAdditionalLine += sTextTag;
                     sAdditionalLine += sText;

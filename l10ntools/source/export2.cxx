@@ -106,13 +106,13 @@ void Export::DumpExportList(const rtl::OString& rListName, ExportList& aList)
 }
 
 void Export::DumpMap(const rtl::OString& rMapName,
-    ByteStringHashMap& aMap)
+    OStringHashMap& aMap)
 {
     if( rMapName.getLength() )
         printf("MapName %s\n", rMapName.getStr());
     if( aMap.size() < 1 )
         return;
-    for(ByteStringHashMap::const_iterator idbg = aMap.begin(); idbg != aMap.end(); ++idbg)
+    for(OStringHashMap::const_iterator idbg = aMap.begin(); idbg != aMap.end(); ++idbg)
     {
         ByteString a( idbg->first );
         ByteString b( idbg->second );
@@ -143,24 +143,24 @@ std::vector<rtl::OString> Export::aLanguages       = std::vector<rtl::OString>()
 std::vector<rtl::OString> Export::aForcedLanguages = std::vector<rtl::OString>();
 
 /*****************************************************************************/
-void Export::QuotHTML( ByteString &rString )
+rtl::OString Export::QuoteHTML( rtl::OString const &rString )
 /*****************************************************************************/
 {
     rtl::OStringBuffer sReturn;
-    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
-        ByteString sTemp = rString.Copy( i );
-        if ( sTemp.Search( "<Arg n=" ) == 0 ) {
-            while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
-                 sReturn.append(rString.GetChar(i));
+    for ( sal_Int32 i = 0; i < rString.getLength(); i++ ) {
+        rtl::OString sTemp = rString.copy( i );
+        if ( sTemp.match( "<Arg n=" ) ) {
+            while ( i < rString.getLength() && rString[i] != '>' ) {
+                 sReturn.append(rString[i]);
                 i++;
             }
-            if ( rString.GetChar( i ) == '>' ) {
+            if ( rString[i] == '>' ) {
                 sReturn.append('>');
                 i++;
             }
         }
-        if ( i < rString.Len()) {
-            switch ( rString.GetChar( i )) {
+        if ( i < rString.getLength()) {
+            switch ( rString[i]) {
                 case '<':
                     sReturn.append("&lt;");
                 break;
@@ -178,20 +178,20 @@ void Export::QuotHTML( ByteString &rString )
                 break;
 
                 case '&':
-                    if ((( i + 4 ) < rString.Len()) &&
-                        ( rString.Copy( i, 5 ) == "&amp;" ))
-                            sReturn.append(rString.GetChar(i));
+                    if ((( i + 4 ) < rString.getLength()) &&
+                        ( rString.copy( i, 5 ) == "&amp;" ))
+                            sReturn.append(rString[i]);
                     else
                         sReturn.append("&amp;");
                 break;
 
                 default:
-                    sReturn.append(rString.GetChar(i));
+                    sReturn.append(rString[i]);
                 break;
             }
         }
     }
-    rString = sReturn.makeStringAndClear();
+    return sReturn.makeStringAndClear();
 }
 
 void Export::RemoveUTF8ByteOrderMarker( rtl::OString &rString )
@@ -298,45 +298,32 @@ bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
 }
 
 /*****************************************************************************/
-void Export::UnquotHTML( ByteString &rString )
+rtl::OString Export::UnquoteHTML( rtl::OString const &rString )
 /*****************************************************************************/
 {
     rtl::OStringBuffer sReturn;
-
-    while ( rString.Len())
-    {
-        if ( rString.Copy( 0, 5 ) == "&amp;" )
-        {
+    for (sal_Int32 i = 0; i != rString.getLength();) {
+        if (rString.match("&amp;", i)) {
             sReturn.append('&');
-            rString.Erase( 0, 5 );
-        }
-        else if ( rString.Copy( 0, 4 ) == "&lt;" )
-        {
+            i += RTL_CONSTASCII_LENGTH("&amp;");
+        } else if (rString.match("&lt;", i)) {
             sReturn.append('<');
-            rString.Erase( 0, 4 );
-        }
-        else if ( rString.Copy( 0, 4 ) == "&gt;" )
-        {
+            i += RTL_CONSTASCII_LENGTH("&lt;");
+        } else if (rString.match("&gt;", i)) {
             sReturn.append('>');
-            rString.Erase( 0, 4 );
-        }
-        else if ( rString.Copy( 0, 6 ) == "&quot;" )
-        {
-            sReturn.append('\"');;
-            rString.Erase( 0, 6 );
-        }
-        else if ( rString.Copy( 0, 6 ) == "&apos;" )
-        {
+            i += RTL_CONSTASCII_LENGTH("&gt;");
+        } else if (rString.match("&quot;", i)) {
+            sReturn.append('"');
+            i += RTL_CONSTASCII_LENGTH("&quot;");
+        } else if (rString.match("&apos;", i)) {
             sReturn.append('\'');
-            rString.Erase( 0, 6 );
-        }
-        else
-        {
-            sReturn.append(rString.GetChar(0));
-            rString.Erase( 0, 1 );
+            i += RTL_CONSTASCII_LENGTH("&apos;");
+        } else {
+            sReturn.append(rString[i]);
+            ++i;
         }
     }
-    rString = sReturn.makeStringAndClear();
+    return sReturn.makeStringAndClear();
 }
 
 bool Export::isSourceLanguage(const rtl::OString &rLanguage)
@@ -357,7 +344,7 @@ void Export::InitLanguages( bool bMergeMode ){
     if( !isInitialized )
     {
         ByteString sTmp;
-        ByteStringBoolHashMap aEnvLangs;
+        OStringBoolHashMap aEnvLangs;
 
         sal_Int32 nIndex = 0;
         do
@@ -380,7 +367,7 @@ void Export::InitLanguages( bool bMergeMode ){
 void Export::InitForcedLanguages( bool bMergeMode ){
 /*****************************************************************************/
     ByteString sTmp;
-    ByteStringBoolHashMap aEnvLangs;
+    OStringBoolHashMap aEnvLangs;
 
     sal_Int32 nIndex = 0;
     do
@@ -409,7 +396,7 @@ rtl::OString Export::GetTimeStamp()
 
 /*****************************************************************************/
 sal_Bool Export::ConvertLineEnds(
-    ByteString sSource, ByteString sDestination )
+    rtl::OString const & sSource, rtl::OString const & sDestination )
 /*****************************************************************************/
 {
     String sSourceFile( sSource, RTL_TEXTENCODING_ASCII_US );
@@ -445,7 +432,7 @@ sal_Bool Export::ConvertLineEnds(
 }
 
 /*****************************************************************************/
-ByteString Export::GetNativeFile( ByteString sSource )
+rtl::OString Export::GetNativeFile( rtl::OString const & sSource )
 /*****************************************************************************/
 {
     DirEntry aTemp( GetTempFile());
@@ -455,7 +442,7 @@ ByteString Export::GetNativeFile( ByteString sSource )
         if ( ConvertLineEnds( sSource, sReturn ))
             return sReturn;
 
-    return "";
+    return rtl::OString();
 }
 
 const char* Export::GetEnv( const char *pVar )

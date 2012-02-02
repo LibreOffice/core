@@ -64,30 +64,31 @@ using namespace std;
 
 /** Holds data of Attributes
  */
-class XMLAttribute : public String
+class XMLAttribute
 {
 private:
-    String sValue;
+    rtl::OUString sName;
+    rtl::OUString sValue;
 
 public:
     /// creates an attribute
     XMLAttribute(
-        const String &rName,    // attributes name
-        const String &rValue    // attributes data
+        const rtl::OUString &rName,    // attributes name
+        const rtl::OUString &rValue    // attributes data
     )
-                : String( rName ), sValue( rValue ) {}
+                : sName( rName ), sValue( rValue ) {}
 
-    /// getting value of an attribue
-    const String &GetValue() { return sValue; }
+    rtl::OUString GetName() const { return sName; }
+    rtl::OUString GetValue() const { return sValue; }
 
-    void setValue(const String &rValue){sValue=rValue;}
+    void setValue(const rtl::OUString &rValue){sValue=rValue;}
 
     /// returns true if two attributes are equal and have the same value
     sal_Bool IsEqual(
         const XMLAttribute &rAttribute  // the attribute which has to be equal
     )
     {
-        return (( rAttribute == *this ) && ( rAttribute.sValue == sValue ));
+        return (( rAttribute.sName == sName ) && ( rAttribute.sValue == sValue ));
     }
 };
 
@@ -172,7 +173,6 @@ public:
         XMLChildNode *pChild , size_t pos   /// the new child
     );
 
-    virtual int GetPosition( ByteString id );
     int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChildren();
 
@@ -204,18 +204,17 @@ class XMLFile : public XMLParentNode
 {
 public:
     XMLFile(
-                const String &rFileName // the file name, empty if created from memory stream
+        const rtl::OUString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& obj ) ;
     ~XMLFile();
 
-    ByteString* GetGroupID(std::deque<rtl::OString> &groupid);
     void        Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    sal_Bool        Write( ByteString &rFilename );
+    sal_Bool        Write( rtl::OString const &rFilename );
     sal_Bool        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
@@ -277,7 +276,7 @@ class XMLElement : public XMLParentNode
 private:
     String sElementName;
     XMLAttributeList *pAttributes;
-    ByteString   project,
+    rtl::OString   project,
                  filename,
                  id,
                  sOldRef,
@@ -332,23 +331,23 @@ public:
 
     /// returns a attribute
     XMLAttribute *GetAttribute(
-        const String &rName // the attribute name
+        const rtl::OUString &rName // the attribute name
     );
-    void SetProject         ( ByteString prj        ){ project = prj;        }
-    void SetFileName        ( ByteString fn         ){ filename = fn;        }
-    void SetId              ( ByteString theId      ){ id = theId;           }
-    void SetResourceType    ( ByteString rt         ){ resourceType = rt;    }
-    void SetLanguageId      ( ByteString lid        ){ languageId = lid;     }
+    void SetProject         ( rtl::OString const & prj        ){ project = prj;        }
+    void SetFileName        ( rtl::OString const & fn         ){ filename = fn;        }
+    void SetId              ( rtl::OString const & theId      ){ id = theId;           }
+    void SetResourceType    ( rtl::OString const & rt         ){ resourceType = rt;    }
+    void SetLanguageId      ( rtl::OString const & lid        ){ languageId = lid;     }
     void SetPos             ( int nPos_in           ){ nPos = nPos_in;       }
-    void SetOldRef          ( ByteString sOldRef_in ){ sOldRef = sOldRef_in; }
+    void SetOldRef          ( rtl::OString const & sOldRef_in ){ sOldRef = sOldRef_in; }
 
     virtual int        GetPos()         { return nPos;         }
-    ByteString GetProject()     { return project;      }
-    ByteString GetFileName()    { return filename;     }
-    ByteString GetId()          { return id;           }
-    ByteString GetOldref()      { return sOldRef;      }
-    ByteString GetResourceType(){ return resourceType; }
-    ByteString GetLanguageId()  { return languageId;   }
+    rtl::OString GetProject()     { return project;      }
+    rtl::OString GetFileName()    { return filename;     }
+    rtl::OString GetId()          { return id;           }
+    rtl::OString GetOldref()      { return sOldRef;      }
+    rtl::OString GetResourceType(){ return resourceType; }
+    rtl::OString GetLanguageId()  { return languageId;   }
 
 
 };

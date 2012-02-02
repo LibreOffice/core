@@ -112,7 +112,7 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
     size_t nPos  = 0;
     sal_Bool bStart = true;
     rtl::OString sGroup, sLine;
-    ByteStringHashMap Text;
+    OStringHashMap Text;
     ByteString sID;
 
     while( nPos < pLines->size() ) {
@@ -135,7 +135,7 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
 }
 
 void LngParser::WriteSDF(SvFileStream &aSDFStream,
-    ByteStringHashMap &rText_inout, const rtl::OString &rPrj,
+    OStringHashMap &rText_inout, const rtl::OString &rPrj,
     const rtl::OString &rRoot, const rtl::OString &rActFileName,
     const rtl::OString &rID)
 {
@@ -179,7 +179,7 @@ bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 }
 
 void LngParser::ReadLine(const rtl::OString &rLine_in,
-        ByteStringHashMap &rText_inout)
+        OStringHashMap &rText_inout)
 {
    rtl::OString sLang = getToken(rLine_in, 0, '=');
    sLang = comphelper::string::stripStart(sLang, ' ');
@@ -230,7 +230,7 @@ sal_Bool LngParser::Merge(
     }
 
     while ( nPos < pLines->size()) {
-        ByteStringHashMap Text;
+        OStringHashMap Text;
         ByteString sID( sGroup );
         sal_uLong nLastLangPos = 0;
 
@@ -276,10 +276,10 @@ sal_Bool LngParser::Merge(
                 {
                     if( sLang.Len() )
                     {
-                        ByteString sNewText;
+                        rtl::OString sNewText;
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
 
-                        if ( sNewText.Len()) {
+                        if ( !sNewText.isEmpty()) {
                             rtl::OString *pLine = (*pLines)[ nPos ];
 
                             ByteString sText1( sLang );
@@ -312,9 +312,9 @@ sal_Bool LngParser::Merge(
                 if( !sCur.EqualsIgnoreCaseAscii("en-US") && Text[sCur].isEmpty() && pEntrys )
                 {
 
-                    ByteString sNewText;
+                    rtl::OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
-                    if (( sNewText.Len()) &&
+                    if (( !sNewText.isEmpty()) &&
                         !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
                     {
                         ByteString sLine;

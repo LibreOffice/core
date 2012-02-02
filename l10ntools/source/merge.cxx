@@ -63,22 +63,22 @@ rtl::OString PFormEntrys::Dump()
     return rtl::OString(RTL_CONSTASCII_STRINGPARAM("PFormEntrys\n"));
 }
 
-sal_Bool PFormEntrys::GetTransex3Text( ByteString &rReturn,
-    sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel )
+sal_Bool PFormEntrys::GetTransex3Text( rtl::OString &rReturn,
+    sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel )
 {
     sal_Bool rc = GetText( rReturn , nTyp , nLangIndex , bDel );
-    for( sal_uInt16 idx = 0; idx < rReturn.Len(); idx++ )
+    for( sal_Int32 idx = 0; idx < rReturn.getLength(); idx++ )
     {
-        if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
+        if( rReturn[idx] == '\"' && ( idx >= 1 )  &&  rReturn[idx-1] == '\\' )
         {
-            rReturn.Erase( idx-1 , 1 );
+            rReturn = rReturn.replaceAt( idx-1, 1, rtl::OString() );
         }
     }
     return rc;
 }
 /*****************************************************************************/
-sal_Bool PFormEntrys::GetText( ByteString &rReturn,
-    sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel )
+sal_Bool PFormEntrys::GetText( rtl::OString &rReturn,
+    sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel )
 {
 
     sal_Bool bReturn=sal_True;

@@ -670,11 +670,11 @@ void XRMResMerge::WorkOnDesc(
             ByteString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-                ByteString sContent;
+                rtl::OString sContent;
                 if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
-                    ( sContent != "-" ) && ( sContent.Len()))
+                    ( sContent != "-" ) && !sContent.isEmpty())
                 {
                     ByteString sText( sContent );
                     ByteString sAdditionalLine( "\n        " );
@@ -738,11 +738,11 @@ void XRMResMerge::WorkOnText(
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
-                ByteString sContent;
+                rtl::OString sContent;
                 if ( Export::isAllowed( sLang ) &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
-                    ( sContent != "-" ) && ( sContent.Len()))
+                    ( sContent != "-" ) && !sContent.isEmpty())
 
                 {
                     rText = sContent;
@@ -776,11 +776,11 @@ void XRMResMerge::EndOfText(
             ByteString sCur;
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-                ByteString sContent;
+                rtl::OString sContent;
                 if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
-                    ( sContent != "-" ) && ( sContent.Len()))
+                    ( sContent != "-" ) && !sContent.isEmpty())
                 {
                     ByteString sText( sContent );
                     ByteString sAdditionalLine( "\n        " );

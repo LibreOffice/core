@@ -32,6 +32,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
+#include "helper.hxx"
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
@@ -41,23 +42,23 @@ using comphelper::string::getTokenCount;
 #define MAX_GID_LID_LEN 250
 
 /*****************************************************************************/
-void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
+void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                   rtl::OString const & aContext, sal_Bool bPrintContext, sal_uLong nLine, rtl::OString aUniqueId = rtl::OString() )
 /*****************************************************************************/
 {
-    fprintf( stdout, "%s %s, Line %lu", aType.GetBuffer(), aPrefix.GetBuffer(), nLine );
-    if ( aUniqueId.Len() )
-        fprintf( stdout, ", UniqueID %s", aUniqueId.GetBuffer() );
-    fprintf( stdout, ": %s", aMsg.GetBuffer() );
+    fprintf( stdout, "%s %s, Line %lu", aType.getStr(), aPrefix.getStr(), nLine );
+    if ( !aUniqueId.isEmpty() )
+        fprintf( stdout, ", UniqueID %s", aUniqueId.getStr() );
+    fprintf( stdout, ": %s", aMsg.getStr() );
 
     if ( bPrintContext )
-        fprintf( stdout, "  \"%s\"", aContext.GetBuffer() );
+        fprintf( stdout, "  \"%s\"", aContext.getStr() );
     fprintf( stdout, "\n" );
 }
 
 /*****************************************************************************/
-void PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
+void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                 rtl::OString const & aContext, sal_Bool bPrintContext, sal_uLong nLine, rtl::OString const & aUniqueId = rtl::OString() )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -139,18 +140,29 @@ void LazySvFileStream::LazyOpen()
 //
 
 /*****************************************************************************/
-GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
+GSILine::GSILine( const rtl::OString &rLine, sal_uLong nLine )
 /*****************************************************************************/
-                : ByteString( rLine )
-                , nLineNumber( nLine )
+                : nLineNumber( nLine )
                 , bOK( sal_True )
                 , bFixed ( sal_False )
+                , data_( rLine )
 {
     if ( getTokenCount(rLine, '\t') == 15 )
     {
         aFormat = FORMAT_SDF;
         aUniqId = getToken(rLine, 0, '\t');
-        aUniqId.Append("/").Append( getToken(rLine, 1, '\t') ).Append("/").Append( getToken(rLine, 3, '\t') ).Append("/").Append( getToken(rLine, 4, '\t') ).Append("/").Append( getToken(rLine, 5, '\t') ).Append("/").Append( getToken(rLine, 6, '\t') ).Append("/").Append( getToken(rLine, 7, '\t') );
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 1, '\t');
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 3, '\t');
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 4, '\t');
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 5, '\t');
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 6, '\t');
+        aUniqId += "/";
+        aUniqId += getToken(rLine, 7, '\t');
         aLineType = "";
         aLangId = getToken(rLine, 9, '\t');
         aText = getToken(rLine, 10, '\t');
@@ -201,12 +213,12 @@ void GSILine::ReassembleLine()
         sal_uInt16 i;
         for ( i = 0 ; i < 10 ; i++ )
         {
-            aReassemble.Append( GetToken( i, '\t' ) );
+            aReassemble.Append( helper::getToken( data_, i, '\t' ) );
             aReassemble.Append( "\t" );
         }
         aReassemble.Append( aText );
         aReassemble.Append( "\t" );
-        aReassemble.Append( GetToken( 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
+        aReassemble.Append( helper::getToken( data_, 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
         aReassemble.Append( "\t" );
         aReassemble.Append( aQuickHelpText );
         aReassemble.Append( "\t" );
@@ -214,7 +226,7 @@ void GSILine::ReassembleLine()
         for ( i = 14 ; i < 15 ; i++ )
         {
             aReassemble.Append( "\t" );
-            aReassemble.Append( GetToken( i, '\t' ) );
+            aReassemble.Append( helper::getToken( data_, i, '\t' ) );
         }
         *(ByteString*)this = aReassemble;
     }
@@ -253,7 +265,7 @@ GSIBlock::~GSIBlock()
 
 void GSIBlock::InsertLine( GSILine* pLine, const rtl::OString &rSourceLang)
 {
-    if ( pLine->GetLanguageId().Equals( rSourceLang ) )
+    if ( pLine->GetLanguageId() == rSourceLang )
     {
         if ( pSourceLine )
         {
@@ -273,7 +285,7 @@ void GSIBlock::InsertLine( GSILine* pLine, const rtl::OString &rSourceLang)
     {
         for ( size_t nPos = 0, n = maList.size(); nPos < n; ++nPos )
         {
-            if ( maList[ nPos ]->GetLanguageId().Equals( pLine->GetLanguageId() ) )
+            if ( maList[ nPos ]->GetLanguageId() == pLine->GetLanguageId() )
             {
                 PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
                 bHasBlockError = sal_True;
@@ -294,23 +306,23 @@ void GSIBlock::SetReferenceLine( GSILine* pLine )
 }
 
 /*****************************************************************************/
-void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
+void GSIBlock::PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                             rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId )
 /*****************************************************************************/
 {
     ::PrintMessage( aType, aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
 /*****************************************************************************/
-void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
+void GSIBlock::PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                           rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, nLine, aUniqueId );
 }
 
 /*****************************************************************************/
-void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
+void GSIBlock::PrintList( ParserMessageList *pList, rtl::OString const & aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
@@ -321,9 +333,9 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
         if ( bPrintContext )
         {
             if ( pMsg->GetTagBegin() == STRING_NOTFOUND )
-                aContext = pLine->GetText().Copy( 0, 300 );
+                aContext = pLine->GetText().copy( 0, 300 );
             else
-                aContext = pLine->Copy( pMsg->GetTagBegin()-150, 300 );
+                aContext = pLine->data_.copy( pMsg->GetTagBegin()-150, 300 );
             aContext = comphelper::string::stripEnd(aContext, ' ');
             aContext = comphelper::string::stripStart(aContext, ' ');
         }
@@ -333,15 +345,15 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
 }
 
 /*****************************************************************************/
-sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const
+sal_Bool GSIBlock::IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const
 /*****************************************************************************/
 {
     String aUTF8Tester(rtl::OStringToOUString(aTestee, RTL_TEXTENCODING_UTF8));
     if ( STRING_MATCH != (nErrorPos = ByteString(rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8)).Match( aTestee )) )
     {
-        aUTF8Tester = String( aTestee.GetBuffer(), nErrorPos, RTL_TEXTENCODING_UTF8 );
+        aUTF8Tester = String( aTestee.getStr(), nErrorPos, RTL_TEXTENCODING_UTF8 );
         nErrorPos = aUTF8Tester.Len();
-        aErrorMsg = ByteString( "UTF8 Encoding seems to be broken" );
+        aErrorMsg = "UTF8 Encoding seems to be broken";
         return sal_False;
     }
 
@@ -349,14 +361,14 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
                 "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x7f" ).GetBuffer() );
     if ( nErrorPos != STRING_NOTFOUND )
     {
-        aErrorMsg = ByteString( "String contains illegal character" );
+        aErrorMsg = "String contains illegal character";
         return sal_False;
     }
 
     if ( bFixTags )
     {
         bHasBeenFixed = sal_False;
-        aFixed.Erase();
+        aFixed = rtl::OString();
     }
 
     return sal_True;
@@ -367,13 +379,13 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
 /*****************************************************************************/
 {
     sal_uInt16 nErrorPos = 0;
-    ByteString aErrorMsg;
+    rtl::OString aErrorMsg;
     sal_Bool bError = sal_False;
-    ByteString aFixed;
+    rtl::OString aFixed;
     sal_Bool bHasBeenFixed = sal_False;
     if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        ByteString aContext( pTestee->GetText().Copy( nErrorPos, 20 ) );
+        ByteString aContext( pTestee->GetText().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Text at Position "))
              .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -386,7 +398,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     }
     if ( !IsUTF8( pTestee->GetQuickHelpText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        ByteString aContext( pTestee->GetQuickHelpText().Copy( nErrorPos, 20 ) );
+        rtl::OString aContext( pTestee->GetQuickHelpText().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in QuickHelpText at Position "))
              .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -399,7 +411,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     }
     if ( !IsUTF8( pTestee->GetTitle(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        ByteString aContext( pTestee->GetTitle().Copy( nErrorPos, 20 ) );
+        rtl::OString aContext( pTestee->GetTitle().copy( nErrorPos, 20 ) );
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Title at Position "))
              .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -420,13 +432,13 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
 sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
 /*****************************************************************************/
 {
-    sal_uInt16 nPos = 0;
-    if ( !bAllowSuspicious && ( nPos = pTestee->GetText().Search("??")) != STRING_NOTFOUND )
-        if ( pSource->GetText().Search("??") == STRING_NOTFOUND )
+    sal_Int32 nPos = 0;
+    if ( !bAllowSuspicious && ( nPos = pTestee->GetText().indexOf("??")) != -1 )
+        if ( pSource->GetText().indexOf("??") == -1 )
         {
             String aUTF8Tester = String( pTestee->GetText(), 0, nPos, RTL_TEXTENCODING_UTF8 );
             sal_uInt16 nErrorPos = aUTF8Tester.Len();
-            ByteString aContext( pTestee->GetText().Copy( nPos, 20 ) );
+            rtl::OString aContext( pTestee->GetText().copy( nPos, 20 ) );
             PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found double questionmark in translation only. Looks like an encoding problem at Position "))
                  .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
                 "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -480,11 +492,11 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
         }
         else
         {
-            if ( pSourceLine && !pSourceLine->Equals( *pReferenceLine ) )
+            if ( pSourceLine && pSourceLine->data_ != pReferenceLine->data_ )
             {
-                xub_StrLen nPos = pSourceLine->Match( *pReferenceLine );
-                ByteString aContext( pReferenceLine->Copy( nPos - 5, 15) );
-                aContext.Append( "\" --> \"" ).Append( pSourceLine->Copy( nPos - 5, 15) );
+                xub_StrLen nPos = ByteString(pSourceLine->data_).Match( pReferenceLine->data_ );
+                ByteString aContext( pReferenceLine->data_.copy( nPos - 5, 15) );
+                aContext.Append( "\" --> \"" ).Append( pSourceLine->data_.copy( nPos - 5, 15) );
                 PrintError( "Source Language Entry has changed.", "File format", aContext, pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
                 pSourceLine->NotOK();
                 bHasError = sal_True;
@@ -529,14 +541,14 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLin
         {
             bHasError = sal_True;
             aErrOut.LazyOpen();
-            aErrOut.WriteLine( *pItem );
+            aErrOut.WriteLine( pItem->data_ );
         }
     }
 
     if ( pSourceLine && ( bHasError || !pSourceLine->IsOK() ) && !( !bHasError && bCheckTranslationLang ) )
     {
         aErrOut.LazyOpen();
-        aErrOut.WriteLine( *pSourceLine );
+        aErrOut.WriteLine( pSourceLine->data_ );
     }
 }
 
@@ -553,14 +565,14 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLi
         {
             bHasOK = sal_True;
             aOkOut.LazyOpen();
-            aOkOut.WriteLine( *pItem );
+            aOkOut.WriteLine( pItem->data_ );
         }
     }
 
     if ( ( pSourceLine && pSourceLine->IsOK() && ( !maList.empty() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
     {
         aOkOut.LazyOpen();
-        aOkOut.WriteLine( *pSourceLine );
+        aOkOut.WriteLine( pSourceLine->data_ );
     }
 }
 
@@ -577,14 +589,14 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut )
         {
             bHasFixes = sal_True;
             aFixOut.LazyOpen();
-            aFixOut.WriteLine( *pItem );
+            aFixOut.WriteLine( pItem->data_ );
         }
     }
 
     if ( pSourceLine && ( bHasFixes || pSourceLine->IsFixed() ) )
     {
         aFixOut.LazyOpen();
-        aFixOut.WriteLine( *pSourceLine );
+        aFixOut.WriteLine( pSourceLine->data_ );
     }
 }
 
@@ -654,7 +666,7 @@ int _cdecl main( int argc, char *argv[] )
     String aCorrectFilename;
     String aFixedFilename;
     sal_Bool bFileHasError = sal_False;
-    ByteString aSourceLang( "en-US" );     // English is default
+    rtl::OString aSourceLang( "en-US" );     // English is default
     ByteString aFilename;
     ByteString aReferenceFilename;
     sal_Bool bReferenceFile = sal_False;
@@ -734,9 +746,9 @@ int _cdecl main( int argc, char *argv[] )
                     {
                         if ( (i+1) < argc )
                         {
-                            aSourceLang = ByteString( argv[ i+1 ] );
-                            if ( aSourceLang.EqualsIgnoreCaseAscii( "none" ) )
-                                aSourceLang.Erase();
+                            aSourceLang = argv[ i+1 ];
+                            if ( aSourceLang.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("none")) )
+                                aSourceLang = rtl::OString();
                             i++;
                         }
                         else
@@ -795,9 +807,9 @@ int _cdecl main( int argc, char *argv[] )
         exit ( 0 );
     }
 
-    if ( aSourceLang.Len() && !LanguageOK( aSourceLang ) )
+    if ( !aSourceLang.isEmpty() && !LanguageOK( aSourceLang ) )
     {
-        fprintf( stderr, "\nERROR: The Language '%s' is invalid!\n\n", aSourceLang.GetBuffer() );
+        fprintf( stderr, "\nERROR: The Language '%s' is invalid!\n\n", aSourceLang.getStr() );
         Help();
         exit ( 1 );
     }
@@ -887,7 +899,7 @@ int _cdecl main( int argc, char *argv[] )
 
     rtl::OString sGSILine;
     GSILine* pGSILine = NULL;
-    ByteString aOldId("No Valid ID");   // just set to something which can never be an ID
+    rtl::OString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
     sal_uLong nLine = 0;
 
@@ -899,40 +911,40 @@ int _cdecl main( int argc, char *argv[] )
         sal_Bool bDelete = sal_True;
 
 
-        if ( pGSILine->Len() )
+        if ( !pGSILine->data_.isEmpty() )
         {
             if ( FORMAT_UNKNOWN == pGSILine->GetLineFormat() )
             {
-                PrintError( "Format of line is unknown. Ignoring!", "Line format", pGSILine->Copy( 0,40 ), bPrintContext, pGSILine->GetLineNumber() );
+                PrintError( "Format of line is unknown. Ignoring!", "Line format", pGSILine->data_.copy( 0,40 ), bPrintContext, pGSILine->GetLineNumber() );
                 pGSILine->NotOK();
                 if ( bWriteError )
                 {
                     bFileHasError = sal_True;
                     aErrOut.LazyOpen();
-                    aErrOut.WriteLine( *pGSILine );
+                    aErrOut.WriteLine( pGSILine->data_ );
                 }
             }
-            else if ( pGSILine->GetLineType().EqualsIgnoreCaseAscii("res-comment") )
+            else if ( pGSILine->GetLineType().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("res-comment")) )
             {   // ignore comment lines, but write them to Correct Items File
                 if ( bWriteCorrect )
                 {
                     aOkOut.LazyOpen();
-                       aOkOut.WriteLine( *pGSILine );
+                       aOkOut.WriteLine( pGSILine->data_ );
                 }
             }
             else
             {
-                ByteString aId = pGSILine->GetUniqId();
+                rtl::OString aId = pGSILine->GetUniqId();
                 if ( aId != aOldId )
                 {
                     if ( pBlock )
                     {
-                        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0, bFixTags );
+                        bFileHasError |= pBlock->CheckSyntax( nLine, !aSourceLang.isEmpty(), bFixTags );
 
                         if ( bWriteError )
-                            pBlock->WriteError( aErrOut, aSourceLang.Len() != 0 );
+                            pBlock->WriteError( aErrOut, !aSourceLang.isEmpty() );
                         if ( bWriteCorrect )
-                            pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
+                            pBlock->WriteCorrect( aOkOut, !aSourceLang.isEmpty() );
                         if ( bWriteFixed )
                             pBlock->WriteFixed( aFixOut );
 
@@ -957,7 +969,7 @@ int _cdecl main( int argc, char *argv[] )
                             }
                             if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
                             {
-                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
+                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId() == aSourceLang )
                                 {
                                     pBlock->SetReferenceLine( pReferenceLine );
                                     pReferenceLine = NULL;
@@ -968,7 +980,7 @@ int _cdecl main( int argc, char *argv[] )
                                 }
                                 else
                                 {
-                                    if ( pReferenceLine->GetUniqId() < aId  && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
+                                    if ( pReferenceLine->GetUniqId() < aId  && pReferenceLine->GetLanguageId() == aSourceLang )
                                         PrintError( "No Entry in source file found. Entry has been removed from source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), pReferenceLine->GetUniqId() );
                                     delete pReferenceLine;
                                     pReferenceLine = NULL;
@@ -995,12 +1007,12 @@ int _cdecl main( int argc, char *argv[] )
     }
     if ( pBlock )
     {
-        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0, bFixTags );
+        bFileHasError |= pBlock->CheckSyntax( nLine, !aSourceLang.isEmpty(), bFixTags );
 
         if ( bWriteError )
-            pBlock->WriteError( aErrOut, aSourceLang.Len() != 0 );
+            pBlock->WriteError( aErrOut, !aSourceLang.isEmpty() );
         if ( bWriteCorrect )
-            pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
+            pBlock->WriteCorrect( aOkOut, !aSourceLang.isEmpty() );
         if ( bWriteFixed )
             pBlock->WriteFixed( aFixOut );
 

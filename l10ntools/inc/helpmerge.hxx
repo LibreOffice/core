@@ -39,43 +39,43 @@
 class HelpParser
 {
 private:
-    ByteString sHelpFile;
+    rtl::OString sHelpFile;
     bool       bUTF8;
     bool       bHasInputList;
 
 #if OSL_DEBUG_LEVEL > 2
     /// Debugmethod, prints the content of the map to stdout
-    static void Dump(LangHashMap* rElem_in , const ByteString sKey_in);
+    static void Dump(LangHashMap* rElem_in , const rtl::OString & sKey_in);
 
     /// Debugmethod, prints the content of the map to stdout
     static void Dump(XMLHashMap* rElem_in);
 #endif
 
 public:
-    HelpParser( const ByteString &rHelpFile, bool bUTF8 , bool bHasInputList );
+    HelpParser( const rtl::OString &rHelpFile, bool bUTF8 , bool bHasInputList );
     ~HelpParser(){};
 
 /// Method creates/append a SDF file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
-    static bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in,
-                           const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1 );
+    static bool CreateSDF( const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in, const rtl::OString &rRoot_in,
+                           const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1 );
 
     static  void parse_languages( std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile );
 
 /// Method merges the String from the SDFfile into XMLfile. Both Strings must
 /// point to existing files.
-    bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in ,
+    bool Merge( const rtl::OString &rSDFFile_in, const rtl::OString &rDestinationFile_in ,
         const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
-    bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
+    bool Merge( const rtl::OString &rSDFFile, const rtl::OString &rPathX , const rtl::OString &rPathY , bool bISO
         , const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
     static rtl::OString makeAbsolutePath(const rtl::OString& sHelpFile , const rtl::OString& rRoot_in);
 
-    ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
-    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
+    rtl::OString GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY );
+    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage , rtl::OString const & sPath );
 
-    void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
+    void ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void MakeDir(const rtl::OString& rPath);
 };
 
