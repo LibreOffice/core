@@ -160,8 +160,8 @@ SHL2STDLIBS= \
         $(SALLIB)		\
         $(SALHELPERLIB)		\
         $(POSTGRESQL_LIB)	\
-        $(LIBPQ_DEP_LIBS)	\
-        $(LIBPQ_LINK)
+        $(LIBPQ_LINK)		\
+        $(LIBPQ_DEP_LIBS)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)/$(SHL2TARGET).def
