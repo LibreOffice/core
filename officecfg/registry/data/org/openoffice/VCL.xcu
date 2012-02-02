@@ -736,24 +736,44 @@
         <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
-    <node oor:name="dz" oor:op="replace">
+    <node oor:name="bo" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Tibetan Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+        <value>Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
+      </prop>
+    </node>
+    <node oor:name="dz" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Tibetan Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Kailasa;Microsoft Himalaya</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya</value>
       </prop>
     </node>
     <node oor:name="km" oor:op="replace">
