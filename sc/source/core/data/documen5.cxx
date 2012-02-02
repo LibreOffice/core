@@ -692,6 +692,8 @@ bool lcl_StringInCollection( const ScStrCollection* pColl, const rtl::OUString& 
 
 void ScDocument::UpdateChartListenerCollection()
 {
+    OSL_ASSERT(pChartListenerCollection);
+
     bChartListenerCollectionNeedsUpdate = false;
     if (!pDrawLayer)
         return;
@@ -708,6 +710,9 @@ void ScDocument::UpdateChartListenerCollection()
             continue;
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        ScChartListenerCollection::StringSetType& rNonOleObjects =
+            pChartListenerCollection->getNonOleObjectNames();
+
         for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
         {
             if ( pObject->GetObjIdentifier() != OBJ_OLE2 )
@@ -715,9 +720,10 @@ void ScDocument::UpdateChartListenerCollection()
 
             rtl::OUString aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
             ScChartListener* pListener = pChartListenerCollection->findByName(aObjName);
+
             if (pListener)
                 pListener->SetUsed(true);
-            else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
+            else if (rNonOleObjects.count(aObjName) > 0)
             {
                 // non-chart OLE object -> don't touch
             }
@@ -756,9 +762,7 @@ void ScDocument::UpdateChartListenerCollection()
                     //! remove names when objects are no longer there?
                     //  (object names aren't used again before reloading the document)
 
-                    if (!pOtherObjects)
-                        pOtherObjects = new ScStrCollection;
-                    pOtherObjects->Insert( new StrData( aObjName ) );
+                    rNonOleObjects.insert(aObjName);
                 }
             }
         }
@@ -769,9 +773,11 @@ void ScDocument::UpdateChartListenerCollection()
 
 void ScDocument::AddOLEObjectToCollection(const rtl::OUString& rName)
 {
-    if (!pOtherObjects)
-        pOtherObjects = new ScStrCollection;
-    pOtherObjects->Insert( new StrData( rName ) );
+    OSL_ASSERT(pChartListenerCollection);
+    ScChartListenerCollection::StringSetType& rNonOleObjects =
+        pChartListenerCollection->getNonOleObjectNames();
+
+    rNonOleObjects.insert(rName);
 }
 
 

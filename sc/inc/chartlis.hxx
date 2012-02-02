@@ -158,10 +158,11 @@ public:
     };
 
     typedef boost::ptr_map<rtl::OUString, ScChartListener> ListenersType;
-
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StringSetType;
 private:
     ListenersType maListeners;
     ::std::list<RangeListenerItem> maHiddenListeners;
+    StringSetType maNonOleObjectNames;
 
     Timer           aTimer;
     ScDocument*     pDoc;
@@ -186,6 +187,7 @@ public:
 
     const ListenersType& getListeners() const;
     ListenersType& getListeners();
+    StringSetType& getNonOleObjectNames();
 
     /**
      * Create a unique name that's not taken by any existing chart listener

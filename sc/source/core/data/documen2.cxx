@@ -145,7 +145,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pEOFormulaTree( NULL ),
         pFormulaTrack( NULL ),
         pEOFormulaTrack( NULL ),
-        pOtherObjects( NULL ),
         pClipData( NULL ),
         pDetOpList(NULL),
         pChangeTrack( NULL ),
@@ -450,7 +449,6 @@ ScDocument::~ScDocument()
     xPoolHelper.clear();
 
     delete pScriptTypeData;
-    delete pOtherObjects;
     delete pRecursionHelper;
 
     OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );

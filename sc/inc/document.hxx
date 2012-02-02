@@ -255,7 +255,6 @@ private:
     ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack (end), last cell
     ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
-    ScStrCollection*        pOtherObjects;                  // non-chart OLE objects
     SvMemoryStream*     pClipData;
     ScDetOpList*        pDetOpList;
     ScChangeTrack*      pChangeTrack;

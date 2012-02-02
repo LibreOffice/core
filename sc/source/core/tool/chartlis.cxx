@@ -535,6 +535,11 @@ ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListener
     return maListeners;
 }
 
+ScChartListenerCollection::StringSetType& ScChartListenerCollection::getNonOleObjectNames()
+{
+    return maNonOleObjectNames;
+}
+
 rtl::OUString ScChartListenerCollection::getUniqueName(const rtl::OUString& rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
