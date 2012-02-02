@@ -155,7 +155,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
             else
             {
                 size_t nPos = std::distance(rUsers.begin(), it);
-                nLastUserIndex = nPos & SC_AUTHORCOLORCOUNT;
+                nLastUserIndex = nPos % SC_AUTHORCOLORCOUNT;
             }
         }
         nColor = nAuthorColor[nLastUserIndex];
