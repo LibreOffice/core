@@ -444,11 +444,9 @@ const ScMatrix* ScFormulaCell::GetMatrix()
 {
     if ( pDocument->GetAutoCalc() )
     {
+        if( IsDirtyOrInTableOpDirty()
         // Was stored !bDirty but an accompanying matrix cell was bDirty?
-        // => we need to get the matrix.
-        if (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix().Is())
-            bDirty = sal_True;
-        if ( IsDirtyOrInTableOpDirty() )
+        || (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix().Is()))
             Interpret();
     }
     return aResult.GetMatrix();
