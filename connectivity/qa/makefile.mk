@@ -34,8 +34,10 @@ PACKAGE = complex/connectivity
 .INCLUDE: settings.mk
 
 .IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/QADEVOOO//)"
+
 all:
-    @echo "QADEVOO not set. Build skipped"
+# nothing
+
 .ELSE
 #----- compile .java files -----------------------------------------
 
