@@ -31,42 +31,41 @@
 
 #include "collect.hxx"
 
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
-class ScUnitConverterData : public StrData
+class ScUnitConverterData
 {
-            double          fValue;
-
+    rtl::OUString maIndexString;
+    double mfValue;
                             // not implemented
-    ScUnitConverterData&    operator=( const ScUnitConverterData& );
+    ScUnitConverterData& operator=( const ScUnitConverterData& );
 
 public:
-                            ScUnitConverterData( const String& rFromUnit,
-                                const String& rToUnit, double fValue = 1.0 );
-                            ScUnitConverterData( const ScUnitConverterData& );
-    virtual                 ~ScUnitConverterData() {};
+    ScUnitConverterData( const rtl::OUString& rFromUnit,
+        const rtl::OUString& rToUnit, double fValue = 1.0 );
+    ScUnitConverterData( const ScUnitConverterData& );
+    ~ScUnitConverterData();
 
-    virtual ScDataObject*       Clone() const;
+    double GetValue() const;
+    const rtl::OUString& GetIndexString() const;
 
-            double          GetValue() const    { return fValue; }
-
-    static  void            BuildIndexString( String& rStr,
-                                const String& rFromUnit, const String& rToUnit );
-
+    static rtl::OUString BuildIndexString(
+        const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit );
 };
 
 
-class ScUnitConverter : public ScStrCollection
+class ScUnitConverter : public boost::noncopyable
 {
-                            // not implemented
-                            ScUnitConverter( const ScUnitConverter& );
-        ScUnitConverter&    operator=( const ScUnitConverter& );
+    typedef boost::ptr_map<rtl::OUString, ScUnitConverterData> MapType;
+    MapType maData;
 
 public:
-                            ScUnitConverter( sal_uInt16 nInit = 16, sal_uInt16 nDelta = 4 );
-    virtual                 ~ScUnitConverter() {};
+    ScUnitConverter();
+    ~ScUnitConverter();
 
-        sal_Bool                GetValue( double& fValue, const String& rFromUnit,
-                                const String& rToUnit ) const;
+    bool GetValue(
+        double& fValue, const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit ) const;
 };
 
 

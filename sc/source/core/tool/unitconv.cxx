@@ -48,51 +48,35 @@ const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
 
 // --- ScUnitConverterData --------------------------------------------
 
-ScUnitConverterData::ScUnitConverterData( const String& rFromUnit,
-            const String& rToUnit, double fVal )
-        :
-        StrData( rFromUnit ),
-        fValue( fVal )
+ScUnitConverterData::ScUnitConverterData(
+    const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit, double fValue ) :
+    maIndexString(BuildIndexString(rFromUnit, rToUnit)),
+    mfValue(fValue) {}
+
+ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r ) :
+    maIndexString(r.maIndexString),
+    mfValue(r.mfValue) {}
+
+ScUnitConverterData::~ScUnitConverterData() {}
+
+double ScUnitConverterData::GetValue() const
 {
-    String aTmp;
-    ScUnitConverterData::BuildIndexString( aTmp, rFromUnit, rToUnit );
-    SetString( aTmp );
+    return mfValue;
 }
 
-
-ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r )
-        :
-        StrData( r ),
-        fValue( r.fValue )
+const rtl::OUString& ScUnitConverterData::GetIndexString() const
 {
+    return maIndexString;
 }
 
-
-ScDataObject* ScUnitConverterData::Clone() const
+rtl::OUString ScUnitConverterData::BuildIndexString(
+    const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit )
 {
-    return new ScUnitConverterData( *this );
+    rtl::OUStringBuffer aBuf(rFromUnit);
+    aBuf.append(cDelim);
+    aBuf.append(rToUnit);
+    return aBuf.makeStringAndClear();
 }
-
-
-void ScUnitConverterData::BuildIndexString( String& rStr,
-            const String& rFromUnit, const String& rToUnit )
-{
-#if 1
-// case sensitive
-    rStr = rFromUnit;
-    rStr += cDelim;
-    rStr += rToUnit;
-#else
-// not case sensitive
-    rStr = rFromUnit;
-    String aTo( rToUnit );
-    ScGlobal::pCharClass->toUpper( rStr );
-    ScGlobal::pCharClass->toUpper( aTo );
-    rStr += cDelim;
-    rStr += aTo;
-#endif
-}
-
 
 // --- ScUnitConverter ------------------------------------------------
 
@@ -101,8 +85,7 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 #define CFGSTR_UNIT_TO      "ToUnit"
 #define CFGSTR_UNIT_FACTOR  "Factor"
 
-ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
-        ScStrCollection( nInit, nDeltaP, false )
+ScUnitConverter::ScUnitConverter()
 {
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values
@@ -153,25 +136,28 @@ ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
                 pProperties[nIndex++] >>= fFactor;
 
                 ScUnitConverterData* pNew = new ScUnitConverterData( sFromUnit, sToUnit, fFactor );
-                if ( !Insert( pNew ) )
-                    delete pNew;
+                rtl::OUString aIndex  = pNew->GetIndexString();
+                maData.insert(aIndex, pNew);
             }
         }
     }
 }
 
-sal_Bool ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
-                const String& rToUnit ) const
+ScUnitConverter::~ScUnitConverter() {}
+
+bool ScUnitConverter::GetValue(
+    double& fValue, const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit ) const
 {
-    ScUnitConverterData aSearch( rFromUnit, rToUnit );
-    sal_uInt16 nIndex;
-    if ( Search( &aSearch, nIndex ) )
+    rtl::OUString aIndex = ScUnitConverterData::BuildIndexString(rFromUnit, rToUnit);
+    MapType::const_iterator it = maData.find(aIndex);
+    if (it == maData.end())
     {
-        fValue = ((const ScUnitConverterData*)(At( nIndex )))->GetValue();
-        return sal_True;
+        fValue = 1.0;
+        return false;
     }
-    fValue = 1.0;
-    return false;
+
+    fValue = it->second->GetValue();
+    return true;
 }
 
 
