@@ -186,7 +186,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed  =bNoTextFrame;
     rInfo.bMirror90Allowed  =bNoTextFrame;
 
-    // allow transparence
+    // allow transparency
     rInfo.bTransparenceAllowed = sal_True;
 
     // gradient depends on fillstyle

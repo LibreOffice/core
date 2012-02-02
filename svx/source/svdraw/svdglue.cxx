@@ -83,7 +83,7 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
         }
     }
     aPt+=aOfs;
-    // Now limit to the BoundRect ofthe object
+    // Now limit to the BoundRect of the object
     if (aPt.X()<aBound.Left  ()) aPt.X()=aBound.Left  ();
     if (aPt.X()>aBound.Right ()) aPt.X()=aBound.Right ();
     if (aPt.Y()<aBound.Top   ()) aPt.Y()=aBound.Top   ();

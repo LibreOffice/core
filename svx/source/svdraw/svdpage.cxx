@@ -452,15 +452,15 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
+    DBG_ASSERT(pObj!=NULL,"Object to remove not found.");
     if(pObj)
     {
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts(true);
 
-        DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
+        DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
         if (pModel!=NULL) {
-            // Hier muss ein anderer Broadcast her!
+            // TODO: We need a different broadcast here.
             if (pObj->GetPage()!=NULL) {
                 SdrHint aHint(*pObj);
                 aHint.SetKind(HINT_OBJREMOVED);
@@ -468,10 +468,10 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
             }
             pModel->SetChanged();
         }
-        pObj->SetInserted(sal_False); // Ruft u.a. den UserCall
+        pObj->SetInserted(sal_False); // calls, among other things, the UserCall
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
-        if (!bObjOrdNumsDirty) { // Optimierung fuer den Fall, dass das letzte Obj rausgenommen wird
+        if (!bObjOrdNumsDirty) { // optimization for the case that the last object is removed
             if (nObjNum!=sal_uIntPtr(nAnz-1)) {
                 bObjOrdNumsDirty=sal_True;
             }
@@ -481,7 +481,7 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
         if(pOwnerObj && !GetObjCount())
         {
             // empty group created; it needs to be repainted since it's
-            // visualisation changes
+            // visualization changes
             pOwnerObj->ActionChanged();
         }
     }
@@ -1392,7 +1392,7 @@ SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
     pPage = this;
 
     // copy all the local parameters to make this instance
-    // a valid copy od source page before copying and inserting
+    // a valid copy of source page before copying and inserting
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
     mbSwappingLocked = rSrcPage.mbSwappingLocked;

@@ -421,7 +421,7 @@ void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
             if (BegChangeEntry(nPos)) bAusgewertet = true;
         } else if (nKeyCode==KEY_ESCAPE) {
             // ...
-        } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { // Strg
+        } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { // Ctrl
             if (nKeyCode==KEY_SHIFT+KEY_MOD1+KEY_MOD2+KEY_W) {
                 bWhichesButNames=!bWhichesButNames;
                 SetDirty();

@@ -179,7 +179,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
 
 void ImpSdrCreateViewExtraData::HideOverlay()
 {
-    // the clear() call at the list removes all objects from the
+    // the clear() call of the list removes all objects from the
     // OverlayManager and deletes them.
     maObjects.clear();
 }
@@ -449,7 +449,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             Point aPnt(rPnt);
             if (nAktInvent!=SdrInventor || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
                                             nAktIdent!=sal_uInt16(OBJ_FREELINE) &&
-                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // Kein Fang fuer Edge und Freihand!
+                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
                 aPnt=GetSnapPos(aPnt,pCreatePV);
             }
             if (pAktCreate!=NULL)
@@ -468,7 +468,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
                 {
                     SfxItemSet aSet(pMod->GetItemPool());
-                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
+                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
@@ -671,7 +671,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                     if(bDidInsert)
                     {
-                        // delete object, it's content is cloned and inserted
+                        // delete object, its content is cloned and inserted
                         SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
                         bRet = sal_False;

@@ -462,8 +462,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     if( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags &&
         GRAPHIC_NONE != eType )
     {
-        // actually transform the graphic only in this case. On the
-        // other hand, cropping will always happen
+        // Actually transform the graphic only in this case.
+        // Cropping always happens, though.
         aActAttr = aGrafInfo;
 
         if( bMirror )

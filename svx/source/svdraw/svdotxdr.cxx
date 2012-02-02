@@ -147,7 +147,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         }
     }
-    if (!ISA(SdrObjCustomShape))        // not justifying for CustomShapes to be able to detect if a shape has to be mirrored
+    if (!ISA(SdrObjCustomShape))        // not justifying when in CustomShapes, to be able to detect if a shape has to be mirrored
         ImpJustifyRect(aTmpRect);
     return aTmpRect;
 }

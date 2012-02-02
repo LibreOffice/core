@@ -369,7 +369,7 @@ SdrItemPool::~SdrItemPool()
         }
     }
 
-    // split pools before detroying
+    // split pools before destroying
     SetSecondaryPool(NULL);
 }
 

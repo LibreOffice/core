@@ -1823,14 +1823,12 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         // take care of old handle
         const sal_uIntPtr nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
-        //SDOsal_Bool bRefresh(sal_False);
 
         if(pOld)
         {
             // switch off old handle
             mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
             pOld->Touch();
-            //SDObRefresh = sal_True;
         }
 
         // allocate pointer array for sorted handle list

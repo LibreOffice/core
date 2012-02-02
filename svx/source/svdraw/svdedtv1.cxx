@@ -67,12 +67,12 @@
 
 void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
 {
-    DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() mit leerem Rect mach keinen Sinn");
+    DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() with an empty Rect does not make sense.");
     if (rRect.IsEmpty()) return;
     sal_uIntPtr nAnz=GetMarkedObjectCount();
     if (nAnz==0) return;
     Rectangle aR0(GetMarkedObjRect());
-    DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() ist leer");
+    DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() is empty.");
     if (aR0.IsEmpty()) return;
     long x0=aR0.Left();
     long y0=aR0.Top();
@@ -290,7 +290,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
 
             if( bUndo )
             {
-                // extra undo actions for changed connector which now may hold its layed out path (SJ)
+                // extra undo actions for changed connector which now may hold its laid out path (SJ)
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
 
@@ -350,7 +350,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
 
             if( bUndo )
             {
-                // extra undo actions for changed connector which now may hold its layed out path (SJ)
+                // extra undo actions for changed connector which now may hold its laid out path (SJ)
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
 
@@ -583,7 +583,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
     }
     else if(pO->IsPolyObj())
     {
-        // e. g. for the mesurement object
+        // e. g. for the measurement object
         sal_uInt32 nPtAnz(pO->GetPointCount());
         XPolygon aXP((sal_uInt16)nPtAnz);
         sal_uInt32 nPtNum;
@@ -599,7 +599,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
         for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
         {
             // broadcasting could be optimized here, but for the
-            // current two points of the measurement object, it's fine
+            // current two points of the measurement object it's fine
             pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
         }
     }
@@ -873,7 +873,6 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr)
     for(sal_uInt32 a(0); a < nMarkAnz; a++)
     {
         // #80277# merging was done wrong in the prev version
-        //const SfxItemSet& rSet = GetMarkedObjectByIndex()->GetItemSet();
         const SfxItemSet& rSet = GetMarkedObjectByIndex(a)->GetMergedItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
@@ -917,7 +916,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             if(bHasEEFeatureItems)
             {
                 String aMessage;
-                aMessage.AppendAscii("SdrEditView::SetAttrToMarked(): Das setzen von EE_FEATURE-Items an der SdrView macht keinen Sinn! Es fuehrt nur zu Overhead und nicht mehr lesbaren Dokumenten.");
+                aMessage.AppendAscii("SdrEditView::SetAttrToMarked(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
                 InfoBox(NULL, aMessage).Execute();
             }
         }
@@ -1009,7 +1008,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             // new geometry undo
             if(bPossibleGeomChange && bUndo)
             {
-                // save position and size of obect, too
+                // save position and size of object, too
                 AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
             }
 
@@ -1163,13 +1162,12 @@ sal_Bool SdrEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll
     }
 }
 
-SfxStyleSheet* SdrEditView::GetStyleSheet() const // SfxStyleSheet* SdrEditView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrEditView::GetStyleSheet() const
 {
     if (GetMarkedObjectCount()!=0) {
-        //rOk=sal_True;
         return GetStyleSheetFromMarked();
     } else {
-        return SdrMarkView::GetStyleSheet(); // SdrMarkView::GetStyleSheet(rOk);
+        return SdrMarkView::GetStyleSheet();
     }
 }
 
@@ -1711,7 +1709,6 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_B
         pObj->TakeObjInfo(aInfo);
         if (aInfo.bMoveAllowed && !pObj->IsMoveProtect())
         {
-            // SdrPageView* pPV=pM->GetPageView();
             long nXMov=0;
             long nYMov=0;
             Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());

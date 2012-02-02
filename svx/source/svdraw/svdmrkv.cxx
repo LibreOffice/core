@@ -71,7 +71,7 @@ class ImplMarkingOverlay
     // The OverlayObjects
     ::sdr::overlay::OverlayObjectList               maObjects;
 
-    // The remembered second position in logical coodinates
+    // The remembered second position in logical coordinates
     basegfx::B2DPoint                               maSecondPosition;
 
     // bitfield
@@ -137,7 +137,6 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 void SdrMarkView::ImpClearVars()
 {
     eDragMode=SDRDRAG_MOVE;
-    //HMHbHdlShown=sal_False;
     bRefHdlShownOnly=sal_False;
     eEditMode=SDREDITMODE_EDIT;
     eEditMode0=SDREDITMODE_EDIT;
@@ -1215,7 +1214,7 @@ sal_Bool SdrMarkView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
         if (pObj->IsMarkProtect() ||
             (!bDesignMode && pObj->IsUnoObj()))
         {
-            // objekt not selectable or
+            // object not selectable or
             // SdrUnoObj not in DesignMode
             return sal_False;
         }
@@ -1408,7 +1407,7 @@ sal_Bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, sal_Bool bPrev)
             if (TryToFindMarkedObject(pObj)==CONTAINER_ENTRY_NOTFOUND) {
                 pFndObj=pObj;
             } else {
-                // TODO: for performance reasons set no to Top or Btm, if necessary
+                // TODO: for performance reasons set on to Top or Btm, if necessary
             }
         }
         if (bPrev) no++;

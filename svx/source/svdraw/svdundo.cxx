@@ -250,7 +250,7 @@ void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, 
         GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
 }
 
-// common call method for evtl. page change when UNDO/REDO is triggered
+// common call method for possible change of the page when UNDO/REDO is triggered
 void SdrUndoObj::ImpShowPageOfThisObject()
 {
     if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())

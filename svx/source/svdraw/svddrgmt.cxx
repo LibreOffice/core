@@ -335,7 +335,7 @@ void SdrDragMethod::createSdrDragEntries()
 
 void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 {
-    // add full obejct drag; Clone() at the object has to work
+    // add full object drag; Clone() at the object has to work
     // for this
     addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
 }
@@ -379,7 +379,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
                                 if(!bSuppressFullDrag)
                                 {
-                                    // add full obejct drag; Clone() at the object has to work
+                                    // add full object drag; Clone() at the object has to work
                                     // for this
                                     createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
                                 }
@@ -2475,7 +2475,7 @@ bool SdrDragMirror::BeginSdrDrag()
         nWink=NormAngle360(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
-            return false; // free choice of axis angle not alowed
+            return false; // free choice of axis angle not allowed
 
         if (!getSdrDragView().IsMirrorAllowed(true,false) && !b90)
             return false;  // 45 degrees not allowed either

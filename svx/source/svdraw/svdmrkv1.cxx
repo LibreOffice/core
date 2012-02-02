@@ -153,7 +153,7 @@ sal_Bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, sal_Bool bUnmar
         }
         else
         {
-            return sal_False; // Fehlerfall!
+            return sal_False; // error case!
         }
     }
 

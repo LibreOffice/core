@@ -1062,7 +1062,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
     sal_Bool bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
     SdrHdl* pHdl=aVEvt.pHdl;
-    // now check the pointers for draggingNun die Pointer fuer Dragging checken
+    // now check the pointers for dragging
     if (pHdl!=NULL || bMarkHit) {
         SdrHdlKind eHdl= pHdl!=NULL ? pHdl->GetKind() : HDL_MOVE;
         sal_Bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();

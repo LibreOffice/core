@@ -298,21 +298,21 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         aTempSet.Put(SdrShadowXDistItem(0L));
         aTempSet.Put(SdrShadowYDistItem(0L));
 
-        // line color and transparence like shadow
+        // line color and transparency like shadow
         if(bLineUsed)
         {
             aTempSet.Put(XLineColorItem(String(), aShadowColor));
             aTempSet.Put(XLineTransparenceItem(nShadowTransparence));
         }
 
-        // fill color and transparence like shadow
+        // fill color and transparency like shadow
         if(bSolidFillUsed)
         {
             aTempSet.Put(XFillColorItem(String(), aShadowColor));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 
-        // gradient and transparence like shadow
+        // gradient and transparency like shadow
         if(bGradientFillUsed)
         {
             XGradient aGradient(((XFillGradientItem&)(rOriginalSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());

@@ -1707,7 +1707,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     bMPgNumsDirty=sal_True;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
-                    OSL_FAIL("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
+                    OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
                 }
             }
         }

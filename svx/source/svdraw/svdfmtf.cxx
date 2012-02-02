@@ -116,7 +116,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     sal_Bool bError = sal_False;
 
 
-    // setup some global scale parameter
+    // setup some global scale parameters
     // fScaleX, fScaleY, aScaleX, aScaleY, bMov, bSize
     fScaleX = fScaleY = 1.0;
     Size  aMtfSize( pMtf->GetPrefSize() );
@@ -235,7 +235,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     }
     nActionsToReport = 0;
 
-    // insert all objects cached in aTmpList zwischengespeicherten Objekte now into rOL from nInsPos
+    // insert all objects cached in aTmpList now into rOL from nInsPos
     if (nInsPos>rOL.GetObjCount()) nInsPos=rOL.GetObjCount();
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
     for (sal_uIntPtr i=0; i<nAnz; i++)
