@@ -33,12 +33,6 @@ ModalDialog RID_DEFAULTABOUT
     Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    OKButton ABOUT_BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
     MultiLineEdit ABOUT_FTXT_VERSION
     {
         Border = FALSE ;
@@ -68,13 +62,29 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 54 , 100 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
     };
+    FixedText ABOUT_TDFSTR_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "The Document Foundation";
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
+    FixedText ABOUT_FEATURES_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Features";
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
     String ABOUT_STR_VERSION
     {
         Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
     };
     String ABOUT_STR_VENDOR
     {
-        Text[ en-US ] = "This product was supplied by %OOOVENDOR.";
+        Text[ en-US ] = "%PRODUCTNAME is a free and open source office suite developed by %OOOVENDOR. ";
     };
     String ABOUT_STR_COPYRIGHT
     {
@@ -90,7 +100,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_ACKNOWLEDGEMENT
     {
-        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more information at the links below:";
     };
     String ABOUT_STR_LINK
     {
@@ -99,5 +109,13 @@ ModalDialog RID_DEFAULTABOUT
     String ABOUT_STR_BUILD
     {
         Text[ en-US ] = "Build ID:";
+    };
+    String ABOUT_TDF_LINK
+    {
+        Text[ en-US ] = "http://http://www.documentfoundation.org/";
+    };
+    String ABOUT_FEATURESSTR_LINK
+    {
+        Text[ en-US ] = "http://www.libreoffice.org/features/";
     };
 };

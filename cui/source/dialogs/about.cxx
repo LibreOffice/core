@@ -101,16 +101,18 @@ GetBuildId()
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     SfxModalDialog  ( pParent,  rId ),
-
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
+    aTdfLink        ( this,     ResId( ABOUT_TDFSTR_LINK, *rId.GetResMgr() ) ),
+    aFeaturesLink   ( this,     ResId( ABOUT_FEATURES_LINK, *rId.GetResMgr() ) ),
     aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aOracleCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT_ORACLE_DERIVED, *rId.GetResMgr())),
     m_aAcknowledgementTextStr(ResId(ABOUT_STR_ACKNOWLEDGEMENT, *rId.GetResMgr())),
     m_aLinkStr(ResId( ABOUT_STR_LINK, *rId.GetResMgr())),
+    m_aTdfLinkStr(ResId( ABOUT_TDF_LINK, *rId.GetResMgr())),
+    m_aFeaturesLinkStr(ResId( ABOUT_FEATURESSTR_LINK, *rId.GetResMgr())),
     m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
 {
     // load image from module path
@@ -152,12 +154,19 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aInfoLink.SetBackground();
     aInfoLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
 
+    aTdfLink.SetURL(m_aTdfLinkStr);
+    aTdfLink.SetBackground();
+    aTdfLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
+
+    aFeaturesLink.SetURL(m_aFeaturesLinkStr);
+    aFeaturesLink.SetBackground();
+    aFeaturesLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
+
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
 
     rtl::OUStringBuffer sText(m_aVendorTextStr);
-    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
     sal_uInt32 nCopyrightId =
         utl::ConfigManager::getProductName().equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("LibreOffice"))
@@ -223,23 +232,31 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     nY += aCTSize.Height() + nCtrlMargin;
 
+    const int nLineSpace = 4;
     // FixedHyperlink with more info link
-    Size aLTSize = aInfoLink.CalcMinimumSize();
+    Size aLTSize = aTdfLink.CalcMinimumSize();
     Point aLTPnt;
     aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
     aLTPnt.Y() = nY;
+    aTdfLink.SetPosSizePixel( aLTPnt, aLTSize );
+
+    nY += aLTSize.Height();
+
+    aLTSize = aFeaturesLink.CalcMinimumSize();
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
+    aFeaturesLink.SetPosSizePixel( aLTPnt, aLTSize );
+
+    nY += aLTSize.Height() + nLineSpace;
+
+    aLTSize = aInfoLink.CalcMinimumSize();
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height()  + nSpace;
     aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
 
-    nY += aLTSize.Height() + nCtrlMargin;
+    nY += aLTSize.Height() + nLineSpace;
 
-    // OK-Button-Position (at the bottom and centered)
-    Size aOKSiz = aOKButton.GetSizePixel();
-    Point aOKPnt;
-    aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
-    aOKPnt.Y() = nY;
-    aOKButton.SetPosPixel( aOKPnt );
-
-    nY += aOKSiz.Height() + nCtrlMargin;
+    nY += nCtrlMargin;
 
     aOutSiz.Height() = nY;
 
