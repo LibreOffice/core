@@ -594,7 +594,7 @@
   <node oor:name="Save">
     <node oor:name="Document">
       <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="CreateBackup" install:module="gconflockdown">
         <value oor:external=
