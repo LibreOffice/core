@@ -33,9 +33,12 @@ ifneq (IOS,$(OS))
 $(eval $(call gb_Module_add_targets,basctl,\
 	AllLangResTarget_basctl \
 	Library_basctl \
-	Package_xml \
 ))
 
 endif
+
+$(eval $(call gb_Module_add_targets,basctl,\
+	Package_xml \
+))
 
 # vim: set noet sw=4 ts=4:
