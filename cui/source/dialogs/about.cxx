@@ -251,7 +251,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     aLTSize = aInfoLink.CalcMinimumSize();
     aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
-    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height()  + nSpace;
+    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
     aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
 
     nY += aLTSize.Height() + nLineSpace;
