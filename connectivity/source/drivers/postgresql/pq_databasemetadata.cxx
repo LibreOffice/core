@@ -1617,7 +1617,7 @@ static void columnMetaData2DatabaseTypeDescription(
     Reference< XStatement > domainTypeStmt = m_origin->createStatement();
     columnMetaData2DatabaseTypeDescription( domainMap, rs, domainTypeStmt );
 
-    unsigned int colNum;
+    sal_uInt32 colNum(0);
     OUString sSchema( ASCII_STR("#invalid#") );
     OUString sTable(  ASCII_STR("#invalid#") );
 
