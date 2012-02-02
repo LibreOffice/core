@@ -4895,7 +4895,7 @@ dnl ===================================================================
 
 ENABLE_GRAPHITE="FALSE"
 AC_MSG_CHECKING([whether to enable graphite support])
-if test "x$enable_graphite" = "xyes" -a \( "$_os" = "WINNT" -o "$_os" = "Linux" \) ; then
+if test "x$enable_graphite" = "xyes" -a \( "$_os" = "WINNT" -o "$_os" = "Linux" -o "$_os" = "FreeBSD" \) ; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_MSG_CHECKING([which graphite to use])
