@@ -1198,30 +1198,6 @@
       </prop>
     </node>
 
-    <node oor:name="af" oor:op="replace">
-    </node>
-    <node oor:name="nr" oor:op="replace">
-    </node>
-    <node oor:name="nso" oor:op="replace">
-    </node>
-    <node oor:name="sw" oor:op="replace">
-    </node>
-    <node oor:name="ts" oor:op="replace">
-    </node>
-    <node oor:name="tn" oor:op="replace">
-    </node>
-    <node oor:name="ss" oor:op="replace">
-    </node>
-    <node oor:name="st" oor:op="replace">
-    </node>
-    <node oor:name="xh" oor:op="replace">
-    </node>
-    <node oor:name="zu" oor:op="replace">
-    </node>
-    <node oor:name="vi" oor:op="replace">
-    </node>
-    <node oor:name="rw" oor:op="replace">
-    </node>
     <node oor:name="si" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>LKLUG;Iskoola Pota;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
