@@ -468,7 +468,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 
 static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
-    sal_uInt16 nEaten;
+    sal_Int32 nEaten;
     SvCommandList aLst;
     aLst.AppendCommands( aCommands, &nEaten );
 
@@ -478,7 +478,7 @@ static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequen
     {
         aCommandSequence[nIndex].Name = aLst[ nIndex ].GetCommand();
         aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = makeAny( OUString( aLst[ nIndex ].GetArgument() ) );
+        aCommandSequence[nIndex].Value = makeAny( aLst[ nIndex ].GetArgument() );
         aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }

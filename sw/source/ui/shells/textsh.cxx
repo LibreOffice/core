@@ -287,7 +287,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvCommandList aCommandList;
             if(pCommandsItem)
             {
-                sal_uInt16 nTemp;
+                sal_Int32 nTemp;
                 aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
             }
 

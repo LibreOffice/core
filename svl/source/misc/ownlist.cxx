@@ -38,45 +38,47 @@ using namespace com::sun::star;
 //============== SvCommandList ============================================
 //=========================================================================
 
-static String parseString(const String & rCmd, sal_uInt16 * pIndex)
+static ::rtl::OUString parseString(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
 {
-    String result;
+    ::rtl::OUString result;
 
-    if(rCmd.GetChar( *pIndex ) == '\"') {
+    if(rCmd[*pIndex] == sal_Unicode('\"')) {
         (*pIndex) ++;
 
-        sal_uInt16 begin = *pIndex;
+        sal_Int32 begin = *pIndex;
 
-        while(*pIndex < rCmd.Len() && rCmd.GetChar((*pIndex) ++) != '\"') ;
+        while(*pIndex < rCmd.getLength() && rCmd[(*pIndex) ++] != sal_Unicode('\"')) ;
 
-        result = String(rCmd.Copy(begin, *pIndex - begin - 1));
+        result = rCmd.copy(begin, *pIndex - begin - 1);
     }
 
     return result;
 }
 
-static String parseWord(const String & rCmd, sal_uInt16 * pIndex)
+static ::rtl::OUString parseWord(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
 {
-    sal_uInt16 begin = *pIndex;
+    sal_Int32 begin = *pIndex;
 
-    while(*pIndex < rCmd.Len() && !isspace(rCmd.GetChar(*pIndex)) && rCmd.GetChar(*pIndex) != '=')
+    while(*pIndex < rCmd.getLength()
+          && !isspace(sal::static_int_cast<int>(rCmd[*pIndex]))
+          && rCmd[*pIndex] != sal_Unicode('='))
         (*pIndex) ++;
 
-    return String(rCmd.Copy(begin, *pIndex - begin));
+    return rCmd.copy(begin, *pIndex - begin);
 }
 
-static void eatSpace(const String & rCmd, sal_uInt16 * pIndex)
+static void eatSpace(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
 {
-    while(*pIndex < rCmd.Len() && isspace(rCmd.GetChar(*pIndex)))
+    while(*pIndex < rCmd.getLength() && isspace(sal::static_int_cast<int>(rCmd[*pIndex])))
         (*pIndex) ++;
 }
 
 
 //=========================================================================
-sal_Bool SvCommandList::AppendCommands
+bool SvCommandList::AppendCommands
 (
-    const String & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
-    sal_uInt16 * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
+ const ::rtl::OUString & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
+ sal_Int32 * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
 )
 /*  [Beschreibung]
 
@@ -85,25 +87,25 @@ sal_Bool SvCommandList::AppendCommands
 
     [R"uckgabewert]
 
-    sal_Bool        sal_True, der Text wurde korrekt geparsed.
-                sal_False, der Text wurde nicht korrekt geparsed.
+    bool        true, der Text wurde korrekt geparsed.
+                false, der Text wurde nicht korrekt geparsed.
 */
 {
-    sal_uInt16 index = 0;
-    while(index < rCmd.Len())
+    sal_Int32 index = 0;
+    while(index < rCmd.getLength())
     {
 
         eatSpace(rCmd, &index);
-        String name = (rCmd.GetChar(index) == '\"') ? parseString(rCmd, &index) : parseWord(rCmd, &index);
+        ::rtl::OUString name = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
 
         eatSpace(rCmd, &index);
-        String value;
-        if(index < rCmd.Len() && rCmd.GetChar(index) == '=')
+        ::rtl::OUString value;
+        if(index < rCmd.getLength() && rCmd[index] == sal_Unicode('='))
         {
             index ++;
 
             eatSpace(rCmd, &index);
-            value = (rCmd.GetChar(index) == '\"') ? parseString(rCmd, &index) : parseWord(rCmd, &index);
+            value = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
         }
 
         aCommandList.push_back( SvCommand(name, value));
@@ -111,14 +113,14 @@ sal_Bool SvCommandList::AppendCommands
 
     *pEaten = index;
 
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
 SvCommand & SvCommandList::Append
 (
-    const String & rCommand,    /* das Kommando */
-    const String & rArg         /* dasArgument des Kommandos */
+ const ::rtl::OUString & rCommand,    /* das Kommando */
+ const ::rtl::OUString & rArg         /* dasArgument des Kommandos */
 )
 /*  [Beschreibung]
 
@@ -134,21 +136,21 @@ SvCommand & SvCommandList::Append
     return aCommandList.back();
 }
 
-sal_Bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
-    String aCommand, aArg;
+    ::rtl::OUString aCommand, aArg;
     ::rtl::OUString aApiArg;
     for( sal_Int32 nIndex=0; nIndex<nCount; nIndex++ )
     {
         aCommand = aCommandSequence[nIndex].Name;
         if( !( aCommandSequence[nIndex].Value >>= aApiArg ) )
-            return sal_False;
+            return false;
         aArg = aApiArg;
         Append( aCommand, aArg );
     }
 
-    return sal_True;
+    return true;
 }
 
 void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
@@ -159,7 +161,7 @@ void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star
     {
         aCommandSequence[nIndex].Name = aCommandList[ nIndex ].GetCommand();
         aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = uno::makeAny( ::rtl::OUString( aCommandList[ nIndex ].GetArgument() ) );
+        aCommandSequence[nIndex].Value = uno::makeAny( aCommandList[ nIndex ].GetArgument() );
         aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }
