@@ -1107,7 +1107,7 @@ void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
-    SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) )
+    SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
 }
 
 // -----------------------------------------------------------------------
