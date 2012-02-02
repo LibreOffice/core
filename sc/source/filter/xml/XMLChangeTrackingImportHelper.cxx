@@ -200,8 +200,7 @@ ScMyRejAction::~ScMyRejAction()
 {
 }
 
-ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
-    : aUsers(),
+ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     aActions(),
     pDoc(NULL),
     pTrack(NULL),
@@ -284,10 +283,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
 void ScXMLChangeTrackingImportHelper::SetActionInfo(const ScMyActionInfo& aInfo)
 {
     pCurrentAction->aInfo = aInfo;
-    String aUser(aInfo.sUser);
-    StrData* pStrData = new StrData( aUser );
-    if ( !aUsers.Insert( pStrData ) )
-        delete pStrData;
+    aUsers.insert(aInfo.sUser);
 }
 
 void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPreviousAction,
@@ -464,18 +460,15 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
     if ( aInfo.aDateTime.HundredthSeconds )
         pTrack->SetTime100thSeconds( true );
 
-    StrData aStrData( aInfo.sUser );
-    sal_uInt16 nPos;
-    if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
+    const std::set<rtl::OUString>& rUsers = pTrack->GetUserCollection();
+    std::set<rtl::OUString>::const_iterator it = rUsers.find(aInfo.sUser);
+    if (it != rUsers.end())
     {
-        const StrData* pUser = static_cast<const StrData*>( pTrack->GetUserCollection().At( nPos ) );
-        if ( pUser )
-            rUser = pUser->GetString();
-        else
-            rUser = aInfo.sUser;    // shouldn't happen
+        // It's probably pointless to do this.
+        rUser = *it;
     }
     else
-        rUser = aInfo.sUser;    // shouldn't happen
+        rUser = aInfo.sUser; // shouldn't happen
 }
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)

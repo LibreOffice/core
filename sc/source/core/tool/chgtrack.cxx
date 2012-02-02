@@ -2055,8 +2055,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUserCollection) :
-        aUserCollection(aTempUserCollection),
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<rtl::OUString>& aTempUserCollection) :
+        maUserCollection(aTempUserCollection),
         aFixDateTime( DateTime::SYSTEM ),
         pDoc( pDocP )
 {
@@ -2105,7 +2105,7 @@ void ScChangeTrack::Init()
     aUser = rUserOpt.GetFirstName();
     aUser += ' ';
     aUser += (String)rUserOpt.GetLastName();
-    aUserCollection.Insert( new StrData( aUser ) );
+    maUserCollection.insert(aUser);
 }
 
 
@@ -2165,25 +2165,29 @@ void ScChangeTrack::Clear()
     aMap.clear();
     aGeneratedMap.clear();
     aPasteCutMap.clear();
-    aUserCollection.FreeAll();
+    maUserCollection.clear();
     aUser.Erase();
     Init();
 }
 
+const std::set<rtl::OUString>& ScChangeTrack::GetUserCollection() const
+{
+    return maUserCollection;
+}
 
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
     {
         const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
-        sal_uInt16 nOldCount = aUserCollection.GetCount();
+        size_t nOldCount = maUserCollection.size();
 
         String aStr( rUserOptions.GetFirstName() );
         aStr += ' ';
         aStr += (String)rUserOptions.GetLastName();
         SetUser( aStr );
 
-        if ( aUserCollection.GetCount() != nOldCount )
+        if ( maUserCollection.size() != nOldCount )
         {
             //  New user in collection -> have to repaint because
             //  colors may be different now (#106697#).
@@ -2204,9 +2208,7 @@ void ScChangeTrack::SetUser( const String& rUser )
         return ;        // nicht die Collection zerschiessen
 
     aUser = rUser;
-    StrData* pStrData = new StrData( aUser );
-    if ( !aUserCollection.Insert( pStrData ) )
-        delete pStrData;
+    maUserCollection.insert(aUser);
 }
 
 

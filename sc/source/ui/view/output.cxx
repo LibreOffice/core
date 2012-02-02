@@ -93,9 +93,9 @@ class ScActionColorChanger
 {
 private:
     const ScAppOptions&     rOpt;
-    const ScStrCollection&  rUsers;
-    String                  aLastUserName;
-    sal_uInt16                  nLastUserIndex;
+    const std::set<rtl::OUString>& rUsers;
+    rtl::OUString           aLastUserName;
+    size_t                  nLastUserIndex;
     ColorData               nColor;
 
 public:
@@ -142,18 +142,21 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
         nColor = nSetColor;
     else                                    // nach Autor
     {
-        if ( rAction.GetUser() != aLastUserName )
+        if (!aLastUserName.equals(rAction.GetUser()))
         {
             aLastUserName = rAction.GetUser();
-            StrData aData(aLastUserName);
-            sal_uInt16 nIndex;
-            if (!rUsers.Search(&aData, nIndex))
+            std::set<rtl::OUString>::const_iterator it = rUsers.find(aLastUserName);
+            if (it == rUsers.end())
             {
                 // empty string is possible if a name wasn't found while saving a 5.0 file
                 OSL_ENSURE( aLastUserName.Len() == 0, "Author not found" );
-                nIndex = 0;
+                nLastUserIndex = 0;
             }
-            nLastUserIndex = nIndex % SC_AUTHORCOLORCOUNT;
+            else
+            {
+                size_t nPos = std::distance(rUsers.begin(), it);
+                nLastUserIndex = nPos & SC_AUTHORCOLORCOUNT;
+            }
         }
         nColor = nAuthorColor[nLastUserIndex];
     }

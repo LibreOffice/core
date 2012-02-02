@@ -31,6 +31,7 @@
 
 #include <deque>
 #include <map>
+#include <set>
 #include <stack>
 
 #include <tools/string.hxx>
@@ -976,7 +977,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrackMsgQueue   aMsgQueue;
     ScChangeTrackMsgStack   aMsgStackTmp;
     ScChangeTrackMsgStack   aMsgStackFinal;
-    ScStrCollection     aUserCollection;
+    std::set<rtl::OUString> maUserCollection;
     String              aUser;
     Link                aModifiedLink;
     ScRange             aInDeleteRange;
@@ -1102,7 +1103,7 @@ public:
                                     }
 
     SC_DLLPUBLIC ScChangeTrack( ScDocument* );
-    ScChangeTrack( ScDocument*, const ScStrCollection& ); // only to use in the XML import
+    ScChangeTrack(ScDocument* pDocP, const std::set<rtl::OUString>& aTempUserCollection); // only to use in the XML import
     SC_DLLPUBLIC virtual ~ScChangeTrack();
     void Clear();
 
@@ -1157,8 +1158,7 @@ public:
     sal_Bool                IsInPasteCut() const { return bInPasteCut; }
     SC_DLLPUBLIC        void                SetUser( const String& );
     const String&       GetUser() const { return aUser; }
-    const ScStrCollection&  GetUserCollection() const
-                            { return aUserCollection; }
+    SC_DLLPUBLIC const std::set<rtl::OUString>& GetUserCollection() const;
     ScDocument*         GetDocument() const { return pDoc; }
                         // for import filter
     const DateTime&     GetFixDateTime() const { return aFixDateTime; }

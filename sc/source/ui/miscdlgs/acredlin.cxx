@@ -239,9 +239,10 @@ void ScAcceptChgDlg::Init()
         pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg,ChgTrackModHdl));
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
-        ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(sal_uInt16  i=0;i<aUserColl.GetCount();i++)
-            pTPFilter->InsertAuthor(aUserColl[i]->GetString());
+        const std::set<rtl::OUString>& rUserColl = pChanges->GetUserCollection();
+        std::set<rtl::OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
+        for (; it != itEnd; ++it)
+            pTPFilter->InsertAuthor(*it);
     }
 
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();

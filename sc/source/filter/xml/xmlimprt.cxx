@@ -2292,7 +2292,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                                 pDoc->GetChangeTrack()->SetProtection(aPass);
                             else
                             {
-                                ScStrCollection aUsers;
+                                std::set<rtl::OUString> aUsers;
                                 ScChangeTrack* pTrack = new ScChangeTrack(pDoc, aUsers);
                                 pTrack->SetProtection(aPass);
                                 pDoc->SetChangeTrack(pTrack);
