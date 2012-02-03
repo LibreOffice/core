@@ -2204,10 +2204,10 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
         WaitObject aWait( GetActiveDialogParent() );
 // HACK damit Sba geoffnetes TempFile ueberschreiben kann
         rMed.CloseOutStream();
-        sal_Bool bHasMemo = false;
+        bool bHasMemo = false;
 
-        sal_uLong eError = DBaseExport( rMed.GetPhysicalName(),
-                        ScGlobal::GetCharsetValue(sCharSet), bHasMemo );
+        sal_uLong eError = DBaseExport(
+            rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
         if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {
