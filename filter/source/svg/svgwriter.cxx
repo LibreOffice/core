@@ -894,7 +894,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                     }
 
                     if( bCont )
-                        nX = aPos.X() + pDXArray[ nCurPos - 1 ];
+                    {
+                        // #118796# do NOT access pDXArray, it may be zero (!)
+                        nX = aPos.X() + pDX[ nCurPos - 1 ];
+                    }
                 }
             }
         }
