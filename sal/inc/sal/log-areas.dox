@@ -13,6 +13,10 @@ a new area, use it and add it to the list in the proper section with an explanat
 This list should give you an overview of which areas to enable when debugging
 certain functionality.
 
+@section Calc
+
+@li sc.ui - Calc's UI
+
 @section oox
 
 @li oox.xmlstream - XmlStream class
