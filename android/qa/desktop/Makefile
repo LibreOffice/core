@@ -202,7 +202,7 @@ copy-stuff: buildrcs
 # uno types & services
 	cp $(OUTDIR)/bin/types.rdb assets/program/types/
 	cp $(OUTDIR)/bin/ure/types.rdb assets/ure/share/misc/
-	cp $(OUTDIR)/xml/services.rdb assets/program/services
+	cp $(OUTDIR)/xml/ure/services.rdb assets/program/services
 	cp $(OUTDIR)/xml/ure/services.rdb assets/ure/share/misc/
 # config
 	cp -R $(OUTDIR)/xml/*.xcd assets/share/registry/
