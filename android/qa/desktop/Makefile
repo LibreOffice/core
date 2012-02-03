@@ -238,26 +238,26 @@ build-ant: copy-stuff
 	unset JAVA_HOME && $(ANT) debug
 
 install: copy-stuff
-	adb shell rm -r $(APP_DATA_PATH)
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell rm -r $(APP_DATA_PATH)
 	unset JAVA_HOME && $(ANT) debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
 
 uninstall:
-	adb uninstall $(APP_PACKAGE)
+	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
 	echo "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
-	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
 # stop and start...
 stop-start-cycle:
-	adb shell stop && adb shell start && sleep 10
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
 clean:
 	$(ANT) clean

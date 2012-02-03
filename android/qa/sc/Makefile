@@ -174,17 +174,17 @@ install: copy-stuff
 	@echo
 
 uninstall:
-	adb uninstall $(APP_PACKAGE)
+	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run_ucalc:
 	echo "STAR_RESOURCEPATH=/assets/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb' '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
-	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 
 run_filters_test:
 	echo "STAR_RESOURCEPATH=/assets/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry module:file:///assets/xml/registry/spool' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb' '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/basic/util/sb.component file:///assets/ComponentTarget/chart2/source/controller/chartcontroller.component file:///assets/ComponentTarget/chart2/source/tools/charttools.component file:///assets/ComponentTarget/chart2/source/model/chartmodel.component file:///assets/ComponentTarget/comphelper/util/comphelp.component file:///assets/ComponentTarget/dbaccess/util/dba.component file:///assets/ComponentTarget/eventattacher/source/evtatt.component file:///assets/ComponentTarget/fileaccess/source/fileacc.component file:///assets/ComponentTarget/filter/source/config/cache/filterconfig1.component file:///assets/ComponentTarget/forms/util/frm.component file:///assets/ComponentTarget/oox/util/oox.component file:///assets/ComponentTarget/package/source/xstor/xstor.component file:///assets/ComponentTarget/package/util/package2.component file:///assets/ComponentTarget/sax/source/expatwrap/expwrap.component file:///assets/ComponentTarget/sax/source/fastparser/fastsax.component file:///assets/ComponentTarget/sc/util/sc.component file:///assets/ComponentTarget/sc/util/scfilt.component file:///assets/ComponentTarget/scaddins/source/analysis/analysis.component file:///assets/ComponentTarget/scaddins/source/datefunc/date.component file:///assets/ComponentTarget/sot/util/sot.component file:///assets/ComponentTarget/svl/util/svl.component file:///assets/ComponentTarget/toolkit/util/tk.component file:///assets/ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component file:///assets/ComponentTarget/unotools/util/utl.component file:///assets/ComponentTarget/unoxml/source/rdf/unordf.component file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
-	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 
 run: run_ucalc run_filters_test
 
@@ -192,11 +192,11 @@ run: run_ucalc run_filters_test
 # between, disk space seems to leak that won't get recycled until you
 # stop and start...
 stop-start-cycle:
-	adb shell stop && adb shell start && sleep 10
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
 # Too hard to remember this stuff;)
 redirect-stdio:
-	adb shell stop && adb shell setprop log.redirect-stdio true && adb shell start
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell setprop log.redirect-stdio true && $(ANDROID_SDK_HOME)/platform-tools/adb shell start
 
 clean:
 	$(ANT) clean
