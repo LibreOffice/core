@@ -959,7 +959,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 break;
 
             // dann mal die Tabellenkoepfe raus:
-            for( SwSelBoxes::iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+            for( SwSelBoxes::iterator it = rBoxes.begin(); it != rBoxes.end(); )
             {
                 pLine = it->second->GetUpper();
                 while( pLine->GetUpper() )
@@ -968,7 +968,10 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 if( pTbl->IsHeadline( *pLine ) )
                 {
                     rBoxes.erase( it++ );
-                    --it;
+                }
+                else
+                {
+                    ++it;
                 }
             }
         } while( sal_False );
