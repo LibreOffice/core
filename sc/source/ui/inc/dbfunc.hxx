@@ -30,6 +30,7 @@
 #define SC_DBFUNC_HXX
 
 #include "viewfunc.hxx"
+#include "dptypes.hxx"
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -50,7 +51,7 @@ struct ScSubTotalParam;
 class ScDBFunc : public ScViewFunc
 {
 private:
-    void            GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension );
+    void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension);
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
@@ -89,8 +90,8 @@ public:
                                     const ScDPObject& rSource, sal_Bool bApi = false );
     void            DeletePivotTable();
     void            RecalcPivotTable();
-    sal_Bool            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
-    sal_Bool            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
+    bool HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
+    bool HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();
     void            DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts );
     void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
@@ -100,8 +101,8 @@ public:
     bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
     sal_Bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
-    sal_Bool            HasSelectionForDrillDown( sal_uInt16& rOrientation );
-    void            SetDataPilotDetails( sal_Bool bShow, const String* pNewDimensionName = NULL );
+    bool HasSelectionForDrillDown( sal_uInt16& rOrientation );
+    void SetDataPilotDetails(bool bShow, const rtl::OUString* pNewDimensionName = NULL);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );

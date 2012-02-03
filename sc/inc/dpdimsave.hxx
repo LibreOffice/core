@@ -34,6 +34,7 @@
 #include <tools/string.hxx>
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "scdllapi.h"
+#include "dptypes.hxx"
 
 class ScDPGroupTableData;
 class ScDPGroupDimension;
@@ -107,7 +108,7 @@ public:
     void    RemoveFromGroups( const String& rItemName );
     void    RemoveGroup( const String& rGroupName );
     bool    IsEmpty() const;
-    bool    HasOnlyHidden( const ScStrCollection& rVisible );
+    bool HasOnlyHidden(const ScDPUniqueStringSet& rVisible);
 
     long    GetGroupCount() const;
     const ScDPSaveGroupItem* GetGroupByIndex( long nIndex ) const;

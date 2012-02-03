@@ -34,6 +34,7 @@
 #include "address.hxx"
 #include "collect.hxx"
 #include "dpoutput.hxx"
+#include "dptypes.hxx"
 #include "pivot.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
@@ -191,7 +192,7 @@ public:
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const ::rtl::OUString& rFilterList );
 
-    void                GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
     void                FillPageList( TypedScStrCollection& rStrings, long nField );
 

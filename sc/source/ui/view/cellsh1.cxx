@@ -963,8 +963,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            String aNewDimName( pDlg->GetDimensionName() );
-                            pTabViewShell->SetDataPilotDetails( sal_True, &aNewDimName );
+                            rtl::OUString aNewDimName( pDlg->GetDimensionName() );
+                            pTabViewShell->SetDataPilotDetails( true, &aNewDimName );
                         }
                     }
                     else if ( !pDPObj->IsServiceData() &&
@@ -973,7 +973,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                    aFilters ) )
                         pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
-                        pTabViewShell->SetDataPilotDetails( sal_True );
+                        pTabViewShell->SetDataPilotDetails(true);
                 }
                 else
                     pTabViewShell->ShowMarkedOutlines();

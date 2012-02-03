@@ -247,17 +247,15 @@ bool ScDPSaveGroupDimension::IsEmpty() const
     return aGroups.empty();
 }
 
-bool ScDPSaveGroupDimension::HasOnlyHidden( const ScStrCollection& rVisible )
+bool ScDPSaveGroupDimension::HasOnlyHidden(const ScDPUniqueStringSet& rVisible)
 {
     // check if there are only groups that don't appear in the list of visible names
 
     bool bAllHidden = true;
-    for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end() && bAllHidden; aIter++ )
+    for (ScDPSaveGroupItemVec::const_iterator aIter = aGroups.begin(); aIter != aGroups.end() && bAllHidden; ++aIter)
     {
-        StrData aSearch( aIter->GetGroupName() );
-        sal_uInt16 nCollIndex;
-        if ( rVisible.Search( &aSearch, nCollIndex ) )
-            bAllHidden = false;                             // found one that is visible
+        if (rVisible.count(aIter->GetGroupName()) > 0)
+            bAllHidden = false;
     }
     return bAllHidden;
 }

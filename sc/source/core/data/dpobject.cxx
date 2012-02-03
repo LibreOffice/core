@@ -1121,11 +1121,11 @@ bool ScDPObject::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
     return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
 }
 
-void ScDPObject::GetMemberResultNames( ScStrCollection& rNames, long nDimension )
+void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension)
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
-    pOutput->GetMemberResultNames( rNames, nDimension );    // used only with table data -> level not needed
+    pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
 bool lcl_Dequote( const String& rSource, xub_StrLen nStartPos, xub_StrLen& rEndPos, String& rResult )

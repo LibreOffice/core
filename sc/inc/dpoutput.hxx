@@ -39,6 +39,8 @@
 #include "address.hxx"
 
 #include "dpcachetable.hxx"
+#include "dptypes.hxx"
+
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -160,7 +162,7 @@ public:
                                     Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
     sal_Bool            IsFilterButton( const ScAddress& rPos );
 
-    void            GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
     void            SetHeaderLayout(bool bUseGrid);
     bool            GetHeaderLayout() const;

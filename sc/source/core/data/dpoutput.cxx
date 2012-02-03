@@ -1170,7 +1170,7 @@ long ScDPOutput::GetHeaderRows()
     return nPageFieldCount + ( bDoFilter ? 1 : 0 );
 }
 
-void ScDPOutput::GetMemberResultNames( ScStrCollection& rNames, long nDimension )
+void ScDPOutput::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension)
 {
     //  Return the list of all member names in a dimension's MemberResults.
     //  Only the dimension has to be compared because this is only used with table data,
@@ -1208,11 +1208,7 @@ void ScDPOutput::GetMemberResultNames( ScStrCollection& rNames, long nDimension 
         for (long nItem=0; nItem<nResultCount; nItem++)
         {
             if ( pArray[nItem].Flags & sheet::MemberResultFlags::HASMEMBER )
-            {
-                StrData* pNew = new StrData( pArray[nItem].Name );
-                if ( !rNames.Insert( pNew ) )
-                    delete pNew;
-            }
+                rNames.insert(pArray[nItem].Name);
         }
     }
 }

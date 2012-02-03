@@ -729,7 +729,7 @@ void ScDBFunc::RecalcPivotTable()
         ErrorMessage(STR_PIVOT_NOTFOUND);
 }
 
-void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension )
+void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension)
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
@@ -781,25 +781,21 @@ void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimensio
                     // accept any part of a member description, also subtotals,
                     // but don't stop if empty parts are contained
                     if ( aData.Flags & sheet::MemberResultFlags::HASMEMBER )
-                    {
-                        StrData* pNew = new StrData( aData.MemberName );
-                        if ( !rEntries.Insert( pNew ) )
-                            delete pNew;
-                    }
+                        rEntries.insert(aData.MemberName);
                 }
             }
     }
 
     rDimension = nStartDimension;   // dimension from which the found members came
     if (!bContinue)
-        rEntries.FreeAll();         // remove all if not valid
+        rEntries.clear();         // remove all if not valid
 }
 
-sal_Bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts )
+bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts )
 {
     // determine if the date group dialog has to be shown for the current selection
 
-    sal_Bool bFound = false;
+    bool bFound = false;
 
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();
@@ -809,11 +805,11 @@ sal_Bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -908,11 +904,11 @@ sal_Bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int
     return bFound;
 }
 
-sal_Bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
+bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
 {
     // determine if the numeric group dialog has to be shown for the current selection
 
-    sal_Bool bFound = false;
+    bool bFound = false;
 
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();
@@ -922,11 +918,11 @@ sal_Bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -982,11 +978,11 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -1112,11 +1108,11 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -1156,11 +1152,11 @@ void ScDBFunc::GroupDataPilot()
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -1183,13 +1179,12 @@ void ScDBFunc::GroupDataPilot()
 
             // remove the selected items from their groups
             // (empty groups are removed, too)
-            sal_uInt16 nEntryCount = aEntries.GetCount();
-            sal_uInt16 nEntry;
             if ( pGroupDimension )
             {
-                for (nEntry=0; nEntry<nEntryCount; nEntry++)
+                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+                for (; it != itEnd; ++it)
                 {
-                    String aEntryName = aEntries[nEntry]->GetString();
+                    const rtl::OUString& aEntryName = *it;
                     if ( pBaseGroupDim )
                     {
                         // for each selected (intermediate) group, remove all its items
@@ -1228,9 +1223,7 @@ void ScDBFunc::GroupDataPilot()
                     {
                         const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                        StrData aStrData( pBaseGroup->GetGroupName() );
-                        sal_uInt16 nCollIndex;
-                        if ( !aEntries.Search( &aStrData, nCollIndex ) )    //! ignore case?
+                        if (!aEntries.count(pBaseGroup->GetGroupName()))
                         {
                             // add an additional group for each item that is not in the selection
                             ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
@@ -1245,9 +1238,10 @@ void ScDBFunc::GroupDataPilot()
             //! localized prefix string
             String aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
             ScDPSaveGroupItem aGroup( aGroupName );
-            for (nEntry=0; nEntry<nEntryCount; nEntry++)
+            ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+            for (; it != itEnd; ++it)
             {
-                String aEntryName = aEntries[nEntry]->GetString();
+                const rtl::OUString& aEntryName = *it;
                 if ( pBaseGroupDim )
                 {
                     // for each selected (intermediate) group, add all its items
@@ -1300,11 +1294,11 @@ void ScDBFunc::UngroupDataPilot()
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -1329,19 +1323,17 @@ void ScDBFunc::UngroupDataPilot()
             }
             else if ( pGroupDim )
             {
-                sal_uInt16 nEntryCount = aEntries.GetCount();
-                for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
-                {
-                    String aEntryName = aEntries[nEntry]->GetString();
-                    pGroupDim->RemoveGroup( aEntryName );
-                }
+                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+                for (; it != itEnd; ++it)
+                    pGroupDim->RemoveGroup(*it);
+
                 // remove group dimension if empty
                 bool bEmptyDim = pGroupDim->IsEmpty();
                 if ( !bEmptyDim )
                 {
                     // If all remaining groups in the dimension aren't shown, remove
                     // the dimension too, as if it was completely empty.
-                    ScStrCollection aVisibleEntries;
+                    ScDPUniqueStringSet aVisibleEntries;
                     pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
                     bEmptyDim = pGroupDim->HasOnlyHidden( aVisibleEntries );
                 }
@@ -1962,19 +1954,19 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
     return bRet;
 }
 
-sal_Bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
+bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -1989,7 +1981,7 @@ sal_Bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
                     if ( pDim == pInner )
                     {
                         rOrientation = nDimOrient;
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -1999,17 +1991,17 @@ sal_Bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
     return bRet;
 }
 
-void ScDBFunc::SetDataPilotDetails( sal_Bool bShow, const String* pNewDimensionName )
+void ScDBFunc::SetDataPilotDetails(bool bShow, const rtl::OUString* pNewDimensionName)
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScStrCollection aEntries;
+        ScDPUniqueStringSet aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
-        if ( aEntries.GetCount() > 0 )
+        if (!aEntries.empty())
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
@@ -2055,23 +2047,22 @@ void ScDBFunc::SetDataPilotDetails( sal_Bool bShow, const String* pNewDimensionN
                     //  Hide details for all visible members (selected are changed below).
                     //! Use all members from source level instead (including non-visible)?
 
-                    ScStrCollection aVisibleEntries;
+                    ScDPUniqueStringSet aVisibleEntries;
                     pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
 
-                    sal_uInt16 nVisCount = aVisibleEntries.GetCount();
-                    for (sal_uInt16 nVisPos=0; nVisPos<nVisCount; nVisPos++)
+                    ScDPUniqueStringSet::const_iterator it = aVisibleEntries.begin(), itEnd = aVisibleEntries.end();
+                    for (; it != itEnd; ++it)
                     {
-                        String aVisName = aVisibleEntries[nVisPos]->GetString();
+                        const rtl::OUString& aVisName = *it;
                         ScDPSaveMember* pMember = pDim->GetMemberByName( aVisName );
                         pMember->SetShowDetails( false );
                     }
                 }
 
-                sal_uInt16 nEntryCount = aEntries.GetCount();
-                for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
+                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+                for (; it != itEnd; ++it)
                 {
-                    String aEntryName = aEntries[nEntry]->GetString();
-                    ScDPSaveMember* pMember = pDim->GetMemberByName( aEntryName );
+                    ScDPSaveMember* pMember = pDim->GetMemberByName(*it);
                     pMember->SetShowDetails( bShow );
                 }
 
