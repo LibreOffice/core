@@ -347,6 +347,18 @@ static const char *app_cmd_name(int cmd)
     }
 }
 
+void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
+{
+    ANativeWindow *pWindow = mpApp->window;
+    if (!pWindow)
+        rRect = Rectangle( Point( 0, 0 ),
+                           Size( 800, 600 ) );
+    else
+        rRect = Rectangle( Point( 0, 0 ),
+                           Size( ANativeWindow_getWidth( pWindow ),
+                                 ANativeWindow_getHeight( pWindow ) ) );
+}
+
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 {
         fprintf (stderr, "app cmd for app %p: %s\n", app, app_cmd_name(cmd));
@@ -602,6 +614,66 @@ SalSystem *AndroidSalInstance::CreateSalSystem()
 {
     return new AndroidSalSystem();
 }
+
+class AndroidSalFrame : public SvpSalFrame
+{
+public:
+    AndroidSalFrame( AndroidSalInstance *pInstance,
+                     SalFrame           *pParent,
+                     sal_uLong           nSalFrameStyle,
+                     SystemParentData   *pSysParent )
+        : SvpSalFrame( pInstance, pParent, nSalFrameStyle, pSysParent )
+    {
+    }
+
+    virtual void GetWorkArea( Rectangle& rRect )
+    {
+        AndroidSalInstance::getInstance()->GetWorkArea( rRect );
+    }
+
+    virtual void UpdateSettings( AllSettings &rSettings )
+    {
+        // Clobber the UI fonts
+#if 0
+        psp::FastPrintFontInfo aInfo;
+        aInfo.m_aFamilyName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Roboto" ) );
+        aInfo.m_eItalic = ITALIC_NORMAL;
+        aInfo.m_eWeight = WEIGHT_NORMAL;
+        aInfo.m_eWidth = WIDTH_NORMAL;
+        psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
+#endif
+
+        // FIXME: is 12 point enough ?
+        Font aFont( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Roboto" ) ),
+                    Size( 0, 14 ) );
+
+        StyleSettings aStyleSet = rSettings.GetStyleSettings();
+        aStyleSet.SetAppFont( aFont );
+        aStyleSet.SetHelpFont( aFont );
+        aStyleSet.SetMenuFont( aFont );
+        aStyleSet.SetToolFont( aFont );
+        aStyleSet.SetLabelFont( aFont );
+        aStyleSet.SetInfoFont( aFont );
+        aStyleSet.SetRadioCheckFont( aFont );
+        aStyleSet.SetPushButtonFont( aFont );
+        aStyleSet.SetFieldFont( aFont );
+        aStyleSet.SetIconFont( aFont );
+        aStyleSet.SetGroupFont( aFont );
+
+        rSettings.SetStyleSettings( aStyleSet );
+    }
+};
+
+SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
+{
+    return new AndroidSalFrame( this, NULL, nStyle, pParent );
+}
+
+SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+{
+    return new AndroidSalFrame( this, pParent, nStyle, NULL );
+}
+
 
 // All the interesting stuff is slaved from the AndroidSalInstance
 void InitSalData()   {}

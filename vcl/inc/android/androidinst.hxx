@@ -49,6 +49,11 @@ public:
 
     virtual SalSystem* CreateSalSystem();
 
+    // frame management
+    void GetWorkArea( Rectangle& rRect );
+    SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+    SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
+
     // mainloop pieces
     virtual void Wakeup();
     virtual bool AnyInput( sal_uInt16 nType );
@@ -58,6 +63,7 @@ public:
     int32_t   onInputEvent (struct android_app* app, AInputEvent* event);
     void      RedrawWindows(ANativeWindow *pWindow);
     SalFrame *getFocusFrame() const;
+
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
     struct android_app *mpApp;
