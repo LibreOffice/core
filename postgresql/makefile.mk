@@ -41,7 +41,13 @@ TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 PATCH_FILES=\
 	postgresql-moz-ldap.patch \
 	$(TARFILE_NAME)-libreoffice.patch \
-	$(TARFILE_NAME)-autoreconf.patch
+	$(TARFILE_NAME)-autoreconf.patch \
+    postgresql-9.1.1-configure.patch
+# postgresql-9.1.1-configure.patch: move check for with_krb5 before with_gssapi,
+#  so that LIBS does not already contain -lgssapi_krb5 (which links against
+#  -lkrb5) when looking for symbols from -lkrb5, and within with_krb5, move
+#  com_err before krb5, so that looking with symbol com_err does not erroneously
+#  pick -lkrb5 (which links against -lcom_err) instead of -lcom_err
 
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 @all:
