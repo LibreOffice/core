@@ -29,10 +29,11 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <scmod.hxx>
 #include "tpcompatibility.hxx"
 #include "optdlg.hrc"
 #include "scresid.hxx"
-#include "docoptio.hxx"
+#include "appoptio.hxx"
 
 ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, ScResId(RID_SCPAGE_COMPATIBILITY), rCoreAttrs),
@@ -41,11 +42,6 @@ ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAtt
     maLbKeyBindings(this, ScResId(LB_KEY_BINDINGS))
 {
     FreeResource();
-
-    const ScTpCalcItem& rItem = static_cast<const ScTpCalcItem&>(
-        rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
-    mpOldOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
-    mpNewOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
 }
 
 ScTpCompatOptions::~ScTpCompatOptions()
@@ -59,43 +55,40 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
 
 sal_Bool ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
-    ScOptionsUtil::KeyBindingType eKeyB = ScOptionsUtil::KEY_DEFAULT;
-    switch (maLbKeyBindings.GetSelectEntryPos())
+    bool bRet = false;
+    if (maLbKeyBindings.GetSavedValue() != maLbKeyBindings.GetSelectEntryPos())
     {
-        case 0:
-            eKeyB = ScOptionsUtil::KEY_DEFAULT;
-        break;
-        case 1:
-            eKeyB = ScOptionsUtil::KEY_OOO_LEGACY;
-        break;
-        default:
-            ;
+        rCoreAttrs.Put(
+            SfxUInt16Item(
+                SID_SC_OPT_KEY_BINDING_COMPAT, maLbKeyBindings.GetSelectEntryPos()));
+        bRet = true;
     }
-    mpNewOptions->SetKeyBindingType(eKeyB);
-
-    if (*mpNewOptions != *mpOldOptions)
-    {
-        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpNewOptions));
-        return true;
-    }
-    else
-        return false;
+    return bRet;
 }
 
-void ScTpCompatOptions::Reset(const SfxItemSet &/*rCoreAttrs*/)
+void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
 {
-    ScOptionsUtil::KeyBindingType eKeyB = mpOldOptions->GetKeyBindingType();
-    switch (eKeyB)
+    const SfxPoolItem* pItem;
+    if (SFX_ITEM_SET == rCoreAttrs.GetItemState(SID_SC_OPT_KEY_BINDING_COMPAT, false, &pItem))
     {
-        case ScOptionsUtil::KEY_DEFAULT:
-            maLbKeyBindings.SelectEntryPos(0);
-        break;
-        case ScOptionsUtil::KEY_OOO_LEGACY:
-            maLbKeyBindings.SelectEntryPos(1);
-        break;
-        default:
-            ;
+        const SfxUInt16Item* p16Item = static_cast<const SfxUInt16Item*>(pItem);
+        ScOptionsUtil::KeyBindingType eKeyB =
+            static_cast<ScOptionsUtil::KeyBindingType>(p16Item->GetValue());
+
+        switch (eKeyB)
+        {
+            case ScOptionsUtil::KEY_DEFAULT:
+                maLbKeyBindings.SelectEntryPos(0);
+            break;
+            case ScOptionsUtil::KEY_OOO_LEGACY:
+                maLbKeyBindings.SelectEntryPos(1);
+            break;
+            default:
+                ;
+        }
     }
+
+    maLbKeyBindings.SaveValue();
 }
 
 int ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)

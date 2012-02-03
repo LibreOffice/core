@@ -33,6 +33,7 @@
 #include <svx/zoomitem.hxx>
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"
+#include "scmod.hxx"
 #include "global.hxx"
 #include "optutil.hxx"
 
@@ -87,6 +88,8 @@ public:
 
     void        SetShowSharedDocumentWarning( sal_Bool bNew )   { mbShowSharedDocumentWarning = bNew; }
     sal_Bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+    ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
+    void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
@@ -110,6 +113,7 @@ private:
     sal_Int32       nDefaultObjectSizeWidth;
     sal_Int32       nDefaultObjectSizeHeight;
     sal_Bool        mbShowSharedDocumentWarning;
+    ScOptionsUtil::KeyBindingType meKeyBindingType;
 };
 
 
@@ -128,6 +132,7 @@ class ScAppCfg : public ScAppOptions
     ScLinkConfigItem    aContentItem;
     ScLinkConfigItem    aSortListItem;
     ScLinkConfigItem    aMiscItem;
+    ScLinkConfigItem    aCompatItem;
 
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( InputCommitHdl, void* );
@@ -135,6 +140,7 @@ class ScAppCfg : public ScAppOptions
     DECL_LINK( ContentCommitHdl, void* );
     DECL_LINK( SortListCommitHdl, void* );
     DECL_LINK( MiscCommitHdl, void* );
+    DECL_LINK( CompatCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetInputPropertyNames();
@@ -142,6 +148,7 @@ class ScAppCfg : public ScAppOptions
     com::sun::star::uno::Sequence<rtl::OUString> GetContentPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetSortListPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetMiscPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
 
 public:
             ScAppCfg();
@@ -149,7 +156,6 @@ public:
     void    SetOptions( const ScAppOptions& rNew );
     void    OptionsChanged();   // after direct access to ScAppOptions base class
 };
-
 
 #endif
 

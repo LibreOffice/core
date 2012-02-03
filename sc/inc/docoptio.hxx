@@ -45,7 +45,6 @@ class SC_DLLPUBLIC ScDocOptions
     SCTAB nInitTabCount;            // number of Tabs for new Spreadsheet doc
     ::rtl::OUString aInitTabPrefix;   // The Tab prefix name in new Spreadsheet doc
     sal_uInt16 nPrecStandardFormat; // precision for standard format
-    ScOptionsUtil::KeyBindingType eKeyBindingType;
     sal_uInt16 nDay;                    // Null date:
     sal_uInt16 nMonth;
     sal_uInt16 nYear;
@@ -105,9 +104,6 @@ public:
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
-    ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
-    void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
-
     sal_Bool    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( sal_Bool bVal ) { bCalcAsShown = bVal; }
 
@@ -145,7 +141,6 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     aInitTabPrefix      = rCpy.aInitTabPrefix;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
-    eKeyBindingType     = rCpy.eKeyBindingType;
     nDay                = rCpy.nDay;
     nMonth              = rCpy.nMonth;
     nYear               = rCpy.nYear;
@@ -175,7 +170,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.aInitTabPrefix         == aInitTabPrefix
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
-            &&  rOpt.eKeyBindingType        == eKeyBindingType
             &&  rOpt.nDay                   == nDay
             &&  rOpt.nMonth                 == nMonth
             &&  rOpt.nYear                  == nYear
@@ -231,19 +225,16 @@ class ScDocCfg : public ScDocOptions
     ScLinkConfigItem    aCalcItem;
     ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
-    ScLinkConfigItem    aCompatItem;
     ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
     DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
-    DECL_LINK( CompatCommitHdl, void* );
     DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
 public:

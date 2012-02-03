@@ -223,6 +223,8 @@
 // "Zoom / Synchronize sheets" in options dialog
 #define SID_SC_OPT_SYNCZOOM             (SC_VIEW_START + 98)
 
+#define SID_SC_OPT_KEY_BINDING_COMPAT   (SC_VIEW_START + 99)
+
 // NOTE: last valid ID is (SC_VIEW_START + 99)
 
 // messages

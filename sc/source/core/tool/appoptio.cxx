@@ -116,9 +116,9 @@ void ScAppOptions::SetDefaults()
     nDefaultObjectSizeHeight = 5000;
 
     mbShowSharedDocumentWarning = true;
-}
 
-//------------------------------------------------------------------------
+    meKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
+}
 
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
@@ -139,6 +139,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
+    meKeyBindingType  = rCpy.meKeyBindingType;
     return *this;
 }
 
@@ -289,6 +290,11 @@ void lcl_GetSortList( Any& rDest )
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
 #define SCMISCOPT_COUNT             3
 
+#define CFGPATH_COMPAT      "Office.Calc/Compatibility"
+
+#define SCCOMPATOPT_KEY_BINDING     0
+#define SCCOMPATOPT_COUNT           1
+
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
@@ -389,6 +395,19 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
     return aNames;
 }
 
+Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "KeyBindings/BaseGroup"         // SCCOMPATOPT_KEY_BINDING
+    };
+    Sequence<OUString> aNames(SCCOMPATOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for (int i = 0; i < SCCOMPATOPT_COUNT; ++i)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
 
 ScAppCfg::ScAppCfg() :
     aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
@@ -396,7 +415,8 @@ ScAppCfg::ScAppCfg() :
     aRevisionItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_REVISION )) ),
     aContentItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CONTENT )) ),
     aSortListItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_SORTLIST )) ),
-    aMiscItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_MISC )) )
+    aMiscItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_MISC )) ),
+    aCompatItem( OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT )) )
 {
     sal_Int32 nIntVal = 0;
 
@@ -574,6 +594,28 @@ ScAppCfg::ScAppCfg() :
         }
     }
     aMiscItem.SetCommitLink( LINK( this, ScAppCfg, MiscCommitHdl ) );
+
+    aNames = GetCompatPropertyNames();
+    aValues = aCompatItem.GetProperties(aNames);
+    aCompatItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    if (aValues.getLength() == aNames.getLength())
+    {
+        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+        {
+            switch (nProp)
+            {
+                case SCCOMPATOPT_KEY_BINDING:
+                {
+                    nIntVal = 0; // 0 = 'Default'
+                    pValues[nProp] >>= nIntVal;
+                    SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
+                }
+                break;
+            }
+        }
+    }
+    aCompatItem.SetCommitLink( LINK(this, ScAppCfg, CompatCommitHdl) );
 }
 
 IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
@@ -729,6 +771,25 @@ IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScAppCfg, CompatCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetCompatPropertyNames();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+    {
+        switch(nProp)
+        {
+            case SCCOMPATOPT_KEY_BINDING:
+                pValues[nProp] <<= static_cast<sal_Int32>(GetKeyBindingType());
+            break;
+        }
+    }
+    aCompatItem.PutProperties(aNames, aValues);
+    return 0;
+}
+
 void ScAppCfg::SetOptions( const ScAppOptions& rNew )
 {
     *(ScAppOptions*)this = rNew;
@@ -743,6 +804,7 @@ void ScAppCfg::OptionsChanged()
     aContentItem.SetModified();
     aSortListItem.SetModified();
     aMiscItem.SetModified();
+    aCompatItem.SetModified();
 }
 
 

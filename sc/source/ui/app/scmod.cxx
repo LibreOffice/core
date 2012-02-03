@@ -1015,6 +1015,19 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveAppOptions = sal_True;
     }
 
+    if ( IS_AVAILABLE(SID_SC_OPT_KEY_BINDING_COMPAT,pItem) )
+    {
+        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        ScOptionsUtil::KeyBindingType eOld = pAppCfg->GetKeyBindingType();
+        ScOptionsUtil::KeyBindingType eNew = static_cast<ScOptionsUtil::KeyBindingType>(nVal);
+        if (eOld != eNew)
+        {
+            pAppCfg->SetKeyBindingType(eNew);
+            bSaveAppOptions = true;
+            pDocSh->ResetKeyBindings(eNew);
+        }
+    }
+
     //============================================
     // ViewOptions
     //============================================
@@ -1092,10 +1105,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pDoc )
         {
             const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
-            ScOptionsUtil::KeyBindingType eKeyOld = rOldOpt.GetKeyBindingType();
-            ScOptionsUtil::KeyBindingType eKeyNew = rNewOpt.GetKeyBindingType();
-            if (eKeyOld != eKeyNew)
-                pDocSh->ResetKeyBindings(eKeyNew);
 
             bRepaint = ( bRepaint || ( rOldOpt != rNewOpt )   );
             bCalcAll =   bRepaint &&
@@ -1917,6 +1926,8 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             //
                             SID_ATTR_METRIC,        SID_ATTR_METRIC,
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
+                            // TP_COMPATIBILITY
+                            SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
                             0 );
 
         ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
@@ -1980,6 +1991,12 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         // TP_USERLISTS
         if ( pUL )
             aULItem.SetUserList( *pUL );
+
+        // TP_COMPATIBILITY
+        pRet->Put(
+            SfxUInt16Item(
+                SID_SC_OPT_KEY_BINDING_COMPAT, GetAppOptions().GetKeyBindingType()));
+
         pRet->Put( aULItem );
 
     }
