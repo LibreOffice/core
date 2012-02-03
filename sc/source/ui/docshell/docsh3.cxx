@@ -955,7 +955,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
 #if OSL_DEBUG_LEVEL > 0
-                String aValue;
+                rtl::OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                 rtl::OStringBuffer aError(rtl::OUStringToOString(aValue,
