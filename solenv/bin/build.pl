@@ -22,7 +22,6 @@
 #
 #**************************************************************
 
-
 #
 # build - build entire project
 #
@@ -2836,7 +2835,7 @@ sub generate_html_file {
         print HTML 'document.write("        <td>");' . "\n";
         print HTML 'document.write("            <table width=100% valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0>");' . "\n";
         print HTML 'document.write("                <tr>");' . "\n";
-        print HTML 'document.write("                    <td height=15 width=';
+        print HTML 'document.write("                    <td height=15* width=';
 
         print HTML $successes_percent + $errors_percent;
         if ($errors_number) {
@@ -2914,19 +2913,26 @@ sub generate_html_file {
     };
 
     print HTML 'function refreshInfoFrames() {        ' . "\n";
-    print HTML '    var ModuleHref = top.innerFrame.frames[0].document.getElementById("ErroneousModules").getAttribute(\'href\');' . "\n";
-    print HTML '    eval(ModuleHref);' . "\n";
-    print HTML '    if (top.innerFrame.frames[1].document.getElementById("ModuleJobs") != null) {' . "\n";
-    print HTML '        var ModuleName = top.innerFrame.frames[1].document.getElementById("ModuleJobs").getAttribute(\'name\');' . "\n";
-    print HTML '        ModuleHref = top.innerFrame.frames[0].document.getElementById(ModuleName).getAttribute(\'href\');' . "\n";
-    print HTML '        var HrefString = ModuleHref.toString();' . "\n";
-    print HTML '        var RefEntries = HrefString.split(",");' . "\n";
-    print HTML '        var RefreshParams = new Array();' . "\n";
-    print HTML '        for (i = 0; i < RefEntries.length; i++) {' . "\n";
-    print HTML '            RefreshParams[i] = RefEntries[i].substring(RefEntries[i].indexOf("\'") + 1, RefEntries[i].lastIndexOf("\'"));' . "\n";
-    print HTML '        };' . "\n";
-    print HTML '        FillFrame_1(RefreshParams[0], RefreshParams[1], RefreshParams[2]);' . "\n";
-    print HTML '    }' . "\n";
+    print HTML '    var ModuleNameObj = top.innerFrame.frames[2].document.getElementById("ModuleErrors");' . "\n";
+    print HTML '    if (ModuleNameObj != null) {' . "\n";
+    print HTML '        var ModuleName = ModuleNameObj.getAttribute(\'name\');' . "\n";
+    print HTML '        var ModuleHref = top.innerFrame.frames[0].document.getElementById(ModuleName).getAttribute(\'href\');' . "\n";
+    print HTML '         eval(ModuleHref);' . "\n";
+    print HTML '    } else if (top.innerFrame.frames[2].document.getElementById("ErroneousModules") != null) {' . "\n";
+    print HTML '        var ModuleHref = top.innerFrame.frames[0].document.getElementById("ErroneousModules").getAttribute(\'href\');' . "\n";
+    print HTML '        eval(ModuleHref);' . "\n";
+    print HTML '        if (top.innerFrame.frames[1].document.getElementById("ModuleJobs") != null) {' . "\n";
+    print HTML '            var ModuleName = top.innerFrame.frames[1].document.getElementById("ModuleJobs").getAttribute(\'name\');' . "\n";
+    print HTML '            ModuleHref = top.innerFrame.frames[0].document.getElementById(ModuleName).getAttribute(\'href\');' . "\n";
+    print HTML '            var HrefString = ModuleHref.toString();' . "\n";
+    print HTML '            var RefEntries = HrefString.split(",");' . "\n";
+    print HTML '            var RefreshParams = new Array();' . "\n";
+    print HTML '            for (i = 0; i < RefEntries.length; i++) {' . "\n";
+    print HTML '                RefreshParams[i] = RefEntries[i].substring(RefEntries[i].indexOf("\'") + 1, RefEntries[i].lastIndexOf("\'"));' . "\n";
+    print HTML '            };' . "\n";
+    print HTML '            FillFrame_1(RefreshParams[0], RefreshParams[1], RefreshParams[2]);' . "\n";
+    print HTML '        }' . "\n";
+    print HTML '    };' . "\n";
     print HTML '}' . "\n";
     print HTML 'function loadFrame_1() {' . "\n";
     print HTML '    document.write("<h3 align=center>Jobs</h3>");' . "\n";
@@ -2951,7 +2957,13 @@ sub generate_html_file {
     print HTML '    return StatusInnerHtml;' . "\n";
     print HTML '}    ' . "\n";
     print HTML 'function ShowLog(LogFilePath, ModuleJob) {' . "\n";
-    print HTML '    top.innerFrame.frames[2].location = LogFilePath;' . "\n";
+    print HTML '    top.innerFrame.frames[2].document.write("<h3 id=ModuleErrors name=\"" + null + "\">Log for " + ModuleJob + "</h3>");' . "\n";
+    print HTML '    top.innerFrame.frames[2].document.write("<iframe id=LogFile name=Log src="';
+    if (defined $html_path) {
+        print HTML 'file://';
+    }
+    print HTML '+ LogFilePath + " width=100%></iframe>");' . "\n";
+    print HTML '    top.innerFrame.frames[2].document.close();' . "\n";
     print HTML '};' . "\n";
     print HTML 'function FillFrame_1(Module, Message1, Message2) {' . "\n";
     print HTML '    var FullUpdate = 1;' . "\n";
@@ -3008,10 +3020,6 @@ sub generate_html_file {
     print HTML '    top.innerFrame.frames[1].document.close();' . "\n";
     print HTML '};' . "\n";
     print HTML 'function Error(Module, Message1, Message2) {' . "\n";
-    print HTML '    if (top.innerFrame.frames[2].location) {' . "\n";
-    print HTML '        var urlquery = location.href.split("?");' . "\n";
-    print HTML '        top.innerFrame.frames[2].location = urlquery[0] + "?initFrame2";' . "\n";
-    print HTML '    }' . "\n";
     print HTML '    if (Module == \'\') {' . "\n";
     print HTML '        if (Message1 != \'\') {' . "\n";
     print HTML '            var erroneous_modules = Message1.split("<br>");' . "\n";
@@ -3027,6 +3035,19 @@ sub generate_html_file {
     print HTML '            };' . "\n";
     print HTML '            top.innerFrame.frames[2].document.close();' . "\n";
     print HTML '        };' . "\n";
+    print HTML '    } else {' . "\n";
+    print HTML '        var ModuleNameObj = top.innerFrame.frames[2].document.getElementById("ModuleErrors");' . "\n";
+    print HTML '        var OldErrors = null;' . "\n";
+    print HTML '        var ErrorNumber = Message1.split("<br>").length;' . "\n";
+    print HTML '        if ((ModuleNameObj != null) && (Module == ModuleNameObj.getAttribute(\'name\')) ) {' . "\n";
+    print HTML '            OldErrors = ModuleNameObj.getAttribute(\'errors\');' . "\n";
+    print HTML '        }' . "\n";
+    print HTML '        if ((OldErrors == null) || (OldErrors != ErrorNumber)) {' . "\n";
+    print HTML '            top.innerFrame.frames[2].document.write("<h3 id=ModuleErrors errors=" + ErrorNumber + " name=\"" + Module + "\">Errors in module " + Module + ":</h3>");' . "\n";
+    print HTML '            top.innerFrame.frames[2].document.write(Message1);' . "\n";
+    print HTML '            top.innerFrame.frames[2].document.close();' . "\n";
+    print HTML '        }' . "\n";
+    print HTML '        FillFrame_1(Module, Message1, Message2);' . "\n";
     print HTML '    }' . "\n";
     print HTML '}' . "\n";
     print HTML 'function updateInnerFrame() {' . "\n";
@@ -3046,7 +3067,7 @@ sub generate_html_file {
     print HTML '    var urlquery = location.href.split("?");' . "\n";
     print HTML '    if (urlquery.length == 1) {' . "\n";
     print HTML '        document.write("<html><head><TITLE id=MainTitle>' . $ENV{INPATH} .'</TITLE>");' . "\n";
-    print HTML '        document.write("    <frameset rows=\"36,*\">");' . "\n";
+    print HTML '        document.write("    <frameset rows=\"12%,88%\">");' . "\n";
     print HTML '        document.write("        <frame name=\"topFrame\" src=\"" + urlquery + "?initTop\"/>");' . "\n";
     print HTML '        document.write("        <frame name=\"innerFrame\" src=\"" + urlquery + "?initInnerPage\"/>");' . "\n";
     print HTML '        document.write("    </frameset>");' . "\n";
@@ -3062,23 +3083,26 @@ sub generate_html_file {
     print HTML '            };' . "\n";
     print HTML '        };' . "\n";
     print HTML '        document.write("<html><body>");' . "\n";
-    print HTML '        document.write("<table border=\"0\" width=\"100%\"> <tr>");' . "\n";
-    print HTML '        document.write("<td align=\"left\"><h3>Build process progress status</h3></td>");' . "\n";
-    print HTML '        document.write("<td align=\"right\">");' . "\n";
+    print HTML '        document.write("<h3 align=center>Build process progress status</h3>");' . "\n";
+    print HTML '        document.write("<div align=\"right\">");' . "\n";
+    print HTML '        document.write("    <table border=\"0\"> <tr>");' . "\n";
+    print HTML '        document.write("<td>Refresh rate(sec):</td>");' . "\n";
+    print HTML '        document.write("<th>");' . "\n";
     print HTML '        document.write("<FORM name=\"Formular\" onsubmit=\"setRefreshRate()\">");' . "\n";
     print HTML '        document.write("<input type=\"hidden\" name=\"initTop\" value=\"\"/>");' . "\n";
     print HTML '        document.write("<input type=\"text\" id=\"RateValue\" name=\"rate\" autocomplete=\"off\" value=\"" + UpdateRate + "\" size=\"1\"/>");' . "\n";
-    print HTML '        document.write("<input type=\"submit\" value=\"Update refresh rate (sec)\">");' . "\n";
+    print HTML '        document.write("<input type=\"submit\" value=\"OK\">");' . "\n";
     print HTML '        document.write("</FORM>");' . "\n";
-    print HTML '        document.write("</td></tr></table>");' . "\n";
+    print HTML '        document.write("</th></tr></table>");' . "\n";
+    print HTML '        document.write("</div>");' . "\n";
     print HTML '        document.write("    </frameset>");' . "\n";
     print HTML '        document.write("</body></html>");' . "\n";
     print HTML '        top.frames[0].clearInterval(IntervalID);' . "\n";
     print HTML '        IntervalID = top.frames[0].setInterval("updateInnerFrame()", UpdateRate * 1000);' . "\n";
     print HTML '    } else if (urlquery[1] == "initInnerPage") {' . "\n";
     print HTML '        document.write("<html><head>");' . "\n";
-    print HTML '        document.write(\'    <frameset rows="50%,50%\">\');' . "\n";
-    print HTML '        document.write(\'        <frameset cols="50%,50%">\');' . "\n";
+    print HTML '        document.write(\'    <frameset rows="80%,20%\">\');' . "\n";
+    print HTML '        document.write(\'        <frameset cols="70%,30%">\');' . "\n";
     print HTML '        document.write(\'            <frame src="\');' . "\n";
     print HTML '        document.write(urlquery[0]);' . "\n";
     print HTML '        document.write(\'?initFrame0"/>\');' . "\n";
