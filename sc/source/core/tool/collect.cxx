@@ -303,33 +303,6 @@ sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) c
 }
 
 //------------------------------------------------------------------------
-
-ScDataObject*   StrData::Clone() const
-{
-    return new StrData(*this);
-}
-
-//------------------------------------------------------------------------
-
-short ScStrCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    StringCompare eComp = ((StrData*)pKey1)->aStr.CompareTo(((StrData*)pKey2)->aStr);
-    if (eComp == COMPARE_EQUAL)
-        return 0;
-    else if (eComp == COMPARE_LESS)
-        return -1;
-    else
-        return 1;
-}
-
-//------------------------------------------------------------------------
-
-ScDataObject*   ScStrCollection::Clone() const
-{
-    return new ScStrCollection(*this);
-}
-
-//------------------------------------------------------------------------
 // TypedScStrCollection
 //------------------------------------------------------------------------
 

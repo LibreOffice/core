@@ -39,7 +39,6 @@
 class ScDPGroupTableData;
 class ScDPGroupDimension;
 class ScDPObject;
-class ScStrCollection;
 class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;

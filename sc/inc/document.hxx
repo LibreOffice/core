@@ -118,7 +118,6 @@ class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
 class ScViewOptions;
-class ScStrCollection;
 class TypedScStrCollection;
 class ScChangeTrack;
 class ScEditEngineDefaulter;

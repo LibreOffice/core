@@ -109,38 +109,6 @@ public:
     sal_Bool        operator==(const ScSortedCollection& rCmp) const;
 };
 
-
-
-//------------------------------------------------------------------------
-class StrData : public ScDataObject
-{
-friend class ScStrCollection;
-    String aStr;
-public:
-                        StrData(const String& rStr) : aStr(rStr) {}
-                        StrData(const StrData& rData) : ScDataObject(), aStr(rData.aStr) {}
-    virtual ScDataObject*   Clone() const;
-    const String&       GetString() const { return aStr; }
-    // SetString only, if StrData is not in ScStrCollection! for example
-    // for Searcher
-    void                SetString( const String& rNew ) { aStr = rNew; }
-};
-
-class SvStream;
-
-class SC_DLLPUBLIC ScStrCollection : public ScSortedCollection
-{
-public:
-    ScStrCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) :
-                        ScSortedCollection  ( nLim, nDel, bDup ) {}
-    ScStrCollection(const ScStrCollection& rScStrCollection) :
-                        ScSortedCollection  ( rScStrCollection ) {}
-
-    virtual ScDataObject*   Clone() const;
-            StrData*    operator[]( const sal_uInt16 nIndex) const {return (StrData*)At(nIndex);}
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-};
-
 //------------------------------------------------------------------------
 // TypedScStrCollection: wie ScStrCollection, nur, dass Zahlen vor Strings
 //                     sortiert werden

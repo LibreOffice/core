@@ -65,7 +65,6 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
-class ScStrCollection;
 class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
