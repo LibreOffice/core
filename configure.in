@@ -3169,7 +3169,7 @@ dnl check for cups support
 dnl ===================================================================
 if test "$test_cups" = "yes"; then
     AC_MSG_CHECKING([whether cups support is present])
-    AC_CHECK_LIB(cups, cupsPrintFiles)
+    AC_CHECK_LIB([cups], [cupsPrintFiles], [:])
     AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups???-devel.])
@@ -4301,7 +4301,7 @@ if test "$with_alloc" = "tcmalloc"; then
     if ! echo $host_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
         AC_MSG_ERROR([tcmalloc only available/usable on ix86])
     fi
-    AC_CHECK_LIB(tcmalloc, malloc, [],
+    AC_CHECK_LIB([tcmalloc], [malloc], [:],
         [AC_MSG_ERROR(tcmalloc not found or functional. Install the Google Profiling Tools)], [])
     ALLOC="TCMALLOC";
 fi
@@ -4310,7 +4310,7 @@ if test "$with_alloc" = "jemalloc"; then
         AC_MSG_RESULT(jemalloc)
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -pthread"
-        AC_CHECK_LIB(jemalloc, malloc, [],
+        AC_CHECK_LIB([jemalloc], [malloc], [:],
             [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
         ALLOC="JEMALLOC";
         CFLAGS=$save_CFLAGS
@@ -5416,7 +5416,7 @@ if test "$with_system_expat" = "yes"; then
     SYSTEM_EXPAT=YES
     AC_CHECK_HEADER(expat.h, [],
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
-    AC_CHECK_LIB(expat, XML_ParserCreate, [],
+    AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
     [AC_MSG_RESULT(expat library not found or functional.)], [])
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libexpat-1.dll"
 else
@@ -6044,7 +6044,7 @@ if test "$ENABLE_MYSQLC" = "YES"; then
         AC_LANG_PUSH([C++])
         AC_CHECK_HEADER(mysql_driver.h, [],
                     [AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
-        AC_CHECK_LIB(mysqlcppconn, main, [],
+        AC_CHECK_LIB([mysqlcppconn], [main], [:],
                     [AC_MSG_ERROR(MySQL C++ Connectivity lib not found or functional)], [])
         AC_MSG_CHECKING([version])
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
@@ -6143,15 +6143,20 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         # MacOS X has system MIT Kerberos 5 since 10.4
         if test "$with_krb5" != "no"; then
             WITH_KRB5=YES
+            save_LIBS=$LIBS
             AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            LIBS=$save_LIBS
             AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+            LIBS=$save_LIBS
         fi
         if test "$with_gssapi" != "no"; then
           WITH_GSSAPI=YES
+          save_LIBS=$LIBS
           AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                 [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+          LIBS=$save_LIBS
         fi
         ;;
     WINNT)
@@ -6162,29 +6167,39 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
     Linux|GNU|*BSD|DragonFly)
         if test "$with_krb5" != "no"; then
             WITH_KRB5=YES
+            save_LIBS=$LIBS
             AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            LIBS=$save_LIBS
             AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+            LIBS=$save_LIBS
         fi
         if test "$with_gssapi" != "no"; then
             WITH_GSSAPI=YES
+            save_LIBS=$LIBS
             AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                 [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+            LIBS=$save_LIBS
         fi
         ;;
     *)
         if test "$with_krb5" = "yes"; then
             WITH_KRB5=YES
+            save_LIBS=$LIBS
             AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+            LIBS=$save_LIBS
             AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                 [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+            LIBS=$save_LIBS
         fi
         if test "$with_gssapi" = "yes"; then
             WITH_GSSAPI=YES
+            save_LIBS=$LIBS
             AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                 [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+            LIBS=$save_LIBS
         fi
     esac
 
@@ -6226,7 +6241,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         CPPFLAGS="${CPPFLAGS} ${POSTGRESQL_INC}"
         LIBS="${LIBS} ${POSTGRESQL_LIB}"
         AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
-        AC_CHECK_LIB(pq, PQconnectdbParams, [],
+        AC_CHECK_LIB([pq], [PQconnectdbParams], [:],
             [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
         CFLAGS=$save_CFLAGS
         CPPFLAGS=$save_CPPFLAGS
@@ -6621,9 +6636,9 @@ if test "$enable_ldap" != "no"; then
         WITH_OPENLDAP=YES
         AC_CHECK_HEADERS(ldap.h, [],
             [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-	AC_CHECK_LIB(ldap, ldap_simple_bind_s, [],
+	AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:],
 	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
-	AC_CHECK_LIB(ldap, ldap_set_option, [],
+	AC_CHECK_LIB([ldap], [ldap_set_option], [:],
 	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
     elif test "$enable_mozilla" != "no"; then
         AC_MSG_RESULT([Mozilla])
@@ -7198,7 +7213,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use Xrender])
 if test "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
-    AC_CHECK_LIB(Xrender, XRenderQueryVersion, [],
+    AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
       [AC_MSG_ERROR(libXrender not found or functional)], [])
     AC_MSG_CHECKING([which Xrender headers to use])
     if test "$with_system_xextensions_headers" != "no"; then
@@ -7226,7 +7241,7 @@ if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" =
             AC_CHECK_HEADER(X11/extensions/Xrandr.h, [],
                         [AC_MSG_ERROR([X11/extensions/Xrandr.h could not be found. X11 dev missing?])], [])
             XRANDR_CFLAGS=" "
-            AC_CHECK_LIB(Xrandr, XRRQueryExtension, [],
+            AC_CHECK_LIB([Xrandr], [XRRQueryExtension], [:],
               [ AC_MSG_ERROR(libXrandr not found or functional) ], [])
             XRANDR_LIBS="-lXrandr "
             ENABLE_RANDR="TRUE"
@@ -7339,7 +7354,7 @@ if test "$with_system_hunspell" = "yes"; then
             AC_CHECK_HEADER(hunspell/hunspell.hxx, [ HUNSPELL_CFLAGS=-I/usr/include/hunspell ],
             [AC_MSG_ERROR(hunspell headers not found.)], [])
             ], [])
-        AC_CHECK_LIB(hunspell, main, [],
+        AC_CHECK_LIB([hunspell], [main], [:],
            [ AC_MSG_ERROR(hunspell library not found.) ], [])
         HUNSPELL_LIBS=-lhunspell
     fi
@@ -7397,7 +7412,7 @@ if test "$with_system_mythes" = "yes"; then
     if test "$MYTHES_PKGCONFIG" = "no"; then
         AC_CHECK_HEADER(mythes.hxx, [],
             [ AC_MSG_ERROR(mythes.hxx headers not found.)], [])
-        AC_CHECK_LIB(mythes-1.2, main, [],
+        AC_CHECK_LIB([mythes-1.2], [main], [:],
             [ MYTHES_FOUND=no], [])
     if test "$MYTHES_FOUND" = "no"; then
         AC_CHECK_LIB(mythes, main, [MYTHES_FOUND=yes],
@@ -7427,11 +7442,13 @@ if test "$with_system_lpsolve" = "yes"; then
     SYSTEM_LPSOLVE=YES
     AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
        [ AC_MSG_ERROR(lpsolve headers not found.)], [])
+    save_LIBS=$LIBS
     # some systems need this. Like Ubuntu....
     AC_CHECK_LIB(m, floor)
     AC_CHECK_LIB(dl, dlopen)
-    AC_CHECK_LIB(lpsolve55, make_lp, ,
+    AC_CHECK_LIB([lpsolve55], [make_lp], [:],
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+    LIBS=$save_LIBS
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS lpsolve55.dll"
 else
     AC_MSG_RESULT([internal])
@@ -8001,9 +8018,9 @@ else
             save_LDFLAGS=$LDFLAGS
             LDFLAGS="$LDFLAGS -lm"
             AC_MSG_RESULT([yes])
-            AC_CHECK_LIB(GL, main, [],
+            AC_CHECK_LIB([GL], [main], [:],
                       [AC_MSG_ERROR(libGL not installed or functional)], [])
-            AC_CHECK_LIB(GLU, main, [],
+            AC_CHECK_LIB([GLU], [main], [:],
                       [AC_MSG_ERROR(libGLU not installed or functional)], [])
             ENABLE_OPENGL=TRUE
             LDFLAGS=$save_LDFLAGS
@@ -9370,7 +9387,7 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         if test "$_os" = "Linux"; then
             XINERAMA_EXTRA_LIBS="$XINERAMA_EXTRA_LIBS -ldl"
         fi
-        AC_CHECK_LIB(Xinerama, XineramaIsActive, [],
+        AC_CHECK_LIB([Xinerama], [XineramaIsActive], [:],
             [AC_MSG_ERROR(Xinerama not functional?)], [$XINERAMA_EXTRA_LIBS])
     else
         AC_MSG_RESULT([no, libXinerama not found or wrong architecture.])
