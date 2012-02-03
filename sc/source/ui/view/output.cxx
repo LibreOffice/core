@@ -149,7 +149,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
             if (it == rUsers.end())
             {
                 // empty string is possible if a name wasn't found while saving a 5.0 file
-                OSL_ENSURE( aLastUserName.Len() == 0, "Author not found" );
+                SAL_INFO_IF( aLastUserName.isEmpty(), "sc.ui", "Author not found" );
                 nLastUserIndex = 0;
             }
             else
