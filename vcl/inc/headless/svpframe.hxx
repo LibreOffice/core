@@ -127,6 +127,9 @@ public:
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
     virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
     bool IsVisible() { return m_bVisible; }
+
+    static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
+
 };
 #endif // _SVP_SVPFRAME_HXX
 

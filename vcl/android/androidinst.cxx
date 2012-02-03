@@ -321,11 +321,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     mbQueueReDraw = false;
 }
 
-SalFrame *AndroidSalInstance::getFocusFrame() const
-{
-    return !getFrames().empty() ? *getFrames().begin() : NULL;
-}
-
 static const char *app_cmd_name(int cmd)
 {
     switch (cmd) {
@@ -436,7 +431,7 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         aEvent.mnCharCode = 'a'; // the unicode of it all ...
         aEvent.mnRepeat = AKeyEvent_getRepeatCount(event);
 
-        SalFrame *pFocus = getFocusFrame();
+        SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
         if (pFocus)
             bHandled = pFocus->CallCallback( nEvent, &aEvent );
         else
