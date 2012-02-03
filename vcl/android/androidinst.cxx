@@ -399,7 +399,7 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 
 int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
 {
-    bool bHandled;
+    bool bHandled = false;
     fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
              app, event,
              AInputEvent_getType(event),
@@ -437,6 +437,8 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         else
             fprintf (stderr, "no focused frame to emit event on\n");
 
+        fprintf( stderr, "bHandled == %s\n", bHandled? "true": "false" );
+
         // FIXME: queueing full re-draw on key events ...
         mbQueueReDraw = true;
         break;
@@ -456,6 +458,27 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
                     AMotionEvent_getX(event, i),
                     AMotionEvent_getY(event, i),
                     AMotionEvent_getPressure(event, i));
+
+        SalMouseEvent aMouseEvent;
+        sal_uInt16 nEvent = 0;
+
+        // FIXME: all this filing the nEvent and aMouseEvent has to be cleaned up
+        nEvent = AMotionEvent_getAction(event)? SALEVENT_MOUSEBUTTONUP: SALEVENT_MOUSEBUTTONDOWN;
+
+        aMouseEvent.mnX = AMotionEvent_getXOffset(event);
+        aMouseEvent.mnY = AMotionEvent_getYOffset(event);
+        aMouseEvent.mnTime = 0; // FIXME
+        aMouseEvent.mnCode = 0; // FIXME
+        aMouseEvent.mnButton = MOUSE_LEFT; // FIXME
+
+        SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
+        if (pFocus)
+            bHandled = pFocus->CallCallback( nEvent, &aMouseEvent );
+        else
+            fprintf (stderr, "no focused frame to emit event on\n");
+
+        fprintf( stderr, "bHandled == %s\n", bHandled? "true": "false" );
+
         break;
     }
     default:
