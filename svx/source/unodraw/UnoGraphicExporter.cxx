@@ -843,8 +843,12 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                             aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ) );
                             aGraphic = aBmpEx;
                         }
+
+                        // #118804# only accept for bitmap graphics, else the
+                        // conversion to bitmap will happen anywhere without size control
+                        // as evtl. defined in rSettings.mnWidth/mnHeight
+                        bSingleGraphic = sal_True;
                     }
-                    bSingleGraphic = sal_True;
                 }
             }
             else if( rSettings.mbScrollText )
