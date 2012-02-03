@@ -953,8 +953,7 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine( ::editeng::SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
     //  Calc needs Twips, and there are 1/100mm in the Uno structure
-    rLine.SetStyle( ::editeng::SvxBorderStyle( table::BorderLineStyle::SOLID ) );
-    rLine.GuessLinesWidths( rLine.GetStyle(),
+    rLine.GuessLinesWidths( editeng::NO_STYLE,
         (sal_uInt16)HMMToTwips( rStruct.OuterLineWidth ),
         (sal_uInt16)HMMToTwips( rStruct.InnerLineWidth ),
         (sal_uInt16)HMMToTwips( rStruct.LineDistance ) );
