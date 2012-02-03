@@ -1005,9 +1005,8 @@ class ScChangeTrack : public utl::ConfigurationListener
                             ScChangeAction* pDependent );
 
     void                Dependencies( ScChangeAction* );
-    void                UpdateReference( ScChangeAction*, sal_Bool bUndo );
-    void                UpdateReference( ScChangeAction** ppFirstAction,
-                            ScChangeAction* pAct, sal_Bool bUndo );
+    void UpdateReference( ScChangeAction*, bool bUndo );
+    void UpdateReference( ScChangeAction** ppFirstAction, ScChangeAction* pAct, bool bUndo );
     void                Append( ScChangeAction* pAppend, sal_uLong nAction );
     SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc, SCsTAB nDz,

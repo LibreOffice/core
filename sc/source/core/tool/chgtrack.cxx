@@ -325,7 +325,7 @@ void ScChangeAction::RemoveAllAnyLinks()
 
 bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
 {
-    sal_Bool bRemoved = false;
+    bool bRemoved = false;
     ScChangeActionLinkEntry* pL = GetDeletedIn();
     while ( pL )
     {
@@ -1048,7 +1048,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
     if ( !aBigRange.IsValid( pDoc ) && GetType() != SC_CAT_DELETE_TABS )
         return false;
 
-    sal_Bool bOk = true;
+    bool bOk = true;
 
     if ( IsTopDelete() )
     {   // den kompletten Bereich in einem Rutsch restaurieren
@@ -1305,7 +1305,7 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
     ScRange aToRange( aBigRange.MakeRange() );
     ScRange aFrmRange( aFromRange.MakeRange() );
 
-    sal_Bool bOk = pDoc->IsBlockEditable( aToRange.aStart.Tab(),
+    bool bOk = pDoc->IsBlockEditable( aToRange.aStart.Tab(),
         aToRange.aStart.Col(), aToRange.aStart.Row(),
         aToRange.aEnd.Col(), aToRange.aEnd.Row() );
     if ( bOk )
@@ -2038,8 +2038,8 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     if ( pTrack->IsInDelete() && !pTrack->IsInDeleteTop() )
         return ;        // Formeln nur kompletten Bereich updaten
 
-    sal_Bool bOldFormula = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_FORMULA );
-    sal_Bool bNewFormula = ( pNewCell && pNewCell->GetCellType() == CELLTYPE_FORMULA );
+    bool bOldFormula = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_FORMULA );
+    bool bNewFormula = ( pNewCell && pNewCell->GetCellType() == CELLTYPE_FORMULA );
     if ( bOldFormula || bNewFormula )
     {   // via ScFormulaCell UpdateReference anpassen (dort)
         if ( pTrack->IsInDelete() )
@@ -2405,7 +2405,7 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
         }
         if ( !pBlockModifyMsg )
         {
-            sal_Bool bNew = false;
+            bool bNew = false;
             while ( !aMsgStackFinal.empty() )
             {
                 aMsgQueue.push_back( aMsgStackFinal.top() );
@@ -2827,7 +2827,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     SCROW nRow2;
     SCTAB nTab2;
     rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-    sal_Bool bDoContents;
+    bool bDoContents;
     if ( eClipMode == SC_CACM_PASTE && HasLastCut() )
     {
         bDoContents = false;
@@ -3093,10 +3093,10 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
     // also genau richtig
 
     const ScBigRange& rRange = pAct->GetBigRange();
-    sal_Bool bActNoInsert = !pAct->IsInsertType();
-    sal_Bool bActColDel = ( eActType == SC_CAT_DELETE_COLS );
-    sal_Bool bActRowDel = ( eActType == SC_CAT_DELETE_ROWS );
-    sal_Bool bActTabDel = ( eActType == SC_CAT_DELETE_TABS );
+    bool bActNoInsert = !pAct->IsInsertType();
+    bool bActColDel = ( eActType == SC_CAT_DELETE_COLS );
+    bool bActRowDel = ( eActType == SC_CAT_DELETE_ROWS );
+    bool bActTabDel = ( eActType == SC_CAT_DELETE_TABS );
 
     if ( pLinkInsertCol && (eActType == SC_CAT_INSERT_COLS ||
             (bActNoInsert && !bActRowDel && !bActTabDel)) )
@@ -3400,19 +3400,19 @@ void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool 
 }
 
 
-void ScChangeTrack::UpdateReference( ScChangeAction* pAct, sal_Bool bUndo )
+void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
 {
     ScChangeActionType eActType = pAct->GetType();
     if ( eActType == SC_CAT_CONTENT || eActType == SC_CAT_REJECT )
         return ;
 
     //! Formelzellen haengen nicht im Dokument
-    sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
+    bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );
-    sal_Bool bOldNoListening = pDoc->GetNoListening();
+    bool bOldNoListening = pDoc->GetNoListening();
     pDoc->SetNoListening( true );
     //! Formelzellen ExpandRefs synchronisiert zu denen im Dokument
-    sal_Bool bOldExpandRefs = pDoc->IsExpandRefs();
+    bool bOldExpandRefs = pDoc->IsExpandRefs();
     if ( (!bUndo && pAct->IsInsertType()) || (bUndo && pAct->IsDeleteType()) )
         pDoc->SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
 
@@ -3445,10 +3445,10 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, sal_Bool bUndo )
 
 
 void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
-        ScChangeAction* pAct, sal_Bool bUndo )
+        ScChangeAction* pAct, bool bUndo )
 {
     ScChangeActionType eActType = pAct->GetType();
-    sal_Bool bGeneratedDelContents =
+    bool bGeneratedDelContents =
         ( ppFirstAction == (ScChangeAction**)&pFirstGeneratedDelContent );
     const ScBigRange& rOrgRange = pAct->GetBigRange();
     ScBigRange aRange( rOrgRange );
@@ -3456,7 +3456,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     sal_Int32 nDx, nDy, nDz;
     nDx = nDy = nDz = 0;
     UpdateRefMode eMode = URM_INSDEL;
-    sal_Bool bDel = false;
+    bool bDel = false;
     switch ( eActType )
     {
         case SC_CAT_INSERT_COLS :
@@ -3529,7 +3529,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             {
                 if ( p == pAct )
                     continue;   // for
-                sal_Bool bUpdate = true;
+                bool bUpdate = true;
                 if ( GetMergeState() == SC_CTMS_OTHER &&
                         p->GetActionNumber() <= GetLastMerge() )
                 {   // Delete in mergendem Dokument, Action im zu mergenden
@@ -3742,7 +3742,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             {
                 if ( p == pAct )
                     continue;   // for
-                sal_Bool bUpdate = true;
+                bool bUpdate = true;
                 if ( aDelRange.In( p->GetBigRange() ) )
                 {
                     // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
@@ -3794,7 +3794,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     else if ( eActType == SC_CAT_MOVE )
     {
         ScChangeActionMove* pActMove = (ScChangeActionMove*) pAct;
-        sal_Bool bLastCutMove = ( pActMove == pLastCutMove );
+        bool bLastCutMove = ( pActMove == pLastCutMove );
         const ScBigRange& rTo = pActMove->GetBigRange();
         const ScBigRange& rFrom = pActMove->GetFromRange();
         if ( !bUndo )
@@ -3844,7 +3844,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
         }
         else
         {   // Undo Move
-            sal_Bool bActRejected = pActMove->IsRejected();
+            bool bActRejected = pActMove->IsRejected();
             for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
             {
                 if ( p == pAct )
@@ -4008,8 +4008,8 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
     //! bAllFlat==TRUE: intern aus Accept oder Reject gerufen,
     //! => Generated werden nicht aufgenommen
 
-    sal_Bool bIsDelete = pAct->IsDeleteType();
-    sal_Bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
+    bool bIsDelete = pAct->IsDeleteType();
+    bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
     const ScChangeAction* pCur = NULL;
     ::std::stack<ScChangeAction*> cStack;
@@ -4235,7 +4235,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
 
     if ( pContent->HasDependent() )
     {
-        sal_Bool bOk = true;
+        bool bOk = true;
         ::std::stack<ScChangeActionContent*> aRejectActions;
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
@@ -4380,7 +4380,7 @@ bool ScChangeTrack::Reject(
         OSL_ENSURE( !pMap, "ScChangeTrack::Reject: Delete mit map" );
         ScBigRange aDelRange;
         sal_uLong nRejectAction = pAct->GetActionNumber();
-        sal_Bool bTabDel, bTabDelOk;
+        bool bTabDel, bTabDelOk;
         if ( pAct->GetType() == SC_CAT_DELETE_TABS )
         {
             bTabDel = true;
@@ -4401,7 +4401,7 @@ bool ScChangeTrack::Reject(
             aDelRange = pDel->GetOverAllRange();
             bOk = aDelRange.IsValid( pDoc );
         }
-        sal_Bool bOneOk = false;
+        bool bOneOk = false;
         if ( bOk )
         {
             ScChangeActionType eActType = pAct->GetType();
@@ -4422,7 +4422,7 @@ bool ScChangeTrack::Reject(
                 }
             }
             ScChangeAction* p = pAct;
-            sal_Bool bLoop = true;
+            bool bLoop = true;
             do
             {
                 pDel = (ScChangeActionDel*) p;
