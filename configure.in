@@ -10939,9 +10939,8 @@ $GNUMAKE check
 ATTENTION: Env.Host.sh and Env.Build.sh are no more.
 The environment is now in config_host.mk and config_build.mk (for cross-compile)
 You do not need to source them, even for partial build.
-In order to have 'build' and 'deliver' alias, source build_env instead.
-(you need to do that only once in a session. this is not impacted by
- autogen, clean etc...)
+run: make help
+for details
 
 _EOF
 
