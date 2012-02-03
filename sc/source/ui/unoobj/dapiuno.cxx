@@ -2642,8 +2642,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 {
                     const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                    StrData aStrData( pBaseGroup->GetGroupName() );
-                    if ( !HasString(rItems, aStrData.GetString()) )    //! ignore case?
+                    if (!HasString(rItems, pBaseGroup->GetGroupName()))    //! ignore case?
                     {
                         // add an additional group for each item that is not in the selection
                         ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
