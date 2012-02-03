@@ -210,8 +210,8 @@ void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-        rtl::OStringBuffer aMessage("Failed loading: ");
-        aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
+        //rtl::OStringBuffer aMessage("Failed loading: ");
+        //aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
         ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[nType].nFormatType);
         // use this only if you're sure that all files can be loaded
         // pay attention to lock files
