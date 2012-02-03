@@ -89,7 +89,7 @@ const char * const this_file_name_and_location =" * icc/source/create_sRGB_profi
 const char* const description = "sRGB IEC61966-2.1";
 //const char* const devicemanufact = "IEC http://www.iec.ch"; not used, device manufactured by OOo seems funny...
 const char* const devicemodel = "IEC 61966-2.1 Default RGB colour space - sRGB";
-const char* const copyright = "The Contents of this file are made available subject to the terms of GNU Lesser General Public License version 3";
+const char* const copyright = "Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License.";
 
 // the creation date is fixed, corresponds to the last time this file has been changed
 // NOTE: change this date values whenever the data inside the profile are changed.
