@@ -242,48 +242,51 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             nInvalidEnd = nPos+nNew;
     }
 
-    for (WrongList::iterator i = begin(); i != end(); ++i)
+    for (WrongList::size_type i = 0; i < size(); ++i)
     {
+        WrongRange & rWrong = (*this)[i]; // why does this thing derive vector?
         sal_Bool bRefIsValid = sal_True;
-        if (i->nEnd >= nPos)
+        if (rWrong.nEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if (i->nStart > nPos)
+            if (rWrong.nStart > nPos)
             {
-                i->nStart += nNew;
-                i->nEnd += nNew;
+                rWrong.nStart += nNew;
+                rWrong.nEnd += nNew;
             }
             // 1: Starts before and goes until nPos...
-            else if (i->nEnd == nPos)
+            else if (rWrong.nEnd == nPos)
             {
                 // Should be halted at a blank!
                 if ( !bPosIsSep )
-                    i->nEnd += nNew;
+                    rWrong.nEnd += nNew;
             }
             // 2: Starts before and goes until after nPos...
-            else if (i->nStart < nPos && i->nEnd > nPos)
+            else if ((rWrong.nStart < nPos) && (rWrong.nEnd > nPos))
             {
-                i->nEnd += nNew;
+                rWrong.nEnd += nNew;
                 // When a separator remove and re-examine the Wrong
                 if ( bPosIsSep )
                 {
                     // Split Wrong...
-                    WrongRange aNewWrong(i->nStart, nPos);
-                    i->nStart = nPos + 1;
-                    insert(i, aNewWrong);
-                    bRefIsValid = sal_False;    // Reference no longer valid after Insert, the other was inserted in front of this position
+                    WrongRange aNewWrong(rWrong.nStart, nPos);
+                    rWrong.nStart = nPos + 1;
+                    insert(begin() + i, aNewWrong);
+                    // Reference no longer valid after Insert, the other
+                    // was inserted in front of this position
+                    bRefIsValid = false;
                     ++i; // Not this again...
                 }
             }
             // 3: Attribute starts at position ..
-            else if (i->nStart == nPos)
+            else if (rWrong.nStart == nPos)
             {
-                i->nEnd += nNew;
+                rWrong.nEnd += nNew;
                 if ( bPosIsSep )
-                    ++(i->nStart);
+                    ++(rWrong.nStart);
             }
         }
-        SAL_WARN_IF(bRefIsValid && i->nStart >= i->nEnd, "editeng",
+        SAL_WARN_IF(bRefIsValid && rWrong.nStart >= rWrong.nEnd, "editeng",
                 "TextInserted, WrongRange: Start >= End?!");
         (void)bRefIsValid;
     }
