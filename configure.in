@@ -4951,7 +4951,7 @@ linux-gnu*)
         JAVA_TOOLKIT="server"
         ;;
     *)
-        AC_MSG_ERROR([No JAVALIB defintion host_cpu $host_cpu for host_os $host_os])
+        AC_MSG_ERROR([No JAVALIB definition host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
     ;;
