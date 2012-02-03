@@ -188,7 +188,9 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                 aTrackText += aComStr;
                 aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n( " ));
             }
-            pFound->GetDescription( aTrackText, pDoc );
+            rtl::OUString aTmp;
+            pFound->GetDescription(aTmp, pDoc);
+            aTrackText += String(aTmp);
             if(aComStr.Len()>0)
             {
                 aTrackText +=')';

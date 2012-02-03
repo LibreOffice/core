@@ -392,8 +392,9 @@ public:
                                 // description will be appended to string
                                 // with bSplitRange only one column/row will be considered for delete
                                 // (for a listing of entries)
-    virtual void GetDescription( String&, ScDocument*,
-                                 sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription(
+        rtl::OUString& rStr, ScDocument* pDoc,
+        bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
 
@@ -438,13 +439,13 @@ public:
             const ScChangeActionState eState,
             const sal_uLong nRejectingNumber,
             const ScBigRange& aBigRange,
-            const String& aUser,
+            const rtl::OUString& aUser,
             const DateTime& aDateTime,
-            const String &sComment,
+            const rtl::OUString &sComment,
             const ScChangeActionType eType); // only to use in the XML import
 
-    virtual void                GetDescription( String&, ScDocument*,
-                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
 };
 
 
@@ -567,8 +568,9 @@ public:
     const ScChangeActionIns*    GetCutOffInsert() const { return pCutOff; }
     short               GetCutOffCount() const { return nCutOff; }
 
-    virtual void                GetDescription( String&, ScDocument*,
-                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+
     void                SetCutOffInsert( ScChangeActionIns* p, short n )
                             { pCutOff = p; nCutOff = n; }   // only to use in the XML import
                                                                     // this should be protected, but for the XML import it is public
@@ -642,8 +644,9 @@ public:
     const ScBigRange&   GetFromRange() const { return aFromRange; }
     SC_DLLPUBLIC        void                GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const;
 
-    virtual void                GetDescription( String&, ScDocument*,
-                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false,
+        bool bWarning = true ) const;
 
     virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
 };
@@ -824,8 +827,9 @@ public:
     void GetNewString( rtl::OUString& rStr ) const;
     const ScBaseCell*   GetOldCell() const { return pOldCell; }
     const ScBaseCell*   GetNewCell() const { return pNewCell; }
-    virtual void                GetDescription( String&, ScDocument*,
-                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+
     virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
 
     static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );

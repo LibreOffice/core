@@ -337,23 +337,23 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 
     ScChangeActionType eType=pScChangeAction->GetType();
     String aString;
-    String aDesc;
+    rtl::OUString aDesc;
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if(eType==SC_CAT_CONTENT)
     {
         if(!pScChangeAction->IsDialogParent())
-            pScChangeAction->GetDescription( aDesc, pDoc, true);
+            pScChangeAction->GetDescription(aDesc, pDoc, true);
     }
     else
-        pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
+        pScChangeAction->GetDescription(aDesc, pDoc, !pScChangeAction->IsMasterDelete());
 
-    if(aDesc.Len()>0)
+    if (!aDesc.isEmpty())
     {
         aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment+=aDesc;
-        aComment+=')';
+        aComment += String(aDesc);
+        aComment += ')';
     }
 
     if(pTheView->IsValidEntry(&aUser,&aDateTime,&aComment))
@@ -395,7 +395,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
     String aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
     rtl::OUStringBuffer aBuf;
-    String aDesc;
+    rtl::OUString aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
     pNewData->pData=(void *)pScChangeAction;
@@ -466,11 +466,11 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
-    if(aDesc.Len()>0)
+    if (!aDesc.isEmpty())
     {
         aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment+=aDesc;
-        aComment+=')';
+        aComment += String(aDesc);
+        aComment += ')';
     }
 
     aBuf.append(aComment);
@@ -572,8 +572,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
         String aRefStr;
         ScChangeActionType eType=pScChangeAction->GetType();
         String aString;
-        String aDesc;
-
+        rtl::OUString aDesc;
 
         ScRedlinData* pNewData=new ScRedlinData;
         pNewData->pData=(void *)pScChangeAction;
@@ -638,11 +637,11 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
 
         String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
-        if(aDesc.Len()>0)
+        if (!aDesc.isEmpty())
         {
             aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-            aComment+=aDesc;
-            aComment+=')';
+            aComment += String(aDesc);
+            aComment += ')';
         }
         if(pTheView->IsValidComment(&aComment))
         {

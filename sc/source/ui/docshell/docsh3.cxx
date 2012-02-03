@@ -782,11 +782,11 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
                 pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
              pAction->GetBigRange() == pA->GetBigRange() )
         {
-            String aActionDesc;
-            pAction->GetDescription( aActionDesc, pDoc, sal_True );
-            String aADesc;
-            pA->GetDescription( aADesc, pSearchDoc, sal_True );
-            if ( aActionDesc.Equals( aADesc ) )
+            rtl::OUString aActionDesc;
+            pAction->GetDescription(aActionDesc, pDoc, true);
+            rtl::OUString aADesc;
+            pA->GetDescription(aADesc, pSearchDoc, true);
+            if (aActionDesc.equals(aADesc))
             {
                 OSL_FAIL( "lcl_FindAction(): found equal action!" );
                 return true;

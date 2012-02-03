@@ -497,9 +497,9 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
     if ( pAction && pDoc )
     {
-        String aDesc;
-        pAction->GetDescription( aDesc, pDoc, sal_True, false );
-        aString += aDesc;
+        rtl::OUString aDesc;
+        pAction->GetDescription(aDesc, pDoc, true, false);
+        aString += String(aDesc);
         aString += '\t';
 
         String aUser = comphelper::string::strip(pAction->GetUser(), ' ');

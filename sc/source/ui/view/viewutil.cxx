@@ -173,10 +173,13 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
 
     if ( rSettings.HasComment() )
     {
-        String aComStr=rAction.GetComment();
-        aComStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        rAction.GetDescription( aComStr, &rDocument );
-        aComStr+=')';
+        rtl::OUStringBuffer aBuf(rAction.GetComment());
+        aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+        rtl::OUString aTmp;
+        rAction.GetDescription(aTmp, &rDocument);
+        aBuf.append(aTmp);
+        aBuf.append(sal_Unicode(')'));
+        String aComStr = aBuf.makeStringAndClear();
 
         if(!rSettings.IsValidComment(&aComStr))
             return false;

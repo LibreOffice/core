@@ -454,71 +454,85 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
 }
 
 
-void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
-        sal_Bool /* bSplitRange */, bool bWarning ) const
+void ScChangeAction::GetDescription(
+    rtl::OUString& rStr, ScDocument* /* pDoc */, bool /* bSplitRange */, bool bWarning ) const
 {
-    if ( IsRejecting() && bWarning )
+    if (!IsRejecting() || !bWarning)
+        return;
+
+    // Add comment if rejection may have resulted in references
+    // not properly restored in formulas. See specification at
+    // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
+
+    rtl::OUStringBuffer aBuf(rStr); // Take the original string.
+    if (GetType() == SC_CAT_MOVE)
     {
-        // Add comment if rejection may have resulted in references
-        // not properly restored in formulas. See specification at
-        // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
-        if (GetType() == SC_CAT_MOVE)
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (IsInsertType())
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    const ScChangeTrack* pCT = GetChangeTrack();
+    if (!pCT)
+        return;
+
+    ScChangeAction* pReject = pCT->GetActionOrGenerated(GetRejectAction());
+
+    if (!pReject)
+        return;
+
+    if (pReject->GetType() == SC_CAT_MOVE)
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (pReject->IsDeleteType())
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (pReject->HasDependent())
+    {
+        ScChangeActionMap aMap;
+        pCT->GetDependents( pReject, aMap, false, true );
+        ScChangeActionMap::iterator itChangeAction;
+        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
         {
-            rStr += ScGlobal::GetRscString(
-                    STR_CHANGED_MOVE_REJECTION_WARNING);
-            rStr += ' ';
-        }
-        else if (IsInsertType())
-        {
-            rStr += ScGlobal::GetRscString(
-                    STR_CHANGED_DELETE_REJECTION_WARNING);
-            rStr += ' ';
-        }
-        else
-        {
-            const ScChangeTrack* pCT = GetChangeTrack();
-            if (pCT)
+            if( itChangeAction->second->GetType() == SC_CAT_MOVE)
             {
-                ScChangeAction* pReject = pCT->GetActionOrGenerated(
-                        GetRejectAction());
-                if (pReject)
-                {
-                    if (pReject->GetType() == SC_CAT_MOVE)
-                    {
-                        rStr += ScGlobal::GetRscString(
-                                STR_CHANGED_MOVE_REJECTION_WARNING);
-                        rStr += ' ';
-                    }
-                    else if (pReject->IsDeleteType())
-                    {
-                        rStr += ScGlobal::GetRscString(
-                                STR_CHANGED_DELETE_REJECTION_WARNING);
-                        rStr += ' ';
-                    }
-                    else if (pReject->HasDependent())
-                    {
-                        ScChangeActionMap aMap;
-                        pCT->GetDependents( pReject, aMap, false, true );
-                        ScChangeActionMap::iterator itChangeAction;
-                        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
-                        {
-                            if( itChangeAction->second->GetType() == SC_CAT_MOVE)
-                            {
-                                rStr += ScGlobal::GetRscString(
-                                        STR_CHANGED_MOVE_REJECTION_WARNING);
-                                rStr += ' ';
-                                break;  // for
-                            }
-                            else if (pReject->IsDeleteType())
-                            {
-                                rStr += ScGlobal::GetRscString(
-                                        STR_CHANGED_DELETE_REJECTION_WARNING);
-                                rStr += ' ';
-                                break;  // for
-                            }
-                        }
-                    }
-                }
+                aBuf.append(
+                    ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+                aBuf.append(sal_Unicode(' '));
+                rStr = aBuf.makeStringAndClear();
+                return;
+            }
+
+            if (pReject->IsDeleteType())
+            {
+                aBuf.append(
+                    ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+                aBuf.append(sal_Unicode(' '));
+                rStr = aBuf.makeStringAndClear();
+                return;
             }
         }
     }
@@ -724,11 +738,12 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
 }
 
 
-ScChangeActionIns::ScChangeActionIns(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                                const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String& sComment,
-                                                const ScChangeActionType eTypeP)
-        :
-        ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
+ScChangeActionIns::ScChangeActionIns(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
+    const rtl::OUString& sComment, const ScChangeActionType eTypeP) :
+    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
 }
 
@@ -736,9 +751,8 @@ ScChangeActionIns::~ScChangeActionIns()
 {
 }
 
-
-void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionIns::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -755,15 +769,22 @@ void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
             nWhatId = STR_AREA;
     }
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_INSERT ) );
-    xub_StrLen nPos = aRsc.SearchAscii( "#1" );
-    rStr += aRsc.Copy( 0, nPos );
-    rStr += ScGlobal::GetRscString( nWhatId );
-    rStr += ' ';
-    rStr += GetRefString( GetBigRange(), pDoc );
-    rStr += aRsc.Copy( nPos+2 );
-}
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        // Construct a range string to replace '#1' first.
+        rtl::OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(GetRefString(GetBigRange(), pDoc));
+        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
 
+        aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
+
+        aBuf.append(rStr).append(aRsc);
+        rStr = aBuf.makeStringAndClear();
+    }
+}
 
 bool ScChangeActionIns::Reject( ScDocument* pDoc )
 {
@@ -974,8 +995,8 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
 }
 
 
-void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionDel::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -1004,13 +1025,21 @@ void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
         aTmpRange.aEnd.SetRow( aTmpRange.aEnd.Row() + GetDy() );
     }
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_DELETE ) );
-    xub_StrLen nPos = aRsc.SearchAscii( "#1" );
-    rStr += aRsc.Copy( 0, nPos );
-    rStr += ScGlobal::GetRscString( nWhatId );
-    rStr += ' ';
-    rStr += GetRefString( aTmpRange, pDoc );
-    rStr += aRsc.Copy( nPos+2 );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        // Build a string to replace with.
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(ScGlobal::GetRscString(nWhatId));
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(GetRefString(aTmpRange, pDoc));
+        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
+        aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
+
+        aBuf.append(rStr).append(aRsc);
+        rStr = aBuf.makeStringAndClear(); // append to the original.
+    }
 }
 
 
@@ -1225,29 +1254,34 @@ void ScChangeActionMove::GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nD
 }
 
 
-void ScChangeActionMove::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionMove::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    sal_Bool bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
+    bool bFlag3D = GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab();
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_MOVE ) );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
 
-    xub_StrLen nPos = 0;
-    String aTmpStr = ScChangeAction::GetRefString( GetFromRange(), pDoc, bFlag3D );
-    nPos = aRsc.SearchAscii( "#1", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+    rtl::OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
-    aTmpStr = ScChangeAction::GetRefString( GetBigRange(), pDoc, bFlag3D );
-    nPos = aRsc.SearchAscii( "#2", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+    aTmpStr = ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D);
+    nPos = aRsc.indexOfAsciiL("#2", 2, nPos);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
-    rStr += aRsc;
+    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    aBuf.append(aRsc);
+    rStr = aBuf.makeStringAndClear();
 }
 
 
@@ -1505,8 +1539,8 @@ void ScChangeActionContent::GetNewString( rtl::OUString& rStr ) const
 }
 
 
-void ScChangeActionContent::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionContent::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -1547,7 +1581,9 @@ void ScChangeActionContent::GetDescription( String& rStr, ScDocument* pDoc,
         nPos += aTmpStr.getLength();
     }
 
-    rStr += String(aRsc);
+    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    aBuf.append(aRsc);
+    rStr = aBuf.makeStringAndClear();
 }
 
 
