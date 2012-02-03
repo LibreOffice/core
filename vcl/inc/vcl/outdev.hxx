@@ -1196,7 +1196,7 @@ public:
                                                 const ImplControlValue& aValue,
                                                 ::rtl::OUString aCaption,
                                                 Rectangle &rNativeBoundingRegion,
-                                                Rectangle &rNativeContentRegion );
+                                                Rectangle &rNativeContentRegion ) const;
 
 };
 

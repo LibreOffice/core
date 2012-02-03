@@ -194,7 +194,7 @@ sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
 
 // -----------------------------------------------------------------------
 
-static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, OutputDevice& rDev )
+static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
     boost::shared_ptr< ImplControlValue > aResult;
     switch( rVal.getType() )
@@ -321,7 +321,7 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 const ImplControlValue& aValue,
                                 ::rtl::OUString aCaption,
                                 Rectangle &rNativeBoundingRegion,
-                                Rectangle &rNativeContentRegion )
+                                Rectangle &rNativeContentRegion ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
         return sal_False;
