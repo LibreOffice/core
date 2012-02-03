@@ -69,7 +69,6 @@
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
@@ -650,12 +649,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
-static const ::rtl::OUString& getProductRegistrationServiceName( )
-{
-    static ::rtl::OUString s_sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.setup.ProductRegistration" );
-    return s_sServiceName;
-}
-
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, sal_Bool, rtl_uString*);
 typedef void (SAL_CALL *basicide_macro_organizer)( sal_Int16 );
 
@@ -893,30 +886,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             break;
         }
-
-        case SID_ONLINE_REGISTRATION:
-        {
-            try
-            {
-                // create the ProductRegistration component
-                Reference< com::sun::star::lang::XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-                Reference< com::sun::star::task::XJobExecutor > xProductRegistration;
-                if ( xORB.is() )
-                    xProductRegistration = xProductRegistration.query( xORB->createInstance( getProductRegistrationServiceName() ) );
-                DBG_ASSERT( xProductRegistration.is(), "OfficeApplication::ExecuteApp_Impl: could not create the service!" );
-
-                // tell it that the user wants to register
-                if ( xProductRegistration.is() )
-                {
-                    xProductRegistration->trigger( ::rtl::OUString::createFromAscii( "RegistrationRequired" ) );
-                }
-            }
-            catch( const ::com::sun::star::uno::Exception& )
-            {
-                DBG_ERROR( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
-            }
-        }
-        break;
 
         case SID_BASICIDE_APPEAR:
         {
@@ -1235,25 +1204,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 {
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
-    while ( *pRanges )
-    {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
-        {
-            switch(nWhich)
-            {
-                case SID_ONLINE_REGISTRATION:
-                {
-                    ::utl::RegOptions aOptions;
-                    if ( !aOptions.allowMenu() )
-                        rSet.DisableItem( SID_ONLINE_REGISTRATION );
-                }
-                break;
-            }
-        }
-    }
-
     SvtModuleOptions aModuleOpt;
 
     if( !aModuleOpt.IsWriter())

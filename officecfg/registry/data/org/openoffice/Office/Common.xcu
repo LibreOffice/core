@@ -134,19 +134,6 @@
             <value>${STARTCENTER_LAYOUT_STYLE}</value>
         </prop>
     </node>
-    <node oor:name="Registration">
-      <prop oor:name="TemplateURL">
-        <value/>
-      </prop>
-      <prop oor:name="URL" install:module="brand">
-        <value>${REGISTRATIONURL}</value>
-      </prop>
-      <prop oor:name="ReminderDate">
-        <value>Patch</value>
-      </prop>
-      <node oor:name="ProductVersions">
-      </node>
-    </node>
     <prop oor:name="System">
       <value install:module="unx">UNIX</value>
       <value install:module="macosx">MAC</value>

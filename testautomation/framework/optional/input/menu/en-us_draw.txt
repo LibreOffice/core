@@ -150,7 +150,6 @@ StarOffice ~Help
 What's ~This?
 
 ~Support
-~Registration...
 
 Check for ~Updates...
 

@@ -795,7 +795,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CheckAndAddMenuExtension" );
-    static const char REFERENCECOMMAND_AFTER[]          = ".uno:OnlineRegistrationDlg";
+    static const char REFERENCECOMMAND_AFTER[]          = ".uno:HelpSupport";
     static const char REFERENCECOMMAND_BEFORE[]         = ".uno:About";
 
     // retrieve menu extension item

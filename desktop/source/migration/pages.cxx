@@ -36,7 +36,6 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/regoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <comphelper/processfactory.hxx>

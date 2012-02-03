@@ -13,7 +13,7 @@ dt	desktop\win32\source					nmake	-	w	dt_wrapper dt_inc NULL
 dt	desktop\win32\source\setup				nmake	-	w	dt_setup dt_inc NULL
 dt	desktop\win32\source\officeloader		nmake	-	w	dt_officeloader dt_inc NULL
 dt	desktop\win32\source\guiloader			nmake	-	w	dt_guiloader dt_wrapper.w dt_inc NULL
-dt  desktop\win32\source\guistdio           nmake   -   w   dt_guistdio dt_inc NULL
+dt  	desktop\win32\source\guistdio           nmake   -   w   dt_guistdio dt_inc NULL
 dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher dt_inc NULL
 dt	desktop\win32\source\applauncher\ooo	nmake	-	w	dt_applauncher_ooo dt_applauncher.w dt_inc NULL
 dt	desktop\win32\source\rebase				nmake	-	w	dt_rebase dt_inc NULL
@@ -40,11 +40,8 @@ dt	desktop\source\deployment\registry\executable		nmake	-	all	dt_dp_registry_exe
 dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
 dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_so_comp dt_spl dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w dt_win32_quickstart_so.w NULL
 dt	desktop\zipintro							nmake	-	all	dt_zipintro NULL
-dt  desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
-dt  desktop\source\registration\com\sun\star\servicetag\resources   get     -  all sn_svctagres NULL
-dt  desktop\source\registration\com\sun\star\servicetag             nmake   -  all sn_svctag NULL
-dt  desktop\source\registration\com\sun\star\registration           nmake   -  all sn_regjob sn_svctag NULL
-dt desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL
-dt desktop\test\deployment\active nmake - all dt_test_deployment_active NULL
-dt desktop\test\deployment\boxt nmake - all dt_test_deployment_boxt NULL
-dt desktop\test\deployment\passive nmake - all dt_test_deployment_passive NULL
+dt  	desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
+dt 	desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL
+dt 	desktop\test\deployment\active nmake - all dt_test_deployment_active NULL
+dt 	desktop\test\deployment\boxt nmake - all dt_test_deployment_boxt NULL
+dt 	desktop\test\deployment\passive nmake - all dt_test_deployment_passive NULL

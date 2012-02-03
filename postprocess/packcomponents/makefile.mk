@@ -64,7 +64,6 @@ my_components = \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
     component/svtools/source/hatchwindow/hatchwindowfactory \
-    component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
     component/svx/util/svx \
     component/svx/util/svxcore \
@@ -250,10 +249,6 @@ my_components += kde4be1
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"
 my_components += ogltrans
-.END
-
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-my_components += productregistration.jar
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"

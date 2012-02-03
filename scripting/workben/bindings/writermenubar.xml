@@ -273,7 +273,6 @@
    <menu:menuitem menu:id="slot:5403" menu:helpid="5403" menu:label="~Extended Tips"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:6683" menu:helpid="6683" menu:label="~Support"/>
-   <menu:menuitem menu:id="slot:6537" menu:helpid="6537" menu:label="~Registration..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5301" menu:helpid="5301" menu:label="A~bout OpenOffice.org..."/>
   </menu:menupopup>

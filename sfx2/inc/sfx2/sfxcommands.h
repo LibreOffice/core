@@ -304,7 +304,6 @@
 #define CMD_SID_ADDONHELP                           ".uno:AddonHelp"
 #define CMD_SID_FORMATMENUSTATE                     ".uno:FormatMenuState"
 #define CMD_SID_INET_DLG                            ".uno:InternetDialog"
-#define CMD_SID_ONLINE_REGISTRATION                 ".uno:OnlineRegistrationDlg"
 #define CMD_SID_OFFICE_CHECK_PLZ                    ".uno:CheckPLZ"
 #define CMD_SID_ADDRESS_DATA_SOURCE                 ".uno:AutoPilotAddressDataSource"
 #define CMD_FN_BUSINESS_CARD                        ".uno:InsertBusinessCard"

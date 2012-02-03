@@ -64,8 +64,6 @@ STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
 
 STD_RES_FILE( gid_File_Res_Preload, preload)
 
-STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
-
 #ifdef UNX
 
 STD_RES_FILE( gid_File_Res_San, san )

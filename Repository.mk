@@ -124,7 +124,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
     hatchwindowfactory \
     passwordcontainer \
-    productregistration \
     vbaswobj \
     msforms \
 ))

@@ -286,7 +286,7 @@ QueryBox RID_SVXQB_CHANGEDATA
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
+    Message [ en-US ] = "The User Data have been changed.\nDo you really want to change your User Data?";
 };
 
  // ********************************************************************** EOF

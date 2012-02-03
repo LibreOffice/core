@@ -24,13 +24,11 @@
 $(eval $(call gb_Module_Module,svtools))
 
 $(eval $(call gb_Module_add_targets,svtools,\
-    AllLangResTarget_productregistration \
     AllLangResTarget_svt \
     Executable_bmp \
     Executable_bmpsum \
     Executable_g2g \
     Library_hatchwindowfactory \
-    Library_productregistration \
     Library_svt \
     Package_inc \
 ))

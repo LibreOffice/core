@@ -24,11 +24,6 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Jobs">
-    <node oor:name="RegistrationRequest" oor:op="replace">
-      <prop oor:name="Service">
-        <value>com.sun.star.setup.ProductRegistration</value>
-      </prop>
-    </node>
   </node>
   <node oor:name="Events">
     <node oor:name="onFirstVisibleTask" oor:op="fuse">
