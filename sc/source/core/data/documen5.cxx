@@ -680,16 +680,6 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
-bool lcl_StringInCollection( const ScStrCollection* pColl, const rtl::OUString& rStr )
-{
-    if ( !pColl )
-        return false;
-
-    StrData aData( rStr );
-    sal_uInt16 nDummy;
-    return pColl->Search( &aData, nDummy );
-}
-
 void ScDocument::UpdateChartListenerCollection()
 {
     OSL_ASSERT(pChartListenerCollection);
