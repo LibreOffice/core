@@ -2732,7 +2732,7 @@ linux-gnu*)
         CPUNAME=AXP
         OUTPATH=unxlngaxp
         ;;
-    armel)
+    arm*)
         CPU=R
         CPUNAME=ARM
         OUTPATH=unxlngr
@@ -4872,7 +4872,7 @@ linux-gnu*)
         JAVA_ARCH="alpha"
         JAVA_TOOLKIT="server"
         ;;
-    arm)
+    arm*)
         JAVA_ARCH="arm"
         JAVA_TOOLKIT="server"
         ;;
