@@ -63,6 +63,7 @@
 #include "subtotalparam.hxx"
 
 #include <vector>
+#include <boost/unordered_set.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1763,8 +1764,8 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    ScStrCollection aScStrCollection;
-    StrData*        pStrData = NULL;
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    StrSetType aStrSet;
 
     bool    bStarted = false;
     bool    bOldResult = true;
@@ -1813,26 +1814,20 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                 bResult = true;
             else
             {
-                String aStr;
+                rtl::OUString aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
                     rtl::OUString aCellStr;
                     GetString(k, j, aCellStr);
-                    aStr += aCellStr;
-                    aStr += (sal_Unicode)1;
+                    rtl::OUStringBuffer aBuf(aStr);
+                    aBuf.append(aCellStr);
+                    aBuf.append(static_cast<sal_Unicode>(1));
+                    aStr = aBuf.makeStringAndClear();
                 }
-                pStrData = new StrData(aStr);
 
-                bool bIsUnique = true;
-                if (pStrData)
-                    bIsUnique = aScStrCollection.Insert(pStrData);
-                if (bIsUnique)
-                    bResult = true;
-                else
-                {
-                    delete pStrData;
-                    bResult = false;
-                }
+                std::pair<StrSetType::iterator, bool> r = aStrSet.insert(aStr);
+                bool bIsUnique = r.second; // unique if inserted.
+                bResult = bIsUnique;
             }
         }
         else
