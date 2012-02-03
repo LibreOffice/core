@@ -52,9 +52,9 @@ namespace drawinglayer
         rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
         // mirror flags
-        aAttributes.SetMirrorFlags(
-            (basegfx::fTools::less(aScale.getX(), 0.0) ? BMP_MIRROR_HORZ : 0)|
-            (basegfx::fTools::less(aScale.getY(), 0.0) ? BMP_MIRROR_VERT : 0));
+        const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
+        const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+        aAttributes.SetMirrorFlags((bMirrorX ? BMP_MIRROR_HORZ : 0)|(bMirrorY ? BMP_MIRROR_VERT : 0));
 
         // rotation
         if(!basegfx::fTools::equalZero(fRotate))
@@ -73,9 +73,13 @@ namespace drawinglayer
         else
         {
             // if rotated, create the unrotated output rectangle for the GraphicManager paint
-            const basegfx::B2DHomMatrix aSimpleObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
-                fabs(aScale.getX()), fabs(aScale.getY()),
-                aTranslate.getX(), aTranslate.getY()));
+            // #118824# Caution! When mirrored, adapt transformation accordingly
+            const basegfx::B2DHomMatrix aSimpleObjectMatrix(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    fabs(aScale.getX()),
+                    fabs(aScale.getY()),
+                    bMirrorX ? aTranslate.getX() - fabs(aScale.getX()): aTranslate.getX(),
+                    bMirrorY ? aTranslate.getY() - fabs(aScale.getY()): aTranslate.getY()));
 
             aOutlineRange.transform(aSimpleObjectMatrix);
         }
