@@ -47,17 +47,24 @@ class ScOutlineEntry : public ScDataObject
     bool        bVisible;
 
 public:
-                            ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
-                                                bool bNewHidden = false );
-                            ScOutlineEntry( const ScOutlineEntry& rEntry );
+    ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden = false );
+    ScOutlineEntry( const ScOutlineEntry& rEntry );
 
     virtual ScDataObject*       Clone() const;
 
-    SCCOLROW                GetStart() const    { return nStart; }
-    SCSIZE                  GetSize() const     { return nSize; }
-    SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    bool                    IsHidden() const    { return bHidden; }             // group hidden
-    bool                    IsVisible() const   { return bVisible; }            // control visible?
+    SCCOLROW GetStart() const;
+    SCSIZE GetSize() const;
+    SC_DLLPUBLIC SCCOLROW GetEnd() const;
+
+    /**
+     * @return true is the group is hidden, false otherwise.
+     */
+    SC_DLLPUBLIC bool IsHidden() const;
+
+    /**
+     * @return true if the control is visible, false otherwise.
+     */
+    bool IsVisible() const;
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -65,7 +72,6 @@ public:
     void                    SetHidden( bool bNewHidden );
     void                    SetVisible( bool bNewVisible );
 };
-
 
 class ScOutlineCollection : public ScSortedCollection
 {

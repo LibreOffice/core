@@ -65,6 +65,30 @@ ScDataObject* ScOutlineEntry::Clone() const
     return new ScOutlineEntry( *this );
 }
 
+SCCOLROW ScOutlineEntry::GetStart() const
+{
+    return nStart;
+}
+
+SCSIZE ScOutlineEntry::GetSize() const
+{
+    return nSize;
+}
+
+SCCOLROW ScOutlineEntry::GetEnd() const
+{
+    return nStart+nSize-1;
+}
+bool ScOutlineEntry::IsHidden() const
+{
+    return bHidden;
+}
+
+bool ScOutlineEntry::IsVisible() const
+{
+    return bVisible;
+}
+
 void ScOutlineEntry::Move( SCsCOLROW nDelta )
 {
     SCCOLROW nNewPos = nStart + nDelta;
