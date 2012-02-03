@@ -165,10 +165,10 @@ copy-stuff:
 
 
 build-ant: copy-stuff
-	unset JAVA_HOME && ant debug
+	unset JAVA_HOME && $ANT debug
 
 install: copy-stuff
-	unset JAVA_HOME && ant debug install
+	unset JAVA_HOME && $ANT debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
@@ -199,6 +199,6 @@ redirect-stdio:
 	adb shell stop && adb shell setprop log.redirect-stdio true && adb shell start
 
 clean:
-	ant clean
+	$ANT clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
 

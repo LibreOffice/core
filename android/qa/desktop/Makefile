@@ -235,11 +235,11 @@ copy-stuff: buildrcs
 
 
 build-ant: copy-stuff
-	unset JAVA_HOME && ant debug
+	unset JAVA_HOME && $ANT debug
 
 install: copy-stuff
 	adb shell rm -r $(APP_DATA_PATH)
-	unset JAVA_HOME && ant debug install
+	unset JAVA_HOME && $ANT debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
@@ -260,6 +260,6 @@ stop-start-cycle:
 	adb shell stop && adb shell start && sleep 10
 
 clean:
-	ant clean
+	$ANT clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
 
