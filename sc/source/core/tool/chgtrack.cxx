@@ -617,7 +617,7 @@ void ScChangeAction::SetComment( const rtl::OUString& rStr )
 }
 
 void ScChangeAction::GetRefString(
-    String& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     rStr = GetRefString( GetBigRange(), pDoc, bFlag3D );
 }
@@ -1289,14 +1289,17 @@ void ScChangeActionMove::GetDescription(
 
 
 void ScChangeActionMove::GetRefString(
-    String& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     if ( !bFlag3D )
         bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
-    rStr = ScChangeAction::GetRefString( GetFromRange(), pDoc, bFlag3D );
-    rStr += ',';
-    rStr += ' ';
-    rStr += ScChangeAction::GetRefString( GetBigRange(), pDoc, bFlag3D );
+
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D));
+    aBuf.append(sal_Unicode(','));
+    aBuf.append(sal_Unicode(' '));
+    aBuf.append(ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D));
+    rStr = aBuf.makeStringAndClear(); // overwrite existing string value.
 }
 
 
@@ -1493,7 +1496,7 @@ void ScChangeActionContent::SetNewCell(
     pNewCell = pCell;
     ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 
-    // #i40704# allow to set formatted text here - don't call SetNewValue with String from XML filter
+    // #i40704# allow to set formatted text here - don't call SetNewValue with string from XML filter
     if (!rFormatted.isEmpty())
         aNewValue = rFormatted;
 }
@@ -1551,9 +1554,7 @@ void ScChangeActionContent::GetDescription(
     rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_CELL);
 
     rtl::OUString aTmpStr;
-    String aFoo;
-    GetRefString(aFoo, pDoc);
-    aTmpStr = aFoo;
+    GetRefString(aTmpStr, pDoc);
 
     sal_Int32 nPos = 0;
     nPos = aRsc.indexOfAsciiL("#1", 2, nPos);
@@ -1592,7 +1593,7 @@ void ScChangeActionContent::GetDescription(
 
 
 void ScChangeActionContent::GetRefString(
-    String& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     sal_uInt16 nFlags = ( GetBigRange().IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( nFlags )
@@ -1617,8 +1618,12 @@ void ScChangeActionContent::GetRefString(
         aTmpAddress.Format( rStr, nFlags, pDoc, pDoc->GetAddressConvention() );
         if ( IsDeletedIn() )
         {
-            rStr.Insert( '(', 0 );
-            rStr += ')';
+            // Insert the parentheses.
+            rtl::OUStringBuffer aBuf;
+            aBuf.append(sal_Unicode('('));
+            aBuf.append(rStr);
+            aBuf.append(sal_Unicode(')'));
+            rStr = aBuf.makeStringAndClear();
         }
     }
     else
@@ -2340,10 +2345,11 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
         const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
         size_t nOldCount = maUserCollection.size();
 
-        String aStr( rUserOptions.GetFirstName() );
-        aStr += ' ';
-        aStr += (String)rUserOptions.GetLastName();
-        SetUser( aStr );
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(rUserOptions.GetFirstName());
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(rUserOptions.GetLastName());
+        SetUser(aBuf.makeStringAndClear());
 
         if ( maUserCollection.size() != nOldCount )
         {

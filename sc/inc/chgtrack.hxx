@@ -396,7 +396,8 @@ public:
         rtl::OUString& rStr, ScDocument* pDoc,
         bool bSplitRange = false, bool bWarning = true ) const;
 
-    virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
+    virtual void GetRefString(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
                         // for DocumentMerge set old date of the other
                         // action, fetched by GetDateTimeUTC
@@ -644,7 +645,8 @@ public:
         rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false,
         bool bWarning = true ) const;
 
-    virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
+    virtual void GetRefString(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 };
 
 
@@ -814,7 +816,7 @@ public:
                             { pPrevContent = p; }
 
     // don't use:
-    // assigns String / creates forumula cell
+    // assigns string / creates forumula cell
     void SetOldValue( const rtl::OUString& rOld, ScDocument* pDoc );
     void SetNewValue( const rtl::OUString& rNew, ScDocument* pDoc );
 
@@ -825,7 +827,8 @@ public:
     virtual void GetDescription(
         rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
 
-    virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
+    virtual void GetRefString(
+        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
     static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );
 
@@ -1173,8 +1176,8 @@ public:
                                     sal_uLong nOldFormat = 0,
                                     sal_uLong nNewFormat = 0 );
 
-                                // Only use the following two if there is no different solution!
-                                // (Assign String for NewValue or creation of a formula respectively)
+    // Only use the following two if there is no different solution! (Assign
+    // string for NewValue or creation of a formula respectively)
 
     SC_DLLPUBLIC void AppendInsert( const ScRange& );
 

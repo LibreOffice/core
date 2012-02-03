@@ -392,7 +392,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
     String aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    String aRefStr;
+    rtl::OUString aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
     rtl::OUStringBuffer aBuf;
     rtl::OUString aDesc;
@@ -569,7 +569,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
     if(bFlag)
     {
 
-        String aRefStr;
+        rtl::OUString aRefStr;
         ScChangeActionType eType=pScChangeAction->GetType();
         String aString;
         rtl::OUString aDesc;
@@ -688,7 +688,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
             bFlag=true;
     }
 
-    String aRefStr;
+    rtl::OUString aRefStr;
     String aString;
     String a2String;
     String aDesc;
