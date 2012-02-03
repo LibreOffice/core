@@ -533,16 +533,12 @@ class ScChangeActionDel : public ScChangeAction
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
 public:
-    ScChangeActionDel(const sal_uLong nActionNumber,
-                    const ScChangeActionState eState,
-                    const sal_uLong nRejectingNumber,
-                    const ScBigRange& aBigRange,
-                    const String& aUser,
-                    const DateTime& aDateTime,
-                    const String &sComment,
-                    const ScChangeActionType eType,
-                    const SCsCOLROW nD,
-                    ScChangeTrack* pTrack); // only to use in the XML import
+    ScChangeActionDel(
+        const sal_uLong nActionNumber, const ScChangeActionState eState,
+        const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
+        const rtl::OUString& aUser, const DateTime& aDateTime,
+        const rtl::OUString &sComment, const ScChangeActionType eType,
+        const SCsCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
                                             // which of nDx and nDy is set is dependend on the type
 
     // is the last in a row (or single)
@@ -632,9 +628,9 @@ public:
                     const ScChangeActionState eState,
                     const sal_uLong nRejectingNumber,
                     const ScBigRange& aToBigRange,
-                    const String& aUser,
+                    const rtl::OUString& aUser,
                     const DateTime& aDateTime,
-                    const String &sComment,
+                    const rtl::OUString &sComment,
                     const ScBigRange& aFromBigRange,
                     ScChangeTrack* pTrack); // only to use in the XML import
 
@@ -743,8 +739,9 @@ class ScChangeActionContent : public ScChangeAction
     bool Select( ScDocument*, ScChangeTrack*,
                  bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions );
 
-    void                PutValueToDoc( ScBaseCell*, const String&,
-                            ScDocument*, SCsCOL nDx, SCsROW nDy ) const;
+    void PutValueToDoc(
+        ScBaseCell* pCell, const rtl::OUString& rValue, ScDocument* pDoc,
+        SCsCOL nDx, SCsROW nDy ) const;
 
 protected:
     using ScChangeAction::GetRefString;
@@ -762,21 +759,18 @@ public:
             pNextInSlot( NULL ),
             ppPrevInSlot( NULL )
         {}
-    ScChangeActionContent(const sal_uLong nActionNumber,
-                    const ScChangeActionState eState,
-                    const sal_uLong nRejectingNumber,
-                    const ScBigRange& aBigRange,
-                    const String& aUser,
-                    const DateTime& aDateTime,
-                    const String &sComment,
-                    ScBaseCell* pOldCell,
-                    ScDocument* pDoc,
-                    const String& sOldValue); // to use for XML Import
-    ScChangeActionContent(const sal_uLong nActionNumber,
-                    ScBaseCell* pNewCell,
-                    const ScBigRange& aBigRange,
-                    ScDocument* pDoc,
-                    const String& sNewValue); // to use for XML Import of Generated Actions
+    ScChangeActionContent(
+        const sal_uLong nActionNumber,  const ScChangeActionState eState,
+        const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
+        const rtl::OUString& aUser, const DateTime& aDateTime,
+        const rtl::OUString &sComment, ScBaseCell* pOldCell,
+        ScDocument* pDoc, const rtl::OUString& sOldValue); // to use for XML Import
+
+    ScChangeActionContent(
+        const sal_uLong nActionNumber, ScBaseCell* pNewCell,
+        const ScBigRange& aBigRange, ScDocument* pDoc,
+        const rtl::OUString& sNewValue); // to use for XML Import of Generated Actions
+
     virtual ~ScChangeActionContent();
 
     ScChangeActionContent*  GetNextContent() const { return pNextContent; }
@@ -807,9 +801,10 @@ public:
                             sal_uLong nOldFormat, ScBaseCell* pNewCell,
                             sal_uLong nNewFormat, ScDocument* pDoc );
 
-                        // Use this only in the XML import,
-                        // takes ownership of cell.
-    void                SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted );
+    // Use this only in the XML import,
+    // takes ownership of cell.
+    void SetNewCell(
+        ScBaseCell* pCell, ScDocument* pDoc, const rtl::OUString& rFormatted );
 
                         // These functions should be protected but for
                         // the XML import they are public.
@@ -869,9 +864,9 @@ public:
                     const ScChangeActionState eState,
                     const sal_uLong nRejectingNumber,
                     const ScBigRange& aBigRange,
-                    const String& aUser,
+                    const rtl::OUString& aUser,
                     const DateTime& aDateTime,
-                    const String &sComment); // only to use in the XML import
+                    const rtl::OUString &sComment); // only to use in the XML import
 };
 
 
@@ -1266,8 +1261,8 @@ public:
     sal_uInt16              GetLoadedFileFormatVersion() const
                             { return nLoadedFileFormatVersion; }
 
-    sal_uLong               AddLoadedGenerated(ScBaseCell* pOldCell,
-                                        const ScBigRange& aBigRange, const String& sNewValue ); // only to use in the XML import
+    sal_uLong AddLoadedGenerated(
+        ScBaseCell* pOldCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue ); // only to use in the XML import
     void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import

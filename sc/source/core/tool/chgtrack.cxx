@@ -858,18 +858,19 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
 }
 
 
-ScChangeActionDel::ScChangeActionDel(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                    const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
-        :
-        ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-        pTrack( pTrackP ),
-        pFirstCell( NULL ),
-        pCutOff( NULL ),
-        nCutOff( 0 ),
-        pLinkMove( NULL ),
-        nDx( 0 ),
-        nDy( 0 )
+ScChangeActionDel::ScChangeActionDel(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP, const rtl::OUString &sComment,
+    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
+    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
+    pTrack( pTrackP ),
+    pFirstCell( NULL ),
+    pCutOff( NULL ),
+    nCutOff( 0 ),
+    pLinkMove( NULL ),
+    nDx( 0 ),
+    nDy( 0 )
 {
     if (eType == SC_CAT_DELETE_COLS)
         nDx = static_cast<SCsCOL>(nD);
@@ -1202,16 +1203,18 @@ void ScChangeActionDel::UndoCutOffInsert()
 
 // --- ScChangeActionMove --------------------------------------------------
 
-ScChangeActionMove::ScChangeActionMove(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                    const ScBigRange& aToBigRange, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScBigRange& aFromBigRange, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
-        :
-        ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-        aFromRange(aFromBigRange),
-        pTrack( pTrackP ),
-        pFirstCell( NULL ),
-        nStartLastCut(0),
-        nEndLastCut(0)
+ScChangeActionMove::ScChangeActionMove(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aToBigRange,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
+    const rtl::OUString &sComment, const ScBigRange& aFromBigRange,
+    ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
+    ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
+    aFromRange(aFromBigRange),
+    pTrack( pTrackP ),
+    pFirstCell( NULL ),
+    nStartLastCut(0),
+    nEndLastCut(0)
 {
 }
 
@@ -1365,9 +1368,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-            const ScBigRange& aBigRangeP, const String& aUserP,
-            const DateTime& aDateTimeP, const String& sComment,
-            ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sOldValue )
+            const ScBigRange& aBigRangeP, const rtl::OUString& aUserP,
+            const DateTime& aDateTimeP, const rtl::OUString& sComment,
+            ScBaseCell* pTempOldCell, ScDocument* pDoc, const rtl::OUString& sOldValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
         aOldValue(sOldValue),
@@ -1381,13 +1384,13 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 {
     if (pOldCell)
         ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
-    if ( sOldValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+    if (!sOldValue.isEmpty())     // #i40704# don't overwrite SetCell result with empty string
         aOldValue = sOldValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             ScBaseCell* pTempNewCell, const ScBigRange& aBigRangeP,
-            ScDocument* pDoc, const String& sNewValue )
+            ScDocument* pDoc, const rtl::OUString& sNewValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber),
         aNewValue(sNewValue),
@@ -1400,7 +1403,7 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 {
     if (pNewCell)
         ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
-    if ( sNewValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+    if (!sNewValue.isEmpty())     // #i40704# don't overwrite SetCell result with empty string
         aNewValue = sNewValue; // set again, because SetCell removes it
 }
 
@@ -1483,14 +1486,15 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
     ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
 }
 
-void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted )
+void ScChangeActionContent::SetNewCell(
+    ScBaseCell* pCell, ScDocument* pDoc, const rtl::OUString& rFormatted )
 {
     OSL_ENSURE( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
     ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 
     // #i40704# allow to set formatted text here - don't call SetNewValue with String from XML filter
-    if ( rFormatted.Len() )
+    if (!rFormatted.isEmpty())
         aNewValue = rFormatted;
 }
 
@@ -1920,15 +1924,16 @@ void ScChangeActionContent::PutNewValueToDoc( ScDocument* pDoc,
 }
 
 
-void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
-        const String& rValue, ScDocument* pDoc, SCsCOL nDx, SCsROW nDy ) const
+void ScChangeActionContent::PutValueToDoc(
+    ScBaseCell* pCell, const rtl::OUString& rValue, ScDocument* pDoc,
+    SCsCOL nDx, SCsROW nDy ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( nDx )
         aPos.IncCol( nDx );
     if ( nDy )
         aPos.IncRow( nDy );
-    if ( !rValue.Len() )
+    if (rValue.isEmpty())
     {
         if ( pCell )
         {
@@ -2162,10 +2167,12 @@ bool ScChangeActionContent::IsOldMatrixReference() const
 
 // --- ScChangeActionReject ------------------------------------------------
 
-ScChangeActionReject::ScChangeActionReject(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                                const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String& sComment)
-        :
-        ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
+ScChangeActionReject::ScChangeActionReject(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber,
+    const ScBigRange& aBigRangeP, const rtl::OUString& aUserP,
+    const DateTime& aDateTimeP, const rtl::OUString& sComment) :
+    ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
 }
 
@@ -4522,7 +4529,8 @@ bool ScChangeTrack::Reject(
 }
 
 
-sal_uLong ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& aBigRange, const String& sNewValue )
+sal_uLong ScChangeTrack::AddLoadedGenerated(
+    ScBaseCell* pNewCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue )
 {
     ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pNewCell, aBigRange, pDoc, sNewValue );
     if ( pAct )
