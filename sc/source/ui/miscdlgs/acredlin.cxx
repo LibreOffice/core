@@ -696,7 +696,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        pScChangeAction->GetOldString(a2String);
+        rtl::OUString aTmp;
+        pScChangeAction->GetOldString(aTmp);
+        a2String = aTmp;
         if(a2String.Len()==0) a2String=aStrEmpty;
 
         //aString+="\'";
@@ -708,7 +710,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
     }
     else
     {
-        pScChangeAction->GetNewString(a2String);
+        rtl::OUString aTmp;
+        pScChangeAction->GetNewString(aTmp);
+        a2String = aTmp;
         if(a2String.Len()==0)
         {
             a2String=aStrEmpty;

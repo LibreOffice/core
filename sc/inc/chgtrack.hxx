@@ -335,49 +335,35 @@ protected:
     virtual const ScChangeTrack* GetChangeTrack() const = 0;
 
 public:
-    sal_Bool                IsInsertType() const
-                            {
-                                return eType == SC_CAT_INSERT_COLS ||
-                                    eType == SC_CAT_INSERT_ROWS ||
-                                    eType == SC_CAT_INSERT_TABS;
-                            }
-    sal_Bool                IsDeleteType() const
-                            {
-                                return eType == SC_CAT_DELETE_COLS ||
-                                    eType == SC_CAT_DELETE_ROWS ||
-                                    eType == SC_CAT_DELETE_TABS;
-                            }
-    sal_Bool                IsVirgin() const
-                            { return eState == SC_CAS_VIRGIN; }
-    sal_Bool                IsAccepted() const
-                            { return eState == SC_CAS_ACCEPTED; }
-    sal_Bool                IsRejected() const
-                            { return eState == SC_CAS_REJECTED; }
+    bool IsInsertType() const;
+    bool IsDeleteType() const;
+    bool IsVirgin() const;
+    SC_DLLPUBLIC bool IsAccepted() const;
+    bool IsRejected() const;
 
-                        // Action rejects another Action
-    sal_Bool                IsRejecting() const
-                            { return nRejectAction != 0; }
+    // Action rejects another Action
+    bool IsRejecting() const;
 
-                        // if action is visible in the document
-    sal_Bool                IsVisible() const;
+    // if action is visible in the document
+    bool IsVisible() const;
 
-                        // if action if touchable
-    sal_Bool                IsTouchable() const;
+    // if action if touchable
+    bool IsTouchable() const;
 
-                        // if action is an entry in dialog root
-    sal_Bool                IsDialogRoot() const;
+    // if action is an entry in dialog root
+    bool IsDialogRoot() const;
 
-                        // if an entry in a dialog shall be a drop down entry
-    sal_Bool                IsDialogParent() const;
+    // if an entry in a dialog shall be a drop down entry
+    bool IsDialogParent() const;
 
-                        // if action is a delete with subdeletes (aufgeklappt = open ?)
-    sal_Bool                IsMasterDelete() const;
+    // if action is a delete with subdeletes (aufgeklappt = open ?)
+    bool IsMasterDelete() const;
 
-                        // if action is acceptable/selectable/rejectable
-    sal_Bool                IsClickable() const;
+    // if action is acceptable/selectable/rejectable
+    bool IsClickable() const;
 
-                        // if action is rejectable
-    sal_Bool                IsRejectable() const;
+    // if action is rejectable
+    bool IsRejectable() const;
 
     const ScBigRange& GetBigRange() const { return aBigRange; }
     SC_DLLPUBLIC DateTime GetDateTime() const;        // local time
@@ -391,27 +377,23 @@ public:
     ScChangeAction*     GetNext() const { return pNext; }
     ScChangeAction*     GetPrev() const { return pPrev; }
 
-    sal_Bool                IsDeletedIn() const
-                            { return GetDeletedIn() != NULL; }
-    sal_Bool                IsDeleted() const
-                            { return IsDeleteType() || IsDeletedIn(); }
-    sal_Bool                IsDeletedIn( const ScChangeAction* ) const;
-    sal_Bool                IsDeletedInDelType( ScChangeActionType ) const;
-    void                RemoveAllDeletedIn();
+    bool IsDeletedIn() const;
+    bool IsDeleted() const;
+    bool IsDeletedIn( const ScChangeAction* ) const;
+    bool IsDeletedInDelType( ScChangeActionType ) const;
+    void RemoveAllDeletedIn();
 
     const ScChangeActionLinkEntry* GetFirstDeletedEntry() const
                             { return pLinkDeleted; }
     const ScChangeActionLinkEntry* GetFirstDependentEntry() const
                             { return pLinkDependent; }
-    sal_Bool                HasDependent() const
-                            { return pLinkDependent != NULL; }
-    sal_Bool                HasDeleted() const { return pLinkDeleted != NULL; }
-
+    bool HasDependent() const;
+    bool HasDeleted() const;
                                 // description will be appended to string
                                 // with bSplitRange only one column/row will be considered for delete
                                 // (for a listing of entries)
-    virtual void                GetDescription( String&, ScDocument*,
-                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
+    virtual void GetDescription( String&, ScDocument*,
+                                 sal_Bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void GetRefString( String&, ScDocument*, bool bFlag3D = false ) const;
 
@@ -562,20 +544,20 @@ public:
                     ScChangeTrack* pTrack); // only to use in the XML import
                                             // which of nDx and nDy is set is dependend on the type
 
-                        // is the last in a row (or single)
-    sal_Bool                IsBaseDelete() const;
+    // is the last in a row (or single)
+    bool IsBaseDelete() const;
 
-                        // is the first in a row (or single)
-    sal_Bool                IsTopDelete() const;
+    // is the first in a row (or single)
+    bool IsTopDelete() const;
 
-                        // is part of a row
-    sal_Bool                IsMultiDelete() const;
+    // is part of a row
+    bool IsMultiDelete() const;
 
-                        // is col, belonging to a TabDelete
-    sal_Bool                IsTabDeleteCol() const;
+    // is col, belonging to a TabDelete
+    bool IsTabDeleteCol() const;
 
-    SCsCOL              GetDx() const { return nDx; }
-    SCsROW              GetDy() const { return nDy; }
+    SCsCOL GetDx() const;
+    SCsROW GetDy() const;
     ScBigRange          GetOverAllRange() const;    // BigRange + (nDx, nDy)
 
     const ScChangeActionCellListEntry* GetFirstCellEntry() const
@@ -592,12 +574,8 @@ public:
                                                                     // this should be protected, but for the XML import it is public
     // only to use in the XML import
     // this should be protected, but for the XML import it is public
-    ScChangeActionDelMoveEntry* AddCutOffMove( ScChangeActionMove* pMove,
-                                short nFrom, short nTo )
-    {
-        return new ScChangeActionDelMoveEntry(
-        &pLinkMove, pMove, nFrom, nTo );
-    }
+    ScChangeActionDelMoveEntry* AddCutOffMove(
+        ScChangeActionMove* pMove, short nFrom, short nTo );
 };
 
 
@@ -685,8 +663,8 @@ class ScChangeActionContent : public ScChangeAction
 {
     friend class ScChangeTrack;
 
-    String              aOldValue;
-    String              aNewValue;
+    rtl::OUString aOldValue;
+    rtl::OUString aNewValue;
     ScBaseCell*         pOldCell;
     ScBaseCell*         pNewCell;
     ScChangeActionContent*  pNextContent;   // at the same position
@@ -717,45 +695,34 @@ class ScChangeActionContent : public ScChangeAction
 
     ScChangeActionContent*  GetNextInSlot() { return pNextInSlot; }
 
-    void                ClearTrack();
+    void ClearTrack();
 
-    static  void                GetStringOfCell( String& rStr,
-                                    const ScBaseCell* pCell,
-                                    const ScDocument* pDoc,
-                                    const ScAddress& rPos );
+    static void GetStringOfCell( rtl::OUString& rStr, const ScBaseCell* pCell,
+                                 const ScDocument* pDoc, const ScAddress& rPos );
 
-    static  void                GetStringOfCell( String& rStr,
-                                    const ScBaseCell* pCell,
-                                    const ScDocument* pDoc,
-                                    sal_uLong nFormat );
+    static void GetStringOfCell( rtl::OUString& rStr, const ScBaseCell* pCell,
+                                 const ScDocument* pDoc, sal_uLong nFormat );
 
-    static  void                SetValue( String& rStr, ScBaseCell*& pCell,
-                                    const ScAddress& rPos,
-                                    const ScBaseCell* pOrgCell,
-                                    const ScDocument* pFromDoc,
-                                    ScDocument* pToDoc );
+    static void SetValue( rtl::OUString& rStr, ScBaseCell*& pCell, const ScAddress& rPos,
+                          const ScBaseCell* pOrgCell, const ScDocument* pFromDoc,
+                          ScDocument* pToDoc );
 
-    static  void                SetValue( String& rStr, ScBaseCell*& pCell,
-                                    sal_uLong nFormat,
-                                    const ScBaseCell* pOrgCell,
-                                    const ScDocument* pFromDoc,
-                                    ScDocument* pToDoc );
+    static void SetValue( rtl::OUString& rStr, ScBaseCell*& pCell, sal_uLong nFormat,
+                          const ScBaseCell* pOrgCell, const ScDocument* pFromDoc,
+                          ScDocument* pToDoc );
 
-    static  void                SetCell( String& rStr, ScBaseCell* pCell,
-                                    sal_uLong nFormat, const ScDocument* pDoc );
+    static void SetCell( rtl::OUString& rStr, ScBaseCell* pCell,
+                         sal_uLong nFormat, const ScDocument* pDoc );
 
     static bool NeedsNumberFormat( const ScBaseCell* );
 
-    void                SetValueString( String& rValue,
-                            ScBaseCell*& pCell, const String& rStr,
-                            ScDocument* pDoc );
+    void SetValueString( rtl::OUString& rValue, ScBaseCell*& pCell,
+                         const rtl::OUString& rStr, ScDocument* pDoc );
 
-    void                GetValueString( String& rStr,
-                            const String& rValue,
-                            const ScBaseCell* pCell ) const;
+    void GetValueString( rtl::OUString& rStr, const rtl::OUString& rValue,
+                         const ScBaseCell* pCell ) const;
 
-    void                GetFormulaString( String& rStr,
-                            const ScFormulaCell* pCell ) const;
+    void GetFormulaString( rtl::OUString& rStr, const ScFormulaCell* pCell ) const;
 
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
@@ -848,13 +815,13 @@ public:
     void                SetPrevContent( ScChangeActionContent* p )
                             { pPrevContent = p; }
 
-                        // don't use:
-                        // assigns String / creates forumula cell
-    void                SetOldValue( const String& rOld, ScDocument* );
-    void                SetNewValue( const String& rNew, ScDocument* );
+    // don't use:
+    // assigns String / creates forumula cell
+    void SetOldValue( const rtl::OUString& rOld, ScDocument* pDoc );
+    void SetNewValue( const rtl::OUString& rNew, ScDocument* pDoc );
 
-    void                GetOldString( String& ) const;
-    void                GetNewString( String& ) const;
+    void GetOldString( rtl::OUString& rStr ) const;
+    void GetNewString( rtl::OUString& rStr ) const;
     const ScBaseCell*   GetOldCell() const { return pOldCell; }
     const ScBaseCell*   GetNewCell() const { return pNewCell; }
     virtual void                GetDescription( String&, ScDocument*,
@@ -863,28 +830,12 @@ public:
 
     static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );
 
-                        // NewCell
-    sal_Bool                IsMatrixOrigin() const
-                            {
-                                return GetContentCellType( GetNewCell() )
-                                    == SC_CACCT_MATORG;
-                            }
-    sal_Bool                IsMatrixReference() const
-                            {
-                                return GetContentCellType( GetNewCell() )
-                                    == SC_CACCT_MATREF;
-                            }
-                        // OldCell
-    sal_Bool                IsOldMatrixOrigin() const
-                            {
-                                return GetContentCellType( GetOldCell() )
-                                    == SC_CACCT_MATORG;
-                            }
-    sal_Bool                IsOldMatrixReference() const
-                            {
-                                return GetContentCellType( GetOldCell() )
-                                    == SC_CACCT_MATREF;
-                            }
+    // NewCell
+    bool IsMatrixOrigin() const;
+    bool IsMatrixReference() const;
+    // OldCell
+    bool IsOldMatrixOrigin() const;
+    bool IsOldMatrixReference() const;
 };
 
 
@@ -977,7 +928,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrackMsgStack   aMsgStackTmp;
     ScChangeTrackMsgStack   aMsgStackFinal;
     std::set<rtl::OUString> maUserCollection;
-    String              aUser;
+    rtl::OUString maUser;
     Link                aModifiedLink;
     ScRange             aInDeleteRange;
     DateTime            aFixDateTime;
@@ -1000,13 +951,13 @@ class ScChangeTrack : public utl::ConfigurationListener
     sal_uLong               nLastMerge;
     ScChangeTrackMergeState eMergeState;
     sal_uInt16              nLoadedFileFormatVersion;
-    sal_Bool                bLoadSave;
-    sal_Bool                bInDelete;
-    sal_Bool                bInDeleteUndo;
-    sal_Bool                bInDeleteTop;
-    sal_Bool                bInPasteCut;
-    sal_Bool                bUseFixDateTime;
-    sal_Bool                bTime100thSeconds;
+    bool bLoadSave:1;
+    bool bInDelete:1;
+    bool bInDeleteUndo:1;
+    bool bInDeleteTop:1;
+    bool bInPasteCut:1;
+    bool bUseFixDateTime:1;
+    bool bTime100thSeconds:1;
 
     // not implemented, prevent usage
     ScChangeTrack( const ScChangeTrack& );
@@ -1015,24 +966,23 @@ class ScChangeTrack : public utl::ConfigurationListener
 #ifdef SC_CHGTRACK_CXX
     static  SCROW               InitContentRowsPerSlot();
 
-                                // true if one is MM_FORMULA and the other is
-                                // not, or if both are and range differs
-    static  sal_Bool                IsMatrixFormulaRangeDifferent(
-                                    const ScBaseCell* pOldCell,
-                                    const ScBaseCell* pNewCell );
+    // true if one is MM_FORMULA and the other is
+    // not, or if both are and range differs
+    static bool IsMatrixFormulaRangeDifferent(
+        const ScBaseCell* pOldCell, const ScBaseCell* pNewCell );
 
     void                Init();
     void                DtorClear();
-    void                SetLoadSave( sal_Bool bVal ) { bLoadSave = bVal; }
+    void                SetLoadSave( bool bVal ) { bLoadSave = bVal; }
     void                SetInDeleteRange( const ScRange& rRange )
                             { aInDeleteRange = rRange; }
-    void                SetInDelete( sal_Bool bVal )
+    void                SetInDelete( bool bVal )
                             { bInDelete = bVal; }
-    void                SetInDeleteTop( sal_Bool bVal )
+    void                SetInDeleteTop( bool bVal )
                             { bInDeleteTop = bVal; }
-    void                SetInDeleteUndo( sal_Bool bVal )
+    void                SetInDeleteUndo( bool bVal )
                             { bInDeleteUndo = bVal; }
-    void                SetInPasteCut( sal_Bool bVal )
+    void                SetInPasteCut( bool bVal )
                             { bInPasteCut = bVal; }
     void                SetMergeState( ScChangeTrackMergeState eState )
                             { eMergeState = eState; }
@@ -1110,8 +1060,8 @@ public:
     ScChangeAction*     GetFirst() const { return pFirst; }
     ScChangeAction*     GetLast() const { return pLast; }
     sal_uLong               GetActionMax() const { return nActionMax; }
-    sal_Bool                IsGenerated( sal_uLong nAction ) const
-                            { return nAction >= nGeneratedMin; }
+    bool IsGenerated( sal_uLong nAction ) const
+        { return nAction >= nGeneratedMin; }
     ScChangeAction*     GetAction( sal_uLong nAction ) const
     {
         ScChangeActionMap::const_iterator it = aMap.find( nAction );
@@ -1148,15 +1098,15 @@ public:
     }
     ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
 
-    sal_Bool                IsLoadSave() const { return bLoadSave; }
+    bool IsLoadSave() const { return bLoadSave; }
     const ScRange&      GetInDeleteRange() const
                             { return aInDeleteRange; }
-    sal_Bool                IsInDelete() const { return bInDelete; }
-    sal_Bool                IsInDeleteTop() const { return bInDeleteTop; }
-    sal_Bool                IsInDeleteUndo() const { return bInDeleteUndo; }
-    sal_Bool                IsInPasteCut() const { return bInPasteCut; }
-    SC_DLLPUBLIC        void                SetUser( const String& );
-    const String&       GetUser() const { return aUser; }
+    bool IsInDelete() const { return bInDelete; }
+    bool IsInDeleteTop() const { return bInDeleteTop; }
+    bool IsInDeleteUndo() const { return bInDeleteUndo; }
+    bool IsInPasteCut() const { return bInPasteCut; }
+    SC_DLLPUBLIC void SetUser( const rtl::OUString& rUser );
+    SC_DLLPUBLIC const rtl::OUString& GetUser() const;
     SC_DLLPUBLIC const std::set<rtl::OUString>& GetUserCollection() const;
     ScDocument*         GetDocument() const { return pDoc; }
                         // for import filter
@@ -1165,7 +1115,7 @@ public:
                         // set this if the date/time set with
                         // SetFixDateTime...() shall be applied to
                         // appended actions
-    void                SetUseFixDateTime( sal_Bool bVal )
+    void                SetUseFixDateTime( bool bVal )
                             { bUseFixDateTime = bVal; }
                         // for MergeDocument, apply original date/time as UTC
     void                SetFixDateTimeUTC( const DateTime& rDT )

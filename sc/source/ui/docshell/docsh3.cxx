@@ -1021,7 +1021,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            String aValue;
+                            rtl::OUString aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                             sal_uInt8 eMatrix = MM_NONE;
                             const ScBaseCell* pCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
@@ -1039,8 +1039,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     ((const ScFormulaCell*)pCell)->GetMatColsRows( nCols, nRows );
                                     aSourceRange.aEnd.SetCol( aPos.Col() + nCols - 1 );
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
-                                    aValue.Erase( 0, 1 );
-                                    aValue.Erase( aValue.Len()-1, 1 );
+                                    aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.
                                     GetDocFunc().EnterMatrix( aSourceRange,
                                         NULL, NULL, aValue, false, false,
                                         EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );

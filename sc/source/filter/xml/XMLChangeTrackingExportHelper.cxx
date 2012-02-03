@@ -158,7 +158,7 @@ void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGenerat
 #endif
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
     WriteBigRange(pGeneratedAction->GetBigRange(), XML_CELL_ADDRESS);
-    String sValue;
+    rtl::OUString sValue;
     static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(sValue);
     WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell(), sValue);
 }
@@ -177,9 +177,9 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
                 SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
                 if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
                 {
-                    String sValue;
+                    rtl::OUString sValue;
                     pContentAction->GetNewString(sValue);
-                     WriteCell(pContentAction->GetNewCell(), sValue);
+                    WriteCell(pContentAction->GetNewCell(), sValue);
                 }
             }
             else
@@ -445,7 +445,7 @@ void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
         if (pPrevAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_PREVIOUS, true, true);
-        String sValue;
+        rtl::OUString sValue;
         static_cast<ScChangeActionContent*>(pAction)->GetOldString(sValue);
         WriteCell(static_cast<ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
