@@ -61,6 +61,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
+#include <boost/unordered_set.hpp>
+
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
@@ -387,8 +389,10 @@ void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 
 void ScDocShell::UpdateLinks()
 {
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
-    ScStrCollection aNames;
+    StrSetType aNames;
 
     // nicht mehr benutzte Links raus
 
@@ -401,11 +405,7 @@ void ScDocShell::UpdateLinks()
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
             if (pTabLink->IsUsed())
-            {
-                StrData* pData = new StrData(pTabLink->GetFileName());
-                if (!aNames.Insert(pData))
-                    delete pData;
-            }
+                aNames.insert(pTabLink->GetFileName());
             else        // nicht mehr benutzt -> loeschen
             {
                 pTabLink->SetAddUndo(sal_True);
@@ -414,48 +414,46 @@ void ScDocShell::UpdateLinks()
         }
     }
 
-
     // neue Links eintragen
 
     SCTAB nTabCount = aDocument.GetTableCount();
-    for (SCTAB i=0; i<nTabCount; i++)
-        if (aDocument.IsLinked(i))
-        {
-            rtl::OUString aDocName = aDocument.GetLinkDoc(i);
-            rtl::OUString aFltName = aDocument.GetLinkFlt(i);
-            rtl::OUString aOptions = aDocument.GetLinkOpt(i);
-            sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
-            sal_Bool bThere = false;
-            for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
-                if (aDocument.IsLinked(j)
-                        && aDocument.GetLinkDoc(j) == aDocName
-                        && aDocument.GetLinkFlt(j) == aFltName
-                        && aDocument.GetLinkOpt(j) == aOptions)
-                        // Ignore refresh delay in compare, it should be the
-                        // same for identical links and we don't want dupes
-                        // if it ain't.
-                    bThere = sal_True;
+    for (SCTAB i = 0; i < nTabCount; ++i)
+    {
+        if (!aDocument.IsLinked(i))
+            continue;
 
-            if (!bThere)                                        // schon als Filter eingetragen?
-            {
-                StrData* pData = new StrData(aDocName);
-                if (!aNames.Insert(pData))
-                {
-                    delete pData;
-                    bThere = sal_True;
-                }
-            }
-            if (!bThere)
-            {
-                ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
-                pLink->SetInCreate( sal_True );
-                String aStringDocName = aDocName;
-                String aStringFltName = aFltName;
-                pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aStringDocName, &aStringFltName );
-                pLink->Update();
-                pLink->SetInCreate( false );
-            }
+        rtl::OUString aDocName = aDocument.GetLinkDoc(i);
+        rtl::OUString aFltName = aDocument.GetLinkFlt(i);
+        rtl::OUString aOptions = aDocument.GetLinkOpt(i);
+        sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
+        bool bThere = false;
+        for (SCTAB j = 0; j < i && !bThere; ++j)                // im Dokument mehrfach?
+        {
+            if (aDocument.IsLinked(j)
+                    && aDocument.GetLinkDoc(j) == aDocName
+                    && aDocument.GetLinkFlt(j) == aFltName
+                    && aDocument.GetLinkOpt(j) == aOptions)
+                    // Ignore refresh delay in compare, it should be the
+                    // same for identical links and we don't want dupes
+                    // if it ain't.
+                bThere = true;
         }
+
+        if (!bThere)                                        // schon als Filter eingetragen?
+        {
+            if (!aNames.insert(aDocName).second)
+                bThere = true;
+        }
+
+        if (!bThere)
+        {
+            ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
+            pLink->SetInCreate(true);
+            pLinkManager->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName);
+            pLink->Update();
+            pLink->SetInCreate(false);
+        }
+    }
 }
 
 sal_Bool ScDocShell::ReloadTabLinks()
