@@ -2477,8 +2477,12 @@ void Window::ImplPostPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
+    // save paint events until layout is done
     if (IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
+    {
+        mpWindowImpl->mpFrameData->maPaintTimer.Start();
         return 0;
+    }
 
     // save paint events until resizing is done
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
