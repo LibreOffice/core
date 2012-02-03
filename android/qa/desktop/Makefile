@@ -114,7 +114,6 @@ copy-stuff: buildrcs
 		  configmgr.uno \
 		  cppcanvaslo \
 		  drawinglayerlo \
-		  editenglo \
 		  expwrap.uno \
 		  fileacc \
 		  fontconfig \
@@ -158,8 +157,6 @@ copy-stuff: buildrcs
 		  store \
 		  svllo \
 		  svtlo \
-		  svxlo \
-		  svxcorelo \
 		  test \
 		  tklo \
 		  tllo \
@@ -180,7 +177,6 @@ copy-stuff: buildrcs
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
-		  xolo \
 		  xstor \
 		  \
 		  swlo \
