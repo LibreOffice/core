@@ -136,6 +136,7 @@ copy-stuff: buildrcs
 		  icuuclo \
 		  jvmaccessgcc3 \
 		  jvmfwk \
+		  lnglo \
 		  localebe1.uno \
 		  localedata_en \
 		  localedata_es \
