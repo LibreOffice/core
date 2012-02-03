@@ -602,7 +602,6 @@ void ComboBox::Resize()
     Size aOutSz = GetOutputSizePixel();
     if( IsDropDownBox() )
     {
-        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
         long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
@@ -642,6 +641,7 @@ void ComboBox::Resize()
         }
         else
         {
+            long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
             mpSubEdit->SetPosSizePixel( Point( 0, 0 ), Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
             mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
