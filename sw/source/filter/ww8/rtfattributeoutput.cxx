@@ -3138,7 +3138,7 @@ static bool StripMetafileHeader(const sal_uInt8 *&rpGraphicAry, unsigned long &r
     return false;
 }
 
-static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, sal_uInt32 nLimit = 64)
+OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, sal_uInt32 nLimit)
 {
     OStringBuffer aRet;
 
@@ -3159,17 +3159,17 @@ static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, sal_uInt32 nLi
     return aRet.makeStringAndClear();
 }
 
-static OString WriteHex(sal_Int32 nNum)
+OString RtfAttributeOutput::WriteHex(sal_Int32 nNum)
 {
-    return WriteHex((sal_uInt8*)&nNum, sizeof(sal_Int32));
+    return RtfAttributeOutput::WriteHex((sal_uInt8*)&nNum, sizeof(sal_Int32));
 }
 
-static OString WriteHex(OString sString)
+OString RtfAttributeOutput::WriteHex(OString sString)
 {
     OStringBuffer aRet;
 
     aRet.append(WriteHex(sString.getLength()+1));
-    aRet.append(WriteHex((sal_uInt8*)sString.getStr(), sString.getLength()+1));
+    aRet.append(RtfAttributeOutput::WriteHex((sal_uInt8*)sString.getStr(), sString.getLength()+1));
 
     return aRet.makeStringAndClear();
 }
@@ -3252,7 +3252,7 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
             StripMetafileHeader(pGraphicAry, nSize);
         }
         aRet.append(RtfExport::sNewLine);
-        aRet.append(WriteHex(pGraphicAry, nSize));
+        aRet.append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
         aRet.append('}');
     }
     return aRet.makeStringAndClear();
@@ -3285,7 +3285,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
         const sal_uInt8* pNativeData = (sal_uInt8*)pStream->GetData();
         m_aRunText.append(WriteHex(nNativeDataSize));
         m_aRunText.append(RtfExport::sNewLine);
-        m_aRunText.append(WriteHex(pNativeData, nNativeDataSize, 126));
+        m_aRunText.append(RtfAttributeOutput::WriteHex(pNativeData, nNativeDataSize, 126));
         m_aRunText.append(RtfExport::sNewLine);
         delete pStream;
 
