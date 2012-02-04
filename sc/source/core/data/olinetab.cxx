@@ -203,10 +203,10 @@ ScOutlineArray::ScOutlineArray( const ScOutlineArray& rArray ) :
 }
 
 void ScOutlineArray::FindEntry(
-    SCCOLROW nSearchPos, size_t& rFindLevel, ScOutlineCollection::iterator& rFindPos,
+    SCCOLROW nSearchPos, size_t& rFindLevel, size_t& rFindIndex,
     size_t nMaxLevel )
 {
-    rFindLevel = 0;
+    rFindLevel = rFindIndex = 0;
 
     if (nMaxLevel > nDepth)
         nMaxLevel = nDepth;
@@ -215,14 +215,13 @@ void ScOutlineArray::FindEntry(
     {
         ScOutlineCollection* pCollect = &aCollections[nLevel];
         ScOutlineCollection::iterator it = pCollect->begin(), itEnd = pCollect->end();
-        rFindPos = itEnd;
         for (; it != itEnd; ++it)
         {
             ScOutlineEntry* pEntry = it->second;
             if (pEntry->GetStart() <= nSearchPos && pEntry->GetEnd() >= nSearchPos)
             {
                 rFindLevel = nLevel + 1;            // naechster Level (zum Einfuegen)
-                rFindPos = it;
+                rFindIndex = std::distance(pCollect->begin(), it);
             }
         }
     }
@@ -233,20 +232,19 @@ bool ScOutlineArray::Insert(
 {
     rSizeChanged = false;
 
-    size_t nStartLevel, nEndLevel;
-    ScOutlineCollection::iterator itStartPos, itEndPos;
+    size_t nStartLevel, nEndLevel, nStartIndex, nEndIndex;
     bool bFound = false;
 
     bool bCont;
     sal_uInt16 nFindMax;
-    FindEntry( nStartCol, nStartLevel, itStartPos );       // nLevel = neuer Level (alter+1) !!!
-    FindEntry( nEndCol, nEndLevel, itEndPos );
+    FindEntry( nStartCol, nStartLevel, nStartIndex );       // nLevel = neuer Level (alter+1) !!!
+    FindEntry( nEndCol, nEndLevel, nEndIndex );
     nFindMax = Max(nStartLevel,nEndLevel);
     do
     {
         bCont = false;
 
-        if (nStartLevel == nEndLevel && itStartPos == itEndPos && nStartLevel < SC_OL_MAXDEPTH)
+        if (nStartLevel == nEndLevel && nStartIndex == nEndIndex && nStartLevel < SC_OL_MAXDEPTH)
             bFound = true;
 
         if (!bFound)
@@ -256,14 +254,18 @@ bool ScOutlineArray::Insert(
                 --nFindMax;
                 if (nStartLevel)
                 {
-                    if (itStartPos->second->GetStart() == nStartCol)
-                        FindEntry(nStartCol, nStartLevel, itStartPos, nFindMax);
+                    ScOutlineCollection::const_iterator it = aCollections[nStartLevel-1].begin();
+                    std::advance(it, nStartIndex);
+                    if (it->second->GetStart() == nStartCol)
+                        FindEntry(nStartCol, nStartLevel, nStartIndex, nFindMax);
                 }
 
                 if (nEndLevel)
                 {
-                    if (itEndPos->second->GetEnd() == nEndCol)
-                        FindEntry(nEndCol, nEndLevel, itEndPos, nFindMax);
+                    ScOutlineCollection::const_iterator it = aCollections[nEndLevel-1].begin();
+                    std::advance(it, nEndIndex);
+                    if (it->second->GetEnd() == nEndCol)
+                        FindEntry(nEndCol, nEndLevel, nEndIndex, nFindMax);
                 }
                 bCont = true;
             }
