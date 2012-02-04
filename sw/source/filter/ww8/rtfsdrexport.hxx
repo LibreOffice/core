@@ -105,6 +105,9 @@ private:
     void AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle );
 
     void WriteOutliner(const OutlinerParaObject& rParaObj);
+
+    /// Exports the pib property of the shape
+    void impl_writeGraphic();
 };
 
 #endif // _RTFSdrEXPORT_HXX_
