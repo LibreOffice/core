@@ -3422,6 +3422,8 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
         rSt >> aHd;
         if (!rSt.good())
             break;
+        if (aHd.nRecLen > nMaxLegalDffRecordLength)
+            break;
         if ( aHd.nRecType == nRecId )
         {
             if ( nSkipCount )
@@ -6818,8 +6820,6 @@ bool SvxMSDffManager::ReadCommonRecordHeader(DffRecordHeader& rRec,
         rRec.nRecInstance, rRec.nRecType, rRec.nRecLen);
 }
 
-sal_uInt32 nMaxLegalRecordLength = SAL_MAX_UINT32 - DFF_COMMON_RECORD_HEADER_SIZE;
-
 /* also static */
 bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     sal_uInt8& rVer, sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)
@@ -6830,7 +6830,7 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     rInst = nTmp >> 4;
     if (!rSt.good())
         return false;
-    if (rLength > nMaxLegalRecordLength)
+    if (rLength > nMaxLegalDffRecordLength)
         return false;
     return true;
 }

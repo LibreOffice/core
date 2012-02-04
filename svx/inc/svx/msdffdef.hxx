@@ -37,6 +37,9 @@
 
 #define DFF_COMMON_RECORD_HEADER_SIZE           8
 
+const sal_uInt32 nMaxLegalDffRecordLength = \
+    SAL_MAX_UINT32 - DFF_COMMON_RECORD_HEADER_SIZE;
+
 #define DFF_PSFLAG_CONTAINER 0x0F         // If the version field of a record
                                           //  header takes on this value, the
                                           //  record header marks the start of
