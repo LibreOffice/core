@@ -74,7 +74,7 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     , aOK(&action_area, SW_RES(PB_OK))
     , aHelp(&action_area, SW_RES(PB_HELP))
 {
-    rtl::OUString sForceInitialSize(RTL_CONSTASCII_USTRINGPARAM("00000000"));
+    rtl::OUString sForceInitialSize(RTL_CONSTASCII_USTRINGPARAM("        "));
     aCurrentWordFI.SetText(sForceInitialSize);
     aCurrentCharacterFI.SetText(sForceInitialSize);
     aCurrentCharacterExcludingSpacesFI.SetText(sForceInitialSize);
