@@ -279,32 +279,37 @@ bool ScOutlineArray::Insert(
     //  untere verschieben
 
     bool bNeedSize = false;
-    for (size_t nMoveLevel = nDepth-1; nMoveLevel >= nLevel; --nMoveLevel)
+    if (nDepth > 0)
     {
-        ScOutlineCollection& rColl = aCollections[nMoveLevel];
-        ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
-        while (it != itEnd)
+        for (size_t nMoveLevel = nDepth-1; nMoveLevel >= nLevel; --nMoveLevel)
         {
-            ScOutlineEntry* pEntry = it->second;
-            SCCOLROW nEntryStart = pEntry->GetStart();
-            if (nEntryStart >= nStartCol && nEntryStart <= nEndCol)
+            ScOutlineCollection& rColl = aCollections[nMoveLevel];
+            ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
+            while (it != itEnd)
             {
-                if (nMoveLevel >= SC_OL_MAXDEPTH - 1)
+                ScOutlineEntry* pEntry = it->second;
+                SCCOLROW nEntryStart = pEntry->GetStart();
+                if (nEntryStart >= nStartCol && nEntryStart <= nEndCol)
                 {
-                    rSizeChanged = false;               // kein Platz
-                    return false;
+                    if (nMoveLevel >= SC_OL_MAXDEPTH - 1)
+                    {
+                        rSizeChanged = false;               // kein Platz
+                        return false;
+                    }
+                    aCollections[nMoveLevel+1].insert(new ScOutlineEntry(*pEntry));
+                    size_t nPos = std::distance(rColl.begin(), it);
+                    rColl.erase(it);
+                    it = rColl.begin();
+                    std::advance(it, nPos);
+                    itEnd = rColl.end();
+                    if (nMoveLevel == nDepth - 1)
+                        bNeedSize = true;
                 }
-                aCollections[nMoveLevel+1].insert(new ScOutlineEntry(*pEntry));
-                size_t nPos = std::distance(rColl.begin(), it);
-                rColl.erase(it);
-                it = rColl.begin();
-                std::advance(it, nPos);
-                itEnd = rColl.end();
-                if (nMoveLevel == nDepth - 1)
-                    bNeedSize = true;
+                else
+                    ++it;
             }
-            else
-                ++it;
+            if (nMoveLevel == 0)
+                break;
         }
     }
 
