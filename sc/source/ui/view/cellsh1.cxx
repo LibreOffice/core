@@ -1836,7 +1836,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
                                 std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
-                                if (aNames.size())
+                                if (!aNames.empty())
                                 {
                                     rtl::OUStringBuffer aBuffer;
                                     for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();

@@ -2162,7 +2162,7 @@ sal_Bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 
     rlRefWindow.erase( i );
 
-    if( !rlRefWindow.size() )
+    if( rlRefWindow.empty() )
         m_mapRefWindow.erase( nSlotId );
 
     return sal_True;
