@@ -362,6 +362,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
             case ESCHER_Prop_txflTextFlow:
                 m_aShapeProps.insert(std::pair<OString,OString>(OString("txflTextFlow"), OString::valueOf(sal_Int32(it->nPropValue))));
                 break;
+            case ESCHER_Prop_fillType:
+                m_aShapeProps.insert(std::pair<OString,OString>(OString("fillType"), OString::valueOf(sal_Int32(it->nPropValue))));
+                break;
             default:
                 SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled property: " << nId << " (value: " << it->nPropValue << ")");
                 break;
