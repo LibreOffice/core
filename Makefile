@@ -352,11 +352,8 @@ config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in auto
 #
 # Bootstap
 #
-$(WORKDIR)/bootstrap: autogen
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
 
-bootstrap: $(WORKDIR)/bootstrap autogen
+bootstrap: $(WORKDIR)/bootstrap
 
 #
 # Fetch

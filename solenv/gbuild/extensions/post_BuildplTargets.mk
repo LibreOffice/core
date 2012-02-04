@@ -27,6 +27,10 @@
 
 .PHONY: cross-build-toolset dev-install build findunusedcode
 
+$(WORKDIR)/bootstrap:
+	@cd $(SRCDIR) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
+
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
 .DEFAULT_GOAL=all
