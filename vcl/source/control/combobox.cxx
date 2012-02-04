@@ -1078,6 +1078,29 @@ Size ComboBox::GetOptimalSize(WindowSizeType eType) const
 
 // -----------------------------------------------------------------------
 
+long ComboBox::getMaxWidthScrollBarAndDownButton() const
+{
+    long nButtonDownWidth = 0;
+
+    Window *pBorder = GetWindow( WINDOW_BORDER );
+    ImplControlValue aControlValue;
+    Point aPoint;
+    Rectangle aContent, aBound;
+
+    // use the full extent of the control
+    Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+
+    if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+    {
+        nButtonDownWidth = aContent.getWidth();
+    }
+
+    long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    return std::max(nScrollBarWidth, nButtonDownWidth);
+}
+
 Size ComboBox::CalcMinimumSize() const
 {
     Size aSz;
@@ -1090,7 +1113,7 @@ Size ComboBox::CalcMinimumSize() const
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Width() += getMaxWidthScrollBarAndDownButton();
     }
 
     aSz = CalcWindowSize( aSz );
@@ -1150,7 +1173,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
         aSz.Width() = aMinSz.Width();
 
     if ( IsDropDownBox() )
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Width() += getMaxWidthScrollBarAndDownButton();
 
     if ( !IsDropDownBox() )
     {
