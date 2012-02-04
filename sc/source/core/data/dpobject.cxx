@@ -39,6 +39,7 @@
 #include "dpgroup.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
+#include "collect.hxx"
 #include "pivot.hxx"        // PIVOT_DATA_FIELD
 #include "dapiuno.hxx"      // ScDataPilotConversion
 #include "miscuno.hxx"

@@ -53,7 +53,6 @@
 #include <boost/shared_ptr.hpp>
 
 class SubTotal;
-#include "collect.hxx"
 
 #define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
 #define PIVOT_FUNC_REF          (MAXCOLCOUNT)

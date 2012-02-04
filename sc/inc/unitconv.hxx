@@ -29,8 +29,6 @@
 #ifndef SC_UNITCONV_HXX
 #define SC_UNITCONV_HXX
 
-#include "collect.hxx"
-
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 

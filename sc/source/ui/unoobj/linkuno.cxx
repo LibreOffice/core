@@ -38,7 +38,6 @@
 #include "convuno.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
-#include "collect.hxx"
 #include "tablink.hxx"
 #include "arealink.hxx"
 #include "hints.hxx"

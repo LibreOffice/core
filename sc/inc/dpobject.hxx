@@ -32,7 +32,6 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"
-#include "collect.hxx"
 #include "dpoutput.hxx"
 #include "dptypes.hxx"
 #include "pivot.hxx"

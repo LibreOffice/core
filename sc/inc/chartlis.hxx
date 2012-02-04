@@ -32,7 +32,6 @@
 
 #include <vcl/timer.hxx>
 #include <svl/listener.hxx>
-#include "collect.hxx"
 #include "rangelst.hxx"
 #include "token.hxx"
 #include "externalrefmgr.hxx"

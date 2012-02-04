@@ -182,8 +182,8 @@ sal_Bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, sal_Bool bColum
 
         ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
 
-        sal_Bool bRes;
-        sal_Bool bSize = false;
+        bool bRes;
+        bool bSize = false;
         if ( bColumns )
             bRes = pArray->Remove( nStartCol, nEndCol, bSize );
         else
@@ -577,9 +577,9 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
 
     if (pTable)
     {
-        ScOutlineEntry* pEntry;
-        sal_uInt16 nColLevel;
-        sal_uInt16 nRowLevel;
+        const ScOutlineEntry* pEntry;
+        size_t nColLevel;
+        size_t nRowLevel;
         sal_uInt16 nCount;
         SCCOLROW nStart;
         SCCOLROW nEnd;

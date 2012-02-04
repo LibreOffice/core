@@ -1486,14 +1486,14 @@ void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, table::CellRangeAdd
 
 void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups)
 {
-    sal_Int32 nDepth(pFields->GetDepth());
-    for(sal_Int32 i = 0; i < nDepth; ++i)
+    size_t nDepth = pFields->GetDepth();
+    for (size_t i = 0; i < nDepth; ++i)
     {
-        sal_Int32 nFields = pFields->GetCount(static_cast<sal_uInt16>(i));
-        for (sal_Int32 j = 0; j < nFields; ++j)
+        size_t nFields = pFields->GetCount(i);
+        for (size_t j = 0; j < nFields; ++j)
         {
             ScMyColumnRowGroup aGroup;
-            ScOutlineEntry* pEntry(pFields->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
+            const ScOutlineEntry* pEntry = pFields->GetEntry(i, j);
             aGroup.nField = pEntry->GetStart();
             aGroup.nLevel = static_cast<sal_Int16>(i);
             aGroup.bDisplay = !(pEntry->IsHidden());

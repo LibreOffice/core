@@ -39,7 +39,6 @@
 
 #include "table.hxx"
 #include "scitems.hxx"
-#include "collect.hxx"
 #include "attrib.hxx"
 #include "cell.hxx"
 #include "document.hxx"

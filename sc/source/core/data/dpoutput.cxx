@@ -50,7 +50,6 @@
 #include "globstr.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
-#include "collect.hxx"
 #include "scresid.hxx"
 #include "unonames.hxx"
 #include "sc.hrc"

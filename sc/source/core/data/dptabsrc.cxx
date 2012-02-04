@@ -53,7 +53,6 @@
 #include "dptabres.hxx"
 #include "dptabdat.hxx"
 #include "global.hxx"
-#include "collect.hxx"
 #include "datauno.hxx"      // ScDataUnoConversion
 #include "miscuno.hxx"
 #include "unonames.hxx"

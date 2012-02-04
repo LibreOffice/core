@@ -40,7 +40,6 @@
 #include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
-#include "collect.hxx"
 #include "scdllapi.h"
 
 #ifdef SC_CHGTRACK_CXX

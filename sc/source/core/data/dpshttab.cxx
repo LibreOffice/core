@@ -36,7 +36,6 @@
 #include "dpshttab.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
-#include "collect.hxx"
 #include "cell.hxx"
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"

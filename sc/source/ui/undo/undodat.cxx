@@ -402,7 +402,7 @@ void ScUndoOutlineBlock::Undo()
 
     if (!bShow)
     {                               //  Groesse des ausgeblendeten Blocks
-        sal_uInt16 nLevel;
+        size_t nLevel;
         pUndoTable->GetColArray()->FindTouchedLevel( nStartCol, nEndCol, nLevel );
         pUndoTable->GetColArray()->ExtendBlock( nLevel, nStartCol, nEndCol );
         pUndoTable->GetRowArray()->FindTouchedLevel( nStartRow, nEndRow, nLevel );

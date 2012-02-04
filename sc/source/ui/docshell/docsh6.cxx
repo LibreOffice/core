@@ -47,7 +47,6 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "tablink.hxx"
-#include "collect.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"

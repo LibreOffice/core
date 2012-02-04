@@ -56,7 +56,6 @@
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "cellform.hxx"
-#include "collect.hxx"
 #include "stlsheet.hxx"
 #include "rechead.hxx"
 #include "brdcst.hxx"

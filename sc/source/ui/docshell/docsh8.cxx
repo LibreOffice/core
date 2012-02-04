@@ -71,7 +71,6 @@
 #include "docsh.hxx"
 #include "filter.hxx"
 #include "progress.hxx"
-#include "collect.hxx"
 #include "cell.hxx"
 #include "editutil.hxx"
 #include "cellform.hxx"

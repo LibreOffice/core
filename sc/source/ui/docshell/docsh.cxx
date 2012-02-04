@@ -104,7 +104,6 @@
 #include "docpool.hxx"      // LoadCompleted
 #include "progress.hxx"
 #include "pntlock.hxx"
-#include "collect.hxx"
 #include "docuno.hxx"
 #include "appoptio.hxx"
 #include "detdata.hxx"

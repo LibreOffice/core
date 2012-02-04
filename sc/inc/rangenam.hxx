@@ -31,7 +31,6 @@
 
 #include "global.hxx" // -> enum UpdateRefMode
 #include "address.hxx"
-#include "collect.hxx"
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
 

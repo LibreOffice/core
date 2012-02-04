@@ -504,7 +504,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
             sal_uInt16 nDepth = pRowArray->GetDepth();
             for (sal_uInt16 i = 0; i < nDepth; ++i)
             {
-                sal_Bool bSize;
+                bool bSize;
                 pRowArray->Remove(aNewParam.nRow1, aNewParam.nRow2, bSize);
             }
         }

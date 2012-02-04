@@ -32,7 +32,6 @@
 #include "sal/types.h"
 #include "osl/mutex.hxx"
 #include "global.hxx"
-#include "collect.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>

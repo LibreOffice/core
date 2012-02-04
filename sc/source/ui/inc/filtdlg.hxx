@@ -37,6 +37,7 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 #include "queryparam.hxx"
+#include "collect.hxx"
 
 #include <deque>
 #include <vector>
@@ -51,7 +52,6 @@ class ScRangeData;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class TypedScStrCollection;
 
 class ScFilterDlg : public ScAnyRefDlg
 {

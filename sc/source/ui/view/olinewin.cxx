@@ -810,8 +810,9 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
     }
     else
     {
-        const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<sal_uInt16>(mnFocusLevel),
-                                                         sal::static_int_cast<sal_uInt16>(mnFocusEntry) );
+        const ScOutlineEntry* pEntry = pArray->GetEntry(
+            mnFocusLevel, mnFocusEntry);
+
         if ( pEntry )
         {
             SCCOLROW nStart = pEntry->GetStart();
@@ -824,19 +825,13 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
             {
                 // next level -> find first child entry
                 nNewLevel = mnFocusLevel + 1;
-                // TODO - change ScOutlineArray interface to size_t usage
-                sal_uInt16 nTmpEntry = 0;
-                bFound = pArray->GetEntryIndexInRange( sal::static_int_cast<sal_uInt16>(nNewLevel), nStart, nEnd, nTmpEntry );
-                nNewEntry = nTmpEntry;
+                bFound = pArray->GetEntryIndexInRange(nNewLevel, nStart, nEnd, nNewEntry);
             }
             else if ( !bForward && (mnFocusLevel > 0) )
             {
                 // previous level -> find parent entry
                 nNewLevel = mnFocusLevel - 1;
-                // TODO - change ScOutlineArray interface to size_t usage
-                sal_uInt16 nTmpEntry = 0;
-                bFound = pArray->GetEntryIndex( sal::static_int_cast<sal_uInt16>(nNewLevel), nStart, nTmpEntry );
-                nNewEntry = nTmpEntry;
+                bFound = pArray->GetEntryIndex(nNewLevel, nStart, nNewEntry);
             }
 
             if ( bFound && IsButtonVisible( nNewLevel, nNewEntry ) )

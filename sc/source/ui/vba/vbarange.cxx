@@ -5233,7 +5233,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
         if( pOutlineArray )
         {
             SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
-            ScOutlineEntry* pEntry = pOutlineArray->GetEntryByPos( 0, nPos );
+            const ScOutlineEntry* pEntry = pOutlineArray->GetEntryByPos( 0, nPos );
             if( pEntry )
             {
                 bShowDetail = !pEntry->IsHidden();

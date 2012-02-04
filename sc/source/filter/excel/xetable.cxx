@@ -1302,8 +1302,8 @@ XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) 
         mpScOLArray = bRows ? pOutlineTable->GetRowArray() : pOutlineTable->GetColArray();
 
     if( mpScOLArray )
-        for( sal_uInt16 nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
-            if( ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nLevel, 0 ) )
+        for( size_t nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
+            if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nLevel, 0 ) )
                 maLevelInfos[ nLevel ].mnScEndPos = pEntry->GetEnd();
 }
 
@@ -1312,7 +1312,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
     if( mpScOLArray )
     {
         // find open level index for passed position
-        sal_uInt16 nNewOpenScLevel = 0; // new open level (0-based Calc index)
+        size_t nNewOpenScLevel = 0; // new open level (0-based Calc index)
         sal_uInt8 nNewLevel = 0;    // new open level (1-based Excel index)
 
         if( mpScOLArray->FindTouchedLevel( nScPos, nScPos, nNewOpenScLevel ) )
@@ -1329,7 +1329,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
                     neighbored groups without gap - therefore check ALL levels). */
                 if( maLevelInfos[ nScLevel ].mnScEndPos < nScPos )
                 {
-                    if( ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
+                    if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
                     {
                         maLevelInfos[ nScLevel ].mnScEndPos = pEntry->GetEnd();
                         maLevelInfos[ nScLevel ].mbHidden = pEntry->IsHidden();

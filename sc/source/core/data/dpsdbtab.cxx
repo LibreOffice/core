@@ -32,7 +32,6 @@
 // INCLUDE --------------------------------------------------------------
 
 #include "dpsdbtab.hxx"
-#include "collect.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
 #include "dpcachetable.hxx"

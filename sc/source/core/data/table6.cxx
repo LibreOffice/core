@@ -36,7 +36,6 @@
 #include <editeng/editobj.hxx>
 
 #include "table.hxx"
-#include "collect.hxx"
 #include "cell.hxx"
 #include "document.hxx"
 #include "stlpool.hxx"

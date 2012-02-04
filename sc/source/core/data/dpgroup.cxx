@@ -38,7 +38,6 @@
 #include <svl/zforlist.hxx>
 
 #include "dpgroup.hxx"
-#include "collect.hxx"
 #include "global.hxx"
 #include "document.hxx"
 #include "dpcachetable.hxx"

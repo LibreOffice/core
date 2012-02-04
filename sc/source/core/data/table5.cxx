@@ -30,7 +30,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include "collect.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
