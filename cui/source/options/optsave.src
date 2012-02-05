@@ -101,7 +101,7 @@ TabPage RID_SFXPAGE_SAVE
     {
         HelpID = "cui:NumericField:RID_SFXPAGE_SAVE:ED_AUTOSAVE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 210 , 61 ) ;
+        Pos = MAP_APPFONT ( 210 , 62 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -116,7 +116,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 234 , 63 ) ;
+        Pos = MAP_APPFONT ( 234 , 64 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "Minutes" ;
     };
