@@ -505,7 +505,6 @@ bool WrongList::operator==(const WrongList& rCompare) const
     return true;
 }
 
-#ifdef DBG_UTIL
 sal_Bool WrongList::DbgIsBuggy() const
 {
     // Check if the ranges overlap.
@@ -524,7 +523,6 @@ sal_Bool WrongList::DbgIsBuggy() const
     }
     return bError;
 }
-#endif
 
 //////////////////////////////////////////////////////////////////////
 
