@@ -87,7 +87,6 @@ public:
      *         returned.
      */
     sal_uLong CheckSourceRange() const;
-    long GetCacheId() const;
 
 private:
     mutable ScRange maSourceRange;

@@ -475,7 +475,6 @@ public:
                                                bool bSTotal = false,
                                                bool bTextAsZero = false );
                     ~ScHorizontalValueIterator();
-    void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
     /// Does NOT reset rValue if no value found!
     bool            GetNext( double& rValue, sal_uInt16& rErr );
 };

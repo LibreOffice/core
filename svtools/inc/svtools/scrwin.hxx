@@ -75,8 +75,6 @@ private:
 public:
                     ScrollableWindow( Window* pParent, WinBits nBits = 0,
                                       ScrollableWindowFlags = SCRWIN_DEFAULT );
-                    ScrollableWindow( Window* pParent, const ResId& rId,
-                                      ScrollableWindowFlags = SCRWIN_DEFAULT );
 
     virtual void    Resize();
     virtual void    Command( const CommandEvent& rCEvt );
@@ -92,16 +90,11 @@ public:
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
-    void            SetVisibleSize( const Size& rNewSize );
-    sal_Bool            MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy = sal_False );
+    sal_Bool        MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy = sal_False );
     Rectangle       GetVisibleArea() const;
 
-    void            SetLineSize( sal_uLong nHorz, sal_uLong nVert );
     using Window::Scroll;
     virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
-    void            ScrollLines( long nLinesX, long nLinesY );
-    void            ScrollPages( long nPagesX, sal_uLong nOverlapX,
-                                 long nPagesY, sal_uLong nOverlapY );
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;

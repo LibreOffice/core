@@ -607,18 +607,6 @@ ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
 {
 }
 
-// GetData/PutData hier nur wegen NewInstance-Krempel implementiert...
-
-void ScSubTotalDescriptorBase::GetData( ScSubTotalParam& /* rParam */ ) const
-{
-    OSL_FAIL("ScSubTotalDescriptorBase::GetData soll nicht gerufen werden");
-}
-
-void ScSubTotalDescriptorBase::PutData( const ScSubTotalParam& /* rParam */ )
-{
-    OSL_FAIL("ScSubTotalDescriptorBase::PutData soll nicht gerufen werden");
-}
-
 // XSubTotalDesctiptor
 
 ScSubTotalFieldObj* ScSubTotalDescriptorBase::GetObjectByIndex_Impl(sal_uInt16 nIndex)

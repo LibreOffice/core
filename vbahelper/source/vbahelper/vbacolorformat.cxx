@@ -63,12 +63,6 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
     }
 }
 
-void
-ScVbaColorFormat::setColorFormat( sal_Int16 _ntype )
-{
-    m_nColorFormatType = _ntype;
-}
-
 // Attribute
 sal_Int32 SAL_CALL
 ScVbaColorFormat::getRGB() throw (uno::RuntimeException)

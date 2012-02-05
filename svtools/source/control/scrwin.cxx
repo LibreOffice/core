@@ -60,18 +60,6 @@ ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
     ImpInitialize( nFlags );
 }
 
-//-------------------------------------------------------------------
-
-ScrollableWindow::ScrollableWindow( Window* pParent, const ResId& rId,
-                                    ScrollableWindowFlags nFlags ) :
-    Window( pParent, rId ),
-    aVScroll( this, WinBits(WB_VSCROLL | WB_DRAG) ),
-    aHScroll( this, WinBits(WB_HSCROLL | WB_DRAG) ),
-    aCornerWin( this )
-{
-    ImpInitialize( nFlags );
-}
-
 // -----------------------------------------------------------------------
 
 void ScrollableWindow::Command( const CommandEvent& rCEvt )
@@ -341,37 +329,6 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::SetVisibleSize( const Size& rNewSize )
-{
-    // get the rectangle, we wish to view
-    Rectangle aWish( Point(0, 0), LogicToPixel(rNewSize) );
-
-    // get maximum rectangle for us from our parent-window (subst our border!)
-    Rectangle aMax( Point(0, 0), GetParent()->GetOutputSizePixel() );
-    aMax.Left() -=  ( Window::GetSizePixel().Width() -
-                    Window::GetOutputSizePixel().Width() );
-    aMax.Bottom() -= (Window::GetSizePixel().Height() -
-                     Window::GetOutputSizePixel().Height());
-
-    Size aWill( aWish.GetIntersection(aMax).GetSize() );
-    sal_Bool bHScroll = sal_False;
-    const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    if ( aWill.Width() < aWish.GetSize().Width() )
-    {   bHScroll = sal_True;
-        aWill.Height() =
-            Min( aWill.Height()+nScrSize, aMax.GetSize().Height() );
-    }
-    if ( aWill.Height() < aWish.GetSize().Height() )
-        aWill.Width() =
-            Min( aWill.Width()+nScrSize, aMax.GetSize().Width() );
-    if ( !bHScroll && (aWill.Width() < aWish.GetSize().Width()) )
-        aWill.Height() =
-            Min( aWill.Height()+nScrSize, aMax.GetSize().Height() );
-    Window::SetOutputSizePixel( aWill );
-}
-
-//-------------------------------------------------------------------
-
 sal_Bool ScrollableWindow::MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy )
 {
     Rectangle aTarget;
@@ -464,17 +421,6 @@ Rectangle ScrollableWindow::GetVisibleArea() const
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::SetLineSize( sal_uLong nHorz, sal_uLong nVert )
-{
-    Size aPixSz( LogicToPixel( Size(nHorz, nVert) ) );
-    nColumnPixW = aPixSz.Width();
-    nLinePixH = aPixSz.Height();
-    aVScroll.SetLineSize( nLinePixH );
-    aHScroll.SetLineSize( nColumnPixW );
-}
-
-//-------------------------------------------------------------------
-
 void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {
     if ( !bScrolling )
@@ -548,24 +494,6 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
         if ( nDeltaY )
             aVScroll.SetThumbPos( -aPixOffset.Y() );
     }
-}
-
-//-------------------------------------------------------------------
-
-void ScrollableWindow::ScrollLines( long nLinesX, long nLinesY )
-{
-    Size aDelta( PixelToLogic( Size( nColumnPixW, nLinePixH ) ) );
-    Scroll( aDelta.Width()*nLinesX, aDelta.Height()*nLinesY );
-}
-
-//-------------------------------------------------------------------
-
-void ScrollableWindow::ScrollPages( long nPagesX, sal_uLong nOverlapX,
-                                    long nPagesY, sal_uLong nOverlapY )
-{
-    Size aOutSz( GetVisibleArea().GetSize() );
-    Scroll( nPagesX * aOutSz.Width() + (nPagesX>0 ? 1 : -1) * nOverlapX,
-            nPagesY * aOutSz.Height() + (nPagesY>0 ? 1 : -1) * nOverlapY );
 }
 
 

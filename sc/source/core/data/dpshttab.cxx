@@ -325,11 +325,6 @@ const ScDPCache* ScSheetSourceDesc::CreateCache() const
     return rCaches.getCache(GetSourceRange());
 }
 
-long ScSheetSourceDesc::GetCacheId() const
-{
-    return -1;
-}
-
 sal_uLong ScSheetSourceDesc::CheckSourceRange() const
 {
     if (!mpDoc)

@@ -108,12 +108,6 @@ class ScMyStyleRanges : public SvRefBase
     void SetStylesToRanges(const ::std::list<ScRange>& rList,
         const rtl::OUString* pStyleName, const sal_Int16 nCellType,
         const rtl::OUString* pCurrency, ScXMLImport& rImport);
-    void SetStylesToRanges(ScRangeList* pList,
-        const rtl::OUString* pStyleName, const sal_Int16 nCellType,
-        const rtl::OUString* pCurrency, ScXMLImport& rImport);
-    void SetStylesToRanges(ScRangeListRef xList,
-        const rtl::OUString* pStyleName, const sal_Int16 nCellType,
-        const rtl::OUString* pCurrency, ScXMLImport& rImport);
 public:
     ScMyStyleRanges();
     ~ScMyStyleRanges();

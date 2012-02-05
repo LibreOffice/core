@@ -1908,33 +1908,6 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
     return bFound;
 }
 
-void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
-{
-    if (!bNumValid)
-    {
-        const ScColumn* pCol = &(pDoc->maTabs[nCurTab])->aCol[nCurCol];
-        nNumFmtIndex = pCol->GetNumberFormat( nCurRow );
-        if ( (nNumFmtIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        {
-            const ScBaseCell* pCell;
-            SCSIZE nCurIndex;
-            if ( pCol->Search( nCurRow, nCurIndex ) )
-                pCell = pCol->maItems[nCurIndex].pCell;
-            else
-                pCell = NULL;
-            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((const ScFormulaCell*)pCell)->GetFormatInfo( nNumFmtType, nNumFmtIndex );
-            else
-                nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
-        }
-        else
-            nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
-        bNumValid = true;
-    }
-    nType = nNumFmtType;
-    nIndex = nNumFmtIndex;
-}
-
 //-------------------------------------------------------------------------------
 
 ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,

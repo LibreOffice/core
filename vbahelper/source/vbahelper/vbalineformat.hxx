@@ -47,7 +47,6 @@ protected:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     sal_Int32 convertLineStartEndNameToArrowheadStyle( rtl::OUString sLineName );
     rtl::OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle ) throw (css::uno::RuntimeException);
-    sal_Int32 calculateArrowheadSize() const;
 public:
     ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape );
 

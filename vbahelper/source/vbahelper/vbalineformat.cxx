@@ -45,12 +45,6 @@ ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& 
 }
 
 sal_Int32
-ScVbaLineFormat::calculateArrowheadSize() const
-{
-    return 0;
-}
-
-sal_Int32
 ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( rtl::OUString sLineName )
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
