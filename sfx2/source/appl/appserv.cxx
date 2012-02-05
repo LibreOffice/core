@@ -586,9 +586,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
                         aValue >>= xLayoutManager;
                     }
-                    catch ( const ::com::sun::star::uno::RuntimeException& e )
+                    catch ( const ::com::sun::star::uno::RuntimeException& )
                     {
-                        throw e;
+                        throw;
                     }
                     catch ( ::com::sun::star::uno::Exception& )
                     {
@@ -889,8 +889,8 @@ static ::rtl::OUString getConfigurationStringValue(
             rKey,
             ::comphelper::ConfigurationHelper::E_READONLY) >>= aDefVal;
     }
-    catch(const com::sun::star::uno::RuntimeException& exRun)
-    { throw exRun; }
+    catch(const com::sun::star::uno::RuntimeException&)
+    { throw; }
     catch(const com::sun::star::uno::Exception&)
     {}
 

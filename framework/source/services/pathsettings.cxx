@@ -413,12 +413,12 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(aPath, sal_False);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::container::NoSuchElementException&)
         { eOp = PathSettings::E_REMOVED; }
-    catch(const css::uno::Exception& exAny)
-        { throw exAny; }
+    catch(const css::uno::Exception&)
+        { throw; }
 
     #ifdef MIGRATE_OLD_USER_PATHES
     try
@@ -433,8 +433,8 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         impl_subst(lOldVals, fa_getSubstitution(), sal_False);
         impl_mergeOldUserPaths(aPath, lOldVals);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     // Normal(!) exceptions can be ignored!
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation
     // we cant find a value for it inside the "old" configuration. So a NoSuchElementException

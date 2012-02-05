@@ -138,8 +138,8 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
                     lInfos[rInfo.Command] = rInfo;
             }
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             { continue; }
     }

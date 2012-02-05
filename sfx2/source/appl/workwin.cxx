@@ -201,9 +201,9 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                 catch ( css::lang::DisposedException& )
                 {
                 }
-                catch ( const css::uno::RuntimeException& e )
+                catch ( const css::uno::RuntimeException& )
                 {
-                    throw e;
+                    throw;
                 }
                 catch ( css::uno::Exception& )
                 {
@@ -262,9 +262,9 @@ throw( css::uno::RuntimeException )
             catch ( css::lang::DisposedException& )
             {
             }
-            catch ( const css::uno::RuntimeException& e )
+            catch ( const css::uno::RuntimeException& )
             {
-                throw e;
+                throw;
             }
             catch ( css::uno::Exception& )
             {

@@ -389,8 +389,8 @@ void RecoveryUI::impl_showAllRecoveredDocs()
 
             xWindow->setVisible(sal_True);
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             { continue; }
     }

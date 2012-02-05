@@ -369,8 +369,8 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
             }
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException& )
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
@@ -750,8 +750,8 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             return xUriRef->getUriReference();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 

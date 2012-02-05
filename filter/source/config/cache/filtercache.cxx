@@ -931,8 +931,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
     {
         aValue = xAccess->getByName(sKey);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     #else
