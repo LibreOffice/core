@@ -150,12 +150,8 @@ rtl::OString CppDep::Exists(const rtl::OString &rFileName)
         if ( stat( pFullName, &aBuf ) == 0 )
         {
 #ifdef DEBUG_VERBOSE
-            fprintf( stderr, "Got Dependency ", pFullName );
+            fprintf( stderr, "Got Dependency %s \\\n", pFullName );
 #endif
-#ifdef DEBUG_VERBOSE
-            fprintf( stderr, "%s \\\n", pFullName );
-#endif
-
             return rtl::OString(pFullName);
         }
     }
