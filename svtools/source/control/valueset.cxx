@@ -339,7 +339,6 @@ void ValueSet::Format()
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
     long        nOff;
-    long        nSpace;
     long        nNoneHeight;
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
@@ -367,7 +366,6 @@ void ValueSet::Format()
     }
     else
         nOff = 0;
-    nSpace = mnSpacing;
 
     // consider size, if NameField does exist
     if ( nStyle & WB_NAMEFIELD )
@@ -388,7 +386,7 @@ void ValueSet::Format()
     if ( nStyle & WB_NONEFIELD )
     {
         nNoneHeight = nTxtHeight+nOff;
-        nNoneSpace = nSpace;
+        nNoneSpace = mnSpacing;
         if ( nStyle & WB_RADIOSEL )
             nNoneHeight += 8;
     }
@@ -414,7 +412,7 @@ void ValueSet::Format()
     {
         if ( mnUserItemWidth )
         {
-            mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth+nSpace) / (mnUserItemWidth+nSpace));
+            mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth+mnSpacing) / (mnUserItemWidth+mnSpacing));
             if ( !mnCols )
                 mnCols = 1;
         }
@@ -437,7 +435,7 @@ void ValueSet::Format()
         mnVisLines = mnUserVisLines;
     else if ( mnUserItemHeight )
     {
-        mnVisLines = (nCalcHeight-nNoneSpace+nSpace) / (mnUserItemHeight+nSpace);
+        mnVisLines = (nCalcHeight-nNoneSpace+mnSpacing) / (mnUserItemHeight+mnSpacing);
         if ( !mnVisLines )
             mnVisLines = 1;
     }
@@ -454,8 +452,8 @@ void ValueSet::Format()
     }
 
     // calculate item size
-    long nColSpace  = (mnCols-1)*nSpace;
-    long nLineSpace = ((mnVisLines-1)*nSpace)+nNoneSpace;
+    long nColSpace  = (mnCols-1)*mnSpacing;
+    long nLineSpace = ((mnVisLines-1)*mnSpacing)+nNoneSpace;
     long nItemWidth;
     long nItemHeight;
     if ( mnUserItemWidth && !mnUserCols )
@@ -583,7 +581,7 @@ void ValueSet::Format()
             // If want also draw parts of items in the last line,
             // then we add one more line if parts of these line are
             // visible
-            if ( y+(mnVisLines*(nItemHeight+nSpace)) < aWinSize.Height() )
+            if ( y+(mnVisLines*(nItemHeight+mnSpacing)) < aWinSize.Height() )
                 nLastItem += mnCols;
         }
         for ( size_t i = 0; i < nItemCount; i++ )
@@ -612,10 +610,10 @@ void ValueSet::Format()
                 if ( !((i+1) % mnCols) )
                 {
                     x = nStartX;
-                    y += nItemHeight+nSpace;
+                    y += nItemHeight+mnSpacing;
                 }
                 else
-                    x += nItemWidth+nSpace;
+                    x += nItemWidth+mnSpacing;
             }
             else
             {
@@ -640,7 +638,7 @@ void ValueSet::Format()
             if ( nStyle & WB_NONEFIELD )
             {
                 aPos.Y() = nStartY+nNoneHeight+1;
-                aSize.Height() = ((nItemHeight+nSpace)*mnVisLines)-2-nSpace;
+                aSize.Height() = ((nItemHeight+mnSpacing)*mnVisLines)-2-mnSpacing;
             }
             mpScrBar->SetPosSizePixel( aPos, aSize );
             mpScrBar->SetRangeMax( mnLines );
@@ -2380,7 +2378,6 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
     Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        nSpace;
     long        n;
 
     if ( nStyle & WB_ITEMBORDER )
@@ -2398,12 +2395,9 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
     if ( mnSpacing )
     {
-        nSpace = mnSpacing;
         aSize.Width()  += mnSpacing*(nCalcCols-1);
         aSize.Height() += mnSpacing*(nCalcLines-1);
     }
-    else
-        nSpace = 0;
 
     if ( nStyle & WB_NAMEFIELD )
     {
@@ -2414,7 +2408,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
     if ( nStyle & WB_NONEFIELD )
     {
-        aSize.Height() += nTxtHeight + n + nSpace;
+        aSize.Height() += nTxtHeight + n + mnSpacing;
         if ( nStyle & WB_RADIOSEL )
             aSize.Height() += 8;
     }
