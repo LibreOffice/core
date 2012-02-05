@@ -56,7 +56,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
     {
         if( RES_FLYFRMFMT == pFmt->Which() )
         {
-            // Schauen, ob es ein SdrObject dafuer gibt
+            // Let's see if we have an SdrObject for this
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*pFmt);
             if( pFly )
             {
@@ -66,7 +66,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
         }
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
-            // Schauen, ob es ein SdrObject dafuer gibt
+            // Let's see if we have an SdrObject for this
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
             if( pContact )
             {
@@ -94,14 +94,14 @@ SwPosFlyFrm::~SwPosFlyFrm()
 
 sal_Bool SwPosFlyFrm::operator==( const SwPosFlyFrm& )
 {
-    return sal_False;   // FlyFrames koennen auf der gleichen Position stehen
+    return sal_False;   // FlyFrames can sit at the same position
 }
 
 sal_Bool SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )
 {
     if( pNdIdx->GetIndex() == rPosFly.pNdIdx->GetIndex() )
     {
-        // dann entscheidet die Ordnungsnummer!
+        // In this case, the order number decides!
         return nOrdNum < rPosFly.nOrdNum;
     }
     return pNdIdx->GetIndex() < rPosFly.pNdIdx->GetIndex();
