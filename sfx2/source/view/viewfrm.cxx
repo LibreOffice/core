@@ -1784,14 +1784,6 @@ sal_Bool SfxViewFrame::IsVisible() const
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::Hide()
-{
-    GetWindow().Hide();
-    if ( pImp->bObjLocked )
-        LockObjectShell_Impl( sal_False );
-}
-
-//--------------------------------------------------------------------
 void SfxViewFrame::LockObjectShell_Impl( sal_Bool bLock )
 {
     DBG_ASSERT( pImp->bObjLocked != bLock, "Wrong Locked status!" );

@@ -150,7 +150,6 @@ public:
                         { return nContextId; }
 
     FloatingWindow*     GetFloatingWindow() const;
-    SfxChildAlignment   GetAlignment() const;
 
     virtual void        Resizing( Size& rSize );
     virtual sal_Bool        Close();

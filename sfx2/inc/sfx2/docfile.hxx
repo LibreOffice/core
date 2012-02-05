@@ -139,7 +139,6 @@ public:
     SfxFrame*           GetLoadTargetFrame() const;
 
     void                SetReferer( const String& rRefer );
-    const String&       GetReferer( ) const;
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter *   GetFilter() const { return pFilter; }
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;

@@ -47,7 +47,6 @@ private:
 public:
                             TYPEINFO();
 
-                            SfxDateTimeItem( sal_uInt16 nWhich );
                             SfxDateTimeItem( sal_uInt16 nWhich,
                                              const DateTime& rDT );
                             SfxDateTimeItem( const SfxDateTimeItem& rCpy );

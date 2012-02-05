@@ -181,7 +181,6 @@ class SfxOleString16Property : public SfxOleStringPropertyBase
 {
 public:
     explicit            SfxOleString16Property( sal_Int32 nPropId );
-    explicit            SfxOleString16Property( sal_Int32 nPropId, const String& rValue );
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
@@ -216,8 +215,6 @@ class SfxOleDateProperty : public SfxOlePropertyBase
 {
 public:
     explicit            SfxOleDateProperty( sal_Int32 nPropId );
-    /** @param rDate  Date as LOCAL time. */
-    explicit            SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate );
 
     /** Returns the date value as LOCAL time. */
     inline const util::Date& GetValue() const { return maDate; }
@@ -571,11 +568,6 @@ SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId ) :
 {
 }
 
-SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId, const String& rValue ) :
-    SfxOleStringPropertyBase( nPropId, PROPTYPE_STRING16, RTL_TEXTENCODING_UCS2, rValue )
-{
-}
-
 void SfxOleString16Property::ImplLoad( SvStream& rStrm )
 {
     SetValue( LoadString16( rStrm ) );
@@ -645,12 +637,6 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
 
 SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_DATE )
-{
-}
-
-SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate ) :
-    SfxOlePropertyBase( nPropId, PROPTYPE_DATE ),
-    maDate( rDate )
 {
 }
 

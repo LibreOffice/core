@@ -496,11 +496,6 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
 
 //-------------------------------------------------------------------------
 
-SfxBroadcaster& SfxFrame::GetBroadcaster() const
-{
-    return *pImp;
-}
-
 sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {
     SfxFrame *pParent = pParentFrame;
@@ -701,11 +696,6 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     }
 
     return pRet;
-}
-
-sal_Bool SfxFrame::IsTop() const
-{
-    return GetFrameInterface().is() ? GetFrameInterface()->isTop() : sal_False;
 }
 
 sal_Bool SfxFrame::HasComponent() const

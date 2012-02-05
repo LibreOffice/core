@@ -141,7 +141,6 @@ protected:
     void                    BindListener();
     void                    UnbindListener();
     void                    AddStatusListener( const rtl::OUString& rCommandURL );
-    void                    RemoveStatusListener( const rtl::OUString& rCommandURL );
 
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;

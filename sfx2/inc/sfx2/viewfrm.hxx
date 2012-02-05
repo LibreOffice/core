@@ -142,7 +142,6 @@ public:
                             { nAdjustPosPixelLock--; }
     void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
                                         const Point &rPos, const Size &rSize );
-    void                    Hide();
     void                    Show();
     sal_Bool                    IsVisible() const;
     void                    ToTop();

@@ -60,7 +60,6 @@ public:
 
     sal_Bool                StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups = sal_False );
     sal_Bool                EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups = sal_False );
-    void                EndListening( sal_uInt16 nNo );
     void                EndListeningAll();
     sal_Bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 

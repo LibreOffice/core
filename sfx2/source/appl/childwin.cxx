@@ -534,22 +534,6 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
     }
 }
 
-SfxChildAlignment SfxChildWindowContext::GetAlignment() const
-{
-    Window *pParent = pWindow->GetParent();
-    if ( pParent->GetType() == RSC_DOCKINGWINDOW )
-    {
-        return ((SfxDockingWindow*)pParent)->GetAlignment();
-    }
-    else if ( pParent->GetType() == RSC_TOOLBOX )
-    {
-        HACK(noch nicht verwendet und noch nicht implementiert);
-        return SFX_ALIGN_NOALIGNMENT;
-    }
-    else
-        return SFX_ALIGN_NOALIGNMENT;
-}
-
 void SfxChildWindowContext::Resizing( Size& )
 {
 }

@@ -620,17 +620,6 @@ void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 
 // -----------------------------------------------------------------------
 
-Link SfxTabDialog::GetApplyHandler() const
-{
-    DBG_ASSERT( pImpl->pApplyButton, "SfxTabDialog::GetApplyHandler: no button enabled!" );
-    if ( !pImpl->pApplyButton )
-        return Link();
-
-    return pImpl->pApplyButton->GetClickHdl();
-}
-
-// -----------------------------------------------------------------------
-
 void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
 {
     if ( IsApplyButtonEnabled() == bEnable )

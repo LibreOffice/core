@@ -870,29 +870,6 @@ sal_uInt16 SfxRequest::GetModifier() const
 
 //--------------------------------------------------------------------
 
-void SfxRequest::SetTarget( const String &rTarget )
-
-/*  [Description]
-
-    With this method the recording of the target object can be implemented.
-
-    [Example]
-
-    The BASIC-Methode 'Open' is although executed by the Shell 'Application'
-    but recorded on the Objekt 'Documents' (global):
-
-        rReq.SetTarget( "Documents" );
-
-    This then leads to:
-
-        Documents.Open( ... )
-*/
-
-{
-    pImp->aTarget = rTarget;
-    pImp->bUseTarget = sal_True;
-}
-
 void SfxRequest::AllowRecording( sal_Bool bSet )
 {
     pImp->bAllowRecording = bSet;

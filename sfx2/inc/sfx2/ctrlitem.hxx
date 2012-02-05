@@ -67,7 +67,6 @@ public:
     void                UnBind();
     void                ReBind();
     sal_Bool                IsBound() const;
-    void                UpdateSlot();
     void                ClearCache();
     void                SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
 
@@ -80,8 +79,6 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual void        DeleteFloatingWindow();
-
-    SfxMapUnit          GetCoreMetric() const;
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 

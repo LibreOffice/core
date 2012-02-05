@@ -212,12 +212,7 @@ SetOfByte::GetSetBit(unsigned short) const
 SetOfByte::IsFull() const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxApplication::Main()
-SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBrushItemLink::Set(SfxBrushItemLink*)
-SfxChildWindowContext::GetAlignment() const
-SfxControllerItem::GetCoreMetric() const
-SfxControllerItem::UpdateSlot()
-SfxDateTimeItem::SfxDateTimeItem(unsigned short)
 SfxDockingWrapper::GetChildWindowId()
 SfxFilterPtrArr::DeleteAndDestroy(unsigned short, unsigned short)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCacheArr_Impl const*, unsigned short, unsigned short)
@@ -225,40 +220,14 @@ SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const*&, unsigned short&)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const**, unsigned short)
 SfxFoundCacheArr_Impl::Remove(SfxFoundCache_Impl const*&, unsigned short)
 SfxFoundCacheArr_Impl::Remove(unsigned short, unsigned short)
-SfxFrame::GetBroadcaster() const
-SfxFrame::IsTop() const
-SfxFrameDescriptor::GetItemPos() const
-SfxFrameDescriptor::GetSize() const
-SfxFrameDescriptor::GetWallpaper() const
-SfxFrameDescriptor::GetWinBits() const
-SfxFrameDescriptor::SetURL(INetURLObject const&)
-SfxHintPoster::SfxHintPoster()
-SfxInPlaceClient::GetActiveWindow(SfxObjectShell*, com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&)
-SfxInPlaceClient::IsObjectActive() const
-SfxItemPropertySetInfo::getMap() const
-SfxItemSetHint::SfxItemSetHint(SfxItemSet*)
-SfxListener::EndListening(unsigned short)
-SfxLockBytesItem::SfxLockBytesItem(unsigned short, SvLockBytes*)
-SfxMailModel::GetCount() const
 SfxMedium::GetHdl()
-SfxMedium::GetReferer() const
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
-SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
-SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxPartChildWnd_Impl::GetChildWindowId()
-SfxPasswordDialog::SetMaxLen(unsigned short)
 SfxPopupWindow::LinkStubDelete(void*, void*)
-SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)
 SfxProgress::Lock()
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
-SfxRequest::SetTarget(String const&)
-SfxShell::GetBroadcaster()
-SfxShell::RemoveItem(unsigned short)
-SfxSlotPool::NextInterface()
-SfxStyleSheet::SfxStyleSheet()
-SfxTabDialog::GetApplyHandler() const
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxUINT32s::Insert(SfxUINT32s const*, unsigned short, unsigned short, unsigned short)
 SfxUINT32s::Remove(unsigned short, unsigned short)
@@ -276,8 +245,6 @@ SfxUShortRanges::Contains(unsigned short) const
 SfxUShortRanges::Intersects(SfxUShortRanges const&) const
 SfxUShortRanges::SfxUShortRanges(int, int, int, ...)
 SfxUShortRangesItem::SfxUShortRangesItem(unsigned short, unsigned short const*)
-SfxViewFactory::~SfxViewFactory()
-SfxViewFrame::Hide()
 Slider::SetRangeMax(long)
 Slider::SetRangeMin(long)
 Slider::Slider(Window*, ResId const&)

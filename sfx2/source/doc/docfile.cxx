@@ -2959,12 +2959,6 @@ void SfxMedium::SetReferer( const String& rRefer )
 {
     pImp->aReferer = rRefer;
 }
-//----------------------------------------------------------------
-
-const String& SfxMedium::GetReferer( ) const
-{
-    return pImp->aReferer;
-}
 
 //----------------------------------------------------------------
 

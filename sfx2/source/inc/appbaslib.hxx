@@ -73,11 +73,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
             getLibraryContainer( ContainerType _eType );
 
-    /** determines whether any of our library containers is modified, i.e. returns <TRUE/>
-        in its isContainerModified call.
-    */
-    bool    isAnyContainerModified() const;
-
     /** calls the storeLibraries at both our script and basic library container
     */
     void    storeAllLibraries();

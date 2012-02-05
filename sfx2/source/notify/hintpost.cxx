@@ -40,13 +40,6 @@ void SfxHintPoster::RegisterEvent()
 
 //--------------------------------------------------------------------
 
-SfxHintPoster::SfxHintPoster()
-{
-    RegisterEvent();
-}
-
-//--------------------------------------------------------------------
-
 SfxHintPoster::SfxHintPoster( const GenLink& rLink ):
     aLink(rLink)
 {

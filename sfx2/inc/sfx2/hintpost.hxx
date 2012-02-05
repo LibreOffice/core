@@ -64,7 +64,6 @@ protected:
     virtual void    Event( SfxHint* pPostedHint );
 
 public:
-                    SfxHintPoster();
                     SfxHintPoster( const GenLink& rLink );
 
     void            Post( SfxHint* pHint = 0 );

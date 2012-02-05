@@ -189,7 +189,6 @@ public:
     void                EnableApplyButton(sal_Bool bEnable = sal_True);
     sal_Bool                IsApplyButtonEnabled() const;
     void                SetApplyHandler(const Link& _rHdl);
-    Link                GetApplyHandler() const;
 
     SAL_DLLPRIVATE void Start_Impl();
     SAL_DLLPRIVATE sal_Bool OK_Impl() { return PrepareLeaveCurrentPage(); }

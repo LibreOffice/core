@@ -106,7 +106,6 @@ public:
     sal_Bool                IsAPI() const;
     sal_Bool                IsSynchronCall() const;
     void                SetSynchronCall( sal_Bool bSynchron );
-    void                SetTarget( const String &rTarget );
 
     sal_Bool                IsDone() const;
     void                Done( sal_Bool bRemove = sal_False );

@@ -876,27 +876,6 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxInPlaceClient::IsObjectActive() const
-{
-    try {
-        return ( m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::ACTIVE ) );
-    }
-    catch( uno::Exception& )
-    {}
-
-    return sal_False;
-}
-
-//--------------------------------------------------------------------
-Window* SfxInPlaceClient::GetActiveWindow( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject )
-{
-    SfxInPlaceClient* pClient = GetClient( pDoc, xObject );
-    if ( pClient )
-        return pClient->GetEditWin();
-    return NULL;
-}
-
-//--------------------------------------------------------------------
 SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject )
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )

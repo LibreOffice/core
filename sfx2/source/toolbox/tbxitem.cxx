@@ -1286,15 +1286,6 @@ void SfxPopupWindow::AddStatusListener( const rtl::OUString& rCommandURL )
 
 //--------------------------------------------------------------------
 
-void SfxPopupWindow::RemoveStatusListener( const rtl::OUString& rCommandURL )
-{
-    GetOrCreateStatusListener();
-    if ( m_xStatusListener.is() )
-        m_pStatusListener->removeStatusListener( rCommandURL );
-}
-
-//--------------------------------------------------------------------
-
 sal_Bool SfxPopupWindow::Close()
 {
     m_bFloating = sal_False;

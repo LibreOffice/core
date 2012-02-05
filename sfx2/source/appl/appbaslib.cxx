@@ -76,18 +76,6 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
     }
 }
 
-bool SfxBasicManagerHolder::isAnyContainerModified() const
-{
-    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::isAnyContainerModified: not initialized!" );
-
-    if ( mxBasicContainer.is() && mxBasicContainer->isModified() )
-        return true;
-    if ( mxDialogContainer.is() && mxDialogContainer->isModified() )
-        return true;
-
-    return false;
-}
-
 void SfxBasicManagerHolder::storeAllLibraries()
 {
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );

@@ -184,8 +184,6 @@ public:
                                 TYPEINFO();
     virtual                     ~SfxShell();
 
-    SfxBroadcaster*             GetBroadcaster();
-
     // TODO/CLEANUP: still needed?!
     virtual SvGlobalName        GetGlobalName() const;
 
@@ -237,7 +235,6 @@ public:
     // Items
     const SfxPoolItem*          GetItem( sal_uInt16 nSlotId ) const;
     void                        PutItem( const SfxPoolItem& rItem );
-    void                        RemoveItem( sal_uInt16 nSlotId );
 
     // TODO/CLEANUP: still needed?!
     void SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs);

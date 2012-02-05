@@ -79,7 +79,6 @@ public:
     Size                GetObjectVisAreaSize() const;
     sal_Bool            IsObjectUIActive() const;
     sal_Bool            IsObjectInPlaceActive() const;
-    sal_Bool            IsObjectActive() const;
     void                DeactivateObject();
     sal_Bool                SetObjArea( const Rectangle & );
     Rectangle           GetObjArea() const;
@@ -89,7 +88,6 @@ public:
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();
-    static Window*      GetActiveWindow( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
     static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
     sal_Int64           GetObjectMiscStatus() const;

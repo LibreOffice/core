@@ -224,15 +224,6 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 
 // -----------------------------------------------------------------------
 
-void SfxPasswordDialog::SetMaxLen( sal_uInt16 nLen )
-{
-    maPasswordED.SetMaxTextLen( nLen );
-    maConfirmED.SetMaxTextLen( nLen );
-    EditModifyHdl( NULL );
-}
-
-// -----------------------------------------------------------------------
-
 short SfxPasswordDialog::Execute()
 {
     maUserFT.Hide();

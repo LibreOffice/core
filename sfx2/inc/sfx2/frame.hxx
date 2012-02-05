@@ -157,7 +157,6 @@ public:
     static const SfxPoolItem*
                         OpenDocumentSynchron( SfxItemSet& aSet, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rTargetFrame );
 
-    SfxBroadcaster&     GetBroadcaster() const;
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
     SfxFrame&           GetTopFrame() const;
@@ -166,7 +165,6 @@ public:
     sal_uInt32          GetFrameType() const;
     void                GetTargetList( TargetList& ) const;
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
-    sal_Bool            IsTop() const;
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
     sal_Bool            HasComponent() const;
