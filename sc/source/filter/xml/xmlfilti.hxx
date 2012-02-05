@@ -88,8 +88,6 @@ public:
 
     virtual void EndElement();
 
-    void SetCaseSensitive(const bool b);
-    void SetUseRegularExpressions(bool b);
     void OpenConnection(bool b);
     void CloseConnection();
     bool GetConnection();

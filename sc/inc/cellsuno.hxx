@@ -869,10 +869,6 @@ public:
 
                             // XML import needs to set results at formula cells,
                             // not meant for any other purpose.
-    void                    SetFormulaResultString( const ::rtl::OUString& rResult );
-    void                    SetFormulaResultDouble( double fResult );
-    void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
 
     void                    InputEnglishString( const ::rtl::OUString& rText );

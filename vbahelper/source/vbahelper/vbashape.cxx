@@ -63,12 +63,6 @@ ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const
     addListeners();
 }
 
-ScVbaShape::ScVbaShape( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape, const uno::Reference< frame::XModel >& xModel ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( uno::Reference< XHelperInterface >(), xContext ), m_xShape( xShape ), m_xModel( xModel )
-{
-    // add listener
-    addListeners();
-}
-
 ScVbaShape::~ScVbaShape()
 {
     // dtor must never ever throw

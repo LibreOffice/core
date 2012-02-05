@@ -32,12 +32,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommentShape::ScVbaCommentShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape, const uno::Reference< excel::XComment >& xComment,
-    const uno::Reference< drawing::XShapes >& xShapes, const uno::Reference< frame::XModel >& xModel, sal_Int32 nType ) : ScVbaShape( xParent, xContext, xShape, xShapes, xModel, nType )
-{
-    m_xComment.set( xComment, uno::UNO_QUERY );
-}
-
 void SAL_CALL ScVbaCommentShape::Delete() throw (uno::RuntimeException)
 {
     if ( m_xComment.is() )

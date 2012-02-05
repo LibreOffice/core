@@ -6234,39 +6234,6 @@ void ScCellObj::SetValue_Impl(double fValue)
 
 // only for XML import
 
-void ScCellObj::SetFormulaResultString( const ::rtl::OUString& rResult )
-{
-    ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        ScBaseCell* pCell = pDocSh->GetDocument()->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-            ((ScFormulaCell*)pCell)->SetHybridString( rResult );
-    }
-}
-
-void ScCellObj::SetFormulaResultDouble( double fResult )
-{
-    ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        ScBaseCell* pCell = pDocSh->GetDocument()->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-            ((ScFormulaCell*)pCell)->SetHybridDouble( fResult );
-    }
-}
-
-void ScCellObj::SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-        const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
-{
-    ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        ScDocFunc aFunc(*pDocSh);
-        aFunc.SetCellText( aCellPos, rFormula, sal_True, sal_True, sal_True, rFormulaNmsp, eGrammar);
-    }
-}
-
 void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
 {
     // This is like a mixture of setFormula and property FormulaLocal:

@@ -37,11 +37,6 @@ ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::X
 {
 }
 
-ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException) : CommandBarControl_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_sResourceUrl( sResourceUrl ), m_xCurrentSettings( xSettings ), m_xBarSettings( xBarSettings ), m_nPosition( nPosition ), m_bTemporary( bTemporary )
-{
-    m_xCurrentSettings->getByIndex( nPosition ) >>= m_aPropertyValues;
-}
-
 void ScVbaCommandBarControl::ApplyChange() throw ( uno::RuntimeException )
 {
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xCurrentSettings, uno::UNO_QUERY_THROW );

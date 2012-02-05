@@ -86,8 +86,6 @@ public:
 private:
     bool hasSize() const;
     bool hasPosition() const;
-    ::com::sun::star::awt::Size getSize() const;
-    ::com::sun::star::awt::Point getPosition() const;
 
     SvXMLImport& m_rImport;
 

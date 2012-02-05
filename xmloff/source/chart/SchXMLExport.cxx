@@ -3533,27 +3533,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     }
 }
 
-
-void SchXMLExportHelper_Impl::getCellAddress( sal_Int32 nCol, sal_Int32 nRow )
-{
-    msStringBuffer.append( (sal_Unicode)'.' );
-    if( nCol < 26 )
-        msStringBuffer.append( (sal_Unicode)('A' + nCol) );
-    else if( nCol < 702 )
-    {
-        msStringBuffer.append( (sal_Unicode)('A' + nCol / 26 - 1 ));
-        msStringBuffer.append( (sal_Unicode)('A' + nCol % 26) );
-    }
-    else
-    {
-        msStringBuffer.append( (sal_Unicode)('A' + nCol / 702 - 1 ));
-        msStringBuffer.append( (sal_Unicode)('A' + (nCol % 702) / 26 ));
-        msStringBuffer.append( (sal_Unicode)('A' + nCol % 26) );
-    }
-
-    msStringBuffer.append( nRow + (sal_Int32)1 );
-}
-
 void SchXMLExportHelper_Impl::addPosition( const awt::Point & rPosition )
 {
     mrExport.GetMM100UnitConverter().convertMeasureToXML(
@@ -3755,13 +3734,6 @@ void SchXMLExport::_ExportContent()
     {
         OSL_FAIL( "Couldn't export chart due to wrong XModel" );
     }
-}
-
-void SchXMLExport::SetProgress( sal_Int32 nPercentage )
-{
-    // set progress view
-    if( mxStatusIndicator.is())
-        mxStatusIndicator->setValue( nPercentage );
 }
 
 UniReference< XMLPropertySetMapper > SchXMLExport::GetPropertySetMapper() const

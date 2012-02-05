@@ -80,8 +80,6 @@ public:
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
-    void SetProgress( sal_Int32 nPercentage );
-
     UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
 
     // XServiceInfo ( : SvXMLExport )

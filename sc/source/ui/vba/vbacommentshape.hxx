@@ -38,9 +38,6 @@ class ScVbaCommentShape : public ScVbaShape
     css::uno::Reference< ooo::vba::excel::XComment > m_xComment;
 
 public:
-    ScVbaCommentShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape,
-        const css::uno::Reference< ooo::vba::excel::XComment >& xComment, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType );
-
     // Methods
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
 };

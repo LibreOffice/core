@@ -167,17 +167,6 @@ void ScXMLFilterContext::EndElement()
         pDatabaseRangeContext->SetFilterConditionSourceRangeAddress(aConditionSourceRangeAddress);
 }
 
-void ScXMLFilterContext::SetCaseSensitive(bool b)
-{
-    mrQueryParam.bCaseSens = b;
-}
-
-void ScXMLFilterContext::SetUseRegularExpressions(bool b)
-{
-    if (!bUseRegularExpressions)
-        bUseRegularExpressions = b;
-}
-
 void ScXMLFilterContext::OpenConnection(bool b)
 {
     maConnStack.push_back(ConnStackItem(b));
