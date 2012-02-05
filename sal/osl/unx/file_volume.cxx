@@ -59,14 +59,12 @@
 #include <sys/mnttab.h>
 #include <sys/statvfs.h>
 #define  HAVE_STATFS_H
-static const sal_Char* MOUNTTAB="/etc/mnttab";
 
 #elif defined(LINUX)
 
 #include <mntent.h>
 #include <sys/vfs.h>
 #define  HAVE_STATFS_H
-static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
@@ -75,16 +73,11 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/mount.h>
 #define  HAVE_STATFS_H
 
-/* No mounting table on *BSD
- * This information is stored only in the kernel. */
-/* static const sal_Char* MOUNTTAB="/etc/mtab"; */
-
 #elif defined(MACOSX)
 
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
-// static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #endif /* HAVE_STATFS_H */
 
@@ -360,42 +353,6 @@ static oslFileError osl_psz_getVolumeInformation (
  *
  *****************************************************************************/
 
-
-/*****************************************
- * osl_unmountVolumeDevice
- ****************************************/
-
-oslFileError osl_unmountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    oslFileError tErr = osl_File_E_NOSYS;
-
-     /* Perhaps current working directory is set to mount point */
-
-     if ( tErr )
-    {
-        sal_Char *pszHomeDir = getenv("HOME");
-
-        if ( pszHomeDir && strlen( pszHomeDir ) && 0 == chdir( pszHomeDir ) )
-        {
-            /* try again */
-            OSL_ENSURE( tErr, "osl_unmountVolumeDevice: CWD was set to volume mount point" );
-        }
-    }
-
-    return tErr;
-}
-
-/*****************************************
- * osl_automountVolumeDevice
- ****************************************/
-
-oslFileError osl_automountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    oslFileError tErr = osl_File_E_NOSYS;
-
-    return tErr;
-}
-
 /*****************************************
  * osl_getVolumeDeviceMountPath
  ****************************************/
@@ -490,42 +447,5 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 
     return osl_File_E_None;
 }
-
-#if !defined(MACOSX) && !defined(AIX) && !defined(IOS) && !defined(ANDROID)
-
-/*****************************************
- * osl_newVolumeDeviceHandleImpl
- ****************************************/
-
-static oslVolumeDeviceHandleImpl* osl_newVolumeDeviceHandleImpl()
-{
-    oslVolumeDeviceHandleImpl* pHandle;
-    const size_t               nSizeOfHandle = sizeof(oslVolumeDeviceHandleImpl);
-
-    pHandle = (oslVolumeDeviceHandleImpl*) rtl_allocateMemory (nSizeOfHandle);
-    if (pHandle != NULL)
-    {
-        pHandle->ident[0]         = 'O';
-        pHandle->ident[1]         = 'V';
-        pHandle->ident[2]         = 'D';
-        pHandle->ident[3]         = 'H';
-        pHandle->pszMountPoint[0] = '\0';
-        pHandle->pszFilePath[0]   = '\0';
-        pHandle->pszDevice[0]     = '\0';
-        pHandle->RefCount         = 1;
-    }
-    return pHandle;
-}
-
-/*****************************************
- * osl_freeVolumeDeviceHandleImpl
- ****************************************/
-
-static void osl_freeVolumeDeviceHandleImpl (oslVolumeDeviceHandleImpl* pHandle)
-{
-    if (pHandle != NULL)
-        rtl_freeMemory (pHandle);
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

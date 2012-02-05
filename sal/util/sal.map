@@ -443,8 +443,6 @@ UDK_3_0_0 {
         osl_getSystemTimeFromLocalTime;
         osl_getAbsoluteFileURL;
 
-        osl_unmountVolumeDevice;
-        osl_automountVolumeDevice;
         osl_releaseVolumeDeviceHandle;
         osl_getVolumeDeviceMountPath;
         osl_acquireVolumeDeviceHandle;

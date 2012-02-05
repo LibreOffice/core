@@ -388,34 +388,6 @@ public:
         return *this;
     }
 
-    /** Automount a volume device.
-
-        @return
-        E_None on success
-
-        @todo
-        specify all error codes that may be returned
-    */
-
-    inline RC automount()
-    {
-        return (RC)osl_automountVolumeDevice( _aHandle );
-    }
-
-    /** Unmount a volume device.
-
-        @return
-        E_None on success
-
-        @todo
-        specify all error codes that may be returned
-    */
-
-    inline RC unmount()
-    {
-        return (RC)osl_unmountVolumeDevice( _aHandle );
-    }
-
     /** Get the full qualified URL where a device is mounted to.
 
            @return

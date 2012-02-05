@@ -224,24 +224,6 @@ namespace /* private */
 //#####################################################
 
 //#####################################################
-oslFileError SAL_CALL osl_unmountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    if ( Handle )
-        return osl_File_E_None;
-    else
-        return osl_File_E_INVAL;
-}
-
-//#####################################################
-oslFileError SAL_CALL osl_automountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    if ( Handle )
-        return osl_File_E_None;
-    else
-        return osl_File_E_INVAL;
-}
-
-//#####################################################
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
     if ( Handle )
