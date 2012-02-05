@@ -1859,6 +1859,58 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     return sal_True;
 }
 
+void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::OString& rTextType )
+{
+    sal_Bool bAddSemicolon = sal_False;
+    sal_Bool bFirst = sal_True;
+    rtl::OString sCur;
+
+    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+        sCur = aLanguages[ n ];
+
+        rtl::OString sText;
+        sal_Bool bText = pEntry->GetTransex3Text( sText, nType, sCur , sal_True );
+        if ( bText && !sText.isEmpty() && sText != "-" ) {
+            rtl::OString sOutput;
+            if ( bNextMustBeDefineEOL)  {
+                if ( bFirst )
+                    sOutput += "\t\\\n";
+                else
+                    sOutput += ";\t\\\n";
+            }
+            bFirst=sal_False;
+            sOutput += "\t";
+
+            sOutput += rTextType;
+
+            if ( ! Export::isSourceLanguage( sCur ) ) {
+                sOutput += "[ ";
+                sOutput += sCur;
+                sOutput += " ] ";
+            }
+            sOutput += "= ";
+            ConvertMergeContent( sText );
+            sOutput += sText;
+
+            if ( bDefine )
+                sOutput += ";\\\n";
+            else if ( !bNextMustBeDefineEOL )
+                sOutput += ";\n";
+            else
+                bAddSemicolon = sal_True;
+            for ( sal_uInt16 j = 1; j < nLevel; j++ )
+                sOutput += "\t";
+            WriteToMerged( sOutput , true );
+        }
+    }
+
+
+    if ( bAddSemicolon ) {
+        rtl::OString sOutput( ";" );
+        WriteToMerged( sOutput , false );
+    }
+}
+
 /*****************************************************************************/
 void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 /*****************************************************************************/
@@ -1876,150 +1928,17 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
         case MERGE_MODE_NORMAL : {
             PFormEntrys *pEntry = pMergeDataFile->GetPFormEntrys( pResData );
 
-            bool bWriteNoSlash = false;
-            if ( pEntry && pResData->bText ) {
+            if ( pEntry ) {
+                if ( pResData->bText )
+                    ResData2Output( pEntry, STRING_TYP_TEXT, pResData->sTextTyp );
 
-                sal_Bool bAddSemikolon = sal_False;
-                sal_Bool bFirst = sal_True;
-                rtl::OString sCur;
-                for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                    sCur = aLanguages[ n ];
+                if ( pResData->bQuickHelpText )
+                    ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, rtl::OString("QuickHelpText") );
 
-                    rtl::OString sText;
-                    sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_TEXT, sCur , sal_True );
-                    if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        rtl::OString sOutput;
-                        if ( bNextMustBeDefineEOL)  {
-                            if ( bFirst )
-                                sOutput += "\t\\\n";
-                            else
-                                sOutput += ";\t\\\n";
-                        }
-                        bFirst=sal_False;
-                        sOutput += "\t";
-                        sOutput += pResData->sTextTyp;
-                        if ( ! Export::isSourceLanguage( sCur ) ) {
-                            sOutput += "[ ";
-                            sOutput += sCur;
-                            sOutput += " ] ";
-                        }
-                        sOutput += "= ";
-                        ConvertMergeContent( sText );
-                        sOutput += sText;
-
-                        if ( bDefine && bWriteNoSlash )
-                            sOutput += ";\n";
-
-                        if ( bDefine )
-                            sOutput += ";\\\n";
-                        else if ( !bNextMustBeDefineEOL )
-                            sOutput += ";\n";
-                        else
-                            bAddSemikolon = sal_True;
-                        for ( sal_uInt16 j = 1; j < nLevel; j++ )
-                            sOutput += "\t";
-                        WriteToMerged( sOutput , true );
-                    }
-                }
-
-
-                if ( bAddSemikolon ) {
-                    rtl::OString sOutput( ";" );
-                    WriteToMerged( sOutput , false );
-                }
+                if ( pResData->bTitle )
+                    ResData2Output( pEntry, STRING_TYP_TITLE, rtl::OString("Title") );
             }
 
-            if ( pEntry && pResData->bQuickHelpText ) {
-                sal_Bool bAddSemikolon = sal_False;
-                sal_Bool bFirst = sal_True;
-                rtl::OString sCur;
-
-                for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                    sCur = aLanguages[ n ];
-
-                    rtl::OString sText;
-                    sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_QUICKHELPTEXT, sCur, sal_True );
-                    if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        rtl::OString sOutput;
-                        if ( bNextMustBeDefineEOL)  {
-                            if ( bFirst )
-                                sOutput += "\t\\\n";
-                            else
-                                sOutput += ";\t\\\n";
-                        }
-                        bFirst=sal_False;
-                        sOutput += "\t";
-                        sOutput += "QuickHelpText";
-                        if ( ! Export::isSourceLanguage( sCur ) ) {
-                            sOutput += "[ ";
-                            sOutput += sCur;
-                            sOutput += " ] ";
-                        }
-                        sOutput += "= ";
-                        ConvertMergeContent( sText );
-                        sOutput += sText;
-                        if ( bDefine )
-                            sOutput += ";\\\n";
-                        else if ( !bNextMustBeDefineEOL )
-                            sOutput += ";\n";
-                        else
-                            bAddSemikolon = sal_True;
-                        for ( sal_uInt16 j = 1; j < nLevel; j++ )
-                            sOutput += "\t";
-                        WriteToMerged( sOutput ,true );
-                    }
-                }
-                if ( bAddSemikolon ) {
-                    rtl::OString sOutput( ";" );
-                    WriteToMerged( sOutput , false );
-                }
-            }
-
-            if ( pEntry && pResData->bTitle ) {
-                sal_Bool bAddSemikolon = sal_False;
-                sal_Bool bFirst = sal_True;
-                rtl::OString sCur;
-
-                for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                    sCur = aLanguages[ n ];
-
-                    rtl::OString sText;
-                    sal_Bool bText = pEntry->GetTransex3Text( sText, STRING_TYP_TITLE, sCur, sal_True );
-                    if ( bText && !sText.isEmpty() && sText != "-" ) {
-                        rtl::OString sOutput;
-                        if ( bNextMustBeDefineEOL)  {
-                            if ( bFirst )
-                                sOutput += "\t\\\n";
-                            else
-                                sOutput += ";\t\\\n";
-                        }
-                        bFirst=sal_False;
-                        sOutput += "\t";
-                        sOutput += "Title";
-                        if ( ! Export::isSourceLanguage( sCur ) ) {
-                            sOutput += "[ ";
-                            sOutput += sCur;
-                            sOutput += " ] ";
-                        }
-                        sOutput += "= ";
-                        ConvertMergeContent( sText );
-                        sOutput += sText;
-                        if ( bDefine )
-                            sOutput += ";\\\n";
-                        else if ( !bNextMustBeDefineEOL )
-                            sOutput += ";\n";
-                        else
-                            bAddSemikolon = sal_True;
-                        for ( sal_uInt16 j = 1; j < nLevel; j++ )
-                            sOutput += "\t";
-                        WriteToMerged( sOutput ,true );
-                    }
-                }
-                if ( bAddSemikolon ) {
-                    rtl::OString sOutput( ";" );
-                    WriteToMerged( sOutput ,false);
-                }
-            }
             // Merge Lists
 
             if ( pResData->bList ) {

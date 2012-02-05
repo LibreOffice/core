@@ -352,7 +352,7 @@ private:
 
     sal_Bool PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         rtl::OString &rLangIndex, ResData *pResData);
-
+    void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( rtl::OString &rText );
 
