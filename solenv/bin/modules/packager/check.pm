@@ -32,9 +32,19 @@ use packager::globals;
 
 sub check_packlist
 {
-    my $projectdir = $ENV{'PRJ'};
-    $projectdir =~ s/$packager::globals::separator\s*$//;
-    $packager::globals::packlistname = $projectdir . $packager::globals::separator . "util" . $packager::globals::separator . $packager::globals::packlistname;
+    my $custompacklist = $ENV{'CUSTOM_PACK_LIST'};
+    if ( defined $custompacklist && length $custompacklist > 0 )
+    {
+        $packager::globals::packlistname = $custompacklist;
+    }
+    else
+    {
+        my $projectdir = $ENV{'PRJ'};
+        $projectdir =~ s/$packager::globals::separator\s*$//;
+        $packager::globals::packlistname = $projectdir . $packager::globals::separator . "util" . $packager::globals::separator . $packager::globals::packlistname;
+    }
+
+    print "Using pack list " . $packager::globals::packlistname . "\n";
 
     if ( ! -f $packager::globals::packlistname )
     {

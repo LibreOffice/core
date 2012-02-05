@@ -26,6 +26,11 @@ AC_ARG_WITH(dmake-url,
                           Note that dmake is under GPL license.],
 [  DMAKE_URL="$withval"
 ])
+AC_ARG_WITH(packager-list,
+[  --with-packager-list=<PATH TO PACK LIST>   Specify a file to drive the packaging process.
+                          The file must follow the format explained in
+                          instsetoo_native/util/pack.lst
+],,)
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
@@ -954,6 +959,28 @@ if test -e $_solenv/inc/minor.mk; then
 else
    AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
 fi
+
+
+dnl ==================================================================
+dnl Checks for custom pack.lst
+dnl ==================================================================
+AC_MSG_CHECKING([for custom pack.lst])
+CUSTOM_PACK_LIST=
+USE_PACKAGER=
+if test -n "$with_packager_list" ; then
+    if test -e $with_packager_list; then
+      CUSTOM_PACK_LIST=$with_packager_list
+      USE_PACKAGER=YES
+    fi
+fi
+if test -n "$CUSTOM_PACK_LIST"; then
+   AC_MSG_RESULT([$CUSTOM_PACK_LIST])
+else
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(CUSTOM_PACK_LIST)
+AC_SUBST(USE_PACKAGER)
+
 
 dnl ===================================================================
 dnl Checks for the operating system and processor.
