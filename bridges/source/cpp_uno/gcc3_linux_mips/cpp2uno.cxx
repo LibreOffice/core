@@ -542,8 +542,6 @@ namespace
           throw RuntimeException(
               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
               (XInterface *)pThis );
-          // is here for dummy
-          eRet = typelib_TypeClass_VOID;
         }
     }
 

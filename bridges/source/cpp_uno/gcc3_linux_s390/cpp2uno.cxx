@@ -454,8 +454,6 @@ static typelib_TypeClass cpp_mediate(
         throw RuntimeException(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pCppI );
-        // is here for dummy
-        eRet = typelib_TypeClass_VOID;
     }
     }
 
