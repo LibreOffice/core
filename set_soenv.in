@@ -2092,8 +2092,8 @@ if ( $platform =~ m/cygwin/ ) {
     ToFile( "", $empty, "n");
 }
 
-# on Solaris, MacOSX and FreeBSD set GNUCOPY, GNUPATCH and GPERF
-if ($platform =~ m/solaris|darwin|freebsd/)
+# on Solaris, MacOSX and FreeBSD (and Windows) set GNUPATCH and GPERF
+if ($platform =~ m/solaris|darwin|freebsd|cygwin/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
   ToFile( "GPERF", "@GPERF@",	"e");
