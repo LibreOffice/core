@@ -182,7 +182,7 @@ void View::rename( const ::rtl::OUString& newName )
             OUStringBuffer buf( e.Message );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)" ) );
             e.Message = buf.makeStringAndClear();
-            throw e;
+            throw;
         }
 
     }

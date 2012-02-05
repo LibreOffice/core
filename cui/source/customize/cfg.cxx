@@ -471,9 +471,9 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
                     }
                 }
             }
-            catch ( uno::RuntimeException& e )
+            catch ( uno::RuntimeException& )
             {
-                throw e;
+                throw;
             }
             catch ( uno::Exception& )
             {

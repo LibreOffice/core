@@ -169,10 +169,10 @@ void HistoryOptTest::impl_testHistory(EHistoryType eHistory ,
         // without problems :-)
         impl_clearList();
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
         impl_clearList();
-        throw ex;
+        throw;
     }
 
 }

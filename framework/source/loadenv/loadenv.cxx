@@ -1383,8 +1383,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Break search.
             break;
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             { continue; }
     }
@@ -1811,8 +1811,8 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             // <- SOLAR SAFE
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }
