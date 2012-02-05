@@ -41,7 +41,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <memory>
 #include <vector>
 
 // -----------
@@ -101,12 +100,11 @@ typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 struct ValueSet_Impl
 {
-    ::std::auto_ptr< ValueItemList >    mpItemList;
-    bool                                mbIsTransientChildrenDisabled;
-    Link                                maHighlightHdl;
+    ValueItemList  mItemList;
+    bool           mbIsTransientChildrenDisabled;
+    Link           maHighlightHdl;
 
-    ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
-                        mbIsTransientChildrenDisabled( false )
+    ValueSet_Impl() : mbIsTransientChildrenDisabled( false )
     {
     }
 };
