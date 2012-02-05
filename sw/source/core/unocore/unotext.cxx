@@ -1603,8 +1603,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // remove the addtional paragraphs in the end
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            SwTableNode *const pSartTableNode(pStartStartNode->FindTableNode());
-            const SwNodeIndex aTblIdx(  *pSartTableNode, -1 );
+            SwTableNode *const pStartTableNode(pStartStartNode->FindTableNode());
+            const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTblIdx);
             bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
             aStartPam.DeleteMark();
