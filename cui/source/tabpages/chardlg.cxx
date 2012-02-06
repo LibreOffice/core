@@ -303,7 +303,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pImpl->m_aTransparentText = String( CUI_RES( STR_CHARNAME_TRANSPARENT ) );
 
     SvtLanguageOptions aLanguageOptions;
-    sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
+    sal_Bool bShowCJK = aLanguageOptions.IsCJKFontEnabled();
+    sal_Bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
+    sal_Bool bShowNonWestern = bShowCJK || bShowCTL;
 
     m_pGrid = new Grid(&m_aBox);
 
@@ -312,42 +314,42 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pWestLine->setChildProperty<sal_Int32>(sTopAttach, 0);
     m_pWestLine->setChildProperty<sal_Int32>(sWidth, 4);
 
-    m_pWestFontNameFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
+    m_pWestFontNameFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
     m_pWestFontNameFT->setChildProperty<sal_Int32>(sLeftAttach, 0);
     m_pWestFontNameFT->setChildProperty<sal_Int32>(sTopAttach, 1);
 
-    m_pWestFontNameLB = new FontNameBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
+    m_pWestFontNameLB = new FontNameBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
     m_pWestFontNameLB->setChildProperty<sal_Int32>(sLeftAttach, 0);
     m_pWestFontNameLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
-    m_pWestFontStyleFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
     m_pWestFontStyleFT->setChildProperty<sal_Int32>(sLeftAttach, 1);
     m_pWestFontStyleFT->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pWestFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
     m_pWestFontStyleLB->setChildProperty<sal_Int32>(sLeftAttach, 1);
     m_pWestFontStyleLB->setChildProperty<sal_Int32>(sTopAttach, 2);
-    m_pWestFontSizeFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
     m_pWestFontSizeFT->setChildProperty<sal_Int32>(sLeftAttach, 2);
     m_pWestFontSizeFT->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pWestFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
     m_pWestFontSizeLB->setChildProperty<sal_Int32>(sLeftAttach, 2);
     m_pWestFontSizeLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
-    if( !bCJK )
+    if( !bShowNonWestern )
     {
         m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
         m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
         m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
     }
 
-    m_pWestFontLanguageFT = new FixedText(m_pGrid, CUI_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
     m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
     m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 1);
-    m_pWestFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
     m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
     m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 2);
 
-    if (!bCJK)
+    if (!bShowNonWestern)
     {
         //10 lines
         sal_Int32 nHeight = m_pWestFontSizeLB->CalcWindowSizePixel(10);
@@ -421,7 +423,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
     m_pCTLFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 8);
 
-    if( bCJK )
+    if( bShowNonWestern )
     {
         m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
         m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
@@ -452,34 +454,19 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pEastFontStyleFT->SetText(sFontStyleString);
     m_pCTLFontStyleFT->SetText(sFontStyleString);
 
-    m_pWestLine             ->Show( bCJK );
-    m_pColorFL              ->Show( bCJK );
+    m_pWestLine             ->Show( bShowNonWestern );
+    m_pColorFL              ->Show( bShowNonWestern );
 
-    bCJK = aLanguageOptions.IsCJKFontEnabled();
-    m_pEastLine             ->Show( bCJK );
-    m_pEastFontNameFT       ->Show( bCJK );
-    m_pEastFontNameLB       ->Show( bCJK );
-    m_pEastFontStyleFT      ->Show( bCJK );
-    m_pEastFontStyleLB      ->Show( bCJK );
-    m_pEastFontSizeFT       ->Show( bCJK );
-    m_pEastFontSizeLB       ->Show( bCJK );
-    m_pEastFontLanguageFT   ->Show( bCJK );
-    m_pEastFontLanguageLB   ->Show( bCJK );
+    m_pEastLine             ->Show( bShowCJK );
+    m_pEastFontNameFT       ->Show( bShowCJK );
+    m_pEastFontNameLB       ->Show( bShowCJK );
+    m_pEastFontStyleFT      ->Show( bShowCJK );
+    m_pEastFontStyleLB      ->Show( bShowCJK );
+    m_pEastFontSizeFT       ->Show( bShowCJK );
+    m_pEastFontSizeLB       ->Show( bShowCJK );
+    m_pEastFontLanguageFT   ->Show( bShowCJK );
+    m_pEastFontLanguageLB   ->Show( bShowCJK );
 
-    sal_Bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
-    if ( bShowCTL && !bCJK )
-    {
-        // move CTL controls to the places of the CJK controls, if these controls aren't visible
-        m_pCTLLine             ->SetPosPixel( m_pEastLine->GetPosPixel() );
-        m_pCTLFontNameFT       ->SetPosPixel( m_pEastFontNameFT->GetPosPixel() );
-        m_pCTLFontNameLB       ->SetPosPixel( m_pEastFontNameLB->GetPosPixel() );
-        m_pCTLFontStyleFT      ->SetPosPixel( m_pEastFontStyleFT->GetPosPixel() );
-        m_pCTLFontStyleLB      ->SetPosPixel( m_pEastFontStyleLB->GetPosPixel() );
-        m_pCTLFontSizeFT       ->SetPosPixel( m_pEastFontSizeFT->GetPosPixel() );
-        m_pCTLFontSizeLB       ->SetPosPixel( m_pEastFontSizeLB->GetPosPixel() );
-        m_pCTLFontLanguageFT   ->SetPosPixel( m_pEastFontLanguageFT->GetPosPixel() );
-        m_pCTLFontLanguageLB   ->SetPosPixel( m_pEastFontLanguageLB->GetPosPixel() );
-    }
     m_pCTLLine             ->Show( bShowCTL );
     m_pCTLFontNameFT       ->Show( bShowCTL );
     m_pCTLFontNameLB       ->Show( bShowCTL );
