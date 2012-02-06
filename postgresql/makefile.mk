@@ -41,6 +41,7 @@ TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 PATCH_FILES=\
 	postgresql-moz-ldap.patch \
 	postgresql-libs-leak.patch \
+	libpq-parallel-build.patch \
 	$(TARFILE_NAME)-libreoffice.patch \
 	$(TARFILE_NAME)-autoreconf.patch
 

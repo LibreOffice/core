@@ -1,0 +1,11 @@
+diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/Makefile misc/build/postgresql-9.1.1.patch/src/interfaces/libpq/Makefile
+--- misc/build/postgresql-9.1.1/src/interfaces/libpq/Makefile	2012-02-06 15:11:19.000000000 +0100
++++ misc/build/postgresql-9.1.1.patch/src/interfaces/libpq/Makefile	2012-02-06 15:02:51.000000000 +0100
+@@ -109,6 +109,7 @@
+ libpq.rc: $(top_builddir)/src/Makefile.global
+ 
+ fe-connect.o: fe-connect.c $(top_builddir)/src/port/pg_config_paths.h
++fe-misc.o: fe-misc.c $(top_builddir)/src/port/pg_config_paths.h
+ 
+ $(top_builddir)/src/port/pg_config_paths.h:
+ 	$(MAKE) -C $(top_builddir)/src/port pg_config_paths.h
