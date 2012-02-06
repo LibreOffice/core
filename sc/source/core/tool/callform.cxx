@@ -164,14 +164,6 @@ public:
     const rtl::OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance; }
     void            FreeInstance() { delete pInstance; pInstance = 0; }
-
-    struct less : public ::std::binary_function<ModuleData, ModuleData, bool>
-    {
-        bool operator() (const ModuleData& left, const ModuleData& right) const
-        {
-            return ScGlobal::GetpTransliteration()->compareString(left.GetName(), right.GetName()) < 0;
-        }
-    };
 };
 
 namespace {
