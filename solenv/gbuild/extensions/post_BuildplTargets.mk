@@ -110,7 +110,7 @@ endef
 
 # the build order dependencies are rather ugly...
 dev-install: \
-			$(WORKDIR)/bootstrap \
+			$(SRCDIR)/workdir/$(INPATH)/bootstrap \
 			$(SRCDIR)/src.downloaded \
 			$(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) \
 		|   $(filter build,$(MAKECMDGOALS)) \
@@ -177,11 +177,11 @@ endif # gb_SourceEnvAndRecurse_STAGE=buildpl
 
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
-dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
+dev-install: $(SRCDIR)/workdir/$(INPATH)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
 
-build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+build: $(SRCDIR)/workdir/$(INPATH)bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 
-cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
+cross_toolset: $(SRCDIR)/workdir/$(INPATH)/bootstrap $(SRCDIR)/src.downloaded
 
 findunusedcode:
 
