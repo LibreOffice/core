@@ -310,6 +310,9 @@ public:
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 };
 
+VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
+    sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
+
 //Get a Size which is large enough to contain all children with
 //an equal amount of space at top left and bottom right
 Size getLegacyBestSizeForChildren(const Window &rWindow);

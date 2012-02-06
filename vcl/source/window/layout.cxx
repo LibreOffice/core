@@ -511,6 +511,18 @@ void Grid::setAllocation(const Size& rAllocation)
     }
 }
 
+void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
+{
+    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
+    rWidget.setChildProperty<sal_Int32>(sLeftAttach, nLeft);
+    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+    rWidget.setChildProperty<sal_Int32>(sTopAttach, nTop);
+    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
+    rWidget.setChildProperty<sal_Int32>(sWidth, nWidth);
+    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
+    rWidget.setChildProperty<sal_Int32>(sHeight, nHeight);
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;
