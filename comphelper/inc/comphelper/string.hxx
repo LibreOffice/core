@@ -283,7 +283,7 @@ COMPHELPER_DLLPUBLIC rtl::OUString strip(const rtl::OUString &rIn,
 /** Returns a token in an OString
 
   @param    rIn         the input OString
-  @param    token       the number of the token to return
+  @param    nToken      the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
@@ -298,7 +298,7 @@ COMPHELPER_DLLPUBLIC inline rtl::OString getToken(const rtl::OString &rIn,
 /** Returns a token in an OUString
 
   @param    rIn         the input OUString
-  @param    token       the number of the token to return
+  @param    nToken      the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
