@@ -78,11 +78,6 @@
 
 using namespace com::sun::star;
 
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
-
-//------------------------------------------------------------------
-
 bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
 {
     OSL_ENSURE( pData, "lcl_GetTextToColumnsRange: pData is null!" );

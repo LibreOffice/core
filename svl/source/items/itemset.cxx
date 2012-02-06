@@ -546,6 +546,11 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     return eRet;
 }
 
+bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem*& rpItem) const
+{
+    return SFX_ITEM_SET == GetItemState(nWhich, true, &rpItem);
+}
+
 // -----------------------------------------------------------------------
 
 const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )

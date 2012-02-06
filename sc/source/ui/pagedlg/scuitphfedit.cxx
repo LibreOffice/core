@@ -161,15 +161,12 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
     aWndRight.SetNumType(eNumType);
 }
 
-// -----------------------------------------------------------------------
-
-#define IS_AVAILABLE(w)(rCoreSet.GetItemState( (w) ) >= SFX_ITEM_AVAILABLE)
-
 void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 {
-    if ( IS_AVAILABLE( nWhich ) )
+    const SfxPoolItem* pItem = NULL;
+    if ( rCoreSet.HasItem(nWhich, pItem) )
     {
-        const ScPageHFItem& rItem = (const ScPageHFItem&)(rCoreSet.Get( nWhich ));
+        const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
 
         if( const EditTextObject* pLeft = rItem.GetLeftArea() )
             aWndLeft.SetText( *pLeft );
@@ -181,10 +178,6 @@ void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
         SetSelectDefinedList();
     }
 }
-
-#undef IS_AVAILABLE
-
-// -----------------------------------------------------------------------
 
 sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 {

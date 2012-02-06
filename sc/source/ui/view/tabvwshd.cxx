@@ -52,11 +52,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//------------------------------------------------------------------
-
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
-
 //!         Parent-Window fuer Dialoge
 //!         Problem: OLE Server!
 

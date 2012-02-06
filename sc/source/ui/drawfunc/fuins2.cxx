@@ -95,11 +95,6 @@ using namespace ::com::sun::star;
 
 extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
-//------------------------------------------------------------------------
-
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
-
 namespace {
 
 void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
@@ -507,7 +502,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
-            if( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
+            if( pReqArgs->HasItem( FN_PARAM_5, pItem ) )
             aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
 
             aPositionRange = pViewSh->GetViewData()->GetCurPos();
@@ -607,7 +602,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             const SfxPoolItem* pItem;
             sal_uInt16 nToTable = 0;
 
-            if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
+            if( pReqArgs->HasItem( FN_PARAM_4, pItem ) )
             {
                 if ( pItem->ISA( SfxUInt16Item ) )
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
