@@ -335,12 +335,12 @@ TxtBox::~TxtBox(void)
     for (int ii = 0; ii < nCell; ++ii)
     {
         LinkedListIterator < HWPPara > it(&plists[ii]);
-        for (; it.current(); it++)
+        for (; it.current(); ++it)
             delete it.current();
     }
 
     LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 
     delete[]plists;
@@ -369,7 +369,7 @@ Picture::~Picture(void)
         delete (HWPDrawingObject *) picinfo.picdraw.hdo;
 
     LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 }
 
@@ -391,7 +391,7 @@ hunit Picture::Height(CharShape * sty)
 Hidden::~Hidden(void)
 {
     LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 }
 
@@ -400,7 +400,7 @@ Hidden::~Hidden(void)
 HeaderFooter::~HeaderFooter(void)
 {
     LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 }
 
@@ -409,7 +409,7 @@ HeaderFooter::~HeaderFooter(void)
 Footnote::~Footnote(void)
 {
     LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 }
 

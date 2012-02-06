@@ -76,19 +76,19 @@ HWPFile::~HWPFile()
     delete hiodev;
 
     LinkedListIterator < ColumnInfo > it_column(&columnlist);
-    for (; it_column.current(); it_column++)
+    for (; it_column.current(); ++it_column)
         delete it_column.current();
 
     LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         delete it.current();
 
     LinkedListIterator < Table > tbl(&tables);
-    for (; tbl.current(); tbl++)
+    for (; tbl.current(); ++tbl)
         delete tbl.current();
 
     LinkedListIterator < HyperText > hyp(&hyperlist);
-    for (; hyp.current(); hyp++)
+    for (; hyp.current(); ++hyp)
     {
         delete hyp.current();
     }
@@ -390,7 +390,7 @@ int HWPFile::GetPageMasterNum(int page)
     ColumnInfo *now = 0;
     int i;
 
-    for( i = 1 ; it.current() ; it++, i++){
+    for( i = 1 ; it.current() ; ++it, i++){
         now = it.current();
         if( page < now->start_page )
             return i-1;
@@ -412,7 +412,7 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
     name[2] = 'P';
 
     LinkedListIterator < EmPicture > it(&emblist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         if (strcmp(name, it.current()->name) == 0)
             return it.current();
     return 0;
@@ -425,7 +425,7 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     name[2] = 'P';
 
     LinkedListIterator < EmPicture > it(&emblist);
-    for (; it.current(); it++)
+    for (; it.current(); ++it)
         if (strcmp(name, it.current()->name) == 0)
             return it.current();
     return 0;

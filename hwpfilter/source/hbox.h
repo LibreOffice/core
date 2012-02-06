@@ -537,7 +537,7 @@ struct Table
      Table(){};
      ~Table(){
           LinkedListIterator<TCell> it(&cells);
-          for( ; it.current(); it++)
+          for( ; it.current(); ++it)
                 delete it.current();
      };
      Columns columns;
