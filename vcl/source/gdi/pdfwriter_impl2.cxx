@@ -420,7 +420,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     else
                     {
                         const Size  aDstSizeTwip( pDummyVDev->PixelToLogic( pDummyVDev->LogicToPixel( rSize ), MAP_TWIP ) );
-                        sal_Int32   nMaxBmpDPI = i_rContext.m_bOnlyLosslessCompression ? 300 : 72;
+
+                        // #115962# Always use at least 300 DPI for bitmap conversion of transparence gradients,
+                        // else the quality is not acceptable (see bugdoc as example)
+                        // sal_Int32    nMaxBmpDPI = i_rContext.m_bOnlyLosslessCompression ? 300 : 72;
+                        sal_Int32 nMaxBmpDPI(300);
+
                         if( i_rContext.m_nMaxImageResolution > 50 )
                         {
                             if ( nMaxBmpDPI > i_rContext.m_nMaxImageResolution )
