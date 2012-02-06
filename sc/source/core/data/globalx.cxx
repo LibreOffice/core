@@ -58,75 +58,73 @@ void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
     SvtPathOptions aPathOpt;
-    String aMultiPath = aPathOpt.GetAddinPath();
-    if ( aMultiPath.Len() > 0 )
-    {
-        xub_StrLen nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
-        xub_StrLen nIndex = 0;
-        for ( xub_StrLen j=0; j<nTokens; j++ )
-        {
-            String aPath( aMultiPath.GetToken( 0, ';', nIndex ) );
-            if ( aPath.Len() > 0 )
-            {
-                //  use LocalFileHelper to convert the path to a URL that always points
-                //  to the file on the server
-                rtl::OUString aUrl;
-                if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
-                    aPath = aUrl;
+    rtl::OUString aMultiPath = aPathOpt.GetAddinPath();
+    if (aMultiPath.isEmpty())
+        return;
 
-                INetURLObject aObj;
-                aObj.SetSmartURL( aPath );
-                aObj.setFinalSlash();
+    sal_Int32 nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
+    for (sal_Int32 j = 0; j < nTokens; ++j)
+    {
+        rtl::OUString aPath = comphelper::string::getToken(aMultiPath, j, ';');
+        if (aPath.isEmpty())
+            continue;
+
+        //  use LocalFileHelper to convert the path to a URL that always points
+        //  to the file on the server
+        rtl::OUString aUrl;
+        if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
+            aPath = aUrl;
+
+        INetURLObject aObj;
+        aObj.SetSmartURL( aPath );
+        aObj.setFinalSlash();
+        try
+        {
+            ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
+                Reference< XCommandEnvironment > () );
+            Reference< sdbc::XResultSet > xResultSet;
+            Sequence< rtl::OUString > aProps;
+            try
+            {
+                xResultSet = aCnt.createCursor(
+                    aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
+            }
+            catch ( Exception& )
+            {
+                // ucb may throw different exceptions on failure now
+                // no assertion if AddIn directory doesn't exist
+            }
+
+            if ( xResultSet.is() )
+            {
+                Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+                Reference< XContentAccess >
+                    xContentAccess( xResultSet, UNO_QUERY );
                 try
                 {
-                    ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
-                        Reference< XCommandEnvironment > () );
-                    Reference< sdbc::XResultSet > xResultSet;
-                    Sequence< rtl::OUString > aProps;
-                    try
+                    if ( xResultSet->first() )
                     {
-                        xResultSet = aCnt.createCursor(
-                            aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
-                    }
-                    catch ( Exception& )
-                    {
-                        // ucb may throw different exceptions on failure now
-                        // no assertion if AddIn directory doesn't exist
-                    }
-
-                    if ( xResultSet.is() )
-                    {
-                        Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-                        Reference< XContentAccess >
-                            xContentAccess( xResultSet, UNO_QUERY );
-                        try
+                        do
                         {
-                            if ( xResultSet->first() )
-                            {
-                                do
-                                {
-                                    rtl::OUString aId( xContentAccess->queryContentIdentifierString() );
-                                    InitExternalFunc( aId );
-                                }
-                                while ( xResultSet->next() );
-                            }
+                            rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+                            InitExternalFunc( aId );
                         }
-                        catch ( Exception& )
-                        {
-                            OSL_FAIL( "ResultSetException catched!" );
-                        }
+                        while ( xResultSet->next() );
                     }
                 }
                 catch ( Exception& )
                 {
-                    OSL_FAIL( "Exception catched!" );
-                }
-                catch ( ... )
-                {
-
-                    OSL_FAIL( "unexpected exception caught!" );
+                    OSL_FAIL( "ResultSetException caught!" );
                 }
             }
+        }
+        catch ( Exception& )
+        {
+            OSL_FAIL( "Exception caught!" );
+        }
+        catch ( ... )
+        {
+            OSL_FAIL( "unexpected exception caught!" );
         }
     }
 }
