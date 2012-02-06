@@ -74,7 +74,7 @@ SERVER_URL = "http://dev-builds.libreoffice.org"
 root_dir = os.getcwd()
 DOWNLOAD_DIR = os.path.join(root_dir, "_download")
 USR_DIR = os.path.join(root_dir, "_libo_smoke_user")
-LOCAL_BUILD_INFO_FILE = "build.cfg"
+LOCAL_BUILD_INFO_FILE = os.path.join(root_dir, "build.cfg")
 
 ROOT_DIR_LIB = os.path.join(root_dir, 'lib')
 ROOT_DIR_LIB32 = os.path.join(root_dir, 'lib32')
@@ -324,7 +324,6 @@ def download(url_reg, build_type):
 
     return True
 
-
 def fetch_build(url, filename):
     ''' Download a build from address url/filename '''
 
@@ -335,8 +334,11 @@ def fetch_build(url, filename):
     try:
         f = open(DOWNLOAD_DIR + '/' + filename, 'wb')
         f.write(u.read())
-    finally:
         f.close()
+    except urllib2.HTTPError, e:
+        print "HTTP Error:",e.code , url
+    except urllib2.URLError, e:
+        print "URL Error:",e.reason , url        
 
     return True
 
@@ -403,6 +405,24 @@ def init_testing():
 
     if not os.path.exists(USR_DIR):
         os.mkdir(USR_DIR)
+
+
+    
+    if not os.path.exists(LOCAL_BUILD_INFO_FILE):
+
+        init_build_cfg = '[daily_branch]' + os.linesep\
+                       + 'build_name =' + os.linesep\
+                       + 'build_time =' + os.linesep\
+                       + '[daily_master]' + os.linesep\
+                       + 'build_name =' + os.linesep\
+                       + 'build_time =' + os.linesep\
+                       + '[pre-releases]' + os.linesep\
+                       + 'build_name =' + os.linesep\
+                       + 'build_time =' + os.linesep
+
+        with open(LOCAL_BUILD_INFO_FILE, 'w+') as f:
+            f.write(init_build_cfg)
+        f.close()
 
     # create set up links
     try:
@@ -588,6 +608,7 @@ def main():
             uninstall()
             sys.exit()
         elif o in ("-d", "--download"):
+            init_testing()
             download(url_reg, build_type)
             sys.exit()
         elif o in ("-l", "--loop"):
