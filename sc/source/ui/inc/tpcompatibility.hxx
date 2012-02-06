@@ -33,8 +33,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 class ScAppOptions;
 
 class ScTpCompatOptions : public SfxTabPage
