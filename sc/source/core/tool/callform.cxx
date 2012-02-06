@@ -39,6 +39,8 @@
 #include "global.hxx"
 #include "adiasync.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 //------------------------------------------------------------------------
 
 extern "C" {
@@ -154,74 +156,81 @@ bool FuncCollection::SearchFunc( const rtl::OUString& rName, sal_uInt16& rIndex 
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ModuleData : public ScDataObject
+class ModuleData
 {
 friend class ModuleCollection;
     rtl::OUString aName;
     osl::Module* pInstance;
 public:
-    ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
-    ModuleData(const ModuleData& rData) : ScDataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
+    ModuleData(const rtl::OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
+    ModuleData(const ModuleData& rData) : aName(rData.aName) {pInstance = new osl::Module(aName);}
     ~ModuleData() { delete pInstance; }
-    virtual ScDataObject*   Clone() const { return new ModuleData(*this); }
 
     const rtl::OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance; }
     void            FreeInstance() { delete pInstance; pInstance = 0; }
+
+    struct less : public ::std::binary_function<ModuleData, ModuleData, bool>
+    {
+        bool operator() (const ModuleData& left, const ModuleData& right) const
+        {
+            return ScGlobal::GetpTransliteration()->compareString(left.GetName(), right.GetName()) < 0;
+        }
+    };
 };
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ModuleCollection : public ScSortedCollection
+namespace {
+
+class ModuleCollection
 {
+    typedef boost::ptr_map<rtl::OUString, ModuleData> MapType;
+    MapType maData;
 public:
-    ModuleCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
-    ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
+    ModuleCollection() {}
+    ModuleCollection(const ModuleCollection& r) : maData(r.maData) {}
 
-    virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
-            ModuleData*     operator[]( const sal_uInt16 nIndex) const {return (ModuleData*)At(nIndex);}
-    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    bool SearchModule(
-        const rtl::OUString& rName, const ModuleData*& rpModule ) const;
+    const ModuleData* findByName(const rtl::OUString& rName) const;
+    void insert(ModuleData* pNew);
+    void clear();
 };
 
-static ModuleCollection aModuleCollection;
+ModuleCollection aModuleCollection;
 
-//------------------------------------------------------------------------
-
-short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    return (short) ScGlobal::GetpTransliteration()->compareString(
-        ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName );
 }
 
-//------------------------------------------------------------------------
-
-bool ModuleCollection::SearchModule(
-    const rtl::OUString& rName, const ModuleData*& rpModule ) const
+const ModuleData* ModuleCollection::findByName(const rtl::OUString& rName) const
 {
-    sal_uInt16 nIndex;
-    ModuleData aSearchModule(rName, 0);
-    sal_Bool bFound = Search( &aSearchModule, nIndex );
-    if (bFound)
-        rpModule = (ModuleData*)At(nIndex);
-    else
-        rpModule = 0;
-    return bFound;
+    MapType::const_iterator it = maData.find(rName);
+    return it == maData.end() ? NULL : it->second;
+}
+
+void ModuleCollection::insert(ModuleData* pNew)
+{
+    if (!pNew)
+        return;
+
+    rtl::OUString aName = pNew->GetName();
+    maData.insert(aName, pNew);
+}
+
+void ModuleCollection::clear()
+{
+    maData.clear();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool InitExternalFunc(const rtl::OUString& rModuleName)
 {
-    // Module schon geladen?
-    const ModuleData* pTemp;
-    if (aModuleCollection.SearchModule(rModuleName, pTemp))
+    // Module already loaded?
+    const ModuleData* pTemp = aModuleCollection.findByName(rModuleName);
+    if (pTemp)
         return false;
 
     rtl::OUString aNP;
     aNP = rModuleName;
 
-    sal_Bool bRet = false;
+    bool bRet = false;
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
@@ -241,7 +250,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
 
             // Module in die Collection aufnehmen
             ModuleData* pModuleData = new ModuleData(rModuleName, pLib);
-            aModuleCollection.Insert(pModuleData);
+            aModuleCollection.insert(pModuleData);
 
             // Schnittstelle initialisieren
             AdvData pfCallBack = &ScAddInAsyncCallBack;
@@ -297,12 +306,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
 
 void ExitExternalFunc()
 {
-    sal_uInt16 nCount = aModuleCollection.GetCount();
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        ModuleData* pData = aModuleCollection[i];
-        pData->FreeInstance();
-    }
+    aModuleCollection.clear();
 }
 
 //------------------------------------------------------------------------
