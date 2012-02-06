@@ -112,7 +112,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_TDF_LINK
     {
-        Text[ en-US ] = "http://http://www.documentfoundation.org/";
+        Text[ en-US ] = "http://www.documentfoundation.org/";
     };
     String ABOUT_FEATURESSTR_LINK
     {
