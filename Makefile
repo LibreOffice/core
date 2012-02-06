@@ -353,7 +353,7 @@ config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in auto
 # Bootstap
 #
 
-bootstrap: $(WORKDIR)/bootstrap
+bootstrap: $(SRCDIR)/workdir/$(INPATH)/bootstrap
 
 #
 # Fetch
