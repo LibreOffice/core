@@ -1154,13 +1154,7 @@ void SbiRuntime::StepINPUT()
     else if( err )
     {
         if( pRestart && !pIosys->GetChannel() )
-        {
-            BasResId aId( IDS_SBERR_START + 4 );
-            String aMsg( aId );
-
-
             pCode = pRestart;
-        }
         else
             Error( err );
     }
