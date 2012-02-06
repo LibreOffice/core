@@ -89,7 +89,7 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
         {
             nTmp = ((SwTxtFrm*)pFrm)->GetParHeight()
                 - pFrm->Prt().Height();
-            // Dieser TxtFrm waere gern ein bisschen groesser
+            // This TxtFrm would like to be a bit bigger
             nRemaining += nTmp;
         }
         else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
@@ -124,9 +124,9 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
-    OSL_ENSURE( rCnt.GetCntntIdx(), "Kein Inhalt fuer Header." );
+    OSL_ENSURE( rCnt.GetCntntIdx(), "No content for Header." );
 
-    //Fuer Header Footer die Objekte gleich erzeugen lassen.
+    // Have the objects created right now for header and footer
     sal_Bool bOld = bObjsDirect;
     bObjsDirect = sal_True;
     sal_uLong nIndex = rCnt.GetCntntIdx()->GetIndex();
@@ -218,12 +218,12 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
     }
     else
     {
-        //Position einstellen.
+        // Set position
         aPrt.Left( pAttrs->CalcLeft( this ) );
         aPrt.Top ( pAttrs->CalcTop()  );
 
-        //Sizes einstellen; die Groesse gibt der umgebende Frm vor, die
-        //die Raender werden einfach abgezogen.
+        // Set sizes - the sizes are given by the surrounding Frm, just
+        // subtract the borders.
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         aPrt.Width ( aFrm.Width() - nLR );
@@ -303,7 +303,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                     if( pFrm->IsTxtFrm() &&
                         ((SwTxtFrm*)pFrm)->IsUndersized() )
-                        // Dieser TxtFrm waere gern ein bisschen groesser
+                        // This TxtFrm would like to be a bit bigger
                         nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
                             - pFrm->Prt().Height();
                     else if( pFrm->IsSctFrm() &&
@@ -374,14 +374,14 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     }
                     else
                         Shrink( -nDiff );
-                    //Schnell auf dem kurzen Dienstweg die Position updaten.
+                    // Quickly update the position
 
                     MakePos();
                     ColLock();
                 }
                 else
                     break;
-                //Unterkante des Uppers nicht ueberschreiten.
+                // Don't overwrite the lower edge of the upper
                 if ( GetUpper() && Frm().Height() )
                 {
                     const SwTwips nDeadLine = GetUpper()->Frm().Top() +
@@ -413,7 +413,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
 void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
 {
-    OSL_ENSURE( pAttrs, "SwFooterFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "SwFooterFrm::Format, pAttrs is 0." );
 
     if ( bValidPrtArea && bValidSize )
         return;
@@ -670,7 +670,7 @@ sal_Bool SwHeadFootFrm::GetEatSpacing() const
 |*
 |*  SwPageFrm::PrepareHeader()
 |*
-|*  Beschreibung        Erzeugt oder Entfernt Header
+|*  Description        Creates or removes headers
 |*
 |*************************************************************************/
 
@@ -708,11 +708,11 @@ void SwPageFrm::PrepareHeader()
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
-    {   //Header einsetzen, vorher entfernen falls vorhanden.
-        OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt fuer Header nicht gefunden." );
+    {   //Implant header, but remove first, if already present
+        OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt for Header not found." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rH.GetHeaderFmt() )
-            return; //Der Footer ist bereits der richtige
+            return; // Header is already the correct one.
 
         if ( pLay->IsHeaderFrm() )
         {   SwLayoutFrm *pDel = pLay;
@@ -721,14 +721,14 @@ void SwPageFrm::PrepareHeader()
             pDel->Cut();
             delete pDel;
         }
-        OSL_ENSURE( pLay, "Wohin mit dem Header?" );
+        OSL_ENSURE( pLay, "Where to with the Header?" );
         SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt(), this );
         pH->Paste( this, pLay );
         if ( GetUpper() )
             ::RegistFlys( this, pH );
     }
     else if ( pLay && pLay->IsHeaderFrm() )
-    {   //Header entfernen falls vorhanden.
+    {   // Remove header if present.
         ::DelFlys( pLay, this );
         pLay->Cut();
         delete pLay;
@@ -738,7 +738,7 @@ void SwPageFrm::PrepareHeader()
 |*
 |*  SwPageFrm::PrepareFooter()
 |*
-|*  Beschreibung        Erzeugt oder Entfernt Footer
+|*  Description        Creates or removes footer
 |*
 |*************************************************************************/
 
@@ -757,11 +757,11 @@ void SwPageFrm::PrepareFooter()
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
-    {   //Footer einsetzen, vorher entfernen falls vorhanden.
-        OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt fuer Footer nicht gefunden." );
+    {   //Implant footer, but remove first, if already present
+        OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt for Footer not found." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rF.GetFooterFmt() )
-            return; //Der Footer ist bereits der richtige.
+            return;  // Footer is already the correct one.
 
         if ( pLay->IsFooterFrm() )
         {   ::DelFlys( pLay, this );
@@ -774,7 +774,7 @@ void SwPageFrm::PrepareFooter()
             ::RegistFlys( this, pF );
     }
     else if ( pLay && pLay->IsFooterFrm() )
-    {   //Footer entfernen falls vorhanden.
+    {   // Remove footer if already present
         ::DelFlys( pLay, this );
         ViewShell *pShell;
         if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&
