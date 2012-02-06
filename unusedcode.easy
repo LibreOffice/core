@@ -18,7 +18,6 @@ DdeTopic::DdeTopic(String const&)
 DdeTopic::RemoveItem(DdeItem const&)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
-DirEntry::GetDevice() const
 EditView::GetSelectionMode() const
 EditView::SetCursor(Cursor const&)
 EditView::SetPointer(Pointer const&)

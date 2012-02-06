@@ -241,27 +241,6 @@ String DirEntry::GetVolume() const
                     String());
 }
 
-DirEntry DirEntry::GetDevice() const
-{
-  DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry aPath( *this );
-    aPath.ToAbs();
-
-    struct stat buf;
-    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
-    {
-        if (aPath.Level() <= 1)
-            return String();
-        aPath = aPath [1];
-    }
-    mymnttab &rMnt = mymnt::get();
-    return ((buf.st_dev == rMnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &rMnt)) ?
-                    String( rMnt.mountpoint, osl_getThreadTextEncoding()) :
-                    String());
-}
-
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
