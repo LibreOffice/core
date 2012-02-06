@@ -249,7 +249,7 @@ void SwUndo::UndoWithContext(SfxUndoContext & rContext)
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
     OSL_ASSERT(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    UndoRedoRedlineGuard const g(*pContext, *this);
     UndoImpl(*pContext);
 }
 
@@ -259,7 +259,7 @@ void SwUndo::RedoWithContext(SfxUndoContext & rContext)
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
     OSL_ASSERT(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    UndoRedoRedlineGuard const g(*pContext, *this);
     RedoImpl(*pContext);
 }
 
