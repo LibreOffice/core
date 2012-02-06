@@ -34,6 +34,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
+#include <filter/msfilter/escherex.hxx>
 
 #include <rtfsdrimport.hxx>
 
@@ -274,7 +275,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr() << "'");
     }
 
-    if (nType == 75) // picture frame
+    if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
     {
         if (bPib)
             m_rImport.resolvePict(false);
