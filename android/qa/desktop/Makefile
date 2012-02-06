@@ -144,7 +144,6 @@ copy-stuff: buildrcs
 		  mergedlo \
 		  msfilterlo \
 		  ooxlo \
-		  package2 \
 		  reflection.uno \
 		  reg \
 		  saxlo \
