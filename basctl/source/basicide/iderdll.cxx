@@ -132,9 +132,6 @@ IDEResId::IDEResId( sal_uInt16 nId ):
 BasicIDEDLL::~BasicIDEDLL()
 {
     delete m_pExtraData;
-#if 0
-    *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
-#endif
 }
 
 BasicIDEDLL::BasicIDEDLL()
