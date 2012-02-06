@@ -61,18 +61,18 @@ class FuncData : public ScDataObject
 {
 friend class FuncCollection;
     const ModuleData* pModuleData;
-    String      aInternalName;
-    String      aFuncName;
+    rtl::OUString aInternalName;
+    rtl::OUString aFuncName;
     sal_uInt16      nNumber;
     sal_uInt16      nParamCount;
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
 private:
-    FuncData(const String& rIName);
+    FuncData(const rtl::OUString& rIName);
 public:
     FuncData(const ModuleData*pModule,
-             const String&    rIName,
-             const String&    rFName,
+             const rtl::OUString& rIName,
+             const rtl::OUString& rFName,
                    sal_uInt16     nNo,
                    sal_uInt16     nCount,
              const ParamType* peType,
@@ -80,15 +80,15 @@ public:
     FuncData(const FuncData& rData);
     virtual ScDataObject*   Clone() const { return new FuncData(*this); }
 
-    const   String&     GetModuleName() const;
-    const   String&     GetInternalName() const { return aInternalName; }
-    const   String&     GetFuncName() const { return aFuncName; }
+    const rtl::OUString& GetModuleName() const;
+    const rtl::OUString& GetInternalName() const { return aInternalName; }
+    const rtl::OUString& GetFuncName() const { return aFuncName; }
             sal_uInt16      GetParamCount() const { return nParamCount; }
             ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
             ParamType   GetReturnType() const { return eParamType[0]; }
             ParamType   GetAsyncType() const { return eAsyncType; }
-            sal_Bool        Call(void** ppParam);
-            sal_Bool        Unadvice(double nHandle);
+    bool        Call(void** ppParam);
+    bool        Unadvice(double nHandle);
 
                         // name and description of parameter nParam.
                         // nParam==0 => Desc := function description,
@@ -107,11 +107,11 @@ public:
     virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
             FuncData*   operator[]( const sal_uInt16 nIndex) const {return (FuncData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            sal_Bool        SearchFunc( const String& rName, sal_uInt16& rIndex ) const;
+    bool        SearchFunc( const rtl::OUString& rName, sal_uInt16& rIndex ) const;
 };
 
 
-sal_Bool InitExternalFunc(const rtl::OUString& rModuleName);
+bool InitExternalFunc(const rtl::OUString& rModuleName);
 void ExitExternalFunc();
 
 #endif

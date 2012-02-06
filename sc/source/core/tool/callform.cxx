@@ -91,7 +91,7 @@ typedef void (CALLTYPE* FARPROC) ( void );
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-FuncData::FuncData(const String& rIName) :
+FuncData::FuncData(const rtl::OUString& rIName) :
     pModuleData     (NULL),
     aInternalName   (rIName),
     nNumber         (0),
@@ -105,8 +105,8 @@ FuncData::FuncData(const String& rIName) :
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,
-                   const String&    rIName,
-                   const String&    rFName,
+                   const rtl::OUString& rIName,
+                   const rtl::OUString& rFName,
                          sal_uInt16 nNo,
                     sal_uInt16  nCount,
                    const ParamType* peType,
@@ -147,7 +147,7 @@ short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncCollection::SearchFunc( const String& rName, sal_uInt16& rIndex ) const
+bool FuncCollection::SearchFunc( const rtl::OUString& rName, sal_uInt16& rIndex ) const
 {
     FuncData aDataObj(rName);
     return Search( &aDataObj, rIndex );
@@ -157,7 +157,7 @@ sal_Bool FuncCollection::SearchFunc( const String& rName, sal_uInt16& rIndex ) c
 class ModuleData : public ScDataObject
 {
 friend class ModuleCollection;
-    String      aName;
+    rtl::OUString aName;
     osl::Module* pInstance;
 public:
     ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
@@ -165,9 +165,9 @@ public:
     ~ModuleData() { delete pInstance; }
     virtual ScDataObject*   Clone() const { return new ModuleData(*this); }
 
-    const   String&         GetName() const { return aName; }
-            osl::Module*    GetInstance() const { return pInstance; }
-            void            FreeInstance() { delete pInstance; pInstance = 0; }
+    const rtl::OUString& GetName() const { return aName; }
+    osl::Module*    GetInstance() const { return pInstance; }
+    void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,8 +180,8 @@ public:
     virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
             ModuleData*     operator[]( const sal_uInt16 nIndex) const {return (ModuleData*)At(nIndex);}
     virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            sal_Bool            SearchModule( const String& rName,
-                                          const ModuleData*& rpModule ) const;
+    bool SearchModule(
+        const rtl::OUString& rName, const ModuleData*& rpModule ) const;
 };
 
 static ModuleCollection aModuleCollection;
@@ -196,8 +196,8 @@ short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-sal_Bool ModuleCollection::SearchModule( const String& rName,
-                                     const ModuleData*& rpModule ) const
+bool ModuleCollection::SearchModule(
+    const rtl::OUString& rName, const ModuleData*& rpModule ) const
 {
     sal_uInt16 nIndex;
     ModuleData aSearchModule(rName, 0);
@@ -211,13 +211,11 @@ sal_Bool ModuleCollection::SearchModule( const String& rName,
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
+bool InitExternalFunc(const rtl::OUString& rModuleName)
 {
-    String aModuleName( rModuleName );
-
     // Module schon geladen?
     const ModuleData* pTemp;
-    if (aModuleCollection.SearchModule(aModuleName, pTemp))
+    if (aModuleCollection.SearchModule(rModuleName, pTemp))
         return false;
 
     rtl::OUString aNP;
@@ -242,7 +240,7 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
             }
 
             // Module in die Collection aufnehmen
-            ModuleData* pModuleData = new ModuleData(aModuleName, pLib);
+            ModuleData* pModuleData = new ModuleData(rModuleName, pLib);
             aModuleCollection.Insert(pModuleData);
 
             // Schnittstelle initialisieren
@@ -309,9 +307,9 @@ void ExitExternalFunc()
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncData::Call(void** ppParam)
+bool FuncData::Call(void** ppParam)
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
     if (fProc != NULL)
@@ -320,81 +318,81 @@ sal_Bool FuncData::Call(void** ppParam)
         {
             case 1 :
                 (*((ExFuncPtr1)fProc))(ppParam[0]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 2 :
                 (*((ExFuncPtr2)fProc))(ppParam[0], ppParam[1]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 3 :
                 (*((ExFuncPtr3)fProc))(ppParam[0], ppParam[1], ppParam[2]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 4 :
                 (*((ExFuncPtr4)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 5 :
                 (*((ExFuncPtr5)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 6 :
                 (*((ExFuncPtr6)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 7 :
                 (*((ExFuncPtr7)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 8 :
                 (*((ExFuncPtr8)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 9 :
                 (*((ExFuncPtr9)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 10 :
                 (*((ExFuncPtr10)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 11 :
                 (*((ExFuncPtr11)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 12:
                 (*((ExFuncPtr12)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 13:
                 (*((ExFuncPtr13)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 14 :
                 (*((ExFuncPtr14)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 15 :
                 (*((ExFuncPtr15)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             case 16 :
                 (*((ExFuncPtr16)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14], ppParam[15]);
-                bRet = sal_True;
+                bRet = true;
                 break;
             default : break;
         }
@@ -404,22 +402,22 @@ sal_Bool FuncData::Call(void** ppParam)
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncData::Unadvice( double nHandle )
+bool FuncData::Unadvice( double nHandle )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
     if (fProc != NULL)
     {
         ((::Unadvice)fProc)(nHandle);
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
 
 //------------------------------------------------------------------------
 
-const String& FuncData::GetModuleName() const
+const rtl::OUString& FuncData::GetModuleName() const
 {
     return pModuleData->GetName();
 }
