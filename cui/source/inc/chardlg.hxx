@@ -192,13 +192,14 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
+    VBox m_aBox;
+    Grid m_aGrid;
+
     FixedText           m_aFontColorFT;
     ColorListBox        m_aFontColorLB;
 
     FixedText           m_aEffectsFT;
-    SvxCheckListBox     m_aEffectsLB;
-
-    ListBox             m_aEffects2LB;
+    ListBox             m_aEffectsLB;
 
     FixedText           m_aReliefFT;
     ListBox             m_aReliefLB;
