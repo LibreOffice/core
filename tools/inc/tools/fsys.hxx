@@ -177,7 +177,6 @@ protected:
                     FileStat( SAL_UNUSED_PARAMETER const void *pInfo ); // CInfoPBRec
 
 public:
-                    FileStat();
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
     sal_Bool            Update( const DirEntry& rDirEntry,

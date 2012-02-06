@@ -43,26 +43,6 @@
 |*
 *************************************************************************/
 
-FileStat::FileStat()
-:   // don't use Default-Ctors!
-    aDateCreated( sal_uIntPtr(0) ),
-    aTimeCreated( sal_uIntPtr(0) ),
-    aDateModified( sal_uIntPtr(0) ),
-    aTimeModified( sal_uIntPtr(0) ),
-    aDateAccessed( sal_uIntPtr(0) ),
-    aTimeAccessed( sal_uIntPtr(0) )
-{
-    nSize = 0;
-    nKindFlags = FSYS_KIND_UNKNOWN;
-    nError = FSYS_ERR_OK;
-}
-
-/*************************************************************************
-|*
-|*    FileStat::FileStat()
-|*
-*************************************************************************/
-
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 :   // don't use Default-Ctors!
     aDateCreated( sal_uIntPtr(0) ),
