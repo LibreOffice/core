@@ -95,6 +95,8 @@ public:
     // bug-compatible with original LinkedList.h/cxx: Ignore parameter!
     void operator++( int );   /// advance iterator by one step (ignore n !!!)
     void operator--( int );   /// go one step backwards (ignore n !!!)
+    void operator++();        /// advance iterator by one step
+    void operator--();        /// go one step backwards
 
 private:
     bool valid();
@@ -271,6 +273,20 @@ void LinkedListIterator<T>::operator--( int )
     ASSERT( mpList != NULL );
 
     // bug-compatible with LinkedList.cxx: ignore parameter!
+    mnPosition --;
+}
+
+template<class T>
+void LinkedListIterator<T>::operator++()
+{
+    ASSERT( mpList != NULL );
+    mnPosition ++;
+}
+
+template<class T>
+void LinkedListIterator<T>::operator--()
+{
+    ASSERT( mpList != NULL );
     mnPosition --;
 }
 
