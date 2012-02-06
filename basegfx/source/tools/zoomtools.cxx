@@ -33,12 +33,12 @@ namespace basegfx
 namespace zoomtools
 {
 
-/** 2^(1/4) as the default step
+/** 2^(1/6) as the default step
 
-    This ensures (unless the rounding is used) that 4 steps lead
+    This ensures (unless the rounding is used) that 6 steps lead
     to double / half zoom level.
 */
-const double ZOOM_FACTOR = 1.1892071150027210667175;
+const double ZOOM_FACTOR = 1.12246205;
 
 /**
 * Round a value against a specified multiple. Values below half
