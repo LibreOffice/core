@@ -1,4 +1,6 @@
 
+.PHONY : bootstrap
+
 gb_PARTIALBUILD := T
 
 ifeq ($(SOLARENV),)
@@ -7,6 +9,12 @@ gb_Side:=host
 endif
 include $(module_directory)/../config_$(gb_Side).mk
 endif
+
+$(WORKDIR)/bootstrap:
+	@cd $(SRCDIR) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
+
+bootstrap: $(WORKDIR)/bootstrap
 
 gb_SourceEnvAndRecurse_STAGE=gbuild
 include $(SOLARENV)/gbuild/gbuild.mk

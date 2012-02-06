@@ -27,10 +27,6 @@
 
 .PHONY: cross-build-toolset dev-install build findunusedcode
 
-$(SRCDIR)/workdir/$(INPATH)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
 .DEFAULT_GOAL=all
@@ -110,7 +106,7 @@ endef
 
 # the build order dependencies are rather ugly...
 dev-install: \
-			$(SRCDIR)/workdir/$(INPATH)/bootstrap \
+			bootstrap \
 			$(SRCDIR)/src.downloaded \
 			$(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) \
 		|   $(filter build,$(MAKECMDGOALS)) \
@@ -177,11 +173,11 @@ endif # gb_SourceEnvAndRecurse_STAGE=buildpl
 
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
-dev-install: $(SRCDIR)/workdir/$(INPATH)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
+dev-install: bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
 
-build: $(SRCDIR)/workdir/$(INPATH)bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+build: bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 
-cross_toolset: $(SRCDIR)/workdir/$(INPATH)/bootstrap $(SRCDIR)/src.downloaded
+cross_toolset: bootstrap $(SRCDIR)/src.downloaded
 
 findunusedcode:
 

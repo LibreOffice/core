@@ -352,8 +352,11 @@ config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in auto
 #
 # Bootstap
 #
+$(WORKDIR)/bootstrap:
+	@cd $(SRCDIR) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
 
-bootstrap: $(SRCDIR)/workdir/$(INPATH)/bootstrap
+bootstrap: $(WORKDIR)/bootstrap
 
 #
 # Fetch
@@ -362,7 +365,7 @@ fetch: src.downloaded
 
 src.downloaded : autogen ooo.lst download
 ifeq ($(DO_FETCH_TARBALLS),YES)
-	./download $(SRCDIR)/ooo.lst && touch $@
+	@./download $(SRCDIR)/ooo.lst && touch $@
 else
 	@echo "Automatic fetching of external tarballs is disabled."
 endif
