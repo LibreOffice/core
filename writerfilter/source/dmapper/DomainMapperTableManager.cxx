@@ -477,7 +477,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
-    else if (m_bImplicitMerges)
+    else if (m_bImplicitMerges && pTableGrid->size())
     {
         // More grid than cells definitions? Then take the last ones.
         // This feature is used by the RTF implicit horizontal cell merges.
