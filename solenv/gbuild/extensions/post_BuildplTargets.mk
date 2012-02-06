@@ -177,7 +177,7 @@ dev-install: $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD
 
 build: $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 
-cross_toolset: bootstrap $(SRCDIR)/src.downloaded
+cross_toolset: $(SRCDIR)/src.downloaded
 
 findunusedcode:
 

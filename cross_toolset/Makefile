@@ -6,15 +6,6 @@
 SHELL=/usr/bin/env bash
 include ../config_build.mk
 
-#
-# Bootstap
-#
-$(WORKDIR)/bootstrap:
-	@cd $(SRC_ROOT) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR)/bootstrap
-
 .PHONY : build
 
 build:
