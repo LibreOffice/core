@@ -343,11 +343,11 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     }
 
     m_pWestFontLanguageFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
-    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, 1);
+    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sLeftAttach, bShowNonWestern ? 3 : 1);
+    m_pWestFontLanguageFT->setChildProperty<sal_Int32>(sTopAttach, bShowNonWestern ? 1 : 3);
     m_pWestFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
-    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, 3);
-    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, 2);
+    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sLeftAttach, bShowNonWestern ? 3 : 1);
+    m_pWestFontLanguageLB->setChildProperty<sal_Int32>(sTopAttach, bShowNonWestern ? 2 : 4);
 
     if (!bShowNonWestern)
     {
