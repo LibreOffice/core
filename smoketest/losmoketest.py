@@ -105,28 +105,28 @@ PR_MAC_PPC_PATH = "pre-releases/mac/ppc/"
 PR_WIN_X86_PATH = "pre-releases/win/x86/"
 
 ## daily_master
-DAILY_MASTER_RPM_X86_PATH =    "daily/Linux_x86_Release_Configuration/master/current"
-DAILY_MASTER_RPM_X86_64_PATH = "daily/Linux_x86_64_Release_Configuration/master/current"
+DAILY_MASTER_RPM_X86_PATH =    "daily/Linux-x86_10-Release_Configuration/master/current"
+DAILY_MASTER_RPM_X86_64_PATH = "daily/Linux-x86_64_11-Release_Configuration/master/current"
 
-DAILY_MASTER_DEB_X86_PATH =    "daily/Linux_x86_Release_Configuration/master/current"
-DAILY_MASTER_DEB_X86_64_PATH = "daily/Linux_x86_64_Release_Configuration/master/current" # No build yet
+DAILY_MASTER_DEB_X86_PATH =    "daily/Linux-x86_10-Release_Configuration/master/current"
+DAILY_MASTER_DEB_X86_64_PATH = "daily/Linux-x86_64_11-Release_Configuration/master/current"
 
-DAILY_MASTER_MAC_X86_PATH =    "daily/MacOSX_10.6.7_Intel_no-moz/master/current"
-DAILY_MASTER_MAC_PPC_PATH =    "^$" # No build yet
+DAILY_MASTER_MAC_X86_PATH =    "daily/MacOSX-Intel@3-OSX_10.6.0-gcc_4.0.1/master/current"
+DAILY_MASTER_MAC_PPC_PATH =    "daily/MacOSX-PPC@12-OSX_10.5.0-gcc_4.0.1/master/current" # No build yet
 
-DAILY_MASTER_WIN_X86_PATH =    "daily/Windows_Release_Configuration/master/current"
+DAILY_MASTER_WIN_X86_PATH =    "daily/Win-x86@7-MinGW/master/current" # cross compling build
 
 ## daily_branch
-DAILY_BRANCH_RPM_X86_PATH =    "daily/Linux_x86_Release_Configuration/libreoffice-" + tag_version + "/current"
-DAILY_BRANCH_RPM_X86_64_PATH = "daily/Linux_x86_64_Release_Configuration/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_RPM_X86_PATH =    "daily/Linux-x86_10-Release_Configuration/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_RPM_X86_64_PATH = "daily/Linux-x86_64_11-Release_Configuration/libreoffice-" + tag_version + "/current"
 
-DAILY_BRANCH_DEB_X86_PATH =    "daily/Linux_x86_Release_Configuration/libreoffice-" + tag_version + "/current"
-DAILY_BRANCH_DEB_X86_64_PATH = "daily/Linux_x86_64_Release_Configuration/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_DEB_X86_PATH =    "daily/Linux-x86_10-Release_Configuration/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_DEB_X86_64_PATH = "daily/Linux-x86_64_11-Release_Configuration/libreoffice-" + tag_version + "/current"
 
-DAILY_BRANCH_MAC_X86_PATH =    "daily/MacOSX_10.6.7_Intel_no-moz/libreoffice-" + tag_version + "/current"
-DAILY_BRANCH_MAC_PPC_PATH =    "^$" # No build yet
+DAILY_BRANCH_MAC_X86_PATH =    "daily/MacOSX-Intel@3-OSX_10.6.0-gcc_4.0.1/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_MAC_PPC_PATH =    "daily/MacOSX-PPC@12-OSX_10.5.0-gcc_4.0.1/libreoffice-" + tag_version + "/current"
 
-DAILY_BRANCH_WIN_X86_PATH =    "daily/Windows_Release_Configuration/libreoffice-" + tag_version + "/current"
+DAILY_BRANCH_WIN_X86_PATH =    "daily/Win-x86@7-MinGW/libreoffice-" + tag_version + "/current"
 
 
 
