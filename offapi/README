@@ -1,0 +1,4 @@
+Contains all of the IDL files except those in [[udkapi]]
+
+i.e. the interfaces that are specific to the OppenOffice.org application.
+An artificial (?) separation.
