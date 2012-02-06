@@ -464,7 +464,7 @@ sal_Int32 RtfSdrExport::StartShape()
         return -1;
 
     m_aShapeProps.insert(std::pair<OString,OString>(OString("shapeType"), OString::valueOf(sal_Int32(m_nShapeType))));
-    if (m_nShapeType == 75)
+    if (ESCHER_ShpInst_PictureFrame == m_nShapeType)
         impl_writeGraphic();
 
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHP);
