@@ -27,7 +27,7 @@
 
 .PHONY: cross-build-toolset dev-install build findunusedcode
 
-$(WORKDIR)/bootstrap:
+$(SRCDIR)/workdir/$(INPATH)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
