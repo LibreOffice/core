@@ -154,7 +154,7 @@ gdk-pixbuf\
 gettext\
 glib\
 graphite\
-helpconten2 \
+helpcontent2 \
 hsqldb\
 hunspell\
 hyphen\
