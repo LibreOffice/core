@@ -38,13 +38,13 @@
 #include <sb.hrc>
 
 BasResId::BasResId( sal_uInt32 nId ) :
-    ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetBasResMgr()) )
+    ResId( nId, *(BASIC_DLL()->GetBasResMgr()) )
 {
 }
 
 BasicDLL::BasicDLL()
 {
-     *(BasicDLL**)GetAppData(SHL_BASIC) = this;
+    BASIC_DLL() = this;
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
     bDebugMode = sal_False;
@@ -58,7 +58,7 @@ BasicDLL::~BasicDLL()
 
 void BasicDLL::EnableBreak( sal_Bool bEnable )
 {
-    BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
+    BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
     if ( pThis )
         pThis->bBreakEnabled = bEnable;
@@ -66,7 +66,7 @@ void BasicDLL::EnableBreak( sal_Bool bEnable )
 
 void BasicDLL::SetDebugMode( sal_Bool bDebugMode )
 {
-    BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
+    BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
     if ( pThis )
         pThis->bDebugMode = bDebugMode;
@@ -79,7 +79,7 @@ void BasicDLL::BasicBreak()
     // but the Basic doesn't stop early enough, the box might appear more often...
     static sal_Bool bJustStopping = sal_False;
 
-    BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
+    BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
     if ( pThis )
     {

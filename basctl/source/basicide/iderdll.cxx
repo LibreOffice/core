@@ -125,7 +125,7 @@ namespace BasicIDEGlobals
 }
 
 IDEResId::IDEResId( sal_uInt16 nId ):
-    ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
+    ResId( nId, *(BASIC_MOD())->GetResMgr() )
 {
 }
 
