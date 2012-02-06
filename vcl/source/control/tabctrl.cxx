@@ -1236,7 +1236,7 @@ void TabControl::Resize()
     {
         // get the listbox' preferred size
         Size aTabCtrlSize( GetSizePixel() );
-        long nPrefWidth = mpTabCtrlData->mpListBox->GetOptimalSize( WINDOWSIZE_PREFERRED ).Width();
+        long nPrefWidth = mpTabCtrlData->mpListBox->get_preferred_size().Width();
         if( nPrefWidth > aTabCtrlSize.Width() )
             nPrefWidth = aTabCtrlSize.Width();
         Size aNewSize( nPrefWidth, LogicToPixel( Size( 12, 12 ), MapMode( MAP_APPFONT ) ).Height() );

@@ -42,7 +42,7 @@ Size Box::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aChildSize = pChild->get_preferred_size();
         long nSecondaryDimension = getSecondaryDimension(aChildSize);
         if (nSecondaryDimension > getSecondaryDimension(aSize))
             setSecondaryDimension(aSize, nSecondaryDimension);
@@ -160,7 +160,7 @@ void Box::setAllocation(const Size &rAllocation)
                 setPrimaryDimension(aBoxSize, nHomogeneousDimension);
             else
             {
-                aBoxSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+                aBoxSize = pChild->get_preferred_size();
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding;
                 bool bExpand = pChild->getWidgetProperty<bool>(sExpand);
@@ -184,7 +184,7 @@ void Box::setAllocation(const Size &rAllocation)
             else
             {
                 setPrimaryDimension(aChildSize,
-                    getPrimaryDimension(pChild->GetOptimalSize(WINDOWSIZE_PREFERRED)));
+                    getPrimaryDimension(pChild->get_preferred_size()));
 
                 setPrimaryCoordinate(aChildPos, nPrimaryCoordinate +
                     (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
@@ -233,7 +233,7 @@ Size ButtonBox::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aChildSize = pChild->get_preferred_size();
         if (aChildSize.Width() > aSize.Width())
             aSize.Width() = aChildSize.Width();
         if (aChildSize.Height() > aSize.Height())
@@ -384,7 +384,7 @@ void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector
             const Window *pChild = A[x][y];
             if (!pChild)
                 continue;
-            Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+            Size aChildSize = pChild->get_preferred_size();
 
             sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)

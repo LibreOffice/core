@@ -1065,6 +1065,7 @@ public:
 
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
+    Size get_preferred_size() const;
     void queueResize();
 
     virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);

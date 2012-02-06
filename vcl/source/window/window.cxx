@@ -9591,9 +9591,8 @@ void Window::queueResize()
     if (!pParent->IsReallyShown())
     {
         //resize dialog to fit requisition
-        //To-Do: honour explicit sizes ?
         const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
-        Size aSize = pContainer->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aSize = pContainer->get_preferred_size();
 
         Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);
         aSize.Width() = std::min(aMax.Width(), aSize.Width());
@@ -9619,6 +9618,24 @@ uno::Any Window::getWidgetAnyProperty(const rtl::OString &rString) const
     if (aI != m_aWidgetProperties.end())
         aAny = aI->second;
     return aAny;
+}
+
+Size Window::get_preferred_size() const
+{
+    rtl::OString sWidthRequest(RTL_CONSTASCII_STRINGPARAM("width-request"));
+    rtl::OString sHeightRequest(RTL_CONSTASCII_STRINGPARAM("height-request"));
+    sal_Int32 nWidth = getWidgetProperty<sal_Int32>(sWidthRequest, -1);
+    sal_Int32 nHeight = getWidgetProperty<sal_Int32>(sHeightRequest, -1);
+    Size aRet(nWidth, nHeight);
+    if (aRet.Width() == -1 || aRet.Height() == -1)
+    {
+        Size aOptimal = GetOptimalSize(WINDOWSIZE_PREFERRED);
+        if (aRet.Width() == -1)
+            aRet.Width() = aOptimal.Width();
+        if (aRet.Height() == -1)
+            aRet.Height() = aOptimal.Height();
+    }
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
