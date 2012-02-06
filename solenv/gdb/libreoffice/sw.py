@@ -100,7 +100,7 @@ class BigPtrArrayPrinter(object):
                 # accessing this is completely non-obvious...
                 # also, node.dynamic_cast(node.dynamic_type) is null?
                 value = "    TextNode " + \
-                    str(node.cast(node.dynamic_type).dereference()['m_Text'])
+                  unicode(node.cast(node.dynamic_type).dereference()['m_Text'])
             elif str(node.dynamic_type.target()) == "SwOLENode":
                 value = "     OLENode "
             elif str(node.dynamic_type.target()) == "SwGrfNode":
