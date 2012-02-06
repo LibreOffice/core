@@ -88,11 +88,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define ADVICE                  "Advice"
 #define UNADVICE                "Unadvice"
 
-#define LIBFUNCNAME( name ) \
-    (String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( name ) ))
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 FuncData::FuncData(const rtl::OUString& rIName) :
     pModuleData     (NULL),
     aInternalName   (rIName),
@@ -234,13 +229,13 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
-        FARPROC fpGetCount = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(GETFUNCTIONCOUNT));
-        FARPROC fpGetData = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(GETFUNCTIONDATA));
+        FARPROC fpGetCount = (FARPROC)pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
+        FARPROC fpGetData = (FARPROC)pLib->getFunctionSymbol(GETFUNCTIONDATA);
         if ((fpGetCount != NULL) && (fpGetData != NULL))
         {
-            FARPROC fpIsAsync = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ISASYNC));
-            FARPROC fpAdvice = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ADVICE));
-            FARPROC fpSetLanguage = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(SETLANGUAGE));
+            FARPROC fpIsAsync = (FARPROC)pLib->getFunctionSymbol(ISASYNC);
+            FARPROC fpAdvice = (FARPROC)pLib->getFunctionSymbol(ADVICE);
+            FARPROC fpSetLanguage = (FARPROC)pLib->getFunctionSymbol(SETLANGUAGE);
             if ( fpSetLanguage )
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguage();
@@ -410,7 +405,7 @@ bool FuncData::Unadvice( double nHandle )
 {
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
+    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(UNADVICE);
     if (fProc != NULL)
     {
         ((::Unadvice)fProc)(nHandle);
@@ -432,7 +427,7 @@ bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
-        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol( LIBFUNCNAME(GETPARAMDESC) );
+        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol(GETPARAMDESC);
         if ( fProc != NULL )
         {
             sal_Char pcName[256];
