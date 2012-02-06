@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Module_Module,dbaccess))
 
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,dbaccess,\
     AllLangResTarget_dba \
     AllLangResTarget_dbmm \
@@ -47,5 +49,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \
     JunitTest_dbaccess_unoapi \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
