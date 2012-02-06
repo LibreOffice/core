@@ -91,7 +91,11 @@ sub exit_program
         installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
     }
     installer::logger::print_error("$message\nin function: $function");
-    installer::logger::print_error("Saved logfile: $installer::globals::logfilename\n");
+    print("ERROR, saved logfile $installer::globals::logfilename is:\n");
+    open(LOG, "<", $installer::globals::logfilename);
+    print ": $_" while (<LOG>);
+    print "\n";
+    close(LOG);
 
     # Saving the debug info
 
