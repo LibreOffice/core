@@ -39,6 +39,7 @@ TARGET=so_postgresql
 TARFILE_NAME=postgresql-9.1.1
 TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 PATCH_FILES=\
+	libpq-parallel-build.patch \
 	$(TARFILE_NAME).patch
 
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
