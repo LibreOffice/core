@@ -36,10 +36,12 @@
 #include <svl/svstdarr.hxx>
 
 #include <vector>
+#include <map>
 
 class Color;
 class SvNumberFormatter;
-class SvNumberFormatTable;
+class SvNumberformat;
+typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
 class NfCurrencyEntry;
 
 enum SvxNumberValueType

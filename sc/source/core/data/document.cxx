@@ -2163,7 +2163,7 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
     {
         SvNumberFormatterIndexTable* pExchangeList =
                  pThisFormatter->MergeFormatter(*(pOtherFormatter));
-        if (pExchangeList->Count() > 0)
+        if (!pExchangeList->empty())
             pFormatExchangeList = pExchangeList;
     }
 }

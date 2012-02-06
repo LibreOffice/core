@@ -970,9 +970,12 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
              rSrcSet.GetItemState( ATTR_VALUE_FORMAT, false, &pSrcItem ) == SFX_ITEM_SET )
         {
             sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
-            sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pFormatExchangeList->Get( nOldFormat ));
-            if (pNewFormat)
-                rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
+            SvNumberFormatterIndexTable::const_iterator it = pFormatExchangeList->find(nOldFormat);
+            if (it != pFormatExchangeList->end())
+            {
+                sal_uInt32 nNewFormat = it->second;
+                rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+            }
         }
 
         // ggF. abgeleitete Styles erzeugen, wenn nicht vorhanden:
@@ -1075,9 +1078,12 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                 //  Zahlformate nach Exchange-Liste
 
                 sal_uLong nOldFormat = ((const SfxUInt32Item*)pSrcItem)->GetValue();
-                sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDestDoc->GetFormatExchangeList()->Get(nOldFormat));
-                if (pNewFormat)
-                    pNewItem = new SfxUInt32Item( ATTR_VALUE_FORMAT, (sal_uInt32) (*pNewFormat) );
+                SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
+                if (it != pDestDoc->GetFormatExchangeList()->end())
+                {
+                    sal_uInt32 nNewFormat = it->second;
+                    pNewItem = new SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat );
+                }
             }
 
             if ( pNewItem )

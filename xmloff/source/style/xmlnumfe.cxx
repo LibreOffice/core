@@ -1699,10 +1699,11 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
             sal_uInt32 nDefaultIndex = 0;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
                                             NUMBERFORMAT_DEFINED, nDefaultIndex, nLang );
-            pFormat = rTable.First();
-            while (pFormat)
+            SvNumberFormatTable::iterator it2 = rTable.begin();
+            while (it2 != rTable.end())
             {
-                nKey = rTable.GetCurKey();
+                nKey = it2->first;
+                pFormat = it2->second;
                 if (!pUsedList->IsUsed(nKey))
                 {
                     DBG_ASSERT((pFormat->GetType() & NUMBERFORMAT_DEFINED) != 0, "a not user defined numberformat found");
@@ -1712,7 +1713,7 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
                     pUsedList->SetUsed(nKey);
                 }
 
-                pFormat = rTable.Next();
+                ++it2;
             }
         }
     }
