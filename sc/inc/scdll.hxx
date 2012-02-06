@@ -66,8 +66,6 @@ public:
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 
-#define SC_DLL() ( *(ScModule**) GetAppData(SHL_CALC) )
-
 #endif
 
 
