@@ -31,6 +31,12 @@ ifeq ($(strip $(SOLARENV)),)
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_host.mk
 endif
 
+$(WORKDIR)/bootstrap:
+	@cd $(SRC_ROOT) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
+
+bootstrap: $(WORKDIR)/bootstrap
+
 gb_SourceEnvAndRecurse_STAGE=gbuild
 include $(SOLARENV)/gbuild/gbuild.mk
 

@@ -173,9 +173,9 @@ endif # gb_SourceEnvAndRecurse_STAGE=buildpl
 
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
-dev-install: bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
+dev-install: $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
 
-build: bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+build: $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 
 cross_toolset: bootstrap $(SRCDIR)/src.downloaded
 

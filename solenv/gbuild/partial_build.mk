@@ -11,7 +11,7 @@ include $(module_directory)/../config_$(gb_Side).mk
 endif
 
 $(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
+	@cd $(SRC_ROOT) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
 bootstrap: $(WORKDIR)/bootstrap
