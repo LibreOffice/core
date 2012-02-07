@@ -115,31 +115,23 @@ public:
 
 class TypedStrData : public ScDataObject
 {
+    friend class TypedScStrCollection;
 public:
-            TypedStrData( const String& rStr, double nVal = 0.0,
-                          sal_uInt16 nType = SC_STRTYPE_STANDARD )
-                : aStrValue(rStr),
-                  nValue(nVal),
-                  nStrType(nType) {}
+    TypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
+                  sal_uInt16 nType = SC_STRTYPE_STANDARD );
 
-            TypedStrData( const TypedStrData& rCpy )
-                : ScDataObject(),
-                  aStrValue(rCpy.aStrValue),
-                  nValue(rCpy.nValue),
-                  nStrType(rCpy.nStrType) {}
+    TypedStrData( const TypedStrData& rCpy );
 
     virtual ScDataObject*   Clone() const;
 
-    sal_Bool                IsStrData() const { return nStrType != 0; }
-    const String&       GetString() const { return aStrValue; }
-    double              GetValue () const { return nValue; }
+    bool IsStrData() const;
+    SC_DLLPUBLIC const rtl::OUString& GetString() const;
+    double GetValue() const;
 
 private:
-    friend class TypedScStrCollection;
-
-    String  aStrValue;
-    double  nValue;
-    sal_uInt16  nStrType;           // 0 = Value
+    rtl::OUString aStrValue;
+    double nValue;
+    sal_uInt16 nStrType;           // 0 = Value
 };
 
 class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection

@@ -306,10 +306,36 @@ sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) c
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
+TypedStrData::TypedStrData(
+    const rtl::OUString& rStr, double nVal, sal_uInt16 nType ) :
+    aStrValue(rStr),
+    nValue(nVal),
+    nStrType(nType) {}
 
-ScDataObject*   TypedStrData::Clone() const
+TypedStrData::TypedStrData( const TypedStrData& rCpy ) :
+    ScDataObject(),
+    aStrValue(rCpy.aStrValue),
+    nValue(rCpy.nValue),
+    nStrType(rCpy.nStrType) {}
+
+ScDataObject* TypedStrData::Clone() const
 {
     return new TypedStrData(*this);
+}
+
+bool TypedStrData::IsStrData() const
+{
+    return nStrType != 0;
+}
+
+const rtl::OUString& TypedStrData::GetString() const
+{
+    return aStrValue;
+}
+
+double TypedStrData::GetValue () const
+{
+    return nValue;
 }
 
 TypedScStrCollection::TypedScStrCollection( sal_uInt16 nLim , sal_uInt16 nDel , sal_Bool bDup  )
