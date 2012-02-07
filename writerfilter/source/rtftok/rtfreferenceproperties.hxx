@@ -45,8 +45,8 @@ namespace writerfilter {
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;
             private:
-                RTFSprms m_rAttributes;
-                RTFSprms m_rSprms;
+                RTFSprms m_aAttributes;
+                RTFSprms m_aSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter
