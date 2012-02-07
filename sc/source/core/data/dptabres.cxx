@@ -44,6 +44,7 @@
 #include "datauno.hxx"      // ScDataUnoConversion
 
 #include "document.hxx"     // for DumpState only!
+#include "stlalgorithm.hxx"
 
 #include <math.h>
 #include <float.h>          //! Test !!!
@@ -64,10 +65,6 @@ using ::std::vector;
 using ::std::pair;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-
-// -----------------------------------------------------------------------
-
-SV_IMPL_PTRARR( ScDPDataMembers, ScDPDataMemberPtr );
 
 // -----------------------------------------------------------------------
 
@@ -243,8 +240,8 @@ sal_Bool ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 )
 
 sal_Bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
-    ScDPDataMember* pDataMember1 = rDimension.GetMember(nIndex1);
-    ScDPDataMember* pDataMember2 = rDimension.GetMember(nIndex2);
+    const ScDPDataMember* pDataMember1 = rDimension.GetMember(nIndex1);
+    const ScDPDataMember* pDataMember2 = rDimension.GetMember(nIndex2);
         sal_Bool bHide1 = pDataMember1 && !pDataMember1->IsVisible();
         sal_Bool bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
         if ( bHide1 || bHide2 )
@@ -2314,7 +2311,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                             sal_Bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
                             sal_Bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
-                            const ScDPResultDimension* pSelectDim = NULL;
+                            ScDPResultDimension* pSelectDim = NULL;
                             long nRowPos = 0;
                             long nColPos = 0;
 
@@ -3297,7 +3294,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
             const long* pNextColIndex = pColIndexes;
             while ( *pNextColIndex >= 0 && pColMember )
             {
-                const ScDPDataDimension* pColChild = pColMember->GetChildDimension();
+                ScDPDataDimension* pColChild = pColMember->GetChildDimension();
                 if ( pColChild && *pNextColIndex < pColChild->GetMemberCount() )
                     pColMember = pColChild->GetMember( *pNextColIndex );
                 else
@@ -3349,7 +3346,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
         long nColSkipped = 0;
         while ( *pNextColIndex >= 0 && pColMember && nColSkipped < nRefDimPos )
         {
-            const ScDPDataDimension* pColChild = pColMember->GetChildDimension();
+            ScDPDataDimension* pColChild = pColMember->GetChildDimension();
             if ( pColChild && *pNextColIndex < pColChild->GetMemberCount() )
                 pColMember = pColChild->GetMember( *pNextColIndex );
             else
@@ -3363,7 +3360,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
 
     if ( pColMember )
     {
-        const ScDPDataDimension* pReferenceDim = pColMember->GetChildDimension();
+        ScDPDataDimension* pReferenceDim = pColMember->GetChildDimension();
         if ( pReferenceDim )
         {
             long nReferenceCount = pReferenceDim->GetMemberCount();
@@ -3404,7 +3401,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
                 const long* pNextColIndex = pColIndexes + nRefDimPos + 1;
                 while ( *pNextColIndex >= 0 && pColMember )
                 {
-                    const ScDPDataDimension* pColChild = pColMember->GetChildDimension();
+                    ScDPDataDimension* pColChild = pColMember->GetChildDimension();
                     if ( pColChild && *pNextColIndex < pColChild->GetMemberCount() )
                         pColMember = pColChild->GetMember( *pNextColIndex );
                     else
@@ -3504,6 +3501,7 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 
 ScDPDataDimension::~ScDPDataDimension()
 {
+    std::for_each(maMembers.begin(), maMembers.end(), ScDeleteObjectByPtr<ScDPDataMember>());
 }
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
@@ -3522,7 +3520,7 @@ void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
         const ScDPResultMember* pResMem = pDim->GetMember(i);
 
         ScDPDataMember* pNew = new ScDPDataMember( pResultData, pResMem );
-        aMembers.Insert( pNew, aMembers.Count() );
+        maMembers.push_back( pNew);
 
         if ( !pResultData->IsLateInit() )
         {
@@ -3541,10 +3539,10 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
 {
     // the ScDPItemData array must contain enough entries for all dimensions - this isn't checked
 
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
-        ScDPDataMember* pMember = aMembers[(sal_uInt16)i];
+        ScDPDataMember* pMember = maMembers[(sal_uInt16)i];
 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
@@ -3568,14 +3566,14 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
                                     long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.Count(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
 
     long nMemberMeasure = nMeasure;
     long nMemberCol = nCol;
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
         long nSorted = rMemberOrder.empty() ? i : rMemberOrder[i];
@@ -3592,7 +3590,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember::FillDataRow ???
         {
-            const ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
+            const ScDPDataMember* pDataMember = maMembers[(sal_uInt16)nMemberPos];
             pDataMember->FillDataRow( pRefMember, rSequence, nMemberCol, nMemberMeasure, bIsSubTotalRow, rSubState );
             // nMemberCol is modified
         }
@@ -3603,11 +3601,11 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
                                     long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.Count(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
         long nMemberPos = i;
@@ -3621,14 +3619,14 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
 
         // Calculate must be called even if the member is not visible (for use as reference value)
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
-        ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
+        ScDPDataMember* pDataMember = maMembers[(sal_uInt16)nMemberPos];
         pDataMember->UpdateDataRow( pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState );
     }
 }
 
 void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 {
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
 
     if ( pRefDim->IsSortByData() )
     {
@@ -3646,7 +3644,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 
     // handle children
 
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.Count(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
@@ -3656,7 +3654,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
+            ScDPDataMember* pDataMember = maMembers[(sal_uInt16)i];
             pDataMember->SortMembers( pRefMember );
         }
     }
@@ -3664,11 +3662,11 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 
 void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 {
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
 
     // handle children first, before changing the visible state
 
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.Count(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
@@ -3678,7 +3676,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
+            ScDPDataMember* pDataMember = maMembers[i];
             pDataMember->DoAutoShow( pRefMember );
         }
     }
@@ -3699,7 +3697,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         // look for equal values to the last included one
 
         long nIncluded = pRefDim->GetAutoCount();
-        ScDPDataMember* pDataMember1 = aMembers[(sal_uInt16)aAutoOrder[nIncluded - 1]];
+        ScDPDataMember* pDataMember1 = maMembers[aAutoOrder[nIncluded - 1]];
         if ( !pDataMember1->IsVisible() )
             pDataMember1 = NULL;
         sal_Bool bContinue = sal_True;
@@ -3708,7 +3706,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
             bContinue = false;
             if ( nIncluded < nCount )
             {
-                ScDPDataMember* pDataMember2 = aMembers[(sal_uInt16)aAutoOrder[nIncluded]];
+                ScDPDataMember* pDataMember2 = maMembers[aAutoOrder[nIncluded]];
                 if ( !pDataMember2->IsVisible() )
                     pDataMember2 = NULL;
 
@@ -3732,13 +3730,13 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
 void ScDPDataDimension::ResetResults()
 {
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
         //  sort order doesn't matter
 
         long nMemberPos = bIsDataLayout ? 0 : i;
-        ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
+        ScDPDataMember* pDataMember = maMembers[nMemberPos];
         pDataMember->ResetResults();
     }
 }
@@ -3757,11 +3755,11 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.Count(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
-    long nCount = aMembers.Count();
+    long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
         const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
@@ -3784,7 +3782,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
             else
                 rRunning.AddColIndex( i, nSorted );
 
-            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
+            ScDPDataMember* pDataMember = maMembers[nMemberPos];
             pDataMember->UpdateRunningTotals( pRefMember, nMemberMeasure,
                                             bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
 
@@ -3800,11 +3798,11 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
 
     SCROW nStartRow = rPos.Row();
 
-    long nCount = bIsDataLayout ? 1 : aMembers.Count();
+    long nCount = bIsDataLayout ? 1 : maMembers.size();
     for (long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pRefMember = pRefDim->GetMember(i);
-        const ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
+        const ScDPDataMember* pDataMember = maMembers[i];
         pDataMember->DumpState( pRefMember, pDoc, rPos );
     }
 
@@ -3813,12 +3811,17 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
 
 long ScDPDataDimension::GetMemberCount() const
 {
-    return aMembers.Count();
+    return maMembers.size();
 }
 
-ScDPDataMember* ScDPDataDimension::GetMember(long n) const
+const ScDPDataMember* ScDPDataDimension::GetMember(long n) const
 {
-    return aMembers[(sal_uInt16)n];
+    return maMembers[n];
+}
+
+ScDPDataMember* ScDPDataDimension::GetMember(long n)
+{
+    return maMembers[n];
 }
 
 // ----------------------------------------------------------------------------

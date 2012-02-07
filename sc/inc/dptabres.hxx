@@ -221,8 +221,6 @@ public:
 //  results for a hierarchy dimension
 //
 
-#define SC_DP_RES_GROW  16
-
 class ScDPResultDimension;
 class ScDPDataDimension;
 class ScDPDataMember;
@@ -494,10 +492,7 @@ public:
     ScDPDataDimension*          GetChildDimension()         { return pChildDimension; }
 };
 
-//! replace PtrArr with 32-bit array ????
-
-typedef ScDPDataMember* ScDPDataMemberPtr;
-SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW)
+typedef std::vector<ScDPDataMember*> ScDPDataMembers;
 
 
 //  result dimension contains only members
@@ -615,7 +610,7 @@ class ScDPDataDimension
 private:
     const ScDPResultData*       pResultData;
     const ScDPResultDimension* pResultDimension;  // column
-    ScDPDataMembers     aMembers;
+    ScDPDataMembers     maMembers;
     sal_Bool                bIsDataLayout;      //! or ptr to IntDimension?
 
 public:
@@ -646,7 +641,8 @@ public:
     void                DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
 
     long                GetMemberCount() const;
-    ScDPDataMember*     GetMember(long n) const;
+    const ScDPDataMember*     GetMember(long n) const;
+    ScDPDataMember*     GetMember(long n);
 };
 
 // ----------------------------------------------------------------------------
