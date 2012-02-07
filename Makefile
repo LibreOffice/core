@@ -227,6 +227,7 @@ stoc\
 store\
 sysui\
 tomcat\
+translations\
 udm\
 unodevtools\
 unoil\
