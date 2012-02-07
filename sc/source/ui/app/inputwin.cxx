@@ -697,7 +697,7 @@ void ScInputWindow::StopEditEngine( sal_Bool bAll )
 
 void ScInputWindow::TextGrabFocus()
 {
-    aTextWindow.GrabFocus();
+    aTextWindow.TextGrabFocus();
 }
 
 void ScInputWindow::TextInvalidate()
@@ -712,12 +712,13 @@ void ScInputWindow::SwitchToTextWin()
     aTextWindow.StartEditEngine();
     if ( SC_MOD()->IsEditMode() )
     {
-        aTextWindow.GrabFocus();
+        aTextWindow.TextGrabFocus();
         EditView* pView = aTextWindow.GetEditView();
         if (pView)
         {
-            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen(0);
-            ESelection aSel( 0, nLen, 0, nLen );
+            sal_uInt16 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
+            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen( nPara );
+            ESelection aSel( nPara, nLen, nPara, nLen );
             pView->SetSelection( aSel );                // set cursor to end of text
         }
     }
@@ -1115,6 +1116,10 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
     return 0;
 }
 
+void ScInputBarGroup::TextGrabFocus()
+{
+    aMultiTextWnd.TextGrabFocus();
+}
 
 //========================================================================
 //                      ScMultiTextWnd
@@ -2022,6 +2027,10 @@ void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
+void ScTextWnd::TextGrabFocus()
+{
+    GrabFocus();
+}
 
 //========================================================================
 //                          Positionsfenster
