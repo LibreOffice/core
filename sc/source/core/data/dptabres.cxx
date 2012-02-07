@@ -3566,7 +3566,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
                                     long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.size(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
@@ -3601,7 +3601,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
                                     long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.size(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
@@ -3644,7 +3644,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 
     // handle children
 
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.size(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
@@ -3666,7 +3666,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
     // handle children first, before changing the visible state
 
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.size(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
@@ -3755,7 +3755,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
-    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == maMembers.size(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
