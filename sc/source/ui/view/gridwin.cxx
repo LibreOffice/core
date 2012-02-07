@@ -1316,15 +1316,15 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             if (pData)
             {
                 TypedStrData* pNew = NULL;
-                String aDocStr;
+                rtl::OUString aDocStr;
                 pDoc->GetString( nCol, nRow, nTab, aDocStr );
                 if ( pDoc->HasValueData( nCol, nRow, nTab ) )
                 {
                     double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
-                    pNew = new TypedStrData( aDocStr, fVal, SC_STRTYPE_VALUE );
+                    pNew = new TypedStrData(aDocStr, fVal, TypedStrData::Value);
                 }
                 else
-                    pNew = new TypedStrData( aDocStr, 0.0, SC_STRTYPE_STANDARD );
+                    pNew = new TypedStrData(aDocStr, 0.0, TypedStrData::Standard);
 
                 bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
                 if ( bSortList )

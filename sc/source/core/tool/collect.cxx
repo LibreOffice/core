@@ -307,16 +307,16 @@ sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) c
 //------------------------------------------------------------------------
 
 TypedStrData::TypedStrData(
-    const rtl::OUString& rStr, double nVal, sal_uInt16 nType ) :
-    aStrValue(rStr),
-    nValue(nVal),
-    nStrType(nType) {}
+    const rtl::OUString& rStr, double nVal, StringType nType ) :
+    maStrValue(rStr),
+    mfValue(nVal),
+    meStrType(nType) {}
 
 TypedStrData::TypedStrData( const TypedStrData& rCpy ) :
     ScDataObject(),
-    aStrValue(rCpy.aStrValue),
-    nValue(rCpy.nValue),
-    nStrType(rCpy.nStrType) {}
+    maStrValue(rCpy.maStrValue),
+    mfValue(rCpy.mfValue),
+    meStrType(rCpy.meStrType) {}
 
 ScDataObject* TypedStrData::Clone() const
 {
@@ -325,17 +325,17 @@ ScDataObject* TypedStrData::Clone() const
 
 bool TypedStrData::IsStrData() const
 {
-    return nStrType != 0;
+    return meStrType != Value;
 }
 
 const rtl::OUString& TypedStrData::GetString() const
 {
-    return aStrValue;
+    return maStrValue;
 }
 
 double TypedStrData::GetValue () const
 {
-    return nValue;
+    return mfValue;
 }
 
 TypedScStrCollection::TypedScStrCollection( sal_uInt16 nLim , sal_uInt16 nDel , sal_Bool bDup  )
@@ -370,18 +370,18 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
         TypedStrData& rData1 = (TypedStrData&)*pKey1;
         TypedStrData& rData2 = (TypedStrData&)*pKey2;
 
-        if ( rData1.nStrType > rData2.nStrType )
+        if ( rData1.meStrType > rData2.meStrType )
             nResult = 1;
-        else if ( rData1.nStrType < rData2.nStrType )
+        else if ( rData1.meStrType < rData2.meStrType )
             nResult = -1;
-        else if ( !rData1.nStrType /* && !rData2.nStrType */ )
+        else if ( !rData1.meStrType /* && !rData2.nStrType */ )
         {
             //--------------------
             // Zahlen vergleichen:
             //--------------------
-            if ( rData1.nValue == rData2.nValue )
+            if ( rData1.mfValue == rData2.mfValue )
                 nResult = 0;
-            else if ( rData1.nValue < rData2.nValue )
+            else if ( rData1.mfValue < rData2.mfValue )
                 nResult = -1;
             else
                 nResult = 1;
@@ -393,10 +393,10 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
             //---------------------
             if ( bCaseSensitive )
                 nResult = (short) ScGlobal::GetCaseTransliteration()->compareString(
-                    rData1.aStrValue, rData2.aStrValue );
+                    rData1.maStrValue, rData2.maStrValue );
             else
                 nResult = (short) ScGlobal::GetpTransliteration()->compareString(
-                    rData1.aStrValue, rData2.aStrValue );
+                    rData1.maStrValue, rData2.maStrValue );
         }
     }
 
@@ -415,8 +415,8 @@ sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
     if ( rPos != SCPOS_INVALID && rPos < nCount )
     {
         TypedStrData* pData = (TypedStrData*) pItems[rPos];
-        if (pData->nStrType)
-            aOldResult = pData->aStrValue;
+        if (pData->meStrType)
+            aOldResult = pData->maStrValue;
     }
 
     if ( bBack )                                    // rueckwaerts
@@ -429,17 +429,17 @@ sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
         {
             --i;
             TypedStrData* pData = (TypedStrData*) pItems[i];
-            if (pData->nStrType)
+            if (pData->meStrType)
             {
-                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->maStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
                             !ScGlobal::GetpTransliteration()->isEqual(
-                            pData->aStrValue, aOldResult ) )
+                            pData->maStrValue, aOldResult ) )
                     {
-                        rResult = pData->aStrValue;
+                        rResult = pData->maStrValue;
                         rPos = i;
                         bFound = sal_True;
                         break;
@@ -457,17 +457,17 @@ sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
         for ( sal_uInt16 i=nStartPos; i<nCount; i++ )
         {
             TypedStrData* pData = (TypedStrData*) pItems[i];
-            if (pData->nStrType)
+            if (pData->meStrType)
             {
-                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->maStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
                             !ScGlobal::GetpTransliteration()->isEqual(
-                            pData->aStrValue, aOldResult ) )
+                            pData->maStrValue, aOldResult ) )
                     {
-                        rResult = pData->aStrValue;
+                        rResult = pData->maStrValue;
                         rPos = i;
                         bFound = sal_True;
                         break;
@@ -487,10 +487,10 @@ sal_Bool TypedScStrCollection::GetExactMatch( String& rString ) const
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
-        if ( pData->nStrType && ScGlobal::GetpTransliteration()->isEqual(
-                pData->aStrValue, rString ) )
+        if ( pData->meStrType && ScGlobal::GetpTransliteration()->isEqual(
+                pData->maStrValue, rString ) )
         {
-            rString = pData->aStrValue;                         // String anpassen
+            rString = pData->maStrValue;                         // String anpassen
             return sal_True;
         }
     }

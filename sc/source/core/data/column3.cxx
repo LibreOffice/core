@@ -1579,7 +1579,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
                         bHasDates = true;
                     }
                 }
-                pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
+                pData = new TypedStrData(aString, nValue, TypedStrData::Value);
             }
         }
 

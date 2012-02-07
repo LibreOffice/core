@@ -1538,7 +1538,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
         {
-            TypedStrData* pNew = new TypedStrData(itr->second->GetName(), 0.0, SC_STRTYPE_NAMES);
+            TypedStrData* pNew = new TypedStrData(itr->second->GetName(), 0.0, TypedStrData::Name);
             if (!rStrings.Insert(pNew))
                 delete pNew;
         }
@@ -1554,7 +1554,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
         {
-            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_DBNAMES);
+            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, TypedStrData::DbName);
             if ( !rStrings.Insert(pNew) )
                 delete pNew;
         }
@@ -1580,7 +1580,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
                     if ( pCell->HasStringData() )
                     {
                         rtl::OUString aStr = pCell->GetStringData();
-                        TypedStrData* pNew = new TypedStrData( aStr, 0.0, SC_STRTYPE_HEADERS );
+                        TypedStrData* pNew = new TypedStrData(aStr, 0.0, TypedStrData::Header);
                         if ( !rStrings.Insert(pNew) )
                             delete pNew;
                     }

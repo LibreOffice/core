@@ -117,8 +117,16 @@ class TypedStrData : public ScDataObject
 {
     friend class TypedScStrCollection;
 public:
+    enum StringType {
+        Value    = 0,
+        Standard = 1,
+        Name     = 2,
+        DbName   = 3,
+        Header   = 4
+    };
+
     TypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
-                  sal_uInt16 nType = SC_STRTYPE_STANDARD );
+                  StringType eType = Standard );
 
     TypedStrData( const TypedStrData& rCpy );
 
@@ -129,9 +137,9 @@ public:
     double GetValue() const;
 
 private:
-    rtl::OUString aStrValue;
-    double nValue;
-    sal_uInt16 nStrType;           // 0 = Value
+    rtl::OUString maStrValue;
+    double mfValue;
+    StringType meStrType;           // 0 = Value
 };
 
 class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection

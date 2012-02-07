@@ -673,7 +673,7 @@ void ScInputHandler::GetFormulaData()
                     {
                         String aEntry = *pDesc->pFuncName;
                         aEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-                        TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
+                        TypedStrData* pData = new TypedStrData(aEntry, 0.0, TypedStrData::Standard);
                         if (!pFormulaData->Insert(pData))
                             delete pData;
                         break;                  // nicht weitersuchen
@@ -688,7 +688,7 @@ void ScInputHandler::GetFormulaData()
             {
                 pDesc->initArgumentInfo();
                 String aEntry = pDesc->getSignature();
-                TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
+                TypedStrData* pData = new TypedStrData(aEntry, 0.0, TypedStrData::Standard);
                 if (!pFormulaDataPara->Insert(pData))
                     delete pData;
             }

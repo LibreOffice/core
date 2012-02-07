@@ -735,7 +735,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                 aValStr = nMatVal.GetString();
 
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, 0.0, SC_STRTYPE_STANDARD);
+                    pEntry = new TypedStrData( aValStr, 0.0, TypedStrData::Standard);
 
                 if( pCell && rMatch < 0 )
                     aCondTokArr.AddString( aValStr );
@@ -770,7 +770,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                     aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, nMatVal.fVal, SC_STRTYPE_VALUE);
+                    pEntry = new TypedStrData( aValStr, nMatVal.fVal, TypedStrData::Value);
             }
 
             if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )
@@ -813,7 +813,8 @@ bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const 
         {
             double fValue;
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
-            TypedStrData* pData = new TypedStrData( *pString, fValue, bIsValue ? SC_STRTYPE_VALUE : SC_STRTYPE_STANDARD );
+            TypedStrData* pData = new TypedStrData(
+                *pString, fValue, bIsValue ? TypedStrData::Value : TypedStrData::Standard);
             lclInsertStringToCollection( rStrColl, pData, bSortList );
         }
         bOk = aIt.Ok();
