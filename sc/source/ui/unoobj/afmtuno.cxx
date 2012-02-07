@@ -164,18 +164,17 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "ScAutoFormatsObj", SCAUTOFORMATSOBJ_S
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const String& rName, sal_uInt16& rOutIndex )
+bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const String& rName, sal_uInt16& rOutIndex )
 {
-    String aEntryName;
     sal_uInt16 nCount = rFormats.GetCount();
     for( sal_uInt16 nPos=0; nPos<nCount; nPos++ )
     {
         ScAutoFormatData* pEntry = rFormats[nPos];
-        pEntry->GetName( aEntryName );
-        if ( aEntryName == rName )
+        const rtl::OUString& aEntryName = pEntry->GetName();
+        if ( aEntryName.equals(rName) )
         {
             rOutIndex = nPos;
-            return sal_True;
+            return true;
         }
     }
     return false;       // is nich
@@ -390,8 +389,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
     rtl::OUString* pAry = aSeq.getArray();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        (*pFormats)[i]->GetName(aName);
-        pAry[i] = aName;
+        pAry[i] = (*pFormats)[i]->GetName();
     }
     return aSeq;
 }
@@ -539,11 +537,8 @@ rtl::OUString SAL_CALL ScAutoFormatObj::getName() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     if (IsInserted() && nFormatIndex < pFormats->GetCount())
-    {
-        String aName;
-        (*pFormats)[nFormatIndex]->GetName(aName);
-        return aName;
-    }
+        return (*pFormats)[nFormatIndex]->GetName();
+
     return rtl::OUString();
 }
 

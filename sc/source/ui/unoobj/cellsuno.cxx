@@ -5484,14 +5484,11 @@ void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
     if ( pDocSh )
     {
         ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-        String aNameString(aName);
         sal_uInt16 nCount = pAutoFormat->GetCount();
         sal_uInt16 nIndex;
-        String aCompare;
         for (nIndex=0; nIndex<nCount; nIndex++)
         {
-            (*pAutoFormat)[nIndex]->GetName(aCompare);
-            if ( aCompare == aNameString )                      //! Case-insensitiv ???
+            if ((*pAutoFormat)[nIndex]->GetName().equals(aName))                      //! Case-insensitiv ???
                 break;
         }
         if (nIndex<nCount)

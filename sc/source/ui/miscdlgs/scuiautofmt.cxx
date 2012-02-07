@@ -149,7 +149,7 @@ void ScAutoFormatDlg::Init()
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        ((*pFormat)[i])->GetName( aEntry );
+        aEntry = ((*pFormat)[i])->GetName();
         aLbFormat.InsertEntry( aEntry );
     }
 
@@ -379,7 +379,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
             {
                 for( n = 0; n < pFormat->GetCount(); ++n )
                 {
-                    (*pFormat)[n]->GetName(aEntry);
+                    aEntry = (*pFormat)[n]->GetName();
                     if (aFormatName.equals(aEntry))
                         break;
                 }
@@ -405,7 +405,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                     aLbFormat.Clear();
                     for ( sal_uInt16 i = 0; i < nCount; i++ )
                     {
-                        ((*pFormat)[i])->GetName( aEntry );
+                        aEntry = ((*pFormat)[i])->GetName();
                         aLbFormat.InsertEntry( aEntry );
                     }
 
@@ -465,13 +465,9 @@ IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-String ScAutoFormatDlg::GetCurrFormatName()
+rtl::OUString ScAutoFormatDlg::GetCurrFormatName()
 {
-    String  aResult;
-
-    ((*pFormat)[nIndex])->GetName( aResult );
-
-    return aResult;
+    return ((*pFormat)[nIndex])->GetName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
