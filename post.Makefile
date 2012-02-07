@@ -1,0 +1,7 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
+$(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
+
+# vim: set noet sw=4 ts=4:
