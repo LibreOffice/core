@@ -1948,7 +1948,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     {
         pClipDoc->ResetClip( this, nTab );
         i = nTab;
-        nEndTab = nTab;
+        nEndTab = nTab + 1;
     }
     else
         pClipDoc->ResetClip(this, pMarks);
