@@ -312,7 +312,7 @@ ifeq ($(BUILD_DMAKE),YES)
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
     bin/repo-list config.log config.status configure \
-	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
+	ooo.lst post_download post_download.log \
 	config_host.mk.last set_soenv.stamp src.downloaded warn
 
 #
