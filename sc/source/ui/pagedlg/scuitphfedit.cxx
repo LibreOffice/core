@@ -164,7 +164,7 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 {
     const SfxPoolItem* pItem = NULL;
-    if ( rCoreSet.HasItem(nWhich, pItem) )
+    if ( rCoreSet.HasItem(nWhich, &pItem) )
     {
         const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
 

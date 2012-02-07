@@ -69,7 +69,7 @@ sal_Bool ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
 {
     const SfxPoolItem* pItem;
-    if (rCoreAttrs.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, pItem))
+    if (rCoreAttrs.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
     {
         const SfxUInt16Item* p16Item = static_cast<const SfxUInt16Item*>(pItem);
         ScOptionsUtil::KeyBindingType eKeyB =

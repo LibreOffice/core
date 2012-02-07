@@ -134,7 +134,7 @@ public:
                                                 sal_Bool bSrchInParent = sal_True,
                                                 const SfxPoolItem **ppItem = 0 ) const;
 
-    bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem*& rpItem) const;
+    bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;
 
     virtual void                DisableItem(sal_uInt16 nWhich);
     virtual void                InvalidateItem( sal_uInt16 nWhich );

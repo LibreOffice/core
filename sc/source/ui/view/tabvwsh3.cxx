@@ -996,7 +996,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
-                    if( pReqArgs->HasItem( FID_PROTECT_DOC, pItem ) &&
+                    if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
                         ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
                     {
                         rReq.Ignore();
@@ -1069,7 +1069,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 bool bNewProtection = !bOldProtection;
-                if( pReqArgs->HasItem( FID_PROTECT_TABLE, pItem ) )
+                if( pReqArgs->HasItem( FID_PROTECT_TABLE, &pItem ) )
                     bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
                 if( bNewProtection == bOldProtection )
                 {

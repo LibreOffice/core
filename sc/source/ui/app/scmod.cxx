@@ -994,26 +994,26 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //  Linguistik nicht mehr
 
-    if (rOptSet.HasItem(SID_ATTR_METRIC, pItem))
+    if (rOptSet.HasItem(SID_ATTR_METRIC, &pItem))
     {
         PutItem( *pItem );
         pAppCfg->SetAppMetric( (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue() );
         bSaveAppOptions = sal_True;
     }
 
-    if (rOptSet.HasItem(SCITEM_USERLIST, pItem))
+    if (rOptSet.HasItem(SCITEM_USERLIST, &pItem))
     {
         ScGlobal::SetUserList( ((const ScUserListItem*)pItem)->GetUserList() );
         bSaveAppOptions = sal_True;
     }
 
-    if (rOptSet.HasItem(SID_SC_OPT_SYNCZOOM, pItem))
+    if (rOptSet.HasItem(SID_SC_OPT_SYNCZOOM, &pItem))
     {
         pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveAppOptions = sal_True;
     }
 
-    if (rOptSet.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, pItem))
+    if (rOptSet.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
     {
         sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         ScOptionsUtil::KeyBindingType eOld = pAppCfg->GetKeyBindingType();
@@ -1030,7 +1030,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // ViewOptions
     //============================================
 
-    if (rOptSet.HasItem(SID_SCVIEWOPTIONS, pItem))
+    if (rOptSet.HasItem(SID_SCVIEWOPTIONS, &pItem))
     {
         const ScViewOptions& rNewOpt = ((const ScTpViewItem*)pItem)->GetViewOptions();
 
@@ -1062,7 +1062,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // da GridOptions Member der ViewOptions ist!
     //============================================
 
-    if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,&pItem) )
     {
         ScGridOptions aNewGridOpt( (const SvxOptionsGrid&)((const SvxGridItem&)*pItem) );
 
@@ -1096,7 +1096,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // DocOptions
     //============================================
 
-    if ( rOptSet.HasItem(SID_SCDOCOPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_SCDOCOPTIONS,&pItem) )
     {
         const ScDocOptions& rNewOpt = ((const ScTpCalcItem*)pItem)->GetDocOptions();
 
@@ -1124,7 +1124,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     // nach den eigentlichen DocOptions auch noch die TabDistance setzen
-    if ( rOptSet.HasItem(SID_ATTR_DEFTABSTOP,pItem) )
+    if ( rOptSet.HasItem(SID_ATTR_DEFTABSTOP,&pItem) )
     {
         sal_uInt16 nTabDist = ((SfxUInt16Item*)pItem)->GetValue();
         ScDocOptions aOpt(GetDocOptions());
@@ -1144,7 +1144,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //  AutoSpell nach den Doc-Options (weil Member)
 
-    if ( rOptSet.HasItem(SID_AUTOSPELL_CHECK,pItem) )              // an Doc-Options
+    if ( rOptSet.HasItem(SID_AUTOSPELL_CHECK,&pItem) )              // an Doc-Options
     {
         sal_Bool bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -1190,43 +1190,43 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // InputOptions
     //============================================
 
-    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
         pInputCfg->SetMoveDir( ((const SfxUInt16Item*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTION,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTION,&pItem) )
     {
         pInputCfg->SetMoveSelection( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_EDITMODE,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_EDITMODE,&pItem) )
     {
         pInputCfg->SetEnterEdit( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_FMT_EXPAND,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_FMT_EXPAND,&pItem) )
     {
         pInputCfg->SetExtendFormat( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_RANGEFINDER,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_RANGEFINDER,&pItem) )
     {
         pInputCfg->SetRangeFinder( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_REF_EXPAND,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_REF_EXPAND,&pItem) )
     {
         pInputCfg->SetExpandRefs( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,&pItem) )
     {
         pInputCfg->SetMarkHeader( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
         bUpdateMarks = sal_True;
     }
-    if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
         sal_Bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
         if ( bNew != pInputCfg->GetTextWysiwyg() )
@@ -1236,7 +1236,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bUpdateRefDev = sal_True;
         }
     }
-    if( rOptSet.HasItem( SID_SC_INPUT_REPLCELLSWARN, pItem ) )
+    if( rOptSet.HasItem( SID_SC_INPUT_REPLCELLSWARN, &pItem ) )
     {
         pInputCfg->SetReplaceCellsWarn( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
@@ -1246,7 +1246,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // PrintOptions
     //============================================
 
-    if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
     {
         const ScPrintOptions& rNewOpt = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
         SetPrintOptions( rNewOpt );

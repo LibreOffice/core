@@ -199,7 +199,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String aFlags;
 
-                    if( pReqArgs->HasItem( FID_INS_CELL, pItem ) )
+                    if( pReqArgs->HasItem( FID_INS_CELL, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
                     if( aFlags.Len() )
                     {
@@ -269,7 +269,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String aFlags;
 
-                    if( pReqArgs->HasItem( FID_DELETE_CELL, pItem ) )
+                    if( pReqArgs->HasItem( FID_DELETE_CELL, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
                     if( aFlags.Len() )
                     {
@@ -352,7 +352,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const   SfxPoolItem* pItem;
                     String  aFlags = 'A';
 
-                    if( pReqArgs->HasItem( SID_DELETE, pItem ) )
+                    if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
@@ -466,7 +466,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const   SfxPoolItem* pItem;
                     String  aFlags = 'A';
 
-                    if( pReqArgs->HasItem( FID_FILL_TAB, pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
@@ -585,17 +585,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     bDoIt=false;
 
-                    if( pReqArgs->HasItem( FID_FILL_SERIES, pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_SERIES, &pItem ) )
                         aFillDir = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                         aFillCmd = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_2, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                         aFillDateCmd = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_3, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_3, &pItem ) )
                         aFillStep = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_4, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
                         aFillStart = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_5, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
                         aFillMax = ((const SfxStringItem*)pItem)->GetValue();
 
                     if( aFillDir.Len() )
@@ -836,7 +836,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
 
-                    if( pReqArgs->HasItem( FID_FILL_AUTO, pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_AUTO, &pItem ) )
                     {
                         ScAddress aScAddress;
                         String aArg = ((const SfxStringItem*)pItem)->GetValue();
@@ -1027,7 +1027,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     bOk = false;
 
-                    if( pReqArgs->HasItem( SID_OUTLINE_MAKE, pItem ) )
+                    if( pReqArgs->HasItem( SID_OUTLINE_MAKE, &pItem ) )
                     {
                         String aCol = ((const SfxStringItem*)pItem)->GetValue();
                         aCol.ToUpperAscii();
@@ -1089,7 +1089,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     bOk = false;
 
-                    if( pReqArgs->HasItem( SID_OUTLINE_REMOVE, pItem ) )
+                    if( pReqArgs->HasItem( SID_OUTLINE_REMOVE, &pItem ) )
                     {
                         String aCol = ((const SfxStringItem*)pItem)->GetValue();
                         aCol.ToUpperAscii();
@@ -1230,7 +1230,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         const   SfxPoolItem* pItem;
                         String  aFlags = 'A';
 
-                        if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, pItem ) )
+                        if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                         aFlags.ToUpperAscii();
@@ -1715,13 +1715,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 String  aName, aSymbol, aAttrib;
 
-                if( pReqArgs->HasItem( FID_DEFINE_NAME, pItem ) )
+                if( pReqArgs->HasItem( FID_DEFINE_NAME, &pItem ) )
                     aName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     aSymbol = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( pReqArgs->HasItem( FN_PARAM_2, pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                     aAttrib = ((const SfxStringItem*)pItem)->GetValue();
 
                 if ( aName.Len() && aSymbol.Len() )
@@ -1772,7 +1772,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
 
-                    if( pReqArgs->HasItem( SID_UPDATECHART, pItem ) )
+                    if( pReqArgs->HasItem( SID_UPDATECHART, &pItem ) )
                         bAll = ((const SfxBoolItem*)pItem)->GetValue();
                 }
 
@@ -2008,7 +2008,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if( pReqArgs->HasItem( SID_HYPERLINK_SETLINK, pItem ) )
+                if( pReqArgs->HasItem( SID_HYPERLINK_SETLINK, &pItem ) )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const String& rName   = pHyper->GetName();
@@ -2028,7 +2028,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if( pReqArgs->HasItem( FID_CONDITIONAL_FORMAT, pItem ) )
+                if( pReqArgs->HasItem( FID_CONDITIONAL_FORMAT, &pItem ) )
                 {
                     // when RefInput has switched to other tabs as data table, switch back
                     if ( GetViewData()->GetTabNo() != GetViewData()->GetRefTabNo() )

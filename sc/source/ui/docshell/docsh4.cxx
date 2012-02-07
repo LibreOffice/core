@@ -156,10 +156,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
             const SfxPoolItem* pRowItem;
             const SfxPoolItem* pTabItem;
             const SfxPoolItem* pTextItem;
-            if( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, pColItem ) &&
-                            pReqArgs->HasItem( FN_PARAM_2, pRowItem ) &&
-                            pReqArgs->HasItem( FN_PARAM_3, pTabItem ) &&
-                            pReqArgs->HasItem( SID_SC_SETTEXT, pTextItem ) )
+            if( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pColItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_2, &pRowItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_3, &pTabItem ) &&
+                            pReqArgs->HasItem( SID_SC_SETTEXT, &pTextItem ) )
             {
                 //  Parameter sind 1-based !!!
                 SCCOL nCol = ((SfxInt16Item*)pColItem)->GetValue() - 1;
@@ -288,18 +288,18 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 sal_Bool bRowInit = false;
                 sal_Bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
 
-                if( pReqArgs->HasItem( SID_CHART_NAME, pItem ) )
+                if( pReqArgs->HasItem( SID_CHART_NAME, &pItem ) )
                     aChartName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( pReqArgs->HasItem( SID_CHART_SOURCE, pItem ) )
+                if( pReqArgs->HasItem( SID_CHART_SOURCE, &pItem ) )
                     aRangeName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                 {
                     bColHeaders = ((const SfxBoolItem*)pItem)->GetValue();
                     bColInit = sal_True;
                 }
-                if( pReqArgs->HasItem( FN_PARAM_2, pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                 {
                     bRowHeaders = ((const SfxBoolItem*)pItem)->GetValue();
                     bRowInit = sal_True;

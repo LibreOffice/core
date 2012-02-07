@@ -87,7 +87,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
-                    if( pReqArgs->HasItem( FID_TABLE_VISIBLE, pItem ) )
+                    if( pReqArgs->HasItem( FID_TABLE_VISIBLE, &pItem ) )
                         bVisible = ((const SfxBoolItem*)pItem)->GetValue();
                 }
 
@@ -129,7 +129,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
-                    if( pReqArgs->HasItem( FID_TABLE_HIDE, pItem ) )
+                    if( pReqArgs->HasItem( FID_TABLE_HIDE, &pItem ) )
                         aName = ((const SfxStringItem*)pItem)->GetValue();
                 }
 
@@ -154,7 +154,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
-                    if( pReqArgs->HasItem( FID_TABLE_SHOW, pItem ) )
+                    if( pReqArgs->HasItem( FID_TABLE_SHOW, &pItem ) )
                     {
                         aName = ((const SfxStringItem*)pItem)->GetValue();
 
@@ -217,8 +217,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     const SfxPoolItem*  pNameItem;
                     String              aName;
 
-                    if ( pReqArgs->HasItem( FN_PARAM_1, pTabItem ) &&
-                         pReqArgs->HasItem( nSlot, pNameItem ) )
+                    if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
+                         pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
                         //  Tabellennr. von Basic: 1-basiert
 
@@ -364,10 +364,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String      aName;
 
-                    if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                         nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
 
-                    if( pReqArgs->HasItem( nSlot, pItem ) )
+                    if( pReqArgs->HasItem( nSlot, &pItem ) )
                         aName = ((const SfxStringItem*)pItem)->GetValue();
 
                     switch ( nSlot )
@@ -481,16 +481,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SCTAB nTableCount = pDoc->GetTableCount();
                     const SfxPoolItem* pItem;
 
-                    if( pReqArgs->HasItem( FID_TAB_MOVE, pItem ) )
+                    if( pReqArgs->HasItem( FID_TAB_MOVE, &pItem ) )
                         aDocName = ((const SfxStringItem*)pItem)->GetValue();
-                    if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
                         //  Tabelle ist 1-basiert
                         nTab = ((const SfxUInt16Item*)pItem)->GetValue() - 1;
                         if ( nTab >= nTableCount )
                             nTab = SC_TAB_APPEND;
                     }
-                    if( pReqArgs->HasItem( FN_PARAM_2, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                         bCpy = ((const SfxBoolItem*)pItem)->GetValue();
 
                     if (!aDocName.isEmpty())
@@ -700,10 +700,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     sal_Bool                bDone = false;
                     const SfxPoolItem*  pItem;
                     Color               aColor;
-                    if( pReqArgs->HasItem( FN_PARAM_1, pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                         nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
 
-                    if( pReqArgs->HasItem( nSlot, pItem ) )
+                    if( pReqArgs->HasItem( nSlot, &pItem ) )
                         aColor = ((const SvxColorItem*)pItem)->GetValue();
 
                     if ( nTabSelCount > 1 )
