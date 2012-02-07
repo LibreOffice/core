@@ -1915,24 +1915,59 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
                 const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
                 const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
+                aExpandText = aExpandText.copy( nExpandBegin, nExpandEnd - nExpandBegin );
 
                 const bool bCount = aExpandText.getLength() > 0;
 
                 // count words in 'regular' text:
                 if( bCount && pBreakIt->GetBreakIter().is() )
                 {
-                    const String aScannerText( aExpandText );
-                    SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
-                                        i18n::WordType::WORD_COUNT,
-                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
-
-                    const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
-
-                    while ( aScanner.NextWord() )
+                    // split into different script languages
+                    sal_Int32 nScriptBegin = 0;
+                    while ( nScriptBegin < aExpandText.getLength() )
                     {
-                        if ( aScanner.GetLen() > 1 ||
-                             CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ) )
-                            ++nTmpWords;
+                        const sal_Int16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aExpandText, nScriptBegin );
+                        const sal_Int32 nScriptEnd = pBreakIt->GetBreakIter()->endOfScript( aExpandText, nScriptBegin, nCurrScript );
+                        rtl::OUString aScriptText = aExpandText.copy( nScriptBegin, nScriptEnd - nScriptBegin );
+
+                        // Asian languages count words as characters
+                        if ( nCurrScript == ::com::sun::star::i18n::ScriptType::ASIAN )
+                        {
+                            // substract white spaces
+                            sal_Int32 nSpaceCount = 0;
+                            sal_Int32 nSpacePos = 0;
+
+                            // substract normal white spaces
+                            nSpacePos = -1;
+                            while ( ( nSpacePos = aScriptText.indexOf( ' ', nSpacePos + 1 ) ) != -1 )
+                            {
+                                nSpaceCount++;
+                            }
+                            // substract Asian full-width white spaces
+                            nSpacePos = -1;
+                            while ( ( nSpacePos = aScriptText.indexOf( 12288, nSpacePos + 1 ) ) != -1 )
+                            {
+                                nSpaceCount++;
+                            }
+                            nTmpWords += nScriptEnd - nScriptBegin - nSpaceCount;
+                        }
+                        else
+                        {
+                            const String aScannerText( aScriptText );
+                            SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
+                                                i18n::WordType::WORD_COUNT,
+                                                (xub_StrLen)0, (xub_StrLen)aScriptText.getLength() );
+
+                            const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
+
+                            while ( aScanner.NextWord() )
+                            {
+                                if ( aScanner.GetLen() > 1 ||
+                                     CH_TXTATR_BREAKWORD != aScriptText.match(aBreakWord, aScanner.GetBegin() ) )
+                                    ++nTmpWords;
+                            }
+                        }
+                        nScriptBegin = nScriptEnd;
                     }
                 }
 
