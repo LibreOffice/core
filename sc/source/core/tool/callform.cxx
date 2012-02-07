@@ -163,8 +163,6 @@ public:
 
 ModuleCollection aModuleCollection;
 
-}
-
 const ModuleData* ModuleCollection::findByName(const rtl::OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
@@ -183,6 +181,8 @@ void ModuleCollection::insert(ModuleData* pNew)
 void ModuleCollection::clear()
 {
     maData.clear();
+}
+
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
