@@ -48,10 +48,12 @@ LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
     , bULF( bULFFormat )
 {
     pLines = new LngLineList();
-    DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
     if ( aEntry.Exists())
     {
-        SvFileStream aStream( String( sSource, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
+        SvFileStream aStream(
+            rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US),
+            STREAM_STD_READ);
         if ( aStream.IsOpen())
         {
             rtl::OString sLine;
@@ -91,29 +93,31 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
 
     Export::InitLanguages( false );
     aLanguages = Export::GetLanguages();
-    SvFileStream aSDFStream( String( rSDFFile, RTL_TEXTENCODING_ASCII_US ),
-        STREAM_STD_WRITE | STREAM_TRUNC );
+    SvFileStream aSDFStream(
+        rtl::OStringToOUString(rSDFFile, RTL_TEXTENCODING_ASCII_US),
+        STREAM_STD_WRITE | STREAM_TRUNC);
     if ( !aSDFStream.IsOpen()) {
         nError = SDF_COULD_NOT_OPEN;
     }
     aSDFStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     nError = SDF_OK;
-    DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
     aEntry.ToAbs();
-    String sFullEntry = aEntry.GetFull();
-    aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
+    rtl::OUString sFullEntry(aEntry.GetFull());
+    aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
     aEntry += DirEntry( rRoot );
     rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
         osl_getThreadTextEncoding()));
     rtl::OString sActFileName(rtl::OUStringToOString(
-        sFullEntry.Copy( sPrjEntry.getLength() + 1 ), osl_getThreadTextEncoding()));
+        sFullEntry.copy(sPrjEntry.getLength() + 1),
+        osl_getThreadTextEncoding()));
     sActFileName = sActFileName.replace('/', '\\');
 
     size_t nPos  = 0;
     sal_Bool bStart = true;
     rtl::OString sGroup, sLine;
     OStringHashMap Text;
-    ByteString sID;
+    rtl::OString sID;
 
     while( nPos < pLines->size() ) {
         sLine = *(*pLines)[ nPos++ ];
@@ -142,15 +146,15 @@ void LngParser::WriteSDF(SvFileStream &aSDFStream,
 
    sal_Bool bExport = true;
    if ( bExport ) {
-          ByteString sTimeStamp( Export::GetTimeStamp());
-       ByteString sCur;
+       rtl::OString sTimeStamp( Export::GetTimeStamp());
+       rtl::OString sCur;
        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
            sCur = aLanguages[ n ];
-           ByteString sAct = rText_inout[ sCur ];
-           if ( !sAct.Len() && sCur.Len() )
-               sAct = rText_inout[ ByteString("en-US") ];
+           rtl::OString sAct = rText_inout[ sCur ];
+           if ( sAct.isEmpty() && !sCur.isEmpty() )
+               sAct = rText_inout[ rtl::OString("en-US") ];
 
-           ByteString sOutput( rPrj ); sOutput += "\t";
+           rtl::OString sOutput( rPrj ); sOutput += "\t";
            if (rRoot.getLength())
                sOutput += rActFileName;
            sOutput += "\t0\t";
@@ -195,16 +199,16 @@ sal_Bool LngParser::Merge(
 {
     Export::InitLanguages( true );
     SvFileStream aDestination(
-        String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),
-        STREAM_STD_WRITE | STREAM_TRUNC );
+        rtl::OStringToOUString(rDestinationFile, RTL_TEXTENCODING_ASCII_US),
+        STREAM_STD_WRITE | STREAM_TRUNC);
     if ( !aDestination.IsOpen()) {
         nError = LNG_COULD_NOT_OPEN;
     }
     nError = LNG_OK;
 
     MergeDataFile aMergeDataFile( rSDFFile, sSource, sal_False );
-    ByteString sTmp( Export::sLanguages );
-    if( sTmp.ToUpperAscii().Equals("ALL") )
+    rtl::OString sTmp( Export::sLanguages );
+    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );
     aLanguages = Export::GetLanguages();
 
@@ -231,7 +235,7 @@ sal_Bool LngParser::Merge(
 
     while ( nPos < pLines->size()) {
         OStringHashMap Text;
-        ByteString sID( sGroup );
+        rtl::OString sID( sGroup );
         sal_uLong nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID , sSource );
@@ -240,7 +244,7 @@ sal_Bool LngParser::Merge(
         // read languages
         bGroup = sal_False;
 
-        ByteString sLanguagesDone;
+        rtl::OString sLanguagesDone;
 
         while ( nPos < pLines->size() && !bGroup )
         {
@@ -259,22 +263,22 @@ sal_Bool LngParser::Merge(
             }
             else if ( getTokenCount(sLine, '=') > 1 )
             {
-                ByteString sLang = getToken(sLine, 0, '=');
+                rtl::OString sLang = getToken(sLine, 0, '=');
                 sLang = comphelper::string::stripStart(sLang, ' ');
                 sLang = comphelper::string::stripEnd(sLang, ' ');
 
-                ByteString sSearch( ";" );
+                rtl::OString sSearch( ";" );
                 sSearch += sLang;
                 sSearch += ";";
 
-                if (( sLanguagesDone.Search( sSearch ) != STRING_NOTFOUND )) {
+                if (( sLanguagesDone.indexOf( sSearch ) != -1 )) {
                     LngLineList::iterator it = pLines->begin();
                     ::std::advance( it, nPos );
                     pLines->erase( it );
                 }
                 if( bULF && pEntrys )
                 {
-                    if( sLang.Len() )
+                    if( !sLang.isEmpty() )
                     {
                         rtl::OString sNewText;
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
@@ -282,7 +286,7 @@ sal_Bool LngParser::Merge(
                         if ( !sNewText.isEmpty()) {
                             rtl::OString *pLine = (*pLines)[ nPos ];
 
-                            ByteString sText1( sLang );
+                            rtl::OString sText1( sLang );
                             sText1 += " = \"";
                             sText1 += sNewText;
                             sText1 += "\"";
@@ -303,21 +307,21 @@ sal_Bool LngParser::Merge(
             else
                 nPos++;
         }
-        ByteString sCur;
+        rtl::OString sCur;
         if ( nLastLangPos )
         {
             for(size_t n = 0; n < aLanguages.size(); ++n)
             {
                 sCur = aLanguages[ n ];
-                if( !sCur.EqualsIgnoreCaseAscii("en-US") && Text[sCur].isEmpty() && pEntrys )
+                if( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) && Text[sCur].isEmpty() && pEntrys )
                 {
 
                     rtl::OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
                     if (( !sNewText.isEmpty()) &&
-                        !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
+                        !(( sCur.equalsL(RTL_CONSTASCII_STRINGPARAM("x-comment"))) && ( sNewText == "-" )))
                     {
-                        ByteString sLine;
+                        rtl::OString sLine;
                         sLine += sCur;
                         sLine += " = \"";
                         sLine += sNewText;

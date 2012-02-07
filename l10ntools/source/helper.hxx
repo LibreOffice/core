@@ -71,6 +71,21 @@ inline void searchAndReplaceAll(
     }
 }
 
+inline void searchAndReplaceAll(
+    rtl::OUString * text, rtl::OUString const & search,
+    rtl::OUString const & replace)
+{
+    assert(text != 0);
+    for (sal_Int32 i = 0;;) {
+        i = text->indexOf(search, i);
+        if (i == -1) {
+            break;
+        }
+        *text = text->replaceAt(i, search.getLength(), replace);
+        i += replace.getLength();
+    }
+}
+
 inline rtl::OString getToken(
     rtl::OString const & text, sal_Int32 token, char separator)
 {

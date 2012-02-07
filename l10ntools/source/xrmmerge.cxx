@@ -26,9 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <comphelper/string.hxx>
 #include <stdio.h>
-#include <tools/string.hxx>
 #include <tools/fsys.hxx>
 
 // local includes
@@ -62,15 +63,15 @@ sal_Bool bErrorLog;
 sal_Bool bUTF8;
 sal_Bool bDisplayName;
 sal_Bool bExtensionDescription;
-ByteString sPrj;
-ByteString sPrjRoot;
-ByteString sInputFileName;
-ByteString sActFileName;
-ByteString sOutputFile;
-ByteString sMergeSrc;
-ByteString sLangAttribute;
-ByteString sResourceType;
-String sUsedTempFile;
+rtl::OString sPrj;
+rtl::OString sPrjRoot;
+rtl::OString sInputFileName;
+rtl::OString sActFileName;
+rtl::OString sOutputFile;
+rtl::OString sMergeSrc;
+rtl::OString sLangAttribute;
+rtl::OString sResourceType;
+rtl::OUString sUsedTempFile;
 XRMResParser *pParser = NULL;
 
 extern "C" {
@@ -96,26 +97,26 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        if ( ByteString( argv[ i ] ).ToUpperAscii() == "-I" ) {
+        if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-I" ) {
             nState = STATE_INPUT; // next token specifies source file
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-O" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-O" ) {
             nState = STATE_OUTPUT; // next token specifies the dest file
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-P" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-P" ) {
             nState = STATE_PRJ; // next token specifies the cur. project
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-R" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-M" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
         }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
+        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-L" ) {
             nState = STATE_LANGUAGES;
         }
         else {
@@ -133,20 +134,20 @@ extern char *GetOutputFile( int argc, char* argv[])
                 }
                 break;
                 case STATE_PRJ: {
-                    sPrj = ByteString( argv[ i ]);
+                    sPrj = rtl::OString( argv[ i ]);
                 }
                 break;
                 case STATE_ROOT: {
-                    sPrjRoot = ByteString( argv[ i ]); // path to project root
+                    sPrjRoot = rtl::OString( argv[ i ]); // path to project root
                 }
                 break;
                 case STATE_MERGESRC: {
-                    sMergeSrc = ByteString( argv[ i ]);
+                    sMergeSrc = rtl::OString( argv[ i ]);
                     bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
-                    Export::sLanguages = ByteString( argv[ i ]);
+                    Export::sLanguages = rtl::OString( argv[ i ]);
                 }
                 break;
             }
@@ -156,8 +157,8 @@ extern char *GetOutputFile( int argc, char* argv[])
     if ( bInput ) {
         // command line is valid
         bEnableExport = sal_True;
-        char *pReturn = new char[ sOutputFile.Len() + 1 ];
-        strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
+        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
+        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
 
@@ -165,7 +166,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     return NULL;
 }
 void removeTempFile(){
-    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
+    if (!sUsedTempFile.isEmpty()) {
         DirEntry aTempFile( sUsedTempFile );
         aTempFile.Kill();
     }
@@ -175,13 +176,13 @@ int InitXrmExport( char *pOutput , char* pFilename)
 /*****************************************************************************/
 {
     // instanciate Export
-    ByteString sOutput( pOutput );
-    ByteString sFilename( pFilename );
+    rtl::OString sOutput( pOutput );
+    rtl::OString sFilename( pFilename );
     Export::InitLanguages( false );
 
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
-      else if ( sOutputFile.Len()) {
+      else if (!sOutputFile.isEmpty()) {
         pParser = new XRMResExport( sOutputFile, sPrj, sActFileName );
     }
 
@@ -197,7 +198,7 @@ int EndXrmExport()
 }
 extern const char* getFilename()
 {
-    return sInputFileName.GetBuffer();
+    return sInputFileName.getStr();
 }
 /*****************************************************************************/
 extern FILE *GetXrmFile()
@@ -205,31 +206,31 @@ extern FILE *GetXrmFile()
 {
     FILE *pFile = 0;
     // look for valid filename
-    if ( sInputFileName.Len()) {
+    if (!sInputFileName.isEmpty()) {
         if( Export::fileHasUTF8ByteOrderMarker( sInputFileName ) ){
             DirEntry aTempFile = Export::GetTempFile();
-            DirEntry aSourceFile( String( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
+            DirEntry aSourceFile( rtl::OStringToOUString( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
             aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-            String sTempFile = aTempFile.GetFull();
+            rtl::OUString sTempFile = aTempFile.GetFull();
             Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US) );
             pFile = fopen(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US).getStr(), "r");
             sUsedTempFile = sTempFile;
         }else{
             // able to open file?
-            pFile = fopen( sInputFileName.GetBuffer(), "r" );
-            sUsedTempFile = String::CreateFromAscii("");
+            pFile = fopen(sInputFileName.getStr(), "r");
+            sUsedTempFile = rtl::OUString();
         }
         if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
-                sInputFileName.GetBuffer());
+                sInputFileName.getStr());
         }
         else {
             // this is a valid file which can be opened, so
             // create path to project root
-            DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
+            DirEntry aEntry( rtl::OStringToOUString( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
             aEntry.ToAbs();
             rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
-            aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
+            aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
             aEntry += DirEntry( sPrjRoot );
             rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
@@ -238,7 +239,7 @@ extern FILE *GetXrmFile()
             sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
 
 
-            sActFileName.SearchAndReplaceAll( "/", "\\" );
+            sActFileName = sActFileName.replace('/', '\\');
 
             return pFile;
         }
@@ -299,7 +300,7 @@ XRMResParser::~XRMResParser()
 int XRMResParser::Execute( int nToken, char * pToken )
 /*****************************************************************************/
 {
-    ByteString rToken( pToken );
+    rtl::OString rToken( pToken );
 
     switch ( nToken ) {
         case XRM_TEXT_START:{
@@ -316,14 +317,14 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case XRM_TEXT_END: {
                 sCurrentCloseTag = rToken;
-                sResourceType = ByteString ( "readmeitem" );
-                sLangAttribute = ByteString ( "xml:lang" );
+                sResourceType = rtl::OString ( "readmeitem" );
+                sLangAttribute = rtl::OString ( "xml:lang" );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                 bText = sal_False;
-                rToken = ByteString("");
-                sCurrentText  = ByteString("");
+                rToken = rtl::OString("");
+                sCurrentText  = rtl::OString("");
         }
         break;
 
@@ -339,7 +340,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_TEXT_START:{
                 if (bDisplayName) {
-                    sLID = ByteString("dispname");
+                    sLID = rtl::OString("dispname");
                     bText = sal_True;
                     sCurrentText = "";
                     sCurrentOpenTag = rToken;
@@ -351,14 +352,14 @@ int XRMResParser::Execute( int nToken, char * pToken )
         case DESC_TEXT_END: {
                 if (bDisplayName) {
                     sCurrentCloseTag = rToken;
-                    sResourceType = ByteString ( "description" );
-                    sLangAttribute = ByteString ( "lang" );
+                    sResourceType = rtl::OString ( "description" );
+                    sLangAttribute = rtl::OString ( "lang" );
                     WorkOnText( sCurrentOpenTag, sCurrentText );
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     bText = sal_False;
-                    rToken = ByteString("");
-                    sCurrentText  = ByteString("");
+                    rToken = rtl::OString("");
+                    sCurrentText  = rtl::OString("");
                 }
         }
         break;
@@ -375,17 +376,17 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_EXTENSION_DESCRIPTION_SRC: {
                 if (bExtensionDescription) {
-                    sLID = ByteString("extdesc");
-                    sResourceType = ByteString ( "description" );
-                    sLangAttribute = ByteString ( "lang" );
+                    sLID = rtl::OString("extdesc");
+                    sResourceType = rtl::OString ( "description" );
+                    sLangAttribute = rtl::OString ( "lang" );
                     sCurrentOpenTag = rToken;
-                    sCurrentText  = ByteString("");
+                    sCurrentText  = rtl::OString("");
                     Output( rToken );
                     WorkOnDesc( sCurrentOpenTag, sCurrentText );
                     sCurrentCloseTag = rToken;
                     Output( sCurrentText );
-                    rToken = ByteString("");
-                    sCurrentText  = ByteString("");
+                    rToken = rtl::OString("");
+                    sCurrentText  = rtl::OString("");
                 }
             }
         break;
@@ -408,18 +409,18 @@ int XRMResParser::Execute( int nToken, char * pToken )
 rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::OString &rAttribute )
 /*****************************************************************************/
 {
-    ByteString sTmp( rToken );
-    sTmp.SearchAndReplaceAll( "\t", " " );
+    rtl::OString sTmp( rToken );
+    sTmp = sTmp.replace('\t', ' ');
 
-    ByteString sSearch( " " );
+    rtl::OString sSearch( " " );
     sSearch += rAttribute;
     sSearch += "=";
-    sal_uInt16 nPos = sTmp.Search( sSearch );
+    sal_Int32 nPos = sTmp.indexOf( sSearch );
 
-    if ( nPos != STRING_NOTFOUND )
+    if ( nPos != -1 )
     {
-        sTmp = sTmp.Copy( nPos );
-        ByteString sId = comphelper::string::getToken(sTmp, 1, '\"');
+        sTmp = sTmp.copy( nPos );
+        rtl::OString sId = comphelper::string::getToken(sTmp, 1, '\"');
         return sId;
     }
     return "";
@@ -468,12 +469,12 @@ XRMResOutputParser::XRMResOutputParser ( const rtl::OString &rOutputFile )
     aLanguages = Export::GetLanguages();
     pOutputStream =
         new SvFileStream(
-            String( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
+            rtl::OStringToOUString( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
             STREAM_STD_WRITE | STREAM_TRUNC
         );
     pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     if ( !pOutputStream->IsOpen()) {
-        ByteString sError( "Unable to open output file: " );
+        rtl::OString sError( "Unable to open output file: " );
         sError += rOutputFile;
         Error( sError );
         delete pOutputStream;
@@ -524,14 +525,14 @@ void XRMResExport::WorkOnDesc(
 )
 /*****************************************************************************/
 {
-    DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry( rtl::OStringToOUString( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
-    ByteString sDescFileName(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
-    sDescFileName.SearchAndReplaceAll( "description.xml", "" );
+    rtl::OString sDescFileName(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
+    helper::searchAndReplaceAll(&sDescFileName, "description.xml", "");
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
     int size;
     char * memblock;
-    ifstream file (sDescFileName.GetBuffer(), ios::in|ios::binary|ios::ate);
+    ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
         size = static_cast<int>(file.tellg());
         memblock = new char [size+1];
@@ -539,7 +540,7 @@ void XRMResExport::WorkOnDesc(
         file.read (memblock, size);
         file.close();
         memblock[size] = '\0';
-        rText = ByteString(memblock);
+        rText = rtl::OString(memblock);
         helper::searchAndReplaceAll(&rText, "\n", "\\n");
         delete[] memblock;
      }
@@ -554,11 +555,11 @@ void XRMResExport::WorkOnText(
 )
 /*****************************************************************************/
 {
-    ByteString sLang( GetAttribute( rOpenTag, sLangAttribute ));
+    rtl::OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( !pResData )
     {
-        ByteString sPlatform( "" );
+        rtl::OString sPlatform( "" );
         pResData = new ResData( sPlatform, GetGID() );
         pResData->sId = GetLID();
     }
@@ -577,8 +578,8 @@ void XRMResExport::EndOfText(
 {
     if ( pResData && pOutputStream )
     {
-        ByteString sTimeStamp( Export::GetTimeStamp());
-        ByteString sCur;
+        rtl::OString sTimeStamp( Export::GetTimeStamp());
+        rtl::OString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
             sCur = aLanguages[ n ];
@@ -586,7 +587,7 @@ void XRMResExport::EndOfText(
             rtl::OString sAct = pResData->sText[ sCur ];
             sAct = comphelper::string::remove(sAct, 0x0A);
 
-            ByteString sOutput( sPrj ); sOutput += "\t";
+            rtl::OString sOutput( sPrj ); sOutput += "\t";
             sOutput += sPath;
             sOutput += "\t0\t";
             sOutput += sResourceType;
@@ -604,8 +605,7 @@ void XRMResExport::EndOfText(
             sOutput += "\t\t\t\t";
             sOutput += sTimeStamp;
 
-            sal_Char cSearch = 0x00;
-            sOutput.SearchAndReplaceAll( cSearch, '_' );
+            sOutput = sOutput.replace('\0', '_');
             if( sAct.getLength() > 1 )
                 pOutputStream->WriteLine( sOutput );
         }
@@ -659,49 +659,51 @@ void XRMResMerge::WorkOnDesc(
     if ( pMergeDataFile && pResData ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
-            ByteString sCur;
-            ByteString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
+            rtl::OString sCur;
+            rtl::OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 rtl::OString sContent;
-                if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
+                if ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US"))  &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
-                    ByteString sText( sContent );
-                    ByteString sAdditionalLine( "\n        " );
+                    rtl::OString sText( sContent );
+                    rtl::OString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
-                    ByteString sSearch = sLangAttribute;
+                    rtl::OString sSearch = sLangAttribute;
                     sSearch += "=\"";
-                    ByteString sReplace( sSearch );
+                    rtl::OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
-                    sAdditionalLine.SearchAndReplace( sSearch, sReplace );
+                    helper::searchAndReplace(
+                        &sAdditionalLine, sSearch, sReplace);
 
-                    sSearch = ByteString("xlink:href=\"");
+                    sSearch = rtl::OString("xlink:href=\"");
                     sReplace = sSearch;
 
-                    ByteString sLocDescFilename = sDescFilename;
-                    sLocDescFilename.SearchAndReplace( "en-US", sCur );
+                    rtl::OString sLocDescFilename = sDescFilename;
+                    helper::searchAndReplace(&sLocDescFilename, "en-US", sCur);
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;
-                    sAdditionalLine.SearchAndReplace( sSearch, sReplace );
+                    helper::searchAndReplace(
+                        &sAdditionalLine, sSearch, sReplace);
 
                     Output( sAdditionalLine );
 
-                    DirEntry aEntry( String( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
+                    DirEntry aEntry( rtl::OStringToOUString( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
                     aEntry.ToAbs();
-                    ByteString sOutputDescFile(rtl::OUStringToOString(aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US));
+                    rtl::OString sOutputDescFile(rtl::OUStringToOString(aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US));
                     rtl::OString sDel(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
                     sOutputDescFile += sDel;
                     sOutputDescFile += sLocDescFilename;
-                    sText.SearchAndReplaceAll( "\\n", "\n" );
-                    ofstream file ( sOutputDescFile.GetBuffer() );
+                    helper::searchAndReplaceAll(&sText, "\\n", "\n");
+                    ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
-                        file << sText.GetBuffer();
+                        file << sText.getStr();
                         file.close();
                     }
                 }
@@ -719,11 +721,11 @@ void XRMResMerge::WorkOnText(
 )
 /*****************************************************************************/
 {
-    ByteString sLang( GetAttribute( rOpenTag, sLangAttribute ));
+    rtl::OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
-            ByteString sPlatform( "" );
+            rtl::OString sPlatform( "" );
             pResData = new ResData( sPlatform, GetLID() , sFilename );
             pResData->sId = GetLID();
             pResData->sResTyp = sResourceType;
@@ -766,26 +768,27 @@ void XRMResMerge::EndOfText(
     if ( pMergeDataFile && pResData ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
-            ByteString sCur;
+            rtl::OString sCur;
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 rtl::OString sContent;
-                if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
+                if (!sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
-                    ByteString sText( sContent );
-                    ByteString sAdditionalLine( "\n        " );
+                    rtl::OString sText( sContent );
+                    rtl::OString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
-                    ByteString sSearch = sLangAttribute;
+                    rtl::OString sSearch = sLangAttribute;
                     sSearch += "=\"";
-                    ByteString sReplace( sSearch );
+                    rtl::OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
 
-                    sAdditionalLine.SearchAndReplace( sSearch, sReplace );
+                    helper::searchAndReplace(
+                        &sAdditionalLine, sSearch, sReplace);
 
                     sAdditionalLine += sText;
                     sAdditionalLine += rCloseTag;

@@ -47,8 +47,6 @@ namespace
     };
 }
 
-extern void ConvertHalfwitdhToFullwidth( String& rString );
-
 //
 // class PFormEntrys
 //
@@ -157,15 +155,8 @@ PFormEntrys* MergeData::GetPFObject( const rtl::OString& rPFO )
 
 sal_Bool MergeData::operator==( ResData *pData )
 {
-    ByteString sResTyp_upper( pData->sResTyp );
-    sResTyp_upper.ToUpperAscii();
-    ByteString sTyp_upper( sTyp );
-    sTyp_upper.ToUpperAscii();
-
-    return (( pData->sId == sLID ) &&
-            ( pData->sGId == sGID ) &&
-            ( sResTyp_upper  ==  sTyp_upper )
-            );
+    return pData->sId == sLID && pData->sGId == sGID
+        && pData->sResTyp.equalsIgnoreAsciiCase(sTyp);
 }
 
 //

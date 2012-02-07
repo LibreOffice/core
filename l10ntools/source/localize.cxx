@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include "srciter.hxx"
 #include "export.hxx"
@@ -36,10 +37,7 @@
 #include "tools/errcode.hxx"
 #include "tools/fsys.hxx"
 
-#ifndef L10NTOOLS_FILE_HXX
-#define L10NTOOLS_FILE_HXX
-#include <l10ntools/file.hxx>
-#endif
+#include "helper.hxx"
 
 using namespace std;
 
@@ -178,38 +176,38 @@ private:
     SvFileStream aSDF;
     sal_uInt16 nMode;
 
-    ByteString sLanguageRestriction;
+    rtl::OString sLanguageRestriction;
 
-    ByteString sOutputFile;
+    rtl::OString sOutputFile;
 
     int nFileCnt;
 
-    const ByteString GetProjectName( sal_Bool bAbs = sal_False );
-    const ByteString GetProjectRootRel();
+    const rtl::OString GetProjectName( sal_Bool bAbs = sal_False );
+    const rtl::OString GetProjectRootRel();
 
 
-    sal_Bool CheckNegativeList( const ByteString &rFileName );
-    sal_Bool CheckPositiveList( const ByteString &rFileName );
+    sal_Bool CheckNegativeList( const rtl::OString &rFileName );
+    sal_Bool CheckPositiveList( const rtl::OString &rFileName );
 
     void WorkOnFile(
-        const ByteString &rFileName,
-        const ByteString &rExecutable,
-        const ByteString &rParameter
+        const rtl::OString &rFileName,
+        const rtl::OString &rExecutable,
+        const rtl::OString &rParameter
     );
 
     void WorkOnFileType(
-        const ByteString &rDirectory,
-        const ByteString &rExtension,
-        const ByteString &rExecutable,
-        const ByteString &rParameter,
-        const ByteString &rCollectMode
+        const rtl::OString &rDirectory,
+        const rtl::OString &rExtension,
+        const rtl::OString &rExecutable,
+        const rtl::OString &rParameter,
+        const rtl::OString &rCollectMode
     );
     void WorkOnDirectory(const rtl::OString &rDirectory);
 public:
-    SourceTreeLocalizer(const ByteString &rRoot, bool skip_links);
+    SourceTreeLocalizer(const rtl::OString &rRoot, bool skip_links);
     ~SourceTreeLocalizer();
 
-    void SetLanguageRestriction( const ByteString& rRestrictions )
+    void SetLanguageRestriction( const rtl::OString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
     int getFileCnt();
     sal_Bool Extract(const rtl::OString &rDestinationFile);
@@ -217,7 +215,7 @@ public:
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 
-SourceTreeLocalizer::SourceTreeLocalizer(const ByteString &rRoot, bool skip_links)
+SourceTreeLocalizer::SourceTreeLocalizer(const rtl::OString &rRoot, bool skip_links)
     : SourceTreeIterator(rRoot)
     , nMode( LOCALIZE_NONE )
     , nFileCnt( 0 )
@@ -232,7 +230,7 @@ SourceTreeLocalizer::~SourceTreeLocalizer()
 }
 
 /*****************************************************************************/
-const ByteString SourceTreeLocalizer::GetProjectName( sal_Bool bAbs )
+const rtl::OString SourceTreeLocalizer::GetProjectName( sal_Bool bAbs )
 /*****************************************************************************/
 {
     sal_Bool bFound = sal_False;
@@ -260,44 +258,44 @@ int SourceTreeLocalizer::GetFileCnt(){
 }
 
 /*****************************************************************************/
-const ByteString SourceTreeLocalizer::GetProjectRootRel()
+const rtl::OString SourceTreeLocalizer::GetProjectRootRel()
 /*****************************************************************************/
 {
-    ByteString sProjectRoot( GetProjectName( sal_True ));
+    rtl::OString sProjectRoot( GetProjectName( sal_True ));
     DirEntry aCur;
     aCur.ToAbs();
-    ByteString sCur(rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US));
+    rtl::OString sCur(rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
-    if( sCur.SearchAndReplace( sProjectRoot, "" ) == STRING_NOTFOUND )
+    if (helper::searchAndReplace(&sCur, sProjectRoot, rtl::OString()) == -1)
         return "";
 
     rtl::OString sDelimiter(rtl::OUStringToOString(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
-    sCur.SearchAndReplaceAll( sDelimiter, "/" );
+    helper::searchAndReplaceAll(&sCur, sDelimiter, "/");
     sCur = comphelper::string::stripStart(sCur, '/');
     sal_Int32 nCount = comphelper::string::getTokenCount(sCur, '/');
 
-    ByteString sProjectRootRel;
+    rtl::OString sProjectRootRel;
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        if ( sProjectRootRel.Len())
+        if (!sProjectRootRel.isEmpty())
             sProjectRootRel += sDelimiter;
         sProjectRootRel += "..";
     }
-    if ( sProjectRootRel.Len())
+    if (!sProjectRootRel.isEmpty())
         return sProjectRootRel;
 
     return ".";
 }
 
-bool skipProject( ByteString sPrj )
+bool skipProject( rtl::OString sPrj )
 {
     int nIndex = 0;
     bool bReturn = true;
-    ByteString sModule( ModuleList[ nIndex ] );
-    while( !sModule.Equals( "NULL" ) && bReturn ) {
-        if( sPrj.Equals ( sModule ) )
+    rtl::OString sModule( ModuleList[ nIndex ] );
+    while (!sModule.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && bReturn) {
+        if (sPrj == sModule)
             bReturn = false;
         nIndex++;
         sModule = ModuleList[ nIndex ];
@@ -307,11 +305,12 @@ bool skipProject( ByteString sPrj )
 
 /*****************************************************************************/
 void SourceTreeLocalizer::WorkOnFile(
-    const ByteString &rFileName, const ByteString &rExecutable,
-    const ByteString &rParameter )
+    const rtl::OString &rFileName, const rtl::OString &rExecutable,
+    const rtl::OString &rParameter )
 /*****************************************************************************/
 {
-        String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString sFull(
+        rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_ASCII_US));
         DirEntry aEntry( sFull );
         rtl::OString sFileName(rtl::OUStringToOString(aEntry.GetName(), RTL_TEXTENCODING_ASCII_US));
 
@@ -320,26 +319,26 @@ void SourceTreeLocalizer::WorkOnFile(
         DirEntry aOldCWD;
         aPath.SetCWD();
 
-        ByteString sPrj( GetProjectName());
-        if ( sPrj.Len() && !skipProject( sPrj ) )
+        rtl::OString sPrj( GetProjectName());
+        if (!sPrj.isEmpty() && !skipProject( sPrj ) )
         {
-            ByteString sRoot( GetProjectRootRel());
+            rtl::OString sRoot( GetProjectRootRel());
 
             DirEntry aTemp( Export::GetTempFile());
             rtl::OString sTempFile(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
-            ByteString sDel;
+            rtl::OString sDel;
 #if defined(WNT)
-            sDel=ByteString("\\");
+            sDel=rtl::OString("\\");
 #else
-            sDel=ByteString("/");
+            sDel=rtl::OString("/");
 #endif
-            ByteString sPath1( Export::GetEnv("SOLARVER") );
-            ByteString sPath2( Export::GetEnv("INPATH_FOR_BUILD") );
-            ByteString sPath3( "bin" );
-            ByteString sExecutable( sPath1 );
+            rtl::OString sPath1( Export::GetEnv("SOLARVER") );
+            rtl::OString sPath2( Export::GetEnv("INPATH_FOR_BUILD") );
+            rtl::OString sPath3( "bin" );
+            rtl::OString sExecutable( sPath1 );
 #if defined(WNT)
-            sExecutable.SearchAndReplaceAll( "/", sDel );
+            sExecutable = sExecutable.replace('/', '\\');
 #endif
             sExecutable += sDel ;
             sExecutable += sPath2 ;
@@ -349,7 +348,7 @@ void SourceTreeLocalizer::WorkOnFile(
             sExecutable += rExecutable ;
 
 
-        ByteString sCommand( sExecutable );
+        rtl::OString sCommand( sExecutable );
         sCommand += " ";
         sCommand += rParameter;
         sCommand += " -p ";
@@ -360,14 +359,14 @@ void SourceTreeLocalizer::WorkOnFile(
         sCommand += sFileName;
         sCommand += " -o ";
         sCommand += sTempFile;
-        if ( sLanguageRestriction.Len()) {
+        if (!sLanguageRestriction.isEmpty()) {
             sCommand += " -l ";
             sCommand +=  sLanguageRestriction;
         }
 
             //printf("DBG: %s\n",sCommand.GetBuffer());
-            if (system(sCommand.GetBuffer()) == -1)
-                fprintf(stderr, "%s failed\n", sCommand.GetBuffer());
+            if (system(sCommand.getStr()) == -1)
+                fprintf(stderr, "%s failed\n", sCommand.getStr());
             nFileCnt++;
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
@@ -388,7 +387,7 @@ void SourceTreeLocalizer::WorkOnFile(
 }
 
 /*****************************************************************************/
-sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
+sal_Bool SourceTreeLocalizer::CheckNegativeList( const rtl::OString &rFileName )
 /*****************************************************************************/
 {
     sal_uLong nIndex = 0;
@@ -397,17 +396,19 @@ sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
     rtl::OString sDelimiter(rtl::OUStringToOString(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
-    ByteString sFileName( rFileName );
-    sFileName.ToLowerAscii();
+    rtl::OString sFileName(rFileName.toAsciiLowerCase());
 
-    ByteString sNegative( NegativeList[ nIndex ] );
-    while( !sNegative.Equals( "NULL" ) && bReturn ) {
-        sNegative.SearchAndReplaceAll( "\\", sDelimiter );
-        sNegative.SearchAndReplaceAll( "/", sDelimiter );
-        sNegative.ToLowerAscii();
+    rtl::OString sNegative( NegativeList[ nIndex ] );
+    while (!sNegative.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && bReturn) {
+        helper::searchAndReplaceAll(&sNegative, "\\", sDelimiter);
+        helper::searchAndReplaceAll(&sNegative, "/", sDelimiter);
+        sNegative = sNegative.toAsciiLowerCase();
 
-        if( sFileName.Search( sNegative ) == sFileName.Len() - sNegative.Len())
-            bReturn = sal_False;
+        if (sFileName.indexOf(sNegative)
+            == sFileName.getLength() - sNegative.getLength())
+        {
+            bReturn = false;
+        }
 
         nIndex++;
         sNegative = NegativeList[ nIndex ];
@@ -417,7 +418,7 @@ sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 }
 
 /*****************************************************************************/
-sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
+sal_Bool SourceTreeLocalizer::CheckPositiveList( const rtl::OString &rFileName )
 /*****************************************************************************/
 {
     sal_uLong nIndex = 0;
@@ -426,17 +427,19 @@ sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
     rtl::OString sDelimiter(rtl::OUStringToOString(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
-    ByteString sFileName( rFileName );
-    sFileName.ToLowerAscii();
+    rtl::OString sFileName(rFileName.toAsciiLowerCase());
 
-    ByteString sNegative( PositiveList[ nIndex ] );
-    while( !sNegative.Equals( "NULL" ) && !bReturn ) {
-        sNegative.SearchAndReplaceAll( "\\", sDelimiter );
-        sNegative.SearchAndReplaceAll( "/", sDelimiter );
-        sNegative.ToLowerAscii();
+    rtl::OString sNegative( PositiveList[ nIndex ] );
+    while (!sNegative.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && !bReturn) {
+        helper::searchAndReplaceAll(&sNegative, "\\", sDelimiter);
+        helper::searchAndReplaceAll(&sNegative, "/", sDelimiter);
+        sNegative = sNegative.toAsciiLowerCase();
 
-        if( sFileName.Search( sNegative ) == sFileName.Len() - sNegative.Len())
-            bReturn = sal_True;
+        if (sFileName.indexOf(sNegative)
+            == sFileName.getLength() - sNegative.getLength())
+        {
+            bReturn = true;
+        }
 
         nIndex++;
         sNegative = PositiveList[ nIndex ];
@@ -447,19 +450,19 @@ sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
 
 /*****************************************************************************/
 void SourceTreeLocalizer::WorkOnFileType(
-    const ByteString &rDirectory, const ByteString &rExtension,
-    const ByteString &rExecutable, const ByteString &rParameter,
-    const ByteString &rCollectMode
+    const rtl::OString &rDirectory, const rtl::OString &rExtension,
+    const rtl::OString &rExecutable, const rtl::OString &rParameter,
+    const rtl::OString &rCollectMode
 )
 /*****************************************************************************/
 {
-    String sWild( rDirectory, RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString sWild(
+        rtl::OStringToOUString(rDirectory, RTL_TEXTENCODING_ASCII_US));
     sWild += DirEntry::GetAccessDelimiter();
-    sWild += String::CreateFromAscii( "*." );
-    sWild += String( rExtension, RTL_TEXTENCODING_ASCII_US );
+    sWild += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*."));
+    sWild += rtl::OStringToOUString(rExtension, RTL_TEXTENCODING_ASCII_US);
 
-    DirEntry aEntry( sWild );
-    Dir aDir( sWild, FSYS_KIND_FILE );
+    Dir aDir(DirEntry(sWild), FSYS_KIND_FILE);
 
     for ( sal_uInt16 i = 0; i < aDir.Count(); i++ )
     {
@@ -468,9 +471,9 @@ void SourceTreeLocalizer::WorkOnFileType(
 
         sal_Bool bAllowed = sal_True;
 
-        if ( rCollectMode.Equals( "negative" ))
+        if (rCollectMode.equalsL(RTL_CONSTASCII_STRINGPARAM("negative")))
             bAllowed = CheckNegativeList( sFile );
-        else if ( rCollectMode.Equals( "positive" ))
+        else if (rCollectMode.equalsL(RTL_CONSTASCII_STRINGPARAM("positive")))
             bAllowed = CheckPositiveList( sFile );
 
         if ( bAllowed )
@@ -482,12 +485,12 @@ void SourceTreeLocalizer::WorkOnDirectory(const rtl::OString &rDirectory)
 {
     //printf("Working on Directory %s\n",rDirectory.getStr());
     sal_uLong nIndex = 0;
-    ByteString sExtension( ExeTable[ nIndex ][ 0 ] );
-    ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
-    ByteString sParameter( ExeTable[ nIndex ][ 2 ] );
-    ByteString sCollectMode( ExeTable[ nIndex ][ 3 ] );
+    rtl::OString sExtension( ExeTable[ nIndex ][ 0 ] );
+    rtl::OString sExecutable( ExeTable[ nIndex ][ 1 ] );
+    rtl::OString sParameter( ExeTable[ nIndex ][ 2 ] );
+    rtl::OString sCollectMode( ExeTable[ nIndex ][ 3 ] );
 
-    while( !sExtension.Equals( "NULL" )) {
+    while (!sExtension.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL"))) {
         WorkOnFileType(
             rDirectory,
             sExtension,
@@ -573,7 +576,7 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
-    String sTempBase( String::CreateFromAscii( "loc" ));
+    rtl::OUString sTempBase(RTL_CONSTASCII_USTRINGPARAM("loc"));
     DirEntry::SetTempNameBase( sTempBase );
 
     bool bSkipLinks = false;
@@ -591,14 +594,14 @@ int _cdecl main( int argc, char *argv[] )
 
     DirEntry aEntry(rtl::OStringToOUString(sFileName, RTL_TEXTENCODING_ASCII_US));
     aEntry.ToAbs();
-    String sFullEntry = aEntry.GetFull();
+    rtl::OUString sFullEntry(aEntry.GetFull());
     rtl::OString sFileABS(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));
     sFileName = sFileABS;
 
     string pwd;
     Export::getCurrentDir( pwd );
     cout << "Localizing directory " << pwd << "\n";
-    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , bSkipLinks );
+    SourceTreeLocalizer aIter( rtl::OString( pwd.c_str() ) , bSkipLinks );
     aIter.SetLanguageRestriction( sLanguages );
     aIter.Extract( sFileName );
     printf("\n%d files found!\n",aIter.GetFileCnt());
