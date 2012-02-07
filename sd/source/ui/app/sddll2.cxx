@@ -67,6 +67,7 @@
 #include <svx/subtoolboxcontrol.hxx>
 
 #include "sddll.hxx"
+#include "sdmod.hxx"
 #define _SD_DIACTRL_CXX
 #include "diactrl.hxx"
 #include "gluectrl.hxx"

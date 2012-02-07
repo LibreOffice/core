@@ -43,7 +43,7 @@
 #include "controller/SlsAnimationFunction.hxx"
 #include "app.hrc"
 #include "drawdoc.hxx"
-#include "sddll.hxx"
+#include "sdmod.hxx"
 #include "optsitem.hxx"
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>

@@ -29,11 +29,6 @@
 #ifndef _SDMOD_HXX
 #define _SDMOD_HXX
 
-
-#ifndef _SDDLL_HXX
-#define _SD_DLL             // fuer SD_MOD()
-#include "sddll.hxx"        // fuer SdModuleDummy
-#endif
 #include "glob.hxx"
 #include "pres.hxx"
 
@@ -206,12 +201,7 @@ private:
 
 };
 
-
-
-
-#ifndef SD_MOD
 #define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
-#endif
 
 #endif                                 // _SDMOD_HXX
 

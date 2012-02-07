@@ -53,9 +53,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 
-#define _SD_DLL                 // fuer SD_MOD()
 #include "sdmod.hxx"
-#include "sddll.hxx"
 #include "pres.hxx"
 #include "optsitem.hxx"
 #include "ViewShell.hxx"

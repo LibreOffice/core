@@ -50,11 +50,8 @@
 
 #include <svx/xmlsecctrl.hxx>
 
-
-#define _SD_DLL                 // fuer SD_MOD()
 #include "sderror.hxx"
 #include "sdmod.hxx"
-#include "sddll.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
 #include "DrawDocShell.hxx"

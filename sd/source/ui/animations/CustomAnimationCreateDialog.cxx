@@ -51,6 +51,7 @@
 #include "CustomAnimationPane.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
+#include "sdmod.hxx"
 
 #include "helpids.h"
 

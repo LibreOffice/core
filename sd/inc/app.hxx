@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define _SD_DLL             // fuer SD_MOD()
 #include "sdmod.hxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

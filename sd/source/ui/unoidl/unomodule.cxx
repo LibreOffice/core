@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
+#include "sddll.hxx"
 #include "sdmod.hxx"
 #include "unomodule.hxx"
 #include <sfx2/objface.hxx>

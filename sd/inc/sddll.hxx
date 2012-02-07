@@ -29,7 +29,6 @@
 #ifndef _SDDLL_HXX
 #define _SDDLL_HXX
 
-#include "sdmod.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/sfxdefs.hxx>
 
@@ -69,11 +68,6 @@ public:
     static void     Init();     // called directly after loading the DLL
 };
 
-
-
-#ifndef _SD_DLL                      // Das define muss im Draw gesetzt werden
-#define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
-#endif
 
 #endif                               // _SDDLL_HXX
 
