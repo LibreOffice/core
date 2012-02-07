@@ -28,7 +28,9 @@ $(eval $(call gb_Module_add_targets,sot,\
     Library_sot \
 ))
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sot,\
     JunitTest_sot_complex \
 ))
+endif
 

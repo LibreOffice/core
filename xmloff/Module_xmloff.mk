@@ -30,9 +30,11 @@ $(eval $(call gb_Module_add_targets,xmloff,\
     Package_inc \
 ))
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
     JunitTest_xmloff_unoapi \
 ))
+endif
 
 #todo: map file
 #todo: xmlkywd.lib - built, but never used?!

@@ -36,10 +36,12 @@ $(eval $(call gb_Module_add_check_targets,sfx2,\
 ))
 endif
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
     JunitTest_sfx2_complex \
     JunitTest_sfx2_unoapi \
 ))
+endif
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Module_add_targets,sfx2,\

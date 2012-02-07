@@ -33,9 +33,11 @@ $(eval $(call gb_Module_add_targets,svtools,\
     Package_inc \
 ))
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
     JunitTest_svtools_unoapi \
 ))
+endif
 
 #todo: javapatchres
 #todo: jpeg on mac in svtools/util/makefile.mk
