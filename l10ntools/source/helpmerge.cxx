@@ -437,7 +437,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 #if defined(UNX)
     rc = rename( sTempFile.getStr() , sTargetFile.getStr() );
 #else
-    rc = MoveFileEx( sTempFile.GetBuffer() , sTargetFile.GetBuffer(), MOVEFILE_REPLACE_EXISTING );
+    rc = MoveFileEx( sTempFile.getStr() , sTargetFile.getStr(), MOVEFILE_REPLACE_EXISTING );
 #endif
     FileStat aFS( aTar );
 
@@ -463,7 +463,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 #if defined(UNX)
         rc = rename( sTempFileCopy.getStr() , sTargetFile.getStr() );
 #else
-        rc = MoveFileEx( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() , MOVEFILE_REPLACE_EXISTING );
+        rc = MoveFileEx( sTempFileCopy.getStr() , sTargetFile.getStr() , MOVEFILE_REPLACE_EXISTING );
 #endif
         aFS.Update( aTar );
 
