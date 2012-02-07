@@ -246,20 +246,13 @@ gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
-
-# This file:/// -> file:!!! -> file:/// substitution is to protect the
-# slashes after file: in a file: URL from being unduplicated by the
-# // -> / substitution.
 define gb_Helper_convert_native
 $(strip \
-$(subst file:!!!,file:///, \
-$(subst //,/, \
-$(subst file:///,file:!!!, \
-$(subst $(REPODIR),$(patsubst %/,%,$(gb_Helper_REPODIR_NATIVE)), \
+$(subst $(REPODIR),$(gb_Helper_REPODIR_NATIVE), \
 $(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
 $(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
 $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
-$(1)))))))))
+$(1))))))
 endef
 
 # YaccTarget class
