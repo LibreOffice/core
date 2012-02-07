@@ -1,0 +1,6 @@
+Edit engine.
+
+In OO.o build DEV300m72 this module was split off from svx but it
+has no dependencies on [[svx]] (nor on [[sfx2]]) while in turn svx depends on editeng
+Read more in the mailing list post:
+[http://www.mail-archive.com/dev@openoffice.org/msg13237.html]

@@ -1,0 +1,3 @@
+Contains parts of the formula parser used outside Calc code.
+
+Has been pulled out from Calc's formula parser code.

@@ -1,0 +1,4 @@
+Audio/Video media implementation.
+
+Needs a Java Media Framework (JMF).
+Not currently usable for streams but only for URIs in the file system.

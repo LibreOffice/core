@@ -1,9 +1,10 @@
-This module provides the source code for the Scripting Framework. For
-more information on the Scripting Framework, see the project web page:
-http://framework.openoffice.org/scripting/
+This module provides the source code for the Scripting Framework.
 
-Source Code Structure
-=====================
+For more information on the Scripting Framework, see the project web page:
+[http://framework.openoffice.org/scripting/]
+
+
+== Source Code Structure ==
 
 The following directories contain the source code currently used
 by the Scripting Framework:
@@ -50,8 +51,8 @@ Classes for performing script IO
 
 Example scripts in BeanShell, JavaScript, Java and Python
 
-Deprecated Code
-===============
+
+== Deprecated Code ==
 
 - java/org/openoffice/*
 

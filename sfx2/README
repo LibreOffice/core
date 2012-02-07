@@ -1,4 +1,6 @@
 This is the gui code, much of which is now deprecated.
-List of documents open would be traceked,
-raw C__ code; gutsy core of document management and loading.
 
+List of documents open would be tracked - raw C__ code.
+Gutsy core of document management and loading.
+
+[git:sfx2/source/applappl/sfxhelp.cxx] Start procedure for the online help viewer top level window; handling of help URL creation and dispatch.
