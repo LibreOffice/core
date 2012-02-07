@@ -1181,26 +1181,30 @@ namespace drawinglayer
                     const bool bAntiAliased(getOptionsDrawinglayer().IsAntiAliasing());
                     aHairlinePolyPolygon.transform(maCurrentTransformation);
 
-                    for(sal_uInt32 a(0); a < nCount; a++)
+                    if(bAntiAliased)
                     {
-                        basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
-
-                        if(bAntiAliased)
+                        if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.0))
                         {
-                            if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.0))
+                            // line in range ]0.0 .. 1.0[
+                            // paint as simple hairline
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range ]0.0 .. 1.0[
-                                // paint as simple hairline
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
+                                mpOutputDevice->DrawPolyLine(aHairlinePolyPolygon.getB2DPolygon(a), 0.0);
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.0))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.0))
+                        {
+                            // line in range [1.0 .. 2.0[
+                            // paint as 2x2 with dynamic line distance
+                            basegfx::B2DHomMatrix aMat;
+                            const double fDistance(fDiscreteLineWidth - 1.0);
+                            const double fHalfDistance(fDistance * 0.5);
+
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range [1.0 .. 2.0[
-                                // paint as 2x2 with dynamic line distance
-                                basegfx::B2DHomMatrix aMat;
-                                const double fDistance(fDiscreteLineWidth - 1.0);
-                                const double fHalfDistance(fDistance * 0.5);
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
 
                                 aMat.set(0, 2, -fHalfDistance);
                                 aMat.set(1, 2, -fHalfDistance);
@@ -1221,14 +1225,20 @@ namespace drawinglayer
                                 aMat.set(1, 2, 0.0);
                                 aCandidate.transform(aMat);
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 3.0))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 3.0))
+                        {
+                            // line in range [2.0 .. 3.0]
+                            // paint as cross in a 3x3  with dynamic line distance
+                            basegfx::B2DHomMatrix aMat;
+                            const double fDistance((fDiscreteLineWidth - 1.0) * 0.5);
+
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range [2.0 .. 3.0]
-                                // paint as cross in a 3x3  with dynamic line distance
-                                basegfx::B2DHomMatrix aMat;
-                                const double fDistance((fDiscreteLineWidth - 1.0) * 0.5);
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
 
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
@@ -1251,26 +1261,36 @@ namespace drawinglayer
                                 aMat.set(1, 2, fDistance);
                                 aCandidate.transform(aMat);
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else
-                            {
-                                // #i101491# line width above 3.0
-                            }
+
+                            bDone = true;
                         }
                         else
                         {
-                            if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.5))
+                            // #i101491# line width above 3.0
+                        }
+                    }
+                    else
+                    {
+                        if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.5))
+                        {
+                            // line width below 1.5, draw the basic hairline polygon
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line width below 1.5, draw the basic hairline polygon
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
+                                mpOutputDevice->DrawPolyLine(aHairlinePolyPolygon.getB2DPolygon(a), 0.0);
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+                        {
+                            // line width is in range ]1.5 .. 2.5], use four hairlines
+                            // drawn in a square
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line width is in range ]1.5 .. 2.5], use four hairlines
-                                // drawn in a square
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
                                 basegfx::B2DHomMatrix aMat;
+
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
                                 aMat.set(0, 2, 1.0);
@@ -1290,23 +1310,32 @@ namespace drawinglayer
                                 aCandidate.transform(aMat);
 
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else
-                            {
-                                // #i101491# line width is above 2.5
-                            }
-                        }
 
-                        if(!bDone && rPolygonStrokeCandidate.getB2DPolygon().count() > 1000)
-                        {
-                            // #i101491# If the polygon complexity uses more than a given amount, do
-                            // use OuputDevice::DrawPolyLine directly; this will avoid buffering all
-                            // decompositions in primtives (memory) and fallback to old line painting
-                            // for very complex polygons, too
-                            mpOutputDevice->DrawPolyLine(aCandidate, fDiscreteLineWidth, rLineAttribute.getLineJoin());
                             bDone = true;
                         }
+                        else
+                        {
+                            // #i101491# line width is above 2.5
+                        }
+                    }
+
+                    if(!bDone && rPolygonStrokeCandidate.getB2DPolygon().count() > 1000)
+                    {
+                        // #i101491# If the polygon complexity uses more than a given amount, do
+                        // use OuputDevice::DrawPolyLine directly; this will avoid buffering all
+                        // decompositions in primtives (memory) and fallback to old line painting
+                        // for very complex polygons, too
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            mpOutputDevice->DrawPolyLine(
+                                aHairlinePolyPolygon.getB2DPolygon(a),
+                                fDiscreteLineWidth,
+                                rLineAttribute.getLineJoin(),
+                                rLineAttribute.getLineCap());
+                        }
+
+                        bDone = true;
                     }
                 }
             }
