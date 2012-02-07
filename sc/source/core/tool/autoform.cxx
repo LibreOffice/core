@@ -495,7 +495,6 @@ ScAutoFormatData::ScAutoFormatData()
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
-        ScDataObject(),
         aName( rData.aName ),
         nStrResId( rData.nStrResId ),
         bIncludeFont( rData.bIncludeFont ),
@@ -889,9 +888,8 @@ bool ScAutoFormatData::Save(SvStream& rStream)
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 
-ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
-    ScSortedCollection        (nLim, nDel, bDup),
-    bSaveLater              (false)
+ScAutoFormat::ScAutoFormat() :
+    mbSaveLater(false)
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
@@ -971,38 +969,113 @@ ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
         }
     }
 
-    Insert(pData);
+    insert(pData);
 }
 
-ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
-    ScSortedCollection (rAutoFormat),
-    bSaveLater       (false)
-{}
+ScAutoFormat::ScAutoFormat(const ScAutoFormat& r) :
+    maData(r.maData),
+    mbSaveLater(false) {}
 
 ScAutoFormat::~ScAutoFormat()
 {
     //  Bei Aenderungen per StarOne wird nicht sofort gespeichert, sondern zuerst nur
     //  das SaveLater Flag gesetzt. Wenn das Flag noch gesetzt ist, jetzt speichern.
 
-    if (bSaveLater)
+    if (mbSaveLater)
         Save();
 }
 
 void ScAutoFormat::SetSaveLater( bool bSet )
 {
-    bSaveLater = bSet;
+    mbSaveLater = bSet;
 }
 
-short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
+const ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex) const
 {
-    rtl::OUString aStr1 = ((ScAutoFormatData*)pKey1)->GetName();
-    rtl::OUString aStr2 = ((ScAutoFormatData*)pKey2)->GetName();
-    String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    if ( ScGlobal::GetpTransliteration()->isEqual( aStr1, aStrStandard ) )
-        return -1;
-    if ( ScGlobal::GetpTransliteration()->isEqual( aStr2, aStrStandard ) )
-        return 1;
-    return (short) ScGlobal::GetpTransliteration()->compareString( aStr1, aStr2 );
+    if (nIndex >= maData.size())
+        return NULL;
+
+    MapType::const_iterator it = maData.begin();
+    std::advance(it, nIndex);
+    return it->second;
+}
+
+ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex)
+{
+    if (nIndex >= maData.size())
+        return NULL;
+
+    MapType::iterator it = maData.begin();
+    std::advance(it, nIndex);
+    return it->second;
+}
+
+ScAutoFormat::const_iterator ScAutoFormat::find(const ScAutoFormatData* pData) const
+{
+    MapType::const_iterator it = maData.begin(), itEnd = maData.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->second == pData)
+            return it;
+    }
+    return itEnd;
+}
+
+ScAutoFormat::iterator ScAutoFormat::find(const ScAutoFormatData* pData)
+{
+    MapType::iterator it = maData.begin(), itEnd = maData.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->second == pData)
+            return it;
+    }
+    return itEnd;
+}
+
+ScAutoFormat::const_iterator ScAutoFormat::find(const rtl::OUString& rName) const
+{
+    return maData.find(rName);
+}
+
+ScAutoFormat::iterator ScAutoFormat::find(const rtl::OUString& rName)
+{
+    return maData.find(rName);
+}
+
+bool ScAutoFormat::insert(ScAutoFormatData* pNew)
+{
+    rtl::OUString aName = pNew->GetName();
+    return maData.insert(aName, pNew).second;
+}
+
+void ScAutoFormat::erase(const iterator& it)
+{
+    maData.erase(it);
+}
+
+size_t ScAutoFormat::size() const
+{
+    return maData.size();
+}
+
+ScAutoFormat::const_iterator ScAutoFormat::begin() const
+{
+    return maData.begin();
+}
+
+ScAutoFormat::const_iterator ScAutoFormat::end() const
+{
+    return maData.end();
+}
+
+ScAutoFormat::iterator ScAutoFormat::begin()
+{
+    return maData.begin();
+}
+
+ScAutoFormat::iterator ScAutoFormat::end()
+{
+    return maData.end();
 }
 
 bool ScAutoFormat::Load()
@@ -1059,7 +1132,7 @@ bool ScAutoFormat::Load()
                 {
                     pData = new ScAutoFormatData();
                     bRet = pData->Load(rStream, aVersions);
-                    Insert(pData);
+                    insert(pData);
                 }
             }
 #ifdef READ_OLDVERS
@@ -1096,7 +1169,7 @@ bool ScAutoFormat::Load()
                     {
                         pData = new ScAutoFormatData();
                         bRet = pData->LoadOld( rStream, aVersions );
-                        Insert( pData );
+                        insert(pData);
                     }
                 }
                 else
@@ -1105,7 +1178,7 @@ bool ScAutoFormat::Load()
 #endif
         }
     }
-    bSaveLater = false;
+    mbSaveLater = false;
     return bRet;
 }
 
@@ -1137,32 +1210,18 @@ bool ScAutoFormat::Save()
 
         bRet = (rStream.GetError() == 0);
         //-----------------------------------------------------------
-        rStream << (sal_uInt16)(nCount - 1);
+        rStream << (sal_uInt16)(maData.size() - 1);
         bRet = (rStream.GetError() == 0);
-        for (sal_uInt16 i=1; bRet && (i < nCount); i++)
-            bRet = ((ScAutoFormatData*)pItems[i])->Save(rStream);
+        MapType::iterator it = maData.begin(), itEnd = maData.end();
+        for (++it; bRet && it != itEnd; ++it) // Skip the first item.
+            bRet = it->second->Save(rStream);
+
         rStream.Flush();
 
         aMedium.Commit();
     }
-    bSaveLater = false;
+    mbSaveLater = false;
     return bRet;
 }
-
-sal_uInt16 ScAutoFormat::FindIndexPerName( const rtl::OUString& rName ) const
-{
-    for( sal_uInt16 i=0; i<nCount ; i++ )
-    {
-        ScAutoFormatData* pItem = (ScAutoFormatData*)pItems[i];
-
-        if (pItem->GetName().equals(rName))
-            return i;
-    }
-
-    return 0;
-}
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

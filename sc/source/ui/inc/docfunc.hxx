@@ -151,8 +151,8 @@ public:
 
     sal_Bool            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, sal_Bool bApi );
     sal_Bool            ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, sal_Bool bApi );
-    sal_Bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
-                                    sal_uInt16 nFormatNo, sal_Bool bRecord, sal_Bool bApi );
+    bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
+                                sal_uInt16 nFormatNo, bool bRecord, bool bApi );
 
     sal_Bool            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,

@@ -3667,8 +3667,8 @@ sal_Bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, 
     return sal_True;
 }
 
-sal_Bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
-                            sal_uInt16 nFormatNo, sal_Bool bRecord, sal_Bool bApi )
+bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
+                            sal_uInt16 nFormatNo, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3694,11 +3694,11 @@ sal_Bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMar
 
     ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
-    if ( nFormatNo < pAutoFormat->GetCount() && aTester.IsEditable() )
+    if ( nFormatNo < pAutoFormat->size() && aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-        sal_Bool bSize = (*pAutoFormat)[nFormatNo]->GetIncludeWidthHeight();
+        bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
 
         SCTAB nTabCount = pDoc->GetTableCount();
         ScDocument* pUndoDoc = NULL;

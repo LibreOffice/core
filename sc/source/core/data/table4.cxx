@@ -1591,7 +1591,8 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo)
 {
-    ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+    ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
+    ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
     if (pData)
     {
         ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
@@ -1603,7 +1604,8 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
-        ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+        ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
+        ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
         if (pData)
         {
             ScPatternAttr* pPatternAttrs[16];

@@ -5484,17 +5484,13 @@ void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
     if ( pDocSh )
     {
         ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-        sal_uInt16 nCount = pAutoFormat->GetCount();
-        sal_uInt16 nIndex;
-        for (nIndex=0; nIndex<nCount; nIndex++)
+        ScAutoFormat::const_iterator it = pAutoFormat->find(aName);
+        if (it != pAutoFormat->end())
         {
-            if ((*pAutoFormat)[nIndex]->GetName().equals(aName))                      //! Case-insensitiv ???
-                break;
-        }
-        if (nIndex<nCount)
-        {
+            ScAutoFormat::const_iterator itBeg = pAutoFormat->begin();
+            size_t nIndex = std::distance(itBeg, it);
             ScDocFunc aFunc(*pDocSh);
-            aFunc.AutoFormat( aRange, NULL, nIndex, sal_True, sal_True );
+            aFunc.AutoFormat(aRange, NULL, nIndex, true, true);
         }
         else
             throw lang::IllegalArgumentException();

@@ -164,15 +164,16 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "ScAutoFormatsObj", SCAUTOFORMATSOBJ_S
 
 //------------------------------------------------------------------------
 
-bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const String& rName, sal_uInt16& rOutIndex )
+bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const rtl::OUString& rName, sal_uInt16& rOutIndex )
 {
-    sal_uInt16 nCount = rFormats.GetCount();
-    for( sal_uInt16 nPos=0; nPos<nCount; nPos++ )
+    ScAutoFormat::const_iterator itBeg = rFormats.begin(), itEnd = rFormats.end();
+    for (ScAutoFormat::const_iterator it = itBeg; it != itEnd; ++it)
     {
-        ScAutoFormatData* pEntry = rFormats[nPos];
+        const ScAutoFormatData* pEntry = it->second;
         const rtl::OUString& aEntryName = pEntry->GetName();
         if ( aEntryName.equals(rName) )
         {
+            size_t nPos = std::distance(itBeg, it);
             rOutIndex = nPos;
             return true;
         }
@@ -220,7 +221,7 @@ uno::Sequence<rtl::OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
 
 ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
-    if (nIndex < ScGlobal::GetOrCreateAutoFormat()->GetCount())
+    if (nIndex < ScGlobal::GetOrCreateAutoFormat()->size())
         return new ScAutoFormatObj(nIndex);
 
     return NULL;    // falscher Index
@@ -260,7 +261,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
                 ScAutoFormatData* pNew = new ScAutoFormatData();
                 pNew->SetName( aNameStr );
 
-                if (pFormats->Insert( pNew ))
+                if (pFormats->insert(pNew))
                 {
                     //! Notify fuer andere Objekte
                     pFormats->Save();   // sofort speichern
@@ -274,7 +275,6 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
                 }
                 else
                 {
-                    delete pNew;
                     OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
                     throw uno::RuntimeException();
                 }
@@ -311,10 +311,10 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const rtl::OUString& aName )
     String aNameStr(aName);
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
-    sal_uInt16 nIndex;
-    if (lcl_FindAutoFormatIndex( *pFormats, aNameStr, nIndex ))
+    ScAutoFormat::iterator it = pFormats->find(aName);
+    if (it != pFormats->end())
     {
-        pFormats->AtFree( nIndex );
+        pFormats->erase(it);
 
         //! Notify fuer andere Objekte
         pFormats->Save();   // sofort speichern
@@ -339,7 +339,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumera
 sal_Int32 SAL_CALL ScAutoFormatsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return ScGlobal::GetOrCreateAutoFormat()->GetCount();
+    return ScGlobal::GetOrCreateAutoFormat()->size();
 }
 
 uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
@@ -384,12 +384,12 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     String aName;
-    sal_uInt16 nCount = pFormats->GetCount();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
+    uno::Sequence<rtl::OUString> aSeq(pFormats->size());
     rtl::OUString* pAry = aSeq.getArray();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    ScAutoFormat::const_iterator it = pFormats->begin(), itEnd = pFormats->end();
+    for (size_t i = 0; it != itEnd; ++it, ++i)
     {
-        pAry[i] = (*pFormats)[i]->GetName();
+        pAry[i] = it->second->GetName();
     }
     return aSeq;
 }
@@ -536,8 +536,8 @@ rtl::OUString SAL_CALL ScAutoFormatObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    if (IsInserted() && nFormatIndex < pFormats->GetCount())
-        return (*pFormats)[nFormatIndex]->GetName();
+    if (IsInserted() && nFormatIndex < pFormats->size())
+        return pFormats->findByIndex(nFormatIndex)->GetName();
 
     return rtl::OUString();
 }
@@ -550,26 +550,29 @@ void SAL_CALL ScAutoFormatObj::setName( const rtl::OUString& aNewName )
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     sal_uInt16 nDummy;
-    if (IsInserted() && nFormatIndex < pFormats->GetCount() &&
-            !lcl_FindAutoFormatIndex( *pFormats, aNewString, nDummy ))
+    if (IsInserted() && nFormatIndex < pFormats->size() &&
+        !lcl_FindAutoFormatIndex( *pFormats, aNewName, nDummy ))
     {
-        ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
+        ScAutoFormat::iterator it = pFormats->begin();
+        std::advance(it, nFormatIndex);
+        ScAutoFormatData* pData = it->second;
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
         pNew->SetName( aNewString );
 
-        pFormats->AtFree( nFormatIndex );
-        if (pFormats->Insert( pNew ))
+        pFormats->erase(it);
+        if (pFormats->insert(pNew))
         {
-            nFormatIndex = pFormats->IndexOf( pNew );   // ist evtl. anders einsortiert...
+            it = pFormats->find(pNew);
+            ScAutoFormat::iterator itBeg = pFormats->begin();
+            nFormatIndex = std::distance(itBeg, it);
 
             //! Notify fuer andere Objekte
-            pFormats->SetSaveLater(sal_True);
+            pFormats->SetSaveLater(true);
         }
         else
         {
-            delete pNew;
             OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
             nFormatIndex = 0;       //! alter Index ist ungueltig
         }
@@ -599,9 +602,9 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    if (IsInserted() && nFormatIndex < pFormats->GetCount())
+    if (IsInserted() && nFormatIndex < pFormats->size())
     {
-        ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
+        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         String aPropString(aPropertyName);
@@ -634,9 +637,9 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const rtl::OUString& aPrope
     uno::Any aAny;
 
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    if (IsInserted() && nFormatIndex < pFormats->GetCount())
+    if (IsInserted() && nFormatIndex < pFormats->size())
     {
-        ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
+        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         sal_Bool bValue;
@@ -707,9 +710,9 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
     const SfxItemPropertySimpleEntry* pEntry =
             aPropSet.getPropertyMap().getByName( aPropertyName );
 
-    if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->GetCount() )
+    if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->size() )
     {
-        ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
+        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
 
         if ( IsScItemWid( pEntry->nWID ) )
         {
@@ -797,9 +800,9 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
     const SfxItemPropertySimpleEntry* pEntry =
             aPropSet.getPropertyMap().getByName( aPropertyName );
 
-    if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->GetCount() )
+    if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->size() )
     {
-        const ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
+        const ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
 
         if ( IsScItemWid( pEntry->nWID ) )
         {

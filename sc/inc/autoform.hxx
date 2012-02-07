@@ -69,6 +69,7 @@
 #include "global.hxx"
 #include "zforauto.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
 
 struct ScAfVersions;
 
@@ -197,7 +198,7 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScAutoFormatData : public ScDataObject
+class SC_DLLPUBLIC ScAutoFormatData
 {
 private:
     rtl::OUString               aName;
@@ -218,11 +219,9 @@ private:
     SC_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;
 
 public:
-                    ScAutoFormatData();
-                    ScAutoFormatData( const ScAutoFormatData& rData );
-    virtual         ~ScAutoFormatData();
-
-    virtual         ScDataObject* Clone() const { return new ScAutoFormatData( *this ); }
+    ScAutoFormatData();
+    ScAutoFormatData( const ScAutoFormatData& rData );
+    ~ScAutoFormatData();
 
     void            SetName( const rtl::OUString& rName )              { aName = rName; nStrResId = USHRT_MAX; }
     const rtl::OUString& GetName() const { return aName; }
@@ -260,23 +259,40 @@ public:
 #endif
 };
 
-class SC_DLLPUBLIC ScAutoFormat : public ScSortedCollection
+class SC_DLLPUBLIC ScAutoFormat
 {
-private:
-    bool                        bSaveLater;
+    typedef boost::ptr_map<rtl::OUString, ScAutoFormatData> MapType;
+    MapType maData;
+    bool mbSaveLater;
 
 public:
-                                ScAutoFormat( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false );
-                                ScAutoFormat( const ScAutoFormat& AutoFormat );
-    virtual                     ~ScAutoFormat();
-    virtual                     ScDataObject*         Clone() const { return new ScAutoFormat( *this ); }
-                                ScAutoFormatData*   operator[]( const sal_uInt16 nIndex ) const {return (ScAutoFormatData*)At( nIndex );}
-    virtual short               Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
-    bool                        Load();
-    bool                        Save();
-    sal_uInt16                  FindIndexPerName( const rtl::OUString& rName ) const;
-    void                        SetSaveLater( bool bSet );
-    bool                        IsSaveLater() const         { return bSaveLater; }
+    typedef MapType::const_iterator const_iterator;
+    typedef MapType::iterator iterator;
+
+    ScAutoFormat();
+    ScAutoFormat(const ScAutoFormat& r);
+    ~ScAutoFormat();
+    bool Load();
+    bool Save();
+
+    void SetSaveLater( bool bSet );
+    bool IsSaveLater() const { return mbSaveLater; }
+
+    const ScAutoFormatData* findByIndex(size_t nIndex) const;
+    ScAutoFormatData* findByIndex(size_t nIndex);
+    const_iterator find(const ScAutoFormatData* pData) const;
+    iterator find(const ScAutoFormatData* pData);
+    const_iterator find(const rtl::OUString& rName) const;
+    iterator find(const rtl::OUString& rName);
+
+    bool insert(ScAutoFormatData* pNew);
+    void erase(const iterator& it);
+
+    size_t size() const;
+    const_iterator begin() const;
+    const_iterator end() const;
+    iterator begin();
+    iterator end();
 };
 
 
