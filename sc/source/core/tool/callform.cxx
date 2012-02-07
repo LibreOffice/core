@@ -39,8 +39,6 @@
 #include "global.hxx"
 #include "adiasync.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
-
 //------------------------------------------------------------------------
 
 extern "C" {
@@ -88,6 +86,21 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define ADVICE                  "Advice"
 #define UNADVICE                "Unadvice"
 
+class ModuleData
+{
+friend class ModuleCollection;
+    rtl::OUString aName;
+    osl::Module* pInstance;
+public:
+    ModuleData(const rtl::OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
+    ModuleData(const ModuleData& rData) : aName(rData.aName) {pInstance = new osl::Module(aName);}
+    ~ModuleData() { delete pInstance; }
+
+    const rtl::OUString& GetName() const { return aName; }
+    osl::Module*    GetInstance() const { return pInstance; }
+    void            FreeInstance() { delete pInstance; pInstance = 0; }
+};
+
 FuncData::FuncData(const rtl::OUString& rIName) :
     pModuleData     (NULL),
     aInternalName   (rIName),
@@ -122,7 +135,6 @@ FuncData::FuncData(const ModuleData*pModule,
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const FuncData& rData) :
-    ScDataObject(),
     pModuleData     (rData.pModuleData),
     aInternalName   (rData.aInternalName),
     aFuncName       (rData.aFuncName),
@@ -133,38 +145,6 @@ FuncData::FuncData(const FuncData& rData) :
     for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = rData.eParamType[i];
 }
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    return (short) ScGlobal::GetpTransliteration()->compareString(
-        ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName );
-}
-
-//------------------------------------------------------------------------
-
-bool FuncCollection::SearchFunc( const rtl::OUString& rName, sal_uInt16& rIndex ) const
-{
-    FuncData aDataObj(rName);
-    return Search( &aDataObj, rIndex );
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ModuleData
-{
-friend class ModuleCollection;
-    rtl::OUString aName;
-    osl::Module* pInstance;
-public:
-    ModuleData(const rtl::OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
-    ModuleData(const ModuleData& rData) : aName(rData.aName) {pInstance = new osl::Module(aName);}
-    ~ModuleData() { delete pInstance; }
-
-    const rtl::OUString& GetName() const { return aName; }
-    osl::Module*    GetInstance() const { return pInstance; }
-    void            FreeInstance() { delete pInstance; pInstance = 0; }
-};
 
 namespace {
 
@@ -277,7 +257,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
                                           nParamCount,
                                           eParamType,
                                           eAsyncType );
-                pFuncCol->Insert(pFuncData);
+                pFuncCol->insert(pFuncData);
             }
             bRet = sal_True;
         }
@@ -298,7 +278,7 @@ void ExitExternalFunc()
 
 //------------------------------------------------------------------------
 
-bool FuncData::Call(void** ppParam)
+bool FuncData::Call(void** ppParam) const
 {
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
@@ -413,7 +393,7 @@ const rtl::OUString& FuncData::GetModuleName() const
     return pModuleData->GetName();
 }
 
-bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam )
+bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam ) const
 {
     bool bRet = false;
     if ( nParam <= nParamCount )
@@ -439,5 +419,37 @@ bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal
     }
     return bRet;
 }
+
+FuncCollection::FuncCollection() {}
+FuncCollection::FuncCollection(const FuncCollection& r) : maData(r.maData) {}
+
+const FuncData* FuncCollection::findByName(const rtl::OUString& rName) const
+{
+    MapType::const_iterator it = maData.find(rName);
+    return it == maData.end() ? NULL : it->second;
+}
+
+FuncData* FuncCollection::findByName(const rtl::OUString& rName)
+{
+    MapType::iterator it = maData.find(rName);
+    return it == maData.end() ? NULL : it->second;
+}
+
+void FuncCollection::insert(FuncData* pNew)
+{
+    rtl::OUString aName = pNew->GetInternalName();
+    maData.insert(aName, pNew);
+}
+
+FuncCollection::const_iterator FuncCollection::begin() const
+{
+    return maData.begin();
+}
+
+FuncCollection::const_iterator FuncCollection::end() const
+{
+    return maData.end();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

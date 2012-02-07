@@ -188,7 +188,7 @@ void ScCompiler::DeInit()
 bool ScCompiler::IsEnglishSymbol( const String& rName )
 {
     // function names are always case-insensitive
-    String aUpper( ScGlobal::pCharClass->uppercase( rName ) );
+    rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -197,15 +197,14 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
         return true;
     }
     // 2. old add in functions
-    sal_uInt16 nIndex;
-    if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
+    if (ScGlobal::GetFuncCollection()->findByName(aUpper))
     {
         return true;
     }
 
     // 3. new (uno) add in functions
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, false ));
-    if (aIntName.Len())
+    rtl::OUString aIntName = ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
+    if (!aIntName.isEmpty())
     {
         return true;
     }
@@ -2522,9 +2521,7 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
         if (!aIntName.Len())
         {
             // Old (deprecated) addins first for legacy.
-            sal_uInt16 nIndex;
-            bFound = ScGlobal::GetFuncCollection()->SearchFunc( cSymbol, nIndex);
-            if (bFound)
+            if (ScGlobal::GetFuncCollection()->findByName(cSymbol))
             {
                 ScRawToken aToken;
                 aToken.SetExternal( cSymbol );

@@ -379,7 +379,6 @@ ScFunctionList::ScFunctionList() :
 {
     ScFuncDesc* pDesc = NULL;
     xub_StrLen nStrLen = 0;
-    FuncCollection* pFuncColl;
     ::std::list<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
     {
@@ -441,11 +440,12 @@ ScFunctionList::ScFunctionList() :
     ::rtl::OUString aDefArgDescNone    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
 
     ::rtl::OUString aArgName, aArgDesc;
-    pFuncColl = ScGlobal::GetFuncCollection();
-    for (sal_uInt16 i = 0; i < pFuncColl->GetCount(); ++i)
+    const FuncCollection& rFuncColl = *ScGlobal::GetFuncCollection();
+    FuncCollection::const_iterator it = rFuncColl.begin(), itEnd = rFuncColl.end();
+    for (; it != itEnd; ++it)
     {
+        const FuncData* pAddInFuncData = it->second;
         pDesc = new ScFuncDesc;
-        FuncData *pAddInFuncData = (FuncData*)pFuncColl->At(i);
         sal_uInt16 nArgs = pAddInFuncData->GetParamCount() - 1;
         pAddInFuncData->getParamDesc( aArgName, aArgDesc, 0 );
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben

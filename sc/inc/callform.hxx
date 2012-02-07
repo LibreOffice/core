@@ -33,6 +33,8 @@
 
 #include <rtl/ustring.hxx>
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
 
@@ -57,9 +59,11 @@ enum ParamType
 };
 
 class ModuleData;
-class FuncData : public ScDataObject
+
+class FuncData
 {
-friend class FuncCollection;
+    friend class FuncCollection;
+
     const ModuleData* pModuleData;
     rtl::OUString aInternalName;
     rtl::OUString aFuncName;
@@ -78,7 +82,6 @@ public:
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
-    virtual ScDataObject*   Clone() const { return new FuncData(*this); }
 
     const rtl::OUString& GetModuleName() const;
     const rtl::OUString& GetInternalName() const { return aInternalName; }
@@ -87,27 +90,32 @@ public:
             ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
             ParamType   GetReturnType() const { return eParamType[0]; }
             ParamType   GetAsyncType() const { return eAsyncType; }
-    bool        Call(void** ppParam);
+    bool        Call(void** ppParam) const;
     bool        Unadvice(double nHandle);
 
-                        // name and description of parameter nParam.
-                        // nParam==0 => Desc := function description,
-                        // Name := n/a
-            bool        getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam );
-
+                // name and description of parameter nParam.
+                // nParam==0 => Desc := function description,
+                // Name := n/a
+    bool getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
 
-class FuncCollection : public ScSortedCollection
+class FuncCollection
 {
+    typedef boost::ptr_map<rtl::OUString, FuncData> MapType;
+    MapType maData;
 public:
-    FuncCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
-    FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
+    typedef MapType::const_iterator const_iterator;
 
-    virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
-            FuncData*   operator[]( const sal_uInt16 nIndex) const {return (FuncData*)At(nIndex);}
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    bool        SearchFunc( const rtl::OUString& rName, sal_uInt16& rIndex ) const;
+    FuncCollection();
+    FuncCollection(const FuncCollection& r);
+
+    const FuncData* findByName(const rtl::OUString& rName) const;
+    FuncData* findByName(const rtl::OUString& rName);
+    void insert(FuncData* pNew);
+
+    const_iterator begin() const;
+    const_iterator end() const;
 };
 
 

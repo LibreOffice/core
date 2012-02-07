@@ -59,16 +59,15 @@ private:
         String*     pStr;
     };
     ScAddInDocs*    pDocs;              // Liste der benutzenden Dokumente
-    FuncData*       pFuncData;          // Zeiger auf die Daten in der Collection
+    FuncData*       mpFuncData;          // Zeiger auf die Daten in der Collection
     sal_uLong           nHandle;            // wird von double auf sal_uLong gecasted
-    ParamType       eType;              // PTR_DOUBLE oder PTR_STRING Ergebnis
+    ParamType       meType;              // PTR_DOUBLE oder PTR_STRING Ergebnis
     sal_Bool            bValid;             // ob Wert gueltig
 
 public:
-                    // cTor nur wenn ScAddInAsync::Get fehlschlaegt!
-                    // nIndex: Index aus der FunctionCollection
-                    ScAddInAsync( sal_uLong nHandle, sal_uInt16 nIndex,
-                                    ScDocument* pDoc );
+    // cTor nur wenn ScAddInAsync::Get fehlschlaegt!
+    // nIndex: Index aus der FunctionCollection
+    ScAddInAsync(sal_uLong nHandle, FuncData* pFuncData, ScDocument* pDoc);
                     // default-cTor nur fuer das eine globale aSeekObj !!!
                     ScAddInAsync();
     virtual         ~ScAddInAsync();
@@ -76,7 +75,7 @@ public:
     static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );
     sal_Bool            IsValid() const         { return bValid; }
-    ParamType       GetType() const         { return eType; }
+    ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
     sal_Bool            HasDocument( ScDocument* pDoc ) const

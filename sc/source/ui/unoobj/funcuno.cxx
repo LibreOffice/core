@@ -355,7 +355,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
-    String aUpper( ScGlobal::pCharClass->uppercase( rName ) );
+    rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
 
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name
@@ -364,25 +364,25 @@ sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,
     if ( eOp != ocNone )
     {
         rArray.AddOpCode( eOp );
-        return sal_True;
+        return true;
     }
 
     // 2. old add in functions
 
-    sal_uInt16 nIndex;
-    if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
+    if (ScGlobal::GetFuncCollection()->findByName(aUpper))
     {
-        rArray.AddExternal( aUpper.GetBuffer() );
-        return sal_True;
+        rArray.AddExternal(aUpper.getStr());
+        return true;
     }
 
     // 3. new (uno) add in functions
 
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, false ));
-    if (aIntName.Len())
+    rtl::OUString aIntName =
+        ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
+    if (!aIntName.isEmpty())
     {
-        rArray.AddExternal( aIntName.GetBuffer() );     // international name
-        return sal_True;
+        rArray.AddExternal(aIntName.getStr());     // international name
+        return true;
     }
 
     return false;       // no valid function name

@@ -2495,13 +2495,12 @@ void ScInterpreter::ScDBGet()
 void ScInterpreter::ScExternal()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScExternal" );
-    sal_uInt16 nIndex;
     sal_uInt8 nParamCount = GetByte();
     String aUnoName;
     String aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
-    if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
+    FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
+    if (pFuncData)
     {
-        FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
         if (nParamCount <= MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
@@ -2645,7 +2644,7 @@ void ScInterpreter::ScExternal()
                         ScAddInAsync* pAs = ScAddInAsync::Get( nHandle );
                         if ( !pAs )
                         {
-                            pAs = new ScAddInAsync( nHandle, nIndex, pDok );
+                            pAs = new ScAddInAsync(nHandle, pFuncData, pDok);
                             pMyFormulaCell->StartListening( *pAs );
                         }
                         else
