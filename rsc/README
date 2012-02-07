@@ -1,0 +1,10 @@
+Resource Compiler.
+
+There is some German documentation about it in a subdirectory called [git:rsc/doku].
+Seems to be very old (January 1992).
+
+From rsc.sdw (in German):
+The StarView Resource Compiler (rsc) is used, to convert the system-independent
+resources in the description files to native description files which in turn are
+compiled efficiently (runtime) by the system's native resource compiler in binary
+resources.

@@ -1,5 +1,6 @@
-The new OOo Canvas Framework
-============================
+New canvas implementation to improve rendering, various backends implement the new XCanvas API eg. Cairo / DirectX.
+
+== The new OOo Canvas Framework ==
 
 The new OpenOffice.org canvas framework is the successor of the system
 GUI and graphics backend VCL. Basic functionality is available,
@@ -24,11 +25,10 @@ Armin's recent drawing layer fixups also make use of it), which
 resides in /graphics/basegfx. From these modules, six libraries are
 currently delivered, namely vclcanvas.uno.dll, javacanvas.jar,
 directxcanvas.uno.dll, canvastools680mi.dll, cppcanvas680mi.dll, and
-basegfx680mi.dll. 
+basegfx680mi.dll.
 
 
-The new OOo slideshow engine
-============================
+== The new OOo slideshow engine ==
 
 The new OpenOffice.org slideshow engine will replace the current
 Impress-embedded presentation framework with a fully independent UNO
