@@ -31,13 +31,6 @@ ifeq ($(strip $(SOLARENV)),)
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_host.mk
 endif
 
-$(WORKDIR)/bootstrap:
-	@cd $(SRC_ROOT) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR)/bootstrap
-
-gb_SourceEnvAndRecurse_STAGE=gbuild
 include $(SOLARENV)/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_tail_build.mk))

@@ -151,9 +151,7 @@ $(eval $(call gb_Helper_collect_libtargets))
 gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
-ifneq ($(filter gbuild buidpl,$(gb_SourceEnvAndRecurse_STAGE)),)
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
-endif
 
 ifeq ($(CROSS_COMPILING),YES)
 # We can safely Assume all cross-compilation is from Unix systems.
@@ -268,7 +266,6 @@ include $(SOLARENV)/inc/minor.mk
 # shortest stem instead of first match. However, upon intoduction this version
 # is not available everywhere by default.
 
-ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 include $(foreach class, \
 	ComponentTarget \
 	ComponentsTarget \
@@ -294,7 +291,6 @@ include $(foreach class, \
 	Configuration \
 	Extension \
 ,$(GBUILDDIR)/$(class).mk)
-endif
 
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)

@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all autogen bootstrap fetch build clean clean-build clean-host
+.PHONY : all autogen bootstrap build check clean clean-build clean-host dev-install dev-install-link distclean distro-pack-install docs fetch findunusedcode id install subsequenttest tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -17,7 +17,7 @@ endif
 
 include $(SRCDIR)/config_$(gb_Side).mk
 
-ifneq ($(verbose),)
+ifeq ($(verbose),)
 GMAKE_OPTIONS:=-rs
 else
 GMAKE_OPTIONS:=-r
@@ -29,6 +29,7 @@ Mesa\
 UnoControls\
 accessibility\
 animations\
+apple_remote\
 avmedia\
 basctl\
 basebmp\
@@ -124,7 +125,6 @@ xmlsecurity\
 dmake_modules:=\
 afms\
 apache-commons\
-apple_remote\
 autodoc\
 beanshell\
 berkeleydb\
@@ -218,6 +218,7 @@ sdext\
 setup_native\
 shell\
 smoketest\
+smoketestoo_native\
 solenv\
 soltools\
 stax\
@@ -238,13 +239,16 @@ xsltml\
 zlib\
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).clean
+.PHONY: $(1) $(1).clean $(1).deliver
 
 $(1): bootstrap fetch
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
 $(1).clean:
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean
+	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
+
+$(1).deliver:
+	@true
 
 endef
 
@@ -263,7 +267,7 @@ $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
-$(1).deliver: bootstrap fetch
+$(1).deliver:
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
 
 $(1).clean:
@@ -274,16 +278,6 @@ endef
 define dmake_modules_rules
 $(foreach m,$(1),$(call dmake_module_rules,$(m)))
 endef
-
-#
-# Build
-#
-build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	cd instsetoo_native && unset MAKEFLAGS && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
-
-cross-toolset:
-	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
 
 #
 # Partial Build
@@ -350,15 +344,6 @@ config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in auto
 	./autogen.sh
 
 #
-# Bootstap
-#
-$(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR)/bootstrap
-
-#
 # Fetch
 #
 fetch: src.downloaded
@@ -371,6 +356,26 @@ else
 endif
 
 #
+# Bootstap
+#
+$(WORKDIR)/bootstrap:
+	@cd $(SRCDIR) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
+
+bootstrap: $(WORKDIR)/bootstrap
+
+#
+# Build
+#
+build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+	cd instsetoo_native && unset MAKEFLAGS && \
+	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+
+cross-toolset: bootstrap fetch
+	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+
+
+#
 # Install
 #
 
@@ -381,14 +386,13 @@ install:
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
 
-#dev-install:  $(WORKDIR)/bootstrap \
-#			  $(ROOT_SRC)/src.downloaded \
-#			  $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) \
-#			| $(filter build,$(MAKECMDGOALS)) \
-#			  $(if $(filter check,$(MAKECMDGOALS)),build)
-#	@rm -f $(SRCDIR)/install && ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
-#	cd smoketestoo_native && \
-#	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+dev-install-link:
+	@rm -f $(SRCDIR)/install && ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
+
+dev-install: dev-install-link
+	cd smoketestoo_native && \
+	unset MAKEFLAGS && \
+	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
@@ -415,11 +419,13 @@ findunusedcode:
 	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile
 	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
 
-ifneq ( $(filter-out check debugrun dev-install subsequentcheck unitcheck,$(MAKECMDGOALS)),$(MAKECMDGOALS))
-gb_SourceEnvAndRecurse_STAGE=buildpl
-include $(SOLARENV)/gbuild/gbuild.mk
-$(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
-endif
+check: subsequentcheck
+
+subsequentcheck: smoketestoo_native
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
+
+debugrun:
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
 
 endif # not clean or distclean
 
