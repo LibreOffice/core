@@ -26,10 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
+#include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
@@ -43,7 +42,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -129,8 +127,6 @@ const sal_Char s_grddl_xsl[] = "http://FIXME";
 #define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
 
 #define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
-
-#define C2U(cChar) OUString( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 
 struct XMLServiceMapEntry_Impl
 {
@@ -438,14 +434,10 @@ void SvXMLExport::_InitCtor()
     // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
     if( (getExportFlags() & EXPORT_OASIS) != 0 )
     {
-        sal_Bool bTemp = sal_True;
-        if ( ::comphelper::ConfigurationHelper::readDirectKey(
-                getServiceFactory(),
-                C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("SaveBackwardCompatibleODF"),
-                ::comphelper::ConfigurationHelper::E_READONLY ) >>= bTemp )
-        {
-            mpImpl->mbSaveBackwardCompatibleODF = bTemp;
-        }
+        mpImpl->mbSaveBackwardCompatibleODF =
+            officecfg::Office::Common::Save::Document::
+            SaveBackwardCompatibleODF::get(
+                mpImpl->mxComponentContext);
     }
 }
 
