@@ -2820,6 +2820,35 @@ freebsd*)
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
+kfreebsd*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=LINUX
+
+    case "$host_cpu" in
+
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        OUTPATH=unxkfgi6
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        LIB64="lib64"
+        OUTPATH=unxkfgx6
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    SOLAREXTRALIB="-L../$LIB64"
+    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    ;;
+
 linux-gnu*)
     COM=GCC
     GUI=UNX
