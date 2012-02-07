@@ -418,7 +418,12 @@ findunusedcode:
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake
 	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile
-	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
+	@grep ::.*\( unusedcode.all \
+              | grep -v ^cppu:: \
+              | grep -v ^boost:: \
+              | grep -v ^CIcc \
+              | grep -v ^Atom \
+              > unusedcode.easy
 
 check: subsequentcheck
 
