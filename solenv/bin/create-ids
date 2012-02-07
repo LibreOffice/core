@@ -2,7 +2,13 @@
 
 # create ID file for the whole LibO tree. run it in toplevel dir
 
-. ./config_host.mk
+if [ -z "$INPATH" ] ; then
+   INPATH=$(grep "INPATH=" ./config_host.mk | sed -e "s/INPATH=//")
+fi
+if [ -z "$INPATH" ] ; then
+    echo "could not determine INPATH" >&2
+    exit 1
+fi
 
 # --with-outpath includes projects/$INPATH/inc (also solver/$INPATH/inc)
 if [ "$1" = "--with-outpath" ]; then
