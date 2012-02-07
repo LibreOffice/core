@@ -648,7 +648,7 @@ void RtfAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
     SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(RES_BOX, sal_True, &pItem))
+    if (pCellFmt->GetAttrSet().HasItem(RES_BOX, pItem))
     {
         const SvxBoxItem& rBox = (SvxBoxItem&)*pItem;
         static const sal_uInt16 aBorders[] =
@@ -694,8 +694,7 @@ void RtfAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(
-                RES_BACKGROUND, sal_True, &pItem ))
+    if (pCellFmt->GetAttrSet().HasItem(RES_BACKGROUND, pItem))
     {
         const SvxBrushItem& rBack = (SvxBrushItem&)*pItem;
         if( !rBack.GetColor().GetTransparency() )
@@ -778,8 +777,7 @@ void RtfAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVMRG);
 
     // vertical alignment
-    if( SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(
-                RES_VERT_ORIENT, sal_True, &pItem ) )
+    if (pCellFmt->GetAttrSet().HasItem(RES_VERT_ORIENT, pItem))
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
             case text::VertOrientation::CENTER: m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC); break;
