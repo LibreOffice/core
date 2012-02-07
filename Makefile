@@ -204,6 +204,7 @@ postgresql\
 postprocess\
 python\
 pyuno\
+pyuno-py3\
 rdbmaker\
 readlicense_oo\
 redland\
@@ -226,6 +227,7 @@ stlport\
 stoc\
 store\
 sysui\
+testtools\
 tomcat\
 translations\
 udm\
