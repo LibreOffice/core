@@ -242,11 +242,6 @@ SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum)
     return &maList.at(nNum);
 }
 
-void SdrObjUserDataList::InsertUserData(SdrObjUserData* pData, size_t nPos)
-{
-    maList.insert(maList.begin()+nPos, pData);
-}
-
 void SdrObjUserDataList::AppendUserData(SdrObjUserData* pData)
 {
     maList.push_back(pData);

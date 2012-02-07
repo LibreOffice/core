@@ -249,7 +249,6 @@ public:
     size_t GetUserDataCount() const;
     const SdrObjUserData* GetUserData(size_t nNum) const;
     SdrObjUserData* GetUserData(size_t nNum);
-    void InsertUserData(SdrObjUserData* pData, size_t nPos);
     void AppendUserData(SdrObjUserData* pData);
     void DeleteUserData(size_t nNum);
 };

@@ -192,7 +192,6 @@ protected:
     SbiExprNode* VBA_And();
     SbiExprNode* VBA_Or();
     SbiExprNode* VBA_Xor();
-    SbiExprNode* VBA_Eqv();
     SbiExprNode* Comp();
     SbiExprNode* Boolean();
 public:

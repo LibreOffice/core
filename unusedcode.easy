@@ -1,8 +1,19 @@
+(anonymous namespace)::badArguments()
 ByteString::Append(char)
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
 ByteString::ByteString(char const*, unsigned short)
+ByteString::CompareTo(ByteString const&, unsigned short) const
+ByteString::Equals(ByteString const&, unsigned short, unsigned short) const
+ByteString::Equals(char const*, unsigned short, unsigned short) const
+ByteString::EqualsIgnoreCaseAscii(ByteString const&) const
+ByteString::GetToken(unsigned short, char, unsigned short&) const
+ByteString::Match(ByteString const&) const
+ByteString::SearchAndReplaceAll(ByteString const&, ByteString const&)
+ByteString::SearchAndReplaceAll(char const*, ByteString const&)
+ByteString::SearchBackward(char, unsigned short) const
 ByteString::SetToken(unsigned short, char, ByteString const&, unsigned short)
+ByteString::ToUpperAscii()
 CalendarWrapper::setFirstDayOfWeek(short)
 CalendarWrapper::setMinimumNumberOfDaysForFirstWeek(short)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
@@ -37,6 +48,7 @@ FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, in
 FontSizeBox::SetUserValue(long, FieldUnit)
 FontStyleBox::FontStyleBox(Window*, long)
 FormattedField::SetValidateText(String const&, String const*)
+FuncData::FuncData(rtl::OUString const&)
 GraphCtrl::GraphCtrl(Window*, long)
 GtkSalFrame::popIgnoreDamage()
 GtkSalFrame::pushIgnoreDamage()
@@ -133,7 +145,13 @@ ScAddInDocs::Insert(ScAddInDocs const*, unsigned short, unsigned short)
 ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
-ScChangeActionContent::SetNewValue(String const&, ScDocument*)
+ScChangeAction::IsDeleted() const
+ScChangeActionContent::IsMatrixReference() const
+ScChangeActionContent::IsOldMatrixOrigin() const
+ScChangeActionContent::SetNewValue(rtl::OUString const&, ScDocument*)
+ScChartListener::ScChartListener(rtl::OUString const&, ScDocument*, ScRange const&)
+ScChartListener::SetName(rtl::OUString const&)
+ScCollection::Free(ScDataObject*)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetEntryCount() const
@@ -192,10 +210,17 @@ ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::getXServiceInfo()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
+ScVbaWorksheet::ScVbaWorksheet(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 ScaList::Insert(void*, unsigned int)
 ScrollBarBox::ScrollBarBox(Window*, ResId const&)
 ScrollableWindow::MakeVisible(Rectangle const&, unsigned char)
 SdFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+SdrObject::IsGrouped() const
+SdrObject::IsMasterCachable() const
+SdrObject::IsShareLock() const
+SdrObject::SetGrouped(bool)
+SdrObject::ShareLock()
+SdrObject::ShareUnlock()
 SectReprArr::Insert(SectRepr* const&, unsigned short&)
 SectReprArr::Insert(SectRepr* const*, unsigned short)
 SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
@@ -216,14 +241,17 @@ SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const*&, unsigned short&)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const**, unsigned short)
 SfxFoundCacheArr_Impl::Remove(SfxFoundCache_Impl const*&, unsigned short)
 SfxFoundCacheArr_Impl::Remove(unsigned short, unsigned short)
+SfxHintPoster::RegisterEvent()
 SfxMedium::GetHdl()
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
+SfxOleStringPropertyBase::SfxOleStringPropertyBase(int, int, unsigned short, String const&)
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxProgress::Lock()
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
+SfxStyleSheetBase::SfxStyleSheetBase()
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxUINT32s::Insert(SfxUINT32s const*, unsigned short, unsigned short, unsigned short)
 SfxUINT32s::Remove(unsigned short, unsigned short)
@@ -1393,6 +1421,7 @@ oox::xls::FormulaProcessorBase::generateApiAddressString(com::sun::star::table::
 oox::xls::FormulaProcessorBase::generateApiRangeListString(oox::xls::ApiCellRangeList const&) const
 oox::xls::FunctionParamInfoIterator::getParamInfo() const
 oox::xls::FunctionProvider::getFuncInfoFromOdfFuncName(rtl::OUString const&) const
+oox::xls::ShapeAnchor::getToCell() const
 oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRange const&)
@@ -1507,6 +1536,7 @@ std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
+svt::FrameStatusListener::removeStatusListener(rtl::OUString const&)
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
 svxform::DataNavigatorManager::GetChildWindowId()
 svxform::FmFilterNavigatorWinMgr::GetChildWindowId()
