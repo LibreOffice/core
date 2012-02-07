@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
 	cppuhelper \
 	oox \
 	sal \
+	svt \
 	ucbhelper \
 	utl \
 	tl \

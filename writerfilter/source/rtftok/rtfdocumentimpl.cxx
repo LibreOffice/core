@@ -41,6 +41,10 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <rtl/oustringostreaminserter.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/grfmgr.hxx>
+#include <vcl/svapp.hxx>
 
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
@@ -581,6 +585,20 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
     aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
     OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, &aExtHeader);
+
+    if (m_aStates.top().aPicture.nStyle == BMPSTYLE_PNG)
+    {
+        // In case of PNG, the real size is known, don't use the values
+        // provided by picw and pich.
+        OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
+        const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
+        Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+        Size aSize(aGraphic.GetPrefSize());
+        MapMode aMap(MAP_100TH_MM);
+        aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, aMap );
+        m_aStates.top().aPicture.nWidth = aSize.Width();
+        m_aStates.top().aPicture.nHeight = aSize.Height();
+    }
 
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
@@ -1920,6 +1938,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FORMSHADE:
             // Noop, this is the default in Writer.
             break;
+        case RTF_PNGBLIP:
+            m_aStates.top().aPicture.nStyle = BMPSTYLE_PNG;
+            break;
         case RTF_POSYT: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top; break;
         case RTF_POSYB: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom; break;
         case RTF_POSYC: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center; break;
@@ -1939,6 +1960,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXO: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside; break;
         case RTF_POSXL: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left; break;
         case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
+
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3318,7 +3340,8 @@ RTFPicture::RTFPicture()
     nCropB(0),
     nCropL(0),
     nCropR(0),
-    eWMetafile(0)
+    eWMetafile(0),
+    nStyle(BMPSTYLE_NONE)
 {
 }
 

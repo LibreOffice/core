@@ -150,6 +150,12 @@ namespace writerfilter {
             FORMFIELD_LIST
         };
 
+        enum RTFBmpStyles
+        {
+            BMPSTYLE_NONE,
+            BMPSTYLE_PNG
+        };
+
         /// A buffer storing dmapper calls.
         typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
 
@@ -184,6 +190,7 @@ namespace writerfilter {
                 sal_uInt16 nScaleX, nScaleY;
                 short nCropT, nCropB, nCropL, nCropR;
                 sal_uInt16 eWMetafile;
+                RTFBmpStyles nStyle;
         };
 
         /// Stores the properties of a frame
