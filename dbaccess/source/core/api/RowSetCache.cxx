@@ -940,7 +940,14 @@ sal_Bool ORowSetCache::moveWindow()
                     bCheck = fill(aIter, aNewEnd, nPos, bCheck);
                 }
 
-                ::std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
+                if ( aEnd <= aNewEnd )
+                {
+                    ::std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
+                }
+                else
+                {
+                    ::std::rotate(m_pMatrix->begin(), aNewEnd, aEnd);
+                }
                 // now correct the iterator in our iterator vector
                 //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
