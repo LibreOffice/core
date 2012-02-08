@@ -309,8 +309,8 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
-        String sMacro(  pInfo->GetMacro() );
-        aTab.Insert( SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro( sMacro, String() ) );
+        rtl::OUString sMacro = pInfo->GetMacro();
+        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro(sMacro, rtl::OUString()));
         aItem.SetMacroTable( aTab );
     }
 
