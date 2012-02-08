@@ -440,4 +440,13 @@ debugrun:
 endif # not clean or distclean
 
 
+#########################
+# help
+#
+.PHONY: help
+help:
+	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
+	@true
+
+
 # vim: set noet sw=4 ts=4:
