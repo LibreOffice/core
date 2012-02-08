@@ -92,7 +92,7 @@ public:
 
 typedef ::std::vector< GSILine* > GSIBlock_Impl;
 
-class LazySvFileStream;
+class LazyStream;
 
 class GSIBlock
 {
@@ -122,9 +122,9 @@ public:
     void SetReferenceLine( GSILine* pLine );
     sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 
-    void WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine );
-    void WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine );
-    void WriteFixed( LazySvFileStream &aFixOut );
+    void WriteError( LazyStream &aErrOut, sal_Bool bRequireSourceLine );
+    void WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine );
+    void WriteFixed( LazyStream &aFixOut );
 };
 
 #endif

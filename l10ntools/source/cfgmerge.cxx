@@ -261,33 +261,25 @@ CfgStack::~CfgStack()
 
 rtl::OString CfgStack::GetAccessPath( size_t nPos )
 {
-    if ( nPos == LIST_APPEND )
-        nPos = maList.size() - 1;
-
     rtl::OStringBuffer sReturn;
     for (size_t i = 0; i <= nPos; ++i)
     {
         if (i)
             sReturn.append('.');
-        sReturn.append(GetStackData( i )->GetIdentifier());
+        sReturn.append(maList[i]->GetIdentifier());
     }
 
     return sReturn.makeStringAndClear();
 }
 
 /*****************************************************************************/
-CfgStackData *CfgStack::GetStackData( size_t nPos )
+CfgStackData *CfgStack::GetStackData()
 /*****************************************************************************/
 {
-    if ( nPos == LIST_APPEND )
-    {
-        if (!maList.empty())
-            nPos = maList.size() - 1;
-        else
-            return 0;
-    }
-
-    return maList[  nPos ];
+    if (!maList.empty())
+        return maList[maList.size() - 1];
+    else
+        return 0;
 }
 
 //
@@ -519,20 +511,13 @@ void CfgParser::Error(const rtl::OString& rError)
 
 CfgOutputParser::CfgOutputParser(const rtl::OString &rOutputFile)
 {
-    pOutputStream =
-        new SvFileStream(
-            rtl::OStringToOUString(rOutputFile, RTL_TEXTENCODING_ASCII_US),
-            STREAM_STD_WRITE | STREAM_TRUNC
-        );
-    pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
-
-    if ( !pOutputStream->IsOpen())
+    pOutputStream.open(
+        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!pOutputStream.is_open())
     {
         rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("ERROR: Unable to open output file: "));
         sError.append(rOutputFile);
         Error(sError.makeStringAndClear());
-        delete pOutputStream;
-        pOutputStream = NULL;
         std::exit(EXIT_FAILURE);
     }
 }
@@ -541,10 +526,7 @@ CfgOutputParser::CfgOutputParser(const rtl::OString &rOutputFile)
 CfgOutputParser::~CfgOutputParser()
 /*****************************************************************************/
 {
-    if ( pOutputStream ) {
-        pOutputStream->Close();
-        delete pOutputStream;
-    }
+    pOutputStream.close();
 }
 
 //
@@ -576,7 +558,7 @@ CfgExport::~CfgExport()
 void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
-    if ( pOutputStream && bLocalize ) {
+    if ( bLocalize ) {
     if ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
         {
             rtl::OString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
@@ -614,7 +596,7 @@ void CfgExport::WorkOnRessourceEnd()
                 sOutput += sText; sOutput += "\t\t\t\t";
                 sOutput += sTimeStamp;
 
-                pOutputStream->WriteLine( sOutput );
+                pOutputStream << sOutput.getStr() << '\n';
             }
         }
     }
@@ -706,8 +688,7 @@ void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
 
 void CfgMerge::Output(const rtl::OString& rOutput)
 {
-    if (pOutputStream)
-        pOutputStream->Write(rOutput.getStr(), rOutput.getLength());
+    pOutputStream << rOutput.getStr();
 }
 
 /*****************************************************************************/

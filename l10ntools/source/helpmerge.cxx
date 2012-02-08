@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <fstream>
 #include <functional>
 
 #include <tools/fsys.hxx>
@@ -88,25 +89,9 @@ bool HelpParser::CreateSDF(
     const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in,const rtl::OString &rRoot_in,
     const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1){
     SimpleXMLParser aParser;
-    rtl::OUString sUsedTempFile;
-    rtl::OUString sXmlFile;
-
-    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) )
-    {
-        DirEntry aTempFile = Export::GetTempFile();
-        DirEntry aSourceFile(
-            rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
-        aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-        rtl::OUString sTempFile(aTempFile.GetFull());
-        Export::RemoveUTF8ByteOrderMarkerFromFile(
-            rtl::OUStringToOString(sTempFile, RTL_TEXTENCODING_ASCII_US));
-        sUsedTempFile = sTempFile;
-        sXmlFile = sTempFile;
-    }
-    else
-    {
-        sXmlFile = rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US);
-    }
+    rtl::OUString sXmlFile(
+        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
+    //TODO: explicit BOM handling?
 
     rtl::OString fullFilePath = rPrj_in;
     fullFilePath += "\\";
@@ -128,11 +113,10 @@ bool HelpParser::CreateSDF(
     if( !file->CheckExportStatus() ){
         return true;
     }
-    SvFileStream aSDFStream(
-        rtl::OStringToOUString(rSDFFile_in, RTL_TEXTENCODING_ASCII_US),
-        STREAM_STD_WRITE | STREAM_TRUNC);
+    std::ofstream aSDFStream(
+        rSDFFile_in.getStr(), std::ios_base::out | std::ios_base::trunc);
 
-    if ( !aSDFStream.IsOpen()) {
+    if (!aSDFStream.is_open()) {
         fprintf(stdout,"Can't open file %s\n",rSDFFile_in.getStr());
         return false;
     }
@@ -199,18 +183,14 @@ bool HelpParser::CreateSDF(
                 sBuffer.append( sOUTimeStamp );
                 rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
                 if( !data.isEmpty() )
-                    aSDFStream.WriteLine( sOut );
+                    aSDFStream << sOut.getStr() << '\n';
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.getStr() );
         }
 
     }
-    aSDFStream.Close();
+    aSDFStream.close();
 
-    if( !sUsedTempFile.isEmpty() ){
-        DirEntry aTempFile( sUsedTempFile );
-        aTempFile.Kill();
-    }
     return sal_True;
 }
 
@@ -238,22 +218,9 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
 
     SimpleXMLParser aParser;
 
-    rtl::OUString sUsedTempFile;
-    rtl::OUString sXmlFile;
-
-    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) ){
-        DirEntry aTempFile = Export::GetTempFile();
-        DirEntry aSourceFile(
-            rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
-        aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-        rtl::OUString sTempFile(aTempFile.GetFull());
-        Export::RemoveUTF8ByteOrderMarkerFromFile(
-            rtl::OUStringToOString(sTempFile, RTL_TEXTENCODING_ASCII_US));
-        sUsedTempFile = sTempFile;
-        sXmlFile = sTempFile;
-    }else{
-        sXmlFile = rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US);
-    }
+    rtl::OUString sXmlFile(
+        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
+    //TODO: explicit BOM handling?
 
     OUString sOUHelpFile( sXmlFile );
     DirEntry aFile( sXmlFile );
@@ -261,10 +228,6 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
     XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( rtl::OUString('0') ) ) );
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
-    if( !sUsedTempFile.isEmpty() ){
-        DirEntry aTempFile( sUsedTempFile );
-        aTempFile.Kill();
-    }
     return hasNoError;
 }
 
@@ -306,26 +269,9 @@ bool HelpParser::Merge(
     (void) rSDFFile ;
     bool hasNoError = true;
     SimpleXMLParser aParser;
-    rtl::OUString sUsedTempFile;
-    rtl::OUString sXmlFile;
-
-    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) )
-    {
-        DirEntry aTempFile = Export::GetTempFile();
-        DirEntry aSourceFile(
-            rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
-        aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-        rtl::OUString sTempFile(aTempFile.GetFull());
-        Export::RemoveUTF8ByteOrderMarkerFromFile(
-            rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US));
-        sUsedTempFile = sTempFile;
-        sXmlFile = sTempFile;
-    }
-    else
-    {
-        sXmlFile = rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US);
-    }
-
+    rtl::OUString sXmlFile(
+        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
+    //TODO: explicit BOM handling?
 
     OUString sOUHelpFile( sXmlFile );
     DirEntry aFile( sXmlFile );
@@ -358,11 +304,6 @@ bool HelpParser::Merge(
         if( !hasNoError ) return false;         // Stop on error
      }
 
-    if( !sUsedTempFile.isEmpty() )
-    {
-        DirEntry aTempFile( sUsedTempFile );
-        aTempFile.Kill();
-    }
     delete xmlfile;
     return hasNoError;
 }

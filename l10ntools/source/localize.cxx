@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <fstream>
+
 #include "srciter.hxx"
 #include "export.hxx"
 #include <string>
@@ -173,7 +175,7 @@ const char DLIST_NAME[] = "d.lst";
 class SourceTreeLocalizer : public SourceTreeIterator
 {
 private:
-    SvFileStream aSDF;
+    std::ofstream aSDF;
     sal_uInt16 nMode;
 
     rtl::OString sLanguageRestriction;
@@ -369,15 +371,18 @@ void SourceTreeLocalizer::WorkOnFile(
                 fprintf(stderr, "%s failed\n", sCommand.getStr());
             nFileCnt++;
 
-            SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
-            rtl::OString sLine;
-            while ( aSDFIn.IsOpen() && !aSDFIn.IsEof())
+            ifstream aSDFIn(
+                rtl::OUStringToOString(
+                    aTemp.GetFull(), osl_getThreadTextEncoding()).
+                getStr());
+            while (aSDFIn.is_open() && !aSDFIn.eof())
             {
-                aSDFIn.ReadLine( sLine );
-                if (!sLine.isEmpty())
-                    aSDF.WriteLine( sLine );
+                std::string s;
+                std::getline(aSDFIn, s);
+                if (!s.empty())
+                    aSDF << s << '\n';
             }
-            aSDFIn.Close();
+            aSDFIn.close();
 
             aTemp.Kill();
 
@@ -521,22 +526,20 @@ sal_Bool SourceTreeLocalizer::Extract(const rtl::OString &rDestinationFile)
 {
     nMode = LOCALIZE_EXTRACT;
 
-    aSDF.Open(rtl::OStringToOUString(rDestinationFile, RTL_TEXTENCODING_ASCII_US) , STREAM_STD_WRITE);
-    aSDF.SetLineDelimiter( LINEEND_CRLF );
+    aSDF.open(
+        rDestinationFile.getStr(), std::ios_base::out | std::ios_base::app);
 
-    sal_Bool bReturn = aSDF.IsOpen();
+    sal_Bool bReturn = aSDF.is_open();
     if ( bReturn )
     {
-        aSDF.Seek( STREAM_SEEK_TO_END );
         bReturn = StartExecute();
-        aSDF.Close();
     }
     else
     {
         printf("ERROR: Can't create file %s\n", rDestinationFile.getStr());
     }
     nMode = LOCALIZE_NONE;
-    aSDF.Close();
+    aSDF.close();
     return bReturn;
 }
 

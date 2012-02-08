@@ -26,6 +26,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <fstream>
+#include <string>
+
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include <comphelper/string.hxx>
@@ -175,23 +180,22 @@ MergeDataFile::MergeDataFile(
     bool bCaseSensitive)
     : bErrorLog( bErrLog )
 {
-    SvFileStream aInputStream(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_ASCII_US), STREAM_STD_READ);
-    aInputStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
-    rtl::OString sLine;
+    std::ifstream aInputStream(rFileName.getStr());
     const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(rFile));
     const bool isFileEmpty = !sFileNormalized.isEmpty();
 
-    if( !aInputStream.IsOpen() )
+    if (!aInputStream.is_open())
     {
         printf("Warning : Can't open %s\n", rFileName.getStr());
         return;
     }
-    while ( !aInputStream.IsEof())
+    while (!aInputStream.eof())
     {
-        xub_StrLen nToks;
-        aInputStream.ReadLine( sLine );
-        nToks = getTokenCount(sLine, '\t');
+        std::string buf;
+        std::getline(aInputStream, buf);
+        rtl::OString sLine(buf.data(), buf.length());
+        xub_StrLen nToks = getTokenCount(sLine, '\t');
         if ( nToks == 15 )
         {
             // Skip all wrong filenames
@@ -223,7 +227,7 @@ MergeDataFile::MergeDataFile(
             printf("ERROR: File format is obsolete and no longer supported!\n");
         }
     }
-    aInputStream.Close();
+    aInputStream.close();
 }
 
 MergeDataFile::~MergeDataFile()

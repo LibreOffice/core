@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <cstring>
+
 #include <comphelper/string.hxx>
 #include <stdio.h>
 #include <tools/fsys.hxx>
@@ -71,7 +73,6 @@ rtl::OString sOutputFile;
 rtl::OString sMergeSrc;
 rtl::OString sLangAttribute;
 rtl::OString sResourceType;
-rtl::OUString sUsedTempFile;
 XRMResParser *pParser = NULL;
 
 extern "C" {
@@ -158,19 +159,14 @@ extern char *GetOutputFile( int argc, char* argv[])
         // command line is valid
         bEnableExport = sal_True;
         char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
+        std::strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
 
     // command line is not valid
     return NULL;
 }
-void removeTempFile(){
-    if (!sUsedTempFile.isEmpty()) {
-        DirEntry aTempFile( sUsedTempFile );
-        aTempFile.Kill();
-    }
-}
+
 /*****************************************************************************/
 int InitXrmExport( char *pOutput , char* pFilename)
 /*****************************************************************************/
@@ -204,22 +200,10 @@ extern const char* getFilename()
 extern FILE *GetXrmFile()
 /*****************************************************************************/
 {
-    FILE *pFile = 0;
     // look for valid filename
     if (!sInputFileName.isEmpty()) {
-        if( Export::fileHasUTF8ByteOrderMarker( sInputFileName ) ){
-            DirEntry aTempFile = Export::GetTempFile();
-            DirEntry aSourceFile( rtl::OStringToOUString( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
-            aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
-            rtl::OUString sTempFile = aTempFile.GetFull();
-            Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US) );
-            pFile = fopen(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US).getStr(), "r");
-            sUsedTempFile = sTempFile;
-        }else{
-            // able to open file?
-            pFile = fopen(sInputFileName.getStr(), "r");
-            sUsedTempFile = rtl::OUString();
-        }
+        //TODO: explicit BOM handling?
+        FILE * pFile = fopen(sInputFileName.getStr(), "r");
         if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.getStr());
@@ -467,18 +451,12 @@ XRMResOutputParser::XRMResOutputParser ( const rtl::OString &rOutputFile )
 /*****************************************************************************/
 {
     aLanguages = Export::GetLanguages();
-    pOutputStream =
-        new SvFileStream(
-            rtl::OStringToOUString( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
-            STREAM_STD_WRITE | STREAM_TRUNC
-        );
-    pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
-    if ( !pOutputStream->IsOpen()) {
+    pOutputStream.open(
+        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!pOutputStream.is_open()) {
         rtl::OString sError( "Unable to open output file: " );
         sError += rOutputFile;
         Error( sError );
-        delete pOutputStream;
-        pOutputStream = NULL;
     }
 }
 
@@ -486,10 +464,7 @@ XRMResOutputParser::XRMResOutputParser ( const rtl::OString &rOutputFile )
 XRMResOutputParser::~XRMResOutputParser()
 /*****************************************************************************/
 {
-    if ( pOutputStream ) {
-        pOutputStream->Close();
-        delete pOutputStream;
-    }
+    pOutputStream.close();
 }
 
 //
@@ -576,7 +551,7 @@ void XRMResExport::EndOfText(
 )
 /*****************************************************************************/
 {
-    if ( pResData && pOutputStream )
+    if ( pResData )
     {
         rtl::OString sTimeStamp( Export::GetTimeStamp());
         rtl::OString sCur;
@@ -607,7 +582,7 @@ void XRMResExport::EndOfText(
 
             sOutput = sOutput.replace('\0', '_');
             if( sAct.getLength() > 1 )
-                pOutputStream->WriteLine( sOutput );
+                pOutputStream << sOutput.getStr() << '\n';
         }
     }
     delete pResData;
@@ -751,9 +726,8 @@ void XRMResMerge::WorkOnText(
 void XRMResMerge::Output( const rtl::OString& rOutput )
 /*****************************************************************************/
 {
-    //printf("W: %s\n",rOutput.GetBuffer());
-    if ( pOutputStream && !rOutput.isEmpty() )
-        pOutputStream->Write( rOutput.getStr(), rOutput.getLength());
+    if (!rOutput.isEmpty())
+        pOutputStream << rOutput.getStr();
 }
 
 /*****************************************************************************/

@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include "export.hxx"
 #include <stdio.h>
 #include <osl/time.h>
@@ -206,54 +208,6 @@ bool Export::hasUTF8ByteOrderMarker( const rtl::OString &rString )
            rString[1] == '\xBB' && rString[2] == '\xBF' ;
 }
 
-bool Export::fileHasUTF8ByteOrderMarker(const rtl::OString &rString)
-{
-    SvFileStream aFileIn(rtl::OStringToOUString(rString, RTL_TEXTENCODING_ASCII_US), STREAM_READ);
-    rtl::OString sLine;
-    if( !aFileIn.IsEof() )
-    {
-        aFileIn.ReadLine( sLine );
-        if( aFileIn.IsOpen() )
-            aFileIn.Close();
-        return hasUTF8ByteOrderMarker( sLine );
-    }
-    if( aFileIn.IsOpen() ) aFileIn.Close();
-    return false;
-}
-
-void Export::RemoveUTF8ByteOrderMarkerFromFile(const rtl::OString &rFilename)
-{
-    SvFileStream aFileIn(rtl::OStringToOUString(rFilename , RTL_TEXTENCODING_ASCII_US) , STREAM_READ );
-    rtl::OString sLine;
-    if( !aFileIn.IsEof() )
-    {
-        aFileIn.ReadLine( sLine );
-        // Test header
-        if( hasUTF8ByteOrderMarker( sLine ) )
-        {
-            DirEntry aTempFile = Export::GetTempFile();
-            rtl::OString sTempFile = rtl::OUStringToOString(aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US);
-            SvFileStream aNewFile(rtl::OStringToOUString(sTempFile , RTL_TEXTENCODING_ASCII_US) , STREAM_WRITE);
-            // Remove header
-            RemoveUTF8ByteOrderMarker( sLine );
-            aNewFile.WriteLine( sLine );
-            // Copy the rest
-            while( !aFileIn.IsEof() )
-            {
-                aFileIn.ReadLine( sLine );
-                aNewFile.WriteLine( sLine );
-            }
-            if( aFileIn.IsOpen() ) aFileIn.Close();
-            if( aNewFile.IsOpen() ) aNewFile.Close();
-            DirEntry aEntry( rFilename.getStr() );
-            aEntry.Kill();
-            DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.getStr() ) );
-        }
-    }
-    if( aFileIn.IsOpen() )
-        aFileIn.Close();
-}
-
 bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
 {
     const int BUFFERSIZE    = 8192;
@@ -395,54 +349,11 @@ rtl::OString Export::GetTimeStamp()
 }
 
 /*****************************************************************************/
-sal_Bool Export::ConvertLineEnds(
-    rtl::OString const & sSource, rtl::OString const & sDestination )
-/*****************************************************************************/
-{
-    rtl::OUString sSourceFile(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
-    rtl::OUString sDestinationFile(rtl::OStringToOUString(sDestination, RTL_TEXTENCODING_ASCII_US));
-
-    SvFileStream aSource( sSourceFile, STREAM_READ );
-    if ( !aSource.IsOpen())
-        return sal_False;
-    SvFileStream aDestination( sDestinationFile, STREAM_STD_WRITE | STREAM_TRUNC );
-    if ( !aDestination.IsOpen()) {
-        aSource.Close();
-        return sal_False;
-    }
-
-    rtl::OString sLine;
-
-    while ( !aSource.IsEof())
-    {
-        aSource.ReadLine( sLine );
-        if ( !aSource.IsEof())  //a complete line
-        {
-            sLine = comphelper::string::remove(sLine, '\r');
-            aDestination.WriteLine( sLine );
-        }
-        else                    //a final incomplete line, just copy it as-is
-            aDestination.Write( sLine.getStr(), sLine.getLength() );
-    }
-
-    aSource.Close();
-    aDestination.Close();
-
-    return sal_True;
-}
-
-/*****************************************************************************/
 rtl::OString Export::GetNativeFile( rtl::OString const & sSource )
 /*****************************************************************************/
 {
-    DirEntry aTemp( GetTempFile());
-    rtl::OString sReturn(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
-
-    for ( sal_uInt16 i = 0; i < 10; i++ )
-        if ( ConvertLineEnds( sSource, sReturn ))
-            return sReturn;
-
-    return rtl::OString();
+    //TODO: Drop this completely unless line end conversion *is* an issue
+    return sSource;
 }
 
 const char* Export::GetEnv( const char *pVar )

@@ -31,6 +31,8 @@
 
 #include "sal/config.h"
 
+#include <fstream>
+
 #include <comphelper/string.hxx>
 
 #ifndef L10NTOOLS_DIRECTORY_HXX
@@ -38,7 +40,6 @@
 #include <l10ntools/directory.hxx>
 #endif
 
-#include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
@@ -263,7 +264,7 @@ class Export
 private:
     WordTransformer *pWordTransformer;
 
-    SvFileStream aOutput;
+    std::ofstream aOutput;
 
     ResStack aResStack;                 // stack for parsing recursive
 
@@ -304,8 +305,6 @@ public:
     static void SetLanguages( std::vector<rtl::OString> val );
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
     static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
-    static void RemoveUTF8ByteOrderMarkerFromFile(const rtl::OString &rFilename);
-    static bool fileHasUTF8ByteOrderMarker(const rtl::OString &rString);
     static rtl::OString QuoteHTML( rtl::OString const &rString );
     static bool CopyFile(const rtl::OString& rSource , const rtl::OString& rDest);
 
@@ -321,7 +320,6 @@ public:
     static void getCurrentDir( std::string& dir );
 
     static rtl::OString GetTimeStamp();
-    static sal_Bool ConvertLineEnds( rtl::OString const & sSource, rtl::OString const & sDestination );
     static rtl::OString GetNativeFile( rtl::OString const & sSource );
     static DirEntry GetTempFile();
 
@@ -461,7 +459,6 @@ class MergeDataFile
     private:
         sal_Bool bErrorLog;
         rtl::OString sErrorLog;
-        SvFileStream aErrLog;
         MergeDataHashMap aMap;
         std::set<rtl::OString> aLanguageSet;
 

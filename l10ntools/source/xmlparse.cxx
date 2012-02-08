@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <iterator> /* std::iterator*/
 
 #include <stdio.h>
@@ -1154,36 +1156,29 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rt
         RTL_CONSTASCII_USTRINGPARAM("ERROR: Unable to open file "));
     aErrorInformation.sMessage += rFileName;
 
-    SvFileStream aStream( rFileName, STREAM_STD_READ );
-
-    if ( !aStream.IsOpen())
-        return NULL;
-
-    SvMemoryStream aMemStream;
-    aStream >> aMemStream;
-    aMemStream.Seek( 0 );
-
-    aStream.Close();
+    oslFileHandle h;
+    if (osl_openFile(rFileName.pData, &h, osl_File_OpenFlag_Read)
+        != osl_File_E_None)
+    {
+        return 0;
+    }
+    sal_uInt64 s;
+    oslFileError e = osl_getFileSize(h, &s);
+    void * p;
+    if (e == osl_File_E_None) {
+        e = osl_mapFile(h, &p, s, 0, 0);
+    }
+    if (e != osl_File_E_None) {
+        osl_closeFile(h);
+        return 0;
+    }
 
     pXMLFile = pXMLFileIn;
     pXMLFile->SetName( rFileName );
     pXMLFile->SetFullName( rFullFileName );
 
-    return Execute( &aMemStream );
-}
-
-/*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
-/*****************************************************************************/
-{
-    if ( !pXMLFile )
-        pXMLFile = new XMLFile(rtl::OUString());
-
     pCurNode = pXMLFile;
     pCurData = NULL;
-
-    sal_uLong nPos = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_END );
 
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
@@ -1199,8 +1194,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
         aErrorInformation.sMessage = rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("XML-File parsed successfully"));
 
-    if ( !XML_Parse(
-        aParser, ( char * ) pStream->GetData() + nPos, pStream->Tell() - nPos, sal_True ))
+    if (!XML_Parse(aParser, reinterpret_cast< char * >(p), s, true))
     {
         aErrorInformation.eCode = XML_GetErrorCode( aParser );
         aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
@@ -1319,7 +1313,9 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
         delete pXMLFile;
         pXMLFile = NULL;
     }
-    pStream->Seek( nPos );
+
+    osl_unmapMappedFile(h, p, s);
+    osl_closeFile(h);
 
     return pXMLFile;
 }

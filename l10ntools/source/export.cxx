@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cstring>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/fsys.hxx>
@@ -71,10 +75,8 @@ rtl::OString sPrjRoot;
 rtl::OString sActFileName;
 rtl::OString sOutputFile;
 rtl::OString sMergeSrc;
-rtl::OString sTempFile;
 rtl::OString sFile;
 MergeDataFile *pMergeDataFile;
-FILE *pTempFile;
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -95,8 +97,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     sActFileName = "";
     Export::sLanguages = "";
     Export::sForcedLanguages = "";
-    sTempFile = "";
-    pTempFile = NULL;
     sal_uInt16 nState = STATE_NON;
     sal_Bool bInput = sal_False;
 
@@ -176,7 +176,7 @@ extern char *GetOutputFile( int argc, char* argv[])
         // command line is valid
         bEnableExport = sal_True;
         char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
+        std::strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
 
@@ -223,15 +223,6 @@ extern FILE *GetNextFile()
 /*****************************************************************************/
 {
     // look for next valid filename in input file list
-    if ( !sTempFile.isEmpty())
-    {
-        fclose( pTempFile );
-        rtl::OUString sTemp(rtl::OStringToOUString(sTempFile,
-            RTL_TEXTENCODING_ASCII_US));
-        DirEntry aTemp( sTemp );
-        aTemp.Kill();
-    }
-
     while ( !aInputFileList.empty() )
     {
         rtl::OString sFileName(aInputFileList[0]);
@@ -247,8 +238,7 @@ extern FILE *GetNextFile()
             return GetNextFile();
         }
 
-        sTempFile = sFileName;
-        Export::RemoveUTF8ByteOrderMarkerFromFile( sFileName );
+        //TODO: explict BOM handling?
 
         // able to open file?
         FILE *pFile = fopen( sFileName.getStr(), "r" );
@@ -256,8 +246,6 @@ extern FILE *GetNextFile()
             fprintf( stderr, "Error: Could not open File %s\n",
                 sFileName.getStr());
         else {
-            pTempFile = pFile;
-
             // this is a valid file which can be opened, so
             // create path to project root
             DirEntry aEntry(rtl::OStringToOUString(sOrigFile,
@@ -422,14 +410,12 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
 
     // open output stream
     if ( bEnableExport ) {
-        aOutput.Open( rtl::OStringToOUString( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
-        if( !aOutput.IsOpen() ) {
+        aOutput.open(
+            rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+        if (!aOutput.is_open()) {
             fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
             exit ( -1 );
         }
-        aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
-
-        aOutput.SetLineDelimiter( LINEEND_CRLF );
     }
 }
 
@@ -464,9 +450,8 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
 
     // open output stream
     if ( bEnableExport ) {
-        aOutput.Open( rtl::OStringToOUString( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
-        aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
-        aOutput.SetLineDelimiter( LINEEND_CRLF );
+        aOutput.open(
+            rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
     }
 
 }
@@ -496,7 +481,7 @@ Export::~Export()
         delete pParseQueue;
     // close output stream
     if ( bEnableExport )
-        aOutput.Close();
+        aOutput.close();
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
     aResStack.clear();
@@ -1233,7 +1218,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
 
-                    aOutput.WriteLine( sOutput );
+                    aOutput << sOutput.getStr() << '\n';
                 }
 
                 if ( bCreateNew ) {
@@ -1362,7 +1347,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
                     sOutput.append(sText).append("\t\t\t\t");
                     sOutput.append(sTimeStamp);
 
-                    aOutput.WriteLine(sOutput.makeStringAndClear());
+                    aOutput << sOutput.makeStringAndClear().getStr() << '\n';
 
                 }
             }
@@ -1522,7 +1507,7 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
             helper::searchAndReplaceAll(&sTmp, "\\0x7F", "-=<[0x7F]>=-");
 
             sal_uInt16 nState = TXT_STATE_TEXT;
-            for (sal_Int32 i = 0; i < getTokenCount(sTmp, '\"'); ++i)
+            for (sal_Int32 i = 1; i < getTokenCount(sTmp, '"'); ++i)
             {
                 rtl::OString sToken(getToken(sTmp, i, '"'));
                 if (!sToken.isEmpty()) {
@@ -1598,10 +1583,10 @@ void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
             }
         } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
             if (sText[i] == '\n') {
-                aOutput.WriteLine(rtl::OString());
+                aOutput << '\n';
             } else {
                 char cChar = sText[i];
-                aOutput.Write(&cChar, 1);
+                aOutput << cChar;
             }
         }
     }

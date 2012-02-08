@@ -26,9 +26,13 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <fstream>
+#include <string>
+
 #include <stdio.h>
 #include <tools/fsys.hxx>
-#include <tools/stream.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
@@ -90,47 +94,39 @@ sal_Bool LanguageOK( rtl::OString const & aLang )
     return sal_False;
 }
 
-//
-// class LazySvFileStream
-//
-
-
-class LazySvFileStream : public SvFileStream
+class LazyStream: public std::ofstream
 {
 
 private:
-    rtl::OUString aFileName;
-    sal_Bool bOpened;
-    StreamMode eOpenMode;
+    rtl::OString aFileName;
+    bool bOpened;
 
 public:
-    LazySvFileStream()
+    LazyStream()
     : aFileName()
-    , bOpened( sal_False )
-    , eOpenMode( 0 )
+    , bOpened(false)
     {};
 
-    void SetOpenParams( const rtl::OUString& rFileName, StreamMode eOpenModeP )
+    void SetFileName( const rtl::OString& rFileName )
     {
         aFileName = rFileName;
-        eOpenMode = eOpenModeP;
     };
 
     void LazyOpen();
 };
 
-void LazySvFileStream::LazyOpen()
+void LazyStream::LazyOpen()
 {
     if ( !bOpened )
     {
-        Open( aFileName, eOpenMode );
-        if ( !IsOpen())
+        open(aFileName.getStr(), std::ios_base::out | std::ios_base::trunc);
+        if (!is_open())
         {
             fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n",
-                rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US).getStr() );
+                     aFileName.getStr() );
             exit ( 4 );
         }
-        bOpened = sal_True;
+        bOpened = true;
     }
 }
 
@@ -535,7 +531,7 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
     return bHasError || bHasBlockError;
 }
 
-void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine  )
+void GSIBlock::WriteError( LazyStream &aErrOut, sal_Bool bRequireSourceLine  )
 {
     if ( pSourceLine && pSourceLine->IsOK() && bCheckSourceLang && !bHasBlockError )
         return;
@@ -549,18 +545,18 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLin
         {
             bHasError = sal_True;
             aErrOut.LazyOpen();
-            aErrOut.WriteLine( pItem->data_ );
+            aErrOut << pItem->data_.getStr() << '\n';
         }
     }
 
     if ( pSourceLine && ( bHasError || !pSourceLine->IsOK() ) && !( !bHasError && bCheckTranslationLang ) )
     {
         aErrOut.LazyOpen();
-        aErrOut.WriteLine( pSourceLine->data_ );
+        aErrOut << pSourceLine->data_.getStr() << '\n';
     }
 }
 
-void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine )
+void GSIBlock::WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine )
 {
     if ( ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) )
         return;
@@ -573,18 +569,18 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLi
         {
             bHasOK = sal_True;
             aOkOut.LazyOpen();
-            aOkOut.WriteLine( pItem->data_ );
+            aOkOut << pItem->data_.getStr() << '\n';
         }
     }
 
     if ( ( pSourceLine && pSourceLine->IsOK() && ( !maList.empty() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
     {
         aOkOut.LazyOpen();
-        aOkOut.WriteLine( pSourceLine->data_ );
+        aOkOut << pSourceLine->data_.getStr() << '\n';
     }
 }
 
-void GSIBlock::WriteFixed( LazySvFileStream &aFixOut )
+void GSIBlock::WriteFixed( LazyStream &aFixOut )
 {
     if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
         return;
@@ -597,14 +593,14 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut )
         {
             bHasFixes = sal_True;
             aFixOut.LazyOpen();
-            aFixOut.WriteLine( pItem->data_ );
+            aFixOut << pItem->data_.getStr() << '\n';
         }
     }
 
     if ( pSourceLine && ( bHasFixes || pSourceLine->IsFixed() ) )
     {
         aFixOut.LazyOpen();
-        aFixOut.WriteLine( pSourceLine->data_ );
+        aFixOut << pSourceLine->data_.getStr() << '\n';
     }
 }
 
@@ -846,13 +842,13 @@ int _cdecl main( int argc, char *argv[] )
         exit ( 2 );
     }
 
-    SvFileStream aGSI( rtl::OStringToOUString( aFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
-    if ( !aGSI.IsOpen()) {
+    std::ifstream aGSI(aFilename.getStr());
+    if (!aGSI.is_open()) {
         fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.getStr() );
         exit ( 3 );
     }
 
-    SvFileStream aReferenceGSI;
+    std::ifstream aReferenceGSI;
     if ( bReferenceFile )
     {
         DirEntry aReferenceSource = DirEntry( rtl::OStringToOUString( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ));
@@ -861,14 +857,14 @@ int _cdecl main( int argc, char *argv[] )
             exit ( 2 );
         }
 
-        aReferenceGSI.Open( rtl::OStringToOUString( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
-        if ( !aReferenceGSI.IsOpen()) {
+        aReferenceGSI.open(aReferenceFilename.getStr());
+        if (!aReferenceGSI.is_open()) {
             fprintf( stderr, "\nERROR: Could not open Input-File %s!\n\n", aFilename.getStr() );
             exit ( 3 );
         }
     }
 
-    LazySvFileStream aOkOut;
+    LazyStream aOkOut;
     rtl::OUString aBaseName(aSource.GetBase());
     if ( bWriteCorrect )
     {
@@ -879,10 +875,12 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aCorrectFilename = aSource.GetFull();
         }
-        aOkOut.SetOpenParams( aCorrectFilename , STREAM_STD_WRITE | STREAM_TRUNC );
+        aOkOut.SetFileName(
+            rtl::OUStringToOString(
+                aCorrectFilename, osl_getThreadTextEncoding()));
     }
 
-    LazySvFileStream aErrOut;
+    LazyStream aErrOut;
     if ( bWriteError )
     {
         if (aErrorFilename.isEmpty())
@@ -892,10 +890,12 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aErrorFilename = aSource.GetFull();
         }
-        aErrOut.SetOpenParams( aErrorFilename , STREAM_STD_WRITE | STREAM_TRUNC );
+        aErrOut.SetFileName(
+            rtl::OUStringToOString(
+                aErrorFilename, osl_getThreadTextEncoding()));
     }
 
-    LazySvFileStream aFixOut;
+    LazyStream aFixOut;
     if ( bWriteFixed )
     {
         if (aFixedFilename.isEmpty())
@@ -905,25 +905,26 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aFixedFilename = aSource.GetFull();
         }
-        aFixOut.SetOpenParams( aFixedFilename , STREAM_STD_WRITE | STREAM_TRUNC );
+        aFixOut.SetFileName(
+            rtl::OUStringToOString(
+                aFixedFilename, osl_getThreadTextEncoding()));
     }
 
 
-    rtl::OString sReferenceLine;
     GSILine* pReferenceLine = NULL;
     sal_uLong nReferenceLine = 0;
 
-    rtl::OString sGSILine;
     GSILine* pGSILine = NULL;
     rtl::OString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
     sal_uLong nLine = 0;
 
-    while ( !aGSI.IsEof() )
+    while (!aGSI.eof())
     {
-        aGSI.ReadLine( sGSILine );
+        std::string s;
+        std::getline(aGSI, s);
         nLine++;
-        pGSILine = new GSILine( sGSILine, nLine );
+        pGSILine = new GSILine(rtl::OString(s.data(), s.length()), nLine );
         sal_Bool bDelete = sal_True;
 
 
@@ -937,7 +938,7 @@ int _cdecl main( int argc, char *argv[] )
                 {
                     bFileHasError = sal_True;
                     aErrOut.LazyOpen();
-                    aErrOut.WriteLine( pGSILine->data_ );
+                    aErrOut << pGSILine->data_.getStr();
                 }
             }
             else if ( pGSILine->GetLineType().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("res-comment")) )
@@ -945,7 +946,7 @@ int _cdecl main( int argc, char *argv[] )
                 if ( bWriteCorrect )
                 {
                     aOkOut.LazyOpen();
-                       aOkOut.WriteLine( pGSILine->data_ );
+                    aOkOut << pGSILine->data_.getStr() << '\n';
                 }
             }
             else
@@ -975,13 +976,16 @@ int _cdecl main( int argc, char *argv[] )
                     if ( bReferenceFile )
                     {
                         sal_Bool bContinueSearching = sal_True;
-                        while ( ( !aReferenceGSI.IsEof() || pReferenceLine ) && bContinueSearching )
+                        while ( ( !aReferenceGSI.eof() || pReferenceLine ) && bContinueSearching )
                         {
                             if ( !pReferenceLine )
                             {
-                                aReferenceGSI.ReadLine( sReferenceLine );
+                                std::string s2;
+                                std::getline(aReferenceGSI, s2);
                                 nReferenceLine++;
-                                pReferenceLine = new GSILine( sReferenceLine, nReferenceLine );
+                                pReferenceLine = new GSILine(
+                                    rtl::OString(s2.data(), s2.length()),
+                                    nReferenceLine);
                             }
                             if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
                             {
@@ -1034,14 +1038,14 @@ int _cdecl main( int argc, char *argv[] )
 
         delete pBlock;
     }
-    aGSI.Close();
+    aGSI.close();
 
     if ( bWriteError )
-        aErrOut.Close();
+        aErrOut.close();
     if ( bWriteCorrect )
-        aOkOut.Close();
+        aOkOut.close();
     if ( bWriteFixed )
-        aFixOut.Close();
+        aFixOut.close();
 
     if ( bFileHasError )
         return 55;

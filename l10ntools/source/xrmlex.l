@@ -40,7 +40,6 @@ extern int SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetXrmFile();
 extern int isQuiet();
-extern void removeTempFile();
 extern char* getFilename();
 
 /* forwards */
@@ -238,7 +237,6 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndXrmExport();
 
-    removeTempFile();
 	/* return error level */
 	return nRetValue;
 }

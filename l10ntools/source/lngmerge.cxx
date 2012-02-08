@@ -26,6 +26,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <fstream>
+#include <string>
+
 #include <tools/fsys.hxx>
 #include <comphelper/string.hxx>
 
@@ -51,16 +56,15 @@ LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
     DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
     if ( aEntry.Exists())
     {
-        SvFileStream aStream(
-            rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US),
-            STREAM_STD_READ);
-        if ( aStream.IsOpen())
+        std::ifstream aStream(sSource.getStr());
+        if (aStream.is_open())
         {
-            rtl::OString sLine;
             bool bFirstLine = true;
-            while ( !aStream.IsEof())
+            while (!aStream.eof())
             {
-                aStream.ReadLine( sLine );
+                std::string s;
+                std::getline(aStream, s);
+                rtl::OString sLine(s.data(), s.length());
 
                 if( bFirstLine )
                 {
@@ -93,13 +97,11 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
 
     Export::InitLanguages( false );
     aLanguages = Export::GetLanguages();
-    SvFileStream aSDFStream(
-        rtl::OStringToOUString(rSDFFile, RTL_TEXTENCODING_ASCII_US),
-        STREAM_STD_WRITE | STREAM_TRUNC);
-    if ( !aSDFStream.IsOpen()) {
+    std::ofstream aSDFStream(
+        rSDFFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!aSDFStream.is_open()) {
         nError = SDF_COULD_NOT_OPEN;
     }
-    aSDFStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     nError = SDF_OK;
     DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
     aEntry.ToAbs();
@@ -134,11 +136,11 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
             WriteSDF( aSDFStream , Text , rPrj , rRoot , sActFileName , sID );
         }
     }
-    aSDFStream.Close();
+    aSDFStream.close();
     return true;
 }
 
-void LngParser::WriteSDF(SvFileStream &aSDFStream,
+void LngParser::WriteSDF(std::ofstream &aSDFStream,
     OStringHashMap &rText_inout, const rtl::OString &rPrj,
     const rtl::OString &rRoot, const rtl::OString &rActFileName,
     const rtl::OString &rID)
@@ -163,7 +165,7 @@ void LngParser::WriteSDF(SvFileStream &aSDFStream,
            sOutput += sCur; sOutput += "\t";
            sOutput += sAct; sOutput += "\t\t\t\t";
            sOutput += sTimeStamp;
-           aSDFStream.WriteLine( sOutput );
+           aSDFStream << sOutput.getStr() << '\n';
        }
    }
 }
@@ -198,10 +200,9 @@ sal_Bool LngParser::Merge(
     const rtl::OString &rDestinationFile)
 {
     Export::InitLanguages( true );
-    SvFileStream aDestination(
-        rtl::OStringToOUString(rDestinationFile, RTL_TEXTENCODING_ASCII_US),
-        STREAM_STD_WRITE | STREAM_TRUNC);
-    if ( !aDestination.IsOpen()) {
+    std::ofstream aDestination(
+        rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!aDestination.is_open()) {
         nError = LNG_COULD_NOT_OPEN;
     }
     nError = LNG_OK;
@@ -346,9 +347,9 @@ sal_Bool LngParser::Merge(
     }
 
     for ( size_t i = 0; i < pLines->size(); ++i )
-        aDestination.WriteLine( *(*pLines)[ i ] );
+        aDestination << (*pLines)[i]->getStr() << '\n';
 
-    aDestination.Close();
+    aDestination.close();
     return sal_True;
 }
 

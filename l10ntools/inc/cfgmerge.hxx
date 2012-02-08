@@ -29,8 +29,12 @@
 #ifndef _CFG_MERGE_HXX
 #define _CFG_MERGE_HXX
 
-#include <boost/unordered_map.hpp>
+#include "sal/config.h"
+
+#include <fstream>
 #include <vector>
+
+#include "boost/unordered_map.hpp"
 
 typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> OStringHashMap;
 
@@ -68,7 +72,7 @@ public:
 // class CfgStack
 //
 
-typedef ::std::vector< CfgStackData* > CfgStackList;
+typedef std::vector< CfgStackData* > CfgStackList;
 
 class CfgStack
 {
@@ -89,9 +93,9 @@ public:
         return temp;
     }
 
-    CfgStackData *GetStackData( size_t nPos = LIST_APPEND );
+    CfgStackData *GetStackData();
 
-    rtl::OString GetAccessPath( size_t nPos = LIST_APPEND );
+    rtl::OString GetAccessPath( size_t nPos );
 
     size_t size() const { return maList.size(); }
 };
@@ -148,7 +152,7 @@ public:
 class CfgOutputParser : public CfgParser
 {
 protected:
-    SvFileStream *pOutputStream;
+    std::ofstream pOutputStream;
 public:
     CfgOutputParser(const rtl::OString &rOutputFile);
     virtual ~CfgOutputParser();

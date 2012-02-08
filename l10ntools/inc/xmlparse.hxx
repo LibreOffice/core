@@ -33,7 +33,6 @@
 #include <expat.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/stream.hxx>
 #include "export.hxx"
 #include "xmlutil.hxx"
 
@@ -483,7 +482,6 @@ private:
     void Comment( const XML_Char *data );
     void Default( const XML_Char *s, int len );
 
-
 public:
     /// creates a new parser
     SimpleXMLParser();
@@ -494,11 +492,6 @@ public:
         const rtl::OUString &rFullFileName,
         const rtl::OUString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
-    );
-
-    /// parse a memory stream, returns NULL on criticall errors
-    XMLFile *Execute(
-        SvMemoryStream *pStream // the stream
     );
 
     /// returns an error struct

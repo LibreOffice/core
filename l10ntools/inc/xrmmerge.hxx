@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <fstream>
+
 //
 // XRMResParser
 //
@@ -89,7 +93,7 @@ class XRMResOutputParser : public XRMResParser
 private:
     std::vector<rtl::OString> aLanguages;
 protected:
-    SvFileStream *pOutputStream;
+    std::ofstream pOutputStream;
 public:
     XRMResOutputParser ( const rtl::OString &rOutputFile );
     virtual ~XRMResOutputParser();
