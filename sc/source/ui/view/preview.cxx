@@ -269,7 +269,6 @@ void ScPreview::CalcPages()
 
         long nThisStart = nTotalPages;
         ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, NULL, &aOptions );
-        aPrintFunc.InitParam( &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
@@ -291,10 +290,7 @@ void ScPreview::CalcPages()
     if (nTabCount > nTabsTested)
         nTabsTested = nTabCount;
 
-    //  testen, ob hinter letzter Seite
-
-    if ( nTabsTested >= nTabCount )
-        TestLastPage();
+    TestLastPage();
 
     aState.nDocPages = nTotalPages;
 
