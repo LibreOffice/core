@@ -37,6 +37,7 @@
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <boost/utility.hpp>
 
 
 namespace basegfx
@@ -48,8 +49,10 @@ namespace unotools
           ::com::sun::star::rendering::XBezierPolyPolygon2D,
           ::com::sun::star::lang::XServiceInfo > UnoPolyPolygonBase;
 
-    class BASEGFX_DLLPUBLIC UnoPolyPolygon : private cppu::BaseMutex,
-                           public UnoPolyPolygonBase
+    class BASEGFX_DLLPUBLIC UnoPolyPolygon
+        : private cppu::BaseMutex
+        , private boost::noncopyable
+        , public UnoPolyPolygonBase
     {
     public:
         explicit UnoPolyPolygon( const B2DPolyPolygon& );
@@ -96,15 +99,15 @@ namespace unotools
                                              sal_Int32 nNumberOfPoints ) const;
 
         /// Get cow copy of internal polygon. not thread-safe outside this object.
-        B2DPolyPolygon getPolyPolygonUnsafe() const;
+        B2DPolyPolygon getPolyPolygonUnsafe() const
+        {
+            return maPolyPoly;
+        }
 
         /// Called whenever internal polypolygon gets modified
         virtual void modifying() const {}
 
     private:
-        UnoPolyPolygon( const UnoPolyPolygon& );
-        UnoPolyPolygon& operator=( const UnoPolyPolygon& );
-
         B2DPolyPolygon                        maPolyPoly;
         ::com::sun::star::rendering::FillRule meFillRule;
     };
