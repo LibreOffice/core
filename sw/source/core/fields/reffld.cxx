@@ -1074,8 +1074,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
-    if( &rDestDoc != pDoc &&
-        rDestDoc.GetSysFldType( RES_GETREFFLD )->GetDepends() )
+    if( &rDestDoc != pDoc )
     {
         // dann gibt es im DestDoc RefFelder, also muessen im SourceDoc
         // alle RefFelder auf einduetige Ids in beiden Docs umgestellt
