@@ -64,6 +64,8 @@ void SwLabRec::SetFromItem( const SwLabItem& rItem )
     lUpper  = rItem.lUpper;
     nCols   = rItem.nCols;
     nRows   = rItem.nRows;
+    lPWidth  = rItem.lPWidth;
+    lPHeight = rItem.lPHeight;
     bCont   = rItem.bCont;
 }
 
@@ -76,6 +78,8 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.lLeft   = lLeft;
     rItem.lUpper  = lUpper;
     rItem.nCols   = nCols;
+    rItem.lPWidth  = lPWidth;
+    rItem.lPHeight = lPHeight;
     rItem.nRows   = nRows;
 }
 

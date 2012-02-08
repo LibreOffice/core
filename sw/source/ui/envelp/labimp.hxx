@@ -105,6 +105,8 @@ public:
     long            lHeight;
     long            lLeft;
     long            lUpper;
+    long            lPWidth;
+    long            lPHeight;
     sal_Int32       nCols;
     sal_Int32       nRows;
     sal_Bool        bCont;
