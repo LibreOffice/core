@@ -2108,13 +2108,13 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
     return true;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates)
+void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<TypedStrData>& rStrings, bool& rHasDates)
 {
     aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings, rHasDates );
 }
 
 void ScTable::GetFilteredFilterEntries(
-    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates )
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<TypedStrData>& rStrings, bool& rHasDates)
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
@@ -2135,7 +2135,7 @@ void ScTable::GetFilteredFilterEntries(
     rHasDates = bHasDates;
 }
 
-bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, bool bLimit)
+bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<TypedStrData>& rStrings, bool bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }

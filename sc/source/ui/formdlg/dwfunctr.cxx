@@ -899,7 +899,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
         }
         if (pHdl)
         {
-            if(pHdl->GetEditString().Len()==0)
+            if (pHdl->GetEditString().isEmpty())
             {
                 aString = '=';
                 aString += pAllFuncList->GetSelectEntry();

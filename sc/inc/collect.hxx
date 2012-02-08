@@ -42,8 +42,7 @@
 #define MAXDELTA                1024
 #define SCPOS_INVALID           USHRT_MAX
 
-#define SC_STRTYPE_VALUE        0
-#define SC_STRTYPE_STANDARD     1
+#include <boost/ptr_container/ptr_set.hpp>
 
 class ScDocument;
 
@@ -113,9 +112,8 @@ public:
 // TypedScStrCollection: wie ScStrCollection, nur, dass Zahlen vor Strings
 //                     sortiert werden
 
-class TypedStrData : public ScDataObject
+class TypedStrData
 {
-    friend class TypedScStrCollection;
 public:
     enum StringType {
         Value    = 0,
@@ -130,39 +128,48 @@ public:
 
     TypedStrData( const TypedStrData& rCpy );
 
-    virtual ScDataObject*   Clone() const;
-
     bool IsStrData() const;
     SC_DLLPUBLIC const rtl::OUString& GetString() const;
     double GetValue() const;
+    StringType GetStringType() const;
+
+    struct LessCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    {
+        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+    };
+
+    struct LessCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    {
+        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+    };
+
+    struct EqualCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    {
+        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+    };
+
+    struct EqualCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    {
+        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+    };
+
+    bool operator== (const TypedStrData& r) const;
+    bool operator< (const TypedStrData& r) const;
+
 
 private:
     rtl::OUString maStrValue;
     double mfValue;
-    StringType meStrType;           // 0 = Value
+    StringType meStrType;
 };
 
-class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection
+class FindTypedStrData : std::unary_function<TypedStrData, bool>
 {
-private:
-    sal_Bool    bCaseSensitive;
-
+    TypedStrData maVal;
+    bool mbCaseSens;
 public:
-    TypedScStrCollection( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false );
-
-    TypedScStrCollection( const TypedScStrCollection& rCpy )
-        : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
-    ~TypedScStrCollection();
-
-    virtual ScDataObject*       Clone() const;
-    virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
-
-    TypedStrData*   operator[]( const sal_uInt16 nIndex) const;
-
-    void    SetCaseSensitive( sal_Bool bSet );
-
-    sal_Bool    FindText( const String& rStart, String& rResult, sal_uInt16& rPos, sal_Bool bBack ) const;
-    sal_Bool    GetExactMatch( String& rString ) const;
+    FindTypedStrData(const TypedStrData& rVal, bool bCaseSens);
+    bool operator() (const TypedStrData& r) const;
 };
 
 #endif

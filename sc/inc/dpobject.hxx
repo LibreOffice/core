@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
 #include <set>
+#include <vector>
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -64,7 +65,6 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
-class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
 class ScDPTableData;
@@ -192,7 +192,7 @@ public:
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
-    void                FillPageList( TypedScStrCollection& rStrings, long nField );
+    void FillPageList( std::vector<rtl::OUString>& rStrings, long nField );
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 

@@ -62,7 +62,7 @@ class ScMarkData;
 class ScPatternAttr;
 class ScStyleSheet;
 class SvtBroadcaster;
-class TypedScStrCollection;
+class TypedStrData;
 class ScProgress;
 class ScPostIt;
 struct ScFunctionData;
@@ -379,8 +379,8 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
-    bool    GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, bool bLimit);
+    void GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<TypedStrData>& rStrings, bool& rHasDates);
+    bool GetDataEntries(SCROW nRow, std::set<TypedStrData>& rStrings, bool bLimit);
 
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable);

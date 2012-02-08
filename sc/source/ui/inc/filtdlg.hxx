@@ -44,6 +44,7 @@
 #include <map>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ class ScFilterDlg : public ScAnyRefDlg
 {
     struct EntryList : boost::noncopyable
     {
-        TypedScStrCollection maList;
+        std::vector<TypedStrData> maList;
         size_t mnHeaderPos;
         EntryList();
     };

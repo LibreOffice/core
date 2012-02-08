@@ -1425,7 +1425,7 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //
 
 bool ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<TypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1445,7 +1445,6 @@ bool ScDocument::GetFilterEntries(
 
             ScQueryParam aParam;
             pDBData->GetQueryParam( aParam );
-            rStrings.SetCaseSensitive( aParam.bCaseSens );
 
             // return all filter entries, if a filter condition is connected with a boolean OR
             if ( bFilter )
@@ -1471,6 +1470,17 @@ bool ScDocument::GetFilterEntries(
                 maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
+            if (aParam.bCaseSens)
+            {
+                std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
+                std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+            }
+            else
+            {
+                std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
+                std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+            }
+
             return true;
         }
     }
@@ -1482,12 +1492,23 @@ bool ScDocument::GetFilterEntries(
 //  GetFilterEntriesArea - Eintraege fuer Filter-Dialog
 //
 
-bool ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
+bool ScDocument::GetFilterEntriesArea(
+    SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
+    std::vector<TypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
+        if (bCaseSens)
+        {
+            std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
+            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+        }
+        else
+        {
+            std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
+            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+        }
         return true;
     }
 
@@ -1498,8 +1519,9 @@ bool ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRo
 //  GetDataEntries - Eintraege fuer Auswahlliste-Listbox (keine Zahlen / Formeln)
 //
 
-bool ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    TypedScStrCollection& rStrings, bool bLimit )
+bool ScDocument::GetDataEntries(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+    std::vector<TypedStrData>& rStrings, bool bLimit )
 {
     if( !bLimit )
     {
@@ -1511,23 +1533,53 @@ bool ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             const ScValidationData* pData = GetValidationEntry( nValidation );
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
+            {
+                if (pData->GetListType() == ValidListType::SORTEDASCENDING)
+                {
+                    if (bCaseSens)
+                    {
+                        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
+                        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+                    }
+                    else
+                    {
+                        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
+                        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+                    }
+                }
                 return true;
+            }
         }
     }
 
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()))
+        return false;
+
+    if (!maTabs[nTab])
+        return false;
+
+    std::set<TypedStrData> aStrings;
+    bool bRet = maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
+    rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
+    if (bCaseSens)
+    {
+        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
+        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+    }
+    else
+    {
+        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
+        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+    }
+
+    return bRet;
 }
 
 //
 //  GetFormulaEntries - Eintraege fuer Formel-AutoEingabe
 //
 
-//  Funktionen werden als 1 schon vom InputHandler eingefuegt
-#define SC_STRTYPE_NAMES        2
-#define SC_STRTYPE_DBNAMES      3
-#define SC_STRTYPE_HEADERS      4
-
-bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
+bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
     //
     //  Bereichsnamen
@@ -1537,11 +1589,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
     {
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
-        {
-            TypedStrData* pNew = new TypedStrData(itr->second->GetName(), 0.0, TypedStrData::Name);
-            if (!rStrings.Insert(pNew))
-                delete pNew;
-        }
+            rStrings.insert(TypedStrData(itr->second->GetName(), 0.0, TypedStrData::Name));
     }
 
     //
@@ -1553,11 +1601,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-        {
-            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, TypedStrData::DbName);
-            if ( !rStrings.Insert(pNew) )
-                delete pNew;
-        }
+            rStrings.insert(TypedStrData(itr->GetName(), 0.0, TypedStrData::DbName));
     }
 
     //
@@ -1580,9 +1624,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
                     if ( pCell->HasStringData() )
                     {
                         rtl::OUString aStr = pCell->GetStringData();
-                        TypedStrData* pNew = new TypedStrData(aStr, 0.0, TypedStrData::Header);
-                        if ( !rStrings.Insert(pNew) )
-                            delete pNew;
+                        rStrings.insert(TypedStrData(aStr, 0.0, TypedStrData::Header));
                     }
             }
     }

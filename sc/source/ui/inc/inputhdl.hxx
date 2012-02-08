@@ -31,9 +31,13 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "types.hxx"
+
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <editeng/svxenum.hxx>
+
+#include <set>
 
 class ScDocument;
 class ScTabView;
@@ -45,7 +49,7 @@ class ScEditEngineDefaulter;
 class EditView;
 class EditTextObject;
 class ScInputHdlState;
-class TypedScStrCollection;
+class TypedStrData;
 class ScRangeFindList;
 class Timer;
 class KeyEvent;
@@ -66,20 +70,21 @@ private:
     EditView*               pTableView;                 // aktive EditView dazu
     EditView*               pTopView;                   // EditView in der Eingabezeile
 
-    TypedScStrCollection*       pColumnData;
-    TypedScStrCollection*       pFormulaData;
-    TypedScStrCollection*       pFormulaDataPara;
+    ScTypedCaseStrSet* pColumnData;
+    ScTypedCaseStrSet* pFormulaData;
+    ScTypedCaseStrSet* pFormulaDataPara;
+    ScTypedCaseStrSet::const_iterator miAutoPos;
+
     Window*                 pTipVisibleParent;
     sal_uLong                   nTipVisible;
     Window*                 pTipVisibleSecParent;
     sal_uLong                   nTipVisibleSec;
     String                  aManualTip;
-    String                  aAutoSearch;
-    sal_uInt16                  nAutoPos;
+    rtl::OUString           aAutoSearch;
     sal_Bool                    bUseTab;                    // Blaettern moeglich
 
     sal_Bool                    bTextValid;                 // Text noch nicht in Edit-Engine
-    String                  aCurrentText;
+    rtl::OUString           aCurrentText;
 
     String                  aFormText;                  // fuer Funktions-Autopilot
     xub_StrLen              nFormSelStart;              // Selektion fuer Funktions-Autopilot
@@ -173,7 +178,7 @@ public:
                                                   eMode != SC_INPUT_TYPE); }
     sal_Bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
 
-    const String&   GetEditString();
+    const rtl::OUString& GetEditString();
     const String&   GetFormString() const   { return aFormText; }
 
     const ScAddress& GetCursorPos() const   { return aCursorPos; }

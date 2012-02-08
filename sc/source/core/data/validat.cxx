@@ -601,13 +601,6 @@ sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
     return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
 }
 
-/** Inserts the passed string object. Always takes ownership. pData is invalid after this call! */
-void lclInsertStringToCollection( TypedScStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
-{
-    if( !(bSorted ? rStrColl.Insert( pData ) : rStrColl.AtInsert( rStrColl.GetCount(), pData )) )
-        delete pData;
-}
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -617,11 +610,9 @@ bool ScValidationData::HasSelectionList() const
     return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
 }
 
-bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
-                                                ScBaseCell* pCell,
-                                                const ScAddress& rPos,
-                                                const ScTokenArray& rTokArr,
-                                                int& rMatch ) const
+bool ScValidationData::GetSelectionFromFormula(
+    std::vector<TypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+    const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
 
@@ -676,7 +667,6 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
 
-    bool    bSortList = (mnListType == ValidListType::SORTEDASCENDING);
     SCSIZE  nCol, nRow, nCols, nRows, n = 0;
     pValues->GetDimensions( nCols, nRows );
 
@@ -783,7 +773,8 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
 
             if( NULL != pEntry )
             {
-                lclInsertStringToCollection( *pStrings, pEntry, bSortList );
+                pStrings->push_back(*pEntry);
+                delete pEntry;
                 n++;
             }
         }
@@ -794,28 +785,25 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     return bOk || NULL == pCell;
 }
 
-bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const ScAddress& rPos ) const
+bool ScValidationData::FillSelectionList(std::vector<TypedStrData>& rStrColl, const ScAddress& rPos) const
 {
     bool bOk = false;
 
     if( HasSelectionList() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<ScTokenArray> pTokArr( CreateTokenArry(0) );
 
         // *** try if formula is a string list ***
 
-        bool bSortList = (mnListType == ValidListType::SORTEDASCENDING);
         sal_uInt32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
         ScStringTokenIterator aIt( *pTokArr );
         for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
         {
             double fValue;
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
-            TypedStrData* pData = new TypedStrData(
-                *pString, fValue, bIsValue ? TypedStrData::Value : TypedStrData::Standard);
-            lclInsertStringToCollection( rStrColl, pData, bSortList );
+            rStrColl.push_back(
+                TypedStrData(
+                    *pString, fValue, bIsValue ? TypedStrData::Value : TypedStrData::Standard));
         }
         bOk = aIt.Ok();
 

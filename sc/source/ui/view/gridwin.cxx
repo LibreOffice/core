@@ -137,6 +137,8 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 
+#include <vector>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -688,14 +690,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the check box list.
     bool bHasDates = false;
-    TypedScStrCollection aStrings(128, 128);
+    std::vector<TypedStrData> aStrings;
     pDoc->GetFilterEntries(nCol, nRow, nTab, true, aStrings, bHasDates);
 
-    sal_uInt16 nCount = aStrings.GetCount();
-    mpAutoFilterPopup->setMemberSize(nCount);
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    mpAutoFilterPopup->setMemberSize(aStrings.size());
+    std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+    for (; it != itEnd; ++it)
     {
-        rtl::OUString aVal = aStrings[i]->GetString();
+        const rtl::OUString& aVal = it->GetString();
         bool bSelected = true;
         if (!aSelected.empty())
             bSelected = aSelected.count(aVal) > 0;
@@ -825,7 +827,6 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
     delete pFilterBox;
     delete pFilterFloat;
 
-    sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
@@ -864,7 +865,7 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 
     //  SetSize comes later
 
-    TypedScStrCollection aStrings( 128, 128 );
+    std::vector<rtl::OUString> aStrings;
 
     //  get list box entries and selection
     sal_Bool bHasCurrentPage = false;
@@ -898,18 +899,19 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 
     //  include all entry widths for the size of the drop-down
     long nMaxText = 0;
-    sal_uInt16 nCount = aStrings.GetCount();
-    for (i=0; i<nCount; i++)
     {
-        TypedStrData* pData = aStrings[i];
-        long nTextWidth = pFilterBox->GetTextWidth( pData->GetString() );
-        if ( nTextWidth > nMaxText )
-            nMaxText = nTextWidth;
+        std::vector<rtl::OUString>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        for (; it != itEnd; ++it)
+        {
+            long nTextWidth = pFilterBox->GetTextWidth(*it);
+            if ( nTextWidth > nMaxText )
+                nMaxText = nTextWidth;
+        }
     }
 
     //  add scrollbar width if needed (string entries are counted here)
     //  (scrollbar is shown if the box is exactly full?)
-    if ( nCount >= SC_FILTERLISTBOX_LINES )
+    if (aStrings.size() >= SC_FILTERLISTBOX_LINES)
         nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
 
     nMaxText += 4;              // for borders
@@ -935,20 +937,23 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
     pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS);
 
     //  fill the list box
-    sal_Bool bWait = ( nCount > 100 );
+    bool bWait = aStrings.size() > 100;
 
     if (bWait)
         EnterWait();
 
-    for (i=0; i<nCount; i++)
-        pFilterBox->InsertEntry( aStrings[i]->GetString() );
+    {
+        std::vector<rtl::OUString>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        for (; it != itEnd; ++it)
+            pFilterBox->InsertEntry(*it);
+    }
 
     pFilterBox->SetSeparatorPos( 0 );
 
     if (bWait)
         LeaveWait();
 
-    pFilterBox->SetUpdateMode(sal_True);
+    pFilterBox->SetUpdateMode(true);
 
     sal_uInt16 nSelPos = LISTBOX_ENTRY_NOTFOUND;
     if (bHasCurrentPage)
@@ -1114,12 +1119,6 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     CaptureMouse();
 }
 
-namespace {
-
-
-
-}
-
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
     delete pFilterBox;
@@ -1165,15 +1164,14 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     //  SetSize spaeter
 
-    sal_Bool bEmpty = false;
-    TypedScStrCollection aStrings( 128, 128 );
+    bool bEmpty = false;
+    std::vector<TypedStrData> aStrings; // case sensitive
     if ( bDataSelect )                                  // Auswahl-Liste
     {
         //  Liste fuellen
-        aStrings.SetCaseSensitive( sal_True );
-        pDoc->GetDataEntries( nCol, nRow, nTab, aStrings );
-        if ( aStrings.GetCount() == 0 )
-            bEmpty = sal_True;
+        pDoc->GetDataEntries(nCol, nRow, nTab, true, aStrings);
+        if (aStrings.empty())
+            bEmpty = true;
     }
     else                                                // AutoFilter
     {
@@ -1186,7 +1184,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
         //  default entries
         static const sal_uInt16 nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_EMPTY, SCSTR_NOTEMPTY };
-        const sal_uInt16 nDefCount = SAL_N_ELEMENTS(nDefIDs);
+        const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
             String aEntry( (ScResId) nDefIDs[i] );
@@ -1204,13 +1202,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
-        sal_uInt16 nCount = aStrings.GetCount();
-        for (i=0; i<nCount; i++)
+        std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        for (; it != itEnd; ++it)
         {
-            TypedStrData* pData = aStrings[i];
-            if ( !pData->IsStrData() )              // only numerical entries
+            if (!it->IsStrData())              // only numerical entries
             {
-                long nTextWidth = pFilterBox->GetTextWidth( pData->GetString() );
+                long nTextWidth = pFilterBox->GetTextWidth(it->GetString());
                 if ( nTextWidth > nMaxText )
                     nMaxText = nTextWidth;
             }
@@ -1218,7 +1215,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
         //  add scrollbar width if needed (string entries are counted here)
         //  (scrollbar is shown if the box is exactly full?)
-        if ( nCount + nDefCount >= SC_FILTERLISTBOX_LINES )
+        if (aStrings.size() + nDefCount >= SC_FILTERLISTBOX_LINES)
             nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
 
         nMaxText += 4;              // for borders
@@ -1248,19 +1245,19 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS);
 
         //  Listbox fuellen
-        sal_uInt16 nCount = aStrings.GetCount();
-        sal_Bool bWait = ( nCount > 100 );
+        bool bWait = aStrings.size() > 100;
 
         if (bWait)
             EnterWait();
 
-        for (i=0; i<nCount; i++)
-            pFilterBox->InsertEntry( aStrings[i]->GetString() );
+        std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        for (; it != itEnd; ++it)
+            pFilterBox->InsertEntry(it->GetString());
 
         if (bWait)
             LeaveWait();
 
-        pFilterBox->SetUpdateMode(sal_True);
+        pFilterBox->SetUpdateMode(true);
     }
 
     sal_uInt16 nSelPos = LISTBOX_ENTRY_NOTFOUND;
@@ -1329,17 +1326,22 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                 bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
                 if ( bSortList )
                 {
-                    sal_uInt16 nStrIndex;
-                    if (aStrings.Search(pNew,nStrIndex))
-                        nSelPos = nStrIndex;
+                    std::vector<TypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                    std::vector<TypedStrData>::const_iterator it =
+                        std::find_if(itBeg, itEnd, FindTypedStrData(*pNew, true));
+                    if (it != itEnd)
+                        // Found!
+                        nSelPos = std::distance(itBeg, it);
                 }
                 else
                 {
-                    sal_uInt16 nCount = aStrings.GetCount();
-                    for (i = 0; ((i < nCount) && ( LISTBOX_ENTRY_NOTFOUND == nSelPos)); i++)
+                    TypedStrData::EqualCaseSensitive aHdl;
+                    std::vector<TypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                    std::vector<TypedStrData>::const_iterator it = itBeg;
+                    for (; it != itEnd && LISTBOX_ENTRY_NOTFOUND == nSelPos; ++it)
                     {
-                        if ( aStrings.Compare(aStrings[i], pNew)==0 )
-                            nSelPos = i;
+                        if (aHdl(*it, *pNew))
+                            nSelPos = std::distance(itBeg, it);
                     }
                 }
                 delete pNew;

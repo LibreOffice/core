@@ -37,7 +37,7 @@ namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 
 class ScPatternAttr;
 class ScTokenArray;
-class TypedScStrCollection;
+class TypedStrData;
 
 enum ScValidationMode
 {
@@ -131,7 +131,7 @@ public:
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
         @param rStrings  (out-param) The string list to fill with list validation entires.
         @return  true = rStrings has been filled with at least one entry. */
-    bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
+    bool FillSelectionList(std::vector<TypedStrData>& rStrings, const ScAddress& rPos) const;
 
                     //  with string: during input, with cell: for detective / RC_FORCED
     sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
@@ -165,9 +165,9 @@ private:
         @param rTokArr   Formula token array.
         @param rMatch    (out-param) the index of the first item that matched, -1 if nothing matched.
         @return  true = Cell range found, rRange is valid, or an error entry stuffed into the list if pCell==NULL. */
-    bool            GetSelectionFromFormula( TypedScStrCollection* pStrings,
-                                             ScBaseCell* pCell, const ScAddress& rPos,
-                                             const ScTokenArray& rTokArr, int& rMatch ) const;
+    bool GetSelectionFromFormula(
+        std::vector<TypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+        const ScTokenArray& rTokArr, int& rMatch) const;
 
     /** Tests, if pCell is equal to what the passed token array represents. */
     bool            IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const;

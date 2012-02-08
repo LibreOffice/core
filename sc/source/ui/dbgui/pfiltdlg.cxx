@@ -346,22 +346,18 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
                 SCROW   nLastRow    = theQueryData.nRow2;
                 nFirstRow++;
                 bool bHasDates = false;
-
-                pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
-                pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
-                pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nLastRow,
-                                            nTab, *pEntryLists[nColumn], bHasDates );
+                bool bCaseSens = aBtnCase.IsChecked();
+                pEntryLists[nColumn] = new std::vector<TypedStrData>;
+                pDoc->GetFilterEntriesArea(
+                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *pEntryLists[nColumn], bHasDates);
             }
 
-            TypedScStrCollection* pColl = pEntryLists[nColumn];
-            sal_uInt16 nValueCount = pColl->GetCount();
-            if ( nValueCount > 0 )
+            std::vector<TypedStrData>* pColl = pEntryLists[nColumn];
+            std::vector<TypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
+            for (; it != itEnd; ++it)
             {
-                for ( sal_uInt16 i=0; i<nValueCount; i++ )
-                {
-                    pValList->InsertEntry( (*pColl)[i]->GetString(), nListPos );
-                    nListPos++;
-                }
+                pValList->InsertEntry(it->GetString(), nListPos);
+                nListPos++;
             }
         }
         pValList->SetText( aCurValue );

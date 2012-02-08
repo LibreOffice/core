@@ -67,7 +67,6 @@ using ::rtl::OUStringBuffer;
 #define INVALID_HEADER_POS std::numeric_limits<size_t>::max()
 
 ScFilterDlg::EntryList::EntryList() :
-    maList(128, 128),
     mnHeaderPos(INVALID_HEADER_POS) {}
 
 ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -500,11 +499,10 @@ void ScFilterDlg::FillFieldLists()
     }
 }
 
-
-//----------------------------------------------------------------------------
-
 void ScFilterDlg::UpdateValueList( size_t nList )
 {
+    bool bCaseSens = aBtnCase.IsChecked();
+
     if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
         ComboBox*   pValList        = maValueEdArr[nList-1];
@@ -541,44 +539,51 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                     return;
 
                 pList = r.first->second;
-                pList->maList.SetCaseSensitive(aBtnCase.IsChecked());
-                pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
-                                            nTab, pList->maList, maHasDates[nOffset+nList-1] );
+                pDoc->GetFilterEntriesArea(
+                    nColumn, nFirstRow+1, nLastRow,
+                    nTab, bCaseSens, pList->maList, maHasDates[nOffset+nList-1] );
 
                 // Entry for the first line
                 //! Entry (pHdrEntry) doesn't generate collection?
 
                 pList->mnHeaderPos = INVALID_HEADER_POS;
-                TypedScStrCollection aHdrColl( 1, 1 );
+                std::vector<TypedStrData> aHdrColl;
                 bool bDummy = false;
-                pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nFirstRow,
-                                            nTab, aHdrColl, bDummy );
-                TypedStrData* pHdrEntry = aHdrColl[0];
-                if ( pHdrEntry )
+                pDoc->GetFilterEntriesArea(
+                    nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl, bDummy );
+                if (!aHdrColl.empty())
                 {
-                    TypedStrData* pNewEntry = new TypedStrData(*pHdrEntry);
-                    if ( pList->maList.Insert(pNewEntry) )
+                    // See if the header value is already in the list.
+                    std::vector<TypedStrData>::iterator itBeg = pList->maList.begin(), itEnd = pList->maList.end();
+                    std::vector<TypedStrData>::iterator it = std::find_if(
+                        itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
+                    if (it == itEnd)
                     {
-                        pList->mnHeaderPos = pList->maList.IndexOf(pNewEntry);
-                        OSL_ENSURE( pList->mnHeaderPos != INVALID_HEADER_POS,
-                                    "Header-Eintrag nicht wiedergefunden" );
+                        // Not in the list. Insert it.
+                        pList->maList.push_back(aHdrColl.front());
+                        if (bCaseSens)
+                            std::sort(pList->maList.begin(), pList->maList.end(), TypedStrData::LessCaseSensitive());
+                        else
+                            std::sort(pList->maList.begin(), pList->maList.end(), TypedStrData::LessCaseInsensitive());
+
+                        // Record its position.
+                        itBeg = pList->maList.begin();
+                        itEnd = pList->maList.end();
+                        it = std::find_if(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
+                        pList->mnHeaderPos = std::distance(itBeg, it);
                     }
-                    else
-                        delete pNewEntry;           // was already there
                 }
             }
             else
                 pList = &maEntryLists[nColumn];
 
             OSL_ASSERT(pList);
-            sal_uInt16 nValueCount = pList->maList.GetCount();
-            if ( nValueCount > 0 )
+
+            std::vector<TypedStrData>::const_iterator it = pList->maList.begin(), itEnd = pList->maList.end();
+            for (; it != itEnd; ++it)
             {
-                for ( sal_uInt16 i=0; i<nValueCount; i++ )
-                {
-                    pValList->InsertEntry(pList->maList[i]->GetString(), nListPos);
-                    nListPos++;
-                }
+                pValList->InsertEntry(it->GetString(), nListPos);
+                nListPos++;
             }
         }
         pValList->SetText( aCurValue );
@@ -616,14 +621,9 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     ComboBox* pValList = maValueEdArr[nList-1];
     size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
-    TypedStrData* pHdrEntry = maEntryLists[nColumn].maList[nPos];
-    if (!pHdrEntry)
-    {
-        OSL_FAIL("Eintag in Liste nicht gefunden");
-        return;
-    }
+    const TypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
 
-    rtl::OUString aHdrStr = pHdrEntry->GetString();
+    const rtl::OUString& aHdrStr = rHdrEntry.GetString();
     bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
     bool bInclude = !aBtnHeader.IsChecked();
 

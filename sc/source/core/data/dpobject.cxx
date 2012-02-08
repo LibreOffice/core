@@ -979,7 +979,7 @@ long ScDPObject::GetDimCount()
     return nRet;
 }
 
-void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
+void ScDPObject::FillPageList( std::vector<rtl::OUString>& rStrings, long nField )
 {
     //! merge members access with ToggleDetails?
 
@@ -1060,16 +1060,12 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
         if (bVisible)
         {
             // use the order from getElementNames
-            TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
-            if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
-                delete pData;
+            rStrings.push_back(pNameArr[nPos]);
         }
     }
 
     //  add "-all-" entry to the top (unsorted)
-    TypedStrData* pAllData = new TypedStrData( String( ScResId( SCSTR_ALL ) ) );    //! separate string? (also output)
-    if ( !rStrings.AtInsert( 0, pAllData ) )
-        delete pAllData;
+    rStrings.insert(rStrings.begin(), ScResId::toString(ScResId(SCSTR_ALL)));
 }
 
 void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHeaderData& rData)

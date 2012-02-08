@@ -306,6 +306,68 @@ sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) c
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
+bool TypedStrData::LessCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return left.meStrType < right.meStrType;
+
+    if (left.meStrType == Value)
+        return left.mfValue < right.mfValue;
+
+    return ScGlobal::GetCaseTransliteration()->compareString(
+        left.maStrValue, right.maStrValue) < 0;
+}
+
+bool TypedStrData::LessCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return left.meStrType < right.meStrType;
+
+    if (left.meStrType == Value)
+        return left.mfValue < right.mfValue;
+
+    return ScGlobal::GetpTransliteration()->compareString(
+        left.maStrValue, right.maStrValue) < 0;
+}
+
+bool TypedStrData::EqualCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return false;
+
+    if (left.meStrType == Value && left.mfValue != right.mfValue)
+        return false;
+
+    return ScGlobal::GetCaseTransliteration()->compareString(
+        left.maStrValue, right.maStrValue) == 0;
+}
+
+bool TypedStrData::EqualCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return false;
+
+    if (left.meStrType == Value && left.mfValue != right.mfValue)
+        return false;
+
+    return ScGlobal::GetpTransliteration()->compareString(
+        left.maStrValue, right.maStrValue) == 0;
+}
+
+bool TypedStrData::operator== (const TypedStrData& r) const
+{
+    // Case insensitive comparison by default.
+    EqualCaseInsensitive aHdl;
+    return aHdl(*this, r);
+}
+
+bool TypedStrData::operator< (const TypedStrData& r) const
+{
+    // Case insensitive comparison by default.
+    LessCaseInsensitive aHdl;
+    return aHdl(*this, r);
+}
+
 TypedStrData::TypedStrData(
     const rtl::OUString& rStr, double nVal, StringType nType ) :
     maStrValue(rStr),
@@ -313,15 +375,9 @@ TypedStrData::TypedStrData(
     meStrType(nType) {}
 
 TypedStrData::TypedStrData( const TypedStrData& rCpy ) :
-    ScDataObject(),
     maStrValue(rCpy.maStrValue),
     mfValue(rCpy.mfValue),
     meStrType(rCpy.meStrType) {}
-
-ScDataObject* TypedStrData::Clone() const
-{
-    return new TypedStrData(*this);
-}
 
 bool TypedStrData::IsStrData() const
 {
@@ -333,171 +389,31 @@ const rtl::OUString& TypedStrData::GetString() const
     return maStrValue;
 }
 
-double TypedStrData::GetValue () const
+double TypedStrData::GetValue() const
 {
     return mfValue;
 }
 
-TypedScStrCollection::TypedScStrCollection( sal_uInt16 nLim , sal_uInt16 nDel , sal_Bool bDup  )
-    : ScSortedCollection( nLim, nDel, bDup )
+TypedStrData::StringType TypedStrData::GetStringType() const
 {
-    bCaseSensitive = false;
+    return meStrType;
 }
 
-TypedScStrCollection::~TypedScStrCollection()
-{}
-ScDataObject* TypedScStrCollection::Clone() const
-{
-    return new TypedScStrCollection(*this);
-}
+FindTypedStrData::FindTypedStrData(const TypedStrData& rVal, bool bCaseSens) :
+    maVal(rVal), mbCaseSens(bCaseSens) {}
 
-TypedStrData*    TypedScStrCollection::operator[]( const sal_uInt16 nIndex) const
+bool FindTypedStrData::operator() (const TypedStrData& r) const
 {
-    return (TypedStrData*)At(nIndex);
-}
-
-void    TypedScStrCollection::SetCaseSensitive( sal_Bool bSet )
-{
-    bCaseSensitive = bSet;
-}
-
-short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const
-{
-    short nResult = 0;
-
-    if ( pKey1 && pKey2 )
+    if (mbCaseSens)
     {
-        TypedStrData& rData1 = (TypedStrData&)*pKey1;
-        TypedStrData& rData2 = (TypedStrData&)*pKey2;
-
-        if ( rData1.meStrType > rData2.meStrType )
-            nResult = 1;
-        else if ( rData1.meStrType < rData2.meStrType )
-            nResult = -1;
-        else if ( !rData1.meStrType /* && !rData2.nStrType */ )
-        {
-            //--------------------
-            // Zahlen vergleichen:
-            //--------------------
-            if ( rData1.mfValue == rData2.mfValue )
-                nResult = 0;
-            else if ( rData1.mfValue < rData2.mfValue )
-                nResult = -1;
-            else
-                nResult = 1;
-        }
-        else /* if ( rData1.nStrType && rData2.nStrType ) */
-        {
-            //---------------------
-            // Strings vergleichen:
-            //---------------------
-            if ( bCaseSensitive )
-                nResult = (short) ScGlobal::GetCaseTransliteration()->compareString(
-                    rData1.maStrValue, rData2.maStrValue );
-            else
-                nResult = (short) ScGlobal::GetpTransliteration()->compareString(
-                    rData1.maStrValue, rData2.maStrValue );
-        }
+        TypedStrData::EqualCaseSensitive aHdl;
+        return aHdl(maVal, r);
     }
-
-    return nResult;
+    else
+    {
+        TypedStrData::EqualCaseInsensitive aHdl;
+        return aHdl(maVal, r);
+    }
 }
-
-sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
-                                    sal_uInt16& rPos, sal_Bool bBack ) const
-{
-    //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
-    //  alles durchsucht werden
-
-    sal_Bool bFound = false;
-
-    String aOldResult;
-    if ( rPos != SCPOS_INVALID && rPos < nCount )
-    {
-        TypedStrData* pData = (TypedStrData*) pItems[rPos];
-        if (pData->meStrType)
-            aOldResult = pData->maStrValue;
-    }
-
-    if ( bBack )                                    // rueckwaerts
-    {
-        sal_uInt16 nStartPos = nCount;
-        if ( rPos != SCPOS_INVALID )
-            nStartPos = rPos;                       // weitersuchen...
-
-        for ( sal_uInt16 i=nStartPos; i>0; )
-        {
-            --i;
-            TypedStrData* pData = (TypedStrData*) pItems[i];
-            if (pData->meStrType)
-            {
-                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->maStrValue ) )
-                {
-                    //  If the collection is case sensitive, it may contain several entries
-                    //  that are equal when compared case-insensitive. They are skipped here.
-                    if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::GetpTransliteration()->isEqual(
-                            pData->maStrValue, aOldResult ) )
-                    {
-                        rResult = pData->maStrValue;
-                        rPos = i;
-                        bFound = sal_True;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    else                                            // vorwaerts
-    {
-        sal_uInt16 nStartPos = 0;
-        if ( rPos != SCPOS_INVALID )
-            nStartPos = rPos + 1;                   // weitersuchen...
-
-        for ( sal_uInt16 i=nStartPos; i<nCount; i++ )
-        {
-            TypedStrData* pData = (TypedStrData*) pItems[i];
-            if (pData->meStrType)
-            {
-                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->maStrValue ) )
-                {
-                    //  If the collection is case sensitive, it may contain several entries
-                    //  that are equal when compared case-insensitive. They are skipped here.
-                    if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::GetpTransliteration()->isEqual(
-                            pData->maStrValue, aOldResult ) )
-                    {
-                        rResult = pData->maStrValue;
-                        rPos = i;
-                        bFound = sal_True;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return bFound;
-}
-
-        // Gross-/Kleinschreibung anpassen
-
-sal_Bool TypedScStrCollection::GetExactMatch( String& rString ) const
-{
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        TypedStrData* pData = (TypedStrData*) pItems[i];
-        if ( pData->meStrType && ScGlobal::GetpTransliteration()->isEqual(
-                pData->maStrValue, rString ) )
-        {
-            rString = pData->maStrValue;                         // String anpassen
-            return sal_True;
-        }
-    }
-
-    return false;
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

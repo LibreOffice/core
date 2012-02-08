@@ -1516,77 +1516,76 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<TypedStrData>& rStrings, bool& rHasDates)
 {
     bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     rtl::OUString aString;
-    SCROW nRow = 0;
     SCSIZE nIndex;
 
     Search( nStartRow, nIndex );
 
-    while ( (nIndex < maItems.size()) ? ((nRow=maItems[nIndex].nRow) <= nEndRow) : false )
+    for (; nIndex < maItems.size(); ++nIndex)
     {
+        SCROW nRow = maItems[nIndex].nRow;
+        if (nRow > nEndRow)
+            break;
+
         ScBaseCell* pCell = maItems[nIndex].pCell;
-        TypedStrData* pData = NULL;
         sal_uLong nFormat = GetNumberFormat( nRow );
 
         ScCellFormat::GetInputString( pCell, nFormat, aString, *pFormatter );
 
         if ( pDocument->HasStringData( nCol, nRow, nTab ) )
-            pData = new TypedStrData( aString );
-        else
         {
-            double nValue = 0.0;
+            rStrings.push_back(TypedStrData(aString));
+            continue;
+        }
 
-            switch ( pCell->GetCellType() )
-            {
-                case CELLTYPE_VALUE:
-                    nValue = ((ScValueCell*)pCell)->GetValue();
-                    break;
+        double nValue = 0.0;
 
-                case CELLTYPE_FORMULA:
-                {
-                    ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
-                    sal_uInt16 nErr = pFC->GetErrCode();
-                    if (nErr)
-                    {
-                        // Error cell is evaluated as string (for now).
-                        String aErr = ScGlobal::GetErrorString(nErr);
-                        if (aErr.Len())
-                            pData = new TypedStrData(aErr);
-                    }
-                    else
-                        nValue = pFC->GetValue();
-                }
+        switch ( pCell->GetCellType() )
+        {
+            case CELLTYPE_VALUE:
+                nValue = ((ScValueCell*)pCell)->GetValue();
                 break;
 
-                default:
-                    ;
-            }
-
-            if (!pData)
+            case CELLTYPE_FORMULA:
             {
-                if (pFormatter)
+                ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
+                sal_uInt16 nErr = pFC->GetErrCode();
+                if (nErr)
                 {
-                    short nType = pFormatter->GetType(nFormat);
-                    if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                    // Error cell is evaluated as string (for now).
+                    String aErr = ScGlobal::GetErrorString(nErr);
+                    if (aErr.Len())
                     {
-                        // special case for date values.  Disregard the time
-                        // element if the number format is of date type.
-                        nValue = ::rtl::math::approxFloor(nValue);
-                        bHasDates = true;
+                        rStrings.push_back(TypedStrData(aErr));
+                        continue;
                     }
                 }
-                pData = new TypedStrData(aString, nValue, TypedStrData::Value);
+                else
+                    nValue = pFC->GetValue();
+            }
+            break;
+
+            default:
+                ;
+        }
+
+        if (pFormatter)
+        {
+            short nType = pFormatter->GetType(nFormat);
+            if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+            {
+                // special case for date values.  Disregard the time
+                // element if the number format is of date type.
+                nValue = ::rtl::math::approxFloor(nValue);
+                bHasDates = true;
             }
         }
 
-        if ( !rStrings.Insert( pData ) )
-            delete pData;                               // doppelt
-
-        ++nIndex;
+        rStrings.push_back(TypedStrData(aString, nValue, TypedStrData::Value));
     }
 
     rHasDates = bHasDates;
@@ -1602,7 +1601,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 #define DATENT_SEARCH   2000
 
 
-bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, bool bLimit)
+bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<TypedStrData>& rStrings, bool bLimit)
 {
     sal_Bool bFound = false;
     SCSIZE nThisIndex;
@@ -1633,10 +1632,8 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, b
                 else
                     ((ScEditCell*)pCell)->GetString(aString);
 
-                TypedStrData* pData = new TypedStrData(aString);
-                if ( !rStrings.Insert( pData ) )
-                    delete pData;                                           // doppelt
-                else if ( bLimit && rStrings.GetCount() >= DATENT_MAX )
+                bool bInserted = rStrings.insert(TypedStrData(aString)).second;
+                if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
                     break;                                                  // Maximum erreicht
                 bFound = true;
 
@@ -1658,10 +1655,8 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, b
                 else
                     ((ScEditCell*)pCell)->GetString(aString);
 
-                TypedStrData* pData = new TypedStrData(aString);
-                if ( !rStrings.Insert( pData ) )
-                    delete pData;                                           // doppelt
-                else if ( bLimit && rStrings.GetCount() >= DATENT_MAX )
+                bool bInserted = rStrings.insert(TypedStrData(aString)).second;
+                if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
                     break;                                                  // Maximum erreicht
                 bFound = true;
 

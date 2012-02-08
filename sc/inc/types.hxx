@@ -29,12 +29,16 @@
 #ifndef __SC_TYPES_HXX__
 #define __SC_TYPES_HXX__
 
+#include "collect.hxx"
+
 #include <boost/intrusive_ptr.hpp>
 
 class ScMatrix;
 
 typedef ::boost::intrusive_ptr<ScMatrix>        ScMatrixRef;
 typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
+
+typedef std::set<TypedStrData, TypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
 
 #endif
 

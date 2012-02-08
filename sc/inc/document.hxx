@@ -118,7 +118,6 @@ class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
 class ScViewOptions;
-class TypedScStrCollection;
 class ScChangeTrack;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
@@ -1479,13 +1478,23 @@ public:
                                         SCTAB nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rStr);
 
-    bool            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
-    SC_DLLPUBLIC bool           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates );
-    bool            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedScStrCollection& rStrings, bool bLimit = false );
-    bool            GetFormulaEntries( TypedScStrCollection& rStrings );
+    /**
+     * Get a list of unique strings to use in filtering criteria.  The string
+     * values are sorted, and there are no duplicate values in the list.  The
+     * data range to use to populate the filter entries is inferred from the
+     * database range that contains the specified cell position.
+     */
+    bool GetFilterEntries(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<TypedStrData>& rStrings, bool& rHasDates);
+
+    SC_DLLPUBLIC bool GetFilterEntriesArea(
+        SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
+        std::vector<TypedStrData>& rStrings, bool& rHasDates);
+
+    bool GetDataEntries(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+        std::vector<TypedStrData>& rStrings, bool bLimit = false );
+    bool GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
