@@ -95,13 +95,13 @@ ALLTAR  : $(LOCALPYFILES)
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall ooohelppack
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack)
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall ooohelppack sdkooall
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
 .ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
@@ -109,13 +109,13 @@ ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) 
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficedevall ooodevhelppack
 .ELSE
-ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack)
+ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficedevall ooodevhelppack sdkoodevall
 .ELSE
-ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
+ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US) sdkoodev_en-US
 .ENDIF
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
