@@ -910,6 +910,10 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
         // Copy the custom print range if exists.
         maTabs[nNewPos]->CopyPrintRange(*maTabs[nOldPos]);
+
+        // Copy the RTL settings
+        maTabs[nNewPos]->SetLayoutRTL(maTabs[nOldPos]->IsLayoutRTL());
+        maTabs[nNewPos]->SetLoadingRTL(maTabs[nOldPos]->IsLoadingRTL());
     }
     else
         SetAutoCalc( bOldAutoCalc );
@@ -945,6 +949,10 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         pSrcDoc->GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
+
+        // Copy the RTL settings
+        maTabs[nDestPos]->SetLayoutRTL(pSrcDoc->maTabs[nSrcPos]->IsLayoutRTL());
+        maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nDestPos]->IsLoadingRTL());
     }
     else                        // bestehende Tabelle ersetzen
     {
