@@ -194,7 +194,7 @@ rtl::OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const rtl::OUStri
 
         return rData.GetString();
     }
-    return rtl::OUString();
+    return rString;
 }
 
 void removeChars(rtl::OUString& rStr, sal_Unicode c)
@@ -2203,7 +2203,7 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
         pTopView->ShowCursor();
     }
 
-    bModified = sal_True;
+    bModified = true;
     bSelIsRef = false;
 
     if ( pRangeFindList && !bInRangeUpdate )
@@ -3844,7 +3844,7 @@ void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
     if (pView)
         pView->SetSelection( ESelection(0,nStart, 0,nEnd) );
 
-    bModified = sal_True;
+    bModified = true;
 }
 
 //------------------------------------------------------------------------
@@ -3872,7 +3872,7 @@ void ScInputHandler::InputReplaceSelection( const String& rStr )
         pView->SetSelection( ESelection(0,nFormSelStart, 0,nFormSelEnd) );
         pView->SetEditEngineUpdateMode( sal_True );
     }
-    bModified = sal_True;
+    bModified = true;
 }
 
 //------------------------------------------------------------------------
