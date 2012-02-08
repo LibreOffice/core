@@ -231,7 +231,6 @@ void ScPreview::CalcPages()
     ScDocument* pDoc = pDocShell->GetDocument();
     nTabCount = pDoc->GetTableCount();
 
-    SCTAB nAnz = nTabCount;
     SCTAB nStart = nTabsTested;
     if (!bValid)
     {
@@ -242,7 +241,7 @@ void ScPreview::CalcPages()
 
     // update all pending row heights with a single progress bar,
     // instead of a separate progress for each sheet from ScPrintFunc
-    pDocShell->UpdatePendingRowHeights( nAnz-1, true );
+    pDocShell->UpdatePendingRowHeights( nTabCount-1, true );
 
     //  PrintOptions is passed to PrintFunc for SkipEmpty flag,
     //  but always all sheets are used (there is no selected sheet)
@@ -252,7 +251,8 @@ void ScPreview::CalcPages()
         nPages.push_back(0);
     while (nStart > static_cast<SCTAB>(nFirstAttr.size()))
         nFirstAttr.push_back(0);
-    for (SCTAB i=nStart; i<nAnz; i++)
+
+    for (SCTAB i=nStart; i<nTabCount; i++)
     {
         if ( i == static_cast<SCTAB>(nPages.size()))
             nPages.push_back(0);
@@ -269,6 +269,7 @@ void ScPreview::CalcPages()
 
         long nThisStart = nTotalPages;
         ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, NULL, &aOptions );
+        aPrintFunc.InitParam( &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
@@ -287,8 +288,8 @@ void ScPreview::CalcPages()
 
     nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
 
-    if (nAnz > nTabsTested)
-        nTabsTested = nAnz;
+    if (nTabCount > nTabsTested)
+        nTabsTested = nTabCount;
 
     //  testen, ob hinter letzter Seite
 
