@@ -88,6 +88,28 @@
 
 using namespace com::sun::star;
 
+namespace {
+
+void sortAndRemoveDuplicates(std::vector<TypedStrData>& rStrings, bool bCaseSens)
+{
+    if (bCaseSens)
+    {
+        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
+        std::vector<TypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+        rStrings.erase(it, rStrings.end());
+    }
+    else
+    {
+        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
+        std::vector<TypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+        rStrings.erase(it, rStrings.end());
+    }
+}
+
+}
+
 void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 {
     ScRangeName::TabNameCopyMap aNames;
@@ -1470,17 +1492,7 @@ bool ScDocument::GetFilterEntries(
                 maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
-            if (aParam.bCaseSens)
-            {
-                std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
-                std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
-            }
-            else
-            {
-                std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
-                std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
-            }
-
+            sortAndRemoveDuplicates(rStrings, aParam.bCaseSens);
             return true;
         }
     }
@@ -1499,16 +1511,7 @@ bool ScDocument::GetFilterEntriesArea(
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
-        if (bCaseSens)
-        {
-            std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
-            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
-        }
-        else
-        {
-            std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
-            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
-        }
+        sortAndRemoveDuplicates(rStrings, bCaseSens);
         return true;
     }
 
@@ -1535,18 +1538,8 @@ bool ScDocument::GetDataEntries(
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
             {
                 if (pData->GetListType() == ValidListType::SORTEDASCENDING)
-                {
-                    if (bCaseSens)
-                    {
-                        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
-                        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
-                    }
-                    else
-                    {
-                        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
-                        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
-                    }
-                }
+                    sortAndRemoveDuplicates(rStrings, bCaseSens);
+
                 return true;
             }
         }
@@ -1561,16 +1554,7 @@ bool ScDocument::GetDataEntries(
     std::set<TypedStrData> aStrings;
     bool bRet = maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
     rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
-    if (bCaseSens)
-    {
-        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
-        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
-    }
-    else
-    {
-        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
-        std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
-    }
+    sortAndRemoveDuplicates(rStrings, bCaseSens);
 
     return bRet;
 }
