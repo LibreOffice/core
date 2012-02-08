@@ -174,6 +174,10 @@ void SfxAlienWarningDialog::InitSize()
     // new size of the dialog
     aNewSize = GetSizePixel();
     aNewSize.Height() -= nDelta;
+    if (aPos.X() + nTxtW + IMPL_EXTRA_BUTTON_WIDTH > aNewSize.Width())
+    {
+        aNewSize.Width() = aPos.X() + nTxtW + IMPL_EXTRA_BUTTON_WIDTH;
+    }
     SetSizePixel( aNewSize );
 
 }
