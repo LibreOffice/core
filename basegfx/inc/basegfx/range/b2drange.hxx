@@ -292,6 +292,12 @@ namespace basegfx
         MyBasicRange        maRangeY;
     };
 
+    /** Round double to nearest integer for 2D range
+
+        @return the nearest integer for this range
+    */
+    BASEGFX_DLLPUBLIC B2IRange fround(const B2DRange& rRange);
+
     /** Compute the set difference of the two given ranges
 
         This method calculates the symmetric difference (aka XOR)

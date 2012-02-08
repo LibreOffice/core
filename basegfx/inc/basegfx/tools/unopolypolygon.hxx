@@ -95,6 +95,9 @@ namespace unotools
                                              sal_Int32 nPointIndex,
                                              sal_Int32 nNumberOfPoints ) const;
 
+        /// Get cow copy of internal polygon. not thread-safe outside this object.
+        B2DPolyPolygon getPolyPolygonUnsafe() const;
+
         /// Called whenever internal polypolygon gets modified
         virtual void modifying() const {}
 

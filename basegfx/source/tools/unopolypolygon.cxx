@@ -445,6 +445,11 @@ namespace unotools
         return aSubsetPoly;
     }
 
+    B2DPolyPolygon UnoPolyPolygon::getPolyPolygonUnsafe() const
+    {
+        return maPolyPoly;
+    }
+
 #define IMPLEMENTATION_NAME "gfx::internal::UnoPolyPolygon"
 #define SERVICE_NAME "com.sun.star.rendering.PolyPolygon2D"
     ::rtl::OUString SAL_CALL UnoPolyPolygon::getImplementationName() throw( uno::RuntimeException )
