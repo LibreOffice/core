@@ -218,6 +218,7 @@ HelpText
 HideInactiveSelection
 HoriJustify
 HoriJustifyMethod
+HoriOrientPosition
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -496,6 +497,7 @@ VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+VertOrientPosition
 ViewBox
 Visible
 VisibleFlag

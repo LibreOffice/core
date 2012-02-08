@@ -308,6 +308,12 @@ ShapeAnchor::applyToXShape( const ::com::sun::star::uno::Reference< ::com::sun::
     {
         PropertySet aShapeProp( rxShape );
         aShapeProp.setProperty( PROP_Anchor, getFromCell() );
+        CellAnchorModel offSets;
+        offSets.mnColOffset = maFrom.mnColOffset;
+        offSets.mnRowOffset = maFrom.mnRowOffset;
+        EmuPoint aPos = calcCellAnchorEmu( offSets );
+        aShapeProp.setProperty( PROP_HoriOrientPosition, lclEmuToHmm( aPos.X ) );
+        aShapeProp.setProperty( PROP_VertOrientPosition, lclEmuToHmm( aPos.Y ) );
     }
 }
 
