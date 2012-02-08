@@ -1542,7 +1542,6 @@ ucbhelper::Content::insertNewContent(rtl::OUString const&, com::sun::star::uno::
 ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, std::__debug::vector<ucbhelper::ContentProviderData, std::allocator<ucbhelper::ContentProviderData> > const&)
 ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 unicode::getCharType(unsigned short)
-unicode::isTitle(unsigned short)
 unographic::GraphicDescriptor::isValid() const
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const

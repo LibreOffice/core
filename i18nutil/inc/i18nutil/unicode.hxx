@@ -51,7 +51,6 @@ public:
     static sal_Int32 SAL_CALL getCharType( const sal_Unicode ch );
     static sal_Bool SAL_CALL isUpper( const sal_Unicode ch);
     static sal_Bool SAL_CALL isLower( const sal_Unicode ch);
-    static sal_Bool SAL_CALL isTitle( const sal_Unicode ch);
     static sal_Bool SAL_CALL isDigit( const sal_Unicode ch);
     static sal_Bool SAL_CALL isControl( const sal_Unicode ch);
     static sal_Bool SAL_CALL isPrint( const sal_Unicode ch);

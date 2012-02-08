@@ -411,7 +411,6 @@ sal_Bool SAL_CALL func( const sal_Unicode ch) {\
 
 IsType(unicode::isUpper, UPPERMASK)
 IsType(unicode::isLower, LOWERMASK)
-IsType(unicode::isTitle, DIGITMASK)
 IsType(unicode::isControl, CONTROLMASK)
 IsType(unicode::isPrint, PRINTMASK)
 IsType(unicode::isAlpha, ALPHAMASK)
