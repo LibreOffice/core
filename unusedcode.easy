@@ -1285,11 +1285,6 @@ libcmis::SessionFactory::getRepositories(std::__debug::map<int, std::basic_strin
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
 libwpg::WPGraphics::parse(unsigned char const*, unsigned long, libwpg::WPGPaintInterface*, libwpg::WPGFileFormat)
-linguistic::IsLower(String const&, unsigned short, unsigned short, short)
-linguistic::ToLower(unsigned short, short)
-linguistic::ToTitle(String const&, short)
-linguistic::ToUpper(String const&, short)
-linguistic::ToUpper(unsigned short, short)
 nullcanvas::CanvasFont::getFontMatrix() const
 nullcanvas::CanvasHelper::flush() const
 nullcanvas::CanvasHelper::getPalette()

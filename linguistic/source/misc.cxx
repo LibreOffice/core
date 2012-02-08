@@ -635,18 +635,6 @@ sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int
 }
 
 
-sal_Bool IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
-{
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
-    sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
-    return      (nFlags & KCharacterType::LOWER)
-            && !(nFlags & KCharacterType::UPPER);
-}
-
-
 String ToLower( const String &rText, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
@@ -656,45 +644,6 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
     return rCC.lowercase( rText );
 }
 
-
-String ToUpper( const String &rText, sal_Int16 nLanguage )
-{
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.uppercase( rText );
-}
-
-
-String ToTitle( const String &rText, sal_Int16 nLanguage )
-{
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.titlecase(rText);
-}
-
-
-sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage )
-{
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.lowercase( rtl::OUString(cChar) )[0];
-}
-
-
-sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage )
-{
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.uppercase( rtl::OUString(cChar) )[0];
-}
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
 // and thus may NOT not be part of names or words like the Chinese/Japanese number characters
