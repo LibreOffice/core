@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "common.hxx"
 #include "sal/config.h"
 
 #include <cstdio>
@@ -33,11 +34,10 @@
 #include <cstring>
 
 #include "boost/scoped_ptr.hpp"
-#include "osl/process.h"
-#include "rtl/uri.hxx"
 
 #include <comphelper/string.hxx>
 
+#include "common.hxx"
 #include "helper.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
@@ -63,55 +63,51 @@ boost::scoped_ptr< CfgParser > parser;
 }
 
 void handleArguments(int argc, char ** argv) {
-    enum State {
-        STATE_NONE, STATE_INPUT, STATE_OUTPUT, STATE_PRJ, STATE_ROOT,
-        STATE_MERGESRC, STATE_LANGUAGES };
-    State state = STATE_NONE;
-    for (int i = 1; i < argc; ++i) {
-        if (std::strcmp(argv[i], "-i") == 0) {
-            state = STATE_INPUT;
-        } else if (std::strcmp(argv[i], "-o") == 0) {
-            state = STATE_OUTPUT;
-        } else if (std::strcmp(argv[i], "-p") == 0) {
-            state = STATE_PRJ;
-        } else if (std::strcmp(argv[i], "-r") == 0) {
-            state = STATE_ROOT;
-        } else if (std::strcmp(argv[i], "-m") == 0) {
-            state = STATE_MERGESRC;
-        } else if (std::strcmp(argv[i], "-e") == 0) {
-            state = STATE_NONE;
+    for (int i = 1; i != argc; ++i) {
+        if (std::strcmp(argv[i], "-e") == 0) {
             global::errorLog = false;
-        } else if (std::strcmp(argv[i], "-l") == 0) {
-            state = STATE_LANGUAGES;
-        } else {
-            switch (state) {
-            default:
+        } else if (std::strcmp(argv[i], "-i") == 0) {
+            if (++i == argc) {
                 global::inputPathname = 0; // no valid command line
-                goto done;
-            case STATE_INPUT:
-                global::inputPathname = argv[i];
-                break;
-            case STATE_OUTPUT:
-                global::outputPathname = argv[i];
-                break;
-            case STATE_PRJ:
-                global::prj = argv[i];
-                break;
-            case STATE_ROOT:
-                global::prjRoot = argv[i];
-                break;
-            case STATE_MERGESRC:
-                global::mergeSrc = argv[i];
-                global::mergeMode = true;
-                break;
-            case STATE_LANGUAGES:
-                Export::sLanguages = argv[i];
                 break;
             }
-            state = STATE_NONE;
+            global::inputPathname = argv[i];
+        } else if (std::strcmp(argv[i], "-l") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            Export::sLanguages = argv[i];
+        } else if (std::strcmp(argv[i], "-m") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::mergeSrc = argv[i];
+            global::mergeMode = true;
+        } else if (std::strcmp(argv[i], "-o") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::outputPathname = argv[i];
+        } else if (std::strcmp(argv[i], "-p") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::prj = argv[i];
+        } else if (std::strcmp(argv[i], "-r") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::prjRoot = argv[i];
+        } else {
+            global::inputPathname = 0; // no valid command line
+            break;
         }
     }
-done:
     if (global::inputPathname == 0 || global::outputPathname == 0) {
         std::fprintf(
             stderr,
@@ -145,85 +141,16 @@ FILE * init(int argc, char ** argv) {
         std::exit(EXIT_FAILURE);
     }
 
-    // Skip UTF-8 BOM:
-    unsigned char buf[3];
-    if (std::fread(buf, 1, 3, pFile) != 3 ||
-        buf[0] != 0xEF || buf[1] != 0xBB || buf[2] != 0xBF)
-    {
-        std::rewind(pFile);
-    }
-
     if (global::mergeMode) {
         global::parser.reset(
             new CfgMerge(
                 global::mergeSrc, global::outputPathname,
                 global::inputPathname));
     } else {
-        rtl::OUString cwd;
-        if (osl_getProcessWorkingDir(&cwd.pData) != osl_Process_E_None) {
-            std::fprintf(stderr, "Error: Cannot determine cwd\n");
-            std::exit(EXIT_FAILURE);
-        }
-        rtl::OUString full;
-        if (!rtl_convertStringToUString(
-                &full.pData, global::inputPathname,
-                rtl_str_getLength(global::inputPathname),
-                osl_getThreadTextEncoding(),
-                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-        {
-            std::fprintf(
-                stderr, "Error: Cannot convert input pathname to UTF-16\n");
-            std::exit(EXIT_FAILURE);
-        }
-        if (osl::FileBase::getAbsoluteFileURL(cwd, full, full)
-            != osl::FileBase::E_None)
-        {
-            std::fprintf(
-                stderr,
-                "Error: Cannot convert input pathname to absolute URL\n");
-            std::exit(EXIT_FAILURE);
-        }
-        if (global::prjRoot == 0) {
-            std::fprintf(stderr, "Error: No project root argument\n");
-            std::exit(EXIT_FAILURE);
-        }
-        rtl::OUString base;
-        if (!rtl_convertStringToUString(
-                &base.pData, global::prjRoot,
-                rtl_str_getLength(global::prjRoot),
-                osl_getThreadTextEncoding(),
-                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-        {
-            std::fprintf(
-                stderr, "Error: Cannot convert project root to UTF-16\n");
-            std::exit(EXIT_FAILURE);
-        }
-        base = rtl::Uri::convertRelToAbs(full, base);
-        if (full.getLength() <= base.getLength() || base.isEmpty()
-            || base[base.getLength() - 1] != '/'
-            || full[base.getLength() - 1] != '/')
-        {
-            std::fprintf(
-                stderr, "Error: Cannot extract suffix from input pathname\n");
-            std::exit(EXIT_FAILURE);
-        }
-        full = full.copy(base.getLength()).replace('/', '\\');
-        rtl::OString suffix;
-        if (!full.convertToString(
-                &suffix, osl_getThreadTextEncoding(),
-                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
-        {
-            std::fprintf(
-                stderr, "Error: Cannot convert suffix from UTF-16\n");
-            std::exit(EXIT_FAILURE);
-        }
         global::parser.reset(
-            new CfgExport(global::outputPathname, global::prj, suffix));
+            new CfgExport(
+                global::outputPathname, global::prj,
+                common::pathnameToken(global::inputPathname, global::prjRoot)));
     }
 
     return pFile;
@@ -572,8 +499,6 @@ void CfgExport::WorkOnRessourceEnd()
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            rtl::OString sTimeStamp( Export::GetTimeStamp());
-
             for (size_t n = 0; n < aLanguages.size(); n++)
             {
                 rtl::OString sCur = aLanguages[ n ];
@@ -594,7 +519,6 @@ void CfgExport::WorkOnRessourceEnd()
                 sOutput += "\t";
 
                 sOutput += sText; sOutput += "\t\t\t\t";
-                sOutput += sTimeStamp;
 
                 pOutputStream << sOutput.getStr() << '\n';
             }

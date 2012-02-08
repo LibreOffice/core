@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <fstream>
 
 #include "srciter.hxx"
@@ -38,10 +39,51 @@
 #include <iostream>
 #include "tools/errcode.hxx"
 #include "tools/fsys.hxx"
+#include "tools/urlobj.hxx"
 
 #include "helper.hxx"
 
 using namespace std;
+
+namespace {
+
+DirEntry GetTempFile()
+{
+    rtl::OUString* sTempFilename = new rtl::OUString();
+
+    // Create a temp file
+    int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
+    if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
+
+    rtl::OUString strTmp( *sTempFilename  );
+
+    INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
+    rtl::OUString sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
+    rtl::OString sTmp(rtl::OUStringToOString(sDecodedStr , RTL_TEXTENCODING_UTF8));
+
+#if defined(WNT)
+    sTmp = comphelper::string::replace(sTmp,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:///")),
+        rtl::OString());
+    sTmp = sTmp.replace('/', '\\');
+#else
+    // Set file permission to 644
+    const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
+                             osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
+
+    nRC = osl::File::setAttributes( *sTempFilename , nPerm );
+    if( nRC ) printf(" osl::File::setAttributes RC = %d",nRC);
+
+    sTmp = comphelper::string::replace(sTmp,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file://")),
+        rtl::OString());
+#endif
+    DirEntry aDirEntry( sTmp );
+    delete sTempFilename;
+    return aDirEntry;
+}
+
+}
 
 namespace transex3
 {
@@ -326,7 +368,7 @@ void SourceTreeLocalizer::WorkOnFile(
         {
             rtl::OString sRoot( GetProjectRootRel());
 
-            DirEntry aTemp( Export::GetTempFile());
+            DirEntry aTemp(GetTempFile());
             rtl::OString sTempFile(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
             rtl::OString sDel;
@@ -395,7 +437,7 @@ void SourceTreeLocalizer::WorkOnFile(
 sal_Bool SourceTreeLocalizer::CheckNegativeList( const rtl::OString &rFileName )
 /*****************************************************************************/
 {
-    sal_uLong nIndex = 0;
+    std::size_t nIndex = 0;
     sal_Bool bReturn  = sal_True;
 
     rtl::OString sDelimiter(rtl::OUStringToOString(
@@ -426,7 +468,7 @@ sal_Bool SourceTreeLocalizer::CheckNegativeList( const rtl::OString &rFileName )
 sal_Bool SourceTreeLocalizer::CheckPositiveList( const rtl::OString &rFileName )
 /*****************************************************************************/
 {
-    sal_uLong nIndex = 0;
+    std::size_t nIndex = 0;
     sal_Bool bReturn  = sal_False;
 
     rtl::OString sDelimiter(rtl::OUStringToOString(
@@ -489,7 +531,7 @@ void SourceTreeLocalizer::WorkOnFileType(
 void SourceTreeLocalizer::WorkOnDirectory(const rtl::OString &rDirectory)
 {
     //printf("Working on Directory %s\n",rDirectory.getStr());
-    sal_uLong nIndex = 0;
+    std::size_t nIndex = 0;
     rtl::OString sExtension( ExeTable[ nIndex ][ 0 ] );
     rtl::OString sExecutable( ExeTable[ nIndex ][ 1 ] );
     rtl::OString sParameter( ExeTable[ nIndex ][ 2 ] );

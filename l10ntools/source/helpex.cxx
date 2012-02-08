@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -216,8 +220,8 @@ int _cdecl main( int argc, char *argv[] )
             ifstream aFStream( sInputFile.copy( 1 ).getStr() , ios::in );
 
             if( !aFStream ){
-                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
-                exit(-1);
+                std::cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
+                std::exit(EXIT_FAILURE);
             }
 
             vector<rtl::OString> filelist;
@@ -244,7 +248,7 @@ int _cdecl main( int argc, char *argv[] )
             for( vector<rtl::OString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
             {
                 sHelpFile = *pos;
-                cout << ".";cout.flush();
+                std::cout << ".\n";
 
                 HelpParser aParser( sHelpFile , bUTF8 , true );
                 hasNoError = aParser.Merge( sSDFFile , sOutputFileX , sOutputFileY , true , aLanguages , aMergeDataFile , bCreateDir );
@@ -252,7 +256,7 @@ int _cdecl main( int argc, char *argv[] )
             }
         }
     } else
-        cerr << "helpex ERROR: Wrong input parameters!\n";
+        std::cerr << "helpex ERROR: Wrong input parameters!\n";
 
     if( hasNoError )
         return 0;

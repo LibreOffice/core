@@ -337,17 +337,6 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     while ( nIndex >= 0 );
 }
 
-rtl::OString Export::GetTimeStamp()
-{
-//  return "xx.xx.xx";
-    char buf[20];
-    Time aTime( Time::SYSTEM );
-
-    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date( Date::SYSTEM).GetDate()),
-        int(aTime.GetHour()), int(aTime.GetMin()), int(aTime.GetSec()));
-    return rtl::OString(buf);
-}
-
 /*****************************************************************************/
 rtl::OString Export::GetNativeFile( rtl::OString const & sSource )
 /*****************************************************************************/
@@ -411,44 +400,6 @@ rtl::OString Export::getRandomName(const rtl::OString& rPrefix, const rtl::OStri
     sRandStr.append(buffer , RAND_NAME_LENGTH);
     sRandStr.append(rPostfix);
     return sRandStr.makeStringAndClear();
-}
-
-/*****************************************************************************/
-DirEntry Export::GetTempFile()
-/*****************************************************************************/
-{
-    rtl::OUString* sTempFilename = new rtl::OUString();
-
-    // Create a temp file
-    int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
-    if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
-
-    rtl::OUString strTmp( *sTempFilename  );
-
-    INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
-    rtl::OUString sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
-    rtl::OString sTmp(rtl::OUStringToOString(sDecodedStr , RTL_TEXTENCODING_UTF8));
-
-#if defined(WNT)
-    sTmp = comphelper::string::replace(sTmp,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:///")),
-        rtl::OString());
-    sTmp = sTmp.replace('/', '\\');
-#else
-    // Set file permission to 644
-    const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
-                             osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
-
-    nRC = osl::File::setAttributes( *sTempFilename , nPerm );
-    if( nRC ) printf(" osl::File::setAttributes RC = %d",nRC);
-
-    sTmp = comphelper::string::replace(sTmp,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file://")),
-        rtl::OString());
-#endif
-    DirEntry aDirEntry( sTmp );
-    delete sTempFilename;
-    return aDirEntry;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

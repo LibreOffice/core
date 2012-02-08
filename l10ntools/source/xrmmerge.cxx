@@ -553,7 +553,6 @@ void XRMResExport::EndOfText(
 {
     if ( pResData )
     {
-        rtl::OString sTimeStamp( Export::GetTimeStamp());
         rtl::OString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
@@ -578,7 +577,6 @@ void XRMResExport::EndOfText(
 
             sOutput += sAct;
             sOutput += "\t\t\t\t";
-            sOutput += sTimeStamp;
 
             sOutput = sOutput.replace('\0', '_');
             if( sAct.getLength() > 1 )

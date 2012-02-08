@@ -29,15 +29,18 @@
 #ifndef BOOTSTRP_XMLPARSE_HXX
 #define BOOTSTRP_XMLPARSE_HXX
 
+#include "sal/config.h"
+
+#include <cstddef>
+#include <vector>
+
 #include <signal.h>
 #include <expat.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "boost/unordered_map.hpp"
 #include "export.hxx"
 #include "xmlutil.hxx"
-
-#include <fstream>
-#include <iostream>
 
 class XMLParentNode;
 class XMLElement;
@@ -46,11 +49,6 @@ class XMLElement;
 using namespace ::rtl;
 using namespace std;
 
-#include <boost/unordered_map.hpp>
-#include <deque>    /* std::deque*/
-#include <iterator> /* std::iterator*/
-#include <list>     /* std::list*/
-#include <vector>   /* std::vector*/
 #define XML_NODE_TYPE_FILE          0x001
 #define XML_NODE_TYPE_ELEMENT       0x002
 #define XML_NODE_TYPE_DATA          0x003
@@ -90,7 +88,7 @@ public:
     }
 };
 
-typedef ::std::vector< XMLAttribute* > XMLAttributeList;
+typedef std::vector< XMLAttribute* > XMLAttributeList;
 
 //-------------------------------------------------------------------------
 
@@ -128,7 +126,7 @@ public:
     virtual ~XMLChildNode(){};
 };
 
-typedef ::std::vector< XMLChildNode* > XMLChildNodeList;
+typedef std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
@@ -212,7 +210,7 @@ public:
     void        Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    sal_Bool        Write( rtl::OString const &rFilename );
+    void Write( rtl::OString const &rFilename );
     sal_Bool        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
@@ -447,8 +445,8 @@ public:
  */
 struct XMLError {
     XML_Error eCode;    // the error code
-    sal_uLong nLine;        // error line number
-    sal_uLong nColumn;      // error column number
+    std::size_t nLine; // error line number
+    std::size_t nColumn; // error column number
     rtl::OUString sMessage;    // readable error message
 };
 

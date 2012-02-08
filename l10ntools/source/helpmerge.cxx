@@ -127,10 +127,6 @@ bool HelpParser::CreateSDF(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    OUString sOUTimeStamp(
-        rtl::OStringToOUString(
-            Export::GetTimeStamp(), RTL_TEXTENCODING_ASCII_US));
-
     OUStringBuffer sBuffer;
     const OUString sOUPrj( rPrj_in.getStr() , rPrj_in.getLength() , RTL_TEXTENCODING_ASCII_US );
     const OUString sOUActFileName(sActFileName.getStr() , sActFileName.getLength() , RTL_TEXTENCODING_ASCII_US );
@@ -180,7 +176,6 @@ bool HelpParser::CreateSDF(
                    sBuffer.append('\t');
                 sBuffer.append( data );
                 sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t\t\t\t"));
-                sBuffer.append( sOUTimeStamp );
                 rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
                 if( !data.isEmpty() )
                     aSDFStream << sOut.getStr() << '\n';
@@ -344,12 +339,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     sTempFile = Export::getRandomName(sPath, INPATH);
     sTempFileCopy = Export::getRandomName(sPath, INPATH);
     // Write in the temp file
-    bool hasNoError = file->Write ( sTempFile );
-    if( !hasNoError )
-    {
-        cerr << "ERROR: file->Write failed\n";
-        return false;
-    }
+    file->Write ( sTempFile );
 
     DirEntry aTmp( sTempFile );
     DirEntry aTmp2( sTempFileCopy );

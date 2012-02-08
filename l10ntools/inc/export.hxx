@@ -31,6 +31,7 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <fstream>
 
 #include <comphelper/string.hxx>
@@ -40,7 +41,6 @@
 #include <l10ntools/directory.hxx>
 #endif
 
-#include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
@@ -87,11 +87,11 @@ class ExportList
 {
 private:
     ExportListBase maList;
-    sal_uLong nSourceLanguageListEntryCount;
+    std::size_t nSourceLanguageListEntryCount;
 
 public:
     ExportList() { nSourceLanguageListEntryCount = 0; }
-    sal_uLong GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
+    std::size_t GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
     size_t size() const { return maList.size(); }
     void push_back( ExportListEntry* item ) { maList.push_back( item ); }
@@ -272,15 +272,14 @@ private:
 
     sal_Bool bDefine;                       // cur. res. in a define?
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
-    sal_uLong nLevel;                       // res. recursiv? how deep?
+    std::size_t nLevel; // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
     rtl::OString m_sListLang;
-    sal_uLong nListIndex;
-    sal_uLong nListLevel;
+    std::size_t nListIndex;
+    std::size_t nListLevel;
     bool bSkipFile;
     rtl::OString sProject;
     rtl::OString sRoot;
-    sal_Bool bEnableExport;
     sal_Bool bMergeMode;
     rtl::OString sMergeSrc;
     rtl::OString sLastListLine;
@@ -319,9 +318,7 @@ public:
     static rtl::OString getRandomName(const rtl::OString& rPrefix, const rtl::OString & sPostfix);
     static void getCurrentDir( std::string& dir );
 
-    static rtl::OString GetTimeStamp();
     static rtl::OString GetNativeFile( rtl::OString const & sSource );
-    static DirEntry GetTempFile();
 
     static void DumpExportList(const rtl::OString& rListName,
         ExportList& aList);
@@ -360,11 +357,8 @@ private:
     void CutComment( rtl::OString &rText );
 
 public:
-    Export(const rtl::OString &rOutput, sal_Bool bWrite,
-            const rtl::OString &rPrj, const rtl::OString &rPrjRoot, const rtl::OString& rFile);
-    Export(const rtl::OString &rOutput, sal_Bool bWrite,
-            const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
-            const rtl::OString &rMergeSource, const rtl::OString& rFile );
+    Export(const rtl::OString &rOutput);
+    Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput);
     ~Export();
 
     void Init();

@@ -28,16 +28,17 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <cstring>
 
+#include "boost/scoped_ptr.hpp"
 #include <stdio.h>
 #include <stdlib.h>
-#include <tools/fsys.hxx>
+#include "common.hxx"
 #include "export.hxx"
 #include "helper.hxx"
 #include "tokens.h"
 #include <iostream>
-#include <vector>
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
 
@@ -47,249 +48,129 @@ using comphelper::string::getTokenCount;
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
 
-Export *pExport = 0L;
+namespace {
 
-// defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_BREAKHELP 0x0008
-#define STATE_UNMERGE   0x0009
-#define STATE_LANGUAGES 0X000A
+rtl::OString sActFileName; //TODO
+MergeDataFile * pMergeDataFile = 0; //TODO
 
-// set of global variables
-typedef ::std::vector< rtl::OString > FileList;
-FileList aInputFileList;
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bBreakWhenHelpText;
-sal_Bool bUnmerge;
-sal_Bool bUTF8;
-rtl::OString sPrj;
-rtl::OString sPrjRoot;
-rtl::OString sActFileName;
-rtl::OString sOutputFile;
-rtl::OString sMergeSrc;
-rtl::OString sFile;
-MergeDataFile *pMergeDataFile;
+namespace global {
+
+bool mergeMode = false;
+bool errorLog = true;
+char const * prj = 0;
+char const * prjRoot = 0;
+char const * inputPathname = 0;
+char const * outputPathname = 0;
+char const * mergeSrc;
+boost::scoped_ptr< Export > exporter;
+
+}
+
+void handleArguments(int argc, char ** argv) {
+    for (int i = 1; i != argc; ++i) {
+        if (std::strcmp(argv[i], "-e") == 0) {
+            global::errorLog = false;
+        } else if (std::strcmp(argv[i], "-i") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::inputPathname = argv[i];
+        } else if (std::strcmp(argv[i], "-l") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            Export::sLanguages = argv[i];
+        } else if (std::strcmp(argv[i], "-m") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::mergeSrc = argv[i];
+            global::mergeMode = true;
+        } else if (std::strcmp(argv[i], "-o") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::outputPathname = argv[i];
+        } else if (std::strcmp(argv[i], "-p") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::prj = argv[i];
+        } else if (std::strcmp(argv[i], "-r") == 0) {
+            if (++i == argc) {
+                global::inputPathname = 0; // no valid command line
+                break;
+            }
+            global::prjRoot = argv[i];
+        } else {
+            global::inputPathname = 0; // no valid command line
+            break;
+        }
+    }
+    if (global::inputPathname == 0 || global::outputPathname == 0) {
+        std::fprintf(
+            stderr,
+            ("Syntax: transex3 [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
+             " [-m DataBase] [-e] [-l l1,l2,...]\n"
+             " Prj:      Project\n"
+             " PrjRoot:  Path to project root (../.. etc.)\n"
+             " FileIn:   Source files (*.src)\n"
+             " FileOut:  Destination file (*.*)\n"
+             " DataBase: Mergedata (*.sdf)\n"
+             " -e: Disable writing errorlog\n"
+             " -l: Restrict the handled languages; l1, l2, ... are elements of"
+             " (de, en-US, ...)\n"));
+        std::exit(EXIT_FAILURE);
+    }
+    Export::InitLanguages();
+}
+
+}
 
 extern "C" {
-// the whole interface to lexer is in this extern "C" section
 
+FILE * init(int argc, char ** argv) {
+    handleArguments(argc, argv);
 
-/*****************************************************************************/
-extern char *GetOutputFile( int argc, char* argv[])
-/*****************************************************************************/
-{
-    bEnableExport = sal_False;
-    bMergeMode = sal_False;
-    bErrorLog = sal_True;
-    bBreakWhenHelpText = sal_False;
-    bUnmerge = sal_False;
-    bUTF8 = sal_True;
-    sPrj = "";
-    sPrjRoot = "";
-    sActFileName = "";
-    Export::sLanguages = "";
-    Export::sForcedLanguages = "";
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
-
-    // parse command line
-    for( int i = 1; i < argc; i++ ) {
-        rtl::OString sSwitch( argv[ i ] );
-
-        if (sSwitch == "-i"  || sSwitch == "-I" ) {
-            nState = STATE_INPUT; // next tokens specifies source files
-        }
-        else if (sSwitch == "-o"  || sSwitch == "-O" ) {
-            nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if (sSwitch == "-p"  || sSwitch == "-P" ) {
-            nState = STATE_PRJ; // next token specifies the cur. project
-        }
-
-        else if (sSwitch == "-r"  || sSwitch == "-R" ) {
-            nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if (sSwitch == "-m"  || sSwitch == "-M" ) {
-            nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if (sSwitch == "-e"  || sSwitch == "-E" ) {
-            nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
-        }
-        else if (sSwitch == "-b"  || sSwitch == "-B" ) {
-            nState = STATE_BREAKHELP;
-            bBreakWhenHelpText = sal_True;
-        }
-        else if (sSwitch == "-u"  || sSwitch == "-U" ) {
-            nState = STATE_UNMERGE;
-            bUnmerge = sal_True;
-            bMergeMode = sal_True;
-        }
-        else if ( sSwitch == "-l"  || sSwitch == "-L" ) {
-            nState = STATE_LANGUAGES;
-        }
-        else {
-            switch ( nState ) {
-                case STATE_NON: {
-                    return NULL;    // no valid command line
-                }
-                case STATE_INPUT: {
-                    aInputFileList.push_back( argv[ i ] );
-                    bInput = sal_True; // min. one source file found
-                }
-                break;
-                case STATE_OUTPUT: {
-                    sOutputFile = rtl::OString(argv[i]); // the dest. file
-                }
-                break;
-                case STATE_PRJ: {
-                    sPrj = rtl::OString(argv[i]);
-                }
-                break;
-                case STATE_ROOT: {
-                    sPrjRoot = rtl::OString(argv[i]); // path to project root
-                }
-                break;
-                case STATE_MERGESRC: {
-                    sMergeSrc = rtl::OString(argv[i]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
-                }
-                break;
-                case STATE_LANGUAGES: {
-                    Export::sLanguages = rtl::OString(argv[i]);
-                }
-                break;
-            }
-        }
-    }
-    if( bUnmerge )
-        sMergeSrc = rtl::OString();
-    if ( bInput ) {
-        // command line is valid
-        bEnableExport = sal_True;
-        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        std::strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
-        return pReturn;
+    FILE * pFile = std::fopen(global::inputPathname, "r");
+    if (pFile == 0) {
+        std::fprintf(
+            stderr, "Error: Cannot open file \"%s\"\n",
+            global::inputPathname);
+        std::exit(EXIT_FAILURE);
     }
 
-    // command line is not valid
-    return NULL;
-}
-/*****************************************************************************/
-int InitExport( char *pOutput , char* pFilename )
-/*****************************************************************************/
-{
-    // instanciate Export
-    rtl::OString sOutput( pOutput );
-    rtl::OString sFilename( pFilename );
-
-    if ( bMergeMode && !bUnmerge )
-    {
-        // merge mode enabled, so read database
-        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot,
-            sMergeSrc , sFilename );
+    if (global::mergeMode) {
+        global::exporter.reset(
+            new Export(global::mergeSrc, global::outputPathname));
+    } else {
+        sActFileName =
+            common::pathnameToken(global::inputPathname, global::prjRoot);
+        global::exporter.reset(new Export(global::outputPathname));
     }
-    else
-    {
-        // no merge mode, only export
-        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot,
-            sFilename );
-    }
-    return 1;
-}
 
-/*****************************************************************************/
-int EndExport()
-/*****************************************************************************/
-{
-    delete pExport;
-    return 1;
-}
+    global::exporter->Init();
 
-extern const char* getFilename()
-{
-    return aInputFileList[0].getStr();
-}
-/*****************************************************************************/
-extern FILE *GetNextFile()
-/*****************************************************************************/
-{
-    // look for next valid filename in input file list
-    while ( !aInputFileList.empty() )
-    {
-        rtl::OString sFileName(aInputFileList[0]);
-
-        rtl::OString sOrigFile( sFileName );
-
-        sFileName = Export::GetNativeFile( sFileName );
-        aInputFileList.erase( aInputFileList.begin() );
-
-        if ( sFileName.isEmpty() ) {
-            fprintf( stderr, "ERROR: Could not precompile File %s\n",
-                sOrigFile.getStr());
-            return GetNextFile();
-        }
-
-        //TODO: explict BOM handling?
-
-        // able to open file?
-        FILE *pFile = fopen( sFileName.getStr(), "r" );
-        if ( !pFile )
-            fprintf( stderr, "Error: Could not open File %s\n",
-                sFileName.getStr());
-        else {
-            // this is a valid file which can be opened, so
-            // create path to project root
-            DirEntry aEntry(rtl::OStringToOUString(sOrigFile,
-                RTL_TEXTENCODING_ASCII_US));
-            aEntry.ToAbs();
-            rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(),
-                RTL_TEXTENCODING_ASCII_US));
-            aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-            aEntry += DirEntry( sPrjRoot );
-            rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
-                RTL_TEXTENCODING_ASCII_US));
-
-            // create file name, beginnig with project root
-            // (e.g.: source\ui\src\menue.src)
-            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
-
-
-            sActFileName = sActFileName.replace('/', '\\');
-            sFile = sActFileName;
-
-            if ( pExport ) {
-                // create instance of class export
-                pExport->Init();
-            }
-            // return the valid file handle
-            return pFile;
-        }
-    }
-    // this means the file could not be opened
-    return NULL;
+    return pFile;
 }
 
 int Parse( int nTyp, const char *pTokenText ){
-    pExport->Execute( nTyp , pTokenText );
+    global::exporter->Execute( nTyp , pTokenText );
     return 1;
 }
 void Close(){
-    pExport->pParseQueue->Close();
+    global::exporter->pParseQueue->Close();
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 {
 
-    pExport->pParseQueue->Push( QueueEntry( nTyp , rtl::OString(pTokenText) ) );
+    global::exporter->pParseQueue->Push( QueueEntry( nTyp , rtl::OString(pTokenText) ) );
     return 1;
 }
 
@@ -301,7 +182,7 @@ int SetError()
 /*****************************************************************************/
 {
     // set error at global instance of class Export
-    pExport->SetError();
+    global::exporter->SetError();
     return 1;
 }
 }
@@ -312,7 +193,7 @@ int GetError()
 /*****************************************************************************/
 {
     // get error at global instance of class Export
-    if ( pExport->GetError())
+    if (global::exporter->GetError())
         return 1;
     return sal_False;
 }
@@ -379,9 +260,7 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 // class Export
 //
 
-Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
-    const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
-    const rtl::OString& rFile)
+Export::Export(const rtl::OString &rOutput)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -391,37 +270,28 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bSkipFile( false ),
-                sProject( sPrj ),
-                sRoot( sPrjRoot ),
-                bEnableExport( bWrite ),
-                bMergeMode( bUnmerge ),
+                sProject( global::prj ),
+                sRoot( global::prjRoot ),
+                bMergeMode( false ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                sFilename( rFile )
+                sFilename( global::inputPathname )
 {
     pParseQueue = new ParserQueue( *this );
-    (void) rPrj;
-    (void) rPrjRoot;
-    (void) rFile;
 
     if( !isInitialized ) InitLanguages();
     // used when export is enabled
 
     // open output stream
-    if ( bEnableExport ) {
-        aOutput.open(
-            rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
-        if (!aOutput.is_open()) {
-            fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
-            exit ( -1 );
-        }
+    aOutput.open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!aOutput.is_open()) {
+        fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        exit ( -1 );
     }
 }
 
-Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
-                const rtl::OString &rPrj, const rtl::OString &rPrjRoot,
-                const rtl::OString &rMergeSource, const rtl::OString& rFile)
+Export::Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -431,29 +301,21 @@ Export::Export(const rtl::OString &rOutput, sal_Bool bWrite,
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bSkipFile( false ),
-                sProject( sPrj ),
-                sRoot( sPrjRoot ),
-                bEnableExport( bWrite ),
+                sProject( global::prj ),
+                sRoot( global::prjRoot ),
                 bMergeMode( sal_True ),
                 sMergeSrc( rMergeSource ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                sFilename( rFile )
+                sFilename( global::inputPathname )
 {
-    (void) rPrj;
-    (void) rPrjRoot;
-    (void) rFile;
     pParseQueue = new ParserQueue( *this );
     if( !isInitialized ) InitLanguages( bMergeMode );
     // used when merge is enabled
 
     // open output stream
-    if ( bEnableExport ) {
-        aOutput.open(
-            rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
-    }
-
+    aOutput.open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
 }
 
 /*****************************************************************************/
@@ -479,16 +341,14 @@ Export::~Export()
 {
     if( pParseQueue )
         delete pParseQueue;
-    // close output stream
-    if ( bEnableExport )
-        aOutput.close();
+    aOutput.close();
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
     aResStack.clear();
 
-    if ( bMergeMode && !bUnmerge ) {
+    if ( bMergeMode ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile(sMergeSrc, sFile, bErrorLog);
+            pMergeDataFile = new MergeDataFile(sMergeSrc, global::inputPathname, global::errorLog);
 
         delete pMergeDataFile;
     }
@@ -937,11 +797,6 @@ int Export::Execute( int nToken, const char * pToken )
                     else if ( sKey == "HELPTEXT" ) {
                         SetChildWithText();
                         pResData->bHelpText = sal_True;
-                        if ( bBreakWhenHelpText )
-                        {
-                            YYWarning("\"HelpText\" found in source");
-                            SetError();
-                        }
                         if ( bMergeMode )
                             PrepareTextToMerge( sOrig, STRING_TYP_HELPTEXT, sLangIndex, pResData );
                         else
@@ -1131,9 +986,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         return sal_True;
     }
 
-    if ( bUnmerge )
-        return sal_True;
-
        // mandatory to export: en-US
 
      if (( !pResData->sText[ SOURCE_LANGUAGE ].isEmpty())
@@ -1157,7 +1009,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         rtl::OString sXQHText;
         rtl::OString sXTitle;
 
-        rtl::OString sTimeStamp(Export::GetTimeStamp());
         rtl::OString sCur;
 
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
@@ -1198,28 +1049,25 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                 else
                     sXText = pResData->sText[ sCur ];
 
-                if ( bEnableExport ) {
-                    rtl::OString sOutput( sProject ); sOutput += "\t";
-                    if ( !sRoot.isEmpty())
-                        sOutput += sActFileName;
-                    sOutput += "\t0\t";
-                    sOutput += pResData->sResTyp; sOutput += "\t";
-                    sOutput += sGID; sOutput += "\t";
-                    sOutput += sLID; sOutput += "\t";
-                    sOutput += pResData->sHelpId; sOutput   += "\t";
-                    sOutput += pResData->sPForm; sOutput    += "\t";
-                    sOutput += rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth)); sOutput += "\t";
-                    sOutput += sCur; sOutput += "\t";
+                rtl::OString sOutput( sProject ); sOutput += "\t";
+                if ( !sRoot.isEmpty())
+                    sOutput += sActFileName;
+                sOutput += "\t0\t";
+                sOutput += pResData->sResTyp; sOutput += "\t";
+                sOutput += sGID; sOutput += "\t";
+                sOutput += sLID; sOutput += "\t";
+                sOutput += pResData->sHelpId; sOutput   += "\t";
+                sOutput += pResData->sPForm; sOutput    += "\t";
+                sOutput += rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth)); sOutput += "\t";
+                sOutput += sCur; sOutput += "\t";
 
 
-                    sOutput += sXText; sOutput  += "\t";
-                    sOutput += sXHText; sOutput += "\t";
-                    sOutput += sXQHText; sOutput+= "\t";
-                    sOutput += sXTitle; sOutput += "\t";
-                    sOutput += sTimeStamp;
+                sOutput += sXText; sOutput  += "\t";
+                sOutput += sXHText; sOutput += "\t";
+                sOutput += sXQHText; sOutput+= "\t";
+                sOutput += sXTitle; sOutput += "\t";
 
-                    aOutput << sOutput.getStr() << '\n';
-                }
+                aOutput << sOutput.getStr() << '\n';
 
                 if ( bCreateNew ) {
                     pResData->sText[ sCur ]         = "";
@@ -1302,7 +1150,6 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         sGID = comphelper::string::stripEnd(sGID, '.');
     }
 
-    rtl::OString sTimeStamp(Export::GetTimeStamp());
     rtl::OString sCur;
     for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
     {
@@ -1314,42 +1161,37 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
             sCur = aLanguages[ n ];
             if (!(*pEntry)[ SOURCE_LANGUAGE ].isEmpty())
             {
-                if ( bEnableExport )
+                rtl::OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+
+                // Strip PairList Line String
+                if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
                 {
-                    rtl::OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
-
-                    // Strip PairList Line String
-                    if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
-                    {
-                        sLID = GetPairedListID( sText );
-                        if (!(*pEntry)[ sCur ].isEmpty())
-                            sText = (*pEntry)[ sCur ];
-                        sText = GetPairedListString( sText );
-                    }
-                    else
-                    {
-                        sText = StripList( (*pEntry)[ sCur ] );
-                        if( sText == "\\\"" )
-                            sText = "\"";
-                    }
-
-                    rtl::OStringBuffer sOutput(sProject);
-                    sOutput.append('\t');
-                    if ( !sRoot.isEmpty())
-                        sOutput.append(sActFileName);
-                    sOutput.append("\t0\t");
-                    sOutput.append(rTyp).append('\t');
-                    sOutput.append(sGID).append('\t');
-                    sOutput.append(sLID).append("\t\t");
-                    sOutput.append(pResData->sPForm).append("\t0\t");
-                    sOutput.append(sCur).append('\t');
-
-                    sOutput.append(sText).append("\t\t\t\t");
-                    sOutput.append(sTimeStamp);
-
-                    aOutput << sOutput.makeStringAndClear().getStr() << '\n';
-
+                    sLID = GetPairedListID( sText );
+                    if (!(*pEntry)[ sCur ].isEmpty())
+                        sText = (*pEntry)[ sCur ];
+                    sText = GetPairedListString( sText );
                 }
+                else
+                {
+                    sText = StripList( (*pEntry)[ sCur ] );
+                    if( sText == "\\\"" )
+                        sText = "\"";
+                }
+
+                rtl::OStringBuffer sOutput(sProject);
+                sOutput.append('\t');
+                if ( !sRoot.isEmpty())
+                    sOutput.append(sActFileName);
+                sOutput.append("\t0\t");
+                sOutput.append(rTyp).append('\t');
+                sOutput.append(sGID).append('\t');
+                sOutput.append(sLID).append("\t\t");
+                sOutput.append(pResData->sPForm).append("\t0\t");
+                sOutput.append(sCur).append('\t');
+
+                sOutput.append(sText).append("\t\t\t\t");
+
+                aOutput << sOutput.makeStringAndClear().getStr() << '\n';
             }
         }
         if ( bCreateNew )
@@ -1547,47 +1389,43 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
 
 void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
 {
-    if ( !bDontWriteOutput || !bUnmerge )
+    rtl::OString sText(rText);
+    while (helper::searchAndReplace(&sText, " \n", "\n") != -1) {}
+    if (pParseQueue->bNextIsM && bSDFContent && sText.getLength() > 2) {
+        for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+            if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                sText = sText.replaceAt(n++, 0, "\\");
+            }
+        }
+    } else if (pParseQueue->bLastWasM && sText.getLength() > 2) {
+        for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+            if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                sText = sText.replaceAt(n++, 0, "\\");
+            }
+            if (sText[n] == '\n') {
+                pParseQueue->bMflag = true;
+            }
+        }
+    } else if (pParseQueue->bCurrentIsM && bSDFContent && sText.getLength() > 2)
     {
-        rtl::OString sText(rText);
-        while (helper::searchAndReplace(&sText, " \n", "\n") != -1) {}
-        if (pParseQueue->bNextIsM && bSDFContent && sText.getLength() > 2) {
-            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
-                if (sText[n] == '\n' && sText[n - 1] != '\\') {
-                    sText = sText.replaceAt(n++, 0, "\\");
-                }
+        for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
+            if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                sText = sText.replaceAt(n++, 0, "\\");
+                pParseQueue->bMflag = true;
             }
-        } else if (pParseQueue->bLastWasM && sText.getLength() > 2) {
-            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
-                if (sText[n] == '\n' && sText[n - 1] != '\\') {
-                    sText = sText.replaceAt(n++, 0, "\\");
-                }
-                if (sText[n] == '\n') {
-                    pParseQueue->bMflag = true;
-                }
+        }
+    } else if (pParseQueue->bMflag) {
+        for (sal_Int32 n = 1; n < sText.getLength(); ++n) {
+            if (sText[n] == '\n' && sText[n - 1] != '\\') {
+                sText = sText.replaceAt(n++, 0, "\\");
             }
-        } else if (pParseQueue->bCurrentIsM && bSDFContent
-                   && sText.getLength() > 2)
-        {
-            for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
-                if (sText[n] == '\n' && sText[n - 1] != '\\') {
-                    sText = sText.replaceAt(n++, 0, "\\");
-                    pParseQueue->bMflag = true;
-                }
-            }
-        } else if (pParseQueue->bMflag) {
-            for (sal_Int32 n = 1; n < sText.getLength(); ++n) {
-                if (sText[n] == '\n' && sText[n - 1] != '\\') {
-                    sText = sText.replaceAt(n++, 0, "\\");
-                }
-            }
-        } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
-            if (sText[i] == '\n') {
-                aOutput << '\n';
-            } else {
-                char cChar = sText[i];
-                aOutput << cChar;
-            }
+        }
+    } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
+        if (sText[i] == '\n') {
+            aOutput << '\n';
+        } else {
+            char cChar = sText[i];
+            aOutput << cChar;
         }
     }
 }
@@ -1678,9 +1516,6 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         case LIST_PAIRED:
         case LIST_ITEM :
         {
-            if ( bUnmerge )
-                return sal_True;
-
             ExportList *pList = NULL;
             switch ( nTyp ) {
                 case LIST_STRING : {
@@ -1800,7 +1635,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
 
     // search for merge data
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, global::errorLog );
 
         // Init Languages
         if( Export::sLanguages.equalsIgnoreAsciiCase("ALL") )
@@ -1901,7 +1736,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 /*****************************************************************************/
 {
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, global::errorLog );
 
         // Init Languages
         if (Export::sLanguages.equalsIgnoreAsciiCase("ALL"))
@@ -1961,8 +1796,8 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                             pResData->sId = "1";
 
                         PFormEntrys *pEntrys;
-                        sal_uLong nLIndex = 0;
-                        sal_uLong nMaxIndex = 0;
+                        std::size_t nLIndex = 0;
+                        std::size_t nMaxIndex = 0;
                         if ( pList )
                             nMaxIndex = pList->GetSourceLanguageListEntryCount();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
@@ -2120,7 +1955,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             }
 
             nListIndex++;
-            sal_uLong nMaxIndex = 0;
+            std::size_t nMaxIndex = 0;
             if ( pList )
                 nMaxIndex = pList->GetSourceLanguageListEntryCount();
             rtl::OString sLine;

@@ -239,51 +239,18 @@ sal_uInt16 XMLFile::GetNodeType()
     return XML_NODE_TYPE_FILE;
 }
 
-/*****************************************************************************/
-sal_Bool XMLFile::Write( rtl::OString const &aFilename )
-/*****************************************************************************/
+void XMLFile::Write( rtl::OString const &aFilename )
 {
-
-    if ( !aFilename.isEmpty()) {
-        // retry harder if there is a NFS problem,
-        for( int x = 1 ; x < 3 ; x++ ){ // this looks strange...yes!
-            ofstream aFStream( aFilename.getStr() , ios::out | ios::trunc );
-
-            if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
-            {                   // I wasn't able to track this down. I think this is an NFS issue .....
-                TimeValue aTime;
-                aTime.Seconds = 3;
-                aTime.Nanosec = 0;
-
-                osl::Thread::wait( aTime );
-            }
-            else
-            {
-                // write out
-                Write( aFStream );
-                aFStream.close();
-
-                // check!
-                DirEntry aTarget( aFilename );
-                FileStat aFileStat( aTarget );
-
-                if( aFileStat.GetSize() < 1 )
-                {
-                    //retry
-                    aTarget.Kill();
-                }
-                else
-                {
-                    //everything ok!
-                    return true;
-                }
-            }
-        }
-        cerr << "ERROR: - helpex - Can't create file " << aFilename.getStr() << "\nPossible reason: Disk full ? Mounted NFS volume broken ? Wrong permissions ?\n";
-        exit( -1 );
+    std::ofstream s(
+        aFilename.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!s.is_open()) {
+        std::cerr
+            << "Error: helpex cannot create file " << aFilename.getStr()
+            << '\n';
+        std::exit(EXIT_FAILURE);
     }
-    cerr << "ERROR: - helpex - Empty file name\n";
-    exit( -1 );
+    Write(s);
+    s.close();
 }
 
 void XMLFile::WriteString( ofstream &rStream, const rtl::OUString &sString )

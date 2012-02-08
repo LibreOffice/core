@@ -33,16 +33,10 @@
 
 /* external functions (C++ code, declared as extren "C" */
 extern int WorkOnTokenSet( int, char* );
-extern int InitExport( char * , char * );
-extern int Parse( int nTyp, char *pTokenText );
-extern int EndExport();
+extern FILE * init(int, char **);
 extern int SetError();
 extern int GetError();
-extern char *GetOutputFile( int argc, char* argv[]);
-extern FILE *GetNextFile();
-extern int isQuiet();
 extern void Close();
-extern char* getFilename();
 
 /* forwards */
 void YYWarning();
@@ -216,15 +210,6 @@ void YYWarning();
 int	yywrap(void)
 /*****************************************************************************/
 {
-	FILE *pFile;
-	pFile = GetNextFile();
-	if ( pFile ) {
-		yyin = pFile;
-		yylineno = 0;
-		return 0;
-	}
-
-   /* end of input reached */
 	return 1;
 }
 
@@ -245,54 +230,13 @@ void yyerror( char *s )
 	SetError();
 }
 
-/*****************************************************************************/
 int
-#ifdef WNT
+#if defined WNT
 _cdecl
 #endif
-main( int argc, char* argv[])
-/*****************************************************************************/
-{
-	/* error level */
-	int nRetValue = 0;
-	char *pOutput;
-	FILE *pFile;
-    
-	pOutput = GetOutputFile( argc, argv );
-
-    if ( !pOutput ) {
-		fprintf( stdout, "Syntax:TRANSEX[-p Prj][-r PrjRoot]-i FileIn...[-o FileOut][-m DataBase][-e][-b][-u][-L l1,l2,...]\n" );
-		fprintf( stdout, " Prj:      Project\n" );
-		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
-		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
-		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
-		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-		fprintf( stdout, " -QQ: quiet output\n" );
-        fprintf( stdout, " -e: Disable writing errorlog\n" );
-		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
-		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
-		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
-		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
-		return 1;
-	}
-    
-	InitExport( pOutput , getFilename() );
-	pFile = GetNextFile();
-	if ( !pFile )
-		return 1;
-    
-   	yyin = pFile;
-
-	/* create global instance of class Export */
-
-	/* start parser */
-   	yylex();
-   	Close();
-
-	/* get error info. and end export */
-	nRetValue = GetError();
-	EndExport();
-
-	/* return error level */
-	return nRetValue;
+main(int argc, char ** argv) {
+    yyin = init(argc, argv);
+    yylex();
+    Close();
+    return GetError();
 }

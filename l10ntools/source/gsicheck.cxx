@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <fstream>
 #include <string>
 
@@ -47,7 +48,7 @@ using comphelper::string::getTokenCount;
 
 /*****************************************************************************/
 void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                   rtl::OString const & aContext, sal_Bool bPrintContext, sal_uLong nLine, rtl::OString aUniqueId = rtl::OString() )
+                   rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString aUniqueId = rtl::OString() )
 /*****************************************************************************/
 {
     fprintf( stdout, "%s %s, Line %lu", aType.getStr(), aPrefix.getStr(), nLine );
@@ -62,7 +63,7 @@ void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::O
 
 /*****************************************************************************/
 void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                 rtl::OString const & aContext, sal_Bool bPrintContext, sal_uLong nLine, rtl::OString const & aUniqueId = rtl::OString() )
+                 rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -136,7 +137,7 @@ void LazyStream::LazyOpen()
 //
 
 /*****************************************************************************/
-GSILine::GSILine( const rtl::OString &rLine, sal_uLong nLine )
+GSILine::GSILine( const rtl::OString &rLine, std::size_t nLine )
 /*****************************************************************************/
                 : nLineNumber( nLine )
                 , bOK( sal_True )
@@ -302,7 +303,7 @@ void GSIBlock::SetReferenceLine( GSILine* pLine )
 
 /*****************************************************************************/
 void GSIBlock::PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                             rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId )
+                             rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId )
 /*****************************************************************************/
 {
     ::PrintMessage( aType, aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -310,7 +311,7 @@ void GSIBlock::PrintMessage( rtl::OString const & aType, rtl::OString const & aM
 
 /*****************************************************************************/
 void GSIBlock::PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                           rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId )
+                           rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, nLine, aUniqueId );
@@ -455,7 +456,7 @@ sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
 
 
 /*****************************************************************************/
-sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags )
+sal_Bool GSIBlock::CheckSyntax( std::size_t nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags )
 /*****************************************************************************/
 {
     static LingTest aTester;
@@ -912,12 +913,12 @@ int _cdecl main( int argc, char *argv[] )
 
 
     GSILine* pReferenceLine = NULL;
-    sal_uLong nReferenceLine = 0;
+    std::size_t nReferenceLine = 0;
 
     GSILine* pGSILine = NULL;
     rtl::OString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
-    sal_uLong nLine = 0;
+    std::size_t nLine = 0;
 
     while (!aGSI.eof())
     {

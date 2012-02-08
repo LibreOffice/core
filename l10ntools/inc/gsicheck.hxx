@@ -29,8 +29,12 @@
 #ifndef _GSICHECK_HXX_
 #define _GSICHECK_HXX_
 
-#include "tagtest.hxx"
+#include "sal/config.h"
+
+#include <cstddef>
 #include <vector>
+
+#include "tagtest.hxx"
 
 //
 // class GSILine
@@ -42,7 +46,7 @@ class GSILine
 private:
     ParserMessageList aMessages;
     LineFormat aFormat;
-    sal_uLong nLineNumber;
+    std::size_t nLineNumber;
 
     rtl::OString aUniqId;
     rtl::OString aLineType;
@@ -59,9 +63,9 @@ private:
 public:
     rtl::OString data_;
 
-    GSILine( const rtl::OString &rLine, sal_uLong nLine );
+    GSILine( const rtl::OString &rLine, std::size_t nLine );
     LineFormat  GetLineFormat() const    { return aFormat; }
-    sal_uLong       GetLineNumber() const    { return nLineNumber; }
+    std::size_t GetLineNumber() const    { return nLineNumber; }
 
     rtl::OString  const GetUniqId()     const    { return aUniqId; }
     rtl::OString  const GetLineType()   const    { return aLineType; }
@@ -90,7 +94,7 @@ public:
 // class GSIBlock
 //
 
-typedef ::std::vector< GSILine* > GSIBlock_Impl;
+typedef std::vector< GSILine* > GSIBlock_Impl;
 
 class LazyStream;
 
@@ -116,11 +120,11 @@ private:
 public:
     GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowSusp );
     ~GSIBlock();
-    void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId = rtl::OString() );
-    void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, sal_uLong nLine, rtl::OString const & aUniqueId = rtl::OString() );
+    void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
+    void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
     void InsertLine( GSILine* pLine, const rtl::OString &rSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
+    sal_Bool CheckSyntax( std::size_t nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 
     void WriteError( LazyStream &aErrOut, sal_Bool bRequireSourceLine );
     void WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine );

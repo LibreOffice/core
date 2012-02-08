@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <fstream>
 #include <string>
 
@@ -148,7 +149,6 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
 
    sal_Bool bExport = true;
    if ( bExport ) {
-       rtl::OString sTimeStamp( Export::GetTimeStamp());
        rtl::OString sCur;
        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
            sCur = aLanguages[ n ];
@@ -164,7 +164,6 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
            sOutput += rID; sOutput += "\t\t\t\t0\t";
            sOutput += sCur; sOutput += "\t";
            sOutput += sAct; sOutput += "\t\t\t\t";
-           sOutput += sTimeStamp;
            aSDFStream << sOutput.getStr() << '\n';
        }
    }
@@ -237,7 +236,7 @@ sal_Bool LngParser::Merge(
     while ( nPos < pLines->size()) {
         OStringHashMap Text;
         rtl::OString sID( sGroup );
-        sal_uLong nLastLangPos = 0;
+        std::size_t nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID , sSource );
         pResData->sResTyp = "LngText";
