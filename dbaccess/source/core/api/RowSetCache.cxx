@@ -914,7 +914,7 @@ sal_Bool ORowSetCache::moveWindow()
             // m_nEndPos < nNewEndPos when window not filled (e.g. there are less rows in total than window size)
             m_nEndPos = std::min(nNewEndPos, m_nEndPos);
             const sal_Int32 nOverlapSize = m_nEndPos - m_nStartPos;
-            const sal_Int32 nStartPosOffset = nNewStartPos - m_nStartPos; // by how much m_nStartPos moves
+            const sal_Int32 nStartPosOffset = m_nStartPos - nNewStartPos; // by how much m_nStartPos moves
             m_nStartPos = nNewStartPos;
             OSL_ENSURE( static_cast<ORowSetMatrix::size_type>(nOverlapSize) <= m_pMatrix->size(), "new window end is after end of cache matrix!" );
             // the first position in m_pMatrix whos data we don't keep;
