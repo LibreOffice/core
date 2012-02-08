@@ -228,7 +228,7 @@
 
     # Collect additional repository directories from the ADDITIONAL_REPOSITORIES
     # environment variable (typically set by configure).
-    foreach my $additional_repository (split(";", $ENV{ADDITIONAL_REPOSITORIES}))
+    foreach my $additional_repository (split(" ", $ENV{ADDITIONAL_REPOSITORIES}))
     {
         next if $additional_repository eq "";
         # The repository path is expected to be relative to the workspace_path.

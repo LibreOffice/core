@@ -37,11 +37,11 @@ gb_REPOS := $(SOLARSRC)
 endif
 
 # HACK
-# unixify windoze paths
+# unixify windows paths
 ifeq ($(OS),WNT)
 override WORKDIR := $(shell cygpath -u $(WORKDIR))
 override OUTDIR := $(shell cygpath -u $(OUTDIR))
-override gb_REPOS := $(shell cygpath -u $(gb_REPOS))
+override gb_REPOS := $(foreach repo,$(gb_REPOS),$(shell cygpath -u $(repo)))
 endif
 
 REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))

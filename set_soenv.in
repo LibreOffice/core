@@ -1512,14 +1512,15 @@ else
 
 #
 print "done\n";
-$gb_REPOS = $SRC_ROOT;
-my $BUILD_TYPE = "@BUILD_TYPE@";
 
-if ('@WITH_LANG@' ne "")
+$gb_REPOS = $SRC_ROOT;
+for my $repo (split(/ /,"@ADDITIONAL_REPOSITORIES@"))
 {
-    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/extras";
-    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
+    my $abs_repo = `cd $SRC_ROOT/$repo;pwd`;
+    chomp($abs_repo);
+    $gb_REPOS .= " " . $abs_repo;
 }
+
 
 #
 # F. Setting the different aliases.
@@ -1872,7 +1873,7 @@ ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
+ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
 ToFile( "ADDITIONAL_REPOSITORIES", "@ADDITIONAL_REPOSITORIES@", "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );

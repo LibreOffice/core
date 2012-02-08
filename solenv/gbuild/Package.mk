@@ -66,6 +66,13 @@ $(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call
 
 endef
 
+#
+# Add multiple files $(3), which are located in directory $(2) to the package $(1). 
+#
+define gb_Package_add_files
+$(foreach header,$(3), $(call gb_Package_add_file,$(strip $(1)),$(strip $(2))/$(header),$(header)))
+endef
+
 define gb_Package_add_customtarget
 $(call gb_Package_get_preparation_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
 $(call gb_Package_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
