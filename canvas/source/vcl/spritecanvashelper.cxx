@@ -454,8 +454,6 @@ namespace vclcanvas
 
             const ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
                 aFirst( rUpdateArea.maComponentList.begin() );
-            ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
-                  aSecond( aFirst ); ++aSecond;
 
             ENSURE_OR_THROW( aFirst->second.getSprite().is(),
                               "VCLCanvas::scrollUpdate(): no sprite" );
