@@ -240,10 +240,14 @@ xsltml\
 zlib\
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).clean $(1).deliver
+.PHONY: $(1) $(1).all $(1).clean $(1).deliver
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
+
+$(1).all: bootstrap fetch
+	cd $(1) && unset MAKEFLAGS && \
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
