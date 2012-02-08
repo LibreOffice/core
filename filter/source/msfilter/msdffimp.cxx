@@ -6672,7 +6672,10 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
                 rBLIPStream.SeekRel( nSkip + 20 );
 
                 // read in size of metafile in EMUS
-                rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
+                sal_Int32 width, height;
+                rBLIPStream >> width >> height;
+                aMtfSize100.Width() = width;
+                aMtfSize100.Height() = height;
 
                 // scale to 1/100mm
                 aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
