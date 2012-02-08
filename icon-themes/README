@@ -1,3 +1,24 @@
+Icon repository for the applications
+
+All of the icons, separated by themes are included in this
+directory. These icons are built into .zip files, and re-ordered /
+packed for efficiency reasons based on our UI configuration by the
+packimages/ module.
+
+An icon theme does not need to contain all images, since these can be
+layered one on top of another.
+
+In general the layering is done like this:
+
+<leaf theme>
+tango
+industrial
+galaxy
+
+The classic theme is left primarily for historical interest, rather
+than intended to be packaged.
+
+
 How to add a new image set:
 ---------------------------
 
