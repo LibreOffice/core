@@ -544,7 +544,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     // API-programs would hang.
     // Moreover the event macro must also not be called in an action
         pWrtShell->StartUndo(UNDO_INSGLOSSARY);
-        if( aStartMacro.GetMacName().Len() )
+        if( aStartMacro.HasMacro() )
             pWrtShell->ExecMacro( aStartMacro );
         if(pWrtShell->HasSelection())
             pWrtShell->DelLeft();
@@ -555,7 +555,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
 
         pWrtShell->InsertGlossary(*pGlossary, aShortName);
         pWrtShell->EndAllAction();
-        if( aEndMacro.GetMacName().Len() )
+        if( aEndMacro.HasMacro() )
         {
             pWrtShell->ExecMacro( aEndMacro );
         }
@@ -590,7 +590,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
     // otherwise the possible Shell change gets delayed and
     // API-programs would hang.
     // Moreover the event macro must also not be called in an action
-    if( aStartMacro.GetMacName().Len() )
+    if( aStartMacro.HasMacro() )
         pWrtShell->ExecMacro( aStartMacro );
     if( pWrtShell->HasSelection() )
         pWrtShell->DelRight();
@@ -601,7 +601,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
 
     pWrtShell->InsertGlossary(*pGlos, rName);
     pWrtShell->EndAllAction();
-    if( aEndMacro.GetMacName().Len() )
+    if( aEndMacro.HasMacro() )
     {
         pWrtShell->ExecMacro( aEndMacro );
     }

@@ -70,29 +70,29 @@ class SjJSbxObject;
 
 class SVL_DLLPUBLIC SvxMacro
 {
-    String aMacName;
-    String aLibName;
+    ::rtl::OUString aMacName;
+    ::rtl::OUString aLibName;
     // Fuer JavaScript muss ein Function-Objekt gehalten werden
     SjJSbxObjectBase* pFunctionObject;
     ScriptType eType;
 
 public:
 
-    SvxMacro( const String &rMacName, const String &rLanguage);
+    SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLanguage);
 
-    SvxMacro( const String &rMacName, const String &rLibName,
+    SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLibName,
                 ScriptType eType); //  = STARBASIC entfernt
 
-    SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSource );
+    SvxMacro( SjJSbxObjectBase* _pFunctionObject, const ::rtl::OUString &rSource );
     ~SvxMacro();    // noetig fuer pFunctionObject
 
-    const String &GetLibName() const        { return aLibName; }
-    const String &GetMacName() const        { return aMacName; }
-    String GetLanguage()const;
+    const ::rtl::OUString &GetLibName() const        { return aLibName; }
+    const ::rtl::OUString &GetMacName() const        { return aMacName; }
+    ::rtl::OUString GetLanguage()const;
 
     ScriptType GetScriptType() const        { return eType; }
 
-    sal_Bool HasMacro() const           { return aMacName.Len() ? sal_True : sal_False; }
+    bool HasMacro() const { return !aMacName.isEmpty(); }
 
 #ifdef SOLAR_JAVA
     // JavaScript-Function-Objekt holen
@@ -103,12 +103,12 @@ public:
     SvxMacro& operator=( const SvxMacro& rBase );
 };
 
-inline SvxMacro::SvxMacro( const String &rMacName, const String &rLibName,
+inline SvxMacro::SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLibName,
                             ScriptType eTyp )
     : aMacName( rMacName ), aLibName( rLibName ), pFunctionObject(NULL), eType( eTyp )
 {}
 
-inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSource )
+inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const ::rtl::OUString &rSource )
     : aMacName( rSource ), pFunctionObject( _pFunctionObject ), eType( JAVASCRIPT )
 {}
 

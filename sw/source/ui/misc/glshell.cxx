@@ -121,10 +121,10 @@ sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                                 rCfg.IsSaveRelFile(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
-    if(aStart.GetMacName().Len() || aEnd.GetMacName().Len() )
+    if(aStart.HasMacro() || aEnd.HasMacro() )
     {
-        SvxMacro* pStart = aStart.GetMacName().Len() ? &aStart : 0;
-        SvxMacro* pEnd = aEnd.GetMacName().Len() ? &aEnd : 0;
+        SvxMacro* pStart = aStart.HasMacro() ? &aStart : 0;
+        SvxMacro* pEnd = aEnd.HasMacro() ? &aEnd : 0;
         pGlosHdl->SetMacros( rShortNm, pStart, pEnd, pBlock );
     }
 

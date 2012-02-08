@@ -585,9 +585,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             pGlossaryHdl->GetMacros(aShortNameEdit.GetText(), aStart, aEnd );
 
             SvxMacroItem aItem(RES_FRMMACRO);
-            if( aStart.GetMacName().Len() )
+            if( aStart.HasMacro() )
                 aItem.SetMacro( SW_EVENT_START_INS_GLOSSARY, aStart );
-            if( aEnd.GetMacName().Len() )
+            if( aEnd.HasMacro() )
                 aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
 
             aSet.Put( aItem );

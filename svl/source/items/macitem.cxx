@@ -50,13 +50,13 @@ SjJSbxObjectBase* SjJSbxObjectBase::Clone( void )
     return NULL;
 }
 
-SvxMacro::SvxMacro( const String &rMacName, const String &rLanguage)
+SvxMacro::SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
       pFunctionObject(NULL), eType( EXTENDED_STYPE)
 {
-    if (rLanguage.EqualsAscii(SVX_MACRO_LANGUAGE_STARBASIC))
+    if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_STARBASIC)))
         eType=STARBASIC;
-    else if (rLanguage.EqualsAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT))
+    else if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
         eType=JAVASCRIPT;
 }
 
@@ -66,22 +66,19 @@ SvxMacro::~SvxMacro()
     delete pFunctionObject;
 }
 
-String SvxMacro::GetLanguage()const
+::rtl::OUString SvxMacro::GetLanguage()const
 {
     if(eType==STARBASIC)
     {
-        return UniString::CreateFromAscii(
-                   RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_STARBASIC));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_STARBASIC));
     }
     else if(eType==JAVASCRIPT)
     {
-        return UniString::CreateFromAscii(
-                   RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
     }
     else if(eType==EXTENDED_STYPE)
     {
-        return UniString::CreateFromAscii(
-                   RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_SF));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_SF));
 
     }
     return aLibName;

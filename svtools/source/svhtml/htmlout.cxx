@@ -917,7 +917,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
         const SvxMacro *pMacro =
             rMacroTable.Get( pEventTable[i].nEvent );
 
-        if( pMacro && pMacro->GetMacName().Len() &&
+        if( pMacro && pMacro->HasMacro() &&
             ( JAVASCRIPT == pMacro->GetScriptType() || bOutStarBasic ))
         {
             const sal_Char *pStr = STARBASIC == pMacro->GetScriptType()
