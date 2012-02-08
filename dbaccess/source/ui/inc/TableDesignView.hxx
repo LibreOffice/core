@@ -114,8 +114,6 @@ namespace dbaui
 
         virtual void initialize();
         void reSync(); // resync window data with realdata
-
-        DECL_LINK( SwitchHdl, Accelerator* );
     };
 }
 #endif // DBAUI_TABLEDESIGNVIEW_HXX

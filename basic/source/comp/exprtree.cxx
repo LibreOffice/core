@@ -754,24 +754,6 @@ SbiExprNode* SbiExpression::VBA_Or()
     return pNd;
 }
 
-SbiExprNode* SbiExpression::VBA_Xor()
-{
-    SbiExprNode* pNd = VBA_Or();
-    if( m_eMode != EXPRMODE_EMPTY_PAREN )
-    {
-        for( ;; )
-        {
-            SbiToken eTok = pParser->Peek();
-            if( eTok != XOR )
-                break;
-            eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Or() );
-        }
-    }
-    return pNd;
-
-}
-
 SbiExprNode* SbiExpression::Like()
 {
     SbiExprNode* pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();

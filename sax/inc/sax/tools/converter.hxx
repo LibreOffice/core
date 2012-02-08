@@ -210,8 +210,6 @@ public:
 
     static sal_Int32 decodeBase64SomeChars(com::sun::star::uno::Sequence<sal_Int8>& aPass, const rtl::OUString& sBuffer);
 
-    static void clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource);
-
     static double GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(const ::rtl::OUString& rString, sal_Int16 nDefaultUnit);
 

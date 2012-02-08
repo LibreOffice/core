@@ -62,9 +62,6 @@ boost::scoped_ptr< CfgParser > parser;
 
 }
 
-void badArguments() {
-}
-
 void handleArguments(int argc, char ** argv) {
     enum State {
         STATE_NONE, STATE_INPUT, STATE_OUTPUT, STATE_PRJ, STATE_ROOT,

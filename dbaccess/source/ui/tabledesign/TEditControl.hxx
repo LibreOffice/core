@@ -69,7 +69,6 @@ namespace dbaui
         sal_uLong                       nDeleteEvent;
         sal_uLong                       nInsNewRowsEvent;
         sal_uLong                       nInvalidateTypeEvent;
-        sal_uLong                       nEntryNotFoundEvent;
         ChildFocusState             m_eChildFocus;
 
         long nOldDataPos;
@@ -188,7 +187,6 @@ namespace dbaui
         DECL_LINK( DelayedDelete, void* );
         DECL_LINK( DelayedInsNewRows, void* );
         DECL_LINK( InvalidateFieldType, void* );
-        DECL_LINK( EntryNotFound, void* );
 
         void InitCellController();
         sal_Int32 HasFieldName( const String& rFieldName );

@@ -261,11 +261,6 @@ namespace utl
         delete m_pImpl;
     }
 
-    const Reference< XMultiServiceFactory >& OConfigurationValueContainer::getServiceFactory( ) const
-    {
-        return m_pImpl->xORB;
-    }
-
     void OConfigurationValueContainer::implConstruct( const ::rtl::OUString& _rConfigLocation,
         const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
     {

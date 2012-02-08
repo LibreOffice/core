@@ -193,7 +193,6 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     ,nDeleteEvent(0)
     ,nInsNewRowsEvent(0)
     ,nInvalidateTypeEvent(0)
-    ,nEntryNotFoundEvent(0)
     ,m_eChildFocus(NONE)
     ,nOldDataPos(-1)
     ,bSaveOnMove(sal_True)
@@ -344,8 +343,6 @@ OTableEditorCtrl::~OTableEditorCtrl()
         Application::RemoveUserEvent( nInsNewRowsEvent );
     if( nInvalidateTypeEvent )
         Application::RemoveUserEvent( nInvalidateTypeEvent );
-    if( nEntryNotFoundEvent )
-        Application::RemoveUserEvent( nEntryNotFoundEvent );
 
     //////////////////////////////////////////////////////////////////////
     // Controltypen zerstoeren
@@ -749,16 +746,6 @@ IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInvalidateTypeEvent = 0;
     Invalidate( GetFieldRectPixel(nOldDataPos, FIELD_TYPE) );
-
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, EntryNotFound, void*, /*EMPTYTAG*/ )
-{
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    nEntryNotFoundEvent = 0;
-    ErrorBox( this, ModuleRes(ERR_INVALID_LISTBOX_ENTRY) ).Execute();
 
     return 0;
 }

@@ -81,15 +81,6 @@ namespace toolkit
     }
 
     //.........................................................................
-    Reference< XRegistryKey > registerServices( const Reference< XRegistryKey >& _rxParentKey,
-        const sal_Char* _pAsciiImplName, const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2 )
-    {
-        Reference< XRegistryKey > xComponentServicesKey = registerServices( _rxParentKey, _pAsciiImplName, _pAsciiServiceName1 );
-        xComponentServicesKey->createKey( ::rtl::OUString::createFromAscii( _pAsciiServiceName2 ) );
-        return xComponentServicesKey;
-    }
-
-    //.........................................................................
     void* tryCreateFactory( const sal_Char* _pRequiredImplName, const sal_Char* _pComponentImplName,
         const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2,
         ::cppu::ComponentInstantiation _pInstantiation, const Reference< XMultiServiceFactory >& _rxServiceFactory )

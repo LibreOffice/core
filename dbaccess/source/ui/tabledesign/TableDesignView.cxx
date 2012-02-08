@@ -256,29 +256,6 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, /*pAcc*/ )
-{
-    if( getController().isReadOnly() )
-        return 0;
-
-    if( GetDescWin()->HasChildPathFocus() )
-    {
-        GetDescWin()->LoseFocus();
-        GetEditorCtrl()->GrabFocus();
-    }
-    else
-    {
-         ::boost::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
-        OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
-        if ( pFieldDescr )
-            GetDescWin()->GrabFocus();
-        else
-            GetEditorCtrl()->GrabFocus();
-    }
-
-    return 0;
-}
-//------------------------------------------------------------------------------
 long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;

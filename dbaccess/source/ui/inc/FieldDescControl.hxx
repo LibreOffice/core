@@ -124,7 +124,6 @@ namespace dbaui
         long                    m_nOldHThumb;
         sal_Int32               m_nWidth;
 
-        sal_uLong                   nDelayedGrabFocusEvent;
         sal_Bool                m_bAdded;
         bool                    m_bRightAligned;
 
@@ -135,7 +134,6 @@ namespace dbaui
         DECL_LINK( FormatClickHdl, Button * );
         DECL_LINK( ChangeHdl, ListBox * );
 
-        DECL_LINK( DelayedGrabFocus, Control** );
             // von ActivatePropertyField benutzt
         DECL_LINK( OnControlFocusLost, Control* );
         DECL_LINK( OnControlFocusGot, Control* );

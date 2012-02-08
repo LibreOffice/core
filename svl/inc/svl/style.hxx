@@ -285,7 +285,7 @@ public:
     virtual sal_Bool        SetParent( const UniString& );
 
 protected:
-    SfxStyleSheet(); // do not use! needed by MSVC
+    SfxStyleSheet() {} // do not use! needed by MSVC
     virtual             ~SfxStyleSheet();
 };
 

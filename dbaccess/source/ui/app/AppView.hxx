@@ -307,8 +307,6 @@ namespace dbaui
                             sal_Bool _bTable);
 
         SvLBoxEntry* getEntry( const Point& _aPosPixel ) const;
-
-        DECL_LINK( SwitchHdl, Accelerator* );
     };
 }
 #endif // DBAUI_APPVIEW_HXX

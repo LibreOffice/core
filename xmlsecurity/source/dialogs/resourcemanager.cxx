@@ -78,26 +78,6 @@ namespace XmlSec
         return sRet;
     }
 
-    String GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime )
-    {
-        String sDay( _rDate, 6, 2 );
-        String sMonth( _rDate, 4, 2 );
-        String sYear( _rDate, 0, 4 );
-
-        String sHour( _rTime, 0, 2 );
-        String sMin( _rTime, 4, 2 );
-        String sSec( _rTime, 6, 2 );
-
-
-        Date aDate( (sal_uInt16)sDay.ToInt32(), (sal_uInt16) sMonth.ToInt32(), (sal_uInt16)sYear.ToInt32() );
-        Time aTime( sHour.ToInt32(), sMin.ToInt32(), sSec.ToInt32(), 0 );
-        const LocaleDataWrapper& rLoDa = GetLocaleData();
-        String aStr( rLoDa.getDate( aDate ) );
-        aStr.AppendAscii( " " );
-        aStr += rLoDa.getTime( aTime );
-        return aStr;
-    }
-
     String GetDateString( const ::com::sun::star::util::DateTime& _rDT )
     {
         return GetLocaleData().getDate( GetDateTime( _rDT ) );

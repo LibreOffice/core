@@ -578,13 +578,6 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
     return aStyleName;
 }
 
-OUString XclTools::GetBuiltInStyleName( const OUString& rStyleName )
-{
-    rtl::OUStringBuffer aBuf(maStyleNamePrefix1);
-    aBuf.append(rStyleName);
-    return aBuf.makeStringAndClear();
-}
-
 bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyleId, sal_Int32* pnNextChar )
 {
     // "Default" becomes "Normal"

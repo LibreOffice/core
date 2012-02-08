@@ -1,4 +1,3 @@
-(anonymous namespace)::badArguments()
 ByteString::Append(char)
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
@@ -251,7 +250,6 @@ SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxProgress::Lock()
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
-SfxStyleSheetBase::SfxStyleSheetBase()
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxUINT32s::Insert(SfxUINT32s const*, unsigned short, unsigned short, unsigned short)
 SfxUINT32s::Remove(unsigned short, unsigned short)
@@ -609,7 +607,6 @@ UnoControlModel::Clone() const
 UnoControlModel::GetImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 UnoControlModel::UnoControlModel()
 UnoControlModel::getInfoHelper()
-UnoDialog::getMapsFromPixels(int) const
 UnoListBoxControl::getActionListeners()
 UnoListBoxControl::getItemListeners()
 UnoMemoryStream::UnoMemoryStream(unsigned int, unsigned int)
@@ -683,7 +680,6 @@ XMLSignatureHelper::GetUriBinding() const
 XMLSignatureHelper::SetUriBinding(com::sun::star::uno::Reference<com::sun::star::xml::crypto::XUriBinding>&)
 XMLSignatureHelper::SetX509Certificate(int, int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 XMLTextFieldExport::ProcessDate(xmloff::token::XMLTokenEnum, com::sun::star::util::Date const&, unsigned short)
-XMLTextFrameContext::CreateIfNotThere()
 XMLTextImportHelper::GetRangeFor(rtl::OUString&)
 XMLTextImportHelper::HasDrawNameAttribute(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, SvXMLNamespaceMap&)
 XMLTextImportHelper::getCurrentFieldName()
@@ -710,9 +706,7 @@ XclRoot::GetPixelXFromHmm(int) const
 XclRoot::GetPixelYFromHmm(int) const
 XclTokenArray::XclTokenArray(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, bool)
 XclTokenArrayIterator::Init()
-XclTools::GetBuiltInStyleName(rtl::OUString const&)
 XclXFBase::HasUsedFlags() const
-XmlSec::GetDateTimeString(rtl::OUString const&, rtl::OUString const&)
 XmlSecStatusBarControl::GetDefItemWidth(StatusBar&)
 ZipPackageStream::SetBaseEncryptionData(rtl::Reference<BaseEncryptionData> const&)
 _CpyTabFrms::Insert(_CpyTabFrm const&, unsigned short&)
@@ -1243,9 +1237,6 @@ cppcanvas::internal::TransparencyGroupActionFactory::createTransparencyGroupActi
 cppcanvas::tools::modifyClip(com::sun::star::rendering::RenderState&, cppcanvas::internal::OutDevState const&, boost::shared_ptr<cppcanvas::Canvas> const&, Point const&, basegfx::B2DVector const*, double const*)
 cppcanvas::tools::modifyClip(com::sun::star::rendering::RenderState&, cppcanvas::internal::OutDevState const&, boost::shared_ptr<cppcanvas::Canvas> const&, basegfx::B2DHomMatrix const&)
 dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-dbaui::OFieldDescControl::LinkStubDelayedGrabFocus(void*, void*)
-dbaui::OTableDesignView::LinkStubSwitchHdl(void*, void*)
-dbaui::OTableEditorCtrl::LinkStubEntryNotFound(void*, void*)
 dbaui::getKeyColumns(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, int)
 dbtools::CharsetIteratorDerefHelper::CharsetIteratorDerefHelper()
 dbtools::DBTypeConversion::toINT64(com::sun::star::util::DateTime const&)
@@ -1463,7 +1454,6 @@ salhelper::ORealDynamicLoader::release()
 salhelper::Timer::addTime(salhelper::TTimeValue const&)
 salhelper::Timer::setAbsoluteTime(salhelper::TTimeValue const&)
 salhelper::Timer::setRemainingTime(salhelper::TTimeValue const&, salhelper::TTimeValue const&)
-sax::Converter::clearUndefinedChars(rtl::OUString&, rtl::OUString const&)
 sax::Converter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, rtl::OUString const&)
 sax::Converter::convertDouble(double&, rtl::OUString const&, short)
 sax::Converter::convertNumber64(rtl::OUStringBuffer&, long)
@@ -1552,7 +1542,6 @@ sw::util::AuthorInfos::Insert(sw::util::AuthorInfo* const*, unsigned short)
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfos const*, unsigned short, unsigned short)
 sw::util::AuthorInfos::Remove(sw::util::AuthorInfo* const&, unsigned short)
 sw::util::AuthorInfos::Remove(unsigned short, unsigned short)
-toolkit::registerServices(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, char const*, char const*, char const*)
 ucbhelper::Content::getPropertyValues(com::sun::star::uno::Sequence<int> const&)
 ucbhelper::Content::insertNewContent(rtl::OUString const&, com::sun::star::uno::Sequence<int> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, ucbhelper::Content&)
 ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, std::__debug::vector<ucbhelper::ContentProviderData, std::allocator<ucbhelper::ContentProviderData> > const&)
@@ -1564,7 +1553,6 @@ unicode::isTitle(unsigned short)
 unographic::GraphicDescriptor::isValid() const
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
-utl::OConfigurationValueContainer::getServiceFactory() const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::I18nHelper::GetDate(Date const&) const
 vcl::I18nHelper::getLocale() const

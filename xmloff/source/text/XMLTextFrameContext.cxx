@@ -1294,17 +1294,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 
-sal_Bool XMLTextFrameContext::CreateIfNotThere()
-{
-    sal_Bool bRet = sal_False;
-    SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
-    if( pImpl )
-        bRet = pImpl->CreateIfNotThere();
-
-    return bRet;
-}
-
 sal_Bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet )
 {

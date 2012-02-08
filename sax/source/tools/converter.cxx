@@ -1787,22 +1787,6 @@ sal_Int32 Converter::decodeBase64SomeChars(
     return nCharsDecoded;
 }
 
-void Converter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource)
-{
-    sal_uInt32 nLength(rSource.getLength());
-    rtl::OUStringBuffer sBuffer(nLength);
-    for (sal_uInt32 i = 0; i < nLength; i++)
-    {
-        sal_Unicode cChar = rSource[i];
-        if (!(cChar < 0x0020) ||
-            (cChar == 0x0009) ||        // TAB
-            (cChar == 0x000A) ||        // LF
-            (cChar == 0x000D))          // legal character
-            sBuffer.append(cChar);
-    }
-    rTarget = sBuffer.makeStringAndClear();
-}
-
 double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     double fRetval(1.0);
