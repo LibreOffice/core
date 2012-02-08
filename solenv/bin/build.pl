@@ -1514,10 +1514,10 @@ sub cancel_build {
     print STDERR "-----------------------------------------------------------------------\n";
     print STDERR "To rebuild a specific module:\n";
     print STDERR "\n";
-    print STDERR "make $module.clean #optional\n";
-    print STDERR "make $module\n";
+    print STDERR "$ENV{GNUMAKE} $module.clean #optional\n";
+    print STDERR "$ENV{GNUMAKE} $module\n";
     print STDERR "\n";
-    print STDERR "when the problem is isolated and fixed re-run 'make'\n";
+    print STDERR "when the problem is isolated and fixed, re-run '$ENV{GNUMAKE}'\n";
     zenity_message("LibreOffice Build Failed!");
     zenity_close();
 
