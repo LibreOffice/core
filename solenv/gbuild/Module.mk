@@ -69,7 +69,7 @@ $(call gb_Module_get_check_target,%) :
 		touch $@)
 
 $(call gb_Module_get_slowcheck_target,%) :
-	$(call gb_Output_announce,$*,$(true),SCHK,5)
+	$(call gb_Output_announce,$*,$(true),SLC,5)
 	$(call gb_Output_announce_title,module $* slowchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
