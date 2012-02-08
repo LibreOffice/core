@@ -86,7 +86,6 @@ public:
     sal_Bool    MatchString( const String& rStr1, const String& rStr2 ) const;
     sal_Bool    MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const;
 
-    String      GetDate( const Date& rDate ) const;
     String      GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;
 
     static String filterFormattingChars( const String& );
