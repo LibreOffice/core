@@ -172,6 +172,8 @@ public:
     bool operator() (const TypedStrData& r) const;
 };
 
+typedef std::set<TypedStrData, TypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

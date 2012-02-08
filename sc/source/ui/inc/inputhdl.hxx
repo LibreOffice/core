@@ -31,7 +31,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include "types.hxx"
+#include "collect.hxx"
 
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
@@ -49,7 +49,6 @@ class ScEditEngineDefaulter;
 class EditView;
 class EditTextObject;
 class ScInputHdlState;
-class TypedStrData;
 class ScRangeFindList;
 class Timer;
 class KeyEvent;
