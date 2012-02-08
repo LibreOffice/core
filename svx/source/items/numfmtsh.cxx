@@ -842,12 +842,12 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
 
     if(nCurCategory!=NUMBERFORMAT_ALL)
     {
-		 SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+        SvNumberFormatTable::iterator it = pCurFmtTable->begin();
 
         while ( it != pCurFmtTable->end() )
         {
             sal_uInt32 nKey = it->first;
-			 pNumEntry   = it->second;
+            pNumEntry   = it->second;
 
             if ( !IsRemoved_Impl( nKey ))
             {
@@ -878,7 +878,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
                     aCurEntryList.push_back( nKey );
                 }
             }
-			 ++it;
+            ++it;
         }
     }
     return nSelPos;
@@ -945,11 +945,11 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,true);
     }
 
-	 SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
     while ( it != pCurFmtTable->end() )
     {
         sal_uInt32 nKey = it->first;
-		 const SvNumberformat* pNumEntry = it->second;
+        const SvNumberformat* pNumEntry = it->second;
 
         if ( !IsRemoved_Impl( nKey ) )
         {
@@ -964,7 +964,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
                 bool bInsFlag = false;
                 if ( pNumEntry->HasNewCurrency() )
                 {
-                    bInsFlag = true;	// merge locale formats into currency selection
+                    bInsFlag = true;    // merge locale formats into currency selection
                 }
                 else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
                    (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
@@ -994,7 +994,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
                 }
             }
         }
-		 ++it;
+        ++it;
     }
 
     NfWSStringsDtor aWSStringsDtor;
@@ -1101,11 +1101,11 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != NUMBERFORMAT_ALL);
 
-	 SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
     while ( it != pCurFmtTable->end() )
     {
         sal_uInt32 nKey = it->first;
-		 const SvNumberformat* pNumEntry = it->second;
+        const SvNumberformat* pNumEntry = it->second;
 
         if ( !IsRemoved_Impl( nKey ) )
         {
@@ -1134,7 +1134,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
                 }
             }
         }
-		 ++it;
+        ++it;
     }
     return nSelPos;
 }

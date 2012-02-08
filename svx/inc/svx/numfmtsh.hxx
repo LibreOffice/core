@@ -34,15 +34,12 @@
 #include "svx/svxdllapi.h"
 
 #include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
 
 #include <vector>
 #include <map>
 
 class Color;
-class SvNumberFormatter;
-class SvNumberformat;
-typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
-class NfCurrencyEntry;
 
 enum SvxNumberValueType
 {

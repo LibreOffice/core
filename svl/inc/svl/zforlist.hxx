@@ -561,8 +561,7 @@ public:
     sal_uInt32 GetEntryKey( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Return the format for a format index
-    const SvNumberformat* GetEntry(sal_uInt32 nKey) const
-		{ SvNumberFormatTable::const_iterator it  = aFTable.find(nKey); return it == aFTable.end() ? 0 : it->second; }
+    const SvNumberformat* GetEntry( sal_uInt32 nKey ) const;
 
     /// Return the format index of the standard default number format for language/country
     sal_uInt32 GetStandardIndex(LanguageType eLnge = LANGUAGE_DONTKNOW);
@@ -800,7 +799,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
     ::com::sun::star::lang::Locale aLocale;
     SvNumberFormatTable aFTable;            // Table of format keys to format entries
-	typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
+    typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
     SvNumberFormatTable* pFormatTable;      // For the UI dialog
     SvNumberFormatterIndexTable* pMergeTable;               // List of indices for merging two formatters
@@ -913,8 +912,12 @@ private:
         sal_Int32 nCount, bool bCheckCorrectness = true
         );
 
-	SVL_DLLPRIVATE SvNumberformat* GetFormatEntry(sal_uInt32 nKey);
-	SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry(sal_uInt32 nKey) const;
+    // Obtain the format entry for a given key index.
+    SVL_DLLPRIVATE       SvNumberformat* GetFormatEntry( sal_uInt32 nKey );
+    SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry( sal_uInt32 nKey ) const
+    {
+        return GetEntry( nKey);
+    }
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
 #ifndef DBG_UTIL
@@ -1001,13 +1004,13 @@ public:
 
 inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
 {
-	if (pMergeTable)
-	{
-		SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
-		if (it != pMergeTable->end())
-			return it->second;
-	}
-	return nOldFmt;
+    if (pMergeTable)
+    {
+        SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
+        if (it != pMergeTable->end())
+            return it->second;
+    }
+    return nOldFmt;
 }
 
 inline bool SvNumberFormatter::HasMergeFmtTbl() const

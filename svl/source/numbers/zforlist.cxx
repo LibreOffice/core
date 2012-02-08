@@ -216,8 +216,8 @@ SvNumberFormatter::~SvNumberFormatter()
         }
     }
 
-	for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
-		delete it->second;
+    for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
+        delete it->second;
     delete pFormatTable;
     delete pCharClass;
     delete pStringScanner;
@@ -357,21 +357,21 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 )
     {
         IniLnge = eLnge;
         ChangeIntl(eLnge);
-		// delete old formats
-		for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
-			delete it->second;
+        // delete old formats
+        for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
+            delete it->second;
+        aFTable.clear();
         ImpGenerateFormats( 0, bLoadingSO5 );   // new standard formats
     }
     else if ( bLoadingSO5 )
     {   // delete additional standard formats
         sal_uInt32 nKey;
-		SvNumberFormatTable::iterator it = aFTable.find( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
+        SvNumberFormatTable::iterator it = aFTable.find( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
         while ( (nKey = it->first) > SV_MAX_ANZ_STANDARD_FORMATE &&
                 nKey < SV_COUNTRY_LANGUAGE_OFFSET )
         {
             delete it->second;
-            aFTable.erase( it );
-			 ++it;
+            aFTable.erase( it++ );
         }
     }
 }
@@ -392,8 +392,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     while ( it != aFTable.end() && (nKey = it->first) >= nCLOffset && nKey <= nMaxBuiltin )
     {
         delete it->second;
-        aFTable.erase( it );
-		 ++it;
+        aFTable.erase( it++ );
     }
 
     // move additional and user defined to temporary table
@@ -401,8 +400,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     while ( it != aFTable.end() && (nKey = it->first) >= nCLOffset && nKey < nNextCL )
     {
         aOldTable[ nKey ] = it->second;
-        aFTable.erase( it );
-		 ++it;
+        aFTable.erase( it++ );
     }
 
     // generate new old builtin formats
@@ -442,7 +440,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
             else
                 pNewEntry->SetType( NUMBERFORMAT_DEFINED );
 
-            if ( !aFTable.insert( make_pair(nKey, pNewEntry) ).second )
+            if ( !aFTable.insert( make_pair( nKey, pNewEntry) ).second )
                 delete pNewEntry;
             else
                 bCheck = true;
@@ -463,7 +461,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
 
 bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
 {
-	const SvNumberformat* pFormat = GetFormatEntry(F_Index);
+    const SvNumberformat* pFormat = GetFormatEntry(F_Index);
     if (!pFormat)
         return false;
     else
@@ -521,7 +519,7 @@ bool SvNumberFormatter::PutEntry(String& rString,
                 OSL_FAIL("SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
-            else if (!aFTable.insert(make_pair(nPos+1,p_Entry)).second)
+            else if (!aFTable.insert(make_pair( nPos+1,p_Entry)).second)
                 delete p_Entry;
             else
             {
@@ -820,7 +818,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
             if (pEnt)
                 pEnt->SetLastInsertKey(pEntry->GetLastInsertKey());
         }
-        if (!aFTable.insert(make_pair(nPos, pEntry)).second)
+        if (!aFTable.insert(make_pair( nPos, pEntry)).second)
             delete pEntry;
         rStream >> nPos;
     }
@@ -873,7 +871,7 @@ bool SvNumberFormatter::Save( SvStream& rStream ) const
     SvNumberFormatTable::const_iterator it = pTable->begin();
     while (it != pTable->end())
     {
-		SvNumberformat* pEntry = it->second;
+        SvNumberformat* pEntry = it->second;
         // Gespeichert werden alle markierten, benutzerdefinierten Formate und
         // jeweils das Standardformat zu allen angewaehlten CL-Kombinationen
         // sowie NewStandardDefined
@@ -952,7 +950,7 @@ sal_uInt32 SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
     sal_uInt32 nOffset = 0;
     while (nOffset <= MaxCLOffset)
     {
-		 const SvNumberformat* pFormat = GetFormatEntry(nOffset);
+        const SvNumberformat* pFormat = GetFormatEntry(nOffset);
         if (pFormat && pFormat->GetLanguage() == eLnge)
             return nOffset;
         nOffset += SV_COUNTRY_LANGUAGE_OFFSET;
@@ -965,7 +963,7 @@ sal_uInt32 SvNumberFormatter::ImpIsEntry(const String& rString,
                                        LanguageType eLnge)
 {
     sal_uInt32 res = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    SvNumberFormatTable::iterator it = aFTable.find(nCLOffset);
+    SvNumberFormatTable::iterator it = aFTable.find( nCLOffset);
     while ( res == NUMBERFORMAT_ENTRY_NOT_FOUND &&
             it != aFTable.end() && it->second->GetLanguage() == eLnge )
     {
@@ -1110,14 +1108,14 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
     // (e.g. currency) => has to be done before collecting formats.
     sal_uInt32 nDefaultIndex = GetStandardFormat( eType, ActLnge );
 
-    SvNumberFormatTable::iterator it = aFTable.find(CLOffset);
+    SvNumberFormatTable::iterator it = aFTable.find( CLOffset);
 
     if (eType == NUMBERFORMAT_ALL)
     {
         while (it != aFTable.end() && it->second->GetLanguage() == ActLnge)
         {   // copy all entries to output table
             (*pFormatTable)[ it->first ] = it->second;
-			++it;
+            ++it;
         }
     }
     else
@@ -1126,7 +1124,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
         {   // copy entries of queried type to output table
             if ((it->second->GetType()) & eType)
                 (*pFormatTable)[ it->first ] = it->second;
-			++it;
+            ++it;
         }
     }
     if ( !pFormatTable->empty() )
@@ -1287,15 +1285,14 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         default:
             nSearch = CLOffset + ZF_STANDARD;
     }
-    sal_uInt32 nDefaultFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find(nSearch);
-    if ( it != aDefaultFormatKeys.end() )
-        nDefaultFormat = it->second;
+    DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( nSearch);
+    sal_uInt32 nDefaultFormat = (it != aDefaultFormatKeys.end() ? 
+            it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
     if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {   // look for a defined standard
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
         sal_uInt32 nKey;
-		SvNumberFormatTable::iterator it2 = aFTable.find( CLOffset );
+        SvNumberFormatTable::iterator it2 = aFTable.find( CLOffset );
         while ( (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
@@ -1331,8 +1328,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
                     nDefaultFormat = CLOffset + ZF_STANDARD;
             }
         }
-        sal_uIntPtr nFormat = nDefaultFormat;
-        aDefaultFormatKeys[ nSearch ] = nFormat;
+        aDefaultFormatKeys[ nSearch ] = nDefaultFormat;
     }
     return nDefaultFormat;
 }
@@ -1490,7 +1486,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            String& sOutString)
 {
     Color* pColor;
-	 SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);
     LanguageType eLang = pFormat->GetLanguage();
@@ -1887,7 +1883,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             return NULL;
         }
     }
-    if ( !aFTable.insert( make_pair(nPos, pFormat) ).second )
+    if ( !aFTable.insert( make_pair( nPos, pFormat) ).second )
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
@@ -1931,7 +1927,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
                                              sal_uInt16& nAnzLeading)
 
 {
-	SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if (pFormat)
         pFormat->GetFormatSpecialInfo(bThousand, IsRed,
                                       nPrecision, nAnzLeading);
@@ -1946,7 +1942,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
 
 sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 {
-	 const SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    const SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if ( pFormat )
         return pFormat->GetFormatPrecision();
     else
@@ -1956,7 +1952,7 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 
 String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
-	 const SvNumberformat* pFormat = GetFormatEntry(nFormat);
+    const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( !pFormat || pFormat->GetLanguage() == ActLnge )
         return GetNumDecimalSep();
 
@@ -2181,20 +2177,20 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
     return nDef;
 }
 
-SvNumberformat* SvNumberFormatter::GetFormatEntry(sal_uInt32 nKey)
+SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey )
 {
-	SvNumberFormatTable::iterator it = aFTable.find(nKey);
-	if (it != aFTable.end())
-		return it->second;
-	return 0;
+    SvNumberFormatTable::iterator it = aFTable.find( nKey);
+    if (it != aFTable.end())
+        return it->second;
+    return 0;
 }
 
-const SvNumberformat* SvNumberFormatter::GetFormatEntry(sal_uInt32 nKey) const
+const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
 {
-	SvNumberFormatTable::const_iterator it = aFTable.find(nKey);
-	if (it != aFTable.end())
-		return it->second;
-	return 0;
+    SvNumberFormatTable::const_iterator it = aFTable.find( nKey);
+    if (it != aFTable.end())
+        return it->second;
+    return 0;
 }
 
 void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO5 )
@@ -2754,7 +2750,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
     const String& rThSep = GetNumThousandSep();
 
-	 SvNumberformat* pFormat = GetFormatEntry( nIndex );
+    SvNumberformat* pFormat = GetFormatEntry( nIndex );
 
     if (nAnzLeading == 0)
     {
@@ -2898,7 +2894,7 @@ bool SvNumberFormatter::IsUserDefined(const String& sStr,
     sal_uInt32 nKey = ImpIsEntry(sStr, CLOffset, eLnge);
     if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
         return true;
-	 SvNumberformat* pEntry = GetFormatEntry( nKey );
+    SvNumberformat* pEntry = GetFormatEntry( nKey );
     if ( pEntry && ((pEntry->GetType() & NUMBERFORMAT_DEFINED) != 0) )
         return true;
     return false;
@@ -2924,7 +2920,7 @@ sal_uInt32 SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
 short SvNumberFormatter::GetType(sal_uInt32 nFIndex)
 {
     short eType;
-	 SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
         eType = NUMBERFORMAT_UNDEFINED;
     else
@@ -2953,10 +2949,10 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
     sal_uInt32 nCLOffset = 0;
     sal_uInt32 nOldKey, nOffset, nNewKey;
     SvNumberformat* pNewEntry;
-	 SvNumberFormatTable::iterator it = rTable.aFTable.begin();
+    SvNumberFormatTable::iterator it = rTable.aFTable.begin();
     while (it != rTable.aFTable.end())
     {
-		 SvNumberformat* pFormat = it->second;
+        SvNumberformat* pFormat = it->second;
         nOldKey = it->first;
         nOffset = nOldKey % SV_COUNTRY_LANGUAGE_OFFSET;     // relativIndex
         if (nOffset == 0)                                   // 1. Format von CL
@@ -2965,11 +2961,11 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
         if (nOffset <= SV_MAX_ANZ_STANDARD_FORMATE)     // Std.form.
         {
             nNewKey = nCLOffset + nOffset;
-            if (aFTable.find(nNewKey) == aFTable.end())                  // noch nicht da
+            if (aFTable.find( nNewKey) == aFTable.end())                  // noch nicht da
             {
 //              pNewEntry = new SvNumberformat(*pFormat);   // Copy reicht nicht !!!
                 pNewEntry = new SvNumberformat( *pFormat, *pFormatScanner );
-                if (!aFTable.insert(make_pair(nNewKey, pNewEntry)).second)
+                if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
                     delete pNewEntry;
             }
             if (nNewKey != nOldKey)                     // neuer Index
@@ -2998,8 +2994,8 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
                 }
-                else if (!aFTable.insert(make_pair(nNewKey, pNewEntry)).second)
-                        delete pNewEntry;
+                else if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
+                    delete pNewEntry;
                 else
                     pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset));
             }
@@ -3008,7 +3004,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 (*pMergeTable)[nOldKey] = nNewKey;
             }
         }
-		++it;
+        ++it;
     }
     return pMergeTable;
 }
@@ -3021,10 +3017,10 @@ SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
 
     SvNumberFormatterMergeMap aMap;
     for (SvNumberFormatterIndexTable::iterator it = pMergeTable->begin(); it != pMergeTable->end(); ++it)
-	 {
+    {
         sal_uInt32 nOldKey = it->first;
         aMap[ nOldKey ] = it->second;
-	 }
+    }
     ClearMergeTable();
     return aMap;
 }
@@ -3258,12 +3254,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 {
     sal_uInt32 CLOffset = ImpGetCLOffset( ActLnge );
-    sal_uInt32 nDefaultCurrencyFormat;
-	 DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( CLOffset + ZF_STANDARD_CURRENCY );
-	 if ( it != aDefaultFormatKeys.end() )
-        nDefaultCurrencyFormat = it->second;
-	 else
-        nDefaultCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( CLOffset + ZF_STANDARD_CURRENCY );
+    sal_uInt32 nDefaultCurrencyFormat = (it != aDefaultFormatKeys.end() ? 
+            it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
     if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         // look for a defined standard
@@ -3278,7 +3271,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
                 nDefaultCurrencyFormat = nKey;
                 break;  // while
             }
-			 ++it2;
+            ++it2;
         }
 
         if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -3304,13 +3297,12 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
                 nDefaultCurrencyFormat = CLOffset + ZF_STANDARD_CURRENCY+3;
             else
             {   // mark as standard so that it is found next time
-				 SvNumberformat* pEntry = GetFormatEntry( nDefaultCurrencyFormat );
+                SvNumberformat* pEntry = GetFormatEntry( nDefaultCurrencyFormat );
                 if ( pEntry )
                     pEntry->SetStandard();
             }
         }
-        sal_uIntPtr nFormat = nDefaultCurrencyFormat;
-        aDefaultFormatKeys[ CLOffset + ZF_STANDARD_CURRENCY ] = nFormat;
+        aDefaultFormatKeys[ CLOffset + ZF_STANDARD_CURRENCY ] = nDefaultCurrencyFormat;
     }
     return nDefaultCurrencyFormat;
 }
@@ -3372,7 +3364,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
         *ppEntry = NULL;
     if ( pBank )
         *pBank = false;
-	 const SvNumberformat* pFormat = GetFormatEntry(nFormat);
+    const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( pFormat )
     {
         String aSymbol, aExtension;
