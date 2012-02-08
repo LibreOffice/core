@@ -533,6 +533,12 @@ private:
      * If we had a field result in the URL.
      */
     bool m_bHadFieldResult;
+
+    /// If we ended a table row without starting a new one.
+    bool m_bTableRowEnded;
+
+    /// Number of cells from the table definition, by depth.
+    std::map<sal_uInt32,sal_uInt32> m_aCells;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 
