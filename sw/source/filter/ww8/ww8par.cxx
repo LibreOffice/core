@@ -4134,8 +4134,7 @@ void wwExtraneousParas::delete_all_from_doc()
     {
         SwTxtNode *pTxtNode = *aI;
         SwNodeIndex aIdx(*pTxtNode);
-        SwPosition aPos(aIdx);
-        SwPaM aTest(aPos);
+        SwPaM aTest(aIdx);
         m_rDoc.DelFullPara(aTest);
     }
     m_aTxtNodes.clear();
