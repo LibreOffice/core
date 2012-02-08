@@ -61,8 +61,7 @@ $(call gb_Extension_get_workdir,%)/description.xml :
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		cp -f $(LOCATION)/description.xml $@)
 else
-$(call gb_Extension_get_workdir,%)/description.xml : | \
-		$(gb_Extension_XRMEXTARGET)
+$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
 ifeq ($(OS_FOR_BUILD),WNT)
 	$(call gb_Helper_abbreviate_dirs_native,\
@@ -168,7 +167,7 @@ endef
 
 define gb_Extension_localize_help_onelang
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
-$(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
+$(call gb_Extension_get_workdir,$(1))/$(2) : $(3) gb_Extension_HELPEXTARGET
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@)
 ifeq ($(OS_FOR_BUILD),WNT)

@@ -238,7 +238,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-l all)
 endef
 
-$(call gb_XcuMergeTarget_get_target,%) : | $(gb_XcuMergeTarget_CFGEXTARGET)
+$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
 	$(if $(SDF),$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
