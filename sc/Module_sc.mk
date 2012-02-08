@@ -42,11 +42,12 @@ $(eval $(call gb_Module_add_targets,sc,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
+    CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc,\
-    CppunitTest_sc_ucalc \
+    CppunitTest_sc_subsequent_filters_test \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
@@ -59,7 +60,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_namedrangeobj \
     CppunitTest_sc_namedrangesobj \
     CppunitTest_sc_tablesheetsobj \
-    CppunitTest_sc_subsequent_filters_test \
 ))
 
 # vim: set noet sw=4 ts=4:
