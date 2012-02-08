@@ -486,11 +486,9 @@ namespace vclcanvas
                                         _1 ) );
     }
 
-    void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
+    void SpriteCanvasHelper::opaqueUpdate( SAL_UNUSED_PARAMETER const ::basegfx::B2DRange& rTotalArea ,
                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
-        (void)rTotalArea;
-
         ENSURE_OR_THROW( mpOwningSpriteCanvas &&
                          mpOwningSpriteCanvas->getBackBuffer() &&
                          mpOwningSpriteCanvas->getFrontBuffer(),
