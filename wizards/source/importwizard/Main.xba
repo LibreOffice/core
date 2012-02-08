@@ -44,7 +44,7 @@ Sub Main()
 	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optMSDocuments&quot;).SetFocus()
-	oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
+	oBinFilterComp = createBF_MigrateFilterIfPossible()
 	ToggleCheckboxesWithBoolean(True)
 
 	RetValue = ImportDialogArea.Execute()
@@ -184,6 +184,17 @@ Dim i as Integer
 		ImportDialogArea.GetControl(&quot;chk&quot; &amp; WizardMode &amp; &quot;Application&quot; &amp; i).Model.Enabled = Abs(CheckInstalledModule(i-1))
 	Next i
 End Sub
+
+
+Function createBF_MigrateFilterIfPossible()
+Dim oService
+    On Error Goto RTError
+    oService = createUnoService(&quot;com.sun.star.comp.office.BF_MigrateFilter&quot;)
+    getBinFilterCompIfItExists = oService
+    Exit Function
+RTError:
+    createBF_MigrateFilterIfPossible = Nothing
+End Function
 
 
 Function CheckInstalledModule(Index as Integer) as Boolean
