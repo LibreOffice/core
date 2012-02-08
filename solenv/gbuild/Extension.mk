@@ -167,7 +167,7 @@ endef
 
 define gb_Extension_localize_help_onelang
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
-$(call gb_Extension_get_workdir,$(1))/$(2) : $(3) gb_Extension_HELPEXTARGET
+$(call gb_Extension_get_workdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@)
 ifeq ($(OS_FOR_BUILD),WNT)
