@@ -48,7 +48,6 @@ public:
     static sal_Unicode SAL_CALL getUnicodeScriptStart(com::sun::star::i18n::UnicodeScript type);
     static sal_Unicode SAL_CALL getUnicodeScriptEnd(com::sun::star::i18n::UnicodeScript type);
     static sal_uInt8 SAL_CALL getUnicodeDirection( const sal_Unicode ch );
-    static sal_Int32 SAL_CALL getCharType( const sal_Unicode ch );
     static sal_Bool SAL_CALL isUpper( const sal_Unicode ch);
     static sal_Bool SAL_CALL isLower( const sal_Unicode ch);
     static sal_Bool SAL_CALL isDigit( const sal_Unicode ch);
