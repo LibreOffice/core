@@ -418,7 +418,6 @@ IsType(unicode::isAlpha, ALPHAMASK)
 IsType(unicode::isDigit, DIGITMASK)
 IsType(unicode::isAlphaDigit, ALPHAMASK|DIGITMASK)
 IsType(unicode::isSpace, SPACEMASK)
-IsType(unicode::isBase, BASEMASK)
 IsType(unicode::isPunctuation, PUNCTUATIONMASK)
 
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\

@@ -55,7 +55,6 @@ public:
     static sal_Bool SAL_CALL isDigit( const sal_Unicode ch);
     static sal_Bool SAL_CALL isControl( const sal_Unicode ch);
     static sal_Bool SAL_CALL isPrint( const sal_Unicode ch);
-    static sal_Bool SAL_CALL isBase( const sal_Unicode ch);
     static sal_Bool SAL_CALL isAlpha( const sal_Unicode ch);
     static sal_Bool SAL_CALL isSpace( const sal_Unicode ch);
     static sal_Bool SAL_CALL isWhiteSpace( const sal_Unicode ch);
