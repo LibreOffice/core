@@ -250,13 +250,19 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
         {
             ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_nTableDepth ) );
             OSL_ENSURE( pDeepInner, "TableNodeInfoInner not found");
-            if ( pDeepInner && pDeepInner->getCell() == 0 )
+            // Make sure we always start a row between ending one and starting a cell.
+            // In case of subtables, we may not get the first cell.
+            if ((pDeepInner && pDeepInner->getCell() == 0) || m_bTableRowEnded)
+            {
+                m_bTableRowEnded = false;
                 StartTableRow( pDeepInner );
+            }
 
             StartTableCell( pDeepInner );
         }
 
-        if ( nRow == 0 && nCell == 0 )
+        // Again, if depth was incremented, start a new table even if we skipped the first cell.
+        if ((nRow == 0 && nCell == 0) || (m_nTableDepth == 0 && pTextNodeInfo->getDepth()))
         {
             // Do we have to start the table?
             // [If we are at the rigth depth already, it means that we
@@ -609,7 +615,10 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
                         rLR.GetLeft() - rLR.GetRight();
     }
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
-    for( sal_uInt16 i = 0; i < pRow->GetCells().Count(); i++ )
+    // Not using m_nTableDepth, which is not yet incremented here.
+    sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
+    m_aCells[nCurrentDepth] = pRow->GetCells().Count();
+    for( sal_uInt16 i = 0; i < m_aCells[nCurrentDepth]; i++ )
     {
         SwWriteTableCell *pCell = pRow->GetCells( )[ i ];
         const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
@@ -907,6 +916,9 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // We'll write the table definition for nested tables later
     if ( nCurrentDepth > 1 )
         return;
+    // Empty the previous row closing buffer before starting the new one,
+    // necessary for subtables.
+    m_rExport.Strm() << m_aAfterRuns.makeStringAndClear().getStr();
     m_rExport.Strm() << m_aRowDefs.makeStringAndClear().getStr();
     }
 }
@@ -945,11 +957,16 @@ void RtfAttributeOutput::EndTableCell( )
     m_bTableCellOpen = false;
     m_bTblAfterCell = true;
     m_bWroteCellInfo = false;
+    m_aCells[m_nTableDepth]--;
 }
 
 void RtfAttributeOutput::EndTableRow( )
 {
     OSL_TRACE("%s, (depth is %d)", OSL_THIS_FUNC, (int)m_nTableDepth);
+
+    // Trying to end the row without writing the required number of cells? Fill with empty ones.
+    for( sal_uInt16 i = 0; i < m_aCells[m_nTableDepth]; i++ )
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_CELL);
 
     if ( m_nTableDepth > 1 )
     {
@@ -972,6 +989,7 @@ void RtfAttributeOutput::EndTableRow( )
         }
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW).append(OOO_STRING_SVTOOLS_RTF_PARD);
     }
+    m_bTableRowEnded = true;
 }
 
 void RtfAttributeOutput::EndTable()
@@ -3000,7 +3018,9 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bBufferSectionHeaders( false ),
     m_bLastTable( true ),
     m_bWroteCellInfo( false ),
-    m_bHadFieldResult( false )
+    m_bHadFieldResult( false ),
+    m_bTableRowEnded( false ),
+    m_aCells()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
