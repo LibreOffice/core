@@ -5068,6 +5068,24 @@
 					</info>
 					<value>0</value>
 				</prop>
+				<prop oor:name="PageWidth" oor:type="xs:int">
+					<!-- UIHints: File  New  Labels  Format -->
+					<info>
+						<author>Winfried</author>
+						<desc>Specifies the page width of the label sheet [UNIT=1/100 mm].</desc>
+						<label>Page Width</label>
+					</info>
+					<value>10000</value>
+				</prop>
+				<prop oor:name="PageHeight" oor:type="xs:int">
+					<!-- UIHints: File  New  Labels  Format -->
+					<info>
+						<author>Winfried</author>
+						<desc>Specifies the page height of the label sheet [UNIT=1/100 mm].</desc>
+						<label>Page Height</label>
+					</info>
+					<value>10000</value>
+				</prop>
 			</group>
 			<group oor:name="Option">
 				<info>

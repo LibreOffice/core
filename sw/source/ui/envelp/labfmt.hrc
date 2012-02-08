@@ -49,12 +49,16 @@
 #define FLD_COLUMNS  15
 #define TXT_ROWS     16
 #define FLD_ROWS     17
-#define FL_NONAME   18
-#define PB_SAVE      19
-#define FI_MAKE      20
-#define FI_TYPE      21
+#define TXT_PWIDTH   18
+#define FLD_PWIDTH   19
+#define TXT_PHEIGHT  20
+#define FLD_PHEIGHT  21
+#define FL_NONAME    22
+#define PB_SAVE      23
+#define FI_MAKE      24
+#define FI_TYPE      25
 
-#define FL_OPTIONS              1
+#define FL_OPTIONS      1
 #define FT_MAKE         2
 #define CB_MAKE         3
 #define FT_TYPE         4
@@ -66,18 +70,20 @@
 
 // global resources ********************************************************
 
-#define STR_HDIST   (RC_LABFMT_BEGIN + 1)
-#define STR_VDIST   (RC_LABFMT_BEGIN + 2)
-#define STR_WIDTH   (RC_LABFMT_BEGIN + 3)
-#define STR_HEIGHT  (RC_LABFMT_BEGIN + 4)
-#define STR_LEFT    (RC_LABFMT_BEGIN + 5)
-#define STR_UPPER   (RC_LABFMT_BEGIN + 6)
-#define STR_COLS    (RC_LABFMT_BEGIN + 7)
-#define STR_ROWS    (RC_LABFMT_BEGIN + 8)
+#define STR_HDIST    (RC_LABFMT_BEGIN +  1)
+#define STR_VDIST    (RC_LABFMT_BEGIN +  2)
+#define STR_WIDTH    (RC_LABFMT_BEGIN +  3)
+#define STR_HEIGHT   (RC_LABFMT_BEGIN +  4)
+#define STR_LEFT     (RC_LABFMT_BEGIN +  5)
+#define STR_UPPER    (RC_LABFMT_BEGIN +  6)
+#define STR_COLS     (RC_LABFMT_BEGIN +  7)
+#define STR_ROWS     (RC_LABFMT_BEGIN +  8)
+#define STR_PWIDTH   (RC_LABFMT_BEGIN +  9)
+#define STR_PHEIGHT  (RC_LABFMT_BEGIN + 10)
 
 // overflow check ********************************************************
 
-#define LABFMT_ACT_END  STR_ROWS
+#define LABFMT_ACT_END  STR_PHEIGHT
 
 #if LABFMT_ACT_END > RC_LABFMT_END
 #error Resource-Ueberlauf in #file, #line

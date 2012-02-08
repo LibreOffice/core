@@ -52,6 +52,8 @@ class SwLabPreview : public Window
     String aUpperStr;
     String aColsStr;
     String aRowsStr;
+    String aPWidthStr;
+    String aPHeightStr;
 
     long lHDistWidth;
     long lVDistWidth;
@@ -59,6 +61,9 @@ class SwLabPreview : public Window
     long lLeftWidth;
     long lUpperWidth;
     long lColsWidth;
+    long PRowsWidth;
+    long lPWidthWidth;
+    long lPHeightWidth;
 
     long lXWidth;
     long lXHeight;
@@ -105,6 +110,10 @@ class SwLabFmtPage : public SfxTabPage
     NumericField aColsField;
     FixedText    aRowsText;
     NumericField aRowsField;
+    FixedText    aPWidthText;
+    MetricField  aPWidthField;
+    FixedText    aPHeightText;
+    MetricField  aPHeightField;
     PushButton   aSavePB;
 
     Timer aPreviewTimer;
