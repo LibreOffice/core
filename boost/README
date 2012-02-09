@@ -1,0 +1,4 @@
+From [http://www.boost.org/].
+
+Apart from the spirit parsing framework, LibreOffice currently mostly
+uses the smart pointers, pool memory and binders functionality.
