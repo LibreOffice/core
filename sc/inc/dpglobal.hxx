@@ -54,9 +54,7 @@
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 
-
-// moved from fieldwnd.hxx, see also SC_DAPI_MAXFIELDS
-#define MAX_LABELS  256
+#define SC_DP_MAX_FIELDS  256
 
 #define     PIVOT_MAXFUNC           11
 #define     PIVOT_FUNC_NONE         0x0000
@@ -72,10 +70,6 @@
 #define     PIVOT_FUNC_STD_VAR      0x0200
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
-
-#define DATA_RENAME_SEPARATOR       "_"
-#define __MAX_NUM_LEN 64
-#define __DECIMALPLACE  18
 
 class SC_DLLPUBLIC ScDPItemData
 {

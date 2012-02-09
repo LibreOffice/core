@@ -254,8 +254,8 @@ sal_Bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 )
 ScDPInitState::ScDPInitState() :
     nCount( 0 )
 {
-    pIndex = new long[SC_DAPI_MAXFIELDS];
-    pData = new SCROW[SC_DAPI_MAXFIELDS];
+    pIndex = new long[SC_DP_MAX_FIELDS];
+    pData = new SCROW[SC_DP_MAX_FIELDS];
 }
 
 ScDPInitState::~ScDPInitState()
@@ -266,8 +266,8 @@ ScDPInitState::~ScDPInitState()
 
 void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 {
-    OSL_ENSURE( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" );
-    if ( nCount < SC_DAPI_MAXFIELDS )
+    OSL_ENSURE( nCount < SC_DP_MAX_FIELDS, "too many InitState members" );
+    if ( nCount < SC_DP_MAX_FIELDS )
     {
         pIndex[nCount] = nSourceIndex;
         pData[nCount] = nMember;
@@ -334,10 +334,10 @@ ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPRe
     nColIndexPos( 0 ),
     nRowIndexPos( 0 )
 {
-    pColVisible = new long[SC_DAPI_MAXFIELDS+1];
-    pColIndexes = new long[SC_DAPI_MAXFIELDS+1];
-    pRowVisible = new long[SC_DAPI_MAXFIELDS+1];
-    pRowIndexes = new long[SC_DAPI_MAXFIELDS+1];
+    pColVisible = new long[SC_DP_MAX_FIELDS+1];
+    pColIndexes = new long[SC_DP_MAX_FIELDS+1];
+    pRowVisible = new long[SC_DP_MAX_FIELDS+1];
+    pRowIndexes = new long[SC_DP_MAX_FIELDS+1];
     pColIndexes[0] = -1;
     pRowIndexes[0] = -1;
 }
@@ -352,8 +352,8 @@ ScDPRunningTotalState::~ScDPRunningTotalState()
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
-    OSL_ENSURE( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" );
-    if ( nColIndexPos < SC_DAPI_MAXFIELDS )
+    OSL_ENSURE( nColIndexPos < SC_DP_MAX_FIELDS, "too many column indexes" );
+    if ( nColIndexPos < SC_DP_MAX_FIELDS )
     {
         pColVisible[nColIndexPos] = nVisible;
         pColIndexes[nColIndexPos] = nSorted;
@@ -365,8 +365,8 @@ void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 {
-    OSL_ENSURE( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" );
-    if ( nRowIndexPos < SC_DAPI_MAXFIELDS )
+    OSL_ENSURE( nRowIndexPos < SC_DP_MAX_FIELDS, "too many row indexes" );
+    if ( nRowIndexPos < SC_DP_MAX_FIELDS )
     {
         pRowVisible[nRowIndexPos] = nVisible;
         pRowIndexes[nRowIndexPos] = nSorted;
@@ -767,7 +767,7 @@ ScDPResultData::ScDPResultData( ScDPSource* pSrc ) :        //! Ref
     bDataAtRow( false )
 {
 
-    lcl_ResizePointVector( mpDimMembers , SC_DAPI_MAXFIELDS );
+    lcl_ResizePointVector( mpDimMembers , SC_DP_MAX_FIELDS );
 }
 
 ScDPResultData::~ScDPResultData()

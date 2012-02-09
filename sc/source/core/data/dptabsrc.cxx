@@ -808,8 +808,8 @@ void ScDPSource::CreateRes_Impl()
         // or pointer arrays.
         vector<rtl::OUString> aDataNames;
         sheet::DataPilotFieldReference* pDataRefValues = NULL;
-        ScSubTotalFunc eDataFunctions[SC_DAPI_MAXFIELDS];
-        sal_uInt16 nDataRefOrient[SC_DAPI_MAXFIELDS];
+        ScSubTotalFunc eDataFunctions[SC_DP_MAX_FIELDS];
+        sal_uInt16 nDataRefOrient[SC_DP_MAX_FIELDS];
         if (nDataDimCount)
         {
             aDataNames.resize(nDataDimCount);

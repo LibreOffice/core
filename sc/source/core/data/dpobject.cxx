@@ -1980,8 +1980,8 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     long nDimCount = xDims->getCount();
-    if ( nDimCount > MAX_LABELS )
-        nDimCount = MAX_LABELS;
+    if ( nDimCount > SC_DP_MAX_FIELDS )
+        nDimCount = SC_DP_MAX_FIELDS;
     if (!nDimCount)
         return false;
 

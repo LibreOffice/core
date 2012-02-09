@@ -347,8 +347,8 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
 {
     size_t nLabelCount = rLabels.size();
-    if (nLabelCount > MAX_LABELS)
-        nLabelCount = MAX_LABELS;
+    if (nLabelCount > SC_DP_MAX_FIELDS)
+        nLabelCount = SC_DP_MAX_FIELDS;
 
     aLabelDataArr.clear();
     aLabelDataArr.reserve( nLabelCount );

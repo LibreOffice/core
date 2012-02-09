@@ -77,10 +77,6 @@ class ScDPResultData;
 class ScDPItemData;
 class ScDPTableData;
 
-//  should be dynamic!
-#define SC_DAPI_MAXFIELDS   256
-
-
 //
 //  implementation of DataPilotSource using ScDPTableData
 //
@@ -108,10 +104,10 @@ private:
     ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
     ScDPDimensions*         pDimensions;        // api objects
                                                 // settings:
-    long                    nColDims[SC_DAPI_MAXFIELDS];
-    long                    nRowDims[SC_DAPI_MAXFIELDS];
-    long                    nDataDims[SC_DAPI_MAXFIELDS];
-    long                    nPageDims[SC_DAPI_MAXFIELDS];
+    long                    nColDims[SC_DP_MAX_FIELDS];
+    long                    nRowDims[SC_DP_MAX_FIELDS];
+    long                    nDataDims[SC_DP_MAX_FIELDS];
+    long                    nPageDims[SC_DP_MAX_FIELDS];
     long                    nColDimCount;
     long                    nRowDimCount;
     long                    nDataDimCount;
