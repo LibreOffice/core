@@ -122,14 +122,6 @@ ScTypedCaseStrSet::const_iterator findText(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
     const rtl::OUString& rStart, rtl::OUString& rResult, bool bBack)
 {
-    rtl::OUString aOldResult;
-    if (itPos != rDataSet.end())
-    {
-        const TypedStrData& rData = *itPos;
-        if (rData.GetStringType())
-            aOldResult = rData.GetString();
-    }
-
     if (bBack)                                    // rueckwaerts
     {
         ScTypedCaseStrSet::const_reverse_iterator it = rDataSet.rbegin(), itEnd = rDataSet.rend();
