@@ -1482,7 +1482,7 @@ String ScModule::InputGetFormulaStr()
     ScInputHandler* pHdl = GetInputHdl();
     String aStr;
     if ( pHdl )
-        aStr = pHdl->InputGetFormulaStr();
+        aStr = pHdl->GetFormString();
     return aStr;
 }
 

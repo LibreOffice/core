@@ -794,7 +794,7 @@ void ScInputHandler::HideTip()
         nTipVisible = 0;
         pTipVisibleParent = NULL;
     }
-    aManualTip.Erase();
+    aManualTip = rtl::OUString();
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -806,7 +806,7 @@ void ScInputHandler::HideTipBelow()
         nTipVisibleSec = 0;
         pTipVisibleSecParent = NULL;
     }
-    aManualTip.Erase();
+    aManualTip = rtl::OUString();
 }
 
 void ScInputHandler::ShowTipCursor()
@@ -1377,7 +1377,7 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
 
 void ScInputHandler::FormulaPreview()
 {
-    String aValue;
+    rtl::OUString aValue;
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pActiveViewSh )
     {
@@ -1388,7 +1388,7 @@ void ScInputHandler::FormulaPreview()
         aValue = lcl_Calculate( aPart, pDoc, aCursorPos );
     }
 
-    if (aValue.Len())
+    if (!aValue.isEmpty())
     {
         ShowTip( aValue );          //  als QuickHelp anzeigen
         aManualTip = aValue;        //  nach ShowTip setzen
@@ -1404,8 +1404,8 @@ void ScInputHandler::PasteManualTip()
     //  drei Punkte am Ende -> Bereichsreferenz -> nicht einfuegen
     //  (wenn wir mal Matrix-Konstanten haben, kann das geaendert werden)
 
-    xub_StrLen nTipLen = aManualTip.Len();
-    if ( nTipLen && ( nTipLen < 3 || !aManualTip.Copy( nTipLen-3 ).EqualsAscii("...") ) )
+    sal_Int32 nTipLen = aManualTip.getLength();
+    if ( nTipLen && ( nTipLen < 3 || !aManualTip.copy( nTipLen-3 ).equalsAscii("...") ) )
     {
         DataChanging();                                     // kann nicht neu sein
 
@@ -2817,7 +2817,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText.Erase();
+    aFormText = rtl::OUString();
 
     bInOwnChange = false;
     bInEnterHandler = false;
@@ -2869,7 +2869,7 @@ void ScInputHandler::CancelHandler()
         NotifyChange( pLastState, true );
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText.Erase();
+    aFormText = rtl::OUString();
 
     bInOwnChange = false;
 }
@@ -3116,7 +3116,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 PasteFunctionData();
                 bUsed = true;
             }
-            else if ( nModi == 0 && nTipVisible && aManualTip.Len() )
+            else if ( nModi == 0 && nTipVisible && !aManualTip.isEmpty() )
             {
                 PasteManualTip();
                 bUsed = true;
@@ -3840,19 +3840,24 @@ void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
 
 //------------------------------------------------------------------------
 
-void ScInputHandler::InputReplaceSelection( const String& rStr )
+void ScInputHandler::InputReplaceSelection( const rtl::OUString& rStr )
 {
     if (!pRefViewSh)
         pRefViewSh = pActiveViewSh;
 
     OSL_ENSURE(nFormSelEnd>=nFormSelStart,"Selektion kaputt...");
 
-    xub_StrLen nOldLen = nFormSelEnd-nFormSelStart;
-    xub_StrLen nNewLen = rStr.Len();
+    sal_Int32 nOldLen = nFormSelEnd - nFormSelStart;
+    sal_Int32 nNewLen = rStr.getLength();
+
+    rtl::OUStringBuffer aBuf(aFormText);
     if (nOldLen)
-        aFormText.Erase( nFormSelStart, nOldLen );
+        aBuf.remove(nFormSelStart, nOldLen);
     if (nNewLen)
-        aFormText.Insert( rStr, nFormSelStart );
+        aBuf.insert(nFormSelStart, rStr);
+
+    aFormText = aBuf.makeStringAndClear();
+
     nFormSelEnd = nFormSelStart + nNewLen;
 
     EditView* pView = GetFuncEditView();
@@ -3864,13 +3869,6 @@ void ScInputHandler::InputReplaceSelection( const String& rStr )
         pView->SetEditEngineUpdateMode( true );
     }
     bModified = true;
-}
-
-//------------------------------------------------------------------------
-
-String ScInputHandler::InputGetFormulaStr()
-{
-    return aFormText;   //! eigene Membervariable?
 }
 
 //========================================================================

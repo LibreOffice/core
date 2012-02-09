@@ -242,7 +242,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 
-    if ( pInputHdl && pInputHdl->GetFormString().Len() )
+    if (pInputHdl && !pInputHdl->GetFormString().isEmpty())
     {
         //  Umschalten waehrend der Funktionsautopilot aktiv ist
         //  -> Inhalt des Funktionsautopiloten wieder anzeigen

@@ -80,12 +80,12 @@ private:
     sal_uLong                   nTipVisible;
     Window*                 pTipVisibleSecParent;
     sal_uLong                   nTipVisibleSec;
-    String                  aManualTip;
+    rtl::OUString           aManualTip;
     rtl::OUString           aAutoSearch;
 
     rtl::OUString           aCurrentText;
 
-    String                  aFormText;                  // fuer Funktions-Autopilot
+    rtl::OUString           aFormText;                  // fuer Funktions-Autopilot
     xub_StrLen              nFormSelStart;              // Selektion fuer Funktions-Autopilot
     xub_StrLen              nFormSelEnd;
 
@@ -180,7 +180,7 @@ public:
     bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
 
     const rtl::OUString& GetEditString();
-    const String&   GetFormString() const   { return aFormText; }
+    const rtl::OUString& GetFormString() const { return aFormText; }
 
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
@@ -242,8 +242,7 @@ public:
     // Kommunikation mit Funktionsautopilot
     void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
     void            InputSetSelection       ( xub_StrLen nStart, xub_StrLen nEnd );
-    void            InputReplaceSelection   ( const String& rStr );
-    String          InputGetFormulaStr      ();
+    void            InputReplaceSelection   ( const rtl::OUString& rStr );
 
     bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
