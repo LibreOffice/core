@@ -211,14 +211,15 @@ void OSelectionBrowseBox::initialize()
         m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
         m_aFunctionStrings += sGroup;
 
-        // Diese Funktionen stehen nur unter CORE zur Verf�gung
+        // Aggregate functions in general available only with Core SQL
+        // We slip in a few optionals one, too.
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
             for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
         }
-        else // sonst nur COUNT(*)
+        else // else only COUNT(*) and COUNT("table".*)
         {
             m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
             m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
@@ -2736,7 +2737,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if ( xConnection.is() )
     {
-        // Diese Funktionen stehen nur unter CORE zur Verf�gung
+        // Aggregate functions in general only available with Core SQL
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             // if we have an asterix, no other function than count is allowed
@@ -2767,7 +2768,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
         }
         else
         {
-            // nur COUNT(*) erlaubt
+            // only COUNT(*) and COUNT("table".*) allowed
             sal_Bool bCountRemoved = !isFieldNameAsterix(_pEntry->GetField());
             if ( bCountRemoved )
                 m_pFunctionCell->RemoveEntry(1);
