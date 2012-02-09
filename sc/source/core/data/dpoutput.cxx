@@ -53,7 +53,6 @@
 #include "scresid.hxx"
 #include "unonames.hxx"
 #include "sc.hrc"
-#include "dpglobal.hxx"
 #include "stringutil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>

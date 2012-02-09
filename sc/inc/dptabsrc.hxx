@@ -60,7 +60,9 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+
 #include "dptabdat.hxx"
+#include "dpglobal.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace sheet {

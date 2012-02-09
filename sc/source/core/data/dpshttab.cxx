@@ -40,7 +40,6 @@
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
-#include "dpglobal.hxx"
 #include "rangenam.hxx"
 #include "queryentry.hxx"
 

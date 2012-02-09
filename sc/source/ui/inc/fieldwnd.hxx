@@ -31,7 +31,7 @@
 
 #include <vector>
 #include "address.hxx"
-#include "dpglobal.hxx"
+
 #include <vcl/ctrl.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>

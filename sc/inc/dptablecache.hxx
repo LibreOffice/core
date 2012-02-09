@@ -30,9 +30,9 @@
 #define SC_DPTABLECACHE_HXX
 
 #include "global.hxx"
-#include <svl/zforlist.hxx>
-#include "dpglobal.hxx"
 #include "dpitemdata.hxx"
+
+#include <svl/zforlist.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
