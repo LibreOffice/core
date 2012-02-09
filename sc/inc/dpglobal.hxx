@@ -91,6 +91,7 @@
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
 #define DP_PROP_FILTER              "Filter"
 #define DP_PROP_POSITION            "Position"
+#define DP_PROP_ORIGINAL            "Original"
 
 class ScTypedStrData;
 class ScDPObject;
@@ -177,7 +178,6 @@ protected:
 namespace ScDPGlobal
 {
 // common operation
-    String operator + ( const String & rL, const String &rR );
     Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
 }
 #endif

@@ -109,35 +109,6 @@ using ::rtl::OUString;
 
 #define SCDPSOURCE_SERVICE  "com.sun.star.sheet.DataPilotSource"
 
-// -----------------------------------------------------------------------
-
-// incompatible versions of data pilot files
-#define SC_DP_VERSION_CURRENT   6
-
-// type of source data
-#define SC_DP_SOURCE_SHEET      0
-#define SC_DP_SOURCE_DATABASE   1
-#define SC_DP_SOURCE_SERVICE    2
-
-// -----------------------------------------------------------------------
-
-//! move to a header file
-#define DP_PROP_COLUMNGRAND         "ColumnGrand"
-#define DP_PROP_FUNCTION            "Function"
-#define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
-#define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_ORIENTATION         "Orientation"
-#define DP_PROP_ORIGINAL            "Original"
-#define DP_PROP_POSITION            "Position"
-#define DP_PROP_REPEATIFEMPTY       "RepeatIfEmpty"
-#define DP_PROP_ROWGRAND            "RowGrand"
-#define DP_PROP_SHOWDETAILS         "ShowDetails"
-#define DP_PROP_SHOWEMPTY           "ShowEmpty"
-#define DP_PROP_SUBTOTALS           "SubTotals"
-#define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     long nRet = sheet::DataPilotFieldOrientation_HIDDEN;

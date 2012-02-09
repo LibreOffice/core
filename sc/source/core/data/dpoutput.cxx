@@ -72,20 +72,6 @@ using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 
-// -----------------------------------------------------------------------
-
-//! move to a header file
-//! use names from unonames.hxx?
-#define DP_PROP_FUNCTION            "Function"
-#define DP_PROP_ORIENTATION         "Orientation"
-#define DP_PROP_POSITION            "Position"
-#define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-#define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_FILTER              "Filter"
-#define DP_PROP_COLUMNGRAND         "ColumnGrand"
-#define DP_PROP_ROWGRAND            "RowGrand"
-#define DP_PROP_SUBTOTALS           "SubTotals"
-
 #define SC_DP_FRAME_INNER_BOLD      20
 #define SC_DP_FRAME_OUTER_BOLD      40
 
