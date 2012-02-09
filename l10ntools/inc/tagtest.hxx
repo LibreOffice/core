@@ -34,9 +34,9 @@
 
 class GSILine;
 
-typedef sal_uInt16 TokenId;
+typedef sal_Int32 TokenId;
 
-#define TOK_INVALIDPOS  sal_uInt16( 0xFFFF )
+#define TOK_INVALIDPOS (-1)
 
 class ParserMessage;
 typedef ::std::vector< ParserMessage* > Impl_ParserMessageList;
@@ -64,12 +64,12 @@ public:
 
     rtl::OUString aTokenString;
     TokenId nId;
-    sal_uInt16 nPos;            // Position in String
+    sal_Int32 nPos;            // Position in String
 
     TokenInfo():bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),nId( 0 ){;}
-explicit    TokenInfo( TokenId pnId, sal_uInt16 nP ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),nId( pnId ),nPos(nP){;}
-    explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),aTokenString( paStr ),nId( pnId ),nPos(nP) {;}
-    explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList );
+explicit    TokenInfo( TokenId pnId, sal_Int32 nP ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),nId( pnId ),nPos(nP){;}
+    explicit    TokenInfo( TokenId pnId, sal_Int32 nP, rtl::OUString const & paStr ):bClosed(sal_False),bCloseTag(sal_False),bIsBroken(sal_False),bHasBeenFixed(sal_False),bDone(sal_False),aTokenString( paStr ),nId( pnId ),nPos(nP) {;}
+    explicit    TokenInfo( TokenId pnId, sal_Int32 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList );
 
     rtl::OUString GetTagName() const;
 
@@ -107,8 +107,8 @@ private:
 
 public:
     ~ParserMessageList() { clear(); }
-    void AddError( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
-    void AddWarning( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
+    void AddError( sal_Int32 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
+    void AddWarning( sal_Int32 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag );
 
     sal_Bool HasErrors();
     bool empty() const { return maList.empty(); }
@@ -242,19 +242,19 @@ public:
 
 class ParserMessage
 {
-    sal_uInt16 nErrorNr;
+    sal_Int32 nErrorNr;
     rtl::OString aErrorText;
-    sal_uInt16 nTagBegin,nTagLength;
+    sal_Int32 nTagBegin,nTagLength;
 
 protected:
-    ParserMessage( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
+    ParserMessage( sal_Int32 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 public:
 
-    sal_uInt16 GetErrorNr() { return nErrorNr; }
+    sal_Int32 GetErrorNr() { return nErrorNr; }
     rtl::OString GetErrorText() { return aErrorText; }
 
-    sal_uInt16 GetTagBegin() { return nTagBegin; }
-    sal_uInt16 GetTagLength() { return nTagLength; }
+    sal_Int32 GetTagBegin() { return nTagBegin; }
+    sal_Int32 GetTagLength() { return nTagLength; }
 
     virtual ~ParserMessage() {}
     virtual sal_Bool IsError() =0;
@@ -264,7 +264,7 @@ public:
 class ParserError : public ParserMessage
 {
 public:
-    ParserError( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
+    ParserError( sal_Int32 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 
     virtual sal_Bool IsError() {return sal_True;}
     virtual rtl::OString Prefix() {return rtl::OString(RTL_CONSTASCII_STRINGPARAM("Error:")); }
@@ -273,7 +273,7 @@ public:
 class ParserWarning : public ParserMessage
 {
 public:
-    ParserWarning( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
+    ParserWarning( sal_Int32 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag );
 
     virtual sal_Bool IsError() {return sal_False;}
     virtual rtl::OString Prefix() {return rtl::OString(RTL_CONSTASCII_STRINGPARAM("Warning:")); }
@@ -282,14 +282,14 @@ public:
 class SimpleParser
 {
 private:
-    sal_uInt16 nPos;
+    sal_Int32 nPos;
     rtl::OUString aSource;
     rtl::OUString aLastToken;
     TokenList aTokenList;
 
     TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
 
-    rtl::OUString GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTokeStartPos );
+    rtl::OUString GetNextTokenString( ParserMessageList &rErrorList, sal_Int32 &rTokeStartPos );
 
 public:
     SimpleParser();
@@ -303,7 +303,7 @@ class TokenParser
 {
     sal_Bool match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken );
     sal_Bool match( const TokenInfo &aCurrentToken, const TokenInfo &aExpectedToken );
-    void ParseError( sal_uInt16 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag );
+    void ParseError( sal_Int32 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag );
     void Paragraph();
     void PfCase();
     void PfCaseBegin();

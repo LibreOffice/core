@@ -107,8 +107,6 @@ APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5RPATH=  NONE
 APP5STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.cfg

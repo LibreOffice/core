@@ -26,8 +26,13 @@
  *
  ************************************************************************/
 
-#include <tools/string.hxx>
-#include <rtl/strbuf.hxx>
+#include "sal/config.h"
+
+#include "rtl/strbuf.hxx"
+#include "rtl/string.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.hxx"
+
 #include "tagtest.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -43,7 +48,7 @@
 
 
 
-TokenInfo::TokenInfo( TokenId pnId, sal_uInt16 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList )
+TokenInfo::TokenInfo( TokenId pnId, sal_Int32 nP, rtl::OUString const & paStr, ParserMessageList &rErrorList )
 : bClosed(sal_False)
 , bCloseTag(sal_False)
 , bIsBroken(sal_False)
@@ -94,8 +99,8 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     sal_Int32 nLastPos = 2;    // skip initial  \<
     sal_Int32 nCheckPos = nLastPos;
     static char const aDelims[] = " \\=>/";
-    String aPortion;
-    String aValue;      // store the value of a property
+    rtl::OUString aPortion;
+    rtl::OUString aValue; // store the value of a property
     rtl::OString aName; // store the name of a property/tag
     sal_Bool bCheckName = sal_False;
     sal_Bool bCheckEmpty = sal_False;
@@ -132,7 +137,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                                break;
                     case '/':
                         {
-                            if ( aPortion.Len() == 0 )
+                            if (aPortion.isEmpty())
                             {
                                 aState = TC_CLOSETAG;
                             }
@@ -194,7 +199,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                                break;
                     case '\"': aState = TC_INSIDE_STRING;
                                bCheckEmpty = sal_True;
-                               aValue.Erase();
+                               aValue = rtl::OUString();
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -206,7 +211,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 {
                     case '\"': aState = TC_INSIDE_STRING;
                                bCheckEmpty = sal_True;
-                               aValue.Erase();
+                               aValue = rtl::OUString();
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -241,7 +246,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                         {
                             aState = TC_INSIDE_STRING;
                             aValue += aPortion;
-                            aValue += cDelim;
+                            aValue += rtl::OUString(cDelim);
                         }
                 }
                 break;
@@ -329,7 +334,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 
         if ( bCheckName )
         {
-            if ( aPortion.Len() == 0 )
+            if (aPortion.isEmpty())
             {
                 rErrorList.AddError( 25, "Tag/Property name missing ", *this );
                 bIsBroken = sal_True;
@@ -363,7 +368,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 
         if ( bCheckEmpty )
         {
-            if ( aPortion.Len() )
+            if (!aPortion.isEmpty())
             {
                 rErrorList.AddError( 25, rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found displaced characters '")).append(rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8)).append(RTL_CONSTASCII_STRINGPARAM("' in Tag ")).makeStringAndClear(), *this );
                 bIsBroken = sal_True;
@@ -528,34 +533,34 @@ rtl::OUString TokenInfo::GetTagName() const
 
 rtl::OUString TokenInfo::MakeTag() const
 {
-    String aRet;
-    aRet.AppendAscii("\\<");
+    rtl::OUStringBuffer aRet;
+    aRet.appendAscii("\\<");
     if ( bCloseTag )
-        aRet.AppendAscii("/");
-    aRet.Append( GetTagName() );
+        aRet.appendAscii("/");
+    aRet.append( GetTagName() );
     StringHashMap::const_iterator iProp;
 
     for( iProp = aProperties.begin() ; iProp != aProperties.end(); ++iProp )
     {
-        aRet.AppendAscii(" ");
-        aRet.Append( String( iProp->first, RTL_TEXTENCODING_UTF8 ) );
-        aRet.AppendAscii("=\\\"");
-        aRet.Append( iProp->second );
-        aRet.AppendAscii("\\\"");
+        aRet.appendAscii(" ");
+        aRet.append( rtl::OStringToOUString( iProp->first, RTL_TEXTENCODING_UTF8 ) );
+        aRet.appendAscii("=\\\"");
+        aRet.append( iProp->second );
+        aRet.appendAscii("\\\"");
     }
     if ( bClosed )
-        aRet.AppendAscii("/");
-    aRet.AppendAscii("\\>");
-    return aRet;
+        aRet.appendAscii("/");
+    aRet.appendAscii("\\>");
+    return aRet.makeStringAndClear();
 }
 
 
-void ParserMessageList::AddError( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddError( sal_Int32 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
 {
     maList.push_back( new ParserError( nErrorNr, rErrorText, rTag ) );
 }
 
-void ParserMessageList::AddWarning( sal_uInt16 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddWarning( sal_Int32 nErrorNr, const rtl::OString& rErrorText, const TokenInfo &rTag )
 {
     maList.push_back( new ParserWarning( nErrorNr, rErrorText, rTag ) );
 }
@@ -677,7 +682,7 @@ void SimpleParser::Parse( rtl::OUString const & PaSource )
 TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 {
     TokenInfo aResult;
-    sal_uInt16 nTokenStartPos = 0;
+    sal_Int32 nTokenStartPos = 0;
     if ( aNextTag.nId != TAG_NOMORETAGS )
     {
         aResult = aNextTag;
@@ -733,12 +738,12 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
                 while (aLastToken[nNonBlankEndPos] == ' ')
                     nNonBlankEndPos--;
                 if (aLastToken[nNonBlankEndPos] == '/')
-                    aNextTag = TokenInfo( TAG_COMMONEND, nTokenStartPos, String::CreateFromAscii("\\</").Append(aResult.GetTagName()).AppendAscii("\\>"), rErrorList );
+                    aNextTag = TokenInfo( TAG_COMMONEND, nTokenStartPos, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\</")) + aResult.GetTagName() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\>")), rErrorList );
             }
         }
         else
         {
-            sal_uInt16 i = 0;
+            sal_Int32 i = 0;
             while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
                 aLastToken != aKnownTags[i].GetName() )
                 i++;
@@ -752,7 +757,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
     return aResult;
 }
 
-rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTagStartPos )
+rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_Int32 &rTagStartPos )
 {
     sal_Int32 nStyle2StartPos = aSource.indexOfAsciiL(
         RTL_CONSTASCII_STRINGPARAM("$["), nPos );
@@ -765,7 +770,7 @@ rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, s
     rTagStartPos = 0;
 
     if (nStyle2StartPos == -1 && nStyle3StartPos == -1)
-        return String();  // no more tokens
+        return rtl::OUString();  // no more tokens
 
     if ( nStyle4StartPos < nStyle2StartPos && nStyle4StartPos <= nStyle3StartPos )  // <= to make sure \\ is always handled first
     {   // Skip quoted Backslash
@@ -820,7 +825,7 @@ rtl::OUString SimpleParser::GetLexem( TokenInfo const &aToken )
         return aToken.aTokenString;
     else
     {
-        sal_uInt16 i = 0;
+        sal_Int32 i = 0;
         while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
             aKnownTags[i].nTag != aToken.nId )
             i++;
@@ -1349,7 +1354,7 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
     return sal_False;
 }
 
-void TokenParser::ParseError( sal_uInt16 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag )
+void TokenParser::ParseError( sal_Int32 nErrNr, const rtl::OString &rErrMsg, const TokenInfo &rTag )
 {
     pErrorList->AddError( nErrNr, rErrMsg, rTag);
 
@@ -1358,12 +1363,12 @@ void TokenParser::ParseError( sal_uInt16 nErrNr, const rtl::OString &rErrMsg, co
 }
 
 
-ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag )
+ParserMessage::ParserMessage( sal_Int32 PnErrorNr, const rtl::OString &rPaErrorText, const TokenInfo &rTag )
         : nErrorNr( PnErrorNr )
         , nTagBegin( 0 )
         , nTagLength( 0 )
 {
-    String aLexem( SimpleParser::GetLexem( rTag ) );
+    rtl::OUString aLexem( SimpleParser::GetLexem( rTag ) );
     rtl::OStringBuffer aErrorBuffer(rPaErrorText);
     aErrorBuffer.append(RTL_CONSTASCII_STRINGPARAM(": "));
     aErrorBuffer.append(rtl::OUStringToOString(aLexem, RTL_TEXTENCODING_UTF8));
@@ -1376,14 +1381,14 @@ ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, const rtl::OString &rPaError
     }
     aErrorText = aErrorBuffer.makeStringAndClear();
     nTagBegin = rTag.nPos;
-    nTagLength = aLexem.Len();
+    nTagLength = aLexem.getLength();
 }
 
-ParserError::ParserError( sal_uInt16 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
+ParserError::ParserError( sal_Int32 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
 : ParserMessage( ErrorNr, rErrorText, rTag )
 {}
 
-ParserWarning::ParserWarning( sal_uInt16 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
+ParserWarning::ParserWarning( sal_Int32 ErrorNr, const rtl::OString &rErrorText, const TokenInfo &rTag )
 : ParserMessage( ErrorNr, rErrorText, rTag )
 {}
 
@@ -1409,12 +1414,12 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
     else if (   TAG_COMMONSTART == aTokenId
              || TAG_COMMONEND == aTokenId )
     {
-        String aTagName = aToken.GetTagName();
-        return !(aTagName.EqualsIgnoreCaseAscii( "comment" )
-              || aTagName.EqualsIgnoreCaseAscii( "bookmark_value" )
-              || aTagName.EqualsIgnoreCaseAscii( "emph" )
-              || aTagName.EqualsIgnoreCaseAscii( "item" )
-              || aTagName.EqualsIgnoreCaseAscii( "br" ) );
+        rtl::OUString aTagName = aToken.GetTagName();
+        return !(aTagName.equalsIgnoreAsciiCaseAscii( "comment" )
+              || aTagName.equalsIgnoreAsciiCaseAscii( "bookmark_value" )
+              || aTagName.equalsIgnoreAsciiCaseAscii( "emph" )
+              || aTagName.equalsIgnoreAsciiCaseAscii( "item" )
+              || aTagName.equalsIgnoreAsciiCaseAscii( "br" ) );
     }
     return sal_False;
 }
@@ -1474,7 +1479,7 @@ void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bF
     if ( bFixTags )
     {
         // we fix only if its a really simple case
-        sal_uInt16 nTagCount = 0;
+        sal_Int32 nTagCount = 0;
         for ( i=0 ; i < aReference.size() ; i++ )
             if ( !aReference[ i ].IsDone() )
                 nTagCount++;

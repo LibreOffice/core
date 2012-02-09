@@ -28,23 +28,46 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <fstream>
 #include <string>
 
 #include <stdio.h>
-#include <tools/fsys.hxx>
 
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
 #include "helper.hxx"
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
-using comphelper::string::getToken;
-using comphelper::string::getTokenCount;
+namespace {
 
-#define MAX_GID_LID_LEN 250
+sal_Int32 const MAX_GID_LID_LEN = 250;
+
+rtl::OString copyUpTo(
+    rtl::OString const & text, sal_Int32 start, sal_Int32 maximumLength)
+{
+    assert(start >= 0 && start <= text.getLength());
+    return text.copy(start, std::min(text.getLength() - start, maximumLength));
+}
+
+rtl::OString addSuffix(
+    rtl::OString const & pathname, rtl::OString const & suffix)
+{
+    sal_Int32 n = pathname.lastIndexOf('.');
+    if (n == -1) {
+        fprintf(
+            stderr,
+            ("Error: pathname \"%s\" does not contain dot to add suffix in"
+             " front of\n"),
+            pathname.getStr());
+        exit(EXIT_FAILURE);
+    }
+    return pathname.replaceAt(n, 0, suffix);
+}
+
+}
 
 /*****************************************************************************/
 void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
@@ -69,30 +92,20 @@ void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
-sal_Bool LanguageOK( rtl::OString const & aLang )
+bool LanguageOK( rtl::OString const & aLang )
 {
-    if (aLang.isEmpty())
-        return sal_False;
-
-    using comphelper::string::isdigitAsciiString;
-    using comphelper::string::isupperAsciiString;
-    using comphelper::string::islowerAsciiString;
-
-    if (isdigitAsciiString(aLang))
-        return sal_True;
-
-    if ( getTokenCount(aLang, '-') == 1 )
-        return islowerAsciiString(aLang);
-    else if ( getTokenCount(aLang, '-') == 2 )
-    {
-        rtl::OString aTok0( getToken(aLang, 0, '-') );
-        rtl::OString aTok1( getToken(aLang, 1, '-') );
-        return  !aTok0.isEmpty() && islowerAsciiString(aTok0)
-             && !aTok1.isEmpty() && isupperAsciiString(aTok1)
-             && !aTok1.equalsIgnoreAsciiCase( aTok0 );
+    sal_Int32 n = 0;
+    rtl::OString t0(aLang.getToken(0, '-', n));
+    if (n == -1) {
+        return !t0.isEmpty()
+            && (helper::isAllAsciiDigits(t0)
+                || helper::isAllAsciiLowerCase(t0));
     }
-
-    return sal_False;
+    rtl::OString t1(aLang.getToken(0, '-', n));
+    return n == -1
+        && !t0.isEmpty() && helper::isAllAsciiLowerCase(t0)
+        && !t1.isEmpty() && helper::isAllAsciiUpperCase(t1)
+        && !t0.equalsIgnoreAsciiCase(t1);
 }
 
 class LazyStream: public std::ofstream
@@ -144,51 +157,67 @@ GSILine::GSILine( const rtl::OString &rLine, std::size_t nLine )
                 , bFixed ( sal_False )
                 , data_( rLine )
 {
-    if ( getTokenCount(rLine, '\t') == 15 )
-    {
-        aFormat = FORMAT_SDF;
-        aUniqId = getToken(rLine, 0, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 1, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 3, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 4, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 5, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 6, '\t');
-        aUniqId += "/";
-        aUniqId += getToken(rLine, 7, '\t');
-        aLineType = "";
-        aLangId = getToken(rLine, 9, '\t');
-        aText = getToken(rLine, 10, '\t');
-        aQuickHelpText = getToken(rLine, 12, '\t');
-        aTitle = getToken(rLine, 13, '\t');
-
-        // do some more format checks here
-        if (!comphelper::string::isdigitAsciiString(getToken(rLine, 8, '\t')))
-        {
-            PrintError( "The length field does not contain a number!", "Line format", getToken(rLine, 8, '\t'), sal_True, GetLineNumber(), GetUniqId() );
-            NotOK();
-        }
-        if ( !LanguageOK( aLangId ) )
-        {
-            PrintError( "The Language is invalid!", "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId() );
-            NotOK();
-        }
-        // limit GID and LID to MAX_GID_LID_LEN chars each for database conformity, see #137575#
-        if ( getToken(rLine, 4, '\t').getLength() > MAX_GID_LID_LEN || getToken(rLine, 5, '\t').getLength() > MAX_GID_LID_LEN )
-        {
-            PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("GID and LID may only be "))
-                 .append(static_cast<sal_Int32>(MAX_GID_LID_LEN))
-                 .append(RTL_CONSTASCII_STRINGPARAM(" chars long each!" )).getStr(),
-                "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId());
-            NotOK();
-        }
+    if (rLine.isEmpty()) {
+        NotOK();
+        return;
     }
-    else
+
+    aFormat = FORMAT_SDF;
+    sal_Int32 n = 0;
+    aUniqId = rLine.getToken(0, '\t', n); // token 0
+    aUniqId += "/";
+    aUniqId += rLine.getToken(0, '\t', n); // token 1
+    aUniqId += "/";
+    aUniqId += rLine.getToken(1, '\t', n); // token 3
+    aUniqId += "/";
+    rtl::OString gid(rLine.getToken(0, '\t', n)); // token 4
+    aUniqId += gid;
+    aUniqId += "/";
+    rtl::OString lid(rLine.getToken(0, '\t', n)); // token 5
+    aUniqId += lid;
+    aUniqId += "/";
+    aUniqId += rLine.getToken(0, '\t', n); // token 6
+    aUniqId += "/";
+    aUniqId += rLine.getToken(0, '\t', n); // token 7
+    rtl::OString length(rLine.getToken(0, '\t', n)); // token 8
+    aLineType = rtl::OString();
+    aLangId = rLine.getToken(0, '\t', n); // token 9
+    aText = rLine.getToken(0, '\t', n); // token 10
+    aQuickHelpText = rLine.getToken(1, '\t', n); // token 12
+    aTitle = rLine.getToken(0, '\t', n); // token 13
+    if (n == -1) {
+        NotOK();
+        return;
+    }
+    rLine.getToken(0, '\t', n); // token 14
+    if (n != -1) {
+        NotOK();
+        return;
+    }
+
+    // do some more format checks here
+    if (!helper::isAllAsciiDigits(length)) {
+        PrintError(
+            "The length field does not contain a number!", "Line format",
+            length, true, GetLineNumber(), GetUniqId());
+        NotOK();
+    }
+    if (!LanguageOK(aLangId)) {
+        PrintError(
+            "The Language is invalid!", "Line format", aLangId, true,
+            GetLineNumber(), GetUniqId());
+        NotOK();
+    }
+    // Limit GID and LID to MAX_GID_LID_LEN chars each for database conformity,
+    // see #137575#:
+    if (gid.getLength() > MAX_GID_LID_LEN || lid.getLength() > MAX_GID_LID_LEN)
     {
+        PrintError(
+            (rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM("GID and LID may only be "))
+             + rtl::OString::valueOf(MAX_GID_LID_LEN)
+             + rtl::OString(RTL_CONSTASCII_STRINGPARAM(" chars long each"))),
+            "Line format", aLangId, true, GetLineNumber(), GetUniqId());
         NotOK();
     }
 }
@@ -204,30 +233,31 @@ void GSILine::NotOK()
 void GSILine::ReassembleLine()
 /*****************************************************************************/
 {
-    if ( GetLineFormat() == FORMAT_SDF )
-    {
-        rtl::OStringBuffer aReassemble;
-        for (sal_Int32 i = 0; i < 10; ++i)
-        {
-            aReassemble.append( helper::getToken( data_, i, '\t' ) );
-            aReassemble.append( "\t" );
-        }
-        aReassemble.append( aText );
-        aReassemble.append( "\t" );
-        aReassemble.append( helper::getToken( data_, 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
-        aReassemble.append( "\t" );
-        aReassemble.append( aQuickHelpText );
-        aReassemble.append( "\t" );
-        aReassemble.append( aTitle );
-        for (sal_Int32 i = 14; i < 15; ++i)
-        {
-            aReassemble.append( "\t" );
-            aReassemble.append( helper::getToken( data_, i, '\t' ) );
-        }
-        data_ = aReassemble.makeStringAndClear();
+    if (GetLineFormat() != FORMAT_SDF) {
+        PrintError(
+            "Cannot reassemble line of unknown type (internal Error).",
+            "Line format", rtl::OString(), false, GetLineNumber(),
+            GetUniqId());
+        return;
     }
-    else
-        PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );
+    rtl::OStringBuffer b;
+    sal_Int32 n = 0;
+    for (sal_Int32 i = 0; i != 10; ++i) {
+        b.append(data_.getToken(0, '\t', n)); // token 0--9
+        b.append('\t');
+    }
+    b.append(aText);
+    b.append('\t');
+    b.append(data_.getToken(1, '\t', n));
+        // token 11; should be empty but there are some places in sc not
+        // reflected to sources
+    b.append('\t');
+    b.append(aQuickHelpText);
+    b.append('\t');
+    b.append(aTitle);
+    b.append('\t');
+    b.append(data_.getToken(2, '\t', n)); // token 14
+    data_ = b.makeStringAndClear();
 }
 
 //
@@ -328,12 +358,11 @@ void GSIBlock::PrintList( ParserMessageList *pList, rtl::OString const & aPrefix
         rtl::OString aContext;
         if ( bPrintContext )
         {
-            if ( pMsg->GetTagBegin() == STRING_NOTFOUND )
+            if ( pMsg->GetTagBegin() == -1 )
                 aContext = pLine->GetText().copy( 0, 300 );
             else
                 aContext = pLine->data_.copy( pMsg->GetTagBegin()-150, 300 );
-            aContext = comphelper::string::stripEnd(aContext, ' ');
-            aContext = comphelper::string::stripStart(aContext, ' ');
+            aContext = helper::trimAscii(aContext);
         }
 
         PrintMessage( pMsg->Prefix(), pMsg->GetErrorText(), aPrefix, aContext, pLine->GetLineNumber(), pLine->GetUniqId() );
@@ -346,12 +375,17 @@ sal_Bool GSIBlock::IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_I
 {
     rtl::OUString aUTF8Tester(
         rtl::OStringToOUString(aTestee, RTL_TEXTENCODING_UTF8));
-    nErrorPos = rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8).
-        indexOf(aTestee);
-    if (nErrorPos != -1)
+    rtl::OString aTestee2(
+        rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8));
+    sal_Int32 i = 0;
+    while (i != std::min(aTestee.getLength(), aTestee2.getLength())
+           && aTestee[i] == aTestee2[i])
     {
-        aUTF8Tester = rtl::OUString(
-            aTestee.getStr(), nErrorPos, RTL_TEXTENCODING_UTF8);
+        ++i;
+    }
+    if (i != aTestee.getLength() || i != aTestee2.getLength())
+    {
+        aUTF8Tester = rtl::OUString(aTestee.getStr(), i, RTL_TEXTENCODING_UTF8);
         nErrorPos = aUTF8Tester.getLength();
         aErrorMsg = "UTF8 Encoding seems to be broken";
         return sal_False;
@@ -388,7 +422,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     sal_Bool bHasBeenFixed = sal_False;
     if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        rtl::OString aContext( pTestee->GetText().copy( nErrorPos, 20 ) );
+        rtl::OString aContext(copyUpTo(pTestee->GetText(), nErrorPos, 20));
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Text at Position "))
              .append(nErrorPos).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -401,7 +435,8 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     }
     if ( !IsUTF8( pTestee->GetQuickHelpText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
-        rtl::OString aContext( pTestee->GetQuickHelpText().copy( nErrorPos, 20 ) );
+        rtl::OString aContext(
+            copyUpTo(pTestee->GetQuickHelpText(), nErrorPos, 20));
         PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in QuickHelpText at Position "))
              .append(nErrorPos).getStr(),
             "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
@@ -667,15 +702,15 @@ int _cdecl main( int argc, char *argv[] )
     sal_Bool bWriteFixed = sal_False;
     sal_Bool bFixTags = sal_False;
     sal_Bool bAllowSuspicious = sal_False;
-    rtl::OUString aErrorFilename;
-    rtl::OUString aCorrectFilename;
-    rtl::OUString aFixedFilename;
+    rtl::OString aErrorFilename;
+    rtl::OString aCorrectFilename;
+    rtl::OString aFixedFilename;
     sal_Bool bFileHasError = sal_False;
     rtl::OString aSourceLang( "en-US" );     // English is default
     rtl::OString aFilename;
     rtl::OString aReferenceFilename;
     sal_Bool bReferenceFile = sal_False;
-    for ( sal_uInt16 i = 1 ; i < argc ; i++ )
+    for ( int i = 1 ; i < argc ; i++ )
     {
         if ( *argv[ i ] == '-' )
         {
@@ -690,10 +725,7 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aErrorFilename = rtl::OUString(
-                                        argv[i + 1],
-                                        rtl_str_getLength(argv[i + 1]),
-                                        RTL_TEXTENCODING_ASCII_US);
+                                    aErrorFilename = argv[i + 1];
                                     bWriteError = sal_True;
                                     i++;
                                 }
@@ -709,10 +741,7 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aCorrectFilename = rtl::OUString(
-                                        argv[i + 1],
-                                        rtl_str_getLength(argv[i + 1]),
-                                        RTL_TEXTENCODING_ASCII_US);
+                                    aCorrectFilename = argv[i + 1];
                                     bWriteCorrect = sal_True;
                                     i++;
                                 }
@@ -727,10 +756,7 @@ int _cdecl main( int argc, char *argv[] )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
-                                    aFixedFilename = rtl::OUString(
-                                        argv[i + 1],
-                                        rtl_str_getLength(argv[i + 1]),
-                                        RTL_TEXTENCODING_ASCII_US);
+                                    aFixedFilename = argv[i + 1];
                                     bWriteFixed = sal_True;
                                     bFixTags = sal_True;
                                     i++;
@@ -837,12 +863,6 @@ int _cdecl main( int argc, char *argv[] )
 
 
 
-    DirEntry aSource = DirEntry( rtl::OStringToOUString( aFilename, RTL_TEXTENCODING_ASCII_US ));
-    if ( !aSource.Exists()) {
-        fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.getStr() );
-        exit ( 2 );
-    }
-
     std::ifstream aGSI(aFilename.getStr());
     if (!aGSI.is_open()) {
         fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.getStr() );
@@ -852,12 +872,6 @@ int _cdecl main( int argc, char *argv[] )
     std::ifstream aReferenceGSI;
     if ( bReferenceFile )
     {
-        DirEntry aReferenceSource = DirEntry( rtl::OStringToOUString( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ));
-        if ( !aReferenceSource.Exists()) {
-            fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.getStr() );
-            exit ( 2 );
-        }
-
         aReferenceGSI.open(aReferenceFilename.getStr());
         if (!aReferenceGSI.is_open()) {
             fprintf( stderr, "\nERROR: Could not open Input-File %s!\n\n", aFilename.getStr() );
@@ -866,19 +880,14 @@ int _cdecl main( int argc, char *argv[] )
     }
 
     LazyStream aOkOut;
-    rtl::OUString aBaseName(aSource.GetBase());
     if ( bWriteCorrect )
     {
         if (aCorrectFilename.isEmpty())
         {
-            rtl::OUString sTmpBase(aBaseName);
-            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_ok"));
-            aSource.SetBase( sTmpBase );
-            aCorrectFilename = aSource.GetFull();
+            aCorrectFilename = addSuffix(
+                aFilename, rtl::OString(RTL_CONSTASCII_STRINGPARAM("_ok")));
         }
-        aOkOut.SetFileName(
-            rtl::OUStringToOString(
-                aCorrectFilename, osl_getThreadTextEncoding()));
+        aOkOut.SetFileName(aCorrectFilename);
     }
 
     LazyStream aErrOut;
@@ -886,14 +895,10 @@ int _cdecl main( int argc, char *argv[] )
     {
         if (aErrorFilename.isEmpty())
         {
-            rtl::OUString sTmpBase(aBaseName);
-            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_err"));
-            aSource.SetBase( sTmpBase );
-            aErrorFilename = aSource.GetFull();
+            aErrorFilename = addSuffix(
+                aFilename, rtl::OString(RTL_CONSTASCII_STRINGPARAM("_err")));
         }
-        aErrOut.SetFileName(
-            rtl::OUStringToOString(
-                aErrorFilename, osl_getThreadTextEncoding()));
+        aErrOut.SetFileName(aErrorFilename);
     }
 
     LazyStream aFixOut;
@@ -901,14 +906,10 @@ int _cdecl main( int argc, char *argv[] )
     {
         if (aFixedFilename.isEmpty())
         {
-            rtl::OUString sTmpBase(aBaseName);
-            sTmpBase += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_fix"));
-            aSource.SetBase( sTmpBase );
-            aFixedFilename = aSource.GetFull();
+            aFixedFilename = addSuffix(
+                aFilename, rtl::OString(RTL_CONSTASCII_STRINGPARAM("_fix")));
         }
-        aFixOut.SetFileName(
-            rtl::OUStringToOString(
-                aFixedFilename, osl_getThreadTextEncoding()));
+        aFixOut.SetFileName(aFixedFilename);
     }
 
 

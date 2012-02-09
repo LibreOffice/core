@@ -35,13 +35,60 @@
 #include <cassert>
 
 #include "rtl/string.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 namespace helper {
 
+inline bool isAsciiWhitespace(char c) {
+    return (c >= 0x09 && c <= 0x0D) || c == ' '; // HT, LF, VT, FF, CR
+}
+
+// cf. comphelper::string::isdigitAsciiString:
+inline bool isAllAsciiDigits(rtl::OString const & text) {
+    for (sal_Int32 i = 0; i != text.getLength(); ++i) {
+        if (text[i] < '0' || text[i] > '9') {
+            return false;
+        }
+    }
+    return true;
+}
+
+// cf. comphelper::string::isupperAsciiString:
+inline bool isAllAsciiUpperCase(rtl::OString const & text) {
+    for (sal_Int32 i = 0; i != text.getLength(); ++i) {
+        if (text[i] < 'A' || text[i] > 'Z') {
+            return false;
+        }
+    }
+    return true;
+}
+
+// cf. comphelper::string::islowerAsciiString:
+inline bool isAllAsciiLowerCase(rtl::OString const & text) {
+    for (sal_Int32 i = 0; i != text.getLength(); ++i) {
+        if (text[i] < 'a' || text[i] > 'z') {
+            return false;
+        }
+    }
+    return true;
+}
+
 inline bool endsWith(rtl::OString const & text, rtl::OString const & search) {
     return text.getLength() >= search.getLength()
         && text.match(search, text.getLength() - search.getLength());
+}
+
+inline rtl::OString trimAscii(rtl::OString const & text) {
+    sal_Int32 i1 = 0;
+    while (i1 != text.getLength() && isAsciiWhitespace(text[i1])) {
+        ++i1;
+    }
+    sal_Int32 i2 = text.getLength();
+    while (i2 != i1 && isAsciiWhitespace(text[i2 - 1])) {
+        --i2;
+    }
+    return text.copy(i1, i2 - i1);
 }
 
 inline sal_Int32 searchAndReplace(
