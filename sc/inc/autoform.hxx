@@ -65,7 +65,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>
 #include "scdllapi.h"
-#include "collect.hxx"
 #include "global.hxx"
 #include "zforauto.hxx"
 

@@ -29,8 +29,6 @@
 #ifndef SC_CALLFORM_HXX
 #define SC_CALLFORM_HXX
 
-#include "collect.hxx"
-
 #include <rtl/ustring.hxx>
 
 #include <boost/ptr_container/ptr_map.hpp>
