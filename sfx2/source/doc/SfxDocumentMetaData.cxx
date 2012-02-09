@@ -1210,7 +1210,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                 if (css::xml::dom::NodeType_ELEMENT_NODE ==xNode->getNodeType())
                 {
                     if (xNode->getNamespaceURI().equalsAscii(s_nsODF) &&
-                        xNode->getLocalName().equalsAscii("document-meta"))
+                        xNode->getLocalName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document-meta")))
                     {
                         xRElem.set(xNode, css::uno::UNO_QUERY_THROW);
                         break;

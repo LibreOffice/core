@@ -698,7 +698,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 
-    if (pExtra && pExtra->equalsAscii("calc:extref"))
+    if (pExtra && pExtra->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc:extref")))
     {
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified

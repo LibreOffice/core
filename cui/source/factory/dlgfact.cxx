@@ -1881,11 +1881,11 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
             const SvObjectServerList* pList )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    if ( rCommand.equalsAscii(".uno:InsertObject" ) )
+    if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObject")) )
         pDlg = new SvInsertOleDlg( pParent, xStor, pList );
-    else if ( rCommand.equalsAscii(".uno:InsertPlugin" ) )
+    else if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertPlugin")) )
         pDlg = new SvInsertPlugInDialog( pParent, xStor );
-    else if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
+    else if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObjectFloatingFrame")) )
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor );
 
     if ( pDlg )
@@ -1900,7 +1900,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* p
             const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
+    if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObjectFloatingFrame")) )
     {
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
         pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );

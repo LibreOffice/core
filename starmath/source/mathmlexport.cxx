@@ -743,7 +743,7 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                             rtl::OUString aActualName( rPropName );
 
                             // handle 'save used symbols only'
-                            if (bUsedSymbolsOnly && rPropName.equalsAscii("Symbols"))
+                            if (bUsedSymbolsOnly && rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Symbols")))
                                 aActualName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "UserDefinedSymbolsInUse" ) );
 
                             pProps->Value = xProps->getPropertyValue( aActualName );

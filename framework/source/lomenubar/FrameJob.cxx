@@ -225,7 +225,7 @@ Any SAL_CALL FrameJob::execute( const Sequence< NamedValue >& aArguments )
 
     for (int i = 0; i<len; i++)
     {
-        if (aArguments[i].Name.equalsAscii("Environment"))
+        if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Environment")))
         {
             aArguments[i].Value >>= lEnv;
             break;
@@ -235,7 +235,7 @@ Any SAL_CALL FrameJob::execute( const Sequence< NamedValue >& aArguments )
     len = lEnv.getLength ();
     for (int i = 0; i<len; i++)
     {
-        if (lEnv[i].Name.equalsAscii("Model"))
+        if (lEnv[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
         {
             lEnv[i].Value >>= xModel;
         }

@@ -1405,7 +1405,7 @@ void ScInputHandler::PasteManualTip()
     //  (wenn wir mal Matrix-Konstanten haben, kann das geaendert werden)
 
     sal_Int32 nTipLen = aManualTip.getLength();
-    if ( nTipLen && ( nTipLen < 3 || !aManualTip.copy( nTipLen-3 ).equalsAscii("...") ) )
+    if ( nTipLen && ( nTipLen < 3 || !aManualTip.copy( nTipLen-3 ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("...")) ) )
     {
         DataChanging();                                     // kann nicht neu sein
 
