@@ -1142,8 +1142,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     {
         {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_IGNOREEM), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
-        {MAP_CHAR_LEN(SC_UNO_DP_REPEATIF), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
+        {MAP_CHAR_LEN(SC_UNO_DP_IGNOREEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
+        {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_ROWFIELDCOUNT),    0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_COLUMNFIELDCOUNT), 0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
@@ -1166,9 +1166,9 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
         setColumnGrand( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_ROWGRAND ) )
         setRowGrand( lcl_GetBoolFromAny( aValue ) );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_IGNOREEM ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_IGNOREEMPTY ) )
         setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_REPEATIF ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_REPEATEMPTY ) )
         setRepeatIfEmpty( lcl_GetBoolFromAny( aValue ) );
     else if (aNameStr.EqualsAscii(SC_UNO_DP_GRANDTOTAL_NAME))
     {
@@ -1193,9 +1193,9 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getColumnGrand() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_ROWGRAND ) )
         lcl_SetBoolInAny( aRet, getRowGrand() );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_IGNOREEM ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_IGNOREEMPTY ) )
         lcl_SetBoolInAny( aRet, getIgnoreEmptyRows() );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_REPEATIF ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_REPEATEMPTY ) )
         lcl_SetBoolInAny( aRet, getRepeatIfEmpty() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_DATADESC ) )             // read-only
         aRet <<= rtl::OUString( getDataDescription() );
@@ -1541,13 +1541,13 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_DP_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_FLAGS),    0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ISDATALA), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_ISDATALAYOUT), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ORIENTAT), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_ORIENTATION), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_ORIGINAL), 0,  &getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_USEDHIERARCHY), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
@@ -1570,13 +1570,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         if (aValue >>= nInt)
             setPosition( nInt );
     }
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_USEDHIER ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_USEDHIERARCHY ) )
     {
         sal_Int32 nInt = 0;
         if (aValue >>= nInt)
             setUsedHierarchy( nInt );
     }
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ORIENTAT ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ORIENTATION ) )
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
@@ -1650,9 +1650,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     String aNameStr = aPropertyName;
     if ( aNameStr.EqualsAscii( SC_UNO_DP_POSITION ) )
         aRet <<= (sal_Int32) getPosition();
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_USEDHIER ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_USEDHIERARCHY ) )
         aRet <<= (sal_Int32) getUsedHierarchy();
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ORIENTAT ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ORIENTATION ) )
     {
         sheet::DataPilotFieldOrientation eVal = (sheet::DataPilotFieldOrientation)getOrientation();
         aRet <<= eVal;
@@ -1664,7 +1664,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_REFVALUE ) )
         aRet <<= aReferenceValue;
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ISDATALA ) )                 // read-only properties
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_ISDATALAYOUT ) )                 // read-only properties
         lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_NUMBERFO ) )
     {
@@ -2266,7 +2266,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         //! change type of AutoShow/Layout/Sorting to API struct when available
         {MAP_CHAR_LEN(SC_UNO_DP_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_LAYOUT),   0,  &getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SHOWEMPT), 0,  &getBooleanCppuType(),                                   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SHOWEMPTY), 0,  &getBooleanCppuType(),                                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_SORTING),  0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_SUBTOTAL), 0,  &getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
         {0,0,0,0,0,0}
@@ -2282,7 +2282,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
                         uno::RuntimeException)
 {
     String aNameStr = aPropertyName;
-    if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWEMPT ) )
+    if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWEMPTY ) )
         setShowEmpty( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_SUBTOTAL ) )
     {
@@ -2308,7 +2308,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
 {
     uno::Any aRet;
     String aNameStr = aPropertyName;
-    if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWEMPT ) )
+    if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWEMPTY ) )
         lcl_SetBoolInAny( aRet, getShowEmpty() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_SUBTOTAL ) )
     {
@@ -2745,9 +2745,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 
     static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_DP_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_ISVISIBLE), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SHOWDETAILS), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
@@ -2762,9 +2762,9 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
                         uno::RuntimeException)
 {
     String aNameStr = aPropertyName;
-    if ( aNameStr.EqualsAscii( SC_UNO_DP_ISVISIBL ) )
+    if ( aNameStr.EqualsAscii( SC_UNO_DP_ISVISIBLE ) )
         setIsVisible( lcl_GetBoolFromAny( aValue ) );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWDETA ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWDETAILS ) )
         setShowDetails( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_POSITION ) )
     {
@@ -2790,9 +2790,9 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
 {
     uno::Any aRet;
     String aNameStr = aPropertyName;
-    if ( aNameStr.EqualsAscii( SC_UNO_DP_ISVISIBL ) )
+    if ( aNameStr.EqualsAscii( SC_UNO_DP_ISVISIBLE ) )
         lcl_SetBoolInAny( aRet, getIsVisible() );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWDETA ) )
+    else if ( aNameStr.EqualsAscii( SC_UNO_DP_SHOWDETAILS ) )
         lcl_SetBoolInAny( aRet, getShowDetails() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DP_POSITION ) )
         aRet <<= (sal_Int32) getPosition();

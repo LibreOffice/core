@@ -41,6 +41,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 struct ScQueryParam;
+class ScDPObject;
 
 /**
  * This class represents the cached data part of the datapilot cache table

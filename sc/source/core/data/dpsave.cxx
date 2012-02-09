@@ -166,17 +166,17 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
         if ( nVisibleMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISVISIBLE)), (bool)nVisibleMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBLE)), (bool)nVisibleMode );
 
         if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWDETAILS)), (bool)nShowDetailsMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETAILS)), (bool)nShowDetailsMode );
 
         if (mpLayoutName.get())
             ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
         if ( nPosition >= 0 )
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, DP_PROP_POSITION, nPosition);
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_POSITION, nPosition);
     }
 }
 
@@ -555,16 +555,16 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         sheet::DataPilotFieldOrientation eOrient = (sheet::DataPilotFieldOrientation)nOrientation;
         aAny <<= eOrient;
-        xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)), aAny );
+        xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION)), aAny );
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)nFunction;
         aAny <<= eFunc;
-        xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_FUNCTION)), aAny );
+        xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FUNCTION)), aAny );
 
         if ( nUsedHierarchy >= 0 )
         {
             aAny <<= (sal_Int32)nUsedHierarchy;
-            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)), aAny );
+            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)), aAny );
         }
 
         if ( pReferenceValue )
@@ -584,7 +584,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         }
         // else keep empty sequence
 
-        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, DP_PROP_FILTER, aFilter);
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FILTER, aFilter);
         if (mpLayoutName.get())
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
@@ -643,11 +643,11 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     for (long i=0; i<nSubTotalCount; i++)
                         pArray[i] = (sheet::GeneralFunction)pSubTotalFuncs[i];
                     aAny <<= aSeq;
-                    xLevProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SUBTOTALS)), aAny );
+                    xLevProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SUBTOTAL)), aAny );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWEMPTY)), (bool)nShowEmptyMode );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWEMPTY)), (bool)nShowEmptyMode );
 
                 if ( pSortInfo )
                     ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_DP_SORTING, *pSortInfo);
@@ -1029,7 +1029,7 @@ void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource 
         {
             uno::Any aAny;
             aAny <<= eOrient;
-            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)), aAny );
+            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION)), aAny );
         }
     }
 }
@@ -1052,10 +1052,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nIgnoreEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_IGNOREEMPTY)), (bool)nIgnoreEmptyMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_IGNOREEMPTY)), (bool)nIgnoreEmptyMode );
             if ( nRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_REPEATIFEMPTY)), (bool)nRepeatEmptyMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REPEATEMPTY)), (bool)nRepeatEmptyMode );
         }
         catch(uno::Exception&)
         {
@@ -1101,7 +1101,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     if ( xDimProp.is() )
                     {
                         bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
                         //! error checking -- is "IsDataLayoutDimension" property required??
                     }
                 }
@@ -1146,10 +1146,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nColumnGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_COLUMNGRAND)), (bool)nColumnGrandMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_COLGRAND)), (bool)nColumnGrandMode );
             if ( nRowGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ROWGRAND)), (bool)nRowGrandMode );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ROWGRAND)), (bool)nRowGrandMode );
         }
     }
     catch(uno::Exception&)

@@ -77,28 +77,6 @@
 #define __MAX_NUM_LEN 64
 #define __DECIMALPLACE  18
 
-#define DP_PROP_COLUMNGRAND         "ColumnGrand"
-#define DP_PROP_FUNCTION            "Function"
-#define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
-#define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_ISVISIBLE           "IsVisible"
-#define DP_PROP_ORIENTATION         "Orientation"
-#define DP_PROP_REPEATIFEMPTY       "RepeatIfEmpty"
-#define DP_PROP_ROWGRAND            "RowGrand"
-#define DP_PROP_SHOWDETAILS         "ShowDetails"
-#define DP_PROP_SHOWEMPTY           "ShowEmpty"
-#define DP_PROP_SUBTOTALS           "SubTotals"
-#define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-#define DP_PROP_FILTER              "Filter"
-#define DP_PROP_POSITION            "Position"
-#define DP_PROP_ORIGINAL            "Original"
-
-class ScTypedStrData;
-class ScDPObject;
-class ScDPInfoWnd;
-class ScDocShell;
-class ScTabViewShell;
-
 class SC_DLLPUBLIC ScDPItemData
 {
 public:

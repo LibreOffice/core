@@ -126,11 +126,11 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
             if ( xDimProp.is() )
             {
                 bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
                 //! error checking -- is "IsDataLayoutDimension" property required??
                 if (bFound)
                     nRet = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION)),
                             sheet::DataPilotFieldOrientation_HIDDEN );
             }
         }
@@ -689,8 +689,8 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
         Reference<beans::XPropertySet> xMemProp(xMember, UNO_QUERY);
         if (xMemProp.is())
         {
-            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBL)));
-            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETA)));
+            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBLE)));
+            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETAILS)));
 
             aMem.maLayoutName = ScUnoHelpFunctions::GetStringProperty(
                 xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
@@ -873,7 +873,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
             if ( xDimName.is() && xDimProp.is() )
             {
                 sal_Bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
                 //! error checking -- is "IsDataLayoutDimension" property required??
 
                 rtl::OUString aName;
@@ -917,7 +917,7 @@ bool ScDPObject::IsDuplicated( long nDim )
                 try
                 {
                     uno::Any aOrigAny = xDimProp->getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIGINAL)) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
                     uno::Reference<uno::XInterface> xIntOrig;
                     if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                         bDuplicated = true;
@@ -973,7 +973,7 @@ void ScDPObject::FillPageList( std::vector<rtl::OUString>& rStrings, long nField
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)) );
     long nLevel = 0;
 
     long nHierCount = 0;
@@ -1023,7 +1023,7 @@ void ScDPObject::FillPageList( std::vector<rtl::OUString>& rStrings, long nField
         sal_Bool bVisible = false;
         if (xPropSet.is())
         {
-            Any any = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBL)));
+            Any any = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBLE)));
             any >>= bVisible;
         }
 
@@ -1344,9 +1344,9 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
         sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
         sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION)),
                             sheet::DataPilotFieldOrientation_HIDDEN );
         if ( !bDataLayout )
         {
@@ -1364,7 +1364,7 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
 
                 uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
                 sal_Int32 nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)) );
+                                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)) );
                 if ( nHierarchy >= xHiers->getCount() )
                     nHierarchy = 0;
 
@@ -1553,7 +1553,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
     if (bDataLayout)
     {
         //  the elements of the data layout dimension can't be found by their names
@@ -1611,7 +1611,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
             if ( xMbrProp.is() )
             {
                 bShowDetails = ScUnoHelpFunctions::GetBoolProperty( xMbrProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWDETAILS)) );
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETAILS)) );
                 //! don't set bFound if property is unknown?
                 bFound = sal_True;
             }
@@ -1660,7 +1660,7 @@ sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimPro
     {
         uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
         long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)) );
         if ( nHierarchy >= xHiers->getCount() )
             nHierarchy = 0;
 
@@ -1679,7 +1679,7 @@ sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimPro
                 try
                 {
                     aSubAny = xLevProp->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SUBTOTALS)) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SUBTOTAL)) );
                 }
                 catch(uno::Exception&)
                 {
@@ -1745,7 +1745,7 @@ void lcl_FillOldFields(
 
         // dimension orientation, hidden by default.
         long nDimOrient = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION)),
                             sheet::DataPilotFieldOrientation_HIDDEN );
 
         if ( xDimProp.is() && nDimOrient == nOrient )
@@ -1757,7 +1757,7 @@ void lcl_FillOldFields(
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_FUNCTION)),
+                                            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FUNCTION)),
                                             sheet::GeneralFunction_NONE );
                 if ( eFunc == sheet::GeneralFunction_AUTO )
                 {
@@ -1771,14 +1771,14 @@ void lcl_FillOldFields(
 
             // is this data layout dimension?
             bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty(
-                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)));
+                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)));
 
             // is this dimension cloned?
             uno::Any aOrigAny;
             try
             {
                 aOrigAny = xDimProp->getPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIGINAL)));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)));
             }
             catch(uno::Exception&)
             {
@@ -1837,7 +1837,7 @@ void lcl_FillOldFields(
                 rField.nFuncMask = nMask;
                 rField.nFuncCount = lcl_CountBits(nMask);
                 long nPos = ScUnoHelpFunctions::GetLongProperty(
-                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_POSITION)));
+                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_POSITION)));
                 aPos.push_back(nPos);
 
                 try
@@ -1907,15 +1907,15 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
         try
         {
             rParam.bMakeTotalCol = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_COLUMNGRAND)), true );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_COLGRAND)), true );
             rParam.bMakeTotalRow = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ROWGRAND)), true );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ROWGRAND)), true );
 
             // following properties may be missing for external sources
             rParam.bIgnoreEmptyRows = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_IGNOREEMPTY)) );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_IGNOREEMPTY)) );
             rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_REPEATIFEMPTY)) );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REPEATEMPTY)) );
         }
         catch(uno::Exception&)
         {
@@ -1932,7 +1932,7 @@ void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XProp
     {
         uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
         long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)) );
         if ( nHierarchy >= xHiers->getCount() )
             nHierarchy = 0;
         rData.mnUsedHier = nHierarchy;
@@ -1950,7 +1950,7 @@ void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XProp
             if ( xLevProp.is() )
             {
                 rData.mbShowAll = ScUnoHelpFunctions::GetBoolProperty( xLevProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWEMPTY)) );
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWEMPTY)) );
 
                 try
                 {
@@ -1997,7 +1997,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         {
             bool bDuplicated = false;
             bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
             //! error checking -- is "IsDataLayoutDimension" property required??
 
             try
@@ -2005,7 +2005,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
                 aFieldName = String( xDimName->getName() );
 
                 uno::Any aOrigAny = xDimProp->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIGINAL)) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
                 uno::Reference<uno::XInterface> xIntOrig;
                 if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                     bDuplicated = true;
@@ -2073,7 +2073,7 @@ sal_Int32 ScDPObject::GetUsedHierarchy( sal_Int32 nDim )
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
     uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex( nDim ), uno::UNO_QUERY);
     if (xDim.is())
-        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USEDHIER ) ) );
+        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USEDHIERARCHY ) ) );
     return nHier;
 }
 
