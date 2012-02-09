@@ -1,0 +1,4 @@
+Java interpreter from [http://www.beanshell.org/] with some patches.
+
+So you can write java in command shell; interactive java good for prototyping/macros.
+

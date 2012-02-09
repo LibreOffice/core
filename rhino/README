@@ -1,6 +1,8 @@
-The Scripting Framework makes use of the Rhino (http://www.mozilla.org/rhino/)
+JavaScript engine/interpreter written in Java, used to provide JavaScript extensions.
+
+The Scripting Framework makes use of the Rhino ([http://www.mozilla.org/rhino/])
 JavaScript interpreter, available under the Mozilla Public License
-(http://www.mozilla.org/MPL/MPL-1.1.html).
+([http://www.mozilla.org/MPL/MPL-1.1.html]).
 
 In addition, to support the debugging of scripts contained in OpenOffice.org
 documents, we have modified the Java source file Main.java.

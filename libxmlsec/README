@@ -1,3 +1,5 @@
+XML signing, etc. From [http://www.aleksey.com/xmlsec/]. Heavily patched.
+
 The XML Security library has been modified, so that there is NO verification of
 the certificate during sign or verification operation. On Windows this was done
 in the function xmlSecMSCryptoX509StoreVerify (file src/mscrypto/x509vfy.c) and

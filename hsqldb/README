@@ -1,0 +1,5 @@
+Java database engine from [http://hsqldb.org/].
+
+Default database format for OpenOffice.org.
+Also used in LibreOffice but shall be replaced as default by SQLite.
+
