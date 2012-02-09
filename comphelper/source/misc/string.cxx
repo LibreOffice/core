@@ -516,11 +516,6 @@ bool isalnumAsciiString(const rtl::OString &rString)
     return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
 }
 
-bool isalnumAsciiString(const rtl::OUString &rString)
-{
-    return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
-}
-
 bool isdigitAsciiString(const rtl::OString &rString)
 {
     return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
@@ -536,17 +531,7 @@ bool islowerAsciiString(const rtl::OString &rString)
     return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
 }
 
-bool islowerAsciiString(const rtl::OUString &rString)
-{
-    return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
-}
-
 bool isupperAsciiString(const rtl::OString &rString)
-{
-    return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
-}
-
-bool isupperAsciiString(const rtl::OUString &rString)
 {
     return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
 }

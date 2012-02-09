@@ -1182,9 +1182,6 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
-comphelper::string::isalnumAsciiString(rtl::OUString const&)
-comphelper::string::islowerAsciiString(rtl::OUString const&)
-comphelper::string::isupperAsciiString(rtl::OUString const&)
 connectivity::OKeyValue::OKeyValue()
 connectivity::ORowSetValue::setFromDouble(double const&, int)
 connectivity::OSQLInternalNode::OSQLInternalNode(unsigned short const*, connectivity::SQLNodeType, unsigned int)
