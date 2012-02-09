@@ -2035,8 +2035,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_SBASEDON: nSprm = NS_rtf::LN_ISTDBASE; break;
         case RTF_SNEXT: nSprm = NS_rtf::LN_ISTDNEXT; break;
-        case RTF_SB: nSprm = NS_ooxml::LN_CT_Spacing_before; break;
-        case RTF_SA: nSprm = NS_ooxml::LN_CT_Spacing_after; break;
         default: break;
     }
     if (nSprm > 0)
@@ -2599,6 +2597,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_WMETAFILE:
             m_aStates.top().aPicture.eWMetafile = nParam;
+            break;
+        case RTF_SB:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
+                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue);
+            break;
+        case RTF_SA:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
+                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
