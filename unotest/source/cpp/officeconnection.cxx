@@ -180,7 +180,12 @@ OfficeConnection::getComponentContext() const {
 }
 
 bool OfficeConnection::isStillAlive() const {
-    OSL_ASSERT(process_ != 0);
+    if (process_ == 0) {
+        // In case "soffice" argument starts with "connect:" we have no direct
+        // control over the liveness of the soffice.bin process (would need to
+        // directly monitor the bridge) so can only assume the best here:
+        return true;
+    }
     TimeValue delay = { 0, 0 }; // 0 sec
     oslProcessError e = osl_joinProcessWithTimeout(process_, &delay);
     CPPUNIT_ASSERT(e == osl_Process_E_None || e == osl_Process_E_TimedOut);
