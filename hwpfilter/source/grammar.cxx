@@ -539,11 +539,9 @@ int yydebug;            /*  nonzero means print parse trace */
    definitions require.  With GCC, __builtin_memcpy takes an arg
    of type size_t, but it can handle unsigned int.  */
 
-#if defined __GNUC__
-#if __GNUC__ > 1        /* GNU C and GNU C++ define this.  */
+#if defined(__GNUC__)
 #define __yy_memcpy(TO,FROM,COUNT)  __builtin_memcpy(TO,FROM,COUNT)
-#endif
-#else               /* not GNU C or C++ */
+#else
 #ifndef __cplusplus
 
 /* This is the most reliable way to avoid incompatibilities

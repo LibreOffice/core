@@ -1118,14 +1118,8 @@ public:
 }
 
 namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
- sdecl::class_<OGLTransitionFactoryImpl> serviceImpl;
- const sdecl::ServiceDecl OGLTransitionFactoryDecl(
-     serviceImpl,
-#else
  const sdecl::ServiceDecl OGLTransitionFactoryDecl(
      sdecl::class_<OGLTransitionFactoryImpl>(),
-#endif
     "com.sun.star.comp.presentation.OGLTransitionFactory",
     "com.sun.star.presentation.TransitionFactory" );
 

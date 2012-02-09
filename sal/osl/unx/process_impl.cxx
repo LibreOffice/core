@@ -89,7 +89,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     char   buffer[PATH_MAX];
     size_t buflen = sizeof(buffer);
 
-#if __GNUC__ >= 4 && defined(MACOSX)
+#if defined(__GNUC__) && defined(MACOSX)
     if (_NSGetExecutablePath (buffer, (uint32_t*)&buflen) == 0)
 #else
     if (_NSGetExecutablePath (buffer, &buflen) == 0)

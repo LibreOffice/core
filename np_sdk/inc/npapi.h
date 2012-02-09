@@ -310,7 +310,7 @@ typedef enum {
  *   gcc 3.x generated vtables on UNIX and OSX are incompatible with
  *   previous compilers.
  */
-#if (defined(XP_UNIX) && defined(__GNUC__) && (__GNUC__ >= 3))
+#if defined(XP_UNIX) && defined(__GNUC__)
 #define _NP_ABI_MIXIN_FOR_GCC3 NP_ABI_GCC3_MASK
 #else
 #define _NP_ABI_MIXIN_FOR_GCC3 0

@@ -2450,14 +2450,8 @@ void FrameSynchronization::Deactivate (void)
 } // anon namespace
 
 namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
- sdecl::class_<SlideShowImpl> serviceImpl;
- const sdecl::ServiceDecl slideShowDecl(
-     serviceImpl,
-#else
- const sdecl::ServiceDecl slideShowDecl(
+const sdecl::ServiceDecl slideShowDecl(
      sdecl::class_<SlideShowImpl>(),
-#endif
     "com.sun.star.comp.presentation.SlideShow",
     "com.sun.star.presentation.SlideShow" );
 

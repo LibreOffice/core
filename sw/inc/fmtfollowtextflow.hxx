@@ -53,15 +53,11 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 
-
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(sal_Bool bInP) const
     { return (const SwFmtFollowTextFlow&)Get( RES_FOLLOW_TEXT_FLOW, bInP ); }
 
 inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(sal_Bool bInP) const
     { return aSet.GetFollowTextFlow( bInP ); }
-#endif
 
 #endif
 

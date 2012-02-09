@@ -247,8 +247,7 @@ typedef OSErr (*BP_GetSupportedMIMETypesProcPtr)(BPSupportedMIMETypes*, UInt32);
 #endif
 
 #if defined(XP_UNIX)
-/* GCC 3.3 and later support the visibility attribute. */
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))
+#if defined(__GNUC__)
 #define NP_VISIBILITY_DEFAULT __attribute__((visibility("default")))
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #define NP_VISIBILITY_DEFAULT __global

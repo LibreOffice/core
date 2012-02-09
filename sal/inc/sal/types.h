@@ -308,7 +308,7 @@ typedef void *                   sal_Handle;
     Compilers that support a construct of this nature will emit a compile
     time warning on unchecked return value.
 */
-#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#if defined(__GNUC__)
 #   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #else
 #   define SAL_WARN_UNUSED_RESULT
@@ -453,7 +453,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
 #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
-#elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+#elif (__GNUC__)
 #    define SAL_DEPRECATED(message) __attribute__((deprecated))
 #elif defined(_MSC_VER)
 #    define SAL_DEPRECATED(message) __declspec(deprecated(message))

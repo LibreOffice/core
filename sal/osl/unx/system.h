@@ -344,9 +344,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define PTHREAD_VALUE(t)             (t)
 #endif
 #ifndef PTHREAD_NONE
-# if (__GNUC__ < 4) && !defined(MACOSX)
-extern pthread_t _pthread_none_;
-# endif
 #   define PTHREAD_NONE                 _pthread_none_
 #   ifndef PTHREAD_NONE_INIT
 #       define PTHREAD_NONE_INIT        ((pthread_t)-1)
