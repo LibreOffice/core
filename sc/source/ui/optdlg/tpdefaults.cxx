@@ -29,8 +29,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/msgbox.hxx>
-
 #include "tpdefaults.hxx"
 #include "optdlg.hrc"
 #include "scresid.hxx"
@@ -49,9 +47,9 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
     SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreAttrs),
     aFLInitSpreadSheet ( this, ScResId( FL_INIT_SPREADSHEET ) ),
     aFtNSheets         ( this, ScResId( FT_NSHEETS ) ),
-    aEdNSheets 		   ( this, ScResId( ED_NSHEETS ) ),
-    aFtSheetPrefix 	   ( this, ScResId( FT_SHEETPREFIX ) ),
-    aEdSheetPrefix 	   ( this, ScResId( ED_SHEETPREFIX ) )
+    aEdNSheets         ( this, ScResId( ED_NSHEETS ) ),
+    aFtSheetPrefix     ( this, ScResId( FT_SHEETPREFIX ) ),
+    aEdSheetPrefix     ( this, ScResId( ED_SHEETPREFIX ) )
 {
     FreeResource();
 
@@ -70,9 +68,10 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
         Point aNewPoint = aEdNSheets.GetPosPixel();
         aNewPoint.X() += ( nTxtW - nCtrlW );
         aEdNSheets.SetPosPixel( aNewPoint );
-    }
+   }
     aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     aEdSheetPrefix.SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
+    aEdSheetPrefix.SetGetFocusHdl( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
 }
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
@@ -121,14 +120,31 @@ void ScTpDefaultsOptions::CheckNumSheets()
         aEdNSheets.SetValue(INIT_SHEETS_MIN);
 }
 
-void ScTpDefaultsOptions::CheckPrefix()
+void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)
 {
-    OUString aSheetPrefix = aEdSheetPrefix.GetText();
+    if (!pEdit)
+        return;
+
+    OUString aSheetPrefix = pEdit->GetText();
 
     if ( !ScDocument::ValidTabName( aSheetPrefix ) )
     {
-         ErrorBox(this,WinBits(WB_OK|WB_DEF_OK), ScGlobal::GetRscString(STR_INVALIDTABNAME) ).Execute();
+        // Revert to last good Prefix
+        pEdit->SetText( maOldPrefixValue );
     }
+    else
+    {
+        OnFocusPrefixInput(pEdit);
+    }
+}
+
+void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
+{
+    if (!pEdit)
+        return;
+
+    // Store Prefix in case we need to revert
+    maOldPrefixValue = pEdit->GetText();
 }
 
 
@@ -138,10 +154,17 @@ IMPL_LINK( ScTpDefaultsOptions, NumModifiedHdl, NumericField*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScTpDefaultsOptions, PrefixModifiedHdl, Edit*, EMPTYARG )
+IMPL_LINK( ScTpDefaultsOptions, PrefixModifiedHdl, Edit*, pEdit )
 {
-    CheckPrefix();
+    CheckPrefix(pEdit);
     return 0;
 }
+
+IMPL_LINK( ScTpDefaultsOptions, PrefixEditOnFocusHdl, Edit*, pEdit )
+{
+    OnFocusPrefixInput(pEdit);
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
