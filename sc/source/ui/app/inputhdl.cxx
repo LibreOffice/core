@@ -202,8 +202,8 @@ void removeChars(rtl::OUString& rStr, sal_Unicode c)
     rtl::OUStringBuffer aBuf(rStr);
     for (sal_Int32 i = 0, n = aBuf.getLength(); i < n; ++i)
     {
-        if (aBuf.charAt(i) == c)
-            aBuf.setCharAt(i, sal_Unicode(' '));
+        if (aBuf[i] == c)
+            aBuf[i] = sal_Unicode(' ');
     }
     rStr = aBuf.makeStringAndClear();
 }
