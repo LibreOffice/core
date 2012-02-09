@@ -53,15 +53,15 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include "dptabsrc.hxx"
 #include "dpglobal.hxx"
-using namespace ScDPGlobal;
+
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
-using namespace com::sun::star::sheet;
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 
 using namespace com::sun::star;
+using namespace com::sun::star::sheet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;

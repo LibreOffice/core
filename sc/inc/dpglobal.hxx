@@ -30,29 +30,6 @@
 #ifndef _SC_DPGLOBAL_HXX
 #define _SC_DPGLOBAL_HXX
 
-#include <algorithm>
-#include <list>
-#include <tools/gen.hxx>
-#include <global.hxx>
-
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
-
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
-#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
-#include <com/sun/star/sheet/DataResultFlags.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/MemberResultFlags.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
-#include <com/sun/star/sheet/XDataPilotResults.hpp>
-#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
-#include <com/sun/star/sheet/XLevelsSupplier.hpp>
-
 #define SC_DP_MAX_FIELDS  256
 
 #define     PIVOT_MAXFUNC           11
@@ -70,11 +47,6 @@
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
 
-namespace ScDPGlobal
-{
-// common operation
-    Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

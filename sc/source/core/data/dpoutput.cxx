@@ -57,6 +57,14 @@
 #include "stringutil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
+#include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/DataResultFlags.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 
 #include <vector>
 
