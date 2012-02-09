@@ -1123,12 +1123,20 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rt
         RTL_CONSTASCII_USTRINGPARAM("ERROR: Unable to open file "));
     aErrorInformation.sMessage += rFileName;
 
+    rtl::OUString aFileURL;
+    if (osl::File::getFileURLFromSystemPath(rFileName, aFileURL)
+        != osl::File::E_None)
+    {
+        return 0;
+    }
+
     oslFileHandle h;
-    if (osl_openFile(rFileName.pData, &h, osl_File_OpenFlag_Read)
+    if (osl_openFile(aFileURL.pData, &h, osl_File_OpenFlag_Read)
         != osl_File_E_None)
     {
         return 0;
     }
+
     sal_uInt64 s;
     oslFileError e = osl_getFileSize(h, &s);
     void * p;
