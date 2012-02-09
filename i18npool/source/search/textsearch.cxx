@@ -754,9 +754,23 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     UErrorCode nIcuErr = U_ZERO_ERROR;
     const IcuUniString aSearchTargetStr( searchStr.getStr(), endPos);
     pRegexMatcher->reset( aSearchTargetStr);
-    if( !pRegexMatcher->find( startPos, nIcuErr))
-        return aRet;
+    // search until there is a valid match
+    for(;;)
+    {
+        if( !pRegexMatcher->find( startPos, nIcuErr))
+            return aRet;
 
+        // #i118887# ignore zero-length matches e.g. "a*" in "bc"
+        int nStartOfs = pRegexMatcher->start( nIcuErr);
+        int nEndOfs = pRegexMatcher->end( nIcuErr);
+        if( nStartOfs < nEndOfs)
+            break;
+        // try at next position if there was a zero-length match
+        if( ++startPos >= endPos)
+            return aRet;
+    }
+
+    // extract the result of the search
     const int nGroupCount = pRegexMatcher->groupCount();
     aRet.subRegExpressions = nGroupCount + 1;
     aRet.startOffset.realloc( aRet.subRegExpressions);
