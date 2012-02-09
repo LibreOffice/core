@@ -103,6 +103,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     udkapi \
     unixODBC \
     UnoControls \
+    unotest \
     unotools \
     unoxml \
     ure \

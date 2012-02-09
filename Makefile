@@ -106,6 +106,7 @@ ucb\
 ucbhelper\
 udkapi\
 unixODBC\
+unotest\
 unotools\
 unoxml\
 ure\
@@ -233,7 +234,6 @@ translations\
 udm\
 unodevtools\
 unoil\
-unotest\
 vigra\
 x11_extensions\
 xmlhelp\

@@ -353,6 +353,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpftp1 \
     ucphier1 \
     ucppkg1 \
+    unoexceptionprotector \
     unopkgapp \
     unotest \
     unsafe_uno \

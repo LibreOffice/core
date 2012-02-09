@@ -40,6 +40,7 @@ gb_Library_FILENAMES := $(patsubst log_uno:liblog_uno%,log_uno:liblog_uno_uno%,$
 gb_Library_FILENAMES := $(patsubst purpenvhelper:libpurpen%,purpenvhelper:libuno_purpen%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst unoexceptionprotector:libuno%,unoexceptionprotector:uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst unsafe_uno:libunsafe_uno%,unsafe_uno:libunsafe_uno_uno%,$(gb_Library_FILENAMES))
 endif
 
