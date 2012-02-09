@@ -360,7 +360,7 @@ void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::
     {
         disposeObject( r );
     }
-    catch( SQLException & e )
+    catch( SQLException & )
     {
         // ignore this
     }
@@ -437,7 +437,7 @@ TransactionGuard::~TransactionGuard()
         if( ! m_commited )
             m_stmt->executeUpdate( getStatics().ROLLBACK );
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
         // ignore, we are within a dtor
     }

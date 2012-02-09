@@ -422,9 +422,9 @@ Any BaseResultSet::convertTo( const Any & val , const Type & type )
     {
         aRet = m_tc->convertTo( val , type );
     }
-    catch( com::sun::star::lang::IllegalArgumentException & e )
+    catch( com::sun::star::lang::IllegalArgumentException & )
     {}
-    catch( com::sun::star::script::CannotConvertException & e )
+    catch( com::sun::star::script::CannotConvertException & )
     {}
     return aRet;
 }
