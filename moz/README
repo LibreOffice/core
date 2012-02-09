@@ -1,4 +1,6 @@
+Used for security features, if nss is not available.
+
 Rebuild moz whenever changes have been made in the nss module. Those libs are
 merged into mozruntime.zip which is build in this project.
 
-Please read nss/readme.txt !!!
+Please read, please read about [[nss]].
