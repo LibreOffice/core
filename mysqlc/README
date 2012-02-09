@@ -1,8 +1,11 @@
----------- Status -------------------------------------------------------------
+The MySQL driver for LibreOffice.
+
+== Status ==
 
 The code is on a PREVIEW level. PREVIEW means pre-alpha.
 
----------- Requirements -------------------------------------------------------
+
+== Requirements ==
 
 The MySQL driver for OpenOffice.org (MySQL Connector/OpenOffice.org - C/OOo)
 requires two external libraries to be build:

@@ -1,0 +1,3 @@
+Postprocessing and checking of files delivered by other modules.
+
+This module hast to be the last one before creating install sets in module 'instset_native'.
