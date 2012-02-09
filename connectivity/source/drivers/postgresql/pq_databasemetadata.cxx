@@ -725,7 +725,12 @@ sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw (SQLException, Ru
 sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, RuntimeException)
 {
     // LEM: jdbc driver says not, although the comments in it seem old
-    return sal_False;
+    //      fdo#45249 Base query design won't use any aggregate function
+    //      (except COUNT(*) unless we say yes, so say yes.
+    //      Actually, Base assumes *also* support for aggregate functions "collect, fusion, intersection"
+    //      as soon as supportsCoreSQLGrammar() returns true.
+    //      Those are *not* Core SQL, though. They are in optional feature S271 "Basic multiset support"
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsExtendedSQLGrammar(  ) throw (SQLException, RuntimeException)
