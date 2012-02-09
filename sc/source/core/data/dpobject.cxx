@@ -689,11 +689,11 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
         Reference<beans::XPropertySet> xMemProp(xMember, UNO_QUERY);
         if (xMemProp.is())
         {
-            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ISVISIBL)));
-            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWDETA)));
+            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBL)));
+            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETA)));
 
             aMem.maLayoutName = ScUnoHelpFunctions::GetStringProperty(
-                xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LAYOUTNAME)), OUString());
+                xMemProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
         }
 
         aMembers.push_back(aMem);
@@ -847,7 +847,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
             continue;
 
         OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-            xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LAYOUTNAME)), OUString());
+            xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
         if (aLayoutName.equalsIgnoreAsciiCase(rName))
             return true;
     }
@@ -891,7 +891,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
 
                 if (pFlags)
                     *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_FLAGS)), 0 );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
             }
         }
     }
@@ -1023,7 +1023,7 @@ void ScDPObject::FillPageList( std::vector<rtl::OUString>& rStrings, long nField
         sal_Bool bVisible = false;
         if (xPropSet.is())
         {
-            Any any = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ISVISIBL)));
+            Any any = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISVISIBL)));
             any >>= bVisible;
         }
 
@@ -1843,7 +1843,7 @@ void lcl_FillOldFields(
                 try
                 {
                     if (nOrient == sheet::DataPilotFieldOrientation_DATA)
-                        xDimProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFVALUE)))
+                        xDimProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REFVALUE)))
                             >>= rField.maFieldRef;
                 }
                 catch (uno::Exception&)
@@ -1954,11 +1954,11 @@ void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XProp
 
                 try
                 {
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SORTING ) ) )
+                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SORTING ) ) )
                         >>= rData.maSortInfo;
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_LAYOUT ) ) )
+                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_LAYOUT ) ) )
                         >>= rData.maLayoutInfo;
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AUTOSHOW ) ) )
+                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_AUTOSHOW ) ) )
                         >>= rData.maShowInfo;
                 }
                 catch(uno::Exception&)
@@ -2015,7 +2015,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
             }
 
             OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LAYOUTNAME)), OUString());
+                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
 
             if ( aFieldName.Len() && !bData && !bDuplicated )
             {
@@ -2028,7 +2028,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
                 GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
                 lcl_FillLabelData(*pNewLabel, xDimProp);
                 pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_FLAGS)), 0 );
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
                 rParam.maLabelArray.push_back(pNewLabel);
             }
         }
@@ -2073,7 +2073,7 @@ sal_Int32 ScDPObject::GetUsedHierarchy( sal_Int32 nDim )
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
     uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex( nDim ), uno::UNO_QUERY);
     if (xDim.is())
-        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_USEDHIER ) ) );
+        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USEDHIER ) ) );
     return nHier;
 }
 

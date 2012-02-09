@@ -569,7 +569,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                                 xDimProp,
                                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
-                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HAS_HIDDEN_MEMBER)));
+                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_HAS_HIDDEN_MEMBER)));
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {
@@ -606,7 +606,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
                                 // LayoutName is new and may not be present in external implementation
                                 OUString aCaption = ScUnoHelpFunctions::GetStringProperty( xPropSet,
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LAYOUTNAME)), aName );
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), aName );
 
                                 bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
@@ -705,7 +705,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         try
         {
             uno::Any aAny = xSrcProp->getPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATADESC)) );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_DATADESC)) );
             rtl::OUString aUStr;
             aAny >>= aUStr;
             aDataDescription = String( aUStr );
@@ -1308,7 +1308,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             if (xPropSet.is())
             {
                 sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATAFIELDCOUNT)) );
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_DATAFIELDCOUNT)) );
                 if (nDataFieldCount > 0)
                     aResData.DataFieldIndex = (nRow - nDataStartRow) % nDataFieldCount;
             }
@@ -1390,7 +1390,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         return false;
 
     sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATAFIELDCOUNT)) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_DATAFIELDCOUNT)) );
     if (nDataFieldCount == 0)
         // No data field is present in this datapilot table.
         return false;

@@ -173,7 +173,7 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWDETAILS)), (bool)nShowDetailsMode );
 
         if (mpLayoutName.get())
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
         if ( nPosition >= 0 )
             ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, DP_PROP_POSITION, nPosition);
@@ -570,7 +570,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         if ( pReferenceValue )
         {
             aAny <<= *pReferenceValue;
-            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFVALUE)), aAny );
+            xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REFVALUE)), aAny );
         }
 
         uno::Sequence<sheet::TableFilterField> aFilter;
@@ -586,12 +586,12 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, DP_PROP_FILTER, aFilter);
         if (mpLayoutName.get())
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
         const OUString* pSubTotalName = GetSubtotalName();
         if (pSubTotalName)
             // Custom subtotal name, with '?' being replaced by the visible field name later.
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_FIELD_SUBTOTALNAME, *pSubTotalName);
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FIELD_SUBTOTALNAME, *pSubTotalName);
     }
 
     // Level loop outside of maMemberList loop
@@ -650,13 +650,13 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SHOWEMPTY)), (bool)nShowEmptyMode );
 
                 if ( pSortInfo )
-                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_SORTING, *pSortInfo);
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_DP_SORTING, *pSortInfo);
 
                 if ( pAutoShowInfo )
-                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_AUTOSHOW, *pAutoShowInfo);
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_DP_AUTOSHOW, *pAutoShowInfo);
 
                 if ( pLayoutInfo )
-                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_LAYOUT, *pLayoutInfo);
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_DP_LAYOUT, *pLayoutInfo);
 
                 // exceptions are caught at ScDPSaveData::WriteToSource
             }
@@ -697,7 +697,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     }
 
     if (xDimProp.is())
-        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_HAS_HIDDEN_MEMBER, bHasHiddenMember);
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER, bHasHiddenMember);
 }
 
 void ScDPSaveDimension::UpdateMemberVisibility(const boost::unordered_map<OUString, bool, OUStringHash>& rData)
@@ -1064,7 +1064,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
         const OUString* pGrandTotalName = GetGrandTotalName();
         if (pGrandTotalName)
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xSourceProp, SC_UNO_GRANDTOTAL_NAME, *pGrandTotalName);
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xSourceProp, SC_UNO_DP_GRANDTOTAL_NAME, *pGrandTotalName);
     }
 
     // exceptions in the other calls are errors
