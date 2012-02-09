@@ -29,9 +29,9 @@
 #ifndef SC_COLLECT_HXX
 #define SC_COLLECT_HXX
 
-#include "scdllapi.h"
+#include "sal/types.h"
 
-class SC_DLLPUBLIC ScDataObject
+class ScDataObject
 {
 public:
                             ScDataObject() {}
@@ -39,7 +39,7 @@ public:
     virtual    ScDataObject*       Clone() const = 0;
 };
 
-class SC_DLLPUBLIC ScCollection : public ScDataObject
+class ScCollection : public ScDataObject
 {
 protected:
     sal_uInt16          nCount;
