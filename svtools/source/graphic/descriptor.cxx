@@ -116,13 +116,6 @@ void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, 
 
 // ------------------------------------------------------------------------------
 
-bool GraphicDescriptor::isValid() const
-{
-    return( mpGraphic ? ( mpGraphic->GetType() != GRAPHIC_NONE ) : ( meType != GRAPHIC_NONE ) );
-}
-
-// ------------------------------------------------------------------------------
-
 void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL )
 {
     String aURL;

@@ -89,8 +89,6 @@ public:
     void init( const ::rtl::OUString& rURL ) throw();
     void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm, const ::rtl::OUString& rURL ) throw();
 
-    bool isValid() const;
-
     static ::rtl::OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
 
