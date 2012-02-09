@@ -114,25 +114,24 @@ redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 novell = 'https://bugzilla.novell.com/buglist.cgi'
 mozilla = 'https://bugzilla.mozilla.org/buglist.cgi'
 
-get_through_rss_query(freedesktop, 'application/msword', "fdo", "doc")
-get_through_rss_query(freedesktop, 'application/rtf', "fdo", "rtf")
-get_through_rss_query(freedesktop, 'text/rtf', "fdo", "rtf")
-get_through_rss_query(freedesktop, 'text/spreadsheet', "fdo", "slk")
-get_through_rss_query(freedesktop, 'application/vnd.ms-powerpoint', "fdo", "ppt")
+mimetypes = [
+    ('application/msword', 'doc'),
+    ('application/rtf', 'rtf'),
+    ('text/rtf', 'rtf'),
+    ('text/spreadsheet', 'slk'),
+    ('application/vnd.ms-powerpoint', 'ppt'),
+]
 
-get_through_rpc_query(redhatrpc, redhatbug, 'application/msword', "rhbz", "doc")
-get_through_rpc_query(redhatrpc, redhatbug, 'application/rtf', "rhbz", "rtf")
-get_through_rpc_query(redhatrpc, redhatbug, 'text/rtf', "rhbz", "rtf")
-get_through_rpc_query(redhatrpc, redhatbug, 'text/spreadsheet', "rhbz", "slk")
-get_through_rpc_query(redhatrpc, redhatbug, 'application/vnd.ms-powerpoint', "rhbz", "ppt")
+for (mimetype,extension) in mimetypes:
+    get_through_rss_query(freedesktop, mimetype, "fdo", extension)
+
+for (mimetype,extension) in mimetypes:
+    get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
 
 #to-do, get attachments some other way, not inline in xml
 #get_through_rss_query(novell, 'application/msword', "n", "doc")
 
-get_through_rss_query(openoffice, 'application/msword', "ooo", "doc")
-get_through_rss_query(openoffice, 'application/rtf', "ooo", "rtf")
-get_through_rss_query(openoffice, 'text/rtf', "ooo", "rtf")
-get_through_rss_query(openoffice, 'text/spreadsheet', "ooo", "slk")
-get_through_rss_query(openoffice, 'application/vnd.ms-powerpoint', "ooo", "ppt")
+for (mimetype,extension) in mimetypes:
+    get_through_rss_query(openoffice, mimetype, "ooo", extension)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
