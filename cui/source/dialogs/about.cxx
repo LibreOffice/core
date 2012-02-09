@@ -73,7 +73,6 @@ GetBuildId()
     if (!sBuildId.isEmpty() && sBuildId.getLength() > 50)
     {
         rtl::OUStringBuffer aBuffer;
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
         sal_Int32 nIndex = 0;
         do
         {
@@ -86,7 +85,7 @@ GetBuildId()
                     if (nIndex % 5)
                         aBuffer.append(static_cast<sal_Unicode>('-'));
                     else
-                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
+                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n"));
                 }
             }
         }
@@ -167,6 +166,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aCopyrightText.SetControlForeground( aTextColor );
 
     rtl::OUStringBuffer sText(m_aVendorTextStr);
+    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
     sal_uInt32 nCopyrightId =
         utl::ConfigManager::getProductName().equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("LibreOffice"))

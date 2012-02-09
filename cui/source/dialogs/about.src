@@ -41,6 +41,9 @@ ModalDialog RID_DEFAULTABOUT
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
     MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
@@ -84,11 +87,11 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_VENDOR
     {
-        Text[ en-US ] = "%PRODUCTNAME is a free and open source office suite developed by %OOOVENDOR. ";
+        Text[ en-US ] = "%PRODUCTNAME is a free and open source office suite. This release was supplied by %OOOVENDOR.";
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "LibreOffice is copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "Copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
     };
     String ABOUT_STR_COPYRIGHT_DERIVED
     {
