@@ -40,14 +40,20 @@ bool ScDPItemData::isDate( sal_uLong nNumType )
     return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
 }
 
+ScDPItemData::ScDPItemData() :
+    mnNumFormat( 0 ), mfValue(0.0), mbFlag(0) {}
+
+ScDPItemData::ScDPItemData(sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF) :
+    mnNumFormat(nNF), maString(rS), mfValue(fV), mbFlag(bF) {}
+
 ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
-    nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
-    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( nNumFormat ) ) )
+    mnNumFormat( nNumFormatP ), maString(rS), mfValue(fV),
+    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( mnNumFormat ) ) )
 {
 }
 
 ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel) :
-    nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
+    mnNumFormat( 0 ), mfValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
     pDoc->GetString( nCol, nRow, nDocTab, aDocStr );
@@ -68,10 +74,10 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocT
         sal_uLong nFormat = NUMBERFORMAT_NUMBER;
         if ( pFormatter )
             nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
-        aString = aDocStr;
-        fValue = fVal;
+        maString = aDocStr;
+        mfValue = fVal;
         mbFlag |= MK_VAL|MK_DATA;
-        nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
+        mnNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
         isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
     }
     else if (bLabel || pDoc->HasData(nCol, nRow, nDocTab))
@@ -94,23 +100,31 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocT
     }
 }
 
+void ScDPItemData::SetString( const String& rS )
+{
+    maString = rS;
+    mbFlag &= ~(MK_VAL|MK_DATE);
+    mnNumFormat = 0;
+    mbFlag |= MK_DATA;
+}
+
 bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 {
     //! pass Transliteration?
     //! inline?
-    return IsValue() ? ( r.IsValue() && rtl::math::approxEqual( fValue, r.fValue ) ) :
+    return IsValue() ? ( r.IsValue() && rtl::math::approxEqual( mfValue, r.mfValue ) ) :
                        ( !r.IsValue() &&
-                        ScGlobal::GetpTransliteration()->isEqual( aString, r.aString ) );
+                        ScGlobal::GetpTransliteration()->isEqual( maString, r.maString ) );
 }
 
 size_t ScDPItemData::Hash() const
 {
     if ( IsValue() )
-        return (size_t) rtl::math::approxFloor( fValue );
+        return (size_t) rtl::math::approxFloor( mfValue );
     else
         // If we do unicode safe case insensitive hash we can drop
         // ScDPItemData::operator== and use ::IsCasInsEqual
-        return rtl_ustr_hashCode_WithLength( aString.GetBuffer(), aString.Len() );
+        return rtl_ustr_hashCode_WithLength( maString.GetBuffer(), maString.Len() );
 }
 
 bool ScDPItemData::operator==( const ScDPItemData& r ) const
@@ -123,7 +137,7 @@ bool ScDPItemData::operator==( const ScDPItemData& r ) const
         if ( IsDate() != r.IsDate() )
             return false;
         else if ( r.IsValue() )
-            return rtl::math::approxEqual( fValue, r.fValue );
+            return rtl::math::approxEqual( mfValue, r.mfValue );
         else
             return false;
     }
@@ -131,7 +145,7 @@ bool ScDPItemData::operator==( const ScDPItemData& r ) const
         return false;
     else
         // need exact equality until we have a safe case insensitive string hash
-        return aString == r.aString;
+        return maString == r.maString;
 }
 
 sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
@@ -141,14 +155,14 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     {
         if ( rB.IsValue() )
         {
-            if ( rtl::math::approxEqual( rA.fValue, rB.fValue ) )
+            if ( rtl::math::approxEqual( rA.mfValue, rB.mfValue ) )
             {
                 if ( rA.IsDate() == rB.IsDate() )
                     return 0;
                 else
                     return rA.IsDate() ? 1: -1;
             }
-            else if ( rA.fValue < rB.fValue )
+            else if ( rA.mfValue < rB.mfValue )
                 return -1;
             else
                 return 1;
@@ -159,7 +173,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     else if ( rB.IsValue() )
         return 1;                // values first
     else
-        return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
+        return ScGlobal::GetCollator()->compareString( rA.maString, rB.maString );
 }
 
 sal_uInt8 ScDPItemData::GetType() const
@@ -191,12 +205,12 @@ bool ScDPItemData::IsValue() const
 
 String ScDPItemData::GetString() const
 {
-    return aString;
+    return maString;
 }
 
 double ScDPItemData::GetValue() const
 {
-    return fValue;
+    return mfValue;
 }
 
 bool ScDPItemData::HasStringData() const

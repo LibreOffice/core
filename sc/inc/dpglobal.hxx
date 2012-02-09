@@ -87,37 +87,37 @@ public:
 private:
     union
     {
-        sal_uLong   nNumFormat;
+        sal_uLong mnNumFormat;
         sal_Int32 mnDatePart;
     };
 
-    String  aString;
-    double  fValue;
+    String maString;
+    double mfValue;
     sal_uInt8 mbFlag;
 
     friend class ScDPCache;
 public:
-    ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
-    ScDPItemData( sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
-    ScDPItemData( const String& rS, double fV = 0.0, bool bHV = false, const sal_uLong nNumFormat = 0 , bool bData = true) ;
+    ScDPItemData();
+    ScDPItemData(sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF);
+    ScDPItemData(const String& rS, double fV = 0.0, bool bHV = false, const sal_uLong nNumFormat = 0 , bool bData = true);
     ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel);
 
-    void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
-    bool        IsCaseInsEqual( const ScDPItemData& r ) const;
+    void SetString( const String& rS );
+    bool IsCaseInsEqual(const ScDPItemData& r) const;
 
-    size_t      Hash() const;
+    size_t Hash() const;
 
     // exact equality
-    bool        operator==( const ScDPItemData& r ) const;
+    bool operator==( const ScDPItemData& r ) const;
     // case insensitive equality
-    static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
+    static sal_Int32 Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
 public:
     bool IsHasData() const ;
     bool IsHasErr() const ;
     bool IsValue() const;
-    String  GetString() const ;
-    double  GetValue() const ;
+    String GetString() const ;
+    double GetValue() const ;
     bool HasStringData() const ;
     bool IsDate() const;
     bool HasDatePart() const;

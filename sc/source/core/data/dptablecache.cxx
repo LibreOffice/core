@@ -595,7 +595,7 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 
     // Wrap this instance with scoped pointer to ensure proper deletion.
     auto_ptr<ScDPItemData> p(pData);
-    pData->SetDate(ScDPItemData::isDate(GetNumType(pData->nNumFormat)));
+    pData->SetDate(ScDPItemData::isDate(GetNumType(pData->mnNumFormat)));
 
     SCROW nIndex = 0;
     if (!hasItemInDimension(maTableDataValues[nDim], maGlobalOrder[nDim], *pData, nIndex))
@@ -628,7 +628,7 @@ String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 
     if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
-        return maLabelNames[nColumn+1].aString;
+        return maLabelNames[nColumn+1].maString;
     }
     else
         return String();
@@ -642,16 +642,16 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
         maLabelNames.push_back( new ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_DATA)) );
 
     //reset name if needed
-    String strNewName = pData->aString;
+    String strNewName = pData->maString;
     bool bFound = false;
     long nIndex = 1;
     do
     {
         for ( long i= maLabelNames.size()-1; i>=0; i-- )
         {
-            if( maLabelNames[i].aString == strNewName )
+            if( maLabelNames[i].maString == strNewName )
             {
-                strNewName  =  pData->aString;
+                strNewName  =  pData->maString;
                 strNewName += String::CreateFromInt32( nIndex );
                 nIndex ++ ;
                 bFound = true;
@@ -661,7 +661,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
     }
     while ( !bFound );
 
-    pData->aString = strNewName;
+    pData->maString = strNewName;
     maLabelNames.push_back( pData );
 }
 
@@ -732,7 +732,7 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
         nCount = 10;
     for (size_t i = 0; i < nCount; ++i)
     {
-        sal_uLong n = maTableDataValues[nDim][i].nNumFormat;
+        sal_uLong n = maTableDataValues[nDim][i].mnNumFormat;
         if (n)
             return n;
     }
