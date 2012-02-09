@@ -36,8 +36,14 @@ gb_MERGEDLIBS := \
 	drawinglayer \
 	editeng \
 	filterconfig \
+	fwe \
+	fwi \
+	fwk \
+	fwl \
+	fwm \
 	lng \
 	package2 \
+	sfx \
 	sofficeapp \
 	spl \
 	svx \
