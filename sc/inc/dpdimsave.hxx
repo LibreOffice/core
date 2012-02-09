@@ -50,25 +50,25 @@ class ScDPSaveGroupDimension;
 
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
-    String                  aGroupName;     // name of group
-    ::std::vector<String>   aElements;      // names of items in original dimension
+    rtl::OUString aGroupName;     // name of group
+    ::std::vector<rtl::OUString> aElements;      // names of items in original dimension
 
 public:
-                ScDPSaveGroupItem( const String& rName );
-                ~ScDPSaveGroupItem();
+    ScDPSaveGroupItem( const rtl::OUString& rName );
+    ~ScDPSaveGroupItem();
 
     void    AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const;
 
-    void    AddElement( const String& rName );
+    void    AddElement( const rtl::OUString& rName );
     void    AddElementsFromGroup( const ScDPSaveGroupItem& rGroup );
-    const String& GetGroupName() const   { return aGroupName; }
-    bool    RemoveElement( const String& rName );   // returns true if found (removed)
+    const rtl::OUString& GetGroupName() const { return aGroupName; }
+    bool    RemoveElement( const rtl::OUString& rName );   // returns true if found (removed)
 
     bool    IsEmpty() const;
     size_t  GetElementCount() const;
-    const String* GetElementByIndex( size_t nIndex ) const;
+    const rtl::OUString* GetElementByIndex(size_t nIndex) const;
 
-    void    Rename( const String& rNewName );
+    void Rename( const rtl::OUString& rNewName );
 
     // remove this group's elements from their groups in rDimension
     // (rDimension must be a different dimension from the one which contains this)
@@ -101,11 +101,11 @@ public:
     sal_Int32   GetDatePart() const             { return nDatePart; }
     const ScDPNumGroupInfo& GetDateInfo() const { return aDateInfo; }
 
-    String  CreateGroupName( const String& rPrefix );
+    rtl::OUString CreateGroupName( const rtl::OUString& rPrefix );
     const ScDPSaveGroupItem* GetNamedGroup( const String& rGroupName ) const;
     ScDPSaveGroupItem* GetNamedGroupAcc( const String& rGroupName );
     void    RemoveFromGroups( const String& rItemName );
-    void    RemoveGroup( const String& rGroupName );
+    void RemoveGroup(const rtl::OUString& rGroupName);
     bool    IsEmpty() const;
     bool HasOnlyHidden(const ScDPUniqueStringSet& rVisible);
 

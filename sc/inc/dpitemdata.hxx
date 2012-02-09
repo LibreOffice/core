@@ -30,10 +30,11 @@
 #define __SC_DPITEMDATA_HXX__
 
 #include "scdllapi.h"
+#include "address.hxx"
+
 #include "sal/types.h"
 #include "tools/solar.h"
-#include "tools/string.hxx"
-#include "address.hxx"
+#include "rtl/ustring.hxx"
 
 #include <vector>
 
@@ -61,18 +62,19 @@ private:
         sal_Int32 mnDatePart;
     };
 
-    String maString;
+    rtl::OUString maString;
     double mfValue;
     sal_uInt8 mbFlag;
 
     friend class ScDPCache;
 public:
     ScDPItemData();
-    ScDPItemData(sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF);
-    ScDPItemData(const String& rS, double fV = 0.0, bool bHV = false, const sal_uLong nNumFormat = 0 , bool bData = true);
+    ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF);
+    ScDPItemData(const rtl::OUString& rS, double fV = 0.0, bool bHV = false,
+                 const sal_uLong nNumFormat = 0, bool bData = true);
     ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel);
 
-    void SetString( const String& rS );
+    void SetString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     size_t Hash() const;
@@ -86,7 +88,7 @@ public:
     bool IsHasData() const ;
     bool IsHasErr() const ;
     bool IsValue() const;
-    String GetString() const ;
+    const rtl::OUString& GetString() const;
     double GetValue() const ;
     bool HasStringData() const ;
     bool IsDate() const;

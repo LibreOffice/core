@@ -68,7 +68,7 @@ public:
     /** individual filter item used in SingleFilter and GroupFilter. */
     struct FilterItem
     {
-        String      maString;
+        rtl::OUString maString;
         double      mfValue;
         bool        mbHasValue;
 
@@ -89,12 +89,12 @@ public:
     class SingleFilter : public FilterBase
     {
     public:
-        explicit SingleFilter(String aString, double fValue, bool bHasValue);
+        explicit SingleFilter(const rtl::OUString& aString, double fValue, bool bHasValue);
         virtual ~SingleFilter() {}
 
         virtual bool match(const ScDPItemData& rCellData) const;
 
-        const String&   getMatchString();
+        const rtl::OUString& getMatchString() const;
         double          getMatchValue() const;
         bool            hasValue() const;
 
@@ -111,7 +111,7 @@ public:
         GroupFilter();
         virtual ~GroupFilter() {}
         virtual bool match(  const  ScDPItemData& rCellData ) const;
-        void addMatchItem(const String& rStr, double fVal, bool bHasValue);
+        void addMatchItem(const rtl::OUString& rStr, double fVal, bool bHasValue);
         size_t getMatchItemCount() const;
 
     private:
@@ -157,7 +157,7 @@ public:
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    String getFieldName( SCCOL  nIndex) const;
+    rtl::OUString getFieldName(SCCOL nIndex) const;
 
    /** Get the unique entries for a field specified by index.  The caller must
        make sure that the table is filled before calling function, or it will

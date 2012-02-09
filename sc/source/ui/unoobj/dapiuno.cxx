@@ -2429,7 +2429,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                             ScFieldGroup aGroup;
                             aGroup.maName = pGroup->GetGroupName();
                             for( sal_Int32 nMemIdx = 0, nMemCount = pGroup->GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
-                                if( const String* pMem = pGroup->GetElementByIndex( nMemIdx ) )
+                                if (const rtl::OUString* pMem = pGroup->GetElementByIndex(nMemIdx))
                                     aGroup.maMembers.push_back( *pMem );
                             aGroups.push_back( aGroup );
                         }

@@ -90,9 +90,9 @@ ScDPCacheTable::FilterItem::FilterItem() :
 {
 }
 
-bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
+bool ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
 {
-    if (rCellData.GetString()!= maString &&
+    if (rCellData.GetString().equals(maString) &&
         (!rCellData.IsValue()|| rCellData.GetValue()!=  mfValue))
             return false;
     return true;
@@ -100,7 +100,7 @@ bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::SingleFilter::SingleFilter(String aString, double fValue, bool bHasValue)
+ScDPCacheTable::SingleFilter::SingleFilter(const rtl::OUString& aString, double fValue, bool bHasValue)
 {
     maItem.maString = aString;
     maItem.mfValue      = fValue;
@@ -112,7 +112,7 @@ bool ScDPCacheTable::SingleFilter::match( const  ScDPItemData& rCellData ) const
       return maItem.match(rCellData);
 }
 
-const String& ScDPCacheTable::SingleFilter::getMatchString()
+const rtl::OUString& ScDPCacheTable::SingleFilter::getMatchString() const
 {
     return maItem.maString;
 }
@@ -145,7 +145,7 @@ bool ScDPCacheTable::GroupFilter::match( const  ScDPItemData& rCellData ) const
         return false;
 }
 
-void ScDPCacheTable::GroupFilter::addMatchItem(const String& rStr, double fVal, bool bHasValue)
+void ScDPCacheTable::GroupFilter::addMatchItem(const rtl::OUString& rStr, double fVal, bool bHasValue)
 {
     FilterItem aItem;
     aItem.maString = rStr;
@@ -332,10 +332,12 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
     else
         rVal.Set(0.0, SC_VALTYPE_EMPTY);
 }
-String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
+
+rtl::OUString ScDPCacheTable::getFieldName(SCCOL nIndex) const
 {
     if (!mpCache)
-        return String();
+        return rtl::OUString();
+
     return getCache()->GetDimensionName( nIndex );
 }
 

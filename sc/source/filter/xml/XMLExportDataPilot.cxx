@@ -668,7 +668,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
                         sal_Int32 nElemCount = pGroup->GetElementCount();
                         for(sal_Int32 j = 0; j < nElemCount; ++j)
                         {
-                            const String* pElem = pGroup->GetElementByIndex( j );
+                            const rtl::OUString* pElem = pGroup->GetElementByIndex(j);
                             if (pElem)
                             {
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);

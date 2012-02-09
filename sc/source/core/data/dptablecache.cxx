@@ -623,7 +623,7 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 }
 
 
-String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
+rtl::OUString ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
     OSL_ENSURE(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
@@ -633,7 +633,7 @@ String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
         return maLabelNames[nColumn+1].maString;
     }
     else
-        return String();
+        return rtl::OUString();
 }
 
 void ScDPCache::AddLabel(ScDPItemData *pData)
@@ -651,11 +651,11 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
     {
         for ( long i= maLabelNames.size()-1; i>=0; i-- )
         {
-            if( maLabelNames[i].maString == strNewName )
+            if (maLabelNames[i].maString.equals(strNewName))
             {
-                strNewName  =  pData->maString;
+                strNewName = pData->maString;
                 strNewName += String::CreateFromInt32( nIndex );
-                nIndex ++ ;
+                ++nIndex;
                 bFound = true;
             }
         }
@@ -758,11 +758,11 @@ SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
     return maTableDataValues[nDim].size();
 }
 
-SCCOL ScDPCache::GetDimensionIndex(String sName) const
+SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
 {
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
-        if ( maLabelNames[i].GetString() == sName )
+        if (maLabelNames[i].GetString().equals(sName))
             return (SCCOL)(i-1);
     }
     return -1;
@@ -789,7 +789,7 @@ const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
     return maRefObjects;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
+SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
@@ -804,7 +804,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
     return GetRowCount() + mpAdditionalData->getDataId(rData);
 }
 
-SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
+SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {

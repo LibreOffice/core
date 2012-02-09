@@ -3909,7 +3909,7 @@ size_t ScDPResultVisibilityData::MemberHash::operator() (const ScDPItemData& r) 
     if (r.IsValue())
         return static_cast<size_t>(::rtl::math::approxFloor(r.GetValue()));
     else
-        return rtl_ustr_hashCode_WithLength(r.GetString().GetBuffer(), r.GetString().Len());
+        return rtl_ustr_hashCode_WithLength(r.GetString().getStr(), r.GetString().getLength());
 }
 SCROW ScDPResultMember::GetDataId( ) const
 {

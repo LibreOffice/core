@@ -106,12 +106,12 @@ public:
     void RemoveReference(ScDPObject* pObj) const;
     const ObjectSetType& GetAllReferences() const;
 
-    SCROW GetIdByItemData( long nDim, const String& sItemData ) const;
-    SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
+    SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
+    SCROW GetIdByItemData(long nDim, const ScDPItemData& rData) const;
 
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
-    SCCOL GetDimensionIndex( String sName) const;
+    SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumType ( sal_uLong nFormat ) const;
     sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
@@ -124,7 +124,7 @@ public:
 
     SCROW  GetRowCount() const;
     SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    String GetDimensionName( sal_uInt16 nColumn ) const;
+    rtl::OUString GetDimensionName( sal_uInt16 nColumn ) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;

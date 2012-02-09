@@ -398,7 +398,7 @@ void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const Sc
             // loop over all elements of one group
             for( size_t nElemIdx = 0, nElemCount = pGroupItem->GetElementCount(); nElemIdx < nElemCount; ++nElemIdx )
             {
-                if( const String* pElemName = pGroupItem->GetElementByIndex( nElemIdx ) )
+                if (const rtl::OUString* pElemName = pGroupItem->GetElementByIndex(nElemIdx))
                 {
                     // try to find the item that is part of the group in the base field
                     sal_uInt16 nBaseItemIdx = rBaseField.GetItemIndex( *pElemName );

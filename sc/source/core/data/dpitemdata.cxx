@@ -42,10 +42,10 @@ bool ScDPItemData::isDate( sal_uLong nNumType )
 ScDPItemData::ScDPItemData() :
     mnNumFormat( 0 ), mfValue(0.0), mbFlag(0) {}
 
-ScDPItemData::ScDPItemData(sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF) :
+ScDPItemData::ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF) :
     mnNumFormat(nNF), maString(rS), mfValue(fV), mbFlag(bF) {}
 
-ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
+ScDPItemData::ScDPItemData(const rtl::OUString& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
     mnNumFormat( nNumFormatP ), maString(rS), mfValue(fV),
     mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( mnNumFormat ) ) )
 {
@@ -54,8 +54,7 @@ ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLon
 ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel) :
     mnNumFormat( 0 ), mfValue(0.0), mbFlag( 0 )
 {
-    String aDocStr;
-    pDoc->GetString( nCol, nRow, nDocTab, aDocStr );
+    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nDocTab);
 
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
@@ -81,7 +80,7 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocT
     }
     else if (bLabel || pDoc->HasData(nCol, nRow, nDocTab))
     {
-        if (bLabel && !aDocStr.Len())
+        if (bLabel && aDocStr.isEmpty())
         {
             // Replace an empty label string with column name.
             rtl::OUStringBuffer aBuf;
@@ -99,7 +98,7 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocT
     }
 }
 
-void ScDPItemData::SetString( const String& rS )
+void ScDPItemData::SetString(const rtl::OUString& rS)
 {
     maString = rS;
     mbFlag &= ~(MK_VAL|MK_DATE);
@@ -123,7 +122,7 @@ size_t ScDPItemData::Hash() const
     else
         // If we do unicode safe case insensitive hash we can drop
         // ScDPItemData::operator== and use ::IsCasInsEqual
-        return rtl_ustr_hashCode_WithLength( maString.GetBuffer(), maString.Len() );
+        return rtl_ustr_hashCode_WithLength(maString.getStr(), maString.getLength());
 }
 
 bool ScDPItemData::operator==( const ScDPItemData& r ) const
@@ -202,7 +201,7 @@ bool ScDPItemData::IsValue() const
     return !!(mbFlag&MK_VAL);
 }
 
-String ScDPItemData::GetString() const
+const rtl::OUString& ScDPItemData::GetString() const
 {
     return maString;
 }

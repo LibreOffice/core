@@ -40,35 +40,31 @@
 
 // ============================================================================
 
-ScDPSaveGroupItem::ScDPSaveGroupItem( const String& rName ) :
-    aGroupName( rName )
-{
-}
+ScDPSaveGroupItem::ScDPSaveGroupItem( const rtl::OUString& rName ) :
+    aGroupName(rName) {}
 
-ScDPSaveGroupItem::~ScDPSaveGroupItem()
-{
-}
+ScDPSaveGroupItem::~ScDPSaveGroupItem() {}
 
-void ScDPSaveGroupItem::AddElement( const String& rName )
+void ScDPSaveGroupItem::AddElement( const rtl::OUString& rName )
 {
-    aElements.push_back( rName );
+    aElements.push_back(rName);
 }
 
 void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
 {
     // add all elements of the other group (used for nested grouping)
 
-    for ( std::vector<String>::const_iterator aIter(rGroup.aElements.begin());
+    for ( std::vector<rtl::OUString>::const_iterator aIter(rGroup.aElements.begin());
                                 aIter != rGroup.aElements.end(); ++aIter )
         aElements.push_back( *aIter );
 }
 
-bool ScDPSaveGroupItem::RemoveElement( const String& rName )
+bool ScDPSaveGroupItem::RemoveElement( const rtl::OUString& rName )
 {
-    for ( std::vector<String>::iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
-        if ( *aIter == rName )          //! ignore case
+    for (std::vector<rtl::OUString>::iterator aIter = aElements.begin(); aIter != aElements.end(); ++aIter)
+        if (*aIter == rName)          //! ignore case
         {
-            aElements.erase( aIter );   // found -> remove
+            aElements.erase(aIter);   // found -> remove
             return true;                // don't have to look further
         }
 
@@ -85,12 +81,12 @@ size_t ScDPSaveGroupItem::GetElementCount() const
     return aElements.size();
 }
 
-const String* ScDPSaveGroupItem::GetElementByIndex( size_t nIndex ) const
+const rtl::OUString* ScDPSaveGroupItem::GetElementByIndex(size_t nIndex) const
 {
     return (nIndex < aElements.size()) ? &aElements[ nIndex ] : 0;
 }
 
-void ScDPSaveGroupItem::Rename( const String& rNewName )
+void ScDPSaveGroupItem::Rename( const rtl::OUString& rNewName )
 {
     aGroupName = rNewName;
 }
@@ -100,16 +96,16 @@ void ScDPSaveGroupItem::RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimen
     // remove this group's elements from their groups in rDimension
     // (rDimension must be a different dimension from the one which contains this)
 
-    for ( std::vector<String>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    for ( std::vector<rtl::OUString>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
         rDimension.RemoveFromGroups( *aIter );
 }
 
 void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const
 {
-    ScDPGroupItem aGroup( aGroupName );
+    ScDPGroupItem aGroup(aGroupName);
     ScDPItemData aData;
 
-    for ( std::vector<String>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    for ( std::vector<rtl::OUString>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
     {
         sal_uInt32 nFormat = 0;      //! ...
         double fValue;
@@ -157,7 +153,7 @@ void ScDPSaveGroupDimension::AddGroupItem( const ScDPSaveGroupItem& rItem )
     aGroups.push_back( rItem );
 }
 
-String ScDPSaveGroupDimension::CreateGroupName( const String& rPrefix )
+rtl::OUString ScDPSaveGroupDimension::CreateGroupName(const rtl::OUString& rPrefix)
 {
     // create a name for a new group, using "Group1", "Group2" etc. (translated prefix in rPrefix)
 
@@ -175,7 +171,7 @@ String ScDPSaveGroupDimension::CreateGroupName( const String& rPrefix )
         // look for existing groups
         for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin());
                                     aIter != aGroups.end() && !bExists; aIter++ )
-            if ( aIter->GetGroupName() == aGroupName )         //! ignore case
+            if (aIter->GetGroupName().equals(aGroupName))         //! ignore case
                 bExists = true;
 
         if ( !bExists )
@@ -185,7 +181,7 @@ String ScDPSaveGroupDimension::CreateGroupName( const String& rPrefix )
     }
 
     OSL_FAIL("CreateGroupName: no valid name found");
-    return EMPTY_STRING;
+    return rtl::OUString();
 }
 
 const ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroup( const String& rGroupName ) const
@@ -195,8 +191,8 @@ const ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroup( const String& rG
 
 ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroupAcc( const String& rGroupName )
 {
-    for ( ScDPSaveGroupItemVec::iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
-        if ( aIter->GetGroupName() == rGroupName )         //! ignore case
+    for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
+        if (aIter->GetGroupName().equals(rGroupName))         //! ignore case
             return &*aIter;
 
     return NULL;        // none found
@@ -232,10 +228,10 @@ void ScDPSaveGroupDimension::RemoveFromGroups( const String& rItemName )
         }
 }
 
-void ScDPSaveGroupDimension::RemoveGroup( const String& rGroupName )
+void ScDPSaveGroupDimension::RemoveGroup(const rtl::OUString& rGroupName)
 {
-    for ( ScDPSaveGroupItemVec::iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
-        if ( aIter->GetGroupName() == rGroupName )          //! ignore case
+    for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
+        if (aIter->GetGroupName().equals(rGroupName))          //! ignore case
         {
             aGroups.erase( aIter );
             return;                     // don't have to look further
