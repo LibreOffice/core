@@ -37,7 +37,7 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 #include "queryparam.hxx"
-#include "collect.hxx"
+#include "typedstrdata.hxx"
 
 #include <deque>
 #include <vector>

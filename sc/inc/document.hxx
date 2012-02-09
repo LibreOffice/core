@@ -44,7 +44,7 @@
 #include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "scdllapi.h"
-#include "collect.hxx"
+#include "typedstrdata.hxx"
 
 #include <memory>
 #include <map>

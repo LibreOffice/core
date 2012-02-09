@@ -76,7 +76,6 @@
 #include "document.hxx"
 #include "docpool.hxx"
 #include "editutil.hxx"
-#include "collect.hxx"
 #include "appoptio.hxx"
 #include "docoptio.hxx"
 #include "validat.hxx"

@@ -44,7 +44,7 @@
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "cellform.hxx"
-#include "collect.hxx"
+#include "typedstrdata.hxx"
 #include "formula/errorcodes.hxx"
 #include "formula/token.hxx"
 #include "brdcst.hxx"

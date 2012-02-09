@@ -31,7 +31,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include "collect.hxx"
+#include "typedstrdata.hxx"
 
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

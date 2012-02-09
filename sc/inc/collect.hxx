@@ -30,9 +30,6 @@
 #define SC_COLLECT_HXX
 
 #include "scdllapi.h"
-#include "rtl/ustring.hxx"
-
-#include <set>
 
 class SC_DLLPUBLIC ScDataObject
 {
@@ -70,68 +67,6 @@ public:
             ScDataObject* operator[]( const sal_uInt16 nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
 };
-
-class TypedStrData
-{
-public:
-    enum StringType {
-        Value    = 0,
-        Standard = 1,
-        Name     = 2,
-        DbName   = 3,
-        Header   = 4
-    };
-
-    TypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
-                  StringType eType = Standard );
-
-    TypedStrData( const TypedStrData& rCpy );
-
-    bool IsStrData() const;
-    SC_DLLPUBLIC const rtl::OUString& GetString() const;
-    double GetValue() const;
-    StringType GetStringType() const;
-
-    struct LessCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
-    {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
-    };
-
-    struct LessCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
-    {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
-    };
-
-    struct EqualCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
-    {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
-    };
-
-    struct EqualCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
-    {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
-    };
-
-    bool operator== (const TypedStrData& r) const;
-    bool operator< (const TypedStrData& r) const;
-
-
-private:
-    rtl::OUString maStrValue;
-    double mfValue;
-    StringType meStrType;
-};
-
-class FindTypedStrData : std::unary_function<TypedStrData, bool>
-{
-    TypedStrData maVal;
-    bool mbCaseSens;
-public:
-    FindTypedStrData(const TypedStrData& rVal, bool bCaseSens);
-    bool operator() (const TypedStrData& r) const;
-};
-
-typedef std::set<TypedStrData, TypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
 
 #endif
 

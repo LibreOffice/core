@@ -53,7 +53,7 @@
 #include "globstr.hrc"
 #include "rangenam.hxx"
 #include "dbdata.hxx"
-#include "collect.hxx"
+#include "typedstrdata.hxx"
 
 #include <math.h>
 #include <memory>

@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-#include <unotools/transliterationwrapper.hxx>
-
 #include "collect.hxx"
-#include "global.hxx"
 
 #include <string.h>
 
@@ -194,116 +191,6 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
 ScDataObject*   ScCollection::Clone() const
 {
     return new ScCollection(*this);
-}
-
-bool TypedStrData::LessCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
-{
-    if (left.meStrType != right.meStrType)
-        return left.meStrType < right.meStrType;
-
-    if (left.meStrType == Value)
-        return left.mfValue < right.mfValue;
-
-    return ScGlobal::GetCaseTransliteration()->compareString(
-        left.maStrValue, right.maStrValue) < 0;
-}
-
-bool TypedStrData::LessCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
-{
-    if (left.meStrType != right.meStrType)
-        return left.meStrType < right.meStrType;
-
-    if (left.meStrType == Value)
-        return left.mfValue < right.mfValue;
-
-    return ScGlobal::GetpTransliteration()->compareString(
-        left.maStrValue, right.maStrValue) < 0;
-}
-
-bool TypedStrData::EqualCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
-{
-    if (left.meStrType != right.meStrType)
-        return false;
-
-    if (left.meStrType == Value && left.mfValue != right.mfValue)
-        return false;
-
-    return ScGlobal::GetCaseTransliteration()->compareString(
-        left.maStrValue, right.maStrValue) == 0;
-}
-
-bool TypedStrData::EqualCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
-{
-    if (left.meStrType != right.meStrType)
-        return false;
-
-    if (left.meStrType == Value && left.mfValue != right.mfValue)
-        return false;
-
-    return ScGlobal::GetpTransliteration()->compareString(
-        left.maStrValue, right.maStrValue) == 0;
-}
-
-bool TypedStrData::operator== (const TypedStrData& r) const
-{
-    // Case insensitive comparison by default.
-    EqualCaseInsensitive aHdl;
-    return aHdl(*this, r);
-}
-
-bool TypedStrData::operator< (const TypedStrData& r) const
-{
-    // Case insensitive comparison by default.
-    LessCaseInsensitive aHdl;
-    return aHdl(*this, r);
-}
-
-TypedStrData::TypedStrData(
-    const rtl::OUString& rStr, double nVal, StringType nType ) :
-    maStrValue(rStr),
-    mfValue(nVal),
-    meStrType(nType) {}
-
-TypedStrData::TypedStrData( const TypedStrData& rCpy ) :
-    maStrValue(rCpy.maStrValue),
-    mfValue(rCpy.mfValue),
-    meStrType(rCpy.meStrType) {}
-
-bool TypedStrData::IsStrData() const
-{
-    return meStrType != Value;
-}
-
-const rtl::OUString& TypedStrData::GetString() const
-{
-    return maStrValue;
-}
-
-double TypedStrData::GetValue() const
-{
-    return mfValue;
-}
-
-TypedStrData::StringType TypedStrData::GetStringType() const
-{
-    return meStrType;
-}
-
-FindTypedStrData::FindTypedStrData(const TypedStrData& rVal, bool bCaseSens) :
-    maVal(rVal), mbCaseSens(bCaseSens) {}
-
-bool FindTypedStrData::operator() (const TypedStrData& r) const
-{
-    if (mbCaseSens)
-    {
-        TypedStrData::EqualCaseSensitive aHdl;
-        return aHdl(maVal, r);
-    }
-    else
-    {
-        TypedStrData::EqualCaseInsensitive aHdl;
-        return aHdl(maVal, r);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
