@@ -43,10 +43,8 @@ $(eval $(call gb_Module_add_targets,sd,\
 ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_uimpress \
+    CppunitTest_sd_filters_test \
 ))
-# disabled for now, seems to have incomplete deps and hangs on a build from scratch
-#    CppunitTest_sd_filters_test \
-
 endif
 
 

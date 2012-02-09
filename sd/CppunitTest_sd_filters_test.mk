@@ -42,8 +42,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
     drawinglayer \
     editeng \
     fileacc \
-    for \
-    forui \
     i18nisolang1 \
     msfilter \
     oox \
@@ -93,7 +91,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
     dbaccess/util/dba \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     oox/util/oox \
@@ -112,8 +109,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-    xmlsecurity/util/xsec_fw \
-    xmlsecurity/util/xmlsecurity \
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
