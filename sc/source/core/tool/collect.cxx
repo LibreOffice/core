@@ -26,16 +26,15 @@
  *
  ************************************************************************/
 
-
-
-
-#include <string.h>
-#include <tools/stream.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include "rechead.hxx"
 #include "collect.hxx"
-#include "document.hxx"         // fuer TypedStrData Konstruktor
+#include "global.hxx"
+
+#include <string.h>
+
+#define MAXCOLLECTIONSIZE       16384
+#define MAXDELTA                1024
 
 // -----------------------------------------------------------------------
 
@@ -196,115 +195,6 @@ ScDataObject*   ScCollection::Clone() const
 {
     return new ScCollection(*this);
 }
-
-//------------------------------------------------------------------------
-// ScSortedCollection
-//------------------------------------------------------------------------
-
-ScSortedCollection::ScSortedCollection(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup) :
-    ScCollection (nLim, nDel),
-    bDuplicates ( bDup)
-{
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt16 ScSortedCollection::IndexOf(ScDataObject* pScDataObject) const
-{
-    sal_uInt16 nIndex;
-    if (Search(pScDataObject, nIndex))
-        return nIndex;
-    else
-        return 0xffff;
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool ScSortedCollection::Search(ScDataObject* pScDataObject, sal_uInt16& rIndex) const
-{
-    rIndex = nCount;
-    sal_Bool bFound = false;
-    short nLo = 0;
-    short nHi = nCount - 1;
-    short nIndex;
-    short nCompare;
-    while (nLo <= nHi)
-    {
-        nIndex = (nLo + nHi) / 2;
-        nCompare = Compare(pItems[nIndex], pScDataObject);
-        if (nCompare < 0)
-            nLo = nIndex + 1;
-        else
-        {
-            nHi = nIndex - 1;
-            if (nCompare == 0)
-            {
-                bFound = sal_True;
-                nLo = nIndex;
-            }
-        }
-    }
-    rIndex = nLo;
-    return bFound;
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool ScSortedCollection::Insert(ScDataObject* pScDataObject)
-{
-    sal_uInt16 nIndex;
-    sal_Bool bFound = Search(pScDataObject, nIndex);
-    if (bFound)
-    {
-        if (bDuplicates)
-            return AtInsert(nIndex, pScDataObject);
-        else
-            return false;
-    }
-    else
-        return AtInsert(nIndex, pScDataObject);
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool ScSortedCollection::InsertPos(ScDataObject* pScDataObject, sal_uInt16& nIndex)
-{
-    sal_Bool bFound = Search(pScDataObject, nIndex);
-    if (bFound)
-    {
-        if (bDuplicates)
-            return AtInsert(nIndex, pScDataObject);
-        else
-            return false;
-    }
-    else
-        return AtInsert(nIndex, pScDataObject);
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool ScSortedCollection::operator==(const ScSortedCollection& rCmp) const
-{
-    if ( nCount != rCmp.nCount )
-        return false;
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if ( !IsEqual(pItems[i],rCmp.pItems[i]) )
-            return false;
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-
-//  IsEqual - komplette Inhalte vergleichen
-
-sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    return ( Compare(pKey1, pKey2) == 0 );      // Default: nur Index vergleichen
-}
-
-//------------------------------------------------------------------------
-// TypedScStrCollection
-//------------------------------------------------------------------------
 
 bool TypedStrData::LessCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
 {

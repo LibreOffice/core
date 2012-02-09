@@ -29,22 +29,10 @@
 #ifndef SC_COLLECT_HXX
 #define SC_COLLECT_HXX
 
-#include "address.hxx"
-#include <tools/string.hxx>
-
-#ifndef INCLUDED_LIMITS_H
-#include <limits.h>
-#define INCLUDED_LIMITS_H
-#endif
 #include "scdllapi.h"
+#include "rtl/ustring.hxx"
 
-#define MAXCOLLECTIONSIZE       16384
-#define MAXDELTA                1024
-#define SCPOS_INVALID           USHRT_MAX
-
-#include <boost/ptr_container/ptr_set.hpp>
-
-class ScDocument;
+#include <set>
 
 class SC_DLLPUBLIC ScDataObject
 {
@@ -82,35 +70,6 @@ public:
             ScDataObject* operator[]( const sal_uInt16 nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
 };
-
-
-class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
-{
-private:
-    sal_Bool    bDuplicates;
-protected:
-                        // for ScStrCollection load/store
-            void        SetDups( sal_Bool bVal ) { bDuplicates = bVal; }
-            sal_Bool        IsDups() const { return bDuplicates; }
-public:
-    ScSortedCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false);
-    ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
-                            ScCollection(rScSortedCollection),
-                            bDuplicates(rScSortedCollection.bDuplicates) {}
-
-    virtual sal_uInt16      IndexOf(ScDataObject* pScDataObject) const;
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const = 0;
-    virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    sal_Bool        Search(ScDataObject* pScDataObject, sal_uInt16& rIndex) const;
-    virtual sal_Bool        Insert(ScDataObject* pScDataObject);
-    virtual sal_Bool        InsertPos(ScDataObject* pScDataObject, sal_uInt16& nIndex);
-
-    sal_Bool        operator==(const ScSortedCollection& rCmp) const;
-};
-
-//------------------------------------------------------------------------
-// TypedScStrCollection: wie ScStrCollection, nur, dass Zahlen vor Strings
-//                     sortiert werden
 
 class TypedStrData
 {
