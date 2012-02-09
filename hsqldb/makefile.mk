@@ -39,6 +39,8 @@ ANT_BUILDFILE=build$/build.xml
 
 .INCLUDE : antsettings.mk
 
+.INCLUDE :  tg_javav.mk
+
 .INCLUDE :  version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
@@ -56,8 +58,12 @@ CONVERTFILES=build$/build.xml \
 PATCH_FILES=patches$/i96823.patch \
             patches$/i97032.patch \
             patches$/i103528.patch \
-            patches$/i104901.patch \
+            patches$/i104901.patch
+
+.IF "$(JAVANUMVER:s/.//)" >= "000100060000"
+PATCH_FILES+= \
             patches$/jdbc-4.1.patch
+.ENDIF
 
 .IF "$(JAVACISGCJ)"=="yes" || "$(JAVA_SOURCE_VER)"=="1.5"
 JAVA_HOME=
