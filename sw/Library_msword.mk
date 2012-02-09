@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,msword,\
     -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     $$(INCLUDE) \
-    -I$(WORKDIR)/oox/inc/ \
 ))
 
 $(eval $(call gb_Library_add_api,msword,\

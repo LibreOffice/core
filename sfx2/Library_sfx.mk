@@ -47,7 +47,6 @@ $(eval $(call gb_Library_set_include,sfx,\
     -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
     -I$(realpath $(SRCDIR)/sfx2/source/inc) \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
-    -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
 ))
 

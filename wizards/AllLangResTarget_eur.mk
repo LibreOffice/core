@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,eur/res))
 
 $(eval $(call gb_SrsTarget_set_include,eur/res,\
 	$$(INCLUDE) \
-	-I$(WORKDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,eur/res,\

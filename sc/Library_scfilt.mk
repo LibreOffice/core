@@ -30,7 +30,6 @@ $(eval $(call gb_Library_set_include,scfilt,\
         -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
         -I$(realpath $(SRCDIR)/sc/inc) \
         $$(INCLUDE) \
-        -I$(WORKDIR)/oox/inc/ \
 ))
 
 $(eval $(call gb_Library_add_api,scfilt,\

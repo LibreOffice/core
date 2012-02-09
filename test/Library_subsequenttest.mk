@@ -27,11 +27,6 @@
 
 $(eval $(call gb_Library_Library,subsequenttest))
 
-$(eval $(call gb_Library_set_include,subsequenttest,\
-	-I$(SRCDIR)/tools/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,subsequenttest,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))

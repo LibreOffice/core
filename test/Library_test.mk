@@ -29,11 +29,6 @@ $(eval $(call gb_Library_Library,test))
 
 $(eval $(call gb_Library_add_package_headers,test,test_inc))
 
-$(eval $(call gb_Library_set_include,test,\
-	-I$(SRCDIR)/tools/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,test,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))
