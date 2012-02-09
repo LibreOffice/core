@@ -79,8 +79,6 @@ public:
                 I18nHelper( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF, const ::com::sun::star::lang::Locale& rLocale );
                 ~I18nHelper();
 
-    const ::com::sun::star::lang::Locale& getLocale() const;
-
     sal_Int32   CompareString( const String& rStr1, const String& rStr2 ) const;
 
     sal_Bool    MatchString( const String& rStr1, const String& rStr2 ) const;

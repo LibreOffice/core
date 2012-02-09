@@ -1544,7 +1544,6 @@ ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::I18nHelper::GetDate(Date const&) const
-vcl::I18nHelper::getLocale() const
 vcl::LabeledElement::setLabel(boost::shared_ptr<vcl::WindowArranger> const&)
 vcl::LazyDeletor<Menu>::is_less(Menu*, Menu*)
 vcl::MatrixArranger::addChild(boost::shared_ptr<vcl::WindowArranger> const&, unsigned int, unsigned int, int)

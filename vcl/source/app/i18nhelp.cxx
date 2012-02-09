@@ -87,11 +87,6 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
     return *mpLocaleDataWrapper;
 }
 
-const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
-{
-    return maLocale;
-}
-
 inline bool is_formatting_mark( sal_Unicode c )
 {
     if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
