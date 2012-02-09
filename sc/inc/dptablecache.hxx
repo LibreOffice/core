@@ -32,6 +32,7 @@
 #include "global.hxx"
 #include <svl/zforlist.hxx>
 #include "dpglobal.hxx"
+#include "dpitemdata.hxx"
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

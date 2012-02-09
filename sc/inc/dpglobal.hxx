@@ -32,7 +32,6 @@
 
 #include <algorithm>
 #include <list>
-#include <vector>
 #include <tools/gen.hxx>
 #include <global.hxx>
 
@@ -70,83 +69,6 @@
 #define     PIVOT_FUNC_STD_VAR      0x0200
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
-
-class SC_DLLPUBLIC ScDPItemData
-{
-public:
-    enum {
-        MK_VAL      = 0x01,
-        MK_DATA     = 0x02,
-        MK_ERR      = 0x04,
-        MK_DATE     = 0x08,
-        MK_DATEPART = 0x10
-    };
-
-    static bool isDate( sal_uLong nNumType );
-
-private:
-    union
-    {
-        sal_uLong mnNumFormat;
-        sal_Int32 mnDatePart;
-    };
-
-    String maString;
-    double mfValue;
-    sal_uInt8 mbFlag;
-
-    friend class ScDPCache;
-public:
-    ScDPItemData();
-    ScDPItemData(sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF);
-    ScDPItemData(const String& rS, double fV = 0.0, bool bHV = false, const sal_uLong nNumFormat = 0 , bool bData = true);
-    ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel);
-
-    void SetString( const String& rS );
-    bool IsCaseInsEqual(const ScDPItemData& r) const;
-
-    size_t Hash() const;
-
-    // exact equality
-    bool operator==( const ScDPItemData& r ) const;
-    // case insensitive equality
-    static sal_Int32 Compare( const ScDPItemData& rA, const ScDPItemData& rB );
-
-public:
-    bool IsHasData() const ;
-    bool IsHasErr() const ;
-    bool IsValue() const;
-    String GetString() const ;
-    double GetValue() const ;
-    bool HasStringData() const ;
-    bool IsDate() const;
-    bool HasDatePart() const;
-    void SetDate( bool b ) ;
-
-    sal_uInt8 GetType() const;
-};
-
-class SC_DLLPUBLIC ScDPItemDataPool
-{
-public:
-    ScDPItemDataPool();
-    ScDPItemDataPool(const ScDPItemDataPool& r);
-
-    virtual ~ScDPItemDataPool();
-    virtual const ScDPItemData* getData( sal_Int32 nId  );
-    virtual sal_Int32 getDataId( const ScDPItemData& aData );
-    virtual sal_Int32 insertData( const ScDPItemData& aData );
-protected:
-    struct DataHashFunc : public std::unary_function< const ScDPItemData &, size_t >
-    {
-        size_t operator() (const ScDPItemData &rData) const { return rData.Hash(); }
-    };
-
-    typedef ::boost::unordered_multimap< ScDPItemData, sal_Int32, DataHashFunc > DataHash;
-
-    ::std::vector< ScDPItemData > maItems;
-    DataHash  maItemIds;
-};
 
 namespace ScDPGlobal
 {
