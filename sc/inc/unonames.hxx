@@ -114,6 +114,7 @@
 #define SC_UNONAME_NUMFMT           "NumberFormat"
 #define SC_UNONAME_SHADOW           "ShadowFormat"
 #define SC_UNONAME_TBLBORD          "TableBorder"
+#define SC_UNONAME_TBLBORD2         "TableBorder2"
 #define SC_UNONAME_WRAP             "IsTextWrapped"
 #define SC_UNONAME_PINDENT          "ParaIndent"
 #define SC_UNONAME_PTMARGIN         "ParaTopMargin"
@@ -130,8 +131,16 @@
 #define SC_UNONAME_RIGHTBORDER      "RightBorder"
 #define SC_UNONAME_TOPBORDER        "TopBorder"
 
+#define SC_UNONAME_BOTTBORDER2      "BottomBorder2"
+#define SC_UNONAME_LEFTBORDER2      "LeftBorder2"
+#define SC_UNONAME_RIGHTBORDER2     "RightBorder2"
+#define SC_UNONAME_TOPBORDER2       "TopBorder2"
+
 #define SC_UNONAME_DIAGONAL_TLBR    "DiagonalTLBR"
 #define SC_UNONAME_DIAGONAL_BLTR    "DiagonalBLTR"
+
+#define SC_UNONAME_DIAGONAL_TLBR2   "DiagonalTLBR2"
+#define SC_UNONAME_DIAGONAL_BLTR2   "DiagonalBLTR2"
 
 #define SC_UNONAME_SHRINK_TO_FIT    "ShrinkToFit"
 

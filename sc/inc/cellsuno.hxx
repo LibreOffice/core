@@ -75,8 +75,9 @@
 #include <com/sun/star/util/XImportable.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XCell2.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
@@ -143,10 +144,15 @@ class ScHelperFunctions
 {
 public:
     static const ::editeng::SvxBorderLine* GetBorderLine( ::editeng::SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
+    static const ::editeng::SvxBorderLine* GetBorderLine( ::editeng::SvxBorderLine& rLine, const com::sun::star::table::BorderLine2& rStruct );
     static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const com::sun::star::table::TableBorder& rBorder );
+    static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const com::sun::star::table::TableBorder2& rBorder );
     static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine );
-    static void FillTableBorder( com::sun::star::table::TableBorder& rBorder,
-                            const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
+    static void FillBorderLine( com::sun::star::table::BorderLine2& rStruct, const ::editeng::SvxBorderLine* pLine );
+    static void AssignTableBorderToAny( com::sun::star::uno::Any& rAny,
+            const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner, bool bInvalidateHorVerDist = false );
+    static void AssignTableBorder2ToAny( com::sun::star::uno::Any& rAny,
+            const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner, bool bInvalidateHorVerDist = false );
     static void ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
 };

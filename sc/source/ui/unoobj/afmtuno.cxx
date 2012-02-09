@@ -132,6 +132,7 @@ const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
         {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,  &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED,     &::getBooleanCppuType(),                    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD,     &::getCppuType((table::TableBorder*)0),     0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2,     &::getCppuType((table::TableBorder2*)0),     0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,    &::getCppuType((const sal_Int16*)0),        0, MID_TL_STYLE },
         {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,       &::getCppuType((float*)0),                  0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,   &::getCppuType((float*)0),                  0, MID_WEIGHT },
@@ -779,7 +780,22 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
                             pData->PutItem( nFieldIndex, aOuter );
 
-                            //! Notify fuer andere Objekte?
+                            //! Notify for other objects?
+                            pFormats->SetSaveLater(sal_True);
+                        }
+                    }
+                    break;
+                case SC_WID_UNO_TBLBORD2:
+                    {
+                        table::TableBorder2 aBorder2;
+                        if ( aValue >>= aBorder2 )   // empty = nothing to do
+                        {
+                            SvxBoxItem aOuter(ATTR_BORDER);
+                            SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                            ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder2 );
+                            pData->PutItem( nFieldIndex, aOuter );
+
+                            //! Notify for other objects?
                             pFormats->SetSaveLater(sal_True);
                         }
                     }
@@ -828,6 +844,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
             switch (pEntry->nWID)
             {
                 case SC_WID_UNO_TBLBORD:
+                case SC_WID_UNO_TBLBORD2:
                     {
                         const SfxPoolItem* pItem = pData->GetItem(nFieldIndex, ATTR_BORDER);
                         if (pItem)
@@ -835,9 +852,10 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                             SvxBoxItem aOuter(*(static_cast<const SvxBoxItem*>(pItem)));
                             SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
 
-                            table::TableBorder aBorder;
-                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
-                            aVal <<= aBorder;
+                            if (pEntry->nWID == SC_WID_UNO_TBLBORD2)
+                                ScHelperFunctions::AssignTableBorder2ToAny( aVal, aOuter, aInner);
+                            else
+                                ScHelperFunctions::AssignTableBorderToAny( aVal, aOuter, aInner);
                         }
                     }
                     break;
