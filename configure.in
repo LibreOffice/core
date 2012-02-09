@@ -2975,6 +2975,7 @@ linux-androideabi*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
+    SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/$OUTPATH"
     ;;
 
 mingw*)
@@ -3000,7 +3001,7 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/win32"
+    SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/win32 -I$SRC_ROOT/solenv/inc/$OUTPATH"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     ;;
@@ -3112,7 +3113,7 @@ esac
 
 INPATH="${OUTPATH}${PROEXT}"
 OUTDIR="$SRC_ROOT/solver/$INPATH"
-SOLARINC="-I. -I$SRC_ROOT/solver/$INPATH/inc/stl -I$SRC_ROOT/solver/$INPATH/inc/external -I$SRC_ROOT/solver/$INPATH/inc -I$SRC_ROOT/solenv/inc/$OUTPATH -I$SRC_ROOT/solenv/inc -I$SRC_ROOT/res $SOLARINC"
+SOLARINC="-I. -I$SRC_ROOT/solver/$INPATH/inc/external -I$SRC_ROOT/solver/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
 WORKDIR="$SRC_ROOT/workdir/$INPATH"
 AC_SUBST(COM)
 AC_SUBST(CPU)
