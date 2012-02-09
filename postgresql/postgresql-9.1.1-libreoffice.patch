@@ -81,7 +81,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
  
  CLEAN :
  	-@erase "$(INTDIR)\getaddrinfo.obj"
-@@ -192,7 +186,7 @@
+@@ -192,10 +186,11 @@
  
  CPP_PROJ=/nologo /W3 /EHsc $(OPT) \
   /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" \
@@ -90,6 +90,10 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
   /D "FRONTEND" $(DEBUGDEF) \
   /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\libpq.pch" \
   /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c  \
++ /D "_CRT_NONSTDC_NO_DEPRECATE" \
+  /D "_CRT_SECURE_NO_DEPRECATE" $(ADD_DEFINES)
+ 
+ !IFDEF USE_SSL
 @@ -230,7 +224,7 @@
  LINK32=link.exe
  LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS) $(LDAP_LIBS) $(KFW_LIBS) $(ADD_SECLIB) \
