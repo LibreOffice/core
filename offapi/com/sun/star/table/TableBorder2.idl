@@ -1,0 +1,160 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Red Hat, Inc., Eike Rathke <erack@redhat.com>
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef __com_sun_star_table_TableBorder2_idl__
+#define __com_sun_star_table_TableBorder2_idl__
+
+#include <com/sun/star/table/BorderLine2.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** contains the style settings of the border lines of all cells in a cell
+    range.
+
+    TableBorder2 is nearly identical to TableBorder, except that it has
+    members of <type>BorderLine2</type> instead of
+    <type>BorderLine</type>.
+
+    <p>In a queried structure, the flags in
+    <member>TableBorder2::Is...LineValid</member> indicate that not all
+    lines of the boxes have the same values.</p>
+
+    <p>In a structure which is used for setting, these flags determine
+    if the corresponding line should be set or if the old value should
+    be kept.</p>
+
+    @since LibreOffice 3.6
+ */
+published struct TableBorder2
+{
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the top edge.
+     */
+    com::sun::star::table::BorderLine2 TopLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::TopLine</member> is used.
+     */
+    boolean IsTopLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the bottom edge.
+     */
+    com::sun::star::table::BorderLine2 BottomLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::BottomLine</member> is used.
+     */
+    boolean IsBottomLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the left edge.
+     */
+    com::sun::star::table::BorderLine2 LeftLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::LeftLine</member> is used.
+     */
+    boolean IsLeftLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the right edge.
+     */
+    com::sun::star::table::BorderLine2 RightLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::RightLine</member> is used.
+     */
+    boolean IsRightLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style of horizontal lines for the inner part
+        of a cell range.
+     */
+    com::sun::star::table::BorderLine2 HorizontalLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::HorizontalLine</member> is used.
+     */
+    boolean IsHorizontalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style of vertical lines for the inner part
+        of a cell range.
+     */
+    com::sun::star::table::BorderLine2 VerticalLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::VerticalLine</member> is used.
+     */
+    boolean IsVerticalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the distance between the lines and other contents.
+     */
+    short Distance;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder2::Distance</member> is used.
+     */
+    boolean IsDistanceValid;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
