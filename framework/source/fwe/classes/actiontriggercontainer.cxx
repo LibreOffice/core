@@ -54,7 +54,8 @@ throw ( RuntimeException )
     Any a = ::cppu::queryInterface(
                 aType ,
                 SAL_STATIC_CAST( XMultiServiceFactory*, this ),
-                SAL_STATIC_CAST( XServiceInfo* ,  this ));
+                SAL_STATIC_CAST( XServiceInfo* ,  this ),
+                SAL_STATIC_CAST( XTypeProvider* ,  this ));
 
     if( a.hasValue() )
     {
@@ -154,8 +155,6 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
             static ::cppu::OTypeCollection aTypeCollection(
                         ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
                         ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexAccess           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexReplace          >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
                         ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
 

@@ -305,8 +305,6 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
             static ::cppu::OTypeCollection aTypeCollection(
                         ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
                         ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexAccess           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexReplace          >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
                         ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ,
                         ::getCppuType(( const Reference< XUnoTunnel             >*)NULL ) ,

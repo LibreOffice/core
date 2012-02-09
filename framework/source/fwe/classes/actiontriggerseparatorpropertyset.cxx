@@ -70,7 +70,8 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                SAL_STATIC_CAST( XServiceInfo*, this ));
+                SAL_STATIC_CAST( XServiceInfo*, this ),
+                SAL_STATIC_CAST( XTypeProvider*,  this ));
 
     if( a.hasValue() )
         return a;
