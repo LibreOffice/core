@@ -28,14 +28,12 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	fwe \
 	i18nisolang1 \
 	i18npaper \
 	sal \
 	salhelper \
 	sax \
 	sb \
-	sfx \
 	sot \
 	svl \
 	svt \
@@ -50,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 
 $(eval $(call gb_Library_use_externals,merged,\
 	icuuc \
+	libxml2 \
 	zlib \
 ))
 
@@ -74,6 +73,13 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	user32 \
 	uuid \
 	winmm \
+))
+endif
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_linked_libs,merged,\
+    objc \
+    Cocoa \
 ))
 endif
 
