@@ -840,9 +840,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*/ )
         else
             rToFill.Right()  = nTmp;
     }
-    //#i32913# in browse mode the visibility of the horizontal scrollbar
-    // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->GetViewOptions()->getBrowseMode()) )
+    if ( pHScrollbar->IsVisible(sal_True) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
