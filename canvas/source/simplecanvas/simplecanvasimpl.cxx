@@ -383,14 +383,8 @@ namespace
     };
 
     namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
-    sdecl::class_<SimpleCanvasImpl, sdecl::with_args<true> > serviceImpl;
-    const sdecl::ServiceDecl simpleCanvasDecl(
-        serviceImpl,
-#else
     const sdecl::ServiceDecl simpleCanvasDecl(
         sdecl::class_<SimpleCanvasImpl, sdecl::with_args<true> >(),
-#endif
         "com.sun.star.comp.rendering.SimpleCanvas",
         SERVICE_NAME );
 }
