@@ -39,6 +39,8 @@
 
 #include <set>
 
+#include <boost/noncopyable.hpp>
+
 class ScDocument;
 class ScTabView;
 class ScTabViewShell;
@@ -60,7 +62,7 @@ struct ESelection;
 //  ScInputHandler
 //========================================================================
 
-class ScInputHandler
+class ScInputHandler : boost::noncopyable
 {
 private:
     ScInputWindow*          pInputWin;
@@ -80,9 +82,7 @@ private:
     sal_uLong                   nTipVisibleSec;
     String                  aManualTip;
     rtl::OUString           aAutoSearch;
-    sal_Bool                    bUseTab;                    // Blaettern moeglich
 
-    sal_Bool                    bTextValid;                 // Text noch nicht in Edit-Engine
     rtl::OUString           aCurrentText;
 
     String                  aFormText;                  // fuer Funktions-Autopilot
@@ -93,18 +93,21 @@ private:
 
     ScAddress               aCursorPos;
     ScInputMode             eMode;
-    sal_Bool                    bModified;
-    sal_Bool                    bSelIsRef;
-    sal_Bool                    bFormulaMode;
-    sal_Bool                    bInRangeUpdate;
-    sal_Bool                    bParenthesisShown;
-    sal_Bool                    bCreatingFuncView;
-    sal_Bool                    bInEnterHandler;
-    sal_Bool                    bCommandErrorShown;
-    sal_Bool                    bInOwnChange;
+    bool                    bUseTab:1;                    // Blaettern moeglich
+    bool                    bTextValid:1;                 // Text noch nicht in Edit-Engine
+    bool                    bModified:1;
+    bool                    bSelIsRef:1;
+    bool                    bFormulaMode:1;
+    bool                    bInRangeUpdate:1;
+    bool                    bParenthesisShown:1;
+    bool                    bCreatingFuncView:1;
+    bool                    bInEnterHandler:1;
+    bool                    bCommandErrorShown:1;
+    bool                    bInOwnChange:1;
 
-    sal_Bool                    bProtected;
-    sal_Bool                    bCellHasPercentFormat;
+    bool                    bProtected:1;
+    bool                    bCellHasPercentFormat:1;
+    bool                    bLastIsSymbol:1;
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
@@ -116,15 +119,14 @@ private:
 
     const ScPatternAttr*    pLastPattern;
     SfxItemSet*             pEditDefaults;
-    sal_Bool                    bLastIsSymbol;
 
     ScInputHdlState*        pLastState;
     Timer*                  pDelayTimer;
 
     ScRangeFindList*        pRangeFindList;
 
-    static sal_Bool             bAutoComplete;              // aus App-Optionen
-    static sal_Bool             bOptLoaded;
+    static bool             bAutoComplete;              // aus App-Optionen
+    static bool             bOptLoaded;
 
 #ifdef _INPUTHDL_CXX
 private:
@@ -145,11 +147,11 @@ private:
     DECL_LINK(      DelayTimer, Timer* );
     void            GetColData();
     void            UseColData();
-    void            NextAutoEntry( sal_Bool bBack );
+    void            NextAutoEntry( bool bBack );
     void            UpdateAdjust( sal_Unicode cTyped );
     void            GetFormulaData();
     void            UseFormulaData();
-    void            NextFormulaEntry( sal_Bool bBack );
+    void            NextFormulaEntry( bool bBack );
     void            PasteFunctionData();
     void            PasteManualTip();
     EditView*       GetFuncEditView();
@@ -160,7 +162,7 @@ private:
     void            UpdateAutoCorrFlag();
     void            ResetAutoPar();
     void            AutoParAdded();
-    sal_Bool            CursorAtClosingPar();
+    bool            CursorAtClosingPar();
     void            SkipClosingPar();
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
@@ -172,38 +174,38 @@ public:
     virtual         ~ScInputHandler();
 
     void            SetMode( ScInputMode eNewMode );
-    sal_Bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
-    sal_Bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
+    bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
+    bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
                                                   eMode != SC_INPUT_TYPE); }
-    sal_Bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
+    bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
 
     const rtl::OUString& GetEditString();
     const String&   GetFormString() const   { return aFormText; }
 
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
-    sal_Bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
+    bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
-    sal_Bool            KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
+    bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit = false );
     void            EnterHandler( sal_uInt8 nBlockMode = 0 );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();
 
-    sal_Bool            InputCommand( const CommandEvent& rCEvt, sal_Bool bForce );
+    bool            InputCommand( const CommandEvent& rCEvt, bool bForce );
 
-    void            InsertFunction( const String& rFuncName, sal_Bool bAddPar = sal_True );
+    void            InsertFunction( const String& rFuncName, bool bAddPar = true );
     void            ClearText();
 
     void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView, sal_Bool bFromNotify = false );
+    void            InputChanged( EditView* pView, bool bFromNotify = false );
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
-    void            NotifyChange( const ScInputHdlState* pState, sal_Bool bForce = false,
-                                    ScTabViewShell* pSourceSh = NULL,
-                                    sal_Bool bStopEditing = sal_True);
+    void            NotifyChange( const ScInputHdlState* pState, bool bForce = false,
+                                  ScTabViewShell* pSourceSh = NULL,
+                                  bool bStopEditing = true);
     void            UpdateCellAdjust( SvxCellHorJustify eJust );
 
     void            ResetDelayTimer(); //BugId 54702
@@ -221,15 +223,15 @@ public:
     EditView*       GetTableView()      { return pTableView; }
     EditView*       GetTopView()        { return pTopView; }
 
-    sal_Bool            DataChanging( sal_Unicode cTyped = 0, sal_Bool bFromCommand = false );
-    void            DataChanged( sal_Bool bFromTopNotify = false );
+    bool            DataChanging( sal_Unicode cTyped = 0, bool bFromCommand = false );
+    void            DataChanged( bool bFromTopNotify = false );
 
-    sal_Bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
+    bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 
-    void            SetModified()       { bModified = sal_True; }
+    void            SetModified()       { bModified = true; }
 
-    sal_Bool            GetSelIsRef() const     { return bSelIsRef; }
-    void            SetSelIsRef(sal_Bool bSet)  { bSelIsRef = bSet; }
+    bool            GetSelIsRef() const     { return bSelIsRef; }
+    void            SetSelIsRef(bool bSet)  { bSelIsRef = bSet; }
 
     void            ShowRefFrame();
 
@@ -243,19 +245,19 @@ public:
     void            InputReplaceSelection   ( const String& rStr );
     String          InputGetFormulaStr      ();
 
-    sal_Bool            IsFormulaMode() const                   { return bFormulaMode; }
+    bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
     void            SetInputWindow( ScInputWindow* pNew )   { pInputWin = pNew; }
-    void            StopInputWinEngine( sal_Bool bAll );
+    void            StopInputWinEngine( bool bAll );
 
-    sal_Bool            IsInEnterHandler() const                { return bInEnterHandler; }
-    sal_Bool            IsInOwnChange() const                   { return bInOwnChange; }
+    bool            IsInEnterHandler() const                { return bInEnterHandler; }
+    bool            IsInOwnChange() const                   { return bInOwnChange; }
 
-    sal_Bool            IsModalMode( SfxObjectShell* pDocSh );
+    bool            IsModalMode( SfxObjectShell* pDocSh );
 
     void            ForgetLastPattern();
 
-    void            UpdateSpellSettings( sal_Bool bFromStartTab = false );
+    void            UpdateSpellSettings( bool bFromStartTab = false );
 
     void            FormulaPreview();
 
@@ -264,7 +266,7 @@ public:
                     // eigentlich private, fuer SID_INPUT_SUM public
     void            InitRangeFinder( const String& rFormula );
 
-    static void     SetAutoComplete(sal_Bool bSet)  { bAutoComplete = bSet; }
+    static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 };
 
 //========================================================================
