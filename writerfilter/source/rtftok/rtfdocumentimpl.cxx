@@ -456,9 +456,6 @@ void RTFDocumentImpl::parBreak()
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
 
-    // If we are not in a table, then the next table row will be the first one.
-    RTFValue::Pointer_t pValue = m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PFInTable);
-
     // start new one
     Mapper().startParagraphGroup();
 }
