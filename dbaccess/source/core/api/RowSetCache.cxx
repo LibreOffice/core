@@ -1074,17 +1074,17 @@ sal_Bool ORowSetCache::moveWindow()
             {
                 aIter = m_pMatrix->begin();
 
-                nPos    = m_nStartPos;
-                bCheck  = m_pCacheSet->absolute_checked(m_nStartPos,sal_False);
-                for(; !aIter->is() && bCheck;++aIter)
+                nPos    = m_nStartPos + 1;
+                bCheck  = m_pCacheSet->absolute_checked(nPos, sal_False);
+                for(; !aIter->is() && bCheck;++aIter, ++nPos)
                 {
                     OSL_ENSURE(aIter != m_pMatrix->end(),"Invalid iterator");
-                    bCheck = m_pCacheSet->next();
                     if ( bCheck ) // resultset stands on right position
                     {
                         *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
-                        m_pCacheSet->fillValueRow(*aIter,++nPos);
+                        m_pCacheSet->fillValueRow(*aIter, nPos);
                     }
+                    bCheck = m_pCacheSet->next();
                 }
             }
         }
