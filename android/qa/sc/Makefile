@@ -77,6 +77,7 @@ copy-stuff:
 		  icui18nlo \
 		  iculelo \
 		  icuuclo \
+		  introspection.uno \
 		  jvmaccessgcc3 \
 		  jvmfwk \
 		  localedata_en \
