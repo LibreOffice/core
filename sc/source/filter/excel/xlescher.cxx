@@ -46,32 +46,6 @@ using ::com::sun::star::drawing::XControlShape;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::script::ScriptEventDescriptor;
 
-// Structs and classes ========================================================
-
-XclObjId::XclObjId() :
-    mnScTab( SCTAB_INVALID ),
-    mnObjId( EXC_OBJ_INVALID_ID )
-{
-}
-
-XclObjId::XclObjId( SCTAB nScTab, sal_uInt16 nObjId ) :
-    mnScTab( nScTab ),
-    mnObjId( nObjId )
-{
-}
-
-bool operator==( const XclObjId& rL, const XclObjId& rR )
-{
-    return (rL.mnScTab == rR.mnScTab) && (rL.mnObjId == rR.mnObjId);
-}
-
-bool operator<( const XclObjId& rL, const XclObjId& rR )
-{
-    return (rL.mnScTab < rR.mnScTab) || ((rL.mnScTab == rR.mnScTab) && (rL.mnObjId < rR.mnObjId));
-}
-
-// ----------------------------------------------------------------------------
-
 namespace {
 
 /** Returns the scaling factor to calculate coordinates from twips. */

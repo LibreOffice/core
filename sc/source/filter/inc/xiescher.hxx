@@ -1258,12 +1258,6 @@ private:
 
     // ------------------------------------------------------------------------
 private:
-    typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
-    typedef ::std::map< XclObjId, XclImpDrawObjRef >    XclImpObjMapById;
-    typedef boost::shared_ptr< XclImpObjTextData >      XclImpObjTextRef;
-    typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
-    typedef ::std::vector< XclObjId >                   XclObjIdVec;
-
     typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
     typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
     typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;

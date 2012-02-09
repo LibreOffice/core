@@ -670,8 +670,6 @@ XclExpFontBuffer::Insert(ScPatternAttr const&, short, XclExpColorType, bool)
 XclExpName::IsHidden() const
 XclExpPivotCache::GetFieldAcc(String const&)
 XclExpString::SetFormats(std::__debug::vector<XclFormatRun, std::allocator<XclFormatRun> > const&)
-XclObjId::XclObjId()
-XclObjId::XclObjId(short, unsigned short)
 XclRoot::GetDatabaseRanges() const
 XclRoot::GetPixelXFromHmm(int) const
 XclRoot::GetPixelYFromHmm(int) const
