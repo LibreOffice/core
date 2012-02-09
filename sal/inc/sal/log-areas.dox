@@ -17,6 +17,10 @@ certain functionality.
 
 @li sc.ui - Calc's UI
 
+@section Filter
+
+@li filter.ms - escher export/import support
+
 @section oox
 
 @li oox.xmlstream - XmlStream class

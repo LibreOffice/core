@@ -142,6 +142,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/strbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star    ;
@@ -6713,10 +6714,10 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
 
 #if OSL_DEBUG_LEVEL > 2
         // extract graphics from ole storage into "dbggfxNNN.*"
-        static sal_Int32 nCount;
+        static sal_Int32 nGrfCount;
 
-        String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbggfx" ) ) );
-        aFileName.Append( String::CreateFromInt32( nCount++ ) );
+        String aFileName( String( RTL_CONSTASCII_USTRINGPARAM( "dbggfx" ) ) );
+        aFileName.Append( String::CreateFromInt32( nGrfCount++ ) );
         switch( nInst &~ 1 )
         {
             case 0x216 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ) ); break;
@@ -6736,7 +6737,11 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             aURL.removeFinalSlash();
             aURL.Append( aFileName );
 
-            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_TRUNC | STREAM_WRITE );
+            aURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+            SAL_INFO("filter.ms", "dumping " << aURLStr);
+
+            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream(aURLStr, STREAM_TRUNC | STREAM_WRITE);
 
             if( pDbgOut )
             {
@@ -7310,9 +7315,9 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 
 #if OSL_DEBUG_LEVEL > 2
         // extract embedded ole streams into "/tmp/embedded_stream_NNN"
-        static sal_Int32 nCount(0);
-        String aTmpName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("/tmp/embedded_stream_")));
-        aTmpName += String::CreateFromInt32(nCount++);
+        static sal_Int32 nOleCount(0);
+        String aTmpName(RTL_CONSTASCII_USTRINGPARAM("/tmp/embedded_stream_"));
+        aTmpName += String::CreateFromInt32(nOleCount++);
         aTmpName += String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(".bin"));
         SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
         pStream->Seek(0);
