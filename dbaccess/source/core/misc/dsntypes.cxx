@@ -173,7 +173,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) c
             sOldPattern = *aIter;
         }
     }
-    return sRet.GetChar(sRet.Len()-1) == '*';
+    return sRet.Len() > 0 && sRet.GetChar(sRet.Len()-1) == '*';
 }
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
