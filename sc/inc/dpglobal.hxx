@@ -81,6 +81,9 @@ public:
         MK_DATE     = 0x08,
         MK_DATEPART = 0x10
     };
+
+    static bool isDate( sal_uLong nNumType );
+
 private:
     union
     {
@@ -90,7 +93,7 @@ private:
 
     String  aString;
     double  fValue;
-    sal_uInt8   mbFlag;
+    sal_uInt8 mbFlag;
 
     friend class ScDPCache;
 public:
@@ -120,9 +123,7 @@ public:
     bool HasDatePart() const;
     void SetDate( bool b ) ;
 
-    sal_uInt8    GetType() const;
-    sal_uInt8 & GetFlag() throw() { return mbFlag; }
-    const sal_uInt8 & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
+    sal_uInt8 GetType() const;
 };
 
 class SC_DLLPUBLIC ScDPItemDataPool

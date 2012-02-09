@@ -31,8 +31,193 @@
 #include "dpglobal.hxx"
 #include "document.hxx"
 #include "dpobject.hxx"
+#include "cell.hxx"
+#include "globstr.hrc"
+#include "dptabdat.hxx"
 
-#include <stdio.h>
+bool ScDPItemData::isDate( sal_uLong nNumType )
+{
+    return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
+}
+
+ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
+    nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
+    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( nNumFormat ) ) )
+{
+}
+
+ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel) :
+    nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
+{
+    String aDocStr;
+    pDoc->GetString( nCol, nRow, nDocTab, aDocStr );
+
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+    ScAddress aPos( nCol, nRow, nDocTab );
+    ScBaseCell* pCell = pDoc->GetCell( aPos );
+
+    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
+    {
+        SetString ( aDocStr );
+        mbFlag |= MK_ERR;
+    }
+    else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
+    {
+        double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
+        sal_uLong nFormat = NUMBERFORMAT_NUMBER;
+        if ( pFormatter )
+            nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
+        aString = aDocStr;
+        fValue = fVal;
+        mbFlag |= MK_VAL|MK_DATA;
+        nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
+        isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
+    }
+    else if (bLabel || pDoc->HasData(nCol, nRow, nDocTab))
+    {
+        if (bLabel && !aDocStr.Len())
+        {
+            // Replace an empty label string with column name.
+            rtl::OUStringBuffer aBuf;
+            aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+            aBuf.append(sal_Unicode(' '));
+
+            ScAddress aColAddr(nCol, 0, 0);
+            rtl::OUString aColStr;
+            aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
+            aBuf.append(aColStr);
+            aDocStr = aBuf.makeStringAndClear();
+        }
+
+        SetString(aDocStr);
+    }
+}
+
+bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
+{
+    //! pass Transliteration?
+    //! inline?
+    return IsValue() ? ( r.IsValue() && rtl::math::approxEqual( fValue, r.fValue ) ) :
+                       ( !r.IsValue() &&
+                        ScGlobal::GetpTransliteration()->isEqual( aString, r.aString ) );
+}
+
+size_t ScDPItemData::Hash() const
+{
+    if ( IsValue() )
+        return (size_t) rtl::math::approxFloor( fValue );
+    else
+        // If we do unicode safe case insensitive hash we can drop
+        // ScDPItemData::operator== and use ::IsCasInsEqual
+        return rtl_ustr_hashCode_WithLength( aString.GetBuffer(), aString.Len() );
+}
+
+bool ScDPItemData::operator==( const ScDPItemData& r ) const
+{
+    if ( IsValue() )
+    {
+        if( (HasDatePart() != r.HasDatePart())  || (HasDatePart() && mnDatePart != r.mnDatePart) )
+            return false;
+
+        if ( IsDate() != r.IsDate() )
+            return false;
+        else if ( r.IsValue() )
+            return rtl::math::approxEqual( fValue, r.fValue );
+        else
+            return false;
+    }
+    else if ( r.IsValue() )
+        return false;
+    else
+        // need exact equality until we have a safe case insensitive string hash
+        return aString == r.aString;
+}
+
+sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
+                                 const ScDPItemData& rB )
+{
+    if ( rA.IsValue() )
+    {
+        if ( rB.IsValue() )
+        {
+            if ( rtl::math::approxEqual( rA.fValue, rB.fValue ) )
+            {
+                if ( rA.IsDate() == rB.IsDate() )
+                    return 0;
+                else
+                    return rA.IsDate() ? 1: -1;
+            }
+            else if ( rA.fValue < rB.fValue )
+                return -1;
+            else
+                return 1;
+        }
+        else
+            return -1;           // values first
+    }
+    else if ( rB.IsValue() )
+        return 1;                // values first
+    else
+        return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
+}
+
+sal_uInt8 ScDPItemData::GetType() const
+{
+    if ( IsHasErr() )
+        return SC_VALTYPE_ERROR;
+    else if ( !IsHasData() )
+        return SC_VALTYPE_EMPTY;
+    else if ( IsValue())
+        return SC_VALTYPE_VALUE;
+    else
+        return SC_VALTYPE_STRING;
+}
+
+bool ScDPItemData::IsHasData() const
+{
+    return !!(mbFlag&MK_DATA);
+}
+
+bool ScDPItemData::IsHasErr() const
+{
+    return !!(mbFlag&MK_ERR);
+}
+
+bool ScDPItemData::IsValue() const
+{
+    return !!(mbFlag&MK_VAL);
+}
+
+String ScDPItemData::GetString() const
+{
+    return aString;
+}
+
+double ScDPItemData::GetValue() const
+{
+    return fValue;
+}
+
+bool ScDPItemData::HasStringData() const
+{
+    return IsHasData()&&!IsHasErr()&&!IsValue();
+}
+
+bool ScDPItemData::IsDate() const
+{
+    return !!(mbFlag&MK_DATE);
+}
+
+bool ScDPItemData::HasDatePart() const
+{
+    return !!(mbFlag&MK_DATEPART);
+}
+
+void ScDPItemData::SetDate( bool b )
+{
+    b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE );
+}
 
 namespace ScDPGlobal
 {
