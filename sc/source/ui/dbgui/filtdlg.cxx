@@ -547,24 +547,24 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                 //! Entry (pHdrEntry) doesn't generate collection?
 
                 pList->mnHeaderPos = INVALID_HEADER_POS;
-                std::vector<TypedStrData> aHdrColl;
+                std::vector<ScTypedStrData> aHdrColl;
                 bool bDummy = false;
                 pDoc->GetFilterEntriesArea(
                     nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl, bDummy );
                 if (!aHdrColl.empty())
                 {
                     // See if the header value is already in the list.
-                    std::vector<TypedStrData>::iterator itBeg = pList->maList.begin(), itEnd = pList->maList.end();
-                    std::vector<TypedStrData>::iterator it = std::find_if(
+                    std::vector<ScTypedStrData>::iterator itBeg = pList->maList.begin(), itEnd = pList->maList.end();
+                    std::vector<ScTypedStrData>::iterator it = std::find_if(
                         itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
                     if (it == itEnd)
                     {
                         // Not in the list. Insert it.
                         pList->maList.push_back(aHdrColl.front());
                         if (bCaseSens)
-                            std::sort(pList->maList.begin(), pList->maList.end(), TypedStrData::LessCaseSensitive());
+                            std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseSensitive());
                         else
-                            std::sort(pList->maList.begin(), pList->maList.end(), TypedStrData::LessCaseInsensitive());
+                            std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseInsensitive());
 
                         // Record its position.
                         itBeg = pList->maList.begin();
@@ -579,7 +579,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
             OSL_ASSERT(pList);
 
-            std::vector<TypedStrData>::const_iterator it = pList->maList.begin(), itEnd = pList->maList.end();
+            std::vector<ScTypedStrData>::const_iterator it = pList->maList.begin(), itEnd = pList->maList.end();
             for (; it != itEnd; ++it)
             {
                 pValList->InsertEntry(it->GetString(), nListPos);
@@ -621,7 +621,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     ComboBox* pValList = maValueEdArr[nList-1];
     size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
-    const TypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
+    const ScTypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
 
     const rtl::OUString& aHdrStr = rHdrEntry.GetString();
     bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));

@@ -1516,7 +1516,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<TypedStrData>& rStrings, bool& rHasDates)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
@@ -1538,7 +1538,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<Type
 
         if ( pDocument->HasStringData( nCol, nRow, nTab ) )
         {
-            rStrings.push_back(TypedStrData(aString));
+            rStrings.push_back(ScTypedStrData(aString));
             continue;
         }
 
@@ -1560,7 +1560,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<Type
                     String aErr = ScGlobal::GetErrorString(nErr);
                     if (aErr.Len())
                     {
-                        rStrings.push_back(TypedStrData(aErr));
+                        rStrings.push_back(ScTypedStrData(aErr));
                         continue;
                     }
                 }
@@ -1585,7 +1585,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<Type
             }
         }
 
-        rStrings.push_back(TypedStrData(aString, nValue, TypedStrData::Value));
+        rStrings.push_back(ScTypedStrData(aString, nValue, ScTypedStrData::Value));
     }
 
     rHasDates = bHasDates;
@@ -1601,7 +1601,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<Type
 #define DATENT_SEARCH   2000
 
 
-bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<TypedStrData>& rStrings, bool bLimit)
+bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<ScTypedStrData>& rStrings, bool bLimit)
 {
     sal_Bool bFound = false;
     SCSIZE nThisIndex;
@@ -1632,7 +1632,7 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<TypedStrData>& rStrings,
                 else
                     ((ScEditCell*)pCell)->GetString(aString);
 
-                bool bInserted = rStrings.insert(TypedStrData(aString)).second;
+                bool bInserted = rStrings.insert(ScTypedStrData(aString)).second;
                 if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
                     break;                                                  // Maximum erreicht
                 bFound = true;
@@ -1655,7 +1655,7 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<TypedStrData>& rStrings,
                 else
                     ((ScEditCell*)pCell)->GetString(aString);
 
-                bool bInserted = rStrings.insert(TypedStrData(aString)).second;
+                bool bInserted = rStrings.insert(ScTypedStrData(aString)).second;
                 if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
                     break;                                                  // Maximum erreicht
                 bFound = true;

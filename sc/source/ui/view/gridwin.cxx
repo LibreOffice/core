@@ -690,11 +690,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the check box list.
     bool bHasDates = false;
-    std::vector<TypedStrData> aStrings;
+    std::vector<ScTypedStrData> aStrings;
     pDoc->GetFilterEntries(nCol, nRow, nTab, true, aStrings, bHasDates);
 
     mpAutoFilterPopup->setMemberSize(aStrings.size());
-    std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+    std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
     for (; it != itEnd; ++it)
     {
         const rtl::OUString& aVal = it->GetString();
@@ -1165,7 +1165,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     //  SetSize spaeter
 
     bool bEmpty = false;
-    std::vector<TypedStrData> aStrings; // case sensitive
+    std::vector<ScTypedStrData> aStrings; // case sensitive
     if ( bDataSelect )                                  // Auswahl-Liste
     {
         //  Liste fuellen
@@ -1202,7 +1202,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
-        std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
         for (; it != itEnd; ++it)
         {
             if (!it->IsStrData())              // only numerical entries
@@ -1250,7 +1250,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         if (bWait)
             EnterWait();
 
-        std::vector<TypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+        std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
         for (; it != itEnd; ++it)
             pFilterBox->InsertEntry(it->GetString());
 
@@ -1312,22 +1312,22 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
             if (pData)
             {
-                TypedStrData* pNew = NULL;
+                ScTypedStrData* pNew = NULL;
                 rtl::OUString aDocStr;
                 pDoc->GetString( nCol, nRow, nTab, aDocStr );
                 if ( pDoc->HasValueData( nCol, nRow, nTab ) )
                 {
                     double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
-                    pNew = new TypedStrData(aDocStr, fVal, TypedStrData::Value);
+                    pNew = new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value);
                 }
                 else
-                    pNew = new TypedStrData(aDocStr, 0.0, TypedStrData::Standard);
+                    pNew = new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard);
 
                 bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
                 if ( bSortList )
                 {
-                    std::vector<TypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
-                    std::vector<TypedStrData>::const_iterator it =
+                    std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                    std::vector<ScTypedStrData>::const_iterator it =
                         std::find_if(itBeg, itEnd, FindTypedStrData(*pNew, true));
                     if (it != itEnd)
                         // Found!
@@ -1335,9 +1335,9 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                 }
                 else
                 {
-                    TypedStrData::EqualCaseSensitive aHdl;
-                    std::vector<TypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
-                    std::vector<TypedStrData>::const_iterator it = itBeg;
+                    ScTypedStrData::EqualCaseSensitive aHdl;
+                    std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
+                    std::vector<ScTypedStrData>::const_iterator it = itBeg;
                     for (; it != itEnd && LISTBOX_ENTRY_NOTFOUND == nSelPos; ++it)
                     {
                         if (aHdl(*it, *pNew))

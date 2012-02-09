@@ -133,8 +133,8 @@ ScTypedCaseStrSet::const_iterator findText(
 
         for (; it != itEnd; ++it)
         {
-            const TypedStrData& rData = *it;
-            if (rData.GetStringType() == TypedStrData::Value)
+            const ScTypedStrData& rData = *it;
+            if (rData.GetStringType() == ScTypedStrData::Value)
                 // skip values.
                 continue;
 
@@ -154,8 +154,8 @@ ScTypedCaseStrSet::const_iterator findText(
 
         for (; it != itEnd; ++it)
         {
-            const TypedStrData& rData = *it;
-            if (rData.GetStringType() == TypedStrData::Value)
+            const ScTypedStrData& rData = *it;
+            if (rData.GetStringType() == ScTypedStrData::Value)
                 // skip values.
                 continue;
 
@@ -176,8 +176,8 @@ rtl::OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const rtl::OUStri
     ScTypedCaseStrSet::const_iterator it = rDataSet.begin(), itEnd = rDataSet.end();
     for (; it != itEnd; ++it)
     {
-        const TypedStrData& rData = *it;
-        if (rData.GetStringType() == TypedStrData::Value)
+        const ScTypedStrData& rData = *it;
+        if (rData.GetStringType() == ScTypedStrData::Value)
             continue;
 
         if (!ScGlobal::GetpTransliteration()->isEqual(rData.GetString(), rString))
@@ -749,7 +749,7 @@ void ScInputHandler::GetFormulaData()
                     {
                         String aEntry = *pDesc->pFuncName;
                         aEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-                        pFormulaData->insert(TypedStrData(aEntry, 0.0, TypedStrData::Standard));
+                        pFormulaData->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
                         break;                  // nicht weitersuchen
                     }
                 }
@@ -762,7 +762,7 @@ void ScInputHandler::GetFormulaData()
             {
                 pDesc->initArgumentInfo();
                 String aEntry = pDesc->getSignature();
-                pFormulaDataPara->insert(TypedStrData(aEntry, 0.0, TypedStrData::Standard));
+                pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
             }
         }
         pDoc->GetFormulaEntries( *pFormulaData );
@@ -1278,7 +1278,7 @@ void ScInputHandler::PasteFunctionData()
 {
     if (pFormulaData && miAutoPos != pFormulaData->end())
     {
-        const TypedStrData& rData = *miAutoPos;
+        const ScTypedStrData& rData = *miAutoPos;
         const rtl::OUString& aInsert = rData.GetString();
         bool bParInserted = false;
 
@@ -1528,7 +1528,7 @@ void ScInputHandler::GetColData()
             pColumnData = new ScTypedCaseStrSet;
         }
 
-        std::vector<TypedStrData> aEntries;
+        std::vector<ScTypedStrData> aEntries;
         pDoc->GetDataEntries(
             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), true, aEntries, true);
         if (!aEntries.empty())

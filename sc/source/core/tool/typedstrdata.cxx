@@ -31,7 +31,7 @@
 
 #include "unotools/transliterationwrapper.hxx"
 
-bool TypedStrData::LessCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
     if (left.meStrType != right.meStrType)
         return left.meStrType < right.meStrType;
@@ -43,7 +43,7 @@ bool TypedStrData::LessCaseSensitive::operator() (const TypedStrData& left, cons
         left.maStrValue, right.maStrValue) < 0;
 }
 
-bool TypedStrData::LessCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
     if (left.meStrType != right.meStrType)
         return left.meStrType < right.meStrType;
@@ -55,7 +55,7 @@ bool TypedStrData::LessCaseInsensitive::operator() (const TypedStrData& left, co
         left.maStrValue, right.maStrValue) < 0;
 }
 
-bool TypedStrData::EqualCaseSensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
     if (left.meStrType != right.meStrType)
         return false;
@@ -67,7 +67,7 @@ bool TypedStrData::EqualCaseSensitive::operator() (const TypedStrData& left, con
         left.maStrValue, right.maStrValue) == 0;
 }
 
-bool TypedStrData::EqualCaseInsensitive::operator() (const TypedStrData& left, const TypedStrData& right) const
+bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
     if (left.meStrType != right.meStrType)
         return false;
@@ -79,64 +79,64 @@ bool TypedStrData::EqualCaseInsensitive::operator() (const TypedStrData& left, c
         left.maStrValue, right.maStrValue) == 0;
 }
 
-bool TypedStrData::operator== (const TypedStrData& r) const
+bool ScTypedStrData::operator== (const ScTypedStrData& r) const
 {
     // Case insensitive comparison by default.
     EqualCaseInsensitive aHdl;
     return aHdl(*this, r);
 }
 
-bool TypedStrData::operator< (const TypedStrData& r) const
+bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 {
     // Case insensitive comparison by default.
     LessCaseInsensitive aHdl;
     return aHdl(*this, r);
 }
 
-TypedStrData::TypedStrData(
+ScTypedStrData::ScTypedStrData(
     const rtl::OUString& rStr, double nVal, StringType nType ) :
     maStrValue(rStr),
     mfValue(nVal),
     meStrType(nType) {}
 
-TypedStrData::TypedStrData( const TypedStrData& rCpy ) :
+ScTypedStrData::ScTypedStrData( const ScTypedStrData& rCpy ) :
     maStrValue(rCpy.maStrValue),
     mfValue(rCpy.mfValue),
     meStrType(rCpy.meStrType) {}
 
-bool TypedStrData::IsStrData() const
+bool ScTypedStrData::IsStrData() const
 {
     return meStrType != Value;
 }
 
-const rtl::OUString& TypedStrData::GetString() const
+const rtl::OUString& ScTypedStrData::GetString() const
 {
     return maStrValue;
 }
 
-double TypedStrData::GetValue() const
+double ScTypedStrData::GetValue() const
 {
     return mfValue;
 }
 
-TypedStrData::StringType TypedStrData::GetStringType() const
+ScTypedStrData::StringType ScTypedStrData::GetStringType() const
 {
     return meStrType;
 }
 
-FindTypedStrData::FindTypedStrData(const TypedStrData& rVal, bool bCaseSens) :
+FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}
 
-bool FindTypedStrData::operator() (const TypedStrData& r) const
+bool FindTypedStrData::operator() (const ScTypedStrData& r) const
 {
     if (mbCaseSens)
     {
-        TypedStrData::EqualCaseSensitive aHdl;
+        ScTypedStrData::EqualCaseSensitive aHdl;
         return aHdl(maVal, r);
     }
     else
     {
-        TypedStrData::EqualCaseInsensitive aHdl;
+        ScTypedStrData::EqualCaseInsensitive aHdl;
         return aHdl(maVal, r);
     }
 }

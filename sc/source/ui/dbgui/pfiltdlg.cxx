@@ -347,13 +347,13 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
                 nFirstRow++;
                 bool bHasDates = false;
                 bool bCaseSens = aBtnCase.IsChecked();
-                pEntryLists[nColumn] = new std::vector<TypedStrData>;
+                pEntryLists[nColumn] = new std::vector<ScTypedStrData>;
                 pDoc->GetFilterEntriesArea(
                     nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *pEntryLists[nColumn], bHasDates);
             }
 
-            std::vector<TypedStrData>* pColl = pEntryLists[nColumn];
-            std::vector<TypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
+            std::vector<ScTypedStrData>* pColl = pEntryLists[nColumn];
+            std::vector<ScTypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
             for (; it != itEnd; ++it)
             {
                 pValList->InsertEntry(it->GetString(), nListPos);

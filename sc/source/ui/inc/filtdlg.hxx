@@ -58,7 +58,7 @@ class ScFilterDlg : public ScAnyRefDlg
 {
     struct EntryList : boost::noncopyable
     {
-        std::vector<TypedStrData> maList;
+        std::vector<ScTypedStrData> maList;
         size_t mnHeaderPos;
         EntryList();
     };

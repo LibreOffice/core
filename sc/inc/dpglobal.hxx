@@ -92,7 +92,7 @@
 #define DP_PROP_FILTER              "Filter"
 #define DP_PROP_POSITION            "Position"
 
-class TypedStrData;
+class ScTypedStrData;
 class ScDPObject;
 class ScDPInfoWnd;
 class ScDocShell;

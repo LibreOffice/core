@@ -34,7 +34,7 @@
 
 #include <set>
 
-class TypedStrData
+class ScTypedStrData
 {
 public:
     enum StringType {
@@ -45,39 +45,38 @@ public:
         Header   = 4
     };
 
-    TypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
-                  StringType eType = Standard );
+    ScTypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
+                    StringType eType = Standard );
 
-    TypedStrData( const TypedStrData& rCpy );
+    ScTypedStrData( const ScTypedStrData& rCpy );
 
     bool IsStrData() const;
     SC_DLLPUBLIC const rtl::OUString& GetString() const;
     double GetValue() const;
     StringType GetStringType() const;
 
-    struct LessCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
     {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct LessCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    struct LessCaseInsensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
     {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct EqualCaseSensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    struct EqualCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
     {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct EqualCaseInsensitive : std::binary_function<TypedStrData, TypedStrData, bool>
+    struct EqualCaseInsensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
     {
-        bool operator() (const TypedStrData& left, const TypedStrData& right) const;
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    bool operator== (const TypedStrData& r) const;
-    bool operator< (const TypedStrData& r) const;
-
+    bool operator== (const ScTypedStrData& r) const;
+    bool operator< (const ScTypedStrData& r) const;
 
 private:
     rtl::OUString maStrValue;
@@ -85,16 +84,16 @@ private:
     StringType meStrType;
 };
 
-class FindTypedStrData : std::unary_function<TypedStrData, bool>
+class FindTypedStrData : std::unary_function<ScTypedStrData, bool>
 {
-    TypedStrData maVal;
+    ScTypedStrData maVal;
     bool mbCaseSens;
 public:
-    FindTypedStrData(const TypedStrData& rVal, bool bCaseSens);
-    bool operator() (const TypedStrData& r) const;
+    FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens);
+    bool operator() (const ScTypedStrData& r) const;
 };
 
-typedef std::set<TypedStrData, TypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
+typedef std::set<ScTypedStrData, ScTypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
 
 #endif
 

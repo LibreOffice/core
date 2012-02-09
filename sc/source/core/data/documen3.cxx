@@ -90,20 +90,20 @@ using namespace com::sun::star;
 
 namespace {
 
-void sortAndRemoveDuplicates(std::vector<TypedStrData>& rStrings, bool bCaseSens)
+void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSens)
 {
     if (bCaseSens)
     {
-        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseSensitive());
-        std::vector<TypedStrData>::iterator it =
-            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseSensitive());
+        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseSensitive());
+        std::vector<ScTypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseSensitive());
         rStrings.erase(it, rStrings.end());
     }
     else
     {
-        std::sort(rStrings.begin(), rStrings.end(), TypedStrData::LessCaseInsensitive());
-        std::vector<TypedStrData>::iterator it =
-            std::unique(rStrings.begin(), rStrings.end(), TypedStrData::EqualCaseInsensitive());
+        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseInsensitive());
+        std::vector<ScTypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseInsensitive());
         rStrings.erase(it, rStrings.end());
     }
 }
@@ -1447,7 +1447,7 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //
 
 bool ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<TypedStrData>& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1506,7 +1506,7 @@ bool ScDocument::GetFilterEntries(
 
 bool ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
-    std::vector<TypedStrData>& rStrings, bool& rHasDates)
+    std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
@@ -1524,7 +1524,7 @@ bool ScDocument::GetFilterEntriesArea(
 
 bool ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
-    std::vector<TypedStrData>& rStrings, bool bLimit )
+    std::vector<ScTypedStrData>& rStrings, bool bLimit )
 {
     if( !bLimit )
     {
@@ -1551,7 +1551,7 @@ bool ScDocument::GetDataEntries(
     if (!maTabs[nTab])
         return false;
 
-    std::set<TypedStrData> aStrings;
+    std::set<ScTypedStrData> aStrings;
     bool bRet = maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
     rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
     sortAndRemoveDuplicates(rStrings, bCaseSens);
@@ -1573,7 +1573,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     {
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
-            rStrings.insert(TypedStrData(itr->second->GetName(), 0.0, TypedStrData::Name));
+            rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
     //
@@ -1585,7 +1585,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-            rStrings.insert(TypedStrData(itr->GetName(), 0.0, TypedStrData::DbName));
+            rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
     //
@@ -1608,7 +1608,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
                     if ( pCell->HasStringData() )
                     {
                         rtl::OUString aStr = pCell->GetStringData();
-                        rStrings.insert(TypedStrData(aStr, 0.0, TypedStrData::Header));
+                        rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
                     }
             }
     }

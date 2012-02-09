@@ -1486,15 +1486,15 @@ public:
      * database range that contains the specified cell position.
      */
     bool GetFilterEntries(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<TypedStrData>& rStrings, bool& rHasDates);
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
     SC_DLLPUBLIC bool GetFilterEntriesArea(
         SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
-        std::vector<TypedStrData>& rStrings, bool& rHasDates);
+        std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
     bool GetDataEntries(
         SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
-        std::vector<TypedStrData>& rStrings, bool bLimit = false );
+        std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
     bool GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );

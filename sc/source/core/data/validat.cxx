@@ -611,7 +611,7 @@ bool ScValidationData::HasSelectionList() const
 }
 
 bool ScValidationData::GetSelectionFromFormula(
-    std::vector<TypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+    std::vector<ScTypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
     const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
@@ -715,7 +715,7 @@ bool ScValidationData::GetSelectionFromFormula(
         for( nCol = 0; nCol < nCols ; nCol++ )
         {
             ScTokenArray         aCondTokArr;
-            TypedStrData*        pEntry = NULL;
+            ScTypedStrData*        pEntry = NULL;
             String               aValStr;
             ScMatrixValue nMatVal = pValues->Get( nCol, nRow);
 
@@ -725,7 +725,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 aValStr = nMatVal.GetString();
 
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, 0.0, TypedStrData::Standard);
+                    pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
 
                 if( pCell && rMatch < 0 )
                     aCondTokArr.AddString( aValStr );
@@ -760,7 +760,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, nMatVal.fVal, TypedStrData::Value);
+                    pEntry = new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value);
             }
 
             if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )
@@ -785,7 +785,7 @@ bool ScValidationData::GetSelectionFromFormula(
     return bOk || NULL == pCell;
 }
 
-bool ScValidationData::FillSelectionList(std::vector<TypedStrData>& rStrColl, const ScAddress& rPos) const
+bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, const ScAddress& rPos) const
 {
     bool bOk = false;
 
@@ -802,8 +802,8 @@ bool ScValidationData::FillSelectionList(std::vector<TypedStrData>& rStrColl, co
             double fValue;
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
             rStrColl.push_back(
-                TypedStrData(
-                    *pString, fValue, bIsValue ? TypedStrData::Value : TypedStrData::Standard));
+                ScTypedStrData(
+                    *pString, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard));
         }
         bOk = aIt.Ok();
 

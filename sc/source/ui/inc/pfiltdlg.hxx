@@ -44,7 +44,7 @@
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class TypedStrData;
+class ScTypedStrData;
 
 //==================================================================
 
@@ -108,7 +108,7 @@ private:
     ListBox*            aFieldLbArr[3];
     ListBox*            aCondLbArr[3];
 
-    std::vector<TypedStrData>* pEntryLists[MAXCOLCOUNT];
+    std::vector<ScTypedStrData>* pEntryLists[MAXCOLCOUNT];
 
 #ifdef _PFILTDLG_CXX
 private:
