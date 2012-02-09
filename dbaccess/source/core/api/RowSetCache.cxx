@@ -909,7 +909,7 @@ sal_Bool ORowSetCache::moveWindow()
             // then we fill in the rows between new and old start pos.
 
             sal_Bool bCheck;
-            bCheck = m_pCacheSet->absolute(nNewStartPos);
+            bCheck = m_pCacheSet->absolute(nNewStartPos + 1);
 
             // m_nEndPos < nNewEndPos when window not filled (e.g. there are less rows in total than window size)
             m_nEndPos = std::min(nNewEndPos, m_nEndPos);
