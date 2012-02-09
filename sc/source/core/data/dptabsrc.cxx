@@ -32,6 +32,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include "dptabsrc.hxx"
+
 #include <algorithm>
 #include <vector>
 #include <set>
@@ -49,13 +51,13 @@
 #include "patattr.hxx"
 #include "cell.hxx"
 
-#include "dptabsrc.hxx"
 #include "dptabres.hxx"
 #include "dptabdat.hxx"
 #include "global.hxx"
 #include "datauno.hxx"      // ScDataUnoConversion
 #include "miscuno.hxx"
 #include "unonames.hxx"
+#include "dpitemdata.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>

@@ -36,6 +36,7 @@
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "docoptio.hxx"
+#include "dpitemdata.hxx"
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
@@ -223,6 +224,7 @@ bool ScDPCache::operator== ( const ScDPCache& r ) const
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
+    mpAdditionalData(new ScDPItemDataPool),
     mbDisposing(false)
 {
 }
@@ -682,7 +684,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
 const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 {
     if ( nId >= GetRowCount()  )
-        return maAdditionalData.getData( nId - GetRowCount() );
+        return mpAdditionalData->getData(nId - GetRowCount());
 
     if (  (size_t)nId >= maTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
         return NULL;
@@ -799,7 +801,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
     }
 
     ScDPItemData rData ( sItemData );
-    return  GetRowCount() +maAdditionalData.getDataId(rData);
+    return GetRowCount() + mpAdditionalData->getDataId(rData);
 }
 
 SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
@@ -812,12 +814,12 @@ SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
                 return i;
         }
     }
-    return  GetRowCount() + maAdditionalData.getDataId(rData);
+    return GetRowCount() + mpAdditionalData->getDataId(rData);
 }
 
 SCROW ScDPCache::GetAdditionalItemID( const ScDPItemData& rData ) const
 {
-    return GetRowCount() + maAdditionalData.insertData( rData );
+    return GetRowCount() + mpAdditionalData->insertData(rData);
 }
 
 

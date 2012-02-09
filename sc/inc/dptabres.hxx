@@ -29,17 +29,20 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
+#include "global.hxx"
+#include "dpcachetable.hxx"
+
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "global.hxx"       // enum ScSubTotalFunc
-#include "dpcachetable.hxx"
+
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <vector>
 #include <memory>
+#include <map>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -499,9 +502,9 @@ typedef std::vector<ScDPDataMember*> ScDPDataMembers;
 
 class ScDPResultDimension
 {
-public :
-    typedef std::vector <ScDPResultMember *>                           MemberArray;
-    typedef std::map < SCROW , ScDPResultMember *> MemberHash;
+public:
+    typedef std::vector<ScDPResultMember*>     MemberArray;
+    typedef std::map<SCROW, ScDPResultMember*> MemberHash;
 private:
         const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;

@@ -35,6 +35,7 @@
 #include "dpobject.hxx"
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include "dpitemdata.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

@@ -31,20 +31,22 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <osl/diagnose.h>
-#include <rtl/math.hxx>
-#include <rtl/strbuf.hxx>
+#include "dptabres.hxx"
 
 #include "dptabdat.hxx"
-#include "dptabres.hxx"
 #include "dptabsrc.hxx"
 #include "global.hxx"
 #include "subtotal.hxx"
 #include "globstr.hrc"
 #include "datauno.hxx"      // ScDataUnoConversion
+#include "dpitemdata.hxx"
 
 #include "document.hxx"     // for DumpState only!
 #include "stlalgorithm.hxx"
+
+#include <osl/diagnose.h>
+#include <rtl/math.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <math.h>
 #include <float.h>          //! Test !!!

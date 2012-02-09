@@ -35,6 +35,7 @@
 
 #include "dptabdat.hxx"
 #include "scdllapi.h"
+#include "dpitemdata.hxx"
 
 class ScDocument;
 class SvNumberFormatter;

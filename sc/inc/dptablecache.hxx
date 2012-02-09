@@ -30,7 +30,6 @@
 #define SC_DPTABLECACHE_HXX
 
 #include "global.hxx"
-#include "dpitemdata.hxx"
 
 #include <svl/zforlist.hxx>
 
@@ -38,17 +37,22 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
-#include <vector>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
 
 struct ScQueryParam;
 class ScDPObject;
+class ScDPItemDataPool;
+class ScDPItemData;
 
 /**
  * This class represents the cached data part of the datapilot cache table
  * implementation.
  */
-class SC_DLLPUBLIC ScDPCache
+class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
@@ -93,7 +97,7 @@ private:
     DataListType maLabelNames;    // Stores dimension names.
     std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
 
-    mutable ScDPItemDataPool    maAdditionalData;
+    boost::scoped_ptr<ScDPItemDataPool> mpAdditionalData;
 
     bool mbDisposing;
 
