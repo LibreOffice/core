@@ -55,9 +55,6 @@ public:
     void testTokenCount();
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
-    void testIsalnumAsciiString();
-    void testIsupperAsciiString();
-    void testIslowerAsciiString();
     void testIndexOfL();
     void testMatchIgnoreAsciiCaseL();
 
@@ -73,9 +70,6 @@ public:
     CPPUNIT_TEST(testTokenCount);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
-    CPPUNIT_TEST(testIsalnumAsciiString);
-    CPPUNIT_TEST(testIsupperAsciiString);
-    CPPUNIT_TEST(testIslowerAsciiString);
     CPPUNIT_TEST(testIndexOfL);
     CPPUNIT_TEST(testMatchIgnoreAsciiCaseL);
     CPPUNIT_TEST_SUITE_END();
@@ -133,75 +127,6 @@ void TestString::testIsdigitAsciiString()
 
     rtl::OString s3;
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s3), true);
-}
-
-void TestString::testIsalnumAsciiString()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s1), true);
-
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("1A34"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s2), true);
-
-    rtl::OString s3;
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s3), true);
-
-    rtl::OString s4(RTL_CONSTASCII_STRINGPARAM("1A[4"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s4), false);
-
-    rtl::OUString s5(RTL_CONSTASCII_USTRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s5), true);
-
-    rtl::OUString s6(RTL_CONSTASCII_USTRINGPARAM("1A34"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s6), true);
-
-    rtl::OUString s7;
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s7), true);
-
-    rtl::OUString s8(RTL_CONSTASCII_USTRINGPARAM("1A[4"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s8), false);
-}
-
-void TestString::testIsupperAsciiString()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s1), false);
-
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("aAbB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s2), false);
-
-    rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("AABB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s3), true);
-
-    rtl::OUString s4(RTL_CONSTASCII_USTRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s4), false);
-
-    rtl::OUString s5(RTL_CONSTASCII_USTRINGPARAM("aAbB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s5), false);
-
-    rtl::OUString s6(RTL_CONSTASCII_USTRINGPARAM("AABB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s6), true);
-}
-
-void TestString::testIslowerAsciiString()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s1), false);
-
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("aAbB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s2), false);
-
-    rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("aabb"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s3), true);
-
-    rtl::OUString s4(RTL_CONSTASCII_USTRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s4), false);
-
-    rtl::OUString s5(RTL_CONSTASCII_USTRINGPARAM("aAbB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s5), false);
-
-    rtl::OUString s6(RTL_CONSTASCII_USTRINGPARAM("aabb"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::islowerAsciiString(s6), true);
 }
 
 void TestString::testIndexOfL()
