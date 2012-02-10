@@ -56,7 +56,6 @@ public:
     sal_Int32 getTabRowIndex( const rtl::OUString& sCellName ) throw (css::uno::RuntimeException);
     sal_Int32 getTabColIndex( const rtl::OUString& sCellName ) throw (css::uno::RuntimeException);
     sal_Int32 getTableWidth( ) throw (css::uno::RuntimeException);
-    void  setTableWidth( sal_Int32 _width ) throw (css::uno::RuntimeException);
 
     sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = sal_False ) throw (css::uno::RuntimeException);
     void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = sal_False ) throw (css::uno::RuntimeException);

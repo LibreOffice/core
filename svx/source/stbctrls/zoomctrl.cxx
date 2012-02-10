@@ -192,11 +192,5 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
-sal_uIntPtr SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
-{
-    long nWidth1 =  rStb.GetTextWidth(String::CreateFromAscii("XXXXX%"));
-    return nWidth1;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

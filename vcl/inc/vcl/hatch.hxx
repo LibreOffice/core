@@ -78,7 +78,6 @@ public:
     sal_Bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
     sal_Bool            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
 
-    void            SetStyle( HatchStyle eStyle );
     HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
 
     void            SetColor( const Color& rColor  );

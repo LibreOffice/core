@@ -146,21 +146,6 @@ sal_Int32 SwVbaTableHelper::getTableWidth( ) throw (uno::RuntimeException)
     return nWidth;
 }
 
-void SwVbaTableHelper::setTableWidth( sal_Int32 _width ) throw (uno::RuntimeException)
-{
-    sal_Bool isWidthRelatvie = sal_False;
-    uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsWidthRelative") ) ) >>= isWidthRelatvie;
-    if( isWidthRelatvie )
-    {
-        xTableProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RelativeWidth") ), uno::makeAny( _width ));
-    }
-    else
-    {
-        xTableProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ), uno::makeAny( _width ) );
-    }
-}
-
 SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw (css::uno::RuntimeException)
 {
     SwTableLines& rLines = pTable->GetTabLines();

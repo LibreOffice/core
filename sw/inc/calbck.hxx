@@ -179,7 +179,6 @@ public:
 
     void CheckCaching( const sal_uInt16 nWhich );
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
-    int GetClientCount() const;
 };
 
 // ----------

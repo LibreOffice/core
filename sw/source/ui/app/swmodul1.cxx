@@ -660,19 +660,9 @@ SvxCompareMode SwModule::GetCompareMode() const
     return pModuleConfig->GetCompareMode();
 }
 
-void SwModule::SetCompareMode( SvxCompareMode eMode )
-{
-    pModuleConfig->SetCompareMode( eMode );
-}
-
 sal_Bool SwModule::IsUseRsid() const
 {
     return pModuleConfig->IsUseRsid();
-}
-
-void SwModule::SetUseRsid( sal_Bool b )
-{
-    pModuleConfig->SetUseRsid( b );
 }
 
 sal_Bool SwModule::IsIgnorePieces() const
@@ -680,19 +670,9 @@ sal_Bool SwModule::IsIgnorePieces() const
     return pModuleConfig->IsIgnorePieces();
 }
 
-void SwModule::SetIgnorePieces( sal_Bool b )
-{
-    pModuleConfig->SetIgnorePieces( b );
-}
-
 sal_uInt16 SwModule::GetPieceLen() const
 {
     return pModuleConfig->GetPieceLen();
-}
-
-void SwModule::SetPieceLen( sal_uInt16 nLen )
-{
-    pModuleConfig->SetPieceLen( nLen );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

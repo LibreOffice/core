@@ -180,12 +180,6 @@ void MSFilterTracer::StartElement( const rtl::OUString& rName, uno::Reference< x
         mxHandler->startElement( rName, xAttribs );
 }
 
-void MSFilterTracer::EndElement( const rtl::OUString& rName )
-{
-    if ( mxHandler.is() )
-        mxHandler->endElement( rName );
-}
-
 void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& rMessage )
 {
     if ( mbEnabled && mxLogger.is() )

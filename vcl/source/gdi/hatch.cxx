@@ -144,15 +144,6 @@ void Hatch::ImplMakeUnique()
 
 // -----------------------------------------------------------------------
 
-void Hatch::SetStyle( HatchStyle eStyle )
-{
-    DBG_CHKTHIS( Hatch, NULL );
-    ImplMakeUnique();
-    mpImplHatch->meStyle = eStyle;
-}
-
-// -----------------------------------------------------------------------
-
 void Hatch::SetColor( const Color& rColor )
 {
     DBG_CHKTHIS( Hatch, NULL );

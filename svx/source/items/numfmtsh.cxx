@@ -1618,14 +1618,6 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList,
     delete pLanguageTable;
 }
 
-bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
-{
-    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
-    sal_uInt16 nCount=rCurrencyTable.Count();
-
-    return (nPos>nCount);
-}
-
 void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
@@ -1654,11 +1646,6 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 sal_uInt32 SvxNumberFormatShell::GetCurrencySymbol()
 {
     return nCurCurrencyEntryPos;
-}
-
-NfCurrencyEntry* SvxNumberFormatShell::GetCurCurrencyEntry()
-{
-    return pCurCurrencyEntry;
 }
 
 void SvxNumberFormatShell::SetCurCurrencyEntry(NfCurrencyEntry* pCEntry)

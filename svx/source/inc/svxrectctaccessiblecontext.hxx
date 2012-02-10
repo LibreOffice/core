@@ -265,11 +265,6 @@ public:
     */
     void selectChild( RECT_POINT ePoint );
 
-    /// Sets the name
-    void setName( const ::rtl::OUString& rName );
-
-    /// Sets the description
-    void setDescription( const ::rtl::OUString& rDescr );
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:

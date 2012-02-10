@@ -98,11 +98,6 @@ SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, co
     return pControl;
 }
 
-std::vector< SwFrameControlPtr >& SwFrameControlsManager::GetControls( FrameControlType eType )
-{
-    return m_aControls[eType];
-}
-
 void SwFrameControlsManager::AddControl( FrameControlType eType, SwFrameControlPtr pControl )
 {
     m_aControls[eType].push_back( pControl );

@@ -312,19 +312,6 @@ SwClient* SwModify::Remove(SwClient * pDepend)
     return pDepend;
 }
 
-int SwModify::GetClientCount() const
-{
-    int nRet=0;
-    SwClientIter aIter( *this );
-    SwClient *pLast = aIter.GoStart();
-    if( pLast )
-        do
-        {
-            ++nRet;
-        } while( 0 != ( pLast = aIter++ ));
-    return nRet;
-}
-
 void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
     if (isCHRATR(nWhich))

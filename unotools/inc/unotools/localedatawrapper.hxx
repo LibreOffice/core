@@ -158,8 +158,6 @@ public:
     /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > getAllFormats() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation > getCollatorImplementations() const;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getTransliterations() const;
     ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getReservedWord() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;

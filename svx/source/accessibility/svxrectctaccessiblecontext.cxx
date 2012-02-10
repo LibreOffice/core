@@ -672,38 +672,6 @@ void SvxRectCtlAccessibleContext::selectChild( RECT_POINT eButton )
     selectChild( PointToIndex( eButton, mbAngleMode ) );
 }
 
-void SvxRectCtlAccessibleContext::setName( const ::rtl::OUString& rName )
-{
-    Any                     aPreVal, aPostVal;
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        aPreVal <<= msName;
-        aPostVal <<= rName;
-
-        msName = rName;
-    }
-
-    const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::NAME_CHANGED, aPreVal, aPostVal ) );
-}
-
-void SvxRectCtlAccessibleContext::setDescription( const ::rtl::OUString& rDescr )
-{
-    Any                     aPreVal, aPostVal;
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        aPreVal <<= msDescription;
-        aPostVal <<= rDescr;
-
-        msDescription = rDescr;
-    }
-
-    const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::DESCRIPTION_CHANGED, aPreVal, aPostVal ) );
-}
-
 void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
 {
     if (mnClientId)

@@ -171,12 +171,10 @@ public:
     String              GetFormat4Entry(short nEntry);
     void                SetComment4Entry(short nEntry,String aCommentString);
 
-    bool                IsBankingSymbol(sal_uInt16 nPos);
     void                SetCurrencySymbol(sal_uInt16 nPos);
     sal_uInt32          GetCurrencySymbol();
     sal_uInt16          FindCurrencyFormat( const String& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
-    NfCurrencyEntry*    GetCurCurrencyEntry();
     void                SetCurCurrencyEntry(NfCurrencyEntry*);
     short               GetListPos4Entry(sal_uInt32 nIdx);
     short               GetListPos4Entry( const String& rFmtString );
