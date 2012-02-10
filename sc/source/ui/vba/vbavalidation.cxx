@@ -21,6 +21,7 @@
 
 
 #include "vbavalidation.hxx"
+#include "vbaformatcondition.hxx" //#i108860
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -222,7 +223,7 @@ ScVbaValidation::Delete(  ) throw (uno::RuntimeException)
     lcl_setValidationProps( m_xRange, xProps );
 }
 void SAL_CALL
-ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& /*Operator*/, const uno::Any& Formula1, const uno::Any& Formula2 ) throw (uno::RuntimeException)
+ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
@@ -286,6 +287,13 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     }
 
     xProps->setPropertyValue( ALERTSTYLE, uno::makeAny( eStyle ) );
+
+    //#i108860: fix the defect that validation cannot work when the input should be limited between a lower bound and an upper bound
+    if ( Operator.hasValue() )
+    {
+        css::sheet::ConditionOperator conOperator = ScVbaFormatCondition::retrieveAPIOperator( Operator );
+        xCond->setOperator( conOperator );
+    }   //#ii108860
 
     if ( sFormula1.getLength() )
         xCond->setFormula1( sFormula1 );
