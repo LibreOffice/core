@@ -28,7 +28,7 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" prefix="dba"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.chart2.data.DatabaseDataProvider">
+  <implementation name="com.sun.star.comp.dbaccess.DatabaseDataProvider">
     <service name="com.sun.star.chart2.data.DatabaseDataProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.DataAccessDescriptorFactory">
