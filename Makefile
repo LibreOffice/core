@@ -323,11 +323,11 @@ endif
 	config_host.mk.last set_soenv.stamp src.downloaded warn
 
 #
-# custum command
+# custom command
 #
 ifneq ( $(MAKECMDGOALS),cmd)
 cmd:
-	echo "custum cmd" && ( $(cmd) )
+	echo "custom cmd" && ( $(cmd) )
 
 endif
 
