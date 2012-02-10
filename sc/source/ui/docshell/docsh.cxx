@@ -1591,6 +1591,7 @@ sal_Bool ScDocShell::IsInformationLost()
     return SfxObjectShell::IsInformationLost();
 }
 
+namespace {
 
 // Xcl-like column width measured in characters of standard font.
 sal_Int32 lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
@@ -1668,6 +1669,32 @@ void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
     rStream.WriteUnicodeOrByteText( aString );
 }
 
+template<typename StrT, typename SepCharT>
+sal_Int32 getTextSepPos(
+    const StrT& rStr, const ScImportOptions& rAsciiOpt, const SepCharT& rTextSep, const SepCharT& rFieldSep, bool& rNeedQuotes)
+{
+    // #i116636# quotes are needed if text delimiter (quote), field delimiter,
+    // or LF is in the cell text.
+    sal_Int32 nPos = rStr.indexOf(rTextSep);
+    rNeedQuotes = rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
+        (rStr.indexOf(rFieldSep) >= 0) ||
+        (rStr.indexOf(sal_Unicode(_LF)) >= 0);
+    return nPos;
+}
+
+template<typename StrT, typename StrBufT>
+void escapeTextSep(sal_Int32 nPos, const StrT& rStrDelim, StrT& rStr)
+{
+    while (nPos >= 0)
+    {
+        StrBufT aBuf(rStr);
+        aBuf.insert(nPos, rStrDelim);
+        rStr = aBuf.makeStringAndClear();
+        nPos = rStr.indexOf(rStrDelim, nPos+1+rStrDelim.getLength());
+    }
+}
+
+}
 
 void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt )
 {
@@ -1933,20 +1960,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 {
                     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                     {
-                        sal_Int32 nPos = aUniString.indexOf(cStrDelim);
-                        // #i116636# quotes are needed if text delimiter (quote), field delimiter, or LF is in the cell text
-                        bool bNeedQuotes =
-                            rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
-                            (aUniString.indexOf(cDelim) >= 0) ||
-                            (aUniString.indexOf(sal_Unicode(_LF)) >= 0);
+                        bool bNeedQuotes = false;
+                        sal_Int32 nPos = getTextSepPos(
+                            aUniString, rAsciiOpt, cStrDelim, cDelim, bNeedQuotes);
 
-                        while (nPos >= 0)
-                        {
-                            rtl::OUStringBuffer aBuf(aUniString);
-                            aBuf.insert(nPos, cStrDelim);
-                            aUniString = aBuf.makeStringAndClear();
-                            nPos = aUniString.indexOf(nPos+2, cStrDelim);
-                        }
+                        escapeTextSep<rtl::OUString, rtl::OUStringBuffer>(
+                            nPos, rtl::OUString(cStrDelim), aUniString);
+
                         if ( bNeedQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         write_uInt16s_FromOUString(rStream, aUniString);
@@ -1972,23 +1992,18 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         if ( bContextOrNotAsciiEncoding )
                         {
                             // to byte encoding
-                            rtl::OString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
+                            rtl::OString aStrEnc = rtl::OUStringToOString(aUniString, eCharSet);
                             // back to Unicode
-                            rtl::OUString aStrDec(rtl::OStringToOUString(aStrEnc, eCharSet));
+                            rtl::OUString aStrDec = rtl::OStringToOUString(aStrEnc, eCharSet);
+
                             // search on re-decoded string
-                            sal_Int32 nPos = aStrDec.indexOf(aStrDelimDecoded);
-                            bool bNeedQuotes =
-                                rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
-                                (aStrDec.indexOf(aDelimDecoded) >= 0) ||
-                                (aStrDec.indexOf(sal_Unicode(_LF)) >= 0);
-                            while (nPos >= 0)
-                            {
-                                rtl::OUStringBuffer aBuf(aStrDec);
-                                aBuf.insert(nPos, aStrDelimDecoded);
-                                aStrDec = aBuf.makeStringAndClear();
-                                nPos = aStrDec.indexOf(
-                                    aStrDelimDecoded, nPos+1+aStrDelimDecoded.getLength());
-                            }
+                            bool bNeedQuotes = false;
+                            sal_Int32 nPos = getTextSepPos(
+                                aStrDec, rAsciiOpt, aStrDelimDecoded, aDelimDecoded, bNeedQuotes);
+
+                            escapeTextSep<rtl::OUString, rtl::OUStringBuffer>(
+                                nPos, aStrDelimDecoded, aStrDec);
+
                             // write byte re-encoded
                             if ( bNeedQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
@@ -1998,21 +2013,16 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            rtl::OString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
+                            rtl::OString aStrEnc = rtl::OUStringToOString(aUniString, eCharSet);
+
                             // search on encoded string
-                            sal_Int32 nPos = aStrEnc.indexOf(aStrDelimEncoded);
-                            bool bNeedQuotes =
-                                rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
-                                (aStrEnc.indexOf(aDelimEncoded) >= 0 ) ||
-                                (aStrEnc.indexOf(sal_Char(_LF)) >= 0);
-                            while (nPos >= 0)
-                            {
-                                rtl::OStringBuffer aBuf(aStrEnc);
-                                aBuf.insert(nPos, aStrDelimEncoded);
-                                aStrEnc = aBuf.makeStringAndClear();
-                                nPos = aStrEnc.indexOf(
-                                    aStrDelimEncoded, nPos+1+aStrDelimEncoded.getLength());
-                            }
+                            bool bNeedQuotes = false;
+                            sal_Int32 nPos = getTextSepPos(
+                                aStrEnc, rAsciiOpt, aStrDelimEncoded, aDelimEncoded, bNeedQuotes);
+
+                            escapeTextSep<rtl::OString, rtl::OStringBuffer>(
+                                nPos, aStrDelimEncoded, aStrEnc);
+
                             // write byte encoded
                             if ( bNeedQuotes )
                                 rStream.Write(
