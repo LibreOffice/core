@@ -435,6 +435,7 @@ findunusedcode:
               | grep -v ^boost:: \
               | grep -v ^CIcc \
               | grep -v ^cppu:: \
+              | grep -v ^Dde \
               | grep -v ^salhelper:: \
               > unusedcode.easy
 
