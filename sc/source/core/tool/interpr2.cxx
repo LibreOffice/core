@@ -2771,11 +2771,6 @@ void ScInterpreter::ScEuroConvert()
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-#define UTF8_STRINGPARAM( ascii )   ascii, static_cast< xub_StrLen >( sizeof( ascii ) - 1 )
-#define UTF8_CREATE( ascii )        rtl::OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
-#define UTF8_APPEND( ascii )        Append( UTF8_STRINGPARAM( ascii ) )
-#define UTF8_PREPEND( ascii )       Insert( UTF8_CREATE( ascii ), 0 )
-
 // local functions ------------------------------------------------------------
 
 namespace {
@@ -2790,16 +2785,16 @@ void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
-        case 0: rText.UTF8_APPEND( UTF8_TH_0 ); break;
-        case 1: rText.UTF8_APPEND( UTF8_TH_1 ); break;
-        case 2: rText.UTF8_APPEND( UTF8_TH_2 ); break;
-        case 3: rText.UTF8_APPEND( UTF8_TH_3 ); break;
-        case 4: rText.UTF8_APPEND( UTF8_TH_4 ); break;
-        case 5: rText.UTF8_APPEND( UTF8_TH_5 ); break;
-        case 6: rText.UTF8_APPEND( UTF8_TH_6 ); break;
-        case 7: rText.UTF8_APPEND( UTF8_TH_7 ); break;
-        case 8: rText.UTF8_APPEND( UTF8_TH_8 ); break;
-        case 9: rText.UTF8_APPEND( UTF8_TH_9 ); break;
+        case 0: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_0 ) ); break;
+        case 1: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_1 ) ); break;
+        case 2: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_2 ) ); break;
+        case 3: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_3 ) ); break;
+        case 4: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_4 ) ); break;
+        case 5: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_5 ) ); break;
+        case 6: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_6 ) ); break;
+        case 7: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_7 ) ); break;
+        case 8: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_8 ) ); break;
+        case 9: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_9 ) ); break;
         default:    OSL_FAIL( "lclAppendDigit - illegal digit" );
     }
 }
@@ -2814,10 +2809,10 @@ void lclAppendPow10( ByteString& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
     lclAppendDigit( rText, nDigit );
     switch( nPow10 )
     {
-        case 2: rText.UTF8_APPEND( UTF8_TH_1E2 );   break;
-        case 3: rText.UTF8_APPEND( UTF8_TH_1E3 );   break;
-        case 4: rText.UTF8_APPEND( UTF8_TH_1E4 );   break;
-        case 5: rText.UTF8_APPEND( UTF8_TH_1E5 );   break;
+        case 2: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_1E2 ) );   break;
+        case 3: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_1E3 ) );   break;
+        case 4: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_1E4 ) );   break;
+        case 5: rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_1E5 ) );   break;
         default:    OSL_FAIL( "lclAppendPow10 - illegal power" );
     }
 }
@@ -2855,11 +2850,11 @@ void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
             if( nTen >= 3 )
                 lclAppendDigit( rText, nTen );
             else if( nTen == 2 )
-                rText.UTF8_APPEND( UTF8_TH_20 );
-            rText.UTF8_APPEND( UTF8_TH_10 );
+                rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_20 ) );
+            rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_10 ) );
         }
         if( (nTen > 0) && (nOne == 1) )
-            rText.UTF8_APPEND( UTF8_TH_11 );
+            rText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_11 ) );
         else if( nOne > 0 )
             lclAppendDigit( rText, nOne );
     }
@@ -2900,7 +2895,7 @@ void ScInterpreter::ScBahtText()
         if( fBaht == 0.0 )
         {
             if( nSatang == 0 )
-                aText.UTF8_APPEND( UTF8_TH_0 );
+                aText.Append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_0) );
         }
         else while( fBaht > 0.0 )
         {
@@ -2911,26 +2906,29 @@ void ScInterpreter::ScBahtText()
                 lclAppendBlock( aBlock, nBlock );
             // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
-                aBlock.UTF8_PREPEND( UTF8_TH_1E6 );
+                aBlock.Insert(
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E6)), 0);
+
             aText.Insert( aBlock, 0 );
         }
         if( aText.Len() > 0 )
-            aText.UTF8_APPEND( UTF8_TH_BAHT );
+            aText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_BAHT ) );
 
         // generate text for Satang value
         if( nSatang == 0 )
         {
-            aText.UTF8_APPEND( UTF8_TH_DOT0 );
+            aText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_DOT0 ) );
         }
         else
         {
             lclAppendBlock( aText, nSatang );
-            aText.UTF8_APPEND( UTF8_TH_SATANG );
+            aText.Append( RTL_CONSTASCII_STRINGPARAM( UTF8_TH_SATANG ) );
         }
 
         // add the minus sign
         if( bMinus )
-            aText.UTF8_PREPEND( UTF8_TH_MINUS );
+            aText.Insert(
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_MINUS)), 0);
 
         PushString( String( aText, RTL_TEXTENCODING_UTF8 ) );
     }
