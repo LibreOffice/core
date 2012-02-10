@@ -74,7 +74,7 @@ void XDataPilotTable2::testGetDrillDownData()
             for ( sal_Int32 row = 1; row < aData.getLength(); ++row)
             {
                 Any aAny = aData[row][nDim];
-                double nValue;
+                double nValue = 0;
                 if (aAny >>= nValue)
                     sum += nValue;
             }
