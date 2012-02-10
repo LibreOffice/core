@@ -84,6 +84,7 @@
 #include <cairo-ft.h>
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
+#include <fontconfig/fontconfig.h>
 
 struct BOX
 {
