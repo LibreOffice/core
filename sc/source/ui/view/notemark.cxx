@@ -113,7 +113,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             pModel->InsertPage( pPage );
 
         }
-        bVisible = sal_True;
+        bVisible = true;
     }
 
     Draw();

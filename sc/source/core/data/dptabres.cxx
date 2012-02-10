@@ -1048,9 +1048,9 @@ void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
 sal_Bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
 {
     //! store ScDPMember pointer instead of ScDPMember ???
-  const ScDPMember*   pMemberDesc = GetDPMember();
+    const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
-        return ((ScDPMember*)pMemberDesc)->IsNamedItem( nIndex  );
+        return pMemberDesc->IsNamedItem(nIndex);
     return false;
 }
 
@@ -1242,8 +1242,8 @@ sal_Bool ScDPResultMember::IsValid() const
     //  non-Valid members are left out of calculation
 
     //  was member set no invisible at the DataPilotSource?
-  const ScDPMember*     pMemberDesc =GetDPMember();
-    if ( pMemberDesc && !pMemberDesc->getIsVisible() )
+    const ScDPMember* pMemberDesc = GetDPMember();
+    if ( pMemberDesc && !pMemberDesc->isVisible() )
         return false;
 
     if ( bAutoHidden )
