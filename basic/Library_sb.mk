@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/vbahelper \
 	basic/source/classes/errobject \
 	basic/source/classes/eventatt \
+	basic/source/classes/global \
 	basic/source/classes/image \
 	basic/source/classes/propacc \
 	basic/source/classes/sb \

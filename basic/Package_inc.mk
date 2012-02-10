@@ -44,6 +44,7 @@ $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxdef.hxx,basic/sbxdef.hx
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxfac.hxx,basic/sbxfac.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxform.hxx,basic/sbxform.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbx.hxx,basic/sbx.hxx))
+$(eval $(call gb_Package_add_file,basic_inc,inc/basic/global.hxx,basic/global.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxmeth.hxx,basic/sbxmeth.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxobj.hxx,basic/sbxobj.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxprop.hxx,basic/sbxprop.hxx))
