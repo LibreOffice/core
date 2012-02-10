@@ -82,10 +82,6 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
     SwTabPortion *pTabPor = 0;
-    SwTabPortion  *pLastTab = rInf.GetLastTab();
-    if( pLastTab && ( pLastTab->IsTabCntPortion() || pLastTab->IsTabDecimalPortion() ) )
-        if( pLastTab->PostFormat( rInf ) )
-            return 0;
 
     xub_Unicode cFill = 0;
     xub_Unicode cDec = 0;
