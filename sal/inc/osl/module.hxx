@@ -147,7 +147,7 @@ public:
 
         @see getSymbol
     */
-    oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
+    oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName ) const
     {
         return ( osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData ) );
     }
