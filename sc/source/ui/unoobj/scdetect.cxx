@@ -734,9 +734,9 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             // get file header
                             rStr.Seek( 0 );
                             const sal_Size nTrySize = 80;
-                            ByteString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
+                            rtl::OString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
 
-                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            if ( HTMLParser::IsHTMLFormat(aHeader.getStr()) )
                             {
                                 // test for HTML
                                 if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
@@ -750,7 +750,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                         bFakeXLS = true;
                                 }
                             }
-                            else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                            else if ( aHeader.copy(0, 5).equalsL("{\\rtf", 5) )
                             {
                                 // test for RTF
                                 pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
