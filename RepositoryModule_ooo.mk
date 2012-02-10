@@ -31,11 +31,14 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     accessibility \
     animations \
+    apple_remote \
+    avmedia \
     basctl \
     basebmp \
     basegfx \
     basic \
     bean \
+    binaryurp \
     canvas \
     chart2 \
     comphelper \
@@ -50,7 +53,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     dtrans \
     editeng \
     eventattacher \
-	extensions \
+    extensions \
     fileaccess \
     filter \
     forms \
@@ -70,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     np_sdk \
     o3tl \
     offapi \
+    officecfg \
     oovbaapi \
     oox \
     package \
@@ -77,6 +81,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     psprint_config \
     regexp \
     reportdesign \
+    rsc \
     sal \
     salhelper \
     sane \
@@ -95,6 +100,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     svx \
     sw \
     swext \
+    test \
     twain \
     toolkit \
     tools \
