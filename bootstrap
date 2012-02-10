@@ -5,7 +5,9 @@ if test -z "${SRC_ROOT}"; then
         . ./config_build.mk
     else
         if test -f ./config_host.mk ; then
-            . ./config_host.mk
+            sed -e 's/^\(export .*=\)\(.*\)$/\1"\2"/' <config_host.mk >config_host.mk.sh
+            . ./config_host.mk.sh
+            rm config_host.mk.sh
         fi
     fi
 fi
