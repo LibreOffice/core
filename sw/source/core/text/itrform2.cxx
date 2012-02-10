@@ -1375,9 +1375,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             }
         }
 
-        // Wenn eine Portion erzeugt wird, obwohl eine RestPortion ansteht,
-        // dann haben wir es mit einem Feld zu tun, das sich aufgesplittet
-        // hat, weil z.B. ein Tab enthalten ist.
+        // if a portion is created despite there being a pending RestPortion,
+        // then it is a field which has been split (e.g. because it contains a Tab)
         if( pPor && rInf.GetRest() )
             pPor->SetLen( 0 );
 
