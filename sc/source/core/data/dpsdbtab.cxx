@@ -101,7 +101,7 @@ long ScDatabaseDPData::GetColumnCount()
 }
 
 
-String ScDatabaseDPData::getDimensionName(long nColumn)
+rtl::OUString ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
     {
@@ -111,7 +111,7 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
     }
 
     CreateCacheTable();
-    return aCacheTable.getFieldName((SCCOL)nColumn);
+    return aCacheTable.getFieldName(static_cast<SCCOL>(nColumn));
 }
 
 sal_Bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)

@@ -198,7 +198,7 @@ public:
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );
-    long        GetDimensionIndex( const String& rName );
+    long        GetDimensionIndex( const rtl::OUString& rName );
 
     ScDocument* GetDocument()   { return pDoc; }
 
@@ -208,7 +208,7 @@ public:
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
-    virtual String                  getDimensionName(long nColumn);
+    virtual rtl::OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual sal_uLong                  GetNumberFormat(long nDim);

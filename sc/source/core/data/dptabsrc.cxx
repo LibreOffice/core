@@ -450,10 +450,10 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     for (sal_Int32 i = 0; i < nFilterCount; ++i)
     {
         const sheet::DataPilotFieldFilter& rFilter = aFilters[i];
-        String aFieldName( rFilter.FieldName );
+        const rtl::OUString& aFieldName = rFilter.FieldName;
         for (long nCol = 0; nCol < nColumnCount; ++nCol)
         {
-            if ( aFieldName == pData->getDimensionName(nCol) )
+            if (aFieldName.equals(pData->getDimensionName(nCol)))
             {
                 ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
                 ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
@@ -473,7 +473,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     }
 
     // Take into account the visibilities of field members.
-    ScDPResultVisibilityData aResVisData(/*rSharedString, */this);
+    ScDPResultVisibilityData aResVisData(this);
     pRowResRoot->FillVisibilityData(aResVisData);
     pColResRoot->FillVisibilityData(aResVisData);
     aResVisData.fillFieldFilters(aFilterCriteria);

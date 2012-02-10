@@ -97,7 +97,7 @@ long ScSheetDPData::GetColumnCount()
     return aCacheTable.getColSize();
 }
 
-String ScSheetDPData::getDimensionName(long nColumn)
+rtl::OUString ScSheetDPData::getDimensionName(long nColumn)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
@@ -109,11 +109,11 @@ String ScSheetDPData::getDimensionName(long nColumn)
     else if (nColumn >= aCacheTable.getColSize())
     {
         OSL_FAIL("getDimensionName: invalid dimension");
-        return String();
+        return rtl::OUString();
     }
     else
     {
-        return  aCacheTable.getFieldName((SCCOL)nColumn);
+        return aCacheTable.getFieldName(static_cast<SCCOL>(nColumn));
     }
 }
 

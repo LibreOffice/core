@@ -1039,10 +1039,10 @@ void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDi
     }
 }
 
-long ScDPGroupTableData::GetDimensionIndex( const String& rName )
+long ScDPGroupTableData::GetDimensionIndex( const rtl::OUString& rName )
 {
-    for (long i=0; i<nSourceCount; i++)                         // nSourceCount excludes data layout
-        if ( pSourceData->getDimensionName(i) == rName )        //! ignore case?
+    for (long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
+        if (pSourceData->getDimensionName(i).equals(rName))        //! ignore case?
             return i;
     return -1;  // none
 }
@@ -1113,7 +1113,7 @@ const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
     return pSourceData->GetMemberById( nDim, nId );
 }
 
-String ScDPGroupTableData::getDimensionName(long nColumn)
+rtl::OUString ScDPGroupTableData::getDimensionName(long nColumn)
 {
     if ( nColumn >= nSourceCount )
     {

@@ -74,7 +74,7 @@ public:
     virtual ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
+    virtual rtl::OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual void                    DisposeData();
