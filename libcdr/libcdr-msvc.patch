@@ -1,0 +1,64 @@
+--- misc/libcdr-0.0.2/src/lib/CDRCollector.cpp	2012-02-10 13:53:41.351040000 +0000
++++ misc/build/libcdr-0.0.2/src/lib/CDRCollector.cpp	2012-02-10 14:07:38.966966400 +0000
+@@ -35,6 +35,13 @@
+ #define M_PI 3.14159265358979323846
+ #endif
+ 
++//http://msdn.microsoft.com/en-us/library/7wsh95e5%28VS.80%29.aspx
++//msvc 2005 doesn't have round
++inline double myround( double d )
++{
++    return floor( d + 0.5 );
++}
++
+ libcdr::CDRCollector::CDRCollector(libwpg::WPGPaintInterface *painter) :
+   m_painter(painter),
+   m_isPageProperties(false),
+@@ -354,9 +361,9 @@
+       satGreen = 0.0;
+       satBlue = (double)(360 - hue) / 60.0;
+     }
+-    red = (unsigned char)round(255*(1 - saturation + saturation * (satRed > 1 ? 1 : satRed)) * brightness);
+-    green = (unsigned char)round(255*(1 - saturation + saturation * (satGreen > 1 ? 1 : satGreen)) * brightness);
+-    blue = (unsigned char)round(255*(1 - saturation + saturation * (satBlue > 1 ? 1 : satBlue)) * brightness);
++    red = (unsigned char)myround(255*(1 - saturation + saturation * (satRed > 1 ? 1 : satRed)) * brightness);
++    green = (unsigned char)myround(255*(1 - saturation + saturation * (satGreen > 1 ? 1 : satGreen)) * brightness);
++    blue = (unsigned char)myround(255*(1 - saturation + saturation * (satBlue > 1 ? 1 : satBlue)) * brightness);
+   }
+   else if (colorModel == 0x07) // HLS
+   {
+@@ -394,15 +401,15 @@
+ 
+     if (lightness < 0.5)
+     {
+-      red = (unsigned char)round(255.0*lightness*tmpRed);
+-      green = (unsigned char)round(255.0*lightness*tmpGreen);
+-      blue = (unsigned char)round(255.0*lightness*tmpBlue);
++      red = (unsigned char)myround(255.0*lightness*tmpRed);
++      green = (unsigned char)myround(255.0*lightness*tmpGreen);
++      blue = (unsigned char)myround(255.0*lightness*tmpBlue);
+     }
+     else
+     {
+-      red = (unsigned char)round(255*((1 - lightness) * tmpRed + 2 * lightness - 1));
+-      green = (unsigned char)round(255*((1 - lightness) * tmpGreen + 2 * lightness - 1));
+-      blue = (unsigned char)round(255*((1 - lightness) * tmpBlue + 2 * lightness - 1));
++      red = (unsigned char)myround(255*((1 - lightness) * tmpRed + 2 * lightness - 1));
++      green = (unsigned char)myround(255*((1 - lightness) * tmpGreen + 2 * lightness - 1));
++      blue = (unsigned char)myround(255*((1 - lightness) * tmpBlue + 2 * lightness - 1));
+     }
+   }
+   else if (colorModel == 0x09) // Grayscale
+--- misc/libcdr-0.0.2/src/lib/CDRParser.cpp	2012-02-10 13:53:41.411126400 +0000
++++ misc/build/libcdr-0.0.2/src/lib/CDRParser.cpp	2012-02-10 14:14:04.832200000 +0000
+@@ -547,8 +547,8 @@
+       tmpPoints.push_back(points[i]);
+     }
+   }
+-  double scaleX = 72.0*fabs(X1 - X2)/(double)width;
+-  double scaleY = 72.0*fabs(Y1 - Y2)/(double)height;
++  double scaleX = 72.0*fabs(double(X1 - X2))/(double)width;
++  double scaleY = 72.0*fabs(double(Y1 - Y2))/(double)height;
+   m_collector->collectBitmap(imageId, colorMode, colorDepth, width, height, scaleX, scaleY);
+ }
+ 

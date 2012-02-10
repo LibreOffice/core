@@ -58,7 +58,8 @@ TARFILE_NAME=libcdr-0.0.2
 TARFILE_MD5=bb94fe29a21444369307f19015d48b82
 
 PATCH_FILES=\
-    libcdr-0.0.2.patch
+    libcdr-0.0.2.patch \
+    libcdr-msvc.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
