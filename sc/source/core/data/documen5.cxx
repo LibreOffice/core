@@ -86,13 +86,13 @@ void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xCh
             const beans::PropertyValue& rProp = pPropArray[i];
             rtl::OUString aPropName(rProp.Name);
 
-            if (aPropName.equalsAscii( "CellRangeRepresentation" ))
+            if (aPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
                 rProp.Value >>= rRanges;
-            else if (aPropName.equalsAscii( "DataRowSource" ))
+            else if (aPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
                 rDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            else if (aPropName.equalsAscii( "HasCategories" ))
+            else if (aPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasCategories")))
                 rHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName.equalsAscii( "FirstCellAsLabel" ))
+            else if (aPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
                 rFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
     }

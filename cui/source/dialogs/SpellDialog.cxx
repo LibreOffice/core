@@ -1234,7 +1234,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     sal_Int32 i = 0;
                     while ( sFullCommentURL.isEmpty() && i < aProperties.getLength() )
                     {
-                        if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+                        if ( aProperties[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullCommentURL")) )
                         {
                             uno::Any aValue = aProperties[i].Value;
                             aValue >>= sFullCommentURL;

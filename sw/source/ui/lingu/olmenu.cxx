@@ -586,7 +586,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
         sal_Int32 i = 0;
         while ( sExplanationLink.isEmpty() && i < aProperties.getLength() )
         {
-            if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+            if ( aProperties[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullCommentURL")) )
             {
                 uno::Any aValue = aProperties[i].Value;
                 aValue >>= sExplanationLink;

@@ -2818,19 +2818,19 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
             }
             else
             {
-                if ( commandName->equalsAscii( "ShowRuler" ) )
+                if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ShowRuler")) )
                     OSL_VERIFY( rCommandValue >>= m_bShowRuler );
-                else if ( commandName->equalsAscii( "HelplinesMove" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelplinesMove")) )
                     OSL_VERIFY( rCommandValue >>= m_bHelplinesMove );
-                else if ( commandName->equalsAscii( "GridVisible" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GridVisible")) )
                     OSL_VERIFY( rCommandValue >>= m_bGridVisible );
-                else if ( commandName->equalsAscii( "GridUse" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GridUse")) )
                     OSL_VERIFY( rCommandValue >>= m_bGridUse );
-                else if ( commandName->equalsAscii( "ControlProperties" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ControlProperties")) )
                     OSL_VERIFY( rCommandValue >>= m_bShowProperties );
-                else if ( commandName->equalsAscii( "LastPropertyBrowserPage" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LastPropertyBrowserPage")) )
                     OSL_VERIFY( rCommandValue >>= m_sLastActivePage );
-                else if ( commandName->equalsAscii( "SplitPosition" ) )
+                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SplitPosition")) )
                     OSL_VERIFY( rCommandValue >>= m_nSplitPos );
             }
         }

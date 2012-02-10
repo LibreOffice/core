@@ -168,7 +168,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
         }
-        else if ( maMediaDescriptor[ i ].Name.equalsAscii( "SelectionOnly" ) )
+        else if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SelectionOnly")) )
         {
             maMediaDescriptor[ i ].Value >>= mbExportSelection;
         }

@@ -237,7 +237,7 @@ void WindowArranger::setProperties( const uno::Sequence< beans::PropertyValue >&
     bool bResize = false;
     for( sal_Int32 i = 0; i < i_rProps.getLength(); i++ )
     {
-        if( pProps[i].Name.equalsAscii( "OuterBorder" ) )
+        if( pProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OuterBorder")) )
         {
             sal_Int32 nVal = 0;
             if( pProps[i].Value >>= nVal )
@@ -249,7 +249,7 @@ void WindowArranger::setProperties( const uno::Sequence< beans::PropertyValue >&
                 }
             }
         }
-        else if( pProps[i].Name.equalsAscii( "ManagedArea" ) )
+        else if( pProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ManagedArea")) )
         {
             awt::Rectangle aArea( 0, 0, 0, 0 );
             if( pProps[i].Value >>= aArea )
@@ -261,7 +261,7 @@ void WindowArranger::setProperties( const uno::Sequence< beans::PropertyValue >&
                 bResize = true;
             }
         }
-        else if( pProps[i].Name.equalsAscii( "Visible" ) )
+        else if( pProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Visible")) )
         {
             sal_Bool bVal = sal_False;
             if( pProps[i].Value >>= bVal )
