@@ -10859,18 +10859,18 @@ else
         ;;
 
     cygwin*)
+        pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
+        pathmunge "$ASM_HOME" "before"
+        pathmunge "$WINDOWS_SDK_HOME/bin" "before"
+        pathmunge "$CSC_PATH" "before"
+        pathmunge "$MIDL_PATH" "before"
+        pathmunge "$MSPDB_PATH" "before"
+        if test "$CL_X64" = "TRUE" ; then
+            pathmunge "$COMPATH/bin/amd64" "before"
+        else
+            pathmunge "$COMPATH/bin" "before"
+        fi
         if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
-            pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
-            pathmunge "$ASM_HOME" "before"
-            pathmunge "$WINDOWS_SDK_HOME/bin" "before"
-            pathmunge "$CSC_PATH" "before"
-            pathmunge "$MIDL_PATH" "before"
-            pathmunge "$MSPDB_PATH" "before"
-            if test "$CL_X64" = "TRUE" ; then
-                pathmunge "$COMPATH/bin/amd64" "before"
-            else
-                pathmunge "$COMPATH/bin" "before"
-            fi
             if test -d "$JAVA_HOME/jre/bin/client" ; then
                 pathmunge "$JAVA_HOME/jre/bin/client" "before"
             fi
