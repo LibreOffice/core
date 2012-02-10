@@ -345,11 +345,6 @@ bool ScChangeAction::IsDeletedIn() const
     return GetDeletedIn() != NULL;
 }
 
-bool ScChangeAction::IsDeleted() const
-{
-    return IsDeleteType() || IsDeletedIn();
-}
-
 bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
 {
     ScChangeActionLinkEntry* pL = GetDeletedIn();
@@ -2153,16 +2148,6 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
 bool ScChangeActionContent::IsMatrixOrigin() const
 {
     return GetContentCellType(GetNewCell()) == SC_CACCT_MATORG;
-}
-
-bool ScChangeActionContent::IsMatrixReference() const
-{
-    return GetContentCellType(GetNewCell()) == SC_CACCT_MATREF;
-}
-
-bool ScChangeActionContent::IsOldMatrixOrigin() const
-{
-    return GetContentCellType(GetOldCell()) == SC_CACCT_MATORG;
 }
 
 bool ScChangeActionContent::IsOldMatrixReference() const

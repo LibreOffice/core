@@ -123,7 +123,6 @@ private:
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
         void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
-        long getEngineWidth(ScFieldEditEngine* pEngine) const;
         bool hasLineBreak() const;
         bool isHyperlinkCell() const;
 

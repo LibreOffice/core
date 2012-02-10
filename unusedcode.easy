@@ -127,9 +127,6 @@ ScAddInDocs::Insert(ScAddInDocs const*, unsigned short, unsigned short)
 ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
-ScChangeAction::IsDeleted() const
-ScChangeActionContent::IsMatrixReference() const
-ScChangeActionContent::IsOldMatrixOrigin() const
 ScChangeActionContent::SetNewValue(rtl::OUString const&, ScDocument*)
 ScChartListener::ScChartListener(rtl::OUString const&, ScDocument*, ScRange const&)
 ScChartListener::SetName(rtl::OUString const&)
@@ -168,7 +165,6 @@ ScHTMLColOffset_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(
 ScMyCellInfo::ScMyCellInfo()
 ScNameDefDlg::LinkStubEdModifyHdl(void*, void*)
 ScNamedRangeObj::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine*) const
 ScRTFColTwips::Insert(ScRTFColTwips const*, unsigned short, unsigned short)
 ScRTFColTwips::Insert(unsigned long const&, unsigned short&)
 ScRTFColTwips::Insert(unsigned long const*, unsigned short)

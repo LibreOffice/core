@@ -2327,14 +2327,6 @@ void ScOutputData::DrawEditParam::getEngineSize(ScFieldEditEngine* pEngine, long
     rHeight = nEngineHeight;
 }
 
-long ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine* pEngine) const
-{
-    if (mbBreak && meOrient != SVX_ORIENTATION_STACKED && !mbAsianVertical)
-        return 0;
-    else
-        return static_cast<long>(pEngine->CalcTextWidth());
-}
-
 bool ScOutputData::DrawEditParam::hasLineBreak() const
 {
     return (mbBreak || (meOrient == SVX_ORIENTATION_STACKED) || mbAsianVertical);

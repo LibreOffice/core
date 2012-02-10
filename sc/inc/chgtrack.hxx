@@ -377,7 +377,6 @@ public:
     ScChangeAction*     GetPrev() const { return pPrev; }
 
     bool IsDeletedIn() const;
-    bool IsDeleted() const;
     bool IsDeletedIn( const ScChangeAction* ) const;
     bool IsDeletedInDelType( ScChangeActionType ) const;
     void RemoveAllDeletedIn();
@@ -833,9 +832,7 @@ public:
 
     // NewCell
     bool IsMatrixOrigin() const;
-    bool IsMatrixReference() const;
     // OldCell
-    bool IsOldMatrixOrigin() const;
     bool IsOldMatrixReference() const;
 };
 
