@@ -65,19 +65,19 @@ namespace pcr
     typedef ::boost::shared_ptr< OBrowserLine > BrowserLinePointer;
     struct ListBoxLine
     {
+        ::rtl::OUString                         aName;
         BrowserLinePointer                      pLine;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                                 xHandler;
 
-        ListBoxLine() { }
-        ListBoxLine( BrowserLinePointer _pLine, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler )
-            :pLine( _pLine )
-            ,xHandler( _rxHandler )
+        ListBoxLine( const ::rtl::OUString& rName, BrowserLinePointer _pLine, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler )
+            : aName( rName ),
+              pLine( _pLine ),
+              xHandler( _rxHandler )
         {
         }
     };
-    typedef ::boost::unordered_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
-    typedef ::std::vector< ListBoxLines::iterator >                                 OrderedListBoxLines;
+    typedef ::std::vector< ListBoxLine > ListBoxLines;
 
     //========================================================================
     //= IControlContext
@@ -106,7 +106,6 @@ namespace pcr
         ::std::auto_ptr< InspectorHelpWindow >
                                     m_pHelpWindow;
         ListBoxLines                m_aLines;
-        OrderedListBoxLines         m_aOrderedLines;
         IPropertyLineListener*      m_pLineListener;
         IPropertyControlObserver*   m_pControlObserver;
         long                        m_nYOffset;
@@ -191,16 +190,6 @@ namespace pcr
                 The control to lookup. Must denote a control of one of the lines in ->m_aLines
         */
         sal_uInt16  impl_getControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl ) const;
-
-        /** retrieves (a reference to) the ->ListBoxLine for a given control
-            @param _rxControl
-                The control to lookup. Must denote a control of one of the lines in ->m_aLines
-        */
-        inline const ListBoxLine&
-                    impl_getControlLine( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl ) const
-        {
-            return m_aOrderedLines[ impl_getControlPos( _rxControl ) ]->second;
-        }
 
         /** sets the given property value at the given control, after converting it as necessary
             @param _rLine
