@@ -493,7 +493,7 @@ sal_Bool ScDocFunc::DetectiveRefresh( sal_Bool bAutomatic )
         sal_uInt16 nCount = pList->Count();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
-            ScDetOpData* pData = (*pList)[i];
+            ScDetOpData* pData = pList->GetObject(i);
             if (pData)
             {
                 ScAddress aPos = pData->GetPos();

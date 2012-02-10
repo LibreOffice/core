@@ -1029,9 +1029,9 @@ void ScUndoDetective::Undo()
         if (pList && pList->Count())
         {
             sal_uInt16 nPos = pList->Count() - 1;
-            ScDetOpData* pData = (*pList)[nPos];
+            ScDetOpData* pData = pList->GetObject(nPos);
             if ( pData->GetOperation() == (ScDetOpType) nAction && pData->GetPos() == aPos )
-                pList->DeleteAndDestroy( nPos, 1 );
+                pList->DeleteAndDestroy( nPos );
             else
             {
                 OSL_FAIL("Detektiv-Eintrag in der Liste nicht gefunden");

@@ -31,12 +31,8 @@
 
 #include <svl/svarray.hxx>
 #include "global.hxx"
-#include "address.hxx"
+#include "boost/ptr_container/ptr_vector.hpp"
 
-
-//------------------------------------------------------------------------
-
-#define SC_DETOP_GROW   4
 
 //------------------------------------------------------------------------
 enum ScDetOpType
@@ -78,13 +74,12 @@ public:
 //  list of operators
 //
 
-typedef ScDetOpData* ScDetOpDataPtr;
+typedef boost::ptr_vector<ScDetOpData> ScDetOpDataVector;
 
-SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW)
-
-class ScDetOpList : public ScDetOpArr_Impl
+class ScDetOpList
 {
     sal_Bool    bHasAddError;       // updated in append
+	 ScDetOpDataVector aDetOpDataVector;
 
 public:
         ScDetOpList() : bHasAddError(false) {}
@@ -97,9 +92,12 @@ public:
 
     sal_Bool    operator==( const ScDetOpList& r ) const;       // for ref-undo
 
-    void    Append( ScDetOpData* pData );
+    void         Append( ScDetOpData* pData );
+	 ScDetOpData* GetObject(int i);
+	 void         DeleteAndDestroy(int i);
 
     sal_Bool    HasAddError() const     { return bHasAddError; }
+	 int         Count() const { return aDetOpDataVector.size(); }
 };
 
 
