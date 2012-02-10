@@ -30,8 +30,8 @@
 #define SC_DETDATA_HXX
 
 #include <svl/svarray.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "global.hxx"
-#include "boost/ptr_container/ptr_vector.hpp"
 
 
 //------------------------------------------------------------------------
@@ -79,7 +79,7 @@ typedef boost::ptr_vector<ScDetOpData> ScDetOpDataVector;
 class ScDetOpList
 {
     sal_Bool    bHasAddError;       // updated in append
-	 ScDetOpDataVector aDetOpDataVector;
+    ScDetOpDataVector aDetOpDataVector;
 
 public:
         ScDetOpList() : bHasAddError(false) {}
@@ -93,11 +93,11 @@ public:
     sal_Bool    operator==( const ScDetOpList& r ) const;       // for ref-undo
 
     void         Append( ScDetOpData* pData );
-	 ScDetOpData* GetObject(int i);
-	 void         DeleteAndDestroy(int i);
+    ScDetOpDataVector&  GetDataVector() { return aDetOpDataVector; }
+    const ScDetOpData* GetObject( size_t nPos ) const;
 
     sal_Bool    HasAddError() const     { return bHasAddError; }
-	 int         Count() const { return aDetOpDataVector.size(); }
+    size_t      Count() const { return aDetOpDataVector.size(); }
 };
 
 

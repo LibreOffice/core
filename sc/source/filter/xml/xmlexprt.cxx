@@ -910,17 +910,17 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
         ScDetOpList* pOpList(pDoc->GetDetOpList());
         if( pOpList )
         {
-            sal_uInt32 nCount(pOpList->Count());
-            for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
+            size_t nCount = pOpList->Count();
+            for (size_t nIndex = 0; nIndex < nCount; ++nIndex )
             {
-                ScDetOpData* pDetData(pOpList->GetObject( static_cast<sal_uInt16>(nIndex) ));
+                const ScDetOpData* pDetData = pOpList->GetObject( nIndex);
                 if( pDetData )
                 {
                     const ScAddress& rDetPos = pDetData->GetPos();
                     SCTAB nTab = rDetPos.Tab();
                     if ( nTab < pDoc->GetTableCount() )
                     {
-                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, nIndex );
+                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, static_cast<sal_uInt32>( nIndex) );
 
                         // cells with detective operations are written even if empty
                         pSharedData->SetLastColumn( nTab, rDetPos.Col() );

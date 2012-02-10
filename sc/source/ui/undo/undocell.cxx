@@ -1028,10 +1028,10 @@ void ScUndoDetective::Undo()
         ScDetOpList* pList = pDoc->GetDetOpList();
         if (pList && pList->Count())
         {
-            sal_uInt16 nPos = pList->Count() - 1;
-            ScDetOpData* pData = pList->GetObject(nPos);
-            if ( pData->GetOperation() == (ScDetOpType) nAction && pData->GetPos() == aPos )
-                pList->DeleteAndDestroy( nPos );
+            ScDetOpDataVector& rVec = pList->GetDataVector();
+            ScDetOpDataVector::iterator it = rVec.begin() + rVec.size() - 1;
+            if ( it->GetOperation() == (ScDetOpType) nAction && it->GetPos() == aPos )
+                rVec.erase( it);
             else
             {
                 OSL_FAIL("Detektiv-Eintrag in der Liste nicht gefunden");

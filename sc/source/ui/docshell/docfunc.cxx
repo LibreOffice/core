@@ -490,10 +490,10 @@ sal_Bool ScDocFunc::DetectiveRefresh( sal_Bool bAutomatic )
 
         //  Wiederholen
 
-        sal_uInt16 nCount = pList->Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        size_t nCount = pList->Count();
+        for (size_t i=0; i < nCount; ++i)
         {
-            ScDetOpData* pData = pList->GetObject(i);
+            const ScDetOpData* pData = pList->GetObject(i);
             if (pData)
             {
                 ScAddress aPos = pData->GetPos();
