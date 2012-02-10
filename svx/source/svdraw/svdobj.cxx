@@ -2588,28 +2588,6 @@ bool SdrObject::IsUnoObj() const
     return bIsUnoObj;
 }
 
-bool SdrObject::IsMasterCachable() const
-{
-    return !bNotMasterCachable;
-}
-
-bool SdrObject::ShareLock()
-{
-    bool r = !bNetLock;
-    bNetLock = true;
-    return r;
-}
-
-void SdrObject::ShareUnlock()
-{
-    bNetLock = false;
-}
-
-bool SdrObject::IsShareLock() const
-{
-    return bNetLock;
-}
-
 void SdrObject::SetMarkProtect(bool bProt)
 {
     bMarkProt = bProt;
@@ -2623,16 +2601,6 @@ bool SdrObject::IsMarkProtect() const
 bool SdrObject::IsInserted() const
 {
     return bInserted;
-}
-
-void SdrObject::SetGrouped(bool bGrp)
-{
-    bGrouped = bGrp;
-}
-
-bool SdrObject::IsGrouped() const
-{
-    return bGrouped;
 }
 
 bool SdrObject::IsMoveProtect() const

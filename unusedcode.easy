@@ -195,22 +195,12 @@ ScaList::Insert(void*, unsigned int)
 ScrollBarBox::ScrollBarBox(Window*, ResId const&)
 ScrollableWindow::MakeVisible(Rectangle const&, unsigned char)
 SdFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-SdrObject::IsGrouped() const
-SdrObject::IsMasterCachable() const
-SdrObject::IsShareLock() const
-SdrObject::SetGrouped(bool)
-SdrObject::ShareLock()
-SdrObject::ShareUnlock()
 SectReprArr::Insert(SectRepr* const&, unsigned short&)
 SectReprArr::Insert(SectRepr* const*, unsigned short)
 SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
 SectReprArr::Remove(SectRepr* const&, unsigned short)
 SectReprArr::Remove(unsigned short, unsigned short)
 SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-SetOfByte::GetClearBit(unsigned short) const
-SetOfByte::GetClearCount() const
-SetOfByte::GetSetBit(unsigned short) const
-SetOfByte::IsFull() const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxApplication::Main()
 SfxBrushItemLink::Set(SfxBrushItemLink*)

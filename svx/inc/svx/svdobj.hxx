@@ -962,16 +962,10 @@ public:
     bool IsEdgeObj() const;
     bool Is3DObj() const;
     bool IsUnoObj() const;
-    bool IsMasterCachable() const;
-    bool ShareLock();
-    void ShareUnlock();
-    bool IsShareLock() const;
     void SetMarkProtect(bool bProt);
     bool IsMarkProtect() const;
     void SetInserted(bool bIns);
     bool IsInserted() const;
-    void SetGrouped(bool bGrp);
-    bool IsGrouped() const;
     void SetMoveProtect(bool bProt);
     bool IsMoveProtect() const;
     void SetResizeProtect(bool bProt);

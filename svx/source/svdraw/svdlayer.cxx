@@ -48,17 +48,6 @@ sal_Bool SetOfByte::IsEmpty() const
     return sal_True;
 }
 
-sal_Bool SetOfByte::IsFull() const
-{
-    for(sal_uInt16 i(0); i < 32; i++)
-    {
-        if(aData[i] != 0xFF)
-            return sal_False;
-    }
-
-    return sal_True;
-}
-
 sal_uInt16 SetOfByte::GetSetCount() const
 {
     sal_uInt16 nRet(0);
@@ -81,49 +70,6 @@ sal_uInt16 SetOfByte::GetSetCount() const
     }
 
     return nRet;
-}
-
-sal_uInt8 SetOfByte::GetSetBit(sal_uInt16 nNum) const
-{
-    nNum++;
-    sal_uInt16 i(0), j(0);
-    sal_uInt16 nRet(0);
-
-    while(j < nNum && i < 256)
-    {
-        if(IsSet(sal_uInt8(i)))
-            j++;
-        i++;
-    }
-
-    if(j == nNum)
-        nRet = i - 1;
-
-    return sal_uInt8(nRet);
-}
-
-sal_uInt16 SetOfByte::GetClearCount() const
-{
-    return sal_uInt16(256 - GetSetCount());
-}
-
-sal_uInt8 SetOfByte::GetClearBit(sal_uInt16 nNum) const
-{
-    nNum++;
-    sal_uInt16 i(0), j(0);
-    sal_uInt16 nRet(0);
-
-    while(j < nNum && i < 256)
-    {
-        if(!IsSet(sal_uInt8(i)))
-            j++;
-        i++;
-    }
-
-    if(j == nNum)
-        nRet = i - 1;
-
-    return sal_uInt8(nRet);
 }
 
 void SetOfByte::operator&=(const SetOfByte& r2ndSet)
