@@ -365,11 +365,17 @@ endif
 #
 # Bootstap
 #
-$(WORKDIR)/bootstrap:
+ifeq ($(OS_FOR_BUILD),WNT)
+WORKDIR_BOOTSTRAP=$(shell cygpath -u $(WORKDIR))/bootstrap
+else
+WORKDIR_BOOTSTRAP=$(WORKDIR)/bootstrap
+endif
+
+$(WORKDIR_BOOTSTRAP):
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
-bootstrap: $(WORKDIR)/bootstrap
+bootstrap: $(WORKDIR_BOOTSTRAP)
 
 #
 # Build
