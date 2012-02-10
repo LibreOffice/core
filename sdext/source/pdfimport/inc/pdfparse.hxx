@@ -304,7 +304,6 @@ class PDFReader
     ~PDFReader() {}
 
     PDFEntry* read( const char* pFileName );
-    PDFEntry* read( const char* pBuffer, unsigned int nLen );
 };
 
 } // namespace

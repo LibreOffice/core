@@ -367,20 +367,6 @@ void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::
 
 }
 
-void rollbackNoThrow( const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & r )
-{
-    try
-    {
-        Reference< XStatement > stmt = r->createStatement();
-        stmt->executeUpdate( getStatics().ROLLBACK );
-
-    }
-    catch( SQLException & )
-    {
-        // ignore this
-    }
-}
-
 Reference< XConnection > extractConnectionFromStatement( const Reference< XInterface > & stmt )
 {
     Reference< XConnection > ret;

@@ -125,8 +125,6 @@ sal_Bool extractBoolProperty(
 void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 void disposeObject( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 
-void rollbackNoThrow( const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & r );
-
 ::rtl::OUString extractTableFromInsert( const rtl::OUString & sql );
 ::rtl::OString extractSingleTableFromSelect( const OStringVector &vec );
 

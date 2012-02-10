@@ -122,10 +122,6 @@ public:
                                sal_Int32 nMin = SAL_MIN_INT32,
                                sal_Int32 nMax = SAL_MAX_INT32 );
 
-    /** convert number to string */
-    static void convertNumber64(::rtl::OUStringBuffer& rBuffer,
-                                sal_Int64 nNumber);
-
     /** convert string to number with optional min and max values */
     static bool convertNumber64(sal_Int64& rValue,
                                 const ::rtl::OUString& rString,
@@ -152,9 +148,6 @@ public:
 
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static bool convertDouble(double& rValue, const ::rtl::OUString& rString);
-
-    /** convert string to double number (using ::rtl::math) with unit conversion */
-    static bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Int16 nTargetUnit );
 
     /** convert double to ISO "duration" string; negative durations allowed */
     static void convertDuration(::rtl::OUStringBuffer& rBuffer,
@@ -217,11 +210,6 @@ public:
     static bool convertAny(::rtl::OUStringBuffer&          rsValue,
                            ::rtl::OUStringBuffer&          rsType ,
                            const ::com::sun::star::uno::Any& rValue);
-
-    /** convert a string to Any (typesafe) */
-    static bool convertAny(::com::sun::star::uno::Any& rValue,
-                           const ::rtl::OUString&    rsType,
-                           const ::rtl::OUString&    rsValue);
 
 };
 

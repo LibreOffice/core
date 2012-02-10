@@ -356,23 +356,6 @@ bool Runtime::isInitialized() throw ( RuntimeException )
     return runtime.is() && impl->cargo->valid;
 }
 
-void Runtime::finalize() throw (RuntimeException)
-{
-    PyRef globalDict, runtime;
-    getRuntimeImpl( globalDict , runtime );
-    RuntimeImpl *impl = reinterpret_cast< RuntimeImpl * > (runtime.get());
-    if( !runtime.is() || ! impl->cargo->valid )
-    {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "pyuno bridge must have been initialized before finalizing" )),
-                                Reference< XInterface > () );
-    }
-    impl->cargo->valid = false;
-    impl->cargo->xInvocation.clear();
-    impl->cargo->xContext.clear();
-    impl->cargo->xTypeConverter.clear();
-}
-
 Runtime::Runtime() throw(  RuntimeException )
     : impl( 0 )
 {

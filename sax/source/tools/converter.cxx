@@ -543,13 +543,6 @@ bool Converter::convertNumber(  sal_Int32& rValue,
     return bRet;
 }
 
-/** convert 64-bit number to string */
-void Converter::convertNumber64( OUStringBuffer& rBuffer,
-                                 sal_Int64 nNumber )
-{
-    rBuffer.append( nNumber );
-}
-
 /** convert string to 64-bit number with optional min and max values */
 bool Converter::convertNumber64( sal_Int64& rValue,
                                  const OUString& rString,
@@ -623,15 +616,6 @@ void Converter::convertDouble(  OUStringBuffer& rBuffer,
 void Converter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber)
 {
     ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
-}
-
-/** convert string to double number (using ::rtl::math) */
-bool Converter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, sal_Int16 nTargetUnit)
-{
-    sal_Int16 nSourceUnit = GetUnitFromString(rString, nTargetUnit);
-
-    return convertDouble(rValue, rString, nSourceUnit, nTargetUnit );
 }
 
 /** convert string to double number (using ::rtl::math) */
@@ -2206,66 +2190,6 @@ bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
             break;
         default:
             break;
-    }
-
-    return bConverted;
-}
-
-bool Converter::convertAny(com::sun::star::uno::Any& rValue,
-                           const ::rtl::OUString&    rsType,
-                           const ::rtl::OUString&    rsValue)
-{
-    bool bConverted = false;
-
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
-    {
-        bool bTempValue = false;
-        ::sax::Converter::convertBool(bTempValue, rsValue);
-        rValue <<= bTempValue;
-        bConverted = true;
-    }
-    else
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("integer")))
-    {
-        sal_Int32 nTempValue = 0;
-        ::sax::Converter::convertNumber(nTempValue, rsValue);
-        rValue <<= nTempValue;
-        bConverted = true;
-    }
-    else
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float")))
-    {
-        double fTempValue = 0.0;
-        ::sax::Converter::convertDouble(fTempValue, rsValue);
-        rValue <<= fTempValue;
-        bConverted = true;
-    }
-    else
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("string")))
-    {
-        rValue <<= rsValue;
-        bConverted = true;
-    }
-    else
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("date")))
-    {
-        com::sun::star::util::DateTime aTempValue;
-        ::sax::Converter::convertDateTime(aTempValue, rsValue);
-        rValue <<= aTempValue;
-        bConverted = true;
-    }
-    else
-    if (rsType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("time")))
-    {
-        com::sun::star::util::Duration aTempValue;
-        com::sun::star::util::Time     aConvValue;
-        ::sax::Converter::convertDuration(aTempValue, rsValue);
-        aConvValue.HundredthSeconds = aTempValue.MilliSeconds / 10;
-        aConvValue.Seconds          = aTempValue.Seconds;
-        aConvValue.Minutes          = aTempValue.Minutes;
-        aConvValue.Hours            = aTempValue.Hours;
-        rValue <<= aConvValue;
-        bConverted = true;
     }
 
     return bConverted;
