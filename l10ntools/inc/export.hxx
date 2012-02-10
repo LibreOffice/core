@@ -126,7 +126,7 @@ public:
     ~ResData();
     sal_Bool SetId(const rtl::OString &rId, sal_uInt16 nLevel);
 
-    sal_uInt16 nWidth;
+    sal_Int32 nWidth;
     sal_uInt16 nChildIndex;
     sal_uInt16 nIdLevel;
     sal_Bool bChild;
@@ -202,6 +202,7 @@ public:
 
     ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
             :
+            nWidth( 0 ),
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
             bChild( sal_False ),

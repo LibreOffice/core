@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "sal/main.h"
+
 #if defined __GNUC__
 #pragma GCC system_header
 #elif defined __SINPRO_CC
@@ -190,14 +192,7 @@ void yyerror ( const char *s )
 	SetError();
 }
 
-/*****************************************************************************/
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char* argv[])
-/*****************************************************************************/
-{
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 	/* error level */
 	int nRetValue = 0;
 	char *pOutput;

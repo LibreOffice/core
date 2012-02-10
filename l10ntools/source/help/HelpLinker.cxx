@@ -43,6 +43,7 @@
 #include <libxslt/functions.h>
 #include <libxslt/extensions.h>
 
+#include <sal/main.h>
 #include <sal/types.h>
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
@@ -1024,8 +1025,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     link();
 }
 
-int main(int argc, char**argv)
-{
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     std::vector<std::string> args;
     for (int i = 1; i < argc; ++i)
         args.push_back(std::string(argv[i]));

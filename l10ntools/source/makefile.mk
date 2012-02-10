@@ -53,7 +53,6 @@ OBJFILES=   			\
     $(OBJ)$/export.obj	\
     $(OBJ)$/export2.obj	\
     $(OBJ)$/merge.obj   \
-    $(OBJ)$/srciter.obj		\
     $(OBJ)$/xmlparse.obj    \
     $(OBJ)$/helpmerge.obj   \
     $(OBJ)$/helpex.obj      \
@@ -66,7 +65,6 @@ LIB1ARCHIV= $(LB)$/libtransex.a
 LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/export2.obj     \
         $(OBJ)$/merge.obj   \
-        $(OBJ)$/srciter.obj             \
         $(OBJ)$/file.obj \
         $(OBJ)$/directory.obj
 
@@ -128,16 +126,12 @@ APP7STDLIBS+= \
             $(SALLIB)
 
 # localizer for l10n framework
-APP9TARGET= localize_sl
+APP9TARGET= localize
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
-APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
+APP9OBJS=   $(OBJ)$/localize.obj
 APP9RPATH=  NONE
 APP9STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
-            $(ICUINLIB) \
-            $(ICUUCLIB) \
             $(SALLIB)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)

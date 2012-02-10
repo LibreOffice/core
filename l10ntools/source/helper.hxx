@@ -79,6 +79,14 @@ inline bool endsWith(rtl::OString const & text, rtl::OString const & search) {
         && text.match(search, text.getLength() - search.getLength());
 }
 
+inline bool endsWithAsciiL(
+    rtl::OUString const & text, char const * search, sal_Int32 searchLength)
+{
+    return text.getLength() >= searchLength
+        && text.matchAsciiL(
+            search, searchLength, text.getLength() - searchLength);
+}
+
 inline rtl::OString trimAscii(rtl::OString const & text) {
     sal_Int32 i1 = 0;
     while (i1 != text.getLength() && isAsciiWhitespace(text[i1])) {

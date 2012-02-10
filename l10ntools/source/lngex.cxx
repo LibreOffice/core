@@ -26,9 +26,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <stdio.h>
 
-// local includes
+#include "sal/main.h"
+
 #include "lngmerge.hxx"
 
 // defines to parse command line
@@ -154,14 +157,7 @@ void Help()
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
 }
 
-/*****************************************************************************/
-#if defined(UNX)
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char *argv[] )
-#endif
-/*****************************************************************************/
-{
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     if ( !ParseCommandLine( argc, argv ))
     {
         Help();

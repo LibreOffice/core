@@ -875,9 +875,9 @@ int Export::Execute( int nToken, const char * pToken )
             sMapping = replace(sMapping, rtl::OString('\t'), rtl::OString());
             sKey = sKey.toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE")))
-                pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 0, ',').toInt32();
+                pResData->nWidth = getToken(sMapping, 0, ',').toInt32();
             else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE")))
-                pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 2, ',').toInt32();
+                pResData->nWidth = getToken(sMapping, 2, ',').toInt32();
         }
         break;
         case RSCDEFINELEND:
@@ -1058,7 +1058,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                 sOutput += sLID; sOutput += "\t";
                 sOutput += pResData->sHelpId; sOutput   += "\t";
                 sOutput += pResData->sPForm; sOutput    += "\t";
-                sOutput += rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth)); sOutput += "\t";
+                sOutput += rtl::OString::valueOf(pResData->nWidth); sOutput += "\t";
                 sOutput += sCur; sOutput += "\t";
 
 

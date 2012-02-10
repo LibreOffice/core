@@ -38,7 +38,7 @@ use Cwd;
 my %options=();
 getopts("ep:r:i:o:l:", \%options);
 
-unless ( $options{i} =~ m/en_US/ ) {exit 1;}
+unless ( $options{i} =~ m/en_US/ ) {exit 0;}
 
 my $file = substr ( Cwd::abs_path($options{i}), length(Cwd::abs_path($options{r})) + 1 );
 $file =~ s|/|\\|g;

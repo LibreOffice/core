@@ -37,6 +37,7 @@
 #include <stdio.h>
 
 #include <rtl/strbuf.hxx>
+#include "sal/main.h"
 #include "helper.hxx"
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
@@ -684,15 +685,7 @@ void Help()
        fprintf( stdout, "\n" );
 }
 
-/*****************************************************************************/
-#if defined(UNX)
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char *argv[] )
-#endif
-/*****************************************************************************/
-{
-
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     sal_Bool bError = sal_False;
     sal_Bool bPrintContext = sal_False;
     sal_Bool bCheckSourceLang = sal_False;

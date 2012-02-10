@@ -12,8 +12,8 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\transex3 %_DEST%\bin\transex3
 ..\%__SRC%\bin\lngex.exe %_DEST%\bin\lngex.exe
 ..\%__SRC%\bin\lngex %_DEST%\bin\lngex
-..\%__SRC%\bin\localize_sl.exe %_DEST%\bin\localize_sl.exe
-..\%__SRC%\bin\localize_sl %_DEST%\bin\localize_sl
+..\%__SRC%\bin\localize.exe %_DEST%\bin\localize.exe
+..\%__SRC%\bin\localize %_DEST%\bin\localize
 ..\%__SRC%\bin\xrmex.exe %_DEST%\bin\xrmex.exe
 ..\%__SRC%\bin\xrmex %_DEST%\bin\xrmex
 ..\%__SRC%\bin\gsicheck.exe %_DEST%\bin\gsicheck.exe

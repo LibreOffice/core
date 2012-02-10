@@ -64,10 +64,16 @@ inline rtl::OString pathnameToken(char const * pathname, char const * root) {
         std::cerr << "Error: Cannot convert input pathname to UTF-16\n";
         std::exit(EXIT_FAILURE);
     }
+    if (osl::FileBase::getFileURLFromSystemPath(full, full)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input pathname to URL\n";
+        std::exit(EXIT_FAILURE);
+    }
     if (osl::FileBase::getAbsoluteFileURL(cwd, full, full)
         != osl::FileBase::E_None)
     {
-        std::cerr << "Error: Cannot convert input pathname to absolute URL\n";
+        std::cerr << "Error: Cannot convert input URL to absolute URL\n";
         std::exit(EXIT_FAILURE);
     }
     if (root == 0) {

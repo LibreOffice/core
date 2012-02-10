@@ -29,17 +29,26 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <cstdlib>
 #include <fstream>
-
-#include "srciter.hxx"
-#include "export.hxx"
-#include <string>
-#include <vector>
-#include <stdio.h>
 #include <iostream>
-#include "tools/errcode.hxx"
-#include "tools/fsys.hxx"
-#include "tools/urlobj.hxx"
+#include <string>
+
+#include "boost/noncopyable.hpp"
+#include "osl/file.h"
+#include "osl/file.hxx"
+#include "osl/process.h"
+#include "osl/thread.h"
+#include "rtl/oustringostreaminserter.hxx"
+#include "rtl/string.h"
+#include "rtl/string.hxx"
+#include "rtl/textcvt.h"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "sal/macros.h"
+#include "sal/main.h"
+#include "sal/types.h"
 
 #include "helper.hxx"
 
@@ -47,610 +56,436 @@ using namespace std;
 
 namespace {
 
-DirEntry GetTempFile()
-{
-    rtl::OUString* sTempFilename = new rtl::OUString();
+namespace global {
 
-    // Create a temp file
-    int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
-    if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
-
-    rtl::OUString strTmp( *sTempFilename  );
-
-    INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
-    rtl::OUString sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
-    rtl::OString sTmp(rtl::OUStringToOString(sDecodedStr , RTL_TEXTENCODING_UTF8));
-
-#if defined(WNT)
-    sTmp = comphelper::string::replace(sTmp,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:///")),
-        rtl::OString());
-    sTmp = sTmp.replace('/', '\\');
-#else
-    // Set file permission to 644
-    const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
-                             osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
-
-    nRC = osl::File::setAttributes( *sTempFilename , nPerm );
-    if( nRC ) printf(" osl::File::setAttributes RC = %d",nRC);
-
-    sTmp = comphelper::string::replace(sTmp,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file://")),
-        rtl::OString());
-#endif
-    DirEntry aDirEntry( sTmp );
-    delete sTempFilename;
-    return aDirEntry;
-}
+std::ofstream output;
 
 }
 
-namespace transex3
-{
+rtl::OUString getEnvironment(rtl::OUString const & variable) {
+    rtl::OUString value;
+    if (osl_getEnvironment(variable.pData, &value.pData) != osl_Process_E_None)
+    {
+        std::cerr
+            << "Error: cannot get environment variable " << variable << '\n';
+        throw false; //TODO
+    }
+    return value;
+}
 
-//
-// SourceTreeLocalizer
-//
-
-const char *ExeTable[][4] = {
-    { "src", "transex3", " -e", "negative" },
-    { "hrc", "transex3", " -e", "positive" },
-    { "ulf", "ulfex", " -e", "negative" },
-    { "xcu", "cfgex", " -e", "negative" },
-    { "xrm", "xrmex", " -e", "negative" },
-    { "xml", "xrmex", " -e", "positive" },
-    { "xhp", "helpex", " -e", "negative" },
-    { "properties", "propex", " -e", "negative" },
-    { "NULL", "NULL", "NULL", "NULL" }
-};
-
-const char *NegativeList[] = {
-    "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
-    "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
-    "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
-    "dictionaries.xcu",
-    "hidother.src",
-    "dictionaries/da_DK/help/da/org.openoffice.da.hunspell.dictionaries/page1.xhp",
-    "dictionaries/hu_HU/help/hu/org.openoffice.hu.hunspell.dictionaries/page1.xhp",
-    "NULL"
-};
-
-const char *PositiveList[] = {
-    "description.xml",
-    "svx/inc/globlmn_tmpl.hrc",
-    "sw/source/ui/inc/swmn_tmpl.hrc",
-    "sw/source/ui/inc/swacc_tmpl.hrc",
-    "sw/source/ui/inc/toolbox_tmpl.hrc",
-    "offmgr/inc/offmenu_tmpl.hrc",
-    "offmgr/source/offapp/intro/intro_tmpl.hrc",
-    "dbaccess/source/ui/inc/toolbox_tmpl.hrc",
-    "svx/source/intro/intro_tmpl.hrc",
-    "dbaccess/source/ui/dlg/AutoControls_tmpl.hrc",
-    "svx/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_DataLabel_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_Statistic_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_Titlesx_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
-    "chart2/source/controller/menu/MenuItems_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_Trendline_tmpl.hrc",
-       "svx.link/inc/globlmn_tmpl.hrc",
-    "sw.link/source/ui/inc/swmn_tmpl.hrc",
-    "sw.link/source/ui/inc/swacc_tmpl.hrc",
-    "sw.link/source/ui/inc/toolbox_tmpl.hrc",
-    "offmgr.link/inc/offmenu_tmpl.hrc",
-    "offmgr.link/source/offapp/intro/intro_tmpl.hrc",
-    "dbaccess.link/source/ui/inc/toolbox_tmpl.hrc",
-    "svx.link/source/intro/intro_tmpl.hrc",
-    "dbaccess.link/source/ui/dlg/AutoControls_tmpl.hrc",
-    "svx.link/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_DataLabel_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_Statistic_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_Titlesx_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
-    "chart2.link/source/controller/menu/MenuItems_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
-    "chart2.link/source/controller/dialogs/res_Trendline_tmpl.hrc",
-    "NULL"
-};
-
-const char *ModuleList[] = {
-    "accessibility",
-    "avmedia",
-    "basctl",
-    "basic",
-    "chart2",
-    "connectivity",
-    "cui",
-    "dbaccess",
-    "desktop",
-    "dictionaries",
-    "editeng",
-    "extensions",
-    "filter",
-    "forms",
-    "formula",
-    "fpicker",
-    "framework",
-    "helpcontent2",
-    "instsetoo_native",
-    "mysqlc",
-    "nlpsolver",
-    "officecfg",
-    "padmin",
-    "readlicense_oo",
-    "reportbuilder",
-    "reportdesign",
-    "sc",
-    "scaddins",
-    "sccomp",
-    "scp2",
-    "scripting",
-    "sd",
-    "sdext",
-    "setup_native",
-    "sfx2",
-    "shell",
-    "starmath",
-    "svl",
-    "svtools",
-    "svx",
-    "sw",
-    "swext",
-    "sysui",
-    "uui",
-    "vcl",
-    "wizards",
-    "xmlsecurity",
-    "NULL",
-};
-
-
-const char PRJ_DIR_NAME[] = "prj";
-const char DLIST_NAME[] = "d.lst";
-
-#define LOCALIZE_NONE       0x0000
-#define LOCALIZE_EXTRACT    0x0001
-
-class SourceTreeLocalizer : public SourceTreeIterator
-{
-private:
-    std::ofstream aSDF;
-    sal_uInt16 nMode;
-
-    rtl::OString sLanguageRestriction;
-
-    rtl::OString sOutputFile;
-
-    int nFileCnt;
-
-    const rtl::OString GetProjectName( sal_Bool bAbs = sal_False );
-    const rtl::OString GetProjectRootRel();
-
-
-    sal_Bool CheckNegativeList( const rtl::OString &rFileName );
-    sal_Bool CheckPositiveList( const rtl::OString &rFileName );
-
-    void WorkOnFile(
-        const rtl::OString &rFileName,
-        const rtl::OString &rExecutable,
-        const rtl::OString &rParameter
-    );
-
-    void WorkOnFileType(
-        const rtl::OString &rDirectory,
-        const rtl::OString &rExtension,
-        const rtl::OString &rExecutable,
-        const rtl::OString &rParameter,
-        const rtl::OString &rCollectMode
-    );
-    void WorkOnDirectory(const rtl::OString &rDirectory);
+class TempFile: private boost::noncopyable {
 public:
-    SourceTreeLocalizer(const rtl::OString &rRoot, bool skip_links);
-    ~SourceTreeLocalizer();
+    TempFile() {
+        if (osl::FileBase::createTempFile(0, 0, &url_) != osl::FileBase::E_None)
+        {
+            std::cerr << "osl::FileBase::createTempFile() failed\n";
+            throw false; //TODO
+        }
+    }
 
-    void SetLanguageRestriction( const rtl::OString& rRestrictions )
-        { sLanguageRestriction = rRestrictions; }
-    int getFileCnt();
-    sal_Bool Extract(const rtl::OString &rDestinationFile);
-    int GetFileCnt();
-    virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
+    ~TempFile() {
+        if (osl::File::remove(url_) != osl::FileBase::E_None) {
+            std::cerr << "Warning: failure removing temporary " << url_ << '\n';
+        }
+    }
+
+    rtl::OUString getUrl() const { return url_; }
+
+private:
+    rtl::OUString url_;
 };
 
-SourceTreeLocalizer::SourceTreeLocalizer(const rtl::OString &rRoot, bool skip_links)
-    : SourceTreeIterator(rRoot)
-    , nMode( LOCALIZE_NONE )
-    , nFileCnt( 0 )
-{
-    bSkipLinks  = skip_links ;
-}
+struct AsciiString {
+    char const * string;
+    sal_Int32 length;
+};
 
-/*****************************************************************************/
-SourceTreeLocalizer::~SourceTreeLocalizer()
-/*****************************************************************************/
+bool matchList(
+    rtl::OUString const & url, AsciiString const * list, std::size_t length)
 {
-}
-
-/*****************************************************************************/
-const rtl::OString SourceTreeLocalizer::GetProjectName( sal_Bool bAbs )
-/*****************************************************************************/
-{
-    sal_Bool bFound = sal_False;
-    DirEntry aCur;
-    aCur.ToAbs();
-
-    for ( ; ! bFound && aCur.Level() > 1; aCur.CutName() )
-    {
-        DirEntry aTest = aCur + DirEntry(PRJ_DIR_NAME) + DirEntry(DLIST_NAME);
-        if ( aTest.Exists() )
-        {
-            if ( bAbs )
-                return rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US);
-            else
-                return rtl::OUStringToOString(aCur.GetName(), RTL_TEXTENCODING_ASCII_US);
+    for (std::size_t i = 0; i != length; ++i) {
+        if (helper::endsWithAsciiL(url, list[i].string, list[i].length)) {
+            return true;
         }
     }
-
-    return "";
-}
-/*****************************************************************************/
-int SourceTreeLocalizer::GetFileCnt(){
-/*****************************************************************************/
-    return nFileCnt;
+    return false;
 }
 
-/*****************************************************************************/
-const rtl::OString SourceTreeLocalizer::GetProjectRootRel()
-/*****************************************************************************/
+bool passesNegativeList(rtl::OUString const & url) {
+    static AsciiString const list[] = {
+        { RTL_CONSTASCII_STRINGPARAM("/dictionaries.xcu") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/dictionaries/da_DK/help/da/"
+            "org.openoffice.da.hunspell.dictionaries/page1.xhp") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/dictionaries/hu_HU/help/hu/"
+            "org.openoffice.hu.hunspell.dictionaries/page1.xhp") },
+        { RTL_CONSTASCII_STRINGPARAM("/hidother.src") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/officecfg/registry/data/org/openoffice/Office/"
+            "Accelerators.xcu") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/officecfg/registry/data/org/openoffice/Office/Labels.xcu") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/officecfg/registry/data/org/openoffice/Office/SFX.xcu") }
+    };
+    return !matchList(url, list, SAL_N_ELEMENTS(list));
+}
+
+bool passesPositiveList(rtl::OUString const & url) {
+    static AsciiString const list[] = {
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_DataLabel_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_ErrorBar_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/"
+            "res_SecondaryAxisCheckBoxes_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_Statistic_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_Titlesx_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/dialogs/res_Trendline_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/chart2/source/controller/menu/MenuItems_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
+        { RTL_CONSTASCII_STRINGPARAM("/offmgr/inc/offmenu_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/offmgr/source/offapp/intro/intro_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/svx/source/intro/intro_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM(
+            "/svx/source/unodialogs/textconversiondlgs/"
+            "chinese_direction_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swacc_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swmn_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/toolbox_tmpl.hrc") }
+    };
+    return matchList(url, list, SAL_N_ELEMENTS(list));
+}
+
+void handleCommand(
+    rtl::OUString const & project, rtl::OUString const & projectRoot,
+    rtl::OUString const & url, rtl::OUString const & executable, bool positive)
 {
-    rtl::OString sProjectRoot( GetProjectName( sal_True ));
-    DirEntry aCur;
-    aCur.ToAbs();
-    rtl::OString sCur(rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US));
-
-    if (helper::searchAndReplace(&sCur, sProjectRoot, rtl::OString()) == -1)
-        return "";
-
-    rtl::OString sDelimiter(rtl::OUStringToOString(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-
-    helper::searchAndReplaceAll(&sCur, sDelimiter, "/");
-    sCur = comphelper::string::stripStart(sCur, '/');
-    sal_Int32 nCount = comphelper::string::getTokenCount(sCur, '/');
-
-    rtl::OString sProjectRootRel;
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        if (!sProjectRootRel.isEmpty())
-            sProjectRootRel += sDelimiter;
-        sProjectRootRel += "..";
-    }
-    if (!sProjectRootRel.isEmpty())
-        return sProjectRootRel;
-
-    return ".";
-}
-
-bool skipProject( rtl::OString sPrj )
-{
-    int nIndex = 0;
-    bool bReturn = true;
-    rtl::OString sModule( ModuleList[ nIndex ] );
-    while (!sModule.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && bReturn) {
-        if (sPrj == sModule)
-            bReturn = false;
-        nIndex++;
-        sModule = ModuleList[ nIndex ];
-    }
-    return bReturn;
-}
-
-/*****************************************************************************/
-void SourceTreeLocalizer::WorkOnFile(
-    const rtl::OString &rFileName, const rtl::OString &rExecutable,
-    const rtl::OString &rParameter )
-/*****************************************************************************/
-{
-    rtl::OUString sFull(
-        rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_ASCII_US));
-        DirEntry aEntry( sFull );
-        rtl::OString sFileName(rtl::OUStringToOString(aEntry.GetName(), RTL_TEXTENCODING_ASCII_US));
-
-        // set current working directory
-        DirEntry aPath( aEntry.GetPath());
-        DirEntry aOldCWD;
-        aPath.SetCWD();
-
-        rtl::OString sPrj( GetProjectName());
-        if (!sPrj.isEmpty() && !skipProject( sPrj ) )
+    if (positive ? passesPositiveList(url) : passesNegativeList(url)) {
+        rtl::OUString inPath;
+        if (osl::FileBase::getSystemPathFromFileURL(url, inPath) !=
+            osl::FileBase::E_None)
         {
-            rtl::OString sRoot( GetProjectRootRel());
-
-            DirEntry aTemp(GetTempFile());
-            rtl::OString sTempFile(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
-
-            rtl::OString sDel;
-#if defined(WNT)
-            sDel=rtl::OString("\\");
-#else
-            sDel=rtl::OString("/");
-#endif
-            rtl::OString sPath1( Export::GetEnv("SOLARVER") );
-            rtl::OString sPath2( Export::GetEnv("INPATH_FOR_BUILD") );
-            rtl::OString sPath3( "bin" );
-            rtl::OString sExecutable( sPath1 );
-#if defined(WNT)
-            sExecutable = sExecutable.replace('/', '\\');
-#endif
-            sExecutable += sDel ;
-            sExecutable += sPath2 ;
-            sExecutable += sDel;
-            sExecutable += sPath3 ;
-            sExecutable += sDel ;
-            sExecutable += rExecutable ;
-
-
-        rtl::OString sCommand( sExecutable );
-        sCommand += " ";
-        sCommand += rParameter;
-        sCommand += " -p ";
-        sCommand += sPrj;
-        sCommand += " -r ";
-        sCommand += sRoot;
-        sCommand += " -i ";
-        sCommand += sFileName;
-        sCommand += " -o ";
-        sCommand += sTempFile;
-        if (!sLanguageRestriction.isEmpty()) {
-            sCommand += " -l ";
-            sCommand +=  sLanguageRestriction;
+            std::cerr
+                << "osl::FileBase::getSystemPathFromFileURL(" << url
+                << ") failed\n";
+            throw false; //TODO
         }
+        TempFile temp;
+        rtl::OUString outPath;
+        if (osl::FileBase::getSystemPathFromFileURL(temp.getUrl(), outPath)
+            != osl::FileBase::E_None)
+        {
+            std::cerr
+                << "osl::FileBase::getSystemPathFromFileURL(" << temp.getUrl()
+                << ") failed\n";
+            throw false; //TODO
+        }
+        rtl::OUStringBuffer buf(
+            getEnvironment(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOLARVER"))));
+        buf.append('/');
+        buf.append(
+            getEnvironment(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("INPATH_FOR_BUILD"))));
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/bin/"));
+        buf.append(executable);
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -e -p "));
+        buf.append(project);
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -r "));
+        buf.append(projectRoot);
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -i "));
+        buf.append(inPath);
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -o "));
+        buf.append(outPath);
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -l en-US"));
+        rtl::OString cmd;
+        if (!buf.makeStringAndClear().convertToString(
+                &cmd, osl_getThreadTextEncoding(),
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+        {
+            std::cerr << "Error: Cannot convert command from UTF-16\n";
+            throw false; //TODO
+        }
+        if (system(cmd.getStr()) != 0) {
+            std::cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
+            throw false; //TODO
+        }
+        rtl::OString outPath8;
+        if (!outPath.convertToString(
+                &outPath8, osl_getThreadTextEncoding(),
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+        {
+            std::cerr << "Error: Cannot convert pathname from UTF-16\n";
+            throw false; //TODO
+        }
+        std::ifstream in(outPath8.getStr());
+        if (!in.is_open()) {
+            std::cerr << "Error: Cannot open " << outPath.getStr() << "\n";
+            throw false; //TODO
+        }
+        while (!in.eof())
+        {
+            std::string s;
+            std::getline(in, s);
+            if (!s.empty())
+                global::output << s << '\n';
+        }
+        in.close();
+    }
+}
 
-            //printf("DBG: %s\n",sCommand.GetBuffer());
-            if (system(sCommand.getStr()) == -1)
-                fprintf(stderr, "%s failed\n", sCommand.getStr());
-            nFileCnt++;
+void handleFile(
+    rtl::OUString const & project, rtl::OUString const & projectRoot,
+    rtl::OUString const & url)
+{
+    struct Command {
+        char const * extension;
+        sal_Int32 extensionLength;
+        char const * executable;
+        bool positive;
+    };
+    static Command const commands[] = {
+        { RTL_CONSTASCII_STRINGPARAM(".src"), "transex3", false },
+        { RTL_CONSTASCII_STRINGPARAM(".hrc"), "transex3", true },
+        { RTL_CONSTASCII_STRINGPARAM(".ulf"), "ulfex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".xcu"), "cfgex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".xrm"), "xrmex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".xml"), "xrmex", true },
+        { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false } };
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i) {
+        if (helper::endsWithAsciiL(
+                url, commands[i].extension, commands[i].extensionLength))
+        {
+            handleCommand(
+                project, projectRoot, url,
+                rtl::OUString::createFromAscii(commands[i].executable),
+                commands[i].positive);
+            break;
+        }
+    }
+}
 
-            ifstream aSDFIn(
-                rtl::OUStringToOString(
-                    aTemp.GetFull(), osl_getThreadTextEncoding()).
-                getStr());
-            while (aSDFIn.is_open() && !aSDFIn.eof())
-            {
-                std::string s;
-                std::getline(aSDFIn, s);
-                if (!s.empty())
-                    aSDF << s << '\n';
+bool includeDirectory(rtl::OUString const & directory) {
+    // Cf. OUTPATH=* in configure.in:
+    static AsciiString const excluded[] = {
+        { RTL_CONSTASCII_STRINGPARAM("unxaig") },
+        { RTL_CONSTASCII_STRINGPARAM("unxand") },
+        { RTL_CONSTASCII_STRINGPARAM("unxdfly") },
+        { RTL_CONSTASCII_STRINGPARAM("unxfbsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxios") },
+        { RTL_CONSTASCII_STRINGPARAM("unxkfg") },
+        { RTL_CONSTASCII_STRINGPARAM("unxlng") },
+        { RTL_CONSTASCII_STRINGPARAM("unxmac") },
+        { RTL_CONSTASCII_STRINGPARAM("unxnbsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxobsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxsog") },
+        { RTL_CONSTASCII_STRINGPARAM("unxsol") },
+        { RTL_CONSTASCII_STRINGPARAM("unxubt") },
+        { RTL_CONSTASCII_STRINGPARAM("wntmsc") } };
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(excluded); ++i) {
+        if (directory.matchAsciiL(excluded[i].string, excluded[i].length)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void handleDirectory(
+    rtl::OUString const & project, rtl::OUString const & projectRoot,
+    rtl::OUString const & url)
+{
+    osl::Directory dir(url);
+    if (dir.open() != osl::FileBase::E_None) {
+        std::cerr << "Error: Cannot open directory\n";
+        throw false; //TODO
+    }
+    for (;;) {
+        osl::DirectoryItem item;
+        osl::FileBase::RC e = dir.getNextItem(item);
+        if (e == osl::FileBase::E_NOENT) {
+            break;
+        }
+        if (e != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot read directory\n";
+            throw false; //TODO
+        }
+        osl::FileStatus stat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName
+            | osl_FileStatus_Mask_FileURL);
+        if (item.getFileStatus(stat) != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot get file status\n";
+            throw false; //TODO
+        }
+        if (stat.getFileType() == osl::FileStatus::Directory) {
+            if (includeDirectory(stat.getFileName())) {
+                rtl::OUString pr(projectRoot);
+                if (!pr.isEmpty()) {
+                    pr += rtl::OUString('/');
+                }
+                pr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
+                handleDirectory(project, pr, stat.getFileURL());
             }
-            aSDFIn.close();
-
-            aTemp.Kill();
-
+        } else {
+            handleFile(project, projectRoot, stat.getFileURL());
         }
-        // reset current working directory
-        aOldCWD.SetCWD();
+    }
+    if (dir.close() != osl::FileBase::E_None) {
+        std::cerr << "Error: Cannot close directory\n";
+        throw false; //TODO
+    }
 }
 
-/*****************************************************************************/
-sal_Bool SourceTreeLocalizer::CheckNegativeList( const rtl::OString &rFileName )
-/*****************************************************************************/
-{
-    std::size_t nIndex = 0;
-    sal_Bool bReturn  = sal_True;
-
-    rtl::OString sDelimiter(rtl::OUStringToOString(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-
-    rtl::OString sFileName(rFileName.toAsciiLowerCase());
-
-    rtl::OString sNegative( NegativeList[ nIndex ] );
-    while (!sNegative.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && bReturn) {
-        helper::searchAndReplaceAll(&sNegative, "\\", sDelimiter);
-        helper::searchAndReplaceAll(&sNegative, "/", sDelimiter);
-        sNegative = sNegative.toAsciiLowerCase();
-
-        if (sFileName.indexOf(sNegative)
-            == sFileName.getLength() - sNegative.getLength())
-        {
-            bReturn = false;
+bool includeProject(rtl::OUString const & project) {
+    static char const * projects[] = {
+        "accessibility",
+        "avmedia",
+        "basctl",
+        "basic",
+        "chart2",
+        "connectivity",
+        "cui",
+        "dbaccess",
+        "desktop",
+        "dictionaries",
+        "editeng",
+        "extensions",
+        "filter",
+        "forms",
+        "formula",
+        "fpicker",
+        "framework",
+        "helpcontent2",
+        "instsetoo_native",
+        "mysqlc",
+        "nlpsolver",
+        "officecfg",
+        "padmin",
+        "readlicense_oo",
+        "reportbuilder",
+        "reportdesign",
+        "sc",
+        "scaddins",
+        "sccomp",
+        "scp2",
+        "scripting",
+        "sd",
+        "sdext",
+        "setup_native",
+        "sfx2",
+        "shell",
+        "starmath",
+        "svl",
+        "svtools",
+        "svx",
+        "sw",
+        "swext",
+        "sysui",
+        "uui",
+        "vcl",
+        "wizards",
+        "xmlsecurity" };
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(projects); ++i) {
+        if (project.equalsAscii(projects[i])) {
+            return true;
         }
-
-        nIndex++;
-        sNegative = NegativeList[ nIndex ];
     }
-
-    return bReturn;
+    return false;
 }
 
-/*****************************************************************************/
-sal_Bool SourceTreeLocalizer::CheckPositiveList( const rtl::OString &rFileName )
-/*****************************************************************************/
-{
-    std::size_t nIndex = 0;
-    sal_Bool bReturn  = sal_False;
-
-    rtl::OString sDelimiter(rtl::OUStringToOString(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-
-    rtl::OString sFileName(rFileName.toAsciiLowerCase());
-
-    rtl::OString sNegative( PositiveList[ nIndex ] );
-    while (!sNegative.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL")) && !bReturn) {
-        helper::searchAndReplaceAll(&sNegative, "\\", sDelimiter);
-        helper::searchAndReplaceAll(&sNegative, "/", sDelimiter);
-        sNegative = sNegative.toAsciiLowerCase();
-
-        if (sFileName.indexOf(sNegative)
-            == sFileName.getLength() - sNegative.getLength())
-        {
-            bReturn = true;
+void handleProjects(char const * root) {
+    rtl::OUString root16;
+    if (!rtl_convertStringToUString(
+            &root16.pData, root, rtl_str_getLength(root),
+            osl_getThreadTextEncoding(),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+    {
+        std::cerr << "Error: Cannot convert pathname to UTF-16\n";
+        throw false; //TODO
+    }
+    rtl::OUString rootUrl;
+    if (osl::FileBase::getFileURLFromSystemPath(root16, rootUrl)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert pathname to URL\n";
+        throw false; //TODO
+    }
+    osl::Directory dir(rootUrl);
+    if (dir.open() != osl::FileBase::E_None) {
+        std::cerr << "Error: Cannot open directory\n";
+        throw false; //TODO
+    }
+    for (;;) {
+        osl::DirectoryItem item;
+        osl::FileBase::RC e = dir.getNextItem(item);
+        if (e == osl::FileBase::E_NOENT) {
+            break;
         }
-
-        nIndex++;
-        sNegative = PositiveList[ nIndex ];
+        if (e != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot read directory\n";
+            throw false; //TODO
+        }
+        osl::FileStatus stat(
+            osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
+        if (item.getFileStatus(stat) != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot get file status\n";
+            throw false; //TODO
+        }
+        rtl::OUString prj(stat.getFileName());
+        if (includeProject(prj)) {
+            handleDirectory(prj, rtl::OUString(), stat.getFileURL());
+        }
     }
-
-    return bReturn;
-}
-
-/*****************************************************************************/
-void SourceTreeLocalizer::WorkOnFileType(
-    const rtl::OString &rDirectory, const rtl::OString &rExtension,
-    const rtl::OString &rExecutable, const rtl::OString &rParameter,
-    const rtl::OString &rCollectMode
-)
-/*****************************************************************************/
-{
-    rtl::OUString sWild(
-        rtl::OStringToOUString(rDirectory, RTL_TEXTENCODING_ASCII_US));
-    sWild += DirEntry::GetAccessDelimiter();
-    sWild += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*."));
-    sWild += rtl::OStringToOUString(rExtension, RTL_TEXTENCODING_ASCII_US);
-
-    Dir aDir(DirEntry(sWild), FSYS_KIND_FILE);
-
-    for ( sal_uInt16 i = 0; i < aDir.Count(); i++ )
-    {
-        DirEntry aFile( aDir[ i ] );
-        rtl::OString sFile(rtl::OUStringToOString(aFile.GetFull(), RTL_TEXTENCODING_ASCII_US));
-
-        sal_Bool bAllowed = sal_True;
-
-        if (rCollectMode.equalsL(RTL_CONSTASCII_STRINGPARAM("negative")))
-            bAllowed = CheckNegativeList( sFile );
-        else if (rCollectMode.equalsL(RTL_CONSTASCII_STRINGPARAM("positive")))
-            bAllowed = CheckPositiveList( sFile );
-
-        if ( bAllowed )
-            WorkOnFile( sFile, rExecutable, rParameter );
+    if (dir.close() != osl::FileBase::E_None) {
+        std::cerr << "Error: Cannot close directory\n";
+        throw false; //TODO
     }
 }
 
-void SourceTreeLocalizer::WorkOnDirectory(const rtl::OString &rDirectory)
-{
-    //printf("Working on Directory %s\n",rDirectory.getStr());
-    std::size_t nIndex = 0;
-    rtl::OString sExtension( ExeTable[ nIndex ][ 0 ] );
-    rtl::OString sExecutable( ExeTable[ nIndex ][ 1 ] );
-    rtl::OString sParameter( ExeTable[ nIndex ][ 2 ] );
-    rtl::OString sCollectMode( ExeTable[ nIndex ][ 3 ] );
+}
 
-    while (!sExtension.equalsL(RTL_CONSTASCII_STRINGPARAM("NULL"))) {
-        WorkOnFileType(
-            rDirectory,
-            sExtension,
-            sExecutable,
-            sParameter,
-            sCollectMode
-        );
-
-        nIndex++;
-
-        sExtension = ExeTable[ nIndex ][ 0 ];
-        sExecutable = ExeTable[ nIndex ][ 1 ];
-        sParameter = ExeTable[ nIndex ][ 2 ];
-        sCollectMode = ExeTable[ nIndex ][ 3 ];
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+    if (argc != 3) {
+        std::cerr
+            << ("localize (c)2001 by Sun Microsystems\n\n"
+                "As part of the L10N framework, localize extracts en-US\n"
+                "strings for translation out of the toplevel modules defined\n"
+                "in projects array in l10ntools/source/localize.cxx.\n\n"
+                "Syntax: localize <source-root> <outfile>\n");
+        std::exit(EXIT_FAILURE);
     }
-}
-
-void SourceTreeLocalizer::OnExecuteDirectory(const rtl::OUString &aDirectory)
-{
-    if ( nMode != LOCALIZE_NONE )
-    {
-        rtl::OString rDirectory(rtl::OUStringToOString(aDirectory, RTL_TEXTENCODING_UTF8));
-        WorkOnDirectory( rDirectory );
+    global::output.open(argv[2], std::ios_base::out | std::ios_base::trunc);
+    if (!global::output.is_open()) {
+        std::cerr << "Error: Cannot append to " << argv[2] << '\n';
+        std::exit(EXIT_FAILURE);
     }
-}
-
-sal_Bool SourceTreeLocalizer::Extract(const rtl::OString &rDestinationFile)
-{
-    nMode = LOCALIZE_EXTRACT;
-
-    aSDF.open(
-        rDestinationFile.getStr(), std::ios_base::out | std::ios_base::app);
-
-    sal_Bool bReturn = aSDF.is_open();
-    if ( bReturn )
-    {
-        bReturn = StartExecute();
+    try {
+        handleProjects(argv[1]);
+    } catch (bool) { //TODO
+        return EXIT_FAILURE;
     }
-    else
-    {
-        printf("ERROR: Can't create file %s\n", rDestinationFile.getStr());
-    }
-    nMode = LOCALIZE_NONE;
-    aSDF.close();
-    return bReturn;
-}
-
-}
-using namespace transex3;
-
-/*****************************************************************************/
-void Help()
-/*****************************************************************************/
-{
-    fprintf( stdout,
-        "localize (c)2001 by Sun Microsystems\n"
-        "====================================\n" );
-    fprintf( stdout,
-        "As part of the L10N framework, localize extracts en-US strings for\n"
-        "translation out of the toplevel modules defined in ModuleList array in\n"
-        "l10ntools/source/localize.cxx.\n\n"
-        "Syntax: localize -f FileName \n"
-        "Parameter:\n"
-        "\tFileName: Output file\n"
-    );
-}
-
-/*****************************************************************************/
-int Error()
-/*****************************************************************************/
-{
-    Help();
-    return 1;
-}
-
-/*****************************************************************************/
-#if defined(UNX)
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char *argv[] )
-#endif
-/*****************************************************************************/
-{
-    rtl::OUString sTempBase(RTL_CONSTASCII_USTRINGPARAM("loc"));
-    DirEntry::SetTempNameBase( sTempBase );
-
-    bool bSkipLinks = false;
-
-    rtl::OString sFileName;
-
-    rtl::OString sLanguages(RTL_CONSTASCII_STRINGPARAM("en-US"));
-
-    rtl::OString sSwitch(rtl::OString(argv[1]).toAsciiUpperCase());
-
-    if ( ( argc == 3 ) && sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-F")) )
-        sFileName = rtl::OString( argv[ 2 ] );
-    else
-        return Error();
-
-    DirEntry aEntry(rtl::OStringToOUString(sFileName, RTL_TEXTENCODING_ASCII_US));
-    aEntry.ToAbs();
-    rtl::OUString sFullEntry(aEntry.GetFull());
-    rtl::OString sFileABS(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));
-    sFileName = sFileABS;
-
-    string pwd;
-    Export::getCurrentDir( pwd );
-    cout << "Localizing directory " << pwd << "\n";
-    SourceTreeLocalizer aIter( rtl::OString( pwd.c_str() ) , bSkipLinks );
-    aIter.SetLanguageRestriction( sLanguages );
-    aIter.Extract( sFileName );
-    printf("\n%d files found!\n",aIter.GetFileCnt());
-    return 0;
+    global::output.close();
+    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
