@@ -31,6 +31,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
 
+#include "test/testdllapi.hxx"
+
 using namespace com::sun::star;
 
 #include <vector>
@@ -39,7 +41,7 @@ using namespace com::sun::star;
 
 namespace apitest {
 
-class XDataPilotTable2
+class OOO_DLLPUBLIC_TEST XDataPilotTable2
 {
 public:
     void testGetPositionData();

@@ -28,6 +28,7 @@
 
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xdatapilottable.hxx>
+#include <test/sheet/xdatapilottable2.hxx>
 #include <test/sheet/xdatapilotdescriptor.hxx>
 #include <test/container/xnamed.hxx>
 
@@ -39,10 +40,10 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 12
+#define NUMBER_OF_TESTS 13
 
 class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
-                                apitest::XNamed
+                                apitest::XNamed, apitest::XDataPilotTable2
 {
 public:
     ScDataPilotTableObj();
@@ -50,6 +51,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
+    virtual uno::Reference< uno::XInterface > initDP2();
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
     CPPUNIT_TEST(testRefresh);
@@ -65,6 +67,7 @@ public:
     CPPUNIT_TEST(testGetDataFields);
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
+    CPPUNIT_TEST(testGetDrillDownData);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -106,6 +109,36 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
     CPPUNIT_ASSERT(xDPT.is());
 
     uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable"))),UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xDPTable.is());
+    return xDPTable;
+}
+
+uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
+{
+    rtl::OUString aFileURL;
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods")), aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    // set variables from xdatapilottable.[ch]xx
+    xCellForChange = xSheet->getCellByPosition( 1, 5 );
+    xCellForCheck = xSheet->getCellByPosition( 7, 11 );
+    CPPUNIT_ASSERT(xCellForCheck.is());
+    CPPUNIT_ASSERT(xCellForChange.is());
+
+    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
+    uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDPTS.is());
+    uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
+    CPPUNIT_ASSERT(xDPT.is());
+
+    uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable2"))),UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;
