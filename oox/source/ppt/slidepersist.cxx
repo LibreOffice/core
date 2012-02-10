@@ -71,8 +71,8 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
         maTitleTextStylePtr->apply( *pDefaultTextStyle.get() );
         maBodyTextStylePtr->apply( *pDefaultTextStyle.get() );
         maNotesTextStylePtr->apply( *pDefaultTextStyle.get() );
-    */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
+    */
     }
 #if OSL_DEBUG_LEVEL > 0
     mxDebugPage = mxPage;
