@@ -2031,10 +2031,16 @@ XMLParaContext::~XMLParaContext()
     xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
 
     // create a cursor that select the whole last paragraph
-    Reference < XTextCursor > xAttrCursor(
-        xTxtImport->GetText()->createTextCursorByRange( xStart ));
-    if( !xAttrCursor.is() )
-        return; // Robust (defect file)
+    Reference < XTextCursor > xAttrCursor;
+    try {
+        xAttrCursor = xTxtImport->GetText()->createTextCursorByRange( xStart );
+        if( !xAttrCursor.is() )
+            return; // Robust (defect file)
+    } catch (uno::Exception &) {
+        // createTextCursorByRange() likes to throw runtime exception, even
+        // though it just means 'we were unable to create the cursor'
+        return;
+    }
     xAttrCursor->gotoRange( xEnd, sal_True );
 
     // xml:id for RDF metadata
