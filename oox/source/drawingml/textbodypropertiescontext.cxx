@@ -119,6 +119,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
         bool bRtl = aAttribs.getBool( XML_rtl, false );
         sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
         if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
+            // #160799# fake different vertical text modes by top-bottom writing mode
             mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
                 <<= WritingMode_TB_RL;
             // workaround for TB_LR as using WritingMode2 doesn't work
@@ -154,6 +155,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
         }
         else if( mrTextBodyProp.moVert.get( XML_horz ) == XML_horz )
             mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
+        else if( eVA == drawing::TextVerticalAdjust_CENTER && xAttributes->hasAttribute( XML_vert ) )
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<= TextHorizontalAdjust_CENTER;
     }
 }
 

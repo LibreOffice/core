@@ -42,10 +42,6 @@ TextBodyProperties::TextBodyProperties()
 void TextBodyProperties::pushToPropMap( PropertyMap& rPropMap ) const
 {
     rPropMap.insert( maPropertyMap.begin(), maPropertyMap.end() );
-
-    // #160799# fake different vertical text modes by top-bottom writing mode
-    if( moVert.get( XML_horz ) != XML_horz )
-        rPropMap[ PROP_TextWritingMode ] <<= ::com::sun::star::text::WritingMode_TB_RL;
 }
 
 // ============================================================================
