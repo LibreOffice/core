@@ -466,7 +466,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(aItem.GetString()/*rSharedString, nMatchStrId*/, aItem.GetValue(), aItem.IsValue()) );
+                        new ScDPCacheTable::SingleFilter(aItem.GetString(), aItem.GetValue(), aItem.IsValue()));
                 }
             }
         }

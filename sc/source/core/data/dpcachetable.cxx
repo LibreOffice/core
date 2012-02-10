@@ -92,7 +92,7 @@ ScDPCacheTable::FilterItem::FilterItem() :
 
 bool ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
 {
-    if (rCellData.GetString().equals(maString) &&
+    if (!rCellData.GetString().equals(maString) &&
         (!rCellData.IsValue()|| rCellData.GetValue()!=  mfValue))
             return false;
     return true;
