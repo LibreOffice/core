@@ -1452,15 +1452,6 @@ sdr::overlay::OverlayRollingRectangleStriped::setShowBounds(bool)
 sdr::overlay::OverlayTriangle::setSecondPosition(basegfx::B2DPoint const&)
 sdr::overlay::OverlayTriangle::setThirdPosition(basegfx::B2DPoint const&)
 sdr::table::Cell::GetStyleSheetPool() const
-sdr::table::SdrTableObj::DeleteColumns(int, int)
-sdr::table::SdrTableObj::DeleteRows(int, int)
-sdr::table::SdrTableObj::FitFrameToTextSize()
-sdr::table::SdrTableObj::GetCellTextEditOutliner(sdr::table::CellPos const&) const
-sdr::table::SdrTableObj::InsertColumns(int, int)
-sdr::table::SdrTableObj::InsertRows(int, int)
-sdr::table::SdrTableObj::getColumnCount() const
-sdr::table::SdrTableObj::getRowCount() const
-sdr::table::SdrTableObjImpl::GetCellItem(sdr::table::CellPos const&, unsigned short) const
 sdr::table::SvxTableController::DeleteTable()
 sdr::table::SvxTableController::getSelectionCursor()
 sfx2::TaskPaneWrapper::GetChildWindowId()

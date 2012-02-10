@@ -123,15 +123,12 @@ private:
     SVX_DLLPRIVATE const CellPos& getSelectionStart();
     SVX_DLLPRIVATE void setSelectionStart( const CellPos& rPos );
     SVX_DLLPRIVATE const CellPos& getSelectionEnd();
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellCursor > getSelectionCursor();
     SVX_DLLPRIVATE void checkCell( CellPos& rPos );
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
     SVX_DLLPRIVATE void EditCell( const CellPos& rPos, ::Window* pWindow, const ::com::sun::star::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
     SVX_DLLPRIVATE bool StopTextEdit();
-
-    SVX_DLLPRIVATE void DeleteTable();
 
     SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, Window* pWindow );
     SVX_DLLPRIVATE bool executeAction( sal_uInt16 nAction, bool bSelect, Window* pWindow );

@@ -1573,27 +1573,6 @@ const CellPos& SvxTableController::getSelectionEnd()
 
 // --------------------------------------------------------------------
 
-Reference< XCellCursor > SvxTableController::getSelectionCursor()
-{
-    Reference< XCellCursor > xCursor;
-
-    if( mxTable.is() )
-    {
-        if( hasSelectedCells() )
-        {
-            CellPos aStart, aEnd;
-            getSelectedCells( aStart, aEnd );
-            xCursor = mxTable->createCursorByRange( mxTable->getCellRangeByPosition( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow ) );
-        }
-        else
-        {
-            xCursor = mxTable->createCursor();
-        }
-    }
-
-    return xCursor;
-}
-
 void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
 {
     if( mxTable.is() ) try
@@ -1766,13 +1745,6 @@ bool SvxTableController::StopTextEdit()
     {
         return false;
     }
-}
-
-// --------------------------------------------------------------------
-
-void SvxTableController::DeleteTable()
-{
-    //
 }
 
 // --------------------------------------------------------------------

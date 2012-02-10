@@ -156,18 +156,11 @@ public:
 
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
-
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
-
     void getCellBounds( const sdr::table::CellPos& rPos, ::Rectangle& rCellRect );
 
     const SfxItemSet& GetActiveCellItemSet() const;
-
-     void InsertRows( sal_Int32 nIndex, sal_Int32 nCount = 1 );
-     void InsertColumns( sal_Int32 nIndex, sal_Int32 nCount = 1 );
-     void DeleteRows( sal_Int32 nIndex, sal_Int32 nCount = 1 );
-     void DeleteColumns( sal_Int32 nIndex, sal_Int32 nCount = 1 );
 
      void setTableStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAutoFormatStyle );
      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& getTableStyle() const;
@@ -195,10 +188,6 @@ public:
 
     /** returns true only if we are in edit mode and the user actually changed anything */
     virtual bool IsRealyEdited() const;
-
-    void FitFrameToTextSize();
-
-    SdrOutliner* GetCellTextEditOutliner( const sdr::table::CellPos& rPos ) const;
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
@@ -285,6 +274,7 @@ public:
     com::sun::star::text::WritingMode GetWritingMode() const;
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
