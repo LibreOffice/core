@@ -431,10 +431,11 @@ findunusedcode:
 		$(SRCDIR)/solenv/callcatcher/bin/dmake
 	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile
 	@grep ::.*\( unusedcode.all \
-              | grep -v ^cppu:: \
+              | grep -v ^Atom \
               | grep -v ^boost:: \
               | grep -v ^CIcc \
-              | grep -v ^Atom \
+              | grep -v ^cppu:: \
+              | grep -v ^salhelper:: \
               > unusedcode.easy
 
 check: subsequentcheck
