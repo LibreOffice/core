@@ -556,9 +556,60 @@ public:
     }
 };
 
+#ifdef WIN32
+PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
+{
+    PDFGrammar<const char*> aGrammar( pBuffer );
+
+    try
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        boost::spirit::parse_info<const char*> aInfo =
+        #endif
+            boost::spirit::parse( pBuffer,
+                                  pBuffer+nLen,
+                                  aGrammar,
+                                  boost::spirit::space_p );
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "parseinfo: stop = %p (buff=%p, offset = %d), hit = %s, full = %s, length = %d\n",
+                 aInfo.stop, pBuffer, aInfo.stop - pBuffer,
+                 aInfo.hit ? "true" : "false",
+                 aInfo.full ? "true" : "false",
+                 (int)aInfo.length );
+        #endif
+    }
+    catch( const parser_error<const char*, const char*>& rError )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "parse error: %s at buffer pos %u\nobject stack:\n",
+                 rError.descriptor, rError.where - pBuffer );
+        unsigned int nElem = aGrammar.m_aObjectStack.size();
+        for( unsigned int i = 0; i < nElem; i++ )
+        {
+            fprintf( stderr, "   %s\n", typeid( *(aGrammar.m_aObjectStack[i]) ).name() );
+        }
+        #endif
+    }
+
+    PDFEntry* pRet = NULL;
+    unsigned int nEntries = aGrammar.m_aObjectStack.size();
+    if( nEntries == 1 )
+    {
+        pRet = aGrammar.m_aObjectStack.back();
+        aGrammar.m_aObjectStack.pop_back();
+    }
+    #if OSL_DEBUG_LEVEL > 1
+    else if( nEntries > 1 )
+        fprintf( stderr, "error got %u stack objects in parse\n", nEntries );
+    #endif
+
+    return pRet;
+}
+#endif
+
 PDFEntry* PDFReader::read( const char* pFileName )
 {
-    #ifdef WIN32
+#ifdef WIN32
     /* #i106583#
        since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
        C++ stdlib istream_iterator does not allow "-" apparently
@@ -584,7 +635,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
         fclose( fp );
     }
     return pRet;
-    #else
+#else
     file_iterator<> file_start( pFileName );
     if( ! file_start )
         return NULL;
@@ -644,7 +695,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
     }
     #endif
     return pRet;
-    #endif // WIN32
+#endif // WIN32
 }
 
 #if defined __SUNPRO_CC
