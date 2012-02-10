@@ -640,12 +640,6 @@ XMLPropertyBackpatcher<rtl::OUString>::XMLPropertyBackpatcher(rtl::OUString cons
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*, char const*, unsigned char, short)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(rtl::OUString const&, rtl::OUString const&, unsigned char, short)
-XMLSignatureHelper::CreateAndWriteSignature(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
-XMLSignatureHelper::GetSecurityEnvironmentByIndex(int)
-XMLSignatureHelper::GetSecurityEnvironmentNumber()
-XMLSignatureHelper::GetUriBinding() const
-XMLSignatureHelper::SetUriBinding(com::sun::star::uno::Reference<com::sun::star::xml::crypto::XUriBinding>&)
-XMLSignatureHelper::SetX509Certificate(int, int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 XMLTextFieldExport::ProcessDate(xmloff::token::XMLTokenEnum, com::sun::star::util::Date const&, unsigned short)
 XMLTextImportHelper::GetRangeFor(rtl::OUString&)
 XMLTextImportHelper::HasDrawNameAttribute(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, SvXMLNamespaceMap&)

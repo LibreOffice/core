@@ -91,16 +91,6 @@ void XMLSignatureHelper::ImplCreateSEInitializer()
         xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
 }
 
-void XMLSignatureHelper::SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding )
-{
-    mxUriBinding = rxUriBinding;
-}
-
-com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > XMLSignatureHelper::GetUriBinding() const
-{
-    return mxUriBinding;
-}
-
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
     ::rtl::OUString sODFVersion)
@@ -144,21 +134,6 @@ void XMLSignatureHelper::SetX509Certificate(
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
-        ouX509IssuerName,
-        ouX509SerialNumber,
-        ouX509Cert);
-}
-
-void XMLSignatureHelper::SetX509Certificate(
-        sal_Int32 nSecurityId,
-        sal_Int32 nSecurityEnvironmentIndex,
-        const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber,
-        const rtl::OUString& ouX509Cert)
-{
-    mpXSecController->setX509Certificate(
-        nSecurityId,
-        nSecurityEnvironmentIndex,
         ouX509IssuerName,
         ouX509SerialNumber,
         ouX509Cert);
@@ -272,18 +247,6 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     return !mbError;
 }
 
-bool XMLSignatureHelper::CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
-{
-    uno::Reference<xml::sax::XDocumentHandler> xDocHandler
-        = CreateDocumentHandlerWithHeader(xOutputStream);
-
-    bool rc = CreateAndWriteSignature( xDocHandler );
-
-    CloseDocumentHandler(xDocHandler);
-
-    return rc;
-}
-
 bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream )
 {
     mbError = false;
@@ -386,16 +349,6 @@ SignatureInformations XMLSignatureHelper::GetSignatureInformations() const
 uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironment()
 {
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
-}
-
-uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironmentByIndex(sal_Int32 nId)
-{
-    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentByIndex(nId)): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
-}
-
-sal_Int32 XMLSignatureHelper::GetSecurityEnvironmentNumber()
-{
-    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentNumber()): 0);
 }
 
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
