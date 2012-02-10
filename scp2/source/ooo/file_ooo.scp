@@ -223,7 +223,7 @@ File gid_File_Bin_Senddoc
   #endif
 End
 
-#if defined(UNX) && !defined(QUARTZ)
+#if defined(UNX) && !defined(QUARTZ) && !defined(HEADLESS)
 
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;

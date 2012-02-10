@@ -312,6 +312,8 @@ MY_FILES_main += \
 # ?
 .ELIF "$(GUIBASE)" == "android"
 # ?
+.ELIF "$(GUIBASE)" == "headless"
+# ?
 .ELSE
 ERROR : unknown-GUIBASE
 .END

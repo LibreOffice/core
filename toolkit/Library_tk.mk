@@ -141,10 +141,12 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
 
+ifneq ($(GUIBASE),headless)
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -522,7 +522,7 @@ File gid_Brand_File_Bin_Soffice
 #endif
 End
 
-#if defined(UNX) && !defined(QUARTZ)
+#if defined(UNX) && !defined(QUARTZ) && !defined(HEADLESS)
 File gid_Brand_File_Bin_Spadmin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

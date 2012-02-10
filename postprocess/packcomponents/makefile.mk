@@ -199,7 +199,7 @@ my_components += \
 my_components += pythonloader
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
 my_components += component/desktop/unx/splash/splash
 .ENDIF
 
@@ -324,7 +324,12 @@ my_components += \
 .END
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
+.IF "$(GUIBASE)" == "headless"
+my_components += \
+    component/vcl/vcl.headless
+.END
+
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx
@@ -354,7 +359,7 @@ my_components += mozbootstrap
 my_components += component/fpicker/source/unx/kde4/fps_kde4
 .END
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+.IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
 my_components += cmdmail
 .END
 

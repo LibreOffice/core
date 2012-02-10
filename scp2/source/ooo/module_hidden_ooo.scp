@@ -689,6 +689,7 @@ Module gid_Module_Root_Files_7
              gid_File_Mozilla_Runtime);
 End
 
+#ifndef HEADLESS
 Module gid_Module_Root_Files_Images
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
@@ -719,6 +720,7 @@ Module gid_Module_Root_Files_Images
 #endif
 	);
 End
+#endif
 
 #ifndef WITHOUT_FONTS
 Module gid_Module_Root_Fonts_OOo_Hidden
