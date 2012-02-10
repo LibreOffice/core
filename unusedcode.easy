@@ -641,9 +641,6 @@ XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*, char const*, unsigned char, short)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(rtl::OUString const&, rtl::OUString const&, unsigned char, short)
 XMLTextFieldExport::ProcessDate(xmloff::token::XMLTokenEnum, com::sun::star::util::Date const&, unsigned short)
-XMLTextImportHelper::GetRangeFor(rtl::OUString&)
-XMLTextImportHelper::HasDrawNameAttribute(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, SvXMLNamespaceMap&)
-XMLTextImportHelper::getCurrentFieldName()
 XMLTextListAutoStylePool::HasName(rtl::OUString const&) const
 XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
 XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)

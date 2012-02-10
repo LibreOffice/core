@@ -2226,28 +2226,6 @@ const XMLFontStylesContext *XMLTextImportHelper::GetFontDecls() const
     return (XMLFontStylesContext *)&m_pImpl->m_xFontDecls;
 }
 
-sal_Bool XMLTextImportHelper::HasDrawNameAttribute(
-        const Reference< XAttributeList > & xAttrList,
-        SvXMLNamespaceMap& rNamespaceMap )
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            rNamespaceMap.GetKeyByAttrName( rAttrName, &aLocalName );
-        if( XML_NAMESPACE_DRAW == nPrefix &&
-            IsXMLToken( aLocalName, XML_NAME ) )
-        {
-            return !xAttrList->getValueByIndex(i).isEmpty();
-        }
-    }
-
-    return sal_False;
-}
-
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -2646,12 +2624,6 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     } else return ::rtl::OUString(); // return the empty string on error...
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > XMLTextImportHelper::GetRangeFor(::rtl::OUString &sName)
-{
-    return m_pImpl->m_BookmarkStartRanges[sName].get<0>();
-}
-
-
 void XMLTextImportHelper::pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type )
 {
     m_pImpl->m_FieldStack.push(Impl::field_stack_item_t(
@@ -2672,14 +2644,6 @@ void XMLTextImportHelper::addFieldParam( ::rtl::OUString name, ::rtl::OUString v
         Impl::field_stack_item_t & FieldStackItem(m_pImpl->m_FieldStack.top());
         FieldStackItem.second.push_back(Impl::field_param_t( name, value ));
     }
-}
-::rtl::OUString XMLTextImportHelper::getCurrentFieldName()
-{
-    DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
-        "stack is empty: not good! Do a pushFieldCtx before...");
-    if (!m_pImpl->m_FieldStack.empty()) {
-        return m_pImpl->m_FieldStack.top().first.first;
-    } else  return ::rtl::OUString();
 }
 
 ::rtl::OUString XMLTextImportHelper::getCurrentFieldType()
