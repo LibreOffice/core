@@ -705,14 +705,6 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Generates a cell address string in Calc's absolute $Sheet.$A$1 notation
-        from the passed cell address.
-
-        @param rAddress  The cell address to be converted to a string.
-     */
-    ::rtl::OUString     generateApiAddressString(
-                            const ::com::sun::star::table::CellAddress& rAddress ) const;
-
     /** Generates a cell range string in Calc's absolute $Sheet.$A$1:$A$
         notation from the passed cell range address.
 
@@ -720,13 +712,6 @@ public:
      */
     ::rtl::OUString     generateApiRangeString(
                             const ::com::sun::star::table::CellRangeAddress& rRange ) const;
-
-    /** Generates a cell range list string in Calc's absolute $Sheet.$A$1:$A$1
-        notation from the passed cell range addresses.
-
-        @param rRanges  The list of cell ranges to be converted to a string.
-     */
-    ::rtl::OUString     generateApiRangeListString( const ApiCellRangeList& rRanges ) const;
 
     /** Generates a string in Calc formula notation from the passed string.
 
@@ -759,29 +744,6 @@ public:
      */
     ::com::sun::star::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
-
-    /** Tries to extract a single cell address from a formula token sequence.
-
-        @param orAddress  (output parameter) If the token sequence is valid,
-            this parameter will contain the extracted cell address. If the
-            token sequence contains unexpected tokens, nothing meaningful is
-            inserted, and the function returns false.
-
-        @param rTokens  The token sequence to be parsed. Should contain exactly
-            one cell address token. The token sequence may contain whitespace
-            tokens.
-
-        @param bAllowRelative  True = it is allowed that rTokens contains
-            relative references (based on cell A1 of the current sheet).
-            False = only real absolute references will be accepted.
-
-        @return  True, if the token sequence contains a valid cell address
-            which has been extracted to orAddress, false otherwise.
-     */
-    bool                extractCellAddress(
-                            ::com::sun::star::table::CellAddress& orAddress,
-                            const ApiTokenSequence& rTokens,
-                            bool bAllowRelative ) const;
 
     /** Tries to extract a cell range address from a formula token sequence.
 

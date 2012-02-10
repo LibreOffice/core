@@ -1494,15 +1494,6 @@ OUString FormulaProcessorBase::generateRangeList2dString( const ApiCellRangeList
 
 // ----------------------------------------------------------------------------
 
-OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAddress ) const
-{
-    OUString aCellName;
-    PropertySet aCellProp( getCellFromDoc( rAddress ) );
-    aCellProp.getProperty( aCellName, PROP_AbsoluteName );
-    OSL_ENSURE( !aCellName.isEmpty(), "FormulaProcessorBase::generateApiAddressString - cannot create cell address string" );
-    return aCellName;
-}
-
 OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& rRange ) const
 {
     OUString aRangeName;
@@ -1510,22 +1501,6 @@ OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& r
     aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
     OSL_ENSURE( !aRangeName.isEmpty(), "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
     return aRangeName;
-}
-
-OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeList& rRanges ) const
-{
-    OUStringBuffer aBuffer;
-    for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-    {
-        OUString aRangeName = generateApiRangeString( *aIt );
-        if( !aRangeName.isEmpty() )
-        {
-            if( aBuffer.getLength() > 0 )
-                aBuffer.append( API_TOKEN_SEP );
-            aBuffer.append( aRangeName );
-        }
-    }
-    return aBuffer.makeStringAndClear();
 }
 
 OUString FormulaProcessorBase::generateApiString( const OUString& rString )
@@ -1576,20 +1551,6 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
             return aRefAny;
     }
     return Any();
-}
-
-bool FormulaProcessorBase::extractCellAddress( CellAddress& orAddress,
-        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
-{
-    CellRangeAddress aRange;
-    if( extractCellRange( aRange, rTokens, bAllowRelative ) && (aRange.StartColumn == aRange.EndColumn) && (aRange.StartRow == aRange.EndRow) )
-    {
-        orAddress.Sheet = aRange.Sheet;
-        orAddress.Column = aRange.StartColumn;
-        orAddress.Row = aRange.StartRow;
-        return true;
-    }
-    return false;
 }
 
 bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,

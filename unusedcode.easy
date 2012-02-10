@@ -1366,11 +1366,6 @@ oox::xls::Dxf::importProtection(oox::AttributeList const&)
 oox::xls::ExternalLinkBuffer::importExternalName(oox::xls::BiffInputStream&)
 oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) const
 oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
-oox::xls::FormulaParserImpl::pushParenthesesOperand()
-oox::xls::FormulaParserImpl::removeLastOperands(unsigned long)
-oox::xls::FormulaProcessorBase::extractCellAddress(com::sun::star::table::CellAddress&, com::sun::star::uno::Sequence<com::sun::star::sheet::FormulaToken> const&, bool) const
-oox::xls::FormulaProcessorBase::generateApiAddressString(com::sun::star::table::CellAddress const&) const
-oox::xls::FormulaProcessorBase::generateApiRangeListString(oox::xls::ApiCellRangeList const&) const
 oox::xls::FunctionParamInfoIterator::getParamInfo() const
 oox::xls::FunctionProvider::getFuncInfoFromOdfFuncName(rtl::OUString const&) const
 oox::xls::ShapeAnchor::getToCell() const

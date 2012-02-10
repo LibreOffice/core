@@ -491,7 +491,6 @@ protected:
 
     ApiToken&           getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex );
     void                removeOperand( size_t nOpCountFromEnd, size_t nOpIndex );
-    void                removeLastOperands( size_t nOpCountFromEnd );
 
     bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
     bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
@@ -519,7 +518,6 @@ protected:
     bool                pushErrorOperand( double fEncodedError );
     bool                pushBiffBoolOperand( sal_uInt8 nValue );
     bool                pushBiffErrorOperand( sal_uInt8 nErrorCode );
-    bool                pushParenthesesOperand();
     bool                pushReferenceOperand( const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
     bool                pushReferenceOperand( const BinComplexRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
     template< typename Type >
@@ -788,12 +786,6 @@ void FormulaParserImpl::removeOperand( size_t nOpCountFromEnd, size_t nOpIndex )
     maOperandSizeStack.erase( aSizeIt );
 }
 
-void FormulaParserImpl::removeLastOperands( size_t nOpCountFromEnd )
-{
-    for( size_t nOpIndex = 0; nOpIndex < nOpCountFromEnd; ++nOpIndex )
-        removeOperand( 1, 0 );
-}
-
 bool FormulaParserImpl::pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
 {
     size_t nSpacesSize = appendWhiteSpaceTokens( pSpaces );
@@ -962,11 +954,6 @@ bool FormulaParserImpl::pushBiffBoolOperand( sal_uInt8 nValue )
 bool FormulaParserImpl::pushBiffErrorOperand( sal_uInt8 nErrorCode )
 {
     return pushErrorOperand( BiffHelper::calcDoubleFromError( nErrorCode ) );
-}
-
-bool FormulaParserImpl::pushParenthesesOperand()
-{
-    return pushParenthesesOperandToken( &maOpeningSpaces, &maClosingSpaces ) && resetSpaces();
 }
 
 bool FormulaParserImpl::pushReferenceOperand( const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset )
