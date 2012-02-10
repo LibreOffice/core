@@ -349,7 +349,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
                                 if( String(aName).Equals(String(aLinkTabName), nIndex, nLinkTabNameLength) &&
-                                    (aName.getStr()[nIndex - 1] == '#') && // before the table name should be the # char
+                                    (aName[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
                                     aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );
@@ -1947,9 +1947,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             rtl::OUString aUniString = aString;//remove that later
             if (!bString && cStrDelim != 0 && !aUniString.isEmpty())
             {
-                sal_Unicode c = aUniString.getStr()[0];
+                sal_Unicode c = aUniString[0];
                 bString = (c == cStrDelim || c == ' ' ||
-                        aUniString.getStr()[aUniString.getLength()-1] == ' ' ||
+                        aUniString[aUniString.getLength()-1] == ' ' ||
                         aUniString.indexOf(cStrDelim) >= 0);
                 if (!bString && cDelim != 0)
                     bString = (aUniString.indexOf(cDelim) >= 0);
