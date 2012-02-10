@@ -1674,8 +1674,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
     CharSet eCharSet      = rAsciiOpt.eCharSet;
-    sal_Bool bFixedWidth      = rAsciiOpt.bFixedWidth;
-    sal_Bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
+    bool bFixedWidth      = rAsciiOpt.bFixedWidth;
+    bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
 
     CharSet eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
@@ -1684,7 +1684,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     UniString aStrDelimDecoded;     // only used if context encoding
     ByteString aDelimEncoded;
     UniString aDelimDecoded;
-    sal_Bool bContextOrNotAsciiEncoding;
+    bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rStream.StartWritingUnicodeText();
@@ -1726,8 +1726,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     const ScViewOptions& rOpt = (pViewSh)
                                 ? pViewSh->GetViewData()->GetOptions()
                                 : aDocument.GetViewOptions();
-    sal_Bool bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
-    sal_Bool bTabProtect = aDocument.IsTabProtected( nTab );
+    bool bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
+    bool bTabProtect = aDocument.IsTabProtected( nTab );
 
     SCCOL nCol;
     SCROW nRow;
@@ -1742,10 +1742,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     ScBaseCell* pCell;
     while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
     {
-        sal_Bool bProgress = false;     // only upon line change
+        bool bProgress = false;     // only upon line change
         if ( nNextRow < nRow )
         {   // empty rows or/and empty columns up to end of row
-            bProgress = sal_True;
+            bProgress = true;
             for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
             {   // remaining columns of last row
                 if ( bFixedWidth )
@@ -1791,7 +1791,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         }
         if ( nCol == nEndCol )
         {
-            bProgress = sal_True;
+            bProgress = true;
             nNextCol = nStartCol;
             nNextRow = nRow + 1;
         }
@@ -1809,7 +1809,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                       pProtAttr->GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
-        sal_Bool bString;
+        bool bString;
         switch ( eType )
         {
             case CELLTYPE_NOTE:
@@ -1823,12 +1823,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     if ( bShowFormulas )
                     {
                         ((ScFormulaCell*)pCell)->GetFormula( aString );
-                        bString = sal_True;
+                        bString = true;
                     }
                     else if ( ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() ) != 0 )
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
-                        bString = sal_True;
+                        bString = true;
                     }
                     else if ( ((ScFormulaCell*)pCell)->IsValue() )
                     {
@@ -1857,7 +1857,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                             ((ScFormulaCell*)pCell)->GetString( aString );
-                        bString = sal_True;
+                        bString = true;
                     }
                 }
                 break;
@@ -1871,7 +1871,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 }
                 else
                     ((ScStringCell*)pCell)->GetString( aString );
-                bString = sal_True;
+                bString = true;
                 break;
             case CELLTYPE_EDIT :
                 {
@@ -1880,7 +1880,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     EditEngine& rEngine = aDocument.GetEditEngine();
                     rEngine.SetText( *pObj);
                     aString = rEngine.GetText();  // including LF
-                    bString = sal_True;
+                    bString = true;
                 }
                 break;
             case CELLTYPE_VALUE :
