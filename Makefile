@@ -205,7 +205,6 @@ postgresql\
 postprocess\
 python\
 pyuno\
-pyuno-py3\
 rdbmaker\
 readlicense_oo\
 redland\
