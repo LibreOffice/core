@@ -30,17 +30,23 @@
 
 #include <cstddef>
 #include <fstream>
+#include <iterator>
 #include <string>
 
-#include <tools/fsys.hxx>
-#include <comphelper/string.hxx>
-
+#include "common.hxx"
+#include "helper.hxx"
 #include "lngmerge.hxx"
-#include <iostream>
 
-using namespace std;
-using comphelper::string::getToken;
-using comphelper::string::getTokenCount;
+namespace {
+
+rtl::OString getBracketedContent(rtl::OString text) {
+    sal_Int32 n = 0;
+    rtl::OString t(text.getToken(1, '[', n));
+    n = 0;
+    return t.getToken(0, ']', n);
+}
+
+}
 
 //
 // class LngParser
@@ -54,34 +60,28 @@ LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
     , bULF( bULFFormat )
 {
     pLines = new LngLineList();
-    DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
-    if ( aEntry.Exists())
+    std::ifstream aStream(sSource.getStr());
+    if (aStream.is_open())
     {
-        std::ifstream aStream(sSource.getStr());
-        if (aStream.is_open())
+        bool bFirstLine = true;
+        while (!aStream.eof())
         {
-            bool bFirstLine = true;
-            while (!aStream.eof())
+            std::string s;
+            std::getline(aStream, s);
+            rtl::OString sLine(s.data(), s.length());
+
+            if( bFirstLine )
             {
-                std::string s;
-                std::getline(aStream, s);
-                rtl::OString sLine(s.data(), s.length());
-
-                if( bFirstLine )
-                {
-                    // Always remove UTF8 BOM from the first line
-                    Export::RemoveUTF8ByteOrderMarker( sLine );
-                    bFirstLine = false;
-                }
-
-                pLines->push_back( new rtl::OString(sLine) );
+                // Always remove UTF8 BOM from the first line
+                Export::RemoveUTF8ByteOrderMarker( sLine );
+                bFirstLine = false;
             }
+
+            pLines->push_back( new rtl::OString(sLine) );
         }
-        else
-            nError = LNG_COULD_NOT_OPEN;
     }
     else
-        nError = LNG_FILE_NOTFOUND;
+        nError = LNG_COULD_NOT_OPEN;
 }
 
 LngParser::~LngParser()
@@ -104,17 +104,8 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
         nError = SDF_COULD_NOT_OPEN;
     }
     nError = SDF_OK;
-    DirEntry aEntry(rtl::OStringToOUString(sSource, RTL_TEXTENCODING_ASCII_US));
-    aEntry.ToAbs();
-    rtl::OUString sFullEntry(aEntry.GetFull());
-    aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-    aEntry += DirEntry( rRoot );
-    rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
-        osl_getThreadTextEncoding()));
-    rtl::OString sActFileName(rtl::OUStringToOString(
-        sFullEntry.copy(sPrjEntry.getLength() + 1),
-        osl_getThreadTextEncoding()));
-    sActFileName = sActFileName.replace('/', '\\');
+    rtl::OString sActFileName(
+        common::pathnameToken(sSource.getStr(), rRoot.getStr()));
 
     size_t nPos  = 0;
     sal_Bool bStart = true;
@@ -171,13 +162,10 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
 
 bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 {
-    sLine_in = comphelper::string::stripStart(sLine_in, ' ');
-    sLine_in = comphelper::string::stripEnd(sLine_in, ' ');
+    sLine_in = helper::trimAscii(sLine_in);
     if ((sLine_in[0] == '[') && (sLine_in[sLine_in.getLength() - 1] == ']'))
     {
-        sGroup_out = getToken(getToken(sLine_in, 1, '['), 0, ']');
-        sGroup_out = comphelper::string::stripStart(sGroup_out, ' ');
-        sGroup_out = comphelper::string::stripEnd(sGroup_out, ' ');
+        sGroup_out = helper::trimAscii(getBracketedContent(sLine_in));
         return true;
     }
     return false;
@@ -186,12 +174,13 @@ bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 void LngParser::ReadLine(const rtl::OString &rLine_in,
         OStringHashMap &rText_inout)
 {
-   rtl::OString sLang = getToken(rLine_in, 0, '=');
-   sLang = comphelper::string::stripStart(sLang, ' ');
-   sLang = comphelper::string::stripEnd(sLang, ' ');
-   rtl::OString sText = getToken(getToken(rLine_in, 1, '\"'), 0, '\"');
-   if (!sLang.isEmpty())
-       rText_inout[ sLang ] = sText;
+    sal_Int32 n = 0;
+    rtl::OString sLang(helper::trimAscii(rLine_in.getToken(0, '=', n)));
+    if (!sLang.isEmpty()) {
+        n = 0;
+        rtl::OString sText(rLine_in.getToken(1, '"', n));
+        rText_inout[sLang] = sText;
+    }
 }
 
 sal_Bool LngParser::Merge(
@@ -220,14 +209,11 @@ sal_Bool LngParser::Merge(
     while ( nPos < pLines->size() && !bGroup )
     {
         rtl::OString sLine( *(*pLines)[ nPos ] );
-        sLine = comphelper::string::stripStart(sLine, ' ');
-        sLine = comphelper::string::stripEnd(sLine, ' ');
+        sLine = helper::trimAscii(sLine);
         if (( sLine[0] == '[' ) &&
             ( sLine[sLine.getLength() - 1] == ']' ))
         {
-            sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
-            sGroup = comphelper::string::stripStart(sGroup, ' ');
-            sGroup = comphelper::string::stripEnd(sGroup, ' ');
+            sGroup = helper::trimAscii(getBracketedContent(sLine));
             bGroup = sal_True;
         }
         nPos ++;
@@ -249,63 +235,65 @@ sal_Bool LngParser::Merge(
         while ( nPos < pLines->size() && !bGroup )
         {
             rtl::OString sLine( *(*pLines)[ nPos ] );
-            sLine = comphelper::string::stripStart(sLine, ' ');
-            sLine = comphelper::string::stripEnd(sLine, ' ');
+            sLine = helper::trimAscii(sLine);
             if (( sLine[0] == '[' ) &&
                 ( sLine[sLine.getLength() - 1] == ']' ))
             {
-                sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
-                sGroup = comphelper::string::stripStart(sGroup, ' ');
-                sGroup = comphelper::string::stripEnd(sGroup, ' ');
+                sGroup = helper::trimAscii(getBracketedContent(sLine));
                 bGroup = sal_True;
                 nPos ++;
                 sLanguagesDone = "";
             }
-            else if ( getTokenCount(sLine, '=') > 1 )
+            else
             {
-                rtl::OString sLang = getToken(sLine, 0, '=');
-                sLang = comphelper::string::stripStart(sLang, ' ');
-                sLang = comphelper::string::stripEnd(sLang, ' ');
-
-                rtl::OString sSearch( ";" );
-                sSearch += sLang;
-                sSearch += ";";
-
-                if (( sLanguagesDone.indexOf( sSearch ) != -1 )) {
-                    LngLineList::iterator it = pLines->begin();
-                    ::std::advance( it, nPos );
-                    pLines->erase( it );
-                }
-                if( bULF && pEntrys )
+                sal_Int32 n = 0;
+                rtl::OString sLang(sLine.getToken(0, '=', n));
+                if (n == -1)
                 {
-                    if( !sLang.isEmpty() )
-                    {
-                        rtl::OString sNewText;
-                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
-
-                        if ( !sNewText.isEmpty()) {
-                            rtl::OString *pLine = (*pLines)[ nPos ];
-
-                            rtl::OString sText1( sLang );
-                            sText1 += " = \"";
-                            sText1 += sNewText;
-                            sText1 += "\"";
-                            *pLine = sText1;
-                            Text[ sLang ] = sNewText;
-                        }
-                    }
-                    nLastLangPos = nPos;
-                    nPos ++;
-                    sLanguagesDone += sSearch;
+                    ++nPos;
                 }
-                else {
-                    nLastLangPos = nPos;
-                    nPos ++;
-                    sLanguagesDone += sSearch;
+                else
+                {
+                    sLang = helper::trimAscii(sLang);
+
+                    rtl::OString sSearch( ";" );
+                    sSearch += sLang;
+                    sSearch += ";";
+
+                    if (( sLanguagesDone.indexOf( sSearch ) != -1 )) {
+                        LngLineList::iterator it = pLines->begin();
+                        std::advance( it, nPos );
+                        pLines->erase( it );
+                    }
+                    if( bULF && pEntrys )
+                    {
+                        if( !sLang.isEmpty() )
+                        {
+                            rtl::OString sNewText;
+                            pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
+
+                            if ( !sNewText.isEmpty()) {
+                                rtl::OString *pLine = (*pLines)[ nPos ];
+
+                                rtl::OString sText1( sLang );
+                                sText1 += " = \"";
+                                sText1 += sNewText;
+                                sText1 += "\"";
+                                *pLine = sText1;
+                                Text[ sLang ] = sNewText;
+                            }
+                        }
+                        nLastLangPos = nPos;
+                        nPos ++;
+                        sLanguagesDone += sSearch;
+                    }
+                    else {
+                        nLastLangPos = nPos;
+                        nPos ++;
+                        sLanguagesDone += sSearch;
+                    }
                 }
             }
-            else
-                nPos++;
         }
         rtl::OString sCur;
         if ( nLastLangPos )
@@ -332,7 +320,7 @@ sal_Bool LngParser::Merge(
 
                         if ( nLastLangPos < pLines->size() ) {
                             LngLineList::iterator it = pLines->begin();
-                            ::std::advance( it, nLastLangPos );
+                            std::advance( it, nLastLangPos );
                             pLines->insert( it, new rtl::OString(sLine) );
                         } else {
                             pLines->push_back( new rtl::OString(sLine) );

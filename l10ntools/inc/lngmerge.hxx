@@ -36,11 +36,9 @@
 typedef std::vector< rtl::OString* > LngLineList;
 
 #define LNG_OK              0x0000
-#define LNG_FILE_NOTFOUND   0x0001
-#define LNG_COULD_NOT_OPEN  0x0002
-#define SDF_OK              0x0003
-#define SDF_FILE_NOTFOUND   0x0004
-#define SDF_COULD_NOT_OPEN  0x0005
+#define LNG_COULD_NOT_OPEN  0x0001
+#define SDF_OK              0x0002
+#define SDF_COULD_NOT_OPEN  0x0003
 
 //
 // class LngParser

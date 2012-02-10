@@ -75,7 +75,6 @@ APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 APP1RPATH=  NONE
 APP1STDLIBS+= \
-            $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
 
@@ -96,8 +95,6 @@ APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj
 APP3RPATH=  NONE
 APP3STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # tag checker for *.gsi
@@ -112,8 +109,6 @@ APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP6RPATH=  NONE
 APP6STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.xrm

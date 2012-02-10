@@ -29,20 +29,19 @@
 #include "sal/config.h"
 
 #include "export.hxx"
+#include "helper.hxx"
 #include <stdio.h>
 #include <osl/time.h>
 #include <osl/process.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
 #include <iostream>
 #include <iomanip>
 #include <tools/urlobj.hxx>
-#include <comphelper/string.hxx>
 #include <time.h>
 #include <stdlib.h>
 
-using namespace std;
-using comphelper::string::getToken;
 //
 // class ResData();
 //
@@ -216,14 +215,14 @@ bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
     FILE* IN_FILE = fopen( rSource.getStr() , "r" );
     if( IN_FILE == NULL )
     {
-        cerr << "Export::CopyFile WARNING: Could not open " << rSource.getStr() << "\n";
+        std::cerr << "Export::CopyFile WARNING: Could not open " << rSource.getStr() << "\n";
         return false;
     }
 
     FILE* OUT_FILE = fopen( rDest.getStr() , "w" );
     if( OUT_FILE == NULL )
     {
-        cerr << "Export::CopyFile WARNING: Could not open/create " << rDest.getStr() << " for writing\n";
+        std::cerr << "Export::CopyFile WARNING: Could not open/create " << rDest.getStr() << " for writing\n";
         fclose( IN_FILE );
         return false;
     }
@@ -232,7 +231,7 @@ bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
     {
         if( fputs( buf , OUT_FILE ) == EOF )
         {
-            cerr << "Export::CopyFile WARNING: Write problems " << rSource.getStr() << "\n";
+            std::cerr << "Export::CopyFile WARNING: Write problems " << rSource.getStr() << "\n";
             fclose( IN_FILE );
             fclose( OUT_FILE );
             return false;
@@ -240,7 +239,7 @@ bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
     }
     if( ferror( IN_FILE ) )
     {
-        cerr << "Export::CopyFile WARNING: Read problems " << rDest.getStr() << "\n";
+        std::cerr << "Export::CopyFile WARNING: Read problems " << rDest.getStr() << "\n";
         fclose( IN_FILE );
         fclose( OUT_FILE );
         return false;
@@ -304,8 +303,8 @@ void Export::InitLanguages( bool bMergeMode ){
         do
         {
             rtl::OString aToken = sLanguages.getToken(0, ',', nIndex);
-            sTmp = getToken(aToken, 0, '=');
-            sTmp = comphelper::string::strip(sTmp, ' ');
+            sal_Int32 n = 0;
+            sTmp = helper::trimAscii(aToken.getToken(0, '=', n));
             if( bMergeMode && !isAllowed( sTmp ) ){}
             else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){
                 aLanguages.push_back( sTmp );
@@ -328,8 +327,8 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     {
         rtl::OString aToken = sForcedLanguages.getToken(0, ',', nIndex);
 
-        sTmp = getToken(aToken, 0, '=');
-        sTmp = comphelper::string::strip(sTmp, ' ');
+        sal_Int32 n = 0;
+        sTmp = helper::trimAscii(aToken.getToken(0, '=', n));
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) )
             aForcedLanguages.push_back( sTmp );
@@ -353,14 +352,14 @@ const char* Export::GetEnv( const char *pVar )
         return pRet;
 }
 
-void Export::getCurrentDir( string& dir )
+void Export::getCurrentDir( std::string& dir )
 {
     char buffer[64000];
     if( getcwd( buffer , sizeof( buffer ) ) == 0 ){
-        cerr << "Error: getcwd failed!\n";
+        std::cerr << "Error: getcwd failed!\n";
         exit( -1 );
     }
-    dir = string( buffer );
+    dir = std::string( buffer );
 }
 
 

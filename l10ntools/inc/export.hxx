@@ -34,8 +34,6 @@
 #include <cstddef>
 #include <fstream>
 
-#include <comphelper/string.hxx>
-
 #ifndef L10NTOOLS_DIRECTORY_HXX
 #define L10NTOOLS_DIRECTORY_HXX
 #include <l10ntools/directory.hxx>
@@ -55,6 +53,8 @@
 #ifdef WNT
 #include <direct.h>
 #endif
+
+#include "helper.hxx"
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
@@ -196,8 +196,8 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        sGId = comphelper::string::remove(sGId, '\r');
-        sPForm = comphelper::string::remove(sPForm, '\r');
+        helper::searchAndReplaceAll(&sGId, "\r", rtl::OString());
+        helper::searchAndReplaceAll(&sPForm, "\r", rtl::OString());
     }
 
     ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
@@ -227,8 +227,8 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        sGId = comphelper::string::remove(sGId, '\r');
-        sPForm = comphelper::string::remove(sPForm, '\r');
+        helper::searchAndReplaceAll(&sGId, "\r", rtl::OString());
+        helper::searchAndReplaceAll(&sPForm, "\r", rtl::OString());
     }
 };
 

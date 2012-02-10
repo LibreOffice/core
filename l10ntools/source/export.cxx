@@ -31,6 +31,8 @@
 #include <cstddef>
 #include <cstring>
 
+#include "comphelper/string.hxx"
+
 #include "boost/scoped_ptr.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,13 +42,12 @@
 #include "tokens.h"
 #include <iostream>
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
-
-using comphelper::string::getToken;
-using comphelper::string::getTokenCount;
 
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
+
+using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 namespace {
 
@@ -245,9 +246,7 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
         if ( sId.getLength() > 255 )
         {
             YYWarning( "LocalId > 255 chars, truncating..." );
-            sId = sId.copy(0, 255);
-            sId = comphelper::string::stripEnd(sId, ' ');
-            sId = comphelper::string::stripEnd(sId, '\t');
+            sId = helper::trimAscii(sId.copy(0, 255));
         }
 
         return sal_True;
@@ -366,11 +365,11 @@ int Export::Execute( int nToken, const char * pToken )
     if ( nToken == CONDITION )
     {
         rtl::OString sTestToken(pToken);
-        sTestToken = comphelper::string::remove(sTestToken, '\t');
-        sTestToken = comphelper::string::remove(sTestToken, ' ');
-        if (( !bReadOver ) && ( comphelper::string::indexOfL(sTestToken, RTL_CONSTASCII_STRINGPARAM("#ifndef__RSC_PARSER")) == 0 ))
+        helper::searchAndReplaceAll(&sTestToken, "\t", rtl::OString());
+        helper::searchAndReplaceAll(&sTestToken, " ", rtl::OString());
+        if (( !bReadOver ) && ( sTestToken.indexOf("#ifndef__RSC_PARSER") == 0 ))
             bReadOver = sal_True;
-        else if (( bReadOver ) && ( comphelper::string::indexOfL(sTestToken, RTL_CONSTASCII_STRINGPARAM("#endif")) == 0 ))
+        else if (( bReadOver ) && ( sTestToken.indexOf("#endif") == 0 ))
             bReadOver = sal_False;
     }
     if ((( nToken < FILTER_LEVEL ) || ( bReadOver )) &&
@@ -491,12 +490,13 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            sToken = comphelper::string::remove(sToken, '\n');
-            sToken = comphelper::string::remove(sToken, '\r');
-            sToken = comphelper::string::remove(sToken, '{');
-            while( helper::searchAndReplace(&sToken, "\t", " " ) != -1 ) {};
-            sToken = comphelper::string::stripEnd(sToken, ' ');
-            rtl::OString sTLower = getToken(sToken, 0, ' ').toAsciiLowerCase();
+            helper::searchAndReplaceAll(&sToken, "\n", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "\r", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "{", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "\t", " ");
+            sToken = helper::trimAscii(sToken);
+            sal_Int32 n = 0;
+            rtl::OString sTLower = sToken.getToken(0, ' ', n).toAsciiLowerCase();
             pResData->sResTyp = sTLower;
             rtl::OString sId( sToken.copy( pResData->sResTyp.getLength() + 1 ));
             rtl::OString sCondition;
@@ -504,12 +504,14 @@ int Export::Execute( int nToken, const char * pToken )
             {
                 // between ResTyp, Id and paranthes is a precomp. condition
                 sCondition = "#";
-                sCondition += getToken(sId, 1, '#');
-                sId = getToken(sId, 0, '#');
+                n = 0;
+                sId = sId.getToken(0, '#', n);
+                sCondition += sId.getToken(0, '#', n);
             }
-            sId = getToken(sId, 0, '/');
+            n = 0;
+            sId = sId.getToken(0, '/', n);
             CleanValue( sId );
-            sId = comphelper::string::remove(sId, '\t');
+            helper::searchAndReplaceAll(&sId, "\t", rtl::OString());
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
             if (!sCondition.isEmpty())
             {
@@ -530,12 +532,12 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            sToken = comphelper::string::remove(sToken, '\n');
-            sToken = comphelper::string::remove(sToken, '\r');
-            sToken = comphelper::string::remove(sToken, '{');
-            sToken = comphelper::string::remove(sToken, '\t');
-            sToken = comphelper::string::remove(sToken, ' ');
-            sToken = comphelper::string::remove(sToken, '\\');
+            helper::searchAndReplaceAll(&sToken, "\n", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "\r", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "{", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "\t", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, " ", rtl::OString());
+            helper::searchAndReplaceAll(&sToken, "\\", rtl::OString());
             sToken = sToken.toAsciiLowerCase();
             pResData->sResTyp = sToken;
         }
@@ -595,16 +597,18 @@ int Export::Execute( int nToken, const char * pToken )
         {
             bDontWriteOutput = sal_False;
             // interpret different types of assignement
-            rtl::OString sKey = getToken(sToken, 0, '=');
-            sKey = comphelper::string::remove(sKey, ' ');
-            sKey = comphelper::string::remove(sKey, '\t');
-            rtl::OString sValue = getToken(sToken, 1, '=');
+            sal_Int32 n = 0;
+            rtl::OString sKey = sToken.getToken(0, '=', n);
+            helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
+            helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+            rtl::OString sValue = sToken.getToken(0, '=', n);
             CleanValue( sValue );
             sKey = sKey.toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
             {
-                rtl::OString sId(comphelper::string::remove(sValue, '\t'));
-                sId = comphelper::string::remove(sId, ' ');
+                rtl::OString sId(sValue);
+                helper::searchAndReplaceAll(&sId, "\t", rtl::OString());
+                helper::searchAndReplaceAll(&sId, " ", rtl::OString());
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
             else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HELPID")))
@@ -1113,11 +1117,8 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 rtl::OString Export::GetPairedListID(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    rtl::OString sIdent(
+    return helper::trimAscii(
         getToken(rText, 1, ';').toAsciiUpperCase().replace('\t', ' '));
-    sIdent = comphelper::string::stripEnd(sIdent, ' ');
-    sIdent = comphelper::string::stripStart(sIdent, ' ');
-    return sIdent;
 }
 
 rtl::OString Export::GetPairedListString(const rtl::OString& rText)

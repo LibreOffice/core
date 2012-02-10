@@ -34,16 +34,13 @@
 #include <cstring>
 
 #include "boost/scoped_ptr.hpp"
-
-#include <comphelper/string.hxx>
+#include "rtl/strbuf.hxx"
 
 #include "common.hxx"
 #include "helper.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
-
-using comphelper::string::getToken;
 
 extern "C" { int yyerror(char const *); }
 
@@ -277,7 +274,12 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-            sTokenName = getToken(getToken(getToken(sToken, 1, '<'), 0, '>'), 0, ' ');
+            sal_Int32 n = 0;
+            rtl::OString t(sToken.getToken(1, '<', n));
+            n = 0;
+            t = t.getToken(0, '>', n);
+            n = 0;
+            sTokenName = t.getToken(0, ' ', n);
 
               if ( !IsTokenClosed( sToken )) {
                 rtl::OString sSearch;
@@ -305,15 +307,16 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnRessourceEnd();
                             rtl::OString sCur;
-                            for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                                sCur = aLanguages[ n ];
+                            for( unsigned int i = 0; i < aLanguages.size(); ++i ){
+                                sCur = aLanguages[ i ];
                                 pStackData->sText[ sCur ] = rtl::OString();
                             }
                          }
                         sCurrentResTyp = sTokenName;
 
                         rtl::OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
-                        sCurrentIsoLang = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
+                        n = 0;
+                        sCurrentIsoLang = sTemp.getToken(1, '"', n);
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
                             bLocalize = sal_False;
@@ -327,7 +330,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 if ( !sSearch.isEmpty())
                 {
                     rtl::OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
-                    sTokenId = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
+                    n = 0;
+                    sTokenId = sTemp.getToken(1, '"', n);
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
@@ -341,8 +345,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 if ( sCurrentResTyp != sTokenName ) {
                     WorkOnRessourceEnd();
                     rtl::OString sCur;
-                    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                        sCur = aLanguages[ n ];
+                    for( unsigned int i = 0; i < aLanguages.size(); ++i ){
+                        sCur = aLanguages[ i ];
                         pStackData->sText[ sCur ] = rtl::OString();
                     }
                 }
@@ -351,7 +355,13 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         }
         break;
         case CFG_CLOSETAG:
-            sTokenName = getToken(getToken(getToken(sToken, 1, '/'), 0, '>'), 0, ' ');
+        {
+            sal_Int32 n = 0;
+            rtl::OString t(sToken.getToken(1, '/', n));
+            n = 0;
+            t = t.getToken(0, '>', n);
+            n = 0;
+            sTokenName = t.getToken(0, ' ', n);
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
                 if (sCurrentText.isEmpty())
@@ -369,6 +379,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 Error( sError );
                 std::exit(EXIT_FAILURE);
             }
+        }
         break;
 
         case CFG_TEXTCHAR:
@@ -625,8 +636,8 @@ void CfgMerge::WorkOnRessourceEnd()
         if ( pEntrys ) {
             rtl::OString sCur;
 
-            for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                sCur = aLanguages[ n ];
+            for( unsigned int i = 0; i < aLanguages.size(); ++i ){
+                sCur = aLanguages[ i ];
 
                 rtl::OString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
@@ -643,12 +654,14 @@ void CfgMerge::WorkOnRessourceEnd()
                     rtl::OString sTextTag = pStackData->sTextTag;
                     rtl::OString sTemp = sTextTag.copy( sTextTag.indexOf( "xml:lang=" ));
 
-                    rtl::OString sSearch = getToken(sTemp, 0, '\"');
+                    sal_Int32 n = 0;
+                    rtl::OString sSearch = sTemp.getToken(0, '"', n);
                     sSearch += "\"";
-                    sSearch += getToken(sTemp, 1, '\"');
+                    sSearch += sTemp.getToken(0, '"', n);
                     sSearch += "\"";
 
-                    rtl::OString sReplace = getToken(sTemp, 0, '\"');
+                    n = 0;
+                    rtl::OString sReplace = sTemp.getToken(0, '"', n);
                     sReplace += "\"";
                     sReplace += sCur;
                     sReplace += "\"";

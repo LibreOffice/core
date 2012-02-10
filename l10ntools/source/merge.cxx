@@ -28,25 +28,20 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
 #include <fstream>
 #include <string>
+#include <vector>
 
-#include <stdio.h>
-#include <tools/fsys.hxx>
-#include <comphelper/string.hxx>
 #include "export.hxx"
-#include <iostream>
-
-using namespace std;
-using comphelper::string::getToken;
-using comphelper::string::getTokenCount;
+#include "helper.hxx"
 
 namespace
 {
     static ::rtl::OString lcl_NormalizeFilename(const ::rtl::OString& rFilename)
     {
         return rFilename.copy(
-            ::std::max(
+            std::max(
                 rFilename.lastIndexOf( "\\" ),
                 rFilename.lastIndexOf( "/" ))+1);
     };
@@ -195,36 +190,27 @@ MergeDataFile::MergeDataFile(
         std::string buf;
         std::getline(aInputStream, buf);
         rtl::OString sLine(buf.data(), buf.length());
-        xub_StrLen nToks = getTokenCount(sLine, '\t');
-        if ( nToks == 15 )
+        sal_Int32 n = 0;
+        // Skip all wrong filenames
+        const ::rtl::OString filename = lcl_NormalizeFilename(sLine.getToken(1, '\t', n)); // token 1
+        if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
         {
-            // Skip all wrong filenames
-            const ::rtl::OString filename = lcl_NormalizeFilename(getToken(sLine, 1 , '\t'));
-            if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
+            const rtl::OString sTYP = sLine.getToken( 1, '\t', n ); // token 3
+            const rtl::OString sGID = sLine.getToken( 0, '\t', n ); // token 4
+            const rtl::OString sLID = sLine.getToken( 0, '\t', n ); // token 5
+            rtl::OString sPFO = sLine.getToken( 1, '\t', n ); // token 7
+            sPFO = sHACK;
+            rtl::OString nLANG = sLine.getToken( 1, '\t', n ); // token 9
+            nLANG = helper::trimAscii(nLANG);
+            const rtl::OString sTEXT = sLine.getToken( 0, '\t', n ); // token 10
+            const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', n ); // token 12
+            const rtl::OString sTITLE = sLine.getToken( 0, '\t', n ); // token 13
+
+            if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             {
-                sal_Int32 rIdx = 0;
-                const rtl::OString sTYP = sLine.getToken( 3, '\t', rIdx );
-                const rtl::OString sGID = sLine.getToken( 0, '\t', rIdx ); // 4
-                const rtl::OString sLID = sLine.getToken( 0, '\t', rIdx ); // 5
-                rtl::OString sPFO = sLine.getToken( 1, '\t', rIdx ); // 7
-                sPFO = sHACK;
-                rtl::OString nLANG = sLine.getToken( 1, '\t', rIdx ); // 9
-                nLANG = comphelper::string::strip(nLANG, ' ');
-                const rtl::OString sTEXT = sLine.getToken( 0, '\t', rIdx ); // 10
-                const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', rIdx ); // 12
-                const rtl::OString sTITLE = sLine.getToken( 0, '\t', rIdx );  // 13
-
-
-                if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
-                {
-                    aLanguageSet.insert(nLANG);
-                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
-                }
+                aLanguageSet.insert(nLANG);
+                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
             }
-        }
-        else if ( nToks == 10 )
-        {
-            printf("ERROR: File format is obsolete and no longer supported!\n");
         }
     }
     aInputStream.close();
