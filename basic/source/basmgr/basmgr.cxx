@@ -46,6 +46,7 @@
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
+#include <basic/global.hxx>
 #include <sbunoobj.hxx>
 #include "basrid.hxx"
 #include "sbintern.hxx"
@@ -1736,12 +1737,11 @@ namespace
         String sModule = sMacro.GetToken( 0, '.', nLast );
         sMacro.Erase( 0, nLast );
 
-        IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+        utl::TransliterationWrapper* pTransliteration = SbGlobal::GetTransliteration();
         sal_uInt16 nLibCount = i_manager->GetLibCount();
         for ( sal_uInt16 nLib = 0; nLib < nLibCount; ++nLib )
         {
-            if ( COMPARE_EQUAL == pCollator->compareString( i_manager->GetLibName( nLib ), sLibName ) )
+            if ( pTransliteration->isEqual( i_manager->GetLibName( nLib ), sLibName ) )
             {
                 StarBASIC* pLib = i_manager->GetLib( nLib );
                 if( !pLib )
@@ -1756,7 +1756,7 @@ namespace
                     for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
                     {
                         SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
-                        if ( pMod && COMPARE_EQUAL == pCollator->compareString( pMod->GetName(), sModule ) )
+                        if ( pMod && pTransliteration->isEqual( pMod->GetName(), sModule ) )
                         {
                             SbMethod* pMethod = (SbMethod*)pMod->Find( sMacro, SbxCLASS_METHOD );
                             if( pMethod )
