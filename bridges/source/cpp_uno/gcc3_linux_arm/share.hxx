@@ -93,7 +93,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 namespace arm
 {
-    enum armlimits { MAX_GPR_REGS = 4 };
+    enum armlimits { MAX_GPR_REGS = 4, MAX_FPR_REGS = 8 };
     bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
 }
 
