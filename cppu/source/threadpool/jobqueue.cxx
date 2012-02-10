@@ -97,7 +97,9 @@ namespace cppu_threadpool {
                 if( 0 == m_lstCallstack.front() )
                 {
                     // disposed !
-                    if( m_lstJob.empty() )
+                    if( m_lstJob.empty()
+                        && (m_lstCallstack.empty()
+                            || m_lstCallstack.front() != 0) )
                     {
                         osl_resetCondition( m_cndWait );
                     }
@@ -110,7 +112,8 @@ namespace cppu_threadpool {
                     job = m_lstJob.front();
                     m_lstJob.pop_front();
                 }
-                if( m_lstJob.empty() )
+                if( m_lstJob.empty()
+                    && (m_lstCallstack.empty() || m_lstCallstack.front() != 0) )
                 {
                     osl_resetCondition( m_cndWait );
                 }
