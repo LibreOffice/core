@@ -314,6 +314,13 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+    subsequenttest \
+    test \
+    unoexceptionprotector \
+    unotest \
+))
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     sal_textenc \
     xmlreader \
@@ -344,8 +351,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     sofficeapp \
     srtrs1 \
     store \
-    subsequenttest \
-    test \
     textconv_dict \
     ucb1 \
     ucpdav1 \
@@ -353,9 +358,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpftp1 \
     ucphier1 \
     ucppkg1 \
-    unoexceptionprotector \
     unopkgapp \
-    unotest \
     unsafe_uno \
     updchk \
     xmlsecurity \
