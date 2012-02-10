@@ -105,6 +105,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
     aTdfLink        ( this,     ResId( ABOUT_TDFSTR_LINK, *rId.GetResMgr() ) ),
     aFeaturesLink   ( this,     ResId( ABOUT_FEATURES_LINK, *rId.GetResMgr() ) ),
+    aButtonsLine    ( this,     ResId( ABOUT_BUTTONS_LINE, *rId.GetResMgr() ) ),
+    aCancelButton   ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
     aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aOracleCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT_ORACLE_DERIVED, *rId.GetResMgr())),
@@ -254,9 +256,26 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
     aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
 
-    nY += aLTSize.Height() + nLineSpace;
+    nY += aLTSize.Height();
 
-    nY += nCtrlMargin;
+    // buttons delimiter line
+    Size aBDSize = aButtonsLine.GetSizePixel();
+    aBDSize.Width() = aOutSiz.Width();
+    Point aBDPnt;
+    aBDPnt.X() = 0;
+    aBDPnt.Y() = nY + nCtrlMargin / 2 + aBDSize.Height() / 2;
+    aButtonsLine.SetPosSizePixel( aBDPnt, aBDSize );
+
+    nY += nCtrlMargin + aBDSize.Height();
+
+    // Cancel-Button-Position (at the bottom and in the right)
+    Size aCancelSiz = aCancelButton.GetSizePixel();
+    Point aCancelPnt;
+    aCancelPnt.X() = aOutSiz.Width() - aCancelSiz.Width() - nDlgMargin / 2;
+    aCancelPnt.Y() = nY;
+    aCancelButton.SetPosPixel( aCancelPnt );
+
+    nY += aCancelSiz.Height() + nCtrlMargin / 2;
 
     aOutSiz.Height() = nY;
 

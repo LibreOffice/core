@@ -42,3 +42,5 @@
 #define ABOUT_STR_LINK      13
 #define ABOUT_TDF_LINK      14
 #define ABOUT_FEATURESSTR_LINK 15
+#define ABOUT_BUTTONS_LINE  16
+#define ABOUT_BTN_CANCEL    17

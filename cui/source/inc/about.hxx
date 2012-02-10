@@ -52,6 +52,8 @@ private:
     svt::FixedHyperlink aInfoLink;
     svt::FixedHyperlink aTdfLink;
     svt::FixedHyperlink aFeaturesLink;
+    FixedLine           aButtonsLine;
+    CancelButton        aCancelButton;
 
     String aVersionData;
     String aVersionTextStr;

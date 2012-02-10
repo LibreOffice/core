@@ -121,4 +121,15 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "http://www.libreoffice.org/features/";
     };
+    FixedLine ABOUT_BUTTONS_LINE
+    {
+        Pos = MAP_APPFONT ( 0 , 245 ) ;
+        Size = MAP_APPFONT ( 170 , 2 ) ;
+    };
+    CancelButton ABOUT_BTN_CANCEL
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
 };
