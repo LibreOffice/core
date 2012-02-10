@@ -119,13 +119,32 @@ void SfxAlienWarningDialog::InitSize()
         m_aMoreInfoBtn.SetPosSizePixel( aNewPoint, aNewSize );
     }
 
-    // text of checkbox to wide -> add new line
-    nTxtW = m_aWarningOnBox.GetCtrlTextWidth( m_aWarningOnBox.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH;
+    // recalculate the size and position of the buttons
+    m_aMoreInfoBtn.Hide();
+    nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
+    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    Size aNewSize = m_aKeepCurrentBtn.GetSizePixel();
+    aNewSize.Width() = nTxtW;
+    m_aKeepCurrentBtn.SetSizePixel( aNewSize );
+    Point aPos = m_aSaveODFBtn.GetPosPixel();
+    aPos.X() = AW_COL_3 + nTxtW;
+    m_aSaveODFBtn.SetPosPixel( aPos );
+    nTxtW = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
+    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    aNewSize = m_aSaveODFBtn.GetSizePixel();
+    aNewSize.Width() = nTxtW;
+    m_aSaveODFBtn.SetSizePixel( aNewSize );
+    long nBtnsWidthSize = m_aKeepCurrentBtn.GetSizePixel().Width() + m_aSaveODFBtn.GetSizePixel().Width() + AW_COL_3 + IMPL_EXTRA_BUTTON_WIDTH;
+
+    // resize + text of checkbox too wide -> add new line
+    aNewSize = m_aWarningOnBox.GetSizePixel();
+    aNewSize.Width() = nBtnsWidthSize - 4*IMPL_EXTRA_BUTTON_WIDTH;
+    m_aWarningOnBox.SetSizePixel( aNewSize );
+    nTxtW = m_aWarningOnBox.GetCtrlTextWidth( m_aWarningOnBox.GetText() );
     nCtrlW = m_aWarningOnBox.GetSizePixel().Width();
     if ( nTxtW >= nCtrlW )
     {
         long nTextHeight = m_aWarningOnBox.GetTextHeight();
-        Size aNewSize = m_aWarningOnBox.GetSizePixel();
         aNewSize.Height() += nTextHeight;
         m_aWarningOnBox.SetSizePixel( aNewSize );
         aNewSize = GetSizePixel();
@@ -133,14 +152,17 @@ void SfxAlienWarningDialog::InitSize()
         SetSizePixel( aNewSize );
     }
 
-    // align the size of the information text control (FixedText) to its content
+    // resize + align the size of the information text control (FixedText) to its content
+    aNewSize = m_aInfoText.GetSizePixel();
+    aNewSize.Width() = nBtnsWidthSize - 4*IMPL_EXTRA_BUTTON_WIDTH;
+    m_aInfoText.SetSizePixel( aNewSize );
     Size aMinSize = m_aInfoText.CalcMinimumSize( m_aInfoText.GetSizePixel().Width() );
     long nTxtH = aMinSize.Height();
     long nCtrlH = m_aInfoText.GetSizePixel().Height();
     long nDelta = ( nCtrlH - nTxtH );
-    Size aNewSize = m_aInfoText.GetSizePixel();
     aNewSize.Height() -= nDelta;
     m_aInfoText.SetSizePixel( aNewSize );
+
 
     // new position for the succeeding windows
     Window* pWins[] =
@@ -155,30 +177,16 @@ void SfxAlienWarningDialog::InitSize()
         (*pCurrent)->SetPosPixel( aNewPos );
     }
 
-    // recalculate the size and position of the buttons
-    m_aMoreInfoBtn.Hide();
-    nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
-    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
-    aNewSize = m_aKeepCurrentBtn.GetSizePixel();
-    aNewSize.Width() = nTxtW;
-    m_aKeepCurrentBtn.SetSizePixel( aNewSize );
-    Point aPos = m_aSaveODFBtn.GetPosPixel();
-    aPos.X() = AW_COL_3 + nTxtW;
-    m_aSaveODFBtn.SetPosPixel( aPos );
-    nTxtW = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
-    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
-    aNewSize = m_aSaveODFBtn.GetSizePixel();
-    aNewSize.Width() = nTxtW;
-    m_aSaveODFBtn.SetSizePixel( aNewSize );
-
     // new size of the dialog
     aNewSize = GetSizePixel();
     aNewSize.Height() -= nDelta;
-    if (aPos.X() + nTxtW + IMPL_EXTRA_BUTTON_WIDTH > aNewSize.Width())
-    {
-        aNewSize.Width() = aPos.X() + nTxtW + IMPL_EXTRA_BUTTON_WIDTH;
-    }
+    aNewSize.Width() = nBtnsWidthSize;
     SetSizePixel( aNewSize );
+
+    // resize the FixedLine
+    aNewSize = m_aOptionLine.GetSizePixel();
+    aNewSize.Width() = GetSizePixel().Width();
+    m_aOptionLine.SetSizePixel( aNewSize );
 
 }
 
