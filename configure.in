@@ -1026,8 +1026,8 @@ AC_ARG_WITH(system-jars,
     [with_system_jars="$with_system_libs"])
 
 AC_ARG_WITH(system-stdlibs,
-    AS_HELP_STRING([--with-system-stdlibs],
-        [Use libstdc++/libgcc_s already on system.]),,
+    AS_HELP_STRING([--without-system-stdlibs],
+        [Bundle the used libstdc++/libgcc_s into the installation set.]),,
     [with_system_stdlibs="$with_system_libs"])
 
 AC_ARG_WITH(system-cairo,
@@ -5555,7 +5555,7 @@ dnl ===================================================================
 dnl Check for system stdlibs
 dnl ===================================================================
 AC_MSG_CHECKING([whether to provide libstdc++/libgcc_s in the installset])
-if test "$with_system_stdlibs" = "yes"; then
+if test "$with_system_stdlibs" != "no"; then
     AC_MSG_RESULT([no])
     SYSTEM_STDLIBS=YES
 else
