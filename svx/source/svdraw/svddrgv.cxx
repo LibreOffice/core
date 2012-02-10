@@ -676,7 +676,7 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
         if(bNewObj)
             aPt = GetSnapPos(aPt,pMarkedPV);
 
-        sal_Bool bClosed0(pMarkedPath->IsClosedObj());
+        bool bClosed0 = pMarkedPath->IsClosedObj();
 
         if(bIdxZwang)
         {

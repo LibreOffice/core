@@ -139,7 +139,6 @@ private:
     void AdjHdl();
 
 public:
-    TYPEINFO();
     SdrPageView(SdrPage* pPage1, SdrView& rNewView);
     ~SdrPageView();
 
