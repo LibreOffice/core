@@ -908,16 +908,6 @@ void PDFIProcessor::endIndicator()
         m_xStatusIndicator->end();
 }
 
-void PDFIProcessor::sortDocument( bool bDeep )
-{
-    for( std::list< Element* >::iterator it = m_pDocument->Children.begin();
-         it != m_pDocument->Children.end(); ++it )
-    {
-        if( dynamic_cast<PageElement*>(*it) != NULL )
-            sortElements( *it, bDeep );
-    }
-}
-
 static bool lr_tb_sort( Element* pLeft, Element* pRight )
 {
     // first: top-bottom sorting
