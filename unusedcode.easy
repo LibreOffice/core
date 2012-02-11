@@ -1495,5 +1495,3 @@ vcl::PDFExtOutDevData::SetOutlineItemDest(int, int)
 vcl::PDFExtOutDevData::SetOutlineItemParent(int, int)
 vcl::PDFExtOutDevData::SetOutlineItemText(int, rtl::OUString const&)
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
-vcl::unx::GtkPrintWrapper::print_operation_set_has_selection(_GtkPrintOperation*, int) const
-vcl::unx::GtkPrintWrapper::print_operation_set_support_selection(_GtkPrintOperation*, int) const
