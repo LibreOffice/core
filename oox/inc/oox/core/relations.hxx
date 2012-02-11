@@ -87,8 +87,6 @@ public:
 
     /** Returns the external target of the relation with the passed relation identifier. */
     ::rtl::OUString     getExternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
-    /** Returns the external target of the first relation with the passed type. */
-    ::rtl::OUString     getExternalTargetFromFirstType( const ::rtl::OUString& rType ) const;
 
     /** Returns the full fragment path for the target of the passed relation. */
     ::rtl::OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;

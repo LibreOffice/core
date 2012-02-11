@@ -1267,18 +1267,14 @@ ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&, int)
 oox::(anonymous namespace)::GenericPropertySet::GenericPropertySet()
 oox::AttributeList::getHyperHex(int, long) const
 oox::AttributeList::getUnsignedHex(int, unsigned int) const
-oox::BinaryInputStream::readNulCharArrayUC(unsigned short)
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
 oox::PropertyMap::dump()
 oox::PropertyMap::getProperty(int) const
 oox::PropertySet::getProperties(com::sun::star::uno::Sequence<com::sun::star::uno::Any>&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
-oox::core::FilterBase::getComponentFactory() const
-oox::core::FilterBase::getInteractionHandler() const
 oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::PowerPointExport::WriteTextStyles(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
-oox::core::Relations::getExternalTargetFromFirstType(rtl::OUString const&) const
 oox::core::XmlFilterBase::getChartConverter()
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)
@@ -1286,11 +1282,7 @@ oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ColorPropertySet::getColor()
 oox::drawingml::ColorPropertySet::setColor(int)
 oox::drawingml::CustomShapeProperties::getValue(std::__debug::vector<oox::drawingml::CustomShapeGuide, std::allocator<oox::drawingml::CustomShapeGuide> > const&, unsigned int) const
-oox::drawingml::Diagram::getLayoutId() const
 oox::drawingml::DiagramLayout::layout(std::__debug::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
-oox::drawingml::GetPoint2D(com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
-oox::drawingml::GetTextMargin(rtl::OUString const&)
-oox::drawingml::GetTextVerticalAdjust(int)
 oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties const&)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const

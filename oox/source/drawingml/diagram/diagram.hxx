@@ -302,7 +302,6 @@ public:
     const DiagramColorMap& getColors() const { return maColors; }
 
     void addTo( const ShapePtr & pShape );
-    ::rtl::OUString getLayoutId() const;
 private:
     void build( );
     DiagramDataPtr                             mpData;

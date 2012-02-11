@@ -259,11 +259,6 @@ const Reference< XComponentContext >& FilterBase::getComponentContext() const
     return mxImpl->mxComponentContext;
 }
 
-const Reference< XMultiComponentFactory >& FilterBase::getComponentFactory() const
-{
-    return mxImpl->mxComponentFactory;
-}
-
 const Reference< XMultiServiceFactory >& FilterBase::getServiceFactory() const
 {
     return mxImpl->mxServiceFactory;
@@ -292,11 +287,6 @@ const Reference< XShape >& FilterBase::getParentShape() const
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 {
     return mxImpl->mxStatusIndicator;
-}
-
-const Reference< XInteractionHandler >& FilterBase::getInteractionHandler() const
-{
-    return mxImpl->mxInteractionHandler;
 }
 
 MediaDescriptor& FilterBase::getMediaDescriptor() const

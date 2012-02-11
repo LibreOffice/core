@@ -168,13 +168,6 @@ public:
      */
     ::rtl::OString      readNulCharArray();
 
-    /** Reads a NUL-terminated byte character array and returns a Unicode string.
-
-        @param eTextEnc
-            The text encoding used to create the Unicode string.
-     */
-    ::rtl::OUString     readNulCharArrayUC( rtl_TextEncoding eTextEnc );
-
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
     ::rtl::OUString     readNulUnicodeArray();

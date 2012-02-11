@@ -344,16 +344,6 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         mpLayout->getNode()->accept( aCreationVisitor );
 }
 
-OUString Diagram::getLayoutId() const
-{
-    OUString sLayoutId;
-    if( mpLayout )
-    {
-        sLayoutId = mpLayout->getUniqueId();
-    }
-    return sLayoutId;
-}
-
 uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const rtl::Reference< core::FragmentHandler >& rxHandler )

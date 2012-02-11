@@ -65,11 +65,6 @@ OString BinaryInputStream::readNulCharArray()
     return aBuffer.makeStringAndClear();
 }
 
-OUString BinaryInputStream::readNulCharArrayUC( rtl_TextEncoding eTextEnc )
-{
-    return OStringToOUString( readNulCharArray(), eTextEnc );
-}
-
 OUString BinaryInputStream::readNulUnicodeArray()
 {
     OUStringBuffer aBuffer;

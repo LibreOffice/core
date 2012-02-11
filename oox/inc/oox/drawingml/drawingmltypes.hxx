@@ -89,9 +89,6 @@ typedef ::boost::shared_ptr< TableProperties > TablePropertiesPtr;
 
 // ============================================================================
 
-/** converts the attributes from an CT_Point2D into an awt Point with 1/100th mm */
-com::sun::star::awt::Point GetPoint2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
-
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 com::sun::star::awt::Point GetPointPercent( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs );
 
@@ -101,11 +98,6 @@ com::sun::star::awt::Size GetSize2D( const ::com::sun::star::uno::Reference< ::c
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
-
-/** converts an emu string into 1/100th mmm but constrain as per ST_TextMargin
- * see 5.1.12.73
- */
-sal_Int32 GetTextMargin( const ::rtl::OUString& sValue );
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue );
@@ -125,8 +117,6 @@ float GetTextSize( const ::rtl::OUString& rValue );
 /** converts the ST_TextSpacingPoint to 1/100mm */
 sal_Int32 GetTextSpacingPoint(  const ::rtl::OUString& sValue );
 sal_Int32 GetTextSpacingPoint(  const sal_Int32 nValue );
-
-::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
 /** */
 ::com::sun::star::style::TabAlign GetTabAlign( ::sal_Int32 aToken );
