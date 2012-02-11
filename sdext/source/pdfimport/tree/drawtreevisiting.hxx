@@ -107,7 +107,6 @@ namespace pdfi
                              );
 
     public:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >& GetCharacterClassification();
         enum DocType{ DRAW_DOC, IMPRESS_DOC };
         explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType, PDFIProcessor& rProc ) :
