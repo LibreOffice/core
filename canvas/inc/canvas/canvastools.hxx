@@ -183,17 +183,9 @@ namespace canvas
             setRenderStateTransform( ::com::sun::star::rendering::RenderState&              renderState,
                                      const ::basegfx::B2DHomMatrix&                         transform );
 
-        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
-            appendToViewState( ::com::sun::star::rendering::ViewState&                      viewState,
-                               const ::basegfx::B2DHomMatrix&                               transform );
-
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             appendToRenderState( ::com::sun::star::rendering::RenderState&                  renderState,
                                  const ::basegfx::B2DHomMatrix&                             transform );
-
-        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
-            prependToViewState( ::com::sun::star::rendering::ViewState&                     viewState,
-                                const ::basegfx::B2DHomMatrix&                              transform );
 
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             prependToRenderState( ::com::sun::star::rendering::RenderState&                 renderState,
@@ -203,13 +195,6 @@ namespace canvas
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                           transform,
                                          const ::com::sun::star::rendering::ViewState&      viewState,
                                          const ::com::sun::star::rendering::RenderState&    renderState );
-
-        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
-            mergeViewAndRenderState( ::com::sun::star::rendering::ViewState&                resultViewState,
-                                     const ::com::sun::star::rendering::ViewState&          viewState,
-                                     const ::com::sun::star::rendering::RenderState&        renderState,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >&            xCanvas );
 
 
         // Matrix utilities

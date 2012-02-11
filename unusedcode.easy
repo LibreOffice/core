@@ -1107,11 +1107,8 @@ canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Refere
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 canvas::tools::ElapsedTime::getTimeBase() const
-canvas::tools::appendToViewState(com::sun::star::rendering::ViewState&, basegfx::B2DHomMatrix const&)
 canvas::tools::calcRectToRectTransform(basegfx::B2DHomMatrix&, basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
-canvas::tools::mergeViewAndRenderState(com::sun::star::rendering::ViewState&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> const&)
-canvas::tools::prependToViewState(com::sun::star::rendering::ViewState&, basegfx::B2DHomMatrix const&)
 canvas::tools::verifyInput(com::sun::star::geometry::RealSize2D const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
 canvas::tools::verifyInput(com::sun::star::rendering::FloatingPointBitmapLayout const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
