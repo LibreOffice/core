@@ -73,7 +73,7 @@ class SpellCheckerDispatcher :
         ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
 
     LngSvcMgr                   &rMgr;
-    linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
+    mutable linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
 
     // disallow copy-constructor and assignment-operator for now
     SpellCheckerDispatcher(const SpellCheckerDispatcher &);
@@ -134,7 +134,7 @@ public:
 inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 {
     if (!pCache)
-        ((SpellCheckerDispatcher *) this)->pCache = new linguistic::SpellCache();
+        pCache = new linguistic::SpellCache();
     return *pCache;
 }
 
