@@ -73,6 +73,7 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	shell32 \
 	user32 \
 	uuid \
+	winmm \
 ))
 endif
 
