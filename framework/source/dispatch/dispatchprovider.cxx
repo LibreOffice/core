@@ -369,7 +369,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
-            // SELF => we must adress the parent directly... and not his parent or any other parent!
+            // SELF => we must address the parent directly... and not his parent or any other parent!
             xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     }
 

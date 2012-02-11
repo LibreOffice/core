@@ -1457,7 +1457,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
             nSetBorders has a bit set for each location that a sprm set a
             border, so with a sprm set, but no border, then disable the
-            appropiate border
+            appropriate border
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }

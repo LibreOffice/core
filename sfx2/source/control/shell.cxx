@@ -443,7 +443,7 @@ SfxRepeatTarget* SfxShell::GetRepeatTarget() const
 /*  [Description]
 
     Returns a pointer to the <SfxRepeatTarget> instance that is used in
-    SID_REPEAT as repeat target when it is adressed from the <SfxUndoManager>
+    SID_REPEAT as repeat target when it is addressed from the <SfxUndoManager>
     supplied by this SfxShell. The return value can be NULL.
 
     [Note]

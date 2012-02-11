@@ -6499,7 +6499,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       endnote seperators, the documentation also gets the index numbers
       backwards when specifiying which bits to test. The bottom six bits
       of this value must be tested and skipped over. Each section's
-      grpfIhdt is then tested for the existence of the appropiate headers
+      grpfIhdt is then tested for the existence of the appropriate headers
       and footers, at the end of each section the nIdxOffset must be updated
       to point to the beginning of the next section's group of headers and
       footers in this PLCF, UpdateIndex does that task.

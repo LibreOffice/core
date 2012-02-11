@@ -85,7 +85,7 @@ public:
     void InsertTextLayerObject(SdrObject* pObject);
     /*
      cmc: We should have have seperate ZOrder classes for 95- and 97+ and
-     instantiate the appropiate one at run time.
+     instantiate the appropriate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
     // new parameter <_bInHeaderFooter>, indicating that object is in header or footer

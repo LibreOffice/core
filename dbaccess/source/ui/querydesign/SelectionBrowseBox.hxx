@@ -255,7 +255,7 @@ namespace dbaui
             @param  _sFieldName
                 The field name inserted by the user.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
@@ -279,7 +279,7 @@ namespace dbaui
             @param  _xMetaData
                 Use to parse the node to a string.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return

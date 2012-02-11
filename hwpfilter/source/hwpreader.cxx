@@ -4764,7 +4764,7 @@ void HwpReader::makeShowPageNum()
 
 
 /**
- * mail merge operation using hwp adressbook and hwp data form.
+ * mail merge operation using hwp addressbook and hwp data form.
  * not support operation in OO writer.
  */
 void HwpReader::makeMailMerge(MailMerge * hbox)

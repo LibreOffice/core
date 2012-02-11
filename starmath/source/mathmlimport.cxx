@@ -2293,7 +2293,7 @@ void SmXMLRowContext_Impl::EndElement()
         //If the first or last element is an operator with stretchyness
         //set then we must create a brace node here from those elements,
         //removing the stretchness from the operators and applying it to
-        //ourselves, and creating the appropiate dummy StarMath none bracket
+        //ourselves, and creating the appropriate dummy StarMath none bracket
         //to balance the arrangement
         if (((aRelationArray[0]->GetScaleMode() == SCALE_HEIGHT)
             && (aRelationArray[0]->GetType() == NMATH))

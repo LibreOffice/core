@@ -372,9 +372,9 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
                 CacheItem::const_iterator pProp   ;
 
-            // "matchByDocumentService="                    => any filter will be adressed here
-            // "matchByDocumentService=all"                 => any filter will be adressed here
-            // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
+            // "matchByDocumentService="                    => any filter will be addressed here
+            // "matchByDocumentService=all"                 => any filter will be addressed here
+            // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be addressed
             ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
             if (
                 (!sDocumentService.isEmpty()                   ) &&
@@ -388,7 +388,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             // "iflags="        => not allowed
             // "iflags=-1"      => not allowed
             // "iflags=0"       => not usefull
-            // "iflags=283648"  => only filter, which has set these flag field will be adressed
+            // "iflags=283648"  => only filter, which has set these flag field will be addressed
             sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
             if (
                 (nIFlags > 0                       ) &&
@@ -401,7 +401,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             // "eflags="        => not allowed
             // "eflags=-1"      => not allowed
             // "eflags=0"       => not usefull
-            // "eflags=283648"  => only filter, which has not set these flag field will be adressed
+            // "eflags=283648"  => only filter, which has not set these flag field will be addressed
             if (
                 (nEFlags > 0                       ) &&
                 ((nCheckValue & nEFlags) == nEFlags)

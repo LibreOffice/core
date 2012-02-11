@@ -227,7 +227,7 @@ sal_uInt32 FrameContainer::getCount() const
                 So it will be marked as deprecated and should be replaced by "getAllElements()".
 
     @param      nIndex
-                    a valud between 0 and (getCount()-1) to adress one container item
+                    a valud between 0 and (getCount()-1) to address one container item
 
     @return     a reference to a frame inside the container, which match with given index
 

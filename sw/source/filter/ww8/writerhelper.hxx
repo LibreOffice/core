@@ -622,7 +622,7 @@ namespace sw
             e.g. Page Anchored elements will not be. For the winword export we
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
-            of sw::Frames which are guaranteed to have an appropiate anchor.
+            of sw::Frames which are guaranteed to have an appropriate anchor.
 
             @param rDoc
             The SwDoc document to get the styles from

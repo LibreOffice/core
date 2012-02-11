@@ -273,7 +273,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             if ( bBookmarkable )
             {
-                // here I know that we have a read only bookmarable cursor
+                // here I know that we have a read only bookmarkable cursor
                 _xRs->beforeFirst();
                 m_nPrivileges = Privilege::SELECT;
                 m_pCacheSet = new WrappedResultSet(i_nMaxRows);

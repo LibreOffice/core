@@ -3125,7 +3125,7 @@ void OQueryDesignView::GetFocus()
     OQueryView::GetFocus();
     if ( m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus() )
     {
-        // first we have to deactivate the current cell to refill when nescessary
+        // first we have to deactivate the current cell to refill when necessary
         m_pSelectionBox->DeactivateCell();
         m_pSelectionBox->ActivateCell(m_pSelectionBox->GetCurRow(), m_pSelectionBox->GetCurColumnId());
         m_pSelectionBox->GrabFocus();

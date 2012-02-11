@@ -284,7 +284,7 @@ public:
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
      * GetXXX(i)     returns i-th xxx (ERR_RAISE if beyond range!).
-     * DelXXX(i)     delets i-th xxx  (ERR_RAISE if beyond range!).
+     * DelXXX(i)     deletes i-th xxx  (ERR_RAISE if beyond range!).
      * GetCurXXX()   returns xxx that is valid at cursor or in ranges.
      *               returns 0, if not unanimuous.
      * SetXXX()      sets xxx at cursor or in ranges.

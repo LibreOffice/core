@@ -1372,7 +1372,7 @@ the field, which gives the same effect and meaning, to do so we must
 get any bookmarks in the field range, and begin them immediately before
 the set/ask field, and end them directly afterwards. MapBookmarkVariables
 returns an identifier of the bookmark attribute to close after inserting
-the appropiate set/ask field.
+the appropriate set/ask field.
 */
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     String &rOrigName, const String &rData)
