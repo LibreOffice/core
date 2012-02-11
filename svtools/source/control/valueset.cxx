@@ -69,21 +69,21 @@ void ValueSet::ImplInit()
     mnUserVisLines      = 0;
     mnSpacing           = 0;
     mnFrameStyle        = 0;
-    mbFormat            = sal_True;
-    mbHighlight         = sal_False ;
-    mbSelection         = sal_False;
-    mbNoSelection       = sal_True;
-    mbDrawSelection     = sal_True;
-    mbBlackSel          = sal_False;
-    mbDoubleSel         = sal_False;
-    mbScroll            = sal_False;
-    mbDropPos           = sal_False;
-    mbFullMode          = sal_True;
+    mbFormat            = true;
+    mbHighlight         = false;
+    mbSelection         = false;
+    mbNoSelection       = true;
+    mbDrawSelection     = true;
+    mbBlackSel          = false;
+    mbDoubleSel         = false;
+    mbScroll            = false;
+    mbDropPos           = false;
+    mbFullMode          = true;
 
     // #106446#, #106601# force mirroring of virtual device
     maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
 // -----------------------------------------------------------------------
@@ -149,8 +149,7 @@ void ValueSet::ImplDeleteItems()
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplInitSettings( sal_Bool bFont,
-                                 sal_Bool bForeground, sal_Bool bBackground )
+void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -423,7 +422,7 @@ void ValueSet::Format()
         mnCols = mnUserCols;
 
     // calculate number of rows
-    mbScroll = sal_False;
+    mbScroll = false;
     mnLines = (long)mpImpl->mItemList.size() / mnCols;
     if ( mpImpl->mItemList.size() % mnCols )
         mnLines++;
@@ -442,7 +441,7 @@ void ValueSet::Format()
     else
         mnVisLines = mnLines;
     if ( mnLines > mnVisLines )
-        mbScroll = sal_True;
+        mbScroll = true;
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
     else
@@ -522,16 +521,16 @@ void ValueSet::Format()
               (aHighColor.GetBlue() > 0x80)) ||
              ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
               (aHighColor.GetBlue() == 0x80)) )
-            mbBlackSel = sal_True;
+            mbBlackSel = true;
         else
-            mbBlackSel = sal_False;
+            mbBlackSel = false;
 
         // draw the selection with double width if the items are bigger
         if ( (nStyle & WB_DOUBLEBORDER) &&
              ((nItemWidth >= 25) && (nItemHeight >= 20)) )
-            mbDoubleSel = sal_True;
+            mbDoubleSel = true;
         else
-            mbDoubleSel = sal_False;
+            mbDoubleSel = false;
 
         // calculate offsets
         long nStartX;
@@ -590,7 +589,7 @@ void ValueSet::Format()
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
-                const sal_Bool bWasEmpty = pItem->maRect.IsEmpty();
+                const bool bWasEmpty = pItem->maRect.IsEmpty();
 
                 pItem->maRect.Left()    = x;
                 pItem->maRect.Top()     = y;
@@ -653,7 +652,7 @@ void ValueSet::Format()
     }
 
     // waiting for the next since the formatting is finished
-    mbFormat = sal_False;
+    mbFormat = false;
 
     // delete ScrollBar
     delete pDelScrBar;
@@ -901,7 +900,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection )
+void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
 {
     if ( mnHighItemId != nItemId )
     {
@@ -911,12 +910,12 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection )
 
         // don't draw the selection if nothing is selected
         if ( !bIsSelection && mbNoSelection )
-            mbDrawSelection = sal_False;
+            mbDrawSelection = false;
 
         // remove the old selection and draw the new one
         ImplHideSelect( nOldItem );
         ImplDrawSelect();
-        mbDrawSelection = sal_True;
+        mbDrawSelection = true;
     }
 }
 
@@ -979,7 +978,7 @@ void ValueSet::ImplDraw()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ValueSet::ImplScroll( const Point& rPos )
+bool ValueSet::ImplScroll( const Point& rPos )
 {
     Size aOutSize = GetOutputSizePixel();
     long nScrBarWidth;
@@ -990,7 +989,7 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
         nScrBarWidth = 0;
 
     if ( !mbScroll || (rPos.X() < 0) || (rPos.X() > aOutSize.Width()-nScrBarWidth) )
-        return sal_False;
+        return false;
 
     long             nScrollOffset;
     sal_uInt16           nOldLine = mnFirstLine;
@@ -1015,17 +1014,17 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
 
     if ( mnFirstLine != nOldLine )
     {
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplDraw();
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
 
-size_t ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
+size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
 {
     if ( mpNoneItem && mpNoneItem->maRect.IsInside( rPos ) )
     {
@@ -1123,7 +1122,7 @@ void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::
 
 // -----------------------------------------------------------------------
 
-sal_Bool ValueSet::ImplHasAccessibleListeners()
+bool ValueSet::ImplHasAccessibleListeners()
 {
     ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );
     return( pAcc && pAcc->HasAccessibleListeners() );
@@ -1137,7 +1136,7 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
     if ( nNewFirstLine != mnFirstLine )
     {
         mnFirstLine = nNewFirstLine;
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplDraw();
     }
     return 0;
@@ -1147,13 +1146,13 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
 
 IMPL_LINK( ValueSet,ImplTimerHdl, Timer*, EMPTYARG )
 {
-    ImplTracking( GetPointerPosPixel(), sal_True );
+    ImplTracking( GetPointerPosPixel(), true );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplTracking( const Point& rPos, sal_Bool bRepeat )
+void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
 {
     if ( bRepeat || mbSelection )
     {
@@ -1172,22 +1171,22 @@ void ValueSet::ImplTracking( const Point& rPos, sal_Bool bRepeat )
     if ( pItem )
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = sal_True;
+            mbHighlight = true;
 
         ImplHighlightItem( pItem->mnId );
     }
     else
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = sal_True;
+            mbHighlight = true;
 
-        ImplHighlightItem( mnSelItemId, sal_False );
+        ImplHighlightItem( mnSelItemId, false );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplEndTracking( const Point& rPos, sal_Bool bCancel )
+void ValueSet::ImplEndTracking( const Point& rPos, bool bCancel )
 {
     ValueSetItem* pItem;
 
@@ -1202,15 +1201,15 @@ void ValueSet::ImplEndTracking( const Point& rPos, sal_Bool bCancel )
         SelectItem( pItem->mnId );
         if ( !mbSelection && !(GetStyle() & WB_NOPOINTERFOCUS) )
             GrabFocus();
-        mbHighlight = sal_False;
-        mbSelection = sal_False;
+        mbHighlight = false;
+        mbSelection = false;
         Select();
     }
     else
     {
-        ImplHighlightItem( mnSelItemId, sal_False );
-        mbHighlight = sal_False;
-        mbSelection = sal_False;
+        ImplHighlightItem( mnSelItemId, false );
+        mbHighlight = false;
+        mbSelection = false;
     }
 }
 
@@ -1223,7 +1222,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
         ValueSetItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
         if ( mbSelection )
         {
-            mbHighlight = sal_True;
+            mbHighlight = true;
             if ( pItem )
             {
                 mnOldItemId  = mnSelItemId;
@@ -1240,7 +1239,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( rMEvt.GetClicks() == 1 )
                 {
                     mnOldItemId  = mnSelItemId;
-                    mbHighlight  = sal_True;
+                    mbHighlight  = true;
                     mnHighItemId = mnSelItemId;
                     ImplHighlightItem( pItem->mnId );
                     StartTracking( STARTTRACK_SCROLLREPEAT );
@@ -1262,7 +1261,7 @@ void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // because of SelectionMode
     if ( rMEvt.IsLeft() && mbSelection )
-        ImplEndTracking( rMEvt.GetPosPixel(), sal_False );
+        ImplEndTracking( rMEvt.GetPosPixel(), false );
     else
         Control::MouseButtonUp( rMEvt );
 }
@@ -1273,7 +1272,7 @@ void ValueSet::MouseMove( const MouseEvent& rMEvt )
 {
     // because of SelectionMode
     if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) )
-        ImplTracking( rMEvt.GetPosPixel(), sal_False );
+        ImplTracking( rMEvt.GetPosPixel(), false );
     Control::MouseMove( rMEvt );
 }
 
@@ -1325,7 +1324,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
     nCalcPos = nCurPos;
 
     //switch off selection mode if key travelling is used
-    sal_Bool bDefault = sal_False;
+    bool bDefault = false;
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_HOME:
@@ -1459,7 +1458,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             //no break;
         default:
             Control::KeyInput( rKEvt );
-            bDefault = sal_True;
+            bDefault = true;
             break;
     }
     if(!bDefault)
@@ -1549,7 +1548,7 @@ void ValueSet::LoseFocus()
 
 void ValueSet::Resize()
 {
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
     Control::Resize();
@@ -1608,23 +1607,23 @@ void ValueSet::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
     else if ( (nType == STATE_CHANGE_STYLE) || (nType == STATE_CHANGE_ENABLE) )
     {
-        mbFormat = sal_True;
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        mbFormat = true;
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -1641,8 +1640,8 @@ void ValueSet::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        mbFormat = sal_True;
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        mbFormat = true;
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -1687,7 +1686,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos 
         mpImpl->mItemList.push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1712,7 +1711,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos 
         mpImpl->mItemList.push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1739,7 +1738,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
         mpImpl->mItemList.push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1766,7 +1765,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
         mpImpl->mItemList.push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1790,7 +1789,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
         mpImpl->mItemList.push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1818,10 +1817,10 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         mnOldItemId     = 0;
         mnHighItemId    = 0;
         mnSelItemId     = 0;
-        mbNoSelection   = sal_True;
+        mbNoSelection   = true;
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1838,9 +1837,9 @@ void ValueSet::Clear()
     mnOldItemId     = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
-    mbNoSelection   = sal_True;
+    mbNoSelection   = true;
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1897,7 +1896,7 @@ Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ValueSet::EnableFullItemMode( sal_Bool bFullMode )
+void ValueSet::EnableFullItemMode( bool bFullMode )
 {
     mbFullMode = bFullMode;
 }
@@ -1909,7 +1908,7 @@ void ValueSet::SetColCount( sal_uInt16 nNewCols )
     if ( mnUserCols != nNewCols )
     {
         mnUserCols = nNewCols;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1922,7 +1921,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     if ( mnUserVisLines != nNewLines )
     {
         mnUserVisLines = nNewLines;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1935,7 +1934,7 @@ void ValueSet::SetItemWidth( long nNewItemWidth )
     if ( mnUserItemWidth != nNewItemWidth )
     {
         mnUserItemWidth = nNewItemWidth;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1948,7 +1947,7 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     if ( mnUserItemHeight != nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1971,15 +1970,10 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     {
         sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
         mnSelItemId = nItemId;
-        mbNoSelection = sal_False;
+        mbNoSelection = false;
 
-        sal_Bool bNewOut;
-        sal_Bool bNewLine;
-        if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-            bNewOut = sal_True;
-        else
-            bNewOut = sal_False;
-        bNewLine = sal_False;
+        bool bNewOut = !mbFormat && IsReallyVisible() && IsUpdateMode();
+        bool bNewLine = false;
 
         // if necessary scroll to the visible area
         if ( mbScroll && nItemId )
@@ -1988,12 +1982,12 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             if ( nNewLine < mnFirstLine )
             {
                 mnFirstLine = nNewLine;
-                bNewLine = sal_True;
+                bNewLine = true;
             }
             else if ( nNewLine > (sal_uInt16)(mnFirstLine+mnVisLines-1) )
             {
                 mnFirstLine = (sal_uInt16)(nNewLine-mnVisLines+1);
-                bNewLine = sal_True;
+                bNewLine = true;
             }
         }
 
@@ -2002,7 +1996,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             if ( bNewLine )
             {
                 // redraw everything if the visible area has changed
-                mbFormat = sal_True;
+                mbFormat = true;
                 ImplDraw();
             }
             else
@@ -2084,9 +2078,9 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
 
 void ValueSet::SetNoSelection()
 {
-    mbNoSelection   = sal_True;
-    mbHighlight     = sal_False;
-    mbSelection     = sal_False;
+    mbNoSelection   = true;
+    mbHighlight     = false;
+    mbSelection     = false;
 
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
@@ -2111,7 +2105,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         Invalidate( pItem->maRect );
     }
     else
-        mbFormat = sal_True;
+        mbFormat = true;
 }
 
 // -----------------------------------------------------------------------
@@ -2145,7 +2139,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
         Invalidate( pItem->maRect );
     }
     else
-        mbFormat = sal_True;
+        mbFormat = true;
 }
 
 // -----------------------------------------------------------------------
@@ -2180,7 +2174,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
             Invalidate( pItem->maRect );
         }
         else
-            mbFormat = sal_True;
+            mbFormat = true;
     }
 }
 
@@ -2256,7 +2250,7 @@ XubString ValueSet::GetItemText( sal_uInt16 nItemId ) const
 void ValueSet::SetColor( const Color& rColor )
 {
     maColor     = rColor;
-    mbFormat    = sal_True;
+    mbFormat    = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
 }
@@ -2269,7 +2263,7 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     {
         mnSpacing = nNewSpacing;
 
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2280,8 +2274,8 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
 void ValueSet::StartSelection()
 {
     mnOldItemId     = mnSelItemId;
-    mbHighlight     = sal_True;
-    mbSelection     = sal_True;
+    mbHighlight     = true;
+    mbSelection     = true;
     mnHighItemId    = mnSelItemId;
 }
 
@@ -2295,17 +2289,17 @@ void ValueSet::EndSelection()
             EndTracking( ENDTRACK_CANCEL );
 
         ImplHighlightItem( mnSelItemId );
-        mbHighlight = sal_False;
+        mbHighlight = false;
     }
-    mbSelection = sal_False;
+    mbSelection = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
+bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 {
     if ( rCEvt.GetCommand() != COMMAND_STARTDRAG )
-        return sal_False;
+        return false;
 
     // if necessary abort an existing action
     EndSelection();
@@ -2321,7 +2315,7 @@ sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 
     // don't activate dragging if no item was clicked on
     if ( !nSelId )
-        return sal_False;
+        return false;
 
     // Check out if the page was selected. If not set as current page and
     // call select.
@@ -2337,7 +2331,7 @@ sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     // assign region
     rRegion = aRegion;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2421,7 +2415,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
 // -----------------------------------------------------------------------
 
-Size ValueSet::CalcItemSizePixel( const Size& rItemSize, sal_Bool bOut ) const
+Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
 {
     Size aSize = rItemSize;
 

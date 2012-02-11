@@ -233,16 +233,16 @@ private:
     sal_uInt16          mnFirstLine;
     sal_uInt16          mnSpacing;
     sal_uInt16          mnFrameStyle;
-    sal_Bool            mbFormat;
-    sal_Bool            mbHighlight;
-    sal_Bool            mbSelection;
-    sal_Bool            mbNoSelection;
-    sal_Bool            mbDrawSelection;
-    sal_Bool            mbBlackSel;
-    sal_Bool            mbDoubleSel;
-    sal_Bool            mbScroll;
-    sal_Bool            mbDropPos;
-    sal_Bool            mbFullMode;
+    bool            mbFormat : 1;
+    bool            mbHighlight : 1;
+    bool            mbSelection : 1;
+    bool            mbNoSelection : 1;
+    bool            mbDrawSelection : 1;
+    bool            mbBlackSel : 1;
+    bool            mbDoubleSel : 1;
+    bool            mbScroll : 1;
+    bool            mbDropPos : 1;
+    bool            mbFullMode : 1;
     Color           maColor;
     Link            maDoubleClickHdl;
     Link            maSelectHdl;
@@ -253,26 +253,26 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
-    SVT_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem );
     SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
     SVT_DLLPRIVATE void         ImplDrawSelect();
     SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
-    SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection = sal_True );
+    SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection = true );
     SVT_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
-    SVT_DLLPRIVATE sal_Bool         ImplScroll( const Point& rPos );
-    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, sal_Bool bMove = sal_False ) const;
+    SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
+    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SVT_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    SVT_DLLPRIVATE sal_Bool            ImplHasAccessibleListeners();
-    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, sal_Bool bRepeat );
-    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, sal_Bool bCancel );
+    SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
+    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
+    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
@@ -283,7 +283,7 @@ private:
 
 protected:
 
-    sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
+    bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
 
 protected:
 
@@ -334,8 +334,8 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
 
-    void            EnableFullItemMode( sal_Bool bFullMode = sal_True );
-    sal_Bool            IsFullItemModeEnabled() const { return mbFullMode; }
+    void            EnableFullItemMode( bool bFullMode = true );
+    bool            IsFullItemModeEnabled() const { return mbFullMode; }
     void            SetColCount( sal_uInt16 nNewCols = 1 );
     sal_uInt16          GetColCount() const { return mnUserCols; }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
@@ -348,10 +348,10 @@ public:
 
     void            SelectItem( sal_uInt16 nItemId );
     sal_uInt16          GetSelectItemId() const { return mnSelItemId; }
-    sal_Bool            IsItemSelected( sal_uInt16 nItemId ) const
-                        { return ((!mbNoSelection && (nItemId == mnSelItemId)) ? sal_True : sal_False); }
+    bool            IsItemSelected( sal_uInt16 nItemId ) const
+                        { return !mbNoSelection && (nItemId == mnSelItemId); }
     void            SetNoSelection();
-    sal_Bool            IsNoSelection() const { return mbNoSelection; }
+    bool            IsNoSelection() const { return mbNoSelection; }
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
@@ -364,7 +364,7 @@ public:
     void            SetColor( const Color& rColor );
     void            SetColor() { SetColor( Color( COL_TRANSPARENT ) ); }
     Color           GetColor() const { return maColor; }
-    sal_Bool            IsColor() const { return maColor.GetTransparency() == 0; }
+    bool            IsColor() const { return maColor.GetTransparency() == 0; }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
     sal_uInt16          GetExtraSpacing() { return mnSpacing; }
@@ -377,7 +377,7 @@ public:
     Size            CalcWindowSizePixel( const Size& rItemSize,
                                          sal_uInt16 nCalcCols = 0,
                                          sal_uInt16 nCalcLines = 0 );
-    Size            CalcItemSizePixel( const Size& rSize, sal_Bool bOut = sal_True ) const;
+    Size            CalcItemSizePixel( const Size& rSize, bool bOut = true ) const;
     long            GetScrollWidth() const;
 
     void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
