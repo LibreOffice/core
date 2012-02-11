@@ -1,11 +1,11 @@
---- misc/jakarta-tomcat-5.0.30-src/jakarta-servletapi-5/build.xml	Thu Jun 19 16:03:59 2008
-+++ misc/build/jakarta-tomcat-5.0.30-src/jakarta-servletapi-5/build.xml	Thu Jun 19 15:56:18 2008
+--- misc/apache-tomcat-5.5.35-src/servletapi/build.xml	Thu Jun 19 16:03:59 2008
++++ misc/build/apache-tomcat-5.5.35-src/servletapi/build.xml	Thu Jun 19 15:56:18 2008
 @@ -1,1 +1,31 @@
 -dummy
-+<project name="jsr152 and jsr154 in Debian" default="debuild" basedir=".">
++<project name="jsr152 and jsr154 in Apache OpenOffice" default="debuild" basedir=".">
 +
 +  <target name="debuild"
-+   description="Build jsr154 and jsr152 for Debian (Default)">
++   description="Build jsr154 and jsr152 for Apache OpenOffice (Default)">
 +    <echo message="Building Servlet 2.4 API"/>
 +    <ant antfile="jsr154/build.xml"
 +         target="dist"

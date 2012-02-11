@@ -23,7 +23,7 @@
 
 PRJ=.
 
-PRJNAME=tomacat
+PRJNAME=tomcat
 TARGET=servlet
 
 .IF "$(SOLAR_JAVA)" != ""
@@ -34,17 +34,17 @@ TARGET=servlet
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=jakarta-tomcat-5.0.30-src
-TARFILE_MD5=2a177023f9ea8ec8bd00837605c5df1b
+TARFILE_NAME=apache-tomcat-5.5.35-src
+TARFILE_MD5=7e4e73c21f031d5a4c93c128baf7fd75
 
-TARFILE_ROOTDIR=jakarta-tomcat-5.0.30-src
+TARFILE_ROOTDIR=apache-tomcat-5.5.35-src
 
-ADDITIONAL_FILES = jakarta-servletapi-5/build.xml
+ADDITIONAL_FILES = servletapi/build.xml
 #CONVERTFILES=build$/build.xml
 
 PATCH_FILES=tomcat.patch
 
-BUILD_DIR=jakarta-servletapi-5
+BUILD_DIR=servletapi
 BUILD_ACTION=$(ANT)
 
 # --- Targets ------------------------------------------------------
