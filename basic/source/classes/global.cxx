@@ -27,24 +27,36 @@
  */
 
 #include "basic/global.hxx"
-#include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
+#include <rtl/instance.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <vcl/svapp.hxx>
 
-utl::TransliterationWrapper* SbGlobal::pTransliteration = NULL;
-
-utl::TransliterationWrapper* SbGlobal::GetTransliteration()
+namespace
 {
-    if(!pTransliteration)
+    class lclTransliterationWrapper
     {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
-        pTransliteration = new ::utl::TransliterationWrapper(
-            comphelper::getProcessServiceFactory(),
-            com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
-            pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    }
-    return pTransliteration;
+    private:
+        utl::TransliterationWrapper m_aTransliteration;
+    public:
+        lclTransliterationWrapper()
+            : m_aTransliteration(
+                comphelper::getProcessServiceFactory(),
+                com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
+        {
+            const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+            m_aTransliteration.loadModuleIfNeeded( eOfficeLanguage );
+        }
+        utl::TransliterationWrapper& getTransliteration() { return m_aTransliteration; }
+    };
+
+    class theTransliterationWrapper : public rtl::Static<lclTransliterationWrapper, theTransliterationWrapper> {};
+}
+
+utl::TransliterationWrapper& SbGlobal::GetTransliteration()
+{
+    return theTransliterationWrapper::get().getTransliteration();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1737,11 +1737,11 @@ namespace
         String sModule = sMacro.GetToken( 0, '.', nLast );
         sMacro.Erase( 0, nLast );
 
-        utl::TransliterationWrapper* pTransliteration = SbGlobal::GetTransliteration();
+        utl::TransliterationWrapper& rTransliteration = SbGlobal::GetTransliteration();
         sal_uInt16 nLibCount = i_manager->GetLibCount();
         for ( sal_uInt16 nLib = 0; nLib < nLibCount; ++nLib )
         {
-            if ( pTransliteration->isEqual( i_manager->GetLibName( nLib ), sLibName ) )
+            if ( rTransliteration.isEqual( i_manager->GetLibName( nLib ), sLibName ) )
             {
                 StarBASIC* pLib = i_manager->GetLib( nLib );
                 if( !pLib )
@@ -1756,7 +1756,7 @@ namespace
                     for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
                     {
                         SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
-                        if ( pMod && pTransliteration->isEqual( pMod->GetName(), sModule ) )
+                        if ( pMod && rTransliteration.isEqual( pMod->GetName(), sModule ) )
                         {
                             SbMethod* pMethod = (SbMethod*)pMod->Find( sMacro, SbxCLASS_METHOD );
                             if( pMethod )

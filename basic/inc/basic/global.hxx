@@ -35,9 +35,8 @@ namespace utl {
 
 class SbGlobal
 {
-    static utl::TransliterationWrapper* pTransliteration;
 public:
-    static utl::TransliterationWrapper* GetTransliteration();
+    static utl::TransliterationWrapper& GetTransliteration();
 };
 
 #endif
