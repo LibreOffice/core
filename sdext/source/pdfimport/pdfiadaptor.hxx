@@ -121,9 +121,6 @@ namespace pdfi
             @param xStatus
             Optional status indicator
          */
-        bool odfConvert( const rtl::OUString&                                                          rURL,
-                         const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&      xOutput,
-                         const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& xStatus );
 
         // XImportFilter
         virtual sal_Bool SAL_CALL importer( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rSourceData,

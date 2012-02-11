@@ -260,22 +260,6 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
     return bSuccess;
 }
 
-bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          rURL,
-                                 const uno::Reference<io::XOutputStream>&      xOutput,
-                                 const uno::Reference<task::XStatusIndicator>& xStatus )
-{
-    XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
-    const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
-                                uno::Reference<task::XInteractionHandler>(),
-                                rtl::OUString(),
-                                xStatus,pEmitter,rURL);
-
-    // tell input stream that it is no longer needed
-    xOutput->closeOutput();
-
-    return bSuccess;
-}
-
 // XImportFilter
 sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::PropertyValue >&        rSourceData,
                                             const uno::Reference< xml::sax::XDocumentHandler >& rHdl,

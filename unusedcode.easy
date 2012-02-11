@@ -1420,7 +1420,6 @@ oox::xls::WorksheetHelper::getRow(int) const
 oox::xls::WorksheetHelper::getRows(oox::ValueRange const&) const
 oox::xls::WorksheetHelper::putFormulaString(com::sun::star::table::CellAddress const&, rtl::OUString const&) const
 oox::xls::Xf::hasAnyUsedFlags() const
-pdfi::PDFIRawAdaptor::odfConvert(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const&)
 psp::GetCommandLineTokenCount(rtl::OString const&)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
