@@ -188,7 +188,7 @@ static sal_Int32 readLogLevelFromConfiguration()
         else if( str.equalsAscii( "SQL" ) )
             loglevel = LogLevel::SQL;
         else if( str.equalsAscii( "INFO" ) )
-            loglevel = LogLevel::SQL;
+            loglevel = LogLevel::INFO;
         else
         {
             fprintf( stderr, "unknown loglevel %s\n",
