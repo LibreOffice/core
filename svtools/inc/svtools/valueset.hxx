@@ -222,10 +222,8 @@ private:
     long            mnLines;
     long            mnUserItemWidth;
     long            mnUserItemHeight;
-    sal_uInt16          mnOldItemId;
     sal_uInt16          mnSelItemId;
     sal_uInt16          mnHighItemId;
-    size_t          mnDropPos;
     sal_uInt16          mnCols;
     sal_uInt16          mnCurCol;
     sal_uInt16          mnUserCols;
@@ -241,7 +239,6 @@ private:
     bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
-    bool            mbDropPos : 1;
     bool            mbFullMode : 1;
     Color           maColor;
     Link            maDoubleClickHdl;

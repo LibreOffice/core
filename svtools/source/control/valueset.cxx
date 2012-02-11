@@ -59,10 +59,8 @@ void ValueSet::ImplInit()
     mnUserItemWidth     = 0;
     mnUserItemHeight    = 0;
     mnFirstLine         = 0;
-    mnOldItemId         = 0;
     mnSelItemId         = 0;
     mnHighItemId        = 0;
-    mnDropPos           = VALUESET_ITEM_NOTFOUND;
     mnCols              = 0;
     mnCurCol            = 0;
     mnUserCols          = 0;
@@ -77,7 +75,6 @@ void ValueSet::ImplInit()
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
-    mbDropPos           = false;
     mbFullMode          = true;
 
     // #106446#, #106601# force mirroring of virtual device
@@ -1225,7 +1222,6 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
             mbHighlight = true;
             if ( pItem )
             {
-                mnOldItemId  = mnSelItemId;
                 mnHighItemId = mnSelItemId;
                 ImplHighlightItem( pItem->mnId );
             }
@@ -1238,7 +1234,6 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
-                    mnOldItemId  = mnSelItemId;
                     mbHighlight  = true;
                     mnHighItemId = mnSelItemId;
                     ImplHighlightItem( pItem->mnId );
@@ -1814,7 +1809,6 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
     if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
     {
         mnCurCol        = 0;
-        mnOldItemId     = 0;
         mnHighItemId    = 0;
         mnSelItemId     = 0;
         mbNoSelection   = true;
@@ -1834,7 +1828,6 @@ void ValueSet::Clear()
     // reset variables
     mnFirstLine     = 0;
     mnCurCol        = 0;
-    mnOldItemId     = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
     mbNoSelection   = true;
@@ -2273,7 +2266,6 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
 
 void ValueSet::StartSelection()
 {
-    mnOldItemId     = mnSelItemId;
     mbHighlight     = true;
     mbSelection     = true;
     mnHighItemId    = mnSelItemId;
