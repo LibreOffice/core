@@ -41,14 +41,6 @@ PathFormat()
     fi
 }
 
-WinPath()
-{
-    formatted_path="$1"
-    if test "$build_os" = "cygwin" ; then
-        formatted_path=`cygpath -d "$formatted_path"`
-    fi
-}
-
 echo "********************************************************************"
 echo "*"
 echo "*   Running ${PACKAGE_NAME} build configuration."
@@ -10661,30 +10653,21 @@ AC_SUBST(BUILD_NCPUS)
 # Set up ILIB for windows build
 #
 if test "$build_os" = "cygwin"; then
-    ILIB="."
-    WinPath "$SRC_ROOT/solver/$INPATH/lib"
-    ILIB="$ILIB;$formatted_path"
+    ILIB=".;$SRC_ROOT/solver/$INPATH/lib"
     if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME" ; then
-        WinPath "$JAVA_HOME/lib"
-        ILIB="$ILIB;$formatted_path"
+        ILIB="$ILIB;$JAVA_HOME/lib"
     fi
     if test "$CL_X64" = "TRUE" ; then
-        WinPath "$COMPATH/lib/amd64"
-        ILIB="$ILIB;$formatted_path"
-        WinPath "$WINDOWS_SDK_HOME/lib64"
-        ILIB="$ILIB;$formatted_path"
+        ILIB="$ILIB;$COMPATH/lib/amd64"
+        ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
     else
-        WinPath "$COMPATH/lib"
-        ILIB="$ILIB;$formatted_path"
-        WinPath "$WINDOWS_SDK_HOME/lib"
-        ILIB="$ILIB;$formatted_path"
+        ILIB="$ILIB;$COMPATH/lib"
+        ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
     fi
-    WinPath "$DOTNET_FRAMEWORK_HOME/lib"
-    ILIB="$ILIB;$formatted_path"
+    ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
     if test "$ENABLE_DIRECTX" = "TRUE" ; then
-        WinPath "$DIRECTXSDK_LIB"
-        ILIB="$ILIB;$formatted_path"
+        ILIB="$ILIB;$DIRECTXSDK_LIB"
     fi
     AC_SUBST(ILIB)
 fi
