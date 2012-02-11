@@ -66,6 +66,8 @@ using namespace ::com::sun::star;
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
+DBG_NAME(SdrPageView);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // interface to SdrPageWindow
 
