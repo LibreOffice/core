@@ -313,6 +313,14 @@ gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_Helper_set_ld_path) $(gb_XSLTPROCTARGET)
 endif
 
+ifeq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
+gb_XMLLINTTARGET :=
+gb_XMLLINT := xsltproc
+else
+gb_XMLLINTTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
+gb_XMLLINT := $(gb_Helper_set_ld_path) $(gb_XMLLINTTARGET)
+endif
+
 ifeq ($(SYSTEM_PYTHON),YES)
 gb_PYTHONTARGET :=
 gb_PYTHON := $(PYTHON)
