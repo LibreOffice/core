@@ -822,7 +822,6 @@ int rc = 0;
 off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
-char* in_list_end;
 char* in_list_base;
 struct hash* dep_hash;
 char* base_dir;
@@ -842,7 +841,6 @@ char* base_dir;
     if(!rc)
     {
         dep_hash = hash_create( kDEFAULT_HASH_SIZE);
-        in_list_end = in_list + in_list_size;
         in_list_base = in_list_cursor = in_list;
 
         /* extract filename of dep file from a 'space' separated list */
