@@ -30,8 +30,7 @@
 
 #include "ObjectIdentifier.hxx"
 #include <sfx2/tabdlg.hxx>
-// header for typedef ChangeType
-#include <svx/tabarea.hxx>
+#include <svx/dlgctrl.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 //.............................................................................

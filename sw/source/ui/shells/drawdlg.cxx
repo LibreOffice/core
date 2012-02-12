@@ -33,8 +33,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdview.hxx>
-#include <svx/tabarea.hxx>
-#include <svx/tabline.hxx>
 #include <svx/drawitem.hxx>
 
 #include <svx/xtable.hxx>

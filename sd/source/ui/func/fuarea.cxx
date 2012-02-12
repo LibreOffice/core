@@ -31,7 +31,6 @@
 #include "fuarea.hxx"
 
 #include <svx/svxids.hrc>
-#include <svx/tabarea.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

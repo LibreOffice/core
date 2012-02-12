@@ -35,8 +35,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/tabarea.hxx>
-#include <svx/tabline.hxx>
+#include <svx/svdpage.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>

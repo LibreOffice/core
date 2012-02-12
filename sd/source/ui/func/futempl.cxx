@@ -70,7 +70,7 @@
 #include "glob.hrc"
 #include "prlayout.hxx"         // enum PresentationObjects
 #include "prltempl.hrc"         // TAB_PRES_LAYOUT_TEMPLATE_x
-#include <svx/tabarea.hxx>
+#include <svx/xfillit.hxx>
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
 #include "strings.hrc"
