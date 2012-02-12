@@ -196,6 +196,10 @@ mimetypes = [
     ('application/x-starwriter', 'sdw'),
     ('application/vnd.stardivision.writer', 'sdw5'),
     ('application/vnd.stardivision.writer-global', 'sgl5'),
+]
+
+# disabled for now, this would download gigs of pngs/jpegs...
+image_mimetypes = [
 # graphics
     ('image/svg+xml', 'svg'),
     ('image/x-MS-bmp', 'bmp'),
