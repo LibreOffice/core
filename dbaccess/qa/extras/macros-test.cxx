@@ -99,7 +99,7 @@ void DBAccessTest::setUp()
     // which is a private symbol to us, gets called
     mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
+    CPPUNIT_ASSERT(mxDesktop.is());
 }
 
 void DBAccessTest::tearDown()

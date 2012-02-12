@@ -141,7 +141,7 @@ void ScMacrosTest::testStarBasic()
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << "returned value = " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     xDocSh->DoClose();
 }
 
@@ -207,7 +207,7 @@ void ScMacrosTest::setUp()
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
     mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
+    CPPUNIT_ASSERT(mxDesktop.is());
 }
 
 void ScMacrosTest::tearDown()
