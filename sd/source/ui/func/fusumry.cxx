@@ -192,8 +192,12 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                 * Text hinzufuegen
                 **************************************************************/
                 OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-                pParaObj->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-                pOutl->AddText(*pParaObj);
+                // #118876#, check if the OutlinerParaObject is created successfully
+                if( pParaObj )
+                {
+                    pParaObj->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+                    pOutl->AddText(*pParaObj);
+                }
             }
         }
     }
