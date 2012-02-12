@@ -283,7 +283,7 @@ void XSpreadsheets2::testImportCellStyle()
     sal_Int32 aVertJustify = 0;
     CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(aProperty) >>= aVertJustify);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("New style: VertJustify not set", aVertJustify, table::CellVertJustify_CENTER);
+    CPPUNIT_ASSERT_MESSAGE("New style: VertJustify not set", aVertJustify == table::CellVertJustify_CENTER);
 }
 
 uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const rtl::OUString& aFileBase, uno::Reference< lang::XComponent >& xComp)
@@ -326,7 +326,7 @@ void XSpreadsheets2::importSheetToCopy()
         uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
         sal_Int32 nDestPos = 0;
         sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, aSrcSheetName, nDestPos);
-        CPPUNIT_ASSERT_EQUALS_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
     }
     else
     {
