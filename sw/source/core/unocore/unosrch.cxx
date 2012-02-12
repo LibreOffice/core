@@ -428,7 +428,6 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     }
     delete pBoxItem;
     delete pBreakItem;
-    delete pBreakItem ;
     delete pAutoKernItem ;
     delete pWLineItem;
     delete pTabItem;
