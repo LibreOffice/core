@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
@@ -871,8 +870,8 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
 {
     Rectangle aRect;
 
-    sal_uInt16 nItemPos = GetItemPos( nItemId );
-    if ( nItemPos != sal::static_int_cast<sal_uInt16>(LIST_ENTRY_NOTFOUND) )
+    size_t nItemPos = GetItemPos( nItemId );
+    if ( nItemPos != VALUESET_ITEM_NOTFOUND )
         aRect = mItemList[nItemPos]->maRect;
     else
     {
