@@ -222,7 +222,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
     }
     else if( HasFollow() )
         GetFollow()->bIsFollow = sal_False;
-    pFollow = NULL;
+    m_pFollow = NULL;
     if( pUp )
     {
         Frm().Height( 0 );

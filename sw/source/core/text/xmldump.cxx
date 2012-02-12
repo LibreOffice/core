@@ -366,8 +366,8 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 
-    if ( pPrecede != NULL )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTxtFrm*)pPrecede );
+    if (m_pPrecede != NULL)
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTxtFrm*)m_pPrecede );
 }
 
 void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
@@ -376,8 +376,8 @@ void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 
-    if ( pPrecede != NULL )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwSectionFrm*)pPrecede );
+    if (m_pPrecede != NULL)
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwSectionFrm*)m_pPrecede );
 }
 
 void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
@@ -386,8 +386,8 @@ void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 
-    if ( pPrecede != NULL )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTabFrm*)pPrecede );
+    if (m_pPrecede != NULL)
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTabFrm*)m_pPrecede );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

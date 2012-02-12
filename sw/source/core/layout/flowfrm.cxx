@@ -79,14 +79,23 @@ sal_Bool SwFlowFrm::bMoveBwdJump = sal_False;
 
 SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     rThis( rFrm ),
-    pFollow( 0 ),
-    pPrecede( 0 ),
+    m_pFollow( 0 ),
+    m_pPrecede( 0 ),
     bIsFollow( false ),
     bLockJoin( false ),
     bUndersized( false ),
     bFlyLock( false )
 {}
 
+
+void SwFlowFrm::SetFollow(SwFlowFrm *const pFollow)
+{
+    m_pFollow = pFollow;
+    if (m_pFollow != NULL)
+    {
+        m_pFollow->m_pPrecede = this;
+    }
+}
 
 /*************************************************************************
 |*
@@ -214,7 +223,7 @@ sal_Bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldK
         {
             SwFrm *pNxt;
             if( 0 != (pNxt = rThis.FindNextCnt()) &&
-                (!pFollow || pNxt != pFollow->GetFrm()))
+                (!m_pFollow || pNxt != m_pFollow->GetFrm()))
             {
                 // #135914#
                 // The last row of a table only keeps with the next content

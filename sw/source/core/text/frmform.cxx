@@ -681,7 +681,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     }
     pFoll->Cut();
     delete pFoll;
-    pFollow = pNxt;
+    m_pFollow = pNxt;
     return pNxt;
 }
 
@@ -2065,7 +2065,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         return sal_False;
     }
 
-    if( pFollow && nStart != ((SwTxtFrm*)pFollow)->GetOfst() )
+    if (m_pFollow && nStart != (static_cast<SwTxtFrm*>(m_pFollow))->GetOfst())
         return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
 
     // Geschafft, wir sind durch ...
