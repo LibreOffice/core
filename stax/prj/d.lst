@@ -1,1 +1,1 @@
-..\%__SRC%\class\jsr*.jar %_DEST%\bin%_EXT%
+..\%__SRC%\class\stax*.jar %_DEST%\bin%_EXT%

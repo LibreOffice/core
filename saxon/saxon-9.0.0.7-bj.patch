@@ -173,7 +173,7 @@
 +    <property name="solar.bin" value="${solarbindir}"/>
 +    <path id="classpath-j">
 +        <fileset dir="${solar.bin}">
-+            <include name="jsr173_1.0_api.jar"/>
++            <include name="stax-1.2.0.jar"/>
 +        </fileset>
 +    </path>
 +        

@@ -84,6 +84,11 @@ a font family based on the Vera Fonts. More information
 is available here:
     http://dejavu-fonts.org/
 
+Older versions of Java may require the StAX API, which
+was included in OpenJDK 6. Information about the latest
+version under an Apache License 2.0 is available here:
+    http://stax.codehaus.org/
+
 Category B Software
 
 As part of its Third-Party Licensing Policy, Apache products

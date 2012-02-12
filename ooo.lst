@@ -47,6 +47,7 @@ c735eab2d659a96e5a594c9e8541ad63-zlib-1.2.5.tar.gz
 3b179ed18f65c43141528aa6d2440db4-serf-1.0.0.tar.bz2
 666a5d56098a9debf998510e304c8095-apr-util-1.4.1.tar.gz
 97262fe54dddaf583eaaee3497a426e1-apr-1.4.5.tar.gz
+980143f96b3f6ce45d2e4947da21a5e9-stax-src-1.2.0.zip
 
 # Libraries with category B license
 61f59e4110781cbe66b46449eadac231-croscorefonts-1.21.0.tar.gz
@@ -58,9 +59,6 @@ b92261a5679276c400555004937af965-nss-3.12.6-with-nspr-4.8.4.tar.gz
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip
 24be19595acad0a2cae931af77a0148a-LICENSE_source-9.0.0.7-bj.html
 48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
-8294d6c42e3553229af9934c5c0ed997-stax-api-1.0-2-sources.jar
-a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
-fb7ba5c2182be4e73748859967455455-README_stax-api-1.0-2-sources.txt
 99d94103662a8d0b571e247a77432ac5-rhino1_7R3.zip
 377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
