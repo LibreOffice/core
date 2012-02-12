@@ -292,7 +292,6 @@ namespace vcl
         virtual size_t countElements() const { return 2; }
 
         void setLabel( Window* );
-        void setLabel( boost::shared_ptr<WindowArranger> const & );
         void setElement( Window* );
         void setElement( boost::shared_ptr<WindowArranger> const & );
         void setLabelColumnWidth( long i_nWidth )
@@ -379,77 +378,6 @@ namespace vcl
         virtual void setParentWindow( Window* ) {}
         virtual size_t countElements() const { return 1; }
         virtual bool isVisible() const { return true; }
-    };
-
-    class VCL_DLLPUBLIC MatrixArranger : public WindowArranger
-    {
-        long    m_nBorderX;
-        long    m_nBorderY;
-
-        struct MatrixElement : public WindowArranger::Element
-        {
-            sal_uInt32  m_nX;
-            sal_uInt32  m_nY;
-
-            MatrixElement()
-            : WindowArranger::Element()
-            , m_nX( 0 )
-            , m_nY( 0 )
-            {}
-
-            MatrixElement( Window* i_pWin,
-                           sal_uInt32 i_nX, sal_uInt32 i_nY,
-                           boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>(),
-                           sal_Int32 i_nExpandPriority = 0,
-                           const Size& i_rMinSize = Size()
-                          )
-            : WindowArranger::Element( i_pWin, i_pChild, i_nExpandPriority, i_rMinSize )
-            , m_nX( i_nX )
-            , m_nY( i_nY )
-            {
-            }
-        };
-
-        std::vector< MatrixElement >            m_aElements;
-        std::map< sal_uInt64, size_t >          m_aMatrixMap;  // maps (x | (y << 32)) to index in m_aElements
-
-        sal_uInt64 getMap( sal_uInt32 i_nX, sal_uInt32 i_nY )
-        { return static_cast< sal_uInt64 >(i_nX) | (static_cast< sal_uInt64>(i_nY) << 32 ); }
-
-        static void distributeExtraSize( std::vector<long>& io_rSizes, const std::vector<sal_Int32>& i_rPrios, long i_nExtraWidth );
-
-        Size getOptimalSize( WindowSizeType,
-                             std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights,
-                             std::vector<sal_Int32>& o_rColumnPrio, std::vector<sal_Int32>& o_rRowPrio
-                            ) const;
-    protected:
-        virtual Element* getElement( size_t i_nIndex )
-        { return i_nIndex < m_aElements.size() ? &m_aElements[ i_nIndex ] : 0; }
-
-    public:
-        MatrixArranger( WindowArranger* i_pParent = NULL,
-                        long i_nBorderX = -1,
-                        long i_nBorderY = -1 )
-        : WindowArranger( i_pParent )
-        , m_nBorderX( i_nBorderX )
-        , m_nBorderY( i_nBorderY )
-        {}
-
-        virtual ~MatrixArranger();
-
-        virtual Size getOptimalSize( WindowSizeType ) const;
-        virtual void resize();
-        virtual size_t countElements() const { return m_aElements.size(); }
-
-        // add a managed window at the given matrix position
-        size_t addWindow( Window*, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0, const Size& i_rMinSize = Size() );
-        void remove( Window* );
-
-        size_t addChild( boost::shared_ptr<WindowArranger> const &, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 );
-        // convenience: use for addChild( new WindowArranger( ... ) ) constructs
-        size_t addChild( WindowArranger* i_pNewChild, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 )
-        { return addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nX, i_nY, i_nExpandPrio ); }
-        void remove( boost::shared_ptr<WindowArranger> const & );
     };
 
 }

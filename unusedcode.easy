@@ -1482,12 +1482,7 @@ ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::I18nHelper::GetDate(Date const&) const
-vcl::LabeledElement::setLabel(boost::shared_ptr<vcl::WindowArranger> const&)
 vcl::LazyDeletor<Menu>::is_less(Menu*, Menu*)
-vcl::MatrixArranger::addChild(boost::shared_ptr<vcl::WindowArranger> const&, unsigned int, unsigned int, int)
-vcl::MatrixArranger::addWindow(Window*, unsigned int, unsigned int, int, Size const&)
-vcl::MatrixArranger::remove(Window*)
-vcl::MatrixArranger::remove(boost::shared_ptr<vcl::WindowArranger> const&)
 vcl::PDFExtOutDevData::EndGroup()
 vcl::PDFExtOutDevData::GetFormsFormat() const
 vcl::PDFExtOutDevData::SetAutoAdvanceTime(unsigned int, int)
