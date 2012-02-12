@@ -907,9 +907,9 @@ PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
     }
 
     int nPos = rURL.lastIndexOf( (sal_Unicode)'.' );
-    OUString aExt = rURL.copy( nPos ).toAsciiLowerCase();
     if( nPos != -1 )
     {
+        OUString const aExt = rURL.copy( nPos ).toAsciiLowerCase();
         for( int i = 0; i < aDescrs.getLength(); i++ )
         {
             OUString aThisExt = pDescrs[ i ].Extension.toAsciiLowerCase();
