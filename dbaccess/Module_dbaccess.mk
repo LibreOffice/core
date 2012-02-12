@@ -45,6 +45,10 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     Package_uiconfig \
 ))
 
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_macros_test \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \
     JunitTest_dbaccess_unoapi \
