@@ -87,12 +87,33 @@ SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     bFlyLock( false )
 {}
 
+SwFlowFrm::~SwFlowFrm()
+{
+    if (m_pFollow)
+    {
+        m_pFollow->m_pPrecede = 0;
+    }
+    if (m_pPrecede)
+    {
+        m_pPrecede->m_pFollow = 0;
+    }
+}
 
 void SwFlowFrm::SetFollow(SwFlowFrm *const pFollow)
 {
+    if (m_pFollow)
+    {
+        assert(this == m_pFollow->m_pPrecede);
+        m_pFollow->m_pPrecede = 0;
+    }
     m_pFollow = pFollow;
     if (m_pFollow != NULL)
     {
+        if (m_pFollow->m_pPrecede) // re-chaining pFollow?
+        {
+            assert(m_pFollow == m_pFollow->m_pPrecede->m_pFollow);
+            m_pFollow->m_pPrecede->m_pFollow = 0;
+        }
         m_pFollow->m_pPrecede = this;
     }
 }
