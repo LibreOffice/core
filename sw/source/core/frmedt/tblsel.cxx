@@ -2208,7 +2208,7 @@ void _FndBox::SetTableLines( const SwTable &rTable )
 
 inline void UnsetFollow( SwFlowFrm *pTab )
 {
-    pTab->bIsFollow = sal_False;
+    pTab->m_pPrecede = 0;
 }
 
 void _FndBox::DelFrms( SwTable &rTable )

@@ -697,7 +697,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     // Damit meine Daten nicht verschwinden, locke ich mich.
     SwTxtFrmLocker aLock( this );
     SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm( this ));
-    pNew->bIsFollow = sal_True;
 
     pNew->SetFollow( GetFollow() );
     SetFollow( pNew );

@@ -117,7 +117,6 @@ protected:
     SwFlowFrm *m_pFollow;
     SwFlowFrm *m_pPrecede;
 
-    sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
     sal_Bool bUndersized:1; // wir sind kleiner als gewuenscht
     sal_Bool bFlyLock   :1; //  Stop positioning of at-character flyframes
@@ -163,8 +162,7 @@ public:
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
            sal_Bool       HasFollow() const    { return m_pFollow ? sal_True : sal_False; }
-           sal_Bool       IsFollow()     const { return bIsFollow; }
-    inline void       _SetIsFollow( sal_Bool bSet ) { bIsFollow = bSet; }
+           sal_Bool       IsFollow()     const { return 0 != m_pPrecede; }
     const  SwFlowFrm *GetFollow() const    { return m_pFollow;   }
            SwFlowFrm *GetFollow()          { return m_pFollow;   }
            sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
