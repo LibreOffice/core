@@ -30,6 +30,13 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
+#include <cppuhelper/implbase1.hxx>
+
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+
+#include <comphelper/processfactory.hxx>
+
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -46,6 +53,29 @@ SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
+
+
+class EventListener
+    : public ::cppu::WeakImplHelper1<document::XDocumentEventListener>
+{
+public:
+    bool m_bLayoutFinished;
+    explicit EventListener() : m_bLayoutFinished(false) { }
+    virtual void SAL_CALL documentEventOccured(
+            document::DocumentEvent const& rEvent)
+        throw (uno::RuntimeException)
+    {
+//        fprintf(stderr, "EVENT: %s\n", ::rtl::OUStringToOString(rEvent.EventName, RTL_TEXTENCODING_UTF8).getStr());
+        if (rEvent.EventName.equalsAscii("OnLayoutFinished"))
+        {
+            m_bLayoutFinished = true;
+        }
+    }
+    virtual void SAL_CALL disposing(lang::EventObject const&)
+        throw (uno::RuntimeException)
+    {
+    }
+};
 
 /* Implementation of Filters test */
 
@@ -71,6 +101,18 @@ private:
 bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
+    ::rtl::Reference<EventListener> xListener;
+    if (false) // does not work: missing ViewShell, no VCL timers, or both
+    {
+        xListener.set(new EventListener);
+        uno::Reference<document::XDocumentEventBroadcaster> xGEB;
+        xGEB.set(::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.frame.GlobalEventBroadcaster"))),
+            uno::UNO_QUERY_THROW);
+        xGEB->addDocumentEventListener(
+            uno::Reference<document::XDocumentEventListener>(xListener.get()));
+    }
     SfxFilter* pFilter = new SfxFilter(
         rFilter,
         rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
@@ -80,6 +122,19 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
     pSrcMed->SetFilter(pFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
+    if (bLoaded && xListener.is())
+    {
+        TimeValue delay = {0, 100000000};
+        int tries(0);
+        while (!xListener->m_bLayoutFinished) {
+            osl_waitThread(& delay);
+            ++tries;
+            if (tries >= 300) {
+                fprintf(stderr, "timed out: no OnLayoutFinished received\n");
+                break;
+            }
+        }
+    }
     if (xDocShRef.Is())
         xDocShRef->DoClose();
     return bLoaded;
