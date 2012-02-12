@@ -68,6 +68,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sd \
     sfx2 \
     slideshow \
+    smoketest \
     starmath \
     svtools \
     svx \

@@ -363,6 +363,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     package2 \
     reg \
     scriptframe \
+    smoketest \
     sofficeapp \
     srtrs1 \
     store \

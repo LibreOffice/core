@@ -96,6 +96,7 @@ scripting\
 sd\
 sfx2\
 slideshow\
+smoketest\
 sot\
 starmath\
 svl\
@@ -219,8 +220,6 @@ scp2\
 sdext\
 setup_native\
 shell\
-smoketest\
-smoketestoo_native\
 solenv\
 soltools\
 stax\

@@ -99,6 +99,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sd \
     sfx2 \
     slideshow \
+    smoketest \
     sot \
     starmath \
     svl \
