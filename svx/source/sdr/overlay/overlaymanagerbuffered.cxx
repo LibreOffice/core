@@ -500,14 +500,6 @@ namespace sdr
                 }
             }
         }
-
-        void OverlayManagerBuffered::SetRefreshWithPreRendering(bool bNew)
-        {
-            if((bool)mbRefreshWithPreRendering != bNew)
-            {
-                mbRefreshWithPreRendering = bNew;
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 

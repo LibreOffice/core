@@ -53,7 +53,6 @@ namespace sdr
 
             // change geometry
             basegfx::B2DPolyPolygon getPolyPolygon() const { return maPolyPolygon; }
-            void setPolyPolygon(const basegfx::B2DPolyPolygon& rNew);
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged();

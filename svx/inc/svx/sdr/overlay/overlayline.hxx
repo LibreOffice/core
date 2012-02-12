@@ -54,7 +54,6 @@ namespace sdr
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint& rNew);
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged();

@@ -102,7 +102,6 @@ namespace sdr
 
             // access to RefreshWithPreRendering Flag
             bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }
-            void SetRefreshWithPreRendering(bool bNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr

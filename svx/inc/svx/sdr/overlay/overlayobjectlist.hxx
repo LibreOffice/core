@@ -59,9 +59,8 @@ namespace sdr
             // clear list, this includes deletion of all contained objects
             void clear();
 
-            // append/remove objects
+            // append objects
             void append(OverlayObject& rOverlayObject) { maVector.push_back(&rOverlayObject); }
-            void remove(OverlayObject& rOverlayObject);
 
             // access to objects
             sal_uInt32 count() const { return maVector.size(); }

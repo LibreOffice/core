@@ -64,7 +64,6 @@ namespace sdr
                 double fRotation);
 
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint&);
 
             // data read access
             double getDiscreteGrow() const { return mfDiscreteGrow; }

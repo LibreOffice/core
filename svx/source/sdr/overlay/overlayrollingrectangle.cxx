@@ -118,30 +118,6 @@ namespace sdr
                 objectChange();
             }
         }
-
-        void OverlayRollingRectangleStriped::setExtendedLines(bool bNew)
-        {
-            if(bNew != (bool)mbExtendedLines)
-            {
-                // remember new value
-                mbExtendedLines = bNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
-        void OverlayRollingRectangleStriped::setShowBounds(bool bNew)
-        {
-            if(bNew != (bool)mbShowBounds)
-            {
-                // remember new value
-                mbShowBounds = bNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 

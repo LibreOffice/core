@@ -73,38 +73,6 @@ namespace sdr
         OverlayBitmapEx::~OverlayBitmapEx()
         {
         }
-
-        void OverlayBitmapEx::setBitmapEx(const BitmapEx& rNew)
-        {
-            if(rNew != maBitmapEx)
-            {
-                // remember new Bitmap
-                maBitmapEx = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
-        void OverlayBitmapEx::setCenterXY(sal_uInt16 nNewX, sal_uInt16 nNewY)
-        {
-            if(nNewX != mnCenterX || nNewY != mnCenterY)
-            {
-                // remember new values
-                if(nNewX != mnCenterX)
-                {
-                    mnCenterX = nNewX;
-                }
-
-                if(nNewY != mnCenterY)
-                {
-                    mnCenterY = nNewY;
-                }
-
-                // register change (after change)
-                objectChange();
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 
