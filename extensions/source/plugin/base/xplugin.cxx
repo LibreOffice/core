@@ -523,7 +523,10 @@ void XPlugin_Impl::loadPlugin()
     }
     const SystemEnvData* pEnvData = getSysChildSysData();
 #if defined( UNX ) && !(defined(QUARTZ))
-    XSync( (Display*)pEnvData->pDisplay, False );
+    if (pEnvData->pDisplay) // headless?
+    {
+        XSync( (Display*)pEnvData->pDisplay, False );
+    }
 #endif
     if( ! getPluginComm() )
     {
@@ -568,8 +571,15 @@ void XPlugin_Impl::loadPlugin()
     // m_aNPWindow is set up in the MacPluginComm from the view
     SetSysPlugDataParentView(*pEnvData);
 #elif defined( UNX )
-    XSync( (Display*)pEnvData->pDisplay, False );
-    m_aNPWindow.window      = (void*)pEnvData->aWindow;
+    if (pEnvData->pDisplay) // headless?
+    {
+        XSync( (Display*)pEnvData->pDisplay, False );
+        m_aNPWindow.window  = (void*)pEnvData->aWindow;
+    }
+    else
+    {
+        m_aNPWindow.window  = NULL;
+    }
     m_aNPWindow.ws_info     = NULL;
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
