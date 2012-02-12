@@ -59,7 +59,9 @@ public:
     void test();
 
     CPPUNIT_TEST_SUITE(DBAccessTest);
+#if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(test);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
