@@ -94,21 +94,6 @@ struct ValueSetItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-typedef ::std::vector< ValueSetItem* > ValueItemList;
-
-// -----------------------------------------------------------------------------
-
-struct ValueSet_Impl
-{
-    ValueItemList  mItemList;
-    bool           mbIsTransientChildrenDisabled;
-    Link           maHighlightHdl;
-
-    ValueSet_Impl() : mbIsTransientChildrenDisabled( false )
-    {
-    }
-};
-
 // ---------------
 // - ValueSetAcc -
 // ---------------

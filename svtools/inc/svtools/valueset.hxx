@@ -214,7 +214,7 @@ private:
 
     VirtualDevice   maVirDev;
     Timer           maTimer;
-    ValueSet_Impl*  mpImpl;
+    ValueItemList   mItemList;
     ValueSetItem*   mpNoneItem;
     ScrollBar*      mpScrBar;
     long            mnTextOffset;
@@ -240,9 +240,11 @@ private:
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
     bool            mbFullMode : 1;
+    bool            mbIsTransientChildrenDisabled : 1;
     Color           maColor;
     Link            maDoubleClickHdl;
     Link            maSelectHdl;
+    Link            maHighlightHdl;
 
 #ifdef _SV_VALUESET_CXX
     friend class ValueSetAcc;
