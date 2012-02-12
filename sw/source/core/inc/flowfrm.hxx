@@ -114,8 +114,8 @@ class SwFlowFrm
 
 protected:
 
-    SwFlowFrm *pFollow;
-    SwFlowFrm *pPrecede;
+    SwFlowFrm *m_pFollow;
+    SwFlowFrm *m_pPrecede;
 
     sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
@@ -161,16 +161,16 @@ public:
     //neuen Parent Moven.
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-           sal_Bool       HasFollow() const    { return pFollow ? sal_True : sal_False; }
+           sal_Bool       HasFollow() const    { return m_pFollow ? sal_True : sal_False; }
            sal_Bool       IsFollow()     const { return bIsFollow; }
     inline void       _SetIsFollow( sal_Bool bSet ) { bIsFollow = bSet; }
-    const  SwFlowFrm *GetFollow() const    { return pFollow;   }
-           SwFlowFrm *GetFollow()          { return pFollow;   }
+    const  SwFlowFrm *GetFollow() const    { return m_pFollow;   }
+           SwFlowFrm *GetFollow()          { return m_pFollow;   }
            sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
-    inline void       SetFollow( SwFlowFrm *pNew );
+           void       SetFollow(SwFlowFrm *const pFollow);
 
-    const  SwFlowFrm *GetPrecede() const   { return pPrecede;   }
-           SwFlowFrm *GetPrecede()         { return pPrecede;   }
+    const  SwFlowFrm *GetPrecede() const   { return m_pPrecede;   }
+           SwFlowFrm *GetPrecede()         { return m_pPrecede;   }
 
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
@@ -237,13 +237,6 @@ public:
 inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
 {
     return rThis.GetIndPrev() != 0;
-}
-
-inline void SwFlowFrm::SetFollow( SwFlowFrm *pNew )
-{
-    pFollow = pNew;
-    if ( pFollow != NULL )
-        pFollow->pPrecede = this;
 }
 
 #endif
