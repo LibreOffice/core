@@ -44,6 +44,17 @@ import xmlrpclib
 from xml.dom import minidom
 from xml.sax.saxutils import escape
 
+def urlopen_retry(url):
+    maxretries = 3
+    for i in range(maxretries + 1):
+        try:
+            return urllib.urlopen(url)
+        except IOError as e:
+            print "caught IOError: ", e
+            if maxretries == i:
+                raise
+            print "retrying..."
+
 def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
     print "id is", prefix, id, suffix
@@ -51,12 +62,12 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
         print "assuming", id, "is up to date"
     else:
         print "parsing", id
-        sock = urllib.urlopen(url+"&ctype=xml")
+        sock = urlopen_retry(url+"&ctype=xml")
         dom = minidom.parse(sock)
         sock.close()
         attachmentid=1
         for attachment in dom.getElementsByTagName('attachment'):
-            print " mimetype is", 
+            print " mimetype is",
             for node in attachment.childNodes:
                 if node.nodeName == 'type':
                     print node.firstChild.nodeValue,
