@@ -81,7 +81,6 @@ SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     rThis( rFrm ),
     m_pFollow( 0 ),
     m_pPrecede( 0 ),
-    bIsFollow( false ),
     bLockJoin( false ),
     bUndersized( false ),
     bFlyLock( false )

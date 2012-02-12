@@ -102,15 +102,11 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
         {
             SwSectionFrm* pMaster = rSect.FindMaster();
             pMaster->SetFollow( this );
-            bIsFollow = sal_True;
         }
-        else
-            rSect.bIsFollow = sal_True;
         SetFollow( &rSect );
     }
     else
     {
-        bIsFollow = sal_True;
         SetFollow( rSect.GetFollow() );
         rSect.SetFollow( this );
         if( !GetFollow() )
@@ -171,7 +167,6 @@ SwSectionFrm::~SwSectionFrm()
         else if( HasFollow() )
         {
             PROTOCOL( this, PROT_SECTION, ACT_DEL_MASTER, GetFollow() )
-            GetFollow()->bIsFollow = sal_False;
         }
     }
 }
@@ -218,10 +213,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
         // freigeben, deshalb wird die Size des Masters invalidiert.
         if( !GetFollow() && !pMaster->IsColLocked() )
             pMaster->InvalidateSize();
-        bIsFollow = sal_False;
     }
-    else if( HasFollow() )
-        GetFollow()->bIsFollow = sal_False;
     SetFollow(0);
     if( pUp )
     {
@@ -504,7 +496,6 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
         }
         SetFollow( pNxt->GetFollow() );
         pNxt->SetFollow( NULL );
-        pNxt->bIsFollow = sal_False;
         pNxt->Cut();
         delete pNxt;
         InvalidateSize();

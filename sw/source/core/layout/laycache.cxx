@@ -924,7 +924,6 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         {
                             SwTxtFrm *pNew = new SwTxtFrm( ((SwTxtFrm*)rpFrm)->
                                                             GetTxtNode(), rpFrm );
-                            pNew->_SetIsFollow( sal_True );
                             pNew->ManipOfst( nOfst );
                             pNew->SetFollow( ((SwTxtFrm*)rpFrm)->GetFollow() );
                             ((SwTxtFrm*)rpFrm)->SetFollow( pNew );
