@@ -115,4 +115,9 @@ $(foreach dependency,$(2),$(call gb_Zip_add_dependency,$(1),$(dependency)))
 
 endef
 
+define gb_Zip_add_commandoptions
+$(call gb_Zip_get_target,$(1)) : gb_Zip_ZIPCOMMAND += $(2)
+
+endef
+
 # vim: set noet sw=4 ts=4:
