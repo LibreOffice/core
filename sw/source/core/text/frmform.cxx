@@ -680,8 +680,8 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         }
     }
     pFoll->Cut();
+    SetFollow(pNxt);
     delete pFoll;
-    m_pFollow = pNxt;
     return pNxt;
 }
 
