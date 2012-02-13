@@ -833,7 +833,6 @@ struct FunctionProviderImpl
     typedef RefMap< sal_uInt16, FunctionInfo >  FuncIdMap;
 
     FunctionInfoVector  maFuncs;            /// All function infos in one list.
-    FuncNameMap         maOdfFuncs;         /// Maps ODF function names to function data.
     FuncNameMap         maOoxFuncs;         /// Maps OOXML function names to function data.
     FuncIdMap           maBiff12Funcs;      /// Maps BIFF12 function indexes to function data.
     FuncIdMap           maBiffFuncs;        /// Maps BIFF2-BIFF8 function indexes to function data.
@@ -931,8 +930,6 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
 
     // insert the function info into the member maps
     maFuncs.push_back( xFuncInfo );
-    if( !xFuncInfo->maOdfFuncName.isEmpty() )
-        maOdfFuncs[ xFuncInfo->maOdfFuncName ] = xFuncInfo;
     if( !xFuncInfo->maOoxFuncName.isEmpty() )
         maOoxFuncs[ xFuncInfo->maOoxFuncName ] = xFuncInfo;
     if( xFuncInfo->mnBiff12FuncId != NOID )

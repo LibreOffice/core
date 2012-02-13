@@ -110,7 +110,6 @@ private:
 
     DoubleVector        maCoeffs;           /// Coefficients for unit conversion.
     OoxErrorCodeMap     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.
-    BiffErrorCodeMap    maBiffErrCodes;     /// Maps BIFF error constants to error code strings.
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 

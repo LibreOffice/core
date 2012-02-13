@@ -239,7 +239,6 @@ sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
 void UnitConverter::addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode )
 {
     maOoxErrCodes[ rErrorCode ]  = nErrorCode;
-    maBiffErrCodes[ nErrorCode ] = rErrorCode;
 }
 
 double UnitConverter::getCoefficient( Unit eUnit ) const
