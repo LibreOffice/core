@@ -777,6 +777,9 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     aPos( rPos )
 {
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
+    if (!pCode)
+        // We need to have a non-NULL token array instance at all times.
+        pCode = new ScTokenArray;
 }
 
 // Wird von den Importfiltern verwendet
