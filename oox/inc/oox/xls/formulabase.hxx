@@ -532,7 +532,6 @@ class FunctionParamInfoIterator
 public:
     explicit            FunctionParamInfoIterator( const FunctionInfo& rFuncInfo );
 
-    const FunctionParamInfo& getParamInfo() const;
     bool                isCalcOnlyParam() const;
     bool                isExcelOnlyParam() const;
     FunctionParamInfoIterator& operator++();
@@ -554,9 +553,6 @@ class FunctionProvider  // not derived from WorkbookHelper to make it usable in 
 public:
     explicit            FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter );
     virtual             ~FunctionProvider();
-
-    /** Returns the function info for an ODF function name, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromOdfFuncName( const ::rtl::OUString& rFuncName ) const;
 
     /** Returns the function info for an OOXML function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOoxFuncName( const ::rtl::OUString& rFuncName ) const;

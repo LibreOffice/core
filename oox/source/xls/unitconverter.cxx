@@ -230,12 +230,6 @@ DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
     return aDateTime;
 }
 
-OUString UnitConverter::calcOoxErrorCode( sal_uInt8 nErrorCode ) const
-{
-    BiffErrorCodeMap::const_iterator aIt = maBiffErrCodes.find( nErrorCode );
-    return (aIt == maBiffErrCodes.end()) ? CREATE_OUSTRING( "#N/A" ) : aIt->second;
-}
-
 sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
 {
     OoxErrorCodeMap::const_iterator aIt = maOoxErrCodes.find( rErrorCode );

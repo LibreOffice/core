@@ -178,8 +178,6 @@ class BinRangeList : public ::std::vector< BinRange >
 public:
     inline explicit     BinRangeList() {}
 
-    BinRange            getEnclosingRange() const;
-
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
     void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;

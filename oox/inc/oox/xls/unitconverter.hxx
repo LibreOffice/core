@@ -94,8 +94,6 @@ public:
     /** Returns the datetime of the passed serial value, based on current nulldate. */
     ::com::sun::star::util::DateTime calcDateTimeFromSerial( double fSerial ) const;
 
-    /** Returns an error string from the passed BIFF error code. */
-    ::rtl::OUString     calcOoxErrorCode( sal_uInt8 nErrorCode ) const;
     /** Returns a BIFF error code from the passed error string. */
     sal_uInt8           calcBiffErrorCode( const ::rtl::OUString& rErrorCode ) const;
 

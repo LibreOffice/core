@@ -181,24 +181,6 @@ void BinRange::write( BiffOutputStream& rStrm, bool bCol16Bit, bool bRow32Bit ) 
 
 // ============================================================================
 
-BinRange BinRangeList::getEnclosingRange() const
-{
-    BinRange aRange;
-    if( !empty() )
-    {
-        const_iterator aIt = begin(), aEnd = end();
-        aRange = *aIt;
-        for( ++aIt; aIt != aEnd; ++aIt )
-        {
-            aRange.maFirst.mnCol = ::std::min( aRange.maFirst.mnCol, aIt->maFirst.mnCol );
-            aRange.maFirst.mnRow = ::std::min( aRange.maFirst.mnRow, aIt->maFirst.mnRow );
-            aRange.maLast.mnCol  = ::std::max( aRange.maLast.mnCol, aIt->maLast.mnCol );
-            aRange.maLast.mnRow  = ::std::max( aRange.maLast.mnRow, aIt->maLast.mnRow );
-        }
-    }
-    return aRange;
-}
-
 void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();

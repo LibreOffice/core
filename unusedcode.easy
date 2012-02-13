@@ -1372,7 +1372,6 @@ oox::xls::BiffOutputStream::startRecord(unsigned short)
 oox::xls::BiffOutputStream::tellBase() const
 oox::xls::BinAddress::write(oox::xls::BiffOutputStream&, bool, bool) const
 oox::xls::BinRange::contains(oox::xls::BinAddress const&) const
-oox::xls::BinRangeList::getEnclosingRange() const
 oox::xls::BinRangeList::write(oox::xls::BiffOutputStream&, bool, bool) const
 oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
 oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
@@ -1387,8 +1386,6 @@ oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) 
 oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
 oox::xls::FormulaParserImpl::removeOperand(unsigned long, unsigned long)
 oox::xls::FormulaProcessorBase::generateApiRangeString(com::sun::star::table::CellRangeAddress const&) const
-oox::xls::FunctionParamInfoIterator::getParamInfo() const
-oox::xls::FunctionProvider::getFuncInfoFromOdfFuncName(rtl::OUString const&) const
 oox::xls::ShapeAnchor::getToCell() const
 oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
@@ -1396,7 +1393,6 @@ oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRa
 oox::xls::SheetDataBuffer::XfIdRowRange::intersects(com::sun::star::table::CellRangeAddress const&) const
 oox::xls::StylesBuffer::getDxf(int) const
 oox::xls::StylesBuffer::writeStyleXfToPropertyMap(oox::PropertyMap&, int) const
-oox::xls::UnitConverter::calcOoxErrorCode(unsigned char) const
 oox::xls::WorkbookHelper::getBiffFilter() const
 oox::xls::WorkbookHelper::getCellFromDoc(com::sun::star::table::CellAddress const&) const
 oox::xls::WorkbookHelper::setTextEncoding(unsigned short)

@@ -797,12 +797,6 @@ FunctionParamInfoIterator::FunctionParamInfoIterator( const FunctionInfo& rFuncI
         "FunctionParamInfoIterator::FunctionParamInfoIterator - expecting at least 2 infos for paired parameters" );
 }
 
-const FunctionParamInfo& FunctionParamInfoIterator::getParamInfo() const
-{
-    static const FunctionParamInfo saInvalidInfo = { FUNC_PARAM_NONE, FUNC_PARAMCONV_ORG, false };
-    return mpParamInfo ? *mpParamInfo : saInvalidInfo;
-}
-
 bool FunctionParamInfoIterator::isCalcOnlyParam() const
 {
     return mpParamInfo && (mpParamInfo->meValid == FUNC_PARAM_CALCONLY);
@@ -965,11 +959,6 @@ FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bIm
 
 FunctionProvider::~FunctionProvider()
 {
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromOdfFuncName( const OUString& rFuncName ) const
-{
-    return mxFuncImpl->maOdfFuncs.get( rFuncName ).get();
 }
 
 const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const
