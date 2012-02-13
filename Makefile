@@ -273,7 +273,7 @@ $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
-$(1).deliver:
+$(1).deliver: $(1)
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
 
 $(1).clean:
