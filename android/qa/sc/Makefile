@@ -61,6 +61,7 @@ copy-stuff:
 		  configmgr.uno \
 		  datelo \
 		  expwrap.uno \
+		  fastsax.uno \
 		  fileacc \
 		  fontconfig \
 		  forlo \
