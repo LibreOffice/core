@@ -74,7 +74,8 @@ private:
     ScTypedCaseStrSet* pColumnData;
     ScTypedCaseStrSet* pFormulaData;
     ScTypedCaseStrSet* pFormulaDataPara;
-    ScTypedCaseStrSet::const_iterator miAutoPos;
+    ScTypedCaseStrSet::const_iterator miAutoPosColumn;
+    ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
     Window*                 pTipVisibleParent;
     sal_uLong                   nTipVisible;

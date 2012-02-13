@@ -1077,9 +1077,9 @@ void ScInputHandler::UseFormulaData()
             if (!aText.isEmpty())
             {
                 rtl::OUString aNew;
-                miAutoPos = pFormulaData->end();
-                miAutoPos = findText(*pFormulaData, miAutoPos, aText, aNew, false);
-                if (miAutoPos != pFormulaData->end())
+                miAutoPosFormula = pFormulaData->end();
+                miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
+                if (miAutoPosFormula != pFormulaData->end())
                 {
                     ShowTip( aNew );
                     aAutoSearch = aText;
@@ -1220,8 +1220,8 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     if ( pActiveView && pFormulaData )
     {
         rtl::OUString aNew;
-        miAutoPos = findText(*pFormulaData, miAutoPos, aAutoSearch, aNew, bBack);
-        if (miAutoPos != pFormulaData->end())
+        miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
+        if (miAutoPosFormula != pFormulaData->end())
             ShowTip( aNew );        //  als QuickHelp anzeigen
     }
 
@@ -1276,9 +1276,9 @@ void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& rParIns
 
 void ScInputHandler::PasteFunctionData()
 {
-    if (pFormulaData && miAutoPos != pFormulaData->end())
+    if (pFormulaData && miAutoPosFormula != pFormulaData->end())
     {
-        const ScTypedStrData& rData = *miAutoPos;
+        const ScTypedStrData& rData = *miAutoPosFormula;
         const rtl::OUString& aInsert = rData.GetString();
         bool bParInserted = false;
 
@@ -1393,9 +1393,9 @@ void ScInputHandler::FormulaPreview()
         ShowTip( aValue );          //  als QuickHelp anzeigen
         aManualTip = aValue;        //  nach ShowTip setzen
         if (pFormulaData)
-            miAutoPos = pFormulaData->end();
-        else if (pColumnData)
-            miAutoPos = pColumnData->end();
+            miAutoPosFormula = pFormulaData->end();
+        if (pColumnData)
+            miAutoPosColumn = pColumnData->end();
     }
 }
 
@@ -1556,9 +1556,9 @@ void ScInputHandler::UseColData()           // beim Tippen
                 if (!aText.isEmpty())
                 {
                     rtl::OUString aNew;
-                    miAutoPos = pColumnData->end();
-                    miAutoPos = findText(*pColumnData, miAutoPos, aText, aNew, false);
-                    if (miAutoPos != pColumnData->end())
+                    miAutoPosColumn = pColumnData->end();
+                    miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aText, aNew, false);
+                    if (miAutoPosColumn != pColumnData->end())
                     {
                         //  durch dBase Import etc. koennen Umbrueche im String sein,
                         //  das wuerde hier mehrere Absaetze ergeben -> nicht gut
@@ -1598,7 +1598,7 @@ void ScInputHandler::UseColData()           // beim Tippen
 
                             rtl::OUString aDummy;
                             ScTypedCaseStrSet::const_iterator itNextPos =
-                                findText(*pColumnData, miAutoPos, aText, aDummy, false);
+                                findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
                             bUseTab = itNextPos != pColumnData->end();
                         }
                         else
@@ -1615,7 +1615,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pColumnData )
     {
-        if (miAutoPos != pColumnData->end() && !aAutoSearch.isEmpty())
+        if (miAutoPosColumn != pColumnData->end() && !aAutoSearch.isEmpty())
         {
             //  stimmt die Selektion noch? (kann per Maus geaendert sein)
 
@@ -1630,8 +1630,8 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                 if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
                 {
                     rtl::OUString aNew;
-                    miAutoPos = findText(*pColumnData, miAutoPos, aAutoSearch, aNew, bBack);
-                    if (miAutoPos != pColumnData->end())
+                    miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aAutoSearch, aNew, bBack);
+                    if (miAutoPosColumn != pColumnData->end())
                     {
                         bInOwnChange = true;        // disable ModifyHdl (reset below)
 
@@ -2498,7 +2498,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
-        if (pColumnData && miAutoPos != pColumnData->end())
+        if (pColumnData && miAutoPosColumn != pColumnData->end())
         {
             // #i47125# If AutoInput appended something, do the final AutoCorrect
             // with the cursor at the end of the input.
@@ -3111,7 +3111,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         case KEY_RETURN:
             if (bControl && !bShift && ( !bInputLine || ( pInputWin && pInputWin->IsMultiLineInput() ) ) )
                 bDoEnter = true;
-            else if (nModi == 0 && nTipVisible && pFormulaData && miAutoPos != pFormulaData->end())
+            else if (nModi == 0 && nTipVisible && pFormulaData && miAutoPosFormula != pFormulaData->end())
             {
                 PasteFunctionData();
                 bUsed = true;
@@ -3139,14 +3139,14 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         case KEY_TAB:
             if (bControl && !bAlt)
             {
-                if (pFormulaData && nTipVisible && miAutoPos != pFormulaData->end())
+                if (pFormulaData && nTipVisible && miAutoPosFormula != pFormulaData->end())
                 {
                     //  blaettern
 
                     NextFormulaEntry( bShift );
                     bUsed = true;
                 }
-                else if (pColumnData && bUseTab && miAutoPos != pColumnData->end())
+                else if (pColumnData && bUseTab && miAutoPosColumn != pColumnData->end())
                 {
                     //  in den Eintraegen der AutoEingabe blaettern
 
@@ -3274,9 +3274,9 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 {
                     bUseTab = false;
                     if (pFormulaData)
-                        miAutoPos = pFormulaData->end();                       // do not search further
-                    else if (pColumnData)
-                        miAutoPos = pColumnData->end();
+                        miAutoPosFormula = pFormulaData->end();                       // do not search further
+                    if (pColumnData)
+                        miAutoPosColumn = pColumnData->end();
 
                     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
                     if ( nChar && nChar != 8 && nChar != 127 &&     // no 'backspace', no 'delete'
@@ -3401,9 +3401,9 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
                         //  AutoInput after ext text input
 
                         if (pFormulaData)
-                            miAutoPos = pFormulaData->end();
-                        else if (pColumnData)
-                            miAutoPos = pColumnData->end();
+                            miAutoPosFormula = pFormulaData->end();
+                        if (pColumnData)
+                            miAutoPosColumn = pColumnData->end();
 
                         if (bFormulaMode)
                             UseFormulaData();
