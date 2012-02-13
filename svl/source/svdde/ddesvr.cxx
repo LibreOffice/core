@@ -110,7 +110,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             }
                         }
                         else
-                            nTopics += sTopics.GetTokenCount( '\t' );
+                            nTopics += comphelper::string::getTokenCount(sTopics, '\t');
                     }
                 }
             }
