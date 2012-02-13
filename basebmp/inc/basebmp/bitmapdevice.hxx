@@ -56,7 +56,7 @@ namespace basebmp
 // Temporary. Use like the tools color object
 class Color;
 typedef boost::shared_ptr< class BitmapDevice >                BitmapDeviceSharedPtr;
-typedef boost::shared_ptr< class IBitmapDeviceDamageTracker >  IBitmapDeviceDamageTrackerSharedPtr;
+typedef boost::shared_ptr< struct IBitmapDeviceDamageTracker > IBitmapDeviceDamageTrackerSharedPtr;
 typedef boost::shared_array< sal_uInt8 >                       RawMemorySharedArray;
 typedef boost::shared_ptr< const std::vector<Color> >          PaletteMemorySharedVector;
 
