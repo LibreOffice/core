@@ -100,6 +100,7 @@ copy-stuff:
 		  store \
 		  svllo \
 		  svtlo \
+		  textinstream.uno \
 		  test \
 		  tklo \
 		  tllo \
