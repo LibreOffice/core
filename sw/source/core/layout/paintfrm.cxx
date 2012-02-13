@@ -134,19 +134,19 @@ using namespace ::com::sun::star;
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
 
-//Tabellenhilfslinien an?
+//subsidiary lines enabled?
 #define IS_SUBS_TABLE \
     (pGlobalShell->GetViewOptions()->IsTable() && \
     !pGlobalShell->GetViewOptions()->IsPagePreview()&&\
     !pGlobalShell->GetViewOptions()->IsReadonly()&&\
     !pGlobalShell->GetViewOptions()->IsFormView() &&\
      SwViewOption::IsTableBoundaries())
-//sonstige Hilfslinien an?
+//other subsidiary lines enabled?
 #define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
         !pGlobalShell->GetViewOptions()->IsReadonly() && \
         !pGlobalShell->GetViewOptions()->IsFormView() &&\
          SwViewOption::IsDocBoundaries())
-//Hilfslinien fuer Bereiche
+//subsidiary lines for sections
 #define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
                          !pGlobalShell->GetViewOptions()->IsReadonly()&&\
                          !pGlobalShell->GetViewOptions()->IsFormView() &&\
@@ -158,8 +158,7 @@ using namespace ::com::sun::star;
 
 #define SW_MAXBORDERCACHE 20
 
-//Klassendeklarationen. Hier weil sie eben nur in diesem File benoetigt
-//werden.
+//Class declaration; here because they are only used in this file
 
 #define SUBCOL_PAGE     0x01    //Helplines of the page
 #define SUBCOL_TAB      0x08    //Helplines inside tables
@@ -172,9 +171,9 @@ class SwLineRect : public SwRect
     Color aColor;
     SvxBorderStyle  nStyle;
     const SwTabFrm *pTab;
-          sal_uInt8     nSubColor;  //Hilfslinien einfaerben
-          sal_Bool      bPainted;   //schon gepaintet?
-          sal_uInt8     nLock;      //Um die Linien zum Hell-Layer abzugrenzen.
+          sal_uInt8     nSubColor;  //colorize subsidiary lines
+          sal_Bool      bPainted;   //already painted?
+          sal_uInt8     nLock;      //To distinguish the line and the hell layer.
 public:
     SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                 const SwTabFrm *pT , const sal_uInt8 nSCol );
@@ -199,7 +198,7 @@ SV_DECL_VARARR( SwLRects, SwLineRect, 100 )
 
 class SwLineRects : public SwLRects
 {
-    sal_uInt16 nLastCount;  //unuetze Durchlaeufe im PaintLines verhindern.
+    sal_uInt16 nLastCount;  //avoid unnecessary cycles in PainLines
 public:
     SwLineRects() : nLastCount( 0 ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
@@ -224,14 +223,14 @@ public:
 
 static ViewShell *pGlobalShell = 0;
 
-//Wenn vom Fly ein Metafile abgezogen wird, so soll nur der FlyInhalt und vor
-//nur hintergrund vom FlyInhalt gepaintet werden.
+//Only repaint the Fly content as well as the background of the Fly content if
+//a metafile is subtracted from the Fly.
 static sal_Bool bFlyMetafile = sal_False;
 static OutputDevice *pFlyMetafileOut = 0;
 
-//Die Retouche fuer Durchsichtige Flys wird vom Hintergrund der Flys
-//erledigt. Dabei darf der Fly selbst natuerlich nicht ausgespart werden.
-//siehe PaintBackground und lcl_SubtractFlys()
+//Retouch for transparent Flys is done by the background of the Flys.
+//The Fly itself should certainly not be spared out. See PaintBackground and
+//lcl_SubtractFlys()
 static SwFlyFrm *pRetoucheFly  = 0;
 static SwFlyFrm *pRetoucheFly2 = 0;
 
@@ -262,10 +261,10 @@ static SfxProgress *pProgress = 0;
 
 static SwFlyFrm *pFlyOnlyDraw = 0;
 
-//Damit die Flys auch fuer den Hack richtig gepaintet werden koennen.
+//So the flys can also be painted right for the hack.
 static sal_Bool bTableHack = sal_False;
 
-//Um das teure Ermitteln der RetoucheColor zu optimieren
+//To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
 // Set borders alignment statics.
@@ -325,7 +324,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
     aScaleY = rMap.GetScaleY();
 }
 
-//Zum Sichern der statics, damit das Paint (quasi) reentrant wird.
+//To be able to save the statics so the paint is more or lees reentrant.
 class SwSavePaintStatics
 {
     sal_Bool            bSFlyMetafile,
@@ -472,6 +471,9 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
 {
     //Rueckwaerts durch, weil Linien die zusammengefasst werden koennen i.d.R.
     //im gleichen Kontext gepaintet werden.
+
+    //Loop backwards because lines which can be combined, can usually be painted
+    //in the same context.
     for ( sal_uInt16 i = Count(); i ; )
     {
         SwLineRect &rLRect = operator[](--i);
@@ -733,7 +735,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         break;
                     }
                 }
-                else                                    //Horizontal
+                else                                    //horizontal
                 {
                     if ( aSubsRect.Top() <= rLine.Bottom() &&
                          aSubsRect.Bottom() >= rLine.Top() )
@@ -1221,7 +1223,7 @@ long MA_FASTCALL lcl_MinWidthDist( const long nDist )
     return ::lcl_AlignWidth( Max( nDist, nMinDistPixelW ));
 }
 
-//Ermittelt PrtArea plus Umrandung plus Schatten.
+//Calculate PrtArea plus surrounding plus shadow.
 void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const sal_Bool bShadow )
@@ -1369,20 +1371,20 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         const sal_Bool bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly ) ?
                                             sal_True : sal_False;
 
-        //Bei zeichengebundenem Fly nur diejenigen betrachten, in denen er
-        //nicht selbst verankert ist.
-        //Warum nur bei zeichengebundenen? Es macht doch nie Sinn
-        //Rahmen abzuziehen in denen er selbst verankert ist oder?
+        //For character bound Flys only examine those Flys in which it is not
+        //anchored itself.
+        //Why only for character bound ones you may ask? It never makes sense to
+        //subtract borders in which it is anchored itself right?
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
             continue;
 
-        //Und warum gilt das nicht analog fuer den RetoucheFly?
+        //Any why does it not apply for the RetoucheFly too?
         if ( pRetoucheFly && pRetoucheFly->IsLowerOf( pFly ) )
             continue;
 
 #if OSL_DEBUG_LEVEL > 0
-        //Flys, die innerhalb des eigenen verankert sind, muessen eine
-        //groessere OrdNum haben oder Zeichengebunden sein.
+        //Flys who are anchored inside their own one, must have a bigger OrdNum
+        //or be character bound.
         if ( pSelfFly && bLowerOfSelf )
         {
             OSL_ENSURE( pFly->IsFlyInCntFrm() ||
@@ -1398,14 +1400,14 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
                 if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-                    //Im gleichen Layer werden nur obenliegende beachtet.
+                    //In the same layer we only observe those how are overhead.
                     continue;
             }
             else
             {
                 if ( !bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue() )
-                    //Aus anderem Layer interessieren uns nur nicht transparente
-                    //oder innenliegende
+                    //From other layers we are only interested in non
+                    //transparent ones or those how are internal
                     continue;
                 bStopOnHell = sal_False;
             }
@@ -1416,21 +1418,21 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
                 if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-                    //Im gleichen Layer werden nur obenliegende beachtet.
+                    //In the same layer we only observe those how are overhead.
                     continue;
             }
             else
             {
                 if ( !pFly->IsLowerOf( pRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue() )
-                    //Aus anderem Layer interessieren uns nur nicht transparente
-                    //oder innenliegende
+                    //From other layers we are only interested in non
+                    //transparent ones or those how are internal
                     continue;
                 bStopOnHell = sal_False;
             }
         }
 
-        //Wenn der Inhalt des Fly Transparent ist, wird er nicht abgezogen, es sei denn
-        //er steht im Hell-Layer
+        //If the content of the Fly is transparent, we subtract it only if it's
+        //contained in the hell layer.
         const IDocumentDrawModelAccess* pIDDMA = pFly->GetFmt()->getIDocumentDrawModelAccess();
         sal_Bool bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
         if ( (bStopOnHell && bHell) ||
@@ -1485,8 +1487,8 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         if ( bHell && pFly->GetAnchorFrm()->IsInFly() )
         {
-            //Damit die Umrandung nicht vom Hintergrund des anderen Flys
-            //zerlegt wird.
+            //So the border won't get dismantled by the background of the other
+            //Fly.
             SwRect aRect;
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1504,7 +1506,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         pRetoucheFly = 0;
 }
 
-//---------------- Ausgabe fuer das BrushItem ----------------
+//---------------- Output for BrushItem ----------------
 
 /** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
 
@@ -2747,20 +2749,19 @@ namespace
 |*
 |*  SwRootFrm::Paint()
 |*
-|*  Beschreibung
-|*      Fuer jede sichtbare Seite, die von Rect ber?hrt wird einmal Painten.
-|*      1. Umrandungen und Hintergruende Painten.
-|*      2. Den Draw Layer (Ramen und Zeichenobjekte) der unter dem Dokument
-|*         liegt painten (Hoelle).
-|*      3. Den Dokumentinhalt (Text) Painten.
-|*      4. Den Drawlayer der ueber dem Dokuemnt liegt painten.
-|*
+|*  Description
+|*      Paint once for every visible page which is touched by Rect.
+|*      1. Paint frames and backgrounds.
+|*      2. Paint the draw layer (frames and drawing objects) which are located
+|*         under the document (hell).
+|*      3. Paint the document content (text)
+|*      4. Paint the draw layer which are located above the document.
 |*************************************************************************/
 
 void
 SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
-    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
+    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Lower of root is no page." );
 
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
@@ -2793,9 +2794,9 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
 
-    //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
-    //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
-    //das alle Werte gueltigt sind - keine Probleme, keine Sonderbehandlung(en).
+    //Trigger an action to clear things up if needed.
+    //Using this trick we can ensure that all values are valid in all paints -
+    //no problems, no special case(s).
     // #i92745#
     // Extend check on certain states of the 'current' <ViewShell> instance to
     // all existing <ViewShell> instances.
@@ -2832,7 +2833,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
     const sal_Bool bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
 
-    pLines = new SwLineRects;   //Sammler fuer Umrandungen.
+    pLines = new SwLineRects;   //Container for borders.
 
     // #104289#. During painting, something (OLE) can
     // load the linguistic, which in turn can cause a reformat
@@ -3083,7 +3084,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
         }
 
         OSL_ENSURE( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
-                "Nachbar von Seite keine Seite." );
+                "Neighbour of page is not a page." );
         pPage = (SwPageFrm*)pPage->GetNext();
     }
 
@@ -3110,7 +3111,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
 void MA_FASTCALL lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
 {
-    //Es kann sein, dass der Cont vernichtet wird.
+    //It's possible that the Cont will get destroyed.
     SwCntntFrm *pCnt = pCont->ContainsCntnt();
     while ( pCnt && pCnt->IsInFtn() )
     {
@@ -3201,9 +3202,8 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( bCnt && pProgress )
             pProgress->Reschedule();
 
-        //Wenn ein Frm es explizit will muss retouchiert werden.
-        //Erst die Retouche, denn selbige koennte die aligned'en Raender
-        //plaetten.
+        //We need to retouch if a frame explicitly requests it.
+        //First do the retouch, because this could flatten the borders.
         if ( pFrm->IsRetouche() )
         {
             if ( pFrm->IsRetoucheFrm() && bWin && !pFrm->GetNext() )
@@ -3219,14 +3219,14 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             if ( bCnt && pFrm->IsCompletePaint() &&
                  !rRect.IsInside( aPaintRect ) && GetpApp()->AnyInput( VCL_INPUT_KEYBOARD ) )
             {
-                //fix(8104): Es kann vorkommen, dass die Verarbeitung nicht
-                //vollstaendig war, aber trotzdem Teile des Absatzes gepaintet
-                //werden. In der Folge werden dann evtl. wiederum andere Teile
-                //des Absatzes garnicht mehr gepaintet. Einziger Ausweg scheint
-                //hier ein Invalidieren der Windows zu sein.
-                //Um es nicht alzu Heftig werden zu lassen versuche ich hier
-                //das Rechteck zu begrenzen indem der gewuenschte Teil gepaintet
-                //und nur die uebrigen Absatzanteile invalidiert werden.
+                //fix(8104): It may happen, that the processing wasn't complete
+                //but some parts of the paragraph were still repainted.
+                //This could lead to the situation, that other parts of the
+                //paragraph won't be repainted at all. The only solution seems
+                //to be an invalidation of the window.
+                //To not make it to severe the rectangle is limited by
+                //repainting the desired part and only invalidating the
+                //remaining paragraph parts.
                 if ( aPaintRect.Left()  == rRect.Left() &&
                      aPaintRect.Right() == rRect.Right() )
                 {
@@ -3256,8 +3256,8 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
             if ( Lower() && Lower()->IsColumnFrm() )
             {
-                //Ggf. die Spaltentrennlinien malen. Fuer den Seitenbody ist
-                //nicht der Upper sondern die Seite Zustaendig.
+                //Paint the column separator line if needed. The page is
+                //responsible for the page frame - not the upper.
                 const SwFrmFmt *pFmt = GetUpper() && GetUpper()->IsPageFrm()
                                             ? GetUpper()->GetFmt()
                                             : GetFmt();
@@ -3613,7 +3613,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
     if ( 0 == ( pUserCall = GetUserCall(pObj) ) )
         return sal_True;
 
-    //Attributabhaengig nicht fuer Drucker oder PreView painten
+    //Attribute dependant, don't paint for printer or PreView
     sal_Bool bPaint =  pFlyOnlyDraw ||
                        ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )
@@ -3621,7 +3621,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 
     if ( bPaint )
     {
-        //Das Paint kann evtl. von von uebergeordneten Flys verhindert werden.
+        //The paint may be prevented by the superior Flys.
         SwFrm *pAnch = 0;
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
@@ -3629,12 +3629,11 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
             if ( pFlyOnlyDraw && pFlyOnlyDraw == pFly )
                 return sal_True;
 
-            //Die Anzeige eines Zwischenstadiums vermeiden, Flys die nicht mit
-            //der Seite auf der sie verankert sind ueberlappen werden auch
-            //nicht gepaintet.
-            //HACK: Ausnahme: Drucken von Rahmen in Tabellen, diese koennen
-            //bei uebergrossen Tabellen (HTML) schon mal auserhalb der Seite
-            //stehen.
+            //Try to avoid displaying the intermediate stage, Flys which don't
+            //overlap with the page on which they are anchored won't be
+            //repainted.
+            //HACK: exception: printing of frames in tables, those can overlap
+            //a page once in a while when dealing with oversized tables (HTML).
             SwPageFrm *pPage = pFly->FindPageFrm();
             if ( pPage )
             {
@@ -3663,12 +3662,11 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                     pAnch = 0;
                 else if ( long(pSh->GetOut()) == long(pSh->getIDocumentDeviceAccess()->getPrinter( false )))
                 {
-                    //HACK: fuer das Drucken muessen wir ein paar Objekte
-                    //weglassen, da diese sonst doppelt gedruckt werden.
-                    //Die Objekte sollen gedruckt werden, wenn der TableHack
-                    //gerade greift. In der Folge duerfen sie nicht gedruckt werden
-                    //wenn sie mit der Seite dran sind, ueber der sie von der
-                    //Position her gerade schweben.
+                    //HACK: we have to omit some of the objects for printing,
+                    //otherwise they would be printed twice.
+                    //The objects should get printed if the TableHack is active
+                    //right now. Afterwards they must not be printed if the
+                    //page over which they float position wise gets printed.
                     const SwPageFrm *pPage = pAnch->FindPageFrm();
                     if ( !bTableHack &&
                          !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
@@ -3719,9 +3717,9 @@ void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
 
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
-    //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
-    //z.B. #33066#
+    //because of the overlapping of frames and drawing objects the flys have to
+    //paint their frames (and those of the internal ones) directly.
+    //i.e. #33066#
     pLines->LockLines(sal_True);
 
     SwRect aRect( rRect );
@@ -3810,8 +3808,9 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         if ( bPaintCompleteBack || bPaintMarginOnly )
         {
-            //#24926# JP 01.02.96, PaintBaBo in teilen hier, damit PaintBorder
-            //das orig. Rect bekommt, aber PaintBackground das begrenzte.
+            //#24926# JP 01.02.96, PaintBaBo is here partially so PaintBorder
+            //receives the original Rect but PaintBackground only the limited
+            //one.
 
             // OD 2004-04-23 #116347#
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
@@ -3831,8 +3830,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 if ( bPaintMarginOnly ||
                      ( pNoTxt && !bIsGraphicTransparent ) )
                 {
-                    //Was wir eigentlich Painten wollen ist der schmale Streifen
-                    //zwischen PrtArea und aeusserer Umrandung.
+                    //What we actually want to paint is the small stripe between
+                    //PrtArea and outer frame.
                     SwRect aTmp( Prt() ); aTmp += Frm().Pos();
                     aRegion -= aTmp;
                 }
@@ -3988,10 +3987,10 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 |*
 |*  SwFrm::PaintShadow()
 |*
-|*  Beschreibung        Malt einen Schatten wenns das FrmFormat fordert.
-|*      Der Schatten wird immer an den auesseren Rand des OutRect gemalt.
-|*      Das OutRect wird ggf. so verkleinert, dass auf diesem das
-|*      malen der Umrandung stattfinden kann.
+|*  Description         Paints a shadow if the format requests so.
+|*      The shadow is always painted on the outer edge of the OutRect.
+|*      If needed, the OutRect is shrunk so the painting of the border can be
+|*      done on it.
 |*
 |*************************************************************************/
 /// OD 23.08.2002 #99657#
@@ -4238,7 +4237,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 |*
 |*  SwFrm::PaintBorderLines()
 |*
-|*  Beschreibung        Nur alle Linien einfach oder alle Linien doppelt!!!!
+|*  Descrtiption        Only all lines once or all lines twice!
 |*
 |*************************************************************************/
 
@@ -4652,7 +4651,7 @@ const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 |*
 |*  SwFrm::PaintBorder()
 |*
-|*  Beschreibung        Malt Schatten und Umrandung
+|*  Description         Paints shadows and borders
 |*
 |*************************************************************************/
 
@@ -4893,10 +4892,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     //-hack
     if ( bLine || bShadow || bFoundCellForTopOrBorderAttrs )
     {
-        //Wenn das Rechteck vollstandig innerhalb der PrtArea liegt,
-        //so braucht kein Rand gepainted werden.
-        //Fuer die PrtArea muss der Aligned'e Wert zugrunde gelegt werden,
-        //anderfalls wuerden u.U. Teile nicht verarbeitet.
+        //If the rectangle is completely inside the PrtArea, no border needs to
+        //be painted.
+        //For the PrtArea the aligned value needs to be used, otherwise it could
+        //happen, that some parts won't be processed.
         SwRect aRect( Prt() );
         aRect += Frm().Pos();
         ::SwAlignRect( aRect, pGlobalShell );
@@ -4986,17 +4985,16 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
 |*
 |*  SwFtnContFrm::PaintBorder()
 |*
-|*  Beschreibung        Spezialimplementierung wg. der Fussnotenlinie.
-|*      Derzeit braucht nur der obere Rand beruecksichtigt werden.
-|*      Auf andere Linien und Schatten wird verzichtet.
-|*
+|*  Description         Special implementation because of the footnote line.
+|*      Currently only the top frame needs to be taken into account.
+|*      Other lines and shadows are set aside.
 |*************************************************************************/
 
 void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                                 const SwBorderAttrs & ) const
 {
-    //Wenn das Rechteck vollstandig innerhalb der PrtArea liegt, so gibt es
-    //keinen Rand zu painten.
+    //If the rectangle is completely inside the PrtArea, no border needs to
+    //be painted.
     SwRect aRect( Prt() );
     aRect.Pos() += Frm().Pos();
     if ( !aRect.IsInside( rRect ) )
@@ -5006,16 +5004,16 @@ void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
 |*
 |*  SwFtnContFrm::PaintLine()
 |*
-|*  Beschreibung        Fussnotenline malen.
+|*  Description         Paint footnote lines.
 |*
 |*************************************************************************/
 
 void SwFtnContFrm::PaintLine( const SwRect& rRect,
                               const SwPageFrm *pPage ) const
 {
-    //Laenge der Linie ergibt sich aus der prozentualen Angabe am PageDesc.
-    //Die Position ist ebenfalls am PageDesc angegeben.
-    //Der Pen steht direkt im PageDesc.
+    //The length of the line is derived from the percentual indication on the
+    //PageDesc. The position is also stated on the PageDesc.
+    //The pen can directly be taken from the PageDesc.
 
     if ( !pPage )
         pPage = FindPageFrm();
@@ -5036,7 +5034,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
         case FTNADJ_LEFT:
             /* do nothing */; break;
         default:
-            OSL_ENSURE( !this, "Neues Adjustment fuer Fussnotenlinie?" );
+            OSL_ENSURE( !this, "New adjustment for footnote lines?" );
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
     const SwRect aLineRect = bVert ?
@@ -5053,8 +5051,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
 |*
 |*  SwLayoutFrm::PaintColLines()
 |*
-|*  Beschreibung        Painted die Trennlinien fuer die innenliegenden
-|*                      Spalten.
+|*  Description         Paints the separator line for inside columns
 |*
 |*************************************************************************/
 
@@ -5083,7 +5080,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         case COLADJ_BOTTOM:
             break;
         default:
-            OSL_ENSURE( !this, "Neues Adjustment fuer Spaltenlinie?" );
+            OSL_ENSURE( !this, "New adjustment for column lines?" );
     }
 
     if( nTop )
@@ -5095,7 +5092,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     (aLineRect.*fnRect->fnSetWidth)( nPenHalf );
     nPenHalf /= 2;
 
-    //Damit uns nichts verlorengeht muessen wir hier etwas grosszuegiger sein.
+    //We need to be a bit generous here, to not lose something.
     SwRect aRect( rRect );
     (aRect.*fnRect->fnSubLeft)( nPenHalf + nPixelSzW );
     (aRect.*fnRect->fnAddRight)( nPenHalf + nPixelSzW );
@@ -5913,7 +5910,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     sal_Bool bLowMode = sal_True;
 
     sal_Bool bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
-    //- Ausgabe wenn ein eigener Hintergrund mitgebracht wird.
+    //- Output if a separate background is used.
     bool bNoFlyBackground = !bFlyMetafile && !bBack && IsFlyFrm();
     if ( bNoFlyBackground )
     {
@@ -6028,9 +6025,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     /// delete temporary background brush.
     delete pTmpBackBrush;
 
-    //Jetzt noch Lower und dessen Nachbarn.
-    //Wenn ein Frn dabei die Kette verlaesst also nicht mehr Lower von mir ist
-    //so hoert der Spass auf.
+    //Now process lower and his neighbour.
+    //We end this as soon as a Frn leaves the chain and therefore is not a lower
+    //of me anymore
     const SwFrm *pFrm = GetLower();
     if ( pFrm )
     {
@@ -6065,7 +6062,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 |*
 |*  SwPageFrm::RefreshSubsidiary()
 |*
-|*  Beschreibung        Erneuert alle Hilfslinien der Seite.
+|*  Description         Refreshes all subsidiary lines of a page.
 |*
 |*************************************************************************/
 
@@ -6079,8 +6076,8 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
         //::SwAlignRect( aRect, pGlobalShell );
         if ( aRect.HasArea() )
         {
-            //Beim Paint ueber die Root wird das Array von dort gesteuert.
-            //Anderfalls kuemmern wir uns selbst darum.
+            //During paint using the root, the array is controlled from there.
+            //Otherwise we'll handle it for our self.
             sal_Bool bDelSubs = sal_False;
             if ( !pSubsLines )
             {
@@ -6158,12 +6155,12 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
 |*
 |*  SwLayoutFrm::PaintSubsidiaryLines()
 |*
-|*  Beschreibung        Hilfslinien um die PrtAreas malen
-|*      Nur die LayoutFrm's die direkt Cntnt enthalten.
+|*  Description         Subsidiary lines to paint the PrtAreas
+|*      Only the LayoutFrms which directly contain Cntnt.
 |*
 |*************************************************************************/
 
-//Malt die angegebene Linie, achtet darauf, dass keine Flys uebermalt werden.
+//Paints the desired line and pays attention to not overpaint any flys.
 
 typedef long Size::* SizePtr;
 typedef long Point::* PointPtr;
@@ -6181,9 +6178,9 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const sal_uInt8 nSubColor,
                                   SwLineRects* _pSubsLines )
 {
-    //In welche Richtung gehts? Kann nur Horizontal oder Vertikal sein.
+    //In which direction do we loop? Can only be horizontal or vertical.
     OSL_ENSURE( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
-            "Schraege Hilfslinien sind nicht erlaubt." );
+            "Sloped subsidiary lines are not allowed." );
     const PointPtr pDirPt = rP1.X() == rP2.X() ? pY : pX;
     const PointPtr pOthPt = pDirPt == pX ? pY : pX;
     const SizePtr pDirSz = pDirPt == pX ? pWidth : pHeight;
@@ -6192,17 +6189,16 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
           aP2( rP2 );
 
     while ( aP1.*pDirPt < aP2.*pDirPt )
-    {   //Der Startpunkt wird jetzt, falls er in einem Fly sitzt, direkt
-        //hinter den Fly gesetzt.
-        //Wenn der Endpunkt in einem Fly sitzt oder zwischen Start und Endpunkt
-        //ein Fly sitzt, so wird der Endpunkt eben an den Start herangezogen.
-        //Auf diese art und weise wird eine Portion nach der anderen
-        //ausgegeben.
+        //If the starting point lies in a fly, it is directly set behind the
+        //fly.
+        //The end point moves to the start if the end point lies in a fly or we
+        //have a fly between starting point and end point.
+        //Using this, every position is outputted one by one.
 
-        //Wenn ich selbst ein Fly bin, weiche ich nur denjenigen Flys aus,
-        //die 'ueber' mir sitzen; d.h. die in dem Array hinter mir stehen.
-        //Auch wenn ich in einem Fly sitze oder in einem Fly im Fly usw. weiche
-        //ich keinem dieser Flys aus.
+        //If I'm a fly I'll only avoid those flys which are places 'above' me;
+        //this means those who are behind me in the array.
+        //Even if I'm inside a fly or inside a fly inside a fly a.s.o I won't
+        //avoid any of those flys.
         SwOrderIter aIter( pPage );
         const SwFlyFrm *pMyFly = pLay->FindFlyFrm();
         if ( pMyFly )
@@ -6222,8 +6218,8 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             const SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)aIter();
             const SwFlyFrm *pFly = pObj ? pObj->GetFlyFrm() : 0;
 
-            //Mir selbst weiche ich natuerlich nicht aus. Auch wenn ich
-            //_in_ dem Fly sitze weiche ich nicht aus.
+            //I certainly won't avoid myself, even if I'm placed _inside_ the
+            //fly I won't avoid.
             if ( !pFly || (pFly == pLay || pFly->IsAnLower( pLay )) )
             {
                 aIter.Next();
@@ -6241,7 +6237,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
                 continue;
             }
 
-            //Sitzt das Obj auf der Linie
+            //Is the Obj placed on the line
             const Rectangle &rBound = pObj->GetCurrentBoundRect();
             const Point aDrPt( rBound.TopLeft() );
             const Size  aDrSz( rBound.GetSize() );
@@ -6599,9 +6595,9 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 |*
 |*  SwPageFrm::RefreshExtraData(), SwLayoutFrm::RefreshExtraData()
 |*
-|*  Beschreibung        Erneuert alle Extradaten (Zeilennummern usw) der Seite.
-|*                      Grundsaetzlich sind nur diejenigen Objekte beruecksichtig,
-|*                      die in die seitliche Ausdehnung des Rects ragen.
+|* Description          Refreshes all extra data (line breaks a.s.o) of the
+|*                      page. Basically only those objects are considered who
+|*                      edgewise loom inside the Rect.
 |*
 |*************************************************************************/
 
@@ -6723,11 +6719,10 @@ const Font& SwPageFrm::GetEmptyPageFont()
 |*
 |*    SwFrm::Retouche
 |*
-|*    Beschreibung      Retouche fuer einen Bereich.
-|*      Retouche wird nur dann durchgefuehrt, wenn der Frm der letzte seiner
-|*      Kette ist. Der Gesamte Bereich des Upper unterhalb des Frm wird
-|*      per PaintBackground gecleared.
-|*
+|*    Description       Retouch for a section.
+|*      Retouch will only be done, if the Frm is the last one in his chain.
+|*      The whole area of the upper which is located below the Frm will be
+|*      using PainBackground cleared.
 |*************************************************************************/
 
 void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
@@ -6735,8 +6730,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     if ( bFlyMetafile )
         return;
 
-    OSL_ENSURE( GetUpper(), "Retoucheversuch ohne Upper." );
-    OSL_ENSURE( getRootFrm()->GetCurrShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
+    OSL_ENSURE( GetUpper(), "Retouche try without Upper." );
+    OSL_ENSURE( getRootFrm()->GetCurrShell() && pGlobalShell->GetWin(), "Retouche on a printer?" );
 
     SwRect aRetouche( GetUpper()->PaintArea() );
     aRetouche.Top( Frm().Top() + Frm().Height() );
@@ -6744,8 +6739,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
     if ( aRetouche.HasArea() )
     {
-        //Uebergebenes Rect ausparen. Dafuer brauchen wir leider eine Region
-        //zum ausstanzen.
+        //Omit the passed Rect. To do this, we unfortunately need a region to
+        //cut out.
         SwRegionRects aRegion( aRetouche );
         aRegion -= rRect;
         ViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -6759,9 +6754,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
             GetUpper()->PaintBaBo( rRetouche, pPage, sal_True );
 
-            //Hoelle und Himmel muessen auch refreshed werden.
-            //Um Rekursionen zu vermeiden muss mein Retouche Flag zuerst
-            //zurueckgesetzt werden!
+            //Hell and Heaven needs to be refreshed too.
+            //To avoid recursion my retouch flag needs to be reseted first!
             ResetRetouche();
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
@@ -6784,8 +6778,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
             SetRetouche();
 
-            //Da wir uns ausserhalb aller Paint-Bereiche begeben muessen hier
-            //leider die Hilfslinien erneuert werden.
+            //Because we leave all paint areas, we need to refresh the
+            //subsidiary lines.
             pPage->RefreshSubsidiary( aRetouchePart );
         }
     }
@@ -6807,11 +6801,9 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     (3) New (OD 20.08.2002) - Background brush is taken, if on background drawing
         of the frame transparency is considered and its color is not "no fill"/"auto fill"
     ---- old description in german:
-    Beschreibung        Liefert die Backgroundbrush fuer den Bereich des
-        des Frm. Die Brush wird entweder von ihm selbst oder von einem
-        Upper vorgegeben, die erste Brush wird benutzt.
-        Ist fuer keinen Frm eine Brush angegeben, so wird sal_False zurueck-
-        geliefert.
+    Description         Returns the Backgroundbrush for the area of the Frm.
+        The Brush is defined from it self or from an upper, the first Brush is
+        used. If no Brush is defined for a Frm, sal_False is returned.
 
     @param rpBrush
     output parameter - constant reference pointer the found background brush
@@ -6950,7 +6942,7 @@ Graphic SwFrmFmt::MakeGraphic( ImageMap* )
 Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 {
     Graphic aRet;
-    //irgendeinen Fly suchen!
+    //search any Fly!
     SwIterator<SwFrm,SwFmt> aIter( *this );
     SwFrm *pFirst = aIter.First();
     ViewShell *pSh;
@@ -6985,7 +6977,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         aDev.SetFillColor();
         aDev.SetFont( pOld->GetFont() );
 
-        //Rechteck ggf. ausdehnen, damit die Umrandunge mit aufgezeichnet werden.
+        //Enlarge the rectangle if needed, so the border is painted too.
         SwRect aOut( pFly->Frm() );
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFly );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
