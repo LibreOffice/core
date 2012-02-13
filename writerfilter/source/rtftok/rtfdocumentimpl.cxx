@@ -3375,6 +3375,7 @@ RTFSprms RTFFrame::getSprms()
     {
         NS_ooxml::LN_CT_FramePr_x,
         NS_ooxml::LN_CT_FramePr_y,
+        NS_ooxml::LN_CT_FramePr_hRule, // Make sure nHRule is processed before nH
         NS_sprm::LN_PWHeightAbs,
         NS_sprm::LN_PDxaWidth,
         NS_sprm::LN_PDxaFromText,
@@ -3385,8 +3386,7 @@ RTFSprms RTFFrame::getSprms()
         NS_ooxml::LN_CT_FramePr_yAlign,
         NS_sprm::LN_PWr,
         NS_ooxml::LN_CT_FramePr_dropCap,
-        NS_ooxml::LN_CT_FramePr_lines,
-        NS_ooxml::LN_CT_FramePr_hRule
+        NS_ooxml::LN_CT_FramePr_lines
     };
 
     for ( int i = 0, len = sizeof( pNames ) / sizeof( Id ); i < len; ++i )
@@ -3438,7 +3438,10 @@ RTFSprms RTFFrame::getSprms()
                 {
                     sal_Int32 nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_auto;
                     if ( nH < 0 )
+                    {
                         nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact;
+                        nH = -nH; // The negative value just sets nHRule
+                    }
                     else if ( nH > 0 )
                         nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_atLeast;
                     pValue.reset(new RTFValue(nHRule));
