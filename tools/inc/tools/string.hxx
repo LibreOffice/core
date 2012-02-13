@@ -246,7 +246,6 @@ public:
     void                SearchAndReplaceAll( const ByteString& rStr, const ByteString& rRepStr );
     void                SearchAndReplaceAll( const sal_Char* pCharStr, const ByteString& rRepStr );
 
-    xub_StrLen          GetTokenCount( sal_Char cTok = ';' ) const;
     void                SetToken( xub_StrLen nToken, sal_Char cTok, const ByteString& rStr,
                                   xub_StrLen nIndex = 0 );
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok, xub_StrLen& rIndex ) const;
@@ -354,6 +353,9 @@ private:
                                      // Append(sal_Unicode)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Unicode)
+                        UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
+                                   rtl_TextEncoding eTextEncoding,
+                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS ); //not implemented, removed
 
     //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
     TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
@@ -368,9 +370,6 @@ public:
                         UniString( sal_Unicode c );
                         UniString(char c); // ...but allow "UniString('a')"
                         UniString( const ByteString& rByteStr,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
-                        UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
                                    rtl_TextEncoding eTextEncoding,
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
                         UniString( const sal_Char* pByteStr,
@@ -508,7 +507,6 @@ public:
     void                SearchAndReplaceAll( const UniString& rStr, const UniString& rRepStr );
     void                SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniString& rRepStr );
 
-    xub_StrLen          GetTokenCount( sal_Unicode cTok = ';' ) const;
     void                SetToken( xub_StrLen nToken, sal_Unicode cTok, const UniString& rStr,
                                   xub_StrLen nIndex = 0 );
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, xub_StrLen& rIndex ) const;

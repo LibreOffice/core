@@ -1,12 +1,16 @@
+ByteString::Append(char const*, unsigned short)
 ByteString::Append(char)
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
 ByteString::ByteString(char const*, unsigned short)
 ByteString::CompareTo(ByteString const&, unsigned short) const
+ByteString::Equals(ByteString const&) const
 ByteString::Equals(ByteString const&, unsigned short, unsigned short) const
 ByteString::Equals(char const*, unsigned short, unsigned short) const
 ByteString::EqualsIgnoreCaseAscii(ByteString const&) const
 ByteString::GetToken(unsigned short, char, unsigned short&) const
+ByteString::Insert(char const*, unsigned short)
+ByteString::Insert(char, unsigned short)
 ByteString::Match(ByteString const&) const
 ByteString::SearchAndReplaceAll(ByteString const&, ByteString const&)
 ByteString::SearchAndReplaceAll(char const*, ByteString const&)
@@ -20,9 +24,12 @@ CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
+DirEntry::SetBase(String const&, char)
 EditView::GetSelectionMode() const
 EditView::SetCursor(Cursor const&)
 EditView::SetPointer(Pointer const&)
+Export::GetNativeFile(rtl::OString const&)
+Export::getCurrentDir(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
 FieldEntry::GetBookmarkType()
 FileControl::SetButtonText(String const&)
 FileStream::FileStream(rtl::OString const&, FileAccessMode)
@@ -68,7 +75,6 @@ MSDffImportRecords::Insert(SvxMSDffImportRec* const&, unsigned short&)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const*, unsigned short)
 MSDffImportRecords::Remove(SvxMSDffImportRec* const&, unsigned short)
 MSDffImportRecords::Remove(unsigned short, unsigned short)
-MSFilterTracer::EndElement(rtl::OUString const&)
 MSFilterTracer::SetProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
 MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>)
 MachineSettings::CopyData()
@@ -139,6 +145,7 @@ ScChangeActionContent::SetNewValue(rtl::OUString const&, ScDocument*)
 ScChartListener::ScChartListener(rtl::OUString const&, ScDocument*, ScRange const&)
 ScChartListener::SetName(rtl::OUString const&)
 ScCollection::Free(ScDataObject*)
+ScCollection::FreeAll()
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetEntryCount() const
@@ -183,6 +190,7 @@ ScRTFColTwips_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(un
 ScRangeData::ScRangeData(unsigned short)
 ScSimpleRangeList::Range::contains(ScSimpleRangeList::Range const&) const
 ScStringCell::ScStringCell()
+ScTypedStrData::GetValue() const
 ScUserList::end()
 ScUserList::end() const
 ScValidationEntries_Impl::Insert(ScValidationData* const&, unsigned short&)
@@ -271,7 +279,6 @@ SotExchange::GetExchangeAction(com::sun::star::uno::Reference<com::sun::star::da
 SotFactory::TestInvariant()
 SotObject::RemoveOwnerLock()
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
-SourceTreeIterator::EndExecute()
 SpanStyleManager::get(WPXString const&) const
 SpinButton::SpinButton(Window*, ResId const&)
 SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
@@ -299,7 +306,6 @@ SvPersistStream::InsertObj(SvPersistBase*)
 SvPersistStream::RemoveObj(SvPersistBase*)
 SvPersistStream::SvPersistStream(SvClassManager&, SvStream*, SvPersistStream const&)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
-SvStream::ReadLine(ByteString&)
 SvStringsISortDtor::Insert(String* const*, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
 SvUnoAttributeContainer::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
@@ -402,6 +408,7 @@ SvxNumRule::SetLevel(unsigned short, SvxNumberFormat const*)
 SvxOpenGraphicDialog::SetControlHelpIds(short const*, char const**)
 SvxPluginFileDlg::IsAvailable(unsigned short)
 SvxPopupWindowListBox::StartSelection()
+SvxRectCtlAccessibleContext::CommitChange(com::sun::star::accessibility::AccessibleEventObject const&)
 SvxRelativeField::SvxRelativeField(Window*, long)
 SvxReloadControllerItem::RegisterControl(unsigned short, SfxModule*)
 SvxRubyChildWindow::GetChildWindowId()
@@ -738,6 +745,7 @@ avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
 basebmp::BitmapDevice::setDamageTracker(boost::shared_ptr<basebmp::IBitmapDeviceDamageTracker> const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::computeSetDifference(std::__debug::vector<basegfx::B2IBox, std::allocator<basegfx::B2IBox> >&, basegfx::B2IBox const&, basegfx::B2IBox const&)
+basegfx::fround(basegfx::B2DRange const&)
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolygon const&)
 basegfx::tools::addPointsAtCutsAndTouches(basegfx::B2DPolyPolygon const&, basegfx::B2DPolygon const&)
 basegfx::tools::applyLineDashing(basegfx::B3DPolyPolygon const&, std::__debug::vector<double, std::allocator<double> > const&, basegfx::B3DPolyPolygon*, basegfx::B3DPolyPolygon*, double)
@@ -783,6 +791,28 @@ binfilter::B3dEntityBucketMemArr::Insert(binfilter::B3dEntityBucketMemArr const*
 binfilter::B3dEntityBucketMemArr::Replace(char const*&, unsigned short)
 binfilter::B3dEntityBucketMemArr::Replace(char const**, unsigned short, unsigned short)
 binfilter::B3dEntityBucketMemArr::_ForEach(unsigned short, unsigned short, unsigned char (*)(char const*&, void*), void*)
+binfilter::ByteString::Append(char)
+binfilter::ByteString::Assign(char const*, unsigned short)
+binfilter::ByteString::Assign(char)
+binfilter::ByteString::ByteString(char const*, unsigned short)
+binfilter::ByteString::CompareIgnoreCaseToAscii(char const*, unsigned short) const
+binfilter::ByteString::CompareTo(binfilter::ByteString const&, unsigned short) const
+binfilter::ByteString::CompareTo(char const*, unsigned short) const
+binfilter::ByteString::Equals(binfilter::ByteString const&, unsigned short, unsigned short) const
+binfilter::ByteString::Equals(char const*, unsigned short, unsigned short) const
+binfilter::ByteString::EqualsIgnoreCaseAscii(binfilter::ByteString const&) const
+binfilter::ByteString::EqualsIgnoreCaseAscii(char const*) const
+binfilter::ByteString::GetToken(unsigned short, char, unsigned short&) const
+binfilter::ByteString::Match(binfilter::ByteString const&) const
+binfilter::ByteString::SearchAndReplace(binfilter::ByteString const&, binfilter::ByteString const&, unsigned short)
+binfilter::ByteString::SearchAndReplace(char const*, binfilter::ByteString const&, unsigned short)
+binfilter::ByteString::SearchAndReplaceAll(binfilter::ByteString const&, binfilter::ByteString const&)
+binfilter::ByteString::SearchAndReplaceAll(char const*, binfilter::ByteString const&)
+binfilter::ByteString::SearchAndReplaceAll(char, char)
+binfilter::ByteString::SearchBackward(char, unsigned short) const
+binfilter::ByteString::SetChar(unsigned short, char)
+binfilter::ByteString::SetToken(unsigned short, char, binfilter::ByteString const&, unsigned short)
+binfilter::ByteString::ToUpperAscii()
 binfilter::CharPosArray::Insert(binfilter::CharPosArray const*, unsigned short, unsigned short, unsigned short)
 binfilter::CharPosArray::Replace(int const&, unsigned short)
 binfilter::CharPosArray::Replace(int const*, unsigned short, unsigned short)
@@ -883,6 +913,18 @@ binfilter::SortedPositions::Remove(unsigned short, unsigned short)
 binfilter::SortedPositions_SAR::Replace(unsigned int const&, unsigned short)
 binfilter::SortedPositions_SAR::Replace(unsigned int const*, unsigned short, unsigned short)
 binfilter::SortedPositions_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned int const&, void*), void*)
+binfilter::String::EqualsIgnoreCaseAscii(binfilter::String const&, unsigned short, unsigned short) const
+binfilter::String::EqualsIgnoreCaseAscii(unsigned short const*) const
+binfilter::String::GetQuotedToken(unsigned short, binfilter::String const&, unsigned short, unsigned short&) const
+binfilter::String::GetQuotedTokenCount(binfilter::String const&, unsigned short) const
+binfilter::String::ReplaceAscii(unsigned short, unsigned short, char const*, unsigned short)
+binfilter::String::Reverse()
+binfilter::String::Search(unsigned short const*, unsigned short) const
+binfilter::String::SearchAndReplaceAll(binfilter::String const&, binfilter::String const&)
+binfilter::String::SearchAndReplaceAllAscii(char const*, binfilter::String const&)
+binfilter::String::SearchChar(unsigned short const*, unsigned short) const
+binfilter::String::ToFloat() const
+binfilter::String::intern() const
 binfilter::SvBools::Insert(binfilter::SvBools const*, unsigned short, unsigned short, unsigned short)
 binfilter::SvBools::Replace(unsigned char const&, unsigned short)
 binfilter::SvBools::Replace(unsigned char const*, unsigned short, unsigned short)
@@ -907,28 +949,28 @@ binfilter::SvShorts::Replace(short const&, unsigned short)
 binfilter::SvShorts::Replace(short const*, unsigned short, unsigned short)
 binfilter::SvShorts::_ForEach(unsigned short, unsigned short, unsigned char (*)(short const&, void*), void*)
 binfilter::SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SvStringsISort::Insert(String* const&)
-binfilter::SvStringsISort::Insert(String* const&, unsigned short&)
-binfilter::SvStringsISort::Insert(String* const*, unsigned short)
+binfilter::SvStringsISort::Insert(binfilter::String* const&)
+binfilter::SvStringsISort::Insert(binfilter::String* const&, unsigned short&)
+binfilter::SvStringsISort::Insert(binfilter::String* const*, unsigned short)
 binfilter::SvStringsISort::Insert(binfilter::SvStringsISort const*, unsigned short, unsigned short)
-binfilter::SvStringsISort::Remove(String* const&, unsigned short)
+binfilter::SvStringsISort::Remove(binfilter::String* const&, unsigned short)
 binfilter::SvStringsISort::Remove(unsigned short, unsigned short)
 binfilter::SvStringsISortDtor::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SvStringsISortDtor::Insert(String* const&)
-binfilter::SvStringsISortDtor::Insert(String* const&, unsigned short&)
-binfilter::SvStringsISortDtor::Insert(String* const*, unsigned short)
+binfilter::SvStringsISortDtor::Insert(binfilter::String* const&)
+binfilter::SvStringsISortDtor::Insert(binfilter::String* const&, unsigned short&)
+binfilter::SvStringsISortDtor::Insert(binfilter::String* const*, unsigned short)
 binfilter::SvStringsISortDtor::Insert(binfilter::SvStringsISortDtor const*, unsigned short, unsigned short)
-binfilter::SvStringsISortDtor::Remove(String* const&, unsigned short)
+binfilter::SvStringsISortDtor::Remove(binfilter::String* const&, unsigned short)
 binfilter::SvStringsISortDtor::Remove(unsigned short, unsigned short)
 binfilter::SvStringsSort::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SvStringsSort::Insert(String* const&, unsigned short&)
-binfilter::SvStringsSort::Insert(String* const*, unsigned short)
+binfilter::SvStringsSort::Insert(binfilter::String* const&, unsigned short&)
+binfilter::SvStringsSort::Insert(binfilter::String* const*, unsigned short)
 binfilter::SvStringsSort::Insert(binfilter::SvStringsSort const*, unsigned short, unsigned short)
-binfilter::SvStringsSort::Remove(String* const&, unsigned short)
-binfilter::SvStringsSortDtor::Insert(String* const&, unsigned short&)
-binfilter::SvStringsSortDtor::Insert(String* const*, unsigned short)
+binfilter::SvStringsSort::Remove(binfilter::String* const&, unsigned short)
+binfilter::SvStringsSortDtor::Insert(binfilter::String* const&, unsigned short&)
+binfilter::SvStringsSortDtor::Insert(binfilter::String* const*, unsigned short)
 binfilter::SvStringsSortDtor::Insert(binfilter::SvStringsSortDtor const*, unsigned short, unsigned short)
-binfilter::SvStringsSortDtor::Remove(String* const&, unsigned short)
+binfilter::SvStringsSortDtor::Remove(binfilter::String* const&, unsigned short)
 binfilter::SvStringsSortDtor::Remove(unsigned short, unsigned short)
 binfilter::SvULongs::Remove(unsigned short, unsigned short)
 binfilter::SvULongs::Replace(unsigned long const&, unsigned short)
@@ -1366,6 +1408,8 @@ oox::xls::Dxf::importProtection(oox::AttributeList const&)
 oox::xls::ExternalLinkBuffer::importExternalName(oox::xls::BiffInputStream&)
 oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) const
 oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
+oox::xls::FormulaParserImpl::removeOperand(unsigned long, unsigned long)
+oox::xls::FormulaProcessorBase::generateApiRangeString(com::sun::star::table::CellRangeAddress const&) const
 oox::xls::FunctionParamInfoIterator::getParamInfo() const
 oox::xls::FunctionProvider::getFuncInfoFromOdfFuncName(rtl::OUString const&) const
 oox::xls::ShapeAnchor::getToCell() const
@@ -1377,6 +1421,7 @@ oox::xls::StylesBuffer::getDxf(int) const
 oox::xls::StylesBuffer::writeStyleXfToPropertyMap(oox::PropertyMap&, int) const
 oox::xls::UnitConverter::calcOoxErrorCode(unsigned char) const
 oox::xls::WorkbookHelper::getBiffFilter() const
+oox::xls::WorkbookHelper::getCellFromDoc(com::sun::star::table::CellAddress const&) const
 oox::xls::WorkbookHelper::setTextEncoding(unsigned short)
 oox::xls::WorksheetHelper::getCellAddress(com::sun::star::uno::Reference<com::sun::star::table::XCell> const&)
 oox::xls::WorksheetHelper::getColumn(int) const
@@ -1447,8 +1492,8 @@ sdr::overlay::OverlayRollingRectangleStriped::setShowBounds(bool)
 sdr::overlay::OverlayTriangle::setSecondPosition(basegfx::B2DPoint const&)
 sdr::overlay::OverlayTriangle::setThirdPosition(basegfx::B2DPoint const&)
 sdr::table::Cell::GetStyleSheetPool() const
-sdr::table::SvxTableController::DeleteTable()
-sdr::table::SvxTableController::getSelectionCursor()
+sdr::table::SdrTableObj::getColumnCount() const
+sdr::table::SdrTableObj::getRowCount() const
 sfx2::TaskPaneWrapper::GetChildWindowId()
 slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
 std::__cxx1998::map<rtl::OUString, OutputStorageWrapper_Impl*, OUStringLess, std::allocator<std::pair<rtl::OUString const, OutputStorageWrapper_Impl*> > >::~map()
@@ -1481,7 +1526,6 @@ ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun:
 ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
-vcl::I18nHelper::GetDate(Date const&) const
 vcl::LazyDeletor<Menu>::is_less(Menu*, Menu*)
 vcl::PDFExtOutDevData::EndGroup()
 vcl::PDFExtOutDevData::GetFormsFormat() const

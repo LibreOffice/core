@@ -58,31 +58,6 @@ UniString::UniString( const ByteString& rByteStr, rtl_TextEncoding eTextEncoding
 
 // -----------------------------------------------------------------------
 
-UniString::UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
-                      rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_CHKOBJ( &rByteStr, ByteString, DbgCheckByteString );
-
-    // Stringlaenge ermitteln
-    if ( nPos > rByteStr.mpData->mnLen )
-        nLen = 0;
-    else
-    {
-        // Laenge korrigieren, wenn noetig
-        sal_Int32 nMaxLen = rByteStr.mpData->mnLen-nPos;
-        if ( nLen > nMaxLen )
-            nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        rByteStr.mpData->maStr+nPos, nLen,
-                        eTextEncoding, nCvtFlags );
-}
-
-// -----------------------------------------------------------------------
-
 UniString::UniString( const char* pByteStr,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {

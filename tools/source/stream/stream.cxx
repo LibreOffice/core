@@ -723,14 +723,6 @@ sal_Bool SvStream::ReadLine(rtl::OString& rStr)
     return bEnd;
 }
 
-sal_Bool SvStream::ReadLine( ByteString& rStr )
-{
-    rtl::OString aFoo;
-    sal_Bool ret = ReadLine(aFoo);
-    rStr = aFoo;
-    return ret;
-}
-
 sal_Bool SvStream::ReadUniStringLine( String& rStr )
 {
     sal_Unicode buf[256+1];

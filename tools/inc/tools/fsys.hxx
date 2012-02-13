@@ -280,7 +280,6 @@ public:
                                  sal_uInt16 nMaxChars = STRING_MAXLEN ) const;
 
     DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
-    static const DirEntry& SetTempNameBase( const String &rBaseName );
     sal_Bool                MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
                                        sal_Bool bUseTilde = sal_True,

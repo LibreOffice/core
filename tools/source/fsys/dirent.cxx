@@ -1569,34 +1569,6 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 *************************************************************************/
 namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
 
-const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
-{
-        DirEntry aTempDir = DirEntry().TempName().GetPath();
-        aTempDir += DirEntry( rBase );
-#ifdef UNX
-        rtl::OString aName(rtl::OUStringToOString(aTempDir.GetFull(), osl_getThreadTextEncoding()));
-        if ( access( aName.getStr(), W_OK | X_OK | R_OK ) )
-        {
-            // Create the directory and only on success give all rights to
-            // everyone. Use mkdir instead of DirEntry::MakeDir because
-            // this returns sal_True even if directory already exists.
-
-            if ( !mkdir( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO ) )
-                chmod( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO );
-
-            // This will not create a directory but perhaps FileStat called
-            // there modifies the DirEntry
-
-            aTempDir.MakeDir();
-        }
-#else
-        aTempDir.MakeDir();
-#endif
-        DirEntry &rEntry = TempNameBase_Impl::get();
-        rEntry = aTempDir.TempName( FSYS_KIND_DIR );
-        return rEntry;
-}
-
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
         // ggf. Base-Temp-Dir verwenden (macht Remote keinen Sinn => vorher)

@@ -380,7 +380,6 @@ public:
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
 
-    sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
     sal_Bool        WriteLine( const rtl::OString& rStr );
 

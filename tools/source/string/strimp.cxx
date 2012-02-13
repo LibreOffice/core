@@ -1135,32 +1135,6 @@ void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
 
 // -----------------------------------------------------------------------
 
-xub_StrLen STRING::GetTokenCount( STRCODE cTok ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Leerer String: TokenCount per Definition 0
-    if ( !mpData->mnLen )
-        return 0;
-
-    xub_StrLen      nTokCount       = 1;
-    sal_Int32       nLen            = mpData->mnLen;
-    const STRCODE*  pStr            = mpData->maStr;
-    sal_Int32       nIndex          = 0;
-    while ( nIndex < nLen )
-    {
-        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
-        if ( *pStr == cTok )
-            ++nTokCount;
-        ++pStr,
-        ++nIndex;
-    }
-
-    return nTokCount;
-}
-
-// -----------------------------------------------------------------------
-
 void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
                        xub_StrLen nIndex )
 {
