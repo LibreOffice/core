@@ -1009,10 +1009,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareCaseClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
-    pCompareCaseClass->loadDefaultCollator( aLcl, 0 );
+    pCompareClass->loadDefaultCollator( aLcl, 0 );
     pCharClass = new CharClass( aLcl );
 
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
@@ -1042,7 +1039,6 @@ OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
     delete pFormatText;
     lcl_ClearTable(aDoubleStringTable);
     delete pCompareClass;
-    delete pCompareCaseClass;
     delete pCharClass;
 }
 /*-----------------14.10.96 15.58-------------------
@@ -1107,7 +1103,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                         nLastPos = nPos - 1;
                         bFound = sal_True;
                         if( !(pWordPtr->IsTextOnly() == (0 == pDouble->pUserData)
-                            && 0 == pCompareCaseClass->compareString(
+                            && 0 == pCompareClass->compareString(
                                 pWordPtr->GetLong(), pDouble->sLong ) ) )
                         {
                             pAutoCorrect->PutText(sEntry, pDouble->sLong, eCurLang);
@@ -1170,7 +1166,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                 bFound = sal_True;
                 String sLong = aReplaceTLB.GetEntryText(pEntry, 1);
                 if( !(pWordPtr->IsTextOnly() == (0 == pEntry->GetUserData())
-                    && 0 == pCompareCaseClass->compareString(
+                    && 0 == pCompareClass->compareString(
                         pWordPtr->GetLong(), sLong )))
                 {
                     pAutoCorrect->PutText(sEntry, sLong, eLang);
@@ -1339,15 +1335,11 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         RefillReplaceBox(sal_False, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
-        delete pCompareCaseClass;
         delete pCharClass;
 
         ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareCaseClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                                CollatorOptions::CollatorOptions_IGNORE_CASE );
-        pCompareCaseClass->loadDefaultCollator( aLcl, 0 );
+        pCompareClass->loadDefaultCollator( aLcl, 0 );
         pCharClass = new CharClass( aLcl );
         ModifyHdl(&aShortED);
     }
@@ -1612,8 +1604,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+    pCompareClass->loadDefaultCollator( aLcl, 0 );
 
     aNewAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
     aDelAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
@@ -1793,9 +1784,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ),
-                        ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ), 0 );
         ModifyHdl(&aAbbrevED);
         ModifyHdl(&aDoubleCapsED);
     }
