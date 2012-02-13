@@ -466,7 +466,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         elem=pos->second;
         if ( (*elem)[ language ] )
         {
-            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_ASCII_US).getStr() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), rtl::OUStringToOString(sFileName, RTL_TEXTENCODING_ASCII_US).getStr() );
             exit( -1 );
         }
         (*elem)[ language ]=pElement;
@@ -1113,7 +1113,7 @@ void SimpleXMLParser::Default(
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rtl::OUString &rFileName, XMLFile* pXMLFileIn )
+XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
     aErrorInformation.eCode = XML_ERROR_NONE;
@@ -1150,7 +1150,6 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rt
 
     pXMLFile = pXMLFileIn;
     pXMLFile->SetName( rFileName );
-    pXMLFile->SetFullName( rFullFileName );
 
     pCurNode = pXMLFile;
     pCurData = NULL;

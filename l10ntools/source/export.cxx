@@ -31,8 +31,6 @@
 #include <cstddef>
 #include <cstring>
 
-#include "comphelper/string.hxx"
-
 #include "boost/scoped_ptr.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,9 +43,6 @@
 
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
-
-using comphelper::string::getToken;
-using comphelper::string::getTokenCount;
 
 namespace {
 
@@ -166,6 +161,8 @@ int Parse( int nTyp, const char *pTokenText ){
 }
 void Close(){
     global::exporter->pParseQueue->Close();
+    global::exporter.reset();
+        // avoid nontrivial Export dtor being executed during exit
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
@@ -639,8 +636,9 @@ int Export::Execute( int nToken, const char * pToken )
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            if ( (sToken.indexOf( '{' ) != -1) &&
-                ( getTokenCount(sToken, '{') > getTokenCount(sToken, '}') ))
+            if (sToken.indexOf( '{' ) != -1
+                && (helper::countOccurrences(sToken, '{')
+                    > helper::countOccurrences(sToken, '}')))
             {
                 Parse( LEVELUP, "" );
             }
@@ -650,14 +648,16 @@ int Export::Execute( int nToken, const char * pToken )
         case LISTASSIGNMENT:
         {
             bDontWriteOutput = sal_False;
-            rtl::OString sTmpToken(
-                comphelper::string::remove(sToken, ' ').toAsciiLowerCase());
+            rtl::OString sTmpToken(sToken);
+            helper::searchAndReplaceAll(&sTmpToken, " ", rtl::OString());
+            sTmpToken = sTmpToken.toAsciiLowerCase();
             sal_Int32 nPos = sTmpToken.indexOf("[en-us]=");
             if (nPos != -1) {
                 rtl::OString sKey(sTmpToken.copy(0 , nPos));
-                sKey = comphelper::string::remove(sKey, ' ');
-                sKey = comphelper::string::remove(sKey, '\t');
-                rtl::OString sValue = getToken(sToken, 1, '=');
+                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
+                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+                sal_Int32 n = 0;
+                rtl::OString sValue = sToken.getToken(1, '=', n);
                 CleanValue( sValue );
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
@@ -705,9 +705,10 @@ int Export::Execute( int nToken, const char * pToken )
             else
             {
                 // new res. is a String- or FilterList
-                rtl::OString sKey = getToken(sToken, 0, '[');
-                sKey = comphelper::string::remove(sKey, ' ');
-                sKey = comphelper::string::remove(sKey, '\t');
+                sal_Int32 n = 0;
+                rtl::OString sKey = sToken.getToken(0, '[', n);
+                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
+                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
                     nList = LIST_STRING;
@@ -720,7 +721,7 @@ int Export::Execute( int nToken, const char * pToken )
                 else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
                     nList = LIST_UIENTRIES;
                 if ( nList ) {
-                    rtl::OString sLang = getToken(getToken(sToken, 1, '['), 0, ']');
+                    rtl::OString sLang = sToken.getToken(0, ']', n);
                     CleanValue( sLang );
                     m_sListLang = sLang;
                     nListIndex = 0;
@@ -735,8 +736,9 @@ int Export::Execute( int nToken, const char * pToken )
             // this is an entry for a String- or FilterList
             if ( nList ) {
                 SetChildWithText();
-                rtl::OString sEntry(getToken(sToken, 1, '\"'));
-                if ( getTokenCount(sToken, '\"') > 3 )
+                sal_Int32 n = 0;
+                rtl::OString sEntry(sToken.getToken(1, '"', n));
+                if ( helper::countOccurrences(sToken, '"') > 2 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
                     sEntry = "\"";
@@ -756,14 +758,23 @@ int Export::Execute( int nToken, const char * pToken )
                 CutComment( sToken );
 
                 // this is a text line!!!
-                rtl::OString sKey = getToken(getToken(sToken, 0, '='), 0, '[');
-                sKey = comphelper::string::remove(sKey, ' ');
-                sKey = comphelper::string::remove(sKey, '\t');
+                sal_Int32 n = 0;
+                rtl::OString t(sToken.getToken(0, '=', n));
+                n = 0;
+                rtl::OString sKey = t.getToken(0, '[', n);
+                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
+                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
                 rtl::OString sText( GetText( sToken, nToken ));
                 rtl::OString sLang;
-                if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
+                n = 0;
+                if ( sToken.getToken(0, '=', n).indexOf('[') != -1 )
                 {
-                    sLang = getToken(getToken(getToken(sToken, 0, '='), 1, '['), 0, ']');
+                    n = 0;
+                    t = sToken.getToken(0, '=', n);
+                    n = 0;
+                    t = t.getToken(1, '[', n);
+                    n = 0;
+                    sLang = t.getToken(0, ']', n);
                     CleanValue( sLang );
                 }
                 rtl::OString sLangIndex = sLang;
@@ -864,24 +875,30 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case APPFONTMAPPING:
         {
-            using comphelper::string::replace;
-
             bDontWriteOutput = sal_False;
             // this is a AppfontMapping, so look if its a definition
             // of field size
-            rtl::OString sKey = getToken(sToken, 0, '=');
-            sKey = comphelper::string::remove(sKey, ' ');
-            sKey = comphelper::string::remove(sKey, '\t');
-            rtl::OString sMapping = getToken(sToken, 1, '=');
-            sMapping = getToken(sMapping, 1, '(');
-            sMapping = getToken(sMapping, 0, ')');
-            sMapping = replace(sMapping, rtl::OString(' '), rtl::OString());
-            sMapping = replace(sMapping, rtl::OString('\t'), rtl::OString());
+            sal_Int32 n = 0;
+            rtl::OString sKey = sToken.getToken(0, '=', n);
+            helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
+            helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+            rtl::OString sMapping = sToken.getToken(0, '=', n);
+            n = 0;
+            sMapping = sMapping.getToken(1, '(', n);
+            n = 0;
+            sMapping = sMapping.getToken(0, ')', n);
+            helper::searchAndReplaceAll(
+                &sMapping, rtl::OString(' '), rtl::OString());
+            helper::searchAndReplaceAll(
+                &sMapping, rtl::OString('\t'), rtl::OString());
             sKey = sKey.toAsciiUpperCase();
-            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE")))
-                pResData->nWidth = getToken(sMapping, 0, ',').toInt32();
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE")))
-                pResData->nWidth = getToken(sMapping, 2, ',').toInt32();
+            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE"))) {
+                n = 0;
+                pResData->nWidth = sMapping.getToken(0, ',', n).toInt32();
+            } else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE"))) {
+                n = 0;
+                pResData->nWidth = sMapping.getToken(2, ',', n).toInt32();
+            }
         }
         break;
         case RSCDEFINELEND:
@@ -892,14 +909,15 @@ int Export::Execute( int nToken, const char * pToken )
             while( helper::searchAndReplace(&sToken, "\r", " " ) != -1 ) {};
             while( helper::searchAndReplace(&sToken, "\t", " " ) != -1 ) {};
             while( helper::searchAndReplace(&sToken, "  ", " " ) != -1 ) {};
-            rtl::OString sCondition(getToken(sToken, 0, ' '));
+            sal_Int32 n = 0;
+            rtl::OString sCondition(sToken.getToken(0, ' ', n));
             if ( sCondition == "#ifndef" ) {
                 sActPForm = "!defined ";
-                sActPForm += getToken(sToken, 1, ' ');
+                sActPForm += sToken.getToken(0, ' ', n);
             }
             else if ( sCondition == "#ifdef" ) {
                 sActPForm = "defined ";
-                sActPForm += getToken(sToken, 1, ' ');
+                sActPForm += sToken.getToken(0, ' ', n);
             }
             else if ( sCondition == "#if" ) {
                 sActPForm = sToken.copy( 4 );
@@ -1117,20 +1135,20 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 rtl::OString Export::GetPairedListID(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
+    sal_Int32 n = 0;
     return helper::trimAscii(
-        getToken(rText, 1, ';').toAsciiUpperCase().replace('\t', ' '));
+        rText.getToken(1, ';', n).toAsciiUpperCase().replace('\t', ' '));
 }
 
 rtl::OString Export::GetPairedListString(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    rtl::OString sString(getToken(rText, 0, ';').replace('\t', ' '));
-    sString = comphelper::string::stripEnd(sString, ' ');
+    sal_Int32 n = 0;
+    rtl::OString sString(rText.getToken(0, ';', n).replace('\t', ' '));
+    sString = helper::trimAscii(sString);
     rtl::OString s1(sString.copy(sString.indexOf('"') + 1));
     sString = s1.copy(0, s1.lastIndexOf('"'));
-    sString = comphelper::string::stripEnd(sString, ' ');
-    sString = comphelper::string::stripStart(sString, ' ');
-    return sString;
+    return helper::trimAscii(sString);
 }
 
 rtl::OString Export::StripList(const rtl::OString & rText)
@@ -1148,7 +1166,9 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
     else {
         sGID += ".";
         sGID += pResData->sId;
-        sGID = comphelper::string::stripEnd(sGID, '.');
+        while (sGID.getLength() != 0 && sGID[sGID.getLength() - 1] == '.') {
+            sGID = sGID.copy(0, sGID.getLength() - 1);
+        }
     }
 
     rtl::OString sCur;
@@ -1340,8 +1360,8 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
         {
             rtl::OString sTmp(rSource.copy(rSource.indexOf("=")));
             CleanValue( sTmp );
-            sTmp = comphelper::string::remove(sTmp, '\n');
-            sTmp = comphelper::string::remove(sTmp, '\r');
+            helper::searchAndReplaceAll(&sTmp, "\n", rtl::OString());
+            helper::searchAndReplaceAll(&sTmp, "\r", rtl::OString());
 
             helper::searchAndReplaceAll(
                 &sTmp, "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"");
@@ -1350,9 +1370,10 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
             helper::searchAndReplaceAll(&sTmp, "\\0x7F", "-=<[0x7F]>=-");
 
             sal_uInt16 nState = TXT_STATE_TEXT;
-            for (sal_Int32 i = 1; i < getTokenCount(sTmp, '"'); ++i)
+            for (sal_Int32 i = 1; i <= helper::countOccurrences(sTmp, '"'); ++i)
             {
-                rtl::OString sToken(getToken(sTmp, i, '"'));
+                sal_Int32 n = 0;
+                rtl::OString sToken(sTmp.getToken(i, '"', n));
                 if (!sToken.isEmpty()) {
                     if ( nState == TXT_STATE_TEXT ) {
                         sReturn += sToken;
@@ -1363,8 +1384,7 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
                         while (helper::searchAndReplace(&sToken, "  ", " ")
                                != -1)
                         {}
-                        sToken = comphelper::string::stripStart(sToken, ' ');
-                        sToken = comphelper::string::stripEnd(sToken, ' ');
+                        sToken = helper::trimAscii(sToken);
                         if (!sToken.isEmpty()) {
                             sReturn += "\\\" ";
                             sReturn += sToken;

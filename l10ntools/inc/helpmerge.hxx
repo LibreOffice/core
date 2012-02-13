@@ -70,8 +70,6 @@ public:
         , const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
-    static rtl::OString makeAbsolutePath(const rtl::OString& sHelpFile , const rtl::OString& rRoot_in);
-
     rtl::OString GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY );
     bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage , rtl::OString const & sPath );
 

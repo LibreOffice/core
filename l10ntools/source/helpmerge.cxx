@@ -31,7 +31,6 @@
 #include <fstream>
 #include <functional>
 
-#include <tools/fsys.hxx>
 #include <osl/file.hxx>
 // local includes
 #include <stdio.h>
@@ -44,13 +43,13 @@
 #include <fstream>
 #include <vector>
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
 #ifdef WNT
 #include <windows.h>
 #undef CopyFile
 #include <direct.h>
 #endif
 
+#include "common.hxx"
 #include "helper.hxx"
 
 #if OSL_DEBUG_LEVEL > 2
@@ -93,16 +92,7 @@ bool HelpParser::CreateSDF(
         rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    rtl::OString fullFilePath = rPrj_in;
-    fullFilePath += "\\";
-    fullFilePath += makeAbsolutePath( sHelpFile , rRoot_in );
-    fullFilePath = fullFilePath.replace('\\', '/');
-
-    rtl::OUString strFullPath(
-        rtl::OStringToOUString(fullFilePath, RTL_TEXTENCODING_ASCII_US));
-
-    //printf( "%s\n", fullFilePath.GetBuffer() );
-    std::auto_ptr <XMLFile> file ( aParser.Execute( strFullPath , sXmlFile, pXmlFile ) );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
 
     if(file.get() == NULL)
     {
@@ -121,7 +111,8 @@ bool HelpParser::CreateSDF(
         return false;
     }
 
-    rtl::OString sActFileName = makeAbsolutePath( sHelpFile , rRoot_in );
+    rtl::OString sActFileName(
+        common::pathnameToken(sHelpFile.getStr(), rRoot_in.getStr()));
 
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
@@ -189,21 +180,6 @@ bool HelpParser::CreateSDF(
     return sal_True;
 }
 
-rtl::OString HelpParser::makeAbsolutePath(const rtl::OString& sHelpFile, const rtl::OString& rRoot_in)
-{
-    DirEntry aEntry(rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
-    aEntry.ToAbs();
-    rtl::OUString sFullEntry(aEntry.GetFull());
-    aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-    aEntry += DirEntry( rRoot_in );
-    rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));
-    rtl::OString sActFileName(rtl::OUStringToOString(
-        sFullEntry.copy(sPrjEntry.getLength() + 1),
-        osl_getThreadTextEncoding()));
-
-    return sActFileName.replace('/', '\\');
-}
-
 bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDestinationFile  ,
     const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
@@ -217,10 +193,7 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
         rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    OUString sOUHelpFile( sXmlFile );
-    DirEntry aFile( sXmlFile );
-
-    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( rtl::OUString('0') ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) ) );
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
@@ -268,10 +241,7 @@ bool HelpParser::Merge(
         rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    OUString sOUHelpFile( sXmlFile );
-    DirEntry aFile( sXmlFile );
-
-    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( rtl::OUString('0') ) ) );
+    XMLFile* xmlfile = aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) );
     xmlfile->Extract();
 
     if( xmlfile == NULL)
@@ -329,127 +299,38 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         ProcessHelp( aLangHM , sLanguage, &pResData , aMergeDataFile );
      }
 
-
-    // Init temp and target file
-    rtl::OString sTempFile;
-    rtl::OString sTargetFile( sPath );
-    rtl::OString sTempFileCopy;
-
-    static const rtl::OString INPATH = Export::GetEnv("INPATH");
-    sTempFile = Export::getRandomName(sPath, INPATH);
-    sTempFileCopy = Export::getRandomName(sPath, INPATH);
-    // Write in the temp file
-    file->Write ( sTempFile );
-
-    DirEntry aTmp( sTempFile );
-    DirEntry aTmp2( sTempFileCopy );
-    DirEntry aTar( sTargetFile );
-
-    if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
-    {
-#if defined(UNX)
-        sleep( 3 );
-#else
-        Sleep( 3 );
-#endif
-        if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
-        {
-            cerr << "ERROR: Can not copy file from " << sTempFile.getStr() << " to " << sTempFileCopy.getStr() << "\n";
-            return false;
-        }
-    }
-
-    FileStat aFSTest( aTar );
-    if( aFSTest.GetSize() < 1 )
-    {
-        remove( sTargetFile.getStr() );
-    }
-    int rc;
-#if defined(UNX)
-    rc = rename( sTempFile.getStr() , sTargetFile.getStr() );
-#else
-    rc = MoveFileEx( sTempFile.getStr() , sTargetFile.getStr(), MOVEFILE_REPLACE_EXISTING );
-#endif
-    FileStat aFS( aTar );
-
-    //cout << "mv " << sTempFile.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
-    //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
-// Windows rename returns -1 if the file already exits
-//#ifdef UNX
-    if( rc < 0 || aFS.GetSize() < 1 )
-//#else
-//    if( aFS.GetSize() < 1 )
-//#endif
-    {
-#if defined(UNX)
-        sleep( 3 );
-#else
-        Sleep( 3 );
-#endif
-        aFSTest.Update( aTar );
-        if( aFSTest.GetSize() < 1 )
-        {
-            remove( sTargetFile.getStr() );
-        }
-#if defined(UNX)
-        rc = rename( sTempFileCopy.getStr() , sTargetFile.getStr() );
-#else
-        rc = MoveFileEx( sTempFileCopy.getStr() , sTargetFile.getStr() , MOVEFILE_REPLACE_EXISTING );
-#endif
-        aFS.Update( aTar );
-
-        //cout << "mv2 " << sTempFileCopy.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
-        //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
-
-// Windows rename returns -1 if the file already exits
-//#ifdef WNT
-//        if( aFS.GetSize() < 1 )
-//#else
-        if( rc < 0 || aFS.GetSize() < 1 )
-//#endif
-        {
-            cerr << "ERROR: helpex Can't rename file " << sTempFileCopy.getStr() << " to " << sTargetFile.getStr() << " rename rc=" << rc << " filesize=" << aFS.GetSize() << "\n";
-            aTmp.Kill();
-            aTmp2.Kill();
-            if( aFS.GetSize() < 1 )
-                aTar.Kill();
-            return false;
-        }
-    }
-    aTmp.Kill();
-    aTmp2.Kill();
-
+    file->Write(sPath);
     return true;
 }
 
 rtl::OString HelpParser::GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY )
 {
     rtl::OString testpath = rPathX;
-    static const rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-    testpath = comphelper::string::stripEnd(testpath, '/');
-    testpath = comphelper::string::stripEnd(testpath, '\\');
-    testpath += sDelimiter;
+    if (!helper::endsWith(testpath, "/")) {
+        testpath += "/";
+    }
     testpath += sCur;
-    testpath += sDelimiter;
+    testpath += "/";
     rtl::OString sRelativePath( rPathY );
-    sRelativePath = comphelper::string::stripStart(sRelativePath, '/');
-    sRelativePath = comphelper::string::stripStart(sRelativePath, '\\');
+    if (sRelativePath.getLength() != 0 && sRelativePath[0] == '/') {
+        sRelativePath = sRelativePath.copy(1);
+    }
     testpath += sRelativePath;
-    testpath += sDelimiter;
+    testpath += "/";
     return testpath;
 }
 
 void HelpParser::MakeDir(const rtl::OString& rPath)
 {
-    rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(),
-        RTL_TEXTENCODING_ASCII_US));
-    rtl::OString sTPath(comphelper::string::replace(rPath, sDelimiter, rtl::OString('/')));
-    sal_uInt16 cnt = comphelper::string::getTokenCount(sTPath, '/');
+    rtl::OString sTPath(rPath);
+    helper::searchAndReplaceAll(&sTPath, "\\", "/");
+    sal_Int32 cnt = helper::countOccurrences(sTPath, '/');
     rtl::OStringBuffer sCreateDir;
-    for (sal_uInt16 i = 0; i < cnt; ++i)
+    for (sal_uInt16 i = 0; i <= cnt; ++i)
     {
-        sCreateDir.append(comphelper::string::getToken(sTPath, i , '/'));
-        sCreateDir.append(sDelimiter);
+        sal_Int32 n = 0;
+        sCreateDir.append(sTPath.getToken(i , '/', n));
+        sCreateDir.append('/');
 #ifdef WNT
         _mkdir( sCreateDir.getStr() );
 #else

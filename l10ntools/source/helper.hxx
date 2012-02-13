@@ -87,6 +87,18 @@ inline bool endsWithAsciiL(
             search, searchLength, text.getLength() - searchLength);
 }
 
+inline sal_Int32 countOccurrences(rtl::OString const & text, char c) {
+    sal_Int32 n = 0;
+    for (sal_Int32 i = 0;; ++i) {
+        i = text.indexOf(c, i);
+        if (i == -1) {
+            break;
+        }
+        ++n;
+    }
+    return n;
+}
+
 inline rtl::OString trimAscii(rtl::OString const & text) {
     sal_Int32 i1 = 0;
     while (i1 != text.getLength() && isAsciiWhitespace(text[i1])) {

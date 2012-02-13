@@ -75,7 +75,6 @@ APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 APP1RPATH=  NONE
 APP1STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 APP1LIBS+=	$(LB)$/$(TARGET).lib
@@ -86,8 +85,6 @@ APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)
 APP2RPATH= NONE
 APP2STDLIBS+= \
             $(EXPATASCII3RDLIB) \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.lng and *.lng
@@ -116,8 +113,6 @@ APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP7RPATH=  NONE
 APP7STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # localizer for l10n framework

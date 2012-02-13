@@ -222,7 +222,6 @@ public:
     /// returns file name
     rtl::OUString GetName() { return sFileName; }
     void          SetName( const rtl::OUString &rFilename ) { sFileName = rFilename; }
-    void          SetFullName( const rtl::OUString &rFullFilename ) { sFullName = rFullFilename; }
     const std::vector<rtl::OString> getOrder(){ return order; }
 
 protected:
@@ -233,7 +232,6 @@ protected:
 
     // DATA
     rtl::OUString      sFileName;
-    rtl::OUString      sFullName;
 
     const rtl::OString ID, OLDREF, XML_LANG;
 
@@ -487,7 +485,6 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
-        const rtl::OUString &rFullFileName,
         const rtl::OUString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
     );

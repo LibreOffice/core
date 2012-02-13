@@ -38,7 +38,6 @@
 #include <sal/macros.h>
 #include <iostream>
 #include <iomanip>
-#include <tools/urlobj.hxx>
 #include <time.h>
 #include <stdlib.h>
 

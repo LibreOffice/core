@@ -233,8 +233,9 @@ void yyerror( char *s )
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+    int e;
     yyin = init(argc, argv);
     yylex();
+    e = GetError();
     Close();
-    return GetError();
 }

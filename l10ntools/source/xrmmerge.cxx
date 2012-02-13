@@ -30,11 +30,9 @@
 
 #include <cstring>
 
-#include <comphelper/string.hxx>
 #include <stdio.h>
-#include <tools/fsys.hxx>
 
-// local includes
+#include "common.hxx"
 #include "export.hxx"
 #include "helper.hxx"
 #include "xrmmerge.hxx"
@@ -209,22 +207,10 @@ extern FILE *GetXrmFile()
                 sInputFileName.getStr());
         }
         else {
-            // this is a valid file which can be opened, so
-            // create path to project root
-            DirEntry aEntry( rtl::OStringToOUString( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
-            aEntry.ToAbs();
-            rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
-            aEntry += DirEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-            aEntry += DirEntry( sPrjRoot );
-            rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
-
-            // create file name, beginnig with project root
-            // (e.g.: source\ui\src\menue.src)
-            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
-
-
-            sActFileName = sActFileName.replace('/', '\\');
-
+            if (!bMergeMode) {
+                sActFileName = common::pathnameToken(
+                    sInputFileName.getStr(), sPrjRoot.getStr());
+            }
             return pFile;
         }
     }
@@ -404,7 +390,8 @@ rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::
     if ( nPos != -1 )
     {
         sTmp = sTmp.copy( nPos );
-        rtl::OString sId = comphelper::string::getToken(sTmp, 1, '\"');
+        sal_Int32 n = 0;
+        rtl::OString sId = sTmp.getToken(1, '"', n);
         return sId;
     }
     return "";
@@ -422,14 +409,7 @@ void XRMResParser::Error( const rtl::OString &rError )
 void XRMResParser::ConvertStringToDBFormat( rtl::OString &rString )
 /*****************************************************************************/
 {
-    rtl::OString sResult;
-    do {
-        sResult = rString;
-        rString = comphelper::string::stripStart(rString, _LF);
-        rString = comphelper::string::stripStart(rString, '\t');
-        rString = comphelper::string::stripEnd(rString, '\t');
-    } while ( sResult != rString );
-
+    rString = helper::trimAscii(rString);
     helper::searchAndReplaceAll(&rString, "\t", "\\t");
 }
 
@@ -500,9 +480,7 @@ void XRMResExport::WorkOnDesc(
 )
 /*****************************************************************************/
 {
-    DirEntry aEntry( rtl::OStringToOUString( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
-    aEntry.ToAbs();
-    rtl::OString sDescFileName(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
+    rtl::OString sDescFileName(sInputFileName);
     helper::searchAndReplaceAll(&sDescFileName, "description.xml", "");
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
     int size;
@@ -559,7 +537,7 @@ void XRMResExport::EndOfText(
             sCur = aLanguages[ n ];
 
             rtl::OString sAct = pResData->sText[ sCur ];
-            sAct = comphelper::string::remove(sAct, 0x0A);
+            helper::searchAndReplaceAll(&sAct, "\x0A", rtl::OString());
 
             rtl::OString sOutput( sPrj ); sOutput += "\t";
             sOutput += sPath;
@@ -667,17 +645,25 @@ void XRMResMerge::WorkOnDesc(
 
                     Output( sAdditionalLine );
 
-                    DirEntry aEntry( rtl::OStringToOUString( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
-                    aEntry.ToAbs();
-                    rtl::OString sOutputDescFile(rtl::OUStringToOString(aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US));
-                    rtl::OString sDel(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
-                    sOutputDescFile += sDel;
-                    sOutputDescFile += sLocDescFilename;
+                    sal_Int32 i = sOutputFile.lastIndexOf('/');
+                    if (i == -1) {
+                        std::cerr
+                            << "Error: output file " << sOutputFile.getStr()
+                            << " does not contain any /\n";
+                        throw false; //TODO
+                    }
+                    rtl::OString sOutputDescFile(
+                        sOutputFile.copy(0, i + 1) + sLocDescFilename);
                     helper::searchAndReplaceAll(&sText, "\\n", "\n");
                     ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
                         file << sText.getStr();
                         file.close();
+                    } else {
+                        std::cerr
+                            << "Error: cannot write "
+                            << sOutputDescFile.getStr() << '\n';
+                        throw false; //TODO
                     }
                 }
             }

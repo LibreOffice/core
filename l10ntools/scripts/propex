@@ -32,6 +32,7 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 
 use strict;
+use File::Basename;
 use Getopt::Std;
 use Cwd;
 
@@ -40,7 +41,8 @@ getopts("ep:r:i:o:l:", \%options);
 
 unless ( $options{i} =~ m/en_US/ ) {exit 0;}
 
-my $file = substr ( Cwd::abs_path($options{i}), length(Cwd::abs_path($options{r})) + 1 );
+my ($unsued1, $dir, $unused2) = File::Basename::fileparse($options{i});
+my $file = substr ( Cwd::abs_path($options{i}), length(Cwd::abs_path($dir . $options{r})) + 1 );
 $file =~ s|/|\\|g;
 
 open (INFILE, "<$options{i}") || die "propex: cannot open input file: $options{i}";
