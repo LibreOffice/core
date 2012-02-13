@@ -117,7 +117,6 @@ copy-stuff:
 		  utllo \
 		  vbahelperlo \
 		  vcllo \
-		  vclplug_svplo \
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
