@@ -1200,7 +1200,28 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aXEdit.SetAccessibleName(String(IDEResId( RID_STR_WATCHNAME)));
     aTreeListBox.SetAccessibleName(String(IDEResId(RID_STR_WATCHNAME)));
 
+    long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
+    aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
+    aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
+    aXEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_RETURN ) );
+    aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+    aXEdit.Show();
+
+    aRemoveWatchButton.Disable();
+    aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
+    aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
+    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
+    aSz.Width() += 6;
+    aSz.Height() += 6;
+    aRemoveWatchButton.SetSizePixel( aSz );
+    aRemoveWatchButton.Show();
+
+    long nRWBtnSize = aRemoveWatchButton.GetModeImage().GetSizePixel().Height() + 10;
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
+
+    if ( nRWBtnSize > nVirtToolBoxHeight )
+        nVirtToolBoxHeight = nRWBtnSize;
+
     nHeaderBarHeight = 16;
 
     aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
@@ -1232,24 +1253,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
     aHeaderBar.Show();
 
-    aRemoveWatchButton.Disable();
-
     aTreeListBox.Show();
-
-    long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER;
-    aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
-    aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
-    aXEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_RETURN ) );
-    aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-    aXEdit.Show();
-
-    aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
-    aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
-    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
-    aRemoveWatchButton.SetSizePixel( aSz );
-    aRemoveWatchButton.Show();
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
 
