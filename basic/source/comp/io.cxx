@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#include <tools/stream.hxx>
 #include "sbcomp.hxx"
 #include "iosys.hxx"
 
@@ -127,7 +124,7 @@ void SbiParser::Line()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = String( RTL_CONSTASCII_USTRINGPARAM( "line" ) );
+        aInfo.m_aKeywordSymbol = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "line" ) );
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 
@@ -258,8 +255,7 @@ void SbiParser::Open()
     if( Peek() == SYMBOL )
     {
         Next();
-        String aLen( aSym );
-        if( aLen.EqualsIgnoreCaseAscii( "LEN" ) )
+        if( aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("LEN")) )
         {
             TestToken( EQ );
             pLen = new SbiExpression( this );
@@ -289,7 +285,7 @@ void SbiParser::Name()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = String( RTL_CONSTASCII_USTRINGPARAM( "name" ) );
+        aInfo.m_aKeywordSymbol = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) );
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 
