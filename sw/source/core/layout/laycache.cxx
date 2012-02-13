@@ -658,18 +658,18 @@ sal_Bool SwLayHelper::CheckInsertPage()
                          bNextPageOdd, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
         {
-            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
             do
             {   rpPage = (SwPageFrm*)rpPage->GetNext();
             } while ( rpPage->GetNext() );
         }
         else
         {
-            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
             rpPage = (SwPageFrm*)rpPage->GetNext();
             if ( rpPage->IsEmptyPage() )
             {
-                OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+                OSL_ENSURE( rpPage->GetNext(), "No new page?" );
                 rpPage = (SwPageFrm*)rpPage->GetNext();
             }
         }
@@ -951,8 +951,8 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                 if ( rpActualSection )
                 {
-                    //Hatte der SectionFrm ueberhaupt Inhalt? Wenn
-                    //nicht kann er gleich umgehaengt werden.
+                    //Did the SectionFrm even have a content? If not, we can
+                    //directly put it somewhere else
                     SwSectionFrm *pSct;
                     bool bInit = false;
                     if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
@@ -972,7 +972,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     if( bInit )
                         pSct->Init();
                     pSct->Frm().Pos() = rpLay->Frm().Pos();
-                    pSct->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+                    pSct->Frm().Pos().Y() += 1; //because of the notifications
 
                     rpLay = pSct;
                     if ( rpLay->Lower() && rpLay->Lower()->IsLayoutFrm() )
