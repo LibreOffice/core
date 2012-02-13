@@ -87,7 +87,49 @@ using namespace ::toolkit;
                             } \
 
 
+uno::Reference< graphic::XGraphic >
+ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const ::rtl::OUString& _rURL )
+{
+    if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
+    {
+        // graphic manager uniqueid
+        rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
+        // get the DefaultContext
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        xOutGraphicObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+    }
+    else // linked
+        xOutGraphicObj = NULL; // release the GraphicObject
 
+    return ImageHelper::getGraphicFromURL_nothrow( _rURL );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+{
+    uno::Reference< graphic::XGraphic > xGraphic;
+    if ( _rURL.isEmpty() )
+        return xGraphic;
+
+    try
+    {
+        uno::Reference< graphic::XGraphicProvider > xProvider;
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+        {
+            uno::Sequence< beans::PropertyValue > aMediaProperties(1);
+            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Value <<= _rURL;
+            xGraphic = xProvider->queryGraphic( aMediaProperties );
+        }
+    }
+    catch (const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return xGraphic;
+}
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
@@ -591,7 +633,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
