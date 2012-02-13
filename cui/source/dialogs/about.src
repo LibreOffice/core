@@ -131,5 +131,6 @@ ModalDialog RID_DEFAULTABOUT
         DefButton = TRUE ;
         Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Close";
     };
 };
