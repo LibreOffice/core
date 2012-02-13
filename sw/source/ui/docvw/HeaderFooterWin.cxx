@@ -148,7 +148,6 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     SwFrameControl( pEditWin, pPageFrm ),
     m_sLabel( ),
     m_bIsHeader( bHeader ),
-    m_bReadonly( false ),
     m_pPopupMenu( NULL ),
     m_pLine( NULL ),
     m_bIsAppearing( false ),
@@ -329,57 +328,54 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                 com::sun::star::lang::Locale(),
                 aLineColor ) );
 
-    // Create the 'plus' or 'arrow' primitive if not readonly
-    if ( !m_bReadonly )
+    // Create the 'plus' or 'arrow' primitive
+    B2DRectangle aSignArea( B2DPoint( aRect.Right() - BUTTON_WIDTH, 0.0 ),
+                            B2DSize( aRect.Right(), aRect.getHeight() ) );
+
+    B2DPolygon aSign;
+    if ( IsEmptyHeaderFooter( ) )
     {
-        B2DRectangle aSignArea( B2DPoint( aRect.Right() - BUTTON_WIDTH, 0.0 ),
-                                B2DSize( aRect.Right(), aRect.getHeight() ) );
+        // Create the + polygon
+        double nLeft = aSignArea.getMinX() + TEXT_PADDING;
+        double nRight = aSignArea.getMaxX() - TEXT_PADDING;
+        double nHalfW = ( nRight - nLeft ) / 2.0;
 
-        B2DPolygon aSign;
-        if ( IsEmptyHeaderFooter( ) )
-        {
-            // Create the + polygon
-            double nLeft = aSignArea.getMinX() + TEXT_PADDING;
-            double nRight = aSignArea.getMaxX() - TEXT_PADDING;
-            double nHalfW = ( nRight - nLeft ) / 2.0;
+        double nTop = aSignArea.getCenterY() - nHalfW;
+        double nBottom = aSignArea.getCenterY() + nHalfW;
 
-            double nTop = aSignArea.getCenterY() - nHalfW;
-            double nBottom = aSignArea.getCenterY() + nHalfW;
-
-            aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() - 1.0 ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() - 1.0 ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nTop ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nTop ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() - 1.0 ) );
-            aSign.append( B2DPoint( nRight, aSignArea.getCenterY() - 1.0 ) );
-            aSign.append( B2DPoint( nRight, aSignArea.getCenterY() + 1.0 ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() + 1.0 ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nBottom ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nBottom ) );
-            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() + 1.0  ) );
-            aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() + 1.0  ) );
-            aSign.setClosed( true );
-        }
-        else
-        {
-            // Create the v polygon
-            B2DPoint aLeft( aSignArea.getMinX() + TEXT_PADDING, aSignArea.getCenterY() );
-            B2DPoint aRight( aSignArea.getMaxX() - TEXT_PADDING, aSignArea.getCenterY() );
-            B2DPoint aBottom( ( aLeft.getX() + aRight.getX() ) / 2.0, aLeft.getY() + 4.0 );
-            aSign.append( aLeft );
-            aSign.append( aRight );
-            aSign.append( aBottom );
-            aSign.setClosed( true );
-        }
-
-        BColor aSignColor = Color( COL_BLACK ).getBColor( );
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            aSignColor = Color( COL_WHITE ).getBColor( );
-
-        aSeq.realloc( aSeq.getLength() + 1 );
-        aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                B2DPolyPolygon( aSign ), aSignColor ) );
+        aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() - 1.0 ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() - 1.0 ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nTop ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nTop ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() - 1.0 ) );
+        aSign.append( B2DPoint( nRight, aSignArea.getCenterY() - 1.0 ) );
+        aSign.append( B2DPoint( nRight, aSignArea.getCenterY() + 1.0 ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() + 1.0 ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nBottom ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nBottom ) );
+        aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() + 1.0  ) );
+        aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() + 1.0  ) );
+        aSign.setClosed( true );
     }
+    else
+    {
+        // Create the v polygon
+        B2DPoint aLeft( aSignArea.getMinX() + TEXT_PADDING, aSignArea.getCenterY() );
+        B2DPoint aRight( aSignArea.getMaxX() - TEXT_PADDING, aSignArea.getCenterY() );
+        B2DPoint aBottom( ( aLeft.getX() + aRight.getX() ) / 2.0, aLeft.getY() + 4.0 );
+        aSign.append( aLeft );
+        aSign.append( aRight );
+        aSign.append( aBottom );
+        aSign.setClosed( true );
+    }
+
+    BColor aSignColor = Color( COL_BLACK ).getBColor( );
+    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        aSignColor = Color( COL_WHITE ).getBColor( );
+
+    aSeq.realloc( aSeq.getLength() + 1 );
+    aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+            B2DPolyPolygon( aSign ), aSignColor ) );
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
@@ -495,8 +491,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 
 void SwHeaderFooterWin::SetReadonly( bool bReadonly )
 {
-    m_bReadonly = bReadonly;
-    Update();
+    ShowAll( !bReadonly );
 }
 
 void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
