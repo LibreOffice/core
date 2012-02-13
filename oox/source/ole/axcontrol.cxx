@@ -2496,6 +2496,7 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 {
     rPropMap.setProperty( PROP_Title, maCaption );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    rConv.convertAxPicture( rPropMap, maPictureData, AX_PICPOS_CENTER  );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
