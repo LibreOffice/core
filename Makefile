@@ -442,7 +442,7 @@ check: subsequentcheck_after_build
 
 subsequentcheck_after_build: build dev-install-link
 	@cd smoketestoo_native && unset MAKEFLAGS && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
 
 subsequentcheck: smoketestoo_native
