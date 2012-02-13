@@ -5828,6 +5828,13 @@ if test "$with_system_libxml" = "yes"; then
     else
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
     fi
+
+    dnl Check for xmllint
+    AC_PATH_PROG(XMLLINT, xmllint, no)
+    if test "$XMLLINT" = "no"; then
+        AC_MSG_ERROR([xmllint is required])
+    fi
+
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS zlib1.dll libxml2-2.dll"
 else
     AC_MSG_RESULT([internal])
@@ -5837,6 +5844,7 @@ fi
 AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
+AC_SUBST(XMLLINT)
 
 dnl ===================================================================
 dnl Checks for Python
