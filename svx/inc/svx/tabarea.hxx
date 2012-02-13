@@ -28,16 +28,6 @@
 #ifndef _SVX_TAB_AREA_HXX
 #define _SVX_TAB_AREA_HXX
 
-// include ---------------------------------------------------------------
-
-#include <svtools/valueset.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <svx/dlgctrl.hxx>
-#include <svx/xsetit.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xfillit.hxx>
-
 // enum ------------------------------------------------------------------
 
 enum ColorModel
@@ -65,9 +55,6 @@ typedef sal_uInt16 ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
 #define CT_MODIFIED             ( (ChangeType) 0x0001 )
 #define CT_CHANGED              ( (ChangeType) 0x0002 )
 #define CT_SAVED                ( (ChangeType) 0x0004 )
-
-class SdrModel;
-class SdrView;
 
 #endif // _SVX_TAB_AREA_HXX
 
