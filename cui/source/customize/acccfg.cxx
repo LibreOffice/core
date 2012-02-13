@@ -884,7 +884,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         { m_xSMGR.clear(); }
@@ -1020,7 +1020,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
             else
                 xAccMgr->removeKeyEvent(aAWTKey);
         }
-        catch(const css::uno::RuntimeException& exRun)
+        catch(const css::uno::RuntimeException&)
             { throw; }
         catch(const css::uno::Exception&)
             {}
@@ -1298,7 +1298,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
@@ -1400,7 +1400,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
@@ -1437,7 +1437,7 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     {
         m_xAct->store();
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw;  }
     catch(const css::uno::Exception&)
         { return sal_False; }
@@ -1526,7 +1526,7 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
                 return sLabel;
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
