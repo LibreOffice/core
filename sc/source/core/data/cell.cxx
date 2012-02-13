@@ -1056,7 +1056,8 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 void ScFormulaCell::Compile( const String& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
-    if ( pDocument->IsClipOrUndo() ) return;
+    if ( pDocument->IsClipOrUndo() )
+        return;
     bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
     if ( bWasInFormulaTree )
         pDocument->RemoveFromFormulaTree( this );
