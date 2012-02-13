@@ -26,7 +26,8 @@ $(eval $(call gb_Module_add_targets,officecfg,\
 	Configuration_officecfg \
 ))
 
-$(eval $(call gb_Module_add_check_targets,officecfg,\
+# The cppheader test depends on comphelper so can only be a subsequentcheck:
+$(eval $(call gb_Module_add_subsequentcheck_targets,officecfg,\
         CppunitTest_officecfg_cppheader_test \
 ))
 

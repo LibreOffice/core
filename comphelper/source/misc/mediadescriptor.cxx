@@ -47,13 +47,12 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
+#include <officecfg/Office/Common.hxx>
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -445,29 +444,8 @@ sal_Bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStreamOwnLock()
 {
-    // Own lock file implementation
-
-    sal_Bool bUseLock = sal_True; // the system file locking is used per default
-    try
-    {
-
-        css::uno::Reference< css::uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
-                            ::comphelper::ConfigurationHelper::E_STANDARD );
-        if ( !xCommonConfig.is() )
-            throw css::uno::RuntimeException();
-
-        ::comphelper::ConfigurationHelper::readRelativeKey(
-                xCommonConfig,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseLock;
-    }
-    catch( const css::uno::Exception& )
-    {
-    }
-
-    return impl_addInputStream( bUseLock );
+    return impl_addInputStream(
+        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get());
 }
 
 /*-----------------------------------------------*/
