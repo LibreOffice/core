@@ -46,6 +46,8 @@ public:
 
     void testRemoveByName();
 
+    virtual ~XNameContainer() {}
+
 private:
     rtl::OUString maNameToRemove;
 };

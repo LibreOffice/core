@@ -46,6 +46,8 @@ public:
 
     virtual uno::Any getAnyElementForNameReplace() = 0;
 
+    virtual ~XNameReplace() {}
+
 private:
     rtl::OUString maName;
 

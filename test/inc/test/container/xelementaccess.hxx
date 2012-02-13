@@ -43,6 +43,8 @@ public:
 
     virtual uno::Reference< uno::XInterface > init() = 0;
 
+    virtual ~XElementAccess() {}
+
 private:
     uno::Type maType;
 };
