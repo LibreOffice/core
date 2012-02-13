@@ -238,7 +238,6 @@ protected:
 
                         XPropertyList( XPropertyListType t, const String& rPath,
                                        XOutdevItemPool* pXPool = NULL );
-    void                Clear();
 
 public:
     virtual             ~XPropertyList();

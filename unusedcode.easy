@@ -622,7 +622,6 @@ XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, short)
-XPropertyList::Clear()
 XWindowItem::XWindowItem(unsigned short, Window*)
 XWindowItem::XWindowItem(unsigned short, com::sun::star::uno::Reference<com::sun::star::awt::XWindow>&)
 XclExpFontBuffer::Insert(ScPatternAttr const&, short, XclExpColorType, bool)
