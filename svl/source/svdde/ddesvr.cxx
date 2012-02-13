@@ -290,7 +290,7 @@ found:
                 else
                     bRes = pTopic->Put( &d );
             }
-            pInst->hCurConvSvr = NULL;
+            pInst->hCurConvSvr = 0;
             if ( bRes )
                 return (HDDEDATA)DDE_FACK;
             else
@@ -332,7 +332,7 @@ found:
                 if (pItem)
                 {
                     pItem->IncMonitor( (long)hConv );
-                    pInst->hCurConvSvr = NULL;
+                    pInst->hCurConvSvr = 0;
                 }
             }
             return (HDDEDATA)sal_True;
@@ -341,7 +341,7 @@ found:
             pItem->DecMonitor( (long)hConv );
             if( !pItem->pImpData )
                 pTopic->StopAdviseLoop();
-            pInst->hCurConvSvr = NULL;
+            pInst->hCurConvSvr = 0;
             return (HDDEDATA)sal_True;
 
         case XTYP_EXECUTE:
@@ -359,7 +359,7 @@ found:
                 else
                     bRes = pTopic->Execute( &aName );
             }
-            pInst->hCurConvSvr = NULL;
+            pInst->hCurConvSvr = 0;
             if ( bRes )
                 return (HDDEDATA)DDE_FACK;
             else
@@ -513,7 +513,7 @@ DdeService::~DdeService()
     {
         if( DdeUninitialize( pInst->hDdeInstSvr ) )
         {
-            pInst->hDdeInstSvr = NULL;
+            pInst->hDdeInstSvr = 0;
             delete pInst->pServicesSvr;
             pInst->pServicesSvr = NULL;
             if( pInst->nRefCount == 0)

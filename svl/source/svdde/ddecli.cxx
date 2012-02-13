@@ -211,7 +211,7 @@ DdeConnection::~DdeConnection()
     {
         if( DdeUninitialize( pInst->hDdeInstCli ) )
         {
-            pInst->hDdeInstCli = NULL;
+            pInst->hDdeInstCli = 0;
             if( pInst->nRefCount == 0 )
                 ImpDeinitInstData();
         }
