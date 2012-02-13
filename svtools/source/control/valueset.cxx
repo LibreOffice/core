@@ -1655,50 +1655,22 @@ void ValueSet::UserDraw( const UserDrawEvent& )
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos )
 {
-    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
-                "ValueSet::InsertItem(): ItemId already exists" );
-
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
-    } else {
-        mItemList.push_back( pItem );
-    }
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    ImplInsertItem( pItem, nPos );
 }
 
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos )
 {
-    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
-                "ValueSet::InsertItem(): ItemId already exists" );
-
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
-    } else {
-        mItemList.push_back( pItem );
-    }
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    ImplInsertItem( pItem, nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -1706,26 +1678,12 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const XubString& rText, size_t nPos )
 {
-    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
-                "ValueSet::InsertItem(): ItemId already exists" );
-
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
-    } else {
-        mItemList.push_back( pItem );
-    }
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    ImplInsertItem( pItem, nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -1733,39 +1691,32 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const XubString& rText, size_t nPos )
 {
-    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
-                "ValueSet::InsertItem(): ItemId already exists" );
-
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
-    } else {
-        mItemList.push_back( pItem );
-    }
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    ImplInsertItem( pItem, nPos );
 }
 
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
-    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
-                "ValueSet::InsertItem(): ItemId already exists" );
-
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
+    ImplInsertItem( pItem, nPos );
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
+{
+    DBG_ASSERT( pItem->mnId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( pItem->mnId ) == VALUESET_ITEM_NOTFOUND,
+                "ValueSet::InsertItem(): ItemId already exists" );
+
     if ( nPos < mItemList.size() ) {
         ValueItemList::iterator it = mItemList.begin();
         ::std::advance( it, nPos );
