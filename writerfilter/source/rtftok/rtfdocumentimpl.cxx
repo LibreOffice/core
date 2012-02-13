@@ -2525,7 +2525,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_default, pIntValue));
             break;
         case RTF_FFRES:
-            if (m_nFormFieldType == FORMFIELD_LIST)
+            if (m_nFormFieldType == FORMFIELD_CHECKBOX)
+                m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFCheckBox_checked, pIntValue));
+            else if (m_nFormFieldType == FORMFIELD_LIST)
                 m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_result, pIntValue));
             break;
         case RTF_EDMINS:
