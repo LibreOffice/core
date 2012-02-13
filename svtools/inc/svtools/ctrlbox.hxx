@@ -560,7 +560,6 @@ public:
     virtual void    SetValue( sal_Int64 nNewValue  );
     virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64   GetValue() const;
-    void            SetUserValue( sal_Int64 nNewValue ) { SetUserValue( nNewValue, FUNIT_NONE ); }
 
 private:
     // declared as private because some compilers would generate the default functions
