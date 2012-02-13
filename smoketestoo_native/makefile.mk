@@ -26,6 +26,7 @@
 PRJ = .
 PRJNAME = smoketestoo_native
 TARGET = smoketest
+ABORT_ON_ASSERTION = TRUE
 
 .INCLUDE: settings.mk
 
