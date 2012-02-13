@@ -101,7 +101,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     bInfFtn ( sal_False ),
     bInfSct ( sal_False )
 {
-    OSL_ENSURE( pMod, "Kein Frameformat uebergeben." );
+    OSL_ENSURE( pMod, "No frame format passed." );
     bInvalidR2L = bInvalidVert = 1;
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = bVertLR = 0;
@@ -308,7 +308,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_BOX:
         case RES_SHADOW:
             Prepare( PREP_FIXSIZE_CHG );
-            // hier kein break !
+            // no break here!
         case RES_LR_SPACE:
         case RES_UL_SPACE:
             rInvFlags |= 0x0B;
@@ -351,7 +351,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         }
         case RES_COL:
-            OSL_FAIL( "Spalten fuer neuen FrmTyp?" );
+            OSL_FAIL( "Columns for new FrmTyp?" );
             break;
 
         default:
@@ -372,9 +372,9 @@ void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
 /*************************************************************************
 |*
 |*    SwFrm::InvalidatePage()
-|*    Beschreibung:     Invalidiert die Seite, in der der Frm gerade steht.
-|*      Je nachdem ob es ein Layout, Cntnt oder FlyFrm ist wird die Seite
-|*      entsprechend Invalidiert.
+|*    Description:      Invalidates the page in which the Frm is placed
+|*      currently. The page is invalidated depending on the type (Layout,
+|*      Cntnt, FlyFrm)
 |*
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
@@ -414,16 +414,16 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         {
             if ( pRoot->IsTurboAllowed() )
             {
-                // JP 21.09.95: wenn sich der ContentFrame 2 mal eintragen
-                //              will, kann es doch eine TurboAction bleiben.
-                //  ODER????
+                // JP 21.09.95: it can still be a TurboAction if the
+                // ContentFrame wants to register a second time.
+                //  RIGHT????
                 if ( !pRoot->GetTurbo() || this == pRoot->GetTurbo() )
                     pRoot->SetTurbo( (const SwCntntFrm*)this );
                 else
                 {
                     pRoot->DisallowTurbo();
-                    //Die Seite des Turbo koennte eine andere als die meinige
-                    //sein, deshalb muss sie invalidiert werden.
+                    //The page of the Turbo could be a different one then mine,
+                    //therefore we have to invalidate it.
                     const SwFrm *pTmp = pRoot->GetTurbo();
                     pRoot->ResetTurbo();
                     pTmp->InvalidatePage();
@@ -530,9 +530,9 @@ Size SwFrm::ChgSize( const Size& aNewSize )
                         GetUpper()->_InvalidateSize();
                 }
 
-                // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
-                // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
-                // wird die Breite jetzt gesetzt.
+                // Even if grow/shrink did not yet set the desired width, for
+                // example when called by ChgColumns to set the column width, we
+                // set the right width now.
                 (aFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
@@ -567,22 +567,21 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 |*
 |*  SwFrm::InsertBefore()
 |*
-|*  Beschreibung        SwFrm wird in eine bestehende Struktur eingefuegt
-|*                      Eingefuegt wird unterhalb des Parent und entweder
-|*                      vor pBehind oder am Ende der Kette wenn pBehind
-|*                      leer ist.
+|*  Description         SwFrm is inserted into an existing structure.
+|*                      Insertion is done below the parent and either before
+|*                      pBehind or at the end of the chain if pBehind is empty.
 |*
 |*************************************************************************/
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( pParent, "No parent for insert." );
     OSL_ENSURE( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
-            "Framebaum inkonsistent." );
+            "Frame tree is inconsistent." );
 
     pUpper = pParent;
     pNext = pBehind;
     if( pBehind )
-    {   //Einfuegen vor pBehind.
+    {   //Inert before pBehind.
         if( 0 != (pPrev = pBehind->pPrev) )
             pPrev->pNext = this;
         else
@@ -590,7 +589,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
         pBehind->pPrev = this;
     }
     else
-    {   //Einfuegen am Ende, oder als ersten Node im Unterbaum
+    {   //Insert at the end, or as first node in the sub tree
         pPrev = pUpper->Lower();
         if ( pPrev )
         {
@@ -607,30 +606,30 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 |*
 |*  SwFrm::InsertBehind()
 |*
-|*  Beschreibung        SwFrm wird in eine bestehende Struktur eingefuegt
-|*                      Eingefuegt wird unterhalb des Parent und entweder
-|*                      hinter pBefore oder am Anfang der Kette wenn pBefore
-|*                      leer ist.
+|*  Description         SwFrm is inserted in an existing structure.
+|*                      Insertion is done below the parent and either behind
+|*                      pBefore or at the beginning of the chain if pBefore is
+|*                      empty.
 |*
 |*************************************************************************/
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( pParent, "No Parent for Insert." );
     OSL_ENSURE( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
-            "Framebaum inkonsistent." );
+            "Frame tree is inconsistent." );
 
     pUpper = pParent;
     pPrev = pBefore;
     if ( pBefore )
     {
-        //Einfuegen hinter pBefore
+        //Insert after pBefore
         if ( 0 != (pNext = pBefore->pNext) )
             pNext->pPrev = this;
         pBefore->pNext = this;
     }
     else
     {
-        //Einfuegen am Anfang der Kette
+        //Insert at the beginning of the chain
         pNext = pParent->Lower();
         if ( pParent->Lower() )
             pParent->Lower()->pPrev = this;
@@ -642,31 +641,28 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*
 |*  SwFrm::InsertGroup()
 |*
-|*  Beschreibung        Eine Kette von SwFrms wird in eine bestehende Struktur
-|*                      eingefuegt
+|*  Description         A chain of SwFrms gets inserted in an existing structure
 |*
-|*  Bisher wird dies genutzt, um einen SectionFrame, der ggf. schon Geschwister
-|*  mit sich bringt, in eine bestehende Struktur einzufuegen.
+|*  Until now this is used to insert a SectionFrame which may has some siblings
+|*  into an existing structure.
 |*
-|*  Wenn man den dritten Parameter als NULL uebergibt, entspricht
-|*  diese Methode dem SwFrm::InsertBefore(..), nur eben mit Geschwistern.
+|*  If the third parameter is NULL, this method is (besides handling the
+|*  siblings) equal to SwFrm::InsertBefore(..)
 |*
-|*  Wenn man einen dritten Parameter uebergibt, passiert folgendes:
-|*  this wird pNext von pParent,
-|*  pSct wird pNext vom Letzten der this-Kette,
-|*  pBehind wird vom pParent an den pSct umgehaengt.
-|*  Dies dient dazu: ein SectionFrm (this) wird nicht als
-|*  Kind an einen anderen SectionFrm (pParent) gehaengt, sondern pParent
-|*  wird in zwei Geschwister aufgespalten (pParent+pSct) und this dazwischen
-|*  eingebaut.
+|*  If the third parameter is passed, the following happens:
+|*  - this becomes pNext of pParent
+|*  - pSct becomes pNext of the last on in the this-chains
+|*  - pBehind is reconnected from pParent to pSct
+|*  This leads to: a SectionFrm (pParent) won't be connected, but pParent get
+|*  split up into two siblings (pParent+pSect) and inserted between.
 |*
 |*************************************************************************/
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( pParent, "No parent for insert." );
     OSL_ENSURE( (!pBehind || ( (pBehind && (pParent == pBehind->GetUpper()))
             || ((pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm())) ) ),
-            "Framebaum inkonsistent." );
+            "Frame tree inconsistent." );
     if( pSct )
     {
         pUpper = pParent->GetUpper();
@@ -698,7 +694,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pLast->pUpper = GetUpper();
         }
         if( pBehind )
-        {   //Einfuegen vor pBehind.
+        {   //Insert befor pBehind.
             if( pBehind->GetPrev() )
                 pBehind->GetPrev()->pNext = NULL;
             else
@@ -737,7 +733,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         }
         pLast->pNext = pBehind;
         if( pBehind )
-        {   //Einfuegen vor pBehind.
+        {   //Insert befor pBehind.
             if( 0 != (pPrev = pBehind->pPrev) )
                 pPrev->pNext = this;
             else
@@ -745,7 +741,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pBehind->pPrev = pLast;
         }
         else
-        {   //Einfuegen am Ende, oder des ersten Nodes im Unterbaum
+            //Insert at the end, or ... the first node in the subtree
             pPrev = pUpper->Lower();
             if ( pPrev )
             {
@@ -766,20 +762,20 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 |*************************************************************************/
 void SwFrm::Remove()
 {
-    OSL_ENSURE( pUpper, "Removen ohne Upper?" );
+    OSL_ENSURE( pUpper, "Remove without upper?" );
 
     if( pPrev )
-        // einer aus der Mitte wird removed
+        // one out of the middle is removed
         pPrev->pNext = pNext;
     else
-    {   // der erste in einer Folge wird removed
-        OSL_ENSURE( pUpper->pLower == this, "Layout inkonsistent." );
+    {   // the first in a list is removed //TODO
+        OSL_ENSURE( pUpper->pLower == this, "Layout is inconsistent." );
         pUpper->pLower = pNext;
     }
     if( pNext )
         pNext->pPrev = pPrev;
 
-    // Verbindung kappen.
+    // Remove link
     pNext  = pPrev  = 0;
     pUpper = 0;
 }
@@ -790,16 +786,16 @@ void SwFrm::Remove()
 |*************************************************************************/
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
-    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
-    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( pParent, "No parent for pasting." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent is CntntFrm." );
+    OSL_ENSURE( pParent != this, "I'm the parent." );
+    OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
-            "Bin noch irgendwo angemeldet." );
+            "I'm still registered somewhere" );
     OSL_ENSURE( !pSibling || pSibling->IsFlowFrm(),
             "<SwCntntFrm::Paste(..)> - sibling not of expected type." );
 
-    //In den Baum einhaengen.
+    //Insert in the tree.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
 
     SwPageFrm *pPage = FindPageFrm();
@@ -835,13 +831,13 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     if ( GetPrev() )
     {
         if ( IsFollow() )
-            //Ich bin jetzt direkter Nachfolger meines Masters geworden
+            //I'm a direct follower of my master now
             ((SwCntntFrm*)GetPrev())->Prepare( PREP_FOLLOW_FOLLOWS );
         else
         {
             if ( GetPrev()->Frm().Height() !=
                  GetPrev()->Prt().Height() + GetPrev()->Prt().Top() )
-                //Umrandung zu beruecksichtigen?
+                //Take the frame into account?
                 GetPrev()->_InvalidatePrt();
             // OD 18.02.2003 #104989# - force complete paint of previous frame,
             // if frame is inserted at the end of a section frame, in order to
@@ -895,7 +891,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 |*************************************************************************/
 void SwCntntFrm::Cut()
 {
-    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut without Upper()." );
 
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
@@ -935,8 +931,9 @@ void SwCntntFrm::Cut()
     }
 
     if( 0 != (pFrm = GetIndNext()) )
-    {   //Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
-        //berechnet, der ist jetzt, wo er der erste wird obsolet bzw. anders.
+        //The old follower may calculated a gap to the predecessor which now
+        //becomes obsolete or different respectively as it becomes the first
+        //one itself.
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
         pFrm->InvalidatePage( pPage );
@@ -965,16 +962,16 @@ void SwCntntFrm::Cut()
     else
     {
         InvalidateNextPos();
-        //Einer muss die Retusche uebernehmen: Vorgaenger oder Upper
+        //Someone needs to do the retouching: predecessor or upper
         if ( 0 != (pFrm = GetPrev()) )
         {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             pFrm->_InvalidatePos();
             pFrm->InvalidatePage( pPage );
         }
-        //Wenn ich der einzige CntntFrm in meinem Upper bin (war), so muss
-        //er die Retouche uebernehmen.
         //Ausserdem kann eine Leerseite entstanden sein.
+        //If I'm (was) the only CntntFrm in my upper, he has to do the
+        //retouching.
         else
         {   SwRootFrm *pRoot = getRootFrm();
             if ( pRoot )
@@ -1006,7 +1003,7 @@ void SwCntntFrm::Cut()
             }
         }
     }
-    //Erst removen, dann Upper Shrinken.
+    //Remove first, then shrink the upper.
     SwLayoutFrm *pUp = GetUpper();
     Remove();
     if ( pUp )
@@ -1047,9 +1044,9 @@ void SwCntntFrm::Cut()
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     {
                         pSct->DelEmpty( sal_False );
-                        // Wenn ein gelockter Bereich nicht geloescht werden darf,
-                        // so ist zumindest seine Groesse durch das Entfernen seines
-                        // letzten Contents ungueltig geworden.
+                        // If a loosened area may not be deleted then at least
+                        // its size became invalid after removing its last
+                        // content.
                         pSct->_InvalidateSize();
                     }
                     else
@@ -1077,8 +1074,8 @@ void SwCntntFrm::Cut()
 |*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
-    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent, "No parent for pasting." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent is CntntFrm." );
     OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
     OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
