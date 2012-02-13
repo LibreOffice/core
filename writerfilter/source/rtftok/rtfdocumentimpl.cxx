@@ -305,7 +305,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bWasInFrame(false),
     m_bIsInFrame(false),
     m_bHasPage(false),
-    m_aUnicodeBuffer()
+    m_aUnicodeBuffer(),
+    m_aHexBuffer()
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -738,9 +739,13 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
 int RTFDocumentImpl::resolveChars(char ch)
 {
+    if (m_aStates.top().nInternalState != INTERNAL_HEX)
+        checkUnicode(false, true);
+
     OStringBuffer aBuf;
 
     bool bUnicodeChecked = false;
+    bool bSkipped = false;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -749,13 +754,16 @@ int RTFDocumentImpl::resolveChars(char ch)
             {
                 if (!bUnicodeChecked)
                 {
-                    checkUnicode();
+                    checkUnicode(true, false);
                     bUnicodeChecked = true;
                 }
                 aBuf.append(ch);
             }
             else
+            {
+                bSkipped = true;
                 m_aStates.top().nCharsToSkip--;
+            }
         }
         // read a single char if we're in hex mode
         if (m_aStates.top().nInternalState == INTERNAL_HEX)
@@ -764,6 +772,14 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
     if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
+
+    if (m_aStates.top().nInternalState == INTERNAL_HEX && m_aStates.top().nDestinationState != DESTINATION_LEVELNUMBERS)
+    {
+        if (!bSkipped)
+            m_aHexBuffer.append(ch);
+        return 0;
+    }
+
     if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
         return 0;
     OString aStr = aBuf.makeStringAndClear();
@@ -2031,8 +2047,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    if (nKeyword != RTF_U)
-        checkUnicode();
+    checkUnicode(nKeyword != RTF_U, true);
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -3370,11 +3385,16 @@ void RTFDocumentImpl::setSkipUnknown(bool bSkipUnknown)
     m_bSkipUnknown = bSkipUnknown;
 }
 
-void RTFDocumentImpl::checkUnicode()
+void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 {
-    if (m_aUnicodeBuffer.getLength() > 0)
+    if (bUnicode && m_aUnicodeBuffer.getLength() > 0)
     {
         OUString aString = m_aUnicodeBuffer.makeStringAndClear();
+        text(aString);
+    }
+    if (bHex && m_aHexBuffer.getLength() > 0)
+    {
+        OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         text(aString);
     }
 }
