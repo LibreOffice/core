@@ -4679,17 +4679,6 @@ if test "$SOLAR_JAVA" != ""; then
     fi
     fi
 
-    if ! test -z "$_java_target_ver" -o \
-        "$_java_target_ver" = "1.1" -o \
-            "$_java_target_ver" = "1.2" -o \
-        "$_java_target_ver" = "1.3" -o \
-        "$_java_target_ver" = "1.4" -o \
-        "$_java_target_ver" = "1.5" -o \
-        "$_java_target_ver" = "1.6" -o \
-        "$_java_target_ver" = "5" ; then
-        AC_MSG_ERROR([$_java_target_ver is not a supported Java bytecode version!])
-    fi
-
     JAVA_SOURCE_VER="$_java_target_ver"
     JAVA_TARGET_VER="$_java_target_ver"
 fi
