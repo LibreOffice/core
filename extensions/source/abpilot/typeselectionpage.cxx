@@ -110,9 +110,13 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla && !bUnx ) );
         m_aAllTypes.push_back( ButtonItem( &m_aOther, AST_OTHER, true ) );
 
-        bool bFirstVisible = true;
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         const Size aSpacing( LogicToPixel( Size( 0, 3 ), MAP_APPFONT ) );
+        if ( ! m_aAllTypes.empty() )
+        {
+            ButtonItem aItem = m_aAllTypes[0];
+            aItem.m_pItem->SetStyle( aItem.m_pItem->GetStyle() | WB_GROUP );
+        }
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
@@ -125,12 +129,6 @@ namespace abp
                 aTopLeft.Y() += aItemSize.Height() + aSpacing.Height();
                 aItem.m_pItem->SetClickHdl( aTypeSelectionHandler );
                 aItem.m_pItem->Show();
-
-                if ( bFirstVisible )
-                {
-                    aItem.m_pItem->SetStyle( aItem.m_pItem->GetStyle() | WB_GROUP );
-                    bFirstVisible = false;
-                }
             }
         }
     }
