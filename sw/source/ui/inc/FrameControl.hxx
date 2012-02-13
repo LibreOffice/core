@@ -30,7 +30,7 @@
 
 class SwEditWin;
 class SwFrm;
-struct Point;
+class Point;
 
 /** Class representing a control linked to a SwFrm.
   */
