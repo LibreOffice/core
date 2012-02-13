@@ -674,27 +674,6 @@ sal_Int8* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 // -------------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-// getDataBuf
-// Gets the data buffer for the given parameter index
-//--------------------------------------------------------------------
-
-sal_Int8* OPreparedStatement::getDataBuf (sal_Int32 index)
-{
-    sal_Int8* b = NULL;
-
-    // Sanity check the parameter number
-
-    if ((index >= 1) &&
-        (index <= numParams))
-    {
-        b = boundParams[index - 1].getBindDataBuffer ();
-    }
-
-    return b;
-}
-// -------------------------------------------------------------------------
-
-//--------------------------------------------------------------------
 // getLengthBuf
 // Gets the length buffer for the given parameter index
 //--------------------------------------------------------------------
@@ -712,34 +691,6 @@ sal_Int8* OPreparedStatement::getLengthBuf (sal_Int32 index)
     }
 
     return b;
-}
-// -------------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-// getParamLength
-// Returns the length of the given parameter number.  When each
-// parameter was bound, a 4-sal_Int8 buffer was given to hold the
-// length (stored in native format).  Get the buffer, convert the
-// buffer from native format, and return it.  If the length is -1,
-// the column is considered to be NULL.
-//--------------------------------------------------------------------
-
-sal_Int32 OPreparedStatement::getParamLength (  sal_Int32 index)
-{
-    sal_Int32 paramLen = SQL_NULL_DATA;
-
-    // Sanity check the parameter number
-
-    if ((index >= 1) &&
-        (index <= numParams)) {
-
-        // Now get the length of the parameter from the
-        // bound param array.  -1 is returned if it is NULL.
-        long n = 0;
-        memcpy (&n, boundParams[index -1].getBindLengthBuffer (), sizeof (n));
-        paramLen = n;
-    }
-    return paramLen;
 }
 // -------------------------------------------------------------------------
 
@@ -810,34 +761,6 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     }
 }
 // -------------------------------------------------------------------------
-//--------------------------------------------------------------------
-// getPrecision
-// Given a SQL type, return the maximum precision for the column.
-// Returns -1 if not known
-//--------------------------------------------------------------------
-
-sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    sal_Int32 prec = -1;
-    const TTypeInfoVector& rTypeInfo = m_pConnection->getTypeInfo();
-    if ( !rTypeInfo.empty() )
-    {
-        m_pConnection->buildTypeInfo();
-    }
-
-    if ( !rTypeInfo.empty() )
-    {
-        OTypeInfo aInfo;
-        aInfo.nType = (sal_Int16)sqlType;
-        TTypeInfoVector::const_iterator aIter = ::std::find(rTypeInfo.begin(),rTypeInfo.end(),aInfo);
-        if(aIter != rTypeInfo.end())
-            prec = (*aIter).nPrecision;
-    }
-    return prec;
-}
 
 //--------------------------------------------------------------------
 // setStream

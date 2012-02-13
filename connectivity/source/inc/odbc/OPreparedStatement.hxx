@@ -88,14 +88,10 @@ namespace connectivity
             void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
             void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
                                                         SQLLEN length,sal_Int32 SQLtype) throw(::com::sun::star::sdbc::SQLException);
-            sal_Int32 getParamLength (  sal_Int32 index);
             sal_Int8* getLengthBuf (sal_Int32 index);
-            sal_Int8* getDataBuf (sal_Int32 index);
             sal_Int8* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
             void initBoundParam () throw(::com::sun::star::sdbc::SQLException);
             void setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,sal_Int32 _nSize,void* _pData);
-
-            sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             sal_Bool isPrepared() const { return m_bPrepared;}
             void prepareStatement();
