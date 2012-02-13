@@ -421,7 +421,6 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandle
     {
         return 1;
     }
-    return 1;
 }
 
 void ErrorMsg(int /*iErrCode*/)
