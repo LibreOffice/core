@@ -3341,6 +3341,7 @@ void SwPageFrm::PaintBreak( ) const
 {
     if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !pGlobalShell->GetViewOptions()->IsReadonly() &&
          !pGlobalShell->IsPreView() )
     {
         const SwFrm* pBodyFrm = Lower();
@@ -3377,6 +3378,7 @@ void SwColumnFrm::PaintBreak( ) const
 {
     if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !pGlobalShell->GetViewOptions()->IsReadonly() &&
          !pGlobalShell->IsPreView() )
     {
         const SwFrm* pBodyFrm = Lower();
@@ -3486,6 +3488,7 @@ void SwPageFrm::PaintDecorators( ) const
             if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !pGlobalShell->IsPreView() &&
+                 !pGlobalShell->GetViewOptions()->IsReadonly() &&
                  ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
                    pGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
             {
