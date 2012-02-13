@@ -1012,18 +1012,29 @@ void ResMgr::TestStack( const Resource* pResObj )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
+    int upperLimit = nCurStack;
+
+    if ( upperLimit < 0 )
+    {
+        OSL_FAIL( "resource stack underrun!" );
+        upperLimit = aStack.size() - 1;
+    }
+    else if ( upperLimit >=  static_cast<int>(aStack.size()) )
+    {
+        OSL_FAIL( "stack occupation index > allocated stack size" );
+        upperLimit = aStack.size() - 1;
+    }
+
     if ( DbgIsResource() )
     {
-        for( int i = 1; i <= nCurStack; ++i )
+        for( int i = 1; i <= upperLimit; ++i )
         {
             if ( aStack[i].pResObj == pResObj )
             {
-#ifdef DBG_UTIL
                 RscError_Impl( "Resource not freed! ", this,
                                aStack[i].pResource->GetRT(),
                                aStack[i].pResource->GetId(),
                                aStack, i-1 );
-#endif
             }
         }
     }
