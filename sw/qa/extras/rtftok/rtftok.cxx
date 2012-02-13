@@ -49,11 +49,13 @@ public:
     virtual void tearDown();
     void testFdo45553();
     void testN192129();
+    void testFdo45543();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testFdo45553);
     CPPUNIT_TEST(testN192129);
+    CPPUNIT_TEST(testFdo45543);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -134,6 +136,27 @@ void RtfModelTest::testN192129()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
+}
+
+void RtfModelTest::testFdo45543()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45543.rtf")));
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    OUStringBuffer aBuf;
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+        while (xRangeEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+            aBuf.append(xRange->getString());
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(5, aBuf.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
