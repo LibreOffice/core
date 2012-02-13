@@ -1230,8 +1230,7 @@ void MiscSettings::SetDisablePrinting( sal_Bool bEnable )
     }
 }
 
-// -----------------------------------------------------------------------
-
+#ifdef WNT
 void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
@@ -1240,7 +1239,6 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         if( bEnable && !ImplInitAccessBridge(false, bDummy) )
             return;
 
-#ifdef WNT
         HKEY hkey;
 
         // If the accessibility key in the Windows registry exists, change it synchronously
@@ -1277,7 +1275,6 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
             RegCloseKey(hkey);
         }
 
-#endif
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
@@ -1285,6 +1282,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
+#endif
 
 void MiscSettings::SetEnableLocalizedDecimalSep( sal_Bool bEnable )
 {

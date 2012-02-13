@@ -990,12 +990,14 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
+#ifdef WNT
     void                            SetEnableATToolSupport( sal_Bool bEnable );
-    sal_Bool                            GetEnableATToolSupport() const;
+#endif
+    sal_Bool                        GetEnableATToolSupport() const;
     void                            SetDisablePrinting( sal_Bool bEnable );
-    sal_Bool                            GetDisablePrinting() const;
+    sal_Bool                        GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( sal_Bool bEnable );
-    sal_Bool                            GetEnableLocalizedDecimalSep() const;
+    sal_Bool                        GetEnableLocalizedDecimalSep() const;
     const MiscSettings&             operator =( const MiscSettings& rSet );
 
     sal_Bool                            operator ==( const MiscSettings& rSet ) const;
