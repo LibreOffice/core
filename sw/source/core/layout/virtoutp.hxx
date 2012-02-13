@@ -42,7 +42,7 @@ class ViewShell;
 
 class SwLayVout
 {
-    friend void _FrmFinit();    //loescht das Vout
+    friend void _FrmFinit();    //deletes Vout
 private:
     ViewShell*      pSh;
     OutputDevice*   pOut;
