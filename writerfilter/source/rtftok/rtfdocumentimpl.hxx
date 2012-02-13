@@ -352,8 +352,8 @@ namespace writerfilter {
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we got tokens indicating we're in a frame.
                 bool inFrame();
-                /// If we have some unicode characters to send.
-                void checkUnicode();
+                /// If we have some unicode or hex characters to send.
+                void checkUnicode(bool bUnicode = true, bool bHex = true);
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -442,6 +442,8 @@ namespace writerfilter {
                 bool m_bHasPage;
                 // Unicode characters are collected here so we don't have to send them one by one.
                 rtl::OUStringBuffer m_aUnicodeBuffer;
+                /// Same for hex characters.
+                rtl::OStringBuffer m_aHexBuffer;
         };
     } // namespace rtftok
 } // namespace writerfilter
