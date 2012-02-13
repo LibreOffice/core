@@ -59,6 +59,7 @@ copy-stuff:
 		  bootstrap.uno \
 		  comphelpgcc3 \
 		  configmgr.uno \
+		  datelo \
 		  expwrap.uno \
 		  fileacc \
 		  fontconfig \
