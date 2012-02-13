@@ -132,6 +132,23 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
+ifeq ($(MERGELIBS),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sal,\
+	sal/textenc/context \
+	sal/textenc/convertbig5hkscs \
+	sal/textenc/converteuctw \
+	sal/textenc/convertgb18030 \
+	sal/textenc/convertiso2022cn \
+	sal/textenc/convertiso2022jp \
+	sal/textenc/convertiso2022kr \
+	sal/textenc/convertsinglebytetobmpunicode \
+	sal/textenc/tables \
+	sal/textenc/tcvtbyte \
+	sal/textenc/tcvtmb \
+	sal/textenc/tcvtutf7 \
+))
+endif
+
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/conditn \

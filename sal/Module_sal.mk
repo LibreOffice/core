@@ -35,7 +35,8 @@ $(eval $(call gb_Module_add_targets,sal,\
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
-	Library_sal_textenc \
+	$(if $(filter TRUE,$(MERGELIBS)),, \
+		Library_sal_textenc) \
 	$(if $(filter $(OS),WNT), \
 		Library_uwinapi) \
 	Package_inc \
