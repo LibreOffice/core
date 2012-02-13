@@ -66,7 +66,6 @@ public:
     void                Click();
 
     void                AddWindow( Window* pWindow );
-    void                RemoveWindow( Window* pWindow );
 
     void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
     sal_uLong               GetDelta() const { return mnDelta; }

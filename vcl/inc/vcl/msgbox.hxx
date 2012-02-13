@@ -83,7 +83,6 @@ protected:
 
 protected:
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
-                        MessBox( WindowType nType );
 
 public:
                         MessBox( Window* pParent, WinBits nStyle,

@@ -82,20 +82,10 @@ MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 MenuBar::MenuBar(ResId const&)
-MergeDataFile::Dump()
-MessBox::MessBox(unsigned short)
-MetaAction::IsEqual(MetaAction const&) const
-MetaCommentAction::MetaCommentAction(unsigned char const*, unsigned int)
-MetricBox::RemoveValue(long, FieldUnit)
-MetricField::ConvertValue(long, unsigned short, FieldUnit, MapUnit)
-MiscSettings::SetDisablePrinting(unsigned char)
-MoreButton::RemoveWindow(Window*)
 MultiLineEdit::GetHScrollBar() const
 MultiLineEdit::GetLeftMargin() const
 MultiLineEdit::GetTextLines() const
 MultiLineEdit::IsFocusSelectionHideEnabled() const
-MultiSelection::Append(long)
-MultiSelection::PrevSelected()
 NfCurrencyEntry::NfCurrencyEntry()
 NotificationSettings::CopyData()
 NumberFormatCodeWrapper::getDefault(short, short) const

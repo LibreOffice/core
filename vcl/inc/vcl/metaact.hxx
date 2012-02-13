@@ -180,8 +180,6 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
-    sal_Bool            IsEqual( const MetaAction& ) const;
-
     sal_uInt16              GetType() const { return mnType; }
     sal_uLong               GetRefCount() const { return mnRefCount; }
     void                ResetRefCount() { mnRefCount = 1; }
@@ -1502,7 +1500,6 @@ public:
                         MetaCommentAction( sal_Int32 nValue = 0L );
                         MetaCommentAction( const MetaCommentAction& rAct );
                         MetaCommentAction( const rtl::OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
-                        MetaCommentAction( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );

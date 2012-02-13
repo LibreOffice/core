@@ -994,7 +994,6 @@ public:
     void                            SetEnableATToolSupport( sal_Bool bEnable );
 #endif
     sal_Bool                        GetEnableATToolSupport() const;
-    void                            SetDisablePrinting( sal_Bool bEnable );
     sal_Bool                        GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( sal_Bool bEnable );
     sal_Bool                        GetEnableLocalizedDecimalSep() const;

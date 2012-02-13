@@ -463,7 +463,6 @@ class MergeDataFile
             const rtl::OString &nLang, const rtl::OString &rTEXT,
             const rtl::OString &rQHTEXT, const rtl::OString &rTITLE,
             const rtl::OString &sFilename, bool bCaseSensitive);
-        rtl::OString Dump();
     public:
         explicit MergeDataFile(const rtl::OString &rFileName,
             const rtl::OString& rFile, bool bErrLog, bool bCaseSensitive = false);

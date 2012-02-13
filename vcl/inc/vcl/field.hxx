@@ -574,8 +574,6 @@ public:
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                           FieldUnit eInUnit, FieldUnit eOutUnit );
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
-                                          FieldUnit eInUnit, MapUnit eOutUnit );
-    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                           MapUnit eInUnit, FieldUnit eOutUnit );
 
     // for backwards compatibility
@@ -768,7 +766,6 @@ public:
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
                                          sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE );
     sal_Int64               GetValue( sal_uInt16 nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
     sal_uInt16                  GetValuePos( sal_Int64 nValue,
                                          FieldUnit eInUnit = FUNIT_NONE ) const;

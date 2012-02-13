@@ -215,23 +215,6 @@ void MoreButton::AddWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-void MoreButton::RemoveWindow( Window* pWindow )
-{
-    if ( mpMBData->mpItemList ) {
-        for ( ImplMoreWindowList::iterator it = mpMBData->mpItemList->begin();
-              it < mpMBData->mpItemList->end();
-              ++it
-        ) {
-            if ( *it == pWindow ) {
-                mpMBData->mpItemList->erase( it );
-                break;
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void MoreButton::SetText( const XubString& rText )
 {
     PushButton::SetText( rText );

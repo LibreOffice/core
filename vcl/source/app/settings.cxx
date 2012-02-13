@@ -1216,20 +1216,6 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
     return (sal_Bool)mpData->mnEnableATT;
 }
 
-// -----------------------------------------------------------------------
-
-void MiscSettings::SetDisablePrinting( sal_Bool bEnable )
-{
-    if ( bEnable != mpData->mnDisablePrinting )
-    {
-        vcl::SettingsConfigItem::get()->
-            setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
-                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ),
-                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
-        mpData->mnDisablePrinting = bEnable ? 1 : 0;
-    }
-}
-
 #ifdef WNT
 void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {

@@ -222,22 +222,6 @@ MergeDataFile::~MergeDataFile()
         delete aI->second;
 }
 
-rtl::OString MergeDataFile::Dump()
-{
-    rtl::OString sRet(RTL_CONSTASCII_STRINGPARAM("MergeDataFile\n"));
-
-    printf("MergeDataFile\n");
-    MergeDataHashMap::const_iterator idbg;
-    for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
-    {
-        printf("aMap[ %s ] = ",idbg->first.getStr());
-        idbg->second->Dump();
-        printf("\n");
-    }
-    printf("\n");
-    return sRet;
-}
-
 std::vector<rtl::OString> MergeDataFile::GetLanguages()
 {
     return std::vector<rtl::OString>(aLanguageSet.begin(),aLanguageSet.end());

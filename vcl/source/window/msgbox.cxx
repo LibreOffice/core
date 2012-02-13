@@ -156,14 +156,6 @@ void MessBox::ImplInitButtons()
 
 // -----------------------------------------------------------------------
 
-MessBox::MessBox( WindowType ) :
-    ButtonDialog( WINDOW_MESSBOX )
-{
-    ImplInitMessBoxData();
-}
-
-// -----------------------------------------------------------------------
-
 MessBox::MessBox( Window* pParent, WinBits nStyle,
                   const XubString& rTitle, const XubString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),

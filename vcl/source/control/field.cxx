@@ -1246,16 +1246,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
 
 // -----------------------------------------------------------------------
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
-                                     FieldUnit eInUnit, MapUnit eOutUnit )
-{
-    return static_cast<sal_Int64>(
-        nonValueDoubleToValueDouble(
-            ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
-}
-
-// -----------------------------------------------------------------------
-
 double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                         FieldUnit eInUnit, FieldUnit eOutUnit )
 {
@@ -2012,16 +2002,6 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPo
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
                                         eInUnit, meUnit );
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void MetricBox::RemoveValue( sal_Int64 nValue, FieldUnit eInUnit )
-{
-    // Umrechnen auf eingestellte Einheiten
-    nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
-                                        eInUnit, meUnit );
-    ComboBox::RemoveEntry( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------

@@ -91,7 +91,6 @@ public:
     void            SetTotalRange( const Range& rTotRange );
     void            Insert( long nIndex, long nCount = 1 );
     void            Remove( long nIndex );
-    void            Append( long nCount = 1 );
 
     const Range&    GetTotalRange() const { return aTotRange; }
     sal_Bool            IsCurValid() const { return bCurValid; }
@@ -99,7 +98,6 @@ public:
     long            FirstSelected( sal_Bool bInverse = sal_False );
     long            LastSelected();
     long            NextSelected();
-    long            PrevSelected();
 
     size_t          GetRangeCount() const { return aSels.size(); }
     const Range&    GetRange( size_t nRange ) const {

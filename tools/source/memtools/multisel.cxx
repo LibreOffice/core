@@ -521,21 +521,6 @@ void MultiSelection::Remove( long nIndex )
 
 // -----------------------------------------------------------------------
 
-void MultiSelection::Append( long nCount )
-{
-    long nPrevLast = aTotRange.Max();
-    aTotRange.Max() += nCount;
-    if ( bSelectNew )
-    {
-        nSelCount += nCount;
-        aSels.push_back( new Range( nPrevLast+1, nPrevLast + nCount ) );
-        if ( aSels.size() > 1 )
-            ImplMergeSubSelections( aSels.size() - 2, aSels.size() );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 long MultiSelection::ImplFwdUnselected()
 {
     if ( !bCurValid )
@@ -631,36 +616,6 @@ long MultiSelection::NextSelected()
             return nCurIndex = aSels[ nCurSubSel ]->Min();
 
         // we are at the end!
-        return SFX_ENDOFSELECTION;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-long MultiSelection::PrevSelected()
-{
-    if ( !bCurValid )
-        return SFX_ENDOFSELECTION;
-
-    if ( bInverseCur )
-    {
-        --nCurIndex;
-        return ImplBwdUnselected();
-    }
-    else
-    {
-        // is the previous index in the current sub selection too?
-        if ( nCurIndex > aSels[ nCurSubSel ]->Min() )
-            return --nCurIndex;
-
-        // are there previous sub selections?
-        if ( nCurSubSel > 0 )
-        {
-            --nCurSubSel;
-            return nCurIndex = aSels[ nCurSubSel ]->Max();
-        }
-
-        // we are at the beginning!
         return SFX_ENDOFSELECTION;
     }
 }
