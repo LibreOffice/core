@@ -91,6 +91,7 @@ copy-stuff:
 		  ooxlo \
 		  reflection.uno \
 		  reg \
+		  sal_textenc \
 		  saxlo \
 		  sclo \
 		  scfiltlo \
