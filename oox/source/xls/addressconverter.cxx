@@ -687,14 +687,6 @@ bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
 
 // ----------------------------------------------------------------------------
 
-bool AddressConverter::checkCellRangeList( const ApiCellRangeList& rRanges, bool bAllowOverflow, bool bTrackOverflow )
-{
-    for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-        if( !checkCellRange( *aIt, bAllowOverflow, bTrackOverflow ) )
-            return false;
-    return true;
-}
-
 void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
 {
     for( size_t nIndex = orRanges.size(); nIndex > 0; --nIndex )

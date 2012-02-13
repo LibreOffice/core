@@ -1288,8 +1288,6 @@ oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const
 oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::addMissingProperties(oox::PropertyMap const&, oox::PropertyMap&)
-oox::drawingml::chart::ObjectFormatter::convertAutomaticLine(oox::PropertySet&, oox::drawingml::chart::ObjectType, int)
-oox::drawingml::chart::ObjectFormatter::isAutomaticLine(oox::drawingml::chart::ModelRef<oox::drawingml::Shape> const&)
 oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
 oox::drawingml::lcl_dump_pset(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::drawingml::lcl_getSequenceLengthByRole(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&, rtl::OUString const&)
@@ -1307,7 +1305,6 @@ oox::dump::Output::resetIndent()
 oox::dump::Output::writeAddress(oox::dump::Address const&)
 oox::dump::Output::writeRange(oox::dump::Range const&)
 oox::dump::Output::writeRangeList(std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
-oox::dump::OutputObjectBase::writeBoolItem(oox::dump::String const&, bool)
 oox::dump::StorageIterator::getElementCount() const
 oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short)
 oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
@@ -1316,12 +1313,8 @@ oox::dump::biff::BiffObjectBase::dumpRowRange(oox::dump::String const&, bool)
 oox::dump::biff::FormulaObject::dumpCellFormula(oox::dump::String const&, unsigned short)
 oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
 oox::formulaimport::XmlStream::skipElement(int)
-oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
-oox::ole::VbaProject::hasModule(rtl::OUString const&) const
 oox::ole::VbaSiteModel::isVisible() const
 oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
-oox::xls::AddressConverter::checkCellRangeList(oox::xls::ApiCellRangeList const&, bool, bool)
 oox::xls::ApiTokenIterator::ApiTokenIterator(oox::xls::ApiTokenIterator const&, bool)
 oox::xls::BiffDrawingBase::appendRawObject(boost::shared_ptr<oox::xls::BiffDrawingObjectBase> const&)
 oox::xls::BiffDrawingBase::setSkipObj(unsigned short)
@@ -1359,8 +1352,6 @@ oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress con
 oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRange const&)
 oox::xls::SheetDataBuffer::XfIdRowRange::intersects(com::sun::star::table::CellRangeAddress const&) const
-oox::xls::StylesBuffer::getDxf(int) const
-oox::xls::StylesBuffer::writeStyleXfToPropertyMap(oox::PropertyMap&, int) const
 oox::xls::WorkbookHelper::getBiffFilter() const
 oox::xls::WorkbookHelper::getCellFromDoc(com::sun::star::table::CellAddress const&) const
 oox::xls::WorkbookHelper::setTextEncoding(unsigned short)

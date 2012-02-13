@@ -1405,7 +1405,6 @@ protected:
     void                writeCharItem( const String& rName, sal_Unicode cData );
     void                writeStringItem( const String& rName, const ::rtl::OUString& rData );
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    void                writeBoolItem( const String& rName, bool bData );
     double              writeRkItem( const String& rName, sal_Int32 nRk );
     void                writeColorABGRItem( const String& rName, sal_Int32 nColor );
     void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );

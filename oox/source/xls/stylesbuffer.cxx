@@ -3329,11 +3329,6 @@ XfRef StylesBuffer::getStyleXf( sal_Int32 nXfId ) const
     return maStyleXfs.get( nXfId );
 }
 
-DxfRef StylesBuffer::getDxf( sal_Int32 nDxfId ) const
-{
-    return maDxfs.get( nDxfId );
-}
-
 FontRef StylesBuffer::getFontFromCellXf( sal_Int32 nXfId ) const
 {
     FontRef xFont;
@@ -3467,12 +3462,6 @@ void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFil
 void StylesBuffer::writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
 {
     if( Xf* pXf = maCellXfs.get( nXfId ).get() )
-        pXf->writeToPropertyMap( rPropMap );
-}
-
-void StylesBuffer::writeStyleXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
-{
-    if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
         pXf->writeToPropertyMap( rPropMap );
 }
 

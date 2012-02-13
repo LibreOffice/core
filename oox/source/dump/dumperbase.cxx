@@ -2384,12 +2384,6 @@ void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnD
     mxOut->writeArray( pnData, nSize, cSep );
 }
 
-void OutputObjectBase::writeBoolItem( const String& rName, bool bData )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeBool( bData );
-}
-
 double OutputObjectBase::writeRkItem( const String& rName, sal_Int32 nRk )
 {
     MultiItemsGuard aMultiGuard( mxOut );

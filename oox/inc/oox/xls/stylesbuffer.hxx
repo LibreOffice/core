@@ -1040,8 +1040,6 @@ public:
     XfRef               getCellXf( sal_Int32 nXfId ) const;
     /** Returns the specified style format object. */
     XfRef               getStyleXf( sal_Int32 nXfId ) const;
-    /** Returns the specified diferential cell format object. */
-    DxfRef              getDxf( sal_Int32 nDxfId ) const;
 
     /** Returns the font object of the specified cell XF. */
     FontRef             getFontFromCellXf( sal_Int32 nXfId ) const;
@@ -1072,8 +1070,6 @@ public:
     void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
     /** Writes the cell formatting attributes of the specified XF to the passed property map. */
     void                writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
-    /** Writes the cell formatting attributes of the specified style XF to the passed property map. */
-    void                writeStyleXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;

@@ -140,13 +140,9 @@ public:
 
     /** Returns true, if the document contains at least one code module. */
     bool                hasModules() const;
-    /** Returns true, if the document contains the specified code module. */
-    bool                hasModule( const ::rtl::OUString& rModuleName ) const;
 
     /** Returns true, if the document contains at least one dialog. */
     bool                hasDialogs() const;
-    /** Returns true, if the document contains the specified dialog. */
-    bool                hasDialog( const ::rtl::OUString& rDialogName ) const;
 
     void                setOleOverridesSink( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
 

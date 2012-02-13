@@ -64,13 +64,6 @@ const sal_uInt16 VBA_ID_PROJECTVERSION          = 0x0009;
 class VbaHelper
 {
 public:
-    /** Returns the full Basic script URL from a VBA module and macro name.
-        The script is assumed to be in a document library. */
-    static ::rtl::OUString getBasicScriptUrl(
-                            const ::rtl::OUString& rLibraryName,
-                            const ::rtl::OUString& rModuleName,
-                            const ::rtl::OUString& rMacroName );
-
     /** Reads the next record from the VBA directory stream 'dir'.
 
         @param rnRecId  (out parameter) The record identifier of the new record.

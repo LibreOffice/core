@@ -42,20 +42,6 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-/*static*/ OUString VbaHelper::getBasicScriptUrl(
-        const OUString& rLibraryName, const OUString& rModuleName, const OUString& rMacroName )
-{
-    OSL_ENSURE( !rLibraryName.isEmpty(), "VbaHelper::getBasicScriptUrl - library name is empty" );
-    OSL_ENSURE( !rModuleName.isEmpty(), "VbaHelper::getBasicScriptUrl - module name is empty" );
-    OSL_ENSURE( !rMacroName.isEmpty(), "VbaHelper::getBasicScriptUrl - macro name is empty" );
-    const sal_Unicode cDot = '.';
-    return OUStringBuffer().
-        appendAscii( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.script:" ) ).
-        append( rLibraryName ).append( cDot ).append( rModuleName ).append( cDot ).append( rMacroName ).
-        appendAscii( RTL_CONSTASCII_STRINGPARAM( "?language=Basic&location=document" ) ).
-        makeStringAndClear();
-}
-
 /*static*/ bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData, BinaryInputStream& rInStrm )
 {
     // read the record header

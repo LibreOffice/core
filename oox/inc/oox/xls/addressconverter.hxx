@@ -579,26 +579,6 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Checks the passed cell range list if it fits into the spreadsheet limits.
-
-        @param rRanges  The cell range list to be checked.
-        @param bAllowOverflow  true = Allow ranges that start inside the
-            supported sheet limits but may end outside of these limits.
-            false = Do not allow ranges that overflow the supported limits.
-        @param bTrackOverflow  true = Update the internal overflow flags, if
-            the passed range list contains cells outside of the supported sheet
-            limits.
-        @return  true = All cell ranges are valid. This function returns also
-            true, if overflowing ranges are allowed via parameter bAllowOverflow
-            and only parts of the ranges are outside the current sheet limits.
-            Returns false, if one of the ranges is completely outside the sheet
-            limits or if overflowing ranges are not allowed via parameter
-            bAllowOverflow.
-     */
-    bool                checkCellRangeList(
-                            const ApiCellRangeList& rRanges,
-                            bool bAllowOverflow, bool bTrackOverflow );
-
     /** Tries to restrict the passed cell range list to current sheet limits.
 
         @param orRanges  (in-out-parameter) Restricts the cell range addresses

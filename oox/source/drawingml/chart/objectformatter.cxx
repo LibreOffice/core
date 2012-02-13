@@ -1161,21 +1161,10 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     }
 }
 
-void ObjectFormatter::convertAutomaticLine( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )
-{
-    if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
-        pFormat->convertAutomaticLine( rPropSet, nSeriesIdx );
-}
-
 void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )
 {
     if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
         pFormat->convertAutomaticFill( rPropSet, nSeriesIdx );
-}
-
-/*static*/ bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
-{
-    return !rxShapeProp || !rxShapeProp->getLineProperties().maLineFill.moFillType.has();
 }
 
 /*static*/ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
