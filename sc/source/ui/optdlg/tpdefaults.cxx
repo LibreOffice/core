@@ -127,10 +127,12 @@ void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)
 
     OUString aSheetPrefix = pEdit->GetText();
 
-    if ( !ScDocument::ValidTabName( aSheetPrefix ) )
+    if ( !aSheetPrefix.isEmpty() && !ScDocument::ValidTabName( aSheetPrefix ) )
     {
-        // Revert to last good Prefix
-        pEdit->SetText( maOldPrefixValue );
+        // Revert to last good Prefix and also select it to
+        // indicate something illegal was typed
+        Selection aSel( 0,  maOldPrefixValue.getLength() );
+        pEdit->SetText( maOldPrefixValue, aSel );
     }
     else
     {
