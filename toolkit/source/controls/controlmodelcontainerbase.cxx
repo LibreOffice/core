@@ -1856,31 +1856,6 @@ void ControlContainerBase::ImplUpdateResourceResolver()
     }
 }
 
-
-uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
-{
-    uno::Reference< graphic::XGraphic > xGraphic;
-    if ( _rURL.isEmpty() )
-        return xGraphic;
-
-    try
-    {
-        uno::Reference< graphic::XGraphicProvider > xProvider;
-        if ( maContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-        {
-            uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-            aMediaProperties[0].Value <<= _rURL;
-            xGraphic = xProvider->queryGraphic( aMediaProperties );
-        }
-    }
-    catch (const Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
-    return xGraphic;
-}
 ////    ----------------------------------------------------
 ////    Helper Method to convert relative url to physical location
 ////    ----------------------------------------------------
