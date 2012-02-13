@@ -458,7 +458,7 @@ SwCntntFrm::~SwCntntFrm()
     if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
-        //Bei der Root abmelden wenn ich dort noch im Turbo stehe.
+        //Unregister from root if I'm still in turbo there.
         SwRootFrm *pRoot = getRootFrm();
         if( pRoot && pRoot->GetTurbo() == this )
         {
@@ -523,13 +523,14 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
             SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
             pMaster->SetFollow( pFrm->GetFollow() );
         }
-        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
-                                //Andernfalls kann es sein, dass ein Follow
-                                //vor seinem Master zerstoert wird, der Master
-                                //greift dann ueber den ungueltigen
-                                //Follow-Pointer auf fremdes Memory zu.
-                                //Die Kette darf hier zerknauscht werden, weil
-                                //sowieso alle zerstoert werden.
+        pFrm->SetFollow( 0 );//So it doesn't get funny ideas.
+                                //Otherwise it could be possible that a follow
+                                //gets destroyed before its master. Following
+                                //the now invalid pointer will then lead to an
+                                //illegal memory access. The chain can be
+                                //crushed here because we'll destroy all of it
+                                //anyway.
+
         if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
             !pFrm->GetIndPrev() )
         {
@@ -563,10 +564,10 @@ SwLayoutFrm::~SwLayoutFrm()
     {
         while ( pFrm )
         {
-            //Erst die Objs des Frm vernichten, denn diese koennen sich sonst nach
-            //dem Remove nicht mehr bei der Seite abmelden.
-            //Falls sich einer nicht abmeldet wollen wir nicht gleich
-            //endlos schleifen.
+            //First delete the Objs of the Frm because they can't unregister
+            //from the page after remove.
+            //We don't want to create an endless loop only because one couldn't
+            //unregister.
 
             sal_uInt32 nCnt;
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
@@ -598,7 +599,7 @@ SwLayoutFrm::~SwLayoutFrm()
             delete pFrm;
             pFrm = pLower;
         }
-        //Fly's vernichten. Der letzte loescht gleich das Array.
+        //Delete the Flys, the last one also deletes the array.
         sal_uInt32 nCnt;
         while ( GetDrawObjs() && GetDrawObjs()->Count() )
         {
