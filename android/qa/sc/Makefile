@@ -67,9 +67,6 @@ copy-stuff:
 		  forlo \
 		  foruilo \
 		  freetype \
-		  fwelo \
-		  fwilo \
-		  fwklo \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
@@ -94,7 +91,6 @@ copy-stuff:
 		  saxlo \
 		  sclo \
 		  scfiltlo \
-		  sfxlo \
 		  sotlo \
 		  stocservices.uno \
 		  store \

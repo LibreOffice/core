@@ -120,9 +120,6 @@ copy-stuff: buildrcs
 		  forlo \
 		  foruilo \
 		  freetype \
-		  fwelo \
-		  fwilo \
-		  fwklo \
 		  fsstorage.uno \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
@@ -149,7 +146,6 @@ copy-stuff: buildrcs
 		  saxlo \
 		  sclo \
 		  scfiltlo \
-		  sfxlo \
 		  sotlo \
 		  stocservices.uno \
 		  store \
