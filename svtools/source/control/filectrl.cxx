@@ -208,13 +208,4 @@ void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         GetEdit().SetStyle( nOldEditStyle );
 }
 
-// -----------------------------------------------------------------------
-
-void FileControl::SetButtonText( const XubString& rStr )
-{
-    mnInternalFlags &= ~FILECTRL_ORIGINALBUTTONTEXT;
-    maButtonText = rStr;
-    Resize();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

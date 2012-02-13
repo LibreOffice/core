@@ -97,7 +97,6 @@ public:
     //------
     //manipulate the Button-Text:
     XubString       GetButtonText() const { return maButtonText; }
-    void            SetButtonText( const XubString& rStr );
 
     //------
     //use this to manipulate the dialog bevore executing it:

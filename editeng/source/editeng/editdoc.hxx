@@ -187,7 +187,6 @@ private:
 
 public:
     ItemList();
-    const SfxPoolItem*  FindAttrib( sal_uInt16 nWhich );
     const SfxPoolItem*  First();
     const SfxPoolItem*  Next();
     size_t              Count() { return aItemPool.size(); };

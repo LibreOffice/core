@@ -859,13 +859,6 @@ sal_uInt32 FontCharMap::GetFirstChar() const
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 FontCharMap::GetLastChar() const
-{
-    return mpImpl->GetLastChar();
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt32 FontCharMap::GetNextChar( sal_uInt32 cChar ) const
 {
     return mpImpl->GetNextChar( cChar );

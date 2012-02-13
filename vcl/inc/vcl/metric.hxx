@@ -104,7 +104,6 @@ public:
     int                 GetCharCount() const;
 
     sal_uInt32          GetFirstChar() const;
-    sal_uInt32          GetLastChar() const;
 
     sal_uInt32          GetNextChar( sal_uInt32 ) const;
     sal_uInt32          GetPrevChar( sal_uInt32 ) const;

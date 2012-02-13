@@ -129,7 +129,6 @@ public:
     bool            GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
     /** Returns a string property. */
     ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-    void            SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
     sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
     void            Merge( DffPropSet& rMasterPropSet ) const;
     void            InitializePropSet() const;

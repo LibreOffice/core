@@ -855,11 +855,6 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     return msBookmarkName;
 }
 
-::rtl::OUString FieldEntry::GetBookmarkType()
-{
-    return msMarkType;
-}
-
 ::rtl::OUString FieldEntry::GetBookmarkCode()
 {
     return msMarkCode;

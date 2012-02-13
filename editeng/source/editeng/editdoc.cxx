@@ -1169,14 +1169,6 @@ ItemList::ItemList() : CurrentItem( 0 )
 {
 }
 
-const SfxPoolItem* ItemList::FindAttrib( sal_uInt16 nWhich )
-{
-    for ( size_t i = 0, n = aItemPool.size(); i < n; ++i )
-        if ( aItemPool[ i ]->Which() == nWhich )
-            return aItemPool[ i ];
-    return NULL;
-}
-
 const SfxPoolItem* ItemList::First()
 {
     CurrentItem = 0;

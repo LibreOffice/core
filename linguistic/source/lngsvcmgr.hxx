@@ -174,9 +174,6 @@ public:
     sal_Bool    AddLngSvcEvtBroadcaster(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
-    sal_Bool    RemoveLngSvcEvtBroadcaster(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };
 
 

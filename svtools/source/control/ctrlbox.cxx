@@ -2005,26 +2005,4 @@ sal_Int64 FontSizeBox::GetValue() const
     return GetValue( FUNIT_NONE );
 }
 
-// -----------------------------------------------------------------------
-
-void FontSizeBox::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
-{
-    if ( !bRelative )
-    {
-        sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
-        // conversion loses precision
-        // however font sizes should never have a problem with that
-        String aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
-        if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
-        {
-            mnLastValue = nTempValue;
-            SetText( aName );
-            return;
-        }
-    }
-
-    MetricBox::SetUserValue( nNewValue, eInUnit );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1762,21 +1762,6 @@ sal_Bool LngSvcMgr::AddLngSvcEvtBroadcaster(
 }
 
 
-sal_Bool LngSvcMgr::RemoveLngSvcEvtBroadcaster(
-            const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
-{
-    sal_Bool bRes = sal_False;
-    if (rxBroadcaster.is())
-    {
-        DBG_ASSERT( pListenerHelper, "pListenerHelper non existent" );
-        if (!pListenerHelper)
-            GetListenerHelper_Impl();
-        bRes = pListenerHelper->RemoveLngSvcEvtBroadcaster( rxBroadcaster );
-    }
-    return bRes;
-}
-
-
 OUString SAL_CALL
     LngSvcMgr::getImplementationName()
         throw(uno::RuntimeException)

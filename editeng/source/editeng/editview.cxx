@@ -362,23 +362,10 @@ const Rectangle& EditView::GetOutputArea() const
     return pImpEditView->GetOutputArea();
 }
 
-void EditView::SetPointer( const Pointer& rPointer )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->SetPointer( rPointer );
-}
-
 const Pointer& EditView::GetPointer() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetPointer();
-}
-
-void EditView::SetCursor( const Cursor& rCursor )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    delete pImpEditView->pCursor;
-    pImpEditView->pCursor = new Cursor( rCursor );
 }
 
 Cursor* EditView::GetCursor() const
@@ -627,12 +614,6 @@ Point EditView::GetWindowPosTopLeft( sal_uInt16 nParagraph )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aDocPos( pImpEditView->pEditEngine->GetDocPosTopLeft( nParagraph ) );
     return pImpEditView->GetWindowPos( aDocPos );
-}
-
-EESelectionMode EditView::GetSelectionMode() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    return pImpEditView->GetSelectionMode();
 }
 
 void EditView::SetSelectionMode( EESelectionMode eMode )

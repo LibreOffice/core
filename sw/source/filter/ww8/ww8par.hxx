@@ -507,7 +507,6 @@ class FieldEntry
         xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
         ::rtl::OUString GetBookmarkName();
-        ::rtl::OUString GetBookmarkType();
         ::rtl::OUString GetBookmarkCode();
         void SetBookmarkName(::rtl::OUString bookmarkName);
         void SetBookmarkType(::rtl::OUString bookmarkType);
