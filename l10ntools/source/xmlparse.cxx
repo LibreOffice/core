@@ -1139,7 +1139,7 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFullFileName , const rt
 
     sal_uInt64 s;
     oslFileError e = osl_getFileSize(h, &s);
-    void * p;
+    void * p = NULL;
     if (e == osl_File_E_None) {
         e = osl_mapFile(h, &p, s, 0, 0);
     }
