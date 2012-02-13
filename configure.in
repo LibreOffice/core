@@ -10650,7 +10650,7 @@ AC_MSG_RESULT([$BUILD_NCPUS])
 AC_SUBST(BUILD_NCPUS)
 
 #
-# Set up ILIB for windows build
+# Set up ILIB for MSVC build
 #
 if test "$build_os" = "cygwin"; then
     ILIB=".;$SRC_ROOT/solver/$INPATH/lib"
