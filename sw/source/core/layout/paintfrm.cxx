@@ -3489,6 +3489,7 @@ void SwPageFrm::PaintDecorators( ) const
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !pGlobalShell->IsPreView() &&
                  !pGlobalShell->GetViewOptions()->IsReadonly() &&
+                 !pGlobalShell->GetViewOptions()->getBrowseMode() &&
                  ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
                    pGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
             {
