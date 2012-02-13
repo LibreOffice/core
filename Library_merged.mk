@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	sal \
 	salhelper \
 	sax \
-	sb \
 	sot \
 	svl \
 	svt \

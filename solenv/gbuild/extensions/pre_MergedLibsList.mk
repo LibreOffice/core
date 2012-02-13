@@ -43,6 +43,7 @@ gb_MERGEDLIBS := \
 	fwm \
 	lng \
 	package2 \
+	sb \
 	sfx \
 	sofficeapp \
 	spl \

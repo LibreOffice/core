@@ -147,7 +147,6 @@ copy-stuff: buildrcs
 		  reflection.uno \
 		  reg \
 		  saxlo \
-		  sblo \
 		  sclo \
 		  scfiltlo \
 		  sfxlo \
