@@ -2036,7 +2036,7 @@ XMLParaContext::~XMLParaContext()
         xAttrCursor = xTxtImport->GetText()->createTextCursorByRange( xStart );
         if( !xAttrCursor.is() )
             return; // Robust (defect file)
-    } catch (uno::Exception &) {
+    } catch (const uno::Exception &) {
         // createTextCursorByRange() likes to throw runtime exception, even
         // though it just means 'we were unable to create the cursor'
         return;
@@ -2064,7 +2064,7 @@ XMLParaContext::~XMLParaContext()
                 }
                 OSL_ENSURE(!xEnum->hasMoreElements(), "xml:id: > 1 paragraph?");
             }
-        } catch (uno::Exception &) {
+        } catch (const uno::Exception &) {
             OSL_TRACE("XMLParaContext::~XMLParaContext: exception");
         }
     }

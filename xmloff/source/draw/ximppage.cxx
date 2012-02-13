@@ -429,9 +429,9 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch (const uno::Exception&)
         {
-            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
+            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception caught!" );
         }
     }
 }

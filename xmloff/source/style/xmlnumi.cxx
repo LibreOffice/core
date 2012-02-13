@@ -1210,9 +1210,9 @@ void SvxXMLListStyleContext::FillUnoNumRule(
             xPropSet->setPropertyValue( sIsContinuousNumbering, aAny );
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
-        OSL_FAIL( "SvxXMLListStyleContext::FillUnoNumRule - Exception catched" );
+        OSL_FAIL( "SvxXMLListStyleContext::FillUnoNumRule - Exception caught" );
     }
 }
 

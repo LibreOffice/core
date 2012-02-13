@@ -554,9 +554,9 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     {
         mxExport = static_cast< ::com::sun::star::document::XFilter *>(&rExport);
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException caught!" );
     }
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
@@ -688,7 +688,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
             mrExport.getInterfaceToIdentifierMapper().registerReference( xInt );
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
     }
@@ -769,9 +769,9 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
             }
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException caught!" );
     }
 }
 
@@ -1016,9 +1016,9 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException caught!" );
     }
 
     // if something goes wrong, its always a good idea to clear the attribute list
@@ -1100,9 +1100,9 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             exportNode( xChildNode );
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException caught!" );
     }
 }
 
@@ -1364,7 +1364,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
 
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
     }
@@ -1396,7 +1396,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
 
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
     }
@@ -1423,7 +1423,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
 
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
     }
@@ -1445,9 +1445,9 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
                 return xRef;
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException caught!" );
     }
 
     Reference< XInterface > xRef;
@@ -1710,9 +1710,9 @@ void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
             mpImpl->prepareNode( xRootNode );
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporter::prepare(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::prepare(), exception caught" );
     }
 }
 
@@ -1746,9 +1746,9 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
                 mpImpl->exportNode( xRootNode );
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::exportAnimations(), exception caught" );
     }
 }
 
