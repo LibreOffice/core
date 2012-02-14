@@ -528,15 +528,17 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredX( sal_True );
             if ( mbFlipV )
                 mpCustomShapePropertiesPtr->setMirroredY( sal_True );
-            if( mpTextBody.get() )
+            if( getTextBody() )
             {
-                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( mpTextBody->getTextProperties().moRotation.get( 0 ) );
+                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -nTextRotateAngle / 60000 );
             }
 
             OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
+        else if( getTextBody() )
+            getTextBody()->getTextProperties().pushVertSimulation();
 
         // in some cases, we don't have any text body.
         if( getTextBody() )

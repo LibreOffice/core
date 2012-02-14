@@ -29,6 +29,7 @@
 #ifndef OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
 #define OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
 
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 
@@ -39,13 +40,15 @@ namespace drawingml {
 
 struct TextBodyProperties
 {
-    PropertyMap         maPropertyMap;
-    OptValue< sal_Int32 > moRotation;
-    OptValue< sal_Int32 > moVert;
+    PropertyMap                                     maPropertyMap;
+    OptValue< sal_Int32 >                           moRotation;
+    OptValue< sal_Int32 >                           moVert;
+    ::com::sun::star::drawing::TextVerticalAdjust   meVA;
 
     explicit            TextBodyProperties();
 
     void                pushToPropMap( PropertyMap& rPropMap ) const;
+    void                pushVertSimulation();
 };
 
 // ============================================================================
