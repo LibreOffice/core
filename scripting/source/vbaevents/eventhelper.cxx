@@ -39,6 +39,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -75,7 +78,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
 #include <set>
@@ -625,7 +628,7 @@ private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
 
-typedef ::cppu::WeakImplHelper2< XScriptListener, lang::XInitialization > EventListener_BASE;
+typedef ::cppu::WeakImplHelper3< XScriptListener, util::XCloseListener, lang::XInitialization > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
 #define EVENTLSTNR_PROPERTY_MODEL            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
@@ -646,6 +649,9 @@ public:
     // XScriptListener
     virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException);
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException);
+    // XCloseListener
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
     // XInitialization
@@ -657,8 +663,27 @@ public:
     DECLARE_XTYPEPROVIDER()
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
+        if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
+        {
+            uno::Reference< frame::XModel > xModel( rValue, uno::UNO_QUERY );
+            if( xModel != m_xModel)
+            {
+                // Remove the listener from the old XCloseBroadcaster.
+                uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
+                if (xCloseBroadcaster.is())
+                {
+                    xCloseBroadcaster->removeCloseListener( this );
+                }
+                // Add the listener into the new XCloseBroadcaster.
+                xCloseBroadcaster = uno::Reference< util::XCloseBroadcaster >( xModel, uno::UNO_QUERY );
+                if (xCloseBroadcaster.is())
+                {
+                    xCloseBroadcaster->addCloseListener( this );
+                }
+            }
+        }
         OPropertyContainer::setFastPropertyValue( nHandle, rValue );
-    if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
+        if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
             setShellFromModel();
     }
 
@@ -676,11 +701,12 @@ private:
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
     SfxObjectShell* mpShell;
+    sal_Bool m_bDocClosed;
 
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
-OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), mpShell( 0 )
+OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(sal_False), mpShell( 0 )
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
@@ -724,6 +750,24 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
     Any ret;
     firing_Impl( evt, &ret );
     return ret;
+}
+
+// XCloseListener
+void SAL_CALL
+EventListener::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+{
+    //Nothing to do
+}
+
+void SAL_CALL
+EventListener::notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+{
+    m_bDocClosed = sal_True;
+    uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
+    if (xCloseBroadcaster.is())
+    {
+        xCloseBroadcaster->removeCloseListener( this );
+    }
 }
 
 // XInitialization
@@ -884,6 +928,11 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
         SbModule* pModule = pBasic->FindModule( evt.ScriptCode );
         for ( ; pModule && txInfo != txInfo_end; ++txInfo )
         {
+        // #i106270#: If the document is closed, we should not execute macro.
+        if (m_bDocClosed)
+        {
+        break;
+        }
             // see if we have a match for the handlerextension
             // where ScriptCode is methodname_handlerextension
             rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName );
