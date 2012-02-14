@@ -564,8 +564,6 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
 
     - is called from HideHidden() - should hide objects in hidden paragraphs and
     - from _Format() - should hide/show objects in partly visible paragraphs
-
-    @author OD
 */
 void SwTxtFrm::HideAndShowObjects()
 {
@@ -751,9 +749,6 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     }
     if(bInv)
     {
-// 90365: nD is passed to a follow two times
-//        if( GetFollow() )
-//            ((SwTxtFrm*)GetFollow())->InvalidateRange( aRange, nD );
         InvalidateSize();
     }
 }
@@ -1220,7 +1215,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                             //     Thus, check complete fly frame background
                             //     color and *not* only its transparency value
                             if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
-                            //if( rBack.GetColor().GetTransparency() &&
                                 rBack.GetGraphicPos() == GPOS_NONE )
                             {
                                 pFly->SetCompletePaint();
@@ -1318,16 +1312,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         }
         break;
 
-/* Seit dem neuen Blocksatz muessen wir immer neu formatieren:
-        case RES_PARATR_ADJUST:
-        {
-            if( GetShell() )
-            {
-                Prepare( PREP_CLEAR );
-            }
-            break;
-        }
-*/
         // 6870: SwDocPosUpdate auswerten.
         case RES_DOCPOS_UPDATE:
         {
@@ -1412,17 +1396,6 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     if ( !pPara )
         return;
     pPara->SetPrepWidows( sal_True );
-
-    // These two lines of code have been deleted for #102340#.
-    // Obviously the widow control does not work if we have a
-    // pMaster->pFollow->pFollow situation:
-
-    // returnen oder nicht ist hier die Frage.
-    // Ohne IsLocked() ist 5156 gefaehrlich,
-    // ohne IsFollow() werden die Orphans unterdrueckt: 6968.
-    // Abfrage auf IsLocked erst hier, weil das Flag gesetzt werden soll.
-//  if( IsLocked() && IsFollow() )
-//      return;
 
     MSHORT nHave = nNeed;
 
@@ -1913,7 +1886,6 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
                   (pFrm->Prt().*fnRect->fnGetTop)() - nLower ) );
     (pFrm->Prt().*fnRect->fnSetWidth)(
         (pFrm->Frm().*fnRect->fnGetWidth)() -
-        // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
         ( rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight( pFrm ) ) );
     pOldPara = pFrm->HasPara() ? pFrm->GetPara() : NULL;
     pFrm->SetPara( new SwParaPortion(), sal_False );
@@ -2201,8 +2173,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     are in LABEL_ALIGNMENT mode, in order to determine additional first
     line offset for the real text formatting due to the value of label
     adjustment attribute of the list level.
-
-    @author OD
 */
 void SwTxtFrm::CalcAdditionalFirstLineOffset()
 {
@@ -2279,8 +2249,6 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
     OD 2005-05-20 #i47162# - introduce new optional parameter <_bUseFont>
     in order to force the usage of the former algorithm to determine the
     height of the last line, which uses the font.
-
-    @author OD
 */
 void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
@@ -2387,7 +2355,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                     // called recursive.
                     // Thus, member <mnHeightOfLastLine> is only set directly, if
                     // no recursive call is needed.
-    //                mnHeightOfLastLine = nAscent + nDescent;
                     const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
                     // #i47162# - if last line only contains
                     // fly content portions, <mnHeightOfLastLine> is zero.
@@ -2560,12 +2527,6 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
-
-    //mba: invalidating is not necessary; if mongolian script has a problem, it should be fixed at the ritgh place
-    //with invalidating we probably get too much flickering
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //Ugly. How can we hack if better?
-    //InvalidatePage();
 }
 
 

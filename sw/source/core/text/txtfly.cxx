@@ -121,8 +121,6 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
             "SwTxtFormatter::CalcUnclipped with unswapped frame" );
 
     long nFlyAsc, nFlyDesc;
-    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
-    //lcl_MaxAscDescent( pCurr, rTop, rBottom, nFlyAsc, nFlyDesc );
     pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
     rBottom = rTop + nFlyDesc;
@@ -156,8 +154,6 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     aTmpInf.SetPos( aStart );
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
-    //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
     KSHORT nTmpHeight = pCurrent->GetRealHeight();
@@ -195,9 +191,6 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
             && ( bAllWays || !IsQuick() ) )
         {
-            // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
-            //lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
-            //                  nFlyAsc, nFlyDesc, pPos );
             pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
             if( pPos->IsGrfNumPortion() )
@@ -290,9 +283,6 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
     {
         if( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
         {
-            // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
-            //lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
-            //                  nFlyAsc, nFlyDesc, pPos );
             pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
             if( pPos->IsGrfNumPortion() )
@@ -963,8 +953,6 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFmtSurround &rSur = pFmt->GetSurround();
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                         //Nur undurchsichtige und weiter oben liegende.
-                    /// OD 08.10.2002 #103898# - add condition
-                    /// <!(pFly->IsBackgroundTransparent() || pFly->IsShadowTransparent())>
                     if( !( pFly->IsBackgroundTransparent()
                            || pFly->IsShadowTransparent() ) &&
                         SURROUND_THROUGHT == rSur.GetSurround() &&
@@ -1203,13 +1191,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                     // anchored objects to one in the page header/footer and
                     // the document body --> content of at-paragraph/at-character
                     // anchored objects doesn't wrap around each other.
-//                    else if( bInFooterOrHeader )
-//                        return sal_False;  // In header or footer no wrapping
-//                                           // if both bounded at paragraph
-//                    else // Zwei Flies mit (auto-)absatzgebunder Verankerung ...
-//                    // ... entscheiden nach der Reihenfolge ihrer Anker im Dok.
-//                      bEvade = rNewA.GetCntntAnchor()->nNode.GetIndex() <=
-//                              rCurrA.GetCntntAnchor()->nNode.GetIndex();
                     else
                         return sal_False;
                 }
@@ -1451,51 +1432,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
                 // If objects on the same position are found, they are sorted
                 // on its width.
                 // #i68520#
-//                sal_uInt16 nPos = pFlyList->Count();
-//                while ( nPos )
-//                {
-//                    SdrObject* pTmpObj = (*pFlyList)[ --nPos ];
-//                    const SwRect aBoundRectOfTmpObj( GetBoundRect( pTmpObj ) );
-//                    if ( ( bR2L &&
-//                           ( (aBoundRectOfTmpObj.*fnRect->fnGetRight)() ==
-//                             (aBound.*fnRect->fnGetRight)() ) ) ||
-//                         ( !bR2L &&
-//                           ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() ==
-//                             (aBound.*fnRect->fnGetLeft)() ) ) )
-//                    {
-//                        SwTwips nTopDiff =
-//                            (*fnRect->fnYDiff)( (aBound.*fnRect->fnGetTop)(),
-//                                                (aBoundRectOfTmpObj.*fnRect->fnGetTop)() );
-//                        if ( nTopDiff == 0 &&
-//                             ( ( bR2L &&
-//                                 ( (aBound.*fnRect->fnGetLeft)() >
-//                                   (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() ) ) ||
-//                               ( !bR2L &&
-//                                 ( (aBound.*fnRect->fnGetRight)() <
-//                                   (aBoundRectOfTmpObj.*fnRect->fnGetRight)() ) ) ) )
-//                        {
-//                            ++nPos;
-//                            break;
-//                        }
-//                        else if ( nTopDiff > 0 )
-//                        {
-//                            ++nPos;
-//                            break;
-//                        }
-//                    }
-//                    else if ( ( bR2L &&
-//                                ( (aBoundRectOfTmpObj.*fnRect->fnGetRight)() >
-//                                  (aBound.*fnRect->fnGetRight)() ) ) ||
-//                              ( !bR2L &&
-//                                ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() <
-//                                  (aBound.*fnRect->fnGetLeft)() ) ) )
-//                    {
-//                        ++nPos;
-//                        break;
-//                    }
-//                }
-//                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
-//                pFlyList->C40_INSERT( SdrObject, pSdrObj, nPos );
                 {
                     SwAnchoredObjList::iterator aInsPosIter =
                             std::lower_bound( mpAnchoredObjList->begin(),
