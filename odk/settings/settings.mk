@@ -207,7 +207,6 @@ LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -nor
 ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
 LIBRARY_LINK_FLAGS+=-instances=static
 endif
-#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
@@ -330,10 +329,6 @@ CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
 CC_DEFINES_JNI=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
-# define for used compiler necessary for UNO
-#-DCPPU_ENV=gcc2 -- gcc 2.91/2.95
-#-DCPPU_ENV=gcc3 -- gcc3 3.0
-
 CC_OUTPUT_SWITCH=-o
 
 LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
@@ -341,7 +336,6 @@ LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
 ifeq "$(PROCTYPE)" "ppc"
 LIBRARY_LINK_FLAGS+=-fPIC
 endif
-#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
@@ -459,16 +453,13 @@ CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_
 CC_OUTPUT_SWITCH=-o
 
 LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
-#-fPIC -fno-common
 
 # install_name '@executable_path$/(@:f)'
-#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)  -Wl,-exported_symbols_list $(COMP_MAPFILE)
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
 LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
-#LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
 
 ifneq "$(OO_SDK_URE_HOME)" ""
 URE_MISC=$(OO_SDK_URE_HOME)/share/misc
@@ -576,7 +567,6 @@ CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK
 CC_OUTPUT_SWITCH=-o
 
 LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
-#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
