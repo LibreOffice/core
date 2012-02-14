@@ -641,11 +641,10 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 
         boundParams = new OBoundParam[numParams];
 
-        // Allocate and initialize each bound parameter
+        // initialize each bound parameter
 
         for (sal_Int32 i = 0; i < numParams; i++)
         {
-            boundParams[i] = OBoundParam();
             boundParams[i].initialize ();
         }
     }
