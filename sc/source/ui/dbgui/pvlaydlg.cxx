@@ -1447,13 +1447,30 @@ bool ScDPLayoutDlg::GetPivotArrays(
     vector<PivotField> aColFields;
     for_each(aColArr.begin(), aColArr.end(), PivotFieldInserter(aColFields, aColArr.size()));
 
-    // default data pilot table always has an extra row field as a data layout field.
     vector<PivotField> aRowFields;
     for_each(aRowArr.begin(), aRowArr.end(), PivotFieldInserter(aRowFields, aRowArr.size()+1));
-    aRowFields.push_back(PivotField(PIVOT_DATA_FIELD, 0));
 
     vector<PivotField> aDataFields;
     for_each(aDataArr.begin(), aDataArr.end(), PivotFieldInserter(aDataFields, aDataArr.size()));
+
+    sheet::DataPilotFieldOrientation eOrientDataLayout = sheet::DataPilotFieldOrientation_ROW;
+    ScDPSaveData* pSaveData = xDlgDPObject->GetSaveData();
+    if (pSaveData)
+    {
+        const ScDPSaveDimension* p = pSaveData->GetExistingDataLayoutDimension();
+        if (p)
+            // Try to preserve the orientation of existing data layout dimension.
+            eOrientDataLayout = static_cast<sheet::DataPilotFieldOrientation>(p->GetOrientation());
+    }
+    switch (eOrientDataLayout)
+    {
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            aColFields.push_back(PivotField(PIVOT_DATA_FIELD, 0));
+        break;
+        default:
+            // data layout dimension can only be row or column.
+            aRowFields.push_back(PivotField(PIVOT_DATA_FIELD, 0));
+    }
 
     rPageFields.swap(aPageFields);
     rColFields.swap(aColFields);
