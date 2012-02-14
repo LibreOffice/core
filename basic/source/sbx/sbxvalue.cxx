@@ -205,32 +205,9 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 
 SbxValue::~SbxValue()
 {
-#ifndef C50
     Broadcast( SBX_HINT_DYING );
     SetFlag( SBX_WRITE );
     SbxValue::Clear();
-#else
-    // Provisional fix for the Solaris 5.0 compiler bbug
-    // at using virtual inheritance. Avoid virtual calls
-    // in the destructor. Instead of calling clear()
-    // de-allocate posible object references direct.
-    if( aData.eType == SbxOBJECT )
-    {
-        if( aData.pObj && aData.pObj != this )
-        {
-            HACK(nicht bei Parent-Prop - sonst CyclicRef)
-            SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-            sal_Bool bParentProp = pThisVar && 5345 ==
-            ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
-            if ( !bParentProp )
-                aData.pObj->ReleaseRef();
-        }
-    }
-    else if( aData.eType == SbxDECIMAL )
-    {
-        releaseDecimalPtr( aData.pDecimal );
-    }
-#endif
 }
 
 void SbxValue::Clear()
