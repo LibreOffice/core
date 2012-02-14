@@ -230,7 +230,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     }
 
     pDPObject = new ScDPObject(pDoc);
-     pDPSave = new ScDPSaveData();
+    pDPSave = new ScDPSaveData();
 }
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
@@ -295,13 +295,48 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 n
     return pContext;
 }
 
+namespace {
+
+const ScDPSaveDimension* getDimension(
+    const std::vector<const ScDPSaveDimension*>& rRowDims,
+    const std::vector<const ScDPSaveDimension*>& rColDims,
+    ScDPOutputGeometry::FieldType eType, size_t nPos)
+{
+    switch (eType)
+    {
+        case ScDPOutputGeometry::Column:
+        {
+            if (rColDims.size() <= nPos)
+                return NULL;
+
+            return rColDims[nPos];
+        }
+        case ScDPOutputGeometry::Row:
+        {
+            if (rRowDims.size() <= nPos)
+                return NULL;
+
+            return rRowDims[nPos];
+        }
+        default:
+            ;
+    }
+    return NULL;
+}
+
+}
+
 void ScXMLDataPilotTableContext::SetButtons()
 {
-    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter, ScDPOutputGeometry::ODF);
+    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter);
     aGeometry.setColumnFieldCount(mnColFieldCount);
     aGeometry.setRowFieldCount(mnRowFieldCount);
     aGeometry.setPageFieldCount(mnPageFieldCount);
     aGeometry.setDataFieldCount(mnDataFieldCount);
+
+    std::vector<const ScDPSaveDimension*> aRowDims, aColDims, aPageDims;
+    pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
+    pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
 
     OUString sAddress;
     sal_Int32 nOffset = 0;
@@ -314,19 +349,19 @@ void ScXMLDataPilotTableContext::SetButtons()
             sal_Int32 nAddrOffset(0);
             if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
             {
-                ScDPOutputGeometry::FieldType eType = aGeometry.getFieldButtonType(aScAddress);
+                std::pair<ScDPOutputGeometry::FieldType, size_t> aBtnType = aGeometry.getFieldButtonType(aScAddress);
+                const ScDPSaveDimension* pDim = getDimension(
+                    aRowDims, aColDims, aBtnType.first, aBtnType.second);
+
+                bool bDataLayout = pDim && pDim->IsDataLayout();
+                bool bHasHidden = pDim && pDim->HasInvisibleMember();
 
                 sal_Int16 nMFlag = SC_MF_BUTTON;
-                if (eType == ScDPOutputGeometry::Column || eType == ScDPOutputGeometry::Row)
-                    nMFlag |= SC_MF_BUTTON_POPUP;
-
-                // Use the cell's string value to see if this field contains a
-                // hidden member.  Isn't there a better way?  GetString() is
-                // quite expensive...
-                String aCellStr;
-                pDoc->GetString(aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aCellStr);
-                if (maHiddenMemberFields.count(aCellStr))
+                if (bHasHidden)
                     nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+                if (!bDataLayout)
+                    nMFlag |= SC_MF_BUTTON_POPUP;
 
                 pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
             }
@@ -345,40 +380,38 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
-            pDim->SetDupFlag( sal_True );
+            pDim->SetDupFlag(true);
 
-        if (!pDim->IsDataLayout())
+        switch (pDim->GetOrientation())
         {
-            switch (pDim->GetOrientation())
-            {
-                case sheet::DataPilotFieldOrientation_ROW:
-                    ++mnRowFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_COLUMN:
-                    ++mnColFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_PAGE:
-                    ++mnPageFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_DATA:
-                    ++mnDataFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_HIDDEN:
-                default:
-                    ;
-            }
-
-            if (bHasHiddenMember)
-            {
-                // the layout name takes priority over the original name,
-                // since this data is used against cell values.
-                const OUString* pLayoutName = pDim->GetLayoutName();
-                if (pLayoutName)
-                    maHiddenMemberFields.insert(*pLayoutName);
-                else
-                    maHiddenMemberFields.insert(pDim->GetName());
-            }
+            case sheet::DataPilotFieldOrientation_ROW:
+                ++mnRowFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_COLUMN:
+                ++mnColFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_PAGE:
+                ++mnPageFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_DATA:
+                ++mnDataFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_HIDDEN:
+            default:
+                ;
         }
+
+        if (bHasHiddenMember)
+        {
+            // the layout name takes priority over the original name,
+            // since this data is used against cell values.
+            const OUString* pLayoutName = pDim->GetLayoutName();
+            if (pLayoutName)
+                maHiddenMemberFields.insert(*pLayoutName);
+            else
+                maHiddenMemberFields.insert(pDim->GetName());
+        }
+
         pDPSave->AddDimension(pDim);
     }
 }

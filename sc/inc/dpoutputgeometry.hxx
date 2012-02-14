@@ -38,9 +38,8 @@ class SC_DLLPUBLIC ScDPOutputGeometry
 {
 public:
     enum FieldType { Column, Row, Page, Data, None };
-    enum ImportType { ODF, XLS };
 
-    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType);
+    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
     ~ScDPOutputGeometry();
 
     /**
@@ -57,7 +56,7 @@ public:
 
     SCROW getRowFieldHeaderRow() const;
 
-    FieldType getFieldButtonType(const ScAddress& rPos) const;
+    std::pair<FieldType, size_t> getFieldButtonType(const ScAddress& rPos) const;
 
 private:
     ScDPOutputGeometry(); // disabled
@@ -68,8 +67,6 @@ private:
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;
-
-    ImportType  meImportType;
 
     bool        mbShowFilter;
 };
