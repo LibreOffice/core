@@ -116,18 +116,6 @@
 #define sun sun
 #endif
 
-/* This is to work around a gcc 3.3 error that fixing actually breaks other
- * compilers.  This will create a dummy variable specifically for gcc 3.3 that
- * allows it to compile and not break the others.  Other compilers may follow
- * with this eror later. */
-#if defined __GNUC__
-#if ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
-#  define SAL_ISO_CONST const
-#else
-#  define SAL_ISO_CONST
-#endif
-#endif
-
 #endif /*_SAL_CONFIG_H_ */
 
 

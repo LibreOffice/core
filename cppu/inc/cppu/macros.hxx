@@ -45,7 +45,7 @@
     struct to become 8 instead of 4 if CPPU_GCC3_ALIGN were added to its first
     member.)
 */
-#if defined(__GNUC__) && (__GNUC__ >= 3)
+#if defined(__GNUC__)
 #define CPPU_GCC3_ALIGN( base_struct ) __attribute__ ((aligned (__alignof__ (base_struct))))
 #else
 #define CPPU_GCC3_ALIGN( base_struct )
