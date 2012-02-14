@@ -38,6 +38,12 @@
 
 #include <osl/detail/android-bootstrap.h>
 
+// Why is this here and not in osl, and using the already existing file
+// handling APIs? Do we really want to add arbitrary new file handling
+// wrappers here and there (and then having to handle the Android (and
+// eventually perhaps iOS) special cases here, too)?  Please move this to osl,
+// it sure looks gemerally useful. Or am I missing something?
+
 void loadFile(const rtl::OUString& aFileName, std::string& aContent)
 {
     rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
