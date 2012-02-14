@@ -60,8 +60,10 @@ SLOFILES=\
 EXCEPTIONSFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj \
+        $(OBJ)$/helpindexer.obj \
         $(SLO)$/HelpLinker.obj \
         $(SLO)$/HelpCompiler.obj
+
 .IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
 # There appears to be a GCC 4.0.1 optimization error causing _file:good() to
 # report true right before the call to writeOut at HelpLinker.cxx:1.12 l. 954
@@ -72,12 +74,21 @@ NOOPTFILES=\
         $(SLO)$/HelpLinker.obj
 .ENDIF
 
+PKGCONFIG_MODULES=libclucene-core
+.INCLUDE : pkg_config.mk
+
 APP1TARGET= $(TARGET)
 APP1OBJS=\
       $(OBJ)$/HelpLinker.obj \
       $(OBJ)$/HelpCompiler.obj
 APP1RPATH = NONE
 APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
+
+APP2TARGET=HelpIndexer
+APP2OBJS=\
+      $(OBJ)$/helpindexer.obj
+APP2RPATH = NONE
+APP2STDLIBS+=$(SALLIB) $(PKGCONFIG_LIBS)
 
 SHL1TARGET	=$(LIBBASENAME)$(DLLPOSTFIX)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
@@ -93,26 +104,7 @@ SHL1USE_EXPORTS	=ordinal
 DEF1NAME	=$(SHL1TARGET) 
 DEFLIB1NAME	=$(TARGET)
 
-JAVAFILES = \
-    HelpIndexerTool.java			        \
-    HelpFileDocument.java
 
-
-JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexerTool.class			        \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
-
-.IF "$(SYSTEM_LUCENE)" == "YES"
-EXTRAJARFILES += $(LUCENE_CORE_JAR) $(LUCENE_ANALYZERS_JAR)
-.ELSE
-JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
-.ENDIF
-JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JARCLASSDIRS	   = $(PACKAGE)/*
-JARTARGET	       = HelpIndexerTool.jar
-JARCOMPRESS        = TRUE 
- 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

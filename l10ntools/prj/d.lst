@@ -26,12 +26,14 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\txtconv %_DEST%\bin\txtconv
 ..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
 ..\%__SRC%\class\FCFGMerge.jar %_DEST%\bin\FCFGMerge.jar
-..\%__SRC%\class\HelpIndexerTool.jar %_DEST%\bin\HelpIndexerTool.jar
-..\%__SRC%\bin\HelpLinker %_DEST%\bin\HelpLinker
 ..\%__SRC%\bin\HelpCompiler %_DEST%\bin\HelpCompiler
 ..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin\HelpCompiler.exe
+..\%__SRC%\bin\HelpLinker %_DEST%\bin\HelpLinker
 ..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin\HelpLinker.exe
 ..\%__SRC%\bin\HelpLinker* %_DEST%\bin
+..\%__SRC%\bin\HelpIndexer %_DEST%\bin\HelpIndexer
+..\%__SRC%\bin\HelpIndexer.exe %_DEST%\bin\HelpIndexer.exe
+..\%__SRC%\bin\HelpIndexer* %_DEST%\bin
 
 ..\scripts\localize %_DEST%\bin\localize
 ..\scripts\fast_merge.pl %_DEST%\bin\fast_merge.pl
