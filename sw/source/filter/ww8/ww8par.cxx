@@ -4118,8 +4118,7 @@ void wwSectionManager::InsertSegments()
         if (pTxtNd)
         {
             SwNodeIndex aIdx(*pTxtNd);
-            SwPosition aPos(aIdx);
-            SwPaM aTest(aPos);
+            SwPaM aTest(aIdx);
             mrReader.rDoc.DelFullPara(aTest);
             pTxtNd = 0;
         }
