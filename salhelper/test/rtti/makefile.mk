@@ -73,10 +73,6 @@ DEF1NAME=	$(SHL1TARGET)
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 SHL1VERSIONMAP=	sols.map
-.ELIF "$(OS)$(CPU)"=="LINUXI"
-SHL1VERSIONMAP= lngi.map
-.ELIF "$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc3"
-SHL1VERSIONMAP= gcc3_freebsd_intel.map
 .ENDIF
 
 
