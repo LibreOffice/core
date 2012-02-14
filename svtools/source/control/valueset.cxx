@@ -693,36 +693,33 @@ void ValueSet::ImplDrawSelect()
         return;
     }
 
-    sal_uInt16 nItemId = mnSelItemId;
-
-    for( int stage = 0; stage < 2; stage++ )
+    ImplDrawSelect( mnSelItemId, bFocus, bDrawSel );
+    if (mbHighlight)
     {
-        if( stage == 1 )
-        {
-            if ( mbHighlight )
-                nItemId = mnHighItemId;
-            else
-                break;
-        }
+        ImplDrawSelect( mnHighItemId, bFocus, bDrawSel );
+    }
+}
 
-        ValueSetItem* pItem;
-        if ( nItemId )
-            pItem = mItemList[ GetItemPos( nItemId ) ];
-        else
-        {
-            if ( mpNoneItem )
-                pItem = mpNoneItem;
-            else
-            {
-                pItem = ImplGetFirstItem();
-                if ( !bFocus || !pItem )
-                    continue;
-            }
-        }
+// -----------------------------------------------------------------------
 
-        if ( pItem->maRect.IsEmpty() )
-            continue;
+void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+{
+    ValueSetItem* pItem;
+    if ( nItemId )
+    {
+        pItem = mItemList[ GetItemPos( nItemId ) ];
+    }
+    else if ( mpNoneItem )
+    {
+        pItem = mpNoneItem;
+    }
+    else if ( !bFocus || !(pItem = ImplGetFirstItem()) )
+    {
+        return;
+    }
 
+    if ( !pItem->maRect.IsEmpty() )
+    {
         // draw selection
         const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
         Rectangle               aRect = pItem->maRect;
@@ -730,7 +727,7 @@ void ValueSet::ImplDrawSelect()
 
         Color aDoubleColor( rStyleSettings.GetHighlightColor() );
         Color aSingleColor( rStyleSettings.GetHighlightTextColor() );
-        if( ! mbDoubleSel )
+        if( !mbDoubleSel )
         {
             /*
             *  #99777# contrast enhancement for thin mode
@@ -761,10 +758,7 @@ void ValueSet::ImplDrawSelect()
 
             if ( bDrawSel )
             {
-                if ( mbBlackSel )
-                    SetLineColor( Color( COL_BLACK ) );
-                else
-                    SetLineColor( aDoubleColor );
+                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
                 DrawRect( aRect );
             }
         }
@@ -809,10 +803,7 @@ void ValueSet::ImplDrawSelect()
         {
             if ( bDrawSel )
             {
-                if ( mbBlackSel )
-                    SetLineColor( Color( COL_BLACK ) );
-                else
-                    SetLineColor( aDoubleColor );
+                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
                 DrawRect( aRect );
             }
             if ( mbDoubleSel )
@@ -847,13 +838,12 @@ void ValueSet::ImplDrawSelect()
 
             if ( bDrawSel )
             {
-                if ( mbBlackSel )
-                    SetLineColor( Color( COL_WHITE ) );
-                else
-                    SetLineColor( aSingleColor );
+                SetLineColor( mbBlackSel ? Color( COL_WHITE ) : aSingleColor );
             }
             else
+            {
                 SetLineColor( Color( COL_LIGHTGRAY ) );
+            }
             DrawRect( aRect2 );
 
             if ( bFocus )

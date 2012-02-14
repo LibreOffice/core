@@ -257,6 +257,7 @@ private:
     SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem );
     SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
+    SVT_DLLPRIVATE void         ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel );
     SVT_DLLPRIVATE void         ImplDrawSelect();
     SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
     SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection = true );
