@@ -124,8 +124,9 @@ private:
     void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const com::sun::star::sheet::MemberResult& rData,
                                 sal_Bool bColHeader, long nLevel );
-    void            FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
-                               bool bInTable, bool bPopup, bool bHasHiddenMember );
+
+    void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
+
     void            CalcSizes();
 
     /** Query which sub-area of the table the cell is in. See

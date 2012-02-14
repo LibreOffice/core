@@ -93,17 +93,16 @@ struct ScDPOutLevelData
     long                                nLevel;
     long                                nDimPos;
     uno::Sequence<sheet::MemberResult>  aResult;
-    String                              maName;   /// Name is the internal field name.
-    String                              aCaption; /// Caption is the name visible in the output table.
-    bool                                mbHasHiddenMember;
+    rtl::OUString                       maName;   /// Name is the internal field name.
+    rtl::OUString                       maCaption; /// Caption is the name visible in the output table.
+    bool                                mbHasHiddenMember:1;
+    bool                                mbDataLayout:1;
 
-    ScDPOutLevelData()
-    {
-        nDim = nHier = nLevel = nDimPos = -1;
-        mbHasHiddenMember = false;
-    }
+    ScDPOutLevelData() :
+        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mbHasHiddenMember(false), mbDataLayout(false)
+    {}
 
-    sal_Bool operator<(const ScDPOutLevelData& r) const
+    bool operator<(const ScDPOutLevelData& r) const
         { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
             ( nDimPos==r.nDimPos && nHier==r.nHier && nLevel<r.nLevel ); }
 
@@ -572,9 +571,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 long nDimPos = ScUnoHelpFunctions::GetLongProperty( xDimProp,
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_POSITION)) );
-                sal_Bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
-                                                xDimProp,
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
+                bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
+                    xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)));
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_HAS_HIDDEN_MEMBER)));
 
@@ -607,7 +605,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                     xLevel, uno::UNO_QUERY );
                             if ( xLevNam.is() && xLevRes.is() )
                             {
-                                String aName = xLevNam->getName();
+                                rtl::OUString aName = xLevNam->getName();
                                 Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
                                 // Caption equals the field name by default.
                                 // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
@@ -625,8 +623,9 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pColFields[nColFieldCount].nDimPos = nDimPos;
                                         pColFields[nColFieldCount].aResult = xLevRes->getResults();
                                         pColFields[nColFieldCount].maName  = aName;
-                                        pColFields[nColFieldCount].aCaption= aCaption;
+                                        pColFields[nColFieldCount].maCaption= aCaption;
                                         pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                        pColFields[nColFieldCount].mbDataLayout = bIsDataLayout;
                                         if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
                                             ++nColFieldCount;
                                         break;
@@ -637,8 +636,9 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pRowFields[nRowFieldCount].nDimPos = nDimPos;
                                         pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
                                         pRowFields[nRowFieldCount].maName  = aName;
-                                        pRowFields[nRowFieldCount].aCaption= aCaption;
+                                        pRowFields[nRowFieldCount].maCaption= aCaption;
                                         pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                        pRowFields[nRowFieldCount].mbDataLayout = bIsDataLayout;
                                         if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
                                         {
                                             ++nRowFieldCount;
@@ -652,7 +652,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].nDimPos = nDimPos;
                                         pPageFields[nPageFieldCount].aResult = lcl_GetSelectedPageAsResult(xDimProp);
                                         pPageFields[nPageFieldCount].maName  = aName;
-                                        pPageFields[nPageFieldCount].aCaption= aCaption;
+                                        pPageFields[nPageFieldCount].maCaption= aCaption;
                                         pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         // no check on results for page fields
                                         ++nPageFieldCount;
@@ -828,23 +828,23 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-void ScDPOutput::FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
-                            bool bInTable, bool bPopup, bool bHasHiddenMember )
+void ScDPOutput::FieldCell(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable)
 {
     // Avoid unwanted automatic format detection.
     ScSetStringParam aParam;
     aParam.mbDetectNumberFormat = false;
     aParam.mbSetTextCellFormat = true;
-    pDoc->SetString(nCol, nRow, nTab, rCaption, &aParam);
+    pDoc->SetString(nCol, nRow, nTab, rData.maCaption, &aParam);
 
     if (bInTable)
         lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
     //  Button
     sal_uInt16 nMergeFlag = SC_MF_BUTTON;
-    if (bPopup)
+    if (!rData.mbDataLayout)
         nMergeFlag |= SC_MF_BUTTON_POPUP;
-    if (bHasHiddenMember)
+    if (rData.mbHasHiddenMember)
         nMergeFlag |= SC_MF_HIDDEN_MEMBER;
     pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
 
@@ -994,7 +994,7 @@ void ScDPOutput::Output()
         SCCOL nHdrCol = aStartPos.Col();
         SCROW nHdrRow = aStartPos.Row() + nField + ( bDoFilter ? 1 : 0 );
         // draw without frame for consistency with filter button:
-        FieldCell( nHdrCol, nHdrRow, nTab, pPageFields[nField].aCaption, false, false, pPageFields[nField].mbHasHiddenMember );
+        FieldCell(nHdrCol, nHdrRow, nTab, pPageFields[nField], false);
         SCCOL nFldCol = nHdrCol + 1;
 
         String aPageValue;
@@ -1035,7 +1035,7 @@ void ScDPOutput::Output()
     for (nField=0; nField<nColFieldCount; nField++)
     {
         SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //! check for overflow
-        FieldCell( nHdrCol, nTabStartRow, nTab, pColFields[nField].aCaption, true, true, pColFields[nField].mbHasHiddenMember );
+        FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true);
 
         SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //! check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
@@ -1081,12 +1081,9 @@ void ScDPOutput::Output()
     vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, false );
     for (nField=0; nField<nRowFieldCount; nField++)
     {
-        bool bDataLayout = mbHasDataLayout && (nField == nRowFieldCount-1);
-
         SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //! check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
-        FieldCell( nHdrCol, nHdrRow, nTab, pRowFields[nField].aCaption, true, !bDataLayout,
-                   pRowFields[nField].mbHasHiddenMember );
+        FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true);
 
         SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //! check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
