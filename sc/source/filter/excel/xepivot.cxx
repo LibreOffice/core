@@ -147,9 +147,9 @@ XclExpPCItem::XclExpPCItem( bool bValue ) :
 
 // ----------------------------------------------------------------------------
 
-bool XclExpPCItem::EqualsText( const String& rText ) const
+bool XclExpPCItem::EqualsText( const rtl::OUString& rText ) const
 {
-    return (rText.Len() == 0) ? IsEmpty() : (GetText() && (*GetText() == rText));
+    return rText.isEmpty() ? IsEmpty() : (GetText() && (*GetText() == rText));
 }
 
 bool XclExpPCItem::EqualsDouble( double fValue ) const
@@ -171,7 +171,7 @@ bool XclExpPCItem::EqualsBool( bool bValue ) const
 
 void XclExpPCItem::WriteBody( XclExpStream& rStrm )
 {
-    if( const String* pText = GetText() )
+    if( const rtl::OUString* pText = GetText() )
     {
         rStrm << XclExpString( *pText );
     }
@@ -291,7 +291,7 @@ const XclExpPCItem* XclExpPCField::GetItem( sal_uInt16 nItemIdx ) const
     return GetVisItemList().GetRecord( nItemIdx ).get();
 }
 
-sal_uInt16 XclExpPCField::GetItemIndex( const String& rItemName ) const
+sal_uInt16 XclExpPCField::GetItemIndex( const rtl::OUString& rItemName ) const
 {
     const XclExpPCItemList& rItemList = GetVisItemList();
     for( size_t nPos = 0, nSize = rItemList.GetSize(); nPos < nSize; ++nPos )
@@ -356,7 +356,8 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
     ScAddress aPos( rRange.aStart );
     rDoc.GetString( aPos.Col(), aPos.Row(), aPos.Tab(), maFieldInfo.maName );
     // #i76047# maximum field name length in pivot cache is 255
-    maFieldInfo.maName.Erase( ::std::min( maFieldInfo.maName.Len(), EXC_PC_MAXSTRLEN ) );
+    if (maFieldInfo.maName.getLength() > EXC_PC_MAXSTRLEN)
+        maFieldInfo.maName = maFieldInfo.maName.copy(0, EXC_PC_MAXSTRLEN);
 
     // loop over all cells, create pivot cache items
     for( aPos.IncRow(); (aPos.Row() <= rRange.aEnd.Row()) && (maOrigItemList.GetSize() < EXC_PC_MAXITEMCOUNT); aPos.IncRow() )
@@ -778,7 +779,7 @@ XclExpPCField* XclExpPivotCache::GetFieldAcc( sal_uInt16 nFieldIdx )
     return maFieldList.GetRecord( nFieldIdx ).get();
 }
 
-XclExpPCField* XclExpPivotCache::GetFieldAcc( const String& rFieldName )
+XclExpPCField* XclExpPivotCache::GetFieldAcc( const rtl::OUString& rFieldName )
 {
     XclExpPCField* pField = 0;
     for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )
@@ -984,9 +985,9 @@ XclExpPTItem::XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx, bool bUs
     maItemInfo.maVisName.mbUseCache = bUseCache;
 }
 
-const String& XclExpPTItem::GetItemName() const
+rtl::OUString XclExpPTItem::GetItemName() const
 {
-    return mpCacheItem ? mpCacheItem->ConvertToText() : EMPTY_STRING;
+    return mpCacheItem ? mpCacheItem->ConvertToText() : rtl::OUString();
 }
 
 void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
@@ -1024,9 +1025,9 @@ XclExpPTField::XclExpPTField( const XclExpPivotTable& rPTable, sal_uInt16 nCache
 
 // data access ----------------------------------------------------------------
 
-const String& XclExpPTField::GetFieldName() const
+rtl::OUString XclExpPTField::GetFieldName() const
 {
-    return mpCacheField ? mpCacheField->GetFieldName() : EMPTY_STRING;
+    return mpCacheField ? mpCacheField->GetFieldName() : rtl::OUString();
 }
 
 sal_uInt16 XclExpPTField::GetFieldIndex() const
@@ -1042,7 +1043,7 @@ sal_uInt16 XclExpPTField::GetLastDataInfoIndex() const
     return static_cast< sal_uInt16 >( maDataInfoVec.size() - 1 );
 }
 
-sal_uInt16 XclExpPTField::GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const
+sal_uInt16 XclExpPTField::GetItemIndex( const rtl::OUString& rName, sal_uInt16 nDefaultIdx ) const
 {
     for( size_t nPos = 0, nSize = maItemList.GetSize(); nPos < nSize; ++nPos )
         if( maItemList.GetRecord( nPos )->GetItemName() == rName )
@@ -1230,7 +1231,7 @@ void XclExpPTField::Save( XclExpStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-XclExpPTItem* XclExpPTField::GetItemAcc( const String& rName )
+XclExpPTItem* XclExpPTField::GetItemAcc( const rtl::OUString& rName )
 {
     XclExpPTItem* pItem = 0;
     for( size_t nPos = 0, nSize = maItemList.GetSize(); !pItem && (nPos < nSize); ++nPos )
@@ -1324,12 +1325,12 @@ const XclExpPTField* XclExpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
     return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetRecord( nFieldIdx ).get();
 }
 
-const XclExpPTField* XclExpPivotTable::GetField( const String& rName ) const
+const XclExpPTField* XclExpPivotTable::GetField( const rtl::OUString& rName ) const
 {
     return const_cast< XclExpPivotTable* >( this )->GetFieldAcc( rName );
 }
 
-sal_uInt16 XclExpPivotTable::GetDataFieldIndex( const String& rName, sal_uInt16 nDefaultIdx ) const
+sal_uInt16 XclExpPivotTable::GetDataFieldIndex( const rtl::OUString& rName, sal_uInt16 nDefaultIdx ) const
 {
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
         if( const XclExpPTField* pField = GetField( aIt->first ) )
@@ -1507,7 +1508,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-XclExpPTField* XclExpPivotTable::GetFieldAcc( const String& rName )
+XclExpPTField* XclExpPivotTable::GetFieldAcc( const rtl::OUString& rName )
 {
     XclExpPTField* pField = 0;
     for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )
@@ -1672,7 +1673,7 @@ void XclExpPivotTable::Finalize()
 
 void XclExpPivotTable::WriteSxview( XclExpStream& rStrm ) const
 {
-    rStrm.StartRecord( EXC_ID_SXVIEW, 46 + maPTInfo.maTableName.Len() + maPTInfo.maDataName.Len() );
+    rStrm.StartRecord( EXC_ID_SXVIEW, 46 + maPTInfo.maTableName.getLength() + maPTInfo.maDataName.getLength() );
     rStrm << maPTInfo;
     rStrm.EndRecord();
 }
