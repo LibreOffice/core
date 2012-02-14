@@ -99,9 +99,9 @@ namespace connectivity
             sal_Bool getEscapeProcessing()      const;
             template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
 
-            void setQueryTimeOut(sal_Int32 _par0)           ;
-            void setMaxFieldSize(sal_Int32 _par0)           ;
-            void setMaxRows(sal_Int32 _par0)                ;
+            void setQueryTimeOut(sal_Int64 _par0)           ;
+            void setMaxFieldSize(sal_Int64 _par0)           ;
+            void setMaxRows(sal_Int64 _par0)                ;
             void setFetchDirection(sal_Int32 _par0)         ;
             void setFetchSize(sal_Int32 _par0)              ;
             void setCursorName(const ::rtl::OUString &_par0);

@@ -756,13 +756,13 @@ sal_Int64 OStatement_Base::getMaxFieldSize() const
     return ::rtl::OUString::createFromAscii((const char*)pName);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setQueryTimeOut(sal_Int32 seconds)
+void OStatement_Base::setQueryTimeOut(sal_Int64 seconds)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_QUERY_TIMEOUT,seconds);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setMaxRows(sal_Int32 _par0)
+void OStatement_Base::setMaxRows(sal_Int64 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_ROWS, _par0);
@@ -872,7 +872,7 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0)
     }
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setMaxFieldSize(sal_Int32 _par0)
+void OStatement_Base::setMaxFieldSize(sal_Int64 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH, _par0);
@@ -913,9 +913,9 @@ void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);
-    DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,     sal_Int32);
-    DECL_PROP0(QUERYTIMEOUT,sal_Int32);
+    DECL_PROP0(MAXFIELDSIZE,sal_Int64);
+    DECL_PROP0(MAXROWS,     sal_Int64);
+    DECL_PROP0(QUERYTIMEOUT,sal_Int64);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
     DECL_BOOL_PROP0(USEBOOKMARKS);
@@ -997,13 +997,13 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
         switch(nHandle)
         {
             case PROPERTY_ID_QUERYTIMEOUT:
-                setQueryTimeOut(comphelper::getINT32(rValue));
+                setQueryTimeOut(comphelper::getINT64(rValue));
                 break;
             case PROPERTY_ID_MAXFIELDSIZE:
-                setMaxFieldSize(comphelper::getINT32(rValue));
+                setMaxFieldSize(comphelper::getINT64(rValue));
                 break;
             case PROPERTY_ID_MAXROWS:
-                setMaxRows(comphelper::getINT32(rValue));
+                setMaxRows(comphelper::getINT64(rValue));
                 break;
             case PROPERTY_ID_CURSORNAME:
                 setCursorName(comphelper::getString(rValue));
