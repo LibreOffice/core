@@ -64,7 +64,7 @@
     arguments all have names such as fooPattern. Within a pattern String, "%"
     means match any substring of 0 or more characters, and "_" means match
     any one character. Only metadata entries matching the search pattern
-    is returned. If a search pattern argument is set to <VOID/>,
+    are returned. If a search pattern argument is set to <VOID/>,
     that argument's criteria will be dropped from the search.
     </p>
     <p>
