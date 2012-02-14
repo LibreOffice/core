@@ -181,14 +181,15 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
     SQLULEN nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
+    bool atExec;
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
 
-    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
+    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize, atExec);
     if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
         nColumnSize = 1;
 
-    if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
+    if (atExec)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
@@ -211,10 +212,12 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                         SQLLEN*& pLen,
                         const void* _pValue,
                         rtl_TextEncoding _nTextEncoding,
-                        SQLULEN& _nColumnSize)
+                        SQLULEN& _nColumnSize,
+                        bool &atExec)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindData" );
     _nColumnSize = 0;
+    atExec = false;
 
     switch (_nOdbcType)
     {
@@ -307,6 +310,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                 *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
             }
+            atExec = true;
             break;
         case SQL_LONGVARCHAR:
         {
@@ -319,6 +323,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 nLen = aString.getLength();
             }
             *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
+            atExec = true;
         }   break;
         case SQL_DATE:
             *(DATE_STRUCT*)_pData = *(DATE_STRUCT*)_pValue;
