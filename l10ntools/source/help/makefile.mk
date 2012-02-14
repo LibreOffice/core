@@ -60,7 +60,8 @@ SLOFILES=\
 EXCEPTIONSFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj \
-        $(OBJ)$/helpindexer.obj \
+        $(OBJ)$/HelpIndexer.obj \
+        $(OBJ)$/HelpIndexer_main.obj \
         $(SLO)$/HelpLinker.obj \
         $(SLO)$/HelpCompiler.obj
 
@@ -74,7 +75,7 @@ NOOPTFILES=\
         $(SLO)$/HelpLinker.obj
 .ENDIF
 
-PKGCONFIG_MODULES=libclucene-core
+PKGCONFIG_MODULES=libclucene-core libclucene-contribs-lib
 .INCLUDE : pkg_config.mk
 
 APP1TARGET= $(TARGET)
@@ -86,7 +87,8 @@ APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
 
 APP2TARGET=HelpIndexer
 APP2OBJS=\
-      $(OBJ)$/helpindexer.obj
+      $(OBJ)$/HelpIndexer.obj \
+      $(OBJ)$/HelpIndexer_main.obj
 APP2RPATH = NONE
 APP2STDLIBS+=$(SALLIB) $(PKGCONFIG_LIBS)
 

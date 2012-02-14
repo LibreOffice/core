@@ -1,5 +1,7 @@
-#include <CLucene/StdHeader.h>
-#include <CLucene.h>
+#include "HelpIndexer.hxx"
+
+#define TODO
+
 #ifdef TODO
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
 #endif
@@ -10,73 +12,9 @@
 #include <errno.h>
 #include <string.h>
 
-#include <string>
-#include <iostream>
 #include <algorithm>
-#include <set>
-
-// I assume that TCHAR is defined as wchar_t throughout
 
 using namespace lucene::document;
-
-class HelpIndexer {
-	private:
-		std::string d_lang;
-		std::string d_module;
-		std::string d_captionDir;
-		std::string d_contentDir;
-		std::string d_indexDir;
-		std::string d_error;
-		std::set<std::string> d_files;
-
-	public:
-
-	/**
-	 * @param lang Help files language.
-	 * @param module The module of the helpfiles.
-	 * @param captionDir The directory to scan for caption files.
-	 * @param contentDir The directory to scan for content files.
-	 * @param indexDir The directory to write the index to.
-	 */
-	HelpIndexer(std::string const &lang, std::string const &module,
-		std::string const &captionDir, std::string const &contentDir,
-		std::string const &indexDir);
-
-	/**
-	 * Run the indexer.
-	 * @return true if index successfully generated.
-	 */
-	bool indexDocuments();
-
-	/**
-	 * Get the error string (empty if no error occurred).
-	 */
-	std::string const & getErrorMessage();
-
-	private:
-
-	/**
-	 * Scan the caption & contents directories for help files.
-	 */
-	bool scanForFiles();
-
-	/**
-	 * Scan for files in the given directory.
-	 */
-	bool scanForFiles(std::string const &path);
-
-	/**
-	 * Fill the Document with information on the given help file.
-	 */
-	bool helpDocument(std::string const & fileName, Document *doc);
-
-	/**
-	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
-	 */
-	lucene::util::Reader *helpFileReader(std::string const & path);
-
-	std::wstring string2wstring(std::string const &source);
-};
 
 HelpIndexer::HelpIndexer(std::string const &lang, std::string const &module,
 	std::string const &captionDir, std::string const &contentDir, std::string const &indexDir) :
@@ -182,66 +120,4 @@ std::wstring HelpIndexer::string2wstring(std::string const &source) {
 	std::wstring target(source.length(), L' ');
 	std::copy(source.begin(), source.end(), target.begin());
 	return target;
-}
-
-int main(int argc, char **argv) {
-	const std::string pLang("-lang");
-	const std::string pModule("-mod");
-	const std::string pOutDir("-zipdir");
-	const std::string pSrcDir("-srcdir");
-
-	std::string lang;
-	std::string module;
-	std::string srcDir;
-	std::string outDir;
-
-	bool error = false;
-	for (int i = 1; i < argc; ++i) {
-		if (pLang.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				lang = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pModule.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				module = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pOutDir.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				outDir = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pSrcDir.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				srcDir = argv[++i];
-			} else {
-				error = true;
-			}
-		} else {
-			error = true;
-		}
-	}
-
-	if (error) {
-		std::cerr << "Error parsing command-line arguments" << std::endl;
-	}
-
-	if (error || lang.empty() || module.empty() || srcDir.empty() || outDir.empty()) {
-		std::cerr << "Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -srcdir SourceDir -zipdir OutputDir" << std::endl;
-		return 1;
-	}
-
-	std::string captionDir(srcDir + "/caption");
-	std::string contentDir(srcDir + "/content");
-	std::string indexDir(outDir + "/" + module + ".idxl");
-	HelpIndexer indexer(lang, module, captionDir, contentDir, indexDir);
-	if (!indexer.indexDocuments()) {
-		std::cerr << indexer.getErrorMessage() << std::endl;
-		return 2;
-	}
-	return 0;
 }
