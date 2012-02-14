@@ -27,6 +27,9 @@
 
 package installer::logger;
 
+use strict;
+use warnings;
+
 use installer::files;
 use installer::globals;
 

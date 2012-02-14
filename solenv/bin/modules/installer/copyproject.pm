@@ -27,6 +27,9 @@
 
 package installer::copyproject;
 
+use strict;
+use warnings;
+
 use installer::control;
 use installer::converter;
 use installer::files;
