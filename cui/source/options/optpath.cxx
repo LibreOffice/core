@@ -50,7 +50,7 @@
 #include "optpath.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include <comphelper/configurationhelper.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -59,6 +59,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <readonlyimage.hxx>
 #include <vcl/help.hxx>
@@ -532,13 +533,11 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 
             // Set configuration flag to notify file picker that it's necessary
             // to take over the path provided.
-            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            ::comphelper::ConfigurationHelper::writeDirectKey(xFactory,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Path/Info")),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkPathChanged")),
-                ::com::sun::star::uno::makeAny(true),
-                ::comphelper::ConfigurationHelper::E_STANDARD);
+            boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Path::Info::WorkPathChanged::set(
+                true, batch);
+            batch->commit();
         }
     }
 }

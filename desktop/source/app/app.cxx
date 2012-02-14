@@ -68,10 +68,10 @@
 #include <toolkit/unohlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <officecfg/Office/Recovery.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/uri.hxx>
@@ -1117,47 +1117,14 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
 void Desktop::retrieveCrashReporterState()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-    static const ::rtl::OUString CFG_PATH_CRASHREPORTER(RTL_CONSTASCII_USTRINGPARAM("CrashReporter"));
-    static const ::rtl::OUString CFG_ENTRY_ENABLED(RTL_CONSTASCII_USTRINGPARAM("Enabled"));
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-
-    sal_Bool bEnabled(sal_False);
-    if ( xSMGR.is() )
-    {
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    xSMGR,
-                                    CFG_PACKAGE_RECOVERY,
-                                    CFG_PATH_CRASHREPORTER,
-                                    CFG_ENTRY_ENABLED,
-                                    ::comphelper::ConfigurationHelper::E_READONLY);
-        aVal >>= bEnabled;
-    }
-    _bCrashReporterEnabled = bEnabled;
+    _bCrashReporterEnabled
+        = officecfg::Office::Recovery::CrashReporter::Enabled::get();
 }
 
 sal_Bool Desktop::isUIOnSessionShutdownAllowed()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-    static const ::rtl::OUString CFG_PATH_SESSION(RTL_CONSTASCII_USTRINGPARAM("SessionShutdown"));
-    static const ::rtl::OUString CFG_ENTRY_UIENABLED(RTL_CONSTASCII_USTRINGPARAM("DocumentStoreUIEnabled"));
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-
-    sal_Bool bResult = sal_False;
-    if ( xSMGR.is() )
-    {
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    xSMGR,
-                                    CFG_PACKAGE_RECOVERY,
-                                    CFG_PATH_SESSION,
-                                    CFG_ENTRY_UIENABLED,
-                                    ::comphelper::ConfigurationHelper::E_READONLY);
-        aVal >>= bResult;
-    }
-
-    return bResult;
+    return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
+        ::get();
 }
 
 //-----------------------------------------------

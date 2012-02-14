@@ -53,7 +53,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 //.........................................................................
 namespace dbtools
