@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install dev-install-link distclean distro-pack-install docs fetch findunusedcode id install subsequenttest tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -396,13 +396,16 @@ install:
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
 
-dev-install-link:
+dev-install: build
+	@rm -rf $(OUTDIR)/installation
+	@mkdir $(OUTDIR)/installation
+ifeq ($(DISABLE_LINKOO),TRUE)
+	@ooinstall $(OUTDIR)/installation/opt
+	@install-gdb-printers -L
+else
+	@ooinstall -l $(OUTDIR)/installation/opt
+endif
 	@rm -f $(SRCDIR)/install && ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
-
-dev-install: dev-install-link
-	cd smoketestoo_native && \
-	unset MAKEFLAGS && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
@@ -436,21 +439,13 @@ findunusedcode:
               | grep -v ^salhelper:: \
               > unusedcode.easy
 
-check: subsequentcheck_after_build
+check: subsequentcheck
 
-subsequentcheck_after_build: build dev-install-link
-	@cd smoketestoo_native && unset MAKEFLAGS && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
-
-subsequentcheck: smoketestoo_native
+subsequentcheck: dev-install
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
 
 debugrun:
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile debugrun
-
-slowcheck:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile slowcheck
 
 endif # not clean or distclean
 
