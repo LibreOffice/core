@@ -60,6 +60,8 @@
 
 #include <vector>
 
+using namespace com::sun::star;
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
@@ -1476,9 +1478,11 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 
     ScDocument& rDoc = GetDoc();
 
-    vector<ScAddress> aPageBtns;
-    aGeometry.getPageFieldPositions(aPageBtns);
-    vector<ScAddress>::const_iterator itr = aPageBtns.begin(), itrEnd = aPageBtns.end();
+    vector<const ScDPSaveDimension*> aFieldDims;
+    vector<ScAddress> aFieldBtns;
+
+    aGeometry.getPageFieldPositions(aFieldBtns);
+    vector<ScAddress>::const_iterator itr = aFieldBtns.begin(), itrEnd = aFieldBtns.end();
     for (; itr != itrEnd; ++itr)
     {
         sal_uInt16 nMFlag = SC_MF_BUTTON;
@@ -1491,32 +1495,42 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), SC_MF_AUTO);
     }
 
-    vector<ScAddress> aColBtns;
-    aGeometry.getColumnFieldPositions(aColBtns);
-    itr    = aColBtns.begin();
-    itrEnd = aColBtns.end();
-    for (; itr != itrEnd; ++itr)
+    aGeometry.getColumnFieldPositions(aFieldBtns);
+    rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aFieldDims);
+    if (aFieldBtns.size() == aFieldDims.size())
     {
-        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
-        rtl::OUString aName;
-        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
-        if (rSaveData.HasInvisibleMember(aName))
-            nMFlag |= SC_MF_HIDDEN_MEMBER;
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        itr    = aFieldBtns.begin();
+        itrEnd = aFieldBtns.end();
+        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+        for (; itr != itrEnd; ++itr, ++itDim)
+        {
+            sal_Int16 nMFlag = SC_MF_BUTTON;
+            const ScDPSaveDimension* pDim = *itDim;
+            if (pDim->HasInvisibleMember())
+                nMFlag |= SC_MF_HIDDEN_MEMBER;
+            if (!pDim->IsDataLayout())
+                nMFlag |= SC_MF_BUTTON_POPUP;
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        }
     }
 
-    vector<ScAddress> aRowBtns;
-    aGeometry.getRowFieldPositions(aRowBtns);
-    itr    = aRowBtns.begin();
-    itrEnd = aRowBtns.end();
-    for (; itr != itrEnd; ++itr)
+    aGeometry.getRowFieldPositions(aFieldBtns);
+    rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aFieldDims);
+    if (aFieldBtns.size() == aFieldDims.size())
     {
-        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
-        rtl::OUString aName;
-        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
-        if (rSaveData.HasInvisibleMember(aName))
-            nMFlag |= SC_MF_HIDDEN_MEMBER;
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        itr    = aFieldBtns.begin();
+        itrEnd = aFieldBtns.end();
+        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+        for (; itr != itrEnd; ++itr, ++itDim)
+        {
+            sal_Int16 nMFlag = SC_MF_BUTTON;
+            const ScDPSaveDimension* pDim = *itDim;
+            if (pDim->HasInvisibleMember())
+                nMFlag |= SC_MF_HIDDEN_MEMBER;
+            if (!pDim->IsDataLayout())
+                nMFlag |= SC_MF_BUTTON_POPUP;
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        }
     }
 }
 

@@ -818,6 +818,28 @@ const OUString* ScDPSaveData::GetGrandTotalName() const
     return mpGrandTotalName.get();
 }
 
+const ScDPSaveData::DimsType& ScDPSaveData::GetDimensions() const
+{
+    return aDimList;
+}
+
+void ScDPSaveData::GetAllDimensionsByOrientation(
+    sheet::DataPilotFieldOrientation eOrientation, std::vector<const ScDPSaveDimension*>& rDims) const
+{
+    std::vector<const ScDPSaveDimension*> aDims;
+    DimsType::const_iterator it = aDimList.begin(), itEnd = aDimList.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPSaveDimension& rDim = *it;
+        if (rDim.GetOrientation() != static_cast<sal_uInt16>(eOrientation))
+            continue;
+
+        aDims.push_back(&rDim);
+    }
+
+    rDims.swap(aDims);
+}
+
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const ::rtl::OUString& rName)
 {
     boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;

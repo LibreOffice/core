@@ -240,8 +240,10 @@ public:
 
 class ScDPSaveData
 {
+public:
+    typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
 private:
-    boost::ptr_vector<ScDPSaveDimension> aDimList;
+    DimsType aDimList;
     ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
@@ -270,8 +272,19 @@ public:
     SC_DLLPUBLIC void SetGrandTotalName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC const ::rtl::OUString* GetGrandTotalName() const;
 
-    const boost::ptr_vector<ScDPSaveDimension>& GetDimensions() const
-        { return aDimList; }
+    SC_DLLPUBLIC const DimsType& GetDimensions() const;
+
+    /**
+     * Get all dimensions in a given orientation.  The order represents the
+     * actual order of occurrence.  The returned list also includes data
+     * layout dimension.
+     *
+     * @param eOrientation orientation
+     * @param rDims (out) list of dimensions for specified orientation
+     */
+    SC_DLLPUBLIC void GetAllDimensionsByOrientation(
+        com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
+        std::vector<const ScDPSaveDimension*>& rDims) const;
 
     void AddDimension(ScDPSaveDimension* pDim)
         { aDimList.push_back(pDim); }
