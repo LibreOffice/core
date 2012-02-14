@@ -89,7 +89,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bImportDone : 1, // Import finished already? For auto reload of Docs.
                         bInPrepareClose : 1,
                         bPreparedForClose : 1,
-                        bWaitingForPicklist : 1, // Must go into pick list
                         bForbidReload : 1,
                         bBasicInitialized :1,
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!

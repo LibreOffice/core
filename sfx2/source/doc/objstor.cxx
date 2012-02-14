@@ -2605,8 +2605,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
     {
-        pImp->bWaitingForPicklist = sal_True;
-
         // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );

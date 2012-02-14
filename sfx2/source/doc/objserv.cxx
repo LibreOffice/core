@@ -342,9 +342,6 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
                 aParams );
 
         }
-
-        // prevent picklist-entry
-        GetMedium()->SetUpdatePickList( sal_False );
     }
 
     return bOk;
