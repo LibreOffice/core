@@ -112,7 +112,7 @@ inline void* operator new( size_t, DummyType* pPtr )
 }
 inline void operator delete( void*, DummyType* ) {}
 
-#if defined(PRODUCT)
+#ifndef DBG_UTIL
 
 #define _SVVARARR_DEF_GET_OP_INLINE( nm, ArrElem ) \
 ArrElem& operator[](sal_uInt16 nP) const { return *(pData+nP); }\
@@ -128,7 +128,7 @@ void Insert( const nm * pI, sal_uInt16 nP,\
 
 #define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )
 
-#else
+#else // DBG_UTIL
 
 #define _SVVARARR_DEF_GET_OP_INLINE( nm,ArrElem )\
 ArrElem& operator[](sal_uInt16 nP) const;\
@@ -150,7 +150,7 @@ void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
         Insert( (const ArrElem*)pI->pData+nStt, (sal_uInt16)nE-nStt, nP );\
 }
 
-#endif
+#endif // DBG_UTIL
 
 #define _SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\

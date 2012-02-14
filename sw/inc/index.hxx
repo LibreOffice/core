@@ -211,7 +211,7 @@ inline SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
     return *this;
 }
 
-#endif // PRODUCT
+#endif // ifndef DBG_UTIL
 
 #endif
 

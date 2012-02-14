@@ -406,7 +406,7 @@ SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
     return *this;
 }
 
-#endif // ifndef PRODUCT
+#endif // ifdef DBG_UTIL
 
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
