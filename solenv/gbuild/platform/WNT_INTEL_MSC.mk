@@ -467,8 +467,9 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.ilk,$(3)) \
 )
 
+$(if $(filter $(gb_MERGEDLIBS),$(1)),,\
 $(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)))
 
 ifneq ($(ENABLE_CRASHDUMP),)
 $(call gb_Library_get_target,$(1)) \
@@ -480,7 +481,7 @@ endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
+$(if $(filter $(gb_MERGEDLIBS),$(1)),,$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1)))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
