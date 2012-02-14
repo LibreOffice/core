@@ -1,0 +1,4 @@
+A simple i/o library that can read and write common file types and handle structured formats that provide file-system-in-a-file semantics.
+
+From:
+[http://www.gnome.org/projects/libgsf]
