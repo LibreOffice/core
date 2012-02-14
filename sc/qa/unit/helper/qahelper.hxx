@@ -36,9 +36,24 @@
 #include <string>
 #include <sstream>
 
+#include <osl/detail/android-bootstrap.h>
+
 void loadFile(const rtl::OUString& aFileName, std::string& aContent)
 {
     rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
+
+#ifdef ANDROID
+    const char *contents;
+    size_t size;
+    if (strncmp(aOFileName.getStr(), "/assets/", sizeof("/assets/")-1) == 0) {
+        contents = (const char *) lo_apkentry(aOFileName.getStr(), &size);
+        if (contents != 0) {
+            aContent = std::string(contents, size);
+            return;
+        }
+    }
+#endif
+
     std::ifstream aFile(aOFileName.getStr());
 
     rtl::OStringBuffer aErrorMsg("Could not open csv file: ");
