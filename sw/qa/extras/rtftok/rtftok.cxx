@@ -156,7 +156,7 @@ void RtfModelTest::testFdo45543()
             aBuf.append(xRange->getString());
         }
     }
-    CPPUNIT_ASSERT_EQUAL(5, aBuf.getLength());
+    CPPUNIT_ASSERT_EQUAL((sal_Int32)5, aBuf.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
