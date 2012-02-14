@@ -372,7 +372,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         pDPObject->RefreshAfterLoad();
 }
 
-void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember)
+void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
     if (pDPSave)
     {
@@ -399,17 +399,6 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
             case sheet::DataPilotFieldOrientation_HIDDEN:
             default:
                 ;
-        }
-
-        if (bHasHiddenMember)
-        {
-            // the layout name takes priority over the original name,
-            // since this data is used against cell values.
-            const OUString* pLayoutName = pDim->GetLayoutName();
-            if (pLayoutName)
-                maHiddenMemberFields.insert(*pLayoutName);
-            else
-                maHiddenMemberFields.insert(pDim->GetName());
         }
 
         pDPSave->AddDimension(pDim);
@@ -1080,7 +1069,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         {
             pDim->SetCurrentPage(&sSelectedPage);
         }
-        pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
+        pDataPilotTable->AddDimension(pDim);
         if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;

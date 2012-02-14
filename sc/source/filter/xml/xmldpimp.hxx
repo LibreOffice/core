@@ -80,9 +80,6 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
-    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
-    StringSet       maHiddenMemberFields;
-
     struct GrandTotalItem
     {
         ::rtl::OUString maDisplayName;
@@ -161,13 +158,10 @@ public:
     void SetSourceRangeName(const rtl::OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
-//  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
     void SetFilterCopyOutputData(const sal_Bool bValue) { bFilterCopyOutputData = bValue; }
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
-//  void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
-//  void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
-    void AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember);
+    void AddDimension(ScDPSaveDimension* pDim);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
     void SetButtons();
