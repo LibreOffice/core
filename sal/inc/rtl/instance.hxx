@@ -446,7 +446,7 @@ private:
               using the outer class
               (the one that derives from this base class)
 */
-#if (__GNUC__ >= 4)
+#if defined HAVE_THREADSAFE_STATICS
 template<typename T, typename Data, typename Unique>
 class StaticWithArg {
 public:
@@ -528,7 +528,7 @@ private:
     @tparam InitAggregate
               initializer functor class
 */
-#if (__GNUC__ >= 4)
+#if defined HAVE_THREADSAFE_STATICS
 template<typename T, typename InitAggregate>
 class StaticAggregate {
 public:
@@ -593,7 +593,7 @@ public:
               Initializer functor's return type.
               Default is T (common practice).
 */
-#if (__GNUC__ >= 4)
+#if defined HAVE_THREADSAFE_STATICS
 template<typename T, typename InitData,
          typename Unique = InitData, typename Data = T>
 class StaticWithInit {
