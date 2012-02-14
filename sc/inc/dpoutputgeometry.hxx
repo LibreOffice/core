@@ -44,8 +44,7 @@ public:
     ~ScDPOutputGeometry();
 
     /**
-     * @param nCount number of row fields, <b>excluding the data layout
-     *               field if exists</b>.
+     * @param nCount number of row fields.
      */
     void setRowFieldCount(sal_uInt32 nCount);
     void setColumnFieldCount(sal_uInt32 nCount);
@@ -65,7 +64,7 @@ private:
 
 private:
     ScRange     maOutRange;
-    sal_uInt32  mnRowFields;    /// number of row fields (data layout field NOT included!)
+    sal_uInt32  mnRowFields;    /// number of row fields
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;

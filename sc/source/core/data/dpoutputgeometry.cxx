@@ -82,8 +82,6 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
         return;
     }
 
-    bool bDataLayout = mnDataFields > 1;
-
     SCROW nCurRow = maOutRange.aStart.Row();
 
     if (mnPageFields)
@@ -97,7 +95,7 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
     SCROW nRow = nCurRow;
     SCTAB nTab = maOutRange.aStart.Tab();
-    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields + (bDataLayout ? 1 : 0));
+    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields);
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
