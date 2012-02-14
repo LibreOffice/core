@@ -30,6 +30,7 @@
 #include <swatrset.hxx>
 #include <format.hxx>
 #include <swtypes.hxx>
+#include <editeng/adjitem.hxx>
 
 class SwCharFmt;
 class IntlWrapper;
@@ -47,12 +48,12 @@ class IntlWrapper;
 //SwFmtDrop an die Absatze propagiert.
 class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
-    SwModify* pDefinedIn;   // Modify-Object, in dem der DropCaps steht
-                            // kann nur TxtFmtCollection/TxtNode sein
-    sal_uInt16 nDistance;   // Abstand zum Textbeginn
-    sal_uInt16 nReadFmt;    // fuer den Sw3-Reader: CharFormat-Id (Pool laden!)
-    sal_uInt8   nLines;      // Anzahl der Zeilen
-    sal_uInt8   nChars;      // Anzahl der Zeichen
+    SwModify* pDefinedIn;   // Modify-Object, in which DropCaps exists
+                            // can have only TxtFmtCollection/TxtNode
+    sal_uInt16 nDistance;   // Distance from the text beginning
+    sal_uInt16 nReadFmt;    // for the Sw3-Reader: CharFormat-Id (Pool load!)
+    sal_uInt8   nLines;      // Number of lines
+    sal_uInt8   nChars;      // Number of characters
     sal_Bool   bWholeWord;   // Erstes Wort als Initialen
 public:
     TYPEINFO(); //Bereits in der Basisklasse SwClient
