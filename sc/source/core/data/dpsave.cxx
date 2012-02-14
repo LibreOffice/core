@@ -755,7 +755,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
 
     aDimList = r.aDimList.clone();
 
-    if (r.mpGrandTotalName.get())
+    if (r.mpGrandTotalName)
         mpGrandTotalName.reset(new OUString(*r.mpGrandTotalName));
 }
 
@@ -790,14 +790,14 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     if (aDimList != r.aDimList)
         return false;
 
-    if (mpGrandTotalName.get())
+    if (mpGrandTotalName)
     {
-        if (!r.mpGrandTotalName.get())
+        if (!r.mpGrandTotalName)
             return false;
         if (!mpGrandTotalName->equals(*r.mpGrandTotalName))
             return false;
     }
-    else if (r.mpGrandTotalName.get())
+    else if (r.mpGrandTotalName)
         return false;
 
     return true;

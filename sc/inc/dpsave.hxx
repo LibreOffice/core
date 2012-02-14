@@ -30,10 +30,10 @@
 #define SC_DPSAVE_HXX
 
 #include <list>
-#include <memory>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -256,9 +256,7 @@ private:
      *  created. */
     bool mbDimensionMembersBuilt;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<rtl::OUString> mpGrandTotalName;
 
 public:
     SC_DLLPUBLIC ScDPSaveData();
