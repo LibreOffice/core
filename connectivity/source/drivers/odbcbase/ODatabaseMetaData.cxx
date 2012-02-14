@@ -728,43 +728,18 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-
-    // there exists no possibility to get table types so we have to check
-    static ::rtl::OUString sTableTypes[] =
-    {
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM TABLE")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL TEMPORARY")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL TEMPORARY")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALIAS")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYNONYM"))
-    };
-    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
-    Reference< XResultSet > xRef = pResult;
-    SQLUINTEGER nValue = 0;
+    Reference< XResultSet > xRef;
     try
     {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
+        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        xRef = pResult;
+        pResult->openTablesTypes();
     }
-    catch(const Exception&)
+    catch(SQLException&)
     {
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     }
-    sal_Bool bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
-
-    ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
-    for(sal_Int32 i=0;i < nSize;++i)
-    {
-        if( !bViewsSupported && i == 1)
-            continue; // no views supported
-        ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.push_back(::connectivity::ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ::connectivity::ORowSetValueDecorator(sTableTypes[i]));
-        aRows.push_back(aRow);
-    }
-    pResult->setRows(aRows);
-     return xRef;
+    return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
