@@ -74,16 +74,20 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     svx \
     sw \
     swext \
+    test \
+    toolkit \
     ucb \
     UnoControls \
     unoxml \
     uui \
     vbahelper \
+    vcl \
     wizards \
     writerfilter \
     writerperfect \
     xmerge \
     xmloff \
+    xmlscript \
     xmlsecurity \
 ))
 
