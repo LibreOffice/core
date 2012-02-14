@@ -56,7 +56,9 @@ PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix
     #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
     #  7a09bf3a88e99d85c4dec2ad296309dbec2987c3>
     # cppunit-1.12.1-warnings.patch: work around additional warnings (found when
-    #  converting module unotest to gbuild)
+    #  converting module unotest to gbuild); upstreamed as
+    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
+    #  0f75eaa0b8de3d68e8b5b5447fbc009531183cb5>
 
 .IF "$(OS)" == "ANDROID"
 PATCH_FILES += android.patch
