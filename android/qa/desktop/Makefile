@@ -150,9 +150,7 @@ copy-stuff: buildrcs
 		  stocservices.uno \
 		  store \
 		  svllo \
-		  svtlo \
 		  test \
-		  tklo \
 		  tllo \
 		  ucb1 \
 		  ucbhelper4gcc3 \

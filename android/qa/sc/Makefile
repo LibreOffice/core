@@ -95,10 +95,8 @@ copy-stuff:
 		  stocservices.uno \
 		  store \
 		  svllo \
-		  svtlo \
 		  textinstream.uno \
 		  test \
-		  tklo \
 		  tllo \
 		  ucb1 \
 		  ucbhelper4gcc3 \

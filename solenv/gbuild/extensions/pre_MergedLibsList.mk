@@ -47,8 +47,10 @@ gb_MERGEDLIBS := \
 	sfx \
 	sofficeapp \
 	spl \
+	svt \
 	svx \
 	svxcore \
+	tk \
 	uui \
 	xo \
 

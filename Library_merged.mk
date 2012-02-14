@@ -30,13 +30,13 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	cppuhelper \
 	i18nisolang1 \
 	i18npaper \
+    i18nutil \
+    jvmfwk \
 	sal \
 	salhelper \
 	sax \
 	sot \
 	svl \
-	svt \
-	tk \
 	tl \
 	ucbhelper \
 	utl \
@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 
 $(eval $(call gb_Library_use_externals,merged,\
 	icuuc \
+	jpeg \
 	libxml2 \
 	zlib \
 ))
