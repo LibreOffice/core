@@ -134,13 +134,13 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     mnColFieldCount(0),
     mnPageFieldCount(0),
     mnDataFieldCount(0),
-    bIsNative(sal_True),
+    bIsNative(true),
     bIgnoreEmptyRows(false),
     bIdentifyCategories(false),
     bTargetRangeAddress(false),
     bSourceCellRange(false),
-    bShowFilter(sal_True),
-    bDrillDown(sal_True),
+    bShowFilter(true),
+    bDrillDown(true),
     bHeaderGridLayout(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

@@ -217,14 +217,14 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScRange         aConditionSourceRangeAddress;
     sal_uInt8   nFilterFieldCount;
     sal_Int16   nUserListIndex;
-    bool        bSkipDuplicates;
-    bool        bCopyOutputData;
-    bool        bUseRegularExpressions;
-    bool        bIsCaseSensitive;
-    bool        bEnabledUserList;
-    bool        bConnectionOr;
-    bool        bNextConnectionOr;
-    bool        bConditionSourceRange;
+    bool        bSkipDuplicates:1;
+    bool        bCopyOutputData:1;
+    bool        bUseRegularExpressions:1;
+    bool        bIsCaseSensitive:1;
+    bool        bEnabledUserList:1;
+    bool        bConnectionOr:1;
+    bool        bNextConnectionOr:1;
+    bool        bConditionSourceRange:1;
     ::std::stack<bool>  aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

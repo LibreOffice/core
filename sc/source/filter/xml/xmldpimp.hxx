@@ -114,18 +114,14 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     sal_uInt32      mnColFieldCount;
     sal_uInt32      mnPageFieldCount;
     sal_uInt32      mnDataFieldCount;
-    sal_Bool        bIsNative;
-    sal_Bool        bIgnoreEmptyRows;
-    sal_Bool        bIdentifyCategories;
-    sal_Bool        bUseRegularExpression;
-    sal_Bool        bIsCaseSensitive;
-    sal_Bool        bSkipDuplicates;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bTargetRangeAddress;
-    sal_Bool        bSourceCellRange;
-    sal_Bool        bShowFilter;
-    sal_Bool        bDrillDown;
-    sal_Bool        bHeaderGridLayout;
+    bool            bIsNative:1;
+    bool            bIgnoreEmptyRows:1;
+    bool            bIdentifyCategories:1;
+    bool            bTargetRangeAddress:1;
+    bool            bSourceCellRange:1;
+    bool            bShowFilter:1;
+    bool            bDrillDown;
+    bool            bHeaderGridLayout:1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -149,17 +145,16 @@ public:
     void SetGrandTotal(::xmloff::token::XMLTokenEnum eOrientation, bool bVisible, const ::rtl::OUString& rDisplayName);
     void SetDatabaseName(const rtl::OUString& sValue) { sDatabaseName = sValue; }
     void SetSourceObject(const rtl::OUString& sValue) { sSourceObject = sValue; }
-    void SetNative(const sal_Bool bValue) { bIsNative = bValue; }
+    void SetNative(bool bValue) { bIsNative = bValue; }
     void SetServiceName(const rtl::OUString& sValue) { sServiceName = sValue; }
     void SetServiceSourceName(const rtl::OUString& sValue) { sServiceSourceName = sValue; }
     void SetServiceSourceObject(const rtl::OUString& sValue) { sServiceSourceObject = sValue; }
     void SetServiceUsername(const rtl::OUString& sValue) { sServiceUsername = sValue; }
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
     void SetSourceRangeName(const rtl::OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
-    void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
+    void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = true; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
-    void SetFilterCopyOutputData(const sal_Bool bValue) { bFilterCopyOutputData = bValue; }
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
     void AddDimension(ScDPSaveDimension* pDim);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);

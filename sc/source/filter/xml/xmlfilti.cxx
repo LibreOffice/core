@@ -641,16 +641,9 @@ void ScXMLDPFilterContext::EndElement()
     aFilterFields.bRegExp = bUseRegularExpressions;
     aFilterFields.bCaseSens = bIsCaseSensitive;
     aFilterFields.bDuplicate = !bSkipDuplicates;
-//  pDataPilotTable->SetFilterUseRegularExpressions(bUseRegularExpressions);
     if (bCopyOutputData)
-    {
         pDataPilotTable->SetFilterOutputPosition(aOutputPosition);
-        pDataPilotTable->SetFilterCopyOutputData(bCopyOutputData);
-    }
-    else
-        pDataPilotTable->SetFilterCopyOutputData(false);
-//  pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
-//  pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
+
     pDataPilotTable->SetSourceQueryParam(aFilterFields);
     if (bConditionSourceRange)
         pDataPilotTable->SetFilterSourceRange(aConditionSourceRangeAddress);
