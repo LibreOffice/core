@@ -70,7 +70,7 @@ public:
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
-//    CPPUNIT_TEST(testThai);
+    CPPUNIT_TEST(testThai);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -264,13 +264,13 @@ void TestBreakIterator::testThai()
     {
         const sal_Unicode THAI1[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
         ::rtl::OUString aTest(THAI1, SAL_N_ELEMENTS(THAI1));
-
         aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_MESSAGE("Should skip full word",
             aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
     }
 
+#ifdef TODO
     {
         const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
         ::rtl::OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
@@ -279,6 +279,7 @@ void TestBreakIterator::testThai()
         CPPUNIT_ASSERT_MESSAGE("Should skip full word",
             aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
     }
+#endif
 }
 
 TestBreakIterator::TestBreakIterator()
