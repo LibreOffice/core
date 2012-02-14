@@ -6,6 +6,8 @@
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
 #endif
 
+#include <rtl/string.hxx>
+
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -16,9 +18,10 @@
 
 using namespace lucene::document;
 
-HelpIndexer::HelpIndexer(std::string const &lang, std::string const &module,
-	std::string const &captionDir, std::string const &contentDir, std::string const &indexDir) :
-d_lang(lang), d_module(module), d_captionDir(captionDir), d_contentDir(contentDir), d_indexDir(indexDir), d_error(""), d_files() {}
+HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
+	rtl::OUString const &captionDir, rtl::OUString const &contentDir, rtl::OUString const &indexDir) :
+d_lang(lang), d_module(module), d_captionDir(captionDir), d_contentDir(contentDir), d_indexDir(indexDir),
+d_error(), d_files() {}
 
 bool HelpIndexer::indexDocuments() {
 	if (!scanForFiles()) {
@@ -28,7 +31,7 @@ bool HelpIndexer::indexDocuments() {
 #ifdef TODO
 	// Construct the analyzer appropriate for the given language
 	lucene::analysis::Analyzer *analyzer = (
-		d_lang.compare("ja") == 0 ?
+		d_lang.compareToAscii("ja") == 0 ?
 		(lucene::analysis::Analyzer*)new lucene::analysis::LanguageBasedAnalyzer(L"cjk") :
 		(lucene::analysis::Analyzer*)new lucene::analysis::standard::StandardAnalyzer());
 #else
@@ -36,11 +39,13 @@ bool HelpIndexer::indexDocuments() {
 		(lucene::analysis::Analyzer*)new lucene::analysis::standard::StandardAnalyzer());
 #endif
 
-	lucene::index::IndexWriter writer(d_indexDir.c_str(), analyzer, true);
+	rtl::OString indexDirStr;
+	d_indexDir.convertToString(&indexDirStr, RTL_TEXTENCODING_ASCII_US, 0);
+	lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer, true);
 
 	// Index the identified help files
 	Document doc;
-	for (std::set<std::string>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
+	for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
 		doc.clear();
 		if (!helpDocument(*i, &doc)) {
 			delete analyzer;
@@ -56,7 +61,7 @@ bool HelpIndexer::indexDocuments() {
 	return true;
 }
 
-std::string const & HelpIndexer::getErrorMessage() {
+rtl::OUString const & HelpIndexer::getErrorMessage() {
 	return d_error;
 }
 
@@ -70,18 +75,23 @@ bool HelpIndexer::scanForFiles() {
 	return true;
 }
 
-bool HelpIndexer::scanForFiles(std::string const & path) {
-	DIR *dir = opendir(path.c_str());
+bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
+	rtl::OString pathStr;
+	path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0);
+	DIR *dir = opendir(pathStr.getStr());
 	if (dir == 0) {
-		d_error = "Error reading directory " + path + strerror(errno);
+		d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path +
+			 rtl::OUString::createFromAscii(strerror(errno));
 		return true;
 	}
 
 	struct dirent *ent;
 	struct stat info;
 	while ((ent = readdir(dir)) != 0) {
-		if (stat((path + "/" + ent->d_name).c_str(), &info) == 0 && S_ISREG(info.st_mode)) {
-			d_files.insert(ent->d_name);
+		rtl::OString entPath(pathStr);
+		entPath += rtl::OString(RTL_CONSTASCII_STRINGPARAM("/")) + rtl::OString(ent->d_name);
+		if (stat(entPath.getStr(), &info) == 0 && S_ISREG(info.st_mode)) {
+			d_files.insert(rtl::OUString::createFromAscii(ent->d_name));
 		}
 	}
 
@@ -90,34 +100,31 @@ bool HelpIndexer::scanForFiles(std::string const & path) {
 	return true;
 }
 
-bool HelpIndexer::helpDocument(std::string const & fileName, Document *doc) {
+bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
 	// Add the help path as an indexed, untokenized field.
-	std::wstring path(L"#HLP#" + string2wstring(d_module) + L"/" + string2wstring(fileName));
-	doc->add(*new Field(_T("path"), path.c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+	rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#HLP#")) + d_module + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
+	// FIXME: the (TCHAR*) cast is a problem, because TCHAR does not match sal_Unicode
+	doc->add(*new Field(_T("path"), (TCHAR*)path.getStr(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
 	// Add the caption as a field.
-	std::string captionPath = d_captionDir + "/" + fileName;
+	rtl::OUString captionPath = d_captionDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
 	doc->add(*new Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 	// FIXME: does the Document take responsibility for the FileReader or should I free it somewhere?
 
 	// Add the content as a field.
-	std::string contentPath = d_contentDir + "/" + fileName;
+	rtl::OUString contentPath = d_contentDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
 	doc->add(*new Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 	// FIXME: does the Document take responsibility for the FileReader or should I free it somewhere?
 
 	return true;
 }
 
-lucene::util::Reader *HelpIndexer::helpFileReader(std::string const & path) {
-	if (access(path.c_str(), R_OK) == 0) {
-		return new lucene::util::FileReader(path.c_str(), "UTF-8");
+lucene::util::Reader *HelpIndexer::helpFileReader(rtl::OUString const & path) {
+	rtl::OString pathStr;
+	path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0);
+	if (access(pathStr.getStr(), R_OK) == 0) {
+		return new lucene::util::FileReader(pathStr.getStr(), "UTF-8");
 	} else {
 		return new lucene::util::StringReader(L"");
 	}
-}
-
-std::wstring HelpIndexer::string2wstring(std::string const &source) {
-	std::wstring target(source.length(), L' ');
-	std::copy(source.begin(), source.end(), target.begin());
-	return target;
 }

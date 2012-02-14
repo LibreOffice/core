@@ -57,9 +57,14 @@ int main(int argc, char **argv) {
 	std::string captionDir(srcDir + "/caption");
 	std::string contentDir(srcDir + "/content");
 	std::string indexDir(outDir + "/" + module + ".idxl");
-	HelpIndexer indexer(lang, module, captionDir, contentDir, indexDir);
+	HelpIndexer indexer(
+		rtl::OUString::createFromAscii(lang.c_str()),
+		rtl::OUString::createFromAscii(module.c_str()),
+		rtl::OUString::createFromAscii(captionDir.c_str()),
+		rtl::OUString::createFromAscii(contentDir.c_str()),
+		rtl::OUString::createFromAscii(indexDir.c_str()));
 	if (!indexer.indexDocuments()) {
-		std::cerr << indexer.getErrorMessage() << std::endl;
+		std::wcerr << indexer.getErrorMessage().getStr() << std::endl;
 		return 2;
 	}
 	return 0;

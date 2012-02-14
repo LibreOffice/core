@@ -4,20 +4,20 @@
 #include <CLucene/StdHeader.h>
 #include <CLucene.h>
 
-#include <string>
+#include <rtl/ustring.hxx>
 #include <set>
 
 // I assume that TCHAR is defined as wchar_t throughout
 
 class HelpIndexer {
 	private:
-		std::string d_lang;
-		std::string d_module;
-		std::string d_captionDir;
-		std::string d_contentDir;
-		std::string d_indexDir;
-		std::string d_error;
-		std::set<std::string> d_files;
+		rtl::OUString d_lang;
+		rtl::OUString d_module;
+		rtl::OUString d_captionDir;
+		rtl::OUString d_contentDir;
+		rtl::OUString d_indexDir;
+		rtl::OUString d_error;
+		std::set<rtl::OUString> d_files;
 
 	public:
 
@@ -28,9 +28,9 @@ class HelpIndexer {
 	 * @param contentDir The directory to scan for content files.
 	 * @param indexDir The directory to write the index to.
 	 */
-	HelpIndexer(std::string const &lang, std::string const &module,
-		std::string const &captionDir, std::string const &contentDir,
-		std::string const &indexDir);
+	HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
+		rtl::OUString const &captionDir, rtl::OUString const &contentDir,
+		rtl::OUString const &indexDir);
 
 	/**
 	 * Run the indexer.
@@ -41,7 +41,7 @@ class HelpIndexer {
 	/**
 	 * Get the error string (empty if no error occurred).
 	 */
-	std::string const & getErrorMessage();
+	rtl::OUString const & getErrorMessage();
 
 	private:
 
@@ -53,19 +53,17 @@ class HelpIndexer {
 	/**
 	 * Scan for files in the given directory.
 	 */
-	bool scanForFiles(std::string const &path);
+	bool scanForFiles(rtl::OUString const &path);
 
 	/**
 	 * Fill the Document with information on the given help file.
 	 */
-	bool helpDocument(std::string const & fileName, lucene::document::Document *doc);
+	bool helpDocument(rtl::OUString const & fileName, lucene::document::Document *doc);
 
 	/**
 	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
 	 */
-	lucene::util::Reader *helpFileReader(std::string const & path);
-
-	std::wstring string2wstring(std::string const &source);
+	lucene::util::Reader *helpFileReader(rtl::OUString const & path);
 };
 
 #endif
