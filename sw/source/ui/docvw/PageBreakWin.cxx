@@ -333,9 +333,13 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     }
 
     const SwPageFrm* pPageFrm = GetPageFrame();
-    const SwFrm* pPrevPage = pPageFrm->GetPrev();
-    while ( pPrevPage && ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) ) )
+    const SwFrm* pPrevPage = pPageFrm;
+    do
+    {
         pPrevPage = pPrevPage->GetPrev();
+    }
+    while ( pPrevPage && ( ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) )
+                || static_cast< const SwPageFrm* >( pPrevPage )->IsEmptyPage( ) ) );
 
     Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrm->GetBoundRect().SVRect() );
     Rectangle aFrmRect = GetEditWin()->LogicToPixel( pPageFrm->Frm().SVRect() );
