@@ -90,30 +90,4 @@ sub sort_array_of_hashes_numerically
     }
 }
 
-#########################################
-# Sorting an array of of strings
-#########################################
-
-sub sorting_array_of_strings
-{
-    my ($arrayref) = @_;
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $onestringunder = ${$arrayref}[$i];
-
-        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
-        {
-            my $onestringover = ${$arrayref}[$j];
-
-            if ( $onestringunder gt $onestringover)
-            {
-                ${$arrayref}[$i] = $onestringover;
-                ${$arrayref}[$j] = $onestringunder;
-                $onestringunder = $onestringover;
-            }
-        }
-    }
-}
-
 1;

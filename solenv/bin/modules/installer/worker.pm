@@ -42,7 +42,6 @@ use installer::logger;
 use installer::pathanalyzer;
 use installer::scpzipfiles;
 use installer::scriptitems;
-use installer::sorter;
 use installer::systemactions;
 use installer::windows::language;
 
@@ -1533,23 +1532,6 @@ sub shift_file_to_end
 }
 
 ###########################################################
-# Putting hash content into array and sorting it
-###########################################################
-
-sub sort_hash
-{
-    my ( $hashref ) =  @_;
-
-    my $item = "";
-    my @sortedarray = ();
-
-    foreach $item (keys %{$hashref}) { push(@sortedarray, $item); }
-    installer::sorter::sorting_array_of_strings(\@sortedarray);
-
-    return \@sortedarray;
-}
-
-###########################################################
 # Renaming Windows files in Patch and creating file
 # patchfiles.txt
 ###########################################################
@@ -1611,7 +1593,7 @@ sub prepare_windows_patchfiles
     my $patchlistfile = installer::existence::get_specified_file_by_name($filesref, $patchfilename);
 
     # reorganizing the patchfile content, sorting for directory to decrease the file size
-    my $sorteddirectorylist = sort_hash(\%patchfiledirectories);
+    my $sorteddirectorylist = [ sort keys %patchfiledirectories ];
     my $patchfilelist = reorg_patchfile(\@patchfiles, $sorteddirectorylist);
 
     # shifting version.ini to the end of the list, to guarantee, that all files are patched
