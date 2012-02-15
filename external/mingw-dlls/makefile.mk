@@ -54,8 +54,8 @@ MINGW_DLLS+=$(MINGW_GXXDLL)
 # Guesstimate where the DLLs can be
 
 POTENTIAL_MINGW_RUNTIME_BINDIRS = \
-	$(COMPATH)/i686-w64-mingw32/sys-root/mingw/bin \
-	/usr/i686-w64-mingw32/sys-root/mingw/bin \
+	$(COMPATH)/$(HOST_PLATFORM)/sys-root/mingw/bin \
+	/usr/$(HOST_PLATFORM)/sys-root/mingw/bin \
 
 all:
 	@for DLL in $(MINGW_DLLS) ; do \
