@@ -67,8 +67,6 @@ LIBXSLTINCDIR=external$/libxslt
 CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 .ENDIF
 
-CFLAGS+= -I$(SRC_ROOT)$/l10ntools$/source$/help
-
 PKGCONFIG_MODULES=libclucene-core libclucene-contribs-lib
 .INCLUDE : pkg_config.mk
 

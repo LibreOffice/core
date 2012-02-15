@@ -29,13 +29,15 @@ PRJ		= ..$/..
 PRJNAME = l10ntools
 TARGET  = HelpLinker
 LIBBASENAME = helplinker
-PACKAGE = com$/sun$/star$/help
 TARGETTYPE=CUI
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
 .INCLUDE : helplinker.pmk
+
+CFLAGS+=-DL10N_DLLIMPLEMENTATION
  
 .IF "$(SYSTEM_LIBXSLT)" == "YES"
 CFLAGS+= $(LIBXSLT_CFLAGS)
@@ -52,18 +54,14 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
-SLOFILES=\
-        $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
-
-EXCEPTIONSFILES=\
-        $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj \
         $(OBJ)$/HelpIndexer.obj \
-        $(OBJ)$/HelpIndexer_main.obj \
+        $(OBJ)$/HelpIndexer_main.obj
+
+SLOFILES=\
         $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
+        $(SLO)$/HelpCompiler.obj \
+        $(SLO)$/HelpIndexer.obj
 
 .IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
 # There appears to be a GCC 4.0.1 optimization error causing _file:good() to
@@ -100,7 +98,7 @@ SHL1IMPLIB	=i$(LIBBASENAME)
 SHL1IMPLIB	=$(LIBBASENAME)$(DLLPOSTFIX)
 .ENDIF
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
-SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
+SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB) $(PKGCONFIG_LIBS)
 SHL1USE_EXPORTS	=ordinal
 
 DEF1NAME	=$(SHL1TARGET) 

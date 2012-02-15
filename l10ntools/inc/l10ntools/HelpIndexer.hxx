@@ -1,6 +1,8 @@
 #ifndef HELPINDEXER_HXX
 #define HELPINDEXER_HXX
 
+#include <l10ntools/dllapi.h>
+
 #include <CLucene/StdHeader.h>
 #include <CLucene.h>
 
@@ -9,7 +11,7 @@
 
 // I assume that TCHAR is defined as wchar_t throughout
 
-class HelpIndexer {
+class L10N_DLLPUBLIC HelpIndexer {
 	private:
 		rtl::OUString d_lang;
 		rtl::OUString d_module;

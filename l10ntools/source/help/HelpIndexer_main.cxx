@@ -1,4 +1,4 @@
-#include "HelpIndexer.hxx"
+#include <l10ntools/HelpIndexer.hxx>
 
 #include <string>
 #include <iostream>

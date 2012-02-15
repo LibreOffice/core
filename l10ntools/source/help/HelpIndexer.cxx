@@ -1,4 +1,4 @@
-#include "HelpIndexer.hxx"
+#include <l10ntools/HelpIndexer.hxx>
 
 #define TODO
 
@@ -100,11 +100,27 @@ bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
 	return true;
 }
 
+std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr)
+{
+    //UTF-16
+    if (sizeof(wchar_t) == sizeof(sal_Unicode))
+        return std::vector<TCHAR>(rStr.getStr(), rStr.getStr() + rStr.getLength());
+
+    //UTF-32
+    std::vector<TCHAR> aRet;
+    for (sal_Int32 nStrIndex = 0; nStrIndex < rStr.getLength();)
+    {
+        const sal_uInt32 nCode = rStr.iterateCodePoints(&nStrIndex);
+        aRet.push_back(nCode);
+    }
+    return aRet;
+}
+
 bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
 	// Add the help path as an indexed, untokenized field.
 	rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#HLP#")) + d_module + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
-	// FIXME: the (TCHAR*) cast is a problem, because TCHAR does not match sal_Unicode
-	doc->add(*new Field(_T("path"), (TCHAR*)path.getStr(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+	std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
+	doc->add(*new Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
 	// Add the caption as a field.
 	rtl::OUString captionPath = d_captionDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;

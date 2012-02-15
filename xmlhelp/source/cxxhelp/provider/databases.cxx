@@ -41,7 +41,7 @@
 
 // EDIT FROM HERE
 
-#include <HelpIndexer.hxx>
+#include <l10ntools/HelpIndexer.hxx>
 
 // EDIT ENDS HERE
 
