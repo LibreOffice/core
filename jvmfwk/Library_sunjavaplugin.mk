@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
 endif
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_libs,sunjavaplugin,\
+$(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
     advapi32 \
     uwinapi \
 ))

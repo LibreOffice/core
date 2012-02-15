@@ -47,7 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,jvmfwk,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_libs,jvmfwk,\
+$(eval $(call gb_Library_add_linked_libs,jvmfwk,\
     advapi32 \
 ))
 endif
