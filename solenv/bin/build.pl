@@ -2979,7 +2979,8 @@ sub generate_html_file {
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Job</strong></td>");' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Start Time</strong></td>");' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Finish Time</strong></td>");' . "\n";
-    print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Client</strong></td>");' . "\n" if ($server_mode);
+    print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Client</strong></td>");' . "\n";
+    print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Link</strong></td>");' . "\n" if ($server_mode);
     print HTML '        top.innerFrame.frames[1].document.write("    </tr>");' . "\n";
     print HTML '        var dir_info_strings = Message2.split("<br><br>");' . "\n";
     print HTML '        for (i = 0; i < dir_info_strings.length; i++) {' . "\n";
@@ -2995,7 +2996,8 @@ sub generate_html_file {
     print HTML '            };' . "\n";
     print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[2] + "</td>");' . "\n";
     print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[3] + "</td>");' . "\n";
-    print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[5] + "</td>");' . "\n" if ($server_mode);
+    print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[5] + "</td>");' . "\n";
+    print HTML '            top.innerFrame.frames[1].document.write("        <td align=center><a target=\"_blank\" href=\"" + dir_info_array[4] + "\">link</a></td>");' . "\n" if ($server_mode);
     print HTML '            top.innerFrame.frames[1].document.write("    </tr>");' . "\n";
     print HTML '        };' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("</table>");' . "\n";
