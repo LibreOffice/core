@@ -2032,37 +2032,34 @@ dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
 if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \) ; then
-    if test -z "$CC" ; then
-        if test -z "$CXX" ; then
-            AC_PATH_PROG([CCACHE],[ccache],[not found])
-            if test "$CCACHE" = "not found" ; then
-                CCACHE=""
-            else
-                CCACHE="ccache"
-                # need to check for ccache version: otherwise prevents
-                # caching of the results (like "-x objective-c++" for Mac)
-                if test $_os = Darwin -o $_os = iOS; then
-                    # check ccache version
-                    AC_MSG_CHECKING([whether version of ccache is suitable])
-                    CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
-                    CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                    if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
-                        AC_MSG_RESULT([yes])
-                    else
-                        AC_MSG_RESULT([no])
-                        AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. ccache will not be used.])
-                        CCACHE=""
-                    fi
+    case "%$CC%$CXX%" in
+    # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some verison number etc),
+    # assume that's good then
+    ccache[[-_' ']]*|*/ccache[[-_' ']]*)
+        AC_MSG_NOTICE([ccache seems to be included in a pre-defined CC and/or CXX])
+        ;;
+    *)
+        AC_PATH_PROG([CCACHE],[ccache],[not found])
+        if test "$CCACHE" = "not found" ; then
+            CCACHE=""
+        else
+            # Need to check for ccache version: otherwise prevents
+            # caching of the results (like "-x objective-c++" for Mac)
+            if test $_os = Darwin -o $_os = iOS; then
+                # Check ccache version
+                AC_MSG_CHECKING([whether version of ccache is suitable])
+                CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
+                CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
+                    AC_MSG_RESULT([yes, $CCACHE_VERSION])
+                else
+                    AC_MSG_RESULT([no, $CCACHE_VERSION])
+                    CCACHE=""
                 fi
             fi
-        else
-            AC_MSG_NOTICE([Automatic ccache detection ignored: CXX is pre-defined])
-            CCACHE=""
         fi
-    else
-        AC_MSG_NOTICE([Automatic ccache detection ignored: CC is pre-defined])
-        CCACHE=""
-    fi
+        ;;
+    esac
 else
     CCACHE=""
 fi
