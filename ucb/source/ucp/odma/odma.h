@@ -29,10 +29,10 @@ typedef int ODMSTATUS;
 #endif
 
 #define ODM_DMSID_MAX           9       /* Max length of a DMS ID including the
-                                        /* terminating NULL character.  */
+                                           terminating NULL character.  */
 
 #define ODM_APPID_MAX           16      /* Max length of a application ID including
-                                        /* the terminating NULL character.  */
+                                           the terminating NULL character.  */
 
 // ODMA 2.0
 #define ODM_QUERYID_MAX         255     // Max length of a query ID including
