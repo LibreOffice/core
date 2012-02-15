@@ -117,15 +117,15 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
 {
     SolarMutexGuard aGuard;
 
-    const sal_Int32 nCount = mxForbiddenChars.is() ? mxForbiddenChars->Map().size() : 0;
+    const sal_Int32 nCount = mxForbiddenChars.is() ? mxForbiddenChars->GetMap().size() : 0;
 
     Sequence< Locale > aLocales( nCount );
     if( nCount )
     {
         Locale* pLocales = aLocales.getArray();
 
-        for( SvxForbiddenCharactersTable::CharInfoMap::iterator it = mxForbiddenChars->Map().begin();
-             it != mxForbiddenChars->Map().end(); ++it )
+        for( SvxForbiddenCharactersTable::Map::iterator it = mxForbiddenChars->GetMap().begin();
+             it != mxForbiddenChars->GetMap().end(); ++it )
         {
             const sal_uLong nLanguage = it->first;
             SvxLanguageToLocale ( *pLocales++, static_cast < LanguageType > (nLanguage) );

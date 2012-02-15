@@ -45,17 +45,17 @@ namespace lang {
 class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public salhelper::SimpleReferenceObject
 {
 public:
-    typedef std::map<sal_uInt16, com::sun::star::i18n::ForbiddenCharacters> CharInfoMap;
+    typedef std::map<sal_uInt16, com::sun::star::i18n::ForbiddenCharacters> Map;
 private:
-    mutable CharInfoMap maCharInfoMap;
+    Map maMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
 public:
     SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
     ~SvxForbiddenCharactersTable() {}
 
-    inline CharInfoMap& Map() { return maCharInfoMap; }
-    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault ) const;
+    Map& GetMap() { return maMap; }
+    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault );
     void    SetForbiddenCharacters(  sal_uInt16 nLanguage , const com::sun::star::i18n::ForbiddenCharacters& );
     void    ClearForbiddenCharacters( sal_uInt16 nLanguage );
 };

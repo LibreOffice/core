@@ -39,31 +39,29 @@ SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno:
     mxMSF = xMSF;
 }
 
-const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault ) const
+const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault )
 {
-    com::sun::star::i18n::ForbiddenCharacters* pInf = NULL;
-    CharInfoMap::iterator it = maCharInfoMap.find( nLanguage );
-    if ( it != maCharInfoMap.end() )
-        pInf = &(it->second);
-    if ( !pInf && bGetDefault && mxMSF.is() )
+    com::sun::star::i18n::ForbiddenCharacters* pForbiddenCharacters = NULL;
+    Map::iterator it = maMap.find( nLanguage );
+    if ( it != maMap.end() )
+        pForbiddenCharacters = &(it->second);
+    else if ( bGetDefault && mxMSF.is() )
     {
         LocaleDataWrapper aWrapper( mxMSF, SvxCreateLocale( nLanguage ) );
-        maCharInfoMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
-        pInf = &maCharInfoMap[ nLanguage ];
+        maMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
+        pForbiddenCharacters = &maMap[ nLanguage ];
     }
-    return pInf;
+    return pForbiddenCharacters;
 }
 
 void SvxForbiddenCharactersTable::SetForbiddenCharacters( sal_uInt16 nLanguage, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenChars )
 {
-    maCharInfoMap[ nLanguage ] = rForbiddenChars;
+    maMap[ nLanguage ] = rForbiddenChars;
 }
 
 void SvxForbiddenCharactersTable::ClearForbiddenCharacters( sal_uInt16 nLanguage )
 {
-    CharInfoMap::iterator it = maCharInfoMap.find( nLanguage );
-    if ( it != maCharInfoMap.end() )
-        maCharInfoMap.erase( it );
+    maMap.erase( nLanguage );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
