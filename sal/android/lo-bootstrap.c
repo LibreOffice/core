@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -48,7 +49,7 @@
 
 #include "uthash.h"
 
-#include "lo-bootstrap.h"
+#include "osl/detail/android-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 
@@ -641,7 +642,8 @@ lo_dlneeds(const char *library)
     int i, fd;
     int n_needed;
     char **result;
-    char *shstrtab, *dynstr;
+    char *shstrtab;
+    char *dynstr = NULL;
     Elf32_Ehdr hdr;
     Elf32_Shdr shdr;
     Elf32_Dyn dyn;
@@ -767,7 +769,8 @@ lo_dlneeds(const char *library)
             }
 
             close(fd);
-            free(dynstr);
+            if (dynstr)
+                free(dynstr);
             free(shstrtab);
             result[n_needed] = NULL;
             return result;
@@ -812,6 +815,8 @@ lo_dlopen(const char *library)
     char **needed;
     int i;
     int found;
+
+    struct timeval tv0, tv1, tvdiff;
 
     rover = loaded_libraries;
     while (rover != NULL &&
@@ -867,8 +872,13 @@ lo_dlopen(const char *library)
     }
     free_ptrarray((void **) needed);
 
+    gettimeofday(&tv0, NULL);
     p = dlopen(full_name, RTLD_LOCAL);
-    LOGI("dlopen(%s) = %p", full_name, p);
+    gettimeofday(&tv1, NULL);
+    timersub(&tv1, &tv0, &tvdiff);
+    LOGI("dlopen(%s) = %p, %ld.%03lds",
+         full_name, p,
+         (long) tvdiff.tv_sec, (long) tvdiff.tv_usec / 1000);
     free(full_name);
     if (p == NULL)
         LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
@@ -947,6 +957,19 @@ lo_dladdr(void *addr,
     fclose(maps);
 
     return result;
+}
+
+__attribute__ ((visibility("default")))
+int
+lo_dlclose(void *handle)
+{
+    /* As we don't know when the reference count for a dlopened shared
+     * object drops to zero, we wouldn't know when to remove it from
+     * our list, so we can't call dlclose().
+     */
+    LOGI("lo_dlclose(%p)", handle);
+
+    return 0;
 }
 
 __attribute__ ((visibility("default")))
@@ -1079,7 +1102,7 @@ new_stat(const char *path,
     struct tm tm;
 
     memset(statp, 0, sizeof(*statp));
-    statp->st_mode = mode | S_IRUSR | S_IRGRP | S_IROTH;
+    statp->st_mode = mode | S_IRUSR;
     statp->st_nlink = 1;
 
     statp->st_uid = getuid();
@@ -1131,7 +1154,7 @@ lo_apk_lstat(const char *path,
     if (*pn == '/') {
         pn++;
         if (!pn[0])
-            return new_stat(path, statp, NULL, S_IFDIR, 1);
+            return new_stat(path, statp, NULL, S_IFDIR | S_IXUSR, 1);
     }
 
     name_size = strlen(pn);
@@ -1147,7 +1170,7 @@ lo_apk_lstat(const char *path,
         if (letoh16(entry->filename_size) == name_size)
             return new_stat(path, statp, entry, S_IFREG, cdir_entries - count + 1);
         else
-            return new_stat(path, statp, entry, S_IFDIR, cdir_entries - count + 1);
+            return new_stat(path, statp, entry, S_IFDIR | S_IXUSR, cdir_entries - count + 1);
     }
 
     errno = ENOENT;
@@ -1402,7 +1425,7 @@ extract_files(const char *prefix)
 
             apkentry = lo_apkentry(filename, &size);
             if (apkentry == NULL) {
-                LOGE("extract_files: Could not find %s in .apk", newfilename);
+                LOGE("extract_files: Could not find %s in .apk", filename);
                 free(filename);
                 continue;
             }
@@ -1480,8 +1503,25 @@ __attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {
+    jint nRet;
+    JNIEnv *pEnv = NULL;
     struct engine engine;
     Dl_info lo_main_info;
+    JavaVMAttachArgs aArgs = {
+        JNI_VERSION_1_2,
+        "LibreOfficeThread",
+        NULL
+    };
+
+    fprintf (stderr, "android_main in thread: %d\n", (int)pthread_self());
+
+    if (sleep_time != 0) {
+        LOGI("android_main: Sleeping for %d seconds, start ndk-gdb NOW if that is your intention", sleep_time);
+        sleep(sleep_time);
+    }
+
+    nRet = (*(*state->activity->vm)->AttachCurrentThreadAsDaemon)(state->activity->vm, &pEnv, &aArgs);
+    fprintf (stderr, "attach thread returned %d %p\n", nRet, pEnv);
 
     app = state;
 
@@ -1493,16 +1533,12 @@ android_main(struct android_app* state)
         lo_main_argv[0] = lo_main_info.dli_fname;
     }
 
-    if (sleep_time != 0)
-        sleep(sleep_time);
-
     patch_libgnustl_shared();
 
     extract_files(UNPACK_TREE);
 
     lo_main(lo_main_argc, lo_main_argv);
-
-    exit(0);
+    fprintf (stderr, "exit android_main\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

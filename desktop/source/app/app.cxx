@@ -102,6 +102,8 @@
 #include <sys/wait.h>
 #endif
 
+extern void VCL_DLLPUBLIC plasma_now(const char *msg);
+
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
@@ -1470,12 +1472,16 @@ int Desktop::Main()
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
+//    ::plasma_now("after desktoppy bits"); - fine to here ...
+
     // Startup screen
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
     OpenSplashScreen();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
     SetSplashScreenProgress(10);
+
+//    ::plasma_now("after splash open");
     {
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_fin != UserInstall::E_None)
@@ -1502,6 +1508,8 @@ int Desktop::Main()
     try
     {
         RegisterServices( xSMgr );
+
+//        ::plasma_now("registered services");
 
         SetSplashScreenProgress(25);
 
@@ -1547,6 +1555,8 @@ int Desktop::Main()
         if ( !InitializeConfiguration() )
             return EXIT_FAILURE;
 
+//        ::plasma_now("init configuration");
+
         SetSplashScreenProgress(30);
 
         // set static variable to enabled/disable crash reporter
@@ -1564,6 +1574,8 @@ int Desktop::Main()
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
+//        ::plasma_now("after title string");
+
 #ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
@@ -1579,6 +1591,8 @@ int Desktop::Main()
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
+
+//        ::plasma_now("unrestricted folders"); -- got this.
 
         // Check special env variable
         std::vector< String > aUnrestrictedFolders;
@@ -1600,6 +1614,8 @@ int Desktop::Main()
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
+        ::plasma_now("done global event broadcaster");
+
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
            and else can deadlock while creating this window from another tread while
@@ -1607,6 +1623,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
+#ifndef ANDROID
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
@@ -1624,6 +1641,7 @@ int Desktop::Main()
         pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
         Migration::migrateSettingsIfNecessary();
+#endif
 
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
@@ -1634,6 +1652,8 @@ int Desktop::Main()
             aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp"));
             pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
         }
+
+        ::plasma_now("invoked OnStartupApp");
 
         SetSplashScreenProgress(50);
 
@@ -1663,6 +1683,8 @@ int Desktop::Main()
             pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
             aMiscOptions.SetUseSystemFileDialog( sal_False );
         }
+
+        ::plasma_now("nearly there !");
 
         if ( !pExecGlobals->bRestartRequested )
         {
@@ -1733,6 +1755,8 @@ int Desktop::Main()
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
 
+    ::plasma_now("setup appearance !");
+
     if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
@@ -1766,6 +1790,8 @@ int Desktop::Main()
         // Release solar mutex just before we wait for our client to connect
         int nAcquireCount = Application::ReleaseSolarMutex();
 
+        ::plasma_now("wait client connect !");
+
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
         // minimize the risk that this message overtakes type detection contruction!!
@@ -1784,6 +1810,8 @@ int Desktop::Main()
         // call Application::Execute to process messages in vcl message loop
         RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
+        ::plasma_now("before java foo !");
+
         try
         {
             // The JavaContext contains an interaction handler which is used when
@@ -1798,6 +1826,15 @@ int Desktop::Main()
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
+
+                ::plasma_now("pre hit execute!");
+
+                // For some reason we're not getting a desktop frame or component [odd]
+                ErrorBox aKickStartVCL( NULL, WB_OK, rtl::OUString::createFromAscii("My very own title!") );
+                aKickStartVCL.SetText( rtl::OUString::createFromAscii("Delphic Utterance") );
+                aKickStartVCL.Show(); // don't execute - just leave it lying around ....
+
+                ::plasma_now("hit execute!");
 
                 Execute();
             }

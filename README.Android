@@ -15,6 +15,7 @@ Then it is necessary to get stdout/err to go to somewhere we can find it:
 
 	Then:
 
+	. Env.Host.sh
 	cd android/qa/sc
 	make clean all install
 	make run ; adb shell logcat

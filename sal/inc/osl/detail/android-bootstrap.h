@@ -27,6 +27,8 @@
  * instead of those above.
  */
 
+#ifndef ANDROID_BOOSTRAP_H
+#define ANDROID_BOOSTRAP_H
 #if defined(ANDROID)
 
 #include <jni.h>
@@ -48,6 +50,8 @@ void *lo_dlsym(void *handle,
 
 int lo_dladdr(void *addr,
               Dl_info *info);
+
+int lo_dlclose(void *handle);
 
 void *lo_apkentry(const char *filename,
                   size_t *size);
@@ -72,6 +76,7 @@ struct android_app *lo_get_app(void);
 }
 #endif
 
-#endif
+#endif // ANDROID
+#endif // ANDROID_BOOTSTRAP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

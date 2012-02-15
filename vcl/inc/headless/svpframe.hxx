@@ -41,9 +41,9 @@ class SvpSalGraphics;
 class SvpSalFrame : public SalFrame, public SvpElement
 {
     SvpSalInstance*                     m_pInstance;
-    SvpSalFrame*                    m_pParent;       // pointer to parent frame
+    SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    sal_uLong                         m_nStyle;
+    sal_uLong                           m_nStyle;
     bool                                m_bVisible;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
@@ -65,7 +65,7 @@ public:
 
     void GetFocus();
     void LoseFocus();
-    void PostPaint() const;
+    void PostPaint(bool bImmediate) const;
 
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
@@ -74,7 +74,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual sal_Bool            PostEvent( void* pData );
 
     virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
@@ -125,6 +125,10 @@ public:
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
     virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
+    bool IsVisible() { return m_bVisible; }
+
+    static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
+
 };
 #endif // _SVP_SVPFRAME_HXX
 

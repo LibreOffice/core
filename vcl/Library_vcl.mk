@@ -438,6 +438,7 @@ ifeq ($(GUIBASE),android)
 $(eval $(call gb_Library_add_libs,vcl,\
 	-llog \
 	-landroid \
+	-lEGL -lGLESv1_CM \
 	-llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_defs,vcl,\

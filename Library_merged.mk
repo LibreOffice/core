@@ -83,4 +83,11 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_linked_libs,merged,\
+    objc \
+    Cocoa \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

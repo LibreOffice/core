@@ -38,6 +38,7 @@ buildrcs:
 	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
 # - this looks useful but breaks more than it fixes ...
 #	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
+
 # fundamentalrc ini ...
 	echo "[Bootstrap]" > assets/program/fundamentalrc
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
@@ -71,6 +72,22 @@ buildrcs:
 	echo "ProductKey=LibreOffice 3.5" >> assets/program/bootstraprc
 	echo "UserInstallation=file://$(APP_DATA_PATH)/files/.libreoffice" >> assets/program/bootstraprc
 
+# versionrc ini ...
+	echo "[Version]" > assets/program/versionrc
+	echo "AllLanguages=en-US" >> assets/program/versionrc
+	echo "BuildVersion=" >> assets/program/versionrc
+	echo "buildid=dead-beef" >> assets/program/versionrc
+	echo "ExtensionUpdateURL=http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update" >> assets/program/versionrc
+	echo "ProductBuildid=3" >> assets/program/versionrc
+	echo "ProductMajor=360" >> assets/program/versionrc
+	echo "ProductMinor=1" >> assets/program/versionrc
+	echo "ProductSource=OOO350" >> assets/program/versionrc
+	echo "ReferenceOOoMajorMinor=3.6" >> assets/program/versionrc
+	echo "UpdateID=LibreOffice_3_en-US" >> assets/program/versionrc
+	echo "UpdateURL=" >> assets/program/versionrc
+	echo "UpdateUserAgent=<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})" >> assets/program/versionrc
+	echo "Vendor=SelfCompiledGit" >> assets/program/versionrc
+
 copy-stuff: buildrcs
 #
 # Copy shared libraries we need to libs/armeabi-v7a so that ant will
@@ -87,12 +104,17 @@ copy-stuff: buildrcs
 # Libs and UNO components that we need.
 #
 	for F in $(strip \
+		  analysislo \
+		  avmedialo \
 		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
+		  canvastoolslo \
 		  comphelpgcc3 \
 		  configmgr.uno \
-		  deploymentmisclo \
+		  cppcanvaslo \
+		  drawinglayerlo \
+		  expwrap.uno \
 		  fileacc \
 		  fontconfig \
 		  forlo \
@@ -101,6 +123,7 @@ copy-stuff: buildrcs
 		  fwelo \
 		  fwilo \
 		  fwklo \
+		  fsstorage.uno \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
@@ -112,6 +135,7 @@ copy-stuff: buildrcs
 		  icuuclo \
 		  jvmaccessgcc3 \
 		  jvmfwk \
+		  lnglo \
 		  localebe1.uno \
 		  localedata_en \
 		  localedata_es \
@@ -120,7 +144,7 @@ copy-stuff: buildrcs
 		  mergedlo \
 		  msfilterlo \
 		  ooxlo \
-		  package2 \
+		  reflection.uno \
 		  reg \
 		  saxlo \
 		  sblo \
@@ -152,9 +176,16 @@ copy-stuff: buildrcs
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
+		  xstor \
+		  \
+		  swlo \
+		  swdlo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
+#		  deployment \
+#		  deploymentmisclo \
+
 #
 # Then the shared GNU C++ library
 	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
@@ -186,6 +217,8 @@ copy-stuff: buildrcs
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
+# shell / splash images
+	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
@@ -197,31 +230,31 @@ copy-stuff: buildrcs
 
 
 build-ant: copy-stuff
-	unset JAVA_HOME && ant debug
+	unset JAVA_HOME && $(ANT) debug
 
 install: copy-stuff
-	adb shell rm -r $(APP_DATA_PATH)
-	unset JAVA_HOME && ant debug install
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell rm -r $(APP_DATA_PATH)
+	unset JAVA_HOME && $(ANT) debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
 
 uninstall:
-	adb uninstall $(APP_PACKAGE)
+	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
 	echo "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
-	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
 # stop and start...
 stop-start-cycle:
-	adb shell stop && adb shell start && sleep 10
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
 clean:
-	ant clean
+	$(ANT) clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
 
