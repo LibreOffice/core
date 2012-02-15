@@ -3933,19 +3933,91 @@ inline ScDirection DirFromFillDir( FillDir eDir )
         return DIR_LEFT;
 }
 
-sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
-                            FillDir eDir, sal_Bool bRecord, sal_Bool bApi )
+namespace {
+
+/**
+ * Expand the fill range as necessary, to allow copying of adjacent cell(s)
+ * even when those cells are not in the original range.
+ */
+void adjustFillRangeForAdjacentCopy(ScRange& rRange, FillDir eDir)
+{
+    switch (eDir)
+    {
+        case FILL_TO_BOTTOM:
+        {
+            if (rRange.aStart.Row() == 0)
+                return;
+
+            if (rRange.aStart.Row() != rRange.aEnd.Row())
+                return;
+
+            // Include the above row.
+            ScAddress& s = rRange.aStart;
+            s.SetRow(s.Row()-1);
+        }
+        break;
+        case FILL_TO_TOP:
+        {
+            if (rRange.aStart.Row() == MAXROW)
+                return;
+
+            if (rRange.aStart.Row() != rRange.aEnd.Row())
+                return;
+
+            // Include the row below.
+            ScAddress& e = rRange.aEnd;
+            e.SetRow(e.Row()+1);
+        }
+        break;
+        case FILL_TO_LEFT:
+        {
+            if (rRange.aStart.Col() == MAXCOL)
+                return;
+
+            if (rRange.aStart.Col() != rRange.aEnd.Col())
+                return;
+
+            // Include the column to the right.
+            ScAddress& e = rRange.aEnd;
+            e.SetCol(e.Col()+1);
+        }
+        break;
+        case FILL_TO_RIGHT:
+        {
+            if (rRange.aStart.Col() == 0)
+                return;
+
+            if (rRange.aStart.Col() != rRange.aEnd.Col())
+                return;
+
+            // Include the column to the left.
+            ScAddress& s = rRange.aStart;
+            s.SetCol(s.Col()-1);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+}
+
+bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
+                            FillDir eDir, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
-
-    sal_Bool bSuccess = false;
     ScDocument* pDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nEndTab = rRange.aEnd.Tab();
+
+    bool bSuccess = false;
+    ScRange aRange = rRange;
+    adjustFillRangeForAdjacentCopy(aRange, eDir);
+
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
@@ -3964,8 +4036,8 @@ sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMar
     {
         WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-        ScRange aSourceArea = rRange;
-        ScRange aDestArea   = rRange;
+        ScRange aSourceArea = aRange;
+        ScRange aDestArea   = aRange;
 
         SCCOLROW nCount = 0;
         switch (eDir)
@@ -4010,7 +4082,7 @@ sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMar
         pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                     aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aMark,
                     nCount, eDir, FILL_SIMPLE );
-        AdjustRowHeight(rRange);
+        AdjustRowHeight(aRange);
 
         if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
         {
@@ -4022,7 +4094,7 @@ sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMar
         rDocShell.PostPaintGridAll();
         aModificator.SetDocumentModified();
 
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     else if (!bApi)
         rDocShell.ErrorMessage(aTester.GetMessageId());

@@ -1264,14 +1264,14 @@ sal_Bool ScViewFunc::RemoveMerge( sal_Bool bRecord )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::FillSimple( FillDir eDir, sal_Bool bRecord )
+void ScViewFunc::FillSimple( FillDir eDir, bool bRecord )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
-        sal_Bool bSuccess = pDocSh->GetDocFunc().FillSimple( aRange, &rMark, eDir, bRecord, false );
+        bool bSuccess = pDocSh->GetDocFunc().FillSimple( aRange, &rMark, eDir, bRecord, false );
         if (bSuccess)
         {
             pDocSh->UpdateOle(GetViewData());

@@ -118,9 +118,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
-    sal_Bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
+    bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
     bool bOnlyNotBecauseOfMatrix;
-    sal_Bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
+    bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -135,38 +135,47 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        sal_Bool bDisable = false;
-        sal_Bool bNeedEdit = sal_True;      // need selection be editable?
+        bool bDisable = false;
+        bool bNeedEdit = true;      // need selection be editable?
         switch ( nWhich )
         {
             case FID_FILL_TO_BOTTOM:    // fill to top / bottom
-            case FID_FILL_TO_TOP:       // are at least 2 rows marked?
-                bDisable = (!bSimpleArea) || (nRow1 == nRow2);
+            {
+                bDisable = !bSimpleArea || (nRow1 == 0 && nRow2 == 0);
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
-                    if ( nWhich == FID_FILL_TO_BOTTOM )
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol2, nRow1, rMark );    // first row
-                    else
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow2, nCol2, nRow2, rMark );    // last row
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol1, nRow1, nCol2, nRow1, rMark );    // first row
                 }
-                break;
-
+            }
+            break;
+            case FID_FILL_TO_TOP:
+            {
+                bDisable = (!bSimpleArea) || (nRow1 == MAXROW && nRow2 == MAXROW);
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol1, nRow2, nCol2, nRow2, rMark );    // last row
+                }
+            }
+            break;
             case FID_FILL_TO_RIGHT:     // fill to left / right
-            case FID_FILL_TO_LEFT:      // are at least 2 columns marked?
-                bDisable = (!bSimpleArea) || (nCol1 == nCol2);
+            {
+                bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
+                bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                    nCol1, nRow1, nCol1, nRow2, rMark );    // first column
+            }
+            break;
+            case FID_FILL_TO_LEFT:
+            {
+                bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
                 if ( !bDisable && bEditable )
                 {   // Matrix nicht zerreissen
-                    if ( nWhich == FID_FILL_TO_RIGHT )
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol1, nRow2, rMark );    // first column
-                    else
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol2, nRow1, nCol2, nRow2, rMark );    // last column
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
-                break;
-
+            }
+            break;
             case FID_FILL_SERIES:       // fill block
             case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)

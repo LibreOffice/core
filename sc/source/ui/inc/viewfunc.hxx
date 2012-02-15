@@ -236,7 +236,7 @@ public:
     sal_Bool            MergeCells( sal_Bool bApi, sal_Bool& rDoContents, sal_Bool bRecord = true, sal_Bool bCenter = false );
     sal_Bool            RemoveMerge( sal_Bool bRecord = true );
 
-    void            FillSimple( FillDir eDir, sal_Bool bRecord = sal_True );
+    void            FillSimple( FillDir eDir, bool bRecord = true );
     void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                                 double fStart, double fStep, double fMax, sal_Bool bRecord = sal_True );
     void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
