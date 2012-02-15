@@ -509,9 +509,6 @@ private:
     SAL_DLLPRIVATE          ImageButton( const ImageButton & );
     SAL_DLLPRIVATE          ImageButton & operator= ( const ImageButton & );
 
-protected:
-                    ImageButton( WindowType nType );
-
 public:
                     ImageButton( Window* pParent, WinBits nStyle = 0 );
                     ImageButton( Window* pParent, const ResId& rResId );

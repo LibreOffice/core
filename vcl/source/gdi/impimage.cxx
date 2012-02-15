@@ -123,11 +123,6 @@ void ImplImageList::RemoveImage( sal_uInt16 nPos )
     maImages.erase( maImages.begin() + nPos );
 }
 
-sal_uInt16 ImplImageList::GetImageCount() const
-{
-    return sal::static_int_cast< sal_uInt16 >( maImages.size() );
-}
-
 // -----------------
 // - ImplImageData -
 // -----------------

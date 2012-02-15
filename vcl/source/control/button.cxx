@@ -3960,14 +3960,6 @@ Size CheckBox::GetOptimalSize(WindowSizeType eType) const
 
 // =======================================================================
 
-ImageButton::ImageButton( WindowType nType ) :
-    PushButton( nType )
-{
-    ImplInitStyle();
-}
-
-// -----------------------------------------------------------------------
-
 ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
     PushButton( pParent, nStyle )
 {

@@ -28,19 +28,13 @@ HTMLControls::Insert(HTMLControl const**, unsigned short)
 HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
 HTMLControls::Remove(HTMLControl const*&, unsigned short)
 HTMLControls::Remove(unsigned short, unsigned short)
-ImageButton::ImageButton(unsigned short)
-ImageMap::GetBoundRect() const
-ImpSvMEdit::SetInsertMode(unsigned char)
 ImpSvtData::~ImpSvtData()
 ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
-ImplEntryList::IsEntrySelected(String const&) const
-ImplImageList::GetImageCount() const
 InsCapOptArr::Insert(InsCapOptArr const*, unsigned short, unsigned short)
 InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
 InsCapOptArr::Insert(InsCaptionOpt* const*, unsigned short)
 InsCapOptArr::Remove(InsCaptionOpt* const&, unsigned short)
 InsCapOptArr::Remove(unsigned short, unsigned short)
-KeyboardSettings::CopyData()
 MSDffImportRecords::Insert(MSDffImportRecords const*, unsigned short, unsigned short)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const&, unsigned short&)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const*, unsigned short)

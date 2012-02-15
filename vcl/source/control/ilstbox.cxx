@@ -498,13 +498,6 @@ sal_uInt16 ImplEntryList::GetSelectEntryPos( sal_uInt16 nIndex ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplEntryList::IsEntrySelected( const XubString& rStr ) const
-{
-    return IsEntryPosSelected( FindEntry( rStr ) );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ImplEntryList::IsEntryPosSelected( sal_uInt16 nIndex ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nIndex );

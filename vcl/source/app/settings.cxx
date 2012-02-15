@@ -376,18 +376,6 @@ const KeyboardSettings& KeyboardSettings::operator =( const KeyboardSettings& rS
 
 // -----------------------------------------------------------------------
 
-void KeyboardSettings::CopyData()
-{
-    // Falls noch andere Referenzen bestehen, dann kopieren
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplKeyboardData( *mpData );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
 {
     return mpData == rSet.mpData

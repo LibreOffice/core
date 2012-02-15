@@ -114,7 +114,6 @@ struct ImplImageList
     void AddImage( const ::rtl::OUString &aName,
                    sal_uInt16 nId, const BitmapEx &aBitmapEx );
     void RemoveImage( sal_uInt16 nPos );
-    sal_uInt16 GetImageCount() const;
 };
 
 // --------------------

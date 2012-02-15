@@ -297,8 +297,6 @@ private:
 
 class VCL_DLLPUBLIC KeyboardSettings
 {
-    void                            CopyData();
-
 private:
     ImplKeyboardData*               mpData;
 
@@ -307,13 +305,9 @@ public:
                                     KeyboardSettings( const KeyboardSettings& rSet );
                                     ~KeyboardSettings();
 
-    void                            SetStandardAccel( const Accelerator& rAccelerator )
-                                        { CopyData(); mpData->maStandardAccel = rAccelerator; }
     const Accelerator&              GetStandardAccel() const
                                         { return mpData->maStandardAccel; }
 
-    void                            SetOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnOptions = nOptions; }
     sal_uLong                           GetOptions() const
                                         { return mpData->mnOptions; }
 

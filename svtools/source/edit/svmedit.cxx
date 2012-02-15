@@ -139,7 +139,6 @@ public:
     void        SetMaxTextLen( xub_StrLen nLen );
     xub_StrLen  GetMaxTextLen() const;
 
-    void        SetInsertMode( sal_Bool bInsert );
     sal_Bool        IsInsertMode() const;
 
     void        InsertText( const String& rStr );
@@ -394,11 +393,6 @@ void ImpSvMEdit::SetModified( sal_Bool bMod )
 sal_Bool ImpSvMEdit::IsModified() const
 {
     return mpTextWindow->GetTextEngine()->IsModified();
-}
-
-void ImpSvMEdit::SetInsertMode( sal_Bool bInsert )
-{
-    mpTextWindow->GetTextView()->SetInsertMode( bInsert );
 }
 
 void ImpSvMEdit::SetReadOnly( sal_Bool bRdOnly )
