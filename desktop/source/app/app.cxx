@@ -102,14 +102,6 @@
 #include <sys/wait.h>
 #endif
 
-#ifdef ANDROID
-// mmeeks debugging stuff?
-extern void VCL_DLLPUBLIC plasma_now(const char *msg);
-#define PLASMA_NOW(s) ::plasma_now(s)
-#else
-#define PLASMA_NOW(s)
-#endif
-
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
@@ -1478,8 +1470,6 @@ int Desktop::Main()
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
-//    PLASMA_NOW("after desktoppy bits"); - fine to here ...
-
     // Startup screen
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
     OpenSplashScreen();
@@ -1487,7 +1477,6 @@ int Desktop::Main()
 
     SetSplashScreenProgress(10);
 
-//    PLASMA_NOW("after splash open");
     {
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_fin != UserInstall::E_None)
@@ -1514,8 +1503,6 @@ int Desktop::Main()
     try
     {
         RegisterServices( xSMgr );
-
-//        PLASMA_NOW("registered services");
 
         SetSplashScreenProgress(25);
 
@@ -1561,8 +1548,6 @@ int Desktop::Main()
         if ( !InitializeConfiguration() )
             return EXIT_FAILURE;
 
-//        PLASMA_NOW("init configuration");
-
         SetSplashScreenProgress(30);
 
         // set static variable to enabled/disable crash reporter
@@ -1580,8 +1565,6 @@ int Desktop::Main()
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
-//        PLASMA_NOW("after title string");
-
 #ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
@@ -1597,8 +1580,6 @@ int Desktop::Main()
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
-
-//        PLASMA_NOW("unrestricted folders"); -- got this.
 
         // Check special env variable
         std::vector< String > aUnrestrictedFolders;
@@ -1619,8 +1600,6 @@ int Desktop::Main()
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
-
-        PLASMA_NOW("done global event broadcaster");
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
@@ -1659,8 +1638,6 @@ int Desktop::Main()
             pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
-        PLASMA_NOW("invoked OnStartupApp");
-
         SetSplashScreenProgress(50);
 
         // Backing Component
@@ -1689,8 +1666,6 @@ int Desktop::Main()
             pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
             aMiscOptions.SetUseSystemFileDialog( sal_False );
         }
-
-        PLASMA_NOW("nearly there !");
 
         if ( !pExecGlobals->bRestartRequested )
         {
@@ -1761,8 +1736,6 @@ int Desktop::Main()
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
 
-    PLASMA_NOW("setup appearance !");
-
     if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
@@ -1796,8 +1769,6 @@ int Desktop::Main()
         // Release solar mutex just before we wait for our client to connect
         int nAcquireCount = Application::ReleaseSolarMutex();
 
-        PLASMA_NOW("wait client connect !");
-
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
         // minimize the risk that this message overtakes type detection contruction!!
@@ -1816,8 +1787,6 @@ int Desktop::Main()
         // call Application::Execute to process messages in vcl message loop
         RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
-        PLASMA_NOW("before java foo !");
-
         try
         {
             // The JavaContext contains an interaction handler which is used when
@@ -1834,14 +1803,10 @@ int Desktop::Main()
                 DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
 #ifdef ANDROID
-                PLASMA_NOW("pre hit execute!");
-
                 // For some reason we're not getting a desktop frame or component [odd]
                 ErrorBox aKickStartVCL( NULL, WB_OK, rtl::OUString::createFromAscii("My very own title!") );
                 aKickStartVCL.SetText( rtl::OUString::createFromAscii("Delphic Utterance") );
                 aKickStartVCL.Show(); // don't execute - just leave it lying around ....
-
-                PLASMA_NOW("hit execute!");
 #endif
                 Execute();
             }
