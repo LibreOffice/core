@@ -61,11 +61,14 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	sdraw \
 	simpress \
 	soffice \
+	soffice_bin \
 	smath \
 	sweb \
 	swriter \
 	unoinfo \
 	unopkg \
+	unopkg_bin \
+	unopkg_com \
 	unopkgio \
 ))
 
