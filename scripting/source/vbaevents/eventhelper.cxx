@@ -700,8 +700,8 @@ private:
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
-    SfxObjectShell* mpShell;
     sal_Bool m_bDocClosed;
+    SfxObjectShell* mpShell;
 
 };
 
