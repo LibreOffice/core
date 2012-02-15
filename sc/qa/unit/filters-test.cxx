@@ -298,7 +298,7 @@ ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nForm
 void ScFiltersTest::testRangeNameODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
 
