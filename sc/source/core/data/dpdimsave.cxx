@@ -123,14 +123,14 @@ void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatt
 
 // ============================================================================
 
-ScDPSaveGroupDimension::ScDPSaveGroupDimension( const String& rSource, const String& rName ) :
+ScDPSaveGroupDimension::ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName ) :
     aSourceDim( rSource ),
     aGroupDimName( rName ),
     nDatePart( 0 )
 {
 }
 
-ScDPSaveGroupDimension::ScDPSaveGroupDimension( const String& rSource, const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
+ScDPSaveGroupDimension::ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
     aSourceDim( rSource ),
     aGroupDimName( rName ),
     aDateInfo( rDateInfo ),
@@ -337,15 +337,15 @@ namespace {
 
 struct ScDPSaveGroupDimNameFunc
 {
-    String              maDimName;
-    inline explicit     ScDPSaveGroupDimNameFunc( const String& rDimName ) : maDimName( rDimName ) {}
+    rtl::OUString       maDimName;
+    inline explicit     ScDPSaveGroupDimNameFunc( const rtl::OUString& rDimName ) : maDimName( rDimName ) {}
     inline bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetGroupDimName() == maDimName; }
 };
 
 struct ScDPSaveGroupSourceNameFunc
 {
-    String              maSrcDimName;
-    inline explicit     ScDPSaveGroupSourceNameFunc( const String& rSrcDimName ) : maSrcDimName( rSrcDimName ) {}
+    rtl::OUString       maSrcDimName;
+    inline explicit     ScDPSaveGroupSourceNameFunc( const rtl::OUString& rSrcDimName ) : maSrcDimName( rSrcDimName ) {}
     inline bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetSourceDimName() == maSrcDimName; }
 };
 
@@ -506,9 +506,9 @@ sal_Int32 ScDPDimensionSaveData::CollectDateParts( const String& rBaseDimName ) 
     return nParts;
 }
 
-String ScDPDimensionSaveData::CreateGroupDimName( const String& rSourceName,
+String ScDPDimensionSaveData::CreateGroupDimName( const rtl::OUString& rSourceName,
                                         const ScDPObject& rObject, bool bAllowSource,
-                                        const std::vector<String>* pDeletedNames )
+                                        const std::vector<rtl::OUString>* pDeletedNames )
 {
     // create a name for the new dimension by appending a number to the original
     // dimension's name
@@ -519,9 +519,9 @@ String ScDPDimensionSaveData::CreateGroupDimName( const String& rSourceName,
     const sal_Int32 nMaxAdd = 1000;     // limit the loop
     while ( nAdd <= nMaxAdd )
     {
-        String aDimName( rSourceName );
+        rtl::OUString aDimName( rSourceName );
         if ( !bUseSource )
-            aDimName.Append( String::CreateFromInt32( nAdd ) );
+            aDimName += rtl::OUString::valueOf(static_cast<sal_Int32>(nAdd));
         bool bExists = false;
 
         // look for existing group dimensions
@@ -553,7 +553,9 @@ String ScDPDimensionSaveData::CreateGroupDimName( const String& rSourceName,
     return EMPTY_STRING;
 }
 
-String ScDPDimensionSaveData::CreateDateGroupDimName( sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames )
+String ScDPDimensionSaveData::CreateDateGroupDimName(
+    sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
+    const std::vector<rtl::OUString>* pDeletedNames )
 {
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
     String aPartName;

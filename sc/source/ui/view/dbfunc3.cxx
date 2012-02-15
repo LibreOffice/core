@@ -1006,11 +1006,11 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 names which may be reused while recreating the groups.
                 Dimensions have to be removed from dimension save data and from
                 save data too. */
-            std::vector< String > aDeletedNames;
+            std::vector<rtl::OUString> aDeletedNames;
             const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
             while ( pExistingGroup )
             {
-                String aGroupDimName = pExistingGroup->GetGroupDimName();
+                const rtl::OUString& aGroupDimName = pExistingGroup->GetGroupDimName();
                 pDimData->RemoveGroupDimension( aGroupDimName );     // pExistingGroup is deleted
 
                 // also remove SaveData settings for the dimension that no longer exists

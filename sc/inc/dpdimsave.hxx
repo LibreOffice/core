@@ -79,15 +79,15 @@ typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
-    String                  aSourceDim;     // always the real source from the original data
-    String                  aGroupDimName;
+    rtl::OUString           aSourceDim;     // always the real source from the original data
+    rtl::OUString           aGroupDimName;
     ScDPSaveGroupItemVec    aGroups;
     ScDPNumGroupInfo        aDateInfo;
     sal_Int32               nDatePart;
 
 public:
-                ScDPSaveGroupDimension( const String& rSource, const String& rName );
-                ScDPSaveGroupDimension( const String& rSource, const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
+                ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName );
+                ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
                 ~ScDPSaveGroupDimension();
 
     void    AddToData( ScDPGroupTableData& rData ) const;
@@ -95,8 +95,8 @@ public:
     void    SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 
     void    AddGroupItem( const ScDPSaveGroupItem& rItem );
-    const String& GetGroupDimName() const   { return aGroupDimName; }
-    const String& GetSourceDimName() const  { return aSourceDim; }
+    const rtl::OUString& GetGroupDimName() const { return aGroupDimName; }
+    const rtl::OUString& GetSourceDimName() const { return aSourceDim; }
 
     sal_Int32   GetDatePart() const             { return nDatePart; }
     const ScDPNumGroupInfo& GetDateInfo() const { return aDateInfo; }
@@ -150,8 +150,13 @@ public:
 
     void    WriteToData( ScDPGroupTableData& rData ) const;
 
-    String  CreateGroupDimName( const String& rSourceName, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
-    String  CreateDateGroupDimName( sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
+    String  CreateGroupDimName(
+        const rtl::OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,
+        const ::std::vector<rtl::OUString>* pDeletedNames );
+
+    String  CreateDateGroupDimName(
+        sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
+        const ::std::vector<rtl::OUString>* pDeletedNames );
 
     void    AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
     void    ReplaceGroupDimension( const ScDPSaveGroupDimension& rGroupDim );

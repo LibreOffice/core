@@ -2760,9 +2760,9 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         ScDPDimensionSaveData& rDimData = *aSaveData.GetDimensionData();
 
         // find source dimension name
-        const String& rDimName = pDim->GetName();
+        const rtl::OUString& rDimName = pDim->GetName();
         const ScDPSaveGroupDimension* pGroupDim = rDimData.GetNamedGroupDim( rDimName );
-        String aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
+        rtl::OUString aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
 
         // find a group dimension for the base field, or get numeric grouping
         pGroupDim = rDimData.GetFirstNamedGroupDim( aSrcDimName );
