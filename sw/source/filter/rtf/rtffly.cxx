@@ -1093,7 +1093,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
 
         // Remove the properties that have been parsed before in the paragraph
-        GetAttrStack().Pop();
+        GetAttrStack().pop_back();
     }
     else
     {
