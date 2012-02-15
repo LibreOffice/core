@@ -47,15 +47,7 @@
 // - Defines -
 // -----------
 
-#define ITEM_OFFSET                 4
-#define ITEM_OFFSET_DOUBLE          6
-#define NAME_LINE_OFF_X             2
-#define NAME_LINE_OFF_Y             2
-#define NAME_LINE_HEIGHT            2
-#define NAME_OFFSET                 2
-#define SCRBAR_OFFSET               1
 #define VALUESET_ITEM_NONEITEM      0xFFFE
-#define VALUESET_SCROLL_OFFSET      4
 
 // --------------------
 // - ValueSetItemType -

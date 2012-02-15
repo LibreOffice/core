@@ -42,6 +42,22 @@
 #define _SV_VALUESET_CXX
 #include <svtools/valueset.hxx>
 
+namespace
+{
+
+enum {
+    ITEM_OFFSET = 4,
+    ITEM_OFFSET_DOUBLE = 6,
+    NAME_LINE_OFF_X = 2,
+    NAME_LINE_OFF_Y = 2,
+    NAME_LINE_HEIGHT = 2,
+    NAME_OFFSET = 2,
+    SCRBAR_OFFSET = 1,
+    SCROLL_OFFSET = 4
+};
+
+}
+
 // ------------
 // - ValueSet -
 // ------------
@@ -975,9 +991,9 @@ bool ValueSet::ImplScroll( const Point& rPos )
     sal_uInt16           nOldLine = mnFirstLine;
     const Rectangle& rTopRect = mItemList[ mnFirstLine*mnCols ]->maRect;
     if ( rTopRect.GetHeight() <= 16 )
-        nScrollOffset = VALUESET_SCROLL_OFFSET/2;
+        nScrollOffset = SCROLL_OFFSET/2;
     else
-        nScrollOffset = VALUESET_SCROLL_OFFSET;
+        nScrollOffset = SCROLL_OFFSET;
     if ( (mnFirstLine > 0) && (rPos.Y() >= 0) )
     {
         long nTopPos = rTopRect.Top();
