@@ -379,16 +379,6 @@ File gid_File_Help_Schart_Zip
 End
 #endif
 
-#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
-
-File gid_File_Jar_Accessbridge
-    TXT_FILE_BODY;
-    Name = "java_uno_accessbridge.jar";
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
-End
-
-#endif
 
 #ifdef SOLAR_JAVA
 #ifndef SYSTEM_LUCENE
@@ -426,6 +416,9 @@ STD_JAR_FILE( gid_File_Jar_Fax, fax )
 STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
 STD_JAR_FILE( gid_File_Jar_Query, query )
 STD_JAR_FILE( gid_File_Jar_Web, web )
+#endif
+
+#if defined SOLAR_JAVA && defined WNT
 STD_JAR_FILE( gid_File_Jar_Accessbridge, java_uno_accessbridge )
 #endif
 
