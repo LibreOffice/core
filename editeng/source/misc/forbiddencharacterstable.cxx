@@ -34,60 +34,36 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, sal_uInt16 nISize, sal_uInt16 nGrow )
- : SvxForbiddenCharactersTableImpl( nISize, nGrow )
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF)
 {
     mxMSF = xMSF;
 }
 
-
-SvxForbiddenCharactersTable::~SvxForbiddenCharactersTable()
-{
-    for ( sal_uLong n = Count(); n; )
-        delete GetObject( --n );
-}
-
-
-
 const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault ) const
 {
-    ForbiddenCharactersInfo* pInf = Get( nLanguage );
+    com::sun::star::i18n::ForbiddenCharacters* pInf = NULL;
+    CharInfoMap::iterator it = maCharInfoMap.find( nLanguage );
+    if ( it != maCharInfoMap.end() )
+        pInf = &(it->second);
     if ( !pInf && bGetDefault && mxMSF.is() )
     {
-        const SvxForbiddenCharactersTableImpl *pConstImpl = dynamic_cast<const SvxForbiddenCharactersTableImpl*>(this);
-        SvxForbiddenCharactersTableImpl* pImpl = const_cast<SvxForbiddenCharactersTableImpl*>(pConstImpl);
-         pInf = new ForbiddenCharactersInfo;
-        pImpl->Insert( nLanguage, pInf );
-
-        pInf->bTemporary = sal_True;
         LocaleDataWrapper aWrapper( mxMSF, SvxCreateLocale( nLanguage ) );
-        pInf->aForbiddenChars = aWrapper.getForbiddenCharacters();
+        maCharInfoMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
+        pInf = &maCharInfoMap[ nLanguage ];
     }
-    return pInf ? &pInf->aForbiddenChars : NULL;
+    return pInf;
 }
-
-
 
 void SvxForbiddenCharactersTable::SetForbiddenCharacters( sal_uInt16 nLanguage, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenChars )
 {
-    ForbiddenCharactersInfo* pInf = Get( nLanguage );
-    if ( !pInf )
-    {
-        pInf = new ForbiddenCharactersInfo;
-        Insert( nLanguage, pInf );
-    }
-    pInf->bTemporary = sal_False;
-    pInf->aForbiddenChars = rForbiddenChars;
+    maCharInfoMap[ nLanguage ] = rForbiddenChars;
 }
 
 void SvxForbiddenCharactersTable::ClearForbiddenCharacters( sal_uInt16 nLanguage )
 {
-    ForbiddenCharactersInfo* pInf = Get( nLanguage );
-    if ( pInf )
-    {
-        Remove( nLanguage );
-        delete pInf;
-    }
+    CharInfoMap::iterator it = maCharInfoMap.find( nLanguage );
+    if ( it != maCharInfoMap.end() )
+        maCharInfoMap.erase( it );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
