@@ -1243,6 +1243,17 @@ File gid_File_Lib_Tvhlp1
   #endif
 End
 
+File gid_File_Lib_CLuceneHelpWrapper
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libCLuceneHelpWrapper,UNXSUFFIX));
+  #else
+    Name = "libCLuceneHelpWrapper.dll";
+  #endif
+End
+
 File gid_File_Lib_Ucb1
     LIB_FILE_BODY;
     Styles = (PACKED);

@@ -2086,6 +2086,8 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
 
 rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, Reference< deployment::XPackage > xPackage )
 {
+    fprintf(stderr, "IndexFolderIterator::implGetIndexFolderFromPackage\n");
+
     rtl::OUString aIndexFolder =
         implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
 

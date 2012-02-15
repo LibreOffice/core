@@ -84,6 +84,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_pDatabases( pDatabases ),
       m_aURLParameter( aURLParameter )
 {
+    fprintf(stderr, "ResultSetForQuery::ResultSetForQuery\n");
+
     Reference< XTransliteration > xTrans(
         xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Transliteration" )) ),
         UNO_QUERY );
@@ -94,7 +96,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                            aLocale );
 
-    // Access Lucene via XInvocation
+    // Access CLucene via XInvocation
     Reference< script::XInvocation > xInvocation(
         xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.HelpSearch" )) ),
         UNO_QUERY );

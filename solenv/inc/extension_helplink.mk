@@ -25,18 +25,6 @@
 #
 #*************************************************************************
 
-my_cp:=$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/juh.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/parser.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/unoil.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/ridl.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/jurt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/xmlsearch.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/LuceneHelpWrapper.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/HelpIndexerTool.jar$
-
-.IF "$(SYSTEM_LUCENE)" == "YES"
-my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
-.ELSE
-my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-core-2.3.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-analyzers-2.3.jar
-.ENDIF
-
-.IF "$(SYSTEM_DB)" != "YES"
-JAVA_LIBRARY_PATH= -Djava.library.path=$(SOLARSHAREDBIN)
-.ENDIF
-
 #aux_alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(aux_langdirs) $(eq,$i,$j  $i $(NULL))))
 aux_alllangiso*:=$(alllangiso)
 
@@ -68,12 +56,9 @@ $(HELPLINKALLTARGETS) : $(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/$$(@:b:s/_/./
 .IF "$(SOLAR_JAVA)" == "TRUE"
 # cleanup index dir
     -$(RM) $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))}/$(LINKNAME).idxl/*
-.IF "$(CHECK_LUCENCE_INDEXER_OUTPUT)" == ""
-    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVA_LIBRARY_PATH) -cp "$(my_cp)" com.sun.star.help.HelpIndexerTool -extension -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && $(TOUCH) $@
-.ELSE
-    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVA_LIBRARY_PATH) -cp "$(my_cp)" com.sun.star.help.HelpIndexerTool -extension -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -checkcfsandsegname _0 _3  && $(TOUCH) $@
-.ENDIF
-.ELSE
+    $(HELPINDEXER) -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -srcdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && $(TOUCH) $@
     -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/content/*.*
+    -$(RMDIR) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/content
     -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/caption/*.*
+    -$(RMDIR) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/caption
 .ENDIF

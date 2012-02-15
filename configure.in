@@ -1169,25 +1169,10 @@ AC_ARG_WITH(system-db,
         [Use Berkeley db already on system.]),,
     [with_system_db="$with_system_libs"])
 
-AC_ARG_WITH(system-lucene,
-    AS_HELP_STRING([--with-system-lucene],
-        [Use Lucene already on system.]),,
-    [with_system_lucene="$with_system_jars"])
-
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
         [Use Apache commons libraries already on system.]),,
     [with_system_apache_commons="$with_system_jars"])
-
-AC_ARG_WITH(lucene-core-jar,
-    AS_HELP_STRING([--with-lucene-core-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LUCENE_CORE_JAR=$withval)
-
-AC_ARG_WITH(lucene-analyzers-jar,
-    AS_HELP_STRING([--with-lucene-analyzers-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LUCENE_ANALYZERS_JAR=$withval ,)
 
 AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
@@ -6138,77 +6123,6 @@ AC_SUBST(SYSTEM_DB)
 AC_SUBST(SYSTEM_DB_CFLAGS)
 AC_SUBST(DB_LIB)
 AC_SUBST(DB_CPPLIB)
-
-dnl ===================================================================
-dnl Check for system lucene
-dnl ===================================================================
-if test "$with_java" != "no"; then
-AC_MSG_CHECKING([which lucene to use])
-if test "$with_system_lucene" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_LUCENE=YES
-    if test -z $LUCENE_CORE_JAR; then
-         AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar,
-            [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
-            [
-              AC_CHECK_FILE(/usr/share/java/lucene-core.jar,
-                [ LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar ],
-                [ AC_CHECK_FILE(/usr/share/java/lucene.jar,
-                   [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
-                   [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
-                  )
-                ]
-              )
-            ]
-         )
-    else
-        AC_CHECK_FILE($LUCENE_CORE_JAR, [],
-               [AC_MSG_ERROR(lucene-core.jar not found.)], [])
-    fi
-
-    if test -z $LUCENE_ANALYZERS_JAR; then
-        AC_CHECK_FILE(/usr/share/java/lucene-analyzers-2.3.jar,
-            [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar ],
-            [
-              AC_CHECK_FILE(/usr/share/java/lucene-contrib/lucene-analyzers.jar,
-                [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-contrib/lucene-analyzers.jar ],
-                [ AC_CHECK_FILE(/usr/share/java/lucene-analyzers.jar,
-                   [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers.jar ],
-                   [ AC_MSG_ERROR(lucene-analyzers.jar replacement not found.)]
-                  )
-                ]
-              )
-            ]
-        )
-    else
-        AC_CHECK_FILE($LUCENE_CORE_JAR, [],
-               [ AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
-    fi
-    AC_MSG_CHECKING([whether lucene is version 2.x])
-    export LUCENE_CORE_JAR
-    if $PERL -e 'use Archive::Zip;
-            my $file = "$ENV{'LUCENE_CORE_JAR'}";
-            my $zip = Archive::Zip->new( $file );
-            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-            if ( $mf =~ m/Specification-Version: 2.*/ ) {
-                exit 0;
-            } else {
-                exit 1;
-            }'; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_ERROR([no, you need lucene 2])
-    fi
-
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_LUCENE=NO
-    BUILD_TYPE="$BUILD_TYPE LUCENE"
-fi
-fi
-AC_SUBST(SYSTEM_LUCENE)
-AC_SUBST(LUCENE_CORE_JAR)
-AC_SUBST(LUCENE_ANALYZERS_JAR)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then

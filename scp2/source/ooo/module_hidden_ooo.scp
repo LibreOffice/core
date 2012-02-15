@@ -159,9 +159,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xflatxml,
 	gid_File_Jar_Xmerge,
 	gid_File_Jar_Xmergebridge,
-	gid_File_Jar_Lucene_Core,
-	gid_File_Jar_Lucene_Analyzers,
-	gid_File_Jar_Lucenehelpwrapper,
 	gid_File_Rdb_Offapi,
 	gid_Starregistry_Services_Rdb);
 End
@@ -339,8 +336,9 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dlgprov,
 	gid_File_Lib_Stringresource,
 	gid_File_Lib_Ldapbe2,
-	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Cached1,
+        gid_File_Lib_CLuceneHelpWrapper,
+	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Curl,
 	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,
