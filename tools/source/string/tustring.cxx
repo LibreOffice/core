@@ -390,6 +390,37 @@ STRING STRING::GetQuotedToken( xub_StrLen nToken, const STRING& rQuotedPairs,
 
 // -----------------------------------------------------------------------
 
+static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRCODE* pStr2,
+                                                sal_Int32 nCount )
+{
+    sal_Int32   nRet = 0;
+    STRCODE     c1;
+    STRCODE     c2;
+    do
+    {
+        if ( !nCount )
+            break;
+
+        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        c1 = *pStr1;
+        c2 = *pStr2;
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = ((sal_Int32)((STRCODEU)c1))-((sal_Int32)((STRCODEU)c2));
+
+        ++pStr1,
+        ++pStr2,
+        --nCount;
+    }
+    while ( nRet == 0 );
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
 sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -603,6 +634,488 @@ STRING& STRING::EraseTrailingChars( STRCODE c )
     if ( nEnd != mpData->mnLen )
         Erase( static_cast< xub_StrLen >(nEnd) );
 
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // Ist es kein 0-Character
+    if ( !c || (mpData->mnLen == STRING_MAXLEN) )
+        return *this;
+
+    // Index groesser als Laenge
+    if ( nIndex > mpData->mnLen )
+        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
+
+    // Neue Laenge ermitteln und neuen String anlegen
+    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+1 );
+
+    // String kopieren
+    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
+    pNewData->maStr[nIndex] = c;
+    memcpy( pNewData->maStr+nIndex+1, mpData->maStr+nIndex,
+            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
+
+    // Alte Daten loeschen und Neue zuweisen
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    mpData = pNewData;
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::ToUpperAscii()
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
+    STRCODE*    pStr = mpData->maStr;
+    while ( nIndex < nLen )
+    {
+        // Ist das Zeichen zwischen 'a' und 'z' dann umwandeln
+        if ( (*pStr >= 97) && (*pStr <= 122) )
+        {
+            // Daten kopieren, wenn noetig
+            pStr = ImplCopyStringData( pStr );
+            *pStr -= 32;
+        }
+
+        ++pStr,
+        ++nIndex;
+    }
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Auf Gleichheit der Pointer testen
+    if ( mpData == rStr.mpData )
+        return COMPARE_EQUAL;
+
+    // Maximale Laenge ermitteln
+    if ( mpData->mnLen < nLen )
+        nLen = static_cast< xub_StrLen >(mpData->mnLen+1);
+    if ( rStr.mpData->mnLen < nLen )
+        nLen = static_cast< xub_StrLen >(rStr.mpData->mnLen+1);
+
+    // String vergleichen
+    sal_Int32 nCompare = ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, nLen );
+
+    // Rueckgabewert anpassen
+    if ( nCompare == 0 )
+        return COMPARE_EQUAL;
+    else if ( nCompare < 0 )
+        return COMPARE_LESS;
+    else
+        return COMPARE_GREATER;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool STRING::Equals( const STRING& rStr ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Sind die Daten gleich
+    if ( mpData == rStr.mpData )
+        return sal_True;
+
+    // Gleiche Laenge
+    if ( mpData->mnLen != rStr.mpData->mnLen )
+        return sal_False;
+
+    // String vergleichen
+    return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Sind die Daten gleich
+    if ( mpData == rStr.mpData )
+        return sal_True;
+
+    // Gleiche Laenge
+    if ( mpData->mnLen != rStr.mpData->mnLen )
+        return sal_False;
+
+    // String vergleichen
+    return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Are there enough codes for comparing?
+    if ( nIndex > mpData->mnLen )
+        return (rStr.mpData->mnLen == 0);
+    sal_Int32 nMaxLen = mpData->mnLen-nIndex;
+    if ( nMaxLen < nLen )
+    {
+        if ( rStr.mpData->mnLen != nMaxLen )
+            return sal_False;
+        nLen = static_cast< xub_StrLen >(nMaxLen);
+    }
+
+    // String vergleichen
+    return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // Are there enough codes for comparing?
+    if ( nIndex > mpData->mnLen )
+        return (*pCharStr == 0);
+
+    return (ImplStringCompare( mpData->maStr+nIndex, pCharStr, nLen ) == 0);
+}
+
+// -----------------------------------------------------------------------
+
+xub_StrLen STRING::Match( const STRING& rStr ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Ist dieser String leer
+    if ( !mpData->mnLen )
+        return STRING_MATCH;
+
+    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+    const STRCODE*  pStr1 = mpData->maStr;
+    const STRCODE*  pStr2 = rStr.mpData->maStr;
+    xub_StrLen      i = 0;
+    while ( i < mpData->mnLen )
+    {
+        // Stimmt das Zeichen nicht ueberein, dann abbrechen
+        if ( *pStr1 != *pStr2 )
+            return i;
+        ++pStr1,
+        ++pStr2,
+        ++i;
+    }
+
+    return STRING_MATCH;
+}
+
+// -----------------------------------------------------------------------
+
+xub_StrLen STRING::SearchBackward( STRCODE c, xub_StrLen nIndex ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    if ( nIndex > mpData->mnLen )
+        nIndex = (xub_StrLen)mpData->mnLen;
+
+    const STRCODE* pStr = mpData->maStr;
+    pStr += nIndex;
+
+    while ( nIndex )
+    {
+        nIndex--;
+        pStr--;
+        if ( *pStr == c )
+            return nIndex;
+    }
+
+    return STRING_NOTFOUND;
+}
+
+// -----------------------------------------------------------------------
+
+void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
+
+    xub_StrLen nSPos = Search( rStr, 0 );
+    while ( nSPos != STRING_NOTFOUND )
+    {
+        Replace( nSPos, rStr.Len(), rRepStr );
+        nSPos = nSPos + rRepStr.Len();
+        nSPos = Search( rStr, nSPos );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
+                       xub_StrLen nIndex )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    const STRCODE*  pStr            = mpData->maStr;
+    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
+    xub_StrLen      nTok            = 0;
+    xub_StrLen      nFirstChar      = nIndex;
+    xub_StrLen      i               = nFirstChar;
+
+    // Bestimme die Token-Position und Laenge
+    pStr += i;
+    while ( i < nLen )
+    {
+        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+        if ( *pStr == cTok )
+        {
+            ++nTok;
+
+            if ( nTok == nToken )
+                nFirstChar = i+1;
+            else
+            {
+                if ( nTok > nToken )
+                    break;
+            }
+        }
+
+        ++pStr,
+        ++i;
+    }
+
+    if ( nTok >= nToken )
+        Replace( nFirstChar, i-nFirstChar, rStr );
+}
+
+// -----------------------------------------------------------------------
+
+STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    const STRCODE*  pStr            = mpData->maStr;
+    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
+    xub_StrLen      nTok            = 0;
+    xub_StrLen      nFirstChar      = rIndex;
+    xub_StrLen      i               = nFirstChar;
+
+    // Bestimme die Token-Position und Laenge
+    pStr += i;
+    while ( i < nLen )
+    {
+        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+        if ( *pStr == cTok )
+        {
+            ++nTok;
+
+            if ( nTok == nToken )
+                nFirstChar = i+1;
+            else
+            {
+                if ( nTok > nToken )
+                    break;
+            }
+        }
+
+        ++pStr,
+        ++i;
+    }
+
+    if ( nTok >= nToken )
+    {
+        if ( i < nLen )
+            rIndex = i+1;
+        else
+            rIndex = STRING_NOTFOUND;
+        return Copy( nFirstChar, i-nFirstChar );
+    }
+    else
+    {
+        rIndex = STRING_NOTFOUND;
+        return STRING();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
+: mpData(NULL)
+{
+    DBG_CTOR( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( pCharStr, "String::String() - pCharStr is NULL" );
+
+    if ( nLen == STRING_LEN )
+        nLen = ImplStringLen( pCharStr );
+
+#ifdef DBG_UTIL
+    if ( DbgIsAssert() )
+    {
+        for ( xub_StrLen i = 0; i < nLen; i++ )
+        {
+            if ( !pCharStr[i] )
+            {
+                OSL_FAIL( "String::String() : nLen is wrong" );
+            }
+        }
+    }
+#endif
+
+    // Ist es kein leerer String
+    if ( nLen )
+    {
+        // Verwaltungsdaten anlegen und String kopieren
+        mpData = ImplAllocData( nLen );
+        memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
+    }
+    else
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( pCharStr, "String::Append() - pCharStr is NULL" );
+
+    if ( nCharLen == STRING_LEN )
+        nCharLen = ImplStringLen( pCharStr );
+
+#ifdef DBG_UTIL
+    if ( DbgIsAssert() )
+    {
+        for ( xub_StrLen i = 0; i < nCharLen; i++ )
+        {
+            if ( !pCharStr[i] )
+            {
+                OSL_FAIL( "String::Append() : nLen is wrong" );
+            }
+        }
+    }
+#endif
+
+    // Ueberlauf abfangen
+    sal_Int32 nLen = mpData->mnLen;
+    sal_Int32 nCopyLen = ImplGetCopyLen( nLen, nCharLen );
+
+    // Ist es kein leerer String
+    if ( nCopyLen )
+    {
+        // Neue Datenstruktur und neuen String erzeugen
+        STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
+
+        // String kopieren
+        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
+        memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
+
+        // Alte Daten loeschen und Neue zuweisen
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = pNewData;
+    }
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Append( STRCODE c )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // kein 0-Character und maximale Stringlaenge nicht ueberschreiten
+    sal_Int32 nLen = mpData->mnLen;
+    if ( c && (nLen < STRING_MAXLEN) )
+    {
+        // Neue Datenstruktur und neuen String erzeugen
+        STRINGDATA* pNewData = ImplAllocData( nLen+1 );
+
+        // String kopieren
+        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
+        pNewData->maStr[nLen] = c;
+
+        // Alte Daten loeschen und Neue zuweisen
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = pNewData;
+    }
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
+
+    if ( nLen == STRING_LEN )
+        nLen = ImplStringLen( pCharStr );
+
+#ifdef DBG_UTIL
+    if ( DbgIsAssert() )
+    {
+        for ( xub_StrLen i = 0; i < nLen; i++ )
+        {
+            if ( !pCharStr[i] )
+            {
+                OSL_FAIL( "String::Assign() : nLen is wrong" );
+            }
+        }
+    }
+#endif
+
+    if ( !nLen )
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+    else
+    {
+        // Wenn String genauso lang ist, wie der String, dann direkt kopieren
+        if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
+            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
+        else
+        {
+            // Alte Daten loeschen
+            STRING_RELEASE((STRING_TYPE *)mpData);
+
+            // Daten initialisieren und String kopieren
+            mpData = ImplAllocData( nLen );
+            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
+        }
+    }
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Assign( STRCODE c )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( c, "String::Assign() - c is 0" );
+
+    // Verwaltungsdaten anlegen und initialisieren
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    mpData = ImplAllocData( 1 );
+    mpData->maStr[0] = c;
     return *this;
 }
 

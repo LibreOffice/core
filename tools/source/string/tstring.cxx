@@ -83,21 +83,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 #include <strimp.cxx>
 #include <strcvt.cxx>
 
-void STRING::SearchAndReplaceAll( const STRCODE* pCharStr, const STRING& rRepStr )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
-
-    xub_StrLen nCharLen = ImplStringLen( pCharStr );
-    xub_StrLen nSPos = Search( pCharStr, 0 );
-    while ( nSPos != STRING_NOTFOUND )
-    {
-        Replace( nSPos, nCharLen, rRepStr );
-        nSPos = nSPos + rRepStr.Len();
-        nSPos = Search( pCharStr, nSPos );
-    }
-}
-
 xub_StrLen STRING::SearchAndReplace( const STRCODE* pCharStr, const STRING& rRepStr,
                                      xub_StrLen nIndex )
 {
@@ -195,41 +180,6 @@ sal_Bool STRING::Equals( const STRCODE* pCharStr ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     return (ImplStringCompare( mpData->maStr, pCharStr ) == 0);
-}
-
-STRING& STRING::Insert( const STRCODE* pCharStr, xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::Insert() - pCharStr is NULL" );
-
-    // Stringlaenge ermitteln
-    sal_Int32 nCopyLen = ImplStringLen( pCharStr );
-
-    // Ueberlauf abfangen
-    nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
-
-    // Ist der einzufuegende String ein Leerstring
-    if ( !nCopyLen )
-        return *this;
-
-    // Index groesser als Laenge
-    if ( nIndex > mpData->mnLen )
-        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
-
-    // Neue Laenge ermitteln und neuen String anlegen
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-    // String kopieren
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex, pCharStr, nCopyLen*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
-            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
-
-    // Alte Daten loeschen und Neue zuweisen
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
