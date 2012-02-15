@@ -27,6 +27,9 @@
 
 package installer::sorter;
 
+use strict;
+use warnings;
+
 #########################################
 # Sorting an array of hashes
 #########################################
