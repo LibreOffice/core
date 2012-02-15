@@ -1664,12 +1664,6 @@ void OutlineView::EndModelChange()
 
     DBG_ASSERT( bHasUndoActions == (mrOutliner.GetUndoManager().GetUndoActionCount() != 0), "sd::OutlineView::EndModelChange(), undo actions not in sync!" );
 
-    if( bHasUndoActions )
-    {
-        SfxLinkUndoAction* pLink = new SfxLinkUndoAction(pDocUndoMgr);
-        mrOutliner.GetUndoManager().AddUndoAction(pLink);
-    }
-
     mrOutliner.GetUndoManager().LeaveListAction();
 
     if( bHasUndoActions && mrOutliner.GetEditEngine().HasTriedMergeOnLastAddUndo() )
