@@ -31,7 +31,6 @@ use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
-use installer::sorter;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
@@ -244,8 +243,7 @@ sub collect_modules_recursive
     {
         if ( $directparent->{$modulegid} eq $parentid )
         {
-            my %childhash = ( "gid" => "$modulegid", "Sortkey" => "$directsortkey->{$modulegid}");
-            push(@allchildren, \%childhash);
+            push @allchildren, [ $directsortkey->{$modulegid}, $modulegid ];
             $childrenexist = 1;
         }
     }
@@ -255,14 +253,13 @@ sub collect_modules_recursive
     if ( $childrenexist )
     {
         # Sort children
-        installer::sorter::sort_array_of_hashes_numerically(\@allchildren, "Sortkey");
+        @allchildren = map { $_->[1] }
+                       sort { $a->[0] <=> $b->[0] }
+                       @allchildren;
 
         # Adding children to new array
-        my $childhashref;
-        foreach $childhashref ( @allchildren )
+        foreach my $gid ( @allchildren )
         {
-            my $gid = $childhashref->{'gid'};
-
             # Saving all lines, that have this 'gid'
 
             my $unique;

@@ -60,34 +60,4 @@ sub sorting_array_of_hashes
     }
 }
 
-######################################################
-# Sorting an array of hashes with a numerical value
-######################################################
-
-sub sort_array_of_hashes_numerically
-{
-    my ($arrayref, $sortkey) = @_;
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $onehashunder = ${$arrayref}[$i];
-        my $sortvalueunder = $onehashunder->{$sortkey};
-
-        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
-        {
-            my $onehashover = ${$arrayref}[$j];
-            my $sortvalueover = $onehashover->{$sortkey};
-
-            if ( $sortvalueunder > $sortvalueover)
-            {
-                ${$arrayref}[$i] = $onehashover;
-                ${$arrayref}[$j] = $onehashunder;
-
-                $onehashunder = $onehashover;
-                $sortvalueunder = $sortvalueover;
-            }
-        }
-    }
-}
-
 1;
