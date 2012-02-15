@@ -51,6 +51,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_executables,OOO,\
+	crashrep_com \
 	guiloader \
 	guistdio \
 	odbcconfig \
