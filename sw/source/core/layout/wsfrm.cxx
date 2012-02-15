@@ -969,7 +969,6 @@ void SwCntntFrm::Cut()
             pFrm->_InvalidatePos();
             pFrm->InvalidatePage( pPage );
         }
-        //Ausserdem kann eine Leerseite entstanden sein.
         //If I'm (was) the only CntntFrm in my upper, he has to do the
         //retouching.
         else
@@ -1076,12 +1075,12 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
     OSL_ENSURE( pParent, "No parent for pasting." );
     OSL_ENSURE( pParent->IsLayoutFrm(), "Parent is CntntFrm." );
-    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
-    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( pParent != this, "I'm the parent oneself." );
+    OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
-            "Bin noch irgendwo angemeldet." );
+            "I'm still registered somewhere." );
 
-    //In den Baum einhaengen.
+    //Insert in the tree.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
 
     // OD 24.10.2002 #103517# - correct setting of variable <fnRect>
@@ -1151,8 +1150,8 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 
     if( (Frm().*fnRect->fnGetHeight)() )
     {
-        // AdjustNeighbourhood wird jetzt auch in Spalten aufgerufen,
-        // die sich nicht in Rahmen befinden
+        // AdjustNeighbourhood is now also called in columns which are not
+        // placed inside the frame
         sal_uInt8 nAdjust = GetUpper()->IsFtnBossFrm() ?
                 ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
                 : NA_GROW_SHRINK;
@@ -1185,11 +1184,11 @@ void SwLayoutFrm::Cut()
     SWRECTFN( this )
     SwTwips nShrink = (Frm().*fnRect->fnGetHeight)();
 
-    //Erst removen, dann Upper Shrinken.
+    //Remove first, then shrink upper.
     SwLayoutFrm *pUp = GetUpper();
 
-    // AdjustNeighbourhood wird jetzt auch in Spalten aufgerufen,
-    // die sich nicht in Rahmen befinden
+    // AdjustNeighbourhood is now also called in columns which are not
+    // placed inside the frame
 
     // Remove must not be called before a AdjustNeighbourhood, but it has to
     // be called before the upper-shrink-call, if the upper-shrink takes care
@@ -1241,7 +1240,7 @@ void SwLayoutFrm::Cut()
 |*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    OSL_ENSURE( nDist >= 0, "Negatives Wachstum?" );
+    OSL_ENSURE( nDist >= 0, "Negative growth?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_GROW_TST : PROT_GROW, 0, &nDist )
 
@@ -1290,7 +1289,7 @@ SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    OSL_ENSURE( nDist >= 0, "Negative Verkleinerung?" );
+    OSL_ENSURE( nDist >= 0, "Negative reduction?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_SHRINK_TST : PROT_SHRINK, 0, &nDist )
 
@@ -1333,50 +1332,46 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwFrm::AdjustNeighbourhood()
 |*
-|*  Beschreibung        Wenn sich die Groesse eines Frm's direkt unterhalb
-|*      eines Fussnotenbosses (Seite/Spalte) veraendert hat, so muss dieser
-|*      "Normalisiert" werden.
-|*      Es gibt dort immer einen Frame, der den "maximal moeglichen" Raum
-|*      einnimmt (der Frame, der den Body.Text enhaelt) und keinen oder
-|*      mehrere Frames die den Platz einnehmen den sie halt brauchen
-|*      (Kopf-/Fussbereich, Fussnoten).
-|*      Hat sich einer der Frames veraendert, so muss der Body-Text-Frame
-|*      entsprechen wachsen oder schrumpfen; unabhaegig davon, dass er fix ist.
-|*      !! Ist es moeglich dies allgemeiner zu loesen, also nicht auf die
-|*      Seite beschraenkt und nicht auf einen Speziellen Frame, der den
-|*      maximalen Platz einnimmt (gesteuert ueber Attribut FrmSize)? Probleme:
-|*      Was ist wenn mehrere Frames nebeneinander stehen, die den maximalen
-|*      Platz einnehmen?
-|*      Wie wird der Maximale Platz berechnet?
-|*      Wie klein duerfen diese Frames werden?
+|*  Description         A Frm needs "normalization" if it is directly placed
+|*       below a footnote boss (page/column) and its size changed.
+|*       There's always a frame which takes the maximum possible space (the
+|*       frame which contains the Body.Text) and zero or more frames which
+|*       only take the space needed (header/footer area, footnote).
+|*       If one of frames changed, the body-text-frame has to grow or shrink
+|*       accordingly; even tough it's fixed.
+|*       !! Is it possible to do this in a generic way and not restrict it to
+|*       the page and a distinct frame which takes the maximum space (controlled
+|*       using the FrmSize attribute)? Problems: What if multiple frames taking
+|*       the maximum space are placed next to each other?
+|*       How is the maximum space calculated?
+|*       How small can those frames become?
 |*
-|*      Es wird auf jeden Fall nur so viel Platz genehmigt, dass ein
-|*      Minimalwert fuer die Hoehe des Bodys nicht unterschritten wird.
+|*       In any case, only a certain amount of space is allowed, so we
+|*       never go below a minimum value for the height of the body.
 |*
-|*  Parameter: nDiff ist der Betrag, um den Platz geschaffen werden muss
+|*  Parameter: nDiff is the value around which the space has to be allocated
 |*
 |*************************************************************************/
 SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
 {
     PROTOCOL_ENTER( this, PROT_ADJUSTN, 0, &nDiff );
 
-    if ( !nDiff || !GetUpper()->IsFtnBossFrm() ) // nur innerhalb von Seiten/Spalten
+    if ( !nDiff || !GetUpper()->IsFtnBossFrm() ) // only inside pages/columns
         return 0L;
 
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
-    //Der (Page)Body veraendert sich nur im BrowseMode, aber nicht wenn er
-    //Spalten enthaelt.
+    //The (Page-)Body only changes in BrwoseMode, but only if it does not
+    //contain columns.
     if ( IsPageBodyFrm() && (!bBrowse ||
           (((SwLayoutFrm*)this)->Lower() &&
            ((SwLayoutFrm*)this)->Lower()->IsColumnFrm())) )
         return 0L;
 
-    //In der BrowseView kann der PageFrm selbst ersteinmal einiges von den
-    //Wuenschen abfangen.
+    //In BrowseView mode the PageFrm can handle some of the requests.
     long nBrowseAdd = 0;
-    if ( bBrowse && GetUpper()->IsPageFrm() ) // nur (Page)BodyFrms
+    if ( bBrowse && GetUpper()->IsPageFrm() ) // only (Page-)BodyFrms
     {
         ViewShell *pViewShell = getRootFrm()->GetCurrShell();
         SwLayoutFrm *pUp = GetUpper();
@@ -1399,8 +1394,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 SetCompletePaint();
                 if ( !pViewShell || pViewShell->VisArea().Height() >= pUp->Frm().Height() )
                 {
-                    //Ersteinmal den Body verkleinern. Der waechst dann schon
-                    //wieder.
+                    //First minimize Body, it will grow again later.
                     SwFrm *pBody = ((SwFtnBossFrm*)pUp)->FindBodyCont();
                     const long nTmp = nChg - pBody->Prt().Height();
                     if ( !bTst )
@@ -1423,20 +1417,19 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         }
         else
         {
-            //Die Seite kann bis auf 0 schrumpfen. Die erste Seite bleibt
-            //mindestens so gross wie die VisArea.
+            //The page can shrink to 0. The fist page keeps the same size like
+            //VisArea.
             nChg = nDiff;
             long nInvaAdd = 0;
             if ( pViewShell && !pUp->GetPrev() &&
                  pUp->Frm().Height() + nDiff < pViewShell->VisArea().Height() )
             {
-                //Das heisst aber wiederum trotzdem, das wir geeignet invalidieren
-                //muessen.
+                //This means, that we have to invalidate adequate.
                 nChg = pViewShell->VisArea().Height() - pUp->Frm().Height();
                 nInvaAdd = -(nDiff - nChg);
             }
 
-            //Invalidieren inklusive unterem Rand.
+            //Invalidate including bottom border.
             long nBorder = nUpPrtBottom + 20;
             nBorder -= nChg;
             aInva.Top( aInva.Bottom() - (nBorder+nInvaAdd) );
@@ -1446,15 +1439,14 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 if ( !IsHeaderFrm() )
                     ((SwFtnBossFrm*)pUp)->FindBodyCont()->SetCompletePaint();
             }
-            //Wegen der Rahmen die Seite invalidieren. Dadurch wird die Seite
-            //wieder entsprechend gross wenn ein Rahmen nicht passt. Das
-            //funktioniert anderfalls nur zufaellig fuer absatzgebundene Rahmen
-            //(NotifyFlys).
+            //Invalidate the page because of the frames. Thereby the page becomes
+            //the right size again if a frame didn't fit. This only works
+            //randomly for paragraph bound frames otherwise (NotifyFlys).
             pUp->InvalidateSize();
         }
         if ( !bTst )
         {
-            //Unabhaengig von nChg
+            //Independent from nChg
             if ( pViewShell && aInva.HasArea() && pUp->GetUpper() )
                 pViewShell->InvalidateWindows( aInva );
         }
@@ -1469,7 +1461,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             if ( GetNext() )
                 GetNext()->_InvalidatePos();
 
-            //Ggf. noch ein Repaint ausloesen.
+            //Trigger a repaint if necessary.
             const SvxGraphicPosition ePos = pUp->GetFmt()->GetBackground().GetGraphicPos();
             if ( ePos != GPOS_NONE && ePos != GPOS_TILED )
                 pViewShell->InvalidateWindows( pUp->Frm() );
@@ -1479,10 +1471,10 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 if ( pUp->GetNext() )
                     pUp->GetNext()->InvalidatePos();
 
-                //Mies aber wahr: im Notify am ViewImp wird evtl. ein Calc
-                //auf die Seite und deren Lower gerufen. Die Werte sollten
-                //unverandert bleiben, weil der Aufrufer bereits fuer die
-                //Anpassung von Frm und Prt sorgen wird.
+                //Sad but true: during notify on ViewImp a Calc on the page and
+                //its Lower may be called. The values should not be changed
+                //because the caller takes care of the adjustment of Frm and
+                //Prt.
                 const long nOldFrmHeight = Frm().Height();
                 const long nOldPrtHeight = Prt().Height();
                 const sal_Bool bOldComplete = IsCompletePaint();
@@ -1564,13 +1556,13 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         if ( !pFrm )
             return 0;
 
-        //Wenn ich keinen finde eruebrigt sich alles weitere.
+        //If not one is found, everything else is solved.
         nReal = (pFrm->Frm().*fnRect->fnGetHeight)();
         if( nReal > nDiff )
             nReal = nDiff;
         if( !bFtnPage )
         {
-            //Minimalgrenze beachten!
+            //Respect the minimal boundary!
             if( nReal )
             {
                 const SwTwips nMax = pBoss->GetVarSpace();
@@ -1582,9 +1574,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 && ( pFrm->GetNext()->IsVertical() == IsVertical() )
                 )
             {
-                //Wenn der Body nicht genuegend her gibt, kann ich noch mal
-                //schauen ob es eine Fussnote gibt, falls ja kann dieser
-                //entsprechend viel gemopst werden.
+                //If the Body doesn't return enough, we look for a footnote, if
+                //there is one, we steal there accordingly.
                 const SwTwips nAddMax = (pFrm->GetNext()->Frm().*fnRect->
                                         fnGetHeight)();
                 nAdd = nDiff - nReal;
@@ -1634,11 +1625,12 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                     OSL_ENSURE( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
                     const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
-                   // Wann muss invalidiert werden?
-                   // Wenn ein Rahmen am SeitenTextBereich ausgerichtet ist,
-                   // muss bei Aenderung des Headers ein TOP, MIDDLE oder NONE,
-                   // bei Aenderung des Footers ein BOTTOM oder MIDDLE
-                   // ausgerichteter Rahmen seine Position neu berechnen.
+                    // When do we have to invalidate?
+                    // If a frame is aligned on a PageTextArea and the header
+                    // changes a TOP, MIDDLE or NONE aligned frame needs to
+                    // recalculate it's position; if the footer changes a BOTTOM
+                    // or MIDDLE aligned frame needs to recalculate it's
+                    // position.
                     if( ( rVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                           rVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )    &&
                         ((IsHeaderFrm() && rVert.GetVertOrient()!=text::VertOrientation::BOTTOM) ||
@@ -1855,7 +1847,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
+    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
     if( !(GetUpper()->GetType() & nTmpType) && GetUpper()->HasFixSize() )
     {
         if ( !bTst )
@@ -1890,7 +1882,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
     if ( !bTst )
     {
-        //Cntnts werden immer auf den gewuenschten Wert gebracht.
+        //Cntnts are always resized to the wished value.
         long nOld = (Frm().*fnRect->fnGetHeight)();
         (Frm().*fnRect->fnSetHeight)( nOld + nDist );
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
@@ -1909,7 +1901,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         }
     }
 
-    //Upper nur growen wenn notwendig.
+    //Only grow Upper if necessary.
     if ( nReal < nDist )
     {
         if( GetUpper() )
@@ -1959,7 +1951,7 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     SWRECTFN( this )
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
     OSL_ENSURE( nDist <= (Frm().*fnRect->fnGetHeight)(),
-            "nDist > als aktuelle Grosse." );
+            "nDist > than current size." );
 
     if ( !bTst )
     {
@@ -2058,11 +2050,10 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
     if ( !bTst )
     {
-        //Die Position des naechsten Frm's veraendert sich auf jeden Fall.
+        //The position of the next Frm changes for sure.
         InvalidateNextPos();
 
-        //Wenn ich keinen Nachfolger habe, so muss ich mich eben selbst um
-        //die Retusche kuemmern.
+        //If I don't have a successor I have to do the retouch by myself.
         if ( !GetNext() )
             SetRetouche();
     }
@@ -2157,9 +2148,9 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
     {
         case RES_FMT_CHG:
             rInvFlags = 0xFF;
-            /* kein break hier */
+            /* no break here */
 
-        case RES_PAGEDESC:                      //Attributaenderung (an/aus)
+        case RES_PAGEDESC:                      //attribute changes (on/off)
             if ( IsInDocBody() && !IsInTab() )
             {
                 rInvFlags |= 0x02;
@@ -2205,9 +2196,9 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
                     GetIndNext()->InvalidateObjs( true );
                 }
-                Prepare( PREP_UL_SPACE );   //TxtFrm muss Zeilenabst. korrigieren.
+                Prepare( PREP_UL_SPACE );   //TxtFrm has to correct line spacing.
                 rInvFlags |= 0x80;
-                /* kein Break hier */
+                /* no break here */
             }
         case RES_LR_SPACE:
         case RES_BOX:
@@ -2365,7 +2356,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
+    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
@@ -2406,7 +2397,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     if ( nReal > 0 )
     {
         if ( GetUpper() )
-        {   // AdjustNeighbourhood jetzt auch in Spalten (aber nicht in Rahmen)
+        {   // AdjustNeighbourhood now only for the columns (but not in frames)
             sal_uInt8 nAdjust = GetUpper()->IsFtnBossFrm() ?
                 ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
                 : NA_GROW_SHRINK;
@@ -2443,7 +2434,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
                 if ( IsFtnFrm() && (nGrow != nReal) && GetNext() )
                 {
-                    //Fussnoten koennen ihre Nachfolger verdraengen.
+                    //Footnotes can replace their successor.
                     SwTwips nSpace = bTst ? 0 : -nDist;
                     const SwFrm *pFrm = GetUpper()->Lower();
                     do
@@ -2578,7 +2569,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                    ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
                    : NA_GROW_SHRINK;
 
-    // AdjustNeighbourhood auch in Spalten (aber nicht in Rahmen)
+    // AdjustNeighbourhood also in columns (but not in frames)
     if( NA_ONLY_ADJUST == nAdjust )
     {
         if ( IsPageBodyFrm() && !bBrowse )
@@ -2656,7 +2647,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 if( IsTabFrm() )
                     ((SwTabFrm*)this)->SetComplete();
-                if ( Lower() )  //Kann auch im Join stehen und leer sein!
+                if ( Lower() )  //Can also be in the Join an be empty!
                     InvalidateNextPos();
             }
         }
@@ -2682,9 +2673,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
               0 != (pCnt = ((SwFtnFrm*)this)->GetRefFromAttr() ) )
         {
             if ( pCnt->IsFollow() )
-            {   // Wenn wir sowieso schon in einer anderen Spalte/Seite sitzen
-                // als der Frame mit der Referenz, dann brauchen wir nicht
-                // auch noch seinen Master zu invalidieren.
+            {   // If we are in an other column/page than the frame with the
+                // reference, we don't need to invalidate its master.
                 SwFrm *pTmp = pCnt->FindFtnBossFrm(sal_True) == FindFtnBossFrm(sal_True)
                               ?  pCnt->FindMaster()->GetFrm() : pCnt;
                 pTmp->Prepare( PREP_ADJUST_FRM );
@@ -2700,11 +2690,11 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwLayoutFrm::ChgLowersProp()
 |*
-|*  Beschreibung        Aendert die Grosse der direkt untergeordneten Frm's
-|*      die eine Fixe Groesse haben, proportional zur Groessenaenderung der
-|*      PrtArea des Frm's.
-|*      Die Variablen Frm's werden auch proportional angepasst; sie werden
-|*      sich schon wieder zurechtwachsen/-schrumpfen.
+|*  Description          Changes the size of the directly subsidiary Frm's
+|*      which have a fixed size, proportionally to the size change of the
+|*      PrtArea of the Frm's.
+|*      The variable Frm's are also proportionally adapted; they will grow/shrink
+|*      again oneself.
 |*
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
@@ -3063,9 +3053,8 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 
         if ( !pLowerFrm->GetNext() && pLowerFrm->IsRetoucheFrm() )
         {
-            //Wenn ein Wachstum stattgefunden hat, und die untergeordneten
-            //zur Retouche faehig sind (derzeit Tab, Section und Cntnt), so
-            //trigger ich sie an.
+            //If a growth took place and the subordinate elements can retouch
+            //oneself (currently Tabs, Sections and Cntnt) we trigger it.
             if ( rOldSize.Height() < Prt().SSize().Height() ||
                  rOldSize.Width() < Prt().SSize().Width() )
                 pLowerFrm->SetRetouche();
@@ -3101,8 +3090,8 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 |*
 |*  SwLayoutFrm::Format()
 |*
-|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
-|*                      Die Fixsize wird hier nicht eingestellt.
+|*  Description:        "Formats" the Frame; Frm and PrtArea.
+|*                      The Fixsize is not set here.
 |*
 |*************************************************************************/
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
@@ -3137,14 +3126,14 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             do
             {   bValidSize = sal_True;
 
-                //Die Groesse in der VarSize wird durch den Inhalt plus den
-                //Raendern bestimmt.
+                //The size in VarSize is calculated using the content plus the
+                //frames.
                 SwTwips nRemaining = 0;
                 SwFrm *pFrm = Lower();
                 while ( pFrm )
                 {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
                     if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
-                    // Dieser TxtFrm waere gern ein bisschen groesser
+                    // This TxtFrm would like to be a bit bigger
                         nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
                                       - (pFrm->Prt().*fnRect->fnGetHeight)();
                     else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
@@ -3162,10 +3151,10 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                         Grow( nDiff );
                     else
                         Shrink( -nDiff );
-                    //Schnell auf dem kurzen Dienstweg die Position updaten.
+                    //Updates the positions using the fast channel.
                     MakePos();
                 }
-                //Unterkante des Uppers nicht ueberschreiten.
+                //Don't exceed the bottom edge of the Upper.
                 if ( GetUpper() && (Frm().*fnRect->fnGetHeight)() )
                 {
                     const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
@@ -3313,7 +3302,7 @@ long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
                     nDiff = nDiff ? Min( nDiff, nTmp ) : nTmp;
             }
         }
-        //Leere Spalten ueberspringen!
+        //Skip empty columns!
         pCol = (SwLayoutFrm*)pCol->GetNext();
         while ( pCol && 0 == (pFrm = pCol->Lower()) )
             pCol = (SwLayoutFrm*)pCol->GetNext();
@@ -3357,20 +3346,16 @@ sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
 void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                                    const SwTwips nBorder, const SwTwips nMinHeight )
 {
-    //Wenn Spalten im Spiel sind, so wird die Groesse an der
-    //letzten Spalte ausgerichtet.
-    //1. Inhalt formatieren.
-    //2. Hoehe der letzten Spalte ermitteln, wenn diese zu
-    //   zu gross ist muss der Fly wachsen.
-    //   Der Betrag um den der Fly waechst ist aber nicht etwa
-    //   der Betrag des Ueberhangs, denn wir muessen davon
-    //   ausgehen, dass etwas Masse zurueckfliesst und so
-    //   zusaetzlicher Platz geschaffen wird.
-    //   Im Ersten Ansatz ist der Betrag um den gewachsen wird
-    //   der Ueberhang geteilt durch die Spaltenanzahl oder
-    //   der Ueberhang selbst wenn er kleiner als die Spalten-
-    //   anzahl ist.
-    //3. Weiter mit 1. bis zur Stabilitaet.
+    //If there are columns involved, the size is adjusted using the last column.
+    //1. Format content.
+    //2. Calculate height of the last column if it's too big, the Fly has to
+    //   grow. The amount by which the Fly grows is not the amount of the
+    //   overhang because we have to act on the assumption that some bulk floats
+    //   back which will generate some more space.
+    //   In the first paragraph the amount which we grow by equals the overhang
+    //   divided by the amount of columns or the overhang itself if it's smaller
+    //   than the amount of columns.
+    //3. Go back to 1. until everything is stable.
 
     const SwFmtCol &rCol = rAttrs.GetAttrSet().GetCol();
     const sal_uInt16 nNumCols = rCol.GetNumCols();
@@ -3380,34 +3365,33 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     {
-        // Zugrunde liegender Algorithmus
-        // Es wird versucht, eine optimale Hoehe fuer die Spalten zu finden.
-        // nMinimum beginnt mit der uebergebenen Mindesthoehe und wird dann als
-        // Maximum der Hoehen gepflegt, bei denen noch Spalteninhalt aus einer
-        // Spalte herausragt.
-        // nMaximum beginnt bei LONG_MAX und wird als Minimum der Hoehen gepflegt,
-        // bei denen der Inhalt gepasst hat.
-        // Bei spaltigen Bereichen beginnt nMaximum bei dem maximalen Wert, den
-        // die Umgebung vorgibt, dies kann natuerlich ein Wert sein, bei dem noch
-        // Inhalt heraushaengt.
-        // Es werden die Spalten formatiert, wenn Inhalt heraushaengt, wird nMinimum
-        // ggf. angepasst, dann wird gewachsen, mindestens um nMinDiff, aber nicht ueber
-        // ein groesseres nMaximum hinaus. Wenn kein Inhalt heraushaengt, sondern
-        // noch Luft in einer Spalte ist, schrumpfen wir entsprechend, mindestens um
-        // nMinDiff, aber nicht unter das nMinimum.
-        // Abgebrochen wird, wenn kein Inhalt mehr heraushaengt und das Minimum sich auf
-        // weniger als ein MinDiff dem Maximum angenaehert hat oder das von der
-        // Umgebung vorgegebene Maximum erreicht ist und trotzdem Inhalt heraus-
-        // haengt.
+        // Underlying algorithm
+        // We try to find the optimal height for the column.
+        // nMinimum starts with the passed minimum height and is then remembered
+        // as the maximum height on which column content still juts out of a
+        // column.
+        // nMaximum starts with LONG_MAX and is then remembered as the minimum
+        // width on which the content fitted.
+        // In column based sections nMaximum starts at the maximum value which
+        // the surrounding defines, this can certainly be a value on which
+        // content still juts out.
+        // If content still juts out, the columns are formated and nMinimum is
+        // adjusted accordingly, then the growth is done, at least by uMinDiff
+        // but not over a certain nMaximum. If no content juts out but there is
+        // still some space left in the column, shrinking is done accordingly, at
+        // least by nMindIff but not below the nMinimum.
+        // Cancel as soon as no content juts out and the difference from minimum
+        // to maximum is less than MinDiff or the maximum which was defined by
+        // the surrounding is reached even if some content still juts out.
 
-        // Kritik an der Implementation
-        // 1. Es kann theoretisch Situationen geben, in denen der Inhalt in einer geringeren
-        // Hoehe passt und in einer groesseren Hoehe nicht passt. Damit der Code robust
-        // gegen solche Verhaeltnisse ist, sind ein paar Abfragen bezgl. Minimum und Maximum
-        // drin, die wahrscheinlich niemals zuschlagen koennen.
-        // 2. Es wird fuer das Schrumpfen das gleiche nMinDiff benutzt wie fuer das Wachstum,
-        // das nMinDiff ist allerdings mehr oder weniger die kleinste erste Zeilenhoehe und
-        // als Mindestwert fuer das Schrumpfen nicht unbedingt optimal.
+        // Criticism of this implementation
+        // 1. Theoretically situations are possible in which the content fits in
+        // a lower height but not in a higher height. To ensure that the code
+        // handles such situations the code contains a few checks concerning
+        // minimum and maximum which probably are never triggered.
+        // 2. We use the same nMinDiff for shrinking and growing, but nMinDiff
+        // is more or less the smallest first line height and doesn't fit ideal
+        // as minimum value.
 
         long nMinimum = nMinHeight;
         long nMaximum;
@@ -3480,15 +3464,14 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         }
         do
         {
-            //Kann eine Weile dauern, deshalb hier auf Waitcrsr pruefen.
+            //Could take a while therefore check for Waitcrsr here.
             if ( pImp )
                 pImp->CheckWaitCrsr();
 
             bValidSize = sal_True;
-            //Erstmal die Spalten formatieren, das entlastet den
-            //Stack ein wenig.
-            //Bei der Gelegenheit stellen wir auch gleich mal die
-            //Breiten und Hoehen der Spalten ein (so sie denn falsch sind).
+            //First format the column as this will relieve the stack a bit.
+            //Also set width and height of the column (if they are wrong)
+            //while we are at it.
             SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
 
             // #i27399#
@@ -3499,7 +3482,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {
                 pCol->Calc();
-                // ColumnFrms besitzen jetzt einen BodyFrm, der auch kalkuliert werden will
+                // ColumnFrms have a BodyFrm now, which need to be calculated too
                 pCol->Lower()->Calc();
                 if( pCol->Lower()->GetNext() )
                     pCol->Lower()->GetNext()->Calc();  // SwFtnCont
@@ -3509,8 +3492,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             ::CalcCntnt( this );
 
             pCol = (SwLayoutFrm*)Lower();
-            OSL_ENSURE( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
-            // bMinDiff wird gesetzt, wenn es keine leere Spalte gibt
+            OSL_ENSURE( pCol && pCol->GetNext(), ":-( column making holidays?");
+            // set bMinDiff if no empty columns exist
             sal_Bool bMinDiff = sal_True;
             // OD 28.03.2003 #108446# - check for all column content and all columns
             while ( bMinDiff && pCol )
@@ -3524,7 +3507,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             SwTwips nDiff = 0;
             SwTwips nMaxFree = 0;
             SwTwips nAllFree = LONG_MAX;
-            // bFoundLower wird gesetzt, wenn es mind. eine nichtleere Spalte gibt
+            // set bFoundLower if there is at least one non-empty column
             sal_Bool bFoundLower = sal_False;
             while( pCol )
             {
@@ -3567,59 +3550,59 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if ( bFoundLower || ( IsSctFrm() && ((SwSectionFrm*)this)->HasFollow() ) )
             {
                 SwTwips nMinDiff = ::lcl_CalcMinColDiff( this );
-                // Hier wird entschieden, ob wir wachsen muessen, naemlich wenn
-                // ein Spalteninhalt (nDiff) oder ein Fly herausragt.
-                // Bei spaltigen Bereichen wird beruecksichtigt, dass mit dem
-                // Besitz eines nichtleeren Follows die Groesse festgelegt ist.
+                // Here we decide if growing is needed - this is the case, if
+                // column content (nDiff) or a Fly juts over.
+                // In sections with columns we take into account to set the size
+                // when having a non-empty Follow.
                 if ( nDiff || ::lcl_IsFlyHeightClipped( this ) ||
                      ( IsSctFrm() && ((SwSectionFrm*)this)->CalcMinDiff( nMinDiff ) ) )
                 {
                     long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
-                    // Das Minimum darf nicht kleiner sein als unsere PrtHeight,
-                    // solange noch etwas herausragt.
+                    // The minimum must not be smaller than our PrtHeight as
+                    // long as something juts over.
                     if( nMinimum < nPrtHeight )
                         nMinimum = nPrtHeight;
-                    // Es muss sichergestellt sein, dass das Maximum nicht kleiner
-                    // als die PrtHeight ist, wenn noch etwas herausragt
+                    // The maximum must not be smaller than PrtHeight if
+                    // something still juts over.
                     if( nMaximum < nPrtHeight )
-                        nMaximum = nPrtHeight;  // Robust, aber kann das ueberhaupt eintreten?
-                    if( !nDiff ) // wenn nur Flys herausragen, wachsen wir um nMinDiff
+                        nMaximum = nPrtHeight;  // Robust, but will this ever happen?
+                    if( !nDiff ) // If only Flys jut over, we grow by nMinDiff
                         nDiff = nMinDiff;
-                    // Wenn wir um mehr als nMinDiff wachsen wollen, wird dies auf die
-                    // Spalten verteilt
+                    // If we should grow more than by nMindDiff we split it over
+                    // the columns
                     if ( Abs(nDiff - nMinDiff) > nNumCols && nDiff > (long)nNumCols )
                         nDiff /= nNumCols;
 
                     if ( bMinDiff )
-                    {   // Wenn es keinen leeren Spalten gibt, wollen wir mind. um nMinDiff
-                        // wachsen. Sonderfall: Wenn wir kleiner als die minimale Frmhoehe
-                        // sind und die PrtHeight kleiner als nMinDiff ist, wachsen wir so,
-                        // dass die PrtHeight hinterher genau nMinDiff ist.
+                    {   // If no empty column exists, we want to grow at least
+                        // by nMinDiff. Special case: If we are smaller than the
+                        // minimal FrmHeight and PrtHeight is smaller than
+                        // nMindiff we grow in a way that PrtHeight is exactly
+                        // nMinDiff afterwards.
                         long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
                         if ( nFrmHeight > nMinHeight || nPrtHeight >= nMinDiff )
                             nDiff = Max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
                             nDiff = nMinDiff - nPrtHeight + 1;
                     }
-                    // nMaximum ist eine Groesse, in der der Inhalt gepasst hat,
-                    // oder der von der Umgebung vorgegebene Wert, deshalb
-                    // brauchen wir nicht ueber diesen Wrt hinauswachsen.
+                    // nMaximum has a size which fits the content or the
+                    // requested value from the surrounding therefore we don't
+                    // need to exceed this value.
                     if( nDiff + nPrtHeight > nMaximum )
                         nDiff = nMaximum - nPrtHeight;
                 }
-                else if( nMaximum > nMinimum ) // Wir passen, haben wir auch noch Spielraum?
+                else if( nMaximum > nMinimum ) // We fit, do we still have some margin?
                 {
                     long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                     if ( nMaximum < nPrtHeight )
-                        nDiff = nMaximum - nPrtHeight; // wir sind ueber eine funktionierende
-                        // Hoehe hinausgewachsen und schrumpfen wieder auf diese zurueck,
-                        // aber kann das ueberhaupt eintreten?
+                        nDiff = nMaximum - nPrtHeight; // We grew over a working
+                        // height and shrink back it, but will this ever happen?
                     else
-                    {   // Wir haben ein neues Maximum, eine Groesse, fuer die der Inhalt passt.
+                    {   // We have a new maximum, a size which fits for the content.
                         nMaximum = nPrtHeight;
-                        // Wenn der Freiraum in den Spalten groesser ist als nMinDiff und wir
-                        // nicht dadurch wieder unter das Minimum rutschen, wollen wir ein wenig
-                        // Luft herauslassen.
+                        // If the margin in the column is bigger than nMinDiff
+                        // and we therefore drop under the minimum, we deflate
+                        // a bit.
                         if ( !bNoBalance &&
                              // #i23129# - <nMinDiff> can be
                              // big, because of an object at the beginning of
@@ -3629,10 +3612,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                              ( !nAllFree ||
                                nMinimum < nPrtHeight - nMinDiff ) )
                         {
-                            nMaxFree /= nNumCols; // auf die Spalten verteilen
-                            nDiff = nMaxFree < nMinDiff ? -nMinDiff : -nMaxFree; // mind. nMinDiff
-                            if( nPrtHeight + nDiff <= nMinimum ) // Unter das Minimum?
-                                nDiff = ( nMinimum - nMaximum ) / 2; // dann lieber die Mitte
+                            nMaxFree /= nNumCols; // disperse over the columns
+                            nDiff = nMaxFree < nMinDiff ? -nMinDiff : -nMaxFree; // min nMinDiff
+                            if( nPrtHeight + nDiff <= nMinimum ) // below the minimum?
+                                nDiff = ( nMinimum - nMaximum ) / 2; // Take the center
                         }
                         else if( nAllFree )
                         {
@@ -3642,7 +3625,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         }
                     }
                 }
-                if( nDiff ) // jetzt wird geschrumpft oder gewachsen..
+                if( nDiff ) // now we shrink or grow...
                 {
                     Size aOldSz( Prt().SSize() );
                     long nTop = (this->*fnRect->fnGetTopMargin)();
@@ -3675,10 +3658,9 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                             }
                         }
                     }
-                    //Es muss geeignet invalidiert werden, damit
-                    //sich die Frms huebsch ausbalancieren
-                    //- Der jeweils erste ab der zweiten Spalte bekommt
-                    //  ein InvalidatePos();
+                    //Invalidate suitable to nicely balance the Frms.
+                    //- Every first one after the second column gets a
+                    //  InvalidatePos();
                     pCol = (SwLayoutFrm*)Lower()->GetNext();
                     while ( pCol )
                     {
@@ -3689,9 +3671,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     }
                     if( IsSctFrm() && ((SwSectionFrm*)this)->HasFollow() )
                     {
-                        // Wenn wir einen Follow erzeugt haben, muessen wir
-                        // seinem Inhalt die Chance geben, im CalcCntnt
-                        // zurueckzufliessen
+                        // If we created a Follow, we need to give its content
+                        // the opportunity to flow back inside the CalcCntnt
                         SwCntntFrm* pTmpCntnt =
                             ((SwSectionFrm*)this)->GetFollow()->ContainsCntnt();
                         if( pTmpCntnt )
@@ -3728,9 +3709,9 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 SwCntntFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
 {
     SwSectionFrm* pSect = pCnt->FindSctFrm();
-    // Wenn unser CntntFrm in einer Tabelle oder Fussnote steht, sind nur
-    // Bereiche gemeint, die ebenfalls innerhalb liegen.
-    // Ausnahme: Wenn direkt eine Tabelle uebergeben wird.
+    // If our CntntFrm is placed inside a table or a footnote, only sections
+    // which are also placed inside are meant.
+    // Exception: If a table is directly passed.
     if( ( ( pCnt->IsInTab() && !pSect->IsInTab() ) ||
         ( pCnt->IsInFtn() && !pSect->IsInFtn() ) ) && !pCnt->IsTabFrm() )
         return NULL;
@@ -3773,7 +3754,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
         {
             if( pCnt->IsInSct() )
             {
-                // Siehe oben bei Tabellen
+                // See above at tables
                 if( !pLastSctCnt )
                     pLastSctCnt = lcl_InvalidateSection( pCnt, nInv );
                 if( pLastSctCnt == pCnt )
@@ -3788,14 +3769,14 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
         {
             if( pCnt->IsInTab() )
             {
-                // Um nicht fuer jeden CntntFrm einer Tabelle das FindTabFrm() zu rufen
-                // und wieder die gleiche Tabelle zu invalidieren, merken wir uns den letzten
-                // CntntFrm der Tabelle und reagieren erst wieder auf IsInTab(), wenn wir
-                // an diesem vorbei sind.
-                // Beim Eintritt in die Tabelle wird der LastSctCnt auf Null gesetzt,
-                // damit Bereiche im Innern der Tabelle richtig invalidiert werden.
-                // Sollte die Tabelle selbst in einem Bereich stehen, so wird an
-                // diesem die Invalidierung bis zu dreimal durchgefuehrt, das ist vertretbar.
+                // To not call FindTabFrm() for each CntntFrm of a table and
+                // then invalidate the table, we remember the last CntntFrm of
+                // the table and stop to react to IsInTab() until we passed it
+                // up.
+                // When entering the table, LastSctCnt is set to null, so areas
+                // inside the table are correctly invalidated.
+                // If the table itself is placed in such an area the
+                // invalidation is done three times, which is acceptable.
                 if( !pLastTabCnt )
                 {
                     pLastTabCnt = lcl_InvalidateTable( pCnt->FindTabFrm(), nInv );
@@ -3848,7 +3829,7 @@ void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 
 void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
 {
-    // Erst werden alle Seitengebundenen FlyFrms abgearbeitet.
+    // First process all page bound FlyFrms.
     SwPageFrm *pPage = (SwPageFrm*)Lower();
     while( pPage )
     {
@@ -3857,7 +3838,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
         pPage->InvalidateFlyInCnt();
         pPage->InvalidateLayout();
         pPage->InvalidateCntnt();
-        pPage->InvalidatePage( pPage ); //Damit ggf. auch der Turbo verschwindet
+        pPage->InvalidatePage( pPage ); // So even the Turbo disappears if applicable
 
         if ( pPage->GetSortedObjs() )
         {
@@ -3879,7 +3860,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
         pPage = (SwPageFrm*)(pPage->GetNext());
     }
 
-    //Hier den gesamten Dokumentinhalt und die zeichengebundenen Flys.
+    //Invalidate the whole document content and the drawn Flys here.
     ::lcl_InvalidateCntnt( ContainsCntnt(), nInv );
 
     if( nInv & INV_PRTAREA )
