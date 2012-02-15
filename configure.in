@@ -2967,6 +2967,7 @@ linux-androideabi*)
         ;;
     esac
     SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/$OUTPATH"
+    SOLARLIB="-L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     ;;
 
 mingw*)
