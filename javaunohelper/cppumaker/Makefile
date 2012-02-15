@@ -29,6 +29,7 @@ gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 done :
+	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,cppumaker -C -BUCR -O. \
 		-Tcom.sun.star.beans.NamedValue \
 		-Tcom.sun.star.beans.XPropertySet \
@@ -51,7 +52,7 @@ done :
 		-Tcom.sun.star.uno.XComponentContext \
 		-Tcom.sun.star.uno.XWeak \
 		$(OUTDIR)/bin/udkapi.rdb) && \
-	touch $@
+	touch $@)
 
 .DEFAULT_GOAL := all
 .PHONY : all

@@ -28,7 +28,8 @@
 include $(GBUILDDIR)/gbuild.mk
 
 JREProperties.class : $(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java
-	$(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^
+	$(call gb_Helper_abbreviate_dirs_native, \
+	$(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^)
 
 .DEFAULT_GOAL := all
 .PHONY : all

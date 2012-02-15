@@ -29,7 +29,8 @@ gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 done : $(OUTDIR)/bin/udkapi.rdb
-	$(call gb_Helper_execute,javamaker -BUCR -O./class $<) && touch $@
+	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_execute,javamaker -BUCR -O./class $<) && touch $@)
 
 .DEFAULT_GOAL := all
 .PHONY : all
