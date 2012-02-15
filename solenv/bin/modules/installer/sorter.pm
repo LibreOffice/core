@@ -30,6 +30,12 @@ package installer::sorter;
 use strict;
 use warnings;
 
+use base 'Exporter';
+
+our @EXPORT_OK = qw(
+    sorting_array_of_hashes
+);
+
 #########################################
 # Sorting an array of hashes
 #########################################
