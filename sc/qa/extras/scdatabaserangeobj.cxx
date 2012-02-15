@@ -63,7 +63,7 @@ uno::Reference< lang::XComponent > ScDatabaseRangeObj::mxComponent;
 uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const rtl::OUString& rDBName )
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xdatabaserange.ods")), aFileURL);
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDatabaseRangeObj.ods")), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

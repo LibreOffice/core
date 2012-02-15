@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_complex \
     JunitTest_sc_unoapi \
     CppunitTest_sc_cellrangeobj \
+    CppunitTest_sc_databaserangeobj \
     CppunitTest_sc_datapilottableobj \
     CppunitTest_sc_datapilotfieldobj \
     CppunitTest_sc_macros_test \
