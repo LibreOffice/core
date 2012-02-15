@@ -62,104 +62,6 @@ DBG_NAME( AllSettings )
                                  STYLE_OPTION_NOMNEMONICS)
 
 // =======================================================================
-ImplMachineData::ImplMachineData()
-{
-    mnRefCount                  = 1;
-    mnOptions                   = 0;
-    mnScreenOptions             = 0;
-    mnPrintOptions              = 0;
-    mnScreenRasterFontDeviation = 0;
-}
-
-// -----------------------------------------------------------------------
-
-ImplMachineData::ImplMachineData( const ImplMachineData& rData )
-{
-    mnRefCount                  = 1;
-    mnOptions                   = rData.mnOptions;
-    mnScreenOptions             = rData.mnScreenOptions;
-    mnPrintOptions              = rData.mnPrintOptions;
-    mnScreenRasterFontDeviation = rData.mnScreenRasterFontDeviation;
-}
-
-// -----------------------------------------------------------------------
-
-MachineSettings::MachineSettings()
-{
-    mpData = new ImplMachineData();
-}
-
-// -----------------------------------------------------------------------
-
-MachineSettings::MachineSettings( const MachineSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MachineSettings: RefCount overflow" );
-
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
-    mpData = rSet.mpData;
-    mpData->mnRefCount++;
-}
-
-// -----------------------------------------------------------------------
-
-MachineSettings::~MachineSettings()
-{
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-}
-
-// -----------------------------------------------------------------------
-
-const MachineSettings& MachineSettings::operator =( const MachineSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MachineSettings: RefCount overflow" );
-
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    rSet.mpData->mnRefCount++;
-
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
-    mpData = rSet.mpData;
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-void MachineSettings::CopyData()
-{
-    // Falls noch andere Referenzen bestehen, dann kopieren
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplMachineData( *mpData );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool MachineSettings::operator ==( const MachineSettings& rSet ) const
-{
-    if ( mpData == rSet.mpData )
-        return sal_True;
-
-    if ( (mpData->mnOptions                     == rSet.mpData->mnOptions)                  &&
-         (mpData->mnScreenOptions               == rSet.mpData->mnScreenOptions)            &&
-         (mpData->mnPrintOptions                == rSet.mpData->mnPrintOptions)             &&
-         (mpData->mnScreenRasterFontDeviation   == rSet.mpData->mnScreenRasterFontDeviation) )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-// =======================================================================
 
 ImplMouseData::ImplMouseData()
 {
@@ -307,79 +209,6 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
         return sal_True;
     else
         return sal_False;
-}
-
-// =======================================================================
-
-ImplKeyboardData::ImplKeyboardData()
-{
-    mnRefCount                  = 1;
-    mnOptions                   = 0;
-}
-
-// -----------------------------------------------------------------------
-
-ImplKeyboardData::ImplKeyboardData( const ImplKeyboardData& rData )
-{
-    mnRefCount                  = 1;
-    mnOptions                   = rData.mnOptions;
-}
-
-// -----------------------------------------------------------------------
-
-KeyboardSettings::KeyboardSettings()
-{
-    mpData = new ImplKeyboardData();
-}
-
-// -----------------------------------------------------------------------
-
-KeyboardSettings::KeyboardSettings( const KeyboardSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "KeyboardSettings: RefCount overflow" );
-
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
-    mpData = rSet.mpData;
-    mpData->mnRefCount++;
-}
-
-// -----------------------------------------------------------------------
-
-KeyboardSettings::~KeyboardSettings()
-{
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-}
-
-// -----------------------------------------------------------------------
-
-const KeyboardSettings& KeyboardSettings::operator =( const KeyboardSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "KeyboardSettings: RefCount overflow" );
-
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    rSet.mpData->mnRefCount++;
-
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
-    mpData = rSet.mpData;
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
-{
-    return mpData == rSet.mpData
-        || mpData->mnOptions == rSet.mpData->mnOptions;
 }
 
 // =======================================================================
@@ -1271,91 +1100,6 @@ sal_Bool MiscSettings::GetEnableLocalizedDecimalSep() const
 
 // =======================================================================
 
-ImplNotificationData::ImplNotificationData()
-{
-    mnRefCount                  = 1;
-    mnOptions                   = 0;
-}
-
-// -----------------------------------------------------------------------
-
-ImplNotificationData::ImplNotificationData( const ImplNotificationData& rData )
-{
-    mnRefCount                  = 1;
-    mnOptions                   = rData.mnOptions;
-}
-
-// -----------------------------------------------------------------------
-
-NotificationSettings::NotificationSettings()
-{
-    mpData = new ImplNotificationData();
-}
-
-// -----------------------------------------------------------------------
-
-NotificationSettings::NotificationSettings( const NotificationSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "NotificationSettings: RefCount overflow" );
-
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
-    mpData = rSet.mpData;
-    mpData->mnRefCount++;
-}
-
-// -----------------------------------------------------------------------
-
-NotificationSettings::~NotificationSettings()
-{
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-}
-
-// -----------------------------------------------------------------------
-
-const NotificationSettings& NotificationSettings::operator =( const NotificationSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "NotificationSettings: RefCount overflow" );
-
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    rSet.mpData->mnRefCount++;
-
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
-    mpData = rSet.mpData;
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-void NotificationSettings::CopyData()
-{
-    // Falls noch andere Referenzen bestehen, dann kopieren
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplNotificationData( *mpData );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool NotificationSettings::operator ==( const NotificationSettings& rSet ) const
-{
-    return mpData == rSet.mpData
-        || mpData->mnOptions == rSet.mpData->mnOptions;
-}
-
-// =======================================================================
-
 ImplHelpData::ImplHelpData()
 {
     mnRefCount                  = 1;
@@ -1473,10 +1217,8 @@ ImplAllSettingsData::ImplAllSettingsData()
 
 ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMouseSettings( rData.maMouseSettings ),
-    maKeyboardSettings( rData.maKeyboardSettings ),
     maStyleSettings( rData.maStyleSettings ),
     maMiscSettings( rData.maMiscSettings ),
-    maNotificationSettings( rData.maNotificationSettings ),
     maHelpSettings( rData.maHelpSettings ),
     maLocale( rData.maLocale )
 {
@@ -1584,16 +1326,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 
     sal_uLong nChangeFlags = 0;
 
-    if ( nFlags & SETTINGS_MACHINE )
-    {
-        if ( mpData->maMachineSettings != rSet.mpData->maMachineSettings )
-        {
-            CopyData();
-            mpData->maMachineSettings = rSet.mpData->maMachineSettings;
-            nChangeFlags |= SETTINGS_MACHINE;
-        }
-    }
-
     if ( nFlags & SETTINGS_MOUSE )
     {
         if ( mpData->maMouseSettings != rSet.mpData->maMouseSettings )
@@ -1601,16 +1333,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
             CopyData();
             mpData->maMouseSettings = rSet.mpData->maMouseSettings;
             nChangeFlags |= SETTINGS_MOUSE;
-        }
-    }
-
-    if ( nFlags & SETTINGS_KEYBOARD )
-    {
-        if ( mpData->maKeyboardSettings != rSet.mpData->maKeyboardSettings )
-        {
-            CopyData();
-            mpData->maKeyboardSettings = rSet.mpData->maKeyboardSettings;
-            nChangeFlags |= SETTINGS_KEYBOARD;
         }
     }
 
@@ -1634,16 +1356,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
         }
     }
 
-    if ( nFlags & SETTINGS_NOTIFICATION )
-    {
-        if ( mpData->maNotificationSettings != rSet.mpData->maNotificationSettings )
-        {
-            CopyData();
-            mpData->maNotificationSettings = rSet.mpData->maNotificationSettings;
-            nChangeFlags |= SETTINGS_NOTIFICATION;
-        }
-    }
-
     if ( nFlags & SETTINGS_HELP )
     {
         if ( mpData->maHelpSettings != rSet.mpData->maHelpSettings )
@@ -1652,12 +1364,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
             mpData->maHelpSettings = rSet.mpData->maHelpSettings;
             nChangeFlags |= SETTINGS_HELP;
         }
-    }
-
-    if ( nFlags & SETTINGS_INTERNATIONAL )
-    {
-        // Nothing, class International is gone.
-        SAL_WARN( "vcl.app","AllSettings::Update: who calls with SETTINGS_INTERNATIONAL and why? You're flogging a dead horse.");
     }
 
     if ( nFlags & SETTINGS_LOCALE )
@@ -1686,23 +1392,14 @@ sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 
     sal_uLong nChangeFlags = 0;
 
-    if ( mpData->maMachineSettings != rSet.mpData->maMachineSettings )
-        nChangeFlags |= SETTINGS_MACHINE;
-
     if ( mpData->maMouseSettings != rSet.mpData->maMouseSettings )
         nChangeFlags |= SETTINGS_MOUSE;
-
-    if ( mpData->maKeyboardSettings != rSet.mpData->maKeyboardSettings )
-        nChangeFlags |= SETTINGS_KEYBOARD;
 
     if ( mpData->maStyleSettings != rSet.mpData->maStyleSettings )
         nChangeFlags |= SETTINGS_STYLE;
 
     if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
         nChangeFlags |= SETTINGS_MISC;
-
-    if ( mpData->maNotificationSettings != rSet.mpData->maNotificationSettings )
-        nChangeFlags |= SETTINGS_NOTIFICATION;
 
     if ( mpData->maHelpSettings != rSet.mpData->maHelpSettings )
         nChangeFlags |= SETTINGS_HELP;
@@ -1723,12 +1420,9 @@ sal_Bool AllSettings::operator ==( const AllSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return sal_True;
 
-    if ( (mpData->maMachineSettings         == rSet.mpData->maMachineSettings)      &&
-         (mpData->maMouseSettings           == rSet.mpData->maMouseSettings)        &&
-         (mpData->maKeyboardSettings        == rSet.mpData->maKeyboardSettings)     &&
+    if ( (mpData->maMouseSettings           == rSet.mpData->maMouseSettings)        &&
          (mpData->maStyleSettings           == rSet.mpData->maStyleSettings)        &&
          (mpData->maMiscSettings            == rSet.mpData->maMiscSettings)         &&
-         (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
          (mpData->maLocale                  == rSet.mpData->maLocale)               &&
