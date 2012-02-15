@@ -187,70 +187,73 @@ namespace unotools
             std::vector<awt::Point> aPoints; aPoints.reserve(nLoopCount);
             std::vector<drawing::PolygonFlags> aFlags; aFlags.reserve(nLoopCount);
 
-            // prepare insert index and current point
-            basegfx::B2DCubicBezier aBezier;
-            aBezier.setStartPoint(rPoly.getB2DPoint(0));
-
-            for(sal_uInt32 b(0L); b<nLoopCount; b++)
+            if( nCount )
             {
-                // add current point (always) and remember StartPointIndex for evtl. later corrections
-                const awt::Point aStartPoint(fround(aBezier.getStartPoint().getX()),
-                                             fround(aBezier.getStartPoint().getY()));
-                const sal_uInt32 nStartPointIndex(aPoints.size());
-                aPoints.push_back(aStartPoint);
-                aFlags.push_back(drawing::PolygonFlags_NORMAL);
+                // prepare insert index and current point
+                basegfx::B2DCubicBezier aBezier;
+                aBezier.setStartPoint(rPoly.getB2DPoint(0));
 
-                // prepare next segment
-                const sal_uInt32 nNextIndex((b + 1) % nCount);
-                aBezier.setEndPoint(rPoly.getB2DPoint(nNextIndex));
-                aBezier.setControlPointA(rPoly.getNextControlPoint(b));
-                aBezier.setControlPointB(rPoly.getPrevControlPoint(nNextIndex));
-
-                if(aBezier.isBezier())
+                for(sal_uInt32 b(0L); b<nLoopCount; b++)
                 {
-                    // if one is used, add always two control points due to the old schema
-                    aPoints.push_back( awt::Point(fround(aBezier.getControlPointA().getX()),
-                                                  fround(aBezier.getControlPointA().getY())) );
-                    aFlags.push_back(drawing::PolygonFlags_CONTROL);
+                    // add current point (always) and remember StartPointIndex for evtl. later corrections
+                    const awt::Point aStartPoint(fround(aBezier.getStartPoint().getX()),
+                                                 fround(aBezier.getStartPoint().getY()));
+                    const sal_uInt32 nStartPointIndex(aPoints.size());
+                    aPoints.push_back(aStartPoint);
+                    aFlags.push_back(drawing::PolygonFlags_NORMAL);
 
-                    aPoints.push_back( awt::Point(fround(aBezier.getControlPointB().getX()),
-                                                  fround(aBezier.getControlPointB().getY())) );
-                    aFlags.push_back(drawing::PolygonFlags_CONTROL);
+                    // prepare next segment
+                    const sal_uInt32 nNextIndex((b + 1) % nCount);
+                    aBezier.setEndPoint(rPoly.getB2DPoint(nNextIndex));
+                    aBezier.setControlPointA(rPoly.getNextControlPoint(b));
+                    aBezier.setControlPointB(rPoly.getPrevControlPoint(nNextIndex));
+
+                    if(aBezier.isBezier())
+                    {
+                        // if one is used, add always two control points due to the old schema
+                        aPoints.push_back( awt::Point(fround(aBezier.getControlPointA().getX()),
+                                                      fround(aBezier.getControlPointA().getY())) );
+                        aFlags.push_back(drawing::PolygonFlags_CONTROL);
+
+                        aPoints.push_back( awt::Point(fround(aBezier.getControlPointB().getX()),
+                                                      fround(aBezier.getControlPointB().getY())) );
+                        aFlags.push_back(drawing::PolygonFlags_CONTROL);
+                    }
+
+                    // test continuity with previous control point to set flag value
+                    if(aBezier.getControlPointA() != aBezier.getStartPoint() && (bClosed || b))
+                    {
+                        const basegfx::B2VectorContinuity eCont(rPoly.getContinuityInPoint(b));
+
+                        if(basegfx::CONTINUITY_C1 == eCont)
+                        {
+                            aFlags[nStartPointIndex] = drawing::PolygonFlags_SMOOTH;
+                        }
+                        else if(basegfx::CONTINUITY_C2 == eCont)
+                        {
+                            aFlags[nStartPointIndex] = drawing::PolygonFlags_SYMMETRIC;
+                        }
+                    }
+
+                    // prepare next polygon step
+                    aBezier.setStartPoint(aBezier.getEndPoint());
                 }
 
-                // test continuity with previous control point to set flag value
-                if(aBezier.getControlPointA() != aBezier.getStartPoint() && (bClosed || b))
+                if(bClosed)
                 {
-                    const basegfx::B2VectorContinuity eCont(rPoly.getContinuityInPoint(b));
-
-                    if(basegfx::CONTINUITY_C1 == eCont)
-                    {
-                        aFlags[nStartPointIndex] = drawing::PolygonFlags_SMOOTH;
-                    }
-                    else if(basegfx::CONTINUITY_C2 == eCont)
-                    {
-                        aFlags[nStartPointIndex] = drawing::PolygonFlags_SYMMETRIC;
-                    }
+                    // add first point again as closing point due to old definition
+                    aPoints.push_back( aPoints[0] );
+                    aFlags.push_back(drawing::PolygonFlags_NORMAL);
                 }
-
-                // prepare next polygon step
-                aBezier.setStartPoint(aBezier.getEndPoint());
-            }
-
-            if(bClosed)
-            {
-                // add first point again as closing point due to old definition
-                aPoints.push_back( aPoints[0] );
-                aFlags.push_back(drawing::PolygonFlags_NORMAL);
-            }
-            else
-            {
-                // add last point as closing point
-                const basegfx::B2DPoint aClosingPoint(rPoly.getB2DPoint(nCount - 1L));
-                const awt::Point aEnd(fround(aClosingPoint.getX()),
-                                      fround(aClosingPoint.getY()));
-                aPoints.push_back(aEnd);
-                aFlags.push_back(drawing::PolygonFlags_NORMAL);
+                else
+                {
+                    // add last point as closing point
+                    const basegfx::B2DPoint aClosingPoint(rPoly.getB2DPoint(nCount - 1L));
+                    const awt::Point aEnd(fround(aClosingPoint.getX()),
+                                          fround(aClosingPoint.getY()));
+                    aPoints.push_back(aEnd);
+                    aFlags.push_back(drawing::PolygonFlags_NORMAL);
+                }
             }
 
             *pOuterSequence++ = comphelper::containerToSequence(aPoints);
