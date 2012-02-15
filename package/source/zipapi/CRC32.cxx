@@ -27,14 +27,8 @@
  ************************************************************************/
 
 #include <CRC32.hxx>
-#ifndef _ZLIB_H
-#ifdef SYSTEM_ZLIB
-#include <zlib.h>
-#else
-#include <external/zlib/zlib.h>
-#endif
-#endif
 #include <PackageConstants.hxx>
+#include <rtl/crc.h>
 #include <com/sun/star/io/XInputStream.hpp>
 
 using namespace com::sun::star::uno;
@@ -67,14 +61,14 @@ void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b,
                                     sal_Int32 len)
         throw(RuntimeException)
 {
-    nCRC = crc32(nCRC, (const unsigned char*)b.getConstArray()+off, len );
+    nCRC = rtl_crc32(nCRC, b.getConstArray()+off, len );
 }
 /** Update CRC32 with specified sequence of bytes
  */
 void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
         throw(RuntimeException)
 {
-    nCRC = crc32(nCRC, (const unsigned char*)b.getConstArray(),b.getLength());
+    nCRC = rtl_crc32(nCRC, b.getConstArray(),b.getLength());
 }
 
 sal_Int32 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
