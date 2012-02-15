@@ -132,7 +132,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
-ifeq ($(MERGELIBS),TRUE)
+ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/context \
 	sal/textenc/convertbig5hkscs \
