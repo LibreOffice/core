@@ -426,6 +426,7 @@ STD_JAR_FILE( gid_File_Jar_Fax, fax )
 STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
 STD_JAR_FILE( gid_File_Jar_Query, query )
 STD_JAR_FILE( gid_File_Jar_Web, web )
+STD_JAR_FILE( gid_File_Jar_Accessbridge, java_uno_accessbridge )
 #endif
 
 #ifdef SOLAR_JAVA
