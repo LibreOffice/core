@@ -1214,18 +1214,18 @@ sal_Bool SaneDlg::LoadState()
 
             using comphelper::string::matchL;
 
-            if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("BOOL=")))
+            if (matchL(aValue, RTL_CONSTASCII_STRINGPARAM("BOOL=")))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("BOOL="));
                 sal_Bool aBOOL = (sal_Bool)aValue.toInt32();
                 mrSane.SetOptionValue( nOption, aBOOL );
             }
-            else if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("STRING=")))
+            else if (matchL(aValue, RTL_CONSTASCII_STRINGPARAM("STRING=")))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("STRING="));
                 mrSane.SetOptionValue(nOption,rtl::OStringToOUString(aValue, osl_getThreadTextEncoding()) );
             }
-            else if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("NUMERIC=")))
+            else if (matchL(aValue, RTL_CONSTASCII_STRINGPARAM("NUMERIC=")))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("NUMERIC="));
 
