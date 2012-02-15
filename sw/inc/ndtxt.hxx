@@ -79,7 +79,7 @@ namespace com { namespace sun { namespace star {
 
 typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
-// SwTxtNode
+/// SwTxtNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
 

@@ -48,6 +48,7 @@ struct SwPosition;
 #define INLINE inline
 #endif
 
+/// Marks a character position inside a document model node.
 class SW_DLLPUBLIC SwIndex
 {
 private:

@@ -249,6 +249,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 // global function to start grammar checking in the document
 void StartGrammarChecking( SwDoc &rDoc );
 
+/// Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentSettingAccess,

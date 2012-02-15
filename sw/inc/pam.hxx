@@ -53,6 +53,7 @@ namespace utl {
     class TextSearch;
 }
 
+/// Marks a position in the document model.
 struct SW_DLLPUBLIC SwPosition
 {
     SwNodeIndex nNode;
@@ -157,6 +158,7 @@ extern SwGoInDoc fnGoCntntCellsSkipHidden;
 
 void _InitPam();
 
+/// PaM is Point and Mark: a selection of the document model.
 class SW_DLLPUBLIC SwPaM : public Ring
 {
     SwPosition   m_Bound1;

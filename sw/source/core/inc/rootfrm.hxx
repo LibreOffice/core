@@ -62,6 +62,7 @@ struct SwCrsrMoveState;
 
 #include <vector>
 
+/// The root element of a Writer document layout.
 class SwRootFrm: public SwLayoutFrm
 {
     //Muss das Superfluous temporaer abschalten.
