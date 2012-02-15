@@ -494,14 +494,14 @@ namespace frm
     {
         OBoundControlModel::write(_rxOutStream);
 
-        // Dummy-Seq, um Kompatible zu bleiben, wenn SelectSeq nicht mehr gespeichert wird
+        // Dummy sequence, to stay compatible if SelectSeq is not saved anymore
         Sequence<sal_Int16> aDummySeq;
 
         // Version
-        // Version 0x0002: ListSource wird StringSeq
+        // Version 0x0002: ListSource becomes StringSeq
         _rxOutStream->writeShort(0x0004);
 
-        // Maskierung fuer any
+        // Masking for any
         sal_uInt16 nAnyMask = 0;
         if (m_aBoundColumn.getValueType().getTypeClass() != TypeClass_VOID)
             nAnyMask |= BOUNDCOLUMN;
@@ -528,8 +528,8 @@ namespace frm
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
     {
-        // Bei manchen Variblen muessen Abhaengigkeiten beruecksichtigt werden.
-        // Deshalb muessen sie explizit ueber setPropertyValue() gesetzt werden.
+        // We need to respect dependencies for certain variables.
+        // Therefore, we need to set them explicitly via setPropertyValue().
 
         OBoundControlModel::read(_rxInStream);
         ControlModelLock aLock( *this );
@@ -563,7 +563,7 @@ namespace frm
             return;
         }
 
-        // Maskierung fuer any
+        // Masking for any
         sal_uInt16 nAnyMask;
         _rxInStream >> nAnyMask;
 
@@ -571,7 +571,7 @@ namespace frm
         StringSequence aListSourceSeq;
         if (nVersion == 0x0001)
         {
-            // ListSourceSeq aus String zusammenstellen;
+            // Create ListSourceSeq from String
             ::rtl::OUString sListSource;
             _rxInStream >> sListSource;
 
@@ -601,7 +601,7 @@ namespace frm
 
         setFastPropertyValue(PROPERTY_ID_LISTSOURCE, aListSourceSeqAny );
 
-        // Dummy-Seq, um Kompatible zu bleiben, wenn SelectSeq nicht mehr gespeichert wird
+        // Dummy sequence, to stay compatible if SelectSeq is not saved anymore
         Sequence<sal_Int16> aDummySeq;
         _rxInStream >> aDummySeq;
 
@@ -635,7 +635,7 @@ namespace frm
         if (nVersion > 3)
             readCommonProperties(_rxInStream);
 
-        // Nach dem Lesen die Defaultwerte anzeigen
+        // Display the default values after reading
         if ( !getControlSource().isEmpty() )
             // (not if we don't have a control source - the "State" property acts like it is persistent, then
             resetNoBroadcast();
@@ -807,7 +807,7 @@ namespace frm
             return;
         }
 
-        // Anzeige- und Werteliste fuellen
+        // Fill display and value lists
         ValueList aDisplayList, aValueList;
         sal_Bool bUseNULL = hasField() && !isRequired();
 
@@ -825,7 +825,7 @@ namespace frm
             case ListSourceType_TABLE:
             case ListSourceType_QUERY:
                 {
-                    // Feld der 1. Column des ResultSets holen
+                    // Get field of the ResultSet's 1st column
                     Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
                     DBG_ASSERT(xSupplyCols.is(), "OListBoxModel::loadData : cursor supports the row set service but is no column supplier?!");
                     Reference<XIndexAccess> xColumns;
@@ -843,7 +843,7 @@ namespace frm
 
                     ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
-                    // Feld der BoundColumn des ResultSets holen
+                    // Get the field of BoundColumn of the ResultSet
                     m_nBoundColumnType = DataType::SQLNULL;
                     if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && m_xColumn.is() )
                     {   // don't look for a bound column if we're not connected to a field
@@ -858,9 +858,8 @@ namespace frm
                         }
                     }
 
-                    //  Ist die LB an ein Feld gebunden und sind Leereintraege zulaessig
-                    //  dann wird die Position fuer einen Leereintrag gemerkt
-
+                    //  If the LB is bound to a field and empty entries are valid, we remember the position
+                    //  for an empty entry
                     RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData: string collection" );
                     ::rtl::OUString aStr;
                     sal_Int16 entryPos = 0;
@@ -914,8 +913,8 @@ namespace frm
         }
 
 
-        // Value-Sequence erzeugen
-        // NULL eintrag hinzufuegen
+        // Create Values sequence
+        // Add NULL entry
         if (bUseNULL && m_nNULLPos == -1)
         {
             if ( impl_hasBoundComponent() )
@@ -1010,7 +1009,7 @@ namespace frm
     //------------------------------------------------------------------------------
     sal_Bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        // current selektion list
+        // current selection list
         const ORowSetValue aCurrentValue( getFirstSelectedValue() );
         if ( aCurrentValue != m_aSaveValue )
         {
@@ -1080,7 +1079,7 @@ namespace frm
         Any aValue;
         if (m_aDefaultSelectSeq.getLength())
             aValue <<= m_aDefaultSelectSeq;
-        else if (m_nNULLPos != -1)  // gebundene Listbox
+        else if (m_nNULLPos != -1)  // bound Listbox
         {
             Sequence<sal_Int16> aSeq(1);
             aSeq.getArray()[0] = m_nNULLPos;
@@ -1112,8 +1111,7 @@ namespace frm
     //--------------------------------------------------------------------
     namespace
     {
-        /** type how we should transfer our selection to external value bindings
-        */
+        // The type of how we should transfer our selection to external value bindings
         enum ExchangeType
         {
             eIndexList,     /// as list of indexes of selected entries
@@ -1492,16 +1490,16 @@ namespace frm
 
         increment(m_refCount);
         {
-            // als FocusListener anmelden
+            // Register as FocusListener
             Reference<XWindow> xComp;
             if (query_aggregation(m_xAggregate, xComp))
                 xComp->addFocusListener(this);
 
-            // als ItemListener anmelden
+            // Register as ItemListener
             if ( query_aggregation( m_xAggregate, m_xAggregateListBox ) )
                 m_xAggregateListBox->addItemListener(this);
         }
-        // Refcount bei 2 fuer angemeldete Listener
+        // Refcount at 2 for registered Listener
         decrement(m_refCount);
 
         doSetDelegator();
