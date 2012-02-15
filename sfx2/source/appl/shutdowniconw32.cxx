@@ -366,7 +366,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
-                    PostMessage( hWnd, NULL, 0, 0 );
+                    PostMessage( hWnd, 0, 0, 0 );
                     switch( m )
                     {
 #if defined(USE_APP_SHORTCUTS)
