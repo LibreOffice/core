@@ -183,14 +183,14 @@ LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
 // #107835# hold reference to ScannerManager, to prevent premature death
 ImpTwain::ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink ) :
-            mrMgr( rMgr ),
             mxMgr( uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( &rMgr ), uno::UNO_QUERY) ),
+            mrMgr( rMgr ),
             aNotifyLink( rNotifyLink ),
             pDSM( NULL ),
             pMod( NULL ),
+            nCurState( 1 ),
             hTwainWnd( 0 ),
             hTwainHook( 0 ),
-            nCurState( 1 ),
             mbCloseFrameOnExit( false )
 {
     // setup TWAIN window
