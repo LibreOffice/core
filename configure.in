@@ -2035,7 +2035,7 @@ if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecrea
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some verison number etc),
     # assume that's good then
-    ccache[[-_' ']]*|*/ccache[[-_' ']]*)
+    *%ccache[[-_' ']]*|*/ccache[[-_' ']]*)
         AC_MSG_NOTICE([ccache seems to be included in a pre-defined CC and/or CXX])
         ;;
     *)
