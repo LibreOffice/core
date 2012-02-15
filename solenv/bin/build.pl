@@ -2999,7 +2999,7 @@ sub generate_html_file {
     print HTML '            if (dir_info_array[4] == "@") {' . "\n";
     print HTML '                top.innerFrame.frames[1].document.write("        <td align=center>&nbsp</td>");' . "\n";
     print HTML '            } else {' . "\n";
-    print HTML '                top.innerFrame.frames[1].document.write("        <td align=center><a target=\"_blank\" href=\"" + dir_info_array[4] + "\">link</a></td>");; title=\"Show Log\">" + dir_info_array[1] + "</a></td>");' . "\n";
+    print HTML '                top.innerFrame.frames[1].document.write("        <td align=center><a target=\"_blank\" href=\"" + dir_info_array[4] + "\">link</a></td>");' . "\n";
     print HTML '            };' . "\n";
     print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[5] + "</td>");' . "\n" if ($server_mode);
     print HTML '            top.innerFrame.frames[1].document.write("    </tr>");' . "\n";
