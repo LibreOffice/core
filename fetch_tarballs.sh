@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #**************************************************************
 #
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -49,7 +49,7 @@ fetch_args=
 #Look for FreeBSD's fetch(1) first
 if [ -x /usr/bin/fetch ]; then
     fetch_bin=/usr/bin/fetch
-    fetch_args="-AFpr"
+    fetch_args="-Fpr"
     echo found FreeBSD fetch: $fetch_bin
     break 2
 else
