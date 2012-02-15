@@ -19,30 +19,16 @@
 #  
 #**************************************************************
 
-
 PRJ=..$/..
-
-
 
 PRJNAME=extras
 TARGET=wordbookall
 
 .INCLUDE : settings.mk
-
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
 ZIP1TARGET      = $(WORDBOOK_ALL_TARGET)
-
-ZIP1LIST        = oracle.dic
-
-
-
+ZIP1LIST        = business.dic
 
 .INCLUDE : target.mk
-
-
-
-
 
