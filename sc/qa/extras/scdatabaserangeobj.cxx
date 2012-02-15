@@ -37,7 +37,7 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
+#define NUMBER_OF_TESTS 5
 
 class ScDatabaseRangeObj : public UnoApiTest, apitest::XDatabaseRange
 {
@@ -51,6 +51,8 @@ public:
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGetSortDescriptor);
     CPPUNIT_TEST(testGetSubtotalDescriptor);
+    CPPUNIT_TEST(testGetImportDescriptor);
+    CPPUNIT_TEST(testGetFilterDescriptor);
     CPPUNIT_TEST_SUITE_END();
 private:
     static sal_Int32 nTest;

@@ -140,6 +140,19 @@ void XDatabaseRange::testGetSortDescriptor()
     }
 }
 
+void XDatabaseRange::testGetFilterDescriptor()
+{
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterDescriptor"))), UNO_QUERY_THROW);
+    uno::Reference< uno::XInterface > xFilterDescr( xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xFilterDescr.is());
+}
+
+void XDatabaseRange::testGetImportDescriptor()
+{
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImportDescriptor"))), UNO_QUERY_THROW);
+    uno::Sequence< beans::PropertyValue > xImportDescr = xDBRange->getImportDescriptor();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
