@@ -44,26 +44,10 @@ sub sorting_array_of_hashes
 {
     my ($arrayref, $sortkey) = @_;
 
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $onehashunder = ${$arrayref}[$i];
-        my $sortvalueunder = $onehashunder->{$sortkey};
-
-        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
-        {
-            my $onehashover = ${$arrayref}[$j];
-            my $sortvalueover = $onehashover->{$sortkey};
-
-            if ( $sortvalueunder gt $sortvalueover)
-            {
-                ${$arrayref}[$i] = $onehashover;
-                ${$arrayref}[$j] = $onehashunder;
-
-                $onehashunder = $onehashover;
-                $sortvalueunder = $sortvalueover;
-            }
-        }
-    }
+    @$arrayref = map { $_->[1] }
+                 sort { $a->[0] cmp $b->[0] }
+                 map { [$_->{$sortkey}, $_] }
+                 @$arrayref;
 }
 
 1;
