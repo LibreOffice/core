@@ -230,7 +230,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                      CH_FULL_BLANK == cCutChar ) )
                 --nBreakPos;
         }
-        else
+        else //#i20878#
         {
             while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
                    ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
