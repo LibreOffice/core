@@ -454,7 +454,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     {
         // We cant check a preselected type for a given stream!
         // So we must believe, that it can work ...
-        if (aParsedURL.Complete.equalsAsciiL("private:stream", 14))
+        if (aParsedURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("private:stream")))
             bBreakDetection = sal_True;
     }
 
@@ -1092,7 +1092,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     if (
         (sURL.isEmpty()                                     ) || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !
-        (sURL.equalsIgnoreAsciiCaseAsciiL("private:stream", 14))    // not a good idea .-)
+        (sURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("private:stream")))    // not a good idea .-)
        )
         return ::rtl::OUString();
 

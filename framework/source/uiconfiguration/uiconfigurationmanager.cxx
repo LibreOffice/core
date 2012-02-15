@@ -216,7 +216,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                     rtl::OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
                     if (!aUIElementName.isEmpty() &&
-                        ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
+                        ( aExtension.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xml"))))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
                         aUIElementData.aName        = aUIElementNames[n];

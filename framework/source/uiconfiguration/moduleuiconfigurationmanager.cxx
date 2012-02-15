@@ -273,7 +273,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                     OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
                     if (!aUIElementName.isEmpty() &&
-                        ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
+                        ( aExtension.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xml"))))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
                         aUIElementData.aName        = aUIElementNames[n];
