@@ -101,7 +101,7 @@ sal_Bool lcl_GCBorder_GetLastBox_B( const SwTableBox*& rpBox, void* pPara )
     return sal_True;
 }
 
-// suche das "Ende" der vorgegebene BorderLine. Returnt wird die "Layout"Pos!
+// Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
 sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
                         const SvxBorderLine& rBrdLn, sal_uInt16& rStt, sal_Bool bTop )
 {
@@ -173,8 +173,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 {
     _SwGCLineBorder* pGCPara = (_SwGCLineBorder*)pPara;
 
-    // zuerst die rechte Kante mit der linken Kante der naechsten Box
-    // innerhalb dieser Line
+    // First the right edge with the left edge of the succeeding Box within this Line
     {
         _SwGCBorder_BoxBrd aBPara;
         const SvxBorderLine* pBrd;
@@ -215,7 +214,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         }
     }
 
-    // und jetzt die eigene untere Kante mit der nachfolgenden oberen Kante
+    // And now the own bottom edge with the succeeding top edge
     if( !pGCPara->IsLastLine() )
     {
         SwCollectTblLineBoxes aBottom( sal_False );
@@ -226,7 +225,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         const SwTableLine* pNextLine = (*pGCPara->pLines)[ pGCPara->nLinePos+1 ];
         ::lcl_Line_CollectBox( pNextLine, &aTop );
 
-        // dann entferne mal alle "doppelten" gleichen Lines
+        // remove all "duplicated" Lines that are the same
         sal_uInt16 nBtmPos, nTopPos,
                 nSttBtm = 0, nSttTop = 0,
                 nEndBtm = aBottom.Count(), nEndTop = aTop.Count();
@@ -245,7 +244,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 
             if( pTopLine && pBtmLine && *pTopLine == *pBtmLine )
             {
-                // dann kann einer entfernt werden, aber welche?
+                // We can remove one, but which one?
                 sal_uInt16 nSavSttBtm = nSttBtm, nSavSttTop = nSttTop;
                 sal_uInt16 nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
                                                 *pTopLine, nSttBtm, sal_False );
@@ -257,7 +256,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 
                 if( nTopEndPos <= nBtmEndPos )
                 {
-                    // dann die TopBorder bis zur BottomEndPos loeschen
+                    // Delete the TopBorders until BottomEndPos
                     nSttTop = nSavSttTop;
                     if( nTopPos <= nBtmEndPos )
                         lcl_GCBorder_DelBorder( aTop, --nSttTop, sal_True,
@@ -268,7 +267,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
                 }
                 else
                 {
-                    // sonst die BottomBorder bis zur TopEndPos loeschen
+                    // Else delete the BottomBorders until TopEndPos
                     nSttBtm = nSavSttBtm;
                     if( nBtmPos <= nTopEndPos )
                         lcl_GCBorder_DelBorder( aBottom, --nSttBtm, sal_False,
@@ -343,7 +342,7 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
     sal_uInt16 n, nLen = rpBox->GetTabLines().Count();
     if( nLen )
     {
-        // ACHTUNG: die Anzahl der Lines kann sich aendern!
+        // ATTENTION: The Line count can change!
         _GCLinePara aPara( rpBox->GetTabLines(), (_GCLinePara*)pPara );
         for( n = 0; n < rpBox->GetTabLines().Count() &&
             lcl_MergeGCLine( *(rpBox->GetTabLines().GetData() + n), &aPara );
@@ -352,8 +351,8 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
 
         if( 1 == rpBox->GetTabLines().Count() )
         {
-            // Box mit einer Line, dann verschiebe alle Boxen der Line
-            // hinter diese Box in der Parent-Line und loesche diese Box
+            // Box with a Line, then move all the Line's Boxes after this Box
+            // into the parent Line and delete this Box
             SwTableLine* pInsLine = rpBox->GetUpper();
             SwTableLine* pCpyLine = rpBox->GetTabLines()[0];
             sal_uInt16 nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, rpBox );
@@ -362,10 +361,10 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
 
             pInsLine->GetTabBoxes().Insert( &pCpyLine->GetTabBoxes(), nInsPos+1 );
             pCpyLine->GetTabBoxes().Remove( 0, n );
-            // loesche alte die Box mit der Line
+            // Delete the old Box with the Line
             pInsLine->GetTabBoxes().DeleteAndDestroy( nInsPos );
 
-            return sal_False;       // neu aufsetzen
+            return sal_False; // set up anew
         }
     }
     return sal_True;
@@ -380,31 +379,30 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
         _GCLinePara* pGCPara = (_GCLinePara*)pPara;
         while( 1 == nLen )
         {
-            // es gibt eine Box mit Lines
+            // We have a Box with Lines
             SwTableBox* pBox = pLn->GetTabBoxes()[0];
             if( !pBox->GetTabLines().Count() )
                 break;
 
             SwTableLine* pLine = pBox->GetTabLines()[0];
 
-            // pLine wird zu der aktuellen, also der rpLine,
-            // die restlichen werden ins LinesArray hinter der akt.
-            // verschoben.
-            // Das LinesArray ist im pPara!
+            // pLine turns into the current Line (that is rpLine), the rest is moved
+            // into the LinesArray past the current one.
+            // The LinesArray is in pPara!
             nLen = pBox->GetTabLines().Count();
 
             SwTableLines& rLns = *pGCPara->pLns;
             const SwTableLine* pTmp = pLn;
             sal_uInt16 nInsPos = rLns.GetPos( pTmp );
-            OSL_ENSURE( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
+            OSL_ENSURE( USHRT_MAX != nInsPos, "Could not find Line!" );
 
             SwTableBox* pUpper = pLn->GetUpper();
 
-            rLns.Remove( nInsPos, 1 );      // die Line dem aus Array loeschen
+            rLns.Remove( nInsPos, 1 );      // remove the Line from the array
             rLns.Insert( &pBox->GetTabLines(), nInsPos );
 
-            // JP 31.03.99: Bug 60000 - die Attribute der zu loeschenden
-            // Line an die "eingefuegten" uebertragen
+            // JP 31.03.99: Bug 60000
+            // Pass the attributes of the to-be-deleted Lines to the "inserted" one
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pLn->GetFrmFmt()->GetItemState(
                                     RES_BACKGROUND, sal_True, &pItem ))
@@ -416,19 +414,19 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
                         pGCPara->pShareFmts->SetAttr( *rBoxLns[ nLns ], *pItem );
             }
 
-            pBox->GetTabLines().Remove( 0, nLen );  // Lines aus Array loeschen
+            pBox->GetTabLines().Remove( 0, nLen );  // Remove Lines from the array
 
             delete pLn;
 
-            // Abhaengigkeit neu setzen
+            // Set the dependency anew
             while( nLen-- )
                 rLns[ nInsPos++ ]->SetUpper( pUpper );
 
-            pLn = pLine;                        // und neu setzen
+            pLn = pLine;                        // and set up anew
             nLen = pLn->GetTabBoxes().Count();
         }
 
-        // ACHTUNG: die Anzahl der Boxen kann sich aendern!
+        // ATTENTION: The number of boxes can change!
         for( nLen = 0; nLen < pLn->GetTabBoxes().Count(); ++nLen )
             if( !lcl_MergeGCBox( *(pLn->GetTabBoxes().GetData() + nLen ), pPara ))
                 --nLen;
@@ -436,10 +434,10 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
     return sal_True;
 }
 
-        // Struktur ein wenig aufraeumen
+// Clean structure a bit
 void SwTable::GCLines()
 {
-    // ACHTUNG: die Anzahl der Lines kann sich aendern!
+    // ATTENTION: The Line count can change!
     _GCLinePara aPara( GetTabLines() );
     SwShareBoxFmts aShareFmts;
     aPara.pShareFmts = &aShareFmts;

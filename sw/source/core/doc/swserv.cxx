@@ -76,7 +76,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
         case BOOKMARK_SERVER:
             if( CNTNT_TYPE.pBkmk->IsExpanded() )
             {
-                // Bereich aufspannen
+                // Span area
                 pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetMarkPos(),
                                 CNTNT_TYPE.pBkmk->GetOtherMarkPos() );
             }
@@ -99,7 +99,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
 
         if( pPam )
         {
-            // Stream anlegen
+            // Create stream
             SvMemoryStream aMemStm( 65535, 65535 );
             SwWriter aWrt( aMemStm, *pPam, sal_False );
             if( !IsError( aWrt.Write( xWrt )) )
@@ -128,7 +128,7 @@ sal_Bool SwServerObject::SetData( const String & ,
 
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
-    // ist an unseren Aenderungen jemand interessiert ?
+    // Is someone interested in our changes?
     if( HasDataLinks() )
     {
         int bCall = sal_False;
@@ -155,7 +155,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 
         if( bCall )
         {
-            // Recursionen erkennen und flaggen
+            // Recognize recursions and flag them
             IsLinkInServer( 0 );
             SvLinkSource::NotifyDataChanged();
         }
@@ -165,7 +165,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 
 void SwServerObject::SendDataChanged( const SwPaM& rRange )
 {
-    // ist an unseren Aenderungen jemand interessiert ?
+    // Is someone interested in our changes?
     if( HasDataLinks() )
     {
         int bCall = sal_False;
@@ -187,14 +187,14 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         }
         if( pNd )
         {
-            // liegt der Start-Bereich im Node Bereich ?
+            // Is the start area within the node area?
             bCall = pStt->nNode.GetIndex() <  pNd->EndOfSectionIndex() &&
                     pEnd->nNode.GetIndex() >= pNd->GetIndex();
         }
 
         if( bCall )
         {
-            // Recursionen erkennen und flaggen
+            // Recognize recursions and flag them
             IsLinkInServer( 0 );
             SvLinkSource::NotifyDataChanged();
         }
@@ -243,10 +243,10 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 
     if( nSttNd && nEndNd )
     {
-        // LinkManager besorgen:
+        // Get LinkManager
         const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
 
-// um Rekursionen zu Verhindern: ServerType umsetzen!
+// To avoid recursions: convert ServerType!
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
     ((SwServerObject*)this)->eType = NONE_SERVER;
@@ -322,8 +322,7 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, sal_uInt16 nTy
 
 SwDataChanged::~SwDataChanged()
 {
-    // JP 09.04.96: nur wenn das Layout vorhanden ist ( also waehrend der
-    //              Eingabe)
+    // JP 09.04.96: Only if the Layout is available (thus during input)
     if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
@@ -331,7 +330,7 @@ SwDataChanged::~SwDataChanged()
         for( sal_uInt16 nCnt = rServers.Count(); nCnt; )
         {
             ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
-            // noch jemand am Object interessiert ?
+            // Any one else interested in the Object?
             if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
                 SwServerObject& rObj = *(SwServerObject*)&refObj;
@@ -341,11 +340,11 @@ SwDataChanged::~SwDataChanged()
                     rObj.SendDataChanged( *pPam );
             }
 
-            // sollte jetzt gar keine Verbindung mehr bestehen
+            // We shouldn't have a connection anymore
             if( !refObj->HasDataLinks() )
             {
-                // dann raus aus der Liste (Object bleibt aber bestehen!)
-                // falls es noch da ist !!
+                // Then remove from the list
+                // Object is not destroyed, if it still is there!
                 if( nCnt < rServers.Count() && &refObj == rServers[ nCnt ] )
                     pDoc->GetLinkManager().RemoveServer( nCnt, 1 );
             }

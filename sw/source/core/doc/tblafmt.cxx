@@ -41,7 +41,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#define READ_OLDVERS        // erstmal noch alte Versionen lesen
+#define READ_OLDVERS        // read the old version for a start
 #include <swtypes.hxx>
 #include <doc.hxx>
 #include <poolfmt.hxx>
@@ -51,13 +51,13 @@
 
 using ::editeng::SvxBorderLine;
 
-// bis SO5PF
+// until SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
 const sal_uInt16 AUTOFORMAT_ID_358      = 9601;
 const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 
-// ab SO5
-//! in nachfolgenden Versionen muss der Betrag dieser IDs groesser sein
+// from SO5
+//! In follow-up versions these IDs' values need to increase
 const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
 const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
@@ -96,11 +96,11 @@ SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 
 #define sAutoTblFmtName "autotbl.fmt"
 
-// SwTable Auto-Format-Tabelle
+// SwTable AutoFormat Table
 SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
 
 
-//  Struct mit Versionsnummern der Items
+// Struct with version numbers of the Items
 
 struct SwAfVersions
 {
@@ -405,7 +405,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         rStream >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
-        if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
+        if ( eSysLanguage == LANGUAGE_SYSTEM )      // from old versions (Calc)
             eSysLanguage = static_cast<LanguageType>(::GetAppLanguage());
     }
 
@@ -481,7 +481,7 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream ) const
     aOrientation.Store( rStream, aOrientation.GetVersion(SOFFICE_FILEFORMAT_40) );
     aMargin.Store( rStream, aMargin.GetVersion(SOFFICE_FILEFORMAT_40) );
     aLinebreak.Store( rStream, aLinebreak.GetVersion(SOFFICE_FILEFORMAT_40) );
-    // Calc Rotation ab SO5
+    // Calc Rotation from SO5
     aRotateAngle.Store( rStream, aRotateAngle.GetVersion(SOFFICE_FILEFORMAT_40) );
     aRotateMode.Store( rStream, aRotateMode.GetVersion(SOFFICE_FILEFORMAT_40) );
 
@@ -556,9 +556,9 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
             delete aBoxAutoFmt[ n ];
 
         SwBoxAutoFmt* pFmt = rNew.aBoxAutoFmt[ n ];
-        if( pFmt )      // ist gesetzt -> kopieren
+        if( pFmt )      // if is set -> copy
             aBoxAutoFmt[ n ] = new SwBoxAutoFmt( *pFmt );
-        else            // sonst default
+        else            // else default
             aBoxAutoFmt[ n ] = 0;
     }
 
@@ -586,26 +586,26 @@ SwTableAutoFmt::~SwTableAutoFmt()
 
 void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
 {
-    OSL_ENSURE( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // ist gesetzt -> kopieren
+    if( pFmt )      // if is set -> copy
         *aBoxAutoFmt[ nPos ] = rNew;
-    else            // sonst neu setzen
+    else            // else set anew
         aBoxAutoFmt[ nPos ] = new SwBoxAutoFmt( rNew );
 }
 
 
 const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
 {
-    OSL_ENSURE( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // ist gesetzt -> kopieren
+    if( pFmt )      // if is set -> copy
         return *pFmt;
-    else            // sonst den default returnen
+    else            // else return the default
     {
-        // falls noch nicht vorhanden:
+        // If it doesn't exist yet:
         if( !pDfltBoxAutoFmt )
             pDfltBoxAutoFmt = new SwBoxAutoFmt;
         return *pDfltBoxAutoFmt;
@@ -619,10 +619,10 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
                                             UpdateFlags eFlags,
                                             SvNumberFormatter* pNFmtr )
 {
-    OSL_ENSURE( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "wrong area" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( !pFmt )     // ist gesetzt -> kopieren
+    if( !pFmt )     // if is set -> copy
     {
         pFmt = new SwBoxAutoFmt;
         aBoxAutoFmt[ nPos ] = pFmt;
@@ -668,12 +668,12 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
                                     static_cast<LanguageType>(::GetAppLanguage()));
         else
         {
-            // defaulten
+            // default
             pFmt->SetValueFormat( aEmptyStr, LANGUAGE_SYSTEM,
                                   static_cast<LanguageType>(::GetAppLanguage() ));
         }
     }
-    // den Rest koennen wir nicht, StarCalc spezifisch
+    // we cannot handle the rest, that's specific to StarCalc
 
     return *pFmt;
 }
@@ -763,7 +763,7 @@ void SwTableAutoFmt::UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet,
         }
     }
 
-    // den Rest koennen wir nicht, StarCalc spezifisch
+    // we cannot handle the rest, that's specific to StarCalc
 }
 
 
@@ -876,9 +876,9 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream ) const
     for( int i = 0; bRet && i < 16; ++i )
     {
         SwBoxAutoFmt* pFmt = aBoxAutoFmt[ i ];
-        if( !pFmt )     // nicht gesetzt -> default schreiben
+        if( !pFmt )     // if not set -> write default
         {
-            // falls noch nicht vorhanden:
+            // If it doesn't exist yet:
             if( !pDfltBoxAutoFmt )
                 pDfltBoxAutoFmt = new SwBoxAutoFmt;
             pFmt = pDfltBoxAutoFmt;
@@ -907,13 +907,13 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     for( i = 0; i < 4; ++i )
         pNew->SetBoxFmt( aNew, i );
 
-    // 70% Grau
+    // 70% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
     aNew.SetBackground( aBrushItem );
     for( i = 4; i <= 12; i += 4 )
         pNew->SetBoxFmt( aNew, i );
 
-    // 20% Grau
+    // 20% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
     aNew.SetBackground( aBrushItem );
     aColor.SetColor( COL_BLACK );
@@ -978,7 +978,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
     sal_Bool bRet = 0 == rStream.GetError();
     if (bRet)
     {
-        // Achtung hier muss ein allgemeiner Header gelesen werden
+        // Attention: We need to read a general Header here
         sal_uInt16 nVal = 0;
         rStream >> nVal;
         bRet = 0 == rStream.GetError();
@@ -998,7 +998,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 //                  rStream >> nFileVers;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    OSL_ENSURE( !this, "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_ENSURE( !this, "The Header contains more or newer Data" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( (CharSet)nChrSet );
@@ -1008,7 +1008,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                aVersions.Load( rStream, nVal );        // Item-Versionen
+                aVersions.Load( rStream, nVal );        // Item versions
 
                 SwTableAutoFmt* pNew;
                 sal_uInt16 nAnz = 0;
@@ -1075,16 +1075,15 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
     {
         rStream.SetVersion( SOFFICE_FILEFORMAT_40 );
 
-        // Achtung hier muss ein allgemeiner Header gespeichert werden
+        // Attention: We need to save a general Header here
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream << nVal
-                << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
+                << (sal_uInt8)2 // Character count of the Header including this value
                 << (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() );
 
         bRet = 0 == rStream.GetError();
 
-        //-----------------------------------------------------------
-        // die VersionsNummer fuer alle Attribute schreiben
+        // Write this version number for all attributes
         (*this)[ 0 ]->GetBoxFmt( 0 ).SaveVerionNo( rStream );
 
         rStream << (sal_uInt16)(Count() - 1);

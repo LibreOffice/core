@@ -159,16 +159,15 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
     InitCtor();
 }
 
-// Initialisierung: z.Zt. Eintragen des Frames im Cache
+// Initialization: Currently add the Frame to the Cache
 
 
 void SwNoTxtFrm::InitCtor()
 {
     nType = FRMC_NOTXT;
-    // Das Gewicht der Grafik ist 0, wenn sie noch nicht
-    // gelesen ist, < 0, wenn ein Lesefehler auftrat und
-    // Ersatzdarstellung angewendet werden musste und >0,
-    // wenn sie zur Verfuegung steht.
+    // The graphic's weight is 0 if it has not been read,
+    // < 0 if we had a read error and we needed to use the replacement and
+    // > 0 if it is available
     nWeight = 0;
 }
 
@@ -268,7 +267,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
        !pSh->GetWin() )
         StopAnimation();
 
-    SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
+    SfxProgress::EnterLock(); // No progress reschedules in paint (SwapIn)
 
     OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
@@ -303,16 +302,15 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     aPaintArea._Intersection( aOrigPaint );
 
     SwRect aNormal( Frm().Pos() + Prt().Pos(), Prt().SSize() );
-    aNormal.Justify(); //Normalisiertes Rechteck fuer die Vergleiche
+    aNormal.Justify(); // Normalized rectangle for the comparisons
 
     if( aPaintArea.IsOver( aNormal ) )
     {
-        // berechne die 4 zu loeschenden Rechtecke
+        // Calculate the four to-be-deleted rectangles
         if( pSh->GetWin() )
             ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aNormal );
 
-        // in der Schnittmenge vom PaintBereich und der Bitmap liegt
-        // der absolut sichtbare Bereich vom Frame
+        // The intersection of the PaintArea and the Bitmap contains the absolutely visible area of the Frame
         aPaintArea._Intersection( aNormal );
 
         if ( bClip )
@@ -321,7 +319,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         PaintPicture( pOut, aGrfArea );
     }
     else
-        // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
+        // If it's not visible, simply delete the given Area
         lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect() );
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( sal_False );
@@ -335,12 +333,12 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 |*    void lcl_CalcRect( Point & aPt, Size & aDim,
 |*                   sal_uInt16 nMirror )
 |*
-|*    Beschreibung      Errechne die Position und die Groesse der Grafik im
-|*                      Frame, entsprechen der aktuellen Grafik-Attribute
+|*    Calculate the position and the size of the graphic in the Frame,
+|*    corresponding to the current graphic attributes
 |*
-|*    Parameter         Point&  die Position im Frame  ( auch Return-Wert )
-|*                      Size&   die Groesse der Grafik ( auch Return-Wert )
-|*                      MirrorGrf   akt. Spiegelungs-Attribut
+|*    Point&  the position in the Frame (also returned)
+|*    Size&   the graphic's size (also returned)
+|*    nMirror the current mirror attribute
 |*
 *************************************************************************/
 
@@ -364,19 +362,18 @@ void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 |*
 |*    void SwNoTxtFrm::GetGrfArea()
 |*
-|*    Beschreibung      Errechne die Position und die Groesse der Bitmap
-|*                      innerhalb des uebergebenem Rechtecks.
+|*    Calculate the Bitmap's position and the size within the passed rectangle
 |*
 *************************************************************************/
 
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              sal_Bool ) const
 {
-    //currently only used for scaling, cropping and mirroring the contour of graphics!
-    //all other is handled by the GraphicObject
+    // Currently only used for scaling, cropping and mirroring the contour of graphics!
+    // Everything else is handled by GraphicObject
 
-    //In rRect wird das sichbare Rechteck der Grafik gesteckt.
-    //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
+    // We put the graphic's visible rectangle into rRect.
+    // pOrigRect contains position and size of the whole graphic.
 
     const SwAttrSet& rAttrSet = GetNode()->GetSwAttrSet();
     const SwCropGrf& rCrop = rAttrSet.GetCropGrf();
@@ -396,7 +393,8 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         }
     }
 
-    //Grafik wird vom Node eingelesen falls notwendig. Kann aber schiefgehen.
+    // We read graphic from the Node, if needed.
+    // It may fail, however.
     long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
     Size aOrigSz( ((SwNoTxtNode*)GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
@@ -449,7 +447,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     Point aVisPt( Frm().Pos() + Prt().Pos() );
     Point aGrfPt( aVisPt );
 
-    //Erst das 'sichtbare' Rect einstellen.
+    // Set the "visible" rectangle first
     if ( nLeftCrop > 0 )
     {
         aVisPt.X()  += nLeftCrop;
@@ -468,7 +466,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     rRect.Pos  ( aVisPt );
     rRect.SSize( aVisSz );
 
-    //Ggf. Die Gesamtgrafik berechnen
+    // Calculate the whole graphic if needed
     if ( pOrigRect )
     {
         Size aTmpSz( aGrfSz );
@@ -489,15 +487,14 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 |*
 |*    Size SwNoTxtFrm::GetSize()
 |*
-|*    Beschreibung      Gebe die Groesse des umgebenen FLys und
-|*                      damit die der Grafik zurueck.
+|*    By returning the surrounding Fly's size which equals the graphic's size
 |*
 *************************************************************************/
 
 
 const Size& SwNoTxtFrm::GetSize() const
 {
-    // gebe die Groesse des Frames zurueck
+    // Return the Frame's size
     const SwFrm *pFly = FindFlyFrm();
     if( !pFly )
         pFly = this;
@@ -537,7 +534,7 @@ void SwNoTxtFrm::MakeAll()
 |*
 |*    SwNoTxtFrm::Format()
 |*
-|*    Beschreibung      Errechne die Groesse der Bitmap, wenn noetig
+|*    Calculate the Bitmap's site, if needed
 |*
 *************************************************************************/
 
@@ -546,7 +543,7 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
 {
     const Size aNewSize( GetSize() );
 
-    // hat sich die Hoehe geaendert?
+    // Did the height change?
     SwTwips nChgHght = IsVertical() ?
         (SwTwips)(aNewSize.Width() - Prt().Width()) :
         (SwTwips)(aNewSize.Height() - Prt().Height());
@@ -577,10 +574,10 @@ sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 
     rRect.Justify();
 
-    // liegt die Bitmap ueberhaupt im sichtbaren Berich ?
+    // Is the Bitmap in the visible area at all?
     if( !aFrameRect.IsOver( rRect ) )
     {
-        // wenn nicht dann steht der Cursor auf dem Frame
+        // If not, then the Cursor is on the Frame
         rRect = aFrameRect;
         rRect.Width( 1 );
     }
@@ -721,7 +718,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 else if ( pSh->VisArea().IsOver( aRect ) &&
                    OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
-                    //invalidate instead of painting
+                    // invalidate instead of painting
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
@@ -771,12 +768,12 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
     }
 }
 
-// Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
-// eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
-// eine Ersatzdarstellung ausgegeben.
-/// delete unused 3rd parameter.
-/// use aligned rectangle for drawing graphic.
-/// pixel-align coordinations for drawing graphic.
+// Paint the graphic.
+// We require either a QuickDraw-Bitmap or a graphic here. If we do not have
+// either, we return a replacement.
+// delete unused 3rd parameter.
+// use aligned rectangle for drawing graphic.
+// pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = getRootFrm()->GetCurrShell();
@@ -790,25 +787,25 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
 
-    /// calculate aligned rectangle from parameter <rGrfArea>.
-    ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
-    ///     the following code.
+    // calculate aligned rectangle from parameter <rGrfArea>.
+    //     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
+    //     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
     ::SwAlignRect( aAlignedGrfArea,  pShell );
 
     if( !bIsChart )
     {
-        /// Because for drawing a graphic left-top-corner and size coordinations are
-        /// used, these coordinations have to be determined on pixel level.
+        // Because for drawing a graphic left-top-corner and size coordinations are
+        // used, these coordinations have to be determined on pixel level.
         ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
     }
     else //if( bIsChart )
     {
-        //#i78025# charts own borders are not completely visible
-        //the above pixel correction is not correct - at least not for charts
-        //so a different pixel correction is choosen here
-        //this might be a good idea for all other OLE objects also,
-        //but as I cannot oversee the consequences I fix it only for charts for now
+        // #i78025# charts own borders are not completely visible
+        // the above pixel correction is not correct - at least not for charts
+        // so a different pixel correction is chosen here
+        // this might be a good idea for all other OLE objects also,
+        // but as I cannot oversee the consequences I fix it only for charts for now
         lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
     }
 
@@ -836,7 +833,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             }
             // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
-//            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
             else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
                         rGrfObj.GetType() == GRAPHIC_NONE ) &&
                       pGrfNd->IsLinkedFile() &&
@@ -893,7 +889,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
                     OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport(),
-                            "pOut sollte kein virtuelles Device sein" );
+                            "pOut should not be a virtual device" );
 
                     rGrfObj.StartAnimation( pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), long(this),
@@ -928,7 +924,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, sal_True );
             }
 
-            //Beim Drucken duerfen wir nicht die Grafiken sammeln...
+            // When printing, we must not collect the graphics
             if( bSwapped && bPrn )
                 bForceSwap = sal_True;
         }
@@ -940,13 +936,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
     }
     else if( bIsChart
-        //charts must be painted resolution dependent!! #i82893#, #i75867#
+        // Charts must be painted resolution dependent!! #i82893#, #i75867#
         && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOut )
         && svt::EmbeddedObjectRef::TryRunningState( pOLENd->GetOLEObj().GetOleRef() )
         && ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel >(
             pOLENd->GetOLEObj().GetOleRef()->getComponent(), uno::UNO_QUERY), pOut, aAlignedGrfArea.SVRect() ) )
     {
-        (void)(0);//all was done in if statement
+        (void)(0);// all was done in if statement
     }
     else if( pOLENd )
     {
@@ -967,8 +963,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         Point aPosition(aAlignedGrfArea.Pos());
         Size aSize(aAlignedGrfArea.SSize());
 
-        // Im BrowseModus gibt es nicht unbedingt einen Drucker und
-        // damit kein JobSetup, also legen wir eines an ...
+        // We do not have a printer in the BrowseMode and thus no JobSetup, so we create one ...
         const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
         sal_Bool bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
@@ -995,7 +990,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
         if( bDummyJobSetup )
-            delete pJobSetup;  // ... und raeumen wieder auf.
+            delete pJobSetup;  // ... and clean it up again
 
         sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
         if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
@@ -1022,14 +1017,14 @@ sal_Bool SwNoTxtFrm::IsTransparent() const
     if( 0 != (pNd = GetNode()->GetGrfNode()) )
         return pNd->IsTransparent();
 
-    //#29381# OLE sind immer Transparent.
+    //#29381# OLE are always transparent
     return sal_True;
 }
 
 
 void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
 {
-    //animierte Grafiken anhalten
+    // Stop animated graphics
     SwGrfNode* pGrfNd = (SwGrfNode*)GetNode()->GetGrfNode();
     if( pGrfNd && pGrfNd->IsAnimated() )
         pGrfNd->GetGrfObj().StopAnimation( pOut, long(this) );
