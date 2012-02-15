@@ -78,7 +78,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    // Vergleichen von PropertyInfo
+    // Compare PropertyInfo
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
@@ -552,7 +552,7 @@ namespace pcr
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const String& _rName)
     {
-        // intialisierung
+        // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
@@ -573,7 +573,7 @@ namespace pcr
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
-        // intialisierung
+        // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
 
