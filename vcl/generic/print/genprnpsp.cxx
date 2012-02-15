@@ -47,7 +47,6 @@
 #endif
 
 #include "rtl/ustring.hxx"
-#include "comphelper/string.hxx"
 
 #include "osl/module.h"
 
@@ -243,7 +242,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 
     // setup command line for exec
     if( ! bPipe )
-        aCmdLine = comphelper::string::replace( aCmdLine, rtl::OString("(TMP)"), aFilename );
+        aCmdLine = aCmdLine.replaceAll(rtl::OString("(TMP)"), aFilename);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",
@@ -359,7 +358,9 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
         {
             OUString aFaxNumber( aFaxNumbers.front() );
             aFaxNumbers.pop_front();
-            OUString aCmdLine = comphelper::string::replace( rCommand, OUString( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber );
+            OUString aCmdLine(
+                rCommand.replaceAllAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("(PHONE)"), aFaxNumber));
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -382,7 +383,9 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
 static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
 #if defined( UNX )
-    OUString aCommandLine = comphelper::string::replace( rCommandLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile );
+    OUString aCommandLine(
+        rCommandLine.replaceAllAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("(OUTFILE)"), rToFile));
 
     return passFileToCommandLine( rFromFile, aCommandLine );
 #else

@@ -38,7 +38,6 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -757,7 +756,8 @@ bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
     ::rtl::OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
-    aQuery = ::comphelper::string::replace(aQuery, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XX")), aNameBuf.makeStringAndClear());
+    aQuery = aQuery.replaceAllAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("XX"), aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );
 }
@@ -802,7 +802,8 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         if ( bNewTitle )
         {
             ::rtl::OUString aTitle(ResId::toString(IDEResId(RID_STR_ENTERPASSWORD)));
-            aTitle = ::comphelper::string::replace(aTitle, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XX")), rLibName);
+            aTitle = aTitle.replaceAllAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("XX"), rLibName);
             pDlg->SetText( aTitle );
         }
 

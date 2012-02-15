@@ -25,9 +25,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include "sal/config.h"
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
 #endif
+
+#include <cassert>
+#include <cstdlib>
 
 #include <rtl/memory.h>
 #include <osl/diagnose.h>
@@ -992,6 +998,178 @@ sal_Bool rtl_convertStringToUString(
     sal_uInt32 info;
     rtl_string2UString_status(target, source, length, encoding, flags, &info);
     return (sal_Bool) ((info & RTL_TEXTTOUNICODE_INFO_ERROR) == 0);
+}
+
+void rtl_uString_newReplaceFirst(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    rtl_uString const * to, sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != 0);
+    assert(index != 0);
+    assert(*index >= 0 && *index <= str->length);
+    assert(from != 0);
+    assert(to != 0);
+    sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
+        str->buffer + *index, str->length - *index, from->buffer, from->length);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(from->length <= str->length);
+        if (str->length - from->length > SAL_MAX_INT32 - to->length) {
+            std::abort();
+        }
+        sal_Int32 n = str->length - from->length + to->length;
+        rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_new_WithLength(newStr, n);
+        if (n != 0) {
+            (*newStr)->length = n;
+            assert(i >= 0 && i < str->length);
+            rtl_copyMemory(
+                (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+            rtl_copyMemory(
+                (*newStr)->buffer + i, to->buffer,
+                to->length * sizeof (sal_Unicode));
+            rtl_copyMemory(
+                (*newStr)->buffer + i + to->length,
+                str->buffer + i + from->length,
+                (str->length - i - from->length) * sizeof (sal_Unicode));
+        }
+        rtl_uString_release(str);
+    }
+    *index = i;
+}
+
+void rtl_uString_newReplaceFirstAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, rtl_uString const * to, sal_Int32 * index)
+    SAL_THROW_EXTERN_C()
+{
+    assert(str != 0);
+    assert(index != 0);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(to != 0);
+    sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - to->length) {
+            std::abort();
+        }
+        sal_Int32 n = str->length - fromLength + to->length;
+        rtl_uString_acquire(str); // in case *newStr == str
+        if (n != 0) {
+            rtl_uString_new_WithLength(newStr, n);
+            (*newStr)->length = n;
+            assert(i >= 0 && i < str->length);
+            rtl_copyMemory(
+                (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+            rtl_copyMemory(
+                (*newStr)->buffer + i, to->buffer,
+                to->length * sizeof (sal_Unicode));
+            rtl_copyMemory(
+                (*newStr)->buffer + i + to->length,
+                str->buffer + i + fromLength,
+                (str->length - i - fromLength) * sizeof (sal_Unicode));
+        }
+        rtl_uString_release(str);
+    }
+    *index = i;
+}
+
+void rtl_uString_newReplaceFirstAsciiLAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != 0);
+    assert(index != 0);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(to != 0);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
+            std::abort();
+        }
+        sal_Int32 n = str->length - fromLength + toLength;
+        rtl_uString_acquire(str); // in case *newStr == str
+        if (n != 0) {
+            rtl_uString_new_WithLength(newStr, n);
+            (*newStr)->length = n;
+            assert(i >= 0 && i < str->length);
+            rtl_copyMemory(
+                (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+            for (sal_Int32 j = 0; j != toLength; ++j) {
+                assert(static_cast< unsigned char >(to[j]) <= 0x7F);
+                (*newStr)->buffer[i + j] = to[j];
+            }
+            rtl_copyMemory(
+                (*newStr)->buffer + i + toLength,
+                str->buffer + i + fromLength,
+                (str->length - i - fromLength) * sizeof (sal_Unicode));
+        }
+        rtl_uString_release(str);
+    }
+    *index = i;
+}
+
+void rtl_uString_newReplaceAll(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    rtl_uString const * to) SAL_THROW_EXTERN_C()
+{
+    assert(to != 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += to->length) {
+        rtl_uString_newReplaceFirst(newStr, *newStr, from, to, &i);
+        if (i == -1) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, rtl_uString const * to) SAL_THROW_EXTERN_C()
+{
+    assert(to != 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += to->length) {
+        rtl_uString_newReplaceFirstAsciiL(
+            newStr, *newStr, from, fromLength, to, &i);
+        if (i == -1) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllAsciiLAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(toLength >= 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_uString_newReplaceFirstAsciiLAsciiL(
+            newStr, *newStr, from, fromLength, to, toLength, &i);
+        if (i == -1) {
+            break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,6 @@
 #include <string.h>
 #include <gmodule.h>
 #include <gtk/gtk.h>
-#include <comphelper/string.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
 
@@ -243,8 +242,8 @@ static rtl::OString MapToGtkAccelerator(const rtl::OUString &rStr)
 {
     const rtl::OUString aRep(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" )));
     return rtl::OUStringToOString(
-            comphelper::string::searchAndReplaceAsciiL(
-                rStr, RTL_CONSTASCII_STRINGPARAM( "~" ), aRep), RTL_TEXTENCODING_UTF8);
+            rStr.replaceFirstAsciiL(RTL_CONSTASCII_STRINGPARAM( "~" ), aRep),
+            RTL_TEXTENCODING_UTF8);
 }
 
 int GtkSalSystem::ShowNativeDialog (const rtl::OUString& rTitle, const rtl::OUString& rMessage,

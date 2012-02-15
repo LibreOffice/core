@@ -62,12 +62,10 @@
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
-using namespace ::comphelper;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -964,7 +962,9 @@ void LibPage::InsertLib()
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
                                         ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_REPLACELIB ) ) );
-                                        aErrStr = ::comphelper::string::replace(aErrStr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibName);
+                                        aErrStr = aErrStr.replaceAllAsciiL(
+                                            RTL_CONSTASCII_STRINGPARAM("XX"),
+                                            aLibName);
                                         aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
                                         aErrStr += ResId::toString( IDEResId( RID_STR_LIBISREADONLY ) );
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
@@ -981,7 +981,9 @@ void LibPage::InsertLib()
                                         aErrStr = ResId::toString( IDEResId( RID_STR_REFNOTPOSSIBLE ) );
                                     else
                                         aErrStr = ResId::toString( IDEResId( RID_STR_IMPORTNOTPOSSIBLE ) );
-                                    aErrStr = ::comphelper::string::replace(aErrStr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibName);
+                                    aErrStr = aErrStr.replaceAllAsciiL(
+                                        RTL_CONSTASCII_STRINGPARAM("XX"),
+                                        aLibName);
                                     aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
                                     aErrStr += ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) );
                                     ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
@@ -1002,7 +1004,9 @@ void LibPage::InsertLib()
                                     if ( !bOK )
                                     {
                                         ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_NOIMPORT ) ) );
-                                        aErrStr = ::comphelper::string::replace(aErrStr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibName);
+                                        aErrStr = aErrStr.replaceAllAsciiL(
+                                            RTL_CONSTASCII_STRINGPARAM("XX"),
+                                            aLibName);
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                         continue;
                                     }

@@ -2754,25 +2754,33 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
                 if (!aReplace.equalsAsciiL("\"", 1))
-                    aString = comphelper::string::replace(aString, aReplace, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                    aString = aString.replaceAll(
+                        aReplace,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
 
                 aReplace = rtl::OUString(pAuto->GetEndDoubleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd();
                 if (!aReplace.equalsAsciiL("\"", 1))
-                    aString = comphelper::string::replace(aString, aReplace, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                    aString = aString.replaceAll(
+                        aReplace,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
 
                 aReplace = rtl::OUString(pAuto->GetStartSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkStart();
                 if (!aReplace.equalsAsciiL("'", 1))
-                    aString = comphelper::string::replace(aString, aReplace, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
+                    aString = aString.replaceAll(
+                        aReplace,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
 
                 aReplace = rtl::OUString(pAuto->GetEndSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkEnd();
                 if (!aReplace.equalsAsciiL("'", 1))
-                    aString = comphelper::string::replace(aString, aReplace, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
+                    aString = aString.replaceAll(
+                        aReplace,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
             }
         }
 

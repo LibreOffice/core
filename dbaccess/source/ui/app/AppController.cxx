@@ -90,7 +90,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -2964,8 +2963,12 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             default:
             case DatabaseObjectContainer::DATA_SOURCE:
             {
-                ::rtl::OUString sMessage = String(ModuleRes( RID_STR_UNSUPPORTED_OBJECT_TYPE ));
-                ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$type$", ::rtl::OUString::valueOf(sal_Int32( pObject->Type )) );
+                ::rtl::OUString sMessage(
+                    rtl::OUString(
+                        String(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
+                    replaceFirstAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("$type$"),
+                        ::rtl::OUString::valueOf(sal_Int32(pObject->Type))));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
         }

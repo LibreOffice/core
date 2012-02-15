@@ -50,8 +50,6 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
-#include "helper.hxx"
-
 using namespace std;
 
 namespace {
@@ -104,7 +102,7 @@ bool matchList(
     rtl::OUString const & url, AsciiString const * list, std::size_t length)
 {
     for (std::size_t i = 0; i != length; ++i) {
-        if (helper::endsWithAsciiL(url, list[i].string, list[i].length)) {
+        if (url.endsWithAsciiL(list[i].string, list[i].length)) {
             return true;
         }
     }
@@ -272,8 +270,8 @@ void handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
         { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i) {
-        if (helper::endsWithAsciiL(
-                url, commands[i].extension, commands[i].extensionLength))
+        if (url.endsWithAsciiL(
+                commands[i].extension, commands[i].extensionLength))
         {
             handleCommand(
                 project, projectRoot, url,

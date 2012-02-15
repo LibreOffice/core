@@ -612,6 +612,14 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
     global:
         osl_unmapMappedFile;
         osl_identicalDirectoryItem;
+        rtl_string_newReplaceAll;
+        rtl_string_newReplaceFirst;
+        rtl_uString_newReplaceAll;
+        rtl_uString_newReplaceAllAsciiL;
+        rtl_uString_newReplaceAllAsciiLAsciiL;
+        rtl_uString_newReplaceFirst;
+        rtl_uString_newReplaceFirstAsciiL;
+        rtl_uString_newReplaceFirstAsciiLAsciiL;
 } UDK_3.10;
 
 PRIVATE_1.0 {

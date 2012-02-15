@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 #include <tools/stream.hxx>
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
 #include "cppdep.hxx"
 
 CppDep::CppDep()
@@ -82,8 +81,7 @@ sal_Bool CppDep::Search(const rtl::OString &rFileName)
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
     {
-        using comphelper::string::indexOfL;
-        sal_Int32 nPos = indexOfL(aReadLine,
+        sal_Int32 nPos = aReadLine.indexOfL(
             RTL_CONSTASCII_STRINGPARAM("include"));
         if ( nPos != -1 )
         {
@@ -186,9 +184,8 @@ rtl::OString CppDep::IsIncludeStatement(rtl::OString aLine)
 #endif
     }
     // WhiteSpacesfressen
-    using comphelper::string::replace;
-    aLine = replace(aLine, rtl::OString(' '), rtl::OString());
-    aLine = replace(aLine, rtl::OString('\t'), rtl::OString());
+    aLine = aLine.replaceAll(rtl::OString(' '), rtl::OString()).
+        replaceAll(rtl::OString('\t'), rtl::OString());
 #ifdef DEBUG_VERBOSE
     fprintf( stderr, "now : %s\n", aLine.getStr() );
 #endif

@@ -305,7 +305,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
             if( !aReadLine.isEmpty() )
                 aFileNameSet.insert( aReadLine );
 
-            if( comphelper::string::indexOfL(aReadLine, RTL_CONSTASCII_STRINGPARAM("enus") ) != -1 )
+            if( aReadLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("enus") ) != -1 )
             {
                 static const char* aLanguages[] =
                 {
@@ -328,10 +328,10 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
                 for( sal_uInt32 n = 0; n < 14; ++n )
                 {
-                    rtl::OString aLangPath = comphelper::string::replace(
-                        aReadLine,
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("enus")),
-                        rtl::OString(aLanguages[n]));
+                    rtl::OString aLangPath(
+                        aReadLine.replaceAll(
+                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("enus")),
+                            rtl::OString(aLanguages[n])));
 
                     DirEntry aTestFile( aLangPath );
 

@@ -34,16 +34,12 @@
 #include <string>
 
 #include "common.hxx"
-#include "helper.hxx"
 #include "lngmerge.hxx"
 
 namespace {
 
 rtl::OString getBracketedContent(rtl::OString text) {
-    sal_Int32 n = 0;
-    rtl::OString t(text.getToken(1, '[', n));
-    n = 0;
-    return t.getToken(0, ']', n);
+    return text.getToken(1, '[').getToken(0, ']');
 }
 
 }
@@ -162,10 +158,10 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
 
 bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 {
-    sLine_in = helper::trimAscii(sLine_in);
+    sLine_in = sLine_in.trim();
     if ((sLine_in[0] == '[') && (sLine_in[sLine_in.getLength() - 1] == ']'))
     {
-        sGroup_out = helper::trimAscii(getBracketedContent(sLine_in));
+        sGroup_out = getBracketedContent(sLine_in).trim();
         return true;
     }
     return false;
@@ -174,11 +170,9 @@ bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 void LngParser::ReadLine(const rtl::OString &rLine_in,
         OStringHashMap &rText_inout)
 {
-    sal_Int32 n = 0;
-    rtl::OString sLang(helper::trimAscii(rLine_in.getToken(0, '=', n)));
+    rtl::OString sLang(rLine_in.getToken(0, '=').trim());
     if (!sLang.isEmpty()) {
-        n = 0;
-        rtl::OString sText(rLine_in.getToken(1, '"', n));
+        rtl::OString sText(rLine_in.getToken(1, '"'));
         rText_inout[sLang] = sText;
     }
 }
@@ -209,11 +203,11 @@ sal_Bool LngParser::Merge(
     while ( nPos < pLines->size() && !bGroup )
     {
         rtl::OString sLine( *(*pLines)[ nPos ] );
-        sLine = helper::trimAscii(sLine);
+        sLine = sLine.trim();
         if (( sLine[0] == '[' ) &&
             ( sLine[sLine.getLength() - 1] == ']' ))
         {
-            sGroup = helper::trimAscii(getBracketedContent(sLine));
+            sGroup = getBracketedContent(sLine).trim();
             bGroup = sal_True;
         }
         nPos ++;
@@ -235,11 +229,11 @@ sal_Bool LngParser::Merge(
         while ( nPos < pLines->size() && !bGroup )
         {
             rtl::OString sLine( *(*pLines)[ nPos ] );
-            sLine = helper::trimAscii(sLine);
+            sLine = sLine.trim();
             if (( sLine[0] == '[' ) &&
                 ( sLine[sLine.getLength() - 1] == ']' ))
             {
-                sGroup = helper::trimAscii(getBracketedContent(sLine));
+                sGroup = getBracketedContent(sLine).trim();
                 bGroup = sal_True;
                 nPos ++;
                 sLanguagesDone = "";
@@ -254,7 +248,7 @@ sal_Bool LngParser::Merge(
                 }
                 else
                 {
-                    sLang = helper::trimAscii(sLang);
+                    sLang = sLang.trim();
 
                     rtl::OString sSearch( ";" );
                     sSearch += sLang;

@@ -30,7 +30,6 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include <comphelper/string.hxx>
 #include "generic/printergfx.hxx"
 #include "generic/printerjob.hxx"
 #include "vcl/fontmanager.hxx"
@@ -1204,9 +1203,9 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
             char cChar = aLine[1];
             if( cChar == '%' )
             {
-                if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%BoundingBox:") )  )
+                if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%BoundingBox:") ) ) )
                 {
-                    aLine = WhitespaceToSpace( comphelper::string::getToken(aLine, 1, ':') );
+                    aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
                     if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )
                     {
                         fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
@@ -1215,9 +1214,9 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
                         fTop    = StringToDouble( GetCommandLineToken( 3, aLine ) );
                     }
                 }
-                else if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%Title:") ) )
+                else if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%Title:") ) ) )
                     aDocTitle = WhitespaceToSpace( aLine.copy( 8 ) );
-                else if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%EndComments") ) )
+                else if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%EndComments") ) ) )
                     bEndComments = true;
             }
             else if( cChar == ' ' || cChar == '\t' || cChar == '\r' || cChar == '\n' )

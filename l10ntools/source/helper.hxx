@@ -40,10 +40,6 @@
 
 namespace helper {
 
-inline bool isAsciiWhitespace(char c) {
-    return (c >= 0x09 && c <= 0x0D) || c == ' '; // HT, LF, VT, FF, CR
-}
-
 // cf. comphelper::string::isdigitAsciiString:
 inline bool isAllAsciiDigits(rtl::OString const & text) {
     for (sal_Int32 i = 0; i != text.getLength(); ++i) {
@@ -74,19 +70,6 @@ inline bool isAllAsciiLowerCase(rtl::OString const & text) {
     return true;
 }
 
-inline bool endsWith(rtl::OString const & text, rtl::OString const & search) {
-    return text.getLength() >= search.getLength()
-        && text.match(search, text.getLength() - search.getLength());
-}
-
-inline bool endsWithAsciiL(
-    rtl::OUString const & text, char const * search, sal_Int32 searchLength)
-{
-    return text.getLength() >= searchLength
-        && text.matchAsciiL(
-            search, searchLength, text.getLength() - searchLength);
-}
-
 inline sal_Int32 countOccurrences(rtl::OString const & text, char c) {
     sal_Int32 n = 0;
     for (sal_Int32 i = 0;; ++i) {
@@ -97,67 +80,6 @@ inline sal_Int32 countOccurrences(rtl::OString const & text, char c) {
         ++n;
     }
     return n;
-}
-
-inline rtl::OString trimAscii(rtl::OString const & text) {
-    sal_Int32 i1 = 0;
-    while (i1 != text.getLength() && isAsciiWhitespace(text[i1])) {
-        ++i1;
-    }
-    sal_Int32 i2 = text.getLength();
-    while (i2 != i1 && isAsciiWhitespace(text[i2 - 1])) {
-        --i2;
-    }
-    return text.copy(i1, i2 - i1);
-}
-
-inline sal_Int32 searchAndReplace(
-    rtl::OString * text, rtl::OString const & search,
-    rtl::OString const & replace)
-{
-    assert(text != 0);
-    sal_Int32 i = text->indexOf(search);
-    if (i != -1) {
-        *text = text->replaceAt(i, search.getLength(), replace);
-    }
-    return i;
-}
-
-inline void searchAndReplaceAll(
-    rtl::OString * text, rtl::OString const & search,
-    rtl::OString const & replace)
-{
-    assert(text != 0);
-    for (sal_Int32 i = 0;;) {
-        i = text->indexOf(search, i);
-        if (i == -1) {
-            break;
-        }
-        *text = text->replaceAt(i, search.getLength(), replace);
-        i += replace.getLength();
-    }
-}
-
-inline void searchAndReplaceAll(
-    rtl::OUString * text, rtl::OUString const & search,
-    rtl::OUString const & replace)
-{
-    assert(text != 0);
-    for (sal_Int32 i = 0;;) {
-        i = text->indexOf(search, i);
-        if (i == -1) {
-            break;
-        }
-        *text = text->replaceAt(i, search.getLength(), replace);
-        i += replace.getLength();
-    }
-}
-
-inline rtl::OString getToken(
-    rtl::OString const & text, sal_Int32 token, char separator)
-{
-    sal_Int32 i = 0;
-    return text.getToken(token, separator, i);
 }
 
 inline sal_Int32 indexOfAnyAsciiL(

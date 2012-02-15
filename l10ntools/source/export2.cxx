@@ -29,7 +29,6 @@
 #include "sal/config.h"
 
 #include "export.hxx"
-#include "helper.hxx"
 #include <stdio.h>
 #include <osl/time.h>
 #include <osl/process.h>
@@ -302,8 +301,7 @@ void Export::InitLanguages( bool bMergeMode ){
         do
         {
             rtl::OString aToken = sLanguages.getToken(0, ',', nIndex);
-            sal_Int32 n = 0;
-            sTmp = helper::trimAscii(aToken.getToken(0, '=', n));
+            sTmp = aToken.getToken(0, '=').trim();
             if( bMergeMode && !isAllowed( sTmp ) ){}
             else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){
                 aLanguages.push_back( sTmp );
@@ -326,8 +324,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     {
         rtl::OString aToken = sForcedLanguages.getToken(0, ',', nIndex);
 
-        sal_Int32 n = 0;
-        sTmp = helper::trimAscii(aToken.getToken(0, '=', n));
+        sTmp = aToken.getToken(0, '=').trim();
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) )
             aForcedLanguages.push_back( sTmp );

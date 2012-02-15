@@ -58,14 +58,12 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
-using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -1065,7 +1063,8 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
             {
                 ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TITLE)));
                 ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TEXT)));
-                aQueryBoxText = ::comphelper::string::replace(aQueryBoxText, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG1)")), aXmlDlgName);
+                aQueryBoxText = aQueryBoxText.replaceAllAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("$(ARG1)"), aXmlDlgName);
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();

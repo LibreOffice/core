@@ -363,7 +363,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, rtl::OString const & aPrefix
                 aContext = pLine->GetText().copy( 0, 300 );
             else
                 aContext = pLine->data_.copy( pMsg->GetTagBegin()-150, 300 );
-            aContext = helper::trimAscii(aContext);
+            aContext = aContext.trim();
         }
 
         PrintMessage( pMsg->Prefix(), pMsg->GetErrorText(), aPrefix, aContext, pLine->GetLineNumber(), pLine->GetUniqId() );

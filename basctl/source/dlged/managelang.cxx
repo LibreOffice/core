@@ -37,8 +37,9 @@
 #include "helpid.hrc"
 #include "managelang.hrc"
 
+#include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <comphelper/string.hxx>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <svtools/langtab.hxx>
@@ -120,7 +121,7 @@ void ManageLanguageDialog::Init()
     ::rtl::OUString sLibName = pIDEShell->GetCurLibName();
     // set dialog title with library name
     ::rtl::OUString sText = GetText();
-    ::comphelper::string::replace(sText, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$1")), sLibName);
+    sText = sText.replaceAllAsciiL(RTL_CONSTASCII_STRINGPARAM("$1"), sLibName);
     SetText( sText );
     // set handler
     m_aAddPB.SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );

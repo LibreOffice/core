@@ -143,13 +143,14 @@ bool HelpParser::CreateSDF(
 
             if( pXMLElement != NULL )
             {
-                OUString data = pXMLElement->ToOUString();
-                helper::searchAndReplaceAll(
-                    &data, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
-                    rtl::OUString()); // remove \n
-                helper::searchAndReplaceAll(
-                    &data, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
-                    rtl::OUString()); // remove \t
+                OUString data(
+                    pXMLElement->ToOUString().
+                    replaceAll(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        rtl::OUString()).
+                    replaceAll(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
+                        rtl::OUString()));
                 sBuffer.append( sOUPrj );
                 sBuffer.append('\t');
                 if ( !rRoot_in.isEmpty())
@@ -306,13 +307,13 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 rtl::OString HelpParser::GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY )
 {
     rtl::OString testpath = rPathX;
-    if (!helper::endsWith(testpath, "/")) {
+    if (!testpath.endsWithL(RTL_CONSTASCII_STRINGPARAM("/"))) {
         testpath += "/";
     }
     testpath += sCur;
     testpath += "/";
     rtl::OString sRelativePath( rPathY );
-    if (sRelativePath.getLength() != 0 && sRelativePath[0] == '/') {
+    if (sRelativePath.matchL(RTL_CONSTASCII_STRINGPARAM("/"))) {
         sRelativePath = sRelativePath.copy(1);
     }
     testpath += sRelativePath;
@@ -322,14 +323,12 @@ rtl::OString HelpParser::GetOutpath( const rtl::OString& rPathX , const rtl::OSt
 
 void HelpParser::MakeDir(const rtl::OString& rPath)
 {
-    rtl::OString sTPath(rPath);
-    helper::searchAndReplaceAll(&sTPath, "\\", "/");
+    rtl::OString sTPath(rPath.replaceAll("\\", "/"));
     sal_Int32 cnt = helper::countOccurrences(sTPath, '/');
     rtl::OStringBuffer sCreateDir;
     for (sal_uInt16 i = 0; i <= cnt; ++i)
     {
-        sal_Int32 n = 0;
-        sCreateDir.append(sTPath.getToken(i , '/', n));
+        sCreateDir.append(sTPath.getToken(i , '/'));
         sCreateDir.append('/');
 #ifdef WNT
         _mkdir( sCreateDir.getStr() );

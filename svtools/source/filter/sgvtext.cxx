@@ -1185,26 +1185,25 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, rtl::OString& Dsc )
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(Dsc, ' ');
     for (sal_Int32 nIdx = 0; nIdx < nTokenCount; ++nIdx)
     {
-        rtl::OString s = comphelper::string::getToken(Dsc, nIdx, ' ');
+        rtl::OString s(Dsc.getToken(nIdx, ' '));
         if (!s.isEmpty())
         {
             s = s.toAsciiUpperCase();
-            using comphelper::string::matchL;
-            if      (matchL(s, RTL_CONSTASCII_USTRINGPARAM("BOLD"))) Bold=sal_True;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ITAL"))) Ital=sal_True;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SERF"))) Serf=sal_True;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SANS"))) Sans=sal_True;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("FIXD"))) Fixd=sal_True;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ROMAN"))) SVFamil=FAMILY_ROMAN;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SWISS"))) SVFamil=FAMILY_SWISS;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MODERN"))) SVFamil=FAMILY_MODERN;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SCRIPT"))) SVFamil=FAMILY_SCRIPT;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("DECORA"))) SVFamil=FAMILY_DECORATIVE;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ANSI"))) SVChSet=RTL_TEXTENCODING_MS_1252;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("IBMPC"))) SVChSet=RTL_TEXTENCODING_IBM_850;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MAC"))) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYMBOL"))) SVChSet=RTL_TEXTENCODING_SYMBOL;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYSTEM"))) SVChSet = osl_getThreadTextEncoding();
+            if      (s.matchL(RTL_CONSTASCII_STRINGPARAM("BOLD"))) Bold=sal_True;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("ITAL"))) Ital=sal_True;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SERF"))) Serf=sal_True;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SANS"))) Sans=sal_True;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("FIXD"))) Fixd=sal_True;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("ROMAN"))) SVFamil=FAMILY_ROMAN;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SWISS"))) SVFamil=FAMILY_SWISS;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("MODERN"))) SVFamil=FAMILY_MODERN;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SCRIPT"))) SVFamil=FAMILY_SCRIPT;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("DECORA"))) SVFamil=FAMILY_DECORATIVE;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("ANSI"))) SVChSet=RTL_TEXTENCODING_MS_1252;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("IBMPC"))) SVChSet=RTL_TEXTENCODING_IBM_850;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("MAC"))) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SYMBOL"))) SVChSet=RTL_TEXTENCODING_SYMBOL;
+            else if (s.matchL(RTL_CONSTASCII_STRINGPARAM("SYSTEM"))) SVChSet = osl_getThreadTextEncoding();
             else if (comphelper::string::isdigitAsciiString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.toInt32());
         }
     }

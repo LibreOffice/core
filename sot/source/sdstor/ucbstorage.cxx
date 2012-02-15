@@ -52,8 +52,6 @@
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
-#include <comphelper/string.hxx>
-
 #include <rtl/digest.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -3294,7 +3292,7 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     if( nBytes == 0x04034b50 )
     {
         rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
-        if (comphelper::string::matchL(aTmp, RTL_CONSTASCII_STRINGPARAM("ContentURL=")))
+        if (aTmp.matchL(RTL_CONSTASCII_STRINGPARAM("ContentURL=")))
         {
             aString = rtl::OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
         }

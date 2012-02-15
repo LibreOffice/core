@@ -712,6 +712,21 @@ public:
     }
 
     /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWith(rtl::OUString const & str) const {
+        return str.getLength() <= getLength()
+            && match(str, getLength() - str.getLength());
+    }
+
+    /**
       Check whether this string ends with a given ASCII string.
 
       @param asciiStr a sequence of at least asciiStrLength ASCII characters
@@ -1067,6 +1082,177 @@ public:
     }
 
     /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceFirst(
+        OUString const & from, OUString const & to, sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirst(
+            &s, pData, from.pData, to.pData, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p fromLength ASCII bytes
+
+      @param fromLength  the length of the \p from substring; must be
+      non-negative
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceFirstAsciiL(
+        char const * from, sal_Int32 fromLength, rtl::OUString const & to,
+        sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirstAsciiL(
+            &s, pData, from, fromLength, to.pData, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p fromLength ASCII bytes
+
+      @param fromLength  the length of the \p from substring; must be
+      non-negative
+
+      @param to  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p toLength ASCII bytes
+
+      @param toLength  the length of the \p to substring; must be non-negative
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceFirstAsciiLAsciiL(
+        char const * from, sal_Int32 fromLength, char const * to,
+        sal_Int32 toLength, sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirstAsciiLAsciiL(
+            &s, pData, from, fromLength, to, toLength, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceAll(OUString const & from, OUString const & to) const {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAll(&s, pData, from.pData, to.pData);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p fromLength ASCII bytes
+
+      @param fromLength  the length of the \p from substring; must be
+      non-negative
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceAllAsciiL(
+        char const * from, sal_Int32 fromLength, OUString const & to) const
+    {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAllAsciiL(&s, pData, from, fromLength, to.pData);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p fromLength ASCII bytes
+
+      @param fromLength  the length of the \p from substring; must be
+      non-negative
+
+      @param to  pointer to the substring to be replaced; must not be null and
+      must point to memory of at least \p toLength ASCII bytes
+
+      @param toLength  the length of the \p to substring; must be non-negative
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceAllAsciiLAsciiL(
+        char const * from, sal_Int32 fromLength, char const * to,
+        sal_Int32 toLength) const
+    {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAllAsciiLAsciiL(
+            &s, pData, from, fromLength, to, toLength);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
       Converts from this string all ASCII uppercase characters (65-90)
       to ASCII lowercase characters (97-122).
 
@@ -1147,6 +1333,24 @@ public:
         rtl_uString * pNew = 0;
         index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
         return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+      Returns a token from the string.
+
+      The same as getToken(sal_Int32, sal_Unicode, sal_Int32 &), but always
+      passing in 0 as the start index in the third argument.
+
+      @param count  the number of the token to return, starting with 0
+      @param separator  the character which separates the tokens
+
+      @return  the given token, or an empty string
+
+      @since LibreOffice 3.6
+     */
+    OUString getToken(sal_Int32 count, sal_Unicode separator) const {
+        sal_Int32 n = 0;
+        return getToken(count, separator, n);
     }
 
     /**

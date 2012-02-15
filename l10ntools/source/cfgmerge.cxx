@@ -37,7 +37,6 @@
 #include "rtl/strbuf.hxx"
 
 #include "common.hxx"
-#include "helper.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
@@ -235,18 +234,12 @@ void CfgParser::AddText(
 )
 /*****************************************************************************/
 {
-        sal_Int32 nTextLen = 0;
-        while ( rText.getLength() != nTextLen ) {
-            nTextLen = rText.getLength();
-            rText = rText.replace( '\n', ' ' );
-            rText = rText.replace( '\r', ' ' );
-            rText = rText.replace( '\t', ' ' );
-            while (helper::searchAndReplace(&rText, "  ", " ") != -1) {}
-        }
-        pStackData->sResTyp = rResTyp;
-        WorkOnText( rText, rIsoLang );
-
-        pStackData->sText[ rIsoLang ] = rText;
+    rText = rText.replaceAll(rtl::OString('\n'), rtl::OString()).
+        replaceAll(rtl::OString('\r'), rtl::OString()).
+        replaceAll(rtl::OString('\t'), rtl::OString());
+    pStackData->sResTyp = rResTyp;
+    WorkOnText( rText, rIsoLang );
+    pStackData->sText[ rIsoLang ] = rText;
 }
 
 /*****************************************************************************/
@@ -274,12 +267,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-            sal_Int32 n = 0;
-            rtl::OString t(sToken.getToken(1, '<', n));
-            n = 0;
-            t = t.getToken(0, '>', n);
-            n = 0;
-            sTokenName = t.getToken(0, ' ', n);
+            sTokenName = sToken.getToken(1, '<').getToken(0, '>').
+                getToken(0, ' ');
 
               if ( !IsTokenClosed( sToken )) {
                 rtl::OString sSearch;
@@ -315,8 +304,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sCurrentResTyp = sTokenName;
 
                         rtl::OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
-                        n = 0;
-                        sCurrentIsoLang = sTemp.getToken(1, '"', n);
+                        sCurrentIsoLang = sTemp.getToken(1, '"');
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
                             bLocalize = sal_False;
@@ -330,8 +318,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 if ( !sSearch.isEmpty())
                 {
                     rtl::OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
-                    n = 0;
-                    sTokenId = sTemp.getToken(1, '"', n);
+                    sTokenId = sTemp.getToken(1, '"');
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
@@ -356,12 +343,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
         case CFG_CLOSETAG:
         {
-            sal_Int32 n = 0;
-            rtl::OString t(sToken.getToken(1, '/', n));
-            n = 0;
-            t = t.getToken(0, '>', n);
-            n = 0;
-            sTokenName = t.getToken(0, ' ', n);
+            sTokenName = sToken.getToken(1, '/').getToken(0, '>').
+                getToken(0, ' ');
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
                 if (sCurrentText.isEmpty())
@@ -660,13 +643,12 @@ void CfgMerge::WorkOnRessourceEnd()
                     sSearch += sTemp.getToken(0, '"', n);
                     sSearch += "\"";
 
-                    n = 0;
-                    rtl::OString sReplace = sTemp.getToken(0, '"', n);
+                    rtl::OString sReplace = sTemp.getToken(0, '"');
                     sReplace += "\"";
                     sReplace += sCur;
                     sReplace += "\"";
 
-                    helper::searchAndReplace(&sTextTag, sSearch, sReplace);
+                    sTextTag = sTextTag.replaceFirst(sSearch, sReplace);
 
                     sAdditionalLine += sTextTag;
                     sAdditionalLine += sText;

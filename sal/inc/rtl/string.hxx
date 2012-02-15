@@ -471,6 +471,31 @@ public:
     }
 
     /**
+      Match against a substring appearing in this string.
+
+      @param str  the substring to be compared; must not be null and must point
+      to memory of at least strLength bytes
+
+      @param strLength  the length of the substring; must be non-negative
+
+      @param fromIndex  the index into this string to start the comparison at;
+      must be non-negative and not greater than this string's length
+
+      @return true if and only if the given str is contained as a substring of
+      this string at the given fromIndex
+
+      @since LibreOffice 3.6
+    */
+    bool matchL(
+        char const * str, sal_Int32 strLength, sal_Int32 fromIndex = 0)
+        const
+    {
+        return rtl_str_shortenedCompare_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            str, strLength, strLength) == 0;
+    }
+
+    /**
       Match against a substring appearing in this string, ignoring the case of
       ASCII letters.
 
@@ -493,6 +518,39 @@ public:
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.pData->buffer, str.pData->length,
                                                                    str.pData->length ) == 0;
+    }
+
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWith(rtl::OString const & str) const {
+        return str.getLength() <= getLength()
+            && match(str, getLength() - str.getLength());
+    }
+
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared; must not be null and must point
+      to memory of at least strLength bytes
+
+      @param strLength  the length of the substring; must be non-negative
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWithL(char const * str, sal_Int32 strLength) const {
+        return strLength <= getLength()
+            && matchL(str, strLength, getLength() - strLength);
     }
 
     friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
@@ -600,6 +658,32 @@ public:
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+      Returns the index within this string of the first occurrence of the
+      specified substring, starting at the specified index.
+
+      If str doesn't include any character, always -1 is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @param    len         the length of the substring.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the first such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or beyond, -1 is returned.
+
+      @since LibreOffice 3.6
+    */
+    sal_Int32 indexOfL(char const * str, sal_Int32 len, sal_Int32 fromIndex = 0)
+        const SAL_THROW(())
+    {
+        sal_Int32 n = rtl_str_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, str, len);
+        return n < 0 ? n : n + fromIndex;
     }
 
     /**
@@ -754,6 +838,56 @@ public:
     }
 
     /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OString replaceFirst(
+        OString const & from, OString const & to, sal_Int32 * index = 0) const
+    {
+        rtl_String * s = 0;
+        sal_Int32 i = 0;
+        rtl_string_newReplaceFirst(
+            &s, pData, from.pData->buffer, from.pData->length,
+            to.pData->buffer, to.pData->length, index == 0 ? &i : index);
+        return OString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    OString replaceAll(OString const & from, OString const & to) const {
+        rtl_String * s = 0;
+        rtl_string_newReplaceAll(
+            &s, pData, from.pData->buffer, from.pData->length,
+            to.pData->buffer, to.pData->length);
+        return OString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
       Converts from this string all ASCII uppercase characters (65-90)
       to ASCII lowercase characters (97-122).
 
@@ -834,6 +968,24 @@ public:
         rtl_String * pNew = 0;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
         return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+      Returns a token from the string.
+
+      The same as getToken(sal_Int32, sal_Char, sal_Int32 &), but always passing
+      in 0 as the start index in the third argument.
+
+      @param count  the number of the token to return, starting with 0
+      @param separator  the character which separates the tokens
+
+      @return  the given token, or an empty string
+
+      @since LibreOffice 3.6
+     */
+    OString getToken(sal_Int32 count, char separator) const {
+        sal_Int32 n = 0;
+        return getToken(count, separator, n);
     }
 
     /**

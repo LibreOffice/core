@@ -68,7 +68,6 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -762,8 +761,10 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 
     if ( !sUnsupportedSetting.isEmpty() )
     {
-        ::rtl::OUString sMessage( String(ModuleRes( STR_CTW_ERROR_UNSUPPORTED_SETTING )) );
-        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", sUnsupportedSetting );
+        ::rtl::OUString sMessage(
+            rtl::OUString(String(ModuleRes(STR_CTW_ERROR_UNSUPPORTED_SETTING))).
+            replaceFirstAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("$name$"), sUnsupportedSetting));
         throw IllegalArgumentException(
             sMessage,
             *const_cast< CopyTableWizard* >( this ),

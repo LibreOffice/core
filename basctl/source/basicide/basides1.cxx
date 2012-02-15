@@ -53,7 +53,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <comphelper/string.hxx>
 #include <svl/visitem.hxx>
 #include <svtools/xtextedt.hxx>
 #include <vcl/msgbox.hxx>
@@ -178,7 +177,9 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                             nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
 
                         ::rtl::OUString aReplStr(ResId::toString(IDEResId(RID_STR_SEARCHREPLACES)));
-                        aReplStr = ::comphelper::string::replace(aReplStr, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XX")), ::rtl::OUString::valueOf(nFound));
+                        aReplStr = aReplStr.replaceAllAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM("XX"),
+                            rtl::OUString::valueOf(nFound));
                         InfoBox( pCurWin, aReplStr ).Execute();
                     }
                     else

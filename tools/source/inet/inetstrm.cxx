@@ -1614,7 +1614,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                         pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
                     rtl::OString aLowerType(aType.toAsciiLowerCase());
 
-                    sal_Int32 nPos = comphelper::string::indexOfL(aLowerType,
+                    sal_Int32 nPos = aLowerType.indexOfL(
                         RTL_CONSTASCII_STRINGPARAM("boundary="));
                     rtl::OString aBoundary(aType.copy(nPos + 9));
 

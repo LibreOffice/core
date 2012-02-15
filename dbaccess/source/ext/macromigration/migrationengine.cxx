@@ -72,7 +72,6 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
@@ -254,8 +253,13 @@ namespace dbmm
         //----------------------------------------------------------------
         ::rtl::OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
-            ::rtl::OUString sObjectName = ResId::toString(MacroMigrationResId( _rDocument.eType == eForm ? STR_FORM : STR_REPORT));
-            ::comphelper::string::searchAndReplaceAsciiI( sObjectName, "$name$", _rDocument.sHierarchicalName );
+            ::rtl::OUString sObjectName(
+                ResId::toString(
+                    MacroMigrationResId(
+                        _rDocument.eType == eForm ? STR_FORM : STR_REPORT)).
+                replaceFirstAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("$name$"),
+                    _rDocument.sHierarchicalName));
             return sObjectName;
         }
 
@@ -1025,8 +1029,11 @@ namespace dbmm
 
         // initialize global progress
         sal_Int32 nOverallRange( m_aSubDocs.size() );
-        String sProgressSkeleton = ResId::toString(MacroMigrationResId( STR_OVERALL_PROGRESS));
-        sProgressSkeleton.SearchAndReplaceAscii( "$overall$", String::CreateFromInt32( nOverallRange ) );
+        rtl::OUString sProgressSkeleton(
+            ResId::toString(MacroMigrationResId( STR_OVERALL_PROGRESS)).
+            replaceFirstAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("$overall$"),
+                rtl::OUString::valueOf(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
 
@@ -1037,8 +1044,10 @@ namespace dbmm
         {
             sal_Int32 nOverallProgressValue( doc - m_aSubDocs.begin() + 1 );
             // update overall progress text
-            ::rtl::OUString sOverallProgress( sProgressSkeleton );
-            ::comphelper::string::searchAndReplaceAsciiI( sOverallProgress, "$current$", ::rtl::OUString::valueOf( nOverallProgressValue ) );
+            ::rtl::OUString sOverallProgress(
+                sProgressSkeleton.replaceFirstAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("$current$"),
+                    ::rtl::OUString::valueOf(nOverallProgressValue)));
             m_rProgress.setOverallProgressText( sOverallProgress );
 
             // migrate document
@@ -1927,12 +1936,16 @@ namespace dbmm
             const ScriptType _eScriptType, const ::rtl::OUString& _rLibraryName ) const
     {
         // a human-readable description of the affected library
-        ::rtl::OUString sLibraryDescription( ResId::toString(
-            MacroMigrationResId( STR_LIBRARY_TYPE_AND_NAME ) ) );
-        ::comphelper::string::searchAndReplaceAsciiI( sLibraryDescription, "$type$",
-            getScriptTypeDisplayName( _eScriptType ) );
-        ::comphelper::string::searchAndReplaceAsciiI( sLibraryDescription, "$library$",
-            _rLibraryName );
+        ::rtl::OUString sLibraryDescription(
+            ResId::toString(MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME)).
+            replaceFirstAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("$type$"),
+                getScriptTypeDisplayName(_eScriptType)).
+            replaceFirstAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("$library$"), _rLibraryName));
+            //TODO: probably broken if first replaceFirstAsciiL can produce
+            // fresh instance of "$library$" in subject string of second
+            // replaceFirstAsciiL
 
         InteractionHandler aHandler( m_aContext, m_xDocumentModel );
         ::rtl::OUString sPassword;

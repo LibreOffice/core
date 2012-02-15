@@ -81,7 +81,6 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -3483,8 +3482,6 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 //-----------------------------------------------
 void AutoRecovery::impl_showFullDiscError()
 {
-    rtl::OUString PLACEHOLDER_PATH(RTL_CONSTASCII_USTRINGPARAM("%PATH"));
-
     rtl::OUString sBtn(ResId::toString(FwkResId(STR_FULL_DISC_RETRY_BUTTON)));
     rtl::OUString sMsg(ResId::toString(FwkResId(STR_FULL_DISC_MSG)));
 
@@ -3495,7 +3492,10 @@ void AutoRecovery::impl_showFullDiscError()
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
-    ErrorBox dlgError(0, WB_OK, comphelper::string::replace(sMsg, PLACEHOLDER_PATH, sBackupPath));
+    ErrorBox dlgError(
+        0, WB_OK,
+        sMsg.replaceAllAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("%PATH"), sBackupPath));
     dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
     dlgError.Execute();
 }

@@ -29,7 +29,6 @@
 
 #include "ooxmlimport.hxx"
 
-#include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <rtl/oustringostreaminserter.hxx>
@@ -85,10 +84,12 @@ OUString SmOoxmlImport::handleStream()
     stream.ensureClosingTag( M_TOKEN( oMath ));
     // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
     // which will result in "{}" in the formula text. Fix this up.
-    ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{}", "<?>" );
+    ret = ret.replaceAllAsciiLAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("{}"), RTL_CONSTASCII_STRINGPARAM("<?>"));
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
-    ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{ }", "{}" );
+    ret = ret.replaceAllAsciiLAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("{ }"), RTL_CONSTASCII_STRINGPARAM("{}"));
     SAL_INFO( "starmath.ooxml", "Formula: " << ret );
     return ret;
 }

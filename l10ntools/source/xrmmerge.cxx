@@ -34,7 +34,6 @@
 
 #include "common.hxx"
 #include "export.hxx"
-#include "helper.hxx"
 #include "xrmmerge.hxx"
 #include "tokens.h"
 #include <iostream>
@@ -390,11 +389,10 @@ rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::
     if ( nPos != -1 )
     {
         sTmp = sTmp.copy( nPos );
-        sal_Int32 n = 0;
-        rtl::OString sId = sTmp.getToken(1, '"', n);
+        rtl::OString sId = sTmp.getToken(1, '"');
         return sId;
     }
-    return "";
+    return rtl::OString();
 }
 
 
@@ -409,15 +407,14 @@ void XRMResParser::Error( const rtl::OString &rError )
 void XRMResParser::ConvertStringToDBFormat( rtl::OString &rString )
 /*****************************************************************************/
 {
-    rString = helper::trimAscii(rString);
-    helper::searchAndReplaceAll(&rString, "\t", "\\t");
+    rString = rString.trim().replaceAll("\t", "\\t");
 }
 
 /*****************************************************************************/
 void XRMResParser::ConvertStringToXMLFormat( rtl::OString &rString )
 /*****************************************************************************/
 {
-    helper::searchAndReplaceAll(&rString, "\\t", "\t");
+    rString = rString.replaceAll("\\t", "\t");
 }
 
 
@@ -480,8 +477,8 @@ void XRMResExport::WorkOnDesc(
 )
 /*****************************************************************************/
 {
-    rtl::OString sDescFileName(sInputFileName);
-    helper::searchAndReplaceAll(&sDescFileName, "description.xml", "");
+    rtl::OString sDescFileName(
+        sInputFileName.replaceAll("description.xml", rtl::OString()));
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
     int size;
     char * memblock;
@@ -493,8 +490,7 @@ void XRMResExport::WorkOnDesc(
         file.read (memblock, size);
         file.close();
         memblock[size] = '\0';
-        rText = rtl::OString(memblock);
-        helper::searchAndReplaceAll(&rText, "\n", "\\n");
+        rText = rtl::OString(memblock).replaceAll("\n", "\\n");
         delete[] memblock;
      }
     WorkOnText( rOpenTag, rText );
@@ -536,8 +532,8 @@ void XRMResExport::EndOfText(
         {
             sCur = aLanguages[ n ];
 
-            rtl::OString sAct = pResData->sText[ sCur ];
-            helper::searchAndReplaceAll(&sAct, "\x0A", rtl::OString());
+            rtl::OString sAct(
+                pResData->sText[sCur].replaceAll("\x0A", rtl::OString()));
 
             rtl::OString sOutput( sPrj ); sOutput += "\t";
             sOutput += sPath;
@@ -629,19 +625,20 @@ void XRMResMerge::WorkOnDesc(
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
-                    helper::searchAndReplace(
-                        &sAdditionalLine, sSearch, sReplace);
+                    sAdditionalLine = sAdditionalLine.replaceFirst(
+                        sSearch, sReplace);
 
                     sSearch = rtl::OString("xlink:href=\"");
                     sReplace = sSearch;
 
                     rtl::OString sLocDescFilename = sDescFilename;
-                    helper::searchAndReplace(&sLocDescFilename, "en-US", sCur);
+                    sLocDescFilename = sLocDescFilename.replaceFirst(
+                        "en-US", sCur);
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;
-                    helper::searchAndReplace(
-                        &sAdditionalLine, sSearch, sReplace);
+                    sAdditionalLine = sAdditionalLine.replaceFirst(
+                        sSearch, sReplace);
 
                     Output( sAdditionalLine );
 
@@ -654,7 +651,7 @@ void XRMResMerge::WorkOnDesc(
                     }
                     rtl::OString sOutputDescFile(
                         sOutputFile.copy(0, i + 1) + sLocDescFilename);
-                    helper::searchAndReplaceAll(&sText, "\\n", "\n");
+                    sText = sText.replaceAll("\\n", "\n");
                     ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
                         file << sText.getStr();
@@ -745,8 +742,8 @@ void XRMResMerge::EndOfText(
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
 
-                    helper::searchAndReplace(
-                        &sAdditionalLine, sSearch, sReplace);
+                    sAdditionalLine = sAdditionalLine.replaceFirst(
+                        sSearch, sReplace);
 
                     sAdditionalLine += sText;
                     sAdditionalLine += rCloseTag;

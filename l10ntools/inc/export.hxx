@@ -54,8 +54,6 @@
 #include <direct.h>
 #endif
 
-#include "helper.hxx"
-
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
 class PFormEntrys;
@@ -196,8 +194,8 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        helper::searchAndReplaceAll(&sGId, "\r", rtl::OString());
-        helper::searchAndReplaceAll(&sPForm, "\r", rtl::OString());
+        sGId = sGId.replaceAll("\r", rtl::OString());
+        sPForm = sPForm.replaceAll("\r", rtl::OString());
     }
 
     ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
@@ -227,8 +225,8 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        helper::searchAndReplaceAll(&sGId, "\r", rtl::OString());
-        helper::searchAndReplaceAll(&sPForm, "\r", rtl::OString());
+        sGId = sGId.replaceAll("\r", rtl::OString());
+        sPForm = sPForm.replaceAll("\r", rtl::OString());
     }
 };
 

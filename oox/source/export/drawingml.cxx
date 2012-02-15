@@ -64,7 +64,6 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -451,8 +450,7 @@ OUString DrawingML::WriteImage( const OUString& rURL )
     rtl::OString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-    using comphelper::string::indexOfL;
-    sal_Int32 index = indexOfL(aURLBS, RTL_CONSTASCII_STRINGPARAM(aURLBegin));
+    sal_Int32 index = aURLBS.indexOfL(RTL_CONSTASCII_STRINGPARAM(aURLBegin));
 
     if ( index != -1 )
     {

@@ -243,7 +243,7 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
         if ( sId.getLength() > 255 )
         {
             YYWarning( "LocalId > 255 chars, truncating..." );
-            sId = helper::trimAscii(sId.copy(0, 255));
+            sId = sId.copy(0, 255).trim();
         }
 
         return sal_True;
@@ -362,8 +362,8 @@ int Export::Execute( int nToken, const char * pToken )
     if ( nToken == CONDITION )
     {
         rtl::OString sTestToken(pToken);
-        helper::searchAndReplaceAll(&sTestToken, "\t", rtl::OString());
-        helper::searchAndReplaceAll(&sTestToken, " ", rtl::OString());
+        sTestToken = sTestToken.replaceAll("\t", rtl::OString()).
+            replaceAll(" ", rtl::OString());
         if (( !bReadOver ) && ( sTestToken.indexOf("#ifndef__RSC_PARSER") == 0 ))
             bReadOver = sal_True;
         else if (( bReadOver ) && ( sTestToken.indexOf("#endif") == 0 ))
@@ -456,9 +456,14 @@ int Export::Execute( int nToken, const char * pToken )
     switch ( nToken ) {
 
         case NORMDEFINE:
-            while( helper::searchAndReplace(&sToken, "\r", " " ) != -1 ) {};
-            while( helper::searchAndReplace(&sToken,  "\t", " " ) != -1 ) {};
-            while( helper::searchAndReplace(&sToken, "  ", " " ) != -1 ) {};
+            sToken = sToken.replace('\r', ' ').replace('\t', ' ');
+            for (;;) {
+                sal_Int32 n = 0;
+                sToken = sToken.replaceFirst("  ", " ", &n);
+                if (n == -1) {
+                    break;
+                }
+            }
             if( sToken.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("#define NO_LOCALIZE_EXPORT")) ){
                             bSkipFile = true;
                             return 0;
@@ -487,13 +492,11 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            helper::searchAndReplaceAll(&sToken, "\n", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "\r", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "{", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "\t", " ");
-            sToken = helper::trimAscii(sToken);
-            sal_Int32 n = 0;
-            rtl::OString sTLower = sToken.getToken(0, ' ', n).toAsciiLowerCase();
+            sToken = sToken.replaceAll("\n", rtl::OString()).
+                replaceAll("\r", rtl::OString()).
+                replaceAll("{", rtl::OString()).replace('\t', ' ');
+            sToken = sToken.trim();
+            rtl::OString sTLower = sToken.getToken(0, ' ').toAsciiLowerCase();
             pResData->sResTyp = sTLower;
             rtl::OString sId( sToken.copy( pResData->sResTyp.getLength() + 1 ));
             rtl::OString sCondition;
@@ -501,14 +504,13 @@ int Export::Execute( int nToken, const char * pToken )
             {
                 // between ResTyp, Id and paranthes is a precomp. condition
                 sCondition = "#";
-                n = 0;
+                sal_Int32 n = 0;
                 sId = sId.getToken(0, '#', n);
                 sCondition += sId.getToken(0, '#', n);
             }
-            n = 0;
-            sId = sId.getToken(0, '/', n);
+            sId = sId.getToken(0, '/');
             CleanValue( sId );
-            helper::searchAndReplaceAll(&sId, "\t", rtl::OString());
+            sId = sId.replaceAll("\t", rtl::OString());
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
             if (!sCondition.isEmpty())
             {
@@ -529,13 +531,12 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            helper::searchAndReplaceAll(&sToken, "\n", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "\r", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "{", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "\t", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, " ", rtl::OString());
-            helper::searchAndReplaceAll(&sToken, "\\", rtl::OString());
-            sToken = sToken.toAsciiLowerCase();
+            sToken = sToken.replaceAll("\n", rtl::OString()).
+                replaceAll("\r", rtl::OString()).
+                replaceAll("{", rtl::OString()).
+                replaceAll("\t", rtl::OString()).
+                replaceAll(" ", rtl::OString()).
+                replaceAll("\\", rtl::OString()).toAsciiLowerCase();
             pResData->sResTyp = sToken;
         }
         break;
@@ -595,17 +596,17 @@ int Export::Execute( int nToken, const char * pToken )
             bDontWriteOutput = sal_False;
             // interpret different types of assignement
             sal_Int32 n = 0;
-            rtl::OString sKey = sToken.getToken(0, '=', n);
-            helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
-            helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+            rtl::OString sKey = sToken.getToken(0, '=', n).
+                replaceAll(" ", rtl::OString()).
+                replaceAll("\t", rtl::OString());
             rtl::OString sValue = sToken.getToken(0, '=', n);
             CleanValue( sValue );
             sKey = sKey.toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
             {
-                rtl::OString sId(sValue);
-                helper::searchAndReplaceAll(&sId, "\t", rtl::OString());
-                helper::searchAndReplaceAll(&sId, " ", rtl::OString());
+                rtl::OString sId(
+                    sValue.replaceAll("\t", rtl::OString()).
+                    replaceAll(" ", rtl::OString()));
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
             else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HELPID")))
@@ -648,16 +649,14 @@ int Export::Execute( int nToken, const char * pToken )
         case LISTASSIGNMENT:
         {
             bDontWriteOutput = sal_False;
-            rtl::OString sTmpToken(sToken);
-            helper::searchAndReplaceAll(&sTmpToken, " ", rtl::OString());
-            sTmpToken = sTmpToken.toAsciiLowerCase();
+            rtl::OString sTmpToken(
+                sToken.replaceAll(" ", rtl::OString()).toAsciiLowerCase());
             sal_Int32 nPos = sTmpToken.indexOf("[en-us]=");
             if (nPos != -1) {
-                rtl::OString sKey(sTmpToken.copy(0 , nPos));
-                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
-                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
-                sal_Int32 n = 0;
-                rtl::OString sValue = sToken.getToken(1, '=', n);
+                rtl::OString sKey(
+                    sTmpToken.copy(0 , nPos).replaceAll(" ", rtl::OString()).
+                    replaceAll("\t", rtl::OString()));
+                rtl::OString sValue = sToken.getToken(1, '=');
                 CleanValue( sValue );
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
@@ -706,10 +705,9 @@ int Export::Execute( int nToken, const char * pToken )
             {
                 // new res. is a String- or FilterList
                 sal_Int32 n = 0;
-                rtl::OString sKey = sToken.getToken(0, '[', n);
-                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
-                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
-                sKey = sKey.toAsciiUpperCase();
+                rtl::OString sKey(
+                    sToken.getToken(0, '[', n).replaceAll(" ", rtl::OString()).
+                    replaceAll("\t", rtl::OString()).toAsciiUpperCase());
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
                     nList = LIST_STRING;
                 else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
@@ -758,23 +756,16 @@ int Export::Execute( int nToken, const char * pToken )
                 CutComment( sToken );
 
                 // this is a text line!!!
-                sal_Int32 n = 0;
-                rtl::OString t(sToken.getToken(0, '=', n));
-                n = 0;
-                rtl::OString sKey = t.getToken(0, '[', n);
-                helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
-                helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+                rtl::OString t(sToken.getToken(0, '='));
+                rtl::OString sKey(
+                    t.getToken(0, '[').replaceAll(" ", rtl::OString()).
+                    replaceAll("\t", rtl::OString()));
                 rtl::OString sText( GetText( sToken, nToken ));
                 rtl::OString sLang;
-                n = 0;
-                if ( sToken.getToken(0, '=', n).indexOf('[') != -1 )
+                if ( sToken.getToken(0, '=').indexOf('[') != -1 )
                 {
-                    n = 0;
-                    t = sToken.getToken(0, '=', n);
-                    n = 0;
-                    t = t.getToken(1, '[', n);
-                    n = 0;
-                    sLang = t.getToken(0, ']', n);
+                    sLang = sToken.getToken(0, '=').getToken(1, '[').
+                        getToken(0, ']');
                     CleanValue( sLang );
                 }
                 rtl::OString sLangIndex = sLang;
@@ -879,25 +870,19 @@ int Export::Execute( int nToken, const char * pToken )
             // this is a AppfontMapping, so look if its a definition
             // of field size
             sal_Int32 n = 0;
-            rtl::OString sKey = sToken.getToken(0, '=', n);
-            helper::searchAndReplaceAll(&sKey, " ", rtl::OString());
-            helper::searchAndReplaceAll(&sKey, "\t", rtl::OString());
+            rtl::OString sKey(
+                sToken.getToken(0, '=', n).replaceAll(" ", rtl::OString()).
+                replaceAll("\t", rtl::OString()));
             rtl::OString sMapping = sToken.getToken(0, '=', n);
-            n = 0;
-            sMapping = sMapping.getToken(1, '(', n);
-            n = 0;
-            sMapping = sMapping.getToken(0, ')', n);
-            helper::searchAndReplaceAll(
-                &sMapping, rtl::OString(' '), rtl::OString());
-            helper::searchAndReplaceAll(
-                &sMapping, rtl::OString('\t'), rtl::OString());
-            sKey = sKey.toAsciiUpperCase();
+            sMapping = sMapping.getToken(1, '(');
+            sMapping = sMapping.getToken(0, ')').
+                replaceAll(rtl::OString(' '), rtl::OString()).
+                replaceAll(rtl::OString('\t'), rtl::OString()).
+                toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE"))) {
-                n = 0;
-                pResData->nWidth = sMapping.getToken(0, ',', n).toInt32();
+                pResData->nWidth = sMapping.getToken(0, ',').toInt32();
             } else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE"))) {
-                n = 0;
-                pResData->nWidth = sMapping.getToken(2, ',', n).toInt32();
+                pResData->nWidth = sMapping.getToken(2, ',').toInt32();
             }
         }
         break;
@@ -906,9 +891,14 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case CONDITION: {
             bDontWriteOutput = sal_False;
-            while( helper::searchAndReplace(&sToken, "\r", " " ) != -1 ) {};
-            while( helper::searchAndReplace(&sToken, "\t", " " ) != -1 ) {};
-            while( helper::searchAndReplace(&sToken, "  ", " " ) != -1 ) {};
+            sToken = sToken.replace('\r', ' ').replace('\t', ' ');
+            for (;;) {
+                sal_Int32 n = 0;
+                sToken = sToken.replaceFirst("  ", " ", &n);
+                if (n == -1) {
+                    break;
+                }
+            }
             sal_Int32 n = 0;
             rtl::OString sCondition(sToken.getToken(0, ' ', n));
             if ( sCondition == "#ifndef" ) {
@@ -920,12 +910,10 @@ int Export::Execute( int nToken, const char * pToken )
                 sActPForm += sToken.getToken(0, ' ', n);
             }
             else if ( sCondition == "#if" ) {
-                sActPForm = sToken.copy( 4 );
-                while ( helper::searchAndReplace(&sActPForm, "||", "\\or" ) != -1 ) {};
+                sActPForm = sToken.copy( 4 ).replaceAll("||", "\\or");
             }
             else if ( sCondition == "#elif" ) {
-                sActPForm = sToken.copy( 6 );
-                while ( helper::searchAndReplace(&sActPForm, "||", "\\or" ) != -1 ) {};
+                sActPForm = sToken.copy( 6 ).replaceAll("||", "\\or");
             }
             else if ( sCondition == "#else" ) {
                 sActPForm = sCondition;
@@ -985,8 +973,7 @@ void Export::CutComment( rtl::OString &rText )
 /*****************************************************************************/
 {
     if (rText.indexOf("//") != -1) {
-        rtl::OString sWork(rText);
-        helper::searchAndReplaceAll(&sWork, "\\\"", "XX");
+        rtl::OString sWork(rText.replaceAll("\\\"", "XX"));
         bool bInner = false;
         for (sal_Int32 i = 0; i < sWork.getLength() - 1; ++i) {
             if (sWork[i] == '"') {
@@ -1135,20 +1122,17 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 rtl::OString Export::GetPairedListID(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    sal_Int32 n = 0;
-    return helper::trimAscii(
-        rText.getToken(1, ';', n).toAsciiUpperCase().replace('\t', ' '));
+    return rText.getToken(1, ';').toAsciiUpperCase().replace('\t', ' ').trim();
 }
 
 rtl::OString Export::GetPairedListString(const rtl::OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    sal_Int32 n = 0;
-    rtl::OString sString(rText.getToken(0, ';', n).replace('\t', ' '));
-    sString = helper::trimAscii(sString);
+    rtl::OString sString(rText.getToken(0, ';').replace('\t', ' '));
+    sString = sString.trim();
     rtl::OString s1(sString.copy(sString.indexOf('"') + 1));
     sString = s1.copy(0, s1.lastIndexOf('"'));
-    return helper::trimAscii(sString);
+    return sString.trim();
 }
 
 rtl::OString Export::StripList(const rtl::OString & rText)
@@ -1360,20 +1344,17 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
         {
             rtl::OString sTmp(rSource.copy(rSource.indexOf("=")));
             CleanValue( sTmp );
-            helper::searchAndReplaceAll(&sTmp, "\n", rtl::OString());
-            helper::searchAndReplaceAll(&sTmp, "\r", rtl::OString());
-
-            helper::searchAndReplaceAll(
-                &sTmp, "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"");
-            helper::searchAndReplaceAll(&sTmp, "\\\"", "-=<[Hochkomma]>=-");
-            helper::searchAndReplaceAll(&sTmp, "\\", "-=<[0x7F]>=-");
-            helper::searchAndReplaceAll(&sTmp, "\\0x7F", "-=<[0x7F]>=-");
+            sTmp = sTmp.replaceAll("\n", rtl::OString()).
+                replaceAll("\r", rtl::OString()).
+                replaceAll("\\\\\"", "-=<[BSlashBSlashHKom]>=-\"").
+                replaceAll("\\\"", "-=<[Hochkomma]>=-").
+                replaceAll("\\", "-=<[0x7F]>=-").
+                replaceAll("\\0x7F", "-=<[0x7F]>=-");
 
             sal_uInt16 nState = TXT_STATE_TEXT;
             for (sal_Int32 i = 1; i <= helper::countOccurrences(sTmp, '"'); ++i)
             {
-                sal_Int32 n = 0;
-                rtl::OString sToken(sTmp.getToken(i, '"', n));
+                rtl::OString sToken(sTmp.getToken(i, '"'));
                 if (!sToken.isEmpty()) {
                     if ( nState == TXT_STATE_TEXT ) {
                         sReturn += sToken;
@@ -1381,10 +1362,14 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
                     }
                     else {
                         sToken = sToken.replace('\t', ' ');
-                        while (helper::searchAndReplace(&sToken, "  ", " ")
-                               != -1)
-                        {}
-                        sToken = helper::trimAscii(sToken);
+                        for (;;) {
+                            sal_Int32 n = 0;
+                            sToken = sToken.replaceFirst("  ", " ", &n);
+                            if (n == -1) {
+                                break;
+                            }
+                        }
+                        sToken = sToken.trim();
                         if (!sToken.isEmpty()) {
                             sReturn += "\\\" ";
                             sReturn += sToken;
@@ -1395,13 +1380,11 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
                 }
             }
 
-            helper::searchAndReplaceAll(&sReturn, "-=<[0x7F]>=-", "");
-            helper::searchAndReplaceAll(&sReturn, "-=<[Hochkomma]>=-", "\"");
-            helper::searchAndReplaceAll(
-                &sReturn, "-=<[BSlashBSlashHKom]>=-", "\\\\");
-            helper::searchAndReplaceAll(
-                &sReturn, "\\\\", "-=<[BSlashBSlash]>=-");
-            helper::searchAndReplaceAll(&sReturn, "-=<[BSlashBSlash]>=-", "\\");
+            sReturn = sReturn.replaceAll("-=<[0x7F]>=-", "").
+                replaceAll("-=<[Hochkomma]>=-", "\"").
+                replaceAll("-=<[BSlashBSlashHKom]>=-", "\\\\").
+                replaceAll("\\\\", "-=<[BSlashBSlash]>=-").
+                replaceAll("-=<[BSlashBSlash]>=-", "\\");
         }
         break;
     }
@@ -1411,7 +1394,13 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
 void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
 {
     rtl::OString sText(rText);
-    while (helper::searchAndReplace(&sText, " \n", "\n") != -1) {}
+    for (;;) {
+        sal_Int32 n = 0;
+        sText = sText.replaceFirst(" \n", "\n", &n);
+        if (n == -1) {
+            break;
+        }
+    }
     if (pParseQueue->bNextIsM && bSDFContent && sText.getLength() > 2) {
         for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
             if (sText[n] == '\n' && sText[n - 1] != '\\') {
@@ -1456,7 +1445,7 @@ void Export::ConvertMergeContent( rtl::OString &rText )
 /*****************************************************************************/
 {
     sal_Bool bNoOpen = ( rText.indexOf( "\\\"" ) != 0 );
-    sal_Bool bNoClose = !helper::endsWith(rText, "\\\"");
+    sal_Bool bNoClose = !rText.endsWithL(RTL_CONSTASCII_STRINGPARAM("\\\""));
     rtl::OStringBuffer sNew;
     for ( sal_Int32 i = 0; i < rText.getLength(); i++ )
     {
@@ -1886,7 +1875,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                         (( sLine.indexOf( '<' ) == -1 ) ||
                                         ( sLine.indexOf( '<' ) >= sLine.indexOf( '"' ))))
                                     {
-                                        helper::searchAndReplace(&sLine, "\"", "< \"" );
+                                        sLine = sLine.replaceFirst("\"", "< \"" );
                                     }
                                 }
 
@@ -1992,7 +1981,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     (( sLine.indexOf( '<' ) == -1 ) ||
                     ( sLine.indexOf( '<' ) >= sLine.indexOf( '"' ))))
                 {
-                    helper::searchAndReplace(&sLine, "\"", "< \"" );
+                    sLine = sLine.replaceFirst("\"", "< \"");
                 }
             }
 

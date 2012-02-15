@@ -732,7 +732,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
-    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
@@ -784,7 +784,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName( rInitName );
-    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());

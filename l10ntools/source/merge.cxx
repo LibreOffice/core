@@ -34,7 +34,6 @@
 #include <vector>
 
 #include "export.hxx"
-#include "helper.hxx"
 
 namespace
 {
@@ -201,7 +200,7 @@ MergeDataFile::MergeDataFile(
             rtl::OString sPFO = sLine.getToken( 1, '\t', n ); // token 7
             sPFO = sHACK;
             rtl::OString nLANG = sLine.getToken( 1, '\t', n ); // token 9
-            nLANG = helper::trimAscii(nLANG);
+            nLANG = nLANG.trim();
             const rtl::OString sTEXT = sLine.getToken( 0, '\t', n ); // token 10
             const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', n ); // token 12
             const rtl::OString sTITLE = sLine.getToken( 0, '\t', n ); // token 13
