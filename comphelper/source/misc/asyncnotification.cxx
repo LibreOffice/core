@@ -171,7 +171,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
 
         // remember the termination request
-        AsyncEventNotifier_TBASE::terminate();
+        Thread::terminate();
 
         // awake the thread
         m_pImpl->aPendingActions.set();
@@ -251,7 +251,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL AsyncEventNotifier::onTerminated()
     {
-        AsyncEventNotifier_TBASE::onTerminated();
+        Thread::onTerminated();
         // when we were started (->run), we aquired ourself. Release this now
         // that we were finally terminated
         release();

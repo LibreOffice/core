@@ -91,7 +91,6 @@ namespace comphelper
     //====================================================================
     //= AsyncEventNotifier
     //====================================================================
-    typedef ::osl::Thread  AsyncEventNotifier_TBASE;
     struct EventNotifierImpl;
 
     /** a helper class for notifying events asynchronously
@@ -110,7 +109,7 @@ namespace comphelper
         events in the queue. As soon as you add an event, the thread is woken up, processes the event,
         and sleeps again.
     */
-    class COMPHELPER_DLLPUBLIC AsyncEventNotifier   :protected AsyncEventNotifier_TBASE
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifier   :public ::osl::Thread
                                                     ,public ::rtl::IReference
     {
         friend struct EventNotifierImpl;
@@ -118,7 +117,6 @@ namespace comphelper
     private:
         ::std::auto_ptr< EventNotifierImpl >        m_pImpl;
 
-    protected:
         // Thread
         virtual void SAL_CALL run();
         virtual void SAL_CALL onTerminated();
@@ -131,13 +129,6 @@ namespace comphelper
         // IReference implementations
         virtual oslInterlockedCount SAL_CALL acquire();
         virtual oslInterlockedCount SAL_CALL release();
-
-        using AsyncEventNotifier_TBASE::create;
-        using AsyncEventNotifier_TBASE::join;
-        using AsyncEventNotifier_TBASE::getIdentifier;
-
-        using AsyncEventNotifier_TBASE::operator new;
-        using AsyncEventNotifier_TBASE::operator delete;
 
         /** terminates the thread
 
