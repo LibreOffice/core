@@ -474,21 +474,23 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CURRENT_DATABASE_COMMAND:
         {
             SwDBData aData = mpDoc->GetDBData();
-            SAL_WARN_IF( aData.sDataSource.isEmpty(), "sw.uno",
-                "\"CurrentDatabaseCommand\" property possibly set before \"CurrentDatabaseDataSource\"" );
+
             if ( rValue >>= aData.sCommand )
                 mpDoc->ChgDBData( aData );
+
+            SAL_WARN_IF( aData.sDataSource.isEmpty() && !aData.sCommand.isEmpty(), "sw.uno",
+                "\"CurrentDatabaseCommand\" property possibly set before \"CurrentDatabaseDataSource\"" );
         }
         break;
         case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
         {
             SwDBData aData = mpDoc->GetDBData();
-            SAL_WARN_IF( aData.sDataSource.isEmpty(), "sw.uno",
-                "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseDataSource\"" );
-            SAL_WARN_IF( aData.sCommand.isEmpty(), "sw.uno",
-                "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseCommand\"" );
             if ( rValue >>= aData.nCommandType )
                 mpDoc->ChgDBData( aData );
+            SAL_WARN_IF( aData.nCommandType && aData.sDataSource.isEmpty(), "sw.uno",
+                "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseDataSource\"" );
+            SAL_WARN_IF( aData.nCommandType && aData.sCommand.isEmpty(), "sw.uno",
+                "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseCommand\"" );
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
