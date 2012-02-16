@@ -90,10 +90,10 @@ if platform.system() == "Linux":
     LOSMOKETEST_BIN = "losmoketest"
 elif platform.system() == "Windows":
     SOFFICE_BIN = "soffice.exe"
-    LOSMOKETEST_BIN = "losmoketest"    
+    LOSMOKETEST_BIN = "losmoketest"
 else:
     SOFFICE_BIN = "soffice"
-    LOSMOKETEST_BIN = "losmoketest"    
+    LOSMOKETEST_BIN = "losmoketest"
 
 # Relative build url
 ## pre-releases
@@ -179,7 +179,7 @@ def local_build_info(t):
         testpack_build_time = datetime.datetime.strptime(config.get(t, 'testpack_build_time').strip('\n'), '%d-%b-%Y %H:%M')
     except ValueError:
         testpack_name = ''
-        testpack_build_time = datetime.datetime.min        
+        testpack_build_time = datetime.datetime.min
 
     return build_name, build_time, testpack_name, testpack_build_time
 
@@ -196,7 +196,7 @@ def get_url_regexp(t, package, arch):
 
     url = ""
     reg_lo = re.compile('^$')
-    reg_tst = re.compile('^$')    
+    reg_tst = re.compile('^$')
     pck = package
     arc = arch
 
@@ -204,7 +204,7 @@ def get_url_regexp(t, package, arch):
         if pck == "rpm" and arc == "x86":
             url = SERVER_URL + "/" + PR_RPM_X86_PATH
             reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
-            reg_tst = re.compile('\<a\ href=\"(LibO-Test.*.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')            
+            reg_tst = re.compile('\<a\ href=\"(LibO-Test.*.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "rpm" and arc == "x86_64":
             url = SERVER_URL + "/" + PR_RPM_X86_64_PATH
             reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86-64_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
@@ -294,7 +294,7 @@ def remote_build_info(url_reg):
     f.close()
 
     build_list = r.findall(c)
-    test_list = r_t.findall(c)    
+    test_list = r_t.findall(c)
 
     build_name = ''
     build_time = datetime.datetime.min
@@ -316,7 +316,7 @@ def remote_build_info(url_reg):
             try:
                 testpack_build_time = datetime.datetime.strptime(t[1] + ' ' + t[2], '%d-%b-%Y %H:%M')
             except:
-                print "remote_build_info: wrong time date&format"                
+                print "remote_build_info: wrong time date&format"
 
     return build_name, build_time, testpack_name, testpack_build_time
 
@@ -340,7 +340,7 @@ def download(url_reg, build_type):
             logger.info('Found a relevant smoketest package: ' + remote_build[2])
             if fetch_build(url_reg[0], remote_build[2]):
                 set_build_config(build_type, 'testpack_name', remote_build[2])
-                set_build_config(build_type, 'testpack_build_time', datetime.datetime.strftime(remote_build[3], '%d-%b-%Y %H:%M')) 
+                set_build_config(build_type, 'testpack_build_time', datetime.datetime.strftime(remote_build[3], '%d-%b-%Y %H:%M'))
                 return True
             else:
                 logger.warning("Failed to find corresponding smoketest package")
@@ -351,7 +351,7 @@ def download(url_reg, build_type):
     except KeyboardInterrupt:
         sys.exit()
     except:
-        logger.error('Error fetch remote build info.')        
+        logger.error('Error fetch remote build info.')
         return False
 
     return False
@@ -370,7 +370,7 @@ def fetch_build(url, filename):
     except urllib2.HTTPError, e:
         print "HTTP Error:",e.code , url
     except urllib2.URLError, e:
-        print "URL Error:",e.reason , url        
+        print "URL Error:",e.reason , url
 
     return True
 
@@ -445,8 +445,6 @@ def init_testing():
     if not os.path.exists(USR_DIR):
         os.mkdir(USR_DIR)
 
-
-    
     if not os.path.exists(LOCAL_BUILD_INFO_FILE):
 
         init_build_cfg = '[daily_branch]' + os.linesep\
@@ -526,7 +524,7 @@ def install(filename):
             return
 
         subprocess.check_call(install_cmd)
-        subprocess.check_call(clean_tmp_cmd)        
+        subprocess.check_call(clean_tmp_cmd)
 
     else:
         logger.info("Unrecognized file extension")
@@ -548,7 +546,7 @@ def verify_smoketest(headless):
         logger.error("Not found any Libreoffice or Test packages!")
         sys.exit(1)
     else:
-        cmd_smoketests = [ p + os.sep + "program" + os.sep + LOSMOKETEST_BIN for p in lo_testable_paths ]        
+        cmd_smoketests = [ p + os.sep + "program" + os.sep + LOSMOKETEST_BIN for p in lo_testable_paths ]
 
     if len(lo_testable_paths) > 1:
         logger.info("++More than one testable build is found, test them one by one.")
@@ -658,8 +656,7 @@ def main():
             except:
                 continue
         else:
-             logger.warning("No new build found.")   
-        
+             logger.warning("No new build found.")
         if loop:
             time.sleep(build_check_interval)
 
