@@ -38,6 +38,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
 #include "unotools/pathoptions.hxx"
+#include "uno/current_context.hxx"
 
 #if !defined(ANDROID) && !defined(IOS)
 #include <l10ntools/compilehelp.hxx>
@@ -420,6 +421,10 @@ void BackendImpl::implProcessHelp(
                 Reference< script::XInvocation > xInvocation;
                 if( xContext.is() )
                 {
+                    // Ignore the missing JRE scenario on upgrade/first-start without
+                    // horrible end-user warnings that are ignorable,and cause grief.
+                    Reference< XCurrentContext > xNoContext;
+                    com::sun::star::uno::ContextLayer dummyLayer( xNoContext );
                     try
                     {
                         xInvocation = Reference< script::XInvocation >(
