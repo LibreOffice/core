@@ -79,7 +79,9 @@ class OListBoxModel :public OBoundControlModel
     ::com::sun::star::form::ListSourceType      m_eListSourceType;      // type der list source
     ::com::sun::star::uno::Any                  m_aBoundColumn;
     ValueList                                   m_aListSourceValues;
-    ValueList                                   m_aBoundValues;
+    ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()
+    mutable ValueList                           m_aConvertedBoundValues;
+    mutable sal_Int32                           m_nConvertedBoundValuesType;
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
@@ -181,7 +183,14 @@ private:
     */
     void        impl_refreshDbEntryList( bool _bForce );
 
+    void        setBoundValues(const ValueList&);
+    void        clearBoundValues();
+
     ValueList   impl_getValues() const;
+
+    sal_Int32   getValueType() const;
+
+    void        convertBoundValues(sal_Int32 nType) const;
 
     bool        impl_hasBoundComponent() const { return m_nBoundColumnType != ::com::sun::star::sdbc::DataType::SQLNULL; }
 };

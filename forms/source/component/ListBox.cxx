@@ -326,7 +326,7 @@ namespace frm
             // propagate
             if ( m_eListSourceType == ListSourceType_VALUELIST )
             {
-                m_aBoundValues = m_aListSourceValues;
+                setBoundValues(m_aListSourceValues);
             }
             else
             {
@@ -556,7 +556,7 @@ namespace frm
             OSL_FAIL("OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= (sal_Int16)0;
-            ValueList().swap(m_aBoundValues);
+            clearBoundValues();
             m_eListSourceType = ListSourceType_VALUELIST;
             m_aDefaultSelectSeq.realloc(0);
             defaultCommonProperties();
@@ -674,7 +674,7 @@ namespace frm
         // outta here if we don't have all pre-requisites
         if ( !xConnection.is() || sListSource.isEmpty() )
         {
-            ValueList().swap(m_aBoundValues);
+            clearBoundValues();
             return;
         }
 
@@ -924,7 +924,7 @@ namespace frm
             m_nNULLPos = 0;
         }
 
-        m_aBoundValues = aValueList;
+        setBoundValues(aValueList);
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
     }
@@ -948,7 +948,7 @@ namespace frm
     {
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
-            ValueList().swap(m_aBoundValues);
+            clearBoundValues();
             m_nNULLPos = -1;
             m_nBoundColumnType = DataType::SQLNULL;
 
@@ -960,19 +960,63 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
+    void OListBoxModel::setBoundValues(const ValueList &l)
+    {
+        m_aConvertedBoundValues.clear();
+        m_aBoundValues = l;
+    }
+
+    //------------------------------------------------------------------------------
+    void OListBoxModel::clearBoundValues()
+    {
+        ValueList().swap(m_aConvertedBoundValues);
+        ValueList().swap(m_aBoundValues);
+    }
+
+    //------------------------------------------------------------------------------
+    void OListBoxModel::convertBoundValues(const sal_Int32 nFieldType) const
+    {
+        m_aConvertedBoundValues.resize(m_aBoundValues.size());
+        ValueList::const_iterator src = m_aBoundValues.begin();
+        const ValueList::const_iterator end = m_aBoundValues.end();
+        ValueList::iterator dst = m_aConvertedBoundValues.begin();
+        for (; src != end; ++src, ++dst )
+        {
+            *dst = *src;
+            dst->setTypeKind(nFieldType);
+        }
+        m_nConvertedBoundValuesType = nFieldType;
+        OSL_ENSURE(dst == m_aConvertedBoundValues.end(), "OListBoxModel::convertBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
+    }
+    //------------------------------------------------------------------------------
+    sal_Int32 OListBoxModel::getValueType() const
+    {
+        return impl_hasBoundComponent() ? m_nBoundColumnType : getFieldType();
+    }
+    //------------------------------------------------------------------------------
     ValueList OListBoxModel::impl_getValues() const
     {
+        const sal_Int32 nFieldType = getValueType();
+
+        if ( !m_aConvertedBoundValues.empty() && m_nConvertedBoundValuesType == nFieldType )
+            return m_aConvertedBoundValues;
+
         if ( !m_aBoundValues.empty() )
-            return m_aBoundValues;
+        {
+            convertBoundValues(nFieldType);
+            return m_aConvertedBoundValues;
+        }
 
         Sequence< ::rtl::OUString > aStringItems( getStringItemList() );
         ValueList aValues( aStringItems.getLength() );
-        ::std::copy(
-            aStringItems.getConstArray(),
-            aStringItems.getConstArray() + aStringItems.getLength(),
-            aValues.begin()
-        );
-
+        ValueList::iterator dst = aValues.begin();
+        const ::rtl::OUString *src (aStringItems.getConstArray());
+        const ::rtl::OUString * const end = src + aStringItems.getLength();
+        for (; src < end; ++src, ++dst )
+        {
+            *dst = *src;
+            dst->setTypeKind(nFieldType);
+        }
         return aValues;
     }
     //------------------------------------------------------------------------------
@@ -1045,7 +1089,7 @@ namespace frm
         Sequence< sal_Int16 > aSelectionIndicies;
 
         ORowSetValue aCurrentValue;
-        aCurrentValue.fill( impl_hasBoundComponent() ? m_nBoundColumnType : getFieldType(), m_xColumn );
+        aCurrentValue.fill( getValueType(), m_xColumn );
 
         // reset selection for NULL values
         if ( aCurrentValue.isNull() )
