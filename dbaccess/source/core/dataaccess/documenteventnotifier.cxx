@@ -165,6 +165,7 @@ namespace dbaccess
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
+            m_pEventBroadcaster->join();
             m_pEventBroadcaster = NULL;
         }
 
