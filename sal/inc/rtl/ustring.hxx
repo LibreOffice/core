@@ -681,6 +681,14 @@ public:
                                                            asciiStr, asciiStrLength ) == 0;
     }
 
+    // This overload is left undefined, to detect calls of matchAsciiL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchAsciiL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
+
     /**
       Match against a substring appearing in this string, ignoring the case of
       ASCII letters.
@@ -710,6 +718,15 @@ public:
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                           asciiStr, asciiStrLength ) == 0;
     }
+
+    // This overload is left undefined, to detect calls of
+    // matchIgnoreAsciiCaseAsciiL that erroneously use
+    // RTL_CONSTASCII_USTRINGPARAM instead of RTL_CONSTASCII_STRINGPARAM (but
+    // would lead to ambiguities on 32 bit platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchIgnoreAsciiCaseAsciiL(char const *, sal_Int32, rtl_TextEncoding)
+        const;
+#endif
 
     /**
       Check whether this string ends with a given substring.
@@ -904,6 +921,14 @@ public:
             pData->buffer + fromIndex, pData->length - fromIndex, str, len);
         return ret < 0 ? ret : ret + fromIndex;
     }
+
+    // This overload is left undefined, to detect calls of indexOfAsciiL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void indexOfAsciiL(char const *, sal_Int32 len, rtl_TextEncoding) const;
+#endif
 
     /**
       Returns the index within this string of the last occurrence of

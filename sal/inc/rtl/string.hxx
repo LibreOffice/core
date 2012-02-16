@@ -495,6 +495,14 @@ public:
             str, strLength, strLength) == 0;
     }
 
+    // This overload is left undefined, to detect calls of matchL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
+
     /**
       Match against a substring appearing in this string, ignoring the case of
       ASCII letters.
@@ -685,6 +693,14 @@ public:
             pData->buffer + fromIndex, pData->length - fromIndex, str, len);
         return n < 0 ? n : n + fromIndex;
     }
+
+    // This overload is left undefined, to detect calls of indexOfL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void indexOfL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
 
     /**
       Returns the index within this string of the last occurrence of
