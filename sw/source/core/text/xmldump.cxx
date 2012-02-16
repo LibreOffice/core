@@ -334,6 +334,12 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%p", GetPrev() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%p", this->GetUpper() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%p", this->GetLower() );
+    if ( IsTxtFrm(  ) )
+    {
+        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
+        SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%lu", pTxtNode->GetIndex() );
+    }
 }
 
 void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer )
