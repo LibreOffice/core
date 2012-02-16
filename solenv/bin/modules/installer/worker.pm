@@ -277,21 +277,6 @@ sub analyze_and_save_logfile
 }
 
 ###############################################################
-# Analyzing and creating the log file
-###############################################################
-
-sub save_logfile_after_linking
-{
-    my ($loggingdir, $installlogdir, $current_install_number) = @_;
-
-    # Saving the logfile in the log file directory and additionally in a log directory in the install directory
-    my $numberedlogfilename = $installer::globals::logfilename;
-    installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
-    installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
-    installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
-}
-
-###############################################################
 # Removing all directories that are saved in the
 # global directory @installer::globals::removedirs
 ###############################################################
