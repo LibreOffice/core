@@ -22,6 +22,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
@@ -163,21 +164,10 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-        //rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
-    if (hmod == NULL)
-        hmod = dlopen( "gcc3_uno.dll", 0);
 
-    if (hmod)
-            rtti = (type_info *)dlsym( hmod, symName.getStr() );
+        // dll imports have been removed because this breaks the build (they are
+        // forward referenced) and also cygwin ignores this.
 
-        if (rtti)
-        {
-            pair< t_rtti_map::iterator, bool > insertion(
-                m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
-        }
-        else
-        {
             // try to lookup the symbol in the generated rtti map
             t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
             if (iFind == m_generatedRttis.end())
@@ -211,7 +201,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
             {
                 rtti = iFind->second;
             }
-        }
     }
     else
     {

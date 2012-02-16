@@ -50,10 +50,10 @@ SLOFILES= \
 
 SHL1TARGET= $(TARGET)
 
-SHL1DEF=defs$/gcc3_uno.def
-SHL1USE_EXPORTS=name
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=..$/..$/bridge_exports.map
+SHL1VERSIONMAP=../../bridge_exports.map
 
 SHL1OBJS = $(SLOFILES)
 SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
