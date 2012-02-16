@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all autogen bootstrap build check clean clean-build clean-host dev-install dev-install-link distclean distro-pack-install docs fetch findunusedcode id install subsequenttest tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install dev-install-link distclean distro-pack-install docs fetch findunusedcode id install subsequenttest tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -332,9 +332,8 @@ endif
 
 ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
-# autogen
+# Makefile
 #
-autogen: Makefile
 
 # I don't like to touch stuff that are supposed to be
 # in the source tree, hence read-only
@@ -354,7 +353,7 @@ config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in auto
 #
 fetch: src.downloaded
 
-src.downloaded : autogen ooo.lst download
+src.downloaded : Makefile ooo.lst download
 ifeq ($(DO_FETCH_TARBALLS),YES)
 	@./download $(SRCDIR)/ooo.lst && touch $@
 else
