@@ -41,6 +41,7 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "extdrawingfragmenthandler.hxx"
 
 using rtl::OUString;
@@ -108,7 +109,19 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         xRet.set( new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
         break;
     case PPT_TOKEN( sp ):           // Shape
-        xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) ) ) );
+        {
+            AttributeList aAttribs( xAttribs );
+            oox::drawingml::ShapePtr pShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
+            if( aAttribs.getBool( XML_useBgFill, false ) )
+            {
+                ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
+                aFill.moFillType = XML_solidFill;
+                // This is supposed to fill with slide (background) color, but
+                // TODO: We are using white here, because thats the closest we can assume (?)
+                aFill.maFillColor.setSrgbClr( API_RGB_WHITE );
+            }
+            xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape ) );
+        }
         break;
     case PPT_TOKEN( pic ):          // CT_Picture
         xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
