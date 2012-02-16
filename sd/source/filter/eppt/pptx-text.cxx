@@ -206,7 +206,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
     }
 }
 
-PortionObj::PortionObj( PortionObj& rPortionObj )
+PortionObj::PortionObj( const PortionObj& rPortionObj )
 : PropStateValue( rPortionObj )
 {
     ImplConstruct( rPortionObj );
@@ -434,7 +434,7 @@ void PortionObj::ImplClear()
     delete[] mpText;
 }
 
-void PortionObj::ImplConstruct( PortionObj& rPortionObj )
+void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
 {
     mbLastPortion = rPortionObj.mbLastPortion;
     mnTextSize = rPortionObj.mnTextSize;
@@ -628,7 +628,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     return nRetValue;
 }
 
-PortionObj& PortionObj::operator=( PortionObj& rPortionObj )
+PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 {
     if ( this != &rPortionObj )
     {
@@ -704,7 +704,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     }
 }
 
-ParagraphObj::ParagraphObj( ParagraphObj& rObj )
+ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
 : List()
 , PropStateValue()
 , SOParagraph()
@@ -1174,7 +1174,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     meBiDi = ePropState;
 }
 
-void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
+void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 {
     mnTextSize = rParagraphObj.mnTextSize;
     mnTextAdjust = rParagraphObj.mnTextAdjust;
@@ -1187,8 +1187,11 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
-        Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
+    {
+        ParagraphObj& rConstApiLossage = const_cast<ParagraphObj&>(rParagraphObj);
+        for ( const void* pPtr = rConstApiLossage.First(); pPtr; pPtr = rConstApiLossage.Next() )
+            Insert( new PortionObj( *static_cast<const PortionObj*>(pPtr) ), LIST_APPEND );
+    }
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -1221,7 +1224,7 @@ sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosi
     return mnTextSize;
 }
 
-ParagraphObj& ParagraphObj::operator=( ParagraphObj& rParagraphObj )
+ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
 {
     if ( this != &rParagraphObj )
     {

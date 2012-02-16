@@ -118,7 +118,7 @@ class PortionObj : public PropStateValue
     protected :
 
         void            ImplClear();
-        void            ImplConstruct( PortionObj& rPortionObj );
+        void            ImplConstruct( const PortionObj& rPortionObj );
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
@@ -151,13 +151,13 @@ class PortionObj : public PropStateValue
                                         sal_Bool bLast, FontCollection& rFontCollection );
                         PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
-                        PortionObj( PortionObj& rPortionObj );
+                        PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
 
         void            Write( SvStream* pStrm, sal_Bool bLast );
         sal_uInt32      Count() const { return mnTextSize; };
 
-        PortionObj&     operator=( PortionObj& rPortionObj );
+        PortionObj&     operator=( const PortionObj& rPortionObj );
 };
 
 struct ParaFlags
@@ -178,7 +178,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
 
     protected :
 
-        void            ImplConstruct( ParagraphObj& rParagraphObj );
+        void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = sal_False );
@@ -215,7 +215,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
-                        ParagraphObj( ParagraphObj& rParargraphObj );
+                        ParagraphObj( const ParagraphObj& rParargraphObj );
                         ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         PPTExBulletProvider& rBuProv );
 
@@ -225,7 +225,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         void            Write( SvStream* pStrm );
         sal_uInt32          Count() const { return mnTextSize; };
 
-        ParagraphObj&   operator=( ParagraphObj& rParagraphObj );
+        ParagraphObj&   operator=( const ParagraphObj& rParagraphObj );
 };
 
 struct ImplTextObj
