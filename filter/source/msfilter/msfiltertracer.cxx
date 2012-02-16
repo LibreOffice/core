@@ -174,12 +174,6 @@ void MSFilterTracer::EndTracing()
     mbEnabled = sal_False;
 }
 
-void MSFilterTracer::StartElement( const rtl::OUString& rName, uno::Reference< xml::sax::XAttributeList > xAttribs )
-{
-    if ( mxHandler.is() )
-        mxHandler->startElement( rName, xAttribs );
-}
-
 void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& rMessage )
 {
     if ( mbEnabled && mxLogger.is() )
@@ -231,11 +225,6 @@ uno::Any MSFilterTracer::GetProperty( const rtl::OUString& rPropName, const uno:
     if ( pDefault )
         aDefault = *pDefault;
     return mpCfgItem->ReadAny( rPropName, aDefault );
-}
-
-void MSFilterTracer::SetProperty( const ::rtl::OUString& rPropName, const uno::Any& rProperty )
-{
-    mpCfgItem->WriteAny( rPropName, rProperty );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

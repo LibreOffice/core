@@ -80,7 +80,6 @@ class MSFILTER_DLLPUBLIC MSFilterTracer
 
         inline sal_Bool IsEnabled() const { return mbEnabled; }
 
-        void StartElement( const ::rtl::OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttribs );
         void EndElement( const ::rtl::OUString& rName );
 
         void Trace( const ::rtl::OUString& rElementID, const ::rtl::OUString& rMessage );
@@ -91,7 +90,6 @@ class MSFILTER_DLLPUBLIC MSFilterTracer
         /* initially all properties of the configuration file and the
            properties which are given to the c'tor can be retrieved */
         ::com::sun::star::uno::Any GetProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any* pDefault = NULL ) const;
-        void SetProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rProperty );
 };
 
 #endif
