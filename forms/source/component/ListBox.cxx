@@ -896,9 +896,9 @@ namespace frm
                     }
                 }
                 break;
-                default:
-                    OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
-                    break;
+            default:
+                OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
+                break;
             }
         }
         catch(const SQLException& eSQL)
