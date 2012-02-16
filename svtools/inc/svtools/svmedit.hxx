@@ -65,7 +65,6 @@ protected:
 
     ExtTextEngine*  GetTextEngine() const;
     ExtTextView*    GetTextView() const;
-    ScrollBar*      GetHScrollBar() const;
     ScrollBar*      GetVScrollBar() const;
 
 public:
@@ -110,7 +109,6 @@ public:
                     { SetText( rStr ); SetSelection( rNewSelection ); }
     String          GetText() const;
     String          GetText( LineEnd aSeparator ) const;
-    String          GetTextLines() const;
     String          GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( sal_Bool bRightToLeft );
@@ -137,7 +135,6 @@ public:
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
        void         SetLeftMargin( sal_uInt16 n );
-    sal_uInt16          GetLeftMargin() const;
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >

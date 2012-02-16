@@ -42,9 +42,6 @@ Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 MenuBar::MenuBar(ResId const&)
 MergeData::Dump()
-MultiLineEdit::GetHScrollBar() const
-MultiLineEdit::GetLeftMargin() const
-MultiLineEdit::GetTextLines() const
 NfCurrencyEntry::NfCurrencyEntry()
 NumberFormatCodeWrapper::getDefault(short, short) const
 NumericBox::GetValue(unsigned short) const

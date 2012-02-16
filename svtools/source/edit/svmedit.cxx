@@ -1215,11 +1215,6 @@ String MultiLineEdit::GetText( LineEnd aSeparator ) const
     return pImpSvMEdit->GetText( aSeparator );
 }
 
-String MultiLineEdit::GetTextLines() const
-{
-    return pImpSvMEdit->GetTextLines();
-}
-
 String MultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
 {
     return pImpSvMEdit->GetTextLines( aSeparator );
@@ -1559,12 +1554,6 @@ ExtTextView* MultiLineEdit::GetTextView() const
     return pImpSvMEdit->GetTextWindow()->GetTextView();
 }
 
-ScrollBar* MultiLineEdit::GetHScrollBar() const
-{
-    return pImpSvMEdit->GetHScrollBar();
-}
-
-
 ScrollBar* MultiLineEdit::GetVScrollBar() const
 {
     return pImpSvMEdit->GetVScrollBar();
@@ -1579,14 +1568,6 @@ void MultiLineEdit::SetLeftMargin( sal_uInt16 n )
 {
     if ( GetTextEngine() )
         GetTextEngine()->SetLeftMargin( n );
-}
-
-sal_uInt16 MultiLineEdit::GetLeftMargin() const
-{
-    if ( GetTextEngine() )
-        return GetTextEngine()->GetLeftMargin();
-    else
-        return 0;
 }
 
 void MultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )
