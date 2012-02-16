@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+/* make Python.h go first as a hack to work around _POSIX_C_SOURCE redefinition
+   warnings: */
+#include "Python.h"
+
 #include "sal/config.h"
 
 #include <stdlib.h>
@@ -35,8 +39,6 @@
 #define __USE_GNU
 #endif
 #include <dlfcn.h>
-
-#include "Python.h"
 
 #include "rtl/string.h"
 
