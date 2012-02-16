@@ -169,7 +169,7 @@ endif
 ifeq ($(OS),OS2)
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:cppunit%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst cui:icuc%,cui:iicuc%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst cui:iicuc%,cui:icuc%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
@@ -180,10 +180,25 @@ gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(
 gb_Library_FILENAMES := $(patsubst vos3:ivos3%,vos3:ivos%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:xml2%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlp45% stl:stdc444.lib,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stdc++%,$(gb_Library_FILENAMES))
 #$(info libnames: $(gb_Library_FILENAMES))
 
+# translate to 8.3 naming
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst drawinglayer:drawinglayer%,drawinglayer:drawingl%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst fsstorage:fsstorage.uno%,fsstorage:fsstorag%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst hatchwindowfactory:hatchwindowfactory.uno%,hatchwindowfactory:hatchwin%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst msforms:msforms.uno%,msforms:msforms%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst passwordcontainer:passwordcontainer.uno%,passwordcontainer:password%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst productregistration:productregistration.uno%,productregistration:productr%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst textconversiondlgs:textconversiondlgs%,textconversiondlgs:txcnvdlg%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst vbahelper:vbahelper%,vbahelper:vbahelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst vbaswobj:vbaswobj.uno%,vbaswobj:vbaswobj%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst sfx:test_sfx2_metadatable%,sfx:tstsfx2m%,$(gb_Library_DLLFILENAMES))
+
+gb_Library_NOILIBFILENAMES:=\
+    icuuc \
+    icule
 
 endif
 

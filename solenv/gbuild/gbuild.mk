@@ -44,7 +44,11 @@
 # SYSTEM_LIBXML (Linux)
 # USE_SYSTEM_STL (Linux)
 
+ifeq ($(OS),OS2)
+SHELL := /@unixroot/usr/bin/sh
+else
 SHELL := /bin/sh
+endif
 true := T
 false :=
 define NEWLINE
