@@ -663,7 +663,8 @@ bool Os2SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& /*rPolygon*/,
     double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
-    basegfx::B2DLineJoin /*eLineJoin*/)
+    basegfx::B2DLineJoin /*eLineJoin*/,
+    com::sun::star::drawing::LineCap /*eLineCap*/)
 {
     // TODO: implement
     return false;
