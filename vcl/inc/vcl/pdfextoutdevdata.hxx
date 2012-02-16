@@ -131,7 +131,6 @@ public :
     sal_Bool    GetIsExportFormFields() const;
     void        SetIsExportFormFields( const sal_Bool bExportFormFields );
 
-    sal_Int32   GetFormsFormat() const;
     void        SetFormsFormat( const sal_Int32 nFormsFormat );
 
     sal_Bool    GetIsExportBookmarks() const;
@@ -163,13 +162,6 @@ public :
         Use this method to group render output.
      */
     void        BeginGroup();
-
-    /** End render output
-
-        This method ends grouped render output without
-        further actions.
-     */
-    void        EndGroup();
 
     /** End render output
 
@@ -320,49 +312,6 @@ public :
         the outline item id of the new item
     */
     sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const rtl::OUString& rText = rtl::OUString(), sal_Int32 nDestID = -1 );
-
-    /** Set an outline item's parent
-
-    @param nItem
-    specififies which item should be reparented.
-
-    @param nNewParent
-    specifies which outline item will be the item's new parent.
-    Use 0 for reparenting to top level.
-
-    @returns
-    -1 if the item does not exist
-    -2 if the new parent does not exist, item will be reparented to top level.
-    */
-    sal_Int32 SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
-
-    /** Set an outline item's title text
-
-    @param nItem
-    specififies which item should get a new text
-
-    @param rText
-    sets the title text of the item
-
-    @returns
-    0 if the item exists and the text was changed
-    -1 if the item does not exist
-    */
-    sal_Int32 SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText );
-
-    /** Set an outline item's destination
-
-    @param nItem
-    specififies which item should get a new dest
-
-    @param nDestID
-    specifies the item's new destination
-
-    @returns
-    -1 if the item does not exist
-    -2 if the new dest does not exist, dest will remain unchanged
-    */
-    sal_Int32 SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     /** Create a new note on a page
 
@@ -517,17 +466,6 @@ public :
     contains the replacement text for the structural element
     */
     void SetAlternateText( const String& rText );
-
-    /** Sets the time in seconds a page will appear before the next
-        page is shown automatically
-
-        @param nSeconds
-        time in seconds the current page will be shown; pass 0 for manual advancement
-
-        @param nPageNr
-        the page number to apply the autoadvance time to; -1 denotes the current page
-    */
-    void SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr = -1 );
 
     /** Sets the transitional effect to be applied when the current page gets shown.
 

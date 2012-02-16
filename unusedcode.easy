@@ -1357,11 +1357,4 @@ ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun:
 ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
-vcl::LazyDeletor<Menu>::is_less(Menu*, Menu*)
-vcl::PDFExtOutDevData::EndGroup()
-vcl::PDFExtOutDevData::GetFormsFormat() const
-vcl::PDFExtOutDevData::SetAutoAdvanceTime(unsigned int, int)
-vcl::PDFExtOutDevData::SetOutlineItemDest(int, int)
-vcl::PDFExtOutDevData::SetOutlineItemParent(int, int)
-vcl::PDFExtOutDevData::SetOutlineItemText(int, rtl::OUString const&)
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
