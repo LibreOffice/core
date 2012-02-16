@@ -147,6 +147,9 @@ $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
 
+# Required for OS/2 macro expansion
+my @unixroot='@unixroot';
+
 #
 #--------------------------------------------------------------------
 # IV. Initialise the warning container and print a note to the user.
@@ -839,7 +842,14 @@ if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. shell path.
+if ( $platform =~ m/os2/ )
+{
+$OOO_SHELL = 'sh';
+} 
+else
+{
 $OOO_SHELL = '@SHELLPATH@'."\/bash";
+}
 
 if ( '@STLPORT4@' eq $no_stl )
 {
@@ -1309,7 +1319,7 @@ elsif ($platform =~ m/os2/)
 
   if ( '@ANT_HOME@' ne '' )
   {
-     $PATH .= $ps.'@ANT_HOME@';
+     $PATH .= $ps.'@ANT_HOME@/bin';
   }
 
   # Append old PATH

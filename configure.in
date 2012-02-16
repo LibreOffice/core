@@ -6867,12 +6867,12 @@ if test "$SOLAR_JAVA" != ""; then
 ANT_HOME=; export ANT_HOME
 WITH_ANT_HOME=; export WITH_ANT_HOME
 if test -z "$with_ant_home"; then
-   AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
+   AC_PATH_PROGS(ANT, [jakarta-ant ant.cmd ant ant.sh ant.bat])
 else
    if test "$_os" = "WINNT"; then
       with_ant_home=`cygpath -u "$with_ant_home"`
    fi
-   AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
+   AC_PATH_PROGS(ANT, [jakarta-ant ant.cmd ant ant.sh ant.bat],,$with_ant_home/bin:$PATH)
    WITH_ANT_HOME=$with_ant_home
    ANT_HOME=$with_ant_home
 fi
