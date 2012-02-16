@@ -83,7 +83,8 @@ static void * load(void * address, char const * symbol) {
 #if PY_MAJOR_VERSION >= 3
 
 PyObject * PyInit_pyuno(void) {
-    ((PyObject * (*)(void)) load((void *) &PyInit_pyuno, "PyInit_pyuno"))();
+    return
+        ((PyObject * (*)(void)) load((void *) &PyInit_pyuno, "PyInit_pyuno"))();
 }
 
 #else
