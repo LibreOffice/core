@@ -209,7 +209,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_URIABBREVIATION                      DECLARE_ASCII("com.sun.star.comp.framework.UriAbbreviation"         )
 #define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerDispatcher" )
 #define IMPLEMENTATIONNAME_LANGSELECTIONSTATUSBARCONTROLLER     DECLARE_ASCII("com.sun.star.comp.framework.LangSelectionStatusbarController"  )
-#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sum.star.comp.framework.LanguageSelectionMenuController" )
+#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sun.star.comp.framework.LanguageSelectionMenuController" )
 #define IMPLEMENTATIONNAME_IMAGEMANAGER                         DECLARE_ASCII("com.sun.star.comp.framework.ImageManager"            )
 #define IMPLEMENTATIONNAME_TABWINDOWSERVICE                     DECLARE_ASCII("com.sun.star.comp.framework.TabWindowService"        )
 #define IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER          DECLARE_ASCII("com.sun.star.comp.framework.WindowContentFactoryManager" )
