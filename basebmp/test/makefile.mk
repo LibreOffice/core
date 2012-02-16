@@ -29,14 +29,10 @@ TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
+.IF "$(WITH_CPPUNIT)" != "YES"
 
 @all:
-.IF "$(GUI)" == "OS2"
-    @echo "Skipping, cppunit broken."
-.ELIF "$(WITH_CPPUNIT)" != "YES"
     @echo "cppunit disabled. nothing do do."
-.END
 
 .ELSE
 
@@ -138,4 +134,4 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE : _cppunit.mk
 .ENDIF
 
-.ENDIF # "$(GUI)" == "OS2"
+.ENDIF # "$(WITH_CPPUNIT)" != "YES"
