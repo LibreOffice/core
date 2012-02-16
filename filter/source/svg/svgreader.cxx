@@ -1771,6 +1771,9 @@ static void writeShapes( StatePool&                                        rStat
     visitElements(aVisitor, xElem);
 }
 
+} // namespace
+
+
 #if OSL_DEBUG_LEVEL > 2
 struct DumpingVisitor
 {
@@ -1812,8 +1815,6 @@ static void dumpTree( const uno::Reference<xml::dom::XElement> xElem )
     visitElements(aVisitor, xElem);
 }
 #endif
-
-} // namespace
 
 
 SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServiceFactory,
@@ -2768,7 +2769,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     svgi::visitElements(aVisitor, xDocElem);
 
 #if OSL_DEBUG_LEVEL > 2
-    dumpTree(xDocElem);
+    svgi::dumpTree(xDocElem);
 #endif
 
     // render all shapes to mtf
