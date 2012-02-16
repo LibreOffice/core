@@ -63,7 +63,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\offacc*.dll %_DEST%\bin%_EXT%\offacc*.dll
 ..\%__SRC%\lib\liboffacc*.so %_DEST%\lib%_EXT%\liboffacc*.so
 ..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib%_EXT%\liboffacc*.dylib
-..\%__SRC%\bin\migratio*.dll %_DEST%\bin%_EXT%\migratio*.dll
+..\%__SRC%\bin\migr*.dll %_DEST%\bin%_EXT%\migr*.dll
 ..\%__SRC%\lib\migratio*.uno.so %_DEST%\lib%_EXT%\migratio*.uno.so
 ..\%__SRC%\lib\migratio*.uno.dylib %_DEST%\lib%_EXT%\migratio*.uno.dylib
 
@@ -82,6 +82,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\unopkg %_DEST%\bin%_EXT%\unopkg.bin
 ..\%__SRC%\bin\so\unopkg %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.bin
+..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.exe
 ..\%__SRC%\bin\so\unopkg.exe %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
 ..\%__SRC%\bin\unopkga*.dll %_DEST%\bin%_EXT%\unopkga*.dll

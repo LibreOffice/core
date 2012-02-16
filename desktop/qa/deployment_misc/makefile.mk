@@ -34,7 +34,11 @@
 
 PRJ := ..$/..
 PRJNAME := desktop
+.IF "$(GUI)" == "OS2"
+TARGET := qa_dpl_m
+.ELSE
 TARGET := qa_deployment_misc
+.ENDIF
 
 ENABLE_EXCEPTIONS := TRUE
 

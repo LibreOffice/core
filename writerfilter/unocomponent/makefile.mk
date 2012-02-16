@@ -20,7 +20,11 @@
 #**************************************************************
 PRJ=..
 PRJNAME=writerfilter
+.IF "$(GUI)" == "OS2"
+TARGET=wfltuno
+.ELSE
 TARGET=writerfilter.uno
+.ENDIF
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 

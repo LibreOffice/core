@@ -65,7 +65,11 @@ SLOFILES=\
     $(SLO)$/updatehdl.obj
         
 SHL1NOCHECK=TRUE
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=updchkun
+.ELSE
 SHL1TARGET=$(TARGET).uno   
+.ENDIF
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 

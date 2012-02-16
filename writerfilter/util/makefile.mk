@@ -20,7 +20,11 @@
 #**************************************************************
 PRJ=..
 PRJNAME=writerfilter
+.IF "$(GUI)" == "OS2"
+TARGET=wfilt
+.ELSE
 TARGET=writerfilter
+.ENDIF
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

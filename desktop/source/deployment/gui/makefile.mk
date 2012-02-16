@@ -55,7 +55,11 @@ SLOFILES = \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 
+.IF "$(GUI)"=="OS2"
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
+.ELSE
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
+.ENDIF
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1STDLIBS = \

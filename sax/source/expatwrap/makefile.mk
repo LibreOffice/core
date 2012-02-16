@@ -49,7 +49,11 @@ SLOFILES =\
         $(SLO)$/sax_expat.obj \
         $(SLO)$/saxwriter.obj
 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET= sax_uno
+.ELSE
 SHL1TARGET= $(TARGET)
+.ENDIF
 SHL1IMPLIB= i$(TARGET)
 
 SHL1STDLIBS= \

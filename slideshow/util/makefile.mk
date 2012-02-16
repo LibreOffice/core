@@ -47,7 +47,11 @@ LIB1FILES=\
     $(SLB)$/slide.lib \
     $(SLB)$/engine.lib
 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=slidesho
+.ELSE
 SHL1TARGET=$(TARGET).uno
+.ENDIF
 
 SHL1STDLIBS= $(TOOLSLIB) \
              $(CPPULIB) \
@@ -73,7 +77,11 @@ DEF1EXPORTFILE=exports.dxp
 
 # ==========================================================================
 
+.IF "$(GUI)" == "OS2"
+TARGET2=slshtest
+.ELSE
 TARGET2=slideshowtest
+.ENDIF
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=$(LIB1FILES)
 
@@ -86,7 +94,11 @@ SHL2LIBS=$(SLB)$/$(TARGET2).lib
 
 DEF2NAME	=$(SHL2TARGET)
 DEF2LIBNAME = $(TARGET2)
+.IF "$(GUI)" == "OS2"
+DEF2DEPN	=$(MISC)$/slideshowtest.flt
+.ELSE
 DEF2DEPN	=$(MISC)$/$(SHL2TARGET).flt
+.ENDIF
 
 DEF2DES		=SlideShowTest
 
@@ -94,10 +106,16 @@ DEF2DES		=SlideShowTest
 
 .INCLUDE :	target.mk
 
+.IF "$(GUI)" == "OS2"
+$(MISC)$/slideshowtest.flt: makefile.mk \
+                            slideshowtest.flt
+    +$(TYPE) slideshowtest.flt > $@
+.ELSE
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk \
                             $(TARGET2).flt
     +$(TYPE) $(TARGET2).flt > $@
 
+.ENDIF
 
 ALLTAR : $(MISC)/slideshow.component
 

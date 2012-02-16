@@ -46,7 +46,11 @@ SLOFILES =\
         $(SLO)$/fastparser.obj\
         $(SLO)$/xml2utf.obj
 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET= fastsax
+.ELSE
 SHL1TARGET= $(TARGET)
+.ENDIF
 SHL1IMPLIB= i$(TARGET)
 
 SHL1STDLIBS= \

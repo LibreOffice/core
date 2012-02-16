@@ -24,7 +24,11 @@
 PRJ=..$/..$/..
 
 PRJNAME=desktop
+.IF "$(OS)" == "OS2"
+TARGET = migroo2
+.ELSE
 TARGET = migrationoo2.uno
+.ENDIF
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = migrationoo2
 LIBTARGET=NO
@@ -77,7 +81,11 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 COMP2TYPELIST = migrationoo3
+.IF "$(OS)" == "OS2"
+SHL2TARGET=migroo3
+.ELSE
 SHL2TARGET=migrationoo3.uno
+.ENDIF
 SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL2OBJS= \
