@@ -58,11 +58,16 @@ SLOFILES=\
     $(SLO)$/myucp_resultset.obj    	\
     $(SLO)$/myucp_datasupplier.obj
 
+.IF "$(GUI)" != "OS2"
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
+.ENDIF
 
 # --- Shared-Library ---------------------------------------------------
 
+.IF "$(GUI)" == "OS2"
+SHL1OBJS=$(SLOFILES)
+.ENDIF
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
