@@ -266,6 +266,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 pUndoDoc->TransferDrawPage( pDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
                     aOptions, aTabName, GetRefreshDelay() );
+                pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
             }
 
             //  Tabellenname einer ExtDocRef anpassen
