@@ -88,7 +88,7 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, sal_Bool bFlags  )
     if( bFlags )
     {
         mpFlagAry = new sal_uInt8[ nInitSize ];
-        memset( mpPointAry, 0, nInitSize );
+        memset( mpFlagAry, 0, nInitSize );
     }
     else
         mpFlagAry = NULL;
