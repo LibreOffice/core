@@ -51,6 +51,8 @@ our @EXPORT_OK = qw(
     print_error
 );
 
+my $starttime;
+
 ####################################################
 # Including header files into the logfile
 ####################################################
@@ -207,7 +209,7 @@ sub savedebug
 
 sub starttime
 {
-    $installer::globals::starttime = time();
+    $starttime = time();
 }
 
 ###############################################################
@@ -258,7 +260,7 @@ sub _convert_timestring
 sub _get_time_string
 {
     my $currenttime = time();
-    $currenttime = $currenttime - $installer::globals::starttime;
+    $currenttime = $currenttime - $starttime;
     $currenttime = _convert_timestring($currenttime);
     $currenttime = localtime() . " \(" . $currenttime . "\)\n";
     return $currenttime;

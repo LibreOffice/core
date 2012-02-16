@@ -431,8 +431,6 @@ BEGIN
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;
 
-    $starttime = "";
-
     @solarispatchscripts = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall", "postinstall", "preinstall", "i.none");
     @solarispatchscriptsforextensions = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall_extensions", "postinstall_extensions", "preinstall", "i.none");
     @solarispatchfiles = (".diPatch", "patchinfo");
