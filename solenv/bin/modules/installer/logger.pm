@@ -270,8 +270,7 @@ sub _get_time_string
 
 sub stoptime
 {
-    my $infoline = _get_time_string();
-    print_message( "$infoline" );
+    print_message( _get_time_string() );
 }
 
 ###############################################################
