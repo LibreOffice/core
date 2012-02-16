@@ -30,7 +30,7 @@ package installer::setupscript;
 use installer::existence;
 use installer::exiter;
 use installer::globals;
-use installer::logger;
+use installer::logger qw(globallog);
 use installer::remover;
 use installer::scriptitems;
 use installer::ziplist;
@@ -241,7 +241,7 @@ sub replace_all_setupscriptvariables_in_script
 {
     my ( $scriptref, $variablesref ) = @_;
 
-    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (start)");
+    globallog("Replacing variables in setup script (start)");
 
     # make hash of variables to be substituted if they appear in the script
     my %subs;
@@ -282,7 +282,7 @@ sub replace_all_setupscriptvariables_in_script
         }
     }
 
-    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (end)");
+    globallog("Replacing variables in setup script (end)");
 
     return $scriptref;
 }

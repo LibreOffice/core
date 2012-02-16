@@ -37,7 +37,6 @@ use installer::globals;
 
 our @EXPORT_OK = qw(
     include_header_into_logfile
-    include_header_into_globallogfile
     include_timestamp_into_logfile
     log_hashref
     globallog
@@ -75,30 +74,6 @@ sub include_header_into_logfile
 
     $infoline = "######################################################\n";
     push( @installer::globals::logfileinfo, $infoline);
-}
-
-####################################################
-# Including header files into the logfile
-####################################################
-
-sub include_header_into_globallogfile
-{
-    my ($message) = @_;
-
-    my $infoline;
-
-    $infoline = "\n" . _get_time_string();
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    $infoline = "######################################################\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    $infoline = "$message\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-
-    $infoline = "######################################################\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
 }
 
 ####################################################
@@ -154,13 +129,13 @@ sub globallog
     $infoline = "\n" . _get_time_string();
     push( @installer::globals::globallogfileinfo, $infoline);
 
-    $infoline = "################################################################\n";
+    $infoline = "######################################################\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
     $infoline = "$message\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
-    $infoline = "################################################################\n";
+    $infoline = "######################################################\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
 }
