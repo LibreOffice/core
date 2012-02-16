@@ -61,10 +61,4 @@ $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
 ))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,i18npool,\
-	Executable_i18npool_cppunittester_all \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

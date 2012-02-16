@@ -39,10 +39,4 @@ $(eval $(call gb_Module_add_check_targets,sax,\
 	CppunitTest_sax \
 ))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,sax,\
-	Executable_sax_cppunittester_all \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
