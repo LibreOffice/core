@@ -127,7 +127,6 @@ friend class SvxSearchDialogWrapper;
 friend class SvxJSearchOptionsDialog;
 
 public:
-    SvxSearchDialog( Window* pParent, SfxBindings& rBind );
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
@@ -135,9 +134,6 @@ public:
 
     // Window
     virtual void    Activate();
-
-    void            GetSearchItems( SfxItemSet& rSet );
-    void            GetReplaceItems( SfxItemSet& rSet );
 
     const SearchAttrItemList*   GetSearchItemList() const
                                     { return pSearchList; }
