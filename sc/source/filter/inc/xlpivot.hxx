@@ -41,7 +41,6 @@
 #include "xladdress.hxx"
 #include "dpobject.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
 class XclImpStream;
