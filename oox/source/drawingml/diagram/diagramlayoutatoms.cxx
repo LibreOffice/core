@@ -394,8 +394,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
 {
     // find the data node to grab text from
     DiagramData::PointsNameMap::const_iterator aDataNode=rDgm.getData()->getPointsPresNameMap().find(msName);
-    if( aDataNode->second.size() > nIdx &&
-        aDataNode != rDgm.getData()->getPointsPresNameMap().end() )
+    if( aDataNode != rDgm.getData()->getPointsPresNameMap().end() &&
+        aDataNode->second.size() > nIdx )
     {
         OSL_TRACE( "Filling content from %d th layout node named \"%s\", modelId \"%s\"",
                    nIdx,
