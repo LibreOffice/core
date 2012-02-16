@@ -315,10 +315,17 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
         # Inet-wnt.xcu must come after Inet.xcu
+.ELIF "$(GUIBASE)" == "os2"
+MY_FILES_main += \
+    $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
+    $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
+    $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
+        # Inet-wnt.xcu must come after Inet.xcu
 .ELSE
 ERROR : unknown-GUIBASE
 .END
-.IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || \
+.IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || "$(OS)" == "OS2" || \
         ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "NETBSD"
 MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
 .END
@@ -471,7 +478,7 @@ MY_FILES_ogltrans = \
     $(MY_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
 .END
 
-.IF "$(GUIBASE)" == "WIN"
+.IF "$(GUIBASE)" == "WIN" || "$(GUIBASE)" == "os2"
 MY_XCDS += $(MISC)/forcedefault.xcd
 MY_DEPS_forcedefault = main
 MY_FILES_forcedefault = \

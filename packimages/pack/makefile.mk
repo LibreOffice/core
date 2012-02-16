@@ -66,11 +66,19 @@ $(COMMONBIN)$/images_brand.zip:
 
 # generate the HiContrast icon set
 $(MISC)$/hicontrast.flag .PHONY :
+.IF "$(GUI)"=="OS2"
+    touch $(MISC)$/hicontrast.flag
+.ELSE
     $(PERL) $(SOLARENV)$/bin$/hicontrast-to-theme.pl $(SOLARSRC)$/default_images $(MISC)$/hicontrast && $(TOUCH) $@
+.ENDIF
 
 # unpack the classic icon set
 $(MISC)$/classic.flag : $(CLASSIC_TARBALL)
+.IF "$(GUI)"=="OS2"
+    cd $(MISC) && tar zxf $(CLASSIC_TARBALL) && $(TOUCH) $(@:f)
+.ELSE
     cd $(MISC) && gunzip -c $(CLASSIC_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+.ENDIF
 .IF "$(GUI)"=="UNX"
     chmod -R g+w $(MISC)$/classic
 .ENDIF
