@@ -27,6 +27,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,smoketest))
 
+$(eval $(call gb_CppunitTest_abort_on_assertion,smoketest))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,smoketest,\
 	smoketest/smoketest \
 ))
