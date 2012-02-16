@@ -30,8 +30,26 @@ package installer::logger;
 use strict;
 use warnings;
 
+use base 'Exporter';
+
 use installer::files;
 use installer::globals;
+
+our @EXPORT_OK = qw(
+    include_header_into_logfile
+    include_header_into_globallogfile
+    include_timestamp_into_logfile
+    log_hashref
+    globallog
+    copy_globalinfo_into_logfile
+    debuginfo
+    savedebug
+    starttime
+    stoptime
+    print_message
+    print_warning
+    print_error
+);
 
 ####################################################
 # Including header files into the logfile
@@ -43,7 +61,7 @@ sub include_header_into_logfile
 
     my $infoline;
 
-    $infoline = "\n" . get_time_string();
+    $infoline = "\n" . _get_time_string();
     push( @installer::globals::logfileinfo, $infoline);
 
     $infoline = "######################################################\n";
@@ -67,7 +85,7 @@ sub include_header_into_globallogfile
 
     my $infoline;
 
-    $infoline = "\n" . get_time_string();
+    $infoline = "\n" . _get_time_string();
     push( @installer::globals::globallogfileinfo, $infoline);
 
     $infoline = "######################################################\n";
@@ -90,7 +108,7 @@ sub include_timestamp_into_logfile
     my ($message) = @_;
 
     my $infoline;
-    my $timestring = get_time_string();
+    my $timestring = _get_time_string();
     $infoline = "$message\t$timestring";
     push( @installer::globals::logfileinfo, $infoline);
 }
@@ -131,7 +149,7 @@ sub globallog
 
     my $infoline;
 
-    $infoline = "\n" . get_time_string();
+    $infoline = "\n" . _get_time_string();
     push( @installer::globals::globallogfileinfo, $infoline);
 
     $infoline = "################################################################\n";
@@ -196,7 +214,7 @@ sub starttime
 # Convert time string
 ###############################################################
 
-sub convert_timestring
+sub _convert_timestring
 {
     my ($secondstring) = @_;
 
@@ -237,11 +255,11 @@ sub convert_timestring
 # Returning time string for logging
 ###############################################################
 
-sub get_time_string
+sub _get_time_string
 {
     my $currenttime = time();
     $currenttime = $currenttime - $installer::globals::starttime;
-    $currenttime = convert_timestring($currenttime);
+    $currenttime = _convert_timestring($currenttime);
     $currenttime = localtime() . " \(" . $currenttime . "\)\n";
     return $currenttime;
 }
@@ -252,7 +270,7 @@ sub get_time_string
 
 sub stoptime
 {
-    my $infoline = get_time_string();
+    my $infoline = _get_time_string();
     print_message( "$infoline" );
 }
 
