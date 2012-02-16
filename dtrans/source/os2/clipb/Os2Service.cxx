@@ -19,12 +19,14 @@
  *
  *************************************************************/
 
+#include <svpm.h>
+#include <string.h>
 
-
-#include "Os2Clipboard.hxx"
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
+
+#include "Os2Clipboard.hxx"
 
 using namespace rtl;
 using namespace com::sun::star::uno;

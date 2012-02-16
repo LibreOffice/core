@@ -18,6 +18,7 @@
 
 #define INCL_WIN
 #include <svpm.h>
+#include <string.h>
 
 #ifndef _OS2CLIPBOARD_HXX_
 #include "Os2Clipboard.hxx"
