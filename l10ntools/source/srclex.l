@@ -238,4 +238,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     yylex();
     e = GetError();
     Close();
+    return EXIT_SUCCESS;
 }
