@@ -77,6 +77,7 @@ officecfg\
 oovbaapi\
 oox\
 package\
+packimages\
 padmin\
 psprint_config\
 qadevOOo\
@@ -201,7 +202,6 @@ neon\
 nss\
 odk\
 openssl\
-packimages\
 pango\
 postgresql\
 postprocess\

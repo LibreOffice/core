@@ -63,4 +63,4 @@ How to add a new image set:
   vcl/source/app/settings.cxx
 
 - The fallback for particular icons is defined in
-    postprocess/packimages/pack/makefile.mk
+    packimages/pack/Makefile
