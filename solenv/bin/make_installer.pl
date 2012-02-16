@@ -57,7 +57,6 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::setupscript;
 use installer::simplepackage;
-use installer::sorter qw(sorting_array_of_hashes);
 use installer::strip;
 use installer::substfilenamefiles;
 use installer::systemactions;
@@ -1101,7 +1100,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3alangpack.log", $directoriesforepmarrayref); }
         ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3blangpack.log", $directoriesforepmarrayref); }
-        sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+        @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3clangpack.log", $directoriesforepmarrayref); }
 
         if ( $installer::globals::iswindowsbuild )
@@ -1130,7 +1129,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3ahelppack.log", $directoriesforepmarrayref); }
         ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3bhelppack.log", $directoriesforepmarrayref); }
-        sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+        @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3chelppack.log", $directoriesforepmarrayref); }
 
         if ( $installer::globals::iswindowsbuild )
@@ -1171,7 +1170,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist4_patch.log", $directoriesforepmarrayref); }
 
-            sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+            @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist5_patch.log", $directoriesforepmarrayref); }
         }
     }
