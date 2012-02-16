@@ -254,10 +254,10 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
             case DataType::CLOB:
             case DataType::OBJECT:
             case DataType::OTHER:
-                (*this) = getAny();
+                (*this) = makeAny();
                 break;
             default:
-                (*this) = getAny();
+                (*this) = makeAny();
                 OSL_FAIL("ORowSetValue::setTypeKind(): UNSUPPORTED TYPE!");
         }
     }
