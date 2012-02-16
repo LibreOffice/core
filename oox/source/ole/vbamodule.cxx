@@ -156,6 +156,9 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULESTREAMNAME:
                 maStreamName = aRecStrm.readCharArrayUC( nRecSize, meTextEnc );
+                // Actually the stream name seems the best name to use
+                // the VBA_ID_MODULENAME name can sometimes be the wrong case
+                maName = maStreamName;
             break;
             case VBA_ID_MODULESTREAMNAMEUNICODE:
             break;
