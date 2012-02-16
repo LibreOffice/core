@@ -83,57 +83,6 @@ sub unpack_all_targzfiles_in_directory
     }
 }
 
-#########################################
-# Create checksum file
-#########################################
-
-sub make_checksum_file
-{
-    my ( $filesref, $includepatharrayref ) = @_;
-
-    my @checksum = ();
-
-    my $checksumfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::checksumfile, $includepatharrayref, 1);
-    if ( $$checksumfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $installer::globals::checksumfile !", "make_checksum_file"); }
-
-    my $systemcall = "$$checksumfileref";
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        $systemcall = $systemcall . " " . $onefile->{'sourcepath'};     # very very long systemcall
-
-        if ((( $i > 0 ) &&  ( $i%100 == 0 )) || ( $i == $#{$filesref} ))    # limiting to 100 files
-        {
-            $systemcall = $systemcall . " \|";
-
-            my @localchecksum = ();
-            open (CHECK, "$systemcall");
-            @localchecksum = <CHECK>;
-            close (CHECK);
-
-            for ( my $j = 0; $j <= $#localchecksum; $j++ ) { push(@checksum, $localchecksum[$j]); }
-
-            $systemcall = "$$checksumfileref";  # reset the system call
-        }
-    }
-
-    return \@checksum;
-}
-
-#########################################
-# Saving the checksum file
-#########################################
-
-sub save_checksum_file
-{
-    my ($current_install_number, $installchecksumdir, $checksumfile) = @_;
-
-    my $numberedchecksumfilename = $installer::globals::checksumfilename;
-    $numberedchecksumfilename =~ s/\./_$current_install_number\./;  # checksum.txt -> checksum_01.txt
-    installer::files::save_file($installchecksumdir . $installer::globals::separator . $numberedchecksumfilename, $checksumfile);
-}
-
 #################################################
 # Writing some global information into
 # the list of files without flag PATCH
@@ -350,9 +299,6 @@ sub analyze_and_save_logfile
     installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
-
-    # Saving the checksumfile in a checksum directory in the install directory
-    # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
 
     # Saving the list of patchfiles in a patchlist directory in the install directory
     if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }

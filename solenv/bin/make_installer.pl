@@ -815,10 +815,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::make_filename_language_specific($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10f.log", $filesinproductlanguageresolvedarrayref); }
 
-    # print "... calculating checksums ...\n";
-    # my $checksumfile = installer::worker::make_checksum_file($filesinproductlanguageresolvedarrayref, $includepatharrayref);
-    # if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . $installer::globals::checksumfilename, $checksumfile); }
-
     ######################################################################################
     # Unzipping files with flag ARCHIVE and putting all included files into the file list
     ######################################################################################
