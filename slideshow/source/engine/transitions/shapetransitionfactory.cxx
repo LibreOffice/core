@@ -143,10 +143,6 @@ void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
                 "ClippingAnimation::start(): Shape already set" );
     OSL_ENSURE( !mpAttrLayer,
                 "ClippingAnimation::start(): Attribute layer already set" );
-
-    mpShape = rShape;
-    mpAttrLayer = rAttrLayer;
-
     ENSURE_OR_THROW( rShape,
                       "ClippingAnimation::start(): Invalid shape" );
     ENSURE_OR_THROW( rAttrLayer,
