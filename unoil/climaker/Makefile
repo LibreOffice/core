@@ -31,6 +31,7 @@ include $(GBUILDDIR)/gbuild_simple.mk
 include $(SRCDIR)/unoil/climaker/version.txt
 
 cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt
+	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,climaker \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ \
@@ -40,16 +41,18 @@ cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt
 		-X $(OUTDIR)/bin/udkapi.rdb \
 		-r $(OUTDIR)/bin/cli_uretypes.dll \
 		--keyfile $(OUTDIR)/bin/cliuno.snk \
-		$(OUTDIR)/bin/offapi.rdb)
+		$(OUTDIR)/bin/offapi.rdb) > /dev/null)
 
 cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config $(SRCDIR)/unoil/climaker/version.txt
-	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $< $@
+	$(call gb_Helper_abbreviate_dirs_native, \
+	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $^ $@)
 
 $(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : cli_oootypes.dll cli_oootypes.config
+	$(call gb_Helper_abbreviate_dirs_native, \
 	al -out:$@ \
 		-version:$(CLI_OOOTYPES_POLICY_VERSION) \
 		-keyfile:$(OUTDIR)/bin/cliuno.snk \
-		-link:cli_oootypes.config
+		-link:cli_oootypes.config)
 
 .DEFAULT_GOAL := all
 .PHONY : all
