@@ -45,44 +45,6 @@ use installer::scriptitems;
 use installer::systemactions;
 use installer::windows::language;
 
-#####################################################################
-# Unpacking all files ending with tar.gz in a specified directory
-#####################################################################
-
-sub unpack_all_targzfiles_in_directory
-{
-    my ( $directory ) = @_;
-
-    installer::logger::include_header_into_logfile("Unpacking tar.gz files:");
-
-    installer::logger::print_message( "... unpacking tar.gz files ... \n" );
-
-    my $localdirectory = $directory . $installer::globals::separator . "packages";
-    my $alltargzfiles = installer::systemactions::find_file_with_file_extension("tar.gz", $localdirectory);
-
-    for ( my $i = 0; $i <= $#{$alltargzfiles}; $i++ )
-    {
-        my $onefile = $localdirectory . $installer::globals::separator . ${$alltargzfiles}[$i];
-
-        my $systemcall = "cd $localdirectory; cat ${$alltargzfiles}[$i] \| gunzip \| tar -xf -";
-        $returnvalue = system($systemcall);
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-}
-
 #################################################
 # Writing some global information into
 # the list of files without flag PATCH
