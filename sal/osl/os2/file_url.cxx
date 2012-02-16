@@ -98,6 +98,8 @@ rtl_uString*  oslMakeUStrFromPsz(const sal_Char* pszStr,rtl_uString** uStr);
 extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 extern "C" int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
+#define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
+
 /***************************************************
  * namespace directives
  **************************************************/
@@ -831,7 +833,7 @@ oslFileError SAL_CALL _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uS
             )
                 nSkip = 17;
             else
-                nSkip = 5;
+                nSkip = 7;
 
             /* Indicates local root */
             if ( nDecodedLen == nSkip )

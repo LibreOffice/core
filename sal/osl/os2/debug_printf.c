@@ -28,6 +28,7 @@
 #ifdef TESTME
 #include <stdio.h>
 #endif
+#include "sal/types.h"
 
 typedef APIRET _PMPRINTF(const char*, ...);
 typedef _PMPRINTF* PMPRINTF;
@@ -35,7 +36,7 @@ typedef _PMPRINTF* PMPRINTF;
 static void*    hmodPmPrintf = NULL;
 static PMPRINTF pfnPmPrintf = NULL;
 
-int _Export debug_printf( const char* format, ...)
+int SAL_DLLPUBLIC_EXPORT debug_printf( const char* format, ...)
 {
     va_list args;
     int     cnt;

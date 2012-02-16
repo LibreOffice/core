@@ -103,7 +103,8 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
         $(OBJ)$/file_path_helper.obj \
         $(OBJ)$/debug.obj \
         $(OBJ)$/except.obj \
-        $(SLO)$/salinit.obj
+        $(OBJ)$/debug_printf.obj \
+        $(OBJ)$/salinit.obj
 
 .ENDIF
 
