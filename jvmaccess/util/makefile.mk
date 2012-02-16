@@ -38,8 +38,10 @@ UNIXVERSIONNAMES = UDK
 .INCLUDE: settings.mk
 
 .IF "$(OS)" == "IOS"
+
 ALL:
-    @echo Nothing done for $(OS)
+# nothing
+
 .ENDIF
 
 .IF "$(UNIXVERSIONNAMES)" == ""

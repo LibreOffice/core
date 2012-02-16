@@ -39,8 +39,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 .IF "$(OS)" == "IOS"
+
 all:
-    @echo No build-time tools for this platform
+# nothing
+
 .ENDIF
 
 .INCLUDE : $(PRJ)$/codemaker.pmk

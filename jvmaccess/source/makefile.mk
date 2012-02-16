@@ -34,8 +34,10 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE: settings.mk
 
 .IF "$(OS)" == "IOS"
+
 ALL:
-    @echo Nothing done for $(OS)
+# nothing
+
 .ENDIF
 
 SLOFILES = \
