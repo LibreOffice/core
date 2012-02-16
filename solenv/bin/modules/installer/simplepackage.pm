@@ -371,7 +371,15 @@ sub create_package
         $from = cwd();
         $return_to_start = 1;
         chdir($tempdir);
-        $systemcall = "$installer::globals::zippath -qr $archive .";
+        if ( $^O =~ /os2/i )
+        {
+            my $zip = Cwd::realpath($archive);
+            $systemcall = "$installer::globals::zippath -qr $zip .";
+        }
+         else
+        {
+            $systemcall = "$installer::globals::zippath -qr $archive .";
+        }
 
         # Using Archive::Zip fails because of very long path names below "share/uno_packages/cache"
         # my $packzip = Archive::Zip->new();
@@ -655,7 +663,7 @@ sub create_simple_package
 
             if ( ! -d $destdir )
             {
-                if ( $^O =~ /cygwin/i ) # Cygwin performance check
+                if ( $^O =~ /cygwin/i || $^O =~ /os2/i ) # Cygwin performance check
                 {
                     $infoline = "Try to create directory $destdir\n";
                     push(@installer::globals::logfileinfo, $infoline);
@@ -671,7 +679,7 @@ sub create_simple_package
     }
 
     # stripping files ?!
-    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { installer::strip::strip_libraries($filesref, $languagestringref); }
+    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::isos2 )) { installer::strip::strip_libraries($filesref, $languagestringref); }
 
     # copy Files
     installer::logger::print_message( "... copying files ...\n" );
@@ -694,7 +702,7 @@ sub create_simple_package
         $source =~ s/\$\$/\$/;
         $destination =~ s/\$\$/\$/;
 
-        if ( $^O =~ /cygwin/i ) # Cygwin performance, do not use copy_one_file. "chmod -R" at the end
+        if ( $^O =~ /cygwin/i || $^O =~ /os2/i )    # Cygwin performance, do not use copy_one_file. "chmod -R" at the end
         {
             my $copyreturn = copy($source, $destination);
 

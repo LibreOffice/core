@@ -385,7 +385,7 @@ sub create_epm_header
 
     # License and Readme file can be included automatically from the file list
 
-    if ( $installer::globals::iswindowsbuild )
+    if ( $installer::globals::iswindowsbuild || $installer::globals::isos2 )
     {
         $licensefilename = "license.txt";
         $readmefilename = "readme.txt";
@@ -399,7 +399,7 @@ sub create_epm_header
     if (( $installer::globals::languagepack )   # in language packs the files LICENSE and README are removed, because they are not language specific
         || ( $variableshashref->{'NO_README_IN_ROOTDIR'} ))
     {
-        if ( $installer::globals::iswindowsbuild )
+        if ( $installer::globals::iswindowsbuild || $installer::globals::isos2 )
         {
             $licensefilename = "license_$searchlanguage.txt";
             $readmefilename = "readme_$searchlanguage.txt";

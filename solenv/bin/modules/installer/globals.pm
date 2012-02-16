@@ -125,6 +125,7 @@ BEGIN
     $islinux = 0;
     $issolaris = 0;
     $ismacosx = 0;
+    $isos2 = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
     $islinuxrpmbuild = 0;
@@ -513,6 +514,20 @@ BEGIN
         %savedrev83mapping = ();
         %saved83dirmapping = ();
     }
+    elsif ( $plat =~ /os2/i )
+    {
+        print "Setup OS/2 platform\n";
+        $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $checksumfile = "so_checksum";
+        $unopkgfile = "unopkg.exe";
+        $separator = "/";
+        $pathseparator = "\:";
+        $libextension = "\.dll";
+        $isunix = 0;
+        $iswin = 0;
+        $isos2 = 1;
+                $archiveformat = ".zip";
+    }
     else
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
@@ -540,6 +555,7 @@ BEGIN
     if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
     if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
+    if ( $plat =~ /os2/i ) { $isos2 = 1; }
 
     # ToDo: Needs to be expanded for additional platforms
 

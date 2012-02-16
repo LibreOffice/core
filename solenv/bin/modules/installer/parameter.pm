@@ -219,7 +219,7 @@ sub make_path_absolute
         }
     }
 
-    if ( $installer::globals::iswin )
+    if ( $installer::globals::iswin || $installer::globals::isos2 )
     {
         if ( $^O =~ /cygwin/i )
         {

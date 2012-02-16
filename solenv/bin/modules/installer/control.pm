@@ -87,6 +87,11 @@ sub check_system_path
         # has to be converted to DOS style for further use.
         $local_pathseparator = ';';
     }
+    if( $^O =~ /os2/i )
+    {
+        # has to be converted to DOS style for further use.
+        $local_pathseparator = ';';
+    }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
     $installer::globals::patharray = $patharrayref;
@@ -110,7 +115,7 @@ sub check_system_path
         }
 
     }
-    elsif ($installer::globals::iswin)
+    elsif ($installer::globals::iswin || $installer::globals::isos2)
     {
         @needed_files_in_path = ("zip.exe");
     }
