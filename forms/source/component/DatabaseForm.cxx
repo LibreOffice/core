@@ -621,7 +621,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     if (!xComponentSet.is())
         return;
 
-    // MIB 25.6.98: Catch nested Forms Geschachtelte; or would we need to submit them?
+    // MIB 25.6.98: Catch nested Forms; or would we need to submit them?
     if (!hasProperty(PROPERTY_CLASSID, xComponentSet))
         return;
 
