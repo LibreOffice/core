@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
 # The contents of this file are subject to the Mozilla Public License Version
 # 1.1 (the "License"); you may not use this file except in compliance with
 # the License or as specified alternatively below. You may obtain a copy of
@@ -11,14 +13,11 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Yifan Jiang, SUSE <yfjiang@suse.com>
-# Portions created by the Initial Developer are Copyright (C) 2011 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# [ Copyright (C) 2011 Yifan Jiang <yfjiang@suse.com> (initial developer) ]
+# [ Copyright (C) 2011 Petr Mladek <pmladek@suse.cz> ]
 #
-# Portions created by the Ted are Copyright (C) 2010 Ted. All Rights Reserved.
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -51,15 +50,21 @@ except ImportError:
 build_version = "3.5"
 tag_version = "3-5"
 # devel build
-install_dirname="lo-dev"
-branding_pack="libo-dev"
-basis_pack="libobasis-dev"
-ure_pack="lodev"
+branding_pack="lodev"
+basis_pack="lodevbasis"
 # stable build
-#install_dirname="libreoffice" + build_version
 #branding_pack="libreoffice"
 #basis_pack="libobasis"
-#ure_pack="libreoffice"
+
+# possible program files of libreoffice, put all platform paths are
+# expected in this list
+lo_all_paths = [
+    "/opt/lodev" + build_version, \
+    "/opt/libreoffice" + build_version, \
+    "/usr/lib/libreoffice", \
+    "/usr/lib64/libreoffice", \
+    "C:\program file\libreoffice", \
+    ]
 
 build_check_interval = 5  #seconds
 
@@ -76,20 +81,19 @@ DOWNLOAD_DIR = os.path.join(root_dir, "_download")
 USR_DIR = os.path.join(root_dir, "_libo_smoke_user")
 LOCAL_BUILD_INFO_FILE = os.path.join(root_dir, "build.cfg")
 
-ROOT_DIR_LIB = os.path.join(root_dir, 'lib')
-ROOT_DIR_LIB32 = os.path.join(root_dir, 'lib32')
-ROOT_DIR_LIB64 = os.path.join(root_dir, 'lib64')
-ROOT_DIR_BIN32 = os.path.join(root_dir, 'bin32')
-ROOT_DIR_BIN64 = os.path.join(root_dir, 'bin64')
-
-CPPUNITTESTER = os.path.join(root_dir, 'cppunittester')
-
 # INSTALL_DIR = os.path.join(root_dir, "_libo_smoke_installation")
 INSTALL_DIR = "" # Installation dir
 
 # SOFFICE_BIN bin
 if platform.system() == "Linux":
-    SOFFICE_BIN= INSTALL_DIR + os.sep + "opt" + os.sep + install_dirname + os.sep + "program" + os.sep + "soffice"
+    SOFFICE_BIN = "soffice"
+    LOSMOKETEST_BIN = "losmoketest"
+elif platform.system() == "Windows":
+    SOFFICE_BIN = "soffice.exe"
+    LOSMOKETEST_BIN = "losmoketest"    
+else:
+    SOFFICE_BIN = "soffice"
+    LOSMOKETEST_BIN = "losmoketest"    
 
 # Relative build url
 ## pre-releases
@@ -170,7 +174,14 @@ def local_build_info(t):
         build_name = ''
         build_time = datetime.datetime.min
 
-    return build_name, build_time
+    try:
+        testpack_name = config.get(t, 'testpack_name').strip('\n')
+        testpack_build_time = datetime.datetime.strptime(config.get(t, 'testpack_build_time').strip('\n'), '%d-%b-%Y %H:%M')
+    except ValueError:
+        testpack_name = ''
+        testpack_build_time = datetime.datetime.min        
+
+    return build_name, build_time, testpack_name, testpack_build_time
 
 def get_url_regexp(t, package, arch):
     '''
@@ -184,86 +195,89 @@ def get_url_regexp(t, package, arch):
     package and its timestamp '''
 
     url = ""
-    reg = re.compile('^$')
+    reg_lo = re.compile('^$')
+    reg_tst = re.compile('^$')    
     pck = package
     arc = arch
 
     if t == 'pre-releases':
         if pck == "rpm" and arc == "x86":
             url = SERVER_URL + "/" + PR_RPM_X86_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*x86_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_tst = re.compile('\<a\ href=\"(LibO-Test.*.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')            
         elif pck == "rpm" and arc == "x86_64":
             url = SERVER_URL + "/" + PR_RPM_X86_64_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*x86-64_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86-64_install-rpm.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_tst = re.compile('\<a\ href=\"(LibO-Test.*.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86":
             url = SERVER_URL + "/" + PR_DEB_X86_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*x86_install-deb.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86_install-deb.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86_64":
             url = SERVER_URL + "/" + PR_DEB_X86_64_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*x86-64_install-deb.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*x86-64_install-deb.*en-US.*\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "exe" and arc == "x86":
             url = SERVER_URL + "/" + PR_WIN_X86_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*Win_x86_install_multi.exe)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*Win_x86_install_multi.exe)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "dmg" and arc == "x86":
             url = SERVER_URL + "/" + PR_MAC_X86_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*MacOS_x86_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*MacOS_x86_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "dmg" and arc == "ppc":
             url = SERVER_URL + "/" + PR_MAC_PPC_PATH
-            reg = re.compile('\<a\ href=\"(LibO_\d.*MacOS_PPC_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(LibO_\d.*MacOS_PPC_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         else:
             logger.error("Unable to handle the system or arch!")
     elif t == 'daily_master':
         if pck == "rpm" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_MASTER_RPM_X86_PATH
-            reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "rpm" and arc == "x86_64":
             url = SERVER_URL + "/" + DAILY_MASTER_RPM_X86_64_PATH
-            reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86-64_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86-64_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_MASTER_DEB_X86_PATH
-            reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-deb_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-deb_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86_64":
             url = SERVER_URL + "/" + DAILY_MASTER_DEB_X86_64_PATH
-            reg = re.compile('^$') # No build yet
+            reg_lo = re.compile('^$') # No build yet
         elif pck == "exe" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_MASTER_WIN_X86_PATH
-            reg = re.compile('^$') # No build yet
+            reg_lo = re.compile('^$') # No build yet
         elif pck == "dmg" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_MASTER_MAC_X86_PATH
-            reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install_en-US.dmg)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "dmg" and arc == "ppc":
             url = SERVER_URL + "/" + DAILY_MASTER_MAC_PPC_PATH
-            reg = re.compile('^$') # No build yet
+            reg_lo = re.compile('^$') # No build yet
         else:
             logger.error("Unable to handle the system or arch!")
     elif t == 'daily_branch':
         if pck == "rpm" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_BRANCH_RPM_X86_PATH
-            reg = re.compile('\<a\ href=\"(.*LibO_.*x86_install-rpm_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(.*LibO_.*x86_install-rpm_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "rpm" and arc == "x86_64":
             url = SERVER_URL + "/" + DAILY_BRANCH_RPM_X86_64_PATH
-            reg = re.compile('\<a\ href=\"(.*LibO_.*x86-64_install-rpm_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(.*LibO_.*x86-64_install-rpm_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_BRANCH_DEB_X86_PATH
-            reg = re.compile('\<a\ href=\"(.*LibO_.*x86_install-deb_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(.*LibO_.*x86_install-deb_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86_64":
             url = SERVER_URL + "/" + DAILY_BRANCH_DEB_X86_64_PATH
-            reg = re.compile('\<a\ href=\"(.*LibO_.*x86-64_install-deb_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(.*LibO_.*x86-64_install-deb_en-US\.tar\.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "exe" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_BRANCH_WIN_X86_PATH
-            reg = re.compile('\<a\ href=\"(.*LibO_.*install_.*\.exe)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
+            reg_lo = re.compile('\<a\ href=\"(.*LibO_.*install_.*\.exe)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "dmg" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_BRANCH_MAC_X86_PATH
-            reg = re.compile('^$') # No build yet
+            reg_lo = re.compile('^$') # No build yet
         elif pck == "dmg" and arc == "ppc":
             url = SERVER_URL + "/" + DAILY_BRANCH_MAC_PPC_PATH
-            reg = re.compile('^$') # No build yet
+            reg_lo = re.compile('^$') # No build yet
         else:
             logger.error("Unable to handle the system or arch!")
     else:
         logger.error("Error build type! The build type has to be:\n pre-releases, daily_master, daily_branch")
 
-    return url, reg
+    return url, reg_lo, reg_tst
 
 def remote_build_info(url_reg):
     ''' Get the latest proper build info (build_name, build_time) from
@@ -273,15 +287,20 @@ def remote_build_info(url_reg):
     pck = p[1]
     arc = p[2]
     r = url_reg[1]
+    r_t = url_reg[2]
 
     f = urllib2.urlopen(url_reg[0])
     c = ''.join(f.readlines())
     f.close()
 
     build_list = r.findall(c)
+    test_list = r_t.findall(c)    
 
     build_name = ''
     build_time = datetime.datetime.min
+    testpack_build_time = datetime.datetime.min
+    testpack_name = ''
+
 
     for b in build_list:
         if datetime.datetime.strptime(b[1] + ' ' + b[2], '%d-%b-%Y %H:%M') > build_time:
@@ -291,7 +310,15 @@ def remote_build_info(url_reg):
             except:
                 print "remote_build_info: wrong time date&format"
 
-    return build_name, build_time
+    for t in test_list:
+        if datetime.datetime.strptime(t[1] + ' ' + t[2], '%d-%b-%Y %H:%M') > testpack_build_time:
+            testpack_name = t[0]
+            try:
+                testpack_build_time = datetime.datetime.strptime(t[1] + ' ' + t[2], '%d-%b-%Y %H:%M')
+            except:
+                print "remote_build_info: wrong time date&format"                
+
+    return build_name, build_time, testpack_name, testpack_build_time
 
 # return True when something was downloaded
 def download(url_reg, build_type):
@@ -301,17 +328,22 @@ def download(url_reg, build_type):
         remote_build = remote_build_info(url_reg)
         local_build = local_build_info(build_type)
 
-#        print 'remote_build[1]=' + remote_build[1].isoformat()
-#        print 'local_build[1]=' + local_build[1].isoformat()
         if remote_build[1] > local_build[1]:
-            logger.info('Found New build: ' + remote_build[0])
+            logger.info('Found New LO build: ' + remote_build[0])
             if fetch_build(url_reg[0], remote_build[0]):
                 set_build_config(build_type, 'build_name', remote_build[0])
                 set_build_config(build_type, 'build_time', datetime.datetime.strftime(remote_build[1], '%d-%b-%Y %H:%M'))
             else:
-                logger.error('Download build failed!')
-        else:
-            return False
+                logger.error('Download libreoffice build failed!')
+
+        if remote_build[3] > local_build[3] and (remote_build[1] - remote_build[3]) < datetime.timedelta(hours=1):
+            logger.info('Found a relevant smoketest package: ' + remote_build[2])
+            if fetch_build(url_reg[0], remote_build[2]):
+                set_build_config(build_type, 'testpack_name', remote_build[2])
+                set_build_config(build_type, 'testpack_build_time', datetime.datetime.strftime(remote_build[3], '%d-%b-%Y %H:%M')) 
+                return True
+            else:
+                logger.warning("Failed to find corresponding smoketest package")
 
     except urllib2.URLError, HTTPError:
         logger.error('Error fetch remote build info.')
@@ -319,10 +351,10 @@ def download(url_reg, build_type):
     except KeyboardInterrupt:
         sys.exit()
     except:
-        print "Some Error"
+        logger.error('Error fetch remote build info.')        
         return False
 
-    return True
+    return False
 
 def fetch_build(url, filename):
     ''' Download a build from address url/filename '''
@@ -350,9 +382,13 @@ def set_build_config(section, option, value):
     with open(LOCAL_BUILD_INFO_FILE, 'wb') as cfgfile:
         config.write(cfgfile)
 
-def uninstall():
+def uninstall(build_type):
     ''' Kill libreoffice processes and uninstall all previously installed
     libreoffice packages '''
+
+    if build_type == "pre-releases":
+        branding_pack="libreoffice"
+        basis_pack="libobasis"
 
     logger.info("Uninstalling ...")
 
@@ -360,7 +396,10 @@ def uninstall():
 
     if pck == 'rpm':
         cmd_query  = ["rpm", "-qa"]
-        cmd_filter = ["grep", "-e", branding_pack+build_version, "-e", basis_pack+build_version,  "-e", ure_pack+build_version]
+        cmd_filter = ["grep", \
+                      "-e", branding_pack+build_version, \
+                      "-e", basis_pack+build_version,  \
+                      ]
 
         P_query  = subprocess.Popen(cmd_query, stdout = subprocess.PIPE)
         P_filter = subprocess.Popen(cmd_filter, stdin = P_query.stdout, stdout = subprocess.PIPE)
@@ -373,7 +412,7 @@ def uninstall():
         else:
             cmd = ["sudo", "rpm", "-e"] + str_filter.split()
     elif pck == 'deb':
-        cmd_query = ["dpkg", "--get-selections", branding_pack+build_version+"*", basis_pack+build_version+"*", ure_pack+build_version+"*"]
+        cmd_query = ["dpkg", "--get-selections", branding_pack+build_version+"*", basis_pack+build_version+"*"]
         cmd_filter = ["cut", "-f", "1"]
 
         P_query = subprocess.Popen(cmd_query, stdout = subprocess.PIPE)
@@ -413,41 +452,22 @@ def init_testing():
         init_build_cfg = '[daily_branch]' + os.linesep\
                        + 'build_name =' + os.linesep\
                        + 'build_time =' + os.linesep\
+                       + 'testpack_name =' + os.linesep\
+                       + 'testpack_build_time =' + os.linesep\
                        + '[daily_master]' + os.linesep\
                        + 'build_name =' + os.linesep\
                        + 'build_time =' + os.linesep\
+                       + 'testpack_name =' + os.linesep\
+                       + 'testpack_build_time =' + os.linesep\
                        + '[pre-releases]' + os.linesep\
                        + 'build_name =' + os.linesep\
-                       + 'build_time =' + os.linesep
+                       + 'build_time =' + os.linesep \
+                       + 'testpack_name =' + os.linesep\
+                       + 'testpack_build_time =' + os.linesep
 
         with open(LOCAL_BUILD_INFO_FILE, 'w+') as f:
             f.write(init_build_cfg)
         f.close()
-
-    # create set up links
-    try:
-        if platform.system() == "Linux":
-            # remove old symlinks if they exists
-            for p in ROOT_DIR_LIB, CPPUNITTESTER:
-                if os.path.exists(p) and os.path.islink(p):
-                    os.remove(p)
-        
-            if platform_info()[2] == "x86":
-                os.symlink(ROOT_DIR_LIB32, ROOT_DIR_LIB)
-                os.symlink(os.path.join(ROOT_DIR_BIN32, 'cppunittester'), CPPUNITTESTER)
-            elif platform_info()[2] == "x86_64":
-                os.symlink(ROOT_DIR_LIB64, ROOT_DIR_LIB)
-                os.symlink(os.path.join(ROOT_DIR_BIN64, 'cppunittester'), CPPUNITTESTER)
-            else:
-                pass
-
-        elif platform.system() == "Windows" and platform_info()[2] == "x86":
-            pass
-        else:
-            pass
-
-    except OSError:
-        pass
 
 def post_testing():
     logger.info("Cleaning up ...")
@@ -493,18 +513,20 @@ def install(filename):
         for root, dirs, files in os.walk(DOWNLOAD_DIR):
             if 'RPMS' in root or 'DEBS' in root:
                 pcklist = pcklist + [os.path.join(root_dir, root, f) for f in files]
-        pcklist = filter(_is_not_filtered, pcklist)
+        install_pcklist = filter(_is_not_filtered, pcklist)
 
         # install
         if platform_info()[1] == 'rpm':
-            install_cmd = ["sudo", "rpm", "-iv"] + pcklist
+            install_cmd = ["sudo", "rpm", "-iv"] + install_pcklist
+            clean_tmp_cmd = ["sudo", "rm", "-f"] + pcklist
         elif platform_info()[1] == 'deb':
-            install_cmd = ["sudo", "dpkg", "-i"] + pcklist
+            install_cmd = ["sudo", "dpkg", "-i"] + install_pcklist
         else:
             logger.error('Cannot generate install command')
             return
 
         subprocess.check_call(install_cmd)
+        subprocess.check_call(clean_tmp_cmd)        
 
     else:
         logger.info("Unrecognized file extension")
@@ -517,32 +539,25 @@ def verify_smoketest(headless):
     pck = p[1]
     arc = p[2]
 
-    if s == "Linux":
-        if headless:
-            os.environ['SAL_USE_VCLPLUGIN'] = "svp"
-        os.environ['LD_LIBRARY_PATH'] = ""
-        os.environ['LD_LIBRARY_PATH'] = ':'.join([os.path.join(root_dir, 'lib'), INSTALL_DIR + '/opt/' + install_dirname + '/ure/lib', os.environ['LD_LIBRARY_PATH']])
-        cmd_cppu = [
-                    CPPUNITTESTER,
-                    "-env:UNO_SERVICES=file://"+ INSTALL_DIR + "/opt/" + install_dirname + "/ure/share/misc/services.rdb",
-                    "-env:UNO_TYPES=" + os.path.join(os.path.join(root_dir, 'lib'), "types.rdb"),
-                    "-env:arg-soffice=path:" + SOFFICE_BIN,
-                    "-env:arg-user=" + USR_DIR,
-                    "-env:arg-env=" + os.environ['LD_LIBRARY_PATH'],
-                    "-env:arg-testarg.smoketest.doc=" + os.path.join(root_dir, "doc/smoketestdoc.sxw"),
-                    "--protector",
-                    os.path.join(root_dir, "lib/unoexceptionprotector.so"), "unoexceptionprotector",
-                    os.path.join(root_dir, "lib/libsmoketest.so")
-                   ]
-    else:
-        logger.warning('The smoketest does not support this platform yet!')
+    lo_testable_paths = filter(lambda p: \
+                               os.path.exists(p + os.sep + "program" + os.sep + LOSMOKETEST_BIN) and \
+                               os.path.exists(p + os.sep + "program" + os.sep + SOFFICE_BIN), \
+                               lo_all_paths)
 
-    try:
-        subprocess.check_call(cmd_cppu)
-        logger.info("   Smoketest PASSED")
-    except:
-        logger.error("   Smoketest FAILED")
-        
+    if not lo_testable_paths:
+        logger.error("Not found any Libreoffice or Test packages!")
+        sys.exit(1)
+    else:
+        cmd_smoketests = [ p + os.sep + "program" + os.sep + LOSMOKETEST_BIN for p in lo_testable_paths ]        
+
+    if len(lo_testable_paths) > 1:
+        logger.info("++More than one testable build is found, test them one by one.")
+
+    # subprocess.call(cmd_smoketest);
+    for c in cmd_smoketests:
+        pattern = re.compile(LOSMOKETEST_BIN + "$")
+        logger.info("  Test Binary: " + pattern.sub(SOFFICE_BIN, c))
+        subprocess.call(c)
 
 def usage():
 
@@ -601,11 +616,12 @@ def main():
             sys.exit()
         elif o in ("-i", "--install"):
             init_testing()
-            uninstall()
+            uninstall(build_type)
             install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[0])
+            install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[2])
             sys.exit()
         elif o in ("-u", "--uninstall"):
-            uninstall()
+            uninstall(build_type)
             sys.exit()
         elif o in ("-d", "--download"):
             init_testing()
@@ -628,18 +644,21 @@ def main():
             try:
                 # FIXME: uninstall script fails but it need not break the whole game; so try it twice
                 try:
-                    uninstall()
+                    uninstall(build_type)
                 except:
-                    logger.error("Some errors happend during uninstall. Trying once again.")
-                    uninstall()
+                    logger.error("Some errors happened during uninstall. Trying once again.")
+                    uninstall(build_type)
 
                 install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[0])
+                install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[2])
                 verify_smoketest(headless)
 
             except KeyboardInterrupt:
                 sys.exit()
             except:
-                pass
+                continue
+        else:
+             logger.warning("No new build found.")   
         
         if loop:
             time.sleep(build_check_interval)
@@ -653,7 +672,7 @@ if __name__ == '__main__':
     logger = logging.getLogger('')
     logger.setLevel(logging.DEBUG)
 
-    fh = logging.FileHandler('losmoketest.log')
+    fh = logging.FileHandler(os.path.basename(__file__) + '.log')
     ch = logging.StreamHandler()
 
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
