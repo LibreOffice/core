@@ -159,13 +159,11 @@ copy-stuff: buildrcs
 		  uno_cppuhelpergcc3 \
 		  uno_sal \
 		  uno_salhelpergcc3 \
-		  unoexceptionprotector \
 		  unotest \
 		  unoxmllo \
 		  utllo \
 		  vbahelperlo \
 		  vcllo \
-		  vclplug_svplo \
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
@@ -178,6 +176,7 @@ copy-stuff: buildrcs
 	done
 #		  deployment \
 #		  deploymentmisclo \
+#		  unoexceptionprotector \
 
 #
 # Then the shared GNU C++ library
