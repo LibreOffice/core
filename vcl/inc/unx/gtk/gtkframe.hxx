@@ -325,10 +325,10 @@ public:
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();
 
+#if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
     void pushIgnoreDamage();
     void popIgnoreDamage();
-#if GTK_CHECK_VERSION(3,0,0)
     void renderArea( cairo_t *cr, cairo_rectangle_t *src );
 #endif
     virtual ~GtkSalFrame();

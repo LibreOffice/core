@@ -304,20 +304,13 @@ public:
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
     static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
     static rtl::OString QuoteHTML( rtl::OString const &rString );
-    static bool CopyFile(const rtl::OString& rSource , const rtl::OString& rDest);
 
     static rtl::OString UnquoteHTML( rtl::OString const &rString );
-
-    static const char* GetEnv( const char *pVar );
 
     static bool isSourceLanguage(const rtl::OString &rLanguage);
     static bool isAllowed(const rtl::OString &rLanguage);
 
     static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
-    static rtl::OString getRandomName(const rtl::OString& rPrefix, const rtl::OString & sPostfix);
-    static void getCurrentDir( std::string& dir );
-
-    static rtl::OString GetNativeFile( rtl::OString const & sSource );
 
     static void DumpExportList(const rtl::OString& rListName,
         ExportList& aList);

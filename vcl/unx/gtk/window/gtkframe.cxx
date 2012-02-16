@@ -2994,19 +2994,17 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     return sal_True;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
 void GtkSalFrame::pushIgnoreDamage()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     m_nDuringRender++;
-#endif
 }
 
 void GtkSalFrame::popIgnoreDamage()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     m_nDuringRender--;
-#endif
 }
+#endif
 
 void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 {

@@ -5,8 +5,6 @@ CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 Dialog::Dialog(Window*, ResId const&)
 DirEntry::SetBase(String const&, char)
-Export::GetNativeFile(rtl::OString const&)
-Export::getCurrentDir(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
 FileStream::FileStream(rtl::OString const&, FileAccessMode)
 FmEntryDataArray::DeleteAndDestroy(unsigned short, unsigned short)
 FmEntryDataArray::Insert(FmEntryData* const&, unsigned short&)
@@ -18,11 +16,8 @@ FmFormObj::getType() const
 FmPropBrwMgr::GetChildWindowId()
 FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
 FontStyleBox::FontStyleBox(Window*, long)
-FormattedField::SetValidateText(String const&, String const*)
 FuncData::FuncData(rtl::OUString const&)
 GraphCtrl::GraphCtrl(Window*, long)
-GtkSalFrame::popIgnoreDamage()
-GtkSalFrame::pushIgnoreDamage()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
 HTMLControls::Insert(HTMLControl const**, unsigned short)
 HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
@@ -42,17 +37,15 @@ MSDffImportRecords::Remove(SvxMSDffImportRec* const&, unsigned short)
 MSDffImportRecords::Remove(unsigned short, unsigned short)
 MSFilterTracer::SetProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
 MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>)
-MachineSettings::CopyData()
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 MenuBar::MenuBar(ResId const&)
+MergeData::Dump()
 MultiLineEdit::GetHScrollBar() const
 MultiLineEdit::GetLeftMargin() const
 MultiLineEdit::GetTextLines() const
-MultiLineEdit::IsFocusSelectionHideEnabled() const
 NfCurrencyEntry::NfCurrencyEntry()
-NotificationSettings::CopyData()
 NumberFormatCodeWrapper::getDefault(short, short) const
 NumericBox::GetValue(unsigned short) const
 NumericBox::GetValuePos(long) const
@@ -63,7 +56,6 @@ OLEObjCache::SetSize(unsigned long)
 ORegKey::acquireKey(void*)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
-ParagraphObj::ParagraphObj(ParagraphObj&)
 ParagraphStyleManager::get(WPXString const&) const
 PluginConnector::getInstance(_NPP*)
 PluginConnector::getInstanceById(unsigned int)
@@ -166,6 +158,7 @@ SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
 SectReprArr::Remove(SectRepr* const&, unsigned short)
 SectReprArr::Remove(unsigned short, unsigned short)
 SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
+SetOfByte::GetSetCount() const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxApplication::Main()
 SfxBrushItemLink::Set(SfxBrushItemLink*)
@@ -601,7 +594,7 @@ XWindowItem::XWindowItem(unsigned short, Window*)
 XWindowItem::XWindowItem(unsigned short, com::sun::star::uno::Reference<com::sun::star::awt::XWindow>&)
 XclExpFontBuffer::Insert(ScPatternAttr const&, short, XclExpColorType, bool)
 XclExpName::IsHidden() const
-XclExpPivotCache::GetFieldAcc(String const&)
+XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 XclExpString::SetFormats(std::__debug::vector<XclFormatRun, std::allocator<XclFormatRun> > const&)
 XclRoot::GetDatabaseRanges() const
 XclRoot::GetPixelXFromHmm(int) const
@@ -718,7 +711,6 @@ binfilter::B3dEntityBucketMemArr::Replace(char const*&, unsigned short)
 binfilter::B3dEntityBucketMemArr::Replace(char const**, unsigned short, unsigned short)
 binfilter::B3dEntityBucketMemArr::_ForEach(unsigned short, unsigned short, unsigned char (*)(char const*&, void*), void*)
 binfilter::ByteString::Append(char)
-binfilter::ByteString::Assign(char const*, unsigned short)
 binfilter::ByteString::Assign(char)
 binfilter::ByteString::ByteString(char const*, unsigned short)
 binfilter::ByteString::CompareIgnoreCaseToAscii(char const*, unsigned short) const
@@ -1148,10 +1140,6 @@ connectivity::mozab::OCatalog::getDot()
 connectivity::mozab::OPreparedStatement::checkParameterIndex(int)
 connectivity::mozab::OResultSet::initializeRow(rtl::Reference<connectivity::ODeleteVector<connectivity::ORowSetValue> >&, int)
 connectivity::mozab::OTable::OTable(connectivity::sdbcx::OCollection*, connectivity::mozab::OConnection*)
-connectivity::odbc::ODatabaseMetaDataResultSet::openTablesTypes()
-connectivity::odbc::OPreparedStatement::getDataBuf(int)
-connectivity::odbc::OPreparedStatement::getParamLength(int)
-connectivity::odbc::OPreparedStatement::getPrecision(int)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 connectivity::toString(com::sun::star::uno::Any const&)
@@ -1237,6 +1225,7 @@ ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&, int)
 oox::(anonymous namespace)::GenericPropertySet::GenericPropertySet()
 oox::AttributeList::getHyperHex(int, long) const
 oox::AttributeList::getUnsignedHex(int, unsigned int) const
+oox::BinaryInputStream::readNulCharArray()
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
@@ -1258,6 +1247,7 @@ oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const
 oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::addMissingProperties(oox::PropertyMap const&, oox::PropertyMap&)
+oox::drawingml::chart::ObjectTypeFormatter::convertAutomaticLine(oox::PropertySet&, int)
 oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
 oox::drawingml::lcl_dump_pset(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::drawingml::lcl_getSequenceLengthByRole(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&, rtl::OUString const&)
@@ -1333,6 +1323,7 @@ oox::xls::WorksheetHelper::getRow(int) const
 oox::xls::WorksheetHelper::getRows(oox::ValueRange const&) const
 oox::xls::WorksheetHelper::putFormulaString(com::sun::star::table::CellAddress const&, rtl::OUString const&) const
 oox::xls::Xf::hasAnyUsedFlags() const
+pdfi::createOdfEmitter(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
 psp::GetCommandLineTokenCount(rtl::OString const&)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
@@ -1379,17 +1370,6 @@ sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
-sdr::overlay::OverlayBitmapEx::setBitmapEx(BitmapEx const&)
-sdr::overlay::OverlayBitmapEx::setCenterXY(unsigned short, unsigned short)
-sdr::overlay::OverlayHatchRect::setSecondPosition(basegfx::B2DPoint const&)
-sdr::overlay::OverlayLineStriped::setSecondPosition(basegfx::B2DPoint const&)
-sdr::overlay::OverlayManagerBuffered::SetRefreshWithPreRendering(bool)
-sdr::overlay::OverlayObjectList::remove(sdr::overlay::OverlayObject&)
-sdr::overlay::OverlayPolyPolygonStriped::setPolyPolygon(basegfx::B2DPolyPolygon const&)
-sdr::overlay::OverlayRollingRectangleStriped::setExtendedLines(bool)
-sdr::overlay::OverlayRollingRectangleStriped::setShowBounds(bool)
-sdr::overlay::OverlayTriangle::setSecondPosition(basegfx::B2DPoint const&)
-sdr::overlay::OverlayTriangle::setThirdPosition(basegfx::B2DPoint const&)
 sdr::table::Cell::GetStyleSheetPool() const
 sdr::table::SdrTableObj::getColumnCount() const
 sdr::table::SdrTableObj::getRowCount() const

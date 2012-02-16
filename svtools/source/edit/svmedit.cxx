@@ -1575,12 +1575,6 @@ void MultiLineEdit::EnableFocusSelectionHide( sal_Bool bHide )
     pImpSvMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-sal_Bool MultiLineEdit::IsFocusSelectionHideEnabled() const
-{
-    return pImpSvMEdit->GetTextWindow()->IsAutoFocusHide();
-}
-
-
 void MultiLineEdit::SetLeftMargin( sal_uInt16 n )
 {
     if ( GetTextEngine() )

@@ -189,7 +189,6 @@ protected:
     SbiExprNode* Cat();
     SbiExprNode* Like();
     SbiExprNode* VBA_Not();
-    SbiExprNode* VBA_And();
     SbiExprNode* Comp();
     SbiExprNode* Boolean();
 public:

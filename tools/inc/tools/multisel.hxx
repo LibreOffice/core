@@ -64,7 +64,6 @@ private:
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
     TOOLS_DLLPRIVATE sal_Bool           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
-    TOOLS_DLLPRIVATE long           ImplBwdUnselected();
 #endif
 
 public:

@@ -581,42 +581,6 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
-    {
-        uno::Reference< graphic::XGraphic > xGraphic;
-
-        if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
-        {
-            // graphic manager uniqueid
-            rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-            // get the DefaultContext
-            mxGrfObj = graphic::GraphicObject::createWithId( maContext.getUNOContext(), sID );
-        }
-        else // linked
-            mxGrfObj = NULL; // release the GraphicObject
-
-        if ( _rURL.isEmpty() )
-            return xGraphic;
-
-        try
-        {
-            uno::Reference< graphic::XGraphicProvider > xProvider;
-            if ( maContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-            {
-                uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-                aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aMediaProperties[0].Value <<= _rURL;
-                xGraphic = xProvider->queryGraphic( aMediaProperties );
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        return xGraphic;
-    }
-
 void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );

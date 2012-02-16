@@ -84,7 +84,9 @@ SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
 
 class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
+private:
     friend class SfxStyleSheetBasePool;
+    SVL_DLLPRIVATE static SfxStyleSheetBasePool& implGetStaticPool();
 
 protected:
     SfxStyleSheetBasePool&  rPool;          // zugehoeriger Pool
@@ -100,7 +102,11 @@ protected:
 
     sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
 
-    SfxStyleSheetBase(); // do not use!
+    SfxStyleSheetBase()  // do not use!
+        : comphelper::OWeakTypeObject()
+        , rPool( implGetStaticPool() )
+    {
+    }
     SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();

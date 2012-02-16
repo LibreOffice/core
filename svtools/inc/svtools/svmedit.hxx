@@ -89,7 +89,6 @@ public:
     virtual sal_Bool    IsReadOnly() const;
 
     void            EnableFocusSelectionHide( sal_Bool bHide );
-    sal_Bool            IsFocusSelectionHideEnabled() const;
 
     virtual void    SetMaxTextLen( xub_StrLen nMaxLen = 0 );
     virtual xub_StrLen GetMaxTextLen() const;

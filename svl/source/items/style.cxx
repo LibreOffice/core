@@ -146,7 +146,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
         pSet = NULL;
 }
 
-static SfxStyleSheetBasePool& implGetStaticPool()
+SfxStyleSheetBasePool& SfxStyleSheetBase::implGetStaticPool()
 {
     static SfxStyleSheetBasePool* pSheetPool = 0;
     static SfxItemPool* pBasePool = 0;
@@ -157,12 +157,6 @@ static SfxStyleSheetBasePool& implGetStaticPool()
         pSheetPool = new SfxStyleSheetBasePool(*pBasePool);
     }
     return *pSheetPool;
-}
-
-SfxStyleSheetBase::SfxStyleSheetBase()
-: comphelper::OWeakTypeObject()
-, rPool( implGetStaticPool() )
-{
 }
 
 SfxStyleSheetBase::~SfxStyleSheetBase()

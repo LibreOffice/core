@@ -205,49 +205,6 @@ bool Export::hasUTF8ByteOrderMarker( const rtl::OString &rString )
            rString[1] == '\xBB' && rString[2] == '\xBF' ;
 }
 
-bool Export::CopyFile(const rtl::OString& rSource, const rtl::OString& rDest)
-{
-    const int BUFFERSIZE    = 8192;
-    char buf[ BUFFERSIZE ];
-
-    FILE* IN_FILE = fopen( rSource.getStr() , "r" );
-    if( IN_FILE == NULL )
-    {
-        std::cerr << "Export::CopyFile WARNING: Could not open " << rSource.getStr() << "\n";
-        return false;
-    }
-
-    FILE* OUT_FILE = fopen( rDest.getStr() , "w" );
-    if( OUT_FILE == NULL )
-    {
-        std::cerr << "Export::CopyFile WARNING: Could not open/create " << rDest.getStr() << " for writing\n";
-        fclose( IN_FILE );
-        return false;
-    }
-
-    while( fgets( buf , BUFFERSIZE , IN_FILE ) != NULL )
-    {
-        if( fputs( buf , OUT_FILE ) == EOF )
-        {
-            std::cerr << "Export::CopyFile WARNING: Write problems " << rSource.getStr() << "\n";
-            fclose( IN_FILE );
-            fclose( OUT_FILE );
-            return false;
-        }
-    }
-    if( ferror( IN_FILE ) )
-    {
-        std::cerr << "Export::CopyFile WARNING: Read problems " << rDest.getStr() << "\n";
-        fclose( IN_FILE );
-        fclose( OUT_FILE );
-        return false;
-    }
-    fclose ( IN_FILE );
-    fclose ( OUT_FILE );
-
-    return true;
-}
-
 /*****************************************************************************/
 rtl::OString Export::UnquoteHTML( rtl::OString const &rString )
 /*****************************************************************************/
@@ -330,71 +287,6 @@ void Export::InitForcedLanguages( bool bMergeMode ){
             aForcedLanguages.push_back( sTmp );
     }
     while ( nIndex >= 0 );
-}
-
-/*****************************************************************************/
-rtl::OString Export::GetNativeFile( rtl::OString const & sSource )
-/*****************************************************************************/
-{
-    //TODO: Drop this completely unless line end conversion *is* an issue
-    return sSource;
-}
-
-const char* Export::GetEnv( const char *pVar )
-{
-        char *pRet = getenv( pVar );
-        if ( !pRet )
-            pRet = 0;
-        return pRet;
-}
-
-void Export::getCurrentDir( std::string& dir )
-{
-    char buffer[64000];
-    if( getcwd( buffer , sizeof( buffer ) ) == 0 ){
-        std::cerr << "Error: getcwd failed!\n";
-        exit( -1 );
-    }
-    dir = std::string( buffer );
-}
-
-
-// Stolen from sal/osl/unx/tempfile.c
-
-#define RAND_NAME_LENGTH 6
-
-rtl::OString Export::getRandomName(const rtl::OString& rPrefix, const rtl::OString& rPostfix)
-{
-    static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    static const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
-
-    rtl::OStringBuffer sRandStr(rPrefix);
-
-    static sal_uInt64 value;
-    char     buffer[RAND_NAME_LENGTH];
-
-    TimeValue           tv;
-    sal_uInt64          v;
-    int                 i;
-
-    osl_getSystemTime( &tv );
-    oslProcessInfo proInfo;
-    proInfo.Size = sizeof(oslProcessInfo);
-    osl_getProcessInfo( 0 , osl_Process_IDENTIFIER , &proInfo );
-
-    value += ((sal_uInt64) ( tv.Nanosec / 1000 ) << 16) ^ ( tv.Nanosec / 1000 ) ^ proInfo.Ident;
-
-    v = value;
-
-    for (i = 0; i < RAND_NAME_LENGTH; ++i)
-    {
-        buffer[i] = LETTERS[v % COUNT_OF_LETTERS];
-        v        /= COUNT_OF_LETTERS;
-    }
-
-    sRandStr.append(buffer , RAND_NAME_LENGTH);
-    sRandStr.append(rPostfix);
-    return sRandStr.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

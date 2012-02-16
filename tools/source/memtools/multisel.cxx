@@ -539,23 +539,6 @@ long MultiSelection::ImplFwdUnselected()
 
 // -----------------------------------------------------------------------
 
-long MultiSelection::ImplBwdUnselected()
-{
-    if ( !bCurValid )
-        return SFX_ENDOFSELECTION;
-
-    if ( aSels[ nCurSubSel ]->Max() < nCurIndex )
-        return nCurIndex;
-
-    nCurIndex = aSels[ nCurSubSel-- ]->Min() - 1;
-    if ( nCurIndex >= 0 )
-        return nCurIndex;
-    else
-        return SFX_ENDOFSELECTION;
-}
-
-// -----------------------------------------------------------------------
-
 long MultiSelection::FirstSelected( sal_Bool bInverse )
 {
     bInverseCur = bInverse;
