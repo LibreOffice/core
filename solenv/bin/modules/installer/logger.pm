@@ -247,19 +247,6 @@ sub get_time_string
 }
 
 ###############################################################
-# Returning the age of a file (in seconds)
-###############################################################
-
-sub get_file_age
-{
-    my ( $filename ) = @_;
-
-    my $filetime = (stat($filename))[9];
-    my $timediff = time() - $filetime;
-    return $timediff;
-}
-
-###############################################################
 # Stopping the time
 ###############################################################
 
@@ -267,29 +254,6 @@ sub stoptime
 {
     my $infoline = get_time_string();
     print_message( "$infoline" );
-}
-
-###############################################################
-# Set date string, format: yymmdd
-###############################################################
-
-sub set_installation_date
-{
-    my $datestring = "";
-
-    my @timearray = localtime(time);
-
-    my $day = $timearray[3];
-    my $month = $timearray[4] + 1;
-    my $year = $timearray[5] - 100;
-
-    if ( $year < 10 ) { $year = "0" . $year; }
-    if ( $month < 10 ) { $month = "0" . $month; }
-    if ( $day < 10 ) { $day = "0" . $day; }
-
-    $datestring = $year . $month . $day;
-
-    return $datestring;
 }
 
 ###############################################################
@@ -302,14 +266,6 @@ sub print_message
     chomp $message;
     my $force = shift || 0;
     print "$message\n" if ( $force || ! $installer::globals::quiet );
-    return;
-}
-
-sub print_message_without_newline
-{
-    my $message = shift;
-    chomp $message;
-    print "$message" if ( ! $installer::globals::quiet );
     return;
 }
 
