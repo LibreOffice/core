@@ -100,10 +100,10 @@ typedef const   char            *LPCSTR;
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 {
+#ifndef OS2
     CHAR    buffer[1024];
     va_list args;
 
-#ifndef OS2
     va_start( args, pFormat );
     StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
     OutputDebugStringA( buffer );
