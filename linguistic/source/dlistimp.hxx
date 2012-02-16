@@ -89,7 +89,7 @@ class DicList :
     void                _CreateDicList();
     DictionaryVec_t &   GetOrCreateDicList()
                         {
-                            if (!bInCreation && aDicList.size() == 0)
+                            if ( !bInCreation && aDicList.empty() )
                                 _CreateDicList();
                             return aDicList;
                         }

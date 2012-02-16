@@ -608,7 +608,7 @@ void SAL_CALL
             pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
         //! avoid creation of dictionaries if not already done
-        if (aDicList.size() > 0)
+        if ( !aDicList.empty() )
         {
             DictionaryVec_t& rDicList = GetOrCreateDicList();
             size_t nCount = rDicList.size();
@@ -720,7 +720,7 @@ void DicList::SaveDics()
 {
     // save dics only if they have already been used/created.
     //! don't create them just for the purpose of saving them !
-    if (aDicList.size() > 0)
+    if ( !aDicList.empty() )
     {
         // save (modified) dictionaries
         DictionaryVec_t& rDicList = GetOrCreateDicList();
