@@ -37,19 +37,16 @@ $(eval $(call gb_Library_add_api,log,\
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_noexception_objects,log,\
-	extensions/source/logging/log_module \
-	extensions/source/logging/logrecord \
-))
-
 $(eval $(call gb_Library_add_exception_objects,log,\
 	extensions/source/logging/consolehandler \
 	extensions/source/logging/csvformatter \
 	extensions/source/logging/filehandler \
 	extensions/source/logging/log_services \
+	extensions/source/logging/log_module \
 	extensions/source/logging/logger \
 	extensions/source/logging/loggerconfig \
 	extensions/source/logging/loghandler \
+	extensions/source/logging/logrecord \
 	extensions/source/logging/plaintextformatter \
 ))
 
