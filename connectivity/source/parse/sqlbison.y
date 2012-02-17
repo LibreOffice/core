@@ -1816,7 +1816,7 @@ unsigned_value_spec:
 general_value_spec:
 		parameter
 	| SQL_TOKEN_USER
-	/*	  | SQL_TOKEN_NULL*/
+	| SQL_TOKEN_NULL
 	| SQL_TOKEN_FALSE
 	| SQL_TOKEN_TRUE
 	| SQL_TOKEN_VALUE
@@ -4032,7 +4032,6 @@ else_clause:
 	;
 result:
 		result_expression
-	|	SQL_TOKEN_NULL
 	;
 result_expression:
 	value_exp
