@@ -27,15 +27,18 @@
 
 $(eval $(call gb_Module_Module,jvmfwk))
 
+$(eval $(call gb_Module_add_targets,jvmfwk,\
+    Library_jvmfwk \
+    Package_inc \
+    Package_rcfiles \
+))
+
 ifneq ($(SOLAR_JAVA),)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
-    Library_jvmfwk \
     Library_sunjavaplugin \
-    Package_inc \
     Package_javavendors \
     Package_jreproperties \
-    Package_rcfiles \
 ))
 
 ifneq ($(OS),MACOSX)
