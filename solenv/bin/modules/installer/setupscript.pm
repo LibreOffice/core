@@ -27,6 +27,8 @@
 
 package installer::setupscript;
 
+use base 'Exporter';
+
 use installer::existence;
 use installer::exiter;
 use installer::globals;
@@ -34,6 +36,20 @@ use installer::logger qw(globallog);
 use installer::remover;
 use installer::scriptitems;
 use installer::ziplist;
+
+our @EXPORT_OK = qw(
+    add_forced_properties
+    add_installationobject_to_variables
+    add_lowercase_productname_setupscriptvariable
+    add_predefined_folder
+    get_all_items_from_script
+    get_all_scriptvariables_from_installation_object
+    prepare_non_advertised_files
+    replace_all_setupscriptvariables_in_script
+    replace_preset_properties
+    resolve_lowercase_productname_setupscriptvariable
+    set_setupscript_name
+);
 
 #######################################################
 # Set setup script name, if not defined as parameter
