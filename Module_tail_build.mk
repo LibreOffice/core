@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     bean \
     canvas \
     chart2 \
+    configmgr \
     cppcanvas \
     cui \
     dbaccess \
