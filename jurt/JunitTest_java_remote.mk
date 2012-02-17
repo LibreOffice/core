@@ -28,14 +28,22 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_java_remote))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_java_remote,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
+	$(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
+
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_java_remote,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_java_remote,\
     jurt/test/com/sun/star/lib/uno/bridges/java_remote/BridgedObject_Test \
     jurt/test/com/sun/star/lib/uno/bridges/java_remote/ProxyFactory_Test \
     jurt/test/com/sun/star/lib/uno/bridges/java_remote/java_remote_bridge_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_java_remote,\
+    com.sun.star.lib.uno.bridges.java_remote.BridgedObject_Test \
+    com.sun.star.lib.uno.bridges.java_remote.ProxyFactory_Test \
+    com.sun.star.lib.uno.bridges.java_remote.java_remote_bridge_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

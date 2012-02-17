@@ -28,24 +28,10 @@
 package com.sun.star.uno;
 
 import com.sun.star.lang.XTypeProvider;
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class AnyConverter_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "test_toBoolean", "test_toChar", "test_toByte", "test_toShort",
-            "test_toInt", "test_toLong", "test_toFloat", "test_toDouble",
-            "test_toObject", "test_toString", "test_toType", "test_toArray",
-            "test_isBoolean", "test_isChar", "test_isByte", "test_isShort",
-            "test_isInt", "test_isLong", "test_isFloat", "test_isDouble",
-            "test_isObject", "test_isString", "test_isType", "test_isArray",
-            "test_isVoid" };
-    }
-
+public final class AnyConverter_Test {
     Any anyBool; //
     Any anyChar; //
     Any anyByte; //
@@ -89,498 +75,498 @@ public final class AnyConverter_Test extends ComplexTestCase {
         anyXTypeProvider= new Any(new Type(XTypeProvider.class), aObj);
     }
 
-    public void test_toBoolean()
+    @Test public void test_toBoolean()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         boolean b= AnyConverter.toBoolean(aBool);
-        assure("", b == aBool.booleanValue());
+        assertEquals(b, aBool.booleanValue());
         b= AnyConverter.toBoolean(anyBool);
-        assure("", b == ((Boolean)anyBool.getObject()).booleanValue());
+        assertEquals(b, ((Boolean)anyBool.getObject()).booleanValue());
 
         // must fail
-        try { AnyConverter.toBoolean(aChar); failed("");
+        try { AnyConverter.toBoolean(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyChar); failed("");
+        try { AnyConverter.toBoolean(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aByte); failed("");
+        try { AnyConverter.toBoolean(aByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyByte); failed("");
+        try { AnyConverter.toBoolean(anyByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aShort); failed("");
+        try { AnyConverter.toBoolean(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyShort); failed("");
+        try { AnyConverter.toBoolean(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aInt); failed("");
+        try { AnyConverter.toBoolean(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyInt); failed("");
+        try { AnyConverter.toBoolean(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aLong); failed("");
+        try { AnyConverter.toBoolean(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyLong); failed("");
+        try { AnyConverter.toBoolean(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aFloat); failed("");
+        try { AnyConverter.toBoolean(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyFloat); failed("");
+        try { AnyConverter.toBoolean(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aDouble); failed("");
+        try { AnyConverter.toBoolean(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyDouble); failed("");
+        try { AnyConverter.toBoolean(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aObj); failed("");
+        try { AnyConverter.toBoolean(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aStr); failed("");
+        try { AnyConverter.toBoolean(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyStr); failed("");
+        try { AnyConverter.toBoolean(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(aType); failed("");
+        try { AnyConverter.toBoolean(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyType); failed("");
+        try { AnyConverter.toBoolean(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyVoid); failed("");
+        try { AnyConverter.toBoolean(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(arByte); failed("");
+        try { AnyConverter.toBoolean(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyArByte); failed("");
+        try { AnyConverter.toBoolean(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toChar()
+    @Test public void test_toChar()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         char b= AnyConverter.toChar(aChar);
-        assure("", b == aChar.charValue());
+        assertEquals(b, aChar.charValue());
         b= AnyConverter.toChar(anyChar);
-        assure("", b == ((Character)anyChar.getObject()).charValue());
+        assertEquals(b, ((Character)anyChar.getObject()).charValue());
 
         // must fail
-        try { AnyConverter.toChar(aBool); failed("");
+        try { AnyConverter.toChar(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyBool); failed("");
+        try { AnyConverter.toChar(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aByte); failed("");
+        try { AnyConverter.toChar(aByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyByte); failed("");
+        try { AnyConverter.toChar(anyByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aShort); failed("");
+        try { AnyConverter.toChar(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyShort); failed("");
+        try { AnyConverter.toChar(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aInt); failed("");
+        try { AnyConverter.toChar(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyInt); failed("");
+        try { AnyConverter.toChar(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aLong); failed("");
+        try { AnyConverter.toChar(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyLong); failed("");
+        try { AnyConverter.toChar(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aFloat); failed("");
+        try { AnyConverter.toChar(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyFloat); failed("");
+        try { AnyConverter.toChar(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aDouble); failed("");
+        try { AnyConverter.toChar(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyDouble); failed("");
+        try { AnyConverter.toChar(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aObj); failed("");
+        try { AnyConverter.toChar(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aStr); failed("");
+        try { AnyConverter.toChar(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyStr); failed("");
+        try { AnyConverter.toChar(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aType); failed("");
+        try { AnyConverter.toChar(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyType); failed("");
+        try { AnyConverter.toChar(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyVoid); failed("");
+        try { AnyConverter.toChar(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(arByte); failed("");
+        try { AnyConverter.toChar(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyArByte); failed("");
+        try { AnyConverter.toChar(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toByte()
+    @Test public void test_toByte()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         byte val= AnyConverter.toByte(aByte);
-        assure("", val == aByte.byteValue());
+        assertEquals(val, aByte.byteValue());
         val= AnyConverter.toByte(anyByte);
-        assure("", val == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(val, ((Byte)anyByte.getObject()).byteValue());
 
         // must fail
-        try { AnyConverter.toByte(aChar); failed("");
+        try { AnyConverter.toByte(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyChar); failed("");
+        try { AnyConverter.toByte(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aShort); failed("");
+        try { AnyConverter.toByte(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyShort); failed("");
+        try { AnyConverter.toByte(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aInt); failed("");
+        try { AnyConverter.toByte(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyInt); failed("");
+        try { AnyConverter.toByte(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aLong); failed("");
+        try { AnyConverter.toByte(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyLong); failed("");
+        try { AnyConverter.toByte(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aFloat); failed("");
+        try { AnyConverter.toByte(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyFloat); failed("");
+        try { AnyConverter.toByte(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aDouble); failed("");
+        try { AnyConverter.toByte(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyDouble); failed("");
+        try { AnyConverter.toByte(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aObj); failed("");
+        try { AnyConverter.toByte(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aStr); failed("");
+        try { AnyConverter.toByte(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyStr); failed("");
+        try { AnyConverter.toByte(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(aType); failed("");
+        try { AnyConverter.toByte(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyType); failed("");
+        try { AnyConverter.toByte(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyVoid); failed("");
+        try { AnyConverter.toByte(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(arByte); failed("");
+        try { AnyConverter.toByte(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyArByte); failed("");
+        try { AnyConverter.toByte(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toShort()
+    @Test public void test_toShort()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         short sh= AnyConverter.toShort(aByte);
-        assure("", sh == aByte.byteValue());
+        assertEquals(sh, aByte.byteValue());
         sh= AnyConverter.toShort(aShort);
-        assure("", sh == aShort.shortValue());
+        assertEquals(sh, aShort.shortValue());
         sh= AnyConverter.toShort(anyByte);
-        assure("", sh == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(sh, ((Byte)anyByte.getObject()).byteValue());
         sh= AnyConverter.toShort(anyShort);
-        assure("", sh == ((Short) anyShort.getObject()).shortValue());
+        assertEquals(sh, ((Short) anyShort.getObject()).shortValue());
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
-        assure("", 5 == AnyConverter.toUnsignedShort( a ));
+        assertEquals(5, AnyConverter.toUnsignedShort( a ));
 
         // must fail
-        try { AnyConverter.toShort(a); failed("");
+        try { AnyConverter.toShort(a); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toUnsignedShort(anyShort); failed("");
+        try { AnyConverter.toUnsignedShort(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(aBool); failed("");
+        try { AnyConverter.toChar(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyBool); failed("");
+        try { AnyConverter.toChar(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aChar); failed("");
+        try { AnyConverter.toShort(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyChar); failed("");
+        try { AnyConverter.toShort(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aBool); failed("");
+        try { AnyConverter.toShort(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyBool); failed("");
+        try { AnyConverter.toShort(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aInt); failed("");
+        try { AnyConverter.toShort(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyInt); failed("");
+        try { AnyConverter.toShort(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aLong); failed("");
+        try { AnyConverter.toShort(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyLong); failed("");
+        try { AnyConverter.toShort(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aFloat); failed("");
+        try { AnyConverter.toShort(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyFloat); failed("");
+        try { AnyConverter.toShort(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aDouble); failed("");
+        try { AnyConverter.toShort(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyDouble); failed("");
+        try { AnyConverter.toShort(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aObj); failed("");
+        try { AnyConverter.toShort(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aStr); failed("");
+        try { AnyConverter.toShort(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyStr); failed("");
+        try { AnyConverter.toShort(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(aType); failed("");
+        try { AnyConverter.toShort(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyType); failed("");
+        try { AnyConverter.toShort(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyVoid); failed("");
+        try { AnyConverter.toShort(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(arByte); failed("");
+        try { AnyConverter.toShort(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyArByte); failed("");
+        try { AnyConverter.toShort(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toInt()
+    @Test public void test_toInt()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         int val= AnyConverter.toInt(aByte);
-        assure("", val == aByte.byteValue());
+        assertEquals(val, aByte.byteValue());
         val= AnyConverter.toInt(aShort);
-        assure("", val == aShort.shortValue());
+        assertEquals(val, aShort.shortValue());
         val= AnyConverter.toInt(aInt);
-        assure("", val == aInt.intValue());
+        assertEquals(val, aInt.intValue());
         val= AnyConverter.toInt(anyByte);
-        assure("", val == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(val, ((Byte)anyByte.getObject()).byteValue());
         val= AnyConverter.toInt(anyShort);
-        assure("", val == ((Short) anyShort.getObject()).shortValue());
+        assertEquals(val, ((Short) anyShort.getObject()).shortValue());
         val= AnyConverter.toInt(anyInt);
-        assure("", val == ((Integer) anyInt.getObject()).intValue());
+        assertEquals(val, ((Integer) anyInt.getObject()).intValue());
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
-        assure("", 5 == AnyConverter.toInt(a));
-        assure("", 5 == AnyConverter.toUnsignedInt(a));
+        assertEquals(5, AnyConverter.toInt(a));
+        assertEquals(5, AnyConverter.toUnsignedInt(a));
         a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
-        assure("", 5 == AnyConverter.toUnsignedInt(a));
+        assertEquals(5, AnyConverter.toUnsignedInt(a));
 
         // must fail
-        try { AnyConverter.toUnsignedInt(anyInt); failed("");
+        try { AnyConverter.toUnsignedInt(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(a); failed("");
+        try { AnyConverter.toInt(a); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toUnsignedInt(anyShort); failed("");
+        try { AnyConverter.toUnsignedInt(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aChar); failed("");
+        try { AnyConverter.toInt(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyChar); failed("");
+        try { AnyConverter.toInt(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aBool); failed("");
+        try { AnyConverter.toInt(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyBool); failed("");
+        try { AnyConverter.toInt(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aLong); failed("");
+        try { AnyConverter.toInt(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyLong); failed("");
+        try { AnyConverter.toInt(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aFloat); failed("");
+        try { AnyConverter.toInt(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyFloat); failed("");
+        try { AnyConverter.toInt(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aDouble); failed("");
+        try { AnyConverter.toInt(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyDouble); failed("");
+        try { AnyConverter.toInt(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aObj); failed("");
+        try { AnyConverter.toInt(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aStr); failed("");
+        try { AnyConverter.toInt(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyStr); failed("");
+        try { AnyConverter.toInt(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(aType); failed("");
+        try { AnyConverter.toInt(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyType); failed("");
+        try { AnyConverter.toInt(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyVoid); failed("");
+        try { AnyConverter.toInt(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(arByte); failed("");
+        try { AnyConverter.toInt(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyArByte); failed("");
+        try { AnyConverter.toInt(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toLong()
+    @Test public void test_toLong()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         long val= AnyConverter.toLong(aByte);
-        assure("", val == aByte.byteValue());
+        assertEquals(val, aByte.byteValue());
         val= AnyConverter.toLong(aShort);
-        assure("", val == aShort.shortValue());
+        assertEquals(val, aShort.shortValue());
         val= AnyConverter.toLong(aInt);
-        assure("", val == aInt.intValue());
+        assertEquals(val, aInt.intValue());
         val= AnyConverter.toLong(aLong);
-        assure("", val == aLong.longValue());
+        assertEquals(val, aLong.longValue());
         val= AnyConverter.toLong(anyByte);
-        assure("", val == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(val, ((Byte)anyByte.getObject()).byteValue());
         val= AnyConverter.toLong(anyShort);
-        assure("", val == ((Short) anyShort.getObject()).shortValue());
+        assertEquals(val, ((Short) anyShort.getObject()).shortValue());
         val= AnyConverter.toLong(anyInt);
-        assure("", val == ((Integer) anyInt.getObject()).intValue());
+        assertEquals(val, ((Integer) anyInt.getObject()).intValue());
         val= AnyConverter.toLong(anyLong);
-        assure("", val == ((Long) anyLong.getObject()).longValue());
+        assertEquals(val, ((Long) anyLong.getObject()).longValue());
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
-        assure("", 5 == AnyConverter.toLong(a));
-        assure("", 5 == AnyConverter.toUnsignedLong(a));
+        assertEquals(5, AnyConverter.toLong(a));
+        assertEquals(5, AnyConverter.toUnsignedLong(a));
         a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
-        assure("", 5 == AnyConverter.toUnsignedLong(a));
-        assure("", 5 == AnyConverter.toLong(a));
+        assertEquals(5, AnyConverter.toUnsignedLong(a));
+        assertEquals(5, AnyConverter.toLong(a));
         a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
-        assure("", 5 == AnyConverter.toUnsignedLong(a));
+        assertEquals(5, AnyConverter.toUnsignedLong(a));
 
         // must fail
-        try { AnyConverter.toUnsignedLong(anyShort); failed("");
+        try { AnyConverter.toUnsignedLong(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toUnsignedLong(anyInt); failed("");
+        try { AnyConverter.toUnsignedLong(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(a); failed("");
+        try { AnyConverter.toLong(a); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toUnsignedLong(anyLong); failed("");
+        try { AnyConverter.toUnsignedLong(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aChar); failed("");
+        try { AnyConverter.toLong(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyChar); failed("");
+        try { AnyConverter.toLong(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aBool); failed("");
+        try { AnyConverter.toLong(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyBool); failed("");
+        try { AnyConverter.toLong(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aFloat); failed("");
+        try { AnyConverter.toLong(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyFloat); failed("");
+        try { AnyConverter.toLong(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aDouble); failed("");
+        try { AnyConverter.toLong(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyDouble); failed("");
+        try { AnyConverter.toLong(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aObj); failed("");
+        try { AnyConverter.toLong(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aStr); failed("");
+        try { AnyConverter.toLong(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyStr); failed("");
+        try { AnyConverter.toLong(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(aType); failed("");
+        try { AnyConverter.toLong(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyType); failed("");
+        try { AnyConverter.toLong(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyVoid); failed("");
+        try { AnyConverter.toLong(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(arByte); failed("");
+        try { AnyConverter.toLong(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyArByte); failed("");
+        try { AnyConverter.toLong(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toFloat()
+    @Test public void test_toFloat()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         float val= AnyConverter.toFloat(aByte);
-        assure("", val == aByte.byteValue()); // 111 = 111.0
+        assertEquals(val, aByte.byteValue(), 0); // 111 = 111.0
         val= AnyConverter.toFloat(anyByte);
-        assure("", val == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(val, ((Byte)anyByte.getObject()).byteValue(), 0);
         val= AnyConverter.toFloat(aShort);
-        assure("", val == aShort.shortValue()); //11111 = 11111.0
+        assertEquals(val, aShort.shortValue(), 0); //11111 = 11111.0
         val= AnyConverter.toFloat(anyShort);
-        assure("", val == ((Short) anyShort.getObject()).shortValue());
+        assertEquals(val, ((Short) anyShort.getObject()).shortValue(), 0);
         val= AnyConverter.toFloat(aFloat);
-        assure("", val == aFloat.floatValue());
+        assertEquals(val, aFloat.floatValue(), 0);
         val= AnyConverter.toFloat(anyFloat);
-        assure("", val == ((Float) anyFloat.getObject()).floatValue());
+        assertEquals(val, ((Float) anyFloat.getObject()).floatValue(), 0);
 
         // must fail
-        try { AnyConverter.toFloat(aChar); failed("");
+        try { AnyConverter.toFloat(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyChar); failed("");
+        try { AnyConverter.toFloat(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aBool); failed("");
+        try { AnyConverter.toFloat(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyBool); failed("");
+        try { AnyConverter.toFloat(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aInt); failed("");
+        try { AnyConverter.toFloat(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyInt); failed("");
+        try { AnyConverter.toFloat(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aLong); failed("");
+        try { AnyConverter.toFloat(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyLong); failed("");
+        try { AnyConverter.toFloat(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aDouble); failed("");
+        try { AnyConverter.toFloat(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyDouble); failed("");
+        try { AnyConverter.toFloat(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aObj); failed("");
+        try { AnyConverter.toFloat(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aStr); failed("");
+        try { AnyConverter.toFloat(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyStr); failed("");
+        try { AnyConverter.toFloat(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(aType); failed("");
+        try { AnyConverter.toFloat(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyType); failed("");
+        try { AnyConverter.toFloat(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyVoid); failed("");
+        try { AnyConverter.toFloat(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(arByte); failed("");
+        try { AnyConverter.toFloat(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyArByte); failed("");
+        try { AnyConverter.toFloat(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toDouble()
+    @Test public void test_toDouble()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         double val= AnyConverter.toDouble(aByte);
-        assure("", val == aByte.byteValue()); // 111 = 111.0
+        assertEquals(val, aByte.byteValue(), 0); // 111 = 111.0
         val= AnyConverter.toDouble(anyByte);
-        assure("", val == ((Byte)anyByte.getObject()).byteValue());
+        assertEquals(val, ((Byte)anyByte.getObject()).byteValue(), 0);
         val= AnyConverter.toDouble(aShort);
-        assure("", val == aShort.shortValue()); //11111 = 11111.0
+        assertEquals(val, aShort.shortValue(), 0); //11111 = 11111.0
         val= AnyConverter.toDouble(anyShort);
-        assure("", val == ((Short) anyShort.getObject()).shortValue());
+        assertEquals(val, ((Short) anyShort.getObject()).shortValue(), 0);
         val= AnyConverter.toDouble(aInt);
-        assure("", val == aInt.intValue());
+        assertEquals(val, aInt.intValue(), 0);
         val= AnyConverter.toDouble(anyInt);
-        assure("", val == ((Integer) anyInt.getObject()).intValue());
+        assertEquals(val, ((Integer) anyInt.getObject()).intValue(), 0);
         val= AnyConverter.toDouble(aFloat);
-        assure("", val == aFloat.floatValue());
+        assertEquals(val, aFloat.floatValue(), 0);
         val= AnyConverter.toDouble(anyFloat);
         float float1= ((Float) anyFloat.getObject()).floatValue();
-        assure("", val <= (float1 + 0.1) || val >= (float1 - 0.1));
+        assertTrue(val <= (float1 + 0.1) || val >= (float1 - 0.1));
         val= AnyConverter.toDouble(aDouble);
-        assure("", val == aDouble.doubleValue());
+        assertEquals(val, aDouble.doubleValue(), 0);
         val= AnyConverter.toDouble(anyDouble);
-        assure("", val == ((Double) anyDouble.getObject()).doubleValue());
+        assertEquals(val, ((Double) anyDouble.getObject()).doubleValue(), 0);
 
         // must fail
-        try { AnyConverter.toDouble(aChar); failed("");
+        try { AnyConverter.toDouble(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyChar); failed("");
+        try { AnyConverter.toDouble(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(aBool); failed("");
+        try { AnyConverter.toDouble(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyBool); failed("");
+        try { AnyConverter.toDouble(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(aLong); failed("");
+        try { AnyConverter.toDouble(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyLong); failed("");
+        try { AnyConverter.toDouble(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(aObj); failed("");
+        try { AnyConverter.toDouble(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(aStr); failed("");
+        try { AnyConverter.toDouble(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyStr); failed("");
+        try { AnyConverter.toDouble(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(aType); failed("");
+        try { AnyConverter.toDouble(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyType); failed("");
+        try { AnyConverter.toDouble(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyVoid); failed("");
+        try { AnyConverter.toDouble(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(arByte); failed("");
+        try { AnyConverter.toDouble(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyArByte); failed("");
+        try { AnyConverter.toDouble(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toObject()
+    @Test public void test_toObject()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         Type _type= new Type(XTypeProvider.class);
         Object val= AnyConverter.toObject(_type, aObj);
-        assure("", UnoRuntime.areSame(val, aObj));
+        assertTrue(UnoRuntime.areSame(val, aObj));
         val= AnyConverter.toObject(
             _type, new Any( new Type(XTypeProvider.class), null));
-        assure("", val == null);
+        assertNull(val);
 
         // structs, exceptions
         com.sun.star.lang.IllegalArgumentException exc =
@@ -588,303 +574,306 @@ public final class AnyConverter_Test extends ComplexTestCase {
         Any any_exc = new Any(
             new Type("com.sun.star.lang.IllegalArgumentException",
                      TypeClass.EXCEPTION), exc);
-        assure("",
-               AnyConverter.toObject(
-                   new Type(com.sun.star.lang.IllegalArgumentException.class),
-                   any_exc).equals(exc));
-        assure("",
-               AnyConverter.toObject(
-                   new Type(com.sun.star.uno.Exception.class), any_exc).equals(
-                       exc));
+        assertEquals(
+            exc,
+            AnyConverter.toObject(
+                new Type(com.sun.star.lang.IllegalArgumentException.class),
+                any_exc));
+        assertEquals(
+            exc,
+            AnyConverter.toObject(
+                new Type(com.sun.star.uno.Exception.class), any_exc));
         try {
             AnyConverter.toObject(
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc);
-            failed("");
+            fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {};
         any_exc = new Any(com.sun.star.lang.IllegalArgumentException.class,
                           exc);
-        assure("",
-               AnyConverter.toObject(
-                   new Type(com.sun.star.lang.IllegalArgumentException.class),
-                   any_exc).equals(exc));
-        assure("",
-               AnyConverter.toObject(new Type(com.sun.star.uno.Exception.class),
-                                     any_exc).equals(exc));
+        assertEquals(
+            exc,
+            AnyConverter.toObject(
+                new Type(com.sun.star.lang.IllegalArgumentException.class),
+                any_exc));
+        assertEquals(
+            exc,
+            AnyConverter.toObject(
+                new Type(com.sun.star.uno.Exception.class), any_exc));
         try {
             AnyConverter.toObject(
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc);
-            failed("");
+            fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {};
 
         // must fail
-        try { AnyConverter.toObject(_type, aType); failed("");
+        try { AnyConverter.toObject(_type, aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toObject(_type, anyType); failed("");
+        try { AnyConverter.toObject(_type, anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toObject(_type, anyVoid); failed("");
+        try { AnyConverter.toObject(_type, anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toObject(_type, new Object()); failed("");
+        try { AnyConverter.toObject(_type, new Object()); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toString()
+    @Test public void test_toString()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         String val= AnyConverter.toString(aStr);
-        assure("", aStr.equals(val));
+        assertEquals(val, aStr);
         val= AnyConverter.toString(anyStr);
-        assure("", ((String)anyStr.getObject()).equals(val));
+        assertEquals(val, ((String)anyStr.getObject()));
 
         // must fail
-        try { AnyConverter.toString(aBool); failed("");
+        try { AnyConverter.toString(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyBool); failed("");
+        try { AnyConverter.toString(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aChar); failed("");
+        try { AnyConverter.toString(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyChar); failed("");
+        try { AnyConverter.toString(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aByte); failed("");
+        try { AnyConverter.toString(aByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyByte); failed("");
+        try { AnyConverter.toString(anyByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aShort); failed("");
+        try { AnyConverter.toString(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyShort); failed("");
+        try { AnyConverter.toString(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aInt); failed("");
+        try { AnyConverter.toString(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyInt); failed("");
+        try { AnyConverter.toString(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aLong); failed("");
+        try { AnyConverter.toString(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyLong); failed("");
+        try { AnyConverter.toString(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aFloat); failed("");
+        try { AnyConverter.toString(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyFloat); failed("");
+        try { AnyConverter.toString(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aDouble); failed("");
+        try { AnyConverter.toString(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyDouble); failed("");
+        try { AnyConverter.toString(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aObj); failed("");
+        try { AnyConverter.toString(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(aType); failed("");
+        try { AnyConverter.toString(aType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyType); failed("");
+        try { AnyConverter.toString(anyType); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyVoid); failed("");
+        try { AnyConverter.toString(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(arByte); failed("");
+        try { AnyConverter.toString(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyArByte); failed("");
+        try { AnyConverter.toString(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toType()
+    @Test public void test_toType()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         Type val= AnyConverter.toType(aType);
-        assure("", val == aType);
+        assertSame(val, aType);
         val= AnyConverter.toType(anyType);
-        assure("", val == anyType.getObject());
+        assertSame(val, anyType.getObject());
 
         // must fail
-        try { AnyConverter.toType(aBool); failed("");
+        try { AnyConverter.toType(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyBool); failed("");
+        try { AnyConverter.toType(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aChar); failed("");
+        try { AnyConverter.toType(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyChar); failed("");
+        try { AnyConverter.toType(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aByte); failed("");
+        try { AnyConverter.toType(aByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyByte); failed("");
+        try { AnyConverter.toType(anyByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aShort); failed("");
+        try { AnyConverter.toType(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyShort); failed("");
+        try { AnyConverter.toType(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aInt); failed("");
+        try { AnyConverter.toType(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyInt); failed("");
+        try { AnyConverter.toType(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aLong); failed("");
+        try { AnyConverter.toType(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyLong); failed("");
+        try { AnyConverter.toType(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aFloat); failed("");
+        try { AnyConverter.toType(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyFloat); failed("");
+        try { AnyConverter.toType(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aDouble); failed("");
+        try { AnyConverter.toType(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyDouble); failed("");
+        try { AnyConverter.toType(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aObj); failed("");
+        try { AnyConverter.toType(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aStr); failed("");
+        try { AnyConverter.toType(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyStr); failed("");
+        try { AnyConverter.toType(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyVoid); failed("");
+        try { AnyConverter.toType(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(arByte); failed("");
+        try { AnyConverter.toType(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyArByte); failed("");
+        try { AnyConverter.toType(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_toArray()
+    @Test public void test_toArray()
         throws com.sun.star.lang.IllegalArgumentException
     {
         // must work
         Object val= AnyConverter.toArray(arByte);
-        assure("", val == arByte);
+        assertSame(val, arByte);
         val= AnyConverter.toArray(anyArByte);
-        assure("", val == anyArByte.getObject());
+        assertSame(val, anyArByte.getObject());
 
         // must fail
-        try { AnyConverter.toType(aBool); failed("");
+        try { AnyConverter.toType(aBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyBool); failed("");
+        try { AnyConverter.toType(anyBool); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aChar); failed("");
+        try { AnyConverter.toType(aChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyChar); failed("");
+        try { AnyConverter.toType(anyChar); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aByte); failed("");
+        try { AnyConverter.toType(aByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyByte); failed("");
+        try { AnyConverter.toType(anyByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aShort); failed("");
+        try { AnyConverter.toType(aShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyShort); failed("");
+        try { AnyConverter.toType(anyShort); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aInt); failed("");
+        try { AnyConverter.toType(aInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyInt); failed("");
+        try { AnyConverter.toType(anyInt); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aLong); failed("");
+        try { AnyConverter.toType(aLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyLong); failed("");
+        try { AnyConverter.toType(anyLong); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aFloat); failed("");
+        try { AnyConverter.toType(aFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyFloat); failed("");
+        try { AnyConverter.toType(anyFloat); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aDouble); failed("");
+        try { AnyConverter.toType(aDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyDouble); failed("");
+        try { AnyConverter.toType(anyDouble); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aObj); failed("");
+        try { AnyConverter.toType(aObj); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(aStr); failed("");
+        try { AnyConverter.toType(aStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyStr); failed("");
+        try { AnyConverter.toType(anyStr); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyVoid); failed("");
+        try { AnyConverter.toType(anyVoid); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(arByte); failed("");
+        try { AnyConverter.toType(arByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyArByte); failed("");
+        try { AnyConverter.toType(anyArByte); fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
     }
 
-    public void test_isBoolean() {
-        assure("", AnyConverter.isBoolean(aBool));
-        assure("", AnyConverter.isBoolean(anyBool));
-        assure("", !AnyConverter.isBoolean(aChar));
+    @Test public void test_isBoolean() {
+        assertTrue(AnyConverter.isBoolean(aBool));
+        assertTrue(AnyConverter.isBoolean(anyBool));
+        assertFalse(AnyConverter.isBoolean(aChar));
     }
 
-    public void test_isChar() {
-        assure("", AnyConverter.isChar(aChar));
-        assure("", AnyConverter.isChar(anyChar));
-        assure("", !AnyConverter.isChar(aBool));
+    @Test public void test_isChar() {
+        assertTrue(AnyConverter.isChar(aChar));
+        assertTrue(AnyConverter.isChar(anyChar));
+        assertFalse(AnyConverter.isChar(aBool));
     }
 
-    public void test_isByte() {
-        assure("", AnyConverter.isByte(aByte));
-        assure("", AnyConverter.isByte(anyByte));
-        assure("", !AnyConverter.isByte(aBool));
+    @Test public void test_isByte() {
+        assertTrue(AnyConverter.isByte(aByte));
+        assertTrue(AnyConverter.isByte(anyByte));
+        assertFalse(AnyConverter.isByte(aBool));
     }
 
-    public void test_isShort() {
-        assure("", AnyConverter.isShort(aShort));
-        assure("", AnyConverter.isShort(anyShort));
-        assure("", Type.SHORT.equals(AnyConverter.getType(anyShort)));
+    @Test public void test_isShort() {
+        assertTrue(AnyConverter.isShort(aShort));
+        assertTrue(AnyConverter.isShort(anyShort));
+        assertEquals(Type.SHORT, AnyConverter.getType(anyShort));
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
-        assure("", Type.UNSIGNED_SHORT.equals(AnyConverter.getType(a)));
-        assure("", !AnyConverter.isShort(a));
-        assure("", !Type.SHORT.equals(AnyConverter.getType(a)));
-        assure("", !AnyConverter.isShort(aBool));
+        assertEquals(Type.UNSIGNED_SHORT, AnyConverter.getType(a));
+        assertFalse(AnyConverter.isShort(a));
+        assertFalse(Type.SHORT.equals(AnyConverter.getType(a)));
+        assertFalse(AnyConverter.isShort(aBool));
     }
 
-    public void test_isInt() {
-        assure("", AnyConverter.isInt(aInt));
-        assure("", AnyConverter.isInt(anyInt));
-        assure("", Type.LONG.equals(AnyConverter.getType(anyInt)));
+    @Test public void test_isInt() {
+        assertTrue(AnyConverter.isInt(aInt));
+        assertTrue(AnyConverter.isInt(anyInt));
+        assertEquals(Type.LONG, AnyConverter.getType(anyInt));
         Any a = new Any(Type.UNSIGNED_LONG, new Integer(5));
-        assure("", Type.UNSIGNED_LONG.equals(AnyConverter.getType(a)));
-        assure("", !AnyConverter.isInt(a));
-        assure("", !Type.LONG.equals(AnyConverter.getType(a)));
-        assure("", !AnyConverter.isInt(aBool));
+        assertEquals(Type.UNSIGNED_LONG, AnyConverter.getType(a));
+        assertFalse(AnyConverter.isInt(a));
+        assertFalse(Type.LONG.equals(AnyConverter.getType(a)));
+        assertFalse(AnyConverter.isInt(aBool));
     }
 
-    public void test_isLong() {
-        assure("", AnyConverter.isLong(aLong));
-        assure("", AnyConverter.isLong(anyLong));
-        assure("", Type.HYPER.equals(AnyConverter.getType(anyLong)));
+    @Test public void test_isLong() {
+        assertTrue(AnyConverter.isLong(aLong));
+        assertTrue(AnyConverter.isLong(anyLong));
+        assertEquals(Type.HYPER, AnyConverter.getType(anyLong));
         Any a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
-        assure("", Type.UNSIGNED_HYPER.equals( AnyConverter.getType(a) ));
-        assure("", !AnyConverter.isLong(a));
-        assure("", !Type.HYPER.equals( AnyConverter.getType(a) ));
-        assure("", !AnyConverter.isLong(aBool));
+        assertEquals(Type.UNSIGNED_HYPER, AnyConverter.getType(a));
+        assertFalse(AnyConverter.isLong(a));
+        assertFalse(Type.HYPER.equals( AnyConverter.getType(a) ));
+        assertFalse(AnyConverter.isLong(aBool));
     }
 
-    public void test_isFloat() {
-        assure("", AnyConverter.isFloat(aFloat));
-        assure("", AnyConverter.isFloat(anyFloat));
-        assure("", !AnyConverter.isFloat(aDouble));
+    @Test public void test_isFloat() {
+        assertTrue(AnyConverter.isFloat(aFloat));
+        assertTrue(AnyConverter.isFloat(anyFloat));
+        assertFalse(AnyConverter.isFloat(aDouble));
     }
 
-    public void test_isDouble() {
-        assure("", AnyConverter.isDouble(aDouble));
-        assure("", AnyConverter.isDouble(anyDouble));
-        assure("", !AnyConverter.isDouble(aFloat));
+    @Test public void test_isDouble() {
+        assertTrue(AnyConverter.isDouble(aDouble));
+        assertTrue(AnyConverter.isDouble(anyDouble));
+        assertFalse(AnyConverter.isDouble(aFloat));
     }
 
-    public void test_isObject() {
-        assure("", AnyConverter.isObject(aObj));
-        assure("", AnyConverter.isObject( new Any( XInterface.class, null)));
-        assure("", !AnyConverter.isObject(new Object()));
+    @Test public void test_isObject() {
+        assertTrue(AnyConverter.isObject(aObj));
+        assertTrue(AnyConverter.isObject( new Any( XInterface.class, null)));
+        assertFalse(AnyConverter.isObject(new Object()));
     }
 
-    public void test_isString() {
-        assure("", AnyConverter.isString(aStr));
-        assure("", AnyConverter.isString(anyStr));
-        assure("", !AnyConverter.isString(new Object()));
+    @Test public void test_isString() {
+        assertTrue(AnyConverter.isString(aStr));
+        assertTrue(AnyConverter.isString(anyStr));
+        assertFalse(AnyConverter.isString(new Object()));
     }
 
-    public void test_isType() {
-        assure("", AnyConverter.isType(aType));
-        assure("", AnyConverter.isType(anyType));
-        assure("", !AnyConverter.isType(new Object()));
+    @Test public void test_isType() {
+        assertTrue(AnyConverter.isType(aType));
+        assertTrue(AnyConverter.isType(anyType));
+        assertFalse(AnyConverter.isType(new Object()));
     }
 
-    public void test_isArray() {
-        assure("", AnyConverter.isArray(arByte));
-        assure("", AnyConverter.isArray(anyArByte));
-        assure("", !AnyConverter.isArray(new Object()));
+    @Test public void test_isArray() {
+        assertTrue(AnyConverter.isArray(arByte));
+        assertTrue(AnyConverter.isArray(anyArByte));
+        assertFalse(AnyConverter.isArray(new Object()));
     }
 
-    public void test_isVoid() {
-        assure("", AnyConverter.isVoid(anyVoid));
-        assure("", !AnyConverter.isVoid(new Object()));
+    @Test public void test_isVoid() {
+        assertTrue(AnyConverter.isVoid(anyVoid));
+        assertFalse(AnyConverter.isVoid(new Object()));
     }
 }
 

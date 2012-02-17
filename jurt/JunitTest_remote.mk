@@ -28,9 +28,10 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_remote))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_remote,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
+
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_remote,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_remote,\
     jurt/test/com/sun/star/lib/uno/environments/remote/JavaThreadPoolFactory_Test \
@@ -40,6 +41,13 @@ $(eval $(call gb_JunitTest_add_sourcefiles,jurt_remote,\
     jurt/test/com/sun/star/lib/uno/environments/remote/TestWorkAt \
     jurt/test/com/sun/star/lib/uno/environments/remote/ThreadId_Test \
     jurt/test/com/sun/star/lib/uno/environments/remote/ThreadPool_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_remote,\
+    com.sun.star.lib.uno.environments.remote.JavaThreadPoolFactory_Test \
+    com.sun.star.lib.uno.environments.remote.JobQueue_Test \
+    com.sun.star.lib.uno.environments.remote.ThreadId_Test \
+    com.sun.star.lib.uno.environments.remote.ThreadPool_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

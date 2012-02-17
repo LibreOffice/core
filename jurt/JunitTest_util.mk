@@ -28,12 +28,17 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_util))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_util,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
 
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_util,jurt))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_util,\
     jurt/test/com/sun/star/lib/util/NativeLibraryLoader_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_util,\
+    com.sun.star.lib.util.NativeLibraryLoader_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

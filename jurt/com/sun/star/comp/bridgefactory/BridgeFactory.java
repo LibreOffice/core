@@ -135,8 +135,11 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
             xBridge = UnoRuntime.queryInterface(XBridge.class, iBridge);
         }
-        catch(Exception exception) {
-            throw new com.sun.star.lang.IllegalArgumentException(exception.getMessage());
+        catch (Exception e) {
+            com.sun.star.lang.IllegalArgumentException e2 =
+                new com.sun.star.lang.IllegalArgumentException(e.getMessage());
+            e2.initCause(e);
+            throw e2;
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".createBridge:" + sName + " " + sProtocol + " " + aConnection + " "  + anInstanceProvider + " " + xBridge);

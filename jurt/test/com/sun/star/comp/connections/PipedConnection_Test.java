@@ -27,18 +27,11 @@
 
 package com.sun.star.comp.connections;
 
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class PipedConnection_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public void test() throws Exception {
+public final class PipedConnection_Test {
+    @Test public void test() throws Exception {
         PipedConnection rightSide = new PipedConnection(new Object[0]);
         PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
 
@@ -57,7 +50,8 @@ public final class PipedConnection_Test extends ComplexTestCase {
 
         reader.join();
 
-        assure("", writer._state && reader._state);
+        assertTrue(writer._state);
+        assertTrue(reader._state);
     }
 
     static class Reader extends Thread {

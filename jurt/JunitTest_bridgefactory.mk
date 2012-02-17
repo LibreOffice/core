@@ -28,12 +28,17 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_bridgefactory))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_bridgefactory,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
 
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_bridgefactory,jurt))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_bridgefactory,\
     jurt/test/com/sun/star/comp/bridgefactory/BridgeFactory_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_bridgefactory,\
+    com.sun.star.comp.bridgefactory.BridgeFactory_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

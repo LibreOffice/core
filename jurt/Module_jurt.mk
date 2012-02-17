@@ -47,16 +47,21 @@ $(eval $(call gb_Module_add_targets,jurt,\
 ))
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
+$(eval $(call gb_Module_add_check_targets,jurt,\
     JunitTest_bridgefactory \
     JunitTest_connections \
     JunitTest_java \
-    JunitTest_java_remote \
     JunitTest_remote \
-    JunitTest_uno \
     JunitTest_urp \
     JunitTest_util \
     Package_test_urp \
+))
+
+#TOOD: The following depend on OOoRunnerLight.jar from qadevOOo (but only for
+# WaitUnreachable, which should be moved elsewhere):
+$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
+    JunitTest_java_remote \
+    JunitTest_uno \
 ))
 
 endif

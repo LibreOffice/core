@@ -32,10 +32,18 @@ $(eval $(call gb_JunitTest_add_jars,jurt_uno,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_uno,jurt))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_uno,\
     jurt/test/com/sun/star/uno/AnyConverter_Test \
     jurt/test/com/sun/star/uno/UnoRuntime_EnvironmentTest \
     jurt/test/com/sun/star/uno/WeakReference_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_uno,\
+    com.sun.star.uno.AnyConverter_Test \
+    com.sun.star.uno.UnoRuntime_EnvironmentTest \
+    com.sun.star.uno.WeakReference_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

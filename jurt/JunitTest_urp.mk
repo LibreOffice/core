@@ -32,10 +32,11 @@ $(eval $(call gb_JunitTest_add_package_dependencies,jurt_urp,\
 ))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_urp,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(WORKDIR)/CustomTarget/jurt/test/com/sun/star/lib/uno/protocols/urp \
 ))
+
+$(eval $(call gb_JunitTest_add_jar_classset,jurt_urp,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test \
@@ -43,6 +44,12 @@ $(eval $(call gb_JunitTest_add_sourcefiles,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp/Protocol_Test \
     jurt/test/com/sun/star/lib/uno/protocols/urp/TestBridge \
     jurt/test/com/sun/star/lib/uno/protocols/urp/TestObject \
+))
+
+$(eval $(call gb_JunitTest_add_classes,jurt_urp,\
+    com.sun.star.lib.uno.protocols.urp.Cache_Test \
+    com.sun.star.lib.uno.protocols.urp.Marshaling_Test \
+    com.sun.star.lib.uno.protocols.urp.Protocol_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
