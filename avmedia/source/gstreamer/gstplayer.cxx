@@ -230,22 +230,14 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         }
                     }
 
-#if OSL_DEBUG_LEVEL > 2
-                    sal_Bool aSuccess =
-#endif
-                                          maSizeCondition.set();
-                    DBG( "%p set condition result: %d", this, aSuccess );
+                    maSizeCondition.set();
                 }
             }
         }
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
-#if OSL_DEBUG_LEVEL > 2
-            sal_Bool aSuccess =
-#endif
-                                maSizeCondition.set();
-            DBG( "%p set condition result: %d", this, aSuccess );
+            maSizeCondition.set();
         }
     }
 
@@ -537,7 +529,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
 
     TimeValue aTimeout = { 10, 0 };
 #if OSL_DEBUG_LEVEL > 2
-    oslConditionResult aResult =
+    osl::Condition::Result aResult =
 #endif
                                  maSizeCondition.wait( &aTimeout );
 
