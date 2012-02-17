@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk3))
 
+$(eval $(call gb_Library_set_warnings_not_errors,vclplug_gtk3))
+
 $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
