@@ -97,7 +97,7 @@ ScrollPanel::~ScrollPanel (void)
         TreeNode* pControl = pNode;
         // When the node has been created as TitledControl then use its
         // control instead of pNode directly.
-        TitledControl* pTitledControl = static_cast<TitledControl*>(pNode);
+        TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pNode);
         if (pTitledControl != NULL)
             pControl = pTitledControl->GetControl();
 
