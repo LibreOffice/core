@@ -65,7 +65,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include <galtheme.hxx>
+#include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -98,7 +98,7 @@ void disposeGallery( Gallery* pGallery )
 static void createTheme( rtl::OUString aThemeName,
                          rtl::OUString aGalleryURL,
                          rtl::OUString aDestDir,
-                         UINT32 nNumFrom,
+                         sal_uInt32 nNumFrom,
                          FileNameList &rFiles )
 {
     Gallery * pGallery( createGallery( aGalleryURL ) );
@@ -276,10 +276,10 @@ int GalApp::Main()
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
     rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Default name"));
-    UINT32 nNumFrom = 0;
+    sal_uInt32 nNumFrom = 0;
     FileNameList aFiles;
 
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         rtl::OUString aParam = GetCommandLineParam( i );
 
