@@ -31,7 +31,8 @@
 
 #include <vector>
 #include <memory>
-#include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -110,9 +111,8 @@ protected:
     virtual void            Deactivate();
 
 private:
-    typedef boost::shared_ptr< ScDPFuncData >   ScDPFuncDataRef;
-    typedef std::vector< ScDPFuncDataRef >      ScDPFuncDataVec;
-    typedef std::auto_ptr< ScDPObject >         ScDPObjectPtr;
+    typedef boost::ptr_vector<ScDPFuncData> ScDPFuncDataVec;
+    typedef boost::scoped_ptr<ScDPObject> ScDPObjectPtr;
 
     FixedLine               aFlLayout;
     FixedText               aFtPage;

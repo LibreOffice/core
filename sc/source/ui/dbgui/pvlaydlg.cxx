@@ -356,8 +356,7 @@ void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
     {
         aLabelDataArr.push_back(*rLabels[i]);
         aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
-        ScDPFuncDataRef p(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
-        aSelectArr.push_back(p);
+        aSelectArr.push_back(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
     }
     aWndSelect.ResetScrollBar();
     aWndSelect.Paint(Rectangle());
@@ -382,8 +381,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
             continue;
 
         size_t nFieldIndex = pInitArr->size();
-        ScDPFuncDataRef p(new ScDPFuncData(nCol, nMask, itr->mnDupCount, itr->maFieldRef));
-        pInitArr->push_back(p);
+        pInitArr->push_back(new ScDPFuncData(nCol, nMask, itr->mnDupCount, itr->maFieldRef));
 
         if (eType == TYPE_DATA)
         {
@@ -395,7 +393,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
                 OUString aStr = pData->maLayoutName;
                 if (aStr.isEmpty())
                 {
-                    sal_uInt16 nInitMask = pInitArr->back()->mnFuncMask;
+                    sal_uInt16 nInitMask = pInitArr->back().mnFuncMask;
                     aStr = GetFuncString(nInitMask, pData->mbIsValue);
                     aStr += pData->maName;
                 }
@@ -436,7 +434,7 @@ void ScDPLayoutDlg::InitFields()
 
 void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Point& rAtPos )
 {
-    ScDPFuncData        fData( *(aSelectArr[nFromIndex]) );
+    ScDPFuncData fData = aSelectArr[nFromIndex];
 
     bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
     if (!bAllowed)
@@ -513,7 +511,7 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
 
 void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
 {
-    ScDPFuncData aFuncData = *aSelectArr[nFromIndex];
+    ScDPFuncData aFuncData = aSelectArr[nFromIndex];
 
     size_t nAt = 0;
     ScDPFieldControlBase* toWnd = GetFieldWindow(eToType);
@@ -608,7 +606,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
         if ( fromArr && toArr && fromWnd && toWnd )
         {
-            ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
+            ScDPFuncData fData = (*fromArr)[nFromIndex];
             bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
 
             size_t nAt = 0;
@@ -682,7 +680,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         size_t              nAt      = 0;
         Point               aToPos;
 
-        ScDPFuncData fData( *((*theArr)[nFromIndex]) );
+        ScDPFuncData fData = (*theArr)[nFromIndex];
 
         if ( Contains( theArr, fData, nAt ) )
         {
@@ -727,7 +725,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
 
         if ( fromArr && toArr && fromWnd && toWnd )
         {
-            ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
+            ScDPFuncData fData = (*fromArr)[nFromIndex];
 
             size_t nAt = 0;
             if ( Contains( fromArr, fData, nAt ) )
@@ -794,7 +792,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
         Point               aToPos;
         bool bDataArr = eFromType == TYPE_DATA;
 
-        ScDPFuncData fData( *((*theArr)[nFromIndex]) );
+        ScDPFuncData fData = (*theArr)[nFromIndex];
 
         if ( Contains( theArr, fData, nAt ) )
         {
@@ -939,7 +937,7 @@ PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
                 case TYPE_DATA:   fromArr = &aDataArr;   break;
                 case TYPE_SELECT: fromArr = &aSelectArr; break;
             }
-            ScDPFuncData fData( *((*fromArr)[nDnDFromIndex]) );
+            ScDPFuncData fData = (*fromArr)[nDnDFromIndex];
             if (IsOrientationAllowed( fData.mnCol, eCheckTarget ))
                 ePtr = lclGetPointerForField( eCheckTarget );
             else
@@ -975,7 +973,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
         }
 
         size_t nArrPos = 0;
-        if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->mnCol, &nArrPos ) )
+        if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex].mnCol, &nArrPos ) )
         {
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -989,9 +987,9 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                     // list of names of all data fields
                     vector<ScDPName> aDataFieldNames;
                     for( ScDPFuncDataVec::const_iterator aIt = aDataArr.begin(), aEnd = aDataArr.end();
-                            (aIt != aEnd) && aIt->get(); ++aIt )
+                            (aIt != aEnd); ++aIt)
                     {
-                        ScDPLabelData* pDFData = GetLabelData((*aIt)->mnCol);
+                        ScDPLabelData* pDFData = GetLabelData(aIt->mnCol);
                         if (!pDFData)
                             continue;
 
@@ -1002,7 +1000,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                         if (aLayoutName.isEmpty())
                         {
                             // No layout name exists.  Use the stock name.
-                            sal_uInt16 nMask = (*aIt)->mnFuncMask;
+                            sal_uInt16 nMask = aIt->mnFuncMask;
                             OUString aFuncStr = GetFuncString(nMask);
                             aLayoutName = aFuncStr + pDFData->maName;
                         }
@@ -1010,16 +1008,16 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                     }
 
                     bool bLayout = (eType == TYPE_ROW) &&
-                        ((aDataFieldNames.size() > 1) || ((nFieldIndex + 1 < pArr->size()) && (*pArr)[nFieldIndex+1].get()));
+                        ((aDataFieldNames.size() > 1) || (nFieldIndex + 1 < pArr->size()));
 
                     AbstractScDPSubtotalDlg* pDlg = pFact->CreateScDPSubtotalDlg(
                         this, RID_SCDLG_PIVOTSUBT,
-                        *xDlgDPObject, *pData, *(*pArr)[nFieldIndex], aDataFieldNames, bLayout );
+                        *xDlgDPObject, *pData, (*pArr)[nFieldIndex], aDataFieldNames, bLayout );
 
                     if ( pDlg->Execute() == RET_OK )
                     {
                         pDlg->FillLabelData( *pData );
-                        (*pArr)[nFieldIndex]->mnFuncMask = pData->mnFuncMask;
+                        (*pArr)[nFieldIndex].mnFuncMask = pData->mnFuncMask;
                     }
                     delete pDlg;
                 }
@@ -1027,7 +1025,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 
                 case TYPE_DATA:
                 {
-                    ScDPFuncData& rFuncData = *aDataArr[nFieldIndex];
+                    ScDPFuncData& rFuncData = aDataArr[nFieldIndex];
                     AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg(
                         this, RID_SCDLG_DPDATAFIELD,
                         aLabelDataArr, *pData, rFuncData);
@@ -1143,7 +1141,7 @@ bool ScDPLayoutDlg::Contains( ScDPFuncDataVec* pArr, const ScDPFuncData& rData, 
     ScDPFuncDataVec::const_iterator itr, itrBeg = pArr->begin(), itrEnd = pArr->end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        if (**itr == rData)
+        if (*itr == rData)
         {
             // found!
             nAt = ::std::distance(itrBeg, itr);
@@ -1170,7 +1168,7 @@ void ScDPLayoutDlg::Insert( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, s
     if (!pArr)
         return;
 
-    ScDPFuncDataRef p (new ScDPFuncData(rFData));
+    std::auto_ptr<ScDPFuncData> p(new ScDPFuncData(rFData));
     if (nAt >= pArr->size())
         pArr->push_back(p);
     else
@@ -1400,7 +1398,7 @@ void ScDPLayoutDlg::AdjustDlgSize()
 
 namespace {
 
-class PivotFieldInserter : public ::std::unary_function<void, boost::shared_ptr<ScDPFuncData> >
+class PivotFieldInserter : public ::std::unary_function<ScDPFuncData, void>
 {
     vector<PivotField>& mrFields;
 public:
@@ -1411,12 +1409,12 @@ public:
 
     PivotFieldInserter(const PivotFieldInserter& r) : mrFields(r.mrFields) {}
 
-    void operator() (const ::boost::shared_ptr<ScDPFuncData>& p)
+    void operator() (const ScDPFuncData& r)
     {
         PivotField aField;
-        aField.nCol = p->mnCol;
-        aField.nFuncMask = p->mnFuncMask;
-        aField.maFieldRef = p->maFieldRef;
+        aField.nCol = r.mnCol;
+        aField.nFuncMask = r.mnFuncMask;
+        aField.maFieldRef = r.maFieldRef;
         mrFields.push_back(aField);
     }
 };
@@ -1670,7 +1668,7 @@ sal_uInt8 ScDPLayoutDlg::GetNextDupCount(
     bool bFound = false;
     for (size_t i = 0, n = rArr.size(); i < n; ++i)
     {
-        const ScDPFuncData& r = *rArr[i];
+        const ScDPFuncData& r = rArr[i];
         if (i == nDataIndex)
             // Skip itself.
             continue;
