@@ -48,8 +48,8 @@ namespace connectivity { namespace mozab {
     //====================================================================
     namespace
     {
-        typedef nsresult (NS_STDCALL nsIAbCard::*CardPropertyGetter)( PRUnichar** aFirstName );
-        typedef nsresult (NS_STDCALL nsIAbCard::*CardPropertySetter)( const PRUnichar* aFirstName );
+        typedef NS_STDCALL_FUNCPROTO(nsResult, CardPropertyGetter, nsIAbCard, GetFirstName, (PRUnichar**));
+        typedef NS_STDCALL_FUNCPROTO(nsResult, CardPropertySetter, nsIAbCard, SetFirstName, (const PRUnichar*));
         struct CardPropertyData
         {
             const sal_Char*     pLDAPAttributeList;
