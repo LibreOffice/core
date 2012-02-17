@@ -42,6 +42,7 @@ class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
 
+/// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
     String aFmtName;

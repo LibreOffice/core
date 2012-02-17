@@ -85,9 +85,7 @@ class IDocumentContentOperations;
 class IDocumentListItems;
 class SwOLENodes;
 
-// --------------------
-// class SwNode
-// --------------------
+/// Base class of the Writer document model elements.
 class SW_DLLPUBLIC SwNode
     : private BigPtrEntry
 {
@@ -304,9 +302,7 @@ private:
     SwNode & operator= ( const SwNode & rNodes );
 };
 
-// --------------------
-// class SwStartNode
-// --------------------
+/// Starts a section of nodes in the document model.
 class SwStartNode: public SwNode
 {
     friend class SwNode;
@@ -340,9 +336,7 @@ private:
 };
 
 
-// --------------------
-// class SwEndNode
-// --------------------
+/// Ends a section of nodes in the document model.
 class SwEndNode : public SwNode
 {
     friend class SwNodes;

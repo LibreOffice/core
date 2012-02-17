@@ -250,6 +250,13 @@ enum MakePageType
 };
 
 
+/**
+ * Base class of the Writer layout elements.
+ *
+ * This includes not only fly frames, but everything down to the paragraph
+ * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
+ * instances are used.)
+ */
 class SwFrm: public SwClient, public SfxBroadcaster
 {
     //Der verkappte Frm
