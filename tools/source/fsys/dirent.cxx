@@ -721,6 +721,8 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
+    (void) eStyle; // only used for DBG_UTIL
+
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
@@ -736,7 +738,9 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+#ifdef DBG_UTIL
                 eStyle = FSYS_STYLE_HOST;
+#endif
     }
     else
     {
@@ -773,6 +777,8 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
+    (void) eStyle; // only used for DBG_UTIL
+
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
@@ -788,7 +794,9 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+#ifdef DBG_UTIL
         eStyle = FSYS_STYLE_HOST;
+#endif
     }
 #ifdef DBG_UTIL
     else
