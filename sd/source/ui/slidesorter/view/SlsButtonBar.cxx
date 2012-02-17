@@ -78,11 +78,9 @@ public:
     void SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox);
     Button::IconSize GetIconSize (void) const;
 
-    virtual BitmapEx CreateBackground (
-        const OutputDevice& rTemplateDevice,
-        const bool bIsButtonDown) const = 0;
-    virtual Point GetBackgroundLocation (void) = 0;
-    virtual Rectangle GetButtonArea (void) = 0;
+    virtual BitmapEx CreateBackground () const;
+    virtual Point GetBackgroundLocation (void);
+    virtual Rectangle GetButtonArea (void);
 
 protected:
     ::boost::shared_ptr<Theme> mpTheme;
@@ -91,8 +89,10 @@ protected:
     Size maMinimumMediumButtonAreaSize;
     Size maMinimumSmallButtonAreaSize;
     Button::IconSize meIconSize;
+    Rectangle maButtonArea;
+    Point maBackgroundLocation;
 
-    virtual void Layout (void) = 0;
+    virtual void Layout (void);
 
 private:
     void UpdateMinimumIconSizes(const ::std::vector<SharedButton>& rButtons);
@@ -100,29 +100,6 @@ private:
 
 
 namespace {
-    /** Button bar is composed of three images, the left and right end of
-        the bar and the center image.  Buttons are only placed over the
-        center image.  The center image is painted as is, it is not scaled.
-    */
-    class BitmapBackgroundTheme : public ButtonBar::BackgroundTheme
-    {
-    public:
-        BitmapBackgroundTheme(
-            const ::boost::shared_ptr<Theme>& rpTheme,
-            const ::std::vector<SharedButton>& rButtons);
-        virtual ~BitmapBackgroundTheme() { }
-        virtual BitmapEx CreateBackground (
-            const OutputDevice& rTemplateDevice,
-            const bool bIsButtonDown) const;
-        virtual Point GetBackgroundLocation (void);
-        virtual Rectangle GetButtonArea (void);
-    protected:
-        virtual void Layout (void);
-    private:
-        Rectangle maButtonArea;
-        Point maBackgroundLocation;
-    };
-
     /** The source mask is essentially multiplied with the given alpha value.
         The result is writen to the result mask.
     */
@@ -437,8 +414,8 @@ void ButtonBar::PaintButtonBackground (
     {
         if (mpBackgroundTheme)
         {
-            maButtonDownBackground = mpBackgroundTheme->CreateBackground(rDevice, true);
-            maNormalBackground = mpBackgroundTheme->CreateBackground(rDevice, false);
+            maButtonDownBackground = mpBackgroundTheme->CreateBackground();
+            maNormalBackground = mpBackgroundTheme->CreateBackground();
         }
     }
     if (mpButtonUnderMouse && mpButtonUnderMouse->IsDown())
@@ -640,7 +617,7 @@ void ButtonBar::HandleDataChangeEvent (void)
     maRegularButtons.push_back(::boost::shared_ptr<Button>(new DuplicateButton(mrSlideSorter)));
 
     mpBackgroundTheme.reset(
-        new BitmapBackgroundTheme(
+        new BackgroundTheme(
             mrSlideSorter.GetTheme(),
             maRegularButtons));
 
@@ -741,7 +718,9 @@ void ButtonBar::ReleaseLock (void)
 ButtonBar::BackgroundTheme::BackgroundTheme (
     const ::boost::shared_ptr<Theme>& rpTheme,
     const ::std::vector<SharedButton>& rButtons)
-    : mpTheme(rpTheme)
+    : mpTheme(rpTheme),
+      maButtonArea(),
+      maBackgroundLocation()
 {
     UpdateMinimumIconSizes(rButtons);
 }
@@ -806,27 +785,8 @@ Button::IconSize ButtonBar::BackgroundTheme::GetIconSize (void) const
 
 
 
-//===== BitmapBackgroundTheme =================================================
-
-BitmapBackgroundTheme::BitmapBackgroundTheme (
-    const ::boost::shared_ptr<Theme>& rpTheme,
-    const ::std::vector<SharedButton>& rButtons)
-    : BackgroundTheme(rpTheme, rButtons),
-      maButtonArea(),
-      maBackgroundLocation()
+BitmapEx ButtonBar::BackgroundTheme::CreateBackground () const
 {
-}
-
-
-
-
-BitmapEx BitmapBackgroundTheme::CreateBackground (
-    const OutputDevice& rTemplateDevice,
-    const bool bIsButtonDown) const
-{
-    (void)rTemplateDevice;
-    (void)bIsButtonDown;
-
     OSL_ASSERT(mpTheme);
 
     // Get images.
@@ -847,7 +807,7 @@ BitmapEx BitmapBackgroundTheme::CreateBackground (
 
 
 
-Point BitmapBackgroundTheme::GetBackgroundLocation (void)
+Point ButtonBar::BackgroundTheme::GetBackgroundLocation (void)
 {
     return maBackgroundLocation;
 }
@@ -855,7 +815,7 @@ Point BitmapBackgroundTheme::GetBackgroundLocation (void)
 
 
 
-Rectangle BitmapBackgroundTheme::GetButtonArea (void)
+Rectangle ButtonBar::BackgroundTheme::GetButtonArea (void)
 {
     return maButtonArea;
 }
@@ -863,7 +823,7 @@ Rectangle BitmapBackgroundTheme::GetButtonArea (void)
 
 
 
-void BitmapBackgroundTheme::Layout (void)
+void ButtonBar::BackgroundTheme::Layout (void)
 {
     Size aImageSize (mpTheme->GetIcon(Theme::Icon_ButtonBarLarge).GetSizePixel());
     if (aImageSize.Width() >= maPreviewBoundingBox.GetWidth())
@@ -1034,10 +994,8 @@ void ImageButton::Paint (
     OutputDevice& rDevice,
     const Point aOffset,
     const double nAlpha,
-    const ::boost::shared_ptr<Theme>& rpTheme) const
+    const ::boost::shared_ptr<Theme>&) const
 {
-    (void)rpTheme;
-
     if ( ! mbIsActive)
         return;
 
