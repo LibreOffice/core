@@ -356,16 +356,15 @@ void ScDPLayoutDlg::InitWndSelect(const ScDPLabelDataVec& rLabels)
     {
         const ScDPLabelData& r = rLabels[i];
 
-        if (r.mnOriginalDim >= 0)
-            // Don't add duplicate dimensions.
-            continue;
-
-        // TODO: For dimension with duplicates, use layout name only when all
-        // its duplicate dimensions use the same layout name. Otherwise use
-        // the original name.
         aLabelDataArr.push_back(new ScDPLabelData(r));
-        aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
-        aSelectArr.push_back(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
+        if (r.mnOriginalDim < 0)
+        {
+            // TODO: For dimension with duplicates, use layout name only when
+            // all its duplicate dimensions use the same layout name.
+            // Otherwise use the original name.
+            aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
+            aSelectArr.push_back(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
+        }
     }
     aWndSelect.ResetScrollBar();
     aWndSelect.Paint(Rectangle());
@@ -414,7 +413,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
     if (!pInitArr || !pInitWnd)
         return;
 
-    vector<PivotField>::const_iterator it = rFields.begin(), itrEnd = rFields.end();
+    vector<PivotField>::const_iterator itr = rFields.begin(), itrEnd = rFields.end();
     for (; itr != itrEnd; ++itr)
     {
         SCCOL nCol = itr->nCol;

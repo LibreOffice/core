@@ -73,12 +73,13 @@ struct ScDPLabelData;
 
 struct PivotField
 {
-    SCsCOL              nCol; /// 0-based dimension index (not source column index)
+    SCCOL               nCol; /// 0-based dimension index (not source column index)
+    long                mnOriginalDim;
     sal_uInt16          nFuncMask;
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            PivotField( SCsCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit PivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
     PivotField( const PivotField& r );
 
     bool                operator==( const PivotField& r ) const;

@@ -1790,23 +1790,17 @@ void lcl_FillOldFields(
                 xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)));
 
             // is this dimension cloned?
-            uno::Any aOrigAny;
+            long nDupSource = -1;
             try
             {
-                aOrigAny = xDimProp->getPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)));
+                uno::Any aOrigAny = xDimProp->getPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
+                sal_Int32 nTmp;
+                if (aOrigAny >>= nTmp)
+                    nDupSource = static_cast<sal_Int32>(nTmp);
             }
             catch(uno::Exception&)
             {
-            }
-
-            long nDupSource = -1;
-            uno::Reference<uno::XInterface> xIntOrig = ScUnoHelpFunctions::AnyToInterface( aOrigAny );
-            if ( xIntOrig.is() )
-            {
-                uno::Reference<container::XNamed> xNameOrig( xIntOrig, uno::UNO_QUERY );
-                if ( xNameOrig.is() )
-                    nDupSource = lcl_FindName( xNameOrig->getName(), xDimsName );
             }
 
             sal_uInt8 nDupCount = 0;
@@ -1832,10 +1826,11 @@ void lcl_FillOldFields(
                 rField.nCol = PIVOT_DATA_FIELD;
                 bDataFound = true;
             }
-            else if (nDupSource >= 0)
-                rField.nCol = static_cast<SCsCOL>(nDupSource);      //! seek from name
             else
-                rField.nCol = static_cast<SCsCOL>(nDim);    //! seek source column from name
+            {
+                rField.mnOriginalDim = nDupSource;
+                rField.nCol = static_cast<SCCOL>(nDim);    //! seek source column from name
+            }
 
             rField.nFuncMask = nMask;
             rField.mnDupCount = nDupCount;
@@ -2023,6 +2018,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
             continue;
 
         bool bIsValue = true;                               //! check
+        aFieldName = comphelper::string::stripEnd(aFieldName, sal_Unicode('*'));
 
         std::auto_ptr<ScDPLabelData> pNewLabel(
             new ScDPLabelData(aFieldName, static_cast<SCCOL>(nDim), bIsValue));
