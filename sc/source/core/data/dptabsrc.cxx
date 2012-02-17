@@ -1388,12 +1388,7 @@ long ScDPDimension::getPosition() const
     return pSource->GetPosition( nDim );
 }
 
-void ScDPDimension::setPosition(long /* nNew */)
-{
-    //! ...
-}
-
-sal_Bool ScDPDimension::getIsDataLayoutDimension() const
+bool ScDPDimension::getIsDataLayoutDimension() const
 {
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
 }
@@ -1436,11 +1431,6 @@ ScDPDimension* ScDPDimension::CreateCloneObject()
 uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone() throw(uno::RuntimeException)
 {
     return CreateCloneObject();
-}
-
-sal_Bool ScDPDimension::isDuplicated() const
-{
-    return (nSourceDim >= 0);
 }
 
 const sheet::DataPilotFieldReference& ScDPDimension::GetReferenceValue() const
@@ -1519,13 +1509,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_POSITION ) )
-    {
-        sal_Int32 nInt = 0;
-        if (aValue >>= nInt)
-            setPosition( nInt );
-    }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_USEDHIERARCHY ) )
+    if ( aPropertyName.equalsAscii( SC_UNO_DP_USEDHIERARCHY ) )
     {
         sal_Int32 nInt = 0;
         if (aValue >>= nInt)

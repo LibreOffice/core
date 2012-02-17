@@ -414,16 +414,14 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_uInt16              getOrientation() const;
-    virtual void                setOrientation(sal_uInt16 nNew);
-    virtual long                getPosition() const;
-    virtual void                setPosition(long nNew);
-    virtual sal_Bool                getIsDataLayoutDimension() const;
-    virtual sal_uInt16              getFunction() const;
-    virtual void                setFunction(sal_uInt16 nNew);       // for data dimension
-    virtual long                getUsedHierarchy() const;
-    virtual void                setUsedHierarchy(long nNew);
-    virtual sal_Bool                isDuplicated() const;
+    sal_uInt16 getOrientation() const;
+    void setOrientation(sal_uInt16 nNew);
+    long getPosition() const;
+    bool getIsDataLayoutDimension() const;
+    sal_uInt16 getFunction() const;
+    void setFunction(sal_uInt16 nNew);       // for data dimension
+    long getUsedHierarchy() const;
+    void setUsedHierarchy(long nNew);
 
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();
