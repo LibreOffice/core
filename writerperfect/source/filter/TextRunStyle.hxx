@@ -76,7 +76,7 @@ public:
     ParagraphStyleManager() : mNameHash(), mStyleHash() {}
     virtual ~ParagraphStyleManager()
     {
-        ParagraphStyleManager::clean();
+        clean();
     }
 
     /* create a new style if it does not exists. In all case, returns the name of the style
@@ -107,7 +107,7 @@ public:
     SpanStyleManager() : mNameHash(), mStyleHash() {}
     virtual ~SpanStyleManager()
     {
-        SpanStyleManager::clean();
+        clean();
     }
 
     /* create a new style if it does not exists. In all case, returns the name of the style

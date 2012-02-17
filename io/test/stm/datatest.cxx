@@ -668,8 +668,8 @@ public:
 
 
 private:
-    void OObjectStreamTest::testObject(     const Reference <XObjectOutputStream > &rOut,
-                                            const Reference <XObjectInputStream> &rIn );
+    void testObject(     const Reference <XObjectOutputStream > &rOut,
+                         const Reference <XObjectInputStream> &rIn );
 
 private:
 };

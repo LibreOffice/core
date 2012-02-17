@@ -57,7 +57,7 @@ public:
     FontStyleManager() : mStyleHash() {}
     virtual ~FontStyleManager()
     {
-        FontStyleManager::clean();
+        clean();
     }
 
     /* create a new font if the font does not exists and returns a font name

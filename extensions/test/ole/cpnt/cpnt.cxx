@@ -315,7 +315,7 @@ public: // XTestSequence
 class EventListener: public WeakImplHelper1<XEventListener>
 {
 public:
-    EventListener::EventListener(): bCalled( sal_False)
+    EventListener(): bCalled( sal_False)
         {}
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
 
