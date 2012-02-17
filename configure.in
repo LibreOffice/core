@@ -1933,6 +1933,10 @@ dnl ===================================================================
 dnl options for stuff used during cross-compilation build
 dnl ===================================================================
 
+AC_ARG_WITH(system-boost-for-build,
+    AS_HELP_STRING([--with-system-boost-for-build],
+        [Use boost/libxslt already on system for build tools (cross-compilation only).]))
+
 AC_ARG_WITH(system-cppunit-for-build,
     AS_HELP_STRING([--with-system-cppunit-for-build],
         [Use cppunit/libxslt already on system for build tools (cross-compilation only).]))
@@ -3175,6 +3179,7 @@ if test "$cross_compiling" = "yes"; then
     test $with_java = no && sub_conf_opts="$sub_conf_opts --without-java"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
+    test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
     ./configure \
