@@ -396,13 +396,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+vcl_generic_code=\
     vcl/generic/app/gensys \
     vcl/generic/app/geninst \
     vcl/generic/app/gendisp \
@@ -423,7 +417,28 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/fontmanager/fontconfig \
     vcl/generic/fontmanager/fontmanager \
     vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
+    vcl/generic/fontmanager/parseAFM
+
+vcl_headless_code=\
+    vcl/headless/svpbmp \
+    vcl/headless/svpdummies \
+    vcl/headless/svpelement \
+    vcl/headless/svpframe \
+    vcl/headless/svpgdi \
+    vcl/headless/svpinst \
+    vcl/headless/svpdata \
+    vcl/headless/svpprn \
+    vcl/headless/svptext \
+    vcl/headless/svpvd
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/cupsmgr \
     vcl/unx/generic/printer/jobdata \
@@ -447,41 +462,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/generic/app/gensys \
-    vcl/generic/app/geninst \
-    vcl/generic/app/gendisp \
-    vcl/generic/print/bitmap_gfx \
-    vcl/generic/print/common_gfx \
-    vcl/generic/print/glyphset \
-    vcl/generic/print/printerjob \
-    vcl/generic/print/psputil \
-    vcl/generic/print/genpspgraphics \
-    vcl/generic/print/genprnpsp \
-    vcl/generic/print/text_gfx \
-    vcl/generic/fontmanager/fontsubst \
-    vcl/generic/glyphs/gcach_ftyp \
-    vcl/generic/glyphs/gcach_layout \
-    vcl/generic/glyphs/gcach_rbmp \
-    vcl/generic/glyphs/glyphcache \
-    vcl/generic/fontmanager/fontcache \
-    vcl/generic/fontmanager/fontconfig \
-    vcl/generic/fontmanager/fontmanager \
-    vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
+	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
-    vcl/headless/svpgdi \
-    vcl/headless/svpinst \
-    vcl/headless/svpdata \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+	$(vcl_headless_code) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -507,41 +493,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/generic/app/gensys \
-    vcl/generic/app/geninst \
-    vcl/generic/app/gendisp \
-    vcl/generic/print/bitmap_gfx \
-    vcl/generic/print/common_gfx \
-    vcl/generic/print/glyphset \
-    vcl/generic/print/printerjob \
-    vcl/generic/print/psputil \
-    vcl/generic/print/genpspgraphics \
-    vcl/generic/print/genprnpsp \
-    vcl/generic/print/text_gfx \
-    vcl/generic/fontmanager/fontsubst \
-    vcl/generic/glyphs/gcach_ftyp \
-    vcl/generic/glyphs/gcach_layout \
-    vcl/generic/glyphs/gcach_rbmp \
-    vcl/generic/glyphs/glyphcache \
-    vcl/generic/fontmanager/fontcache \
-    vcl/generic/fontmanager/fontconfig \
-    vcl/generic/fontmanager/fontmanager \
-    vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
+	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/android/androidinst \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
-    vcl/headless/svpgdi \
-    vcl/headless/svpinst \
-    vcl/headless/svpdata \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+	$(vcl_headless_code) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
