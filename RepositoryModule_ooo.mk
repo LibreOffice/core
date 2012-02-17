@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     binaryurp \
     canvas \
     chart2 \
+    clucene \
     comphelper \
     configmgr \
     cppcanvas \
