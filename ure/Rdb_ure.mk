@@ -49,7 +49,7 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Rdb_add_components,ure/services,\
     javaloader \
     javavm \
-    juh \
+    javaunohelper/util/juh \
 ))
 endif
 
