@@ -1,0 +1,24 @@
+Index: icu-4.4.1/source/tools/toolutil/pkg_genc.c
+===================================================================
+--- misc/icu/source/tools/toolutil/pkg_genc.c	2010-04-28 11:27:46.000000000 -0400
++++ misc/build/icu/source/tools/toolutil/pkg_genc.c	2010-07-17 07:31:54.408752610 -0400
+@@ -1,5 +1,5 @@
+ /******************************************************************************
+- *   Copyright (C) 2009, International Business Machines
++ *   Copyright (C) 2009-2010, International Business Machines
+  *   Corporation and others.  All Rights Reserved.
+  *******************************************************************************
+  */
+@@ -118,10 +118,10 @@
+ } assemblyHeader[] = {
+     {"gcc",
+         ".globl %s\n"
+-        "\t.section .note.GNU-stack,\"\",@progbits\n"
++        "\t.section .note.GNU-stack,\"\",%%progbits\n"
+         "\t.section .rodata\n"
+         "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+-        "\t.type %s,@object\n"
++        "\t.type %s,%%object\n"
+         "%s:\n\n",
+ 
+         ".long ","",HEX_0X

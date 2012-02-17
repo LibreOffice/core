@@ -53,7 +53,8 @@ PATCH_FILES=\
     icu4c-warnings.patch \
     icu4c-escapespace.patch \
     icu4c-strict-c.patch \
-    CVE-2011-4599.patch
+    CVE-2011-4599.patch \
+    arm-assembler.patch
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
