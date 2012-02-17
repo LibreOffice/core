@@ -69,8 +69,8 @@ $(call gb_JavaClassSet_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@
 
 define gb_JavaClassSet_JavaClassSet
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := $(call gb_JavaClassSet_get_preparation_target,$(1))
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := $(call gb_JavaClassSet_get_preparation_target,$(1))
 
 endef
 
@@ -112,16 +112,15 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(call gb_JavaClassSet_get_target,$(1)) : $(2)
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
 $(2) :| $(gb_Helper_PHONY)
 
 endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
 
 endef
 
@@ -132,6 +131,19 @@ endef
 
 define gb_JavaClassSet_add_system_jars
 $(foreach jar,$(2),$(call gb_JavaClassSet_add_system_jar,$(1),$(jar)))
+
+endef
+
+# gb_JavaClassSet_add_jar_classset: Like gb_JavaClassSet_add_jar, but instead of
+# using the jar, use the directory tree with the class files that make up the
+# jar.  This is sometimes necessary in JunitTests that have test classes in
+# packages that belong to a sealed jar.
+# $1: token identifying this JavaClassSet
+# $2: token identifying the Jar being used
+define gb_JavaClassSet_add_jar_classset
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2)))
 
 endef
 
