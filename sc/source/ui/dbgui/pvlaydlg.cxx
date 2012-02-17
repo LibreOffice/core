@@ -344,7 +344,7 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
+void ScDPLayoutDlg::InitWndSelect(const ScDPLabelDataVec& rLabels)
 {
     size_t nLabelCount = rLabels.size();
     if (nLabelCount > SC_DP_MAX_FIELDS)
@@ -354,7 +354,7 @@ void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
     aLabelDataArr.reserve( nLabelCount );
     for ( size_t i=0; i < nLabelCount; i++ )
     {
-        aLabelDataArr.push_back(*rLabels[i]);
+        aLabelDataArr.push_back(new ScDPLabelData(rLabels[i]));
         aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
         aSelectArr.push_back(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
     }

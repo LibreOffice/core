@@ -491,7 +491,7 @@ public:
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
-                                                                const ScDPLabelDataVector& rLabelVec,
+                                                                const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData );
 

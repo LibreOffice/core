@@ -50,7 +50,7 @@
 #include "dpglobal.hxx"
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SubTotal;
 
@@ -68,7 +68,6 @@ class ScUserListData;
 class ScProgress;
 
 struct ScDPLabelData;
-typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 // -----------------------------------------------------------------------
 
@@ -88,13 +87,15 @@ struct PivotField
 
 // -----------------------------------------------------------------------
 
+typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVec;
+
 // implementation still in global2.cxx
 struct ScPivotParam
 {
     SCCOL           nCol;           // cursor position /
     SCROW           nRow;           // or start of destination area
     SCTAB           nTab;
-    ::std::vector<ScDPLabelDataRef> maLabelArray;
+    ScDPLabelDataVec maLabelArray;
     ::std::vector<PivotField> maPageFields;
     ::std::vector<PivotField> maColFields;
     ::std::vector<PivotField> maRowFields;
@@ -110,7 +111,7 @@ struct ScPivotParam
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     bool            operator==      ( const ScPivotParam& r ) const;
-    void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
+    void SetLabelData(const ScDPLabelDataVec& r);
 };
 
 //------------------------------------------------------------------------
@@ -167,8 +168,6 @@ struct ScDPLabelData
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
-typedef std::vector< ScDPLabelData > ScDPLabelDataVector;
-
 // ============================================================================
 
 struct ScPivotField
@@ -182,8 +181,6 @@ struct ScPivotField
 
     bool                operator==( const ScPivotField& r ) const;
 };
-
-typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
 // ============================================================================
 
@@ -204,7 +201,6 @@ struct ScDPFuncData
 
 // ============================================================================
 
-typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
 typedef std::vector<ScDPName> ScDPNameVec;
 
 #endif

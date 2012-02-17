@@ -53,6 +53,7 @@
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "pivot.hxx"
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
@@ -159,16 +160,14 @@ ScPivotParam::~ScPivotParam()
 {
 }
 
-void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
+void ScPivotParam::SetLabelData(const ScDPLabelDataVec& r)
 {
-    vector<ScDPLabelDataRef> aNewArray;
+    ScDPLabelDataVec aNewArray;
     aNewArray.reserve(r.size());
-    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
-          itr != itrEnd; ++itr)
-    {
-        ScDPLabelDataRef p(new ScDPLabelData(**itr));
-        aNewArray.push_back(p);
-    }
+    for (ScDPLabelDataVec::const_iterator itr = r.begin(), itrEnd = r.end();
+         itr != itrEnd; ++itr)
+        aNewArray.push_back(new ScDPLabelData(*itr));
+
     maLabelArray.swap(aNewArray);
 }
 

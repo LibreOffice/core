@@ -2025,7 +2025,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
                 SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
                 bool bIsValue = true;                               //! check
 
-                ScDPLabelDataRef pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
+                std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
                 pNewLabel->maLayoutName = aLayoutName;
                 GetHierarchies(nDim, pNewLabel->maHiers);
                 GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);

@@ -200,7 +200,7 @@ void ScDPFunctionListBox::FillFunctionNames()
 // ============================================================================
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        Window* pParent, const ScDPLabelDataVec& rLabelVec,
         const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATAFIELD ) ),
     maFlFunc        ( this, ScResId( FL_FUNC ) ),
