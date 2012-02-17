@@ -186,7 +186,10 @@ public class HelpIndexerTool
         try
         {
             Date start = new Date();
-            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
+            Analyzer analyzer = ( aLanguageStr.equals("ja")
+                                || aLanguageStr.equals("ko")
+                                || aLanguageStr.equals("zh-CN")
+                                || aLanguageStr.equals("zh-TW") ) ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
             IndexWriter writer = new IndexWriter( aIndexDir, analyzer, true );
             if( !bExtensionMode )
                 System.out.println( "Lucene: Indexing to directory '" + aIndexDir + "'..." );
