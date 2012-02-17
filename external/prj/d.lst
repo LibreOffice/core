@@ -1,18 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\external
-mkdir: %_DEST%\inc%_EXT%\external\glibc
 mkdir: %_DEST%\inc%_EXT%\external\mingw
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
-
-..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
-..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
-
-..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib%_EXT%\gnu_getopt.lib
-..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
-..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib%_EXT%\libgnu_getopt_static.a
-
-..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\glibc\*.h
 
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc%_EXT%\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc%_EXT%\external\mingw\include\atl\*
