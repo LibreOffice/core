@@ -1027,24 +1027,30 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 
                 case TYPE_DATA:
                 {
+                    ScDPFuncData& rFuncData = *aDataArr[nFieldIndex];
                     AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg(
                         this, RID_SCDLG_DPDATAFIELD,
-                        aLabelDataArr, *pData, *(*pArr)[nFieldIndex] );
+                        aLabelDataArr, *pData, rFuncData);
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        (*pArr)[nFieldIndex]->mnFuncMask = pData->mnFuncMask = pDlg->GetFuncMask();
-                        (*pArr)[nFieldIndex]->maFieldRef = pDlg->GetFieldRef();
+                        bool bFuncChanged = rFuncData.mnFuncMask != pDlg->GetFuncMask();
+                        rFuncData.mnFuncMask = pData->mnFuncMask = pDlg->GetFuncMask();
+                        rFuncData.maFieldRef = pDlg->GetFieldRef();
 
-                        ScDPLabelData* p = GetLabelData(aDataArr[nFieldIndex]->mnCol);
+                        if (bFuncChanged)
+                            // Get the new duplicate count since the function has changed.
+                            rFuncData.mnDupCount = GetNextDupCount(aDataArr, rFuncData, nFieldIndex);
+
+                        ScDPLabelData* p = GetLabelData(rFuncData.mnCol);
                         OUString aStr = p->maLayoutName;
                         if (aStr.isEmpty())
                         {
                             // Layout name is not available.  Use default name.
-                            aStr = GetFuncString (aDataArr[nFieldIndex]->mnFuncMask);
+                            aStr = GetFuncString (rFuncData.mnFuncMask);
                             aStr += p->maName;
                         }
-                        aWndData.SetFieldText( aStr, nFieldIndex );
+                        aWndData.SetFieldText(aStr, nFieldIndex, rFuncData.mnDupCount);
                     }
                     delete pDlg;
                 }
@@ -1655,6 +1661,29 @@ void ScDPLayoutDlg::GetOtherDataArrays(
         default:
             ;
     }
+}
+
+sal_uInt8 ScDPLayoutDlg::GetNextDupCount(
+    const ScDPFuncDataVec& rArr, const ScDPFuncData& rData, size_t nDataIndex) const
+{
+    sal_uInt8 nDupCount = 0;
+    bool bFound = false;
+    for (size_t i = 0, n = rArr.size(); i < n; ++i)
+    {
+        const ScDPFuncData& r = *rArr[i];
+        if (i == nDataIndex)
+            // Skip itself.
+            continue;
+
+        if (r.mnCol != rData.mnCol || r.mnFuncMask != rData.mnFuncMask)
+            continue;
+
+        bFound = true;
+        if (r.mnDupCount > nDupCount)
+            nDupCount = r.mnDupCount;
+    }
+
+    return bFound ? nDupCount + 1 : 0;
 }
 
 //----------------------------------------------------------------------------

@@ -289,11 +289,10 @@ void ScDPFieldControlBase::ClearFields()
     maFieldNames.clear();
 }
 
-void ScDPFieldControlBase::SetFieldText( const rtl::OUString& rText, size_t nIndex )
+void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount)
 {
     if( IsExistingIndex( nIndex ) )
     {
-        sal_uInt8 nDupCount = GetNextDupCount(rText);
         maFieldNames[nIndex] = FieldName(rText, true, nDupCount);
         Redraw();
 

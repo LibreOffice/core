@@ -152,7 +152,7 @@ public:
     /** Removes all fields. */
     void            ClearFields();
     /** Changes the text on an existing field. */
-    void SetFieldText( const rtl::OUString& rText, size_t nIndex );
+    void SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount);
     /** Returns the text of an existing field. */
     rtl::OUString GetFieldText( size_t nIndex ) const;
 

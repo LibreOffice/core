@@ -240,6 +240,8 @@ private:
     void GetOtherDataArrays(
         ScDPFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2);
 
+    sal_uInt8 GetNextDupCount(const ScDPFuncDataVec& rArr, const ScDPFuncData& rData, size_t nDataIndex) const;
+
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
     DECL_LINK( SelAreaHdl, ListBox * );
