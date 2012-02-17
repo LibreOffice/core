@@ -62,6 +62,10 @@ hwpfilter\
 i18npool\
 i18nutil\
 idl\
+javaunohelper\
+jurt\
+jvmaccess\
+jvmfwk\
 lingucomponent\
 linguistic\
 lotuswordpro\
@@ -78,6 +82,7 @@ psprint_config\
 qadevOOo\
 regexp\
 reportdesign\
+ridljar\
 rsc\
 sal\
 salhelper\
@@ -106,6 +111,7 @@ ucb\
 ucbhelper\
 udkapi\
 unixODBC\
+unoil\
 unotest\
 unotools\
 unoxml\
@@ -164,12 +170,8 @@ icu\
 idlc\
 instsetoo_native\
 io\
-javaunohelper\
 jfreereport\
 jpeg\
-jurt\
-jvmaccess\
-jvmfwk\
 l10ntools\
 languagetool\
 libcdr\
@@ -212,7 +214,6 @@ registry\
 remotebridges\
 reportbuilder\
 rhino\
-ridljar\
 saxon\
 scp2\
 sdext\
@@ -232,7 +233,6 @@ tomcat\
 translations\
 udm\
 unodevtools\
-unoil\
 vigra\
 x11_extensions\
 xmlhelp\
