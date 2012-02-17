@@ -112,7 +112,10 @@ void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
     // interpreter lock is held or not
     // TODO: Look for a more efficient solution
     osl::Thread *t = new GCThread( interpreter, object );
-    t->create();
+    // don't call create() because Valgrind complains about invalid read in
+    // the rather bizarre GCThread::onTerminated; try a lame workaround:
+    t->createSuspended();
+    t->resume();
 }
 
 }
