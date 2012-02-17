@@ -32,6 +32,7 @@
 #include <functional>
 
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 // local includes
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,7 +71,7 @@ void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
     {
         x=posn->first;
         y=posn->second->ToOString();
-        fprintf(stdout,"key=%s value=%s\n",x.GetBuffer(),y.getStr());
+        fprintf(stdout,"key=%s value=%s\n",x.getStr(),y.getStr());
     }
     fprintf(stdout,"+--------------------------+\n");
 }
@@ -291,7 +292,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 #if OSL_DEBUG_LEVEL > 2
         printf("*********************DUMPING HASHMAP***************************************");
         Dump(aXMLStrHM);
-        printf("DBG: sHelpFile = %s\n",sHelpFile.GetBuffer() );
+        printf("DBG: sHelpFile = %s\n",sHelpFile.getStr() );
 #endif
 
         pResData.sGId      =  pos->first;
