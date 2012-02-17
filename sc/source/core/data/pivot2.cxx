@@ -96,6 +96,7 @@ ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsVal
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
+    mnDupCount(0),
     mnUsedHier( 0 ),
     mnFlags( 0 ),
     mbShowAll( false ),
@@ -114,7 +115,6 @@ OUString ScDPLabelData::getDisplayName() const
 PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
-    nFuncCount( 0 ),
     mnDupCount(0)
 {
 }
@@ -122,7 +122,6 @@ PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
 PivotField::PivotField( const PivotField& r ) :
     nCol(r.nCol),
     nFuncMask(r.nFuncMask),
-    nFuncCount(r.nFuncCount),
     mnDupCount(r.mnDupCount),
     maFieldRef(r.maFieldRef) {}
 
@@ -130,7 +129,6 @@ bool PivotField::operator==( const PivotField& r ) const
 {
     return (nCol                            == r.nCol)
         && (nFuncMask                       == r.nFuncMask)
-        && (nFuncCount                      == r.nFuncCount)
         && (mnDupCount                      == r.mnDupCount)
         && equals(maFieldRef, r.maFieldRef);
 }

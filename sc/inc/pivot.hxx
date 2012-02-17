@@ -73,9 +73,8 @@ struct ScDPLabelData;
 
 struct PivotField
 {
-    SCsCOL              nCol;
+    SCsCOL              nCol; /// 0-based dimension index (not source column index)
     sal_uInt16          nFuncMask;
-    sal_uInt16          nFuncCount;
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
@@ -129,8 +128,9 @@ struct ScDPLabelData
 {
     ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
-    SCCOL               mnCol;
+    SCCOL               mnCol;          /// 0-based field index (not the source column index)
     sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
+    sal_uInt8           mnDupCount;
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.

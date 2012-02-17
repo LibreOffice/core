@@ -1098,6 +1098,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
         lcl_ResetOrient( xSource );
 
+        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+        uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+        long nIntCount = xIntDims->getCount();
+
         boost::ptr_vector<ScDPSaveDimension>::iterator iter = aDimList.begin();
         for (long i = 0; iter != aDimList.end(); ++iter, ++i)
         {
@@ -1109,9 +1113,6 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
             //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
-            uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
-            uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-            long nIntCount = xIntDims->getCount();
             bool bFound = false;
             for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {

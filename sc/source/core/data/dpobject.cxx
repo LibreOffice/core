@@ -1736,7 +1736,7 @@ public:
 void lcl_FillOldFields(
     vector<PivotField>& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-    sal_uInt16 nOrient, SCCOL nColAdd, bool bAddData )
+    sal_uInt16 nOrient, bool bAddData )
 {
     vector<PivotField> aFields;
 
@@ -1814,11 +1814,11 @@ void lcl_FillOldFields(
             {
                 // this dimension is cloned.
 
-                SCsCOL nCompCol; // column ID of the original dimension.
+                SCsCOL nCompCol; // ID of the original dimension.
                 if ( bDataLayout )
                     nCompCol = PIVOT_DATA_FIELD;
                 else
-                    nCompCol = static_cast<SCsCOL>(nDupSource)+nColAdd;     //! seek source column from name
+                    nCompCol = static_cast<SCsCOL>(nDupSource);     //! seek source column from name
 
                 vector<PivotField>::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
                 if (it != aFields.end())
@@ -1833,12 +1833,11 @@ void lcl_FillOldFields(
                 bDataFound = true;
             }
             else if (nDupSource >= 0)
-                rField.nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
+                rField.nCol = static_cast<SCsCOL>(nDupSource);      //! seek from name
             else
-                rField.nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
+                rField.nCol = static_cast<SCsCOL>(nDim);    //! seek source column from name
 
             rField.nFuncMask = nMask;
-            rField.nFuncCount = lcl_CountBits(nMask);
             rField.mnDupCount = nDupCount;
             long nPos = ScUnoHelpFunctions::GetLongProperty(
                 xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_POSITION)));
@@ -1892,17 +1891,15 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     rParam.nTab = aOutRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    SCCOL nSrcColOffset = 0;
-
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(
-        rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, nSrcColOffset, false);
+        rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, false);
     lcl_FillOldFields(
-        rParam.maColFields, xSource, sheet::DataPilotFieldOrientation_COLUMN, nSrcColOffset, bAddData);
+        rParam.maColFields, xSource, sheet::DataPilotFieldOrientation_COLUMN, bAddData);
     lcl_FillOldFields(
-        rParam.maRowFields, xSource, sheet::DataPilotFieldOrientation_ROW, nSrcColOffset, false);
+        rParam.maRowFields, xSource, sheet::DataPilotFieldOrientation_ROW, false);
     lcl_FillOldFields(
-        rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, nSrcColOffset, false);
+        rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, false);
 
     uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
     if (xProp.is())
@@ -1982,15 +1979,15 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
-    long nDimCount = xDims->getCount();
+    sal_Int32 nDimCount = xDims->getCount();
     if ( nDimCount > SC_DP_MAX_FIELDS )
         nDimCount = SC_DP_MAX_FIELDS;
     if (!nDimCount)
         return false;
 
-    for (long nDim=0; nDim < nDimCount; nDim++)
+    for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
     {
-        String aFieldName;
+        rtl::OUString aFieldName;
         uno::Reference<uno::XInterface> xIntDim =
             ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
         uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
@@ -2005,8 +2002,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 
             try
             {
-                aFieldName = String( xDimName->getName() );
-
+                aFieldName = xDimName->getName();
                 uno::Any aOrigAny = xDimProp->getPropertyValue(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
                 uno::Reference<uno::XInterface> xIntOrig;
@@ -2020,7 +2016,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
             OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
                 xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
 
-            if ( aFieldName.Len() && !bData && !bDuplicated )
+            if (!aFieldName.isEmpty() && !bData)
             {
                 SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
                 bool bIsValue = true;                               //! check
