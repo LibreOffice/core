@@ -1941,6 +1941,10 @@ AC_ARG_WITH(system-cppunit-for-build,
     AS_HELP_STRING([--with-system-cppunit-for-build],
         [Use cppunit/libxslt already on system for build tools (cross-compilation only).]))
 
+AC_ARG_WITH(system-db-for-build,
+    AS_HELP_STRING([--with-system-db-for-build],
+        [Use db/libxslt already on system for build tools (cross-compilation only).]))
+
 AC_ARG_WITH(system-libxml-for-build,
     AS_HELP_STRING([--with-system-libxml-for-build],
         [Use libxml/libxslt already on system for build tools (cross-compilation only).]))
@@ -3181,6 +3185,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
+    test -n "$with_system_db_for_build" && sub_conf_opts="$sub_conf_opts --with-system-db"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
     ./configure \
         --disable-mozilla \
