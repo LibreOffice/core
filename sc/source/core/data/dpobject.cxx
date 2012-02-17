@@ -1717,6 +1717,22 @@ sal_uInt16 lcl_CountBits( sal_uInt16 nBits )
     return nCount;
 }
 
+namespace {
+
+class FindByColumn : public std::unary_function<PivotField, bool>
+{
+    SCsCOL mnCol;
+    sal_uInt16 mnMask;
+public:
+    FindByColumn(SCsCOL nCol, sal_uInt16 nMask) : mnCol(nCol), mnMask(nMask) {}
+    bool operator() (const PivotField& r) const
+    {
+        return r.nCol == mnCol && r.nFuncMask == mnMask;
+    }
+};
+
+}
+
 void lcl_FillOldFields(
     vector<PivotField>& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
@@ -1793,12 +1809,10 @@ void lcl_FillOldFields(
                     nDupSource = lcl_FindName( xNameOrig->getName(), xDimsName );
             }
 
-            bool bDupUsed = false;
-            if ( nDupSource >= 0 )
+            sal_uInt8 nDupCount = 0;
+            if (nDupSource >= 0)
             {
                 // this dimension is cloned.
-
-                //  add function bit to previous entry
 
                 SCsCOL nCompCol; // column ID of the original dimension.
                 if ( bDataLayout )
@@ -1806,49 +1820,38 @@ void lcl_FillOldFields(
                 else
                     nCompCol = static_cast<SCsCOL>(nDupSource)+nColAdd;     //! seek source column from name
 
-                vector<PivotField>::iterator itr = aFields.begin(), itrEnd = aFields.end();
-                for (; itr != itrEnd; ++itr)
-                {
-                    //  add to previous column only if new bits aren't already set there
-                    if (itr->nCol == nCompCol && (itr->nFuncMask & nMask) == 0)
-                    {
-                        itr->nFuncMask |= nMask;
-                        itr->nFuncCount = lcl_CountBits(itr->nFuncMask);
-                        bDupUsed = true;
-                        break;
-                    }
-                }
+                vector<PivotField>::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
+                if (it != aFields.end())
+                    nDupCount = it->mnDupCount + 1;
             }
 
-            if ( !bDupUsed )        // also for duplicated dim if original has different orientation
+            aFields.push_back(PivotField());
+            PivotField& rField = aFields.back();
+            if (bDataLayout)
             {
-                aFields.push_back(PivotField());
-                PivotField& rField = aFields.back();
-                if (bDataLayout)
-                {
-                    rField.nCol = PIVOT_DATA_FIELD;
-                    bDataFound = true;
-                }
-                else if (nDupSource >= 0)
-                    rField.nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
-                else
-                    rField.nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
+                rField.nCol = PIVOT_DATA_FIELD;
+                bDataFound = true;
+            }
+            else if (nDupSource >= 0)
+                rField.nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
+            else
+                rField.nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
 
-                rField.nFuncMask = nMask;
-                rField.nFuncCount = lcl_CountBits(nMask);
-                long nPos = ScUnoHelpFunctions::GetLongProperty(
-                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_POSITION)));
-                aPos.push_back(nPos);
+            rField.nFuncMask = nMask;
+            rField.nFuncCount = lcl_CountBits(nMask);
+            rField.mnDupCount = nDupCount;
+            long nPos = ScUnoHelpFunctions::GetLongProperty(
+                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_POSITION)));
+            aPos.push_back(nPos);
 
-                try
-                {
-                    if (nOrient == sheet::DataPilotFieldOrientation_DATA)
-                        xDimProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REFVALUE)))
-                            >>= rField.maFieldRef;
-                }
-                catch (uno::Exception&)
-                {
-                }
+            try
+            {
+                if (nOrient == sheet::DataPilotFieldOrientation_DATA)
+                    xDimProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REFVALUE)))
+                        >>= rField.maFieldRef;
+            }
+            catch (uno::Exception&)
+            {
             }
         }
     }

@@ -58,6 +58,18 @@ using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
 using ::std::vector;
 
+namespace {
+
+bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& right)
+{
+    return (left.ReferenceType     == right.ReferenceType)
+        && (left.ReferenceField    == right.ReferenceField)
+        && (left.ReferenceItemType == right.ReferenceItemType)
+        && (left.ReferenceItemName == right.ReferenceItemName);
+}
+
+}
+
 // ============================================================================
 
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
@@ -101,24 +113,25 @@ OUString ScDPLabelData::getDisplayName() const
 PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
-    nFuncCount( 0 )
+    nFuncCount( 0 ),
+    mnDupCount(0)
 {
 }
 
 PivotField::PivotField( const PivotField& r ) :
-    nCol(r.nCol), nFuncMask(r.nFuncMask), nFuncCount(r.nFuncCount), maFieldRef(r.maFieldRef)
-{
-}
+    nCol(r.nCol),
+    nFuncMask(r.nFuncMask),
+    nFuncCount(r.nFuncCount),
+    mnDupCount(r.mnDupCount),
+    maFieldRef(r.maFieldRef) {}
 
 bool PivotField::operator==( const PivotField& r ) const
 {
     return (nCol                            == r.nCol)
         && (nFuncMask                       == r.nFuncMask)
         && (nFuncCount                      == r.nFuncCount)
-        && (maFieldRef.ReferenceType        == r.maFieldRef.ReferenceType)
-        && (maFieldRef.ReferenceField       == r.maFieldRef.ReferenceField)
-        && (maFieldRef.ReferenceItemType    == r.maFieldRef.ReferenceItemType)
-        && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
+        && (mnDupCount                      == r.mnDupCount)
+        && equals(maFieldRef, r.maFieldRef);
 }
 
 ScPivotParam::ScPivotParam()
@@ -199,15 +212,26 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
-    mnFuncMask( nFuncMask )
+    mnFuncMask( nFuncMask ),
+    mnDupCount(0)
 {
 }
 
-ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScDPFuncData::ScDPFuncData(
+    SCCOL nCol, sal_uInt16 nFuncMask, sal_uInt8 nDupCount, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
+    mnDupCount(nDupCount),
     maFieldRef( rFieldRef )
 {
+}
+
+bool ScDPFuncData::operator== (const ScDPFuncData& r) const
+{
+    if (mnCol != r.mnCol || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
+        return false;
+
+    return equals(maFieldRef, r.maFieldRef);
 }
 
 // ============================================================================

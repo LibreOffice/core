@@ -225,6 +225,14 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
     }
 }
 
+void ScAccessibleDataPilotControl::MoveField(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
+{
+    RemoveField(nOldIndex);
+    if (nNewIndex > nOldIndex)
+        --nNewIndex;
+    AddField(nNewIndex);
+}
+
 void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
 {
     sal_Bool bRemoved(sal_False);

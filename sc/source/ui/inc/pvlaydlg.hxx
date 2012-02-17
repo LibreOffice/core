@@ -202,7 +202,7 @@ private:
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
     String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
-    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    bool Contains( ScDPFuncDataVec* pArr, const ScDPFuncData& rData, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 

@@ -61,7 +61,16 @@ enum ScDPFieldType
 class ScDPFieldControlBase : public Control
 {
 protected:
-    typedef ::std::pair<String, bool> FieldName;    // true = text fits into button
+    struct FieldName
+    {
+        rtl::OUString maText;
+        bool mbFits;
+        sal_uInt8 mnDupCount;
+        FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount = 0);
+        FieldName(const FieldName& r);
+
+        rtl::OUString getDisplayedText() const;
+    };
     typedef ::std::vector<FieldName> FieldNames;
 
 public:
@@ -117,15 +126,20 @@ public:
     bool            IsExistingIndex( size_t nIndex ) const;
 
     /** Inserts a field to the specified index. */
-    void            AddField( const String& rText, size_t nNewIndex );
+    void AddField( const rtl::OUString& rText, size_t nNewIndex );
 
     /** Inserts a field using the specified pixel position.
         @param rPos  The coordinates to insert the field.
         @param rnIndex  The new index of the field is returned here.
         @return  true, if the field has been created. */
-    bool            AddField( const String& rText, const Point& rPos, size_t& rnIndex );
+    bool AddField(const rtl::OUString& rText, const Point& rPos, size_t& rnIndex, sal_uInt8& rnDupCount);
 
-    bool            AppendField(const String& rText, size_t& rnIndex);
+    bool MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex);
+
+    bool AppendField(const rtl::OUString& rText, size_t& rnIndex);
+
+
+    sal_uInt8 GetDupCount(size_t nIndex) const;
 
     /** Removes a field from the specified index. */
     void            DelField( size_t nDelIndex );
@@ -138,9 +152,9 @@ public:
     /** Removes all fields. */
     void            ClearFields();
     /** Changes the text on an existing field. */
-    void            SetFieldText( const String& rText, size_t nIndex );
+    void SetFieldText( const rtl::OUString& rText, size_t nIndex );
     /** Returns the text of an existing field. */
-    const String&   GetFieldText( size_t nIndex ) const;
+    rtl::OUString GetFieldText( size_t nIndex ) const;
 
     /** Calculates a field index at a specific pixel position. Returns in every
         case the index of an existing field.
@@ -224,6 +238,8 @@ private:
     void                    SetSelectionEnd();
     /** Sets selection to new position relative to current. */
     void                    MoveSelection( SCsCOL nDX, SCsROW nDY );
+
+    sal_uInt8 GetNextDupCount(const rtl::OUString& rFieldText) const;
 
 private:
     typedef ::std::vector<Window*> Paintables;

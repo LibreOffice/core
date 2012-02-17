@@ -75,8 +75,9 @@ typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 struct PivotField
 {
     SCsCOL              nCol;
-    sal_uInt16              nFuncMask;
-    sal_uInt16              nFuncCount;
+    sal_uInt16          nFuncMask;
+    sal_uInt16          nFuncCount;
+    sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
     explicit            PivotField( SCsCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
@@ -188,13 +189,17 @@ typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
 struct ScDPFuncData
 {
-    short               mnCol;
+    SCCOL               mnCol;
     sal_uInt16          mnFuncMask;
+    sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask );
-    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask,
-                            const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
+    explicit ScDPFuncData( SCCOL nNewCol, sal_uInt16 nNewFuncMask );
+    explicit ScDPFuncData(
+        SCCOL nNewCol, sal_uInt16 nNewFuncMask, sal_uInt8 nDupCount,
+        const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
+
+    bool operator== (const ScDPFuncData& r) const;
 };
 
 // ============================================================================
