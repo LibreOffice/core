@@ -12,7 +12,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="hi_IN"/>
-  <LC_FORMAT ref="hi_IN" replaceTo="[$रु.-44e]"/>
+  <LC_FORMAT ref="hi_IN" replaceTo="[$₹-44E]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="en_US"/>
