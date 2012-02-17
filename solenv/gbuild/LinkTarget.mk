@@ -472,6 +472,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -494,6 +495,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCL
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
 endif
 
 endef
@@ -949,5 +951,12 @@ endef
 gb_LinkTarget_use_externals = \
  $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
 
+define gb_LinkTarget_set_warnings_not_errors
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+endif
+
+endef
 
 # vim: set noet sw=4:

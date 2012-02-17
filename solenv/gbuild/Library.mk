@@ -181,6 +181,7 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	export_objects_list \
 	add_nativeres \
+	set_warnings_not_errors \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

@@ -279,6 +279,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
@@ -297,6 +298,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
@@ -322,8 +324,8 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
 	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \

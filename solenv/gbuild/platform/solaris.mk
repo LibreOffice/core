@@ -169,6 +169,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-xMF $(4) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -183,6 +184,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-xMMD \
@@ -205,8 +207,8 @@ gb_LinkTarget__RPATHS := \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
 	NONE:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
