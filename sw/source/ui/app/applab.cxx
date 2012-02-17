@@ -164,7 +164,6 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     return pFmt;
 }
 
-
 void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 {
     static sal_uInt16 nLabelTitleNo = 0;
@@ -294,34 +293,31 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             // Prepare border template
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
-            SwFrmFmt* pFmtEORow = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );  //new SwFrmFmt (*pFmt);
-            SwFrmFmt* pFmtEOCol = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );  //new SwFrmFmt (*pFmt);
-            SwFrmFmt* pFmtEOColEORow = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );  //new SwFrmFmt (*pFmt);
-
             sal_Int32 iResultWidth = rItem.lLeft + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth - rItem.lPWidth;
             sal_Int32 iResultHeight = rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight - rItem.lPHeight;
             sal_Int32 iWidth = (iResultWidth > 0 ? rItem.lWidth - (iResultWidth / rItem.nCols) - 1 : rItem.lWidth);
             sal_Int32 iHeight = (iResultHeight > 0 ? rItem.lHeight - (iResultHeight / rItem.nRows) - 1 : rItem.lHeight);
             SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE, iWidth, iHeight );
+            pFmt->SetFmtAttr( aFrmSize );
+
+            SwFrmFmt* pFmtEORow = new SwFrmFmt (*pFmt);
+            SwFrmFmt* pFmtEOCol = new SwFrmFmt (*pFmt);
+            SwFrmFmt* pFmtEOColEORow = new SwFrmFmt (*pFmt);
 
             SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
-                                        RES_UL_SPACE);
-            SvxULSpaceItem aFrmNoULSpace( 0, 0, RES_UL_SPACE);
+                                        RES_UL_SPACE );
+            SvxULSpaceItem aFrmNoULSpace( 0, 0, RES_UL_SPACE );
 
             SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
-                                        0, 0, RES_LR_SPACE);
-            SvxLRSpaceItem aFrmNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE);
+                                        0, 0, RES_LR_SPACE );
+            SvxLRSpaceItem aFrmNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE );
 
-            pFmt->SetFmtAttr( aFrmSize );
             pFmt->SetFmtAttr(aFrmULSpace);
             pFmt->SetFmtAttr(aFrmLRSpace);
-            pFmtEORow->SetFmtAttr( aFrmSize );
             pFmtEORow->SetFmtAttr(aFrmULSpace);
             pFmtEORow->SetFmtAttr(aFrmNoLRSpace);
-            pFmtEOCol->SetFmtAttr( aFrmSize );
             pFmtEOCol->SetFmtAttr(aFrmNoULSpace);
             pFmtEOCol->SetFmtAttr(aFrmLRSpace);
-            pFmtEOColEORow->SetFmtAttr( aFrmSize );
             pFmtEOColEORow->SetFmtAttr(aFrmNoULSpace);
             pFmtEOColEORow->SetFmtAttr(aFrmNoLRSpace);
 
@@ -351,7 +347,6 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                 lcl_InsertLabText( *pSh, rItem, *pFrmFmt, *pFldMgr, j, i,
                                     i == rItem.nRows - 1 && j == rItem.nCols - 1, sal_True ) :
                                 lcl_InsertBCText(*pSh, rItem, *pFrmFmt, j, i, sal_True);
-
                         if (!(i|j))
                         {
                             pFirstFlyFmt = pTmp;
