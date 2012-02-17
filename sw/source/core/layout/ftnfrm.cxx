@@ -1000,7 +1000,7 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes
             if( pBody && pBody->Lower() )
             {
                 SwFrm* pLow = pBody->Lower();
-                while( pLow->GetNext() )
+                while (pLow)
                 {
                     if( pLow->IsSctFrm() && ( !pLow->GetNext() ||
                         ((SwSectionFrm*)pLow)->IsAnyNoteAtEnd() ) &&

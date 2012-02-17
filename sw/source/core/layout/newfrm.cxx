@@ -610,7 +610,7 @@ SwRootFrm::~SwRootFrm()
     // also searches backwards to find the master of footnotes, they must be
     // considered to be owned by the SwRootFrm and also be destroyed here,
     // before tearing down the (now footnote free) rest of the layout.
-    AllRemoveFtns();
+    RemoveFtns(0, false, true);
 
     if(pBlink)
         pBlink->FrmDelete( this );
