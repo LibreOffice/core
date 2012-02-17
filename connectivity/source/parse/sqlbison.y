@@ -770,7 +770,7 @@ fetch_statement:
 	;
 
 insert_statement:
-		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_node opt_column_commalist values_or_query_spec
+		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_node opt_column_commalist query_exp
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
