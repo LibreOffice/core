@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,30 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svx))
+$(eval $(call gb_Package_Package,svx_gengal,$(SRCDIR)/svx/source/gengal))
+$(eval $(call gb_Package_add_file,svx_gengal,bin/gengal,gengal.sh))
 
-$(eval $(call gb_Module_add_targets,svx,\
-    Library_svx \
-    Library_svxcore \
-    Library_textconversiondlgs \
-    AllLangResTarget_svx \
-    AllLangResTarget_ofa \
-    AllLangResTarget_gal \
-    AllLangResTarget_textconversiondlgs \
-    Package_globlmn_hrc \
-    Package_inc \
-    Package_sdi \
-    Package_gengal \
-    Executable_gengal.bin \
-))
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
-    JunitTest_svx_unoapi \
-))
-
-#todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
-#todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: globlmn.hrc
-#todo: component file
-# vim: set noet sw=4 ts=4:
+# vim: set noet ts=4 sw=4:

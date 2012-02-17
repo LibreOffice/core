@@ -84,6 +84,7 @@ else
 $(eval $(call gb_Helper_register_executables,OOO,\
     soffice.bin \
     unopkg.bin \
+    gengal.bin \
 ))
 
 ifeq ($(OS),MACOSX)

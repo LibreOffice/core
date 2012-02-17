@@ -124,6 +124,28 @@ End
 #endif
 #endif
 
+File gid_File_Bin_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "gengal.bin";
+  #else
+    Name = "gengal.exe";
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Script_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "gengal";
+End
+
+#endif
+
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
