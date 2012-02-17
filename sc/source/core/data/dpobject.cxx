@@ -2007,10 +2007,10 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         {
             aFieldName = xDimName->getName();
             uno::Any aOrigAny = xDimProp->getPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
-            uno::Reference<uno::XInterface> xIntOrig;
-            if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
-                bDuplicated = true;
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
+            sal_Int32 nOrigPos = -1;
+            if (aOrigAny >>= nOrigPos)
+                bDuplicated = nOrigPos >= 0;
         }
         catch(uno::Exception&)
         {

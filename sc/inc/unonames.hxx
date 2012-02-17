@@ -565,6 +565,7 @@
 #define SC_UNO_DP_COLGRAND             "ColumnGrand"
 #define SC_UNO_DP_ROWGRAND             "RowGrand"
 #define SC_UNO_DP_ORIGINAL             "Original"
+#define SC_UNO_DP_ORIGINAL_POS         "OriginalPosition"
 #define SC_UNO_DP_ISDATALAYOUT         "IsDataLayoutDimension"
 #define SC_UNO_DP_ORIENTATION          "Orientation"
 #define SC_UNO_DP_POSITION             "Position"

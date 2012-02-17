@@ -1491,6 +1491,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_DP_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_ORIENTATION), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_ORIGINAL), 0,  &getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_ORIGINAL_POS), 0, &getCppuType((sal_Int32*)0),             0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_USEDHIERARCHY), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
@@ -1640,6 +1641,11 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         if (nSourceDim >= 0)
             xOriginal = pSource->GetDimensionsObject()->getByIndex(nSourceDim);
         aRet <<= xOriginal;
+    }
+    else if (aPropertyName.equalsAscii(SC_UNO_DP_ORIGINAL_POS))
+    {
+        sal_Int32 nPos = static_cast<sal_Int32>(nSourceDim);
+        aRet <<= nPos;
     }
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_FILTER ) )
     {
