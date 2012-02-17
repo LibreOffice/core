@@ -89,7 +89,6 @@ struct PivotField
 
 typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVec;
 
-// implementation still in global2.cxx
 struct ScPivotParam
 {
     SCCOL           nCol;           // cursor position /
