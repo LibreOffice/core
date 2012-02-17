@@ -176,7 +176,6 @@ public:
     void            SetSymbol( SymbolType eSymbol );
     SymbolType      GetSymbol() const { return meSymbol; }
     void            SetSymbolAlign( SymbolAlign eAlign );
-    SymbolAlign     GetSymbolAlign() const;
 
     void            SetDropDown( sal_uInt16 nStyle );
     sal_uInt16          GetDropDown() const { return mnDDStyle; }

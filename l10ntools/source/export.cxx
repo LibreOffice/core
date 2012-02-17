@@ -201,29 +201,6 @@ int GetError()
 // class ResData
 //
 
-void ResData::Dump(){
-    printf("**************\nResData\n");
-    printf("sPForm = %s , sResTyp = %s , sId = %s , sGId = %s , sHelpId = %s\n",
-        sPForm.getStr(), sResTyp.getStr(), sId.getStr(),
-        sGId.getStr(), sHelpId.getStr());
-
-    rtl::OString a("*pStringList");
-    rtl::OString b("*pUIEntries");
-    rtl::OString c("*pFilterList");
-    rtl::OString d("*pItemList");
-    rtl::OString e("*pPairedList");
-    rtl::OString f("sText");
-
-    Export::DumpMap( f , sText );
-
-    if( pStringList )   Export::DumpExportList( a , *pStringList );
-    if( pUIEntries )    Export::DumpExportList( b , *pUIEntries );
-    if( pFilterList )   Export::DumpExportList( c , *pFilterList );
-    if( pItemList )     Export::DumpExportList( d , *pItemList );
-    if( pPairedList )   Export::DumpExportList( e , *pPairedList );
-    printf("\n");
-}
-
 /*****************************************************************************/
 sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 /*****************************************************************************/

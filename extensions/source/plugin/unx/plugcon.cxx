@@ -59,23 +59,6 @@ sal_uInt32 PluginConnector::GetNPPID( NPP instance )
     return UnknownNPPID;
 }
 
-ConnectorInstance* PluginConnector::getInstance( NPP instance )
-{
-    size_t nLen = m_aInstances.size();
-    for( size_t i=0; i <nLen; i++ )
-    {
-        ConnectorInstance* pInst = m_aInstances[i];
-        if( pInst->instance == instance )
-            return pInst;
-    }
-    return NULL;
-}
-
-ConnectorInstance* PluginConnector::getInstanceById( sal_uInt32 nInstanceID )
-{
-    return nInstanceID < static_cast<sal_uInt32>(m_aInstances.size()) ? m_aInstances[ nInstanceID ] : NULL;
-}
-
 struct PtrStruct
 {
     char* pData;

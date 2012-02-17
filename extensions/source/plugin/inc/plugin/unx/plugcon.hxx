@@ -184,9 +184,6 @@ public:
         LINK( this, PluginConnector, WorkOnNewMessageHdl ).
             Call( (Mediator*)this );
     }
-
-    ConnectorInstance* getInstance( NPP );
-    ConnectorInstance* getInstanceById( sal_uInt32 );
 };
 
 enum CommandAtoms

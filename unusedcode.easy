@@ -54,13 +54,8 @@ ORegKey::acquireKey(void*)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 ParagraphStyleManager::get(WPXString const&) const
-PluginConnector::getInstance(_NPP*)
-PluginConnector::getInstanceById(unsigned int)
 PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
-ProposalList::Remove(rtl::OUString const&)
-PushButton::GetSymbolAlign() const
-ResData::Dump()
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
 SalGraphics::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString const&, OutputDevice const*)
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)

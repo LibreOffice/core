@@ -166,8 +166,6 @@ public:
 
     rtl::OString sPForm;
 
-    void Dump();
-
     ResData(const rtl::OString &rPF, const rtl::OString &rGId)
             :
             nWidth( 0 ),

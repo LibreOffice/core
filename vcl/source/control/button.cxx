@@ -1624,12 +1624,6 @@ void PushButton::SetSymbolAlign( SymbolAlign eAlign )
 }
 
 // -----------------------------------------------------------------------
-SymbolAlign PushButton::GetSymbolAlign() const
-{
-    return ImplGetSymbolAlign();
-}
-
-// -----------------------------------------------------------------------
 
 void PushButton::SetDropDown( sal_uInt16 nStyle )
 {
