@@ -14,6 +14,7 @@
 # Major Contributor(s):
 # Copyright (C) 2012 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
 #  (initial developer)
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #
 # All Rights Reserved.
 #
@@ -25,11 +26,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,clucene))
+gb_PARTIALBUILD := T
+include $(GBUILDDIR)/gbuild_simple.mk
 
-$(eval $(call gb_Module_add_targets,clucene,\
-    Library_clucene \
-    Package_source \
-))
+done :
+	mkdir -p $(dir $@)
+	# FIXME: do not hardcode the path here
+	$(GNUTAR) -x --strip-component=1 -f $(TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+	#FIXME ?, our rules expect .cxx
+	for i in `find . -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done
+	#dirent.h is a problem, move it around
+	mkdir -p inc/internal/CLucene/util
+	mv src/shared/CLucene/util/dirent.h inc/internal/CLucene/util
+	#To generate these, run cmake for each sufficiently different platform, customize and stick into configs
+	cp $(SRCDIR)/clucene/configs/_clucene-config-generic.h src/shared/CLucene/_clucene-config.h
+	cp $(SRCDIR)/clucene/configs/clucene-config-generic.h src/shared/CLucene/clucene-config.h
+
+.DEFAULT_GOAL := all
+.PHONY : all
+all : done
 
 # vim: set noet sw=4 ts=4:
