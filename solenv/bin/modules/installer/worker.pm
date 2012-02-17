@@ -1403,7 +1403,10 @@ sub prepare_windows_patchfiles
     my $winpatchdirname = "winpatch";
     my $winpatchdir = installer::systemactions::create_directories($winpatchdirname, $languagestringref);
 
-    my $patchlistfile = installer::existence::get_specified_file_by_name($filesref, $patchfilename);
+    my ($patchlistfile) = grep {$_->{Name} eq $patchfilename} @{$filesref};
+    if (! defined $patchlistfile) {
+        installer::exiter::exit_program("ERROR: Could not find file $patchfilename in list of files!", "prepare_windows_patchfiles");
+    }
 
     # reorganizing the patchfile content, sorting for directory to decrease the file size
     my $sorteddirectorylist = [ sort keys %patchfiledirectories ];

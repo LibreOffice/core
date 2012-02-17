@@ -63,36 +63,4 @@ sub get_specified_file
     return $onefile;
 }
 
-#####################################################################
-# Returning a specified file as base for a new file,
-# defined by its "Name"
-#####################################################################
-
-sub get_specified_file_by_name
-{
-    my ($filesarrayref, $searchname) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
-    {
-        $onefile = ${$filesarrayref}[$i];
-        my $filename = $onefile->{'Name'};
-
-        if ( $filename eq $searchname )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    if (!($foundfile))
-    {
-        installer::exiter::exit_program("ERROR: Could not find file $searchname in list of files!", "get_specified_file_by_name");
-    }
-
-    return $onefile;
-}
-
 1;
