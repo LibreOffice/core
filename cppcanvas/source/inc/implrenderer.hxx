@@ -184,9 +184,6 @@ static float GetSwapFloat( SvStream& rSt )
             ImplRenderer( const CanvasSharedPtr&    rCanvas,
                           const GDIMetaFile&        rMtf,
                           const Parameters&         rParms );
-            ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const BitmapEx&           rBmpEx,
-                          const Parameters&         rParms );
 
             virtual ~ImplRenderer();
 
@@ -220,10 +217,8 @@ static float GetSwapFloat( SvStream& rSt )
             void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags = 0);
             void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags = 0);
             void MapToDevice (double &x, double &y);
-            ::basegfx::B2DPoint Map (::basegfx::B2DPoint& p);
             ::basegfx::B2DPoint Map (double ix, double iy);
             ::basegfx::B2DSize MapSize (double iwidth, double iheight);
-            ::basegfx::B2DRange MapRectangle (double ix, double iy, double iwidth, double iheight);
 
         private:
             // default: disabled copy/assignment

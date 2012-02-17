@@ -102,7 +102,6 @@ namespace cppcanvas
 
         // singleton
         VCLFactory();
-        ~VCLFactory();
 
         // default: disabled copy/assignment
         VCLFactory(const VCLFactory&);

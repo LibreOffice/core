@@ -143,65 +143,9 @@ namespace cppcanvas
         bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
-                         const ::Point&                                     rOffset,
-                         const ::basegfx::B2DVector*                        pScaling,
-                         const double*                                      pRotation );
-
-        /** This method modifies the clip, to cancel the given
-            transformation.
-
-            As the clip is relative to the render state
-            transformation, offsetting or scaling the render state
-            must modify the clip, to keep it at the same position
-            relative to the primitive at hand
-
-            @param o_rRenderState
-            Render state to change the clip in
-
-            @param rOutdevState
-            Input state. Is used to retrieve the original clip from
-
-            @param rOffset
-            The clip is offsetted by the negative of this value.
-
-            @param pScaling
-            The clip is inversely scaled by this value (if given)
-
-            @param pRotation
-            The clip is inversely rotated by this value (if given)
-
-            @return true, if the clip has changed, false if not
-         */
-        bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
                          const double*                                      pRotation );
-
-        /** This method modifies the clip, to cancel the given
-            transformation.
-
-            As the clip is relative to the render state
-            transformation, transforming the render state further must
-            modify the clip, to keep it at the same position relative
-            to the primitive at hand
-
-            @param o_rRenderState
-            Render state to change the clip in
-
-            @param rOutdevState
-            Input state. Is used to retrieve the original clip from
-
-            @param rTransform
-            The clip is transformed by the inverse of this value.
-
-            @return true, if the clip has changed, false if not
-         */
-        bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::basegfx::B2DHomMatrix&                     rTransform );
 
         struct TextLineInfo
         {

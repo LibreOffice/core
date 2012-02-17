@@ -1140,18 +1140,6 @@ connectivity::mozab::OTable::OTable(connectivity::sdbcx::OCollection*, connectiv
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 connectivity::toString(com::sun::star::uno::Any const&)
-cppcanvas::BaseGfxFactory::createPolyPolygon(boost::shared_ptr<cppcanvas::Canvas> const&, basegfx::B2DPolyPolygon const&) const
-cppcanvas::BaseGfxFactory::createText(boost::shared_ptr<cppcanvas::Canvas> const&, rtl::OUString const&) const
-cppcanvas::BaseGfxFactory::~BaseGfxFactory()
-cppcanvas::VCLFactory::~VCLFactory()
-cppcanvas::internal::ImplRenderer::ImplRenderer(boost::shared_ptr<cppcanvas::Canvas> const&, BitmapEx const&, cppcanvas::Renderer::Parameters const&)
-cppcanvas::internal::ImplRenderer::Map(basegfx::B2DPoint&)
-cppcanvas::internal::ImplRenderer::MapRectangle(double, double, double, double)
-cppcanvas::internal::ImplSprite::getGraphicDevice() const
-cppcanvas::internal::ImplSpriteCanvas::createSpriteFromBitmaps(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap> > const&, signed char)
-cppcanvas::internal::TransparencyGroupActionFactory::createTransparencyGroupAction(std::auto_ptr<GDIMetaFile>&, cppcanvas::Renderer::Parameters const&, basegfx::B2DPoint const&, basegfx::B2DVector const&, double, boost::shared_ptr<cppcanvas::Canvas> const&, cppcanvas::internal::OutDevState const&)
-cppcanvas::tools::modifyClip(com::sun::star::rendering::RenderState&, cppcanvas::internal::OutDevState const&, boost::shared_ptr<cppcanvas::Canvas> const&, Point const&, basegfx::B2DVector const*, double const*)
-cppcanvas::tools::modifyClip(com::sun::star::rendering::RenderState&, cppcanvas::internal::OutDevState const&, boost::shared_ptr<cppcanvas::Canvas> const&, basegfx::B2DHomMatrix const&)
 dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 dbaui::getKeyColumns(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, int)
 dbtools::CharsetIteratorDerefHelper::CharsetIteratorDerefHelper()

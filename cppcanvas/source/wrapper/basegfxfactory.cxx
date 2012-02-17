@@ -68,10 +68,6 @@ namespace cppcanvas
     {
     }
 
-    BaseGfxFactory::~BaseGfxFactory()
-    {
-    }
-
     PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr&          rCanvas,
                                                             const ::basegfx::B2DPolygon&    rPoly ) const
     {
@@ -91,27 +87,6 @@ namespace cppcanvas
                                            ::basegfx::unotools::xPolyPolygonFromB2DPolygon(
                                                xCanvas->getDevice(),
                                                rPoly) ) );
-    }
-
-    PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr&              rCanvas,
-                                                            const ::basegfx::B2DPolyPolygon&    rPolyPoly ) const
-    {
-        OSL_ENSURE( rCanvas.get() != NULL &&
-                    rCanvas->getUNOCanvas().is(),
-                    "BaseGfxFactory::createPolyPolygon(): Invalid canvas" );
-
-        if( rCanvas.get() == NULL )
-            return PolyPolygonSharedPtr();
-
-        uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
-        if( !xCanvas.is() )
-            return PolyPolygonSharedPtr();
-
-        return PolyPolygonSharedPtr(
-            new internal::ImplPolyPolygon( rCanvas,
-                                           ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                                               xCanvas->getDevice(),
-                                               rPolyPoly) ) );
     }
 
     BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
@@ -152,12 +127,6 @@ namespace cppcanvas
             new internal::ImplBitmap( rCanvas,
                                       xCanvas->getDevice()->createCompatibleAlphaBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
-    }
-
-    TextSharedPtr BaseGfxFactory::createText( const CanvasSharedPtr& rCanvas, const ::rtl::OUString& rText ) const
-    {
-        return TextSharedPtr( new internal::ImplText( rCanvas,
-                                                      rText ) );
     }
 
 }

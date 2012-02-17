@@ -135,15 +135,6 @@ namespace cppcanvas
                                 mpTransformArbiter ) );
         }
 
-        SpriteSharedPtr ImplSpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& rAnimationBitmaps,
-                                                                   sal_Int8                                                     nInterpolationMode )
-        {
-            return SpriteSharedPtr( new internal::ImplSprite( mxSpriteCanvas,
-                                                              mxSpriteCanvas->createSpriteFromBitmaps( rAnimationBitmaps,
-                                                                                                       nInterpolationMode ),
-                                                              mpTransformArbiter ) );
-        }
-
         CanvasSharedPtr ImplSpriteCanvas::clone() const
         {
             return SpriteCanvasSharedPtr( new ImplSpriteCanvas( *this ) );

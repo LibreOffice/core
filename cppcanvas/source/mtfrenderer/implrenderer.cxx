@@ -3077,54 +3077,6 @@ namespace cppcanvas
                             );
         }
 
-        ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
-                                    const BitmapEx&         rBmpEx,
-                                    const Parameters&       rParams ) :
-            CanvasGraphicHelper( rCanvas ),
-            maActions()
-        {
-            // TODO(F3): property modification parameters are
-            // currently ignored for Bitmaps
-            (void)rParams;
-
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::ImplRenderer(bitmap)" );
-
-            OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
-                        "ImplRenderer::ImplRenderer(): Invalid canvas" );
-            OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
-                        "ImplRenderer::ImplRenderer(): Invalid graphic device" );
-
-            // make sure canvas and graphic device are valid; action
-            // creation don't check that every time
-            if( rCanvas.get() == NULL ||
-                !rCanvas->getUNOCanvas().is() ||
-                !rCanvas->getUNOCanvas()->getDevice().is() )
-            {
-                // leave actions empty
-                return;
-            }
-
-            OutDevState aState;
-
-            const Size aBmpSize( rBmpEx.GetSizePixel() );
-
-            // Setup local state, such that the bitmap renders itself
-            // into a one-by-one square for identity view and render
-            // transformations
-            aState.transform.scale( 1.0 / aBmpSize.Width(),
-                                    1.0 / aBmpSize.Height() );
-
-            // create a single action for the provided BitmapEx
-            maActions.push_back(
-                MtfAction(
-                    BitmapActionFactory::createBitmapAction(
-                        rBmpEx,
-                        ::basegfx::B2DPoint(),
-                        rCanvas,
-                        aState),
-                    0 ) );
-        }
-
         ImplRenderer::~ImplRenderer()
         {
         }

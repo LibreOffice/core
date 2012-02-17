@@ -75,7 +75,6 @@ namespace cppcanvas
             coordinate space as the source polygon
          */
         PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolygon& rPoly ) const;
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolyPolygon& rPoly ) const;
 
         /** Create an uninitialized bitmap with the given size
          */
@@ -85,16 +84,11 @@ namespace cppcanvas
          */
         BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
 
-        /** Create a text portion with the given content string
-         */
-        TextSharedPtr           createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
-
     private:
         friend struct InitInstance2;
 
         // singleton
         BaseGfxFactory();
-        ~BaseGfxFactory();
 
         // default: disabled copy/assignment
         BaseGfxFactory(const BaseGfxFactory&);

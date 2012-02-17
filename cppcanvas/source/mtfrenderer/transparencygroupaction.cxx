@@ -558,25 +558,6 @@ namespace cppcanvas
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
-                                                                                       const Renderer::Parameters&  rParms,
-                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
-                                                                                       const ::basegfx::B2DVector&  rDstSize,
-                                                                                       double                       nAlpha,
-                                                                                       const CanvasSharedPtr&       rCanvas,
-                                                                                       const OutDevState&           rState )
-        {
-            return ActionSharedPtr( new TransparencyGroupAction(rGroupMtf,
-                                                                rParms,
-                                                                rDstPoint,
-                                                                rDstSize,
-                                                                nAlpha,
-                                                                rCanvas,
-                                                                rState ) );
-        }
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
                                                                                        GradientAutoPtr&             rAlphaGradient,
                                                                                        const Renderer::Parameters&  rParms,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,

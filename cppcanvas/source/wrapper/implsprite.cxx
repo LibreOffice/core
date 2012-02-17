@@ -226,11 +226,6 @@ namespace cppcanvas
         {
             return mxSprite;
         }
-
-        uno::Reference< rendering::XGraphicDevice > ImplSprite::getGraphicDevice() const
-        {
-            return mxGraphicDevice;
-        }
     }
 }
 
