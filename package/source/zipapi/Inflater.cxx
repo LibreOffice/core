@@ -27,12 +27,10 @@
  ************************************************************************/
 
 #include <package/Inflater.hxx>
-#ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
 #include <zlib.h>
 #else
 #include <external/zlib/zlib.h>
-#endif
 #endif
 #include <string.h> // for memset
 
