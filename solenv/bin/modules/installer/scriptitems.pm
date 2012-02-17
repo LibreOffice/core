@@ -28,7 +28,6 @@
 package installer::scriptitems;
 
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::languages;

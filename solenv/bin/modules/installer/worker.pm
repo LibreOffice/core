@@ -34,7 +34,6 @@ use File::Temp qw(tmpnam);
 use File::Path;
 use installer::control;
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;

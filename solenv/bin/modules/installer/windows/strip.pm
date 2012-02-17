@@ -29,7 +29,6 @@ package installer::windows::strip;
 
 use File::Temp qw(tmpnam);
 use installer::converter;
-use installer::existence;
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;

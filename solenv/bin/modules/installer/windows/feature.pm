@@ -27,7 +27,6 @@
 
 package installer::windows::feature;
 
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;

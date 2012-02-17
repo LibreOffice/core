@@ -29,7 +29,6 @@ package installer::archivefiles;
 
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;

@@ -28,7 +28,6 @@
 package installer::windows::featurecomponent;
 
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;

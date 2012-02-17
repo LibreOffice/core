@@ -29,7 +29,6 @@ package installer::windows::sign;
 
 use Cwd;
 use installer::converter;
-use installer::existence;
 use installer::files;
 use installer::globals;
 use installer::scriptitems;

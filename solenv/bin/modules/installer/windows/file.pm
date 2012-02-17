@@ -28,7 +28,6 @@
 package installer::windows::file;
 
 use Digest::MD5;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;

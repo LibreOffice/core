@@ -27,7 +27,6 @@
 
 package installer::ziplist;
 
-use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::logger;
