@@ -95,8 +95,8 @@ OUString ScDPLabelData::Member::getDisplayName() const
 ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue) :
     maName( rName ),
     mnCol( nCol ),
+    mnOriginalDim(-1),
     mnFuncMask( PIVOT_FUNC_NONE ),
-    mnDupCount(0),
     mnUsedHier( 0 ),
     mnFlags( 0 ),
     mbShowAll( false ),
@@ -129,7 +129,6 @@ bool PivotField::operator==( const PivotField& r ) const
 {
     return (nCol                            == r.nCol)
         && (nFuncMask                       == r.nFuncMask)
-        && (mnDupCount                      == r.mnDupCount)
         && equals(maFieldRef, r.maFieldRef);
 }
 

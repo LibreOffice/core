@@ -354,7 +354,16 @@ void ScDPLayoutDlg::InitWndSelect(const ScDPLabelDataVec& rLabels)
     aLabelDataArr.reserve( nLabelCount );
     for ( size_t i=0; i < nLabelCount; i++ )
     {
-        aLabelDataArr.push_back(new ScDPLabelData(rLabels[i]));
+        const ScDPLabelData& r = rLabels[i];
+
+        if (r.mnOriginalDim >= 0)
+            // Don't add duplicate dimensions.
+            continue;
+
+        // TODO: For dimension with duplicates, use layout name only when all
+        // its duplicate dimensions use the same layout name. Otherwise use
+        // the original name.
+        aLabelDataArr.push_back(new ScDPLabelData(r));
         aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
         aSelectArr.push_back(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
     }

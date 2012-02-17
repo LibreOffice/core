@@ -129,8 +129,8 @@ struct ScDPLabelData
     ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
     SCCOL               mnCol;          /// 0-based field index (not the source column index)
+    long                mnOriginalDim;  /// original dimension index (>= 0 for duplicated dimension)
     sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
-    sal_uInt8           mnDupCount;
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.

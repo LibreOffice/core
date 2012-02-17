@@ -2003,12 +2003,12 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
         //! error checking -- is "IsDataLayoutDimension" property required??
 
+        sal_Int32 nOrigPos = -1;
         try
         {
             aFieldName = xDimName->getName();
             uno::Any aOrigAny = xDimProp->getPropertyValue(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
-            sal_Int32 nOrigPos = -1;
             if (aOrigAny >>= nOrigPos)
                 bDuplicated = nOrigPos >= 0;
         }
@@ -2022,10 +2022,11 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         if (aFieldName.isEmpty() || bData)
             continue;
 
-        SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
         bool bIsValue = true;                               //! check
 
-        std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
+        std::auto_ptr<ScDPLabelData> pNewLabel(
+            new ScDPLabelData(aFieldName, static_cast<SCCOL>(nDim), bIsValue));
+        pNewLabel->mnOriginalDim = static_cast<long>(nOrigPos);
         pNewLabel->maLayoutName = aLayoutName;
         GetHierarchies(nDim, pNewLabel->maHiers);
         GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
