@@ -28,10 +28,18 @@
 
 package packager::work;
 
+use base 'Exporter';
+
 use packager::exiter;
 use packager::existence;
 use packager::files;
 use packager::globals;
+
+our @EXPORT_OK = qw(
+    set_global_variable
+    create_package_todos
+    execute_system_calls
+);
 
 ###########################################
 # Setting global variables
