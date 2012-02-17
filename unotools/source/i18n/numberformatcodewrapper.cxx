@@ -70,7 +70,7 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
         if ( xNFC.is() )
             return xNFC->getDefault( formatType, formatUsage, aLocale );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getDefault: Exception caught!" );
     }
@@ -86,7 +86,7 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
         if ( xNFC.is() )
             return xNFC->getFormatCode( formatIndex, aLocale );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getFormatCode: Exception caught!" );
     }
@@ -102,7 +102,7 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
         if ( xNFC.is() )
             return xNFC->getAllFormatCode( formatUsage, aLocale );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getAllFormatCode: Exception caught!" );
     }
@@ -118,7 +118,7 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
         if ( xNFC.is() )
             return xNFC->getAllFormatCodes( aLocale );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getAllFormatCodes: Exception caught!" );
     }
