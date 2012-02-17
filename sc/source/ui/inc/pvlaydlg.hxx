@@ -192,6 +192,7 @@ private:
 private:
     void                    Init            (bool bNewOutput);
     void InitWndSelect(const ScDPLabelDataVec& rLabels);
+    void InitWndData(const std::vector<PivotField>& rFields);
     void                    InitFieldWindow ( const ::std::vector<PivotField>& rFields, ScDPFieldType eType );
     void                    InitFocus       ();
     void                    InitFields      ();

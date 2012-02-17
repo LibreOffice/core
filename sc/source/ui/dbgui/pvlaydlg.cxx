@@ -371,17 +371,50 @@ void ScDPLayoutDlg::InitWndSelect(const ScDPLabelDataVec& rLabels)
     aWndSelect.Paint(Rectangle());
 }
 
-//----------------------------------------------------------------------------
+void ScDPLayoutDlg::InitWndData(const vector<PivotField>& rFields)
+{
+    vector<PivotField>::const_iterator it = rFields.begin(), itEnd = rFields.end();
+    for (; it != itEnd; ++it)
+    {
+        SCCOL nCol = it->nCol;
+        sal_uInt16 nMask = it->nFuncMask;
+        if (nCol == PIVOT_DATA_FIELD)
+            continue;
+
+        size_t nFieldIndex = aDataArr.size();
+        aDataArr.push_back(
+            new ScDPFuncData(nCol, nMask, it->mnDupCount, it->maFieldRef));
+
+        // data field - we need to concatenate function name with the field name.
+        ScDPLabelData* pData = GetLabelData(nCol);
+        OSL_ENSURE( pData, "ScDPLabelData not found" );
+        if (pData)
+        {
+            OUString aStr = pData->maLayoutName;
+            if (aStr.isEmpty())
+            {
+                sal_uInt16 nInitMask = aDataArr.back().mnFuncMask;
+                aStr = GetFuncString(nInitMask, pData->mbIsValue);
+                aStr += pData->maName;
+            }
+
+            aWndData.AddField(aStr, nFieldIndex);
+            pData->mnFuncMask = nMask;
+        }
+    }
+    aWndData.ResetScrollBar();
+}
 
 void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFieldType eType )
 {
+    OSL_ASSERT(eType != TYPE_DATA);
     ScDPFuncDataVec* pInitArr = GetFieldDataArray(eType);
     ScDPFieldControlBase* pInitWnd = GetFieldWindow(eType);
 
     if (!pInitArr || !pInitWnd)
         return;
 
-    vector<PivotField>::const_iterator itr = rFields.begin(), itrEnd = rFields.end();
+    vector<PivotField>::const_iterator it = rFields.begin(), itrEnd = rFields.end();
     for (; itr != itrEnd; ++itr)
     {
         SCCOL nCol = itr->nCol;
@@ -391,28 +424,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
 
         size_t nFieldIndex = pInitArr->size();
         pInitArr->push_back(new ScDPFuncData(nCol, nMask, itr->mnDupCount, itr->maFieldRef));
-
-        if (eType == TYPE_DATA)
-        {
-            // data field - we need to concatenate function name with the field name.
-            ScDPLabelData* pData = GetLabelData(nCol);
-            OSL_ENSURE( pData, "ScDPLabelData not found" );
-            if (pData)
-            {
-                OUString aStr = pData->maLayoutName;
-                if (aStr.isEmpty())
-                {
-                    sal_uInt16 nInitMask = pInitArr->back().mnFuncMask;
-                    aStr = GetFuncString(nInitMask, pData->mbIsValue);
-                    aStr += pData->maName;
-                }
-
-                pInitWnd->AddField(aStr, nFieldIndex);
-                pData->mnFuncMask = nMask;
-            }
-        }
-        else
-            pInitWnd->AddField(GetLabelString(nCol), nFieldIndex);
+        pInitWnd->AddField(GetLabelString(nCol), nFieldIndex);
     }
     pInitWnd->ResetScrollBar();
 }
@@ -436,7 +448,7 @@ void ScDPLayoutDlg::InitFields()
     InitFieldWindow(thePivotData.maPageFields, TYPE_PAGE);
     InitFieldWindow(thePivotData.maColFields, TYPE_COL);
     InitFieldWindow(thePivotData.maRowFields, TYPE_ROW);
-    InitFieldWindow(thePivotData.maDataFields, TYPE_DATA);
+    InitWndData(thePivotData.maDataFields);
 }
 
 //----------------------------------------------------------------------------
