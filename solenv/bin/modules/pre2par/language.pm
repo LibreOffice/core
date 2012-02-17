@@ -28,7 +28,6 @@
 package pre2par::language;
 
 use strict;
-use pre2par::existence;
 
 ##############################################################
 # Returning a specific language string from the block
