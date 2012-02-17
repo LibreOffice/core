@@ -1928,44 +1928,46 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
 void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
-    if ( xDimProp.is() && xDimSupp.is() )
+    if (!xDimProp.is() || !xDimSupp.is())
+        return;
+
+    uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
+    long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
+        xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)));
+    if ( nHierarchy >= xHiers->getCount() )
+        nHierarchy = 0;
+    rData.mnUsedHier = nHierarchy;
+
+    uno::Reference<uno::XInterface> xHier =
+        ScUnoHelpFunctions::AnyToInterface(xHiers->getByIndex(nHierarchy));
+
+    uno::Reference<sheet::XLevelsSupplier> xHierSupp( xHier, uno::UNO_QUERY );
+    if (!xHierSupp.is())
+        return;
+
+    uno::Reference<container::XIndexAccess> xLevels =
+        new ScNameToIndexAccess( xHierSupp->getLevels() );
+
+    uno::Reference<uno::XInterface> xLevel =
+        ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(0) );
+    uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
+    if (!xLevProp.is())
+        return;
+
+    rData.mbShowAll = ScUnoHelpFunctions::GetBoolProperty(
+        xLevProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWEMPTY)));
+
+    try
     {
-        uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
-        long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_USEDHIERARCHY)) );
-        if ( nHierarchy >= xHiers->getCount() )
-            nHierarchy = 0;
-        rData.mnUsedHier = nHierarchy;
-
-        uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(
-                                    xHiers->getByIndex(nHierarchy) );
-
-        uno::Reference<sheet::XLevelsSupplier> xHierSupp( xHier, uno::UNO_QUERY );
-        if ( xHierSupp.is() )
-        {
-            uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess( xHierSupp->getLevels() );
-            uno::Reference<uno::XInterface> xLevel =
-                ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex( 0 ) );
-            uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
-            if ( xLevProp.is() )
-            {
-                rData.mbShowAll = ScUnoHelpFunctions::GetBoolProperty( xLevProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWEMPTY)) );
-
-                try
-                {
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SORTING ) ) )
-                        >>= rData.maSortInfo;
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_LAYOUT ) ) )
-                        >>= rData.maLayoutInfo;
-                    xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_AUTOSHOW ) ) )
-                        >>= rData.maShowInfo;
-                }
-                catch(uno::Exception&)
-                {
-                }
-            }
-        }
+        xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SORTING ) ) )
+            >>= rData.maSortInfo;
+        xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_LAYOUT ) ) )
+            >>= rData.maLayoutInfo;
+        xLevProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_AUTOSHOW ) ) )
+            >>= rData.maShowInfo;
+    }
+    catch(uno::Exception&)
+    {
     }
 }
 
@@ -1993,44 +1995,44 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
         uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
 
-        if ( xDimName.is() && xDimProp.is() )
+        if (!xDimName.is() || !xDimProp.is())
+            continue;
+
+        bool bDuplicated = false;
+        bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
+        //! error checking -- is "IsDataLayoutDimension" property required??
+
+        try
         {
-            bool bDuplicated = false;
-            bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
-            //! error checking -- is "IsDataLayoutDimension" property required??
-
-            try
-            {
-                aFieldName = xDimName->getName();
-                uno::Any aOrigAny = xDimProp->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
-                uno::Reference<uno::XInterface> xIntOrig;
-                if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
-                    bDuplicated = true;
-            }
-            catch(uno::Exception&)
-            {
-            }
-
-            OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
-
-            if (!aFieldName.isEmpty() && !bData)
-            {
-                SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
-                bool bIsValue = true;                               //! check
-
-                std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
-                pNewLabel->maLayoutName = aLayoutName;
-                GetHierarchies(nDim, pNewLabel->maHiers);
-                GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
-                lcl_FillLabelData(*pNewLabel, xDimProp);
-                pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
-                rParam.maLabelArray.push_back(pNewLabel);
-            }
+            aFieldName = xDimName->getName();
+            uno::Any aOrigAny = xDimProp->getPropertyValue(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)) );
+            uno::Reference<uno::XInterface> xIntOrig;
+            if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
+                bDuplicated = true;
         }
+        catch(uno::Exception&)
+        {
+        }
+
+        OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
+            xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
+
+        if (aFieldName.isEmpty() || bData)
+            continue;
+
+        SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
+        bool bIsValue = true;                               //! check
+
+        std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
+        pNewLabel->maLayoutName = aLayoutName;
+        GetHierarchies(nDim, pNewLabel->maHiers);
+        GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
+        lcl_FillLabelData(*pNewLabel, xDimProp);
+        pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
+        rParam.maLabelArray.push_back(pNewLabel);
     }
 
     return true;
