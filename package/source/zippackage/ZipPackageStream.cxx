@@ -542,6 +542,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     {
         OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
         OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+        (void)ex;
         return uno::Reference < io::XInputStream > ();
     }
 }
