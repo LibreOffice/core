@@ -3157,6 +3157,7 @@ if test "$cross_compiling" = "yes"; then
     cd CONF-FOR-BUILD
     sub_conf_opts=""
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
+    test $with_java = no && sub_conf_opts="$sub_conf_opts --without-java"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     ./configure \
