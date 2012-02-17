@@ -279,7 +279,11 @@ void callVirtualMethod(
 #endif
         //Make the call
         "ldr r5, %[pmethod]\n\t"
+#ifndef __ARM_ARCH_4T__
         "blx r5\n\t"
+#else
+        "mov lr, pc ; bx r5\n\t"
+#endif
 
         //Fill in return values
         "mov %[r0], r0\n\t"
