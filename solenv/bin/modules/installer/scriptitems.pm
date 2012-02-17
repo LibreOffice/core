@@ -776,7 +776,7 @@ sub collect_language_specific_names
 
             if (( $language ne "" ) && ( $language eq $specificlanguage ))
             {
-                if (! installer::existence::exists_in_array($oneitem->{'Name'}, \@installer::globals::languagenames ))
+                if (! grep {$_ eq $oneitem->{'Name'}} @installer::globals::languagenames )
                 {
                     push(@installer::globals::languagenames, $oneitem->{'Name'});
                 }
@@ -2627,7 +2627,7 @@ sub collect_all_parent_feature
 
         if ( $parentgid ne "" )
         {
-            if (! installer::existence::exists_in_array($parentgid, \@allparents))
+            if (! grep {$_ eq $parentgid} @allparents)
             {
                 push(@allparents, $parentgid);
             }
@@ -2668,7 +2668,7 @@ sub set_children_flag
 
         # is this gid a parent?
 
-        if ( installer::existence::exists_in_array($gid, $allparents) )
+        if ( grep {$_ eq $gid} @{$allparents} )
         {
             $onefeature->{'has_children'} = 1;
         }

@@ -27,28 +27,6 @@
 
 package installer::existence;
 
-#############################
-# Test of existence
-#############################
-
-sub exists_in_array
-{
-    my ($searchstring, $arrayref) = @_;
-
-    my $alreadyexists = 0;
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        if ( ${$arrayref}[$i] eq $searchstring)
-        {
-            $alreadyexists = 1;
-            last;
-        }
-    }
-
-    return $alreadyexists;
-}
-
 #####################################################################
 # Returning a specified file as base for the new
 # configuration file, defined by its "gid"

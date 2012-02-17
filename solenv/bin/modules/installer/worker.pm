@@ -636,7 +636,7 @@ sub collect_all_modules
         $registryitem = ${$registryitemsref}[$i];
         my $module = $registryitem->{'ModuleID'};
 
-        if ( ! installer::existence::exists_in_array($module, \@allmodules) )
+        if ( ! grep {$_ eq $module} @allmodules )
         {
             push(@allmodules, $module);
         }

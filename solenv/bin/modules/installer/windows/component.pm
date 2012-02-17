@@ -467,7 +467,7 @@ sub get_component_name_from_modulegid
             my $filemodules = $onefile->{'modules'};
             my $filemodulesarrayref = installer::converter::convert_stringlist_into_array_without_newline(\$filemodules, ",");
 
-            if (installer::existence::exists_in_array($modulegid, $filemodulesarrayref))
+            if (grep {$_ eq $modulegid} @{$filemodulesarrayref})
             {
                 $componentname = $onefile->{'componentname'};
                 last;

@@ -1602,7 +1602,7 @@ sub create_xpd_file
         {
             my $create_missing_parent = is_empty_parent($parentgid, $allpackages);
 
-            if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::createdxpdfiles) ))
+            if ($create_missing_parent && ( ! grep {$_ eq $parentgid} @installer::globals::createdxpdfiles ))
             {
                 $grandpagid = create_emptyparents_xpd_file($parentgid, $modulesarrayref, $xpddir);
             }
@@ -1612,7 +1612,7 @@ sub create_xpd_file
         {
             my $create_missing_parent = is_empty_parent($grandpagid, $allpackages);
 
-            if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($grandpagid, \@installer::globals::createdxpdfiles) ))
+            if ($create_missing_parent && ( ! grep {$_ eq $grandpagid} @installer::globals::createdxpdfiles ))
             {
                 create_emptyparents_xpd_file($grandpagid, $modulesarrayref, $xpddir);
              }
@@ -1657,7 +1657,7 @@ sub create_xpd_file_for_childproject
     {
         my $create_missing_parent = 1; # -> Always missing parent by child projects!
         # Parent is now created, if it was not created before. Attention: Parent module must not come later.
-        if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::createdxpdfiles) ))
+        if ($create_missing_parent && ( ! grep {$_ eq $parentgid} @installer::globals::createdxpdfiles ))
         {
             create_emptyparents_xpd_file($parentgid, $modulesarrayref, $installer::globals::xpddir);
         }

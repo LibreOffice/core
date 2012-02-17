@@ -409,7 +409,7 @@ sub create_feature_table
             push(@featuretable, $oneline);
 
             # collecting all feature in global feature collector (so that properties can be set in property table)
-            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+            if ( ! grep {$_ eq $feature{'feature'}} @installer::globals::featurecollector )
             {
                 push(@installer::globals::featurecollector, $feature{'feature'});
             }

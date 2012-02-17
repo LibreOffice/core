@@ -1920,7 +1920,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $onelanguage = ${$languagesarrayref}[$m];
 
             my $is_rtl = 0;
-            if ( installer::existence::exists_in_array($onelanguage, \@installer::globals::rtllanguages) ) { $is_rtl = 1; }
+            if ( grep {$_ eq $onelanguage} @installer::globals::rtllanguages ) { $is_rtl = 1; }
 
             my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
             if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }

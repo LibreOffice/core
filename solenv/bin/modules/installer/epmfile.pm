@@ -1680,7 +1680,7 @@ sub set_tab_into_datafile
                         push(@installer::globals::logfileinfo, $infoline);
 
                         # collecting all new classes
-                        if (! installer::existence::exists_in_array($onefile->{'SolarisClass'}, \@newclasses))
+                        if (! grep {$_ eq $onefile->{'SolarisClass'}} @newclasses)
                         {
                             push(@newclasses, $onefile->{'SolarisClass'});
                         }

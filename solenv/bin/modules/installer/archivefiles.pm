@@ -390,7 +390,7 @@ sub resolving_archive_flag
 
                         if ( $select_files )
                         {
-                            if ( ! installer::existence::exists_in_array($zipname,$selectlistfiles) )
+                            if ( ! grep {$_ eq $zipname} @{$selectlistfiles} )
                             {
                                 $infoline = "Removing from ARCHIVE file $onefilename: $zipname\n";
                                 push( @installer::globals::logfileinfo, $infoline);
@@ -409,7 +409,7 @@ sub resolving_archive_flag
                             # Is this file listed in the Patchfile list?
                             # $zipname (filename including path in zip file has to be listed in patchfile list
 
-                            if ( ! installer::existence::exists_in_array($zipname,$patchlistfiles) )
+                            if ( ! grep {$_ eq $zipname} @{$patchlistfiles} )
                             {
                                 $newfile{'Styles'} =~ s/\bPATCH\b//;    # removing the flag PATCH
                                 $newfile{'Styles'} =~ s/\,\s*\,/\,/;
@@ -476,7 +476,7 @@ sub resolving_archive_flag
 
                     for ( my $k = 0; $k <= $#{$selectlistfiles}; $k++ )
                     {
-                        if ( ! installer::existence::exists_in_array(${$selectlistfiles}[$k],\@keptfiles) )
+                        if ( ! grep {$_ eq ${$selectlistfiles}[$k]} @keptfiles )
                         {
                             push(@warningfiles, ${$selectlistfiles}[$k]);
                         }
@@ -514,7 +514,7 @@ sub resolving_archive_flag
 
                     for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
                     {
-                        if ( ! installer::existence::exists_in_array(${$patchlistfiles}[$k],\@keptpatchflags) )
+                        if ( ! grep {$_ eq ${$patchlistfiles}[$k]} @keptpatchflags )
                         {
                             push(@warningfiles, ${$patchlistfiles}[$k]);
                         }

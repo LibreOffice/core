@@ -78,7 +78,7 @@ sub create_featurecomponent_table_from_files_collector
 
             # control of uniqueness
 
-            if (! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
+            if (! grep {$_ eq $oneline} @{$featurecomponenttableref})
             {
                 push(@{$featurecomponenttableref}, $oneline);
             }
@@ -124,7 +124,7 @@ sub create_featurecomponent_table_from_registry_collector
 
         # control of uniqueness
 
-        if (! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
+        if (! grep {$_ eq $oneline} @{$featurecomponenttableref})
         {
             push(@{$featurecomponenttableref}, $oneline);
         }

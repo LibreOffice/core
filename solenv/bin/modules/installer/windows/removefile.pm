@@ -122,7 +122,7 @@ sub create_removefile_table
 
         if ( $onelink->{'used'} == 0 ) { next; }
 
-        if ( installer::existence::exists_in_array($onelink->{'directory'}, \@directorycollector)) { next; }
+        next if grep {$_ eq $onelink->{'directory'}} @directorycollector;
 
         push(@directorycollector, $onelink->{'directory'});
 

@@ -59,7 +59,7 @@ sub sorting_profile
         {
             my $section = $1;
 
-            if (!(installer::existence::exists_in_array($section, \@definedsections)))
+            if (! grep {$_ eq $section} @definedsections)
             {
                 my $sectionline = $section . "\n";
                 push(@definedsections, $section);

@@ -383,7 +383,7 @@ sub remove_multiples_from_ziplist
             $itemname = $1;
         }
 
-        if (! installer::existence::exists_in_array($itemname, \@itemarray))
+        if (! grep {$_ eq $itemname} @itemarray)
         {
             push(@itemarray, $itemname);
         }
