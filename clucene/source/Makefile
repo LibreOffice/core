@@ -29,18 +29,32 @@
 gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
+ifeq ($(OS),WNT)
+FIXED_TARFILE_LOCATION=$(shell cygpath -u $(TARFILE_LOCATION))
+else
+FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
+endif
+
 done :
 	mkdir -p $(dir $@)
 	# FIXME: do not hardcode the path here
-	$(GNUTAR) -x --strip-component=1 -f $(TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+	$(GNUTAR) -x --strip-component=1 -f $(FIXED_TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-internal-zlib.patch
 	#FIXME ?, our rules expect .cxx
 	for i in `find . -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done
+ifneq ($(OS),WNT)
 	#dirent.h is a problem, move it around
 	mkdir -p inc/internal/CLucene/util
 	mv src/shared/CLucene/util/dirent.h inc/internal/CLucene/util
+endif
 	#To generate these, run cmake for each sufficiently different platform, customize and stick into configs
+ifeq ($(COM),MSC)
+	cp $(SRCDIR)/clucene/configs/_clucene-config-MSVC.h src/shared/CLucene/_clucene-config.h
+	cp $(SRCDIR)/clucene/configs/clucene-config-MSVC.h src/shared/CLucene/clucene-config.h
+else
 	cp $(SRCDIR)/clucene/configs/_clucene-config-generic.h src/shared/CLucene/_clucene-config.h
 	cp $(SRCDIR)/clucene/configs/clucene-config-generic.h src/shared/CLucene/clucene-config.h
+endif
 
 .DEFAULT_GOAL := all
 .PHONY : all

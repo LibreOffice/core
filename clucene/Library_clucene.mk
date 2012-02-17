@@ -47,6 +47,12 @@ $(eval $(call gb_Library_add_defs,clucene,\
     -Dclucene_contribs_lib_EXPORTS\
 ))
 
+ifeq ($(SYSTEM_ZLIB),YES)
+$(eval $(call gb_Library_add_defs,clucene,\
+    -DSYSTEM_ZLIB \
+))
+endif
+
 $(eval $(call gb_Library_add_linked_libs,clucene,\
     $(gb_STDLIBS) \
 ))

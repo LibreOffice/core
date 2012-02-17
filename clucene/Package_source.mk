@@ -35,9 +35,15 @@ $(eval $(call gb_CustomTarget_add_dependencies,clucene/source,\
 	clucene/configs/clucene-config-generic.h \
 ))
 
+ifeq ($(OS),WNT)
+FIXED_TARFILE_LOCATION=$(shell cygpath -u $(TARFILE_LOCATION))
+else
+FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
+endif
+
 # FIXME: do not hardcode the path here
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,clucene/source,\
-	$(TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz \
+	$(FIXED_TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz \
 ))
 
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/SharedHeader.h,src/shared/CLucene/SharedHeader.h))
