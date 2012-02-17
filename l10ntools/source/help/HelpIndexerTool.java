@@ -185,7 +185,10 @@ public class HelpIndexerTool
 
         try
         {
-            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
+            Analyzer analyzer = ( aLanguageStr.equals("ja")
+                                || aLanguageStr.equals("ko")
+                                || aLanguageStr.equals("zh-CN")
+                                || aLanguageStr.equals("zh-TW") ) ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
             IndexWriter writer = new IndexWriter( aIndexDir, analyzer, true );
             int nRet = indexDocs( writer, aModule, bExtensionMode, aCaptionFilesDir, aContentFilesDir );
             if( nRet != -1 )

@@ -255,7 +255,10 @@ public class HelpSearch
         {
             IndexReader reader = IndexReader.open( aIndexStr );
             Searcher searcher = new IndexSearcher( reader );
-            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
+            Analyzer analyzer = ( aLanguageStr.equals("ja")
+                                || aLanguageStr.equals("ko")
+                                || aLanguageStr.equals("zh-CN")
+                                || aLanguageStr.equals("zh-TW") ) ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
 
             String aField;
             if( bCaptionOnly )
