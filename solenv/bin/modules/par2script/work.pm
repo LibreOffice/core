@@ -28,7 +28,6 @@
 
 package par2script::work;
 
-use par2script::existence;
 use par2script::globals;
 use par2script::remover;
 
