@@ -159,7 +159,6 @@ ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
       maRegularButtons(),
       maExcludedButtons(),
       maNormalBackground(),
-      maButtonDownBackground(),
       mbIsMouseOverBar(false),
       mpBackgroundTheme(),
       mnLockCount(0)
@@ -409,27 +408,19 @@ void ButtonBar::PaintButtonBackground (
     const model::SharedPageDescriptor& rpDescriptor,
     const Point aOffset)
 {
-    BitmapEx* pBitmap = NULL;
-    if (maButtonDownBackground.IsEmpty() || maNormalBackground.IsEmpty())
+    if (maNormalBackground.IsEmpty())
     {
         if (mpBackgroundTheme)
-        {
-            maButtonDownBackground = mpBackgroundTheme->CreateBackground();
             maNormalBackground = mpBackgroundTheme->CreateBackground();
-        }
     }
-    if (mpButtonUnderMouse && mpButtonUnderMouse->IsDown())
-        pBitmap = &maButtonDownBackground;
-    else
-        pBitmap = &maNormalBackground;
-    if (pBitmap != NULL)
+    if (!maNormalBackground.IsEmpty())
     {
-        AlphaMask aMask (pBitmap->GetSizePixel());
+        AlphaMask aMask (maNormalBackground.GetSizePixel());
         AdaptTransparency(
             aMask,
-            pBitmap->GetAlpha(),
+            maNormalBackground.GetAlpha(),
             rpDescriptor->GetVisualState().GetButtonBarAlpha());
-        rDevice.DrawBitmapEx(maBackgroundLocation+aOffset, BitmapEx(pBitmap->GetBitmap(), aMask));
+        rDevice.DrawBitmapEx(maBackgroundLocation+aOffset, BitmapEx(maNormalBackground.GetBitmap(), aMask));
     }
 }
 
@@ -469,7 +460,6 @@ void ButtonBar::LayoutButtons (const Size aPageObjectSize)
         // Release the background bitmaps so that on the next paint
         // they are created anew in the right size.
         maNormalBackground.SetEmpty();
-        maButtonDownBackground.SetEmpty();
     }
 }
 

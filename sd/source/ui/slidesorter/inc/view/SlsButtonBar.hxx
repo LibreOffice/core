@@ -143,7 +143,6 @@ private:
     ::std::vector<SharedButton> maRegularButtons;
     ::std::vector<SharedButton> maExcludedButtons;
     BitmapEx maNormalBackground;
-    BitmapEx maButtonDownBackground;
     bool mbIsMouseOverBar;
     ::boost::scoped_ptr<BackgroundTheme> mpBackgroundTheme;
     int mnLockCount;
