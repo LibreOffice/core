@@ -129,8 +129,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aBtnOptions     ( this, ScResId( BTN_OPTIONS ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
 
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrNewTable    ( ScResId( SCSTR_NEWTABLE ) ),
+        aStrUndefined   (ScResId::toString(ScResId(SCSTR_UNDEFINED))),
+        aStrNewTable    (ScResId::toString(ScResId(SCSTR_NEWTABLE))),
 
         bIsDrag         ( false ),
 
@@ -162,7 +162,7 @@ ScDPLayoutDlg::~ScDPLayoutDlg()
     sal_uInt16 i;
 
     for ( i=2; i<nEntries; i++ )
-        delete (String*)aLbOutPos.GetEntryData( i );
+        delete (rtl::OUString*)aLbOutPos.GetEntryData( i );
 }
 
 //----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
 
     aFuncNameArr.reserve( PIVOT_MAXFUNC );
     for ( sal_uInt16 i = 0; i < PIVOT_MAXFUNC; ++i )
-        aFuncNameArr.push_back( String( ScResId( i + 1 ) ) );
+        aFuncNameArr.push_back(ScResId::toString(ScResId(i+1)));
 
     aBtnMore.AddWindow( &aFlAreas );
     aBtnMore.AddWindow( &aFtInArea );
@@ -198,7 +198,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
     CalcWndSizes();
 
     ScRange inRange;
-    String inString;
+    rtl::OUString inString;
     if (xDlgDPObject->GetSheetDesc())
     {
         aEdInPos.Enable();
@@ -247,9 +247,9 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
         aLbOutPos.InsertEntry( aStrNewTable,  1 );
 
         ScAreaNameIterator aIter( pDoc );
-        String aName;
+        rtl::OUString aName;
         ScRange aRange;
-        String aRefStr;
+        rtl::OUString aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             if ( !aIter.WasDBName() )       // hier keine DB-Bereiche !
@@ -257,7 +257,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
                 sal_uInt16 nInsert = aLbOutPos.InsertEntry( aName );
 
                 aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention() );
-                aLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
+                aLbOutPos.SetEntryData(nInsert, new rtl::OUString(aRefStr));
             }
         }
     }
@@ -275,7 +275,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
 
         if ( thePivotData.nTab != MAXTAB+1 )
         {
-            String aStr;
+            rtl::OUString aStr;
             ScAddress( thePivotData.nCol,
                        thePivotData.nRow,
                        thePivotData.nTab ).Format( aStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
@@ -792,7 +792,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
         ScDPFuncDataVec*    theArr   = GetFieldDataArray(eFromType);
         size_t              nAt      = 0;
         Point               aToPos;
-        sal_Bool                bDataArr = eFromType == TYPE_DATA;
+        bool bDataArr = eFromType == TYPE_DATA;
 
         ScDPFuncData fData( *((*theArr)[nFromIndex]) );
 
@@ -1067,13 +1067,13 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, sal_Bool bGotFocus )
+void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, bool bGotFocus )
 {
     /*  Enable Remove/Options buttons on GetFocus in field window.
         Enable them also, if dialog is deactivated (click into document).
         The !IsActive() condition handles the case that a LoseFocus event of a
         field window would follow the Deactivate event of this dialog. */
-    sal_Bool bEnable = (bGotFocus || !IsActive()) && (eType != TYPE_SELECT);
+    bool bEnable = (bGotFocus || !IsActive()) && (eType != TYPE_SELECT);
 
     // The TestTool may set the focus into an empty field.
     // Then the Remove/Options buttons must be disabled.
@@ -1195,13 +1195,13 @@ ScDPLabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pnPos )
 
 //----------------------------------------------------------------------------
 
-String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
+rtl::OUString ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
 {
     ScDPLabelData* pData = GetLabelData( nCol );
     OSL_ENSURE( pData, "LabelData not found" );
     if (pData)
         return pData->getDisplayName();
-    return String();
+    return rtl::OUString();
 }
 
 //----------------------------------------------------------------------------
@@ -1229,42 +1229,42 @@ bool ScDPLayoutDlg::IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType )
 
 //----------------------------------------------------------------------------
 
-String ScDPLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, sal_Bool bIsValue )
+rtl::OUString ScDPLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, bool bIsValue )
 {
-    String aStr;
+    rtl::OUStringBuffer aBuf;
 
     if (   rFuncMask == PIVOT_FUNC_NONE
         || rFuncMask == PIVOT_FUNC_AUTO )
     {
         if ( bIsValue )
         {
-            aStr = FSTR(PIVOTSTR_SUM);
+            aBuf.append(FSTR(PIVOTSTR_SUM));
             rFuncMask = PIVOT_FUNC_SUM;
         }
         else
         {
-            aStr = FSTR(PIVOTSTR_COUNT);
+            aBuf.append(FSTR(PIVOTSTR_COUNT));
             rFuncMask = PIVOT_FUNC_COUNT;
         }
     }
-    else if ( rFuncMask == PIVOT_FUNC_SUM )       aStr = FSTR(PIVOTSTR_SUM);
-    else if ( rFuncMask == PIVOT_FUNC_COUNT )     aStr = FSTR(PIVOTSTR_COUNT);
-    else if ( rFuncMask == PIVOT_FUNC_AVERAGE )   aStr = FSTR(PIVOTSTR_AVG);
-    else if ( rFuncMask == PIVOT_FUNC_MAX )       aStr = FSTR(PIVOTSTR_MAX);
-    else if ( rFuncMask == PIVOT_FUNC_MIN )       aStr = FSTR(PIVOTSTR_MIN);
-    else if ( rFuncMask == PIVOT_FUNC_PRODUCT )   aStr = FSTR(PIVOTSTR_PROD);
-    else if ( rFuncMask == PIVOT_FUNC_COUNT_NUM ) aStr = FSTR(PIVOTSTR_COUNT2);
-    else if ( rFuncMask == PIVOT_FUNC_STD_DEV )   aStr = FSTR(PIVOTSTR_DEV);
-    else if ( rFuncMask == PIVOT_FUNC_STD_DEVP )  aStr = FSTR(PIVOTSTR_DEV2);
-    else if ( rFuncMask == PIVOT_FUNC_STD_VAR )   aStr = FSTR(PIVOTSTR_VAR);
-    else if ( rFuncMask == PIVOT_FUNC_STD_VARP )  aStr = FSTR(PIVOTSTR_VAR2);
+    else if ( rFuncMask == PIVOT_FUNC_SUM )       aBuf = FSTR(PIVOTSTR_SUM);
+    else if ( rFuncMask == PIVOT_FUNC_COUNT )     aBuf = FSTR(PIVOTSTR_COUNT);
+    else if ( rFuncMask == PIVOT_FUNC_AVERAGE )   aBuf = FSTR(PIVOTSTR_AVG);
+    else if ( rFuncMask == PIVOT_FUNC_MAX )       aBuf = FSTR(PIVOTSTR_MAX);
+    else if ( rFuncMask == PIVOT_FUNC_MIN )       aBuf = FSTR(PIVOTSTR_MIN);
+    else if ( rFuncMask == PIVOT_FUNC_PRODUCT )   aBuf = FSTR(PIVOTSTR_PROD);
+    else if ( rFuncMask == PIVOT_FUNC_COUNT_NUM ) aBuf = FSTR(PIVOTSTR_COUNT2);
+    else if ( rFuncMask == PIVOT_FUNC_STD_DEV )   aBuf = FSTR(PIVOTSTR_DEV);
+    else if ( rFuncMask == PIVOT_FUNC_STD_DEVP )  aBuf = FSTR(PIVOTSTR_DEV2);
+    else if ( rFuncMask == PIVOT_FUNC_STD_VAR )   aBuf = FSTR(PIVOTSTR_VAR);
+    else if ( rFuncMask == PIVOT_FUNC_STD_VARP )  aBuf = FSTR(PIVOTSTR_VAR2);
     else
     {
-        aStr  = ScGlobal::GetRscString( STR_TABLE_ERGEBNIS );
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
+        aBuf.append(ScGlobal::GetRscString(STR_TABLE_ERGEBNIS));
+        aBuf.appendAscii(" - ");
     }
 
-    return aStr;
+    return aBuf.makeStringAndClear();
 }
 
 //----------------------------------------------------------------------------
@@ -1468,7 +1468,7 @@ bool ScDPLayoutDlg::GetPivotArrays(
 
 void ScDPLayoutDlg::UpdateSrcRange()
 {
-    String  aSrcStr = aEdInPos.GetText();
+    rtl::OUString aSrcStr = aEdInPos.GetText();
     sal_uInt16  nResult = ScRange().Parse(aSrcStr, pDoc, pDoc->GetAddressConvention());
     DataSrcType eSrcType = SRC_INVALID;
     ScRange aNewRange;
@@ -1698,13 +1698,13 @@ void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
     if ( pEditActive == &aEdInPos )
     {
-        String aRefStr;
+        rtl::OUString aRefStr;
         rRef.Format( aRefStr, SCR_ABS_3D, pDocP, pDocP->GetAddressConvention() );
         pEditActive->SetRefString( aRefStr );
     }
     else if ( pEditActive == &aEdOutPos )
     {
-        String aRefStr;
+        rtl::OUString aRefStr;
         rRef.aStart.Format( aRefStr, STD_FORMAT, pDocP, pDocP->GetAddressConvention() );
         pEditActive->SetRefString( aRefStr );
     }
@@ -1759,12 +1759,12 @@ IMPL_LINK( ScDPLayoutDlg, ClickHdl, PushButton *, pBtn )
 
 IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 {
-    String      aOutPosStr( aEdOutPos.GetText() );
+    rtl::OUString aOutPosStr = aEdOutPos.GetText();
     ScAddress   aAdrDest;
-    sal_Bool        bToNewTable = (aLbOutPos.GetSelectEntryPos() == 1);
+    bool bToNewTable = (aLbOutPos.GetSelectEntryPos() == 1);
     sal_uInt16      nResult     = !bToNewTable ? aAdrDest.Parse( aOutPosStr, pDoc, pDoc->GetAddressConvention() ) : 0;
 
-    if (!bToNewTable && (aOutPosStr.Len() == 0 || (nResult & SCA_VALID) != SCA_VALID))
+    if (!bToNewTable && (aOutPosStr.isEmpty() || (nResult & SCA_VALID) != SCA_VALID))
     {
         // Invalid reference.  Bail out.
         if ( !aBtnMore.GetState() )
@@ -1970,19 +1970,19 @@ IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
 
 IMPL_LINK( ScDPLayoutDlg, EdModifyHdl, Edit *, EMPTYARG )
 {
-    String  theCurPosStr = aEdOutPos.GetText();
+    rtl::OUString theCurPosStr = aEdOutPos.GetText();
     sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
     if ( SCA_VALID == (nResult & SCA_VALID) )
     {
-        String* pStr    = NULL;
-        sal_Bool    bFound  = false;
+        rtl::OUString* pStr = NULL;
+        bool bFound  = false;
         sal_uInt16  i       = 0;
         sal_uInt16  nCount  = aLbOutPos.GetEntryCount();
 
         for ( i=2; i<nCount && !bFound; i++ )
         {
-            pStr = (String*)aLbOutPos.GetEntryData( i );
+            pStr = static_cast<rtl::OUString*>(aLbOutPos.GetEntryData(i));
             bFound = (theCurPosStr == *pStr);
         }
 
@@ -2004,12 +2004,12 @@ IMPL_LINK( ScDPLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
 
 IMPL_LINK( ScDPLayoutDlg, SelAreaHdl, ListBox *, EMPTYARG )
 {
-    String  aString;
+    rtl::OUString  aString;
     sal_uInt16  nSelPos = aLbOutPos.GetSelectEntryPos();
 
     if ( nSelPos > 1 )
     {
-        aString = *(String*)aLbOutPos.GetEntryData( nSelPos );
+        aString = *(rtl::OUString*)aLbOutPos.GetEntryData(nSelPos);
     }
     else if ( nSelPos == aLbOutPos.GetEntryCount()-1 ) // auf neue Tabelle?
     {

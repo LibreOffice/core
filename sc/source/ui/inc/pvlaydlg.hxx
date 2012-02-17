@@ -100,7 +100,7 @@ public:
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, sal_Bool bGotFocus );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, bool bGotFocus );
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
@@ -153,13 +153,13 @@ private:
     PushButton              aBtnOptions;
     MoreButton              aBtnMore;
 
-    const String            aStrUndefined;
-    const String            aStrNewTable;
-    std::vector< String >   aFuncNameArr;
+    const rtl::OUString     aStrUndefined;
+    const rtl::OUString     aStrNewTable;
+    std::vector<rtl::OUString> aFuncNameArr;
 
     ScDPFieldType           eDnDFromType;
     size_t                  nDnDFromIndex;
-    sal_Bool                    bIsDrag;
+    bool                    bIsDrag;
 
     ::formula::RefEdit*     pEditActive;
 
@@ -199,9 +199,9 @@ private:
     void                    AdjustDlgSize();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
-    String                  GetLabelString  ( SCsCOL nCol );
+    rtl::OUString GetLabelString(SCsCOL nCol);
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
-    String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
+    rtl::OUString GetFuncString( sal_uInt16& rFuncMask, bool bIsValue = true );
     bool Contains( ScDPFuncDataVec* pArr, const ScDPFuncData& rData, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
