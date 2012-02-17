@@ -322,7 +322,7 @@ Here is an autogen.lastrun for Android, when cross-compiling from Mac OS X:
 
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
---with-android-ndk=/Users/tml/android-ndk-r7
+--with-android-ndk=/Users/tml/android-ndk-r7b
 --with-android-sdk=/Users/tml/android-sdk-macosx
 --build=x86_64-apple-darwin11
 --disable-zenity
@@ -338,7 +338,7 @@ And here is an autogen.lastrun for Android when cross-compiling from Linux:
 
 CC_FOR_BUILD=ccache gcc
 CXX_FOR_BUILD=ccache g++
---with-android-ndk=/home/tml/android-ndk-r7
+--with-android-ndk=/home/tml/android-ndk-r7b
 --with-android-sdk=/home/tml/android-sdk-linux_x86
 --with-ant-home=/opt/apache-ant-1.8.2
 --build=x86_64-unknown-linux-gnu
