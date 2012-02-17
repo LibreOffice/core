@@ -111,7 +111,6 @@ copy-stuff: buildrcs
 		  bootstrap.uno \
 		  canvastoolslo \
 		  comphelpgcc3 \
-		  configmgr.uno \
 		  cppcanvaslo \
 		  drawinglayerlo \
 		  expwrap.uno \
@@ -152,9 +151,7 @@ copy-stuff: buildrcs
 		  svllo \
 		  test \
 		  tllo \
-		  ucb1 \
 		  ucbhelper4gcc3 \
-		  ucpfile1 \
 		  uno_cppu \
 		  uno_cppuhelpergcc3 \
 		  uno_sal \

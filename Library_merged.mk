@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	ucbhelper \
 	utl \
 	vcl \
-	xcr \
+	xmlreader \
 	$(gb_STDLIBS) \
 ))
 

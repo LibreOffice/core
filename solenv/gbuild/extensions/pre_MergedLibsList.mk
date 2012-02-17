@@ -31,6 +31,7 @@ ifeq ($(MERGELIBS),TRUE)
 gb_MERGEDLIBS := \
 	avmedia \
 	canvastools \
+	configmgr \
 	cppcanvas \
 	deploymentmisc \
 	drawinglayer \
@@ -51,7 +52,10 @@ gb_MERGEDLIBS := \
 	svx \
 	svxcore \
 	tk \
+	ucb1 \
+	ucpfile1 \
 	uui \
+	xcr \
 	xo \
 
 endif

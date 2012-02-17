@@ -49,7 +49,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
 
 //=========================================================================
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;

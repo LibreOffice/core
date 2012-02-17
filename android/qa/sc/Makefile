@@ -58,7 +58,6 @@ copy-stuff:
 		  basegfxlo \
 		  bootstrap.uno \
 		  comphelpgcc3 \
-		  configmgr.uno \
 		  datelo \
 		  expwrap.uno \
 		  fastsax.uno \
@@ -98,9 +97,7 @@ copy-stuff:
 		  textinstream.uno \
 		  test \
 		  tllo \
-		  ucb1 \
 		  ucbhelper4gcc3 \
-		  ucpfile1 \
 		  uno_cppu \
 		  uno_cppuhelpergcc3 \
 		  uno_sal \
