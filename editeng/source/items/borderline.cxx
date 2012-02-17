@@ -492,29 +492,20 @@ bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
     const sal_uInt16 nThisSize = GetOutWidth() + GetDistance() + GetInWidth();
     const sal_uInt16 nOtherSize = rOtherLine.GetOutWidth() + rOtherLine.GetDistance() + rOtherLine.GetInWidth();
 
-    if (nThisSize > nOtherSize)
+    if ( nThisSize > nOtherSize )
     {
         return true;
     }
-    else if (nThisSize < nOtherSize)
+    else if ( nThisSize < nOtherSize )
     {
         return false;
     }
-    else
+    else if ( rOtherLine.GetInWidth() && !GetInWidth() )
     {
-        if ( rOtherLine.GetInWidth() && !GetInWidth() )
-        {
-            return true;
-        }
-        else if ( GetInWidth() && !rOtherLine.GetInWidth() )
-        {
-            return false;
-        }
-        else
-        {
-            return false;
-        }
+        return true;
     }
+
+    return false;
 }
 
 } // namespace editeng
