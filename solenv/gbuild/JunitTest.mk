@@ -74,6 +74,7 @@ $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_JunitTest_platform,$(1))
 
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
+$(call gb_JavaClassSet_add_system_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(OOO_JUNIT_JAR))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))
 $(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
 endef
@@ -104,12 +105,8 @@ $(foreach sourcefile,$(2),$(call gb_JunitTest_add_sourcefile,$(1),$(sourcefile))
 
 endef
 
-define gb_JunitTest_set_classpath
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $(2)
-
-endef
-
 define gb_JunitTest_add_jar
+$(call gb_JavaClassSet_add_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(2)
 $(call gb_JunitTest_get_target,$(1)) : $(2)
 $(2) :| $(gb_Helper_PHONY)
@@ -147,7 +144,6 @@ gb_JunitTest_add_classes :=
 gb_JunitTest_add_class :=
 gb_JunitTest_add_sourcefile :=
 gb_JunitTest_add_sourcefiles :=
-gb_JunitTest_set_classpath :=
 gb_JunitTest_add_jar :=
 gb_JunitTest_add_jars :=
 gb_JunitTest_add_package_dependency :=
