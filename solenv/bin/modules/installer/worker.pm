@@ -718,7 +718,11 @@ sub write_content_into_inf_file
             replace_in_template_file($templatefile, $placeholder, $tooltip);
 
             my $executablegid = $folderitem->{'FileID'};
-            my $exefile = installer::existence::get_specified_file($filesref, $executablegid);
+            my ($exefile) = grep {$_->{gid} eq $executablegid} @{$filesref};
+            if (! defined $exefile) {
+                installer::exiter::exit_program("ERROR: Could not find file $executablegid in list of files!", "write_content_into_inf_file");
+            }
+
             my $exefilename = $exefile->{'Name'};
             $placeholder = "PLACEHOLDER_FOLDERITEM_TARGET_" . $app;
             replace_in_template_file($templatefile, $placeholder, $exefilename);

@@ -28,6 +28,7 @@
 package installer::windows::inifile;
 
 use installer::existence;
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
@@ -40,7 +41,10 @@ sub get_profile_for_profileitem
 {
     my ($profileid, $filesref) = @_;
 
-    my $profile = installer::existence::get_specified_file($filesref, $profileid);
+    my ($profile) = grep {$_->{gid} eq $profileid} @{$filesref};
+    if (! defined $profile) {
+        installer::exiter::exit_program("ERROR: Could not find file $profileid in list of files!", "get_profile_for_profileitem");
+    }
 
     return $profile;
 }

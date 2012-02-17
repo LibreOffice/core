@@ -97,7 +97,10 @@ sub add_profile_into_filelist
 
     my $vclgid = "gid_File_Lib_Vcl";
     if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
-    my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
+    my ($vclfile) = grep {$_->{gid} eq $vclgid} @{$filesarrayref};
+    if (! defined $vclfile) {
+        installer::exiter::exit_program("ERROR: Could not find file $vclgid in list of files!", "add_profile_into_filelist");
+    }
 
     # copying all base data
     installer::converter::copy_item_object($vclfile, \%profile);

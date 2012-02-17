@@ -27,40 +27,4 @@
 
 package installer::existence;
 
-#####################################################################
-# Returning a specified file as base for the new
-# configuration file, defined by its "gid"
-#####################################################################
-
-sub get_specified_file
-{
-    my ($filesarrayref, $searchgid) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
-    {
-        $onefile = ${$filesarrayref}[$i];
-        my $filegid = $onefile->{'gid'};
-
-        if ( $filegid eq $searchgid )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    my $errorline = "ERROR: Could not find file $searchgid in list of files!";
-
-    if ( $installer::globals::patch) { $errorline = "ERROR: Could not find file $searchgid in list of files! intro.bmp must be part of every patch. Please assign the flag PATCH in scp2 project."; }
-
-    if (!($foundfile))
-    {
-        installer::exiter::exit_program($errorline, "get_specified_file");
-    }
-
-    return $onefile;
-}
-
 1;
