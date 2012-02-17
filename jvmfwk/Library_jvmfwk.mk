@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_api,jvmfwk,\
 $(eval $(call gb_Library_add_linked_libs,jvmfwk,\
     cppuhelper \
     sal \
+	$(gb_STDLIBS) \
 ))
 
 ifeq ($(OS),WNT)

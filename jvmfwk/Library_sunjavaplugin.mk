@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
     cppuhelper \
     sal \
     salhelper \
+	$(gb_STDLIBS) \
 ))
 
 ifeq ($(OS),ANDROID)

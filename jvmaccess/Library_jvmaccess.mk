@@ -45,13 +45,8 @@ $(eval $(call gb_Library_add_linked_libs,jvmaccess,\
     cppu \
     sal \
     salhelper \
+	$(gb_STDLIBS) \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,jvmaccess,\
-    advapi32 \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,jvmaccess,\
     jvmaccess/source/classpath \
