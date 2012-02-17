@@ -121,7 +121,12 @@ void XSecController::addSignature()
 
 void XSecController::addReference( const rtl::OUString& ouUri)
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::addReference: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.addReference(TYPE_SAMEDOCUMENT_REFERENCE,ouUri, -1 );
 }
 
@@ -131,7 +136,12 @@ void XSecController::addStreamReference(
 {
         sal_Int32 type = (isBinary?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
 
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::addStreamReference: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
 
     if ( isi.xReferenceResolvedListener.is() )
     {
@@ -154,7 +164,13 @@ void XSecController::addStreamReference(
 
 void XSecController::setReferenceCount() const
 {
-    const InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setReferenceCount: no signature");
+        return;
+    }
+    const InternalSignatureInformation &isi =
+        m_vInternalSignatureInformations.back();
 
     if ( isi.xReferenceResolvedListener.is() )
     {
@@ -182,51 +198,97 @@ void XSecController::setReferenceCount() const
 
 void XSecController::setX509IssuerName( rtl::OUString& ouX509IssuerName )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setX509IssuerName: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
 }
 
 void XSecController::setX509SerialNumber( rtl::OUString& ouX509SerialNumber )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setX509SerialNumber: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
 }
 
 void XSecController::setX509Certificate( rtl::OUString& ouX509Certificate )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setX509Certificate: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouX509Certificate = ouX509Certificate;
 }
 
 void XSecController::setSignatureValue( rtl::OUString& ouSignatureValue )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setSignatureValue: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouSignatureValue = ouSignatureValue;
 }
 
 void XSecController::setDigestValue( rtl::OUString& ouDigestValue )
 {
-    SignatureInformation &si = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1].signatureInfor;
-    SignatureReferenceInformation &reference = si.vSignatureReferenceInfors[si.vSignatureReferenceInfors.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setDigestValue: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    if (isi.signatureInfor.vSignatureReferenceInfors.empty())
+    {
+        OSL_TRACE("XSecController::setDigestValue: no signature reference");
+        return;
+    }
+    SignatureReferenceInformation &reference =
+        isi.signatureInfor.vSignatureReferenceInfors.back();
     reference.ouDigestValue = ouDigestValue;
 }
 
 void XSecController::setDate( rtl::OUString& ouDate )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setDate: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     convertDateTime( isi.signatureInfor.stDateTime, ouDate );
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
 void XSecController::setId( rtl::OUString& ouId )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setId: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouSignatureId = ouId;
 }
 
 void XSecController::setPropertyId( rtl::OUString& ouPropertyId )
 {
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    if (m_vInternalSignatureInformations.empty())
+    {
+        OSL_TRACE("XSecController::setPropertyId: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouPropertyId = ouPropertyId;
 }
 
