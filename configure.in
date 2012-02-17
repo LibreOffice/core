@@ -7231,7 +7231,7 @@ if test "$with_system_icu" = "yes"; then
 
     ICUPATH="$PATH"
     if test "$WITH_MINGW" = "yes" ; then
-        ICUPATH="/usr/i686-w64-mingw32/sys-root/mingw/bin:$ICUPATH"
+        ICUPATH=`$CC -print-sysroot`/mingw/bin:"$ICUPATH"
     fi
     AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
 
