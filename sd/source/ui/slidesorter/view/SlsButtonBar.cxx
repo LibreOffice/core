@@ -68,19 +68,25 @@ namespace sd { namespace slidesorter { namespace view {
 class ButtonBar::BackgroundTheme
 {
 public:
+    enum ButtonPosition { TOP, BOTTOM };
+public:
     BackgroundTheme(
         const ::boost::shared_ptr<Theme>& rpTheme,
         const ::std::vector<SharedButton>& rButtons);
-    virtual ~BackgroundTheme() { }
+    ~BackgroundTheme() { }
     /** Set the preview bounding box, the maximal area in which to display
         buttons.  A call to this method triggers a call to Layout().
     */
     void SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox);
     Button::IconSize GetIconSize (void) const;
 
-    virtual BitmapEx CreateBackground () const;
-    virtual Point GetBackgroundLocation (void);
-    virtual Rectangle GetButtonArea (void);
+    BitmapEx CreateBackground () const;
+    Point GetBackgroundLocation (void);
+    Rectangle GetButtonArea (void);
+    void SetButtonPosition( ButtonPosition ePosition ) { mePosition = ePosition; }
+
+    /// Compute the positions & sizes.
+    void Layout (void);
 
 protected:
     ::boost::shared_ptr<Theme> mpTheme;
@@ -92,7 +98,8 @@ protected:
     Rectangle maButtonArea;
     Point maBackgroundLocation;
 
-    virtual void Layout (void);
+    /// This comes into effect only during Layout(), before it only caches the value.
+    ButtonPosition mePosition;
 
 private:
     void UpdateMinimumIconSizes(const ::std::vector<SharedButton>& rButtons);
@@ -275,6 +282,24 @@ void ButtonBar::ProcessMouseMotionEvent (
 }
 
 
+void ButtonBar::UpdateButtonPosition(
+    const model::SharedPageDescriptor& rpDescriptor,
+    const Point& rMousePosition)
+{
+    if (rpDescriptor && mpBackgroundTheme)
+    {
+        Rectangle aRectangle( rpDescriptor->GetBoundingBox() );
+        aRectangle.Bottom() -= aRectangle.GetHeight() / 2;
+
+        if (aRectangle.IsInside(rMousePosition))
+            mpBackgroundTheme->SetButtonPosition(ButtonBar::BackgroundTheme::BOTTOM);
+        else
+            mpBackgroundTheme->SetButtonPosition(ButtonBar::BackgroundTheme::TOP);
+
+        // Relayout, to propagate the newest location of the buttons
+        LayoutButtons();
+    }
+}
 
 
 void ButtonBar::ResetPage (void)
@@ -503,6 +528,7 @@ bool ButtonBar::LayoutButtons (void)
     nMaximumHeight += 2*nBorder;
 
     // Set up the bounding box of the button bar.
+    mpBackgroundTheme->Layout();
     maButtonBoundingBox = mpBackgroundTheme->GetButtonArea();
     maBackgroundLocation = mpBackgroundTheme->GetBackgroundLocation();
     if (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonPaintType) == 1)
@@ -710,7 +736,8 @@ ButtonBar::BackgroundTheme::BackgroundTheme (
     const ::std::vector<SharedButton>& rButtons)
     : mpTheme(rpTheme),
       maButtonArea(),
-      maBackgroundLocation()
+      maBackgroundLocation(),
+      mePosition( BOTTOM )
 {
     UpdateMinimumIconSizes(rButtons);
 }
@@ -833,9 +860,9 @@ void ButtonBar::BackgroundTheme::Layout (void)
     }
 
     maBackgroundLocation = Point(
-        maPreviewBoundingBox.Left()
-            + (maPreviewBoundingBox.GetWidth()-aImageSize.Width())/2,
-        maPreviewBoundingBox.Bottom() - aImageSize.Height());
+        maPreviewBoundingBox.Left() + (maPreviewBoundingBox.GetWidth()-aImageSize.Width())/2,
+        mePosition == TOP? maPreviewBoundingBox.Top():
+                           maPreviewBoundingBox.Bottom() - aImageSize.Height());
     maButtonArea = Rectangle(maBackgroundLocation, aImageSize);
 }
 

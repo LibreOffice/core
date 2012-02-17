@@ -69,6 +69,11 @@ public:
         const Point aMouseModelLocation,
         const bool bIsMouseButtonDown);
 
+    /// Decide whether the button should be drawn at the top, or the bottom.
+    void UpdateButtonPosition(
+        const model::SharedPageDescriptor& rpDescriptor,
+        const Point& rMousePosition);
+
     void ResetPage (void);
 
     bool IsMouseOverBar (void) const;
