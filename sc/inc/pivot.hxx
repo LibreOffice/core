@@ -99,10 +99,10 @@ struct ScPivotParam
     ::std::vector<PivotField> maColFields;
     ::std::vector<PivotField> maRowFields;
     ::std::vector<PivotField> maDataFields;
-    sal_Bool            bIgnoreEmptyRows;
-    sal_Bool            bDetectCategories;
-    sal_Bool            bMakeTotalCol;
-    sal_Bool            bMakeTotalRow;
+    bool            bIgnoreEmptyRows;
+    bool            bDetectCategories;
+    bool            bMakeTotalCol;
+    bool            bMakeTotalRow;
 
     ScPivotParam();
     ScPivotParam( const ScPivotParam& r );
@@ -158,7 +158,7 @@ struct ScDPLabelData
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-    explicit            ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue );
+    explicit ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue);
 
     /**
      * return the name that should be displayed in the dp dialogs i.e. when

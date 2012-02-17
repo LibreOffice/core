@@ -92,7 +92,7 @@ OUString ScDPLabelData::Member::getDisplayName() const
     return maName;
 }
 
-ScDPLabelData::ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue ) :
+ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue) :
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
