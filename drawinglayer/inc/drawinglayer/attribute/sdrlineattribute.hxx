@@ -68,7 +68,6 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen);
-            SdrLineAttribute(const basegfx::BColor& rColor);
             SdrLineAttribute();
             SdrLineAttribute(const SdrLineAttribute& rCandidate);
             SdrLineAttribute& operator=(const SdrLineAttribute& rCandidate);
@@ -87,9 +86,6 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             const ::std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
-
-            // bool access
-            bool isDashed() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

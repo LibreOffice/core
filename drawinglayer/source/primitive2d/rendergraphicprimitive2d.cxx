@@ -50,16 +50,6 @@ namespace drawinglayer
         {
         }
 
-        void RenderGraphicPrimitive2D::setCurrentRasterizer() const
-        {
-            mapCurrentRasterizer.reset();
-        }
-
-        void RenderGraphicPrimitive2D::setCurrentRasterizer( const vcl::RenderGraphicRasterizer& rCurrentRasterizer ) const
-        {
-            mapCurrentRasterizer.reset( new vcl::RenderGraphicRasterizer( rCurrentRasterizer ) );
-        }
-
         bool RenderGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BasePrimitive2D::operator==(rPrimitive))

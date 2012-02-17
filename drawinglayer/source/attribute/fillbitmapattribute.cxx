@@ -106,12 +106,6 @@ namespace drawinglayer
         {
         }
 
-        FillBitmapAttribute::FillBitmapAttribute()
-        :   mpFillBitmapAttribute(ImpFillBitmapAttribute::get_global_default())
-        {
-            mpFillBitmapAttribute->mnRefCount++;
-        }
-
         FillBitmapAttribute::FillBitmapAttribute(const FillBitmapAttribute& rCandidate)
         :   mpFillBitmapAttribute(rCandidate.mpFillBitmapAttribute)
         {

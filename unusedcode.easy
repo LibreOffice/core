@@ -1165,27 +1165,10 @@ dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
 dp_info::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
 dp_manager::factory::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
-drawinglayer::attribute::FillBitmapAttribute::FillBitmapAttribute()
-drawinglayer::attribute::Sdr3DLightAttribute::Sdr3DLightAttribute()
-drawinglayer::attribute::Sdr3DObjectAttribute::Sdr3DObjectAttribute()
-drawinglayer::attribute::SdrFillBitmapAttribute::getLogSize() const
 drawinglayer::attribute::SdrFillTextAttribute::isDefault() const
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
-drawinglayer::attribute::SdrLightingAttribute::getAmbientLight() const
-drawinglayer::attribute::SdrLineAttribute::SdrLineAttribute(basegfx::BColor const&)
-drawinglayer::attribute::SdrLineAttribute::isDashed() const
-drawinglayer::attribute::SdrLineFillShadowAttribute3D::isDefault() const
-drawinglayer::attribute::SdrSceneAttribute::getDistance() const
 drawinglayer::attribute::SdrTextAttribute::getPropertiesVersion() const
 drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
-drawinglayer::primitive2d::GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix const&, GraphicObject const&)
-drawinglayer::primitive2d::PolyPolygonStrokeArrowPrimitive2D::PolyPolygonStrokeArrowPrimitive2D(basegfx::B2DPolyPolygon const&, drawinglayer::attribute::LineAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&)
-drawinglayer::primitive2d::PolyPolygonStrokeArrowPrimitive2D::PolyPolygonStrokeArrowPrimitive2D(basegfx::B2DPolyPolygon const&, drawinglayer::attribute::LineAttribute const&, drawinglayer::attribute::StrokeAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&)
-drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D::PolygonStrokeArrowPrimitive2D(basegfx::B2DPolygon const&, drawinglayer::attribute::LineAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&, drawinglayer::attribute::LineStartEndAttribute const&)
-drawinglayer::primitive2d::RenderGraphicPrimitive2D::setCurrentRasterizer() const
-drawinglayer::primitive2d::RenderGraphicPrimitive2D::setCurrentRasterizer(vcl::RenderGraphicRasterizer const&) const
-drawinglayer::primitive3d::PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(basegfx::B3DPolygon const&, drawinglayer::attribute::LineAttribute const&)
-drawinglayer::processor3d::CollectingProcessor3D::CollectingProcessor3D(drawinglayer::geometry::ViewInformation3D const&)
 formula::ArgInput::GetArgSelection()
 formula::EditBox::EditBox(Window*, long)
 formula::FormulaListBox::FormulaListBox(Window*, long)

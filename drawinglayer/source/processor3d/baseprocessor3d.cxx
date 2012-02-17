@@ -90,12 +90,6 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        CollectingProcessor3D::CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation)
-        :   BaseProcessor3D(rViewInformation),
-            maPrimitive3DSequence()
-        {
-        }
-
         CollectingProcessor3D::~CollectingProcessor3D()
         {
         }

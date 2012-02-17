@@ -65,7 +65,6 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rTopLeft,
                 const basegfx::B2DVector& rSize,
                 bool bTiling);
-            FillBitmapAttribute();
             FillBitmapAttribute(const FillBitmapAttribute& rCandidate);
             FillBitmapAttribute& operator=(const FillBitmapAttribute& rCandidate);
             ~FillBitmapAttribute();

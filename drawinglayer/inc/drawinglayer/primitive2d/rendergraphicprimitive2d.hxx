@@ -72,8 +72,6 @@ namespace drawinglayer
             // access to latest used vcl::GraphicRasterizer for possibly reusing
             // an already rendered vcl::RenderGraphic with the same transform
             // properties during the next rendering process
-            void setCurrentRasterizer() const;
-            void setCurrentRasterizer( const vcl::RenderGraphicRasterizer& rCurrentGraphicRasterizer ) const;
             inline const vcl::RenderGraphicRasterizer* getCurrentRasterizer() const { return( mapCurrentRasterizer.get() ); }
 
             /// compare operator

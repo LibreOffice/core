@@ -66,9 +66,6 @@ namespace drawinglayer
                 const FillGradientAttribute& rFillFloatTransGradient);
             SdrLineFillShadowAttribute3D();
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
-
             // compare operator
             bool operator==(const SdrLineFillShadowAttribute3D& rCandidate) const;
 

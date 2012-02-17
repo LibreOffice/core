@@ -226,21 +226,6 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            /// constructor
-            PolyPolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute,
-                const attribute::StrokeAttribute& rStrokeAttribute,
-                const attribute::LineStartEndAttribute& rStart,
-                const attribute::LineStartEndAttribute& rEnd);
-
-            /// constructor without stroking
-            PolyPolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute,
-                const attribute::LineStartEndAttribute& rStart,
-                const attribute::LineStartEndAttribute& rEnd);
-
             /// data read access
             const attribute::LineStartEndAttribute& getStart() const { return maStart; }
             const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }

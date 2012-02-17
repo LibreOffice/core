@@ -96,7 +96,6 @@ namespace drawinglayer
             primitive3d::Primitive3DSequence                        maPrimitive3DSequence;
 
         public:
-            CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
             virtual ~CollectingProcessor3D();
 
             /// the central processing method

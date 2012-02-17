@@ -158,11 +158,6 @@ namespace drawinglayer
             return (*rCandidate.mpSdrLightingAttribute == *mpSdrLightingAttribute);
         }
 
-        const basegfx::BColor& SdrLightingAttribute::getAmbientLight() const
-        {
-            return mpSdrLightingAttribute->getAmbientLight();
-        }
-
         const ::std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const
         {
             return mpSdrLightingAttribute->getLightVector();

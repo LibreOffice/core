@@ -295,29 +295,6 @@ namespace drawinglayer
             }
         }
 
-        PolyPolygonStrokeArrowPrimitive2D::PolyPolygonStrokeArrowPrimitive2D(
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
-               const attribute::LineAttribute& rLineAttribute,
-            const attribute::StrokeAttribute& rStrokeAttribute,
-            const attribute::LineStartEndAttribute& rStart,
-            const attribute::LineStartEndAttribute& rEnd)
-        :   PolyPolygonStrokePrimitive2D(rPolyPolygon, rLineAttribute, rStrokeAttribute),
-            maStart(rStart),
-            maEnd(rEnd)
-        {
-        }
-
-        PolyPolygonStrokeArrowPrimitive2D::PolyPolygonStrokeArrowPrimitive2D(
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
-               const attribute::LineAttribute& rLineAttribute,
-            const attribute::LineStartEndAttribute& rStart,
-            const attribute::LineStartEndAttribute& rEnd)
-        :   PolyPolygonStrokePrimitive2D(rPolyPolygon, rLineAttribute),
-            maStart(rStart),
-            maEnd(rEnd)
-        {
-        }
-
         bool PolyPolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(PolyPolygonStrokePrimitive2D::operator==(rPrimitive))

@@ -75,7 +75,6 @@ namespace drawinglayer
             bool operator==(const SdrSceneAttribute& rCandidate) const;
 
             // data read access
-            double getDistance() const;
             double getShadowSlant() const;
             ::com::sun::star::drawing::ProjectionMode getProjectionMode() const;
             ::com::sun::star::drawing::ShadeMode getShadeMode() const;

@@ -57,15 +57,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrLineFillShadowAttribute3D::isDefault() const
-        {
-            return(getLine().isDefault()
-                && getFill().isDefault()
-                && getLineStartEnd().isDefault()
-                && getShadow().isDefault()
-                && getFillFloatTransGradient().isDefault());
-        }
-
         bool SdrLineFillShadowAttribute3D::operator==(const SdrLineFillShadowAttribute3D& rCandidate) const
         {
             return(getLine() == rCandidate.getLine()
