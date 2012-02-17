@@ -368,7 +368,7 @@ Private_GetJavaClass(void)
 char *
 NP_GetMIMEDescription(void)
 {
-    return NPP_GetMIMEDescription();
+    return (char *)NPP_GetMIMEDescription();
 }
 
 /*
