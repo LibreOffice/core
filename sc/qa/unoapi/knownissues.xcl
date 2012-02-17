@@ -200,7 +200,6 @@ sc.ScCellCursorObj::com::sun::star::sheet::XCellRangesQuery
 sc.ScCellObj::com::sun::star::table::CellProperties
 sc.ScCellObj::com::sun::star::style::CharacterProperties
 sc.ScCellObj::com::sun::star::beans::XPropertySet
-sc.ScCellRangeObj::com::sun::star::table::CellProperties
 sc.ScCellRangesObj::com::sun::star::table::CellProperties
 sc.ScCellRangesObj::com::sun::star::beans::XPropertySet
 
@@ -217,6 +216,7 @@ sc.ScCellRangeObj::com::sun::star::table::CellProperties
 sc.ScCellRangeObj::com::sun::star::util::XSearchable
 sc.ScCellRangeObj::com::sun::star::sheet::XCellRangesQuery
 sc.ScCellRangeObj::com::sun::star::util::XReplaceable
+sc.ScCellRangeObj::com::sun::star::sheet::XCellRangeData
 sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
 sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
 sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
