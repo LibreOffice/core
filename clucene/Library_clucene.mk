@@ -25,13 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# FIXME, need a way to suppress -Werror
-
 $(eval $(call gb_Library_Library,clucene))
 
 $(eval $(call gb_Library_use_external,clucene,zlib))
 
 $(eval $(call gb_Library_add_package_headers,clucene,clucene_source))
+
+$(eval $(call gb_Library_set_warnings_not_errors,clucene))
 
 $(eval $(call gb_Library_set_include,clucene,\
 	-I$(WORKDIR)/CustomTarget/clucene/source/inc/internal \
