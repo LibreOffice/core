@@ -2721,7 +2721,6 @@ aix*)
     OS=AIX
     OUTPATH=unxaigppc
     P_SEP=:
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -2810,7 +2809,6 @@ dragonfly*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -2838,7 +2836,6 @@ freebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -2867,7 +2864,6 @@ kfreebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -2975,7 +2971,6 @@ linux-gnu*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -3061,7 +3056,6 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -3088,7 +3082,6 @@ openbsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB64"
     SOLARINC="$SOLARINC -I/usr/local/include"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
@@ -3120,9 +3113,6 @@ solaris*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLAREXTRALIB="-L../$LIB -L$SRC_ROOT/solenv/$OUTPATH/lib.solaris.2.6"
-    SOLAREXTRALIB="$SOLAREXTRALIB -L/lib -L/usr/lib"
-    SOLAREXTRALIB="$SOLAREXTRALIB -L/usr/local/bin -L/usr/dt/lib -L/usr/openwin/lib"
     SOLARINC="$SOLARINC -I/usr/local/include"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
@@ -3155,7 +3145,6 @@ AC_SUBST(OS)
 AC_SUBST(OUTDIR)
 AC_SUBST(OUTPATH)
 AC_SUBST(P_SEP)
-AC_SUBST(SOLAREXTRALIB)
 AC_SUBST(WORKDIR)
 
 dnl ===================================================================
