@@ -14,7 +14,7 @@
  </vendor>
  </vendorInfos>
  <plugins>
-  <library vendor="Apple Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dylib</library>
-  <library vendor="Apple Computer, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dylib</library>
+  <library vendor="Apple Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.dylib</library>
+  <library vendor="Apple Computer, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.dylib</library>
  </plugins>
 </javaSelection>

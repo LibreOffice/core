@@ -165,3 +165,7 @@ $(1)
 endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
+
+gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
+
+gb_Helper_get_rcfile = $(1)rc

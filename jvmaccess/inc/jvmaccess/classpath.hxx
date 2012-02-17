@@ -29,6 +29,7 @@
 #ifndef INCLUDED_JVMACCESS_CLASSPATH_HXX
 #define INCLUDED_JVMACCESS_CLASSPATH_HXX
 
+#include "jvmaccessdllapi.h"
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
 
@@ -50,7 +51,7 @@ namespace jvmaccess {
 /**
    Helper functions for class path handling.
 */
-class ClassPath {
+class JVMACCESS_DLLPUBLIC ClassPath {
 public:
     /**
        translates a class path into a java.net.URL[] instance.

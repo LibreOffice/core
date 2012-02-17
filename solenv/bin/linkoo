@@ -113,7 +113,7 @@ my $brand_program_dir = 'program';
 my $ure_lib_dir = 'ure-link/lib';
 my $win_ure_lib_dir = 'URE/bin';
 
-my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
+my @exceptions = ( 'cppuhelper', 'libsunjavaplugin', 'libjvmfwk' );
 
 my $bin;
 $bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');

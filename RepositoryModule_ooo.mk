@@ -64,6 +64,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18npool \
     i18nutil \
     idl \
+    javaunohelper \
+    jvmaccess \
+    jvmfwk \
+    jurt \
     lingucomponent \
     linguistic \
     lotuswordpro \
@@ -81,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     psprint_config \
     regexp \
     reportdesign \
+    ridljar \
     rsc \
     sal \
     salhelper \
@@ -109,6 +114,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     udkapi \
     unixODBC \
     UnoControls \
+    unoil \
     unotest \
     unotools \
     unoxml \

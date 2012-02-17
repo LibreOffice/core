@@ -365,7 +365,7 @@ End
 File gid_File_Dl_Sunjavaplugin
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_BARE("sunjavaplugin");
+    Name = SCP2_URE_DL_NORMAL("sunjavaplugin");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0AC6C688-876C-40C5-B24E-9257003FDC3E";
 End

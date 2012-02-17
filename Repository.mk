@@ -114,6 +114,14 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 
 endif
 
+ifneq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_executables,UREBIN,\
+	javaldx \
+))
+
+endif
+
 ifeq ($(WITH_MOZILLA),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
     pluginapp.bin \
@@ -315,9 +323,22 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipe \
+    juh \
+    juhx \
+    jvmfwk \
     sal_textenc \
+    sunjavaplugin \
     xmlreader \
 ))
+
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipx \
+))
+
+endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     affine_uno \
@@ -394,12 +415,12 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
-    jvmaccess \
     ucbhelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
+    jvmaccess \
     purpenvhelper \
     salhelper \
 ))
@@ -481,7 +502,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
-    jvmfwk \
     sal \
 ))
 

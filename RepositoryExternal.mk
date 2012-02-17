@@ -1011,6 +1011,29 @@ endef
 endif #SYSTEM_MOZILLA_HEADERS
 
 
+ifneq ($(VALGRIND_CFLAGS),)
+
+define gb_LinkTarget__use_valgrind
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DHAVE_VALGRIND_H \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(VALGRIND_CFLAGS) \
+)
+
+endef
+
+else # !VALGRIND_CFLAGS
+
+define gb_LinkTarget__use_valgrind
+
+endef
+
+endif # VALGRIND_CFLAGS
+
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
