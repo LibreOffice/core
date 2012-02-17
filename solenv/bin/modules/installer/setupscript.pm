@@ -29,7 +29,6 @@ package installer::setupscript;
 
 use base 'Exporter';
 
-use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::logger qw(globallog);
@@ -393,23 +392,16 @@ sub add_predefined_folder
 {
     my ( $folderitemref, $folderref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$folderitemref}; $i++ )
-    {
-        my $folderitem = ${$folderitemref}[$i];
-        my $folderid = $folderitem->{'FolderID'};
+    for my $folderid ( map { $_->{FolderID} } @{$folderitemref} ) {
+        # FIXME: Anchor to start of line?
+        next unless ( $folderid =~ /PREDEFINED_/ );
+        next if grep { $_->{gid} eq $folderid } @{$folderref};
 
-        if ( $folderid =~ /PREDEFINED_/ )
-        {
-            if (! installer::existence::exists_in_array_of_hashes("gid", $folderid, $folderref))
-            {
-                my %folder = ();
-                $folder{'ismultilingual'} = "0";
-                $folder{'Name'} = "";
-                $folder{'gid'} = $folderid;
-
-                push(@{$folderref}, \%folder);
-            }
-        }
+        push @{$folderref}, {
+            ismultilingual => 0,
+            Name => "",
+            gid => $folderid,
+        };
     }
 }
 

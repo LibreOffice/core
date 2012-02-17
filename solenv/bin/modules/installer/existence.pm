@@ -49,26 +49,6 @@ sub exists_in_array
     return $alreadyexists;
 }
 
-sub exists_in_array_of_hashes
-{
-    my ($searchkey, $searchvalue, $arrayref) = @_;
-
-    my $valueexists = 0;
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $hashref = ${$arrayref}[$i];
-
-        if ( $hashref->{$searchkey} eq $searchvalue )
-        {
-            $valueexists = 1;
-            last;
-        }
-    }
-
-    return $valueexists;
-}
-
 #####################################################################
 # Returning a specified file as base for the new
 # configuration file, defined by its "gid"
