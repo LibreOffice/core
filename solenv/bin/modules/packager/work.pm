@@ -28,11 +28,12 @@
 
 package packager::work;
 
+use strict;
+use warnings;
+
 use base 'Exporter';
 
 use packager::exiter;
-use packager::existence;
-use packager::files;
 use packager::globals;
 
 our @EXPORT_OK = qw(
@@ -54,31 +55,6 @@ sub set_global_variable
     $packager::globals::compiler = $compiler;
 }
 
-#############################################################################
-# Converting a string list with separator $listseparator
-# into an array
-#############################################################################
-
-sub convert_stringlist_into_array
-{
-    my ( $includestringref, $listseparator ) = @_;
-
-    my @newarray = ();
-    my $first;
-    my $last = ${$includestringref};
-
-    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        push(@newarray, "$first");
-    }
-
-    push(@newarray, "$last");
-
-    return \@newarray;
-}
-
 ###########################################
 # Generating a list of package calls
 # corresponding to the package list
@@ -90,50 +66,28 @@ sub create_package_todos
 
     my @targets = ();   # only used, if the build server is not used
 
-    for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
-    {
-        my $line = ${$packagelist}[$i];
+    for my $line ( @{$packagelist} ) {
+        next if ($line =~ /^\s*\#/);  # comment line
 
-        if ( $line =~ /^\s*\#/ ) { next; }  # comment line
+        my ($product, $compilerlist, $languagelist, $target) =
+            ($line =~ /^\s*(\w+?)\s+(\S+?)\s+(\S+?)\s+(\w+?)\s*$/);
 
-        if ( $line =~ /^\s*(\w+?)\s+(\S+?)\s+(\S+?)\s+(\w+?)\s*$/ )
-        {
-            my $product = $1;
-            my $compilerlist = $2;
-            my $languagelist = $3;
-            my $target = $4;
+        my @compilers = split ',', $compilerlist;
 
-            $product =~ s/\s//g;
-            $compilerlist =~ s/\s//g;
-            $languagelist =~ s/\s//g;
-            $target =~ s/\s//g;
+        # is the compiler of this "build" part of the compiler list in pack.lst ?
 
-            my $compilers = convert_stringlist_into_array(\$compilerlist, ",");
+        next unless grep { $_ eq $packager::globals::compiler } @compilers;
 
-            # is the compiler of this "build" part of the compiler list in pack.lst ?
+        # products are separated in pack.lst by "|"
+        # now all information is available to create the targets for the systemcalls
+        for my $languagestring (split '\|', $languagelist) {
+            $languagestring =~ s/,/_/g;   # comma in pack.lst becomes "_" in dmake command
 
-            if ( packager::existence::exists_in_array($packager::globals::compiler, $compilers) )
-            {
-                # products are separated in pack.lst by "|"
-
-                my $languagesets = convert_stringlist_into_array(\$languagelist, "\|");
-
-                # now all information is available to create the targets for the systemcalls
-
-                for ( my $j = 0; $j <= $#{$languagesets}; $j++ )
-                {
-                    my $languagestring = ${$languagesets}[$j];
-                    $languagestring =~ s/\,/\_/g;   # comma in pack.lst becomes "_" in dmake command
-
-                    my $target = $target . "_" . $languagestring;
-                    push(@targets, $target);
-
-                    my $insertline = $target . "\n";
-                    push( @packager::globals::logfileinfo, $insertline);
-                }
-            }
+            push @targets, $target . '_' . $languagestring;
         }
     }
+
+    push @packager::globals::logfileinfo, map { $_ . "\n" } @targets;
 
     return \@targets;
 }
