@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/container/xnamed \
     test/source/sheet/cellproperties \
     test/source/sheet/datapilotfield \
+    test/source/sheet/xcellrangedata \
     test/source/sheet/xcellrangesquery \
     test/source/sheet/xdatabaserange \
     test/source/sheet/xdatapilotdescriptor \
