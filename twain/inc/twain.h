@@ -102,7 +102,7 @@
  * to detect it early and override both GNU and MS.
  */
 #if defined(__MINGW32__)
-  #define TWH_CMP_MING32
+    #define TWH_CMP_MING32
 #endif
 
 /* Microsoft C/C++ Compiler */
