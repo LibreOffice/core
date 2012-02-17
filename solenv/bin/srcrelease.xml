@@ -1,0 +1,84 @@
+<project name="Apache OpenOffice" basedir="." default="pack">
+
+  <property name="out.dir" value="."/>
+  <property name="aoo.name" value="aoo"/>
+  <property name="aoo.ver" value="3.4"/>
+  <property name="release.dir.name" value="${aoo.name}-${aoo.ver}"/>
+  <property name="release.file.name" value="${release.dir.name}-src"/>
+  <property name="release.zip" value="${out.dir}/${release.file.name}.zip"/>
+  <property name="release.tar" value="${out.dir}/${release.file.name}.tar"/>
+  <property name="release.tar.gz" value="${out.dir}/${release.file.name}.tar.gz"/>
+  <property name="release.tar.bz2" value="${out.dir}/${release.file.name}.tar.bz2"/>
+
+  <property name="excludes.list" value="configure, moz/zipped/**, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, MacOSXX86Env.*, external/unowinreg/unowinreg.dll" />
+  <property name="excludes.executables" value="solenv/bin/macosx-create-bundle, solenv/bin/linkoo, solenv/bin/localize, solenv/bin/createpdbrelocators, solenv/bin/langwrap, solenv/bin/makedepn, solenv/bin/packmodule, solenv/bin/rpm-wrapper, solenv/bin/relocate, solenv/bin/receditor, solenv/bin/subsequenttests, **/*.sh, **/*.bat, **/*.exe, configure.cmd, oowintool, config.sub, config.guess, **/*.pl"/>
+  <property name="includes.mk" value="inc/unxmac*.mk inc/unxlng*.mk inc/wntmsci*.mk inc/unxsol*.mk" />
+  <property name="excludes.outdirs" value="**/unxmacx*/**, **/unxlng*/**, **/unxsol*/**, **/wntmsci*/**" />
+
+
+  <target name="clean">
+    <echo level="verbose" message="### clean output files:"/>
+    <delete file="${release.zip}" verbose="true"/>
+    <delete file="${release.tar}" verbose="true"/>
+    <delete file="${release.tar.gz}" verbose="true"/>
+    <delete file="${release.tar.bz2}" verbose="true"/>
+  </target>
+
+  <target name="source.zip">
+    <echo level="verbose" message="### creating ${release.zip} ..."/>
+    <echo level="verbose" message="### basedir=${basedir}"/>
+    <echo level="verbose" message="### source.root=${source.root}"/>
+    <echo level="verbose" message="### out.dir =${out.dir}"/>
+    <zip destfile="${release.zip}">
+
+      <zipfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
+      <zipfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
+      <zipfileset dir="ext_libraries" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/ext_libraries"/>
+      <zipfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <zipfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
+      <zipfileset dir="main" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <zipfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <zipfileset dir="main/solenv" includes="${includes.mk}" prefix="${release.dir.name}/main/solenv"/>
+    </zip>
+    <echo level="verbose" message="   ... DONE"/>
+  </target>
+
+  <target name="source.tar">
+    <echo level="verbose" message="### creating intermediate ${release.tar} ..."/>
+    <tar destfile="${release.tar}" longfile="gnu">
+      <tarfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
+      <tarfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
+      <tarfileset dir="ext_libraries" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/ext_libraries"/>
+      <tarfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <tarfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
+      <tarfileset dir="main" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <tarfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <tarfileset dir="main/solenv" includes="${includes.mk}" prefix="${release.dir.name}/main/solenv"/>
+    </tar>
+    <echo level="verbose" message="   ... DONE"/>
+  </target>
+
+  <target name="source.tar.gz" depends="source.tar">
+    <echo level="verbose" message="### creating ${release.tar.gz} ..."/>
+    <gzip destfile="${release.tar.gz}" src="${release.tar}"/>
+    <echo level="verbose" message="   ... DONE"/>
+  </target>
+
+  <target name="source.tar.bz2" depends="source.tar">
+    <echo level="verbose" message="### creating ${release.tar.bz2} ..."/>
+    <bzip2 destfile="${release.tar.bz2}" src="${release.tar}"/>
+    <echo level="verbose" message="   ... DONE"/>
+  </target>
+
+  <target name="dummy">
+    <zip destfile="${release.zip}">
+      <zipfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
+      <zipfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
+    </zip>
+  </target>
+
+  <target name="pack" depends="clean,source.zip,source.tar.gz,source.tar.bz2">
+    <echo level="info" message="### Create source release files for Apache OpenOffice ${aoo.ver} ..."/>
+  </target>
+
+</project>

@@ -109,6 +109,13 @@ VERBOSESWITCH=-verbose
 VERBOSESWITCH=-quiet
 .ENDIF
 
+# New target to prepare a source release
+SRC_RELEASE_OUT_DIR=$(shell cd $(OUT) && pwd)$/AOO_SRC_Release
+
+aoo_srcrelease: $(SOLARENV)$/bin$/srcrelease.xml
+    @-$(MKDIR) $(OUT)$/AOO_SRC_Release
+    $(ANT) -f $(SOLARENV)$/bin$/srcrelease.xml -q -Dbasedir=$(SOURCE_ROOT_DIR) -Dout.dir=$(SRC_RELEASE_OUT_DIR)
+
 updatepack:
     $(PERL) -w $(SOLARENV)$/bin$/packager.pl
 
@@ -168,7 +175,7 @@ $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
-             
+
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
