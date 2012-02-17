@@ -307,7 +307,7 @@ public:
                     return pWin; \
                 } \
         sal_uInt16 Class::GetChildWindowId () \
-                { return MyID; } \
+		{ return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
                     SfxChildWinFactory *pFact = new SfxChildWinFactory( \

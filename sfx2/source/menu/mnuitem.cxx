@@ -247,14 +247,6 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
 }
 
 //--------------------------------------------------------------------
-
-void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
-{
-    RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
-                SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
-}
-
-//--------------------------------------------------------------------
 void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
 {
     SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );

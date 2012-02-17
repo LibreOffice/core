@@ -32,12 +32,6 @@
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 
-//====================================================================
-
-void SfxHintPoster::RegisterEvent()
-{
-}
-
 //--------------------------------------------------------------------
 
 SfxHintPoster::SfxHintPoster( const GenLink& rLink ):

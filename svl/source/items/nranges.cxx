@@ -720,50 +720,6 @@ SfxNumRanges& SfxNumRanges::operator /=
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
-
-/** <H3>Description</H3>
-
-    Determines if at least one range in 'rRanges' intersects with one
-    range in '*this'.
-
-    sal_True, if there is at least one with:
-        this->Contains( n ) && rRanges.Contains( n )
-*/
-
-{
-    // special cases: one is empty
-    if ( rRanges.IsEmpty() || IsEmpty() )
-        return sal_False;
-
-    // find at least one intersecting range
-    const NUMTYPE *pRange1 = _pRanges;
-    const NUMTYPE *pRange2 = rRanges._pRanges;
-
-    do
-    {
-        // 1st range is smaller than 2nd range?
-        if ( pRange1[1] < pRange2[0] )
-            // => keep 1st range
-            pRange1 += 2;
-
-        // 2nd range is smaller than 1st range?
-        else if ( pRange2[1] < pRange1[0] )
-            // => skip 2nd range
-            pRange2 += 2;
-
-        // the ranges are overlappung
-        else
-            return sal_True;
-    }
-    while ( *pRange2 );
-
-    // no intersection found
-    return sal_False;
-}
-
-//------------------------------------------------------------------------
-
 NUMTYPE SfxNumRanges::Count() const
 
 /** <H3>Description</H3>
@@ -774,23 +730,6 @@ NUMTYPE SfxNumRanges::Count() const
 
 {
     return Capacity_Impl( _pRanges );
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool SfxNumRanges::Contains( NUMTYPE n ) const
-
-/** <H3>Description</H3>
-
-    Determines if '*this' contains 'n'.
-*/
-
-{
-    for ( NUMTYPE *pRange = _pRanges; *pRange && *pRange <= n; pRange += 2 )
-        if ( pRange[0] <= n && n <= pRange[1] )
-            return sal_True;
-    return sal_False;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

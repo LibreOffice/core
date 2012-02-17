@@ -60,16 +60,6 @@ SfxXRangeItem::SfxXRangeItem( sal_uInt16 which, NUMTYPE from, NUMTYPE to ):
 {
 }
 
-
-// -----------------------------------------------------------------------
-
-SfxXRangeItem::SfxXRangeItem( sal_uInt16 nW, SvStream &rStream ) :
-    SfxPoolItem( nW )
-{
-    rStream >> nFrom;
-    rStream >> nTo;
-}
-
 // -----------------------------------------------------------------------
 
 SfxXRangeItem::SfxXRangeItem( const SfxXRangeItem& rItem ) :

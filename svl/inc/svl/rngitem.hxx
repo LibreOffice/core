@@ -67,7 +67,6 @@ public:
                                 TYPEINFO();
                                 SfxXRangeItem();
                                 SfxXRangeItem( sal_uInt16 nWID, NUMTYPE nFrom, NUMTYPE nTo );
-                                SfxXRangeItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxXRangeItem( const SfxXRangeItem& rItem );
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

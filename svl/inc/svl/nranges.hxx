@@ -80,8 +80,6 @@ public:
     NUMTYPE                     Count() const;
     sal_Bool                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
-    sal_Bool                        Contains( NUMTYPE n ) const;
-    sal_Bool                        Intersects( const SfxNumRanges & ) const;
 
                                 operator const NUMTYPE* () const
                                 { return _pRanges; }
