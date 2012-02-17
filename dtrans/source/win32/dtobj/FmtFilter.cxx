@@ -482,7 +482,7 @@ typedef Sequence<sal_Int8> ByteSequence_t;
    a double '\0' terminated string buffer */
 size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
 {
-    if (fileList.size() == 0)
+    if ( fileList.empty() )
         return 0;
 
     size_t size = 1; // one for the very final '\0'
