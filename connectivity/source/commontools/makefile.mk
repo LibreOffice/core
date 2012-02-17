@@ -49,6 +49,7 @@ ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
 
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=\
+        $(SLO)$/AutoRetrievingBase.obj					\
         $(SLO)$/predicateinput.obj						\
         $(SLO)$/ConnectionWrapper.obj					\
         $(SLO)$/TConnection.obj							\
@@ -90,8 +91,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/dbconversion.obj
 
 SLOFILES=\
-        $(EXCEPTIONSFILES)								\
-        $(SLO)$/AutoRetrievingBase.obj					\
+        $(EXCEPTIONSFILES)
 
 
 
