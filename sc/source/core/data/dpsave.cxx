@@ -94,7 +94,7 @@ ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r) :
     nVisibleMode( r.nVisibleMode ),
     nShowDetailsMode( r.nShowDetailsMode )
 {
-    if (r.mpLayoutName.get())
+    if (r.mpLayoutName)
         mpLayoutName.reset(new OUString(*r.mpLayoutName));
 }
 
@@ -171,7 +171,7 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
             lcl_SetBoolProperty( xMembProp,
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_SHOWDETAILS)), (bool)nShowDetailsMode );
 
-        if (mpLayoutName.get())
+        if (mpLayoutName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
         if ( nPosition >= 0 )
@@ -248,9 +248,9 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         pSelectedPage = new ::rtl::OUString( *(r.pSelectedPage) );
     else
         pSelectedPage = NULL;
-    if (r.mpLayoutName.get())
+    if (r.mpLayoutName)
         mpLayoutName.reset(new OUString(*r.mpLayoutName));
-    if (r.mpSubtotalName.get())
+    if (r.mpSubtotalName)
         mpSubtotalName.reset(new OUString(*r.mpSubtotalName));
 }
 
@@ -584,7 +584,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         // else keep empty sequence
 
         ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FILTER, aFilter);
-        if (mpLayoutName.get())
+        if (mpLayoutName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
         const OUString* pSubTotalName = GetSubtotalName();
