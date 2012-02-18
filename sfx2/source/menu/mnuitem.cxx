@@ -246,13 +246,11 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
     return new SfxMenuControl( sal_True );
 }
 
-#ifndef LINUX
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
     RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
                 SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
 }
-#endif
 
 //--------------------------------------------------------------------
 void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
