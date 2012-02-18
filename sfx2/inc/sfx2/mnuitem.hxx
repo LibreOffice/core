@@ -56,6 +56,7 @@ public:
                             SfxMenuControl( sal_uInt16, SfxBindings&);
 
     static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
+    static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL );
 
                             ~SfxMenuControl();
 
