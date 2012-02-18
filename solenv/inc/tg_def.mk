@@ -192,7 +192,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL$(TNR)TARGET8=$(shell @fix_shl $(SHL$(TNR)TARGETN:f))
+SHL$(TNR)TARGET8=$(shell @fix_shl.cmd $(SHL$(TNR)TARGETN:f))
 
 DEF$(TNR)FILTER=$(SOLARENV)/inc/dummy.flt
 DEF$(TNR)NAMELIST=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib)
@@ -208,7 +208,6 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL$(TNR)TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!

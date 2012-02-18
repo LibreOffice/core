@@ -50,7 +50,12 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
     @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-.ELSE			# "$(GUI)"=="UNX"
+
+.ELIF "$(GUI)"=="OS2"
+
+    @ln -s $(LIB$(TNR)TARGET) $(LIB$(TNR)ARCHIV)
+
+.ELSE			# "$(GUI)"=="OS2"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd

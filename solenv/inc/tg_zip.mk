@@ -105,7 +105,9 @@ $(ZIP$(TNR)TARGETN) : delzip $(ZIP$(TNR)DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).$(ZIP$(TNR)TARGET){$(subst,$(ZIP$(TNR)HELPVAR),_ $(@:db))}$(ZIP$(TNR)EXT)

@@ -135,7 +135,7 @@ $(PAR)/%.par :
 .ENDIF
 # YD: INCLUDE macro too long, include only few items (scp2 compile)
 .IF "$(GUI)"=="OS2"
-    $(CPPLCC) -+ -P -I..\..\inc -I..\..\os2gcci.pro\inc $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
+    $(CPPLCC) -+ -P -I../../inc -I../../os2gcci.pro/inc $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .IF "$(GUI)"=="UNX"
     $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc -+ -P $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre

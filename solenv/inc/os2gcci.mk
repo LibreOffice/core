@@ -175,6 +175,9 @@ CFLAGS+=-DSTL_OS2_BUILDING
 CFLAGSCXX+=-DSTL_OS2_BUILDING
 .ENDIF
 
+CFLAGS+=$(LIBXML_CFLAGS) -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/os2
+CFLAGSCXX+=$(LIBXML_CFLAGS) -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/os2
+
 # name of linker
 LINK*=gcc
 # default linker flags
@@ -189,7 +192,7 @@ LINKFLAGS+=-Zargs-wild -Zargs-resp
 #LINKFLAGS+= -Zlinker /NOI -Zlinker /PACKD:65536 -Zlinker /EXEPACK:2
 #LINKFLAGS+= -Zlinker /NOExtdictionary
 LINKFLAGS+= -Zomf
-#LINKFLAGS+= -Zlinker "DISABLE 1121"
+LINKFLAGS+= -Zlinker "DISABLE 1121"
 .ENDIF
 
 
@@ -234,10 +237,10 @@ SONAME_SWITCH=-Wl,-h
 
 #STDLIBCPP=stdc++ supc++ gcc_eh
 #STDLIBCPP=stdc++ gcc432
-STDLIBCPP=stdc432 gcc432
+STDLIBCPP=-lstdc++ -lgcc_so_d
 
 # default objectfilenames to link
-STDOBJVCL=$(L)/salmain.obj
+STDOBJVCL=$(L)/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -252,13 +255,13 @@ STDLIBGUIST=$(STDLIBCPP)
 STDSHLGUIMT=$(STDLIBCPP)
 STDSHLCUIMT=$(STDLIBCPP)
 
-LIBSTLPORT=$(DYNAMIC) stlp45.lib
-LIBSTLPORTST=$(STATIC) stlp45.lib $(DYNAMIC)
+LIBSTLPORT=stlp45.lib $(DYNAMIC) 
+LIBSTLPORTST=stlp45.lib $(STATIC) $(DYNAMIC)
 
 
 # name of library manager
 LIBMGR=ar
-LIBFLAGS=crv
+LIBFLAGS=-crv
 
 .IF "$(aout)"==""
 LIBMGR=emxomfar -p2048

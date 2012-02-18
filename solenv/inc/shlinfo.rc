@@ -32,6 +32,9 @@
 
 #define OS2_VERSION "hello world"
 
+// YD write some default code...
+MENU 1 BEGIN END
+
 #else
 
 #include <windows.h>

@@ -241,7 +241,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL1TARGET8=$(shell @fix_shl $(SHL1TARGET))
+SHL1TARGET8=$(shell @fix_shl.cmd $(SHL1TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -483,7 +483,7 @@ $(SHL1TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL1DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL1DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL1DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL1ICON)" != ""
     @-+echo 1 ICON $(SHL1ICON) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF
@@ -511,9 +511,9 @@ $(SHL1TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) \
         $(SHL1LIBS) \
-        $(SHL1STDLIBS:^"-l") \
         $(SHL1LINKRES) \
-        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l") 
+        $(SHL1STDLIBS) \
+        $(SHL1STDSHL) $(STDSHL1)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -526,12 +526,14 @@ $(SHL1TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) \
         $(SHL1LIBS) \
-        $(SHL1STDLIBS:^"-l") \
         $(SHL1LINKRES) \
-        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL1STDLIBS) \
+        $(SHL1STDSHL) $(STDSHL1)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL1IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL1TARGET).lib $@
 
 .IF "$(SHL1TARGET8)" != "$(SHL1TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL1TARGET8).dll
@@ -784,7 +786,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL2TARGET8=$(shell @fix_shl $(SHL2TARGET))
+SHL2TARGET8=$(shell @fix_shl.cmd $(SHL2TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -1026,7 +1028,7 @@ $(SHL2TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL2DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL2DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL2DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL2ICON)" != ""
     @-+echo 1 ICON $(SHL2ICON) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF
@@ -1054,9 +1056,9 @@ $(SHL2TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) \
         $(SHL2LIBS) \
-        $(SHL2STDLIBS:^"-l") \
         $(SHL2LINKRES) \
-        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l") 
+        $(SHL2STDLIBS) \
+        $(SHL2STDSHL) $(STDSHL2)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -1069,12 +1071,14 @@ $(SHL2TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) \
         $(SHL2LIBS) \
-        $(SHL2STDLIBS:^"-l") \
         $(SHL2LINKRES) \
-        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL2STDLIBS) \
+        $(SHL2STDSHL) $(STDSHL2)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL2IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL2TARGET).lib $@
 
 .IF "$(SHL2TARGET8)" != "$(SHL2TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL2TARGET8).dll
@@ -1327,7 +1331,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL3TARGET8=$(shell @fix_shl $(SHL3TARGET))
+SHL3TARGET8=$(shell @fix_shl.cmd $(SHL3TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -1569,7 +1573,7 @@ $(SHL3TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL3DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL3DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL3DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL3ICON)" != ""
     @-+echo 1 ICON $(SHL3ICON) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF
@@ -1597,9 +1601,9 @@ $(SHL3TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) \
         $(SHL3LIBS) \
-        $(SHL3STDLIBS:^"-l") \
         $(SHL3LINKRES) \
-        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l") 
+        $(SHL3STDLIBS) \
+        $(SHL3STDSHL) $(STDSHL3)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -1612,12 +1616,14 @@ $(SHL3TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) \
         $(SHL3LIBS) \
-        $(SHL3STDLIBS:^"-l") \
         $(SHL3LINKRES) \
-        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL3STDLIBS) \
+        $(SHL3STDSHL) $(STDSHL3)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL3IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL3TARGET).lib $@
 
 .IF "$(SHL3TARGET8)" != "$(SHL3TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL3TARGET8).dll
@@ -1870,7 +1876,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL4TARGET8=$(shell @fix_shl $(SHL4TARGET))
+SHL4TARGET8=$(shell @fix_shl.cmd $(SHL4TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2112,7 +2118,7 @@ $(SHL4TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL4DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL4DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL4DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL4ICON)" != ""
     @-+echo 1 ICON $(SHL4ICON) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF
@@ -2140,9 +2146,9 @@ $(SHL4TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) \
         $(SHL4LIBS) \
-        $(SHL4STDLIBS:^"-l") \
         $(SHL4LINKRES) \
-        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l") 
+        $(SHL4STDLIBS) \
+        $(SHL4STDSHL) $(STDSHL4)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -2155,12 +2161,14 @@ $(SHL4TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) \
         $(SHL4LIBS) \
-        $(SHL4STDLIBS:^"-l") \
         $(SHL4LINKRES) \
-        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL4STDLIBS) \
+        $(SHL4STDSHL) $(STDSHL4)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL4IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL4TARGET).lib $@
 
 .IF "$(SHL4TARGET8)" != "$(SHL4TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL4TARGET8).dll
@@ -2413,7 +2421,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL5TARGET8=$(shell @fix_shl $(SHL5TARGET))
+SHL5TARGET8=$(shell @fix_shl.cmd $(SHL5TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2655,7 +2663,7 @@ $(SHL5TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL5DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL5DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL5DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL5ICON)" != ""
     @-+echo 1 ICON $(SHL5ICON) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF
@@ -2683,9 +2691,9 @@ $(SHL5TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) \
         $(SHL5LIBS) \
-        $(SHL5STDLIBS:^"-l") \
         $(SHL5LINKRES) \
-        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l") 
+        $(SHL5STDLIBS) \
+        $(SHL5STDSHL) $(STDSHL5)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -2698,12 +2706,14 @@ $(SHL5TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) \
         $(SHL5LIBS) \
-        $(SHL5STDLIBS:^"-l") \
         $(SHL5LINKRES) \
-        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL5STDLIBS) \
+        $(SHL5STDSHL) $(STDSHL5)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL5IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL5TARGET).lib $@
 
 .IF "$(SHL5TARGET8)" != "$(SHL5TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL5TARGET8).dll
@@ -2956,7 +2966,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL6TARGET8=$(shell @fix_shl $(SHL6TARGET))
+SHL6TARGET8=$(shell @fix_shl.cmd $(SHL6TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -3198,7 +3208,7 @@ $(SHL6TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL6DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL6DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL6DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL6ICON)" != ""
     @-+echo 1 ICON $(SHL6ICON) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF
@@ -3226,9 +3236,9 @@ $(SHL6TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) \
         $(SHL6LIBS) \
-        $(SHL6STDLIBS:^"-l") \
         $(SHL6LINKRES) \
-        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l") 
+        $(SHL6STDLIBS) \
+        $(SHL6STDSHL) $(STDSHL6)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -3241,12 +3251,14 @@ $(SHL6TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) \
         $(SHL6LIBS) \
-        $(SHL6STDLIBS:^"-l") \
         $(SHL6LINKRES) \
-        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL6STDLIBS) \
+        $(SHL6STDSHL) $(STDSHL6)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL6IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL6TARGET).lib $@
 
 .IF "$(SHL6TARGET8)" != "$(SHL6TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL6TARGET8).dll
@@ -3499,7 +3511,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL7TARGET8=$(shell @fix_shl $(SHL7TARGET))
+SHL7TARGET8=$(shell @fix_shl.cmd $(SHL7TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -3741,7 +3753,7 @@ $(SHL7TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL7DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL7DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL7DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL7ICON)" != ""
     @-+echo 1 ICON $(SHL7ICON) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF
@@ -3769,9 +3781,9 @@ $(SHL7TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) \
         $(SHL7LIBS) \
-        $(SHL7STDLIBS:^"-l") \
         $(SHL7LINKRES) \
-        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l") 
+        $(SHL7STDLIBS) \
+        $(SHL7STDSHL) $(STDSHL7)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -3784,12 +3796,14 @@ $(SHL7TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) \
         $(SHL7LIBS) \
-        $(SHL7STDLIBS:^"-l") \
         $(SHL7LINKRES) \
-        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL7STDLIBS) \
+        $(SHL7STDSHL) $(STDSHL7)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL7IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL7TARGET).lib $@
 
 .IF "$(SHL7TARGET8)" != "$(SHL7TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL7TARGET8).dll
@@ -4042,7 +4056,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL8TARGET8=$(shell @fix_shl $(SHL8TARGET))
+SHL8TARGET8=$(shell @fix_shl.cmd $(SHL8TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4284,7 +4298,7 @@ $(SHL8TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL8DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL8DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL8DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL8ICON)" != ""
     @-+echo 1 ICON $(SHL8ICON) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF
@@ -4312,9 +4326,9 @@ $(SHL8TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) \
         $(SHL8LIBS) \
-        $(SHL8STDLIBS:^"-l") \
         $(SHL8LINKRES) \
-        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l") 
+        $(SHL8STDLIBS) \
+        $(SHL8STDSHL) $(STDSHL8)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -4327,12 +4341,14 @@ $(SHL8TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) \
         $(SHL8LIBS) \
-        $(SHL8STDLIBS:^"-l") \
         $(SHL8LINKRES) \
-        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL8STDLIBS) \
+        $(SHL8STDSHL) $(STDSHL8)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL8IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL8TARGET).lib $@
 
 .IF "$(SHL8TARGET8)" != "$(SHL8TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL8TARGET8).dll
@@ -4585,7 +4601,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL9TARGET8=$(shell @fix_shl $(SHL9TARGET))
+SHL9TARGET8=$(shell @fix_shl.cmd $(SHL9TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4827,7 +4843,7 @@ $(SHL9TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL9DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL9DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL9DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL9ICON)" != ""
     @-+echo 1 ICON $(SHL9ICON) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF
@@ -4855,9 +4871,9 @@ $(SHL9TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) \
         $(SHL9LIBS) \
-        $(SHL9STDLIBS:^"-l") \
         $(SHL9LINKRES) \
-        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l") 
+        $(SHL9STDLIBS) \
+        $(SHL9STDSHL) $(STDSHL9)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -4870,12 +4886,14 @@ $(SHL9TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) \
         $(SHL9LIBS) \
-        $(SHL9STDLIBS:^"-l") \
         $(SHL9LINKRES) \
-        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL9STDLIBS) \
+        $(SHL9STDSHL) $(STDSHL9)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL9IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL9TARGET).lib $@
 
 .IF "$(SHL9TARGET8)" != "$(SHL9TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL9TARGET8).dll
@@ -5128,7 +5146,7 @@ $(MISC)/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL10TARGET8=$(shell @fix_shl $(SHL10TARGET))
+SHL10TARGET8=$(shell @fix_shl.cmd $(SHL10TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -5370,7 +5388,7 @@ $(SHL10TARGETN) : \
 .IF "$(GUI)" == "OS2"
 
 .IF "$(SHL10DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL10DEFAULTRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(SHL10DEFAULTRES:b).rc > $(NULLDEV)
 .IF "$(SHL10ICON)" != ""
     @-+echo 1 ICON $(SHL10ICON) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF
@@ -5398,9 +5416,9 @@ $(SHL10TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) \
         $(SHL10LIBS) \
-        $(SHL10STDLIBS:^"-l") \
         $(SHL10LINKRES) \
-        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l") 
+        $(SHL10STDLIBS) \
+        $(SHL10STDSHL) $(STDSHL10)
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -5413,12 +5431,14 @@ $(SHL10TARGETN) : \
         -L$(SOLARVERSION)/$(INPATH)/lib \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) \
         $(SHL10LIBS) \
-        $(SHL10STDLIBS:^"-l") \
         $(SHL10LINKRES) \
-        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
+        $(SHL10STDLIBS) \
+        $(SHL10STDSHL) $(STDSHL10)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
+
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL10IMPLIBN) $@
+    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL10TARGET).lib $@
 
 .IF "$(SHL10TARGET8)" != "$(SHL10TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL10TARGET8).dll

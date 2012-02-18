@@ -219,11 +219,11 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP1LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP1LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP1LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP1ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP1LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP1ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1ICON)" != ""
 .IF "$(APP1VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP1LINKRES:b).rc
@@ -236,22 +236,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo NAME $(APP1TARGET) WINDOWAPI > $(MISC)/$(APP1TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP1LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP1BASEX) \
-        $(APP1STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP1LINKRES) \
-        $(APP1RES) \
-        $(APP1DEF) \
-        $(APP1OBJS) \
-        $(APP1LIBS) \
-        $(APP1STDLIBS:^"-l") \
-        $(APP1STDLIB:^"-l") $(STDLIB1:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP1LINKER) -v \
         $(APP1LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP1BASEX) \
@@ -265,8 +249,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1DEF) \
         $(APP1OBJS) \
         $(APP1LIBS) \
-        $(APP1STDLIBS:^"-l") \
-        $(APP1STDLIB:^"-l") $(STDLIB1:^"-l") 
+        $(APP1STDLIBS) \
+        $(APP1STDLIB) $(STDLIB1) 
 
 
 .IF "$(APP1TARGET)" == "loader"
@@ -503,11 +487,11 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP2LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP2LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP2LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP2ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP2LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP2ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2ICON)" != ""
 .IF "$(APP2VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP2LINKRES:b).rc
@@ -520,22 +504,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo NAME $(APP2TARGET) WINDOWAPI > $(MISC)/$(APP2TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP2LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP2BASEX) \
-        $(APP2STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP2LINKRES) \
-        $(APP2RES) \
-        $(APP2DEF) \
-        $(APP2OBJS) \
-        $(APP2LIBS) \
-        $(APP2STDLIBS:^"-l") \
-        $(APP2STDLIB:^"-l") $(STDLIB2:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP2LINKER) -v \
         $(APP2LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP2BASEX) \
@@ -549,8 +517,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2DEF) \
         $(APP2OBJS) \
         $(APP2LIBS) \
-        $(APP2STDLIBS:^"-l") \
-        $(APP2STDLIB:^"-l") $(STDLIB2:^"-l") 
+        $(APP2STDLIBS) \
+        $(APP2STDLIB) $(STDLIB2) 
 
 
 .IF "$(APP2TARGET)" == "loader"
@@ -787,11 +755,11 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP3LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP3LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP3LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP3ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP3LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP3ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3ICON)" != ""
 .IF "$(APP3VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP3LINKRES:b).rc
@@ -804,22 +772,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo NAME $(APP3TARGET) WINDOWAPI > $(MISC)/$(APP3TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP3LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP3BASEX) \
-        $(APP3STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP3LINKRES) \
-        $(APP3RES) \
-        $(APP3DEF) \
-        $(APP3OBJS) \
-        $(APP3LIBS) \
-        $(APP3STDLIBS:^"-l") \
-        $(APP3STDLIB:^"-l") $(STDLIB3:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP3LINKER) -v \
         $(APP3LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP3BASEX) \
@@ -833,8 +785,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3DEF) \
         $(APP3OBJS) \
         $(APP3LIBS) \
-        $(APP3STDLIBS:^"-l") \
-        $(APP3STDLIB:^"-l") $(STDLIB3:^"-l") 
+        $(APP3STDLIBS) \
+        $(APP3STDLIB) $(STDLIB3) 
 
 
 .IF "$(APP3TARGET)" == "loader"
@@ -1071,11 +1023,11 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP4LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP4LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP4LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP4ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP4LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP4ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4ICON)" != ""
 .IF "$(APP4VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP4LINKRES:b).rc
@@ -1088,22 +1040,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo NAME $(APP4TARGET) WINDOWAPI > $(MISC)/$(APP4TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP4LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP4BASEX) \
-        $(APP4STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP4LINKRES) \
-        $(APP4RES) \
-        $(APP4DEF) \
-        $(APP4OBJS) \
-        $(APP4LIBS) \
-        $(APP4STDLIBS:^"-l") \
-        $(APP4STDLIB:^"-l") $(STDLIB4:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP4LINKER) -v \
         $(APP4LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP4BASEX) \
@@ -1117,8 +1053,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4DEF) \
         $(APP4OBJS) \
         $(APP4LIBS) \
-        $(APP4STDLIBS:^"-l") \
-        $(APP4STDLIB:^"-l") $(STDLIB4:^"-l") 
+        $(APP4STDLIBS) \
+        $(APP4STDLIB) $(STDLIB4) 
 
 
 .IF "$(APP4TARGET)" == "loader"
@@ -1355,11 +1291,11 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP5LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP5LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP5LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP5ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP5LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP5ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5ICON)" != ""
 .IF "$(APP5VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP5LINKRES:b).rc
@@ -1372,22 +1308,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo NAME $(APP5TARGET) WINDOWAPI > $(MISC)/$(APP5TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP5LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP5BASEX) \
-        $(APP5STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP5LINKRES) \
-        $(APP5RES) \
-        $(APP5DEF) \
-        $(APP5OBJS) \
-        $(APP5LIBS) \
-        $(APP5STDLIBS:^"-l") \
-        $(APP5STDLIB:^"-l") $(STDLIB5:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP5LINKER) -v \
         $(APP5LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP5BASEX) \
@@ -1401,8 +1321,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5DEF) \
         $(APP5OBJS) \
         $(APP5LIBS) \
-        $(APP5STDLIBS:^"-l") \
-        $(APP5STDLIB:^"-l") $(STDLIB5:^"-l") 
+        $(APP5STDLIBS) \
+        $(APP5STDLIB) $(STDLIB5) 
 
 
 .IF "$(APP5TARGET)" == "loader"
@@ -1639,11 +1559,11 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP6LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP6LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP6LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP6ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP6LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP6ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6ICON)" != ""
 .IF "$(APP6VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP6LINKRES:b).rc
@@ -1656,22 +1576,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo NAME $(APP6TARGET) WINDOWAPI > $(MISC)/$(APP6TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP6LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP6BASEX) \
-        $(APP6STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP6LINKRES) \
-        $(APP6RES) \
-        $(APP6DEF) \
-        $(APP6OBJS) \
-        $(APP6LIBS) \
-        $(APP6STDLIBS:^"-l") \
-        $(APP6STDLIB:^"-l") $(STDLIB6:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP6LINKER) -v \
         $(APP6LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP6BASEX) \
@@ -1685,8 +1589,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6DEF) \
         $(APP6OBJS) \
         $(APP6LIBS) \
-        $(APP6STDLIBS:^"-l") \
-        $(APP6STDLIB:^"-l") $(STDLIB6:^"-l") 
+        $(APP6STDLIBS) \
+        $(APP6STDLIB) $(STDLIB6) 
 
 
 .IF "$(APP6TARGET)" == "loader"
@@ -1923,11 +1827,11 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP7LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP7LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP7LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP7ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP7LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP7ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7ICON)" != ""
 .IF "$(APP7VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP7LINKRES:b).rc
@@ -1940,22 +1844,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo NAME $(APP7TARGET) WINDOWAPI > $(MISC)/$(APP7TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP7LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP7BASEX) \
-        $(APP7STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP7LINKRES) \
-        $(APP7RES) \
-        $(APP7DEF) \
-        $(APP7OBJS) \
-        $(APP7LIBS) \
-        $(APP7STDLIBS:^"-l") \
-        $(APP7STDLIB:^"-l") $(STDLIB7:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP7LINKER) -v \
         $(APP7LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP7BASEX) \
@@ -1969,8 +1857,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7DEF) \
         $(APP7OBJS) \
         $(APP7LIBS) \
-        $(APP7STDLIBS:^"-l") \
-        $(APP7STDLIB:^"-l") $(STDLIB7:^"-l") 
+        $(APP7STDLIBS) \
+        $(APP7STDLIB) $(STDLIB7) 
 
 
 .IF "$(APP7TARGET)" == "loader"
@@ -2207,11 +2095,11 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP8LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP8LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP8LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP8ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP8LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP8ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8ICON)" != ""
 .IF "$(APP8VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP8LINKRES:b).rc
@@ -2224,22 +2112,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo NAME $(APP8TARGET) WINDOWAPI > $(MISC)/$(APP8TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP8LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP8BASEX) \
-        $(APP8STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP8LINKRES) \
-        $(APP8RES) \
-        $(APP8DEF) \
-        $(APP8OBJS) \
-        $(APP8LIBS) \
-        $(APP8STDLIBS:^"-l") \
-        $(APP8STDLIB:^"-l") $(STDLIB8:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP8LINKER) -v \
         $(APP8LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP8BASEX) \
@@ -2253,8 +2125,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8DEF) \
         $(APP8OBJS) \
         $(APP8LIBS) \
-        $(APP8STDLIBS:^"-l") \
-        $(APP8STDLIB:^"-l") $(STDLIB8:^"-l") 
+        $(APP8STDLIBS) \
+        $(APP8STDLIB) $(STDLIB8) 
 
 
 .IF "$(APP8TARGET)" == "loader"
@@ -2491,11 +2363,11 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP9LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP9LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP9LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP9ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP9LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP9ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9ICON)" != ""
 .IF "$(APP9VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP9LINKRES:b).rc
@@ -2508,22 +2380,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo NAME $(APP9TARGET) WINDOWAPI > $(MISC)/$(APP9TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP9LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP9BASEX) \
-        $(APP9STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP9LINKRES) \
-        $(APP9RES) \
-        $(APP9DEF) \
-        $(APP9OBJS) \
-        $(APP9LIBS) \
-        $(APP9STDLIBS:^"-l") \
-        $(APP9STDLIB:^"-l") $(STDLIB9:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP9LINKER) -v \
         $(APP9LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP9BASEX) \
@@ -2537,8 +2393,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9DEF) \
         $(APP9OBJS) \
         $(APP9LIBS) \
-        $(APP9STDLIBS:^"-l") \
-        $(APP9STDLIB:^"-l") $(STDLIB9:^"-l") 
+        $(APP9STDLIBS) \
+        $(APP9STDLIB) $(STDLIB9) 
 
 
 .IF "$(APP9TARGET)" == "loader"
@@ -2775,11 +2631,11 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP10LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP10LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP10LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP10ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP10LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP10ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10ICON)" != ""
 .IF "$(APP10VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP10LINKRES:b).rc
@@ -2792,22 +2648,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo NAME $(APP10TARGET) WINDOWAPI > $(MISC)/$(APP10TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP10LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP10BASEX) \
-        $(APP10STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP10LINKRES) \
-        $(APP10RES) \
-        $(APP10DEF) \
-        $(APP10OBJS) \
-        $(APP10LIBS) \
-        $(APP10STDLIBS:^"-l") \
-        $(APP10STDLIB:^"-l") $(STDLIB10:^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP10LINKER) -v \
         $(APP10LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP10BASEX) \
@@ -2821,8 +2661,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10DEF) \
         $(APP10OBJS) \
         $(APP10LIBS) \
-        $(APP10STDLIBS:^"-l") \
-        $(APP10STDLIB:^"-l") $(STDLIB10:^"-l") 
+        $(APP10STDLIBS) \
+        $(APP10STDLIB) $(STDLIB10) 
 
 
 .IF "$(APP10TARGET)" == "loader"

@@ -244,11 +244,11 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF			# "$(GUI)" == "WNT"
 
 .IF "$(GUI)" == "OS2"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @+-$(MKDIR) $(@:d:d) > $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
-    @+-$(RM) $(MISC)/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP$(TNR)LINKRES:b).rc > $(NULLDEV)
 .IF "$(APP$(TNR)ICON)" != ""
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
+    @-+echo ICON 1 $(EMQ)"$(APP$(TNR)ICON:s#/#\\\\#)$(EMQ)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF		# "$(APP$(TNR)ICON)" != ""
 .IF "$(APP$(TNR)VERINFO)" != ""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
@@ -261,22 +261,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo NAME $(APP$(TNR)TARGET) WINDOWAPI > $(MISC)/$(APP$(TNR)TARGET).def
 .ENDIF
 
-  .IF "$(VERBOSE)" == "TRUE"
-    @+echo	$(APP$(TNR)LINKFLAGS) \
-        $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
-        $(APP$(TNR)STACKN) \
-        -o $@ \
-        -Zmap -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(STDOBJ) \
-        $(APP$(TNR)LINKRES) \
-        $(APP$(TNR)RES) \
-        $(APP$(TNR)DEF) \
-        $(APP$(TNR)OBJS) \
-        $(APP$(TNR)LIBS) \
-        $(APP$(TNR)STDLIBS:^"-l") \
-        $(APP$(TNR)STDLIB:^"-l") $(STDLIB$(TNR):^"-l") 
-  .ENDIF
     $(COMMAND_ECHO)$(APP$(TNR)LINKER) -v \
         $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
@@ -290,8 +274,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)DEF) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
-        $(APP$(TNR)STDLIBS:^"-l") \
-        $(APP$(TNR)STDLIB:^"-l") $(STDLIB$(TNR):^"-l") 
+        $(APP$(TNR)STDLIBS) \
+        $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) 
 
 
 .IF "$(APP$(TNR)TARGET)" == "loader"

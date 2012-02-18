@@ -54,7 +54,11 @@ EES:=
 EMQ:=\\
 USQ:="
 
+.IF "$(GUI)" == "OS2"
+NULLDEV:=NUL
+.ELSE
 NULLDEV:=/dev/null
+.ENDIF
 
 
 # iz29609 helpmacro to check if file exists
@@ -145,26 +149,25 @@ SORT*=sort
 PERL*=perl
 TYPE=cat
 CDD=@cd
-COPY*=$(SHELL) /c copy /b
-COPYRECURSE=/s
-COPYUPDATE=/u
+COPY=cp -f
+COPYRECURSE=-r
+COPYUPDATE=-u
 DELAY=sleep
 ECHON*=echos
-ECHONL=+echo.
+ECHONL=echo
 AWK*=awk
 GNUCOPY*=cp
 GNUPATCH*=gnupatch
 GNUMAKE*=make
-TOUCH=touch /c
+TOUCH=touch
 #YD rename doesn't work across different drives!
 RENAME=mv
-MKDIR=+md
-MKDIRHIER=+md /s
+MKDIR*=mkdir$E
+MKDIRHIER*=mkdir$E -p
 GREP=grep
 FIND=find
 LS=ls
 DUMPBIN=echo
-4nt_force_shell:=+
 
 .ENDIF			# "$(GUI)"=="UNX"
 

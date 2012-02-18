@@ -220,6 +220,12 @@ patch : $(MISC)/$(TARGET)_convert_dos_flag
 
 .ENDIF          # "$(CONVERTFILES)"!=""
 
+.IF "$(OS)"=="OS2"
+# YD do not trigger bash for scripts!
+CONFIG_SHELL=sh.exe
+.EXPORT: CONFIG_SHELL
+.ENDIF
+
 $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
     @@-$(RM) $@
 .IF "$(CONFIGURE_ACTION)" == "none" || "$(CONFIGURE_ACTION)"==""
@@ -345,7 +351,11 @@ create_patch : $(MISC)/$(TARFILE_ROOTDIR).done $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
     $(COMMAND_ECHO)-$(TOUCH) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
     $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/patch_sanitizer.pl $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak $(MISC)/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME)
     @@-$(RM) $(MISC)/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
+.IF "$(GUI)" == "OS2"
+    $(COMMAND_ECHO)dmake $(MAKEMACROS) patch
+.ELSE
     $(COMMAND_ECHO)$(MAKECMD) $(MAKEMACROS) patch
+.ENDIF
     @echo still some problems with win32 generated patches...
     @echo $(USQ)find your new changes in $(NEW_PATCH_FILE_NAME). don't forget to move/rename that patch and insert it in your makefiles PATCH_FILES to activate.$(USQ)
 

@@ -167,7 +167,7 @@ $(DEF1TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL1TARGET8=$(shell @fix_shl $(SHL1TARGETN:f))
+SHL1TARGET8=$(shell @fix_shl.cmd $(SHL1TARGETN:f))
 
 DEF1FILTER=$(SOLARENV)/inc/dummy.flt
 DEF1NAMELIST=$(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib)
@@ -183,7 +183,6 @@ $(DEF1TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL1TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF1DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -448,7 +447,7 @@ $(DEF2TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL2TARGET8=$(shell @fix_shl $(SHL2TARGETN:f))
+SHL2TARGET8=$(shell @fix_shl.cmd $(SHL2TARGETN:f))
 
 DEF2FILTER=$(SOLARENV)/inc/dummy.flt
 DEF2NAMELIST=$(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib)
@@ -464,7 +463,6 @@ $(DEF2TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL2TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF2DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -729,7 +727,7 @@ $(DEF3TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL3TARGET8=$(shell @fix_shl $(SHL3TARGETN:f))
+SHL3TARGET8=$(shell @fix_shl.cmd $(SHL3TARGETN:f))
 
 DEF3FILTER=$(SOLARENV)/inc/dummy.flt
 DEF3NAMELIST=$(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib)
@@ -745,7 +743,6 @@ $(DEF3TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL3TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF3DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -1010,7 +1007,7 @@ $(DEF4TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL4TARGET8=$(shell @fix_shl $(SHL4TARGETN:f))
+SHL4TARGET8=$(shell @fix_shl.cmd $(SHL4TARGETN:f))
 
 DEF4FILTER=$(SOLARENV)/inc/dummy.flt
 DEF4NAMELIST=$(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib)
@@ -1026,7 +1023,6 @@ $(DEF4TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL4TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF4DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -1291,7 +1287,7 @@ $(DEF5TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL5TARGET8=$(shell @fix_shl $(SHL5TARGETN:f))
+SHL5TARGET8=$(shell @fix_shl.cmd $(SHL5TARGETN:f))
 
 DEF5FILTER=$(SOLARENV)/inc/dummy.flt
 DEF5NAMELIST=$(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib)
@@ -1307,7 +1303,6 @@ $(DEF5TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL5TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF5DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -1572,7 +1567,7 @@ $(DEF6TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL6TARGET8=$(shell @fix_shl $(SHL6TARGETN:f))
+SHL6TARGET8=$(shell @fix_shl.cmd $(SHL6TARGETN:f))
 
 DEF6FILTER=$(SOLARENV)/inc/dummy.flt
 DEF6NAMELIST=$(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib)
@@ -1588,7 +1583,6 @@ $(DEF6TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL6TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF6DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -1853,7 +1847,7 @@ $(DEF7TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL7TARGET8=$(shell @fix_shl $(SHL7TARGETN:f))
+SHL7TARGET8=$(shell @fix_shl.cmd $(SHL7TARGETN:f))
 
 DEF7FILTER=$(SOLARENV)/inc/dummy.flt
 DEF7NAMELIST=$(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib)
@@ -1869,7 +1863,6 @@ $(DEF7TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL7TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF7DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -2134,7 +2127,7 @@ $(DEF8TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL8TARGET8=$(shell @fix_shl $(SHL8TARGETN:f))
+SHL8TARGET8=$(shell @fix_shl.cmd $(SHL8TARGETN:f))
 
 DEF8FILTER=$(SOLARENV)/inc/dummy.flt
 DEF8NAMELIST=$(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib)
@@ -2150,7 +2143,6 @@ $(DEF8TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL8TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF8DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -2415,7 +2407,7 @@ $(DEF9TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL9TARGET8=$(shell @fix_shl $(SHL9TARGETN:f))
+SHL9TARGET8=$(shell @fix_shl.cmd $(SHL9TARGETN:f))
 
 DEF9FILTER=$(SOLARENV)/inc/dummy.flt
 DEF9NAMELIST=$(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib)
@@ -2431,7 +2423,6 @@ $(DEF9TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL9TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF9DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
@@ -2696,7 +2687,7 @@ $(DEF10TARGETN) .PHONY :
 
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL10TARGET8=$(shell @fix_shl $(SHL10TARGETN:f))
+SHL10TARGET8=$(shell @fix_shl.cmd $(SHL10TARGETN:f))
 
 DEF10FILTER=$(SOLARENV)/inc/dummy.flt
 DEF10NAMELIST=$(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib)
@@ -2712,7 +2703,6 @@ $(DEF10TARGETN) .PHONY :
     @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL10TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF10DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!

@@ -30,7 +30,11 @@ $(MISC)/%.cxx : %.y
     @@-$(COPY:s/-f//) $@.h $(INCCOM)/$(@:b).hxx
     @@-$(COPY:s/-f//) $(@:d)/$(@:b).hxx $(INCCOM)/$(@:b).hxx
 # fail on not existing .hxx
+.IF "$(OS)" == "OS2"
+    $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx > $(NULLDEV)
+.ELSE
     $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
+.ENDIF
 
 $(INCCOM)/yy%.cxx : %.y
     @echo "Making:   " $(@:f)
@@ -40,5 +44,8 @@ $(INCCOM)/yy%.cxx : %.y
     @@-$(COPY:s/-f//) $@.h $(INCCOM)/$(@:b).hxx
     @@-$(COPY:s/-f//) $(@:d)/$(@:b).hxx $(INCCOM)/$(@:b).hxx
 # fail on not existing .hxx
+.IF "$(OS)" == "OS2"
+    $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx > $(NULLDEV)
+.ELSE
     $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
-
+.ENDIF

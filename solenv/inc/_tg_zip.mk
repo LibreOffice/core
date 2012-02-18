@@ -81,7 +81,9 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)
@@ -204,7 +206,9 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)
@@ -327,7 +331,9 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)
@@ -450,7 +456,9 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)
@@ -573,7 +581,9 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)
@@ -696,7 +706,9 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)
@@ -819,7 +831,9 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)
@@ -942,7 +956,9 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)
@@ -1065,7 +1081,9 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)
@@ -1188,7 +1206,9 @@ $(ZIP10TARGETN) : delzip $(ZIP10DEPS)
     @echo "Making:   " $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
     @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
+.IF "$(GUI)" != "OS2"
     @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+.ENDIF
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)

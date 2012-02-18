@@ -20,8 +20,8 @@ S *:= .asm	# Assembler sources
 V *:= 		# RCS suffix
 
 .MKSARGS         *:= yes
-RM               *=  $(ROOTDIR)$/bin$/rm
-MV	            *=  $(ROOTDIR)$/bin$/mv
+RM               *=  rm
+MV	         *=  mv
 DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
 __.DIVSEP-sh-yes !:= \\\
 __.DIVSEP-sh-no  !:= \\

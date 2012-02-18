@@ -297,6 +297,9 @@ dbgutil=
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
 .IF "$(GUI)"=="WNT"
 posix_PWD:=/cygdrive/$(PWD:s/://)
+.ELIF "$(GUI)"=="OS2"
+# add /drives/ prefix, requires libc pathrewriter, otherwise breaks dmake % rule
+posix_PWD:=/drives/$(PWD:s/://)
 .ELSE			#GUI)"=="WNT"
 posix_PWD:=$(PWD)
 .ENDIF			#GUI)"=="WNT"
@@ -1206,7 +1209,11 @@ STDSHL=$(STDSHLCUIMT)
 .EXPORT : PICSWITCH
 
 .IF "$(USE_SYSTEM_STL)"=="YES"
+.IF "$(GUI)"=="OS2"
+LIBSTLPORT=
+.ELSE
 LIBSTLPORT=""
+.ENDIF
 .ENDIF
 
 .IF "$(NO_DEFAULT_STL)"==""
@@ -1358,7 +1365,7 @@ CPPUNIT_CFLAGS =
 
 COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
 COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
 COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
 .ELSE
 COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/

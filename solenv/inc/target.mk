@@ -32,7 +32,9 @@ CDEFS+=-DSTL_OS2_BUILDING
 .ENDIF
 .IF "$(VISIBILITY_HIDDEN)" != ""
 .IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+.IF "$(GUI)" != "OS2"
 CFLAGS += -fvisibility=hidden
+.ENDIF
 .ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
 CFLAGS += -xldscope=hidden
 .ENDIF
