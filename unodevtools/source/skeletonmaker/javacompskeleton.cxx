@@ -78,15 +78,6 @@ void generateImports(std::ostream & o, ProgramOptions const & options,
             o << "import com.sun.star.lib.uno.helper.PropertySetMixin;\n";
         }
     }
-
-
-//     boost::unordered_set< OString, OStringHash >::const_iterator iter =
-//                    interfaces.begin();
-//     while (iter != interfaces.end())
-//     {
-//         o << "import " << ((*iter).getStr()) << ";\n";
-//         iter++;
-//     }
 }
 
 void generateCompFunctions(std::ostream & o, const OString & classname)
@@ -885,19 +876,6 @@ void generateSkeleton(ProgramOptions const & options,
                   interfaces, services, properties);
         checkType(manager, "com.sun.star.frame.XDispatch",
                   interfaces, services, properties);
-
-
-//         ProtocolCmdMap::const_iterator iter2 = options.protocolCmdMap.begin();
-//         while (iter2 != options.protocolCmdMap.end()) {
-//             fprintf(stdout, "prt=%s\n", (*iter2).first.getStr());
-
-//             for (std::vector< OString >::const_iterator i = (*iter2).second.begin();
-//                  i != (*iter2).second.end(); ++i) {
-//                 fprintf(stdout, "cmd=%s\n", (*i).getStr());
-//             }
-//             iter2++;
-//         }
-//         return;
     }
 
     if (options.componenttype == 2) {
