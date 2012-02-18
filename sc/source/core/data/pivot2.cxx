@@ -100,7 +100,8 @@ ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsVal
     mnUsedHier( 0 ),
     mnFlags( 0 ),
     mbShowAll( false ),
-    mbIsValue( bIsValue )
+    mbIsValue( bIsValue ),
+    mbDataLayout(false)
 {
 }
 

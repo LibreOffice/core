@@ -238,13 +238,15 @@ public:
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 
-    static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
-                            const com::sun::star::uno::Reference<
-                                com::sun::star::sheet::XDimensionsSupplier>& xSource,
-                            ::std::vector<PivotField>* pRefColFields = NULL,
-                            ::std::vector<PivotField>* pRefRowFields = NULL,
-                            ::std::vector<PivotField>* pRefPageFields = NULL );
+    static void ConvertOrientation(
+        ScDPSaveData& rSaveData,
+        const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
+        const com::sun::star::uno::Reference<
+            com::sun::star::sheet::XDimensionsSupplier>& xSource,
+        const ScDPLabelDataVec& rLabels,
+        std::vector<PivotField>* pRefColFields = NULL,
+        std::vector<PivotField>* pRefRowFields = NULL,
+        std::vector<PivotField>* pRefPageFields = NULL );
 
     static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
 };

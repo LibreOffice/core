@@ -181,6 +181,7 @@ public:
     void RemoveLayoutName();
     void SetSubtotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString* GetSubtotalName() const;
+    void RemoveSubtotalName();
 
     bool IsMemberNameInUse(const ::rtl::OUString& rName) const;
 

@@ -2014,21 +2014,27 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
             xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
 
-        if (aFieldName.isEmpty() || bData)
-            continue;
+        OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
+            xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FIELD_SUBTOTALNAME)), OUString());
 
         bool bIsValue = true;                               //! check
         aFieldName = comphelper::string::stripEnd(aFieldName, sal_Unicode('*'));
 
         std::auto_ptr<ScDPLabelData> pNewLabel(
             new ScDPLabelData(aFieldName, static_cast<SCCOL>(nDim), bIsValue));
-        pNewLabel->mnOriginalDim = static_cast<long>(nOrigPos);
-        pNewLabel->maLayoutName = aLayoutName;
-        GetHierarchies(nDim, pNewLabel->maHiers);
-        GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
-        lcl_FillLabelData(*pNewLabel, xDimProp);
-        pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
+        pNewLabel->mbDataLayout = bData;
+
+        if (!bData)
+        {
+            pNewLabel->mnOriginalDim = static_cast<long>(nOrigPos);
+            pNewLabel->maLayoutName = aLayoutName;
+            pNewLabel->maSubtotalName = aSubtotalName;
+            GetHierarchies(nDim, pNewLabel->maHiers);
+            GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
+            lcl_FillLabelData(*pNewLabel, xDimProp);
+            pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
+        }
         rParam.maLabelArray.push_back(pNewLabel);
     }
 
@@ -2179,6 +2185,7 @@ public:
 void ScDPObject::ConvertOrientation(
     ScDPSaveData& rSaveData, const vector<PivotField>& rFields, sal_uInt16 nOrient,
     const Reference<XDimensionsSupplier>& xSource,
+    const ScDPLabelDataVec& rLabels,
     vector<PivotField>* pRefColFields, vector<PivotField>* pRefRowFields, vector<PivotField>* pRefPageFields )
 {
     //  xSource must be set
@@ -2232,14 +2239,15 @@ void ScDPObject::ConvertOrientation(
             }
 
             sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
-            ScDPSaveDimension* pCurrDim = bFirst ? pDim : rSaveData.DuplicateDimension(pDim->GetName());
-            pCurrDim->SetOrientation(nOrient);
-            pCurrDim->SetFunction(sal::static_int_cast<sal_uInt16>(eFunc));
+            if (!bFirst)
+                pDim = rSaveData.DuplicateDimension(pDim->GetName());
+            pDim->SetOrientation(nOrient);
+            pDim->SetFunction(sal::static_int_cast<sal_uInt16>(eFunc));
 
             if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
-                pCurrDim->SetReferenceValue( 0 );
+                pDim->SetReferenceValue(0);
             else
-                pCurrDim->SetReferenceValue( &rFieldRef );
+                pDim->SetReferenceValue(&rFieldRef);
         }
         else                                            // set SubTotals
         {
@@ -2260,6 +2268,18 @@ void ScDPObject::ConvertOrientation(
             //  must be set for data layout dimension (not accessible in dialog)
             if ( nCol == PIVOT_DATA_FIELD )
                 pDim->SetShowEmpty( true );
+        }
+
+        size_t nDimIndex = rField.nCol;
+        pDim->RemoveLayoutName();
+        pDim->RemoveSubtotalName();
+        if (nDimIndex < rLabels.size())
+        {
+            const ScDPLabelData& rLabel = rLabels[nDimIndex];
+            if (!rLabel.maLayoutName.isEmpty())
+                pDim->SetLayoutName(rLabel.maLayoutName);
+            if (!rLabel.maSubtotalName.isEmpty())
+                pDim->SetSubtotalName(rLabel.maSubtotalName);
         }
     }
 }

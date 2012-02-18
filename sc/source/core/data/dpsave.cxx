@@ -422,6 +422,11 @@ const OUString* ScDPSaveDimension::GetSubtotalName() const
     return mpSubtotalName.get();
 }
 
+void ScDPSaveDimension::RemoveSubtotalName()
+{
+    mpSubtotalName.reset();
+}
+
 bool ScDPSaveDimension::IsMemberNameInUse(const OUString& rName) const
 {
     MemberList::const_iterator itr = maMemberList.begin(), itrEnd = maMemberList.end();
@@ -904,9 +909,11 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
 ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const ::rtl::OUString& rName)
 {
     // always insert new
-    //! check if dimension is there?
 
-    ScDPSaveDimension* pOld = GetDimensionByName( rName );
+    ScDPSaveDimension* pOld = GetExistingDimensionByName(rName);
+    if (!pOld)
+        return NULL;
+
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
     pNew->SetDupFlag( true );
     aDimList.push_back(pNew);

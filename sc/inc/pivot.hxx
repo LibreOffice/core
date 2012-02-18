@@ -128,15 +128,17 @@ struct ScDPName
 
 struct ScDPLabelData
 {
-    ::rtl::OUString     maName;         /// Original name of the dimension.
-    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
+    rtl::OUString       maName;         /// Original name of the dimension.
+    rtl::OUString       maLayoutName;   /// Layout name (display name)
+    rtl::OUString       maSubtotalName;
     SCCOL               mnCol;          /// 0-based field index (not the source column index)
     long                mnOriginalDim;  /// original dimension index (>= 0 for duplicated dimension)
     sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
-    bool                mbShowAll;      /// true = Show all (also empty) results.
-    bool                mbIsValue;      /// true = Sum or count in data field.
+    bool                mbShowAll:1;    /// true = Show all (also empty) results.
+    bool                mbIsValue:1;    /// true = Sum or count in data field.
+    bool                mbDataLayout:1;
 
     struct Member
     {

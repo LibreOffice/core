@@ -357,7 +357,7 @@ void ScDPLayoutDlg::InitWndSelect(const ScDPLabelDataVec& rLabels)
         const ScDPLabelData& r = rLabels[i];
 
         aLabelDataArr.push_back(new ScDPLabelData(r));
-        if (r.mnOriginalDim < 0)
+        if (r.mnOriginalDim < 0 && !r.mbDataLayout)
         {
             // TODO: For dimension with duplicates, use layout name only when
             // all its duplicate dimensions use the same layout name.
@@ -1452,7 +1452,7 @@ bool ScDPLayoutDlg::GetPivotArrays(
     for_each(aPageArr.begin(), aPageArr.end(), PivotFieldInserter(aPageFields, aPageArr.size()));
 
     vector<PivotField> aColFields;
-    for_each(aColArr.begin(), aColArr.end(), PivotFieldInserter(aColFields, aColArr.size()));
+    for_each(aColArr.begin(), aColArr.end(), PivotFieldInserter(aColFields, aColArr.size()+1));
 
     vector<PivotField> aRowFields;
     for_each(aRowArr.begin(), aRowArr.end(), PivotFieldInserter(aRowFields, aRowArr.size()+1));
@@ -1827,18 +1827,19 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
     uno::Reference<sheet::XDimensionsSupplier> xSource = xDlgDPObject->GetSource();
 
     ScDPObject::ConvertOrientation(
-        aSaveData, aPageFields, sheet::DataPilotFieldOrientation_PAGE, xSource );
+        aSaveData, aPageFields, sheet::DataPilotFieldOrientation_PAGE, xSource, aLabelDataArr);
     ScDPObject::ConvertOrientation(
-        aSaveData, aColFields, sheet::DataPilotFieldOrientation_COLUMN, xSource );
+        aSaveData, aColFields, sheet::DataPilotFieldOrientation_COLUMN, xSource, aLabelDataArr);
     ScDPObject::ConvertOrientation(
-        aSaveData, aRowFields, sheet::DataPilotFieldOrientation_ROW, xSource );
+        aSaveData, aRowFields, sheet::DataPilotFieldOrientation_ROW, xSource, aLabelDataArr);
     ScDPObject::ConvertOrientation(
-        aSaveData, aDataFields, sheet::DataPilotFieldOrientation_DATA, xSource,
+        aSaveData, aDataFields, sheet::DataPilotFieldOrientation_DATA, xSource, aLabelDataArr,
         &aColFields, &aRowFields, &aPageFields );
 
     for( ScDPLabelDataVec::const_iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); aIt != aEnd; ++aIt )
     {
         ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(aIt->maName);
+
         if (!pDim)
             continue;
 
@@ -1848,21 +1849,6 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
         pDim->SetLayoutInfo( &aIt->maLayoutInfo );
         pDim->SetAutoShowInfo( &aIt->maShowInfo );
         ScDPSaveDimension* pOldDim = NULL;
-        if (pOldSaveData)
-        {
-            // Transfer the existing layout names to new dimension instance.
-            pOldDim = pOldSaveData->GetExistingDimensionByName(aIt->maName);
-            if (pOldDim)
-            {
-                const OUString* pLayoutName = pOldDim->GetLayoutName();
-                if (pLayoutName)
-                    pDim->SetLayoutName(*pLayoutName);
-
-                const OUString* pSubtotalName = pOldDim->GetSubtotalName();
-                if (pSubtotalName)
-                    pDim->SetSubtotalName(*pSubtotalName);
-            }
-        }
 
         bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
 
