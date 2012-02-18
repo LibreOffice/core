@@ -84,10 +84,7 @@ SHL1STDLIBS=\
     $(SO2LIB)			\
     $(SALLIB)
 
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS+= \
-        idba.lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL1STDLIBS+= \
         -ldba$(DLLPOSTFIX)
 .ELSE

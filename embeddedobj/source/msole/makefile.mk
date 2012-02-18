@@ -92,7 +92,7 @@ SHL1STDLIBS=\
     $(TOOLSLIB)
     
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(COM)"=="GCC"
 EMBOBJLIB=-lembobj
 .ELSE

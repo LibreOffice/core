@@ -163,7 +163,7 @@ SHL3STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
-        UClip.lib
+        -lUClip
         
 SHL3IMPLIB=i$(SHL3TARGET) 
 

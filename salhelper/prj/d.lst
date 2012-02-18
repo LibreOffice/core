@@ -16,6 +16,6 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\%__SRC%\lib\libuno_salhelper*.*.* %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\salhelper*.lib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\salhelp*.lib %_DEST%\lib%_EXT%\*
 
 linklib: libuno_salhelper*.*.*

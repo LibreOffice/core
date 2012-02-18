@@ -29,12 +29,9 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(MYTHESLIB)"==""
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
 MYTHESLIB=-lmythes
 .ENDIF # unx
-.IF "$(GUI)"=="OS2"
-MYTHESLIB=$(SLB)\libmythes.lib
-.ENDIF # os2
 .IF "$(GUI)"=="WNT"
 MYTHESLIB=libmythes.lib
 .ENDIF # wnt

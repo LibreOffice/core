@@ -29,7 +29,7 @@ STL_OS2_BUILDING=1
 CODEMAKERLIBDEPN=codemaker.lib
 COMMONCPPLIBDEPN=commoncpp.lib
 COMMONJAVALIBDEPN=commonjava.lib
-.IF "$(COM)"=="GCC" && "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC" && ("$(GUI)"=="WNT" || "$(GUI)"=="OS2")
 CODEMAKERLIBST=-lcodemaker
 COMMONCPPLIBST=-lcommoncpp
 COMMONJAVALIBST=-lcommonjava

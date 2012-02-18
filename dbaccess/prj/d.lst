@@ -31,6 +31,7 @@ mkdir: %_DEST%\inc%_EXT%\dbaccess
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\lib\idbu* %_DEST%\lib%_EXT%\idbu*
+..\%__SRC%\lib\db?.lib %_DEST%\lib%_EXT%\db?.lib
 *.xml %_DEST%\xml%_EXT%\*.xml
 
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid

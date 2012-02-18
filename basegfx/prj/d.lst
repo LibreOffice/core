@@ -1,4 +1,5 @@
 ..\%__SRC%\lib\ibasegfx.lib %_DEST%\lib%_EXT%\ibasegfx.lib
+..\%__SRC%\lib\basegfx.lib %_DEST%\lib%_EXT%\basegfx.lib
 ..\%__SRC%\lib\basegfx_s.lib %_DEST%\lib%_EXT%\basegfx_s.lib
 
 ..\%__SRC%\bin\basegfx?????.dll %_DEST%\bin%_EXT%\basegfx?????.dll

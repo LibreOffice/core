@@ -109,6 +109,7 @@ gb_CXXFLAGS := \
 #
 
 gb_STDLIBS = \
+	icule \
 	z \
 	stdc++ \
 
@@ -326,7 +327,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(LDFLAGS) \
 		@$${RESPONSEFILE} \
-		-L/@unixroot/usr/lib \
 		$(if $(DLLTARGET), $(DLLDEF8)) \
 		$(NATIVERES) \
 		$(patsubst %.lib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
@@ -366,11 +366,12 @@ gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := -Zdll
 gb_Library_get_rpath :=
 
-gb_Library_SYSPRE := i
+gb_Library_SYSPRE := 
 gb_Library_PLAINEXT := .lib
 
 gb_Library_PLAINLIBS_NONE += \
 	$(gb_STDLIBS) \
+	icule \
 	ft2lib \
 	dl \
 	freetype \

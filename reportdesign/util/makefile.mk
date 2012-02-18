@@ -67,10 +67,7 @@ SHL1STDLIBS= \
         $(VOSLIB)				\
         $(SALLIB)
 
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS+= \
-        idbu.lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL1STDLIBS+= \
         -ldbu$(DLLPOSTFIX)
 .ELSE
@@ -127,11 +124,7 @@ SHL2STDLIBS= \
         $(SO2LIB)				\
         $(I18NISOLANGLIB)		\
         $(SALLIB)
-.IF "$(GUI)"=="OS2"
-SHL2STDLIBS+= \
-        idbu.lib				\
-        i$(TARGET).lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL2STDLIBS+= \
         -ldbu$(DLLPOSTFIX) \
         -l$(TARGET)$(DLLPOSTFIX)
@@ -141,11 +134,7 @@ SHL2STDLIBS+= \
         i$(TARGET).lib
 .ENDIF
 
-.IF "$(GUI)"=="OS2"
-SHL2STDLIBS+= \
-        ifor.lib \
-        iforui.lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL2STDLIBS+= \
         -lfor$(DLLPOSTFIX) \
         -lforui$(DLLPOSTFIX)
@@ -200,10 +189,7 @@ SHL3STDLIBS=\
     $(SOTLIB)			\
     $(SO2LIB)			\
     $(SALLIB)
-.IF "$(GUI)"=="OS2"
-SHL3STDLIBS+= \
-    irpt.lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL3STDLIBS+= \
         -l$(TARGET)$(DLLPOSTFIX)
 .ELSE

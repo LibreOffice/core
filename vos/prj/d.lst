@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\vos
 
 ..\%__SRC%\lib\avos.lib %_DEST%\lib%_EXT%\avos.lib
 ..\%__SRC%\lib\ivos.lib %_DEST%\lib%_EXT%\ivos.lib
+..\%__SRC%\lib\vos*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%

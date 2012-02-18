@@ -43,10 +43,10 @@ UNODEVTOOLSLIBDEPN=unodevtools.lib
 CODEMAKERLIBDEPN=codemaker.lib
 COMMONCPPLIBDEPN=commoncpp.lib
 COMMONJAVALIBDEPN=commonjava.lib
-UNODEVTOOLSLIBST=unodevtools.lib
-CODEMAKERLIBST=codemaker.lib
-COMMONCPPLIBST=commoncpp.lib
-COMMONJAVALIBST=commonjava.lib
+UNODEVTOOLSLIBST=-lunodevtools
+CODEMAKERLIBST=-lcodemaker
+COMMONCPPLIBST=-lcommoncpp
+COMMONJAVALIBST=-lcommonjava
 .ELSE
 
 UNODEVTOOLSLIBDEPN=libunodevtools.a

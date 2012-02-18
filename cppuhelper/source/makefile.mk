@@ -146,7 +146,6 @@ OBJFILES = $(OBJ)$/findsofficepath.obj
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 .ELIF "$(GUI)" == "OS2"
-SHL1TARGET=cppuh
 SHL1TARGET=cppuh$(UDK_MAJOR)
 .ELSE
 SHL1TARGET=uno_$(TARGET)$(COMID)

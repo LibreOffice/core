@@ -54,6 +54,7 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\inc\cppu\helper\purpenv\Mapping.hxx      %_DEST%\inc%_EXT%\cppu\helper\purpenv\Mapping.hxx
 
 ..\%__SRC%\lib\icppu.lib %_DEST%\lib%_EXT%\icppu.lib
+..\%__SRC%\lib\cppu*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\cppu* %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\libuno_cppu.*.* %_DEST%\lib%_EXT%\*
 

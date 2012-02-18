@@ -2,6 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\xmlreader
 mkdir: %_DEST%\inc%_EXT%\xmlreader\detail
 ..\%__SRC%\bin\xmlread*.dll %_DEST%\bin%_EXT%\xmlread*.dll
 ..\%__SRC%\lib\ixmlreader.lib %_DEST%\lib%_EXT%\ixmlreader.lib
+..\%__SRC%\lib\xmlreader*.lib %_DEST%\lib%_EXT%\xmlreader*.lib
 ..\%__SRC%\lib\libxmlreader.dylib %_DEST%\lib%_EXT%\libxmlreader.dylib
 ..\%__SRC%\lib\libxmlreader.so %_DEST%\lib%_EXT%\libxmlreader.so
 ..\inc\xmlreader\detail\xmlreaderdllapi.hxx %_DEST%\inc%_EXT%\xmlreader\detail\xmlreaderdllapi.hxx

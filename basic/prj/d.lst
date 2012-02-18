@@ -7,6 +7,7 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\slb\sb.lib %_DEST%\lib%_EXT%\xsb.lib
+..\%__SRC%\slb\sb.lib %_DEST%\lib%_EXT%\sb.lib
 ..\%__SRC%\srs\classes.srs %_DEST%\res%_EXT%\basic.srs
 ..\%COMMON_OUTDIR%\srs\classes_srs.hid %COMMON_DEST%\res%_EXT%\basic_srs.hid
 ..\%__SRC%\bin\sb?????.dll %_DEST%\bin%_EXT%\sb?????.dll

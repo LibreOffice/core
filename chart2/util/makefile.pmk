@@ -28,13 +28,13 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # define macro for (chart-specific) tools library
-.IF "$(COM)" == "MSC" || "$(GUI)" == "OS2"
+.IF "$(COM)" == "MSC"
     CHARTTOOLS= icharttools.lib
 .ELSE
     CHARTTOOLS= -lcharttools$(DLLPOSTFIX)
 .ENDIF
 
-.IF "$(COM)" == "MSC" || "$(GUI)" == "OS2"
+.IF "$(COM)" == "MSC"
     CHARTVIEW= ichartview.lib
 .ELSE
     CHARTVIEW= -lchartview$(DLLPOSTFIX)

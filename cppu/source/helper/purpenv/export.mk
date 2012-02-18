@@ -6,7 +6,7 @@ purpenv_helper_LIB := -l$(NAMEpurpenv_helper)
 
 .ELIF "$(GUI)"=="OS2"
 NAMEpurpenv_helper := purpeh$(UDK_MAJOR)
-purpenv_helper_LIB := i$(NAMEpurpenv_helper)
+purpenv_helper_LIB := -l$(NAMEpurpenv_helper)
 
 .ELSE
 NAMEpurpenv_helper := purpenvhelper$(UDK_MAJOR)$(COMID)

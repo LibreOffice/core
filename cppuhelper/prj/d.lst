@@ -62,7 +62,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\lib\libuno_cppuhelper*.*.* %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\cppuh*.lib %_DEST%\lib%_EXT%\*
 
 ..\source\unorc %_DEST%\bin%_EXT%\uno.ini
 ..\source\unorc %_DEST%\lib%_EXT%\unorc

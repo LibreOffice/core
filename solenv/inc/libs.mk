@@ -21,7 +21,7 @@
 
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 #
 #externe libs in plattform.mk
@@ -38,6 +38,11 @@ ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
 ICUDATALIB=-licudt$(ICU_MAJOR)$(ICU_MINOR)
+.ELIF "$(GUI)"=="OS2"
+ICUINLIB=-licuin
+ICULELIB=-licule
+ICUUCLIB=-licuuc
+ICUDATALIB=-licudt
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 ICUINLIB=-licui18n
 ICULELIB=-licule
@@ -50,6 +55,8 @@ I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
+.ELIF "$(GUI)"=="OS2"
+SALHELPERLIB=-lsalhelp$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
@@ -63,12 +70,19 @@ TOOLSLIB=-ltl$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 CPPULIB=-lcppu$(UDK_MAJOR)
 CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
+.ELIF "$(GUI)"=="OS2"
+CPPULIB=-lcppu$(UDK_MAJOR)
+CPPUHELPERLIB=-lcppuh$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : ucbhelper/version.mk
+.IF "$(GUI)"=="OS2"
+UCBHELPERLIB=-lucbh$(UCBHELPER_MAJOR)
+.ELSE
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
+.ENDIF
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
 OPENSSLLIBST=$(STATIC) $(OPENSSL_LIBS) $(DYNAMIC)
@@ -80,7 +94,7 @@ OPENSSLLIBST=-lssl_static -lcrypto_static
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
 .ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
@@ -89,7 +103,7 @@ REGLIB=-lreg
 VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 STORELIB=-lstore$(UDK_MAJOR)
 SALLIB=-lsal$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -100,7 +114,7 @@ SALLIB=-luno_sal
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 RMCXTLIB=-lrmcxt$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt
@@ -251,7 +265,7 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
@@ -266,7 +280,7 @@ XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk
@@ -330,6 +344,8 @@ HUNSPELLLIB=-lhunspell-1.2
 .ENDIF
 .IF "$(SYSTEM_MYTHES)" == "YES"
 MYTHESLIB=$(MYTHES_LIBS)
+.ELIF "$(GUI)" == "OS2"
+MYTHESLIB=-lmythes
 .ELSE
 MYTHESLIB=-lmythes-1.2
 .ENDIF
@@ -340,7 +356,7 @@ UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
 XMLREADERLIB=-lxmlreader
 
-.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
@@ -363,11 +379,7 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
-.IF "$(GUI)"=="OS2"
-OPENSSLLIB=ssl.lib crypto.lib
-.ELSE
 OPENSSLLIB=ssleay32.lib libeay32.lib
-.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile.lib
@@ -473,13 +485,9 @@ FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
-CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
-.IF "$(GUI)"=="OS2"
-REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
-.ELSE
+CPPUNITLIB = icppunit_dll.lib
 REDLANDLIB = librdf.lib
-.ENDIF
 
 JVMFWKLIB = ijvmfwk.lib
 
@@ -522,4 +530,4 @@ UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
 XMLREADERLIB=ixmlreader.lib
 
-.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")

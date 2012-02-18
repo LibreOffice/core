@@ -89,10 +89,6 @@ RES1FILELIST=\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS += pthread.lib libz.lib
-.ENDIF
-
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk

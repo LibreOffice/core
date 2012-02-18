@@ -7,6 +7,7 @@ dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib;
 ..\%__SRC%\bin\for*.dll %_DEST%\bin%_EXT%\for*.dll
 ..\%__SRC%\lib\libfor*.so %_DEST%\lib%_EXT%\libfor*.so
 ..\%__SRC%\lib\ifor*.lib %_DEST%\lib%_EXT%\ifor*.lib
+..\%__SRC%\lib\for*.lib %_DEST%\lib%_EXT%\for*.lib
 ..\%__SRC%\lib\libfor*.dylib %_DEST%\lib%_EXT%\libfor*.dylib
 
 # Resources

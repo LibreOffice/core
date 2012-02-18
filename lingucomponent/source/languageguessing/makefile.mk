@@ -34,7 +34,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 LIBTEXTCATLIB=-ltextcat
 .ELSE               # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 LIBTEXTCATLIB=ilibtextcat.lib

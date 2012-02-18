@@ -5,6 +5,8 @@
 ..\%__SRC%\lib\*.jnilib %_DEST%\lib%_EXT%\*.jnilib
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
+..\%__SRC%\lib\dbt*.lib %_DEST%\lib%_EXT%\dbt*.lib
+
 ..\source\cpool\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\adabas\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\ado\*.xml %_DEST%\xml%_EXT%\*.xml

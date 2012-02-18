@@ -16,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\i*.lib %_DEST%\lib%_EXT%\i*.lib
+..\%__SRC%\lib\oox.lib %_DEST%\lib%_EXT%\oox.lib
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\%__SRC%\inc\oox\token\tokens.hxx %_DEST%\inc%_EXT%\oox\token\tokens.hxx
