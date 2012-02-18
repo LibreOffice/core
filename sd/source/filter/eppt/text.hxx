@@ -249,7 +249,7 @@ class TextObj
     public :
                         TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
                                     rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
-                        TextObj( TextObj& rTextObj );
+                        TextObj( const TextObj& rTextObj );
                         ~TextObj();
 
         void            Write( SvStream* pStrm );

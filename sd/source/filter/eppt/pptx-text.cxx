@@ -1285,9 +1285,9 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
     ImplCalculateTextPositions();
 }
 
-TextObj::TextObj( TextObj& rTextObj )
+TextObj::TextObj( const TextObj& rTextObj )
 {
-    mpImplTextObj = rTextObj.mpImplTextObj;
+    mpImplTextObj = const_cast<TextObj&>(rTextObj).mpImplTextObj;
     mpImplTextObj->mnRefCount++;
 }
 
