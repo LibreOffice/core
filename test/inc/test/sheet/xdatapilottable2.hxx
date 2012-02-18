@@ -30,6 +30,8 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/uno/Sequence.h>
 
 #include "test/testdllapi.hxx"
 
@@ -47,13 +49,16 @@ public:
     void testGetPositionData();
     void testGetDrillDownData();
     void testGetOutputRangeByType();
-    void testInsertDrillData();
+    void testInsertDrillDownSheet();
 
     virtual uno::Reference< uno::XInterface > initDP2() = 0;
+    virtual uno::Reference< uno::XInterface > getSheets() = 0;
 
 protected:
 
 private:
+    bool checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet >, uno::Sequence< uno::Sequence < uno::Any > > aData);
+
     void getOutputRanges(uno::Reference< sheet::XDataPilotTable2 >);
     void buildDataFields(uno::Reference< sheet::XDataPilotTable2 >);
     void buildResultCells(uno::Reference< sheet::XDataPilotTable2 >);
