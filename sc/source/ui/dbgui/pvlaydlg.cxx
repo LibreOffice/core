@@ -1838,56 +1838,58 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
     for( ScDPLabelDataVec::const_iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); aIt != aEnd; ++aIt )
     {
-        if( ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName( aIt->maName ) )
-        {
-            pDim->SetUsedHierarchy( aIt->mnUsedHier );
-            pDim->SetShowEmpty( aIt->mbShowAll );
-            pDim->SetSortInfo( &aIt->maSortInfo );
-            pDim->SetLayoutInfo( &aIt->maLayoutInfo );
-            pDim->SetAutoShowInfo( &aIt->maShowInfo );
-            ScDPSaveDimension* pOldDim = NULL;
-            if (pOldSaveData)
-            {
-                // Transfer the existing layout names to new dimension instance.
-                pOldDim = pOldSaveData->GetExistingDimensionByName(aIt->maName);
-                if (pOldDim)
-                {
-                    const OUString* pLayoutName = pOldDim->GetLayoutName();
-                    if (pLayoutName)
-                        pDim->SetLayoutName(*pLayoutName);
+        ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(aIt->maName);
+        if (!pDim)
+            continue;
 
-                    const OUString* pSubtotalName = pOldDim->GetSubtotalName();
-                    if (pSubtotalName)
-                        pDim->SetSubtotalName(*pSubtotalName);
-                }
+        pDim->SetUsedHierarchy( aIt->mnUsedHier );
+        pDim->SetShowEmpty( aIt->mbShowAll );
+        pDim->SetSortInfo( &aIt->maSortInfo );
+        pDim->SetLayoutInfo( &aIt->maLayoutInfo );
+        pDim->SetAutoShowInfo( &aIt->maShowInfo );
+        ScDPSaveDimension* pOldDim = NULL;
+        if (pOldSaveData)
+        {
+            // Transfer the existing layout names to new dimension instance.
+            pOldDim = pOldSaveData->GetExistingDimensionByName(aIt->maName);
+            if (pOldDim)
+            {
+                const OUString* pLayoutName = pOldDim->GetLayoutName();
+                if (pLayoutName)
+                    pDim->SetLayoutName(*pLayoutName);
+
+                const OUString* pSubtotalName = pOldDim->GetSubtotalName();
+                if (pSubtotalName)
+                    pDim->SetSubtotalName(*pSubtotalName);
+            }
+        }
+
+        bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
+
+        // visibility of members
+        for (vector<ScDPLabelData::Member>::const_iterator itr = aIt->maMembers.begin(), itrEnd = aIt->maMembers.end();
+              itr != itrEnd; ++itr)
+        {
+            ScDPSaveMember* pMember = pDim->GetMemberByName(itr->maName);
+
+            // #i40054# create/access members only if flags are not default
+            // (or in manual sorting mode - to keep the order)
+            if (bManualSort || !itr->mbVisible || !itr->mbShowDetails)
+            {
+                pMember->SetIsVisible(itr->mbVisible);
+                pMember->SetShowDetails(itr->mbShowDetails);
             }
 
-            bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
+            if (!pOldDim)
+                continue;
 
-            // visibility of members
-            for (vector<ScDPLabelData::Member>::const_iterator itr = aIt->maMembers.begin(), itrEnd = aIt->maMembers.end();
-                  itr != itrEnd; ++itr)
+            // Transfer the existing layout name.
+            ScDPSaveMember* pOldMember = pOldDim->GetMemberByName(itr->maName);
+            if (pOldMember)
             {
-                ScDPSaveMember* pMember = pDim->GetMemberByName(itr->maName);
-
-                // #i40054# create/access members only if flags are not default
-                // (or in manual sorting mode - to keep the order)
-                if (bManualSort || !itr->mbVisible || !itr->mbShowDetails)
-                {
-                    pMember->SetIsVisible(itr->mbVisible);
-                    pMember->SetShowDetails(itr->mbShowDetails);
-                }
-                if (pOldDim)
-                {
-                    // Transfer the existing layout name.
-                    ScDPSaveMember* pOldMember = pOldDim->GetMemberByName(itr->maName);
-                    if (pOldMember)
-                    {
-                        const OUString* pLayoutName = pOldMember->GetLayoutName();
-                        if (pLayoutName)
-                            pMember->SetLayoutName(*pLayoutName);
-                    }
-                }
+                const OUString* pLayoutName = pOldMember->GetLayoutName();
+                if (pLayoutName)
+                    pMember->SetLayoutName(*pLayoutName);
             }
         }
     }
