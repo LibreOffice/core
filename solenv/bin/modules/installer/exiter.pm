@@ -100,10 +100,6 @@ sub exit_program
     print "\n";
     close(LOG);
 
-    # Saving the debug info
-
-    if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
-
     installer::logger::stoptime();
 
     exit(-1);

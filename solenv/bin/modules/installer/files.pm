@@ -41,8 +41,6 @@ sub check_file
 {
     my ($arg) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::check_file : $arg"); }
-
     if(!( -f $arg ))
     {
         installer::exiter::exit_program("ERROR: Cannot find file $arg", "check_file");
@@ -53,8 +51,6 @@ sub read_file
 {
     my ($localfile) = @_;
     my @localfile = ();
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_file : $localfile"); }
 
     open( IN, "<$localfile" ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
 
@@ -77,8 +73,6 @@ sub read_file
 sub save_file
 {
     my ($savefile, $savecontent) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_file : $savefile : $#{$savecontent}"); }
 
     if ( open( OUT, ">$savefile" ) )
     {
@@ -105,8 +99,6 @@ sub save_hash
 {
     my ($savefile, $hashref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_hash : $savefile"); }
-
     my @printcontent = ();
 
     my $itemkey;
@@ -127,8 +119,6 @@ sub save_hash
 sub save_array_of_hashes
 {
     my ($savefile, $arrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_array_of_hashes : $savefile : $#{$arrayref}"); }
 
     my @printcontent = ();
 
@@ -157,8 +147,6 @@ sub save_array_of_hashes
 sub save_array_of_hashes_modules
 {
     my ($savefile, $arrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_array_of_hashes : $savefile : $#{$arrayref}"); }
 
     my @printcontent = ();
 
@@ -192,8 +180,6 @@ sub read_binary_file
 {
     my ($filename) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_binary_file : $filename"); }
-
     my $file;
 
     open( IN, "<$filename" ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "read_binary_file");
@@ -210,8 +196,6 @@ sub read_binary_file
 sub save_binary_file
 {
     my ($file, $filename) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_binary_file : $filename"); }
 
     open( OUT, ">$filename" ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for writing", "save_binary_file");
     binmode OUT;

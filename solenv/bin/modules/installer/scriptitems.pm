@@ -44,8 +44,6 @@ sub resolve_all_directory_names
 {
     my ($directoryarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::resolve_all_directory_names : $#{$directoryarrayref}"); }
-
     # After this procedure the hash shall contain the complete language
     # dependent path, not only the language dependent HostName.
 
@@ -159,8 +157,6 @@ sub remove_delete_only_files_from_productlists
 {
     my ($productarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_delete_only_files_from_productlists : $#{$productarrayref}"); }
-
     my @newitems = ();
 
     for ( my $i = 0; $i <= $#{$productarrayref}; $i++ )
@@ -187,8 +183,6 @@ sub remove_delete_only_files_from_productlists
 sub remove_notinsuite_files_from_productlists
 {
     my ($productarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_notinsuite_files_from_productlists : $#{$productarrayref}"); }
 
     my @newitems = ();
 
@@ -222,8 +216,6 @@ sub remove_office_start_language_files
 {
     my ($productarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_notinsuite_files_from_productlists : $#{$productarrayref}"); }
-
     my @newitems = ();
 
     for ( my $i = 0; $i <= $#{$productarrayref}; $i++ )
@@ -254,8 +246,6 @@ sub remove_office_start_language_files
 sub remove_uninstall_regitems_from_script
 {
     my ($registryarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_uninstall_regitems_from_script : $#{$registryarrayref}"); }
 
     my @newitems = ();
 
@@ -307,8 +297,6 @@ sub get_languagespecific_module
 sub resolving_all_languages_in_productlists
 {
     my ($productarrayref, $languagesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::resolving_all_languages_in_productlists : $#{$productarrayref} : $#{$languagesarrayref}"); }
 
     my @itemsinalllanguages = ();
 
@@ -725,8 +713,6 @@ sub changing_name_of_language_dependent_keys
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::changing_name_of_language_dependent_keys : $#{$itemsarrayref}"); }
-
     # Changing key for multilingual items from "Name ( )" to "Name" or "HostName ( )" to "HostName"
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
@@ -792,8 +778,6 @@ sub collect_language_specific_names
 sub replace_setup_variables
 {
     my ($itemsarrayref, $languagestringref, $hashref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::replace_setup_variables : $#{$itemsarrayref} : $$languagestringref : $hashref->{'PRODUCTNAME'}"); }
 
     my $languagesstring = $$languagestringref;
     $languagesstring =~ s/\_/ /g;   # replacing underscore with whitespace
@@ -887,8 +871,6 @@ sub remove_non_existent_languages_in_productlists
 {
     my ($itemsarrayref, $languagestringref, $searchkey, $itemtype) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_non_existent_languages_in_productlists : $#{$itemsarrayref} : $$languagestringref : $searchkey : $itemtype"); }
-
     # Removing of all non existent files, for instance asian fonts
 
     installer::logger::include_header_into_logfile("Removing for this language $$languagestringref:");
@@ -935,8 +917,6 @@ sub remove_non_existent_languages_in_productlists
 sub get_Directoryname_From_Directorygid
 {
     my ($dirsarrayref ,$searchgid, $onelanguage, $oneitemgid) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_Directoryname_From_Directorygid : $#{$dirsarrayref} : $searchgid : $onelanguage"); }
 
     my $directoryname = "";
     my $onedirectory;
@@ -988,8 +968,6 @@ sub get_Directoryname_From_Directorygid
 sub get_Destination_Directory_For_Item_From_Directorylist       # this is used for Files, Profiles and Links
 {
     my ($itemarrayref, $dirsarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist : $#{$itemarrayref} : $#{$dirsarrayref}"); }
 
     for ( my $i = 0; $i <= $#{$itemarrayref}; $i++ )
     {
@@ -1052,8 +1030,6 @@ sub get_sourcepath_from_filename_and_includepath_classic
 {
     my ($searchfilenameref, $includepatharrayref, $write_logfile) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic : $$searchfilenameref : $#{$includepatharrayref} : $write_logfile"); }
-
     my ($onefile, $includepath, $infoline);
 
     my $foundsourcefile = 0;
@@ -1108,8 +1084,6 @@ sub get_sourcepath_from_filename_and_includepath_classic
 sub get_sourcepath_from_filename_and_includepath
 {
     my ($searchfilenameref, $unused, $write_logfile) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_sourcepath_from_filename_and_includepath : $$searchfilenameref : $#{$includepatharrayref} : $write_logfile"); }
 
     my ($onefile, $includepath, $infoline);
 
@@ -1221,8 +1195,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 {
     my ($filesarrayref, $includepatharrayref, $dirsref, $item) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist : $#{$filesarrayref} : $#{$includepatharrayref} : $item"); }
-
     installer::logger::include_header_into_logfile("$item:");
 
     my $infoline = "";
@@ -1315,8 +1287,6 @@ sub remove_Files_For_Languagepacks
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Files_For_Languagepacks : $#{$filesarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1350,8 +1320,6 @@ sub remove_Files_For_Languagepacks
 sub remove_Files_Without_Sourcedirectory
 {
     my ($filesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Files_Without_Sourcedirectory : $#{$filesarrayref}"); }
 
     my $infoline;
 
@@ -1485,8 +1453,6 @@ sub get_office_directory_gid_and_hostname
 sub add_License_Files_into_Installdir
 {
     my ($filesarrayref, $dirsarrayref, $languagesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::add_License_Files_into_Installdir : $#{$filesarrayref} : $#{$languagesarrayref}"); }
 
     my $infoline;
 
@@ -1645,8 +1611,6 @@ sub remove_scpactions_without_name
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_scpactions_without_name : $#{$itemsarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1679,8 +1643,6 @@ sub remove_scpactions_without_name
 sub change_keys_of_scpactions
 {
     my ($itemsarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::change_keys_of_scpactions : $#{$itemsarrayref}"); }
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
@@ -1725,8 +1687,6 @@ sub remove_Xpdonly_Items
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Xpdonly_Items : $#{$itemsarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1762,8 +1722,6 @@ sub remove_Xpdonly_Items
 sub remove_Languagepacklibraries_from_Installset
 {
     my ($itemsarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Languagepacklibraries_from_Installset : $#{$itemsarrayref}"); }
 
     my $infoline;
 
@@ -1801,8 +1759,6 @@ sub remove_Helppacklibraries_from_Installset
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Helppacklibraries_from_Installset : $#{$itemsarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1838,8 +1794,6 @@ sub remove_Helppacklibraries_from_Installset
 sub remove_patchonlyfiles_from_Installset
 {
     my ($itemsarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_patchonlyfiles_from_Installset : $#{$itemsarrayref}"); }
 
     my $infoline;
 
@@ -1877,8 +1831,6 @@ sub remove_tabonlyfiles_from_Installset
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_tabonlyfiles_from_Installset : $#{$itemsarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1915,8 +1867,6 @@ sub remove_installedproductonlyfiles_from_Installset
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_installedproductonlyfiles_from_Installset : $#{$itemsarrayref}"); }
-
     my $infoline;
 
     my @newitemsarray = ();
@@ -1951,8 +1901,6 @@ sub remove_installedproductonlyfiles_from_Installset
 sub quoting_illegal_filenames
 {
     my ($filesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::rename_illegal_filenames : $#{$filesarrayref}"); }
 
     # This function has to be removed as soon as possible!
 
@@ -2014,8 +1962,6 @@ sub optimize_list
 sub collect_directories_from_filesarray
 {
     my ($filesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::collect_directories_from_filesarray : $#{$filesarrayref}"); }
 
     my @alldirectories = ();
     my %alldirectoryhash = ();
@@ -2085,8 +2031,6 @@ sub collect_directories_from_filesarray
 sub collect_directories_with_create_flag_from_directoryarray
 {
     my ($directoryarrayref, $alldirectoryhash) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::collect_directories_with_create_flag_from_directoryarray : $#{$directoryarrayref}"); }
 
     my $alreadyincluded = 0;
     my @alldirectories = ();
@@ -2210,8 +2154,6 @@ sub get_destination_file_path_for_links
 {
     my ($linksarrayref, $filesarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_destination_file_path_for_links : $#{$linksarrayref} : $#{$filesarrayref}"); }
-
     my $infoline;
 
     for ( my $i = 0; $i <= $#{$linksarrayref}; $i++ )
@@ -2256,8 +2198,6 @@ sub get_destination_file_path_for_links
 sub get_destination_link_path_for_links
 {
     my ($linksarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_destination_link_path_for_links : $#{$linksarrayref}"); }
 
     my $infoline;
 
@@ -2304,8 +2244,6 @@ sub remove_workstation_only_items
 {
     my ($itemarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_workstation_only_items : $#{$itemarrayref}"); }
-
     my @newitemarray = ();
 
     for ( my $i = 0; $i <= $#{$itemarrayref}; $i++ )
@@ -2333,8 +2271,6 @@ sub remove_workstation_only_items
 sub resolve_links_with_flag_relative
 {
     my ($linksarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::resolve_links_with_flag_relative : $#{$linksarrayref}"); }
 
     # Before this step is:
     # destination=program/libsalhelperC52.so.3, this will be the name of the link
@@ -2433,8 +2369,6 @@ sub get_string_of_modulegids_for_itemgid
 {
     my ($module_lookup_table, $modulesref, $itemgid, $itemname) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_string_of_modulegids_for_itemgid : $#{$modulesref} : $itemgid : $itemname"); }
-
     my $allmodules = "";
     my $haslanguagemodule = 0;
     my %foundmodules = ();
@@ -2469,8 +2403,6 @@ sub get_string_of_modulegids_for_itemgid
 sub assigning_modules_to_items
 {
     my ($modulesref, $itemsref, $itemname) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::assigning_modules_to_items : $#{$modulesref} : $#{$itemsref} : $itemname"); }
 
     my $infoline = "";
     my $languageassignmenterror = 0;
@@ -2536,8 +2468,6 @@ sub add_rootpath_to_directories
 {
     my ($dirsref, $rootpath) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::add_rootpath_to_directories : $#{$dirsref} : $rootpath"); }
-
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
         my $onedir = ${$dirsref}[$i];
@@ -2567,8 +2497,6 @@ sub add_rootpath_to_files
 {
     my ($filesref, $rootpath) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::add_rootpath_to_files : $#{$filesref} : $rootpath"); }
-
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         my $onefile = ${$filesref}[$i];
@@ -2581,8 +2509,6 @@ sub add_rootpath_to_files
 sub add_rootpath_to_links
 {
     my ($linksref, $rootpath) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::add_rootpath_to_links : $#{$linksref} : $rootpath"); }
 
     for ( my $i = 0; $i <= $#{$linksref}; $i++ )
     {

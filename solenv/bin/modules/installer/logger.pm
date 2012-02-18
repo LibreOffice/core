@@ -41,8 +41,6 @@ our @EXPORT_OK = qw(
     log_hashref
     globallog
     copy_globalinfo_into_logfile
-    debuginfo
-    savedebug
     starttime
     stoptime
     print_message
@@ -151,31 +149,6 @@ sub copy_globalinfo_into_logfile
     {
         push(@installer::globals::logfileinfo, $installer::globals::globallogfileinfo[$i]);
     }
-}
-
-###############################################################
-# For each product (new language) a new log file is created.
-# Therefore the global logging has to be saved in this file.
-###############################################################
-
-sub debuginfo
-{
-    my  ( $message ) = @_;
-
-    $message = $message . "\n";
-    push(@installer::globals::functioncalls, $message);
-}
-
-###############################################################
-# Saving the debug information.
-###############################################################
-
-sub savedebug
-{
-    my ( $outputdir ) = @_;
-
-    installer::files::save_file($outputdir . $installer::globals::debugfilename, \@installer::globals::functioncalls);
-    print_message( "... writing debug file " . $outputdir . $installer::globals::debugfilename . "\n" );
 }
 
 ###############################################################

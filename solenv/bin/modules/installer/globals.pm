@@ -253,10 +253,7 @@ BEGIN
     $followme_from_directory = 0;
     $internal_cabinet_signing = 0;
 
-    $debug = 0;
-    $debugfilename = "debug.txt";
     $checksumfilename = "checksum.txt";
-    @functioncalls = ();
 
     $ismultilingual = 0;
     @multilanguagemodules = ();

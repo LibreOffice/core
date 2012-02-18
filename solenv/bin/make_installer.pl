@@ -120,10 +120,6 @@ installer::environment::set_global_environment_variables($environmentvariablesha
 installer::parameter::saveparameter();
 installer::parameter::getparameter();
 
-# debugging can start after function "getparameter"
-if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1: The platform independent part\n"); }
-if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1a: The language independent part\n"); }
-
 installer::parameter::control_fundamental_parameter();
 installer::parameter::setglobalvariables();
 installer::parameter::control_required_parameter();
@@ -594,11 +590,6 @@ if (!($installer::globals::is_copy_only_project))
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2aa.log", $dirsinproductarrayref); }
 }
 
-if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1a: The language independent part\n"); }
-
-# saving debug info, before staring part 1b
-if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
-
 #################################################
 # Part 1b: The language dependent part
 # (still platform independent)
@@ -611,8 +602,6 @@ if ( $installer::globals::debug ) { installer::logger::savedebug($installer::glo
 # Beginning of language dependent part
 # The for iterates over all products, separated by an # in the language list
 ###############################################################################
-
-if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1b: The language dependent part\n"); }
 
 for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 {
@@ -1217,22 +1206,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::packagelist::log_packages_content($packages);
     installer::packagelist::create_module_destination_hash($packages, $allvariableshashref);
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1b: The language dependent part\n"); }
-
-    # saving debug info, before starting part 2
-    if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
-
     #################################################
     # Part 2: The platform dependent part
     #################################################
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 2: The platform dependent part\n"); }
-
     #################################################
     # Part 2a: All non-Windows platforms
     #################################################
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 2a: All non-Windows platforms\n"); }
 
     #########################################################
     # ... creating epm list file ...
@@ -1767,13 +1747,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         }
     }   # end of "if (!( $installer::globals::iswindowsbuild ))"
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 2a: All non-Windows platforms\n"); }
-
     #################################################
     # Part 2b: The Windows platform
     #################################################
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 2b: The Windows platform\n"); }
 
     #####################################################################
     # ... creating idt files ...
@@ -2221,16 +2197,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     }    # end of "if ( $installer::globals::iswindowsbuild )"
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 2b: The Windows platform\n"); }
-
     # saving file_info file for later analysis
     my $speciallogfilename = "fileinfo_" . $installer::globals::product . "\.log";
     installer::files::save_array_of_hashes($loggingdir . $speciallogfilename, $filesinproductlanguageresolvedarrayref);
 
 }   # end of iteration for one language group
-
-# saving debug info at end
-if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
 
 #######################################################
 # Stopping time

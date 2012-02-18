@@ -148,8 +148,6 @@ sub resolving_archive_flag
 {
     my ($filesarrayref, $additionalpathsref, $languagestringref, $loggingdir) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::archivefiles::resolving_archive_flag : $#{$filesarrayref} : $#{$additionalpathsref} : $$languagestringref : $loggingdir"); }
-
     my @newallfilesarray = ();
 
     my ($systemcall, $returnvalue, $infoline);
