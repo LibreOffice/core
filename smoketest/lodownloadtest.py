@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Version: MPL 1.1 / GPLv3+ / LGPLv3+
 
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
