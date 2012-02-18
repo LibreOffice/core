@@ -673,7 +673,7 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
             {
                 /* unloading the user profile */
                 if (fLoadUserProfile && fUnloadUserProfile)
-                    bOk = fUnloadUserProfile(hAccessToken, ((oslSecurityImpl*)Security)->m_hProfile);
+                    fUnloadUserProfile(hAccessToken, ((oslSecurityImpl*)Security)->m_hProfile);
 
                 if (hUserEnvLib)
                     FreeLibrary(hUserEnvLib);
