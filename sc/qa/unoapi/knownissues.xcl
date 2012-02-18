@@ -225,6 +225,8 @@ sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotDescriptor
 sc.ScDataPilotTableObj::com::sun::star::container::XNamed
 sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
 sc.ScNamedRangeObj::com::sun::star::sheet::XNamedRange
+sc.ScNamedRangeObj::com::sun::star::container::XNamed
+sc.ScNamedRangeObj::com::sun::star::sheet::XCellRangeReferrer
 sc.ScNamedRangesObj::com::sun::star::sheet::XNamedRanges
 sc.ScTableSheetObj::com::sun::star::util::XSearchable
 sc.ScTableSheetObj::com::sun::star::util::XReplaceable
