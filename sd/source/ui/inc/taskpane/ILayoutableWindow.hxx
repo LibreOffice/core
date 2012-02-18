@@ -77,7 +77,7 @@ public:
     */
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth) = 0;
 
-    /** Return wether the window is generally resizable.  When used by
+    /** Return whether the window is generally resizable.  When used by
         a VerticalLayouter then the width will always be resized and
         the return value of this method determines whether the height
         may be modified as well.

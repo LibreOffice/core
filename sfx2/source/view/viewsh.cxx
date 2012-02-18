@@ -1465,7 +1465,7 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
     With this virtual Method can a for example a Dialog be queried, to
     check if something is selected in the current view. If the Parameter
-    is <BOOL> TRUE then it is checked wether some text is selected.
+    is <BOOL> TRUE then it is checked whether some text is selected.
 */
 
 {

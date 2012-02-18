@@ -616,7 +616,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             {
                 // make changes in dic
 
-                //! ...IsVisible should reflect wether the dictionary is a negativ
+                //! ...IsVisible should reflect whether the dictionary is a negativ
                 //! or not (hopefully...)
                 sal_Bool bIsNegEntry = aReplaceFT.IsVisible();
                 ::rtl::OUString aRplcText;

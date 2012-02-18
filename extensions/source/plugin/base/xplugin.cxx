@@ -685,7 +685,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
     OString aURL  = OUStringToOString( url, m_aEncoding );
 
-    // check wether there is a notifylistener for this stream
+    // check whether there is a notifylistener for this stream
     // this means that the strema is created from the plugin
     // via NPN_GetURLNotify or NPN_PostURLNotify
     std::list<PluginEventListener*>::iterator iter;

@@ -128,7 +128,7 @@ uno::Reference<XAccessible>
     throw (::com::sun::star::uno::RuntimeException,
            ::com::sun::star::lang::IndexOutOfBoundsException)
 {
-    // Check wether the given index is valid.
+    // Check whether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(

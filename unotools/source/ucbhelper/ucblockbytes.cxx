@@ -920,7 +920,7 @@ static sal_Bool UCBOpenContentSync(
     if(xContId.is())
         aScheme = xContId->getContentProviderScheme();
 
-    // now determine wether we use a timeout or not;
+    // now determine whether we use a timeout or not;
     if( ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("http"))                &&
         ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("https"))               &&
         ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.webdav")) &&

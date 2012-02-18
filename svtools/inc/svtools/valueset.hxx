@@ -62,7 +62,7 @@ class ValueSet
 This class allows the selection of an item. In the process items are
 drawn side by side. The selection of items can be more clear than in a
 ListBox shape for example in case of colors or samples.
-The amount of columns drawn by the control and wether the items
+The amount of columns drawn by the control and whether the items
 should be encircled can be specified. Optional a NoSelection or name
 field could be shown. By default image and color items are supported.
 Items could be drawn by oneself if InsertItem() is only called with

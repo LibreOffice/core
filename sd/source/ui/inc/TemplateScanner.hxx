@@ -161,7 +161,7 @@ public:
     */
     const TemplateEntry* GetLastAddedEntry (void) const;
 
-    /** Set wether to sort the template entries inside the regions.
+    /** Set whether to sort the template entries inside the regions.
     */
     void EnableEntrySorting (bool isEntrySortingEnabled = true)
         {mbEntrySortingEnabled = isEntrySortingEnabled;}
