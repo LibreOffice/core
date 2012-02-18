@@ -74,7 +74,7 @@ struct ScDPLabelData;
 struct PivotField
 {
     SCCOL               nCol; /// 0-based dimension index (not source column index)
-    long                mnOriginalDim;
+    long                mnOriginalDim; /// >= 0 for duplicated field.
     sal_uInt16          nFuncMask;
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
@@ -82,6 +82,7 @@ struct PivotField
     explicit PivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
     PivotField( const PivotField& r );
 
+    long getOriginalDim() const;
     bool                operator==( const PivotField& r ) const;
 };
 
@@ -187,13 +188,14 @@ struct ScPivotField
 struct ScDPFuncData
 {
     SCCOL               mnCol;
+    long                mnOriginalDim;
     sal_uInt16          mnFuncMask;
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScDPFuncData( SCCOL nNewCol, sal_uInt16 nNewFuncMask );
     explicit ScDPFuncData(
-        SCCOL nNewCol, sal_uInt16 nNewFuncMask, sal_uInt8 nDupCount,
+        SCCOL nNewCol, long nOriginalDim, sal_uInt16 nNewFuncMask, sal_uInt8 nDupCount,
         const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 
     bool operator== (const ScDPFuncData& r) const;

@@ -2163,6 +2163,17 @@ bool hasFieldColumn(const vector<PivotField>* pRefFields, SCCOL nCol)
     return false;
 }
 
+class FindByOriginalDim : public std::unary_function<PivotField, bool>
+{
+    long mnDim;
+public:
+    FindByOriginalDim(long nDim) : mnDim(nDim) {}
+    bool operator() (const PivotField& r) const
+    {
+        return mnDim == r.getOriginalDim();
+    }
+};
+
 }
 
 void ScDPObject::ConvertOrientation(
@@ -2178,7 +2189,7 @@ void ScDPObject::ConvertOrientation(
     {
         const PivotField& rField = *itr;
 
-        SCCOL nCol = rField.nCol;
+        long nCol = rField.getOriginalDim();
         sal_uInt16 nFuncs = rField.nFuncMask;
         const sheet::DataPilotFieldReference& rFieldRef = rField.maFieldRef;
 
@@ -2187,8 +2198,8 @@ void ScDPObject::ConvertOrientation(
             pDim = rSaveData.GetDataLayoutDimension();
         else
         {
-            String aDocStr = lcl_GetDimName( xSource, nCol );   // cols must start at 0
-            if ( aDocStr.Len() )
+            rtl::OUString aDocStr = lcl_GetDimName( xSource, nCol );   // cols must start at 0
+            if (!aDocStr.isEmpty())
                 pDim = rSaveData.GetDimensionByName(aDocStr);
             else
                 pDim = NULL;
@@ -2217,35 +2228,18 @@ void ScDPObject::ConvertOrientation(
             {
                 //  if set via api, a data column may occur several times
                 //  (if the function hasn't been changed yet) -> also look for duplicate data column
-                for (vector<PivotField>::const_iterator itr2 = itrBeg; itr2 != itr; ++itr2)
-                {
-                    if (itr2->nCol == nCol)
-                    {
-                        bFirst = false;
-                        break;
-                    }
-                }
+                bFirst = std::find_if(itrBeg, itr, FindByOriginalDim(nCol)) == itr;
             }
 
-            sal_uInt16 nMask = 1;
-            for (sal_uInt16 nBit=0; nBit<16; nBit++)
-            {
-                if ( nFuncs & nMask )
-                {
-                    sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc( nMask );
-                    ScDPSaveDimension* pCurrDim = bFirst ? pDim : rSaveData.DuplicateDimension(pDim->GetName());
-                    pCurrDim->SetOrientation( nOrient );
-                    pCurrDim->SetFunction( sal::static_int_cast<sal_uInt16>(eFunc) );
+            sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
+            ScDPSaveDimension* pCurrDim = bFirst ? pDim : rSaveData.DuplicateDimension(pDim->GetName());
+            pCurrDim->SetOrientation(nOrient);
+            pCurrDim->SetFunction(sal::static_int_cast<sal_uInt16>(eFunc));
 
-                    if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
-                        pCurrDim->SetReferenceValue( 0 );
-                    else
-                        pCurrDim->SetReferenceValue( &rFieldRef );
-
-                    bFirst = false;
-                }
-                nMask *= 2;
-            }
+            if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
+                pCurrDim->SetReferenceValue( 0 );
+            else
+                pCurrDim->SetReferenceValue( &rFieldRef );
         }
         else                                            // set SubTotals
         {

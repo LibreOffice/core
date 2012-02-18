@@ -127,6 +127,11 @@ PivotField::PivotField( const PivotField& r ) :
     mnDupCount(r.mnDupCount),
     maFieldRef(r.maFieldRef) {}
 
+long PivotField::getOriginalDim() const
+{
+    return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);
+}
+
 bool PivotField::operator==( const PivotField& r ) const
 {
     return (nCol          == r.nCol)
@@ -211,14 +216,17 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
+    mnOriginalDim(-1),
     mnFuncMask( nFuncMask ),
     mnDupCount(0)
 {
 }
 
 ScDPFuncData::ScDPFuncData(
-    SCCOL nCol, sal_uInt16 nFuncMask, sal_uInt8 nDupCount, const DataPilotFieldReference& rFieldRef ) :
+    SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
+    const DataPilotFieldReference& rFieldRef) :
     mnCol( nCol ),
+    mnOriginalDim(nOriginalDim),
     mnFuncMask( nFuncMask ),
     mnDupCount(nDupCount),
     maFieldRef( rFieldRef )
@@ -227,7 +235,7 @@ ScDPFuncData::ScDPFuncData(
 
 bool ScDPFuncData::operator== (const ScDPFuncData& r) const
 {
-    if (mnCol != r.mnCol || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
+    if (mnCol != r.mnCol || mnOriginalDim != r.mnOriginalDim || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
         return false;
 
     return equals(maFieldRef, r.maFieldRef);

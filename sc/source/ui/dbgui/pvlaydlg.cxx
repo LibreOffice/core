@@ -382,7 +382,7 @@ void ScDPLayoutDlg::InitWndData(const vector<PivotField>& rFields)
 
         size_t nFieldIndex = aDataArr.size();
         aDataArr.push_back(
-            new ScDPFuncData(nCol, nMask, it->mnDupCount, it->maFieldRef));
+            new ScDPFuncData(nCol, it->mnOriginalDim, nMask, it->mnDupCount, it->maFieldRef));
 
         // data field - we need to concatenate function name with the field name.
         ScDPLabelData* pData = GetLabelData(nCol);
@@ -422,7 +422,8 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
             continue;
 
         size_t nFieldIndex = pInitArr->size();
-        pInitArr->push_back(new ScDPFuncData(nCol, nMask, itr->mnDupCount, itr->maFieldRef));
+        pInitArr->push_back(
+            new ScDPFuncData(nCol, itr->mnOriginalDim, nMask, itr->mnDupCount, itr->maFieldRef));
         pInitWnd->AddField(GetLabelString(nCol), nFieldIndex);
     }
     pInitWnd->ResetScrollBar();
@@ -1433,6 +1434,8 @@ public:
     {
         PivotField aField;
         aField.nCol = r.mnCol;
+        aField.mnOriginalDim = r.mnOriginalDim;
+        aField.mnDupCount = r.mnDupCount;
         aField.nFuncMask = r.mnFuncMask;
         aField.maFieldRef = r.maFieldRef;
         mrFields.push_back(aField);
