@@ -168,7 +168,7 @@ NP_Shutdown()
 
 char * NP_GetMIMEDescription()
 {
-    return NPP_GetMIMEDescription();
+  return (char *)NPP_GetMIMEDescription();
 }
 
 //                      END - PLUGIN DLL entry points
