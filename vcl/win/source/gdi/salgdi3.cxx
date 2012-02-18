@@ -1465,28 +1465,6 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 
 // -----------------------------------------------------------------------
 
-bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
-{
-    // Test, if Font available
-    LOGFONTW aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-
-    UINT nNameLen = rName.Len();
-    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-    memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    aLogFont.lfFaceName[nNameLen] = 0;
-
-    bool bAvailable = false;
-    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
-                         (LPARAM)(void*)&bAvailable, 0 );
-
-    return bAvailable;
-}
-
-// -----------------------------------------------------------------------
-
 void ImplGetLogFontFromFontSelect( HDC hDC,
                                    const FontSelectPattern* pFont,
                                    LOGFONTW& rLogFont,
@@ -1783,24 +1761,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
-}
-
-// -----------------------------------------------------------------------
-
-int CALLBACK SalEnumCharSetsProcExA( const ENUMLOGFONTEXA* pLogFont,
-                                     const NEWTEXTMETRICEXA* /*pMetric*/,
-                                     DWORD /*nFontType*/, LPARAM lParam )
-{
-    WinSalGraphics* pData = (WinSalGraphics*)lParam;
-    // Charset already in the list?
-    for ( BYTE i = 0; i < pData->mnFontCharSetCount; i++ )
-    {
-        if ( pData->mpFontCharSets[i] == pLogFont->elfLogFont.lfCharSet )
-            return 1;
-    }
-    pData->mpFontCharSets[pData->mnFontCharSetCount] = pLogFont->elfLogFont.lfCharSet;
-    pData->mnFontCharSetCount++;
-    return 1;
 }
 
 // -----------------------------------------------------------------------
