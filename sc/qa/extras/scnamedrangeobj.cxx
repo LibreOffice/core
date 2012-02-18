@@ -26,9 +26,10 @@
  * instead of those above.
  */
 
+#include <test/unoapi_test.hxx>
 #include <test/sheet/xnamedrange.hxx>
 #include <test/container/xnamed.hxx>
-#include <test/unoapi_test.hxx>
+#include <test/sheet/xcellrangereferrer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -37,9 +38,9 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 8
+#define NUMBER_OF_TESTS 9
 
-class ScNamedRangeObj : public UnoApiTest, apitest::XNamedRange, apitest::XNamed
+class ScNamedRangeObj : public UnoApiTest, apitest::XNamedRange, apitest::XNamed, apitest::XCellRangeReferrer
 {
 public:
     ScNamedRangeObj();
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testSetReferencePosition);
     CPPUNIT_TEST(testSetName);
     CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testGetReferredCells);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference< sheet::XNamedRanges > init_impl();
@@ -71,7 +73,8 @@ sal_Int32 ScNamedRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
-        apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange")))
+        apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange"))),
+        apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
 
 }
