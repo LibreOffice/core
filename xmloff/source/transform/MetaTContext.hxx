@@ -30,15 +30,14 @@
 #define _XMLOFF_METATCONTEXT_HXX
 
 #include <rtl/ref.hxx>
-#include "xmloff/functional.hxx"
-
+#include <comphelper/stl_types.hxx>
 #include <map>
 
 #include "FlatTContext.hxx"
 
 typedef ::std::multimap< ::rtl::OUString,
                     ::rtl::Reference< XMLPersTextContentTContext >,
-                    less_functor > XMLMetaContexts_Impl;
+                    ::comphelper::UStringLess > XMLMetaContexts_Impl;
 
 
 class XMLMetaTransformerContext : public XMLTransformerContext

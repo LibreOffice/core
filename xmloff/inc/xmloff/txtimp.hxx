@@ -39,9 +39,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
-
-// xmloff/functional.hxx is obsolete and should be replaced by its comphelper
-// counterpart
 #include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
 
