@@ -57,11 +57,11 @@ static OUString FilePicker_getSystemPickerServiceName()
 {
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFilePicker"));
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde4"))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
     else
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
@@ -138,9 +138,9 @@ static OUString FolderPicker_getSystemPickerServiceName()
 {
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
 #ifdef UNX
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFolderPicker"));
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
 #endif
 #ifdef WNT

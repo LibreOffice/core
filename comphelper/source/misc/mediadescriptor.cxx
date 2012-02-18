@@ -657,7 +657,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             // Only file system content provider is able to provide XStream
             // so for this content impossibility to create XStream triggers
             // switch to readonly mode in case of opening with locking on
-            if( bLockFile && aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+            if( bLockFile && aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
                 bReadOnly = sal_True;
             else
             {
@@ -680,7 +680,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
         try
         {
             // all the contents except file-URLs should be opened as usual
-            if ( bLockFile || !aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+            if ( bLockFile || !aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
                 xInputStream = aContent.openStream();
             else
                 xInputStream = aContent.openStreamNoLock();

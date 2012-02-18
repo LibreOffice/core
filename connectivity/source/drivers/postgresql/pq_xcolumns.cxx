@@ -107,14 +107,14 @@ namespace pq_sdbc_driver
 
 static Any isCurrency( const rtl::OUString & typeName )
 {
-    sal_Bool b = typeName.equalsIgnoreAsciiCaseAscii( "money" );
+    sal_Bool b = typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("money"));
     return Any( &b, getBooleanCppuType() );
 }
 
 // static sal_Bool isAutoIncrement8( const rtl::OUString & typeName )
 // {
-//     return typeName.equalsIgnoreAsciiCaseAscii( "serial8" ) ||
-//         typeName.equalsIgnoreAsciiCaseAscii( "bigserial" );
+//     return typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("serial8")) ||
+//         typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bigserial"));
 // }
 
 static Any isAutoIncrement( const rtl::OUString & defaultValue )

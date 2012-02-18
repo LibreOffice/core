@@ -589,14 +589,14 @@ namespace frm
                 {
                     Any aValue;
                     if  (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) )
-                        ||  aText.equalsIgnoreAsciiCaseAscii( "TRUE" )
-                        ||  aText.equalsIgnoreAsciiCaseAscii( "IS TRUE" )
+                        ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("TRUE"))
+                        ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IS TRUE"))
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
                     else if (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "0" ) )
-                            ||  aText.equalsIgnoreAsciiCaseAscii( "FALSE" )
+                            ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("FALSE"))
                             )
                     {
                         aValue <<= (sal_Int32)STATE_NOCHECK;

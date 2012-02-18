@@ -341,7 +341,7 @@ namespace animcore
                         // initially. This is currently the only place
                         // where a shape effect influences shape
                         // attributes outside it's effective duration.
-                        if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCaseAscii("visibility") )
+                        if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("visibility")) )
                         {
                             sal_Bool bVisible( sal_False );
 
@@ -356,13 +356,13 @@ namespace animcore
                                 {
                                     // we also take the strings "true" and "false",
                                     // as well as "on" and "off" here
-                                    if( aString.equalsIgnoreAsciiCaseAscii("true") ||
-                                        aString.equalsIgnoreAsciiCaseAscii("on") )
+                                    if( aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
+                                        aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
                                     {
                                         bVisible = sal_True;
                                     }
-                                    if( aString.equalsIgnoreAsciiCaseAscii("false") ||
-                                        aString.equalsIgnoreAsciiCaseAscii("off") )
+                                    if( aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
+                                        aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("off")) )
                                     {
                                         bVisible = sal_False;
                                     }
@@ -477,7 +477,7 @@ namespace animcore
 
     sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName.equalsIgnoreAsciiCaseAscii( SERVICE_NAME );
+        return ServiceName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(SERVICE_NAME));
     }
 
     uno::Sequence< ::rtl::OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException )

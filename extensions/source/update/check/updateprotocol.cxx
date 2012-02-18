@@ -190,7 +190,7 @@ checkForUpdates(
                     {
                         uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
                         rtl::OUString aType = xParent->getAttribute(UNISTRING("type"));
-                        bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAscii("text/html") );
+                        bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text/html")) );
 
                         o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
                     }

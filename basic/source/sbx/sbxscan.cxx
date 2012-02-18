@@ -445,13 +445,13 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
         // check as string in case of sal_Bool sal_True and sal_False
         case SbxBOOL:
         {
-            if( rSrc.equalsIgnoreAsciiCaseAscii( "true" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
                 bChanged = sal_True;
             }
             else
-            if( rSrc.equalsIgnoreAsciiCaseAscii( "false" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
                 bChanged = sal_True;
