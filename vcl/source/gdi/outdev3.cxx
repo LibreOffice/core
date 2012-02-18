@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #include "i18npool/mslangid.hxx"
 
@@ -412,6 +414,35 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
     return 0;
     int nCount =  pSubst->GetFontSubstituteCount();
     return (sal_uInt16)nCount;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::GetFontSubstitute( sal_uInt16 n,
+                                      XubString& rFontName,
+                                      XubString& rReplaceFontName,
+                                      sal_uInt16& rFlags )
+{
+    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( pSubst )
+        pSubst->GetFontSubstitute( n, rFontName, rReplaceFontName, rFlags );
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
+    String& rFontName, String& rSubstFontName, sal_uInt16& rFlags ) const
+{
+    FontSubstList::const_iterator it = maFontSubstList.begin();
+    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
+    if( it == maFontSubstList.end() )
+        return false;
+
+    const ImplFontSubstEntry* pEntry = &(*it);
+    rFontName       = pEntry->maName;
+    rSubstFontName  = pEntry->maReplaceName;
+    rFlags          = pEntry->mnFlags;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1666,6 +1697,18 @@ void ImplDevFontList::InitMatchData() const
 
         pEntry->InitMatchData( rFontSubst, rSearchName );
     }
+}
+
+//----------------------------------------------------------------------------
+ImplDevFontListData* ImplDevFontList::ImplFindByLocale( com::sun::star::lang::Locale& rLocale ) const
+{
+    // get the default font for a specified locale
+    const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
+    const String aDefault = rDefaults.getUserInterfaceFont( rLocale );
+    ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
+    if( pFontData )
+        return pFontData;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -3131,6 +3174,15 @@ bool OutputDevice::ImplNewFont() const
     }
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+long OutputDevice::ImplGetTextWidth( const SalLayout& rSalLayout ) const
+{
+    long nWidth = rSalLayout.GetTextWidth();
+    nWidth /= rSalLayout.GetUnitsPerPixel();
+    return nWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -5460,6 +5512,13 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
 // ------------------------------------------------------------------------
 
+sal_Bool OutputDevice::IsTextUnderlineAbove( const Font& rFont )
+{
+    return ImplIsUnderlineAbove( rFont );
+}
+
+// ------------------------------------------------------------------------
+
 void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
                                  sal_uInt16 nStyle )
 {
@@ -5967,9 +6026,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( bFilter )
     {
         xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
-        rtl::OUString aTmpStr(aStr);
-        bool bFiltered = mpGraphics->filterText( rOrigStr, aTmpStr, nMinIndex, nLen, nCutStart, nCutStop );
-        aStr = aTmpStr;
+        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
         if( !nLen )
             return NULL;
 
@@ -6416,7 +6473,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
+                    aLastLine.ConvertLineEnd( LINEEND_LF );
                     // Alle LineFeed's durch Spaces ersetzen
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )
@@ -7437,6 +7495,17 @@ long OutputDevice::GetMinKashida() const
     ImplFontEntry*      pEntry = mpFontEntry;
     ImplFontMetricData* pMetric = &(pEntry->maMetric);
     return ImplDevicePixelToLogicWidth( pMetric->mnMinKashida );
+}
+// -----------------------------------------------------------------------
+
+long OutputDevice::GetMinKashida( const Font& rFont ) const
+{
+    // select font, query Kashida, select original font again
+    Font aOldFont = GetFont();
+    const_cast<OutputDevice*>(this)->SetFont( rFont );
+    long aKashida = GetMinKashida();
+    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
+    return aKashida;
 }
 
 // -----------------------------------------------------------------------
