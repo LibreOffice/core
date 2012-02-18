@@ -46,15 +46,15 @@ PATCH_FILES=\
     mythes-1.2.0-makefile-mk.diff \
     mythes-1.2.0-android.patch
 
-.IF "$(GUI)"=="UNX"
-CONFIGURE_DIR=$(BUILD_DIR)
-
-.IF "$(SYSTEM_MYTHES)" != "YES"
-
+.IF "$(COM)"=="GCC"
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS +:= -I$(SOLARINCDIR)$/hunspell
 HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.3
 .ENDIF
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
 # still needed also in system-mythes case as it creates the makefile
@@ -86,17 +86,15 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff
 
 BUILD_ACTION=make
 OUT2INC += mythes.hxx
-.ENDIF
 .ENDIF # "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-.IF "$(SYSTEM_MYTHES)" != "YES"
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic \
-    HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
-    HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.3"
+    HUNSPELL_CFLAGS="$(HUNSPELL_CFLAGS)" \
+    HUNSPELL_LIBS="$(HUNSPELL_LIBS)"
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no
@@ -104,7 +102,6 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff
 
 BUILD_ACTION=make
 
-.ENDIF
 .ELSE
 BUILD_ACTION=dmake
 .ENDIF # "$(COM)"=="GCC"
