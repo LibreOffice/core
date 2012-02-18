@@ -279,25 +279,6 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
                                                   RegValue pValueList,
                                                   sal_uInt32 len);
 
-/** This function used to create a link.
-
-    @obsolete Links are no longer supported.
-
-    @return REG_INVALID_LINK
-*/
-RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
-                                               rtl_uString* linkName,
-                                          rtl_uString* linkTarget);
-
-/** This function used to delete a link.
-
-    @obsolete Links are no longer supported.
-
-    @return REG_INVALID_LINK
-*/
-RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
-                                            rtl_uString* linkName);
-
 /** This function returns the type of a key.
 
     The registry differentiates two possible types:
@@ -311,16 +292,6 @@ RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
 RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
                                           rtl_uString* keyName,
                                              RegKeyType* pKeyType);
-
-/** This function used to return the linktarget of a link.
-
-    @obsolete Links are no longer supported.
-
-    @return REG_INVALID_LINK
-*/
-RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
-                                             rtl_uString* linkName,
-                                               rtl_uString** pLinkTarget);
 
 /** This function resolves a keyname.
 
