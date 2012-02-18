@@ -133,6 +133,16 @@ $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
 
 endef
 
+# Add several files at once
+#
+# This function avoids the need to specify each file's name twice. The
+# files are added directly under specified path in the extension,
+# without any subpath.
+define gb_Extension_add_files
+$(foreach file,$(3),$(call gb_Extension_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
+
+endef
+
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_Extension_localize_properties
