@@ -186,10 +186,6 @@ OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
 
     vt      = VT_ARRAY|VT_UI1;
 
-    SAFEARRAYBOUND rgsabound[1];
-    rgsabound[0].lLbound = 0;
-    rgsabound[0].cElements = x.getLength();
-    //  parray  = SafeArrayCreate(VT_UI1,1,rgsabound);
     parray  = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
     const sal_Int8* pBegin = x.getConstArray();
     const sal_Int8* pEnd = pBegin + x.getLength();
