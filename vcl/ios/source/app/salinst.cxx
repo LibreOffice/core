@@ -189,35 +189,36 @@ void InitSalMain()
         oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
         if (err2 == osl_File_E_None)
         {
-            ByteString aPath( getenv( "PATH" ) );
-            ByteString aResPath( getenv( "STAR_RESOURCEPATH" ) );
-            ByteString aCmdPath( OUStringToOString(OUString(sysWorkDir), RTL_TEXTENCODING_UTF8).getStr() );
-            ByteString aTmpPath;
+            rtl::OString aPath( getenv( "PATH" ) );
+            rtl::OString aResPath( getenv( "STAR_RESOURCEPATH" ) );
+            rtl::OString aCmdPath( OUStringToOString(OUString(sysWorkDir), RTL_TEXTENCODING_UTF8).getStr() );
+            rtl::OString aTmpPath;
             // Get absolute path of command's directory
-            if ( aCmdPath.Len() ) {
+            if ( !aCmdPath.isEmpty() )
+            {
                 DirEntry aCmdDirEntry( aCmdPath );
                 aCmdDirEntry.ToAbs();
                 aCmdPath = rtl::OUStringToOString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
             }
             // Assign to PATH environment variable
-            if ( aCmdPath.Len() )
+            if ( !aCmdPath.isEmpty() )
             {
-                aTmpPath = ByteString( "PATH=" );
+                aTmpPath = rtl::OString( "PATH=" );
                 aTmpPath += aCmdPath;
-                if ( aPath.Len() )
+                if ( !aPath.isEmpty() )
                     aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aPath;
-                putenv( (char*)aTmpPath.GetBuffer() );
+                putenv( (char*)aTmpPath.getStr() );
             }
             // Assign to STAR_RESOURCEPATH environment variable
-            if ( aCmdPath.Len() )
+            if ( !aCmdPath.isEmpty() )
             {
-                aTmpPath = ByteString( "STAR_RESOURCEPATH=" );
+                aTmpPath = rtl::OString( "STAR_RESOURCEPATH=" );
                 aTmpPath += aCmdPath;
-                if ( aResPath.Len() )
+                if ( !aResPath.isEmpty() )
                     aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aResPath;
-                putenv( (char*)aTmpPath.GetBuffer() );
+                putenv( (char*)aTmpPath.getStr() );
             }
         }
     }

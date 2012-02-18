@@ -2222,7 +2222,7 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return sal_False;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
+    const rtl::OString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
 
     // get the raw-bytes from the font to be subset
     ByteVector aBuffer;
@@ -2240,7 +2240,7 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         // NOTE: assuming that all glyphids requested on Aqua are fully translated
 
         // make the subsetter provide the requested subset
-        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
             pGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
@@ -2338,7 +2338,7 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     free( pGlyphMetrics );
 
     // write subset into destination file
-    nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.GetBuffer(), aShortIDs,
+    nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
             aTempEncs, nGlyphCount, 0, NULL, 0 );
     ::CloseTTFont(pSftFont);
     return (nRC == SF_OK);
