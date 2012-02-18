@@ -57,7 +57,6 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/mutexhelper.hxx
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/property.hxx,toolkit/helper/property.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/servicenames.hxx,toolkit/helper/servicenames.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/tkresmgr.hxx,toolkit/helper/tkresmgr.hxx))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unomemorystream.hxx,toolkit/helper/unomemorystream.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unopropertyarrayhelper.hxx,toolkit/helper/unopropertyarrayhelper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unowrapper.hxx,toolkit/helper/unowrapper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/vclunohelper.hxx,toolkit/helper/vclunohelper.hxx))

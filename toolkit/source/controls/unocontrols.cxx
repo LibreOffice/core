@@ -44,7 +44,6 @@
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
-#include <toolkit/helper/unomemorystream.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/imagealign.hxx>

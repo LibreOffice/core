@@ -124,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/registerservices \
     toolkit/source/helper/servicenames \
     toolkit/source/helper/tkresmgr \
-    toolkit/source/helper/unomemorystream \
     toolkit/source/helper/unopropertyarrayhelper \
     toolkit/source/helper/unowrapper \
     toolkit/source/helper/vclunohelper \
