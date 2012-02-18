@@ -1419,8 +1419,6 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
 {
     using namespace ::com::sun::star::sheet;
 
-    const rtl::OUString& aNewName = rString;
-
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( rPos.Col(), rPos.Row(), rPos.Tab() );
     if (!pDPObj)
@@ -1457,11 +1455,11 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
                 // valid name: not empty, no existing dimension (group or other)
                 if (!rString.isEmpty() && !pDPObj->IsDimNameInUse(rString))
                 {
-                    pGroupDim->Rename( aNewName );
+                    pGroupDim->Rename( rString );
 
                     // also rename in SaveData to preserve the field settings
                     ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aOldText );
-                    pSaveDim->SetName( aNewName );
+                    pSaveDim->SetName( rString );
 
                     bChange = sal_True;
                 }
@@ -1540,15 +1538,15 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
                 {
                     // valid name: not empty, no existing group in this dimension
                     //! ignore case?
-                    if (!aNewName.isEmpty() && !pGroupDim->GetNamedGroup(aNewName))
+                    if (!rString.isEmpty() && !pGroupDim->GetNamedGroup(rString))
                     {
                         ScDPSaveGroupItem* pGroup = pGroupDim->GetNamedGroupAcc( aOldText );
                         if ( pGroup )
-                            pGroup->Rename( aNewName );     // rename the existing group
+                            pGroup->Rename( rString );     // rename the existing group
                         else
                         {
                             // create a new group to replace the automatic group
-                            ScDPSaveGroupItem aGroup( aNewName );
+                            ScDPSaveGroupItem aGroup( rString );
                             aGroup.AddElement( aOldText );
                             pGroupDim->AddGroupItem( aGroup );
                         }
@@ -1557,7 +1555,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
                         ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aDimName );
                         ScDPSaveMember* pSaveMember = pSaveDim->GetExistingMemberByName( aOldText );
                         if ( pSaveMember )
-                            pSaveMember->SetName( aNewName );
+                            pSaveMember->SetName( rString );
 
                         bChange = true;
                     }
