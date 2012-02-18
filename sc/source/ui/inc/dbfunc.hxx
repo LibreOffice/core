@@ -95,7 +95,7 @@ public:
     void            DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts );
     void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
     void            UngroupDataPilot();
-    void            DataPilotInput( const ScAddress& rPos, const String& rString );
+    void DataPilotInput( const ScAddress& rPos, const rtl::OUString& rString );
 
     bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
     sal_Bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );

@@ -1415,18 +1415,18 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const
     return aBuf.makeStringAndClear();
 }
 
-void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
+void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rString )
 {
     using namespace ::com::sun::star::sheet;
 
-    String aNewName( rString );
+    const rtl::OUString& aNewName = rString;
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( rPos.Col(), rPos.Row(), rPos.Tab() );
     if (!pDPObj)
         return;
 
-    String aOldText;
+    rtl::OUString aOldText;
     pDoc->GetString( rPos.Col(), rPos.Row(), rPos.Tab(), aOldText );
 
     if ( aOldText == rString )
@@ -1455,7 +1455,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
             if ( pGroupDim )
             {
                 // valid name: not empty, no existing dimension (group or other)
-                if ( rString.Len() && !pDPObj->IsDimNameInUse(rString) )
+                if (!rString.isEmpty() && !pDPObj->IsDimNameInUse(rString))
                 {
                     pGroupDim->Rename( aNewName );
 
@@ -1476,9 +1476,9 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
             ScDPSaveDimension* pDim = bDataLayout ? aData.GetDataLayoutDimension() : aData.GetDimensionByName(aDimName);
             if (pDim)
             {
-                if (rString.Len())
+                if (!rString.isEmpty())
                 {
-                    if (rString.EqualsIgnoreCaseAscii(String(aDimName)))
+                    if (rString.equalsIgnoreAsciiCase(aDimName))
                     {
                         pDim->RemoveLayoutName();
                         bChange = true;
@@ -1502,7 +1502,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         ScDPSaveDimension* pDim = aData.GetFirstDimension(sheet::DataPilotFieldOrientation_DATA);
         if (pDim)
         {
-            if (rString.Len())
+            if (!rString.isEmpty())
             {
                 if (pDim->GetName().equalsIgnoreAsciiCase(rString))
                 {
@@ -1527,7 +1527,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         sheet::DataPilotTableHeaderData aPosData;
         pDPObj->GetHeaderPositionData(rPos, aPosData);
 
-        if ( (aPosData.Flags & MemberResultFlags::HASMEMBER) && aOldText.Len() )
+        if ((aPosData.Flags & MemberResultFlags::HASMEMBER) && !aOldText.isEmpty())
         {
             if ( aData.GetExistingDimensionData() && !(aPosData.Flags & MemberResultFlags::SUBTOTAL))
             {
@@ -1540,7 +1540,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                 {
                     // valid name: not empty, no existing group in this dimension
                     //! ignore case?
-                    if ( aNewName.Len() && !pGroupDim->GetNamedGroup( aNewName ) )
+                    if (!aNewName.isEmpty() && !pGroupDim->GetNamedGroup(aNewName))
                     {
                         ScDPSaveGroupItem* pGroup = pGroupDim->GetNamedGroupAcc( aOldText );
                         if ( pGroup )
@@ -1559,7 +1559,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                         if ( pSaveMember )
                             pSaveMember->SetName( aNewName );
 
-                        bChange = sal_True;
+                        bChange = true;
                     }
                     else
                         nErrorId = STR_INVALIDNAME;
@@ -1586,7 +1586,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                         if (!pDim)
                             break;
 
-                        if (!rString.Len())
+                        if (rString.isEmpty())
                         {
                             nErrorId = STR_INVALIDNAME;
                             break;
@@ -1648,9 +1648,9 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                         {
                             // Check to make sure the member name isn't
                             // already used.
-                            if (rString.Len())
+                            if (!rString.isEmpty())
                             {
-                                if (::rtl::OUString(rString).equalsIgnoreAsciiCase(pMem->GetName()))
+                                if (rString.equalsIgnoreAsciiCase(pMem->GetName()))
                                 {
                                     pMem->RemoveLayoutName();
                                     bChange = true;
