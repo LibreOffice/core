@@ -66,10 +66,8 @@ extern sdecl::ServiceDecl const serviceDecl;
 namespace dp_manager {
 namespace factory {
 extern sdecl::ServiceDecl const serviceDecl;
-bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 }
 extern sdecl::ServiceDecl const serviceDecl;
-bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 }
 
 namespace dp_log {
@@ -78,7 +76,6 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 namespace dp_info {
 extern sdecl::ServiceDecl const serviceDecl;
-bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 }
 
 extern "C" {

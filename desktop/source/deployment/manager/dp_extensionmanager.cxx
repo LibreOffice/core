@@ -1506,28 +1506,6 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.ExtensionManager",
     "com.sun.star.comp.deployment.ExtensionManager");
 
-//------------------------------------------------------------------------------
-bool singleton_entries(
-    uno::Reference< registry::XRegistryKey > const & xRegistryKey )
-{
-    try {
-        uno::Reference< registry::XRegistryKey > xKey(
-            xRegistryKey->createKey(
-                serviceDecl.getImplementationName() +
-                // xxx todo: use future generated function to get singleton name
-                OUSTR("/UNO/SINGLETONS/"
-                      "com.sun.star.deployment.ExtensionManager") ) );
-        xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
-        return true;
-    }
-    catch (const registry::InvalidRegistryException & exc) {
-        (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return false;
-    }
-}
-
 // XModifyBroadcaster
 //______________________________________________________________________________
 void ExtensionManager::addModifyListener(

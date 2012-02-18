@@ -82,28 +82,6 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.PackageManagerFactory",
     "com.sun.star.comp.deployment.PackageManagerFactory" );
 
-//==============================================================================
-bool singleton_entries(
-    Reference<registry::XRegistryKey> const & xRegistryKey )
-{
-    try {
-        Reference<registry::XRegistryKey> xKey(
-            xRegistryKey->createKey(
-                serviceDecl.getImplementationName() +
-                // xxx todo: use future generated function to get singleton name
-                OUSTR("/UNO/SINGLETONS/"
-                      "com.sun.star.deployment.thePackageManagerFactory") ) );
-        xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
-        return true;
-    }
-    catch (const registry::InvalidRegistryException & exc) {
-        (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return false;
-    }
-}
-
 //______________________________________________________________________________
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
     Reference<XComponentContext> const & xComponentContext )
