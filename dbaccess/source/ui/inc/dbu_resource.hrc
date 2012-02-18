@@ -104,9 +104,9 @@
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
-#define DLG_ADABASSTAT                  RID_DIALOG_START + 18
+    // FREE
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
-#define DLG_DATABASE_ADABASADMIN        RID_DIALOG_START + 20
+    // FREE
 #define DLG_DATABASE_USERADMIN          RID_DIALOG_START + 21
 #define DLG_DIRECTSQL                   RID_DIALOG_START + 22
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
@@ -126,7 +126,7 @@
 #define PAGE_DBASE                      RID_PAGE_START +  1
 #define PAGE_ODBC                       RID_PAGE_START +  3
 #define PAGE_TEXT                       RID_PAGE_START +  4
-#define PAGE_ADABAS                     RID_PAGE_START +  5
+    // FREE
 #define PAGE_CONNECTION                 RID_PAGE_START +  6
 #define PAGE_ADO                        RID_PAGE_START +  7
 #define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
@@ -134,7 +134,7 @@
 #define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 10
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
-#define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
+    // FREE
 // free
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
@@ -161,7 +161,7 @@
 #define PAGE_DBWIZARD_TEXT                      RID_PAGE_START + 42
 #define PAGE_DBWIZARD_MSACCESS                  RID_PAGE_START + 43
 #define PAGE_DBWIZARD_LDAP                      RID_PAGE_START + 44
-#define PAGE_DBWIZARD_ADABAS                    RID_PAGE_START + 45
+    // FREE
 #define PAGE_DBWIZARD_MYSQL_INTRO               RID_PAGE_START + 46
 #define PAGE_DBWIZARD_MYSQL_ODBC                RID_PAGE_START + 47
 #define PAGE_DBWIZARD_ORACLE                    RID_PAGE_START + 48

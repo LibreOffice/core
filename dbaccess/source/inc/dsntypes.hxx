@@ -51,7 +51,7 @@ enum DATASOURCE_TYPE
     DST_MYSQL_ODBC          =  2,
     DST_MYSQL_JDBC          =  3,
     DST_ORACLE_JDBC         =  4,
-    DST_ADABAS              =  5,
+    //5 was DST_ADABAS
     DST_CALC                =  6,
     DST_DBASE               =  7,
     DST_FLAT                =  8,
@@ -93,7 +93,7 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_TEXT                      2
 #define PAGE_DBSETUPWIZARD_MSACCESS                  3
 #define PAGE_DBSETUPWIZARD_LDAP                      4
-#define PAGE_DBSETUPWIZARD_ADABAS                    5
+//5 was PAGE_DBSETUPWIZARD_ADABAS
 #define PAGE_DBSETUPWIZARD_MYSQL_INTRO               6
 #define PAGE_DBSETUPWIZARD_MYSQL_JDBC                7
 #define PAGE_DBSETUPWIZARD_MYSQL_ODBC                8

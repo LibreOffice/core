@@ -51,7 +51,7 @@
 #define STR_SPREADSHEET_HELPTEXT            36
     // FREE
 #define STR_FINAL_HELPTEXT                  38
-#define STR_ADABAS_HELPTEXT                 39
+    // FREE
 #define STR_ORACLE_HELPTEXT                 40
 #define STR_DBASE_HEADERTEXT                41
 #define STR_MSACCESS_HEADERTEXT             42
@@ -64,14 +64,14 @@
     // FREE
 #define STR_SPREADSHEET_HEADERTEXT          50
 #define STR_FINAL_HEADERTEXT                52
-#define STR_ADABAS_HEADERTEXT               53
+    // FREE
 #define STR_ORACLE_HEADERTEXT               54
 #define STR_GENERAL_HEADERTEXT              55
 #define STR_DBWIZARDTITLE                   56
 
 #define STR_DEFAULTLDAPPORTNUMBER           60
 
-#define STR_ADABASNAME                  61
+    // FREE
 #define STR_ODBCDATASOURCENAME          63
 #define STR_SPREADSHEETPATH             64
 #define STR_DBLOCATIONLABEL             65
@@ -83,7 +83,7 @@
 #define STR_PAGETITLE_TEXT              71
 #define STR_PAGETITLE_MSACCESS          72
 #define STR_PAGETITLE_LDAP              73
-#define STR_PAGETITLE_ADABAS            74
+    // FREE
 #define STR_PAGETITLE_ADO               75
 #define STR_PAGETITLE_JDBC              76
 #define STR_PAGETITLE_ORACLE            77

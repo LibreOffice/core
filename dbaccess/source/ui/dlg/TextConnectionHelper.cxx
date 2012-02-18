@@ -46,7 +46,6 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
 #include <jvmaccess/virtualmachine.hxx>
-#include "AdabasStat.hxx"
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"

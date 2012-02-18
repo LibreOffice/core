@@ -62,7 +62,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 //==================================================================
-ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet)
+ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
      ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
      ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
@@ -72,53 +72,14 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
 #ifdef HAVE_ODBC_ADMINISTRATION
      ,m_aManageDatasources  (this, ModuleRes(PB_MANAGE))
 #endif
-     ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
-    if ( _bAdabas )
-    {   // set a new title (indicating that we're browsing local data sources only)
-        SetText(ModuleRes(STR_LOCAL_DATASOURCES));
-        m_aDescription.SetText(ModuleRes(STR_DESCRIPTION2));
-
-        m_aCreateAdabasDB.Show();
-        m_aCreateAdabasDB.SetClickHdl(LINK(this,ODatasourceSelectDialog,CreateDBClickHdl));
-
-        // resize the dialog a little bit, 'cause Adabas data source names are usually somewhat shorter
-        // than ODBC ones are
-
-        // shrink the listbox
-        Size aOldSize = m_aDatasource.GetSizePixel();
-        Size aNewSize(3 * aOldSize.Width() / 4, aOldSize.Height());
-        m_aDatasource.SetSizePixel(aNewSize);
-
-        sal_Int32 nLostPixels = aOldSize.Width() - aNewSize.Width();
-
-        // shrink the fixed text
-        aOldSize = m_aDescription.GetSizePixel();
-        m_aDescription.SetSizePixel(Size(aOldSize.Width() - nLostPixels, aOldSize.Height()));
-
-        // move the buttons
-        PushButton* pButtons[] = { &m_aOk, &m_aCancel, &m_aHelp ,&m_aCreateAdabasDB};
-        for (size_t i=0; i < SAL_N_ELEMENTS(pButtons); ++i)
-        {
-            Point aOldPos = pButtons[i]->GetPosPixel();
-            pButtons[i]->SetPosPixel(Point(aOldPos.X() - nLostPixels, aOldPos.Y()));
-        }
-
-        // resize the dialog itself
-        aOldSize = GetSizePixel();
-        SetSizePixel(Size(aOldSize.Width() - nLostPixels, aOldSize.Height()));
-    }
-
     fillListBox(_rDatasources);
 #ifdef HAVE_ODBC_ADMINISTRATION
     // allow ODBC datasource managenment
-    if (  !_bAdabas )
-    {
-        m_aManageDatasources.Show();
-        m_aManageDatasources.Enable();
-        m_aManageDatasources.SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
-    }
+    m_aManageDatasources.Show();
+    m_aManageDatasources.Enable();
+    m_aManageDatasources.SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
 #endif
     m_aDatasource.SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
     FreeResource();
@@ -135,63 +96,6 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
     if (pListBox->GetSelectEntryCount())
         EndDialog(RET_OK);
     return 0;
-}
-// -----------------------------------------------------------------------
-IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
-{
-    try
-    {
-        OSL_ENSURE(m_pOutputSet,"No itemset given!");
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-        Reference<XCreateCatalog> xCatalog(xORB->createInstance(SERVICE_EXTENDED_ADABAS_DRIVER),UNO_QUERY);
-        if ( xCatalog.is() && m_pOutputSet )
-        {
-            Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateCatalog")), 0, makeAny(xCatalog), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
-
-            Reference< XExecutableDialog > xDialog(
-                xORB->createInstanceWithArguments(SERVICE_SDB_ADABASCREATIONDIALOG, aArgs), UNO_QUERY);
-            if (!xDialog.is())
-            {
-                //  ShowServiceNotAvailableError(this, String(SERVICE_SDB_ADABASCREATIONDIALOG), sal_True);
-                return 0L;
-            }
-
-            if ( xDialog->execute() == RET_OK )
-            {
-                Reference<XPropertySet> xProp(xDialog,UNO_QUERY);
-                if(xProp.is())
-                {
-                    Reference<XPropertySetInfo> xPropInfo(xProp->getPropertySetInfo());
-                    if(xPropInfo->hasPropertyByName(PROPERTY_DATABASENAME))
-                    {
-                        String sDatabaseName;
-                        sDatabaseName = String(::comphelper::getString(xProp->getPropertyValue(PROPERTY_DATABASENAME)));
-                        m_aDatasource.SelectEntryPos(m_aDatasource.InsertEntry( sDatabaseName ));
-
-                    }
-                    if ( xPropInfo->hasPropertyByName(PROPERTY_CONTROLUSER) )
-                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CTRLUSER, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CONTROLUSER))));
-                    if ( xPropInfo->hasPropertyByName(PROPERTY_CONTROLPASSWORD) )
-                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CTRLPWD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CONTROLPASSWORD))));
-                    if ( xPropInfo->hasPropertyByName(PROPERTY_USER) )
-                        m_pOutputSet->Put(SfxStringItem(DSID_USER, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_USER))));
-                    if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
-                    {
-                        m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
-                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_True));
-                    }
-                    if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
-                        m_pOutputSet->Put(SfxInt32Item(DSID_CONN_CACHESIZE, ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
-                }
-            }
-        }
-    }
-    catch(Exception&)
-    {
-    }
-    return 0L;
 }
 
 // -----------------------------------------------------------------------

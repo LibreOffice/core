@@ -39,7 +39,7 @@
 #define FT_MSACCESS_MDB_FILE        6
 #define FT_FLAT_PATH_OR_FILE        7
 #define FT_CALC_PATH_OR_FILE        8
-#define FT_ADABAS_DATABASE_NAME     9
+    // FREE
 #define FT_NO_ADDITIONAL_SETTINGS   10
 #define FT_HOSTNAME                 11
 #define FT_ORACLE_DATABASE_NAME     12

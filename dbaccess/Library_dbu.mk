@@ -130,7 +130,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/toolboxcontroller \
     dbaccess/source/ui/control/undosqledit \
     dbaccess/source/ui/control/VertSplitView \
-    dbaccess/source/ui/dlg/AdabasStat \
     dbaccess/source/ui/dlg/admincontrols \
     dbaccess/source/ui/dlg/adminpages \
     dbaccess/source/ui/dlg/adtabdlg \

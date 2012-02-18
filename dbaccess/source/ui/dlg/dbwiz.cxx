@@ -65,7 +65,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_PAGE_DBASE           2
 #define ADDITIONAL_PAGE_FLAT            3
 #define ADDITIONAL_PAGE_LDAP            4
-#define ADDITIONAL_PAGE_ADABAS          5
+//5 was ADDITIONAL_PAGE_ADABAS
 #define ADDITIONAL_PAGE_MYSQL_JDBC      6
 #define ADDITIONAL_PAGE_MYSQL_ODBC      7
 #define ADDITIONAL_PAGE_ORACLE_JDBC     8
@@ -189,9 +189,6 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_LDAP:
                     nNextState = ADDITIONAL_PAGE_LDAP;
                     break;
-                case  ::dbaccess::DST_ADABAS:
-                    nNextState = ADDITIONAL_PAGE_ADABAS;
-                    break;
                 case  ::dbaccess::DST_MYSQL_JDBC:
                     nNextState = ADDITIONAL_PAGE_MYSQL_JDBC;
                     break;
@@ -282,9 +279,6 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             break;
         case ADDITIONAL_PAGE_LDAP:
             pPage = ODriversSettings::CreateLDAP(this,*m_pOutSet);
-            break;
-        case ADDITIONAL_PAGE_ADABAS:
-            pPage = ODriversSettings::CreateAdabas(this,*m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
             pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);

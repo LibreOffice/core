@@ -152,8 +152,6 @@ endif
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     PptImporter \
     abp \
-    adabas \
-    adabasui \
     acc \
     agg \
     analysis \

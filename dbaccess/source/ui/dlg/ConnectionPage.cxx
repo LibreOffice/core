@@ -161,10 +161,6 @@ namespace dbaui
                 m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
-            case  ::dbaccess::DST_ADABAS:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_ADABAS_DATABASE);
-                break;
             case  ::dbaccess::DST_ADO:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;

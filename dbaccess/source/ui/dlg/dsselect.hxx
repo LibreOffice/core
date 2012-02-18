@@ -62,7 +62,6 @@ protected:
 #ifdef HAVE_ODBC_ADMINISTRATION
     PushButton      m_aManageDatasources;
 #endif
-    PushButton      m_aCreateAdabasDB;
     SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
     ::std::auto_ptr< OOdbcManagement >
@@ -70,7 +69,7 @@ protected:
 #endif
 
 public:
-    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet = NULL );
+    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
@@ -84,7 +83,6 @@ protected:
     DECL_LINK( ManageClickHdl, PushButton * );
     DECL_LINK( ManageProcessFinished, void* );
 #endif
-    DECL_LINK( CreateDBClickHdl, PushButton * );
     void fillListBox(const StringBag& _rDatasources);
 };
 

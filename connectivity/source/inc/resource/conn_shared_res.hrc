@@ -58,9 +58,6 @@
 // MACAB driver resource ids
 #define STR_MACAB_BASE                  1650
 
-// Adabas D driver resource ids
-#define STR_ADABAS_BASE                 1700
-
 // hsqldb driver resource ids
 #define STR_HSQLDB_BASE                 1750
 // ============================================================================

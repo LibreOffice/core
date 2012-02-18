@@ -147,7 +147,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_sRM_TextText(ModuleRes(STR_PAGETITLE_TEXT))
     , m_sRM_MSAccessText(ModuleRes(STR_PAGETITLE_MSACCESS))
     , m_sRM_LDAPText(ModuleRes(STR_PAGETITLE_LDAP))
-    , m_sRM_ADABASText(ModuleRes(STR_PAGETITLE_ADABAS))
     , m_sRM_ADOText(ModuleRes(STR_PAGETITLE_ADO))
     , m_sRM_JDBCText(ModuleRes(STR_PAGETITLE_JDBC))
     , m_sRM_MySQLNativePageTitle(ModuleRes(STR_PAGETITLE_MYSQL_NATIVE))
@@ -256,9 +255,6 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
             break;
         case PAGE_DBSETUPWIZARD_LDAP:
             sRoadmapItem = m_sRM_LDAPText;
-            break;
-        case PAGE_DBSETUPWIZARD_ADABAS:
-            sRoadmapItem = m_sRM_ADABASText;
             break;
         case PAGE_DBSETUPWIZARD_JDBC:
             sRoadmapItem = m_sRM_JDBCText;
@@ -570,11 +566,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( this, *m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_ADABAS:
-            pPage = OConnectionTabPageSetup::CreateAdabasTabPage( this, *m_pOutSet);
-            break;
-
-        case PAGE_DBSETUPWIZARD_LDAP    :
+        case PAGE_DBSETUPWIZARD_LDAP:
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;
 

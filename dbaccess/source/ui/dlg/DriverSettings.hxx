@@ -87,10 +87,6 @@ namespace dbaui
         */
         static SfxTabPage*  CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet );
 
-        /** Creates the detail page for Adabas
-        */
-        static  SfxTabPage* CreateAdabas( Window* _pParent, const SfxItemSet& _rAttrSet );
-
         /** Creates the detail page for LDAP
         */
         static  SfxTabPage* CreateLDAP( Window* _pParent, const SfxItemSet& _rAttrSet );

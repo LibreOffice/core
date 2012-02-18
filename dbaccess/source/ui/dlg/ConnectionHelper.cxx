@@ -263,86 +263,6 @@ DBG_NAME(OConnectionHelper)
                 askForFileName(aFileDlg);
             }
             break;
-            case  ::dbaccess::DST_ADABAS:
-            {
-                // collect all names from the config dir
-                // and all dir's of the DBWORK/wrk or DBROOT/wrk dir
-                // compare the names
-
-                // collect the names of the installed databases
-                StringBag aInstalledDBs;
-                ::rtl::OUString sAdabasConfigDir,sAdabasWorkDir,sRootDir;
-                ::rtl::OUString sEnvVarName(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
-                rtl_uString* pDbVar = NULL;
-                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sAdabasWorkDir = pDbVar;
-                    rtl::OUString sURL;
-                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sURL);
-                    sAdabasWorkDir = sURL;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sEnvVarName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
-                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sAdabasConfigDir = pDbVar;
-                    rtl::OUString sURL;
-                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sURL);
-                    sAdabasConfigDir = sURL;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sEnvVarName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
-                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sRootDir = pDbVar;
-                    rtl::OUString sURL;
-                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sURL);
-                    sRootDir = sURL;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sal_Bool bOldFashion = !(sAdabasConfigDir.isEmpty() || sAdabasWorkDir.isEmpty());
-
-                if(!bOldFashion) // we have a normal adabas installation
-                {    // so we check the local database names in $DBROOT/config
-                    sAdabasConfigDir    = sRootDir;
-                    sAdabasWorkDir      = sRootDir;
-                }
-
-                if(!(sAdabasConfigDir.isEmpty() || sAdabasWorkDir.isEmpty() || sRootDir.isEmpty()))
-                {
-
-                    aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
-
-                    if(!aInstalledDBs.size() && bOldFashion)
-                    {
-                        sAdabasConfigDir    = sRootDir;
-                        sAdabasWorkDir      = sRootDir;
-                        aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
-                    }
-
-                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, true,m_pItemSetHelper->getWriteOutputSet());
-                    if (RET_OK == aSelector.Execute())
-                    {
-                        setURLNoPrefix(aSelector.GetSelected());
-                        SetRoadmapStateValue(sal_True);
-                        callModifiedHdl();
-                    }
-                }
-                else
-                {
-                    LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
-                    String sError = String(ModuleRes(STR_NO_ADABASE_DATASOURCES));
-                    ErrorBox aBox(this, WB_OK, sError);
-                    aBox.Execute();
-                }
-            }
-            break;
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
             {
@@ -408,7 +328,7 @@ DBG_NAME(OConnectionHelper)
 
 
                     // execute the select dialog
-                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
+                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
                     if (!sOldProfile.isEmpty())
@@ -605,98 +525,6 @@ DBG_NAME(OConnectionHelper)
         return RET_OK;
     }
 
-
-    //-------------------------------------------------------------------------
-    StringBag OConnectionHelper::getInstalledAdabasDBDirs(const String& _rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude)
-    {
-        INetURLObject aNormalizer;
-        aNormalizer.SetSmartProtocol(INET_PROT_FILE);
-        aNormalizer.SetSmartURL(_rPath);
-        String sAdabasConfigDir = aNormalizer.GetMainURL(INetURLObject::NO_DECODE);
-
-        ::ucbhelper::Content aAdabasConfigDir;
-        try
-        {
-            aAdabasConfigDir = ::ucbhelper::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-        }
-        catch(::com::sun::star::ucb::ContentCreationException&)
-        {
-            return StringBag();
-        }
-
-        StringBag aInstalledDBs;
-        sal_Bool bIsFolder = sal_False;
-        try
-        {
-            bIsFolder = aAdabasConfigDir.isFolder();
-        }
-        catch(Exception&) // the exception is thrown when the path doesn't exists
-        {
-        }
-        if (bIsFolder && aAdabasConfigDir.get().is())
-        {   // we have a content for the directory, loop through all entries
-            Sequence< ::rtl::OUString > aProperties(1);
-            aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-
-            try
-            {
-                Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, _reResultSetInclude);
-                Reference< XRow > xRow(xFiles, UNO_QUERY);
-                xFiles->beforeFirst();
-                while (xFiles->next())
-                {
-#ifdef DBG_UTIL
-                    ::rtl::OUString sName = xRow->getString(1);
-#endif
-                    aInstalledDBs.insert(xRow->getString(1));
-                }
-            }
-            catch(Exception&)
-            {
-                OSL_FAIL("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
-            }
-        }
-
-
-        return aInstalledDBs;
-    }
-    // -----------------------------------------------------------------------------
-    StringBag OConnectionHelper::getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir)
-    {
-        String sAdabasConfigDir(_rConfigDir),sAdabasWorkDir(_rWorkDir);
-
-        if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
-            sAdabasConfigDir.AppendAscii("config");
-        else
-            sAdabasConfigDir.AppendAscii("/config");
-
-        if (sAdabasWorkDir.Len() && ('/' == sAdabasWorkDir.GetBuffer()[sAdabasWorkDir.Len() - 1]))
-            sAdabasWorkDir.AppendAscii("wrk");
-        else
-            sAdabasWorkDir.AppendAscii("/wrk");
-        // collect the names of the installed databases
-        StringBag aInstalledDBs;
-        // collect the names of the installed databases
-        StringBag aConfigDBs,aWrkDBs;
-        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
-        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
-        ConstStringBagIterator aOuter = aConfigDBs.begin();
-        ConstStringBagIterator aOuterEnd = aConfigDBs.end();
-        for(;aOuter != aOuterEnd;++aOuter)
-        {
-            ConstStringBagIterator aInner = aWrkDBs.begin();
-            ConstStringBagIterator aInnerEnd = aWrkDBs.end();
-            for (;aInner != aInnerEnd; ++aInner)
-            {
-                if (aInner->equalsIgnoreAsciiCase(*aOuter))
-                {
-                    aInstalledDBs.insert(*aInner);
-                    break;
-                }
-            }
-        }
-        return aInstalledDBs;
-    }
     // -----------------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
     {

@@ -173,14 +173,6 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
             addDetailPage(PAGE_ORACLE_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
             break;
 
-        case  ::dbaccess::DST_ADABAS:
-            // for adabas we have more than one page
-            // CAUTION: the order of inserting pages matters.
-            // the major detail page should be inserted last always (thus, it becomes the first page after
-            // the general page)
-            addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdabas);
-            break;
-
         case  ::dbaccess::DST_LDAP:
             addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;

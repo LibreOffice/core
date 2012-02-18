@@ -149,11 +149,6 @@ TabPage PAGE_CONNECTION
 
 };
 
-String STR_NO_ADABASE_DATASOURCES
-{
-    Text [ en-US ] = "No Adabas D data sources were found on your system.";
-};
-
 String STR_CONNECTION_TEST
 {
     Text [ en-US ] = "Connection Test";
