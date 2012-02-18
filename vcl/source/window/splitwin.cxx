@@ -1435,12 +1435,14 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
         SetSizePixel( aSize );
         break;
     case WINDOWALIGN_BOTTOM:
+    {
         maDragRect.Top() += nDelta;
         Point aPos = GetPosPixel();
         aPos.Y() -= nDelta;
         aSize.Height() += nDelta;
         SetPosSizePixel( aPos, aSize );
         break;
+    }
     case WINDOWALIGN_LEFT:
         aSize.Width() += nDelta;
         SetSizePixel( aSize );
