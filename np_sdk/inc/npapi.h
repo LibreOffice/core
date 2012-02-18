@@ -739,13 +739,6 @@ enum NPEventType {
 #define NPRES_USER_BREAK   (NPRES_BASE + 2)
 
 /*
- * Don't use these obsolete error codes any more.
- */
-#define NP_NOERR  NP_NOERR_is_obsolete_use_NPERR_NO_ERROR
-#define NP_EINVAL NP_EINVAL_is_obsolete_use_NPERR_GENERIC_ERROR
-#define NP_EABORT NP_EABORT_is_obsolete_use_NPRES_USER_BREAK
-
-/*
  * Version feature information
  */
 #define NPVERS_HAS_STREAMOUTPUT             8
