@@ -364,19 +364,17 @@ void psp::normPath( OString& rPath )
 {
     char buf[PATH_MAX];
 
-    ByteString aPath( rPath );
-
     // double slashes and slash at end are probably
     // removed by realpath anyway, but since this runs
     // on many different platforms let's play it safe
-    while( aPath.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND )
-        ;
-    if( aPath.Len() > 0 && aPath.GetChar( aPath.Len()-1 ) == '/' )
-        aPath.Erase( aPath.Len()-1 );
+    rtl::OString aPath = rPath.replaceAll("//", "/");
 
-    if( ( aPath.Search( "./" ) != STRING_NOTFOUND ||
-          aPath.Search( "~" ) != STRING_NOTFOUND )
-        && realpath( aPath.GetBuffer(), buf ) )
+    if( !aPath.isEmpty() && aPath[aPath.getLength()-1] == '/' )
+        aPath = aPath.copy(0, aPath.getLength()-1);
+
+    if( ( aPath.indexOfL(RTL_CONSTASCII_STRINGPARAM("./")) != -1 ||
+          aPath.indexOf( '~' ) != -1 )
+        && realpath( aPath.getStr(), buf ) )
     {
         rPath = buf;
     }

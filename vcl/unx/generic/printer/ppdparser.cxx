@@ -971,11 +971,11 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
     PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
     {
-        ByteString aCurrentLine( *line );
+        rtl::OString aCurrentLine( *line );
         ++line;
-        if( aCurrentLine.GetChar(0) != '*' )
+        if( aCurrentLine[0] != '*' )
             continue;
-        if( aCurrentLine.GetChar(1) == '%' )
+        if( aCurrentLine[1] == '%' )
             continue;
 
         ByteString aKey = GetCommandLineToken( 0, comphelper::string::getToken(aCurrentLine, 0, ':') );
@@ -1035,10 +1035,10 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         }
 
         String aOption;
-        nPos = aCurrentLine.Search( ':' );
-        if( nPos != STRING_NOTFOUND )
+        nPos = aCurrentLine.indexOf(':');
+        if( nPos != -1 )
         {
-            aOption = String( aCurrentLine.Copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
+            aOption = rtl::OStringToOUString( aCurrentLine.copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
             aOption = GetCommandLineToken( 1, aOption );
             int nTransPos = aOption.Search( '/' );
             if( nTransPos != STRING_NOTFOUND )
@@ -1052,14 +1052,14 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         if( nPos != STRING_NOTFOUND )
         {
             // found a colon, there may be an option
-            ByteString aLine = aCurrentLine.Copy( 1, nPos-1 );
+            ByteString aLine = aCurrentLine.copy( 1, nPos-1 );
             aLine = WhitespaceToSpace( aLine );
             int nTransPos = aLine.Search( '/' );
             if( nTransPos != STRING_NOTFOUND )
                 aOptionTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
 
             // read in more lines if necessary for multiline values
-            aLine = aCurrentLine.Copy( nPos+1 );
+            aLine = aCurrentLine.copy( nPos+1 );
             if( aLine.Len() )
             {
                 //while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
@@ -1218,21 +1218,21 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
 void PPDParser::parseOpenUI(const rtl::OString& rLine)
 {
     String aTranslation;
-    ByteString aKey = rLine;
+    rtl::OString aKey = rLine;
 
-    int nPos = aKey.Search( ':' );
-    if( nPos != STRING_NOTFOUND )
-        aKey.Erase( nPos );
-    nPos = aKey.Search( '/' );
-    if( nPos != STRING_NOTFOUND )
+    sal_Int32 nPos = aKey.indexOf(':');
+    if( nPos != -1 )
+        aKey = aKey.copy(0, nPos);
+    nPos = aKey.indexOf('/');
+    if( nPos != -1 )
     {
-        aTranslation = handleTranslation( aKey.Copy( nPos + 1 ), false );
-        aKey.Erase( nPos );
+        aTranslation = handleTranslation( aKey.copy( nPos + 1 ), false );
+        aKey = aKey.copy(0, nPos);
     }
     aKey = GetCommandLineToken( 1, aKey );
-    aKey.Erase( 0, 1 );
+    aKey = aKey.copy(1);
 
-    String aUniKey( aKey, RTL_TEXTENCODING_MS_1252 );
+    String aUniKey(rtl::OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
     PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aUniKey );
     PPDKey* pKey;
     if( keyit == m_aKeys.end() )
@@ -1247,10 +1247,10 @@ void PPDParser::parseOpenUI(const rtl::OString& rLine)
     m_pTranslator->insertKey( pKey->getKey(), aTranslation );
 
     sal_Int32 nIndex = 0;
-    ByteString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
-    if( aValue.CompareIgnoreCaseToAscii( "boolean" ) == COMPARE_EQUAL )
+    rtl::OString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
+    if( aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("boolean")))
         pKey->m_eUIType = PPDKey::Boolean;
-    else if( aValue.CompareIgnoreCaseToAscii( "pickmany" ) == COMPARE_EQUAL )
+    else if (aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pickmany")))
         pKey->m_eUIType = PPDKey::PickMany;
     else
         pKey->m_eUIType = PPDKey::PickOne;
@@ -1264,7 +1264,7 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
         aLine = aLine.copy( nPos+1 );
 
     sal_Int32 nOrder = GetCommandLineToken( 0, aLine ).toInt32();
-    ByteString aSetup = GetCommandLineToken( 1, aLine );
+    rtl::OString aSetup = GetCommandLineToken( 1, aLine );
     String aKey(rtl::OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey.GetChar( 0 ) != '*' )
         return; // invalid order depency
@@ -1281,15 +1281,15 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
         pKey = keyit->second;
 
     pKey->m_nOrderDependency = nOrder;
-    if( aSetup.Equals( "ExitServer" ) )
+    if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("ExitServer")) )
         pKey->m_eSetupType = PPDKey::ExitServer;
-    else if( aSetup.Equals( "Prolog" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("Prolog")) )
         pKey->m_eSetupType = PPDKey::Prolog;
-    else if( aSetup.Equals( "DocumentSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("DocumentSetup")) )
         pKey->m_eSetupType = PPDKey::DocumentSetup;
-    else if( aSetup.Equals( "PageSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("PageSetup")) )
         pKey->m_eSetupType = PPDKey::PageSetup;
-    else if( aSetup.Equals( "JCLSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("JCLSetup")) )
         pKey->m_eSetupType = PPDKey::JCLSetup;
     else
         pKey->m_eSetupType = PPDKey::AnySetup;
@@ -1871,13 +1871,13 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
-        rBytes += aCopy.Len();
+        rtl::OString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        rBytes += aCopy.getLength();
         rBytes += 1; // for ':'
         if( it->second )
         {
             aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
-            rBytes += aCopy.Len();
+            rBytes += aCopy.getLength();
         }
         else
             rBytes += 4;
@@ -1889,17 +1889,17 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     char* pRun = pBuffer;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
-        int nBytes = aCopy.Len();
-        memcpy( pRun, aCopy.GetBuffer(), nBytes );
+        rtl::OString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        int nBytes = aCopy.getLength();
+        memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
         *pRun++ = ':';
         if( it->second )
             aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
         else
             aCopy = "*nil";
-        nBytes = aCopy.Len();
-        memcpy( pRun, aCopy.GetBuffer(), nBytes );
+        nBytes = aCopy.getLength();
+        memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
 
         *pRun++ = 0;
@@ -1919,15 +1919,15 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
     char* pRun = pBuffer;
     while( nBytes && *pRun )
     {
-        ByteString aLine( pRun );
-        int nPos = aLine.Search( ':' );
-        if( nPos != STRING_NOTFOUND )
+        rtl::OString aLine( pRun );
+        sal_Int32 nPos = aLine.indexOf(':');
+        if( nPos != -1 )
         {
-            const PPDKey* pKey = m_pParser->getKey( String( aLine.Copy( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
+            const PPDKey* pKey = m_pParser->getKey( rtl::OStringToOUString( aLine.copy( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
             if( pKey )
             {
                 const PPDValue* pValue = NULL;
-                String aOption( aLine.Copy( nPos+1 ), RTL_TEXTENCODING_MS_1252 );
+                String aOption( aLine.copy( nPos+1 ), RTL_TEXTENCODING_MS_1252 );
                 if( ! aOption.EqualsAscii( "*nil" ) )
                     pValue = pKey->getValue( aOption );
                 m_aCurrentValues[ pKey ] = pValue;
@@ -1936,8 +1936,8 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 #endif
             }
         }
-        nBytes -= aLine.Len()+1;
-        pRun += aLine.Len()+1;
+        nBytes -= aLine.getLength()+1;
+        pRun += aLine.getLength()+1;
     }
 }
 

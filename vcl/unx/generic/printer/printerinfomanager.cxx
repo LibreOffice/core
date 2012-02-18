@@ -325,13 +325,13 @@ void PrinterInfoManager::initialize()
             }
 
             // get the PPDContext of global JobData
-            for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
+            for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
-                ByteString aKey( aConfig.GetKeyName( nKey ) );
-                if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL )
+                rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey( String( aKey.Copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
                     if( pKey )
                     {
                         m_aGlobalDefaults.m_aContext.
@@ -340,10 +340,10 @@ void PrinterInfoManager::initialize()
                         sal_True );
                     }
                 }
-                else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
+                else if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
+                    m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
@@ -533,13 +533,13 @@ void PrinterInfoManager::initialize()
                 // now iterate over all keys to extract multi key information:
                 // 1. PPDContext information
                 // 2. Font substitution table
-                for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
+                for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
-                    ByteString aKey( aConfig.GetKeyName( nKey ) );
-                    if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL && aPrinter.m_aInfo.m_pParser )
+                    rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                    if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.Copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
                         if( pKey )
                         {
                             aPrinter.m_aInfo.m_aContext.
@@ -548,10 +548,10 @@ void PrinterInfoManager::initialize()
                             sal_True );
                         }
                     }
-                    else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
+                    else if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")) )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
+                        aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                     }
                 }
 
