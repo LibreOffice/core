@@ -228,6 +228,9 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
+    //used by 2-level font fallback
+    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
+
 protected:
     void                    InitMatchData() const;
     bool                    AreMapNamesAvailable() const { return mbMapNames; }
