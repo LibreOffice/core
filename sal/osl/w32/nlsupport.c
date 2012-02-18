@@ -51,14 +51,14 @@ struct EnumLocalesParams
 
 static DWORD g_dwTLSLocaleEncId = (DWORD) -1;
 
-/*****************************************************************************/
+/*****************************************************************************
  * callback function test
  *
  * osl_getTextEncodingFromLocale calls EnumSystemLocalesA, so that we don't
  * need to provide a unicode wrapper for this function under Win9x
  * that means the callback function has an ansi prototype and receives
  * the locale strings as ansi strings
-/*****************************************************************************/
+ *****************************************************************************/
 
 BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
 {
@@ -123,9 +123,9 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
 }
 
 
-/*****************************************************************************/
+/*****************************************************************************
  * GetTextEncodingFromLCID
-/*****************************************************************************/
+ *****************************************************************************/
 
 rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 {
@@ -155,9 +155,9 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 }
 
 
-/*****************************************************************************/
+/*****************************************************************************
  * osl_getTextEncodingFromLocale
-/*****************************************************************************/
+ *****************************************************************************/
 
 rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
@@ -202,9 +202,9 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
-/*****************************************************************************/
+/*****************************************************************************
  * imp_getProcessLocale
-/*****************************************************************************/
+ *****************************************************************************/
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
