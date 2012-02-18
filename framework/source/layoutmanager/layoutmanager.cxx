@@ -26,14 +26,12 @@
  *
  ************************************************************************/
 
-
 //      my own includes
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-#include <framework/sfxhelperfunctions.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
 #include <framework/addonsoptions.hxx>
@@ -1242,18 +1240,6 @@ void SAL_CALL LayoutManager::reset()
 throw (RuntimeException)
 {
     implts_reset( sal_True );
-}
-
-void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 )
-throw (uno::RuntimeException)
-{
-    OSL_FAIL( "This method is obsolete and should not be used!\n" );
-}
-
-void SAL_CALL LayoutManager::resetInplaceMenuBar()
-throw (uno::RuntimeException)
-{
-    OSL_FAIL( "This method is obsolete and should not be used!\n" );
 }
 
 //---------------------------------------------------------------------------------------------------------

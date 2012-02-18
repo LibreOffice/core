@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XLayoutManager.idl>
 #include <com/sun/star/frame/XFrameActionListener.idl>
 #include <com/sun/star/ui/XUIConfigurationListener.idl>
-#include <com/sun/star/frame/XInplaceLayout.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
@@ -100,12 +99,6 @@ service LayoutManager
     */
     [optional] interface ::com::sun::star::frame::XLayoutManagerEventBroadcaster;
 
-    /** interface to support settings a menu bar for inplace editing of
-        components inside OpenOffice.org.
-
-        @deprecated
-    */
-    [optional] interface ::com::sun::star::frame::XInplaceLayout;
 };
 
 }; }; }; };

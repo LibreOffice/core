@@ -161,12 +161,6 @@ namespace framework
             virtual sal_Bool SAL_CALL isVisible() throw (::com::sun::star::uno::RuntimeException);
 
             //---------------------------------------------------------------------------------------------------------
-            //  XInplaceLayout
-            //---------------------------------------------------------------------------------------------------------
-            virtual void SAL_CALL setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL resetInplaceMenuBar(  ) throw (::com::sun::star::uno::RuntimeException);
-
-            //---------------------------------------------------------------------------------------------------------
             // XMenuBarMergingAcceptor
             //---------------------------------------------------------------------------------------------------------
             virtual sal_Bool SAL_CALL setMergedMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )

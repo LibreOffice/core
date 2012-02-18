@@ -1,6 +1,4 @@
 "LayoutManager";"com::sun::star::lang::XEventListener";"disposing()"
-"LayoutManager";"com::sun::star::frame::XInplaceLayout#optional";"setInplaceMenuBar()"
-"LayoutManager";"com::sun::star::frame::XInplaceLayout#optional";"resetInplaceMenuBar()"
 "LayoutManager";"com::sun::star::frame::XLayoutManager";"attachFrame()"
 "LayoutManager";"com::sun::star::frame::XLayoutManager";"reset()"
 "LayoutManager";"com::sun::star::frame::XLayoutManager";"getCurrentDockingArea()"
