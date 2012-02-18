@@ -666,6 +666,8 @@ exec_pagein (Args *args)
     free (argv[1]);
 }
 
+#if defined SOLAR_JAVA
+
 static void extend_library_path (const char *new_element)
 {
     rtl_uString *pEnvName=NULL, *pOrigEnvVar=NULL, *pNewEnvVar=NULL;
@@ -788,6 +790,8 @@ exec_javaldx (Args *args)
     if (fileOut)
         osl_closeFile(fileOut);
 }
+
+#endif
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
