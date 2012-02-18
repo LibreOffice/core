@@ -28,8 +28,11 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
+#include <rtl/oustringostreaminserter.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <vcl/outdev.hxx>
@@ -50,12 +53,14 @@ public:
     void testFdo45553();
     void testN192129();
     void testFdo45543();
+    void testN695479();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testFdo45553);
     CPPUNIT_TEST(testN192129);
     CPPUNIT_TEST(testFdo45543);
+    CPPUNIT_TEST(testN695479);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -157,6 +162,34 @@ void RtfModelTest::testFdo45543()
         }
     }
     CPPUNIT_ASSERT_EQUAL((sal_Int32)5, aBuf.getLength());
+}
+
+void RtfModelTest::testN695479()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n695479.rtf")));
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    // Negative ABSH should mean fixed size.
+    sal_Int16 nSizeType = 0;
+    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")));
+    aValue >>= nSizeType;
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, nSizeType);
+    sal_Int32 nHeight = 0;
+    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")));
+    aValue >>= nHeight;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), nHeight);
+
+    // Both frames should be anchored to the first paragraph.
+    for (int i = 0; i < 2; ++i)
+    {
+        uno::Reference<text::XTextContent> xTextContent(xIndexAccess->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(RTL_CONSTASCII_USTRINGPARAM("plain")), xText->getString());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
