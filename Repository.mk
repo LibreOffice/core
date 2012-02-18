@@ -45,6 +45,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svidl \
     typesconfig \
     xml2cmp \
+    xpdfimport \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
@@ -454,11 +455,14 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
+    pdfimport \
+    PresenterScreen \
     reflection \
     simplecanvas \
     slideshow \
     stocservices \
     stringresource \
+	SunPresentationMinimizer \
     ucpcmis1 \
     ucpexpand1 \
     ucpext \

@@ -1060,6 +1060,40 @@ endef
 
 endif # VALGRIND_CFLAGS
 
+ifeq ($(SYSTEM_POPPLER),YES)
+
+define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_POPPLER \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(POPPLER_CFLAGS) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(POPPLER_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_POPPLER
+
+# FIXME: what are the libs created by xpdf?
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	poppler \
+))
+
+define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	poppler \
+)
+
+endef
+
+endif # SYSTEM_POPPLER
+
 
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)

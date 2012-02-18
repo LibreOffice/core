@@ -163,6 +163,7 @@
       </prop>
     </group>
     <group oor:name="ToolBarDescription">
+      <info><desc>Description of a tool bar entry state.</desc></info>
       <node-ref oor:name="Font" oor:node-type="Font">
         <info><desc>Font used for displaying the text.</desc></info>
       </node-ref>
@@ -177,6 +178,7 @@
       </prop>
     </group>
     <group oor:name="ToolBarEntry">
+      <info><desc>Definition of a tool bar entry.</desc></info>
       <prop oor:name="Name" oor:type="xs:string">
         <info><desc>Name of the entry.  May be used to have mode dependant entries.</desc></info>
       </prop>
@@ -203,6 +205,7 @@
       </set>
     </group>
     <group oor:name="Button">
+      <info><desc>Description of a button.</desc></info>
       <prop oor:name="Name" oor:type="xs:string">
         <info><desc>Name of the button that is used to look up the button.</desc></info>
       </prop>
@@ -220,6 +223,7 @@
       </prop>
     </group>
     <group oor:name="HelpEntry">
+      <info><desc>Description of a help entry.</desc></info>
       <prop oor:name="Left" oor:type="xs:string" oor:localized="true">
         <info><desc>Typically a list of keyboard key names.</desc></info>
       </prop>
@@ -288,8 +292,9 @@
       </prop>
     </group>
     <group oor:name="PresenterString">
-      <info><desc></desc></info>
+      <info><desc>Presenter string, whatever that might mean.</desc></info>
       <prop oor:name="String" oor:type="xs:string" oor:localized="true">
+          <info><desc>Just a string.</desc></info>
       </prop>
     </group>
     <group oor:name="ViewDescription">
