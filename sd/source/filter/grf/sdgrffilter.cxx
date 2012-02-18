@@ -210,9 +210,6 @@ sal_Bool SdGRFFilter::Import()
     const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
 
-    // ggf. Filterdialog ausfuehren
-    if ( !rGraphicFilter.HasImportDialog( nFilter ) || rGraphicFilter.DoImportDialog( NULL, nFilter ) )
-    {
         SvStream*       pIStm = mrMedium.GetInStream();
         sal_uInt16          nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
 
@@ -259,7 +256,6 @@ sal_Bool SdGRFFilter::Import()
             pPage->InsertObject( new SdrGrafObj( aGraphic, Rectangle( aPos, aGrfSize ) ) );
             bRet = sal_True;
         }
-    }
     return bRet;
 }
 
