@@ -361,14 +361,9 @@ sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, 
 }
 
 
-Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect, THEMESIZE eTS = TS_TRUE )
+Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
-    RECT rc;
-    rc.left = aRect.nLeft;
-    rc.right = aRect.nRight;
-    rc.top = aRect.nTop;
-    rc.bottom = aRect.nBottom;
     HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
