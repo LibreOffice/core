@@ -705,7 +705,6 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
     else
     {
-        DWORD err = GetLastError();
         // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
         DeleteBitmap( hBmpBitmap );
     }
