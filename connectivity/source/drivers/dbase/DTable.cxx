@@ -692,7 +692,6 @@ void ODbaseTable::refreshIndexes()
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
         rtl::OString aKeyName;
-        ByteString aIndexName;
 
         for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
         {
@@ -701,8 +700,8 @@ void ODbaseTable::refreshIndexes()
             //...if yes, add the index list of the table
             if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
             {
-                aIndexName = aInfFile.ReadKey(aKeyName);
-                aURL.setName(String(aIndexName,m_eEncoding));
+                rtl::OString aIndexName = aInfFile.ReadKey(aKeyName);
+                aURL.setName(rtl::OStringToOUString(aIndexName, m_eEncoding));
                 try
                 {
                     Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
@@ -2691,7 +2690,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
         case MemodBaseIII: // dBase III-Memofield, ends with Ctrl-Z
         {
             const char cEOF = (char) DBF_EOL;
-            ByteString aBStr;
+            rtl::OStringBuffer aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // avoid random value
             sal_Bool bReady = sal_False;
@@ -2706,12 +2705,12 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
                 bReady = aBuf[i] == cEOF;
 
                 aBuf[i] = 0;
-                aBStr += aBuf;
+                aBStr.append(aBuf);
 
-            } while (!bReady && !m_pMemoStream->IsEof() && aBStr.Len() < STRING_MAXLEN);
+            } while (!bReady && !m_pMemoStream->IsEof());
 
-            ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),m_eEncoding);
-            aVariable = aStr;
+            aVariable = rtl::OStringToOUString(aBStr.makeStringAndClear(),
+                m_eEncoding);
 
         } break;
         case MemoFoxPro:
