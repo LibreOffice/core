@@ -584,7 +584,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
         LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
         LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
         HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
-        DWORD                   nError              = 0;
 
         /* try to create user profile */
         if ( !hAccessToken )
@@ -625,8 +624,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
                     bOk = TRUE;
                 }
-                else
-                    nError = GetLastError();
 
                 rtl_uString_release(buffer);
             }
