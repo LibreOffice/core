@@ -1449,12 +1449,14 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
         break;
     case WINDOWALIGN_RIGHT:
     default:
+    {
         maDragRect.Left() += nDelta;
         Point aPos = GetPosPixel();
         aPos.X() -= nDelta;
         aSize.Width() += nDelta;
         SetPosSizePixel( aPos, aSize );
         break;
+    }
     }
 
     SplitResize();
