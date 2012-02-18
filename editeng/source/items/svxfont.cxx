@@ -478,37 +478,6 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
 }
 
 
-void SvxFont::DrawText( OutputDevice *pOut,
-               const Point &rPos, const XubString &rTxt,
-               const xub_StrLen nIdx, const xub_StrLen nLen ) const
-{
-    if( !nLen || !rTxt.Len() )  return;
-    xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )   // already initialized?
-        nTmp = rTxt.Len();
-    Point aPos( rPos );
-    if ( nEsc )
-    {
-        Size aSize = (this->GetSize());
-        aPos.Y() -= ((nEsc*long(aSize.Height()))/ 100L);
-    }
-    Font aOldFont( ChgPhysFont( pOut ) );
-
-    if ( IsCapital() )
-        DrawCapital( pOut, aPos, rTxt, nIdx, nTmp );
-    else
-    {
-        Size aSize = GetPhysTxtSize( pOut, rTxt, nIdx, nTmp );
-
-        if ( !IsCaseMap() )
-            pOut->DrawStretchText( aPos, aSize.Width(), rTxt, nIdx, nTmp );
-        else
-            pOut->DrawStretchText( aPos, aSize.Width(), CalcCaseMap( rTxt ),
-                                   nIdx, nTmp );
-    }
-    pOut->SetFont(aOldFont);
-}
-
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const XubString &rTxt,
     const xub_StrLen nIdx, const xub_StrLen nLen, const sal_Int32* pDXArray ) const

@@ -284,7 +284,6 @@ SvxDoCapitals::Do(String const&, unsigned short, unsigned short, unsigned char)
 SvxDrawOutlinerViewForwarder::SetShapePos(Point const&)
 SvxDrawPage::SvxDrawPage()
 SvxEditSourceHelper::UserSpaceToEE(Rectangle const&, Size const&, bool)
-SvxFont::DrawText(OutputDevice*, Point const&, String const&, unsigned short, unsigned short) const
 SvxFrameDirectionItem::SvxFrameDirectionItem(unsigned short)
 SvxGrafToolBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxIMapDlg::GetTargetList() const
