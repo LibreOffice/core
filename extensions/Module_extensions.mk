@@ -34,8 +34,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_pcr \
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
 	Library_abp \
 	Library_bib \
 	Library_dbp \
@@ -43,12 +41,23 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_pcr \
 	Library_res \
 	Library_scn \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
 	Package_bib \
 	Package_pcr \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,extensions,\
+	AllLangResTarget_updchk \
+	Configuration_updchk \
+	Library_updatecheckui \
+	Library_updatefeed \
+	Library_updchk \
+))
+
+$(eval $(call gb_Module_add_check_targets,extensions,\
+    CppunitTest_extensions_test_update \
+))
+endif
 
 ifeq ($(OS),WNT)
 
@@ -112,9 +121,5 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_ldapbe2 \
 ))
 endif # WITH_LDAP=YES
-
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
-))
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

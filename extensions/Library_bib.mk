@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_linked_libs,bib,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_STDLIBS) \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

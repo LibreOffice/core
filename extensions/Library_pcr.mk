@@ -57,6 +57,7 @@ $(eval $(call gb_Library_add_linked_libs,pcr,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pcr,\
