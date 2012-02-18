@@ -3283,15 +3283,6 @@ MenuBar::MenuBar( const MenuBar& rMenu ) : Menu( sal_True )
     bIsMenuBar          = sal_True;
 }
 
-MenuBar::MenuBar( const ResId& rResId ) : Menu ( sal_True )
-{
-    mbDisplayable       = sal_True;
-    mbCloserVisible     = sal_False;
-    mbFloatBtnVisible   = sal_False;
-    mbHideBtnVisible    = sal_False;
-    ImplLoadRes( rResId );
-}
-
 MenuBar::~MenuBar()
 {
     ImplDestroy( this, sal_True );

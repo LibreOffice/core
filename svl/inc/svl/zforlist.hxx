@@ -247,7 +247,6 @@ private:
 
 public:
 
-                        NfCurrencyEntry();
                         NfCurrencyEntry( const LocaleDataWrapper& rLocaleData,
                             LanguageType eLang );
                         NfCurrencyEntry(

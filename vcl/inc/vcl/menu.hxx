@@ -399,7 +399,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 
 public:
                         MenuBar();
-                        MenuBar( const ResId& rResId );
                         MenuBar( const MenuBar& rMenu );
                         ~MenuBar();
 

@@ -174,11 +174,6 @@ void OLEObjCache::UnloadOnDemand()
     }
 }
 
-void OLEObjCache::SetSize(sal_uIntPtr nNewSize)
-{
-    nSize = nNewSize;
-}
-
 void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 {
     if ( Count() )

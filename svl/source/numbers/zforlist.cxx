@@ -3798,15 +3798,6 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
 
 //--- NfCurrencyEntry ----------------------------------------------------
 
-NfCurrencyEntry::NfCurrencyEntry()
-    :   eLanguage( LANGUAGE_DONTKNOW ),
-        nPositiveFormat(3),
-        nNegativeFormat(8),
-        nDigits(2),
-        cZeroChar('0')
-{
-}
-
 
 NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, LanguageType eLang )
 {

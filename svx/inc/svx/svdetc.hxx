@@ -256,7 +256,6 @@ public:
     OLEObjCache();
     SVX_DLLPUBLIC ~OLEObjCache();
 
-    void SetSize(sal_uIntPtr nNewSize);
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 };

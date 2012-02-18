@@ -63,22 +63,6 @@ void NumberFormatCodeWrapper::setLocale( const ::com::sun::star::lang::Locale& r
 
 
 ::com::sun::star::i18n::NumberFormatCode
-NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage ) const
-{
-    try
-    {
-        if ( xNFC.is() )
-            return xNFC->getDefault( formatType, formatUsage, aLocale );
-    }
-    catch ( const Exception& )
-    {
-        SAL_WARN( "unotools.i18n", "getDefault: Exception caught!" );
-    }
-    return ::com::sun::star::i18n::NumberFormatCode();
-}
-
-
-::com::sun::star::i18n::NumberFormatCode
 NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
 {
     try

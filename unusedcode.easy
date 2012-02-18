@@ -39,17 +39,11 @@ MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Referenc
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
-MenuBar::MenuBar(ResId const&)
-MergeData::Dump()
-NfCurrencyEntry::NfCurrencyEntry()
-NumberFormatCodeWrapper::getDefault(short, short) const
 NumericBox::GetValue(unsigned short) const
 NumericBox::GetValuePos(long) const
 NumericBox::RemoveValue(long)
 NumericFormatter::ConvertToFraction(long)
 NumericFormatter::ConvertToLong(Fraction const&)
-OLEObjCache::SetSize(unsigned long)
-ORegKey::acquireKey(void*)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 ParagraphStyleManager::get(WPXString const&) const

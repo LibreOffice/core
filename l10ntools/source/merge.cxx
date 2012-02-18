@@ -129,22 +129,6 @@ void MergeData::Insert(PFormEntrys* pfEntrys )
     aMap.insert( PFormEntrysHashMap::value_type( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) , pfEntrys ) );
 }
 
-rtl::OString MergeData::Dump()
-{
-    printf("MergeData sTyp = %s , sGid = %s , sLid =%s , sFilename = %s\n",
-        sTyp.getStr(), sGID.getStr(), sLID.getStr(), sFilename.getStr());
-
-    PFormEntrysHashMap::const_iterator idbg;
-    for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg )
-    {
-        printf("aMap[ %s ] = " ,idbg->first.getStr());
-        ( (PFormEntrys*)(idbg->second) )->Dump();
-        printf("\n");
-    }
-    printf("\n");
-    return rtl::OString(RTL_CONSTASCII_STRINGPARAM("MergeData\n"));
-}
-
 PFormEntrys* MergeData::GetPFObject( const rtl::OString& rPFO )
 {
     if( aMap.find( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
