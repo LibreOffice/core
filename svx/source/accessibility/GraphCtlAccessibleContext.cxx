@@ -735,38 +735,11 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 
 //=====  internals ========================================================
 
-void SvxGraphCtrlAccessibleContext::checkChildIndex( long nIndex ) throw( lang::IndexOutOfBoundsException )
-{
-    if( nIndex < 0 || nIndex >= getAccessibleChildCount() )
-        throw lang::IndexOutOfBoundsException();
-}
-
-//-----------------------------------------------------------------------------
-
 void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
     if( nIndex < 0 || nIndex >= getSelectedAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
 }
-
-//-----------------------------------------------------------------------------
-
-void SvxGraphCtrlAccessibleContext::setName( const OUString& rName )
-{
-    ::SolarMutexGuard aGuard;
-
-    msName = rName;
-}
-
-//-----------------------------------------------------------------------------
-
-void SvxGraphCtrlAccessibleContext::setDescription( const OUString& rDescr )
-{
-    ::SolarMutexGuard aGuard;
-
-    msDescription = rDescr;
-}
-
 
 
 

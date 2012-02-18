@@ -61,9 +61,6 @@ public:
     sal_uLong   GetValue() const;
     sal_uLong   GetStartValue() const;
     sal_uLong   GetEndValue() const;
-    void    SetValue( sal_uLong n );
-    void    SetStartValue( sal_uLong n );
-    void    SetEndValue( sal_uLong n );
 };
 
 /** Helper class for common functionality in edit sources

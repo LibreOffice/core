@@ -538,18 +538,6 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
         Invalidate();
 }
 
-SvTabJustify SvTabListBox::GetTabJustify( sal_uInt16 nTab ) const
-{
-    SvTabJustify eResult = AdjustLeft;
-    if( nTab >= nTabCount )
-        return eResult;
-    SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    sal_uInt16 nFlags = pTab->nFlags;
-    nFlags &= MYTABMASK;
-    eResult = (SvTabJustify)nFlags;
-    return eResult;
-}
-
 long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
     if( SvTreeListBox::nTreeFlags & TREEFLAG_RECALCTABS )

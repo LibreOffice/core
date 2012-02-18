@@ -120,7 +120,6 @@ public:
 
     virtual void    Resize();
     void            SetTabJustify( sal_uInt16 nTab, SvTabJustify );
-    SvTabJustify    GetTabJustify( sal_uInt16 nTab ) const;
 };
 
 inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const

@@ -63,21 +63,6 @@ sal_uLong SvxEditSourceHint::GetEndValue() const
     return mnEnd;
 }
 
-void SvxEditSourceHint::SetValue( sal_uLong n )
-{
-    TextHint::SetValue( n );
-}
-
-void SvxEditSourceHint::SetStartValue( sal_uLong n )
-{
-    mnStart = n;
-}
-
-void SvxEditSourceHint::SetEndValue( sal_uLong n )
-{
-    mnEnd = n;
-}
-
 //------------------------------------------------------------------------
 
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )

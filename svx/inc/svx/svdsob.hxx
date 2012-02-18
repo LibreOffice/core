@@ -96,7 +96,6 @@ public:
 
     sal_Bool IsEmpty() const;
 
-    sal_uInt16 GetSetCount() const;
     void operator&=(const SetOfByte& r2ndSet);
     void operator|=(const SetOfByte& r2ndSet);
 

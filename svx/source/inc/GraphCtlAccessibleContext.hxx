@@ -191,16 +191,9 @@ public:
 protected:
     //=====  internals ========================================================
 
-    void checkChildIndex( long nIndexOfChild ) throw (::com::sun::star::lang::IndexOutOfBoundsException );
     void checkChildIndexOnSelection( long nIndexOfChild ) throw (::com::sun::star::lang::IndexOutOfBoundsException );
 
 public:
-
-    /// Sets the name
-    void setName( const ::rtl::OUString& rName );
-
-    /// Sets the description
-    void setDescription( const ::rtl::OUString& rDescr );
 
     /** This method is used by the graph control to tell the
         accessibility object about a new model and view.
