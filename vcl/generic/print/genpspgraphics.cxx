@@ -1319,11 +1319,8 @@ SystemGraphicsData GenPspGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
-SystemFontData GenPspGraphics::GetSysFontData( int nFallbacklevel ) const
+SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
-    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
-    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
-
     return SystemFontData();
 }
 
