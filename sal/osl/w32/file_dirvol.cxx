@@ -1747,7 +1747,6 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         if ( !pItemImpl->bFullPathNormalized )
         {
-            sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
                                                       ::osl::mingw_reinterpret_cast<LPTSTR>( aBuffer ),
