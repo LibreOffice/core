@@ -74,8 +74,6 @@ struct oslPipeImpl {
 /* osl_create/destroy-PipeImpl */
 /*****************************************************************************/
 
-static oslInterlockedCount nPipes = 0;
-
 oslPipe __osl_createPipeImpl(void)
 {
     oslPipe pPipe;
