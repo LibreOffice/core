@@ -646,7 +646,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
         HMODULE                 hUserEnvLib         = NULL;
         LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
         LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
-        BOOL                    bOk                 = FALSE;
         HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
 
         if ( !hAccessToken )
