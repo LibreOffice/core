@@ -40,7 +40,7 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 13
+#define NUMBER_OF_TESTS 16
 
 class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
                                 apitest::XNamed, apitest::XDataPilotTable2
@@ -52,6 +52,7 @@ public:
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
     virtual uno::Reference< uno::XInterface > initDP2();
+    virtual uno::Reference< uno::XInterface > getSheets();
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
     CPPUNIT_TEST(testRefresh);
@@ -68,6 +69,9 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
     CPPUNIT_TEST(testGetDrillDownData);
+    CPPUNIT_TEST(testInsertDrillDownSheet);
+    CPPUNIT_TEST(testGetPositionData);
+    CPPUNIT_TEST(testGetOutputRangeByType);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -112,6 +116,13 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 
     CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;
+}
+
+uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference< uno::XInterface > xSheets = xDoc->getSheets();
+    return xSheets;
 }
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
