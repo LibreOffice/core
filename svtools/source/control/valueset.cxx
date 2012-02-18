@@ -430,10 +430,9 @@ void ValueSet::Format()
 
     // calculate number of rows
     mbScroll = false;
-    mnLines = (long)mItemList.size() / mnCols;
-    if ( mItemList.size() % mnCols )
-        mnLines++;
-    else if ( !mnLines )
+    // Floor( (M+N-1)/N )==Ceiling( M/N )
+    mnLines = (static_cast<long>(nItemCount)+mnCols-1) / mnCols;
+    if ( !mnLines )
         mnLines = 1;
 
     long nCalcHeight = aWinSize.Height()-nNoneHeight;
@@ -2298,10 +2297,9 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
                 nCalcLines = mnUserVisLines;
             else
             {
-                nCalcLines = mItemList.size() / nCalcCols;
-                if ( mItemList.size() % nCalcCols )
-                    nCalcLines++;
-                else if ( !nCalcLines )
+                // Floor( (M+N-1)/N )==Ceiling( M/N )
+                nCalcLines = (mItemList.size()+nCalcCols-1) / nCalcCols;
+                if ( !nCalcLines )
                     nCalcLines = 1;
             }
         }
