@@ -426,6 +426,12 @@ sub copy_one_file
 
     my ($returnvalue, $infoline);
 
+
+    # copy returns 0 if files are identical :-(
+    if ( $installer::globals::isos2 ) {
+        unlink($dest);
+    }
+
     my $copyreturn = copy($source, $dest);
 
     if ($copyreturn)
