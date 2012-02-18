@@ -262,7 +262,7 @@ End
 
 // Link to basis
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 File gid_Brand_File_BasisLink
    TXT_FILE_BODY;
    Dir = gid_Dir_Brand_Root;
@@ -369,12 +369,14 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
+#ifndef OS2
 File gid_Brand_File_Bin_Unoinfo
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(unoinfo);
     Styles = (PACKED);
 End
+#endif
 
 #ifdef WNT
 File gid_Brand_File_Bin_Unopkgcom
@@ -385,7 +387,7 @@ File gid_Brand_File_Bin_Unopkgcom
 End
 #endif
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 File gid_Brand_File_Bin_Unopkgexe
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -429,12 +431,14 @@ Unixlink gid_Brand_Unixlink_Unopkg
 End
 #endif
 
+#ifndef OS2
 File gid_Brand_File_Bin_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+#endif
 
 #if defined WNT && \
     (defined M1310 || \
@@ -804,7 +808,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
     Section = "Bootstrap";
     Order = 3;
     Key = "UserInstallation";
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #elif defined MACOSX
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
@@ -875,7 +879,7 @@ ProfileItem gid_Brand_Profileitem_Soffice_NativeProgress_So
     Value = "${NATIVEPROGRESS}";
 End
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -889,7 +893,7 @@ ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
 End
 #endif
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 ProfileItem gid_Brand_Profileitem_Soffice_Startlang
     ProfileID = gid_Brand_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -921,7 +925,7 @@ ProfileItem gid_Brand_Profileitem_Version_Productsource
     Value = "<sourceid>";
 End
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 
 ProfileItem gid_Brand_Profileitem_Version_Productcode
     ProfileID = gid_Brand_Profile_Version_Ini;
@@ -934,7 +938,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 
 ProfileItem gid_Brand_Profileitem_Version_Upgradecode
     ProfileID = gid_Brand_Profile_Version_Ini;
@@ -1062,7 +1066,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ooo_Base_Dir
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "OOO_BASE_DIR";
-#if defined WNT
+#if defined(WNT) || defined(OS2)
     Value = "${.link:${BRAND_BASE_DIR}/basis-link}";
 #else
     Value = "${BRAND_BASE_DIR}/basis-link";

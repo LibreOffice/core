@@ -23,8 +23,16 @@
 
 #include "macros.inc"
 
+#ifdef OS2
+STD_LIB_FILE(gid_File_Lib_CppCanvas, cppcanva)
+STD_LIB_FILE(gid_File_Lib_CanvasTools, canvasto)
+
+SPECIAL_COMPONENT_LIB_FILE(gid_File_CanvasFactory, canvasfa)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_SimpleCanvas, simpleca)
+#else
 STD_LIB_FILE(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_CanvasFactory, canvasfactory.uno)
 SPECIAL_COMPONENT_LIB_FILE(gid_File_SimpleCanvas, simplecanvas.uno)
+#endif

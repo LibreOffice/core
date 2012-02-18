@@ -32,5 +32,9 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Flash, flash )
 
+#ifdef OS2
+STD_LIB_FILE( gid_File_Lib_Svg, svgfilte )
+#else
 STD_LIB_FILE( gid_File_Lib_Svg, svgfilter )
+#endif
 

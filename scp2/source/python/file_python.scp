@@ -27,6 +27,8 @@ File gid_File_Lib_Pyuno
     TXT_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
+  #elif defined(OS2)
+    Name = "pyuno.dll";
   #else
     Name = "pyuno.pyd";
   #endif
@@ -39,6 +41,8 @@ File gid_File_Lib_Pythonloader
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
+  #elif defined(OS2)
+    Name = "pythonlo.dll";
   #else
     Name = "pythonloader.uno.dll";
   #endif

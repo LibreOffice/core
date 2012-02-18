@@ -73,6 +73,9 @@
 #define ALL_LANG_KEY(vident) \
         ALL_LANG(Key,vident)
 
+#ifdef OS2
+    #define UNXSUFFIX .dll
+#endif
 
 #ifdef UNX
     #ifdef MACOSX
@@ -111,7 +114,7 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
 #else
 #define SCP2_OOO_BIN_DIR gid_Dir_Program
@@ -528,7 +531,7 @@ End
 
 // ---------------------------------------
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_BARE(n) n ".dll"

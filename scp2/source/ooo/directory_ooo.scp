@@ -68,7 +68,7 @@ End
 #ifndef MACOSX
 Directory gid_Dir_Ooo_Openofficeorg
     ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     HostName = "${BASISROOTNAME}";
   #else
     HostName = "${UNIXBASISROOTNAME}";
@@ -78,12 +78,12 @@ End
 
 #ifndef MACOSX
 Directory gid_Dir_Ooo_Basis
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     ParentID = gid_Dir_Brand_Root;
   #else
     ParentID = gid_Dir_Ooo_Openofficeorg;
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     HostName = "Basis";
   #else
     HostName = "basis${OOOBASEVERSION}";

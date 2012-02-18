@@ -33,5 +33,9 @@ End
 #endif
 
 #if defined(BUILD_SPECIAL)
+#ifdef OS2
+STD_LIB_FILE( gid_File_Lib_Oooimprovement , oooimp)
+#else
 STD_LIB_FILE( gid_File_Lib_Oooimprovement , oooimprovement)
+#endif
 #endif

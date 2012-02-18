@@ -26,7 +26,7 @@
 #ifndef MACOSX
 Directory gid_Dir_Brand_Root
     ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
   #else
     HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";

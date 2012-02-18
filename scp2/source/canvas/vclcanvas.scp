@@ -23,4 +23,8 @@
 
 #include "macros.inc"
 
+#ifdef OS2
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_VCLCanvas, vclcanva)
+#else
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_VCLCanvas, vclcanvas.uno)
+#endif

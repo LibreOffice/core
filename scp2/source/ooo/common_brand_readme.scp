@@ -31,7 +31,7 @@ File gid_Brand_File_Txt_License
   #ifdef UNX
     README_ALL_LANG(Name, LICENSE);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, license, txt);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -43,7 +43,7 @@ File gid_Brand_File_Txt_License_Html
   #ifdef UNX
     README_TXT_ALL_LANG(Name, LICENSE, html);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, license, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -55,7 +55,7 @@ File gid_Brand_File_License_License
   #ifdef UNX
     README_ALL_LANG(Name, LICENSE);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, license, txt);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -67,7 +67,7 @@ File gid_Brand_File_License_License_Html
   #ifdef UNX
     README_TXT_ALL_LANG(Name, LICENSE, html);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, license, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -79,7 +79,7 @@ File gid_Brand_File_Txt_Readme
   #ifdef UNX
     README_ALL_LANG(Name, README);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, readme, txt);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -91,7 +91,7 @@ File gid_Brand_File_Txt_Readme_Html
   #ifdef UNX
     README_TXT_ALL_LANG(Name, README, html);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, readme, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -103,7 +103,7 @@ File gid_Brand_File_Readme_Readme
   #ifdef UNX
     README_ALL_LANG(Name, README);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, readme, txt);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -115,7 +115,7 @@ File gid_Brand_File_Readme_Readme_Html
   #ifdef UNX
     README_TXT_ALL_LANG(Name, README, html);
   #endif
-  #ifdef WNT
+  #if defined(WNT) || defined(OS2)
     README_TXT_ALL_LANG(Name, readme, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);

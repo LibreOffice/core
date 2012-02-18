@@ -24,7 +24,11 @@
 #include "macros.inc"
 
 File gid_File_Lib_Placeware
+#ifdef OS2
+    Name = LIBNAME(placewar);
+#else
     Name = LIBNAME(placeware);
+#endif
     PACKED_LIB_FILE_BODY;
 End
 

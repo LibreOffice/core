@@ -412,7 +412,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Bin_Dir
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
-#if defined WNT
+#if defined(WNT) || defined(OS2)
     Value = "${.link:$ORIGIN/../ure-link}/bin";
 #else
     Value = "$ORIGIN/../ure-link/bin";
@@ -424,7 +424,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Lib_Dir
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_LIB_DIR";
-#if defined WNT
+#if defined(WNT) || defined(OS2)
     Value = "${.link:$ORIGIN/../ure-link}/bin";
 #else
     Value = "$ORIGIN/../ure-link/lib";
