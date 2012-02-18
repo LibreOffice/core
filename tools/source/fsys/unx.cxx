@@ -75,9 +75,9 @@ struct mnttab
 struct mymnttab
 {
     dev_t mountdevice;
-    ByteString mountspecial;
-    ByteString mountpoint;
-    ByteString mymnttab_filesystem;
+    rtl::OString mountspecial;
+    rtl::OString mountpoint;
+    rtl::OString mymnttab_filesystem;
     mymnttab() { mountdevice = (dev_t) -1; }
 };
 
