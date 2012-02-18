@@ -3472,32 +3472,13 @@ static sal_uInt16 ImplSalGetKeyCode( WPARAM wParam )
 
 // -----------------------------------------------------------------------
 
-static UINT ImplStrToNum( const sal_Char* pStr )
-{
-    sal_uInt16 n = 0;
-
-    // Solange es sich um eine Ziffer handelt, String umwandeln
-    while( (*pStr >= 48) && (*pStr <= 57) )
-    {
-        n *= 10;
-        n += ((*pStr) - 48);
-        pStr++;
-    }
-
-    return n;
-}
-
-// -----------------------------------------------------------------------
-
 static void ImplUpdateInputLang( WinSalFrame* pFrame )
 {
-    sal_Bool bLanguageChange = FALSE;
     UINT nLang = LOWORD( GetKeyboardLayout( 0 ) );
     if ( nLang && nLang != pFrame->mnInputLang )
     {
         // keep input lang up-to-date
         pFrame->mnInputLang = nLang;
-        bLanguageChange = TRUE;
     }
 
     // We are on Windows NT so we use Unicode FrameProcs and get

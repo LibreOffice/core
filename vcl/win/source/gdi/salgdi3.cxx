@@ -1228,8 +1228,6 @@ sal_IntPtr ImplWinFontData::GetFontId() const
 // -----------------------------------------------------------------------
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 // -----------------------------------------------------------------------
@@ -1803,120 +1801,6 @@ int CALLBACK SalEnumCharSetsProcExA( const ENUMLOGFONTEXA* pLogFont,
     pData->mpFontCharSets[pData->mnFontCharSetCount] = pLogFont->elfLogFont.lfCharSet;
     pData->mnFontCharSetCount++;
     return 1;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplGetAllFontCharSets( WinSalGraphics* pData )
-{
-    if ( !pData->mpFontCharSets )
-        pData->mpFontCharSets = new BYTE[256];
-
-    LOGFONTA aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-    GetTextFaceA( pData->mhDC, sizeof( aLogFont.lfFaceName ), aLogFont.lfFaceName );
-    EnumFontFamiliesExA( pData->mhDC, &aLogFont, (FONTENUMPROCA)SalEnumCharSetsProcExA,
-                         (LPARAM)(void*)pData, 0 );
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplAddKerningPairs( WinSalGraphics* pData )
-{
-    sal_uLong nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
-    if ( !nPairs )
-        return;
-
-    CHARSETINFO aInfo;
-    if ( !TranslateCharsetInfo( (DWORD*)(sal_uLong)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
-        return;
-
-    if ( !pData->mpFontKernPairs )
-        pData->mpFontKernPairs = new KERNINGPAIR[nPairs];
-    else
-    {
-        KERNINGPAIR* pOldPairs = pData->mpFontKernPairs;
-        pData->mpFontKernPairs = new KERNINGPAIR[nPairs+pData->mnFontKernPairCount];
-        memcpy( pData->mpFontKernPairs, pOldPairs,
-                pData->mnFontKernPairCount*sizeof( KERNINGPAIR ) );
-        delete[] pOldPairs;
-    }
-
-    UINT            nCP = aInfo.ciACP;
-    sal_uLong           nOldPairs = pData->mnFontKernPairCount;
-    KERNINGPAIR*    pTempPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
-    nPairs = ::GetKerningPairsA( pData->mhDC, nPairs, pTempPair );
-    for ( sal_uLong i = 0; i < nPairs; i++ )
-    {
-        unsigned char   aBuf[2];
-        wchar_t         nChar;
-        int             nLen;
-        sal_Bool            bAdd = TRUE;
-
-        // None-ASCII?, then we must convert the char
-        if ( (pTempPair->wFirst > 125) || (pTempPair->wFirst == 92) )
-        {
-            if ( pTempPair->wFirst < 256 )
-            {
-                aBuf[0] = (unsigned char)pTempPair->wFirst;
-                nLen = 1;
-            }
-            else
-            {
-                aBuf[0] = (unsigned char)(pTempPair->wFirst >> 8);
-                aBuf[1] = (unsigned char)(pTempPair->wFirst & 0xFF);
-                nLen = 2;
-            }
-            if ( MultiByteToWideChar( nCP, MB_PRECOMPOSED | MB_USEGLYPHCHARS,
-                                      (const char*)aBuf, nLen, &nChar, 1 ) )
-                pTempPair->wFirst = nChar;
-            else
-                bAdd = FALSE;
-        }
-        if ( (pTempPair->wSecond > 125) || (pTempPair->wSecond == 92) )
-        {
-            if ( pTempPair->wSecond < 256 )
-            {
-                aBuf[0] = (unsigned char)pTempPair->wSecond;
-                nLen = 1;
-            }
-            else
-            {
-                aBuf[0] = (unsigned char)(pTempPair->wSecond >> 8);
-                aBuf[1] = (unsigned char)(pTempPair->wSecond & 0xFF);
-                nLen = 2;
-            }
-            if ( MultiByteToWideChar( nCP, MB_PRECOMPOSED | MB_USEGLYPHCHARS,
-                                      (const char*)aBuf, nLen, &nChar, 1 ) )
-                pTempPair->wSecond = nChar;
-            else
-                bAdd = FALSE;
-        }
-
-        // TODO: get rid of linear search!
-        KERNINGPAIR* pTempPair2 = pData->mpFontKernPairs;
-        for ( sal_uLong j = 0; j < nOldPairs; j++ )
-        {
-            if ( (pTempPair2->wFirst == pTempPair->wFirst) &&
-                 (pTempPair2->wSecond == pTempPair->wSecond) )
-            {
-                bAdd = FALSE;
-                break;
-            }
-            pTempPair2++;
-        }
-
-        if ( bAdd )
-        {
-            KERNINGPAIR* pDestPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
-            if ( pDestPair != pTempPair )
-                memcpy( pDestPair, pTempPair, sizeof( KERNINGPAIR ) );
-            pData->mnFontKernPairCount++;
-        }
-
-        pTempPair++;
-    }
 }
 
 // -----------------------------------------------------------------------

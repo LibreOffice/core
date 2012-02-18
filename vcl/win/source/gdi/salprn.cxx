@@ -105,7 +105,6 @@ using ::rtl::OUString;
 // =======================================================================
 
 static char aImplWindows[] = "windows";
-static char aImplDevices[] = "devices";
 static char aImplDevice[]  = "device";
 
 static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
