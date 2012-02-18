@@ -105,14 +105,18 @@ endef
 # But the component target also must be delivered, so a new phony target
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),\
-	$(call gb_Library_get_runtime_filename,$(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))))
-$(call gb_Library__get_final_target,$(1)) : \
+$(call gb_ComponentTarget_ComponentTarget,$(2),\
+	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
+	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
+$(call gb_Library__get_final_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_ComponentTarget_get_target,$(2)) :| $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_clean_target,$(1)) : \
+$(call gb_ComponentTarget_get_target,$(2)) :| \
+	$(call gb_Library_get_target,$(gb_Library__get_name))
+$(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef
+
+gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
 
 gb_Library__get_componentprefix = \
 	$(call gb_Library__get_layer_componentprefix,$(call \
