@@ -307,7 +307,6 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     oslPipe  pAcceptedPipe = NULL;
 
-    HANDLE       Event;
     OVERLAPPED   os;
 
     DWORD nBytesTransfered;
@@ -315,10 +314,8 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     rtl_uString* temp = NULL;
 
     OSL_ASSERT(pPipe);
+    OSL_ASSERT(pPipe->m_File != INVALID_HANDLE_VALUE);
 
-    OSL_ASSERT (pPipe->m_File != INVALID_HANDLE_VALUE);
-
-    Event = pPipe->m_AcceptEvent;
     rtl_zeroMemory(&os, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
     ResetEvent(pPipe->m_AcceptEvent);
