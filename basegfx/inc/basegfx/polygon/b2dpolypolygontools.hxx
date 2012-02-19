@@ -78,19 +78,6 @@ namespace basegfx
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
-        /** get range of PolyPolygon. Control points are included.
-
-            For detailed description look at getRangeWithControlPoints(const B2DPolygon&).
-            This method just expands by the range of every sub-Polygon.
-
-            @param rCandidate
-            The B2DPolyPolygon eventually containing bezier segments
-
-            @return
-            The outer range including control points
-        */
-        BASEGFX_DLLPUBLIC B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate);
-
         /** Get the range of a polyPolygon
 
             For detailed description look at getRange(const B2DPolygon&).
@@ -240,20 +227,6 @@ namespace basegfx
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         BASEGFX_DLLPUBLIC B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
-
-        /** split each edge of a polyPolygon in exactly nSubEdges equidistant edges
-
-            @param rCandidate
-            The source polyPolygon. If too small (no edges), nSubEdges too small (<2)
-            or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
-            Else for each edge nSubEdges will be created. Closed state is preserved.
-
-            @param nSubEdges
-            @param bHandleCurvedEdges
-            @param bHandleStraightEdges
-            Please take a look at reSegmentPolygonEdges description, these are the same.
-        */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons

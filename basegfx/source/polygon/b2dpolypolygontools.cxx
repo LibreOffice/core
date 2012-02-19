@@ -238,20 +238,6 @@ namespace basegfx
             }
         }
 
-        B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate)
-        {
-            B2DRange aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-            {
-                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.expand(tools::getRangeWithControlPoints(aCandidate));
-            }
-
-            return aRetval;
-        }
-
         B2DRange getRange(const B2DPolyPolygon& rCandidate)
         {
             B2DRange aRetval;
@@ -524,18 +510,6 @@ namespace basegfx
             {
                 return rCandidate;
             }
-        }
-
-        B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges)
-        {
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(reSegmentPolygonEdges(rCandidate.getB2DPolygon(a), nSubEdges, bHandleCurvedEdges, bHandleStraightEdges));
-            }
-
-            return aRetval;
         }
 
         //////////////////////////////////////////////////////////////////////

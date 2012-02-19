@@ -130,12 +130,6 @@ namespace basegfx
         // if 0.0 it is calculated using getLength(...)
         BASEGFX_DLLPUBLIC B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength = 0.0);
 
-        // get a snippet from given polygon for relative distances. The polygon is assumed
-        // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. 1.0], where
-        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
-        // if 0.0 it is calculated using getLength(...)
-        BASEGFX_DLLPUBLIC B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom = 0.0, double fTo = 1.0, double fLength = 0.0);
-
         // Continuity check for point with given index
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
@@ -350,10 +344,6 @@ namespace basegfx
         // replacing segments with spikes/loops and self intersections
         // by several trivial sub-segments
         BASEGFX_DLLPUBLIC B2DPolygon createSimplifiedPolygon(const B2DPolygon&);
-
-        // calculate the distance to the given endless ray and return. The relative position on the edge is returned in Cut.
-        // That position may be less than 0.0 or more than 1.0
-        BASEGFX_DLLPUBLIC double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut);
 
         // calculate the smallest distance to given edge and return. The relative position on the edge is returned in Cut.
         // That position is in the range [0.0 .. 1.0] and the returned distance is adapted accordingly to the start or end

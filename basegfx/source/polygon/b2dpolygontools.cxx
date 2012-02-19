@@ -978,19 +978,6 @@ namespace basegfx
             }
         }
 
-        B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength)
-        {
-            // get length if not given
-            if(fTools::equalZero(fLength))
-            {
-                fLength = getLength(rCandidate);
-            }
-
-            // multiply distances with real length to get absolute position and
-            // use getSnippetAbsolute
-            return getSnippetAbsolute(rCandidate, fFrom * fLength, fTo * fLength, fLength);
-        }
-
         CutFlagValue findCut(
             const B2DPolygon& rCandidate,
             sal_uInt32 nIndex1, sal_uInt32 nIndex2,
@@ -2497,30 +2484,6 @@ namespace basegfx
             aRetval.setClosed(rCandidate.isClosed());
 
             return aRetval;
-        }
-
-        double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
-        {
-            if(rPointA.equal(rPointB))
-            {
-                rCut = 0.0;
-                const B2DVector aVector(rTestPoint - rPointA);
-                return aVector.getLength();
-            }
-            else
-            {
-                // get the relative cut value on line vector (Vector1) for cut with perpendicular through TestPoint
-                const B2DVector aVector1(rPointB - rPointA);
-                const B2DVector aVector2(rTestPoint - rPointA);
-                const double fDividend((aVector2.getX() * aVector1.getX()) + (aVector2.getY() * aVector1.getY()));
-                const double fDivisor((aVector1.getX() * aVector1.getX()) + (aVector1.getY() * aVector1.getY()));
-
-                rCut = fDividend / fDivisor;
-
-                const B2DPoint aCutPoint(rPointA + rCut * aVector1);
-                const B2DVector aVector(rTestPoint - aCutPoint);
-                return aVector.getLength();
-            }
         }
 
         double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
