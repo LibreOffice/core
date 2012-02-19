@@ -81,6 +81,8 @@ public:
     }
 };
 
+#include <stdio.h> // FIXME: remove once the fprintf() calls below are gone
+
 Any CLuceneHelpWrapper::invoke(const OUString& rFunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
         throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException )
 {

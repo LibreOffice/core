@@ -1,4 +1,5 @@
 #include <l10ntools/HelpIndexer.hxx>
+#include "LuceneHelper.hxx"
 
 #define TODO
 
@@ -98,22 +99,6 @@ bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
 	closedir(dir);
 
 	return true;
-}
-
-std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr)
-{
-    //UTF-16
-    if (sizeof(wchar_t) == sizeof(sal_Unicode))
-        return std::vector<TCHAR>(rStr.getStr(), rStr.getStr() + rStr.getLength());
-
-    //UTF-32
-    std::vector<TCHAR> aRet;
-    for (sal_Int32 nStrIndex = 0; nStrIndex < rStr.getLength();)
-    {
-        const sal_uInt32 nCode = rStr.iterateCodePoints(&nStrIndex);
-        aRet.push_back(nCode);
-    }
-    return aRet;
 }
 
 bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {

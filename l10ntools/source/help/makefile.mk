@@ -56,12 +56,16 @@ OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj \
         $(OBJ)$/HelpIndexer.obj \
-        $(OBJ)$/HelpIndexer_main.obj
+        $(OBJ)$/HelpIndexer_main.obj \
+	$(OBJ)$/HelpSearch.obj \
+	$(OBJ)$/LuceneHelper.obj
 
 SLOFILES=\
         $(SLO)$/HelpLinker.obj \
         $(SLO)$/HelpCompiler.obj \
-        $(SLO)$/HelpIndexer.obj
+	$(SLO)$/LuceneHelper.obj \
+        $(SLO)$/HelpIndexer.obj \
+	$(SLO)$/HelpSearch.obj
 
 .IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
 # There appears to be a GCC 4.0.1 optimization error causing _file:good() to
@@ -85,6 +89,7 @@ APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
 
 APP2TARGET=HelpIndexer
 APP2OBJS=\
+      $(OBJ)$/LuceneHelper.obj \
       $(OBJ)$/HelpIndexer.obj \
       $(OBJ)$/HelpIndexer_main.obj
 APP2RPATH = NONE

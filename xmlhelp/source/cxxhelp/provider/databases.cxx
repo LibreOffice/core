@@ -39,11 +39,7 @@
 #include <algorithm>
 #include <string.h>
 
-// EDIT FROM HERE
-
 #include <l10ntools/HelpIndexer.hxx>
-
-// EDIT ENDS HERE
 
 // Extensible help
 #include "com/sun/star/deployment/ExtensionManager.hpp"
@@ -2092,8 +2088,6 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
 
 rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, Reference< deployment::XPackage > xPackage )
 {
-    fprintf(stderr, "IndexFolderIterator::implGetIndexFolderFromPackage\n");
-
     rtl::OUString aIndexFolder =
         implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
 
@@ -2121,7 +2115,6 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
             // TEST
             //bIsWriteAccess = false;
 
-// EDIT FROM HERE
             try
             {
                 rtl::OUString aLang;
@@ -2172,9 +2165,6 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
             }
             catch (Exception &)
             {}
-
-// EDIT UNTIL HERE
-
         }
     }
 
