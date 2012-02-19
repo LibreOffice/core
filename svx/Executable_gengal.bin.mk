@@ -71,7 +71,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
     kernel32 \
     msvcrt \
-    oldnames \
+    $(gb_Library_win32_OLDNAMES) \
     user32 \
     uwinapi \
 ))
