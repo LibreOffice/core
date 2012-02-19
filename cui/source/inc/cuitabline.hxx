@@ -91,7 +91,7 @@ public:
 
 /*************************************************************************/
 
-class SvxBmpItemInfo;
+struct SvxBmpItemInfo;
 typedef ::std::vector< SvxBmpItemInfo* > SvxBmpItemInfoList;
 
 class SvxLineTabPage : public SvxTabPage
