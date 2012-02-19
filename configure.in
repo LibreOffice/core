@@ -3160,7 +3160,6 @@ if test "$cross_compiling" = "yes"; then
     mkdir CONF-FOR-BUILD
     tar cf - \
         bin/repo-list.in \
-        build_env.in \
         android/Bootstrap/local.properties.in \
         android/qa/sc/local.properties.in \
         android/qa/desktop/local.properties.in \
@@ -10963,7 +10962,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst bin/repo-list build_env android/Bootstrap/local.properties android/qa/sc/local.properties android/qa/desktop/local.properties])
+AC_CONFIG_FILES([config_host.mk ooo.lst bin/repo-list android/Bootstrap/local.properties android/qa/sc/local.properties android/qa/desktop/local.properties])
 AC_OUTPUT
 
 # touch the config timestamp file set_soenv.stamp
