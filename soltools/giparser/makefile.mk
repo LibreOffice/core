@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,12 @@ all:
 OBJFILES=\
     $(OBJ)$/gen_info.obj	\
     $(OBJ)$/gi_list.obj	    \
-    $(OBJ)$/gi_parse.obj    \
-    $(OBJ)$/st_gilrw.obj
+    $(OBJ)$/gi_parse.obj
 
 SLOFILES=\
     $(SLO)$/gen_info.obj	\
     $(SLO)$/gi_list.obj	    \
-    $(SLO)$/gi_parse.obj    \
-    $(SLO)$/st_gilrw.obj
+    $(SLO)$/gi_parse.obj
 
 # --- Targets ------------------------------------------------------
 
