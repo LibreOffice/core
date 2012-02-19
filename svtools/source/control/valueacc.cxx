@@ -436,7 +436,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( ((sal_uInt16)-1) != nItemId )
+    if ( nItemId )
     {
         const size_t nItemPos = mpParent->GetItemPos( nItemId );
 
