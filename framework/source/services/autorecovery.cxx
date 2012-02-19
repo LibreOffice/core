@@ -692,7 +692,9 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         throw;
     }
     catch(const css::uno::Exception&)
-        {} // TODO better error handling
+    {
+        // TODO better error handling
+    }
 
     aListenerInformer.stop();
 
@@ -972,12 +974,12 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
-        {
-            // These config keys are not sooooo important, that
-            // we are interested on errors here realy .-)
-            nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
-            nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
-        }
+    {
+        // These config keys are not sooooo important, that
+        // we are interested on errors here realy .-)
+        nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
+        nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
+    }
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -1291,7 +1293,9 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
                 xModify->removeByName(sID);
             }
             catch(const css::container::NoSuchElementException&)
-                { return; }
+            {
+                return;
+            }
         }
         else
         {
@@ -1317,9 +1321,13 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         }
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        {} // ??? can it happen that a full disc let these set of operations fail too ???
+    {
+        // ??? can it happen that a full disc let these set of operations fail too ???
+    }
 
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     do
@@ -1336,28 +1344,28 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             nRetry = 0;
         }
         catch(const css::uno::Exception&)
-            {
-                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
-                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+        {
+            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
-                // SAFE ->
-                ReadGuard aReadLock(m_aLock);
-                sal_Int32 nMinSpaceConfigSave = m_nMinSpaceConfigSave;
-                aReadLock.unlock();
-                // <- SAFE
+            // SAFE ->
+            ReadGuard aReadLock(m_aLock);
+            sal_Int32 nMinSpaceConfigSave = m_nMinSpaceConfigSave;
+            aReadLock.unlock();
+            // <- SAFE
 
-                if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
-                    AutoRecovery::impl_showFullDiscError();
-                else
-                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
-                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-                else
-                if (nRetry <= GIVE_UP_RETRY)
-                    throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+            if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
+                AutoRecovery::impl_showFullDiscError();
+            else
+            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+            else
+            if (nRetry <= GIVE_UP_RETRY)
+                throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
-                --nRetry;
-            }
+            --nRetry;
+        }
     }
     while(nRetry>0);
 }
@@ -2030,7 +2038,8 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
             }
         }
         catch( const css::uno::Exception& )
-        {}
+        {
+        }
     }
 }
 
@@ -2085,17 +2094,11 @@ void AutoRecovery::implts_prepareSessionShutdown()
                 {
                     xClose->close(sal_False);
                 }
-                /*
-                catch(const css::lang::DisposedException&)
-                    {
-                        // closed ... disposed ... always the same .-)
-                    }
-                */
                 catch(const css::uno::Exception&)
-                    {
-                        // At least it's only a try to close these documents before anybody else it does.
-                        // So it seams to be possible to ignore any error here .-)
-                    }
+                {
+                    // At least it's only a try to close these documents before anybody else it does.
+                    // So it seams to be possible to ignore any error here .-)
+                }
 
                 rInfo.Document.clear();
             }
@@ -2374,30 +2377,30 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
             nRetry = 0;
         }
         catch(const css::uno::Exception&)
-            {
-                bError = sal_True;
+        {
+            bError = sal_True;
 
-                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
-                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
-                // SAFE ->
-                ReadGuard aReadLock2(m_aLock);
-                sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
-                aReadLock2.unlock();
-                // <- SAFE
+            // SAFE ->
+            ReadGuard aReadLock2(m_aLock);
+            sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
+            aReadLock2.unlock();
+            // <- SAFE
 
-                if (! impl_enoughDiscSpace(nMinSpaceDocSave))
-                    AutoRecovery::impl_showFullDiscError();
-                else
-                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
-                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-                else
-                if (nRetry <= GIVE_UP_RETRY)
-                    throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+            if (! impl_enoughDiscSpace(nMinSpaceDocSave))
+                AutoRecovery::impl_showFullDiscError();
+            else
+            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+            else
+            if (nRetry <= GIVE_UP_RETRY)
+                throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
-                --nRetry;
-            }
+            --nRetry;
+        }
     }
     while(nRetry>0);
 
@@ -2726,7 +2729,9 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         rInfo.Document = xModel.get();
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
     {
         Any aCaughtException( ::cppu::getCaughtException() );
@@ -2822,7 +2827,9 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
                 xListener->statusChanged(aEvent);
             }
             catch(const css::uno::RuntimeException&)
-                { pIt.remove(); }
+            {
+                pIt.remove();
+            }
         }
     }
 }
@@ -3243,7 +3250,9 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment);
     }
     catch(const css::uno::Exception&)
-        { return AutoRecovery::E_WRONG_TARGET_PATH; }
+    {
+        return AutoRecovery::E_WRONG_TARGET_PATH;
+    }
 
     sal_Int32 nNameClash;
     nNameClash = css::ucb::NameClash::RENAME;
@@ -3254,7 +3263,9 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
-        { return AutoRecovery::E_ORIGINAL_FILE_MISSING; }
+    {
+        return AutoRecovery::E_ORIGINAL_FILE_MISSING;
+    }
 
     return AutoRecovery::E_COPIED;
 }
@@ -3409,7 +3420,9 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             // can happen in multithreaded environments, that frames was removed from the container during this loop runs!
             // Ignore it.
             catch(const css::lang::IndexOutOfBoundsException&)
-                { continue; }
+            {
+                continue;
+            }
 
             // We are interested on visible documents only.
             // Note: It's n optional interface .-(
@@ -3442,10 +3455,13 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             implts_registerDocument(xModel);
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw; }
+    catch(const css::uno::RuntimeException&)
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 
     LOG_RECOVERY("... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()")
 }
@@ -3620,7 +3636,8 @@ void AutoRecovery::impl_flushALLConfigChanges()
         ::utl::ConfigManager::storeConfigItems();
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 //-----------------------------------------------
@@ -3635,7 +3652,8 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 //-----------------------------------------------
@@ -3654,7 +3672,8 @@ void AutoRecovery::st_impl_removeLockFile()
         AutoRecovery::st_impl_removeFile(sLockURL);
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 } // namespace framework

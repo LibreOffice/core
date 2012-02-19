@@ -347,7 +347,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
                 lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
         }
         catch(const css::uno::Exception&)
-            {}
+        {
+        }
     }
 
     ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lResult.getAsConstList());
@@ -377,10 +378,14 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
                     CFGPATH_FACTORIES,
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw; }
+    catch(const css::uno::RuntimeException&)
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        { xCfg.clear(); }
+    {
+        xCfg.clear();
+    }
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
