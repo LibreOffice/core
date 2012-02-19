@@ -8,12 +8,7 @@
 #endif
 
 #include <rtl/string.hxx>
-
-#include <unistd.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <errno.h>
-#include <string.h>
+#include <osl/file.hxx>
 
 #include <algorithm>
 
@@ -77,26 +72,19 @@ bool HelpIndexer::scanForFiles() {
 }
 
 bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
-	rtl::OString pathStr;
-	path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0);
-	DIR *dir = opendir(pathStr.getStr());
-	if (dir == 0) {
-		d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path +
-			 rtl::OUString::createFromAscii(strerror(errno));
+	osl::Directory dir(path);
+	if (osl::FileBase::E_None != dir.open()) {
+		d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path;
 		return true;
 	}
 
-	struct dirent *ent;
-	struct stat info;
-	while ((ent = readdir(dir)) != 0) {
-		rtl::OString entPath(pathStr);
-		entPath += rtl::OString(RTL_CONSTASCII_STRINGPARAM("/")) + rtl::OString(ent->d_name);
-		if (stat(entPath.getStr(), &info) == 0 && S_ISREG(info.st_mode)) {
-			d_files.insert(rtl::OUString::createFromAscii(ent->d_name));
+	osl::DirectoryItem item;
+	osl::FileStatus fileStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type);
+	while (dir.getNextItem(item) == osl::FileBase::E_None) {
+		if (fileStatus.getFileType() == osl::FileStatus::Regular) {
+			d_files.insert(fileStatus.getFileName());
 		}
 	}
-
-	closedir(dir);
 
 	return true;
 }
@@ -121,9 +109,11 @@ bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
 }
 
 lucene::util::Reader *HelpIndexer::helpFileReader(rtl::OUString const & path) {
-	rtl::OString pathStr;
-	path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0);
-	if (access(pathStr.getStr(), R_OK) == 0) {
+	osl::File file(path);
+	if (osl::FileBase::E_None == file.open(osl_File_OpenFlag_Read)) {
+		file.close();
+		rtl::OString pathStr;
+		path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0); // FIXME: path encoding?
 		return new lucene::util::FileReader(pathStr.getStr(), "UTF-8");
 	} else {
 		return new lucene::util::StringReader(L"");
