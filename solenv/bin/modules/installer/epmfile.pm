@@ -135,77 +135,6 @@ sub read_packagemap
 
 }
 
-############################################################################
-# The header file contains the strings for the epm header in all languages
-############################################################################
-
-sub get_string_from_headerfile
-{
-    my ($searchstring, $language, $fileref) = @_;
-
-    my $returnstring  = "";
-    my $onestring  = "";
-    my $englishstring  = "";
-    my $foundblock = 0;
-    my $foundstring = 0;
-    my $foundenglishstring = 0;
-    my $englishidentifier = "01";
-
-    $searchstring = "[" . $searchstring . "]";
-
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
-    {
-        my $line = ${$fileref}[$i];
-
-        if ( $line =~ /^\s*\Q$searchstring\E\s*$/ )
-        {
-            $foundblock = 1;
-            my $counter = $i + 1;
-
-            $line = ${$fileref}[$counter];
-
-            # Beginning of the next block oder Dateiende
-
-            while ((!($line =~ /^\s*\[\s*\w+\s*\]\s*$/ )) && ( $counter <= $#{$fileref} ))
-            {
-                if ( $line =~ /^\s*\Q$language\E\s+\=\s*\"(.*)\"\s*$/ )
-                {
-                    $onestring = $1;
-                    $foundstring = 1;
-                    last;
-                }
-
-                if ( $line =~ /^\s*\Q$englishidentifier\E\s+\=\s*\"(.*)\"\s*$/ )
-                {
-                    $englishstring = $1;
-                    $foundenglishstring = 1;
-                }
-
-                $counter++;
-                $line = ${$fileref}[$counter];
-            }
-        }
-    }
-
-    if ( $foundstring )
-    {
-        $returnstring = $onestring;
-    }
-    else
-    {
-        if ( $foundenglishstring )
-        {
-            $returnstring = $englishstring;
-        }
-        else
-        {
-            installer::exiter::exit_program("ERROR: No string found for $searchstring in epm header file (-h)", "get_string_from_headerfile");
-        }
-    }
-
-    return \$returnstring;
-}
-
 ##########################################################
 # Filling the epm file with directories, files and links
 ##########################################################
@@ -737,20 +666,6 @@ sub replace_variable_in_shellscripts
     for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
     {
         ${$scriptref}[$i] =~ s/\$\{$searchstring\}/$variable/g;
-    }
-}
-
-###################################################
-# Replace one in shell scripts ( %VARIABLENAME )
-###################################################
-
-sub replace_percent_variable_in_shellscripts
-{
-    my ($scriptref, $variable, $searchstring) = @_;
-
-    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
-    {
-        ${$scriptref}[$i] =~ s/\%$searchstring/$variable/g;
     }
 }
 
@@ -2176,32 +2091,6 @@ sub prepare_packages
     }
 
     return $newepmdir;
-}
-
-############################################################
-# Linux requirement for perl is changed by epm from
-# /usr/bin/perl to perl .
-# Requires: perl
-############################################################
-
-sub check_requirements_in_specfile
-{
-    my ( $specfile ) = @_;
-
-    for ( my $i = 0; $i <= $#{$specfile}; $i++ )
-    {
-        if (( ${$specfile}[$i] =~ /^\s*Requires/ ) && ( ${$specfile}[$i] =~ /\bperl\b/ ) && ( ! (  ${$specfile}[$i] =~ /\/usr\/bin\/perl\b/ )))
-        {
-            my $oldline = ${$specfile}[$i];
-            ${$specfile}[$i] =~ s/perl/\/usr\/bin\/perl/;
-            my $newline = ${$specfile}[$i];
-
-            $oldline =~ s/\s*$//;
-            $newline =~ s/\s*$//;
-            my $infoline = "Spec File: Changing content from \"$oldline\" to \"$newline\".\n";
-            push(@installer::globals::logfileinfo, $infoline);
-        }
-    }
 }
 
 ###############################################################################
