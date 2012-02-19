@@ -247,16 +247,6 @@ sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
     return static_cast< sal_Int32 >( fPixelY * mrData.mfScreenPixelY + 0.5 );
 }
 
-double XclRoot::GetPixelXFromHmm( sal_Int32 nX ) const
-{
-    return static_cast< double >( (nX - 0.5) / mrData.mfScreenPixelX );
-}
-
-double XclRoot::GetPixelYFromHmm( sal_Int32 nY ) const
-{
-    return static_cast< double >( (nY - 0.5) / mrData.mfScreenPixelY );
-}
-
 uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
@@ -318,11 +308,6 @@ ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
 ScRangeName& XclRoot::GetNamedRanges() const
 {
     return *GetDoc().GetRangeName();
-}
-
-ScDBCollection& XclRoot::GetDatabaseRanges() const
-{
-    return *GetDoc().GetDBCollection();
 }
 
 SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const
