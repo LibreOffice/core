@@ -540,13 +540,6 @@ namespace basegfx
             return true;
         }
 
-        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
-        }
-
     } // end of namespace tools
 } // end of namespace basegfx
 

@@ -382,21 +382,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle)
-        {
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-            {
-                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-
-                aRetval.append(rotateAroundPoint(aCandidate, rCenter, fAngle));
-            }
-
-            return aRetval;
-        }
-
         B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate)
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
@@ -531,13 +516,6 @@ namespace basegfx
             }
 
             return true;
-        }
-
-        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
         B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate)

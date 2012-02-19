@@ -56,8 +56,6 @@ namespace basegfx
             multiplications
          */
         BASEGFX_DLLPUBLIC B2DHomMatrix createScaleB2DHomMatrix(double fScaleX, double fScaleY);
-        BASEGFX_DLLPUBLIC B2DHomMatrix createShearXB2DHomMatrix(double fShearX);
-        BASEGFX_DLLPUBLIC B2DHomMatrix createShearYB2DHomMatrix(double fShearY);
         BASEGFX_DLLPUBLIC B2DHomMatrix createRotateB2DHomMatrix(double fRadiant);
         BASEGFX_DLLPUBLIC B2DHomMatrix createTranslateB2DHomMatrix(double fTranslateX, double fTranslateY);
 

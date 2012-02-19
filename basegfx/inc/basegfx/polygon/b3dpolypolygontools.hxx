@@ -148,7 +148,6 @@ namespace basegfx
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D PolyPolygons
         BASEGFX_DLLPUBLIC bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue);
-        BASEGFX_DLLPUBLIC bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB);
 
     } // end of namespace tools
 } // end of namespace basegfx

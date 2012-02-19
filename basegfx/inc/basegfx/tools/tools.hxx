@@ -39,30 +39,6 @@ namespace basegfx
 
     namespace tools
     {
-        /** Liang-Barsky 2D line clipping algorithm
-
-            This function clips a line given by two points against the
-            given rectangle. The resulting line is returned in the
-            given points.
-
-            @param io_rStart
-            Start point of the line. On return, contains the clipped
-            start point.
-
-            @param io_rEnd
-            End point of the line. On return, contains the clipped
-            end point.
-
-            @param rClipRect
-            The rectangle to clip against
-
-            @return true, when at least part of the line is visible
-            after the clip, false otherwise
-         */
-        BASEGFX_DLLPUBLIC bool liangBarskyClip2D( ::basegfx::B2DPoint&      io_rStart,
-                                ::basegfx::B2DPoint&        io_rEnd,
-                                const ::basegfx::B2DRange&  rClipRect );
-
         /** Expand given parallelogram, such that it extends beyond
             bound rect in a given direction.
 

@@ -96,30 +96,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DHomMatrix createShearXB2DHomMatrix(double fShearX)
-        {
-            B2DHomMatrix aRetval;
-
-            if(!fTools::equalZero(fShearX))
-            {
-                aRetval.set(0, 1, fShearX);
-            }
-
-            return aRetval;
-        }
-
-        B2DHomMatrix createShearYB2DHomMatrix(double fShearY)
-        {
-            B2DHomMatrix aRetval;
-
-            if(!fTools::equalZero(fShearY))
-            {
-                aRetval.set(1, 0, fShearY);
-            }
-
-            return aRetval;
-        }
-
         B2DHomMatrix createRotateB2DHomMatrix(double fRadiant)
         {
             B2DHomMatrix aRetval;

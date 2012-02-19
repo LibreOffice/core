@@ -175,9 +175,6 @@ namespace basegfx
         // corresponding points.
         BASEGFX_DLLPUBLIC B2DPolyPolygon distort(const B2DPolyPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
 
-        // rotate PolyPolygon around given point with given angle.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
-
         // expand all segments (which are not yet) to curve segments. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances on each segment.
         BASEGFX_DLLPUBLIC B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate);
@@ -231,7 +228,6 @@ namespace basegfx
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons
         BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
-        BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         /** snap some polygon coordinates to discrete coordinates
 

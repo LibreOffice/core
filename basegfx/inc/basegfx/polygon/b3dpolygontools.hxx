@@ -85,11 +85,6 @@ namespace basegfx
         // get length of polygon
         BASEGFX_DLLPUBLIC double getLength(const B3DPolygon& rCandidate);
 
-        // get position on polygon for absolute given distance. If
-        // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
-        // using getLength(...)
-        BASEGFX_DLLPUBLIC B3DPoint getPositionAbsolute(const B3DPolygon& rCandidate, double fDistance, double fLength = 0.0);
-
         /** Apply given LineDashing to given polygon
 
             For a description see applyLineDashing in b2dpolygontoos.hxx
