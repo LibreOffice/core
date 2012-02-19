@@ -426,7 +426,6 @@ public:
     void Insert( PFormEntrys* pfEntrys );
     PFormEntrys* GetPFObject( const rtl::OString &rPFO );
 
-    rtl::OString Dump();
     sal_Bool operator==( ResData *pData );
 };
 
