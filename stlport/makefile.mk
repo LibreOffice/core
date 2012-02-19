@@ -49,7 +49,8 @@ all:
     PATCH_FILES=\
                 STLport-4.5.patch \
                 STLport-4.5-gcc43_warnings.patch \
-                STLport-4.5-cxx0x.patch
+                STLport-4.5-cxx0x.patch \
+                STLport-4.5-clang_locale_h.patch
 .ELIF "$(GUI)"=="WNT"
     TARFILE_NAME=STLport-4.5-0119
     TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
