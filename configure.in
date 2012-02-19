@@ -10321,7 +10321,7 @@ AC_MSG_CHECKING([which languages to be built])
 ALL_LANGS="en-US $completelangiso"
 # check the configured localizations
 WITH_LANG="$with_lang"
-if test -z "$WITH_LANG"; then
+if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
 else
     AC_MSG_RESULT([$WITH_LANG])
