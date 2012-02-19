@@ -275,7 +275,7 @@ bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpread
     CPPUNIT_ASSERT_EQUAL(aData[0].getLength(), aLastCell.Column + 1);
 
     uno::Reference< table::XCellRange > xCellRange = xSheet->getCellRangeByPosition(0, 0, aLastCell.Column, aLastCell.Row);
-    uno::Reference< sheet::XCellRangeData > xCellRangeData(xCellRangeData, UNO_QUERY_THROW);
+    uno::Reference< sheet::XCellRangeData > xCellRangeData(xCellRange, UNO_QUERY_THROW);
 
     uno::Sequence< uno::Sequence< Any > > aSheetData = xCellRangeData->getDataArray();
     for (sal_Int32 x = 0; x < aSheetData.getLength(); ++x)
