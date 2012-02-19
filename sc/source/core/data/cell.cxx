@@ -723,32 +723,6 @@ ScStringCell::~ScStringCell()
 //      ScFormulaCell
 //
 
-ScFormulaCell::ScFormulaCell() :
-    ScBaseCell( CELLTYPE_FORMULA ),
-    eTempGrammar( FormulaGrammar::GRAM_DEFAULT),
-    pCode( NULL ),
-    pDocument( NULL ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
-    nFormatIndex(0),
-    nFormatType( NUMBERFORMAT_NUMBER ),
-    nSeenInIteration(0),
-    cMatrixFlag ( MM_NONE ),
-    bDirty( false ),
-    bChanged( false ),
-    bRunning( false ),
-    bCompile( false ),
-    bSubTotal( false ),
-    bIsIterCell( false ),
-    bInChangeTrack( false ),
-    bTableOpDirty( false ),
-    bNeedListening( false ),
-    aPos(0,0,0)
-{
-}
-
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const String& rFormula,
                               const FormulaGrammar::Grammar eGrammar,

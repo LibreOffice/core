@@ -64,9 +64,6 @@ struct ScMyCellInfo
     ~ScMyCellInfo();
 
     ScBaseCell* CreateCell(ScDocument* pDoc);
-
-private:
-    ScMyCellInfo(); // disabled
 };
 
 struct ScMyDeleted

@@ -155,7 +155,6 @@ public:
     void        SetText( const String& rStr );
     String      GetText() const;
     String      GetText( LineEnd aSeparator ) const;
-    String      GetTextLines() const;
     String      GetTextLines( LineEnd aSeparator ) const;
 
     void        Resize();
@@ -538,11 +537,6 @@ String ImpSvMEdit::GetText() const
 String ImpSvMEdit::GetText( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextEngine()->GetText( aSeparator );
-}
-
-String ImpSvMEdit::GetTextLines() const
-{
-    return mpTextWindow->GetTextEngine()->GetTextLines();
 }
 
 String ImpSvMEdit::GetTextLines( LineEnd aSeparator ) const

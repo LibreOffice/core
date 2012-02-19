@@ -254,12 +254,6 @@ bool SbxDecimal::getChar( sal_Unicode& rVal )
     return bRet;
 }
 
-bool SbxDecimal::getByte( sal_uInt8& rVal )
-{
-    bool bRet = ( VarUI1FromDec( &maDec, &rVal ) == S_OK );
-    return bRet;
-}
-
 bool SbxDecimal::getShort( sal_Int16& rVal )
 {
     bool bRet = ( VarI2FromDec( &maDec, &rVal ) == S_OK );
@@ -369,7 +363,6 @@ void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
 bool SbxDecimal::setString( ::rtl::OUString* pOUString )    { (void)pOUString;  return false; }
 
 bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
-bool SbxDecimal::getByte( sal_uInt8& rVal )         { (void)rVal; return false; }
 bool SbxDecimal::getShort( sal_Int16& rVal )        { (void)rVal; return false; }
 bool SbxDecimal::getLong( sal_Int32& rVal )         { (void)rVal; return false; }
 bool SbxDecimal::getUShort( sal_uInt16& rVal )      { (void)rVal; return false; }

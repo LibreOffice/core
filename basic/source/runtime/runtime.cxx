@@ -902,11 +902,6 @@ SbMethod* SbiRuntime::GetCaller()
     return pMeth;
 }
 
-SbxArray* SbiRuntime::GetParams()
-{
-    return refParams;
-}
-
 //  Stacks
 
 // The expression-stack is available for the continous evaluation

@@ -375,7 +375,6 @@ public:
     ScAddress       aPos;
 
                     ~ScFormulaCell();
-                    ScFormulaCell();
 
     /** Empty formula cell, or with a preconstructed token array. */
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,

@@ -38,20 +38,6 @@
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
-ScMyCellInfo::ScMyCellInfo()
-    : pCell(NULL),
-    sFormulaAddress(),
-    sFormula(),
-    sInputString(),
-    fValue(0.0),
-    nMatrixCols(0),
-    nMatrixRows(0),
-    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
-    nType(NUMBERFORMAT_ALL),
-    nMatrixFlag(MM_NONE)
-{
-}
-
 ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
             const formula::FormulaGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,
             const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
