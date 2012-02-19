@@ -490,11 +490,15 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const rtl::O
     ::rtl::OUString aElementName;
 
     parseResourceURL( aName, aElementType, aElementName );
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
         return m_xMenuBar;
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == aName ))
+    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+             ( m_aStatusBarElement.m_aName == aName ))
         return m_aStatusBarElement.m_xUIElement;
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
         return m_aProgressBarElement.m_xUIElement;
 
     return uno::Reference< ui::XUIElement >();
@@ -1494,7 +1498,8 @@ throw (RuntimeException)
             bNotify         = m_pToolbarManager->createToolbar( aName );
             bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+                  aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
         {
             // #i38743# don't create a menubar if frame isn't top
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
@@ -1545,17 +1550,20 @@ throw (RuntimeException)
             }
             aWriteLock.unlock();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+                  ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) && implts_isFrameOrWindowTop(xFrame) )
+        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+                  aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+                  implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
         {
             // Add layout manager as listener for docking and other window events
             uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject* >(this), uno::UNO_QUERY );
@@ -1598,7 +1606,8 @@ throw (RuntimeException)
     Reference< XComponent > xComponent;
     parseResourceURL( aName, aElementType, aElementName );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
     {
         if ( !m_bInplaceMenuSet )
         {
@@ -1607,7 +1616,8 @@ throw (RuntimeException)
             bNotify = true;
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
+    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
         aWriteLock.unlock();
@@ -1615,7 +1625,8 @@ throw (RuntimeException)
         bMustBeLayouted = true;
         bNotify         = true;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
     {
         aWriteLock.unlock();
         implts_createProgressBar();
@@ -1628,7 +1639,7 @@ throw (RuntimeException)
         bNotify         = m_pToolbarManager->destroyToolbar( aName );
         bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
     {
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
@@ -1670,7 +1681,9 @@ throw (uno::RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s requested.", aResName.getStr() );
 
-    if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == rResourceURL ))
+    if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+          aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+        ( m_aStatusBarElement.m_aName == rResourceURL ))
     {
         implts_readStatusBarState( rResourceURL );
         if ( m_aStatusBarElement.m_bVisible && !m_aStatusBarElement.m_bMasterHide )
@@ -1697,7 +1710,8 @@ throw (uno::RuntimeException)
             }
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) )
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
     {
         aWriteLock.unlock();
         implts_showProgressBar();
@@ -1716,7 +1730,7 @@ throw (uno::RuntimeException)
                 bNotify   = pToolbarManager->requestToolbar( rResourceURL );
             }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
     {
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         aWriteLock.unlock();
@@ -1801,7 +1815,8 @@ throw (RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
     {
         WriteGuard aWriteLock( m_aLock );
         m_bMenuVisible = sal_True;
@@ -1810,7 +1825,9 @@ throw (RuntimeException)
         bResult = implts_resetMenuBar();
         bNotify = bResult;
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == aName ))
+    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+             ( m_aStatusBarElement.m_aName == aName ))
     {
         WriteGuard aWriteLock( m_aLock );
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
@@ -1824,7 +1841,8 @@ throw (RuntimeException)
             bNotify     = true;
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
     {
         bNotify = bResult = implts_showProgressBar();
     }
@@ -1841,7 +1859,7 @@ throw (RuntimeException)
             bMustLayout = pToolbarManager->isLayoutDirty();
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1850,7 +1868,7 @@ throw (RuntimeException)
 
         impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, true );
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolpanel" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolpanel")))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1881,7 +1899,8 @@ throw (RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
     {
         WriteGuard aWriteLock( m_aLock );
 
@@ -1902,7 +1921,9 @@ throw (RuntimeException)
             }
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == aName ))
+    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+             ( m_aStatusBarElement.m_aName == aName ))
     {
         WriteGuard aWriteLock( m_aLock );
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
@@ -1913,7 +1934,8 @@ throw (RuntimeException)
             bNotify     = sal_True;
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
     {
         bNotify = implts_hideProgressBar();
     }
@@ -1927,7 +1949,7 @@ throw (RuntimeException)
         bNotify     = pToolbarManager->hideToolbar( aName );
         bMustLayout = pToolbarManager->isLayoutDirty();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -2114,7 +2136,8 @@ throw (RuntimeException)
     ::rtl::OUString aElementName;
 
     parseResourceURL( aName, aElementType, aElementName );
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
     {
         ReadGuard aReadLock( m_aLock );
         if ( m_xContainerWindow.is() )
@@ -2136,7 +2159,9 @@ throw (RuntimeException)
             }
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == aName ))
+    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+             ( m_aStatusBarElement.m_aName == aName ))
     {
         if ( m_aStatusBarElement.m_xUIElement.is() )
         {
@@ -2151,7 +2176,8 @@ throw (RuntimeException)
             }
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" )))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
     {
         if ( m_aProgressBarElement.m_xUIElement.is() )
             return m_aProgressBarElement.m_bVisible;
@@ -2166,7 +2192,7 @@ throw (RuntimeException)
         if ( pToolbarManager )
             return pToolbarManager->isToolbarVisible( aName );
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
+    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -3084,7 +3110,8 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 // No settings anymore, element must be destroyed
                     if ( xContainerWindow.is() && bNoSettings )
                 {
-                    if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+                    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
+                         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
                     {
                         SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
                         if ( pSysWindow && !m_bInplaceMenuSet )

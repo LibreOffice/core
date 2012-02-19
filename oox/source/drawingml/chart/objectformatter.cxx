@@ -1147,7 +1147,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         }
         else try
         {
-            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAscii( "general" ) ?
+            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("general")) ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
                 mxData->mxNumFmts->addNewConverted( rNumberFormat.maFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )

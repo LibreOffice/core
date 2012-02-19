@@ -1497,8 +1497,8 @@ sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star
 {
     String sNumStr = cBulletId;
 
-    if ( rFontDesc.Name.equalsIgnoreAsciiCaseAscii("starsymbol") ||
-         rFontDesc.Name.equalsIgnoreAsciiCaseAscii("opensymbol") )  {
+    if ( rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
+         rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )  {
         String sFontName = rFontDesc.Name;
         rtl_TextEncoding aCharSet = rFontDesc.CharSet;
 

@@ -1415,11 +1415,11 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
              || TAG_COMMONEND == aTokenId )
     {
         rtl::OUString aTagName = aToken.GetTagName();
-        return !(aTagName.equalsIgnoreAsciiCaseAscii( "comment" )
-              || aTagName.equalsIgnoreAsciiCaseAscii( "bookmark_value" )
-              || aTagName.equalsIgnoreAsciiCaseAscii( "emph" )
-              || aTagName.equalsIgnoreAsciiCaseAscii( "item" )
-              || aTagName.equalsIgnoreAsciiCaseAscii( "br" ) );
+        return !(aTagName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("comment"))
+              || aTagName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bookmark_value"))
+              || aTagName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("emph"))
+              || aTagName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("item"))
+              || aTagName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("br")) );
     }
     return sal_False;
 }

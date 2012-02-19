@@ -132,13 +132,18 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
     std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
     {
-        if( find->second.equalsIgnoreAsciiCaseAscii( "true" ) || find->second.equalsIgnoreAsciiCaseAscii( "on" )
-            || find->second.equalsIgnoreAsciiCaseAscii( "t" ) || find->second.equalsIgnoreAsciiCaseAscii( "1" ))
+        const rtl::OUString sValue = find->second;
+        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("t")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) )
             return true;
-        if( find->second.equalsIgnoreAsciiCaseAscii( "false" ) || find->second.equalsIgnoreAsciiCaseAscii( "off" )
-            || find->second.equalsIgnoreAsciiCaseAscii( "f" ) || find->second.equalsIgnoreAsciiCaseAscii( "0" ))
+        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("off")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("f")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) )
             return false;
-        SAL_WARN( "oox.xmlstream", "Cannot convert \'" << find->second << "\' to bool." );
+        SAL_WARN( "oox.xmlstream", "Cannot convert \'" << sValue << "\' to bool." );
     }
     return def;
 }
