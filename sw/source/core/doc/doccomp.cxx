@@ -200,6 +200,7 @@ public:
     virtual bool Compare( int nIdx1, int nIdx2 ) const = 0;
     virtual int GetLen1() const = 0;
     virtual int GetLen2() const = 0;
+    virtual ~ArrayComparator() {}
 };
 
 // Consider two lines equal if similar enough (e.g. look like different
