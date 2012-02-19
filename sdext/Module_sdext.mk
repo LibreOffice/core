@@ -39,6 +39,8 @@ endif
 
 ifeq ($(ENABLE_PDFIMPORT),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
+    Executable_pdf2xml \
+    Executable_pdfunzip \
     Executable_xpdfimport \
     Extension_pdfimport \
     Library_pdfimport \

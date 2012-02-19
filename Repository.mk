@@ -38,6 +38,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     genindex_data \
     mkunroll \
     osl_process_child \
+    pdf2xml \
+    pdfunzip \
     rsc \
     rscdep \
     saxparser \
