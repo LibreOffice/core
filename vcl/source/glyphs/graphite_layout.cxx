@@ -859,7 +859,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
     }
     else if (nDeltaWidth < 0)// condense - apply a factor to all glyph positions
     {
-        if (mvGlyphs.size() == 0) return;
+        if (mvGlyphs.empty()) return;
         Glyphs::iterator iLastGlyph = mvGlyphs.begin() + (mvGlyphs.size() - 1);
         // position last glyph using original width
         float fXFactor = static_cast<float>(rArgs.mnLayoutWidth - iLastGlyph->mnOrigWidth) / static_cast<float>(iLastGlyph->maLinearPos.X());

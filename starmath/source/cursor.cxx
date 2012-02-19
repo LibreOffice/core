@@ -298,7 +298,7 @@ void SmCursor::Delete(){
 }
 
 void SmCursor::InsertNodes(SmNodeList* pNewNodes){
-    if(pNewNodes->size() == 0){
+    if(pNewNodes->empty()){
         delete pNewNodes;
         return;
     }
@@ -702,7 +702,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //If there's no selected nodes, create a place node
     SmNode *pBodyNode;
     SmCaretPos PosAfterInsert;
-    if(pSelectedNodesList->size() == 0) {
+    if(pSelectedNodesList->empty()) {
         pBodyNode = new SmPlaceNode();
         PosAfterInsert = SmCaretPos(pBodyNode, 1);
     } else
@@ -871,7 +871,7 @@ bool SmCursor::InsertRow() {
         it = pLineList->end();
         if(it != pLineList->begin())
             --it;
-        if(pNewLineList->size() == 0)
+        if(pNewLineList->empty())
             pNewLineList->push_front(new SmPlaceNode());
         //Parse new line
         SmNode *pNewLine = SmNodeListParser().Parse(pNewLineList);

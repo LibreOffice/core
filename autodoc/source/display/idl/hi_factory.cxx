@@ -234,7 +234,7 @@ HtmlFactory_Idl::write_ManualLinks( Xml::Element &  o_screen,
 {
     const StringVector &
         rLinks2Descrs = i_ce.Secondaries().Links2DescriptionInManual();
-    if ( rLinks2Descrs.size() == 0 )
+    if ( rLinks2Descrs.empty() )
         return;
 
     o_screen

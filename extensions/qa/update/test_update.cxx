@@ -154,7 +154,7 @@ protected:
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "123456-abcdef-1a2b3c-4d5e6f" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
         {
-            CPPUNIT_ASSERT( aInfo.Sources.size() == 0 );
+            CPPUNIT_ASSERT( aInfo.Sources.empty() );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );

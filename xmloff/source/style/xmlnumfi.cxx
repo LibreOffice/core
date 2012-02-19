@@ -1579,7 +1579,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  and no color definition (detected by the '[' at the start)
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
     if ( bAutoInt )         // automatic integer digits
@@ -1587,7 +1587,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //! only if two decimal places was set?
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 

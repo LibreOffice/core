@@ -290,7 +290,7 @@ ManagerImpl::ManagerImpl(
 //__________________________________________________________________________________________________
 ManagerImpl::~ManagerImpl()
 {
-    OSL_ENSURE( _aProviders.size() == 0, "### still providers left!" );
+    OSL_ENSURE( _aProviders.empty(), "### still providers left!" );
     OSL_TRACE( "> TypeDescriptionManager shut down. <" );
     ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }

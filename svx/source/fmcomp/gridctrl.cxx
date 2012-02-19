@@ -3688,7 +3688,7 @@ void DbGridControl::EndCursorAction()
 void DbGridControl::ConnectToFields()
 {
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
-    DBG_ASSERT(!pListeners || pListeners->size() == 0, "DbGridControl::ConnectToFields : please call DisconnectFromFields first !");
+    DBG_ASSERT(!pListeners || pListeners->empty(), "DbGridControl::ConnectToFields : please call DisconnectFromFields first !");
 
     if (!pListeners)
     {

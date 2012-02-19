@@ -159,7 +159,7 @@ void IdlReflectionServiceImpl::dispose()
     MutexGuard aGuard( _aComponentMutex );
     _aElements.clear();
 #ifdef TEST_LIST_CLASSES
-    OSL_ENSURE( g_aClassNames.size() == 0, "### idl classes still alive!" );
+    OSL_ENSURE( g_aClassNames.empty(), "### idl classes still alive!" );
     ClassNameList::const_iterator iPos( g_aClassNames.begin() );
     while (iPos != g_aClassNames.end())
     {

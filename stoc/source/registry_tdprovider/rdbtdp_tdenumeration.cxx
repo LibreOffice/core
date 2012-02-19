@@ -171,7 +171,7 @@ TypeDescriptionEnumerationImpl::createInstance(
     if ( !bOpenKeySucceeded )
         throw reflection::NoSuchTypeNameException();
 
-    if ( aModuleKeys.size() == 0 )
+    if ( aModuleKeys.empty() )
         throw reflection::InvalidTypeNameException();
 
     return rtl::Reference< TypeDescriptionEnumerationImpl >(

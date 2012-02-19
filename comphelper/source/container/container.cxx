@@ -113,7 +113,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     bCheckingStartingPoint = sal_False;
                 }
 
-                if ((m_arrChildIndizies.size() == 0) && !bCheckingStartingPoint)
+                if (m_arrChildIndizies.empty() && !bCheckingStartingPoint)
                 {   // das ist genau dann der Fall, wenn ich keinen rechten Nachbarn fuer irgendeinen der direkten Vorfahren des
                     // urspruenglichen xSearchLoop gefunden habe
                     bHasMoreToSearch = sal_False;
@@ -138,7 +138,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
 
     if (!bFoundSomething)
     {
-        OSL_ENSURE(m_arrChildIndizies.size() == 0, "IndexAccessIterator::Next : items left on stack ! how this ?");
+        OSL_ENSURE(m_arrChildIndizies.empty(), "IndexAccessIterator::Next : items left on stack ! how this ?");
         Invalidate();
     }
 

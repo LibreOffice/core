@@ -775,7 +775,7 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     aLock.clear();
     // <- SYNCHRONIZED
 
-    if (lFilters.size() == 0)
+    if (lFilters.empty())
         return;
 
     COMDLG_FILTERSPEC   *pFilt = &lFilters[0];

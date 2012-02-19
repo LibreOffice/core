@@ -296,7 +296,7 @@ void BackendDb::writeVectorOfPair(
     css::uno::Reference<css::xml::dom::XNode> const & xParent)
 {
     try{
-        if (vecPairs.size() == 0)
+        if (vecPairs.empty())
             return;
         const OUString sNameSpace = getDbNSName();
         OSL_ASSERT(!sNameSpace.isEmpty());
@@ -413,7 +413,7 @@ void BackendDb::writeSimpleList(
 {
     try
     {
-        if (list.size() == 0)
+        if (list.empty())
             return;
         const OUString sNameSpace = getDbNSName();
         const OUString sPrefix(getNSPrefix() + OUSTR(":"));

@@ -65,7 +65,7 @@ OComponentEventThread::~OComponentEventThread()
 {
     DBG_DTOR( OComponentEventThread, NULL );
 
-    DBG_ASSERT( m_aEvents.size() == 0,
+    DBG_ASSERT( m_aEvents.empty(),
         "OComponentEventThread::~OComponentEventThread: Kein dispose gerufen?" );
 
     impl_clearEventQueue();

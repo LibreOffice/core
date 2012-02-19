@@ -210,14 +210,14 @@ GlyphSet::GetSymbolMapping (sal_Unicode nUnicodeChar)
 void
 GlyphSet::AddNotdef (char_map_t &rCharMap)
 {
-    if (rCharMap.size() == 0)
+    if (rCharMap.empty())
         rCharMap[0] = 0;
 }
 
 void
 GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
 {
-    if (rGlyphMap.size() == 0)
+    if (rGlyphMap.empty())
         rGlyphMap[0] = 0;
 }
 sal_Bool
@@ -699,7 +699,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
             PSDefineReencodedFont (pOutFile, nGlyphSetID);
             continue;
         }
-        if ((*aGlyphSet).size() == 0) // empty set, doesn't need reencoding
+        if ((*aGlyphSet).empty()) // empty set, doesn't need reencoding
         {
             continue;
         }
@@ -845,7 +845,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
          aCharSet != maCharList.end();
          ++aCharSet, nCharSetID++)
     {
-        if ((*aCharSet).size() == 0)
+        if ((*aCharSet).empty())
             continue;
 
         // loop thru all the chars in the subset
@@ -877,7 +877,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
          aGlyphSet != maGlyphList.end();
          ++aGlyphSet, nGlyphSetID++)
     {
-        if ((*aGlyphSet).size() == 0)
+        if ((*aGlyphSet).empty())
             continue;
 
         // loop thru all the glyphs in the subset

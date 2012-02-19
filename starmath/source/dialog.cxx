@@ -1291,7 +1291,7 @@ void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
     if (nSymbol < aSymbolSet.size())
         nSelectSymbol = nSymbol;
 
-    if (aSymbolSet.size() == 0)
+    if (aSymbolSet.empty())
         nSelectSymbol = SYMBOL_NONE;
 
     if (nSelectSymbol != SYMBOL_NONE)

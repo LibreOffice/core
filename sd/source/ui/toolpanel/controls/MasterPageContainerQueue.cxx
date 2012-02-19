@@ -217,7 +217,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
 
     do
     {
-        if (mpRequestQueue->size() == 0)
+        if (mpRequestQueue->empty())
             break;
 
         // First check whether the system is idle.

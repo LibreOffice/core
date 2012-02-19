@@ -197,7 +197,7 @@ public:
 
 template < typename T, typename Allocator > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T, Allocator> &vec )
 {
-    if ( vec.size() == 0 )
+    if ( vec.empty() )
         return com::sun::star::uno::Sequence<T>();
     else
         return com::sun::star::uno::Sequence<T>( &vec[0], vec.size());

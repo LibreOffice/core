@@ -344,7 +344,7 @@ void printf_packages(
 {
     OSL_ASSERT(allExtensions.size() == vecUnaccepted.size());
 
-    if (allExtensions.size() == 0)
+    if (allExtensions.empty())
     {
         printf_space( level );
         dp_misc::writeConsole("<none>\n");

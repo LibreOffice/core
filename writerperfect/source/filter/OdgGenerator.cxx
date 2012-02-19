@@ -222,7 +222,7 @@ static WPXString doubleToString(const double value)
 #else
     std::string decimalPoint(".");
 #endif
-    if ((decimalPoint.size() == 0) || (decimalPoint == "."))
+    if (decimalPoint.empty() || (decimalPoint == "."))
         return tempString;
     std::string stringValue(tempString.cstr());
     if (!stringValue.empty())

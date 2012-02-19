@@ -74,7 +74,7 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
 {
     const StringVector &
         rLinks2Refs = i_ce.Secondaries().Links2RefsInManual();
-    if ( rLinks2Refs.size() == 0 )
+    if ( rLinks2Refs.empty() )
     {
         rContentDirectory
             << C_sDevMan

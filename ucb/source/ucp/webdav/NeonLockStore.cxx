@@ -98,7 +98,7 @@ NeonLockStore::~NeonLockStore()
     stopTicker();
 
     // release active locks, if any.
-    OSL_ENSURE( m_aLockInfoMap.size() == 0,
+    OSL_ENSURE( m_aLockInfoMap.empty(),
                 "NeonLockStore::~NeonLockStore - Releasing active locks!" );
 
     LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );

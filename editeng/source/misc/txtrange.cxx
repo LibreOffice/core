@@ -409,7 +409,7 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
     }
     if( !bMultiple )
     {
-        DBG_ASSERT( pLongArr->size() == 0, "I said: Simple!" );
+        DBG_ASSERT( pLongArr->empty(), "I said: Simple!" );
         if( nAct )
         {
             if( bInner )

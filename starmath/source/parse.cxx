@@ -1112,7 +1112,7 @@ void SmParser::Line()
     //If there's no expression, add an empty one.
     //this is to avoid a formula tree without any caret
     //positions, in visual formula editor.
-    if(ExpressionArray.size() == 0)
+    if(ExpressionArray.empty())
         ExpressionArray.push_back(new SmExpressionNode(SmToken()));
 
     SmStructureNode *pSNode = new SmLineNode(m_aCurToken);

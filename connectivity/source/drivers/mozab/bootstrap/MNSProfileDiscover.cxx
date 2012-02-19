@@ -300,7 +300,7 @@ namespace connectivity
                 //default profile setted in mozilla registry
                 return m_Product.mCurrentProfileName;
             }
-            if (m_Product.mProfileList.size() == 0)
+            if (m_Product.mProfileList.empty())
             {
                 //there are not any profiles
                 return ::rtl::OUString();

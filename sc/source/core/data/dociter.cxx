@@ -311,7 +311,7 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                     }
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->maItems.size() == 0 );
+            } while ( pCol->maItems.empty() );
             pCol->Search( nRow, nColRow );
         }
 
@@ -1040,7 +1040,7 @@ ScBaseCell* ScCellIterator::GetThis()
                         return NULL;                // Ende und Aus
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->maItems.size() == 0 );
+            } while ( pCol->maItems.empty() );
             pCol->Search( nRow, nColRow );
         }
 
@@ -1152,7 +1152,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                     nFirstQueryField = rEntry.nField;
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-            } while ( pCol->maItems.size() == 0 );
+            } while ( pCol->maItems.empty() );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
                 !mpParam->bHasHeader && rItem.meType == ScQueryEntry::ByString &&

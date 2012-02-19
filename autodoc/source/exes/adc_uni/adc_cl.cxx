@@ -255,7 +255,7 @@ CommandLine::do_PrintUse() const
 bool
 CommandLine::inq_CheckParameters() const
 {
-    if (NOT bInitOk OR aCommands.size() == 0)
+    if (NOT bInitOk OR aCommands.empty())
         return false;
     return true;
 }

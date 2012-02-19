@@ -2272,7 +2272,7 @@ ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( FontSelectPattern& rF
 
 ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 {
-    DBG_ASSERT( m_aSubsets.size() == 0, "Fonts changing during PDF generation, document will be invalid" );
+    DBG_ASSERT( m_aSubsets.empty(), "Fonts changing during PDF generation, document will be invalid" );
     ImplDevFontList* pFiltered = pFontList->Clone( true, true );
 
     // append the PDF builtin fonts

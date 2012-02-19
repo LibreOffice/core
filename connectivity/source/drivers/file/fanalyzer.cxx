@@ -263,7 +263,7 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
     OOperand* pOperand = aCodeStack.top();
     aCodeStack.pop();
 
-    OSL_ENSURE(aCodeStack.size() == 0, "StackFehler");
+    OSL_ENSURE(aCodeStack.empty(), "StackFehler");
     OSL_ENSURE(pOperand, "StackFehler");
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;

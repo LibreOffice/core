@@ -640,7 +640,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
 {
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
 
-    if ( maLabelNames.size() == 0 )
+    if ( maLabelNames.empty() )
         maLabelNames.push_back( new ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_DATA)) );
 
     //reset name if needed

@@ -207,7 +207,7 @@ public:
 
         pb->clear();
 
-        CPPUNIT_ASSERT_MESSAGE("Clearing property bag failed", pb->size() == 0);
+        CPPUNIT_ASSERT_MESSAGE("Clearing property bag failed", pb->empty());
     }
 
     void testSortPropertyBag()
@@ -393,7 +393,7 @@ public:
         PropertyBag_Pointer_t pb = createPropertyBag();
         PropertyPoolHandle_Pointer_t ph = pool->insert(pb);
 
-        CPPUNIT_ASSERT_MESSAGE("Inserting empty property bag failed", ph->getPropertyBag()->size() == 0);
+        CPPUNIT_ASSERT_MESSAGE("Inserting empty property bag failed", ph->getPropertyBag()->empty());
     }
 
     void testDumpPropertyPool()

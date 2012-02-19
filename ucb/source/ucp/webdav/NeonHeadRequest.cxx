@@ -49,7 +49,7 @@ void process_headers( ne_request * req,
         rtl::OUString aHeaderValue( rtl::OUString::createFromAscii( value ) );
 
         // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = ( rHeaderNames.size() == 0 );
+        bool bIncludeIt = ( rHeaderNames.empty() );
 
         if ( !bIncludeIt )
         {

@@ -2068,7 +2068,7 @@ SwSaveRowSpan* SwTable::CleanUpTopRowSpan( sal_uInt16 nSplitLine )
     if( !IsNewModel() )
         return pRet;
     pRet = new SwSaveRowSpan( GetTabLines()[0]->GetTabBoxes(), nSplitLine );
-    if( pRet->mnRowSpans.size() == 0 )
+    if( pRet->mnRowSpans.empty() )
     {
         delete pRet;
         pRet = 0;

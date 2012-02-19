@@ -1337,7 +1337,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
     PopTextListsHelper();
-    DBG_ASSERT( maTextListsHelperStack.size() == 0,
+    DBG_ASSERT( maTextListsHelperStack.empty(),
                 "misusage of text lists helper stack - it is not empty. Serious defect - please inform OD" );
 }
 

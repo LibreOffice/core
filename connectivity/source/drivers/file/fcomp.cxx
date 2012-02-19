@@ -578,7 +578,7 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     OOperand* pOperand = m_aStack.top();
     m_aStack.pop();
 
-    DBG_ASSERT(m_aStack.size() == 0, "StackFehler");
+    DBG_ASSERT(m_aStack.empty(), "StackFehler");
     DBG_ASSERT(pOperand, "StackFehler");
 
     bResult = pOperand->isValid();
@@ -605,7 +605,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
     OOperand* pOperand = m_aStack.top();
     m_aStack.pop();
 
-    DBG_ASSERT(m_aStack.size() == 0, "StackFehler");
+    DBG_ASSERT(m_aStack.empty(), "StackFehler");
     DBG_ASSERT(pOperand, "StackFehler");
 
     (*_rVal) = pOperand->getValue();

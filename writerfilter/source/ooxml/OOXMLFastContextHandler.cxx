@@ -111,7 +111,7 @@ public:
     {
         string s((*QNameToString::Instance())(rId));
 
-        if (s.size() == 0)
+        if (s.empty())
             s = "(fasttoken)" + fastTokenToId(rId);
         else
             s = "(qname)" + s;

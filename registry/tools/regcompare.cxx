@@ -262,11 +262,11 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         }
     }
 
-    if ( m_regName1.size() == 0 )
+    if ( m_regName1.empty() )
     {
         return badOption("missing", "-r1");
     }
-    if ( m_regName2.size() == 0 )
+    if ( m_regName2.empty() )
     {
         return badOption("missing", "-r2");
     }

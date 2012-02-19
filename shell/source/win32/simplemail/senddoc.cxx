@@ -111,7 +111,7 @@ void addRecipient(
 /** @internal */
 void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 {
-    OSL_ASSERT(pMapiRecipientList->size() == 0);
+    OSL_ASSERT(pMapiRecipientList->empty());
 
     // add to recipients
     StringListIterator_t iter = gTo.begin();
@@ -135,7 +135,7 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 /** @internal */
 void initAttachementList(MapiAttachmentList_t* pMapiAttachmentList)
 {
-    OSL_ASSERT(pMapiAttachmentList->size() == 0);
+    OSL_ASSERT(pMapiAttachmentList->empty());
 
     StringListIterator_t iter = gAttachments.begin();
     StringListIterator_t iter_end = gAttachments.end();

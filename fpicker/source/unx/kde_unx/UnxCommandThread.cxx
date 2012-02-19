@@ -182,7 +182,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
 
     ::std::list< ::rtl::OUString > aList = tokenize( rCommand );
 
-    if ( aList.size() == 0 )
+    if ( aList.empty() )
         return;
 
     ::rtl::OUString aCommandName = aList.front();

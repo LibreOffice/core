@@ -57,7 +57,7 @@ public:
         mbIsEditDoc(bIsEditDoc),
         mnRefCount(0)
     {
-        if( (maParagraphDataVector.size() == 0) && (pEditTextObject->GetParagraphCount() != 0) )
+        if( maParagraphDataVector.empty() && (pEditTextObject->GetParagraphCount() != 0) )
             maParagraphDataVector.resize(pEditTextObject->GetParagraphCount());
     }
 
