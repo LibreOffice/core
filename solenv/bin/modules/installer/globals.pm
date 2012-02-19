@@ -237,8 +237,6 @@ BEGIN
 
     $strip = 1;
 
-    $globallogging = 0;
-    $globalloggingform21 = 1;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
     @errorlogfileinfo = ();

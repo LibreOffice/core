@@ -542,14 +542,10 @@ sub create_directory_table
     my $infoline;
 
     overwrite_programfilesfolder($allvariableshashref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_unique_directorynames($directoryref, $allvariableshashref);
     $already_checked_the_frigging_directories_for_uniqueness++;
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
     set_installlocation_directory($directoryref, $allvariableshashref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
     add_root_directories(\@directorytable, $allvariableshashref, $onelanguage);
     create_directorytable_from_collection(\@directorytable, $directoryref);

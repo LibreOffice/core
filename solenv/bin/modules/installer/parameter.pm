@@ -134,7 +134,6 @@ sub getparameter
         elsif ($param eq "-c") { $installer::globals::compiler = shift(@ARGV); }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
-        elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
         elsif ($param eq "-verbose") { $installer::globals::quiet = 0; }
         elsif ($param eq "-tab") { $installer::globals::tab = 1; }
@@ -544,7 +543,6 @@ sub outputparameter
     if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
     if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
-    if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
     else { push(@output, "No file stripping\n"); }
