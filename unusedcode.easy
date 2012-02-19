@@ -252,11 +252,6 @@ SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
 SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
 SvtIconWindow_Impl::GetSelectedIconText() const
-SvtListenerIter::First(void* (*)())
-SvtListenerIter::GoEnd()
-SvtListenerIter::GoPrev()
-SvtListenerIter::GoRoot()
-SvtListenerIter::Next()
 SvtScriptedTextHelper::GetText() const
 SvtScriptedTextHelper::GetTextHeight() const
 SvtScriptedTextHelper::GetTextWidth() const
