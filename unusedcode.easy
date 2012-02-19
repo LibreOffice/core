@@ -535,7 +535,6 @@ XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(char const*, char const*, unsigned char, short)
 XMLPropertyBackpatcher<short>::XMLPropertyBackpatcher(rtl::OUString const&, rtl::OUString const&, unsigned char, short)
 XMLTextFieldExport::ProcessDate(xmloff::token::XMLTokenEnum, com::sun::star::util::Date const&, unsigned short)
-XMLTextListAutoStylePool::HasName(rtl::OUString const&) const
 XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
 XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
