@@ -393,12 +393,6 @@ SvStream* GraphicObject::GetSwapStream() const
     return( HasSwapStreamHdl() ? (SvStream*) mpSwapStreamHdl->Call( (void*) this ) : GRFMGR_AUTOSWAPSTREAM_NONE );
 }
 
-// !!! to be removed
-sal_uLong GraphicObject::GetReleaseFromCache() const
-{
-    return 0;
-}
-
 void GraphicObject::SetAttr( const GraphicAttr& rAttr )
 {
     maAttr = rAttr;

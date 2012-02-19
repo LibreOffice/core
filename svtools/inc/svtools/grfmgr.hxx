@@ -346,9 +346,6 @@ protected:
     virtual void            GraphicManagerDestroyed();
     virtual SvStream*       GetSwapStream() const;
 
-    // !!! to be removed
-    virtual sal_uLong       GetReleaseFromCache() const;
-
     virtual void            Load( SvStream& );
     virtual void            Save( SvStream& );
     virtual void            Assign( const SvDataCopyStream& );
