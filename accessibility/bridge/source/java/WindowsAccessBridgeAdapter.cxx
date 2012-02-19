@@ -168,7 +168,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
         }
     }
 
-    catch ( RuntimeException &e)
+    catch (const RuntimeException &)
     {
         OSL_TRACE("RuntimeException caught while initializing the mapping");
     }
@@ -252,7 +252,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                     }
                 }
             }
-            catch (::com::sun::star::uno::RuntimeException &e)
+            catch (const ::com::sun::star::uno::RuntimeException &)
             {
                 // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
                 // but keep revoking these windows in hide(s).
