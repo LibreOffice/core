@@ -98,8 +98,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                            aLocale );
 
-    // EDIT FROM HERE
-
     vector< vector< rtl::OUString > > queryList;
     {
         sal_Int32 idx;
@@ -169,7 +167,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 }
                 pQueryResultVector->reserve( hitCount );
 
-// INVOCATION HERE
+                // START Invoke CLucene HelpSearch
                 rtl::OUString aLang = m_aURLParameter.get_language();
                 rtl::OUString aSystemPath;
                 osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
@@ -185,12 +183,13 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 if( nQueryListSize > 1 )
                     aSet.clear();
 
-                for (unsigned j = 0; j < aPathVector.size(); ++i) {
+                for (unsigned j = 0; j < aPathVector.size(); ++j) {
                     pQueryResultVector->push_back(HitItem(aPathVector[j], aScoreVector[j]));
                     if (nQueryListSize > 1)
                         aSet.insert(aPathVector[j]);
                 }
-// INVOCATION END
+                // END Invoke CLucene HelpSearch
+
                 // intersect
                 if( nQueryListSize > 1 )
                 {
