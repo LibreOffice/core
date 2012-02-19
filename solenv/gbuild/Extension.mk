@@ -195,4 +195,14 @@ endif
 
 endef
 
+define gb_Extension_add_package_dependency
+$(call gb_Extension_get_target,$(1)) : $(call gb_Package_get_target,$(2))
+
+endef
+
+define gb_Extension_add_package_dependencies
+$(foreach package,$(2),$(call gb_Extension_add_package_dependency,$(1),$(package)))
+
+endef
+
 # vim: set noet sw=4 ts=4:
