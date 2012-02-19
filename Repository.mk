@@ -58,6 +58,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_executables,OOO,\
 	crashrep_com \
+	gengal \
 	guiloader \
 	guistdio \
 	odbcconfig \

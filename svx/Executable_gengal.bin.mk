@@ -25,9 +25,16 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Executable_Executable,gengal.bin))
+ifeq ($(OS),WNT)
+gengalbin := gengal
+else
+gengalbin := gengal.bin
+endif
 
-$(eval $(call gb_Executable_set_include,gengal.bin,\
+
+$(eval $(call gb_Executable_Executable,$(gengalbin)))
+
+$(eval $(call gb_Executable_set_include,$(gengalbin),\
     $$(INCLUDE) \
     -I$(SRCDIR)/svx/inc/ \
     -I$(SRCDIR)/svx/inc/pch \
@@ -36,11 +43,11 @@ $(eval $(call gb_Executable_set_include,gengal.bin,\
     -I$(OUTDIR)/inc/offapi \
 ))
 
-$(eval $(call gb_Executable_add_cxxflags,gengal.bin,\
+$(eval $(call gb_Executable_add_cxxflags,$(gengalbin),\
     $$(CXXFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,gengal.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
     sal \
     tl \
     svl \
@@ -52,16 +59,16 @@ $(eval $(call gb_Executable_add_linked_libs,gengal.bin,\
     svxcore \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,gengal.bin,\
+$(eval $(call gb_Executable_add_exception_objects,$(gengalbin),\
     svx/source/gengal/gengal \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,gengal.bin,\
+$(eval $(call gb_Executable_add_linked_static_libs,$(gengalbin),\
     vclmain \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_linked_libs,gengal.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
     kernel32 \
     msvcrt \
     oldnames \
@@ -71,7 +78,7 @@ $(eval $(call gb_Executable_add_linked_libs,gengal.bin,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,gengal.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
     dl \
     pthread \
 ))
