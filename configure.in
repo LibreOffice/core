@@ -1977,7 +1977,7 @@ pathmunge ()
         else
             new_path="$1"
         fi
-        if ! echo LO_PATH | $EGREP -q "(^|:)$1($|:)" ; then
+        if ! echo "$LO_PATH" | $EGREP -q "(^|:)$1($|:)" ; then
             if test "$2" = "after" ; then
                 LO_PATH="$LO_PATH:$new_path"
             else
