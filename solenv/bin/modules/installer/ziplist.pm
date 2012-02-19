@@ -27,10 +27,11 @@
 
 package installer::ziplist;
 
+use File::Spec::Functions qw(rel2abs);
+
 use installer::exiter;
 use installer::globals;
 use installer::logger;
-use installer::parameter;
 use installer::remover;
 use installer::systemactions;
 
@@ -702,10 +703,10 @@ sub resolve_relative_pathes
 {
     my ( $patharrayref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    for my $path ( @{$patharrayref} )
     {
-        installer::parameter::make_path_absolute(\${$patharrayref}[$i]);
-        simplify_path(\${$patharrayref}[$i]);
+        $path = rel2abs($path);
+        simplify_path(\$path);
     }
 }
 
