@@ -95,27 +95,6 @@ sub save_file
     }
 }
 
-sub save_hash
-{
-    my ($savefile, $hashref) = @_;
-
-    my @printcontent = ();
-
-    my $itemkey;
-
-    foreach $itemkey ( keys %{$hashref} )
-    {
-        my $line = "";
-        my $itemvalue = $hashref->{$itemkey};
-        $line = $itemkey . "=" . $itemvalue . "\n";
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_hash");
-    print OUT @printcontent;
-    close( OUT);
-}
-
 sub save_array_of_hashes
 {
     my ($savefile, $arrayref) = @_;
@@ -132,34 +111,6 @@ sub save_array_of_hashes
         {
             my $itemvalue = $hashref->{$itemkey};
             $line = $line . $itemkey . "=" . $itemvalue . "\t";
-        }
-
-        $line = $line . "\n";
-
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
-    print OUT @printcontent;
-    close( OUT);
-}
-
-sub save_array_of_hashes_modules
-{
-    my ($savefile, $arrayref) = @_;
-
-    my @printcontent = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $line = "***************************************************\n";
-        my $hashref = ${$arrayref}[$i];
-        my $itemkey;
-
-        foreach $itemkey ( keys %{$hashref} )
-        {
-            my $itemvalue = $hashref->{$itemkey};
-            $line = $line . $itemkey . "=" . $itemvalue . "\n";
         }
 
         $line = $line . "\n";
