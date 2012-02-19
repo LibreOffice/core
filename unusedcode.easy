@@ -549,7 +549,6 @@ XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString
 XWindowItem::XWindowItem(unsigned short, Window*)
 XWindowItem::XWindowItem(unsigned short, com::sun::star::uno::Reference<com::sun::star::awt::XWindow>&)
 XclExpFontBuffer::Insert(ScPatternAttr const&, short, XclExpColorType, bool)
-XclExpName::IsHidden() const
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 XclExpString::SetFormats(std::__debug::vector<XclFormatRun, std::allocator<XclFormatRun> > const&)
 XclTokenArray::XclTokenArray(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, bool)

@@ -94,8 +94,6 @@ public:
 
     /** Returns true, if this defined name is volatile. */
     bool                IsVolatile() const;
-    /** Returns true, if this defined name is hidden. */
-    bool                IsHidden() const;
     /** Returns true, if this defined name describes a macro call.
         @param bFunc  true = Macro function; false = Macro procedure. */
     bool                IsMacroCall( bool bVBasic, bool bFunc ) const;
@@ -304,11 +302,6 @@ void XclExpName::SetSymbol( String sSymbol )
 bool XclExpName::IsVolatile() const
 {
     return mxTokArr && mxTokArr->IsVolatile();
-}
-
-bool XclExpName::IsHidden() const
-{
-    return ::get_flag( mnFlags, EXC_NAME_HIDDEN );
 }
 
 bool XclExpName::IsMacroCall( bool bVBasic, bool bFunc ) const
