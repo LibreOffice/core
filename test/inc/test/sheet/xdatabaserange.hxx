@@ -45,6 +45,7 @@ public:
     void testGetSubtotalDescriptor();
     void testGetImportDescriptor();
     void testGetFilterDescriptor();
+    void testRefresh();
 };
 
 }

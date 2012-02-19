@@ -37,6 +37,10 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
 #include "cppunit/extensions/HelperMacros.h"
@@ -151,6 +155,49 @@ void XDatabaseRange::testGetImportDescriptor()
 {
     uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImportDescriptor"))), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xImportDescr = xDBRange->getImportDescriptor();
+}
+
+void XDatabaseRange::testRefresh()
+{
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Refresh"))), UNO_QUERY_THROW);
+
+    const sal_Int32 nCol = 0;
+    rtl::OUString aHidden(RTL_CONSTASCII_USTRINGPARAM("IsVisible"));
+    uno::Reference< sheet::XCellRangeReferrer > xCellRangeReferrer(xDBRange, UNO_QUERY_THROW);
+    uno::Reference< table::XCellRange > xCellRange = xCellRangeReferrer->getReferredCells();
+
+    for (sal_Int32 i = 1; i < 5; ++i)
+    {
+        uno::Reference< table::XCell > xCell = xCellRange->getCellByPosition(nCol, i);
+        xCell->setValue(0);
+    }
+
+    for (sal_Int32 i = 2; i < 5; ++i)
+    {
+        uno::Reference< table::XColumnRowRange > xColRowRange(xCellRange, UNO_QUERY_THROW);
+        uno::Reference< table::XTableRows > xRows = xColRowRange->getRows();
+        uno::Reference< table::XCellRange > xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
+        uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
+        Any aAny = xPropRow->getPropertyValue( aHidden );
+
+        CPPUNIT_ASSERT( aAny.get<sal_Bool>() == true);
+    }
+
+    xDBRange->refresh();
+    std::cout << "after refresh" << std::endl;
+
+    for (sal_Int32 i = 1; i < 5; ++i)
+    {
+        uno::Reference< table::XColumnRowRange > xColRowRange(xCellRange, UNO_QUERY_THROW);
+        uno::Reference< table::XTableRows > xRows = xColRowRange->getRows();
+        uno::Reference< table::XCellRange > xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
+        uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
+        Any aAny = xPropRow->getPropertyValue( aHidden );
+
+        CPPUNIT_ASSERT( aAny.get<sal_Bool>() == false);
+    }
+
+
 }
 
 }
