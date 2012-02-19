@@ -45,7 +45,6 @@
 /aclocal.m4
 /autom4te.cache
 /autogen.lastrun
-/build_env
 /ChangeLog
 /config.guess
 /config.log
@@ -118,10 +117,6 @@ test/user-template/user/psprint/pspfontcache
 
 # LibreOffice lock files
 .~lock.*#
-
-# Everyone loves patching
-*.orig
-*.rej
 
 # Somepeople love debugging
 gdbtrace.log
