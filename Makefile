@@ -378,8 +378,14 @@ bootstrap: $(WORKDIR_BOOTSTRAP)
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+	cd packimages && unset MAKEFLAGS && \
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+ifeq ($(OS_FOR_BUILD),WNT)
+	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
+else
 	cd instsetoo_native && unset MAKEFLAGS && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+endif
 
 cross-toolset: bootstrap fetch
 	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
