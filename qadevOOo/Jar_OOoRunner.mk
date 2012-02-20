@@ -571,7 +571,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/frame/_XFrameActionListener \
     qadevOOo/tests/java/ifc/frame/_XFrameLoader \
     qadevOOo/tests/java/ifc/frame/_XFramesSupplier \
-    qadevOOo/tests/java/ifc/frame/_XInplaceLayout \
     qadevOOo/tests/java/ifc/frame/_XLayoutManager \
     qadevOOo/tests/java/ifc/frame/_XModel \
     qadevOOo/tests/java/ifc/frame/_XModuleManager \
