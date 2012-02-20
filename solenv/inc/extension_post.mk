@@ -39,15 +39,15 @@ fixme4=$(fixme:n)
 $(EXTENSIONDIR)/$(COMPONENT_CONFIGDEST)/%.xcu : %.xcu
 # ugly hacking to workaround prepended first source path
     @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
-    $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
+    $(COMMAND_ECHO)$(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
     
 $(EXTENSIONDIR)/$(COMPONENT_CONFIGDESTSCHEMA)/%.xcs : %.xcs
     @@-$(MKDIRHIER) $(subst,$(fixme4),$(MISC) $(@:d))
-    $(GNUCOPY) $< $(subst,$(fixme4),$(MISC) $@)
+    $(COMMAND_ECHO)$(GNUCOPY) $< $(subst,$(fixme4),$(MISC) $@)
 
 $(EXTENSIONDIR)/%.jar : $(SOLARBINDIR)/%.jar
     @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
+    $(COMMAND_ECHO)$(GNUCOPY) $< $@
 
 .IF "$(COMPONENT_FILES)"!=""
 COMPONENT_FILES_SRC*=./
