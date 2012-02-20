@@ -82,7 +82,6 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\unopkg %_DEST%\bin%_EXT%\unopkg.bin
 ..\%__SRC%\bin\so\unopkg %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.bin
-..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.exe
 ..\%__SRC%\bin\so\unopkg.exe %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
 ..\%__SRC%\bin\unopkga*.dll %_DEST%\bin%_EXT%\unopkga*.dll
