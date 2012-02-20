@@ -1030,9 +1030,19 @@ lo_apk_opendir(const char *dirname)
 
         HASH_FIND(hh, dir, p, (unsigned)(q - p), entry);
 
-        if (entry == NULL) {
+        if (entry == NULL && *q == '/') {
             errno = ENOENT;
             return NULL;
+        } else if (entry == NULL) {
+            /* Empty directories, or directories containing only "hidden"
+             * files (like the .gitignore in sc/qa/unit/qpro/indeterminate)
+             * are not present in the .apk. So we need to pretend that any
+             * directory that doesn't exist as a parent of an entry in the
+             * .apk *does* exist but is empty.
+             */
+            lo_apk_dir *result = malloc(sizeof(*result));
+            result->cur = NULL;
+            return result;
         }
 
         if (entry->kind != DIRECTORY) {
