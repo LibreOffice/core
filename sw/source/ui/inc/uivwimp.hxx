@@ -72,7 +72,7 @@ public:
 
 // --------------------------- Clipboard EventListener ------------------
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
-    CLIP_NMSPC::XClipboardListener >
+    ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
     SwView* pView;
 
@@ -81,7 +81,7 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
         throw ( com::sun::star::uno::RuntimeException );
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const CLIP_NMSPC::ClipboardEvent& rEventObject )
+    virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
         throw ( com::sun::star::uno::RuntimeException );
 
 public:

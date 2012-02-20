@@ -281,7 +281,7 @@ void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventO
 {
 }
 
-void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::ClipboardEvent& rEventObject )
+void SAL_CALL SwClipboardChangeListener::changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
     throw ( RuntimeException )
 
 {
