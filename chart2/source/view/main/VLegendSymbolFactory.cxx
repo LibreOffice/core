@@ -44,7 +44,8 @@ namespace
 void lcl_setPropetiesToShape(
     const Reference< beans::XPropertySet > & xProp,
     const Reference< drawing::XShape > & xShape,
-    ::chart::VLegendSymbolFactory::tPropertyType ePropertyType )
+    ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
+    const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
 {
     const ::chart::tPropertyNameMap & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     const ::chart::tPropertyNameMap & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
@@ -83,7 +84,8 @@ void lcl_setPropetiesToShape(
         sal_Int32 nLineWidth = 0;
         if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
         {
-            const sal_Int32 nMaxLineWidthForLegend = 50;/*1/100 mm*///todo: make this dependent from legend entry height
+            // use legend entry height as upper limit for line width
+            sal_Int32 nMaxLineWidthForLegend = aMaxSymbolExtent.Height;
             if( nLineWidth>nMaxLineWidthForLegend )
                 *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
         }
@@ -134,7 +136,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 xLine->setSize(  awt::Size( rEntryKeyAspectRatio.Width, 0 ));
                 xLine->setPosition( awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
 
-                lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType );
+                lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
             }
 
             Reference< drawing::XShape > xSymbol;
