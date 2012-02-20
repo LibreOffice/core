@@ -456,7 +456,6 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
     $$(FREETYPE_CFLAGS) \
 ))
 $(eval $(call gb_Library_add_defs,vcl,\
-    -DHEADLESS \
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \

@@ -8108,8 +8108,6 @@ if test "x$enable_headless" = "xyes"; then
     ENABLE_HEADLESS="TRUE"
     SCPDEFS="$SCPDEFS -DHEADLESS"
     R="headless"
-    # this does not work see hack in Library_vcl.mk
-    AC_DEFINE(HEADLESS)
 fi
 AC_SUBST(ENABLE_HEADLESS)
 
