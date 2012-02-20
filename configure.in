@@ -5643,6 +5643,8 @@ if test "$with_system_clucene" = "yes"; then
     save_CPPFLAGS=$CPPFLAGS
     CXXFLAGS="$CXXFLAGS $LIBCLUCENE_CFLAGS"
     CPPFLAGS="$CPPFLAGS $LIBCLUCENE_CFLAGS"
+    dnl http://sourceforge.net/tracker/index.php?func=detail&aid=3392466&group_id=80013&atid=558446
+    dnl https://bugzilla.redhat.com/show_bug.cgi?id=794795
     AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
                  [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [])
     CXXFLAGS=$save_CXXFLAGS
