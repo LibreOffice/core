@@ -25,27 +25,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,smoketest))
+$(eval $(call gb_Library_Library,smoketest))
 
-ifeq ($(CROSS_COMPILING),)
-
-$(eval $(call gb_Module_add_targets,smoketest,\
-	Library_smoketest \
-	Package_losmoketest \
-	Zip_smoketestdoc \
+$(eval $(call gb_Library_add_api,smoketest,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,smoketest,\
-	Jar_TestExtension \
-	Zip_TestExtension \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
-	CppunitTest_smoketest \
+$(eval $(call gb_Library_add_linked_libs,smoketest,\
+	cppu \
+	cppuhelper \
+	sal \
+	unotest \
 ))
 
-endif
+$(eval $(call gb_Library_use_external,smoketest,cppunit))
+
+$(eval $(call gb_Library_add_exception_objects,smoketest,\
+	smoketest/smoketest \
+))
 
 # vim: set noet sw=4 ts=4:
