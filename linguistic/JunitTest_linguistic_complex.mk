@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,linguistic_complex,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,linguistic_complex))
 
 $(eval $(call gb_JunitTest_set_defs,linguistic_complex,\
 	$$(DEFS) \

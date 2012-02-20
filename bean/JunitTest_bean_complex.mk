@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_JunitTest_JunitTest,bean_complex,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,bean_complex))
 
 $(eval $(call gb_JunitTest_add_jars,bean_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \

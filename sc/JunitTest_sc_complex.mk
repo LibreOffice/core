@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,sc_complex,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,sc_complex))
 
 # sc/qa/complex/calcPreview/ tests do not work autmatically (they request "Press
 # any key after resizing" etc.)

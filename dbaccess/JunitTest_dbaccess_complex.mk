@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,dbaccess_complex,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,dbaccess_complex))
 
 $(eval $(call gb_JunitTest_set_defs,dbaccess_complex,\
 	$$(DEFS) \
