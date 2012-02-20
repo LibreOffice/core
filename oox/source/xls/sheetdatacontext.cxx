@@ -163,12 +163,7 @@ void SheetDataContext::onCharacters( const OUString& rChars )
             maCellValue = rChars;
         break;
         case XLS_TOKEN( f ):
-            if( 0 && maFmlaData.mnFormulaType == XML_normal )
-            {
-                maCellValue = rChars;
-                mrSheetData.putFormulaString( maCellData.maCellAddr, maCellValue );
-            }
-            else if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
+            if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
             {
                 maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
             }
