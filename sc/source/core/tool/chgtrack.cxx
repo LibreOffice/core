@@ -1523,12 +1523,6 @@ void ScChangeActionContent::SetOldValue( const rtl::OUString& rOld, ScDocument* 
 }
 
 
-void ScChangeActionContent::SetNewValue( const rtl::OUString& rNew, ScDocument* pDoc )
-{
-    SetValueString( aNewValue, pNewCell, rNew, pDoc );
-}
-
-
 void ScChangeActionContent::GetOldString( rtl::OUString& rStr ) const
 {
     GetValueString( rStr, aOldValue, pOldCell );

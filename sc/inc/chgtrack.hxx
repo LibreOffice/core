@@ -816,7 +816,6 @@ public:
     // don't use:
     // assigns string / creates forumula cell
     void SetOldValue( const rtl::OUString& rOld, ScDocument* pDoc );
-    void SetNewValue( const rtl::OUString& rNew, ScDocument* pDoc );
 
     void GetOldString( rtl::OUString& rStr ) const;
     void GetNewString( rtl::OUString& rStr ) const;

@@ -270,7 +270,6 @@ public:
     inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
     String              CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    void                SetBase( const String& rBase, char cSep = '.' );
     String              GetBase(char cSep = '.' ) const;
     DirEntry            GetPath() const;
     DirEntry            GetDevice() const;

@@ -651,23 +651,6 @@ sal_Bool NumericFormatter::IsValueModified() const
 
 // -----------------------------------------------------------------------
 
-Fraction NumericFormatter::ConvertToFraction( sal_Int64 nValue )
-{
-    // caution: precision loss in double cast (and in fraction anyhow)
-    return Fraction( (double)nValue/(double)ImplPower10( GetDecimalDigits() ) );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 NumericFormatter::ConvertToLong( const Fraction& rValue )
-{
-    Fraction aFract = rValue;
-    aFract *= Fraction( (long)ImplPower10( GetDecimalDigits() ), 1 );
-    return (sal_Int64)(double)aFract;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 {
     return (nValue * ImplPower10( GetDecimalDigits() ) );
@@ -1038,29 +1021,6 @@ void NumericBox::ReformatAll()
 void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 {
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void NumericBox::RemoveValue( sal_Int64 nValue )
-{
-    ComboBox::RemoveEntry( CreateFieldText( nValue ) );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 NumericBox::GetValue( sal_uInt16 nPos ) const
-{
-    double nValue = 0;
-    ImplNumericGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
-    return (sal_Int64)nValue;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 NumericBox::GetValuePos( sal_Int64 nValue ) const
-{
-    return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------

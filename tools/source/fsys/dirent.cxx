@@ -1534,31 +1534,6 @@ DirEntry DirEntry::GetDevice() const
 
 /*************************************************************************
 |*
-|*    DirEntry::SetBase()
-|*
-*************************************************************************/
-
-void DirEntry::SetBase( const String& rBase, char cSep )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    const char *p0 = aName.getStr();
-    const char *p1 = p0 + aName.getLength() - 1;
-    while ( p1 >= p0 && *p1 != cSep )
-        p1--;
-
-    if ( p1 >= p0 )
-    {
-        // es wurde ein cSep an der Position p1 gefunden
-        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding())
-            + aName.copy(p1 - p0);
-    }
-    else
-        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding());
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::GetSearchDelimiter()
 |*
 *************************************************************************/

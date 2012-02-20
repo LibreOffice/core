@@ -9,7 +9,6 @@ CharPosArray::Replace(int const&, unsigned short)
 CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 Dialog::Dialog(Window*, ResId const&)
-DirEntry::SetBase(String const&, char)
 Export::DumpExportList(rtl::OString const&, ExportList&)
 FileStream::FileStream(rtl::OString const&, FileAccessMode)
 FmEntryDataArray::DeleteAndDestroy(unsigned short, unsigned short)
@@ -44,11 +43,6 @@ MSDffImportRecords::Remove(unsigned short, unsigned short)
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
-NumericBox::GetValue(unsigned short) const
-NumericBox::GetValuePos(long) const
-NumericBox::RemoveValue(long)
-NumericFormatter::ConvertToFraction(long)
-NumericFormatter::ConvertToLong(Fraction const&)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 ParagraphStyleManager::get(WPXString const&) const
@@ -72,11 +66,8 @@ ScAddInDocs::Insert(ScAddInDocs const*, unsigned short, unsigned short)
 ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
-ScChangeActionContent::SetNewValue(rtl::OUString const&, ScDocument*)
 ScChartListener::ScChartListener(rtl::OUString const&, ScDocument*, ScRange const&)
 ScChartListener::SetName(rtl::OUString const&)
-ScCollection::Free(ScDataObject*)
-ScCollection::FreeAll()
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetEntryCount() const
@@ -97,7 +88,6 @@ ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_itera
 ScDBCollection::AnonDBs::size() const
 ScDPSaveDimension::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&, std::__debug::list<rtl::OUString, std::allocator<rtl::OUString> > const&)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
-ScDocument::SetAllTabRangeNames(std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)

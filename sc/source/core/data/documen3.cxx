@@ -129,23 +129,6 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
     rNames.swap(aNames);
 }
 
-void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
-{
-    // Remove all existing range names first.
-    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
-    {
-        if (!maTabs[i])
-            // no more tables to iterate through.
-            break;
-
-        maTabs[i]->SetRangeName(NULL);
-    }
-
-    ScRangeName::TabNameCopyMap::const_iterator itr = rNames.begin(), itrEnd = rNames.end();
-    for (; itr != itrEnd; ++itr)
-        SetRangeName(itr->first, new ScRangeName(*itr->second));
-}
-
 void ScDocument::SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
 {
     rtl::OUString aGlobalStr(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));

@@ -53,10 +53,6 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
-    void        AtFree(sal_uInt16 nIndex);
-    void        Free(ScDataObject* pScDataObject);
-    void        FreeAll();
-
     sal_Bool        AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject);
     virtual sal_Bool        Insert(ScDataObject* pScDataObject);
 

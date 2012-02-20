@@ -89,32 +89,6 @@ ScCollection::~ScCollection()
 
 //------------------------------------------------------------------------
 sal_uInt16 ScCollection::GetCount() const { return nCount; }
-void ScCollection::AtFree(sal_uInt16 nIndex)
-{
-    if ((pItems) && (nIndex < nCount))
-    {
-        delete pItems[nIndex];
-        --nCount;               // before memmove
-        memmove ( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ScDataObject*));
-        pItems[nCount] = NULL;
-    }
-}
-
-//------------------------------------------------------------------------
-
-void ScCollection::Free(ScDataObject* pScDataObject)
-{
-    AtFree(IndexOf(pScDataObject));
-}
-
-//------------------------------------------------------------------------
-
-void ScCollection::FreeAll()
-{
-    lcl_DeleteScDataObjects( pItems, nCount );
-    nCount = 0;
-    pItems = new ScDataObject*[nLimit];
-}
 
 //------------------------------------------------------------------------
 
