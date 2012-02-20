@@ -448,10 +448,10 @@ findunusedcode:
 check: subsequentcheck
 
 subsequentcheck: dev-install
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile subsequentcheck
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile $@
 
 debugrun:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile debugrun
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile $@
 
 endif # not clean or distclean
 
