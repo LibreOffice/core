@@ -6307,6 +6307,27 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimit
     return aSeq;
 }
 
+drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimiterPrimitives (
+        const SwRect& rRect )
+{
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
+    aPolygon.setClosed( true );
+
+    drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                aPolygon, aLineColor );
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+    return aSeq;
+}
+
 drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
@@ -6362,7 +6383,10 @@ void SwPageFrm::PaintSubsidiaryLines( const SwPageFrm *,
         if ( pFtnCont )
             aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
 
-        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+        if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+            ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+        else
+            ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
     }
 }
 
@@ -6399,7 +6423,10 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
 
     ::SwAlignRect( aArea, pGlobalShell );
 
-    ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
+    if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+        ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
+    else
+        ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
 }
 
 void SwSectionFrm::PaintSubsidiaryLines( const SwPageFrm * pPage,
@@ -6426,7 +6453,10 @@ void SwHeadFootFrm::PaintSubsidiaryLines( const SwPageFrm *, const SwRect & ) co
     {
         SwRect aArea( Prt() );
         aArea.Pos() += Frm().Pos();
-        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+        if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+            ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+        else
+            ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
     }
 }
 
