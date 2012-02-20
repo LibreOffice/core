@@ -48,10 +48,6 @@ for $arg (@ARGV) {
 		# Cwd::realpath does not work if the path does not exist
 		mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
 		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
-		if (!$do_link) {
-			my $destdir = Cwd::realpath( $ENV{DESTDIR} );
-			$path =~ s|$destdir||;
-	    }
     }
 }
 
