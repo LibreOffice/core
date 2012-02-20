@@ -1,11 +1,6 @@
 #include <l10ntools/HelpIndexer.hxx>
 #include "LuceneHelper.hxx"
-
-#define TODO
-
-#ifdef TODO
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
-#endif
 
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
@@ -24,16 +19,17 @@ bool HelpIndexer::indexDocuments() {
 		return false;
 	}
 
-#ifdef TODO
+	rtl::OUString sLang = d_lang.getToken(0, '-');
+	bool bUseCJK =
+		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
+		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) ||
+		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
+
 	// Construct the analyzer appropriate for the given language
 	lucene::analysis::Analyzer *analyzer = (
-		d_lang.compareToAscii("ja") == 0 ?
+		bUseCJK ?
 		(lucene::analysis::Analyzer*)new lucene::analysis::LanguageBasedAnalyzer(L"cjk") :
 		(lucene::analysis::Analyzer*)new lucene::analysis::standard::StandardAnalyzer());
-#else
-	lucene::analysis::Analyzer *analyzer = (
-		(lucene::analysis::Analyzer*)new lucene::analysis::standard::StandardAnalyzer());
-#endif
 
 	rtl::OString indexDirStr;
 	d_indexDir.convertToString(&indexDirStr, RTL_TEXTENCODING_ASCII_US, 0);

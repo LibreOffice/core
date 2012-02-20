@@ -24,5 +24,5 @@ rtl::OUString TCHARArrayToOUString(TCHAR const *str)
         return rtl::OUString((const sal_Unicode*)(str));
 
     // UTF-32
-    return ::OUString((const sal_uInt32*)str, wcslen(str));
+    return rtl::OUString((const sal_uInt32*)str, wcslen(str));
 }
