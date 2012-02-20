@@ -2614,18 +2614,6 @@ void Dxf::importNumFmt( const AttributeList& rAttribs )
     mxNumFmt = getStyles().importNumFmt( rAttribs );
 }
 
-void Dxf::importAlignment( const AttributeList& rAttribs )
-{
-    mxAlignment.reset( new Alignment( *this ) );
-    mxAlignment->importAlignment( rAttribs );
-}
-
-void Dxf::importProtection( const AttributeList& rAttribs )
-{
-    mxProtection.reset( new Protection( *this ) );
-    mxProtection->importProtection( rAttribs );
-}
-
 void Dxf::importDxf( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;

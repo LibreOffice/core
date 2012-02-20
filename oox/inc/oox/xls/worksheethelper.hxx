@@ -219,29 +219,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges >
                         getCellRangeList( const ApiCellRangeList& rRanges ) const;
 
-    /** Returns the address of the passed cell. The cell reference must be valid. */
-    static ::com::sun::star::table::CellAddress
-                        getCellAddress(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell );
-    /** Returns the address of the passed cell range. The range reference must be valid. */
-    static ::com::sun::star::table::CellRangeAddress
-                        getRangeAddress(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >& rxRange );
-
-    /** Returns the XCellRange interface for a column. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getColumn( sal_Int32 nCol ) const;
-    /** Returns the XCellRange interface for a row. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getRow( sal_Int32 nRow ) const;
-
-    /** Returns the XTableColumns interface for a range of columns. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableColumns >
-                        getColumns( const ValueRange& rColRange ) const;
-    /** Returns the XTableRows interface for a range of rows. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows >
-                        getRows( const ValueRange& rRowRange ) const;
-
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                         getDrawPage() const;
@@ -327,9 +304,6 @@ public:
     void                putFormulaResult(
                             const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue ) const;
-    void                putFormulaString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const ::rtl::OUString& rText ) const;
 
     /** Inserts a string cell directly into the Calc sheet. */
     void                putString(

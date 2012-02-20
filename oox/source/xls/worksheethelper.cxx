@@ -1408,46 +1408,6 @@ Reference< XSheetCellRanges > WorksheetHelper::getCellRangeList( const ApiCellRa
     return mrSheetGlob.getCellRangeList( rRanges );
 }
 
-CellAddress WorksheetHelper::getCellAddress( const Reference< XCell >& rxCell )
-{
-    CellAddress aAddress;
-    Reference< XCellAddressable > xAddressable( rxCell, UNO_QUERY );
-    OSL_ENSURE( xAddressable.is(), "WorksheetHelper::getCellAddress - cell reference not addressable" );
-    if( xAddressable.is() )
-        aAddress = xAddressable->getCellAddress();
-    return aAddress;
-}
-
-CellRangeAddress WorksheetHelper::getRangeAddress( const Reference< XCellRange >& rxRange )
-{
-    CellRangeAddress aRange;
-    Reference< XCellRangeAddressable > xAddressable( rxRange, UNO_QUERY );
-    OSL_ENSURE( xAddressable.is(), "WorksheetHelper::getRangeAddress - cell range reference not addressable" );
-    if( xAddressable.is() )
-        aRange = xAddressable->getRangeAddress();
-    return aRange;
-}
-
-Reference< XCellRange > WorksheetHelper::getColumn( sal_Int32 nCol ) const
-{
-    return mrSheetGlob.getColumn( nCol );
-}
-
-Reference< XCellRange > WorksheetHelper::getRow( sal_Int32 nRow ) const
-{
-    return mrSheetGlob.getRow( nRow );
-}
-
-Reference< XTableColumns > WorksheetHelper::getColumns( const ValueRange& rColRange ) const
-{
-    return mrSheetGlob.getColumns( rColRange );
-}
-
-Reference< XTableRows > WorksheetHelper::getRows( const ValueRange& rRowRange ) const
-{
-    return mrSheetGlob.getRows( rRowRange );
-}
-
 Reference< XDrawPage > WorksheetHelper::getDrawPage() const
 {
     return mrSheetGlob.getDrawPage();
@@ -1662,12 +1622,6 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
     Reference< XCell2 > xCell( getCell( rAddress ), UNO_QUERY );
     OSL_ENSURE( xCell.is(), "WorksheetHelper::putFormulaResult - missing cell interface" );
     if( xCell.is() ) xCell->setFormulaResult( fValue );
-}
-
-void WorksheetHelper::putFormulaString( const CellAddress& rAddress, const OUString& rFormula ) const
-{
-    Reference< XCell2 > xCell( getCell( rAddress ), UNO_QUERY );
-    if( xCell.is() ) xCell->setFormulaString( rFormula );
 }
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const

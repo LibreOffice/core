@@ -1015,12 +1015,6 @@ ExternalLinkRef ExternalLinkBuffer::importExternalBook( BiffInputStream& rStrm )
     return xExtLink;
 }
 
-void ExternalLinkBuffer::importExternalName( BiffInputStream& rStrm )
-{
-    if( !maLinks.empty() )
-        maLinks.back()->importExternalName( rStrm );
-}
-
 void ExternalLinkBuffer::importExternSheet8( BiffInputStream& rStrm )
 {
     OSL_ENSURE( getBiff() == BIFF8, "ExternalLinkBuffer::importExternSheet8 - wrong BIFF version" );

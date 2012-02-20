@@ -1480,15 +1480,6 @@ OUString FormulaProcessorBase::generateRangeList2dString( const ApiCellRangeList
 
 // ----------------------------------------------------------------------------
 
-OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& rRange ) const
-{
-    OUString aRangeName;
-    PropertySet aRangeProp( getCellRangeFromDoc( rRange ) );
-    aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
-    OSL_ENSURE( !aRangeName.isEmpty(), "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
-    return aRangeName;
-}
-
 OUString FormulaProcessorBase::generateApiString( const OUString& rString )
 {
     OUString aRetString = rString;

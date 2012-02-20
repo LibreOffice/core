@@ -168,10 +168,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                         getSheetFromDoc( const ::rtl::OUString& rSheet ) const;
 
-    /** Returns the XCell interface for the passed cell address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCellFromDoc(
-                            const ::com::sun::star::table::CellAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
                         getCellRangeFromDoc(
@@ -274,15 +270,11 @@ public:
 
     // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 
-    /** Returns the base BIFF filter object. */
-    ::oox::core::BinaryFilterBase& getBiffFilter() const;
     /** Returns the BIFF type in binary filter. */
     BiffType            getBiff() const;
 
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
-    /** Sets the text encoding to import/export byte strings. */
-    void                setTextEncoding( rtl_TextEncoding eTextEnc );
     /** Sets code page read from a CODEPAGE record for byte string import. */
     void                setCodePage( sal_uInt16 nCodePage );
     /** Sets text encoding from the default application font, if CODEPAGE record is missing. */

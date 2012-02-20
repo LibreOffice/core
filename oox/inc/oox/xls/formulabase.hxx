@@ -701,14 +701,6 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Generates a cell range string in Calc's absolute $Sheet.$A$1:$A$
-        notation from the passed cell range address.
-
-        @param rRange  The cell range address to be converted to a string.
-     */
-    ::rtl::OUString     generateApiRangeString(
-                            const ::com::sun::star::table::CellRangeAddress& rRange ) const;
-
     /** Generates a string in Calc formula notation from the passed string.
 
         @param rString  The string value.

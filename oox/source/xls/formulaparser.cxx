@@ -772,20 +772,6 @@ ApiToken& FormulaParserImpl::getOperandToken( size_t nOpCountFromEnd, size_t nOp
     return maTokenStorage[ *(aIndexIt + nTokenIndex) ];
 }
 
-void FormulaParserImpl::removeOperand( size_t nOpCountFromEnd, size_t nOpIndex )
-{
-    OSL_ENSURE( (nOpIndex < nOpCountFromEnd) && (nOpCountFromEnd <= maOperandSizeStack.size()),
-        "FormulaParserImpl::removeOperand - invalid parameters" );
-    // remove indexes into token storage, but do not touch storage itself
-    SizeTypeVector::iterator aSizeEnd = maOperandSizeStack.end();
-    SizeTypeVector::iterator aSizeIt = aSizeEnd - nOpCountFromEnd + nOpIndex;
-    size_t nRemainingSize = 0;
-    for( SizeTypeVector::iterator aIt = aSizeIt + 1; aIt != aSizeEnd; ++aIt )
-        nRemainingSize += *aIt;
-    maTokenIndexes.erase( maTokenIndexes.end() - nRemainingSize - *aSizeIt, maTokenIndexes.end() - nRemainingSize );
-    maOperandSizeStack.erase( aSizeIt );
-}
-
 bool FormulaParserImpl::pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
 {
     size_t nSpacesSize = appendWhiteSpaceTokens( pSpaces );

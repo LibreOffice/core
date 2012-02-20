@@ -759,20 +759,6 @@ Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rShee
     return xSheet;
 }
 
-Reference< XCell > WorkbookHelper::getCellFromDoc( const CellAddress& rAddress ) const
-{
-    Reference< XCell > xCell;
-    try
-    {
-        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rAddress.Sheet ), UNO_SET_THROW );
-        xCell = xSheet->getCellByPosition( rAddress.Column, rAddress.Row );
-    }
-    catch( Exception& )
-    {
-    }
-    return xCell;
-}
-
 Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const CellRangeAddress& rRange ) const
 {
     Reference< XCellRange > xRange;
@@ -931,12 +917,6 @@ bool WorkbookHelper::importOoxFragment( const ::rtl::Reference< FragmentHandler 
 
 // BIFF specific --------------------------------------------------------------
 
-BinaryFilterBase& WorkbookHelper::getBiffFilter() const
-{
-    OSL_ENSURE( mrBookGlob.getFilterType() == FILTER_BIFF, "WorkbookHelper::getBiffFilter - invalid call" );
-    return mrBookGlob.getBiffFilter();
-}
-
 BiffType WorkbookHelper::getBiff() const
 {
     return mrBookGlob.getBiff();
@@ -945,11 +925,6 @@ BiffType WorkbookHelper::getBiff() const
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
     return mrBookGlob.getTextEncoding();
-}
-
-void WorkbookHelper::setTextEncoding( rtl_TextEncoding eTextEnc )
-{
-    mrBookGlob.setTextEncoding( eTextEnc );
 }
 
 void WorkbookHelper::setCodePage( sal_uInt16 nCodePage )

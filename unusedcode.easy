@@ -1068,7 +1068,6 @@ connectivity::toString(com::sun::star::uno::Any const&)
 cppcanvas::internal::(anonymous namespace)::TransparencyGroupAction::TransparencyGroupAction(std::auto_ptr<GDIMetaFile>&, cppcanvas::Renderer::Parameters const&, basegfx::B2DPoint const&, basegfx::B2DVector const&, double, boost::shared_ptr<cppcanvas::Canvas> const&, cppcanvas::internal::OutDevState const&)
 cppcanvas::internal::ImplSprite::ImplSprite(com::sun::star::uno::Reference<com::sun::star::rendering::XSpriteCanvas> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XAnimatedSprite> const&, boost::shared_ptr<cppcanvas::internal::ImplSpriteCanvas::TransformationArbiter> const&)
 cppcanvas::internal::ImplText::ImplText(boost::shared_ptr<cppcanvas::Canvas> const&, rtl::OUString const&)
-dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 dbaui::getKeyColumns(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, int)
 dbtools::CharsetIteratorDerefHelper::CharsetIteratorDerefHelper()
 dbtools::DBTypeConversion::toINT64(com::sun::star::util::DateTime const&)
@@ -1195,28 +1194,13 @@ oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
 oox::xls::CellBlock::startNextRow()
 oox::xls::Color::importColorRgb(oox::SequenceInputStream&)
 oox::xls::Comment::importAnchor(bool, int, rtl::OUString const&)
-oox::xls::Dxf::importAlignment(oox::AttributeList const&)
-oox::xls::Dxf::importProtection(oox::AttributeList const&)
-oox::xls::ExternalLinkBuffer::importExternalName(oox::xls::BiffInputStream&)
 oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) const
 oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
-oox::xls::FormulaParserImpl::removeOperand(unsigned long, unsigned long)
-oox::xls::FormulaProcessorBase::generateApiRangeString(com::sun::star::table::CellRangeAddress const&) const
 oox::xls::ShapeAnchor::getToCell() const
 oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRange const&)
 oox::xls::SheetDataBuffer::XfIdRowRange::intersects(com::sun::star::table::CellRangeAddress const&) const
-oox::xls::WorkbookHelper::getBiffFilter() const
-oox::xls::WorkbookHelper::getCellFromDoc(com::sun::star::table::CellAddress const&) const
-oox::xls::WorkbookHelper::setTextEncoding(unsigned short)
-oox::xls::WorksheetHelper::getCellAddress(com::sun::star::uno::Reference<com::sun::star::table::XCell> const&)
-oox::xls::WorksheetHelper::getColumn(int) const
-oox::xls::WorksheetHelper::getColumns(oox::ValueRange const&) const
-oox::xls::WorksheetHelper::getRangeAddress(com::sun::star::uno::Reference<com::sun::star::table::XCellRange> const&)
-oox::xls::WorksheetHelper::getRow(int) const
-oox::xls::WorksheetHelper::getRows(oox::ValueRange const&) const
-oox::xls::WorksheetHelper::putFormulaString(com::sun::star::table::CellAddress const&, rtl::OUString const&) const
 oox::xls::Xf::hasAnyUsedFlags() const
 pdfi::createOdfEmitter(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
 psp::GetCommandLineTokenCount(rtl::OString const&)

@@ -452,16 +452,6 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUS
     }
 }
 
-::rtl::OUString OptimisticSet::getComposedTableName(const ::rtl::OUString& /*_sCatalog*/,
-                                              const ::rtl::OUString& /*_sSchema*/,
-                                              const ::rtl::OUString& /*_sTable*/)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::getComposedTableName" );
-    ::rtl::OUString aComposedName;
-
-    return aComposedName;
-}
-
 void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_aJoinColumns)
 {
     ::std::vector< TNodePair >::const_iterator aIter = i_aJoinColumns.begin();

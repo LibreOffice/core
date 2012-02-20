@@ -830,10 +830,6 @@ public:
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
-    /** Sets all attributes from the alignment element. */
-    void                importAlignment( const AttributeList& rAttribs );
-    /** Sets all attributes from the protection element. */
-    void                importProtection( const AttributeList& rAttribs );
 
     /** Imports the DXF record from the passed stream. */
     void                importDxf( SequenceInputStream& rStrm );

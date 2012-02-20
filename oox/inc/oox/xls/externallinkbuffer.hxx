@@ -362,8 +362,6 @@ public:
     ExternalLinkRef     importExternSheet( BiffInputStream& rStrm );
     /** Imports the EXTERNALBOOK record from the passed stream. */
     ExternalLinkRef     importExternalBook( BiffInputStream& rStrm );
-    /** Imports the EXTERNALNAME record from the passed stream. */
-    void                importExternalName( BiffInputStream& rStrm );
     /** Imports the BIFF8 EXTERNSHEET record from the passed stream. */
     void                importExternSheet8( BiffInputStream& rStrm );
 
