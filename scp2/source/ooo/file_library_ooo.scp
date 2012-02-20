@@ -76,6 +76,19 @@ File gid_File_Lib_Cached1
   #endif
 End
 
+#ifndef SYSTEM_CLUCENE
+File gid_File_Lib_CLucene
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libclucene,UNXSUFFIX));
+  #else
+    Name = "clucene.dll";
+  #endif
+End
+#endif
+
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP

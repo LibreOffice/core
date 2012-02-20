@@ -1,4 +1,4 @@
-tr l10ntools : BERKELEYDB:berkeleydb EXPAT:expat LIBXSLT:libxslt sal NULL
+tr l10ntools : BERKELEYDB:berkeleydb EXPAT:expat LIBXSLT:libxslt CLUCENE:clucene sal NULL
 tr	l10ntools						usr1	-	all	tr_mkout NULL
 tr	l10ntools\inc					nmake	-	all	tr_inc NULL
 tr	l10ntools\source					nmake	-	all	tr_src tr_inc NULL

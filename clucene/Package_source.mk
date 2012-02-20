@@ -46,6 +46,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,clucene/source,\
 	$(FIXED_TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz \
 ))
 
+$(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/clucene-config.h,src/shared/CLucene/clucene-config.h))
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/SharedHeader.h,src/shared/CLucene/SharedHeader.h))
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/index/DirectoryIndexReader.h,src/core/CLucene/index/DirectoryIndexReader.h))
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/index/Terms.h,src/core/CLucene/index/Terms.h))

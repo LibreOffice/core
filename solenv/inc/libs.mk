@@ -182,6 +182,11 @@ HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
 LNGLIB=-llng$(DLLPOSTFIX)
+.IF "$(SYSTEM_CLUCENE)"=="YES"
+CLUCENELIB=$(LIBCLUCENE_LIBS)
+.ELSE
+CLUCENELIB=-lclucene
+.ENDIF
 .IF "$(SYSTEM_EXPAT)"=="YES"
 EXPAT3RDLIB=-lexpat
 EXPATASCII3RDLIB=-lexpat
@@ -453,6 +458,7 @@ HM2LIBSH=hmwrpdll.lib
 HM2LIBST=hmwrap.lib
 LINGULIB=$(HM2LIBST)
 LNGLIB=ilng.lib
+CLUCENELIB=clucene.lib
 EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib

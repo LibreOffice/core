@@ -37,9 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=\
     $(SLO)$/CLuceneHelpWrapper.obj
 
-PKGCONFIG_MODULES=libclucene-core
-.INCLUDE : pkg_config.mk
-
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
 
@@ -52,7 +49,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB) \
     $(UNOTOOLSLIB) \
     $(SALLIB) \
-    $(PKGCONFIG_LIBS)
+    $(LIBCLUCENE_LIBS)
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
  
 .INCLUDE :  target.mk

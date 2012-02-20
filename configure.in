@@ -1110,6 +1110,10 @@ AC_ARG_WITH(system-jpeg,
     with_system_jpeg="$with_system_libs"
   fi])
 
+AC_ARG_WITH(system-clucene,
+    AS_HELP_STRING([--with-system-clucene],
+        [Use clucene already on system.]),,)
+
 AC_ARG_WITH(system-expat,
     AS_HELP_STRING([--with-system-expat],
         [Use expat already on system.]),,
@@ -5624,6 +5628,36 @@ else
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
+
+dnl ===================================================================
+dnl Check for system clucene
+dnl ===================================================================
+AC_MSG_CHECKING([which clucene to use])
+if test "$with_system_clucene" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CLUCENE=YES
+    PKG_CHECK_MODULES(LIBCLUCENE, libclucene-core)
+
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    save_CPPFLAGS=$CPPFLAGS
+    CXXFLAGS="$CXXFLAGS $LIBCLUCENE_CFLAGS"
+    CPPFLAGS="$CPPFLAGS $LIBCLUCENE_CFLAGS"
+    AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
+                 [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [])
+    CXXFLAGS=$save_CXXFLAGS
+    CPPFLAGS=$save_CPPFLAGS
+    AC_LANG_POP([C++])
+
+    LIBCLUCENE_LIBS="$LIBCLUCENE_LIBS -lclucene-contribs-lib"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CLUCENE=NO
+    BUILD_TYPE="$BUILD_TYPE CLUCENE"
+fi
+AC_SUBST(SYSTEM_CLUCENE)
+AC_SUBST(LIBCLUCENE_CFLAGS)
+AC_SUBST(LIBCLUCENE_LIBS)
 
 dnl ===================================================================
 dnl Check for system expat

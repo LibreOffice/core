@@ -61,7 +61,7 @@ public:
     }
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
         throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException );
-    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
+    virtual void SAL_CALL setValue(const OUString&, const Any&)
         throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException )
     {
         throw UnknownPropertyException();
@@ -83,7 +83,7 @@ public:
 
 #include <stdio.h> // FIXME: remove once the fprintf() calls below are gone
 
-Any CLuceneHelpWrapper::invoke(const OUString& rFunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
+Any CLuceneHelpWrapper::invoke(const OUString& rFunctionName, const Sequence< Any >&, Sequence< sal_Int16 >&, Sequence< Any >& )
         throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException )
 {
     fprintf(stderr, "invoke something or other, %s\n", rtl::OUStringToOString(rFunctionName, RTL_TEXTENCODING_UTF8).getStr());
@@ -93,6 +93,7 @@ Any CLuceneHelpWrapper::invoke(const OUString& rFunctionName, const Sequence< An
         fprintf(stderr, "implement me, do indexing thing for extensions with help, but without pre-created index, make need to split l10ntools HelpIndexer tool into a lib and header that we can link to here");
     else
         throw IllegalArgumentException();
+    return Any();
 }
 
 namespace
