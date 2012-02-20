@@ -371,7 +371,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
     util::ElementChange aChange = rEvent.Changes[ 0 ];
     OUString sOperation;
     aChange.Accessor >>= sOperation;
-    if( !sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
+    if( !sOperation.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("cell-change")) )
         return;
 
     if( nCount == 1 )
@@ -394,7 +394,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
         aChange.Accessor >>= sOperation;
         uno::Reference< table::XCellRange > xRangeObj;
         aChange.ReplacedElement >>= xRangeObj;
-        if( xRangeObj.is() && sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
+        if( xRangeObj.is() && sOperation.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("cell-change")) )
         {
             uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable( xRangeObj, uno::UNO_QUERY );
             if( xCellRangeAddressable.is() )

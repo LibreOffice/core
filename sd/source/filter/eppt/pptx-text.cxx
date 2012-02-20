@@ -930,8 +930,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAscii("starsymbol") ||
-                            aFontDesc.Name.equalsIgnoreAsciiCaseAscii("opensymbol") )
+                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
+                            aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )
                         {
                             String sFontName = aFontDesc.Name;
                             String sNumStr = cBulletId;

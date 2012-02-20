@@ -113,7 +113,7 @@ static sal_Bool ImplAccelDisabled()
             vcl::SettingsConfigItem::get()->
             getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Menu" ) ),
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuppressAccelerators" ) ) );
-        nAccelDisabled = aStr.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+        nAccelDisabled = aStr.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
     }
     return (nAccelDisabled == 1) ? sal_True : sal_False;
 }

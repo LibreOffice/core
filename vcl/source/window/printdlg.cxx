@@ -628,7 +628,7 @@ void PrintDialog::JobTabPage::readFromSettings()
 
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
-    if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
+    if( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("alwaysoff")) )
     {
         mnCollateUIMode = 1;
         maCollateBox.Check( sal_False );
@@ -639,7 +639,7 @@ void PrintDialog::JobTabPage::readFromSettings()
         mnCollateUIMode = 0;
         aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
-        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
     }
     Resize();
 }
@@ -692,7 +692,7 @@ void PrintDialog::OutputOptPage::readFromSettings()
     rtl::OUString aValue;
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ) );
-    if ( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
+    if ( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
     {
         maCollateSingleJobsBox.Check( sal_True );
     }

@@ -423,7 +423,7 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
 
         if( compat_it != pJobSetup->maValueMap.end() )
         {
-            if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
                 bStrictSO52Compatibility = true;
         }
         pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
@@ -636,7 +636,7 @@ sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 
     if( compat_it != pJobSetup->maValueMap.end() )
     {
-        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+        if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
             bStrictSO52Compatibility = true;
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
@@ -1000,7 +1000,7 @@ sal_Bool PspSalPrinter::StartJob(
 
     if( compat_it != pJobSetup->maValueMap.end() )
     {
-        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+        if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
             bStrictSO52Compatibility = true;
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );

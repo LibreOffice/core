@@ -213,10 +213,10 @@ void FilterConfigCache::ImplInit()
             xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
             if (lFlags.getLength()!=1 || lFlags[0].isEmpty())
                 continue;
-            if (lFlags[0].equalsIgnoreAsciiCaseAscii("import"))
+            if (lFlags[0].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("import")))
                 aEntry.nFlags = 1;
             else
-            if (lFlags[0].equalsIgnoreAsciiCaseAscii("export"))
+            if (lFlags[0].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("export")))
                 aEntry.nFlags = 2;
 
             OUString sUIComponent;

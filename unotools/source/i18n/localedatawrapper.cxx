@@ -1088,8 +1088,8 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     if (!aGrouping[0])
     {
         i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
-        if (aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "IN") ||    // India
-                aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "BT"))  // Bhutan
+        if (aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IN")) || // India
+            aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("BT")) )  // Bhutan
         {
             aGrouping[0] = 3;
             aGrouping[1] = 2;

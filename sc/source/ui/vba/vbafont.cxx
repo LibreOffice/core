@@ -321,10 +321,10 @@ ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException )
     std::vector< rtl::OUString >::iterator it;
     for( it = aTokens.begin(); it != aTokens.end(); ++it )
     {
-        if( (*it).equalsIgnoreAsciiCaseAscii( "Bold" ) )
+        if( (*it).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Bold")) )
             bBold = sal_True;
 
-        if( (*it).equalsIgnoreAsciiCaseAscii( "Italic" ) )
+        if( (*it).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Italic")) )
             bItalic = sal_True;
     }
 

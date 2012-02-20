@@ -342,7 +342,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     uno::Reference< lang::XServiceInfo > xServiceInfo( aSelection, uno::UNO_QUERY_THROW );
     rtl::OUString sImplementationName = xServiceInfo->getImplementationName();
 
-    if( sImplementationName.equalsIgnoreAsciiCaseAscii("com.sun.star.drawing.SvxShapeCollection") )
+    if( sImplementationName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.SvxShapeCollection")) )
     {
         uno::Reference< drawing::XShapes > xShapes( aSelection, uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xIndexAccess( xShapes, uno::UNO_QUERY_THROW );

@@ -199,7 +199,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
             pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
         if( compat_it != pJobSetup->maValueMap.end() )
         {
-            if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
                 bStrictSO52Compatibility = true;
         }
         pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );

@@ -133,7 +133,7 @@ const char* SalGenericSystem::getFrameResName()
         {
             rtl::OUString aArg;
             if( ! osl_getCommandArg( n, &aArg.pData ) &&
-                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
+                aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-name")) &&
                 ! osl_getCommandArg( n+1, &aArg.pData ) )
             {
                 aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
