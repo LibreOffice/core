@@ -732,9 +732,9 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntr
     {
         // damit GetVisibleCount die Positionen aktualisiert
         ((SvListView*)pView)->nVisibleCount = 0;
-        GetVisibleCount( pView );
+        GetVisibleCount( const_cast<SvListView*>(pView) );
     }
-    SvViewData* pViewData = pView->GetViewData( pEntry );
+    const SvViewData* pViewData = pView->GetViewData( pEntry );
     return pViewData->nVisPos;
 }
 
@@ -744,7 +744,7 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntr
 |*
 *************************************************************************/
 
-sal_uLong SvTreeList::GetVisibleCount( const SvListView* pView ) const
+sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
 {
     DBG_ASSERT(pView,"GetVisCount:No View");
     if( !pView->HasViewData() )
@@ -1445,15 +1445,13 @@ void SvListView::InitTable()
     DBG_ASSERT(pModel,"InitTable:No Model");
     DBG_ASSERT(!nSelectionCount&&!nVisibleCount&&!bVisPositionsValid,"InitTable: Not cleared!");
 
-    if( aDataTable.Count() )
+    if( maDataTable.size() )
     {
-        DBG_ASSERT(aDataTable.Count()==1,"InitTable: TableCount != 1");
+        DBG_ASSERT(maDataTable.size()==1,"InitTable: TableCount != 1");
         // die im Clear fuer die Root allozierten View-Daten loeschen
         // Achtung: Das zu dem RootEntry (und damit auch der Entry)
         // gehoerende Model kann bereits geloescht sein!
-        SvViewData* pViewData = (SvViewData*)aDataTable.GetObject( 0 );
-        delete pViewData;
-        aDataTable.Clear();
+        maDataTable.clear();
     }
 
     SvListEntry* pEntry;
@@ -1463,7 +1461,7 @@ void SvListView::InitTable()
     pEntry = pModel->pRootItem;
     pViewData = new SvViewData;
     pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
-    aDataTable.Insert( (sal_uLong)pEntry, pViewData );
+    maDataTable.insert( pEntry, pViewData );
     // Jetzt alle anderen Entries
     pEntry = pModel->First();
     while( pEntry )
@@ -1471,7 +1469,7 @@ void SvListView::InitTable()
         pViewData = CreateViewData( pEntry );
         DBG_ASSERT(pViewData,"InitTable:No ViewData");
         InitViewData( pViewData, pEntry );
-        aDataTable.Insert( (sal_uLong)pEntry, pViewData );
+        maDataTable.insert( pEntry, pViewData );
         pEntry = pModel->Next( pEntry );
     }
 }
@@ -1485,13 +1483,7 @@ SvViewData* SvListView::CreateViewData( SvListEntry* )
 void SvListView::ClearTable()
 {
     DBG_CHKTHIS(SvListView,0);
-    SvViewData* pViewData = (SvViewData*)aDataTable.First();
-    while( pViewData )
-    {
-        delete pViewData;
-        pViewData = (SvViewData*)aDataTable.Next();
-    }
-    aDataTable.Clear();
+    maDataTable.clear();
 }
 
 void SvListView::Clear()
@@ -1506,7 +1498,7 @@ void SvListView::Clear()
         SvListEntry* pEntry = pModel->pRootItem;
         SvViewData* pViewData = new SvViewData;
         pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
-        aDataTable.Insert( (sal_uLong)pEntry, pViewData );
+        maDataTable.insert( pEntry, pViewData );
     }
 }
 
@@ -1579,7 +1571,7 @@ void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry*,sal_uLong)
     DBG_ASSERT(pParent,"Model not consistent");
     if( pParent != pModel->pRootItem && pParent->pChildren->size() == 1 )
     {
-        SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uLong)pParent );
+        SvViewData* pViewData = maDataTable.find( pParent )->second;
         pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
     }
     // vorlaeufig
@@ -1603,10 +1595,10 @@ void SvListView::ActionInserted( SvListEntry* pEntry )
     SvViewData* pData = CreateViewData( pEntry );
     InitViewData( pData, pEntry );
     #ifdef DBG_UTIL
-    sal_Bool bSuccess =
+    std::pair<SvDataTable::iterator, bool> aSuccess =
     #endif
-        aDataTable.Insert( (sal_uLong)pEntry, pData );
-    DBG_ASSERT(bSuccess,"Entry already in View");
+        maDataTable.insert( pEntry, pData );
+    DBG_ASSERT(aSuccess.second,"Entry already in View");
     if ( nVisibleCount && pModel->IsEntryVisible( this, pEntry ))
     {
         nVisibleCount = 0;
@@ -1627,11 +1619,11 @@ void SvListView::ActionInsertedTree( SvListEntry* pEntry )
     sal_uInt16 nRefDepth = pModel->GetDepth( pCurEntry );
     while( pCurEntry )
     {
-        DBG_ASSERT(aDataTable.Get((sal_uLong)pCurEntry)==0,"Entry already in Table");
+        DBG_ASSERT(maDataTable.find(pCurEntry) != maDataTable.end(),"Entry already in Table");
         SvViewData* pViewData = CreateViewData( pCurEntry );
         DBG_ASSERT(pViewData,"No ViewData");
         InitViewData( pViewData, pEntry );
-        aDataTable.Insert( (sal_uLong)pCurEntry, pViewData );
+        maDataTable.insert( pCurEntry, pViewData );
         pCurEntry = pModel->Next( pCurEntry );
         if ( pCurEntry && pModel->GetDepth(pCurEntry) <= nRefDepth)
             pCurEntry = 0;
@@ -1646,9 +1638,7 @@ void SvListView::RemoveViewData( SvListEntry* pParent )
         SvListEntry* pCur = (SvListEntry*)pChildren->First();
         while( pCur )
         {
-            SvViewData* pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pCur);
-            delete pViewData;
-            aDataTable.Remove( (sal_uLong)pCur );
+            maDataTable.erase(pCur);
             if( pCur->HasChildren())
                 RemoveViewData( pCur );
             pCur = (SvListEntry*)pChildren->Next();
@@ -1663,7 +1653,7 @@ void SvListView::ActionRemoving( SvListEntry* pEntry )
     DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Remove:No Entry");
 
-    SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
+    SvViewData* pViewData = maDataTable.find( pEntry )->second;
     sal_uLong nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + pModel->GetChildSelectionCount( this, pEntry );
@@ -1683,16 +1673,14 @@ void SvListView::ActionRemoving( SvListEntry* pEntry )
     }
     bVisPositionsValid = sal_False;
 
-    pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pEntry);
-    delete pViewData;
-    aDataTable.Remove( (sal_uLong)pEntry );
+    maDataTable.erase(pEntry);
     RemoveViewData( pEntry );
 
     SvListEntry* pCurEntry = pEntry->pParent;
     if ( pCurEntry && pCurEntry != pModel->pRootItem &&
          pCurEntry->pChildren->size() == 1 )
     {
-        pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pCurEntry);
+        pViewData = maDataTable.find(pCurEntry)->second;
         pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
     }
 }

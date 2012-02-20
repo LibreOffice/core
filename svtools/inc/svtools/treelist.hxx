@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #include <tools/table.hxx>
 #include <tools/link.hxx>
@@ -280,7 +281,7 @@ class SVT_DLLPUBLIC SvTreeList
     sal_Bool            IsEntryVisible( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*        GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
     sal_uLong           GetVisiblePos( const SvListView*,SvListEntry* pEntry ) const;
-    sal_uLong           GetVisibleCount( const SvListView* ) const;
+    sal_uLong           GetVisibleCount( SvListView* ) const;
     sal_uLong           GetVisibleChildCount( const SvListView*,SvListEntry* pParent ) const;
 
     SvListEntry*        FirstSelected( const SvListView*) const;
@@ -421,6 +422,8 @@ class SVT_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 
+    typedef boost::ptr_map<SvListEntry*, SvViewData> SvDataTable;
+
     sal_uLong           nVisibleCount;
     sal_uLong           nSelectionCount;
     sal_Bool            bVisPositionsValid;
@@ -430,7 +433,7 @@ class SVT_DLLPUBLIC SvListView
     SVT_DLLPRIVATE void RemoveViewData( SvListEntry* pParent );
 
 protected:
-    Table               aDataTable;  // Mapping SvListEntry -> ViewData
+    SvDataTable maDataTable;  // Mapping SvListEntry -> ViewData
     SvTreeList*         pModel;
 
     void                ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
@@ -527,10 +530,11 @@ public:
     sal_Bool            IsExpanded( SvListEntry* pEntry ) const;
     sal_Bool            IsSelected( SvListEntry* pEntry ) const;
     sal_Bool            HasEntryFocus( SvListEntry* pEntry ) const;
-    void                SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus ) const;
-    SvViewData*         GetViewData( SvListEntry* pEntry ) const;
+    void                SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus );
+    const SvViewData*         GetViewData( SvListEntry* pEntry ) const;
+    SvViewData*         GetViewData( SvListEntry* pEntry );
     sal_Bool            HasViewData() const
-    { return aDataTable.Count() > 1; }  // eine ROOT gibts immer
+    { return maDataTable.size() > 1; }  // eine ROOT gibts immer
 
     virtual SvViewData* CreateViewData( SvListEntry* pEntry );
     virtual void        InitViewData( SvViewData*, SvListEntry* pEntry );
@@ -552,43 +556,54 @@ public:
 inline sal_Bool SvListView::IsExpanded( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table");
-    return pData->IsExpanded();
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry);
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->IsExpanded();
 }
 
 inline sal_Bool SvListView::IsSelected( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table");
-    return pData->IsSelected();
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->IsSelected();
 }
 
 inline sal_Bool SvListView::HasEntryFocus( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table");
-    return pData->HasFocus();
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->HasFocus();
 }
 
-inline void SvListView::SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus ) const
+inline void SvListView::SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus )
 {
     DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table");
-    pData->SetFocus(bFocus);
+    SvDataTable::iterator itr = maDataTable.find(pEntry);
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    itr->second->SetFocus(bFocus);
 }
 
-inline SvViewData* SvListView::GetViewData( SvListEntry* pEntry ) const
+inline const SvViewData* SvListView::GetViewData( SvListEntry* pEntry ) const
 {
 #ifndef DBG_UTIL
-    return (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
+    return maDataTable.find( pEntry )->second;
 #else
-    SvViewData* pResult = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
-    DBG_ASSERT(pResult,"Entry not in model or wrong view");
-    return pResult;
+    SvDataTable::const_iterator itr = maDataTable.find( pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
+    return itr->second;
+#endif
+}
+
+inline SvViewData* SvListView::GetViewData( SvListEntry* pEntry )
+{
+#ifndef DBG_UTIL
+    return maDataTable.find( pEntry )->second;
+#else
+    SvDataTable::iterator itr = maDataTable.find( pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
+    return itr->second;
 #endif
 }
 
