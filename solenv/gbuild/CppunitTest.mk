@@ -51,7 +51,9 @@ endif
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+ifneq ($(OS),IOS)
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
+endif
 
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 

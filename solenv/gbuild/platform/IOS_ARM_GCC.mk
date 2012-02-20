@@ -183,8 +183,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
-$(if $(filter Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+$(call gb_LinkTarget__command_staticlink,$(1))
 endef
 
 
@@ -276,24 +275,13 @@ endef
 
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_EXT := .a
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
-
-endef
-
-# JunitTest class
-
-define gb_JunitTest_JunitTest_platform
-$(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice}" \
-	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
-	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
-	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 
 endef
 
