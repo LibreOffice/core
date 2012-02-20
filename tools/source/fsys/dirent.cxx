@@ -128,62 +128,6 @@ int Sys2SolarError_Impl( int nSysErr )
 
 //--------------------------------------------------------------------
 
-FSysRedirector* FSysRedirector::_pRedirector = 0;
-sal_Bool FSysRedirector::_bEnabled = sal_True;
-#ifdef UNX
-sal_Bool bInRedirection = sal_True;
-#else
-sal_Bool bInRedirection = sal_False;
-#endif
-static osl::Mutex* pRedirectMutex = 0;
-
-//------------------------------------------------------------------------
-void FSysRedirector::DoRedirect( String &rPath )
-{
-        String aURL(rPath);
-
-        // if redirection is disabled or not even registered do nothing
-        if ( !_bEnabled || !pRedirectMutex )
-                return;
-
-        // redirect only removable or remote volumes
-        if (!IsRedirectable_Impl(rtl::OUStringToOString(aURL, osl_getThreadTextEncoding())))
-                return;
-
-        // Redirection is acessible only by one thread per time
-        // dont move the guard behind the bInRedirection check!!!
-        // think of nested calls (when called from callback)
-        osl::MutexGuard aGuard( pRedirectMutex );
-
-        // if already in redirection, dont redirect
-        if ( bInRedirection )
-                return;
-
-        // dont redirect on nested calls
-        bInRedirection = sal_True;
-
-        // convert to URL
-#ifndef UNX
-        for ( sal_Unicode *p = (sal_Unicode*)aURL.GetBuffer(); *p; ++p )
-                if ( '\\' == *p ) *p = '/';
-                else if ( ':' == *p ) *p = '|';
-#endif
-
-        aURL.Insert( String("file:///", osl_getThreadTextEncoding()), 0 );
-
-        // do redirection
-        if ( !_pRedirector )
-        {
-            pRedirectMutex = new osl::Mutex;
-            _pRedirector = new FSysRedirector;
-        }
-
-        bInRedirection = sal_False;
-        return;
-}
-
-//--------------------------------------------------------------------
-
 class DirEntryStack
 {
 private:
@@ -966,7 +910,6 @@ sal_Bool DirEntry::First()
     FSysFailOnErrorImpl();
 
         String    aUniPathName( GetPath().GetFull() );
-        FSysRedirector::DoRedirect( aUniPathName );
         rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 
         DIR *pDir = opendir(aPathName.getStr());
@@ -1667,7 +1610,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 // Redirect
                 String aRetVal(ret_val, osl_getThreadTextEncoding());
                                 String aRedirected (aRetVal);
-                                FSysRedirector::DoRedirect( aRedirected );
                                 if ( FSYS_KIND_DIR == eKind )
                                 {
                                                 if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
@@ -1764,7 +1706,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                         {
                                 FSysFailOnErrorImpl();
                                 String aDirName(pNewDir->GetFull());
-                                FSysRedirector::DoRedirect( aDirName );
                                 rtl::OString bDirName(rtl::OUStringToOString(aDirName, osl_getThreadTextEncoding()));
 
 #ifdef WIN32
@@ -1850,11 +1791,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
 
-        FSysRedirector::DoRedirect(aFrom);
-
         String aTo( aDest.GetFull() );
-
-        FSysRedirector::DoRedirect(aTo);
 
         rtl::OString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
         rtl::OString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
@@ -1993,7 +1930,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 
         // Name als doppelt 0-terminierter String
         String aTmpName( GetFull() );
-        FSysRedirector::DoRedirect( aTmpName );
         rtl::OString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
         char *pName = new char[bTmpName.getLength()+2];

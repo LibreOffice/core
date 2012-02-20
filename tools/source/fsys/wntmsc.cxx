@@ -666,7 +666,6 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         // Redirect
         String aPath( rDirEntry.GetFull() );
-        FSysRedirector::DoRedirect( aPath );
         DirEntry aDirEntry( aPath );
 
         // ist ein Medium im Laufwerk?

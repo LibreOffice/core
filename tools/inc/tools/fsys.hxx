@@ -422,43 +422,6 @@ public:
     DirEntry&       operator []( size_t nIndex ) const;
 };
 
-//========================================================================
-
-/** FSysRedirector is an abstract base class for a hook to redirect
-    mirrored directory trees.
-
-    <P>One instance of a subclass can be instanciated and registered
-    using the method FSysRedirector::Register(FSysRedirector*).
- */
-
-class FSysRedirector
-{
-    static FSysRedirector*  _pRedirector;
-    static sal_Bool             _bEnabled;
-
-public:
-    //-----------------------------------------------------------------------
-    /** This method is to be used to redirect a file system path.
-
-        <P>It will not redirect while redirection is disabled.
-
-        <P>It may block while another thread is accessing the redirector
-        or another thread has disabled redirections.
-
-        @param String &rPath<BR>
-                This inout-argument accepts a file:-URL even as a native
-                file system path name to redirect in 'rPath'. It returns the
-                redirected (modified) path too, which can be of both formats
-                too.
-
-        @return sal_Bool<BR>
-                sal_True, if the path is redirected
-                sal_False, if the path is not redirected (unchanged)
-     */
-    static void             DoRedirect( String &rPath );
-};
-
-
 #if defined(DBG_UTIL)
 void FSysTest();
 #endif

@@ -687,7 +687,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 //    !!! DirEntry aDirEntry( rFilename );
 //    !!! aFilename = aDirEntry.GetFull();
     aFilename = rFilename;
-    FSysRedirector::DoRedirect( aFilename );
     rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
