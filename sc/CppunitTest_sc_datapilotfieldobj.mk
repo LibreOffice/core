@@ -90,7 +90,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_datapilotfieldobj,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_datapilotfieldobj,\
-    basic/util/sb \
+    $(if $(filter-out $(OS),IOS), \
+	    basic/util/sb) \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

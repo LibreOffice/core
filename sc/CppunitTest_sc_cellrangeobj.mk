@@ -91,7 +91,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_cellrangesbase,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
-    basic/util/sb \
+    $(if $(filter-out $(OS),IOS), \
+		basic/util/sb) \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
