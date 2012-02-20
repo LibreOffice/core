@@ -1,9 +1,8 @@
 # libo_FIND_MINGW_EXTERNAL_DLLS([library-names],[variable],[?exclude])
-# uses: CC, WITH_MINGW
+# uses: CC, SED, WITH_MINGW
 # --------------------------------------------------------------------
 AC_DEFUN([libo_FIND_MINGW_EXTERNAL_DLLS],
-[AC_REQUIRE([AC_PROG_SED])dnl
-if test "$WITH_MINGW" = yes -a -n "$CC"; then
+[if test "$WITH_MINGW" = yes -a -n "$CC"; then
     _libo_mingw_libdir=`$CC -print-sysroot`/mingw/lib
     for _libo_mingw_lib in $1; do
         _libo_mingw_lib="$_libo_mingw_libdir/$_libo_mingw_lib.la"
@@ -28,7 +27,7 @@ fi[]dnl
 ]) # libo_FIND_MINGW_EXTERNAL_DLLS
 
 # libo_ADD_MINGW_EXTERNAL_DLLS([library-names],[variable])
-# uses: CC, WITH_MINGW
+# uses: CC, SED, WITH_MINGW
 # --------------------------------------------------------
 AC_DEFUN([libo_ADD_MINGW_EXTERNAL_DLLS],
 [libo_FIND_MINGW_EXTERNAL_DLLS([$1],[_libo_mingw_found_dlls],[$$2])
