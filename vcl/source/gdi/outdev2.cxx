@@ -78,8 +78,6 @@ DBG_NAMEEX( OutputDevice )
         return;                             \
 }
 
-#define TwoRect     SalTwoRect
-
 // -------------
 // - externals -
 // -------------
@@ -92,7 +90,7 @@ extern sal_uLong nVCLLut[ 256 ];
 
 // =======================================================================
 
-sal_uLong ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
+sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
 {
     sal_uLong nMirrFlags = 0;
 
@@ -151,7 +149,7 @@ sal_uLong ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
 
 // =======================================================================
 
-void ImplAdjustTwoRect( TwoRect& rTwoRect, const Rectangle& rValidSrcRect )
+void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect )
 {
     if( ( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
         ( rTwoRect.mnSrcY < rValidSrcRect.Top() ) || ( rTwoRect.mnSrcY >= rValidSrcRect.Bottom() ) ||
@@ -192,7 +190,7 @@ void ImplAdjustTwoRect( TwoRect& rTwoRect, const Rectangle& rValidSrcRect )
 
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoidPosAry )
 {
-    TwoRect*            pPosAry = (TwoRect*)pVoidPosAry;
+    SalTwoRect*            pPosAry = (SalTwoRect*)pVoidPosAry;
     SalGraphics*        pGraphics2;
 
     if ( this == pSrcDev )
@@ -285,7 +283,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     OUTDEV_INIT();
 
-    TwoRect aPosAry;
+    SalTwoRect aPosAry;
     aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
     aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
     aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
@@ -340,7 +338,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     OUTDEV_INIT();
 
-    TwoRect aPosAry;
+    SalTwoRect aPosAry;
     aPosAry.mnSrcX       = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
     aPosAry.mnSrcY       = rOutDev.ImplLogicYToDevicePixel( rSrcPt.Y() );
     aPosAry.mnSrcWidth   = rOutDev.ImplLogicWidthToDevicePixel( rSrcSize.Width() );
@@ -402,7 +400,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
     OUTDEV_INIT();
 
-    TwoRect aPosAry;
+    SalTwoRect aPosAry;
     aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
     aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
 
@@ -478,7 +476,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     else
         ImplSelectClipRegion( rRegion );
 
-    TwoRect aPosAry;
+    SalTwoRect aPosAry;
     aPosAry.mnSrcX       = rDevPt.X();
     aPosAry.mnSrcY       = rDevPt.Y();
     aPosAry.mnSrcWidth   = rDevSize.Width();
@@ -637,7 +635,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
     if( !aBmp.IsEmpty() )
     {
-        TwoRect aPosAry;
+        SalTwoRect aPosAry;
 
         aPosAry.mnSrcX = rSrcPtPixel.X();
         aPosAry.mnSrcY = rSrcPtPixel.Y();
@@ -884,7 +882,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if( !( !aBmpEx ) )
     {
-        TwoRect aPosAry;
+        SalTwoRect aPosAry;
 
         aPosAry.mnSrcX = rSrcPtPixel.X();
         aPosAry.mnSrcY = rSrcPtPixel.Y();
@@ -1131,7 +1129,7 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
     const ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
     if ( pImpBmp )
     {
-        TwoRect aPosAry;
+        SalTwoRect aPosAry;
 
         aPosAry.mnSrcX = rSrcPtPixel.X();
         aPosAry.mnSrcY = rSrcPtPixel.Y();
@@ -1298,7 +1296,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                 {
                     if ( ((OutputDevice*)&aVDev)->mpGraphics || ((OutputDevice*)&aVDev)->ImplGetGraphics() )
                     {
-                        TwoRect aPosAry;
+                        SalTwoRect aPosAry;
 
                         aPosAry.mnSrcX = nX;
                         aPosAry.mnSrcY = nY;
