@@ -161,8 +161,6 @@ public:
     sal_Bool DeleteFrm( sal_uInt16 nFrmId );    // FrmId entfernen, diesen nicht mehr Aufzeichnen
     void FileInit();                    // Auslesen der INI-Datei
     void ChkStream() { if( !pStream ) NewStream(); }
-    void GetVar( const sal_uInt16 nNo, long& rVar )
-        { if( nNo < aVars.size() ) rVar = aVars[ nNo ]; }
 };
 
 /* --------------------------------------------------
@@ -271,12 +269,6 @@ void SwProtocol::Stop()
             pFntCache->Flush();
      }
      nRecord = 0;
-}
-
-void SwProtocol::GetVar( const sal_uInt16 nNo, long& rVar )
-{
-    if( pImpl )
-        pImpl->GetVar( nNo, rVar );
 }
 
 SwImplProtocol::SwImplProtocol()

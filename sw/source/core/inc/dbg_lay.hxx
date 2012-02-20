@@ -84,7 +84,6 @@ public:
     static void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAction, void* pParam );
     static void Init();
     static void Stop();
-    static void GetVar( const sal_uInt16 nNo, long& rVar );
 };
 
 class SwEnterLeave
@@ -103,7 +102,6 @@ public:
 #define PROTOCOL_INIT SwProtocol::Init();
 #define PROTOCOL_STOP SwProtocol::Stop();
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar ) SwEnterLeave aEnter( pFrm, nFunc, nAct, pPar );
-#define GET_VARIABLE( nNo, nVar ) SwProtocol::GetVar( nNo, nVar );
 
 #else
 
@@ -111,7 +109,6 @@ public:
 #define PROTOCOL_INIT
 #define PROTOCOL_STOP
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar )
-#define GET_VARIABLE( nNo, nVar )
 
 #endif
 
