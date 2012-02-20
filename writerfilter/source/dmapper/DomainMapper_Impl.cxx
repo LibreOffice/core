@@ -703,7 +703,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             StyleSheetEntryPtr pParaStyle =
                 GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
-            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 9);
+            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 16: 9);
 
             if ( pParaStyle.get( ) )
             {
@@ -723,6 +723,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[12].Name = rPropNameSupplier.GetName(PROP_RIGHT_MARGIN);
                 pFrameProperties[13].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
                 pFrameProperties[14].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
+                pFrameProperties[15].Name = rPropNameSupplier.GetName(PROP_BACK_COLOR_TRANSPARENCY);
 
                 const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                 sal_Int32 nWidth =
@@ -795,6 +796,10 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
                 pFrameProperties[13].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist;
                 pFrameProperties[14].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist;
+                // If there is no fill, the Word default is 100% transparency.
+                // Otherwise CellColorHandler has priority, and this setting
+                // will be ignored.
+                pFrameProperties[15].Value <<= 100;
 
                 lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
