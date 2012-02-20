@@ -57,6 +57,7 @@ $(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
     vcl \
     ucbhelper \
     svxcore \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,$(gengalbin),\
