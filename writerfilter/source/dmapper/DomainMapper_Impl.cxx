@@ -799,7 +799,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 // If there is no fill, the Word default is 100% transparency.
                 // Otherwise CellColorHandler has priority, and this setting
                 // will be ignored.
-                pFrameProperties[15].Value <<= 100;
+                pFrameProperties[15].Value <<= sal_Int32(100);
 
                 lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
