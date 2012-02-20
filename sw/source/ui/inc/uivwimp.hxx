@@ -97,10 +97,10 @@ class SwMailMergeConfigItem;
 
 class SwView_Impl
 {
-    STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
-    STAR_REFERENCE( lang::XEventListener )  xClipEvtLstnr;
-    STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
-    STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xScanEvtLstnr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xClipEvtLstnr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >              *pxXTextView;       // UNO object
     com::sun::star::uno::WeakReference< com::sun::star::lang::XUnoTunnel > xTransferable;
 
     // temporary document for printing text of selection / multi selection

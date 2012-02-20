@@ -1115,7 +1115,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         TransferDataContainer* pClipCntnr =
                                                     new TransferDataContainer;
-                        STAR_REFERENCE( datatransfer::XTransferable )
+                        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)

@@ -52,25 +52,25 @@ class SwRenameXNamedDlg : public ModalDialog
 
     String          sRemoveWarning;
 
-    STAR_REFERENCE( container::XNamed ) &   xNamed;
-    STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
-    STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
-    STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > &   xNamed;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xSecondAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xThirdAccess;
 
     DECL_LINK(OkHdl, OKButton*);
     DECL_LINK(ModifyHdl, NoSpaceEdit*);
 
 public:
     SwRenameXNamedDlg( Window* pParent,
-                    STAR_REFERENCE( container::XNamed ) & xNamed,
-                    STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess );
 
     void    SetForbiddenChars( const String& rSet )
         { aNewNameED.SetForbiddenChars( rSet ); }
 
     void SetAlternativeAccess(
-            STAR_REFERENCE( container::XNameAccess ) & xSecond,
-            STAR_REFERENCE( container::XNameAccess ) & xThird )
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird )
     {
         xSecondAccess = xSecond;
         xThirdAccess = xThird;

@@ -269,7 +269,7 @@ SwCalc::SwCalc( SwDoc& rD )
         eLang != SvxLocaleToLanguage( pCharClass->getLocale() ) )
     {
         ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
-        STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(
                             ::comphelper::getProcessServiceFactory() );
         pCharClass = new CharClass( xMSF, aLocale );
         pLclData = new LocaleDataWrapper( xMSF, aLocale );

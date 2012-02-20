@@ -54,7 +54,7 @@ class IndexEntrySupplierWrapper
 public:
     IndexEntrySupplierWrapper(
             const ::com::sun::star::lang::Locale& rLcl,
-            STAR_REFERENCE( lang::XMultiServiceFactory )& rxMSF );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~IndexEntrySupplierWrapper();
 
     String GetIndexKey( const String& rTxt, const String& rTxtReading,

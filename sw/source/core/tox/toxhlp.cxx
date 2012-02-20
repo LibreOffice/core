@@ -45,7 +45,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
                                     ::comphelper::getProcessServiceFactory();
 
     try {
-        STAR_REFERENCE( uno::XInterface ) xI =
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xI =
             rxMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.i18n.IndexEntrySupplier")) );
         if( xI.is() )

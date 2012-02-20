@@ -72,7 +72,7 @@ sal_Bool UCB_DeleteFile( const String& rURL )
     try
     {
         ucbhelper::Content aTempContent( rURL,
-                                STAR_REFERENCE( ucb::XCommandEnvironment )());
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         aTempContent.executeCommand(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                         ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
@@ -97,7 +97,7 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         String sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
         ucbhelper::Content aTempContent( sMainURL,
-                                STAR_REFERENCE( ucb::XCommandEnvironment )());
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
 
         ::com::sun::star::uno::Any aAny;
         ::com::sun::star::ucb::TransferInfo aInfo;
@@ -123,21 +123,21 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
     sal_Bool bCaseSensitive;
     try
     {
-        STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF =
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     comphelper::getProcessServiceFactory();
 
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
-        STAR_REFERENCE( ucb::XContentIdentifier ) xRef1 = new
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef1 = new
                 ucbhelper::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
-        STAR_REFERENCE( ucb::XContentIdentifier ) xRef2 = new
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef2 = new
                 ucbhelper::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
-        STAR_REFERENCE( ucb::XContentProvider ) xProv =
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xProv =
                 ucbhelper::ContentBroker::get()->getContentProviderInterface();
 
         sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
@@ -156,7 +156,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     sal_Bool bIsReadOnly = sal_False;
     try
     {
-        ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
+        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
         if(aAny.hasValue())
@@ -174,7 +174,7 @@ sal_Bool UCB_IsFile( const String& rURL )
     sal_Bool bExists = sal_False;
     try
     {
-        ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         bExists = aContent.isDocument();
     }
     catch (::com::sun::star::uno::Exception &)
@@ -188,7 +188,7 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     sal_Bool bExists = sal_False;
     try
     {
-        ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         bExists = aContent.isFolder();
     }
     catch (::com::sun::star::uno::Exception &)
@@ -210,8 +210,8 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
     sal_Bool bOk = sal_False;
     try
     {
-        ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
-        STAR_REFERENCE( sdbc::XResultSet ) xResultSet;
+        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
 
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
         ::com::sun::star::uno::Sequence < rtl::OUString > aProps( nSeqSize );
@@ -231,7 +231,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
 
         if( xResultSet.is() )
         {
-            STAR_REFERENCE( sdbc::XRow ) xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
             xub_StrLen nExtLen = pExtension ? pExtension->Len() : 0;
             try
             {

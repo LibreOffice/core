@@ -372,8 +372,8 @@ void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const String& rSet )
 }
 
 void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
-             STAR_REFERENCE( container::XNameAccess ) & xSecond,
-             STAR_REFERENCE( container::XNameAccess ) & xThird )
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird )
 {
     pDlg->SetAlternativeAccess( xSecond, xThird);
 }
@@ -1114,8 +1114,8 @@ SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& 
 }
 
 AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg( Window* pParent,
-                                                                STAR_REFERENCE( container::XNamed ) & xNamed,
-                                                                STAR_REFERENCE( container::XNameAccess ) & xNameAccess,int nResId )
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess,int nResId )
 {
     SwRenameXNamedDlg* pDlg=NULL;
     switch ( nResId )

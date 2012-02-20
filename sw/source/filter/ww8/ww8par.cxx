@@ -366,7 +366,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
         SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
         OSL_ENSURE(rReader.pFormImpl, "No Form Implementation!");
-        STAR_REFERENCE( drawing::XShape ) xShape;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
         if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
             rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {

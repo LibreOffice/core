@@ -306,8 +306,8 @@ class AbstractSwRenameXNamedDlg : public VclAbstractDialog //add for SwRenameXNa
 public:
     virtual void    SetForbiddenChars( const String& rSet ) = 0;
     virtual void SetAlternativeAccess(
-             STAR_REFERENCE( container::XNameAccess ) & xSecond,
-             STAR_REFERENCE( container::XNameAccess ) & xThird ) = 0;
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird ) = 0;
 };
 
 class AbstractSwModalRedlineAcceptDlg : public VclAbstractDialog //add for SwModalRedlineAcceptDlg
@@ -416,8 +416,8 @@ public:
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ) = 0; //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
-                                                                STAR_REFERENCE( container::XNamed ) & xNamed,
-                                                                STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId ) = 0;
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId ) = 0;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ) = 0; //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateSwVclDialog( int nResId, Window* pParent, sal_Bool& rWithPrev ) = 0; //add for SwMergeTblDlg
