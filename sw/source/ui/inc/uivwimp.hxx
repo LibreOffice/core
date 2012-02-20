@@ -35,7 +35,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <swunodef.hxx>
 #include <cppuhelper/weakref.hxx>
 
 class SwXTextView;

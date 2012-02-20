@@ -36,7 +36,6 @@ namespace com{namespace sun{namespace star{namespace container{
 }}}}
 #include "swdllapi.h"
 #include <swtypes.hxx>
-#include <swunodef.hxx>
 
 class SwDBTreeList_Impl;
 class SwWrtShell;

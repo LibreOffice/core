@@ -43,7 +43,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include "swunodef.hxx"
 #include "itabenum.hxx"
 
 class SfxViewFrame;

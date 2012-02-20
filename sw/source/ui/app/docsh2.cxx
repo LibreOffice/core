@@ -69,7 +69,6 @@
 #include <basic/basmgr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
-#include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
 #include <view.hxx>         // for the current view

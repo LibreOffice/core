@@ -109,7 +109,6 @@
 #include <ndole.hxx>
 #include <swwait.hxx>
 #include <viewopt.hxx>
-#include <swunodef.hxx>
 #include <vcl/sound.hxx>
 #include <swerror.h>
 #include <SwCapObjType.hxx>

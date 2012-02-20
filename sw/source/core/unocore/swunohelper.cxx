@@ -45,7 +45,6 @@
 #include <ucbhelper/content.hxx>
 #include <svl/svstdarr.hxx>
 #include <swunohelper.hxx>
-#include <swunodef.hxx>
 
 namespace SWUnoHelper {
 

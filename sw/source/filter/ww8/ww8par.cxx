@@ -99,7 +99,6 @@
 #include <mdiexp.hxx>           // Progress
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <swerror.h>            // ERR_WW8_...
-#include <swunodef.hxx>
 #include <unodraw.hxx>
 #include <swtable.hxx>          // class SwTableLines, ...
 // #i18732#

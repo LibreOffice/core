@@ -47,7 +47,6 @@
 #include <editeng/brshitem.hxx>
 
 
-#include <swunodef.hxx>
 #include <frmatr.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>

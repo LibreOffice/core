@@ -40,7 +40,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <tools/resary.hxx>
-#include <swunodef.hxx>
 #include "swdllapi.h"
 
 class SwOneExampleFrame;

@@ -62,7 +62,6 @@
 #include <swundo.hxx>                   // for Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
-#include <swunodef.hxx>
 #include <shellio.hxx>
 
 #include <helpid.h>

@@ -58,7 +58,6 @@
 #include <usrfld.hxx>
 #include <dbmgr.hxx>
 #include <docfld.hxx>
-#include <swunodef.hxx>
 #include <swtypes.hxx>
 
 using namespace ::com::sun::star;

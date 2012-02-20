@@ -32,7 +32,6 @@
 #include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <swunodef.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace i18n {

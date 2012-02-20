@@ -81,7 +81,6 @@
 #include <docsh.hxx>
 #include <mdiexp.hxx>           // Progress
 #include <fmtcnct.hxx>
-#include <swunodef.hxx>
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
 #include "ww8par.hxx"           // class SwWWImplReader

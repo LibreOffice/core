@@ -53,7 +53,6 @@
 #include <IMark.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
-#include <swunodef.hxx>
 #include <swmodule.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/macitem.hxx>
