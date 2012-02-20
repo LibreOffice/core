@@ -1805,54 +1805,6 @@ sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
-// get a screenshot of the current frame including window manager decoration
-SalBitmap* X11SalFrame::SnapShot()
-{
-    Display* pDisplay = GetXDisplay();
-
-    // make sure the frame has been reparented and all paint timer have been
-    // expired
-    do
-    {
-        XSync(pDisplay, False);
-        Application::Reschedule ();
-    }
-    while (XPending(pDisplay));
-    TimeValue aVal;
-    aVal.Seconds = 0;
-    aVal.Nanosec = 50000000;
-    osl_waitThread( &aVal );
-    do
-    {
-        XSync(pDisplay, False);
-        Application::Reschedule ();
-    }
-    while (XPending(pDisplay));
-
-    // get the most outer window, usually the window manager decoration
-    Drawable hWindow = None;
-    if (IsOverrideRedirect())
-        hWindow = GetDrawable();
-    else
-    if (hPresentationWindow != None)
-        hWindow = hPresentationWindow;
-    else
-        hWindow = GetStackingWindow();
-
-    // query the contents of the window
-    if (hWindow != None)
-    {
-        X11SalBitmap *pBmp = new X11SalBitmap;
-        if (pBmp->SnapShot (pDisplay, hWindow))
-            return pBmp;
-        else
-            delete pBmp;
-    }
-
-    return NULL;
-}
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // native menu implementation - currently empty

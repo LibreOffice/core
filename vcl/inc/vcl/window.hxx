@@ -950,8 +950,6 @@ public:
     void                SetData( void* pNewData );
     void*               GetData() const;
 
-    Bitmap              SnapShot( sal_Bool bBorder = sal_True ) const;
-
     void                ShowFocus( const Rectangle& rRect );
     void                HideFocus();
 

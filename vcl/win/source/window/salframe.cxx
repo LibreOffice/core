@@ -2958,39 +2958,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
 // -----------------------------------------------------------------------
 
-SalBitmap* WinSalFrame::SnapShot()
-{
-    WinSalBitmap* pSalBitmap = NULL;
-
-    RECT aRect;
-    GetWindowRect( mhWnd, &aRect );
-
-    int     nDX = aRect.right-aRect.left;
-    int     nDY = aRect.bottom-aRect.top;
-    HDC     hDC = GetWindowDC( mhWnd );
-    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
-    HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
-    sal_Bool    bRet;
-
-    bRet = BitBlt( hBmpDC, 0, 0, nDX, nDY, hDC, 0, 0, SRCCOPY ) ? TRUE : FALSE;
-    ImplReleaseCachedDC( CACHED_HDC_1 );
-
-    if ( bRet )
-    {
-        pSalBitmap = new WinSalBitmap;
-
-        if ( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
-        {
-            delete pSalBitmap;
-            pSalBitmap = NULL;
-        }
-    }
-
-    return pSalBitmap;
-}
-
-// -----------------------------------------------------------------------
-
 const SystemEnvData* WinSalFrame::GetSystemData() const
 {
     return &maSysData;

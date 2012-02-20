@@ -393,8 +393,6 @@ public:
     // may be LANGUAGE_DONTKNOW if not supported by the OS
     virtual LanguageType        GetInputLanguage();
 
-    virtual SalBitmap*          SnapShot();
-
     virtual void                UpdateSettings( AllSettings& rSettings );
 
     virtual void                Beep( SoundType eSoundType );

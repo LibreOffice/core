@@ -2446,32 +2446,6 @@ LanguageType GtkSalFrame::GetInputLanguage()
     return LANGUAGE_DONTKNOW;
 }
 
-SalBitmap* GtkSalFrame::SnapShot()
-{
-    if( !m_pWindow )
-        return NULL;
-
-#if GTK_CHECK_VERSION(3,0,0)
-    SvpSalGraphics *pGraphics = static_cast<SvpSalGraphics *>(GetGraphics());
-    if (!pGraphics)
-        return NULL;
-
-    SalBitmap *pRet = pGraphics->getBitmap( 0, 0, maGeometry.nWidth, maGeometry.nHeight );
-    ReleaseGraphics( pGraphics );
-
-    return pRet;
-#else
-    X11SalBitmap *pBmp = new X11SalBitmap;
-    if( pBmp->SnapShot( GDK_DISPLAY_XDISPLAY( getGdkDisplay() ),
-                        widget_get_xid(m_pWindow) ) )
-        return pBmp;
-    else
-        delete pBmp;
-#endif
-
-    return NULL;
-}
-
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     if( ! m_pWindow )

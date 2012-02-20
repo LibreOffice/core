@@ -161,7 +161,6 @@ public:
     sal_Bool DeleteFrm( sal_uInt16 nFrmId );    // FrmId entfernen, diesen nicht mehr Aufzeichnen
     void FileInit();                    // Auslesen der INI-Datei
     void ChkStream() { if( !pStream ) NewStream(); }
-    void SnapShot( const SwFrm* pFrm, sal_uLong nFlags );
     void GetVar( const sal_uInt16 nNo, long& rVar )
         { if( nNo < aVars.size() ) rVar = aVars[ nNo ]; }
 };
@@ -272,14 +271,6 @@ void SwProtocol::Stop()
             pFntCache->Flush();
      }
      nRecord = 0;
-}
-
-// Creates a more or less detailed snapshot of the layout structur
-
-void SwProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
-{
-    if( pImpl )
-        pImpl->SnapShot( pFrm, nFlags );
 }
 
 void SwProtocol::GetVar( const sal_uInt16 nNo, long& rVar )
@@ -766,40 +757,6 @@ sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
     if ( pFrmIds->erase(nId) )
         return sal_True;
     return sal_False;
-}
-
-/*--------------------------------------------------
- * SwProtocol::SnapShot(..)
- * creates a snapshot of the given frame and its content.
- * --------------------------------------------------*/
-void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
-{
-    while( pFrm )
-    {
-        _Record( pFrm, PROT_SNAPSHOT, 0, 0);
-        if( pFrm->GetDrawObjs() && nFlags & SNAP_FLYFRAMES )
-        {
-            aLayer.append(RTL_CONSTASCII_STRINGPARAM("[ "));
-            const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
-            {
-                SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
-                    SnapShot( static_cast<SwFlyFrm*>(pObj), nFlags );
-            }
-            if (aLayer.getLength() > 1)
-                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
-        }
-        if( pFrm->IsLayoutFrm() && nFlags & SNAP_LOWER &&
-            ( !pFrm->IsTabFrm() || nFlags & SNAP_TABLECONT ) )
-        {
-            aLayer.append(RTL_CONSTASCII_STRINGPARAM("  "));
-            SnapShot( ((SwLayoutFrm*)pFrm)->Lower(), nFlags );
-            if (aLayer.getLength() > 1)
-                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
-        }
-        pFrm = pFrm->GetNext();
-    }
 }
 
 /* --------------------------------------------------

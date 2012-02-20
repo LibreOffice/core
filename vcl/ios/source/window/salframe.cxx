@@ -958,11 +958,6 @@ void IosSalFrame::SetBackgroundBitmap( SalBitmap* )
     //TODO: implement
 }
 
-SalBitmap* IosSalFrame::SnapShot()
-{
-    return mpGraphics ? mpGraphics->getBitmap( 0, 0, maGeometry.nWidth, maGeometry.nHeight ) : NULL;
-}
-
 SalFrame* IosSalFrame::GetParent() const
 {
     return mpParent;

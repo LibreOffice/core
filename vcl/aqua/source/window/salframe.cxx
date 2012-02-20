@@ -1621,11 +1621,6 @@ void AquaSalFrame::SetBackgroundBitmap( SalBitmap* )
     //TODO: implement
 }
 
-SalBitmap* AquaSalFrame::SnapShot()
-{
-    return mpGraphics ? mpGraphics->getBitmap( 0, 0, maGeometry.nWidth, maGeometry.nHeight ) : NULL;
-}
-
 SalFrame* AquaSalFrame::GetParent() const
 {
     return mpParent;

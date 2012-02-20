@@ -78,13 +78,6 @@ public:
     static void                 ImplDestroyCache();
     void                        ImplRemovedFromCache();
 
-    bool                        SnapShot (Display* pDisplay, XLIB_Window hWindow);
-    bool                        ImplCreateFromXImage(
-                                    Display* pDisplay,
-                                    XLIB_Window hWindow,
-                                    SalX11Screen nXScreen,
-                                    XImage* pImage
-                                );
 private:
 
     BitmapBuffer*   mpDIB;

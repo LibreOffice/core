@@ -384,11 +384,6 @@ LanguageType SvpSalFrame::GetInputLanguage()
     return LANGUAGE_DONTKNOW;
 }
 
-SalBitmap* SvpSalFrame::SnapShot()
-{
-    return NULL;
-}
-
 void SvpSalFrame::UpdateSettings( AllSettings& )
 {
 }

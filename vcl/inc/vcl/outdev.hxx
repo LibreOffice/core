@@ -533,8 +533,6 @@ public:
                                         const OutputDevice& rOutDev, const Region& rRegion );
     SAL_DLLPRIVATE void         ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                         OutputDevice& rOutDev );
-    SAL_DLLPRIVATE void         ImplGetFrameBitmap( const Point& rPt, const Size& rSize,
-                                        Bitmap& rBitmap ) const;
 
     SAL_DLLPRIVATE sal_Bool         ImplIsRecordLayout() const;
 

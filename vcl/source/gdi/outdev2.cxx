@@ -1361,19 +1361,6 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
 // ------------------------------------------------------------------
 
-void OutputDevice::ImplGetFrameBitmap( const Point& rDestPt, const Size& rSize,
-                                       Bitmap& rBitmap ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    sal_Bool bOldMap = mbMap;
-    ((OutputDevice*)this)->mbMap = sal_False;
-    rBitmap = GetBitmap( rDestPt, rSize );
-    ((OutputDevice*)this)->mbMap = bOldMap;
-}
-
-// ------------------------------------------------------------------
-
 Color OutputDevice::GetPixel( const Point& rPt ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

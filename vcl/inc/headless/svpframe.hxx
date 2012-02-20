@@ -107,7 +107,6 @@ public:
     virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
-    virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
