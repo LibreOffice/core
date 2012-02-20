@@ -4282,8 +4282,14 @@ if test "$GCC" = "yes"; then
         dnl     return n;
         dnl   }
         dnl
-        dnl Mac OS X up to at least 10.7.1 is known to have this problem:
-        if test "$_os" = "Darwin"; then
+        dnl Mac OS X up to at least 10.7.1 is known to have this problem, as is
+        dnl at least one instance of GCC 4.2.4 (used on a "Linux
+        dnl ooobuild1.osuosl.org 2.6.9-101.plus.c4smp #1 SMP Thu Jul 21 19:08:15
+        dnl EDT 2011 i686 i686 i386 GNU/Linux" machine); see the definition of
+        dnl __cxa_guard_acquire in GCC's libstdc++-v3/libsupc++/guard.cc for
+        dnl what #ifdefs actually make a difference there.  Conservative advice
+        dnl from Jakub Jelinek is to assume it working in GCC >= 4.3:
+        if test "$_os" = "Darwin" -o "${GCCVER?}" -lt 040300; then
             unset HAVE_THREADSAFE_STATICS
             AC_MSG_RESULT([broken (i.e., no)])
         else
