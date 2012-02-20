@@ -196,6 +196,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CONTOUR_POLY_POLYGON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")); break;
             case PROP_PAGE_TOGGLE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageToggle")); break;
             case PROP_BACK_COLOR           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColor")); break;
+            case PROP_BACK_COLOR_TRANSPARENCY:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColorTransparency")); break;
             case PROP_ALTERNATIVE_TEXT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")); break;
             case PROP_HEADER_TEXT_LEFT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderTextLeft")); break;
             case PROP_HEADER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderText")); break;
