@@ -268,7 +268,7 @@ SwCalc::SwCalc( SwDoc& rD )
     if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) ||
         eLang != SvxLocaleToLanguage( pCharClass->getLocale() ) )
     {
-        STAR_NMSPC::lang::Locale aLocale( SvxCreateLocale( eLang ));
+        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
         STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF(
                             ::comphelper::getProcessServiceFactory() );
         pCharClass = new CharClass( xMSF, aLocale );

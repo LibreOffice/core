@@ -100,8 +100,8 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
 
         UNO_NMSPC::Any aAny;
-        STAR_NMSPC::ucb::TransferInfo aInfo;
-        aInfo.NameClash = STAR_NMSPC::ucb::NameClash::ERROR;
+        ::com::sun::star::ucb::TransferInfo aInfo;
+        aInfo.NameClash = ::com::sun::star::ucb::NameClash::ERROR;
         aInfo.NewTitle = sName;
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
@@ -248,7 +248,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
 
                             if( pDateTimeList )
                             {
-                                STAR_NMSPC::util::DateTime aStamp = xRow->getTimestamp(2);
+                                ::com::sun::star::util::DateTime aStamp = xRow->getTimestamp(2);
                                 ::DateTime* pDateTime = new ::DateTime(
                                         ::Date( aStamp.Day,
                                                 aStamp.Month,

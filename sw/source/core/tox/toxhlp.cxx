@@ -75,7 +75,7 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 
 String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
                                                const String& rTxtReading,
-                                               const STAR_NMSPC::lang::Locale& rLocale ) const
+                                               const ::com::sun::star::lang::Locale& rLocale ) const
 {
     String sRet;
     try {
@@ -117,8 +117,8 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     return sRet;
 }
 
-STAR_NMSPC::uno::Sequence< ::rtl::OUString >
-IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const
 {
     uno::Sequence< ::rtl::OUString > sRet;
 
@@ -141,7 +141,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
 }
 
 sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
-        const STAR_NMSPC::lang::Locale& rLcl,
+        const ::com::sun::star::lang::Locale& rLcl,
         const String& sSortAlgorithm, long nOptions ) const
 {
     sal_Bool bRet = sal_False;
@@ -165,9 +165,9 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
 
 sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
             const String& rTxt1, const String& rTxtReading1,
-            const STAR_NMSPC::lang::Locale& rLocale1,
+            const ::com::sun::star::lang::Locale& rLocale1,
             const String& rTxt2, const String& rTxtReading2,
-            const STAR_NMSPC::lang::Locale& rLocale2 ) const
+            const ::com::sun::star::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;
     try {

@@ -54,7 +54,7 @@ namespace com{ namespace sun{ namespace star {
 }}}
 
 class SwScannerEventListener : public ::cppu::WeakImplHelper1<
-    STAR_NMSPC::lang::XEventListener >
+    ::com::sun::star::lang::XEventListener >
 {
     SwView* pView;
 
@@ -77,7 +77,7 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     SwView* pView;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const STAR_NMSPC::lang::EventObject& rEventObject )
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObject )
         throw ( com::sun::star::uno::RuntimeException );
 
     // XClipboardListener

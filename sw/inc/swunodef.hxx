@@ -28,11 +28,10 @@
 #ifndef _SWUNODEF_HXX
 #define _SWUNODEF_HXX
 
-#define STAR_NMSPC              ::com::sun::star
-#define UNO_NMSPC               STAR_NMSPC::uno
-#define CLIP_NMSPC              STAR_NMSPC::datatransfer::clipboard
+#define UNO_NMSPC               ::com::sun::star::uno
+#define CLIP_NMSPC              ::com::sun::star::datatransfer::clipboard
 
-#define STAR_REFERENCE(aType)   UNO_NMSPC::Reference< STAR_NMSPC::aType >
+#define STAR_REFERENCE(aType)   UNO_NMSPC::Reference< ::com::sun::star::aType >
 
 #endif
 
