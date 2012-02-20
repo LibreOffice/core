@@ -28,7 +28,6 @@
 $(eval $(call gb_JunitTest_JunitTest,ridljar_uno))
 
 $(eval $(call gb_JunitTest_add_jars,ridljar_uno,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
 
@@ -36,6 +35,12 @@ $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_uno,\
     ridljar/test/com/sun/star/uno/Any_Test \
     ridljar/test/com/sun/star/uno/Type_Test \
     ridljar/test/com/sun/star/uno/UnoRuntime_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,ridljar_uno,\
+    com.sun.star.uno.Any_Test \
+    com.sun.star.uno.Type_Test \
+    com.sun.star.uno.UnoRuntime_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -28,12 +28,15 @@
 $(eval $(call gb_JunitTest_JunitTest,ridljar_typedesc))
 
 $(eval $(call gb_JunitTest_add_jars,ridljar_typedesc,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_typedesc,\
     ridljar/test/com/sun/star/lib/uno/typedesc/TypeDescription_Test \
+))
+
+$(eval $(call gb_JunitTest_add_classes,ridljar_typedesc,\
+    com.sun.star.lib.uno.typedesc.TypeDescription_Test \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

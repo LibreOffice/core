@@ -36,4 +36,8 @@ $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_util,\
     ridljar/test/com/sun/star/lib/util/WeakMap_Test \
 ))
 
+$(eval $(call gb_JunitTest_add_classes,ridljar_util,\
+    com.sun.star.lib.util.WeakMap_Test \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
