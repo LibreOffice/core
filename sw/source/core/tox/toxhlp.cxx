@@ -50,12 +50,12 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
                                 "com.sun.star.i18n.IndexEntrySupplier")) );
         if( xI.is() )
         {
-            UNO_NMSPC::Any x = xI->queryInterface( ::getCppuType(
+            ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType(
                     (const uno::Reference< i18n::XExtendedIndexEntrySupplier>*)0) );
             x >>= xIES;
         }
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -81,7 +81,7 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
     try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -102,7 +102,7 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -125,7 +125,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
     try {
         sRet = xIES->getAlgorithmList( rLcl );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -148,7 +148,7 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
     try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -174,7 +174,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                         rTxt2, rTxtReading2, rLocale2 );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif

@@ -168,7 +168,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pRecs->C40_INSERT( SwLabRec, pRec, 0 );
 
     sal_uInt16 nLstGroup = 0;
-    const UNO_NMSPC::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const ::com::sun::star::uno::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
     const rtl::OUString* pMan = rMan.getConstArray();
     for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
     {
@@ -510,7 +510,7 @@ void SwLabPage::InitDatabaseBox()
     if( GetNewDBMgr() )
     {
         aDatabaseLB.Clear();
-        UNO_NMSPC::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        ::com::sun::star::uno::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const rtl::OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);

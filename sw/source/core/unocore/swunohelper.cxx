@@ -49,14 +49,14 @@
 
 namespace SWUnoHelper {
 
-sal_Int32 GetEnumAsInt32( const UNO_NMSPC::Any& rVal )
+sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
 {
     sal_Int32 eVal;
     try
     {
         eVal = comphelper::getEnumAsINT32( rVal );
     }
-    catch( UNO_NMSPC::Exception & )
+    catch( ::com::sun::star::uno::Exception & )
     {
         eVal = 0;
         OSL_FAIL( "can't get EnumAsInt32" );
@@ -75,10 +75,10 @@ sal_Bool UCB_DeleteFile( const String& rURL )
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
         aTempContent.executeCommand(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
-                        UNO_NMSPC::makeAny( sal_Bool( sal_True ) ) );
+                        ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
         bRemoved = sal_True;
     }
-    catch( UNO_NMSPC::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
         bRemoved = sal_False;
         OSL_FAIL( "Exeception from executeCommand( delete )" );
@@ -99,7 +99,7 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         ucbhelper::Content aTempContent( sMainURL,
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
 
-        UNO_NMSPC::Any aAny;
+        ::com::sun::star::uno::Any aAny;
         ::com::sun::star::ucb::TransferInfo aInfo;
         aInfo.NameClash = ::com::sun::star::ucb::NameClash::ERROR;
         aInfo.NewTitle = sName;
@@ -110,7 +110,7 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                             aAny );
     }
-    catch( UNO_NMSPC::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL( "Exeception from executeCommand( transfer )" );
         bCopyCompleted = sal_False;
@@ -143,7 +143,7 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
         sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = 0 != nCompare;
     }
-    catch( UNO_NMSPC::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
         bCaseSensitive = sal_False;
         OSL_FAIL( "Exeception from compareContentIds()" );
@@ -157,12 +157,12 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     try
     {
         ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
-        UNO_NMSPC::Any aAny = aCnt.getPropertyValue(
+        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }
-    catch( UNO_NMSPC::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
         bIsReadOnly = sal_False;
     }
@@ -177,7 +177,7 @@ sal_Bool UCB_IsFile( const String& rURL )
         ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
         bExists = aContent.isDocument();
     }
-    catch (UNO_NMSPC::Exception &)
+    catch (::com::sun::star::uno::Exception &)
     {
     }
     return bExists;
@@ -191,7 +191,7 @@ sal_Bool UCB_IsDirectory( const String& rURL )
         ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
         bExists = aContent.isFolder();
     }
-    catch (UNO_NMSPC::Exception &)
+    catch (::com::sun::star::uno::Exception &)
     {
     }
     return bExists;
@@ -214,7 +214,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
         STAR_REFERENCE( sdbc::XResultSet ) xResultSet;
 
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
-        UNO_NMSPC::Sequence < rtl::OUString > aProps( nSeqSize );
+        ::com::sun::star::uno::Sequence < rtl::OUString > aProps( nSeqSize );
         rtl::OUString* pProps = aProps.getArray();
         pProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         if( pDateTimeList )
@@ -224,14 +224,14 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
         {
             xResultSet = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
         }
-        catch( UNO_NMSPC::Exception& )
+        catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL( "create cursor failed!" );
         }
 
         if( xResultSet.is() )
         {
-            STAR_REFERENCE( sdbc::XRow ) xRow( xResultSet, UNO_NMSPC::UNO_QUERY );
+            STAR_REFERENCE( sdbc::XRow ) xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
             xub_StrLen nExtLen = pExtension ? pExtension->Len() : 0;
             try
             {
@@ -267,13 +267,13 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
                 }
                 bOk = sal_True;
             }
-            catch( UNO_NMSPC::Exception& )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 OSL_FAIL( "Exception caught!" );
             }
         }
     }
-    catch( UNO_NMSPC::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL( "Exception caught!" );
         bOk = sal_False;

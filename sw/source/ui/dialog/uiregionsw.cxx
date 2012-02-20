@@ -467,7 +467,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             if (aPasswdDlg.Execute())
             {
                 String sNewPasswd( aPasswdDlg.GetPassword() );
-                UNO_NMSPC::Sequence <sal_Int8 > aNewPasswd;
+                ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
                         pRepr->GetSectionData().GetPassword(), sNewPasswd))
@@ -623,7 +623,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 
     aProtectCB  .Enable(sal_True);
     aFileCB     .Enable(sal_True);
-    UNO_NMSPC::Sequence <sal_Int8> aCurPasswd;
+    ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
         aHideCB.EnableTriState( sal_True );
