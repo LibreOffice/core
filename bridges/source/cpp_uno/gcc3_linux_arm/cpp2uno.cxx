@@ -70,6 +70,7 @@ namespace
         char * pCppStack = pTopStack;
 
 #ifdef __ARM_PCS_VFP
+        int dc = 0;
         char * pFloatArgs = (char *)(pCppStack - 64);
 #endif
         // return
@@ -152,6 +153,11 @@ namespace
                     if ((pFloatArgs - pTopStack) % 8) pFloatArgs+=sizeof(float); //align to 8
                     pCppArgs[nPos] = pUnoArgs[nPos] = pFloatArgs;
                     pFloatArgs += sizeof(double);
+                    if (++dc == arm::MAX_FPR_REGS) {
+                        if (pCppStack - pTopStack < 16)
+                            pCppStack = pTopStack + 16;
+                        pFloatArgs = pCppStack;
+                    }
                 } else
 #endif
                     pCppArgs[nPos] = pUnoArgs[nPos] = pCppStack;

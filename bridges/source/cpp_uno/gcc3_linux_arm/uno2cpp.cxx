@@ -362,7 +362,8 @@ void callVirtualMethod(
                 { \
                     ++pDS; \
                 } \
-                *pDS++ = *reinterpret_cast<double *>( pSV );\
+            *(double *)pDS = *reinterpret_cast<double *>( pSV );\
+            pDS += 2;\
         }
 #else
 #define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
