@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -50,7 +49,6 @@
 #include "NotesChildWindow.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
-#include "UpdateLockManager.hxx"
 #include "FrameView.hxx"
 #include "ViewTabBar.hxx"
 #include <sfx2/event.hxx>
@@ -152,15 +150,9 @@ public:
         It does not include the ViewTabBar.
     */
     ::boost::scoped_ptr< ::Window> mpViewWindow;
-
     ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
-
     ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
-
     ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
-
-    ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
-
     ::boost::shared_ptr<FormShellManager> mpFormShellManager;
 
     Implementation (ViewShellBase& rBase);
@@ -282,7 +274,6 @@ ViewShellBase::ViewShellBase (
     mpImpl.reset(new Implementation(*this));
     mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
-    mpImpl->mpUpdateLockManager.reset(new UpdateLockManager(*this));
 
     _pFrame->GetWindow().SetBackground(Wallpaper());
 
@@ -323,7 +314,6 @@ ViewShellBase::~ViewShellBase (void)
         pShell->GetActiveWindow()->GetParent()->Hide();
     }
 
-    mpImpl->mpUpdateLockManager->Disable();
     mpImpl->mpToolBarManager->Shutdown();
     mpImpl->mpViewShellManager->Shutdown();
 
@@ -1095,19 +1085,6 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 }
 
 
-
-
-::boost::shared_ptr<UpdateLockManager> ViewShellBase::GetUpdateLockManager (void) const
-{
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpUpdateLockManager.get()!=NULL);
-
-    return mpImpl->mpUpdateLockManager;
-}
-
-
-
-
 ::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
@@ -1218,7 +1195,6 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
       mpToolBarManager(),
       mpViewShellManager(),
       mpEventMultiplexer(),
-      mpUpdateLockManager(),
       mpFormShellManager(),
       mrBase(rBase),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())

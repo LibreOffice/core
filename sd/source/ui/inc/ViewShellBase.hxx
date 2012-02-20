@@ -55,7 +55,6 @@ class DrawController;
 class DrawDocShell;
 class FormShellManager;
 class ToolBarManager;
-class UpdateLockManager;
 class ViewShell;
 class ViewShellManager;
 
@@ -221,10 +220,7 @@ public:
     */
     const Rectangle& getClientRectangle() const;
 
-    ::boost::shared_ptr<UpdateLockManager> GetUpdateLockManager (void) const;
-
     ::boost::shared_ptr<ToolBarManager> GetToolBarManager (void) const;
-
     ::boost::shared_ptr<FormShellManager> GetFormShellManager (void) const;
 
     DrawController& GetDrawController (void) const;

@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include "framework/ConfigurationController.hxx"
-
 #include "framework/Configuration.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "ConfigurationUpdater.hxx"
@@ -40,7 +38,6 @@
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationClassifier.hxx"
 #include "ViewShellBase.hxx"
-#include "UpdateLockManager.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

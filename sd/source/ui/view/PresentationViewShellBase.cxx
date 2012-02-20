@@ -26,12 +26,10 @@
  *
  ************************************************************************/
 
-
 #include "PresentationViewShellBase.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
 #include "strings.hrc"
-#include "UpdateLockManager.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "framework/PresentationModule.hxx"
 
@@ -79,8 +77,6 @@ PresentationViewShellBase::PresentationViewShellBase (
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {
-    GetUpdateLockManager()->Disable();
-
     // Hide the automatic (non-context sensitive) tool bars.
     if (_pFrame!=NULL)
     {

@@ -1217,9 +1217,6 @@ sd::CopyDlg::LinkStubReset(void*, void*)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
-sd::UpdateLockManager::IsLocked() const
-sd::UpdateLockManager::Lock()
-sd::UpdateLockManager::Unlock()
 sd::View::LockRedraw(unsigned char)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 sd::framework::ConfigurationClassifier::GetC1andC2() const
