@@ -321,7 +321,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
 sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategories )
 {
     sal_Int32 nCount = 0;
-    std::vector< ComplexCategory >::iterator aIt( rComplexCategories.begin() );
+    std::vector< ComplexCategory >::const_iterator aIt( rComplexCategories.begin() );
     std::vector< ComplexCategory >::const_iterator aEnd( rComplexCategories.end() );
     for( ; aIt != aEnd; ++aIt )
         nCount+=aIt->Count;
