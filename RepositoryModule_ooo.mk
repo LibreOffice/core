@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sccomp \
     scripting \
     sd \
+    sdext \
     sfx2 \
     slideshow \
     smoketest \
