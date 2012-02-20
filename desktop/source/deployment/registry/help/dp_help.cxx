@@ -37,8 +37,9 @@
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
-#include "unotools/pathoptions.hxx"
+#include "svtools/javainteractionhandler.hxx"
 #include "uno/current_context.hxx"
+#include "unotools/pathoptions.hxx"
 
 #if !defined(ANDROID) && !defined(IOS)
 #include <l10ntools/compilehelp.hxx>
@@ -60,6 +61,29 @@ namespace dp_registry {
 namespace backend {
 namespace help {
 namespace {
+
+// A current context that filters out java-vm.interaction-handler:
+class NonJavaCurrentContext: public cppu::WeakImplHelper1< XCurrentContext > {
+public:
+    NonJavaCurrentContext(Reference< XCurrentContext > const & parent):
+        parent_(parent) {}
+
+    virtual Any SAL_CALL getValueByName(rtl::OUString const & Name)
+        throw (RuntimeException);
+
+private:
+    Reference< XCurrentContext > parent_;
+};
+
+Any NonJavaCurrentContext::getValueByName(rtl::OUString const & Name)
+    throw (RuntimeException)
+{
+    return
+        (Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM(JAVA_INTERACTION_HANDLER_NAME))
+         || !parent_.is())
+        ? Any() : parent_->getValueByName(Name);
+}
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -421,10 +445,11 @@ void BackendImpl::implProcessHelp(
                 Reference< script::XInvocation > xInvocation;
                 if( xContext.is() )
                 {
-                    // Ignore the missing JRE scenario on upgrade/first-start without
-                    // horrible end-user warnings that are ignorable,and cause grief.
-                    Reference< XCurrentContext > xNoContext;
-                    com::sun::star::uno::ContextLayer dummyLayer( xNoContext );
+                    // Ignore the missing JRE scenario on upgrade/first-start
+                    // without horrible end-user warnings that are ignorable,
+                    // and cause grief:
+                    ContextLayer l(
+                        new NonJavaCurrentContext(getCurrentContext()));
                     try
                     {
                         xInvocation = Reference< script::XInvocation >(
