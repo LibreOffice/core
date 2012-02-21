@@ -567,15 +567,15 @@ String PPDParser::getPPDFile( const String& rFile )
     String aRet;
     if( aStream.IsOpen() )
     {
-        ByteString aLine = aStream.ReadLine();
-        if( aLine.Search( "*PPD-Adobe" ) == 0 )
+        rtl::OString aLine = aStream.ReadLine();
+        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*PPD-Adobe")) == 0)
             aRet = aStream.GetFileName();
         else
         {
             // our *Include hack does usually not begin
             // with *PPD-Adobe, so try some lines for *Include
             int nLines = 10;
-            while( aLine.Search( "*Include" ) != 0 && --nLines )
+            while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*Include")) != 0 && --nLines)
                 aLine = aStream.ReadLine();
             if( nLines )
                 aRet = aStream.GetFileName();
