@@ -137,4 +137,8 @@ gb_Library_FILENAMES := $(patsubst vbahelper:libvbahelper%,,$(gb_Library_FILENAM
 
 endif
 
+ifeq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+gb_Library_FILENAMES := $(patsubst dbtools:libdbtools%,,$(gb_Library_FILENAMES))
+endif
+
 # vim: set noet sw=4 ts=4:

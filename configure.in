@@ -384,7 +384,7 @@ AC_ARG_ENABLE(ext-barcode,
 
 AC_ARG_ENABLE(database-connectivity,
     AS_HELP_STRING([--disable-database-connectivity],
-        [Disable various database connectivity.])
+        [Disable various database connectivity. Work in progress, don't use.])
 )
 
 AC_ARG_ENABLE(ext-diagram,
@@ -2040,9 +2040,13 @@ if test -z "$enable_database_connectivity"; then
     fi
 fi
 
+DISABLE_DBCONNECTIVITY=''
 if test "$enable_database_connectivity" = yes; then
     BUILD_TYPE="$BUILD_TYPE DBCONNECTIVITY"
+else
+    DISABLE_DBCONNECTIVITY='TRUE'
 fi
+AC_SUBST(DISABLE_DBCONNECTIVITY)
 
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
