@@ -178,6 +178,7 @@ void SbiParser::Input()
 
 void SbiParser::Open()
 {
+    bInStatement = true;
     SbiExpression aFileName( this );
     SbiToken eTok;
     TestToken( FOR );
@@ -273,6 +274,7 @@ void SbiParser::Open()
     aGen.Gen( _OPEN, nMode, nFlags );
     delete pLen;
     delete pChan;
+    bInStatement = false;
 }
 
 // NAME file AS file

@@ -73,6 +73,7 @@ protected:
     bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
     bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
 
+    bool   bInStatement;
     void   GenError( SbError );
 public:
     SbiScanner( const ::rtl::OUString&, StarBASIC* = NULL );
