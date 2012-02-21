@@ -119,8 +119,6 @@ sal_Bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo
 
     if ( nComp < 0 )
         return sal_True;
-    else if ( nComp > 0 )
-        return sal_False;
     else
         return sal_False;
 }
