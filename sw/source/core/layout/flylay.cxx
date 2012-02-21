@@ -519,7 +519,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
             (const SfxPoolItem**)&pAnch ))
-                // GetItemState sets the anchor pointer!
+        ; // GetItemState sets the anchor pointer!
 
     else if( RES_ANCHOR == nWhich )
     {
