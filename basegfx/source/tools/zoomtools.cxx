@@ -104,8 +104,11 @@ static long enforceStep(long nCurrent, long nPrevious, int nStep)
 long zoomIn(long nCurrent)
 {
     long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
-    // make sure 100% isn't skipped
+    // make sure some values are not skipped
+    nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
+    nNew = enforceStep(nNew, nCurrent, 75);
+    nNew = enforceStep(nNew, nCurrent, 50);
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
@@ -118,8 +121,11 @@ long zoomIn(long nCurrent)
 long zoomOut(long nCurrent)
 {
     long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
-    // make sure 100% isn't skipped
+    // make sure some values are not skipped
+    nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
+    nNew = enforceStep(nNew, nCurrent, 75);
+    nNew = enforceStep(nNew, nCurrent, 50);
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
