@@ -45,10 +45,9 @@ namespace scripting_runtimemgr
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
 
 class ScriptNameResolverImpl : public
-    ::cppu::WeakImplHelper1 < dcsssf::runtime::XScriptNameResolver >
+    ::cppu::WeakImplHelper1 < ::drafts::com::sun::star::script::framework::runtime::XScriptNameResolver >
 {
 public:
     /**********************************************
@@ -80,17 +79,17 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    css::uno::Reference < dcsssf::storage::XScriptInfo > SAL_CALL resolve(
+    css::uno::Reference < ::drafts::com::sun::star::script::framework::storage::XScriptInfo > SAL_CALL resolve(
         const ::rtl::OUString & scriptURI,
         css::uno::Any& invocationCtx )
         throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 private:
-    css::uno::Reference < dcsssf::storage::XScriptInfo >
+    css::uno::Reference < ::drafts::com::sun::star::script::framework::storage::XScriptInfo >
     resolveURIFromStorageID( sal_Int32 sid, const rtl::OUString & docURI,
         const ::rtl::OUString & nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
-    css::uno::Reference< dcsssf::storage::XScriptInfoAccess >
+    css::uno::Reference< ::drafts::com::sun::star::script::framework::storage::XScriptInfoAccess >
     getStorageInstance( sal_Int32 sid, const rtl::OUString & permissionURI)
         SAL_THROW ( ( css::uno::RuntimeException ) );
     ::rtl::OUString
