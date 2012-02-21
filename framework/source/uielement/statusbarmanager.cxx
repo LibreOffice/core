@@ -72,9 +72,6 @@ using namespace ::com::sun::star;
 #ifndef css
 #define css ::com::sun::star
 #endif
-#ifndef css_ui
-#define css_ui ::com::sun::star::ui
-#endif
 
 static const char HELPID_PREFIX[] = "helpid:";
 
@@ -93,23 +90,23 @@ static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
     sal_uInt16 nItemBits( 0 );
 
-    if (( nStyle & css_ui::ItemStyle::ALIGN_RIGHT ) == css_ui::ItemStyle::ALIGN_RIGHT )
+    if (( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_RIGHT ) == ::com::sun::star::ui::ItemStyle::ALIGN_RIGHT )
         nItemBits |= SIB_RIGHT;
-    else if ( nStyle & css_ui::ItemStyle::ALIGN_LEFT )
+    else if ( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_LEFT )
         nItemBits |= SIB_LEFT;
     else
         nItemBits |= SIB_CENTER;
 
-    if (( nStyle & css_ui::ItemStyle::DRAW_FLAT ) == css_ui::ItemStyle::DRAW_FLAT )
+    if (( nStyle & ::com::sun::star::ui::ItemStyle::DRAW_FLAT ) == ::com::sun::star::ui::ItemStyle::DRAW_FLAT )
         nItemBits |= SIB_FLAT;
-    else if ( nStyle & css_ui::ItemStyle::DRAW_OUT3D )
+    else if ( nStyle & ::com::sun::star::ui::ItemStyle::DRAW_OUT3D )
         nItemBits |= SIB_OUT;
     else
         nItemBits |= SIB_IN;
 
-    if (( nStyle & css_ui::ItemStyle::AUTO_SIZE ) == css_ui::ItemStyle::AUTO_SIZE )
+    if (( nStyle & ::com::sun::star::ui::ItemStyle::AUTO_SIZE ) == ::com::sun::star::ui::ItemStyle::AUTO_SIZE )
         nItemBits |= SIB_AUTOSIZE;
-    if ( nStyle & css_ui::ItemStyle::OWNER_DRAW )
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::OWNER_DRAW )
         nItemBits |= SIB_USERDRAW;
 
     return nItemBits;
@@ -485,7 +482,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
         sal_Int16                               nWidth( 0 );
-        sal_uInt16                              nType( css_ui::ItemType::DEFAULT );
+        sal_uInt16                              nType( ::com::sun::star::ui::ItemType::DEFAULT );
 
         try
         {
