@@ -171,7 +171,9 @@ public:
     void testBugFixesXLSX();
 
     //misc tests unrelated to the import filters
-    void testPassword();
+    void testPasswordNew();
+    void testPasswordOld();
+
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeName);
@@ -185,7 +187,8 @@ public:
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
 #if !defined(MACOSX) && !defined(DRAGONFLY)
-    CPPUNIT_TEST(testPassword);
+    CPPUNIT_TEST(testPasswordOld);
+    CPPUNIT_TEST(testPasswordNew);
 #endif
 
 #if TEST_BUG_FILES
@@ -196,6 +199,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    void testPassword_Impl(const rtl::OUString& rFileNameBase);
     uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aBaseString;
 };
@@ -544,15 +548,13 @@ void ScFiltersTest::testBugFixesXLSX()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testPassword()
+void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
 
     sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
@@ -577,6 +579,21 @@ void ScFiltersTest::testPassword()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
     xDocSh->DoClose();
+
+}
+
+void ScFiltersTest::testPasswordNew()
+{
+    //tests opening a file with new password algorithm
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
+    testPassword_Impl(aFileNameBase);
+}
+
+void ScFiltersTest::testPasswordOld()
+{
+    //tests opening a file with old password algorithm
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("passwordOld."));
+    testPassword_Impl(aFileNameBase);
 }
 
 ScFiltersTest::ScFiltersTest()
