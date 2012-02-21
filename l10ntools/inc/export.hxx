@@ -381,7 +381,6 @@ private:
 
 public:
     PFormEntrys( const rtl::OString &rPForm ) : data_( rPForm ) {};
-    rtl::OString Dump();
     void InsertEntry(const rtl::OString &rId, const rtl::OString &rText,
         const rtl::OString &rQuickHelpText, const rtl::OString &rTitle)
     {

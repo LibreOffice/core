@@ -148,7 +148,6 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(int, int, unsigned short, Str
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
-SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxUINT32s::Insert(SfxUINT32s const*, unsigned short, unsigned short, unsigned short)
 SfxUINT32s::Remove(unsigned short, unsigned short)
 SfxUINT32s::Replace(unsigned int const&, unsigned short)
@@ -262,12 +261,10 @@ SvxDrawOutlinerViewForwarder::SetShapePos(Point const&)
 SvxDrawPage::SvxDrawPage()
 SvxEditSourceHelper::UserSpaceToEE(Rectangle const&, Size const&, bool)
 SvxFrameDirectionItem::SvxFrameDirectionItem(unsigned short)
-SvxGrafToolBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxIMapDlg::GetTargetList() const
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
 SvxJustifyMethodItem::SvxJustifyMethodItem(unsigned short)
 SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
-SvxListBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxMSDffManager::GetAutoForm(MSO_SPT) const
 SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
 SvxMSDffManager::Scale(PolyPolygon&) const
@@ -287,7 +284,6 @@ SvxPluginFileDlg::IsAvailable(unsigned short)
 SvxPopupWindowListBox::StartSelection()
 SvxRectCtlAccessibleContext::CommitChange(com::sun::star::accessibility::AccessibleEventObject const&)
 SvxRelativeField::SvxRelativeField(Window*, long)
-SvxReloadControllerItem::RegisterControl(unsigned short, SfxModule*)
 SvxRubyChildWindow::GetChildWindowId()
 SvxRuler::GetDefTabDist() const
 SvxSelectionModeControl::GetDefItemWidth(StatusBar const&)

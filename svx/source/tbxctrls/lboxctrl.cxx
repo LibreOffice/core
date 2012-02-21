@@ -164,8 +164,10 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 
 /////////////////////////////////////////////////////////////////
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
-
+SfxToolBoxControl* SvxListBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
+{
+    return new SvxListBoxControl( nSlotId, nId, rTbx );
+}
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),

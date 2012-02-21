@@ -53,9 +53,10 @@ using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
 
-SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
-
-
+SfxMenuControl* SfxThesSubMenuControl::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
+{
+    return new SfxThesSubMenuControl(nId, rMenu, rBindings);
+}
 
 /*
     Constructor; sets the Select-Handler for the Menu and inserts it into

@@ -138,7 +138,7 @@ protected:
     DECL_LINK( Activate, Menu * );
 
 public:
-    SFX_DECL_MENU_CONTROL();
+    static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
     SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
     ~SfxAppMenuControl_Impl();
 };

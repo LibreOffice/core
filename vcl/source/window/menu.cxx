@@ -977,11 +977,6 @@ void Menu::ImplInit()
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar, this );
 }
 
-Menu* Menu::ImplGetStartedFrom() const
-{
-    return pStartedFrom;
-}
-
 void Menu::ImplLoadRes( const ResId& rResId )
 {
     ResMgr* pMgr = rResId.GetResMgr();

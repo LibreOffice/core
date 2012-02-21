@@ -303,7 +303,10 @@ PopupMenu* SfxMenuControl::GetPopup () const
 
 long Select_Impl( void* pHdl, void* pVoid );
 
-SFX_IMPL_MENU_CONTROL( SfxAppMenuControl_Impl, SfxStringItem );
+SfxMenuControl* SfxAppMenuControl_Impl::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
+{
+    return new SfxAppMenuControl_Impl(nId, rMenu, rBindings);
+}
 
 SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )

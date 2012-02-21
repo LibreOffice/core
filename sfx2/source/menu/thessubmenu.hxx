@@ -57,7 +57,7 @@ public:
 
     virtual PopupMenu*  GetPopup() const;
 
-    SFX_DECL_MENU_CONTROL();
+    static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
 };
 
 

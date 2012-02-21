@@ -207,7 +207,7 @@ protected:
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
-    SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
+    SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
 
                             Menu();
                             Menu( sal_Bool bMenuBar );

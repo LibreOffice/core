@@ -127,8 +127,12 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineColorToolBoxControl, SvxColorItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxReloadControllerItem,  SfxBoolItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
+
+SfxToolBoxControl* SvxReloadControllerItem::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
+{
+    return new SvxReloadControllerItem( nSlotId, nId, rTbx );
+}
 
 //========================================================================
 // class SvxStyleBox_Impl -----------------------------------------------------

@@ -73,10 +73,10 @@ public:
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:
+    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
 
-                        SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        ~SvxGrafToolBoxControl();
+    SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    ~SvxGrafToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );

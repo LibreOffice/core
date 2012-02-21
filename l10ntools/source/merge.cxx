@@ -50,16 +50,6 @@ namespace
 // class PFormEntrys
 //
 
-rtl::OString PFormEntrys::Dump()
-{
-    if (sText.size())
-    {
-        rtl::OString a(RTL_CONSTASCII_STRINGPARAM("sText"));
-        Export::DumpMap(a , sText);
-    }
-    return rtl::OString(RTL_CONSTASCII_STRINGPARAM("PFormEntrys\n"));
-}
-
 sal_Bool PFormEntrys::GetTransex3Text( rtl::OString &rReturn,
     sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel )
 {
