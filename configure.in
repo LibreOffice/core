@@ -5651,7 +5651,7 @@ if test "$with_system_expat" = "yes"; then
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
     [AC_MSG_RESULT(expat library not found or functional.)], [])
-    libo_ADD_MINGW_EXTERNAL_DLLS([libexpat],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libexpat],[MINGW_EXTERNAL_DLLS],[libexpat-1.dll])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=NO
@@ -5843,7 +5843,7 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xsltproc is required])
     fi
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libxslt],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libxslt],[MINGW_EXTERNAL_DLLS],[libxslt-1.dll])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
@@ -5893,7 +5893,7 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xmllint is required])
     fi
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libxml2],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libxml2],[MINGW_EXTERNAL_DLLS],[zlib1.dll libxml2-2.dll])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
@@ -6694,7 +6694,7 @@ if test "$with_system_curl" = "yes"; then
         ;;
     esac
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libcurl],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libcurl],[MINGW_EXTERNAL_DLLS],[libintl-8.dll libidn-11.dll libnspr4.dll nssutil3.dll libplc4.dll libplds4.dll nss3.dll ssl3.dll libgpg-error-0.dll libgcrypt-11.dll libssh2-1.dll libcurl-4.dll])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
@@ -7599,7 +7599,7 @@ if test "$with_system_hunspell" = "yes"; then
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
-    libo_ADD_MINGW_EXTERNAL_DLLS([libhunspell],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libhunspell],[MINGW_EXTERNAL_DLLS],[libhunspell-1.3-0.dll])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -9794,7 +9794,7 @@ if test "$enable_cairo_canvas" = "yes" -a "$with_system_cairo" = "yes"; then
             AC_LANG_POP([C])
         fi
     fi
-    libo_ADD_MINGW_EXTERNAL_DLLS([libcairo],[MINGW_EXTERNAL_DLLS])
+    libo_ADD_MINGW_EXTERNAL_DLLS([libcairo],[MINGW_EXTERNAL_DLLS],[libfontconfig-1.dll libfreetype-6.dll libpixman-1-0.dll libpng15-15.dll libcairo-2.dll])
 else
     AC_MSG_RESULT([no])
 
