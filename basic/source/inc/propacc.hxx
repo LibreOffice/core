@@ -37,15 +37,11 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#define NS_BEANS    ::com::sun::star::beans
-#define NS_LANG     ::com::sun::star::lang
-#define NS_UNO      ::com::sun::star::uno
-
-typedef NS_BEANS::PropertyValue* SbPropertyValuePtr;
+typedef ::com::sun::star::beans::PropertyValue* SbPropertyValuePtr;
 SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4 )
 
-typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet,
-                                 NS_BEANS::XPropertyAccess > SbPropertyValuesHelper;
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
+                                 ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
 
 
 //==========================================================================
@@ -53,7 +49,7 @@ typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet,
 class SbPropertyValues:     public SbPropertyValuesHelper
 {
     SbPropertyValueArr_Impl _aPropVals;
-    NS_UNO::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
 
 private:
     sal_Int32                   GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
@@ -63,65 +59,65 @@ public:
     virtual                 ~SbPropertyValues();
 
     // XPropertySet
-    virtual NS_UNO::Reference< NS_BEANS::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo(void) throw( NS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL   setPropertyValue(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Any& aValue)
+                                const ::com::sun::star::uno::Any& aValue)
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                 ::com::sun::star::beans::PropertyVetoException,
                                 ::com::sun::star::lang::IllegalArgumentException,
                                 ::com::sun::star::lang::WrappedTargetException,
                                 ::com::sun::star::uno::RuntimeException);
-    virtual NS_UNO::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(  NS_BEANS::UnknownPropertyException,
-                NS_LANG::WrappedTargetException,
-                NS_UNO::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(  ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   addPropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
                                 throw ();
     virtual void SAL_CALL   removePropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
                                 throw ();
     virtual void SAL_CALL   addVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
                                 throw ();
     virtual void SAL_CALL   removeVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
                                 throw ();
 
     // XPropertyAccess
-    virtual NS_UNO::Sequence< NS_BEANS::PropertyValue > SAL_CALL getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValues(const NS_UNO::Sequence< NS_BEANS::PropertyValue >& PropertyValues_) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValues(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& PropertyValues_) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
 //==========================================================================
 
-typedef ::cppu::WeakImplHelper1< NS_BEANS::XPropertySetInfo > SbPropertySetInfoHelper;
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo > SbPropertySetInfoHelper;
 
 // AB 20.3.2000 Help Class for XPropertySetInfo implementation
 class PropertySetInfoImpl
 {
     friend class SbPropertySetInfo;
 
-    NS_UNO::Sequence< NS_BEANS::Property > _aProps;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > _aProps;
 
     sal_Int32 GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
 
 public:
     PropertySetInfoImpl();
-    PropertySetInfoImpl( NS_UNO::Sequence< NS_BEANS::Property >& rProps );
+    PropertySetInfoImpl( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProps );
 
     // XPropertySetInfo
-    NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void) throw ();
-    NS_BEANS::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
-        throw( NS_UNO::RuntimeException );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) throw ();
+    ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
+        throw( ::com::sun::star::uno::RuntimeException );
     sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
-        throw ( NS_UNO::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 class SbPropertySetInfo:    public SbPropertySetInfoHelper
@@ -133,12 +129,12 @@ public:
     virtual                 ~SbPropertySetInfo();
 
     // XPropertySetInfo
-    virtual NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void)
-        throw( NS_UNO::RuntimeException );
-    virtual NS_BEANS::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
-        throw( NS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void)
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
+        throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
-        throw( NS_UNO::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException );
 };
 
 //=========================================================================
@@ -147,13 +143,6 @@ class StarBASIC;
 class SbxArray;
 
 void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-
-
-#undef NS_BEANS
-#undef NS_LANG
-#undef NS_UNO
-
-
 
 #endif
 

@@ -97,12 +97,6 @@ public:
 
 SV_DECL_IMPL_REF( UcbLockBytesHandler )
 
-#define NS_UNO ::com::sun::star::uno
-#define NS_IO ::com::sun::star::io
-#define NS_UCB ::com::sun::star::ucb
-#define NS_BEANS ::com::sun::star::beans
-#define NS_TASK ::com::sun::star::task
-
 class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
     osl::Condition          m_aInitialized;
@@ -113,9 +107,9 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     String                  m_aRealURL;
     DateTime                m_aExpireDate;
 
-    NS_UNO::Reference < NS_IO::XInputStream >  m_xInputStream;
-    NS_UNO::Reference < NS_IO::XOutputStream > m_xOutputStream;
-    NS_UNO::Reference < NS_IO::XSeekable >     m_xSeekable;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >  m_xInputStream;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > m_xOutputStream;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable >     m_xSeekable;
     void*                   m_pCommandThread; // is alive only for compatibility reasons
     UcbLockBytesHandlerRef  m_xHandler;
 
@@ -135,21 +129,21 @@ protected:
 
 public:
                             // properties: Referer, PostMimeType
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent >& xContent,
+    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent >& xContent,
                                             const ::rtl::OUString& rReferer,
                                             const ::rtl::OUString& rMediaType,
-                                            const NS_UNO::Reference < NS_IO::XInputStream >& xPostData,
-                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler >& xInter,
+                                            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xPostData,
+                                            const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=0 );
 
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent >& xContent,
-                                            const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
+    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent >& xContent,
+                                            const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
-                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler >& xInter,
+                                            const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=0 );
 
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream >& xContent );
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_IO::XStream >& xContent );
+    static UcbLockBytesRef  CreateInputLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xContent );
+    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xContent );
 
     // SvLockBytes
     virtual void            SetSynchronMode (sal_Bool bSynchron);
@@ -173,27 +167,27 @@ public:
     DateTime                GetExpireDate() const;
 
     // calling this method delegates the responsibility to call closeinput to the caller!
-    NS_UNO::Reference < NS_IO::XInputStream > getInputStream();
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream();
 
 #if _SOLAR__PRIVATE
-    sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream,
+    sal_Bool                setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
                                                  sal_Bool bSetXSeekable = sal_True );
-    sal_Bool                setStream_Impl( const NS_UNO::Reference < NS_IO::XStream > &rxStream );
+    sal_Bool                setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
     void                    terminate_Impl (void);
 
-    NS_UNO::Reference < NS_IO::XInputStream > getInputStream_Impl() const
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream_Impl() const
                             {
                                 osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
-    NS_UNO::Reference < NS_IO::XOutputStream > getOutputStream_Impl() const
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > getOutputStream_Impl() const
                             {
                                 osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
-    NS_UNO::Reference < NS_IO::XSeekable > getSeekable_Impl() const
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > getSeekable_Impl() const
                             {
                                 osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xSeekable;
