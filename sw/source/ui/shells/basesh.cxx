@@ -1927,6 +1927,10 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor
  --------------------------------------------------------------------*/
+// STATIC DATA -----------------------------------------------------------
+Color  SwBaseShell::mBackgroundColor = COL_TRANSPARENT;
+//             -----------------------------------------------------------
+
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
@@ -2260,13 +2264,15 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                                             pArgs->Get(SID_BACKGROUND_COLOR);
                     const Color& rNewColor = rNewColorItem.GetValue();
                     aBrushItem.SetColor( rNewColor );
+                    SetBackgroundColor( rNewColor );
                     GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
                 }
                 else
                 {
-                    aBrushItem.SetColor( COL_TRANSPARENT );
-                    rReq.AppendItem( SvxColorItem( Color( COL_TRANSPARENT ), nSlot ) );
-                }
+                    // call without arguments, use last used background color
+                    aBrushItem.SetColor( GetBackgroundColor() );
+                    rReq.AppendItem( SvxColorItem( GetBackgroundColor(), nSlot ) );
+                 }
             }
             break;
 

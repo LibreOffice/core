@@ -122,7 +122,7 @@ using namespace ::com::sun::star::lang;
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorToolBoxControl, SvxColorItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorExtToolBoxControl, SvxColorItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxColorExtToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
@@ -2235,10 +2235,10 @@ void SvxColorToolBoxControl::StateChanged(
 }
 
 //========================================================================
-// class SvxFontColorExtToolBoxControl --------------------------------------
+// class SvxColorExtToolBoxControl ----------------------------------------
 //========================================================================
 
-SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl(
+SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
@@ -2247,37 +2247,47 @@ SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl(
     pBtnUpdater(0),
     mLastColor( COL_AUTO )
 {
+    sal_uInt16 nMode;
+
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     bChoiceFromPalette = sal_False;
 
-    // The following commands are available at the writer and the calc module.
-    if ( SID_ATTR_CHAR_COLOR2 == nSlotId || SID_ATTR_CHAR_COLOR == nSlotId )
-        addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
-    else
-        addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
+    // The following commands are available at the various modules
+    switch( nSlotId )
+    {
+        case SID_ATTR_CHAR_COLOR2 :
+        case SID_ATTR_CHAR_COLOR  :
+            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
+            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            break;
 
-    sal_uInt16 nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+        case SID_ATTR_CHAR_COLOR_BACKGROUND :
+        case SID_BACKGROUND_COLOR :
+            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
+            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            break;
+    }
 
     pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), nMode );
 }
 
 // -----------------------------------------------------------------------
 
-SvxFontColorExtToolBoxControl::~SvxFontColorExtToolBoxControl()
+SvxColorExtToolBoxControl::~SvxColorExtToolBoxControl()
 {
     delete pBtnUpdater;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindowType SvxFontColorExtToolBoxControl::GetPopupWindowType() const
+SfxPopupWindowType SvxColorExtToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindow* SvxFontColorExtToolBoxControl::CreatePopupWindow()
+SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
@@ -2288,8 +2298,16 @@ SfxPopupWindow* SvxFontColorExtToolBoxControl::CreatePopupWindow()
                             &GetToolBox(),
                             mLastColor );
 
-    if ( GetSlotId() == SID_ATTR_CHAR_COLOR_BACKGROUND )
-        pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND ) );
+    switch( GetSlotId() )
+    {
+        case SID_ATTR_CHAR_COLOR_BACKGROUND :
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND ) );
+            break;
+
+        case SID_BACKGROUND_COLOR :
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
+            break;
+    }
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
@@ -2301,7 +2319,7 @@ SfxPopupWindow* SvxFontColorExtToolBoxControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxFontColorExtToolBoxControl::StateChanged(
+void SvxColorExtToolBoxControl::StateChanged(
 
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -2312,53 +2330,58 @@ void SvxFontColorExtToolBoxControl::StateChanged(
     if ( bChoiceFromPalette )
     {
         bChoiceFromPalette = sal_False;
-        if ( nSID == SID_ATTR_CHAR_COLOR_EXT ||
-                nSID == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
+        switch( nSID )
         {
-            if ( SFX_ITEM_DONTCARE != eState )
-            {
-                const SfxBoolItem* pBool = PTR_CAST( SfxBoolItem, pState );
-                rTbx.CheckItem( nId, pBool && pBool->GetValue());
-            }
-            rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-        }
-        else
-        {
-            if ( SFX_ITEM_DONTCARE != eState )
-                pItem = PTR_CAST( SvxColorItem, pState );
+            case SID_ATTR_CHAR_COLOR_EXT :
+            case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT :
+                if ( SFX_ITEM_DONTCARE != eState )
+                {
+                    const SfxBoolItem* pBool = PTR_CAST( SfxBoolItem, pState );
+                    rTbx.CheckItem( nId, pBool && pBool->GetValue());
+                }
+                rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+                break;
 
-            if ( pItem )
-            {
-                pBtnUpdater->Update( pItem->GetValue() );
-                mLastColor = pItem->GetValue();
-            }
+            case SID_ATTR_CHAR_COLOR2 :
+            case SID_ATTR_CHAR_COLOR_BACKGROUND :
+            case SID_BACKGROUND_COLOR :
+                if ( SFX_ITEM_DONTCARE != eState )
+                    pItem = PTR_CAST( SvxColorItem, pState );
+
+                if ( pItem )
+                {
+                    pBtnUpdater->Update( pItem->GetValue() );
+                    mLastColor = pItem->GetValue();
+                }
+                break;
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SvxFontColorExtToolBoxControl::Select( sal_Bool )
+void SvxColorExtToolBoxControl::Select( sal_Bool )
 {
     OUString aCommand;
     OUString aParamName;
-    if ( SID_ATTR_CHAR_COLOR2 == GetSlotId() || SID_ATTR_CHAR_COLOR == GetSlotId() )
+
+    switch( GetSlotId() )
     {
-        aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" ));
-        aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColorExt" ));
-    }
-    else
-    {
-        if ( SID_BACKGROUND_COLOR == GetSlotId() )
-        {
+        case SID_ATTR_CHAR_COLOR2 :
+        case SID_ATTR_CHAR_COLOR  :
+            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" ));
+            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColorExt" ));
+            break;
+
+        case SID_BACKGROUND_COLOR :
             aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" ));
             aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ));
-        }
-        else
-        {
+            break;
+
+        case SID_ATTR_CHAR_COLOR_BACKGROUND :
             aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" ));
             aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackgroundExt" ));
-        }
+            break;
     }
 
     Sequence< PropertyValue > aArgs( 1 );

@@ -35,6 +35,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 #include <svl/svstdarr.hxx>
+#include <viewopt.hxx>
 
 #include <mdiexp.hxx>
 #include <set>
@@ -49,6 +50,7 @@ struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell
 {
     SwView      &rView;
+    static Color        mBackgroundColor;
 
     // DragMode
     static FlyMode eFrameMode;
@@ -119,7 +121,8 @@ public:
     static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrmMode()                 { return eFrameMode;  }
-
+    Color       GetBackgroundColor()                   { return  mBackgroundColor; }
+    void        SetBackgroundColor( const Color& clr ) { mBackgroundColor = clr;   }
 };
 
 

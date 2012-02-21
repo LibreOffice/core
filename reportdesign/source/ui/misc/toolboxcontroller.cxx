@@ -197,7 +197,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontColor")),sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Color")),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontColorExtToolBoxControl/*SvxFontColorToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxColorExtToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox));
         }
         else
         {
@@ -268,7 +268,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                         ::Color aGcc3WorkaroundTemporary( nColor);
                         SvxColorItem aColorItem(aGcc3WorkaroundTemporary,1);
                         if ( SID_ATTR_CHAR_COLOR2 == m_nSlotId )
-                            static_cast<SvxFontColorExtToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
+                            static_cast<SvxColorExtToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
                         else
                             static_cast<SvxColorToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
                     }

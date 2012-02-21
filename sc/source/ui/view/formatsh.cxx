@@ -1453,10 +1453,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_BACKGROUND_COLOR:
                 {
                     //  SID_BACKGROUND_COLOR without arguments -> set background to last used color
+
                     SvxBrushItem        aBrushItem( (const SvxBrushItem&)
                                             pTabViewShell->GetSelectionPattern()->
                                                 GetItem( ATTR_BACKGROUND ) );
-
                     aBrushItem.SetColor( pTabViewShell->GetBackgroundColor()  );
 
                     pTabViewShell->ApplyAttr( aBrushItem );

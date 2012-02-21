@@ -65,23 +65,23 @@
         from DocShell:  presently none
                         in future: color palette
 
-        class SvxFontColorExtToolBoxControl
+        class SvxColorExtToolBoxControl
         -----------------------------------
-        for font color
         Item type:      SvxColorItem
-                    und SfxBoolItem
+                    and SfxBoolItem
+
+        for font color (writer, ...)
         Execute-Id      SID_ATTR_CHAR_COLOR2
-                    und SID_ATTR_CHAR_COLOR_EXT
+                    and SID_ATTR_CHAR_COLOR_EXT
 
         for character background color (writer)
-        Item-Typ        SvxColorItem
-                    und SfxBoolItem
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
-                    und SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
+                    and SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
+
+        for paragraph background color (writer)
+        Execute-Id      SID_BACKGROUND_COLOR
 
         for  cell background color (calc)
-        Item-Typ        SvxColorItem
-                    und SfxBoolItem
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
 
         SvxColorToolBoxControl
@@ -89,9 +89,6 @@
         Item type:      SvxBrushItem
         Execute-Id:     SID_BACKGROUND_COLOR
                         -> SvxColorItem
-        Additional information
-        from DocShell:   presently none
-                        in future: color palette
 
         SvxPatternToolBoxControl
         ------------------------
@@ -306,12 +303,12 @@ public:
 
 
 //========================================================================
-// class SvxFontColorExtToolBoxControl --------------------------------------
+// class SvxColorExtToolBoxControl --------------------------------------
 //========================================================================
 
 
 
-class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
     using SfxToolBoxControl::Select;
@@ -323,8 +320,8 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontColorExtToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFontColorExtToolBoxControl();
+    SvxColorExtToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    ~SvxColorExtToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
