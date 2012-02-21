@@ -108,7 +108,6 @@ copy-stuff:
 		  utllo \
 		  vbahelperlo \
 		  vcllo \
-		  xcrlo \
 		  xml2 \
 		  xmlreader \
 		  xstor \

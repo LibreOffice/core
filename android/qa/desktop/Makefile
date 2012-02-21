@@ -161,7 +161,6 @@ copy-stuff: buildrcs
 		  utllo \
 		  vbahelperlo \
 		  vcllo \
-		  xcrlo \
 		  xml2 \
 		  xmlreader \
 		  xstor \
