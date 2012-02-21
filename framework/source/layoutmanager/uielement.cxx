@@ -92,8 +92,6 @@ namespace framework
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
                                 return sal_True;
-                            else if ( !m_bUserActive && aUIElement.m_bUserActive )
-                                return sal_False;
                             else
                                 return sal_False;
                         }
@@ -112,8 +110,6 @@ namespace framework
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
                                 return sal_True;
-                            else if ( !m_bUserActive && aUIElement.m_bUserActive )
-                                return sal_False;
                             else
                                 return sal_False;
                         }
