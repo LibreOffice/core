@@ -55,7 +55,6 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
 /* Bah, we do want to use dladdr here also on iOS, I think? */
 #if !defined(NO_DL_FUNCTIONS) || defined(IOS)
 #if defined(AIX)
-    int i;
     int size = 4 * 1024;
     char *buf, *filename=NULL;
     struct ld_info *lp;
@@ -63,7 +62,7 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     if ((buf = malloc(size)) == NULL)
         return result;
 
-    while((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM)
+    while(loadquery(L_GETINFO, buf, size) == -1 && errno == ENOMEM)
     {
         size += 4 * 1024;
         if ((buf = malloc(size)) == NULL)
