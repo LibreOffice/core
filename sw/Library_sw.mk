@@ -563,14 +563,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/config/uinums \
     sw/source/ui/config/usrpref \
     sw/source/ui/config/viewopt \
-    sw/source/ui/dbui/dbmgr \
-    sw/source/ui/dbui/dbtree \
-    sw/source/ui/dbui/dbui \
-    sw/source/ui/dbui/maildispatcher \
-    sw/source/ui/dbui/mailmergechildwindow \
-    sw/source/ui/dbui/mailmergehelper \
-    sw/source/ui/dbui/mmconfigitem \
-    sw/source/ui/dbui/swdbtoolsclient \
     sw/source/ui/dialog/SwSpellDialogChildWindow \
     sw/source/ui/dialog/regionsw \
     sw/source/ui/dialog/swabstdlg \
@@ -737,6 +729,19 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/wrtsh/wrtsh4 \
     sw/source/ui/wrtsh/wrtundo \
 ))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,sw,\
+    sw/source/ui/dbui/dbmgr \
+    sw/source/ui/dbui/dbtree \
+    sw/source/ui/dbui/dbui \
+    sw/source/ui/dbui/maildispatcher \
+    sw/source/ui/dbui/mailmergechildwindow \
+    sw/source/ui/dbui/mailmergehelper \
+    sw/source/ui/dbui/mmconfigitem \
+    sw/source/ui/dbui/swdbtoolsclient \
+))
+endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
 

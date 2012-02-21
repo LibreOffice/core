@@ -56,7 +56,9 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/EnhancedCustomShapeFunctionPar
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/ucsubset.hxx,svx/ucsubset.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sderitm.hxx,svx/sderitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/obj3d.hxx,svx/obj3d.hxx))
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/dbcharsethelper.hxx,svx/dbcharsethelper.hxx))
+endif
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdangitm.hxx,svx/sdangitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/grfcrop.hxx,svx/grfcrop.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxtraitm.hxx,svx/sxtraitm.hxx))

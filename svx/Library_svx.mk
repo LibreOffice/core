@@ -147,16 +147,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/txenctab \
     svx/source/dialog/wrapfield \
     svx/source/engine3d/float3d \
-    svx/source/fmcomp/dbaobjectex \
-    svx/source/form/databaselocationinput \
-    svx/source/form/dbcharsethelper \
-    svx/source/form/filtnav \
-    svx/source/form/fmobjfac \
-    svx/source/form/fmPropBrw \
-    svx/source/form/fmsrccfg \
-    svx/source/form/fmsrcimp \
-    svx/source/form/tabwin \
-    svx/source/form/tbxform \
     svx/source/items/algitem \
     svx/source/items/hlnkitem \
     svx/source/items/numfmtsh \
@@ -212,6 +202,21 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogaltheme \
     svx/source/unogallery/unogalthemeprovider \
 ))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Library_use_external,svx,icuuc))
+    svx/source/fmcomp/dbaobjectex \
+    svx/source/form/databaselocationinput \
+    svx/source/form/dbcharsethelper \
+    svx/source/form/filtnav \
+    svx/source/form/fmobjfac \
+    svx/source/form/fmPropBrw \
+    svx/source/form/fmsrccfg \
+    svx/source/form/fmsrcimp \
+    svx/source/form/tabwin \
+    svx/source/form/tbxform \
+))
+endif
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_exception_objects,svx,\

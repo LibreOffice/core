@@ -29,21 +29,26 @@ $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_abp \
-	AllLangResTarget_bib \
-	AllLangResTarget_dbp \
-	AllLangResTarget_pcr \
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
 	Library_abp \
-	Library_bib \
-	Library_dbp \
 	Library_log \
-	Library_pcr \
 	Library_res \
 	Library_scn \
+))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,extensions,\
+	AllLangResTarget_bib \
+	AllLangResTarget_dbp \
+	AllLangResTarget_pcr \
+	Library_bib \
+	Library_dbp \
+	Library_pcr \
 	Package_bib \
 	Package_pcr \
 ))
+endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\

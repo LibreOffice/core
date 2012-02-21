@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
+#ifndef DISABLE_DBCONNECTIVITY
 
 #include <stdio.h>
 #include <tools/urlobj.hxx>
@@ -1166,5 +1163,6 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
     return nErr;
 }
 
+#endif // !DISABLE_DBCONNECTIVITY
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
