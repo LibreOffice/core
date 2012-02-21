@@ -1173,28 +1173,6 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
     return bOk;
 }
 
-
-/*
- * DrawNativeControlText()
- *
- *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
- *     Used if text not drawn by DrawNativeControl().
- *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
- */
-sal_Bool WinSalGraphics::drawNativeControlText( ControlType,
-                                ControlPart,
-                                const Rectangle&,
-                                ControlState,
-                                const ImplControlValue&,
-                                const OUString& )
-{
-    return( false );
-}
-
-
 /*
  * GetNativeControlRegion()
  *

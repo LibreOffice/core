@@ -904,27 +904,6 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
 }
 
 /*
- * DrawNativeControlText()
- *
- *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
- *     Used if text not drawn by DrawNativeControl().
- *
- *  rControlRegion:    The bounding region of the complete control in VCL frame coordinates.
- *  aValue:          An optional value (tristate/numerical/string)
- *  rCaption:      A caption or title string (like button text etc)
- */
-sal_Bool GtkSalGraphics::drawNativeControlText(    ControlType,
-                                ControlPart,
-                                const Rectangle&,
-                                ControlState,
-                                const ImplControlValue&,
-                                const OUString& )
-{
-    return( sal_False );
-}
-
-
-/*
  * GetNativeControlRegion()
  *
  *  If the return value is sal_True, rNativeBoundingRegion

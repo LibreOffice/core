@@ -49,7 +49,6 @@ ParagraphStyleManager::get(WPXString const&) const
 PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
-SalGraphics::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString const&, OutputDevice const*)
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)
 SalGraphics::drawPolyLine(basegfx::B2DPolygon const&, double, basegfx::B2DVector const&, basegfx::B2DLineJoin)
 SalGraphics::drawPolyPolygon(basegfx::B2DPolyPolygon const&, double)

@@ -744,23 +744,6 @@ sal_Bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, c
         return drawNativeControl( nType, nPart, rControlRegion, nState, aValue, aCaption );
 }
 
-sal_Bool SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                                ControlState nState, const ImplControlValue& aValue,
-                                                const OUString& aCaption, const OutputDevice *pOutDev )
-{
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        Rectangle rgn( rControlRegion );
-        mirror( rgn, pOutDev );
-        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
-        mirror( *mirrorValue, pOutDev );
-        sal_Bool bRet = drawNativeControlText( nType, nPart, rgn, nState, *mirrorValue, aCaption );
-        return bRet;
-    }
-    else
-        return drawNativeControlText( nType, nPart, rControlRegion, nState, aValue, aCaption );
-}
-
 sal_Bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion, const OutputDevice *pOutDev )

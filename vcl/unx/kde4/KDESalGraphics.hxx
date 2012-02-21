@@ -78,18 +78,6 @@ class KDESalGraphics : public X11SalGraphics
                                         const ImplControlValue& aValue,
                                         const rtl::OUString& aCaption );
 
-        /** Draw text on the widget.
-            OPTIONAL. Draws the requested text for the control described by part/nControlState.
-            Used if text is not drawn by DrawNativeControl().
-
-            @param rControlRegion The bounding region of the complete control in VCL frame coordinates.
-            @param aValue An optional value (tristate/numerical/string)
-            @param aCaption A caption or title string (like button text etc.)
-        */
-        virtual sal_Bool drawNativeControlText( ControlType, ControlPart,
-                                            const Rectangle&, ControlState,
-                                            const ImplControlValue&,
-                                            const rtl::OUString& ) { return false; }
         /** Check if the bounding regions match.
 
             If the return value is TRUE, rNativeBoundingRegion

@@ -166,9 +166,6 @@ protected:
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                               ControlState nState, const ImplControlValue& aValue,
-                                               const rtl::OUString& aCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
@@ -452,15 +449,6 @@ public:
                                     const ImplControlValue& aValue,
                                     const rtl::OUString& aCaption,
                                     const OutputDevice *pOutDev );
-
-    // Request rendering of a caption string for a control
-    sal_Bool DrawNativeControlText( ControlType nType,
-                                        ControlPart nPart,
-                                        const Rectangle& rControlRegion,
-                                        ControlState nState,
-                                        const ImplControlValue& aValue,
-                                        const rtl::OUString& aCaption,
-                                        const OutputDevice *pOutDev );
 
     // Query the native control's actual drawing region (including adornment)
     sal_Bool GetNativeControlRegion( ControlType nType,
