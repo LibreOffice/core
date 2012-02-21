@@ -121,20 +121,6 @@ void ImplInitSVData()
     pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
-    // find out whether we are running in the testtool
-    // in this case we need some special workarounds
-    sal_uInt32 nArgs = osl_getCommandArgCount();
-    for( sal_uInt32 i = 0; i < nArgs; i++ )
-    {
-        rtl::OUString aArg;
-        osl_getCommandArg( i, &aArg.pData );
-        if( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-enableautomation" ) ) )
-        {
-            pImplSVData->mbIsTestTool = true;
-            break;
-        }
-    }
-
     // mark default layout border as unitialized
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }

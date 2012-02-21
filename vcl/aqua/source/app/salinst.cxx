@@ -206,9 +206,6 @@ static void initNSApp()
                                            selector: @selector(applicationWillResignActive:)
                                            name: @"AppleRemoteWillResignActive"
                                            object: nil ];
-
-    if( ImplGetSVData()->mbIsTestTool )
-        [NSApp activateIgnoringOtherApps: YES];
 }
 
 sal_Bool ImplSVMainHook( int * pnInit )

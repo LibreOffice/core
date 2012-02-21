@@ -1851,15 +1851,11 @@ static void ImplHandleGetFocus( Window* pWindow )
     // do not blink when they receive focus
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
-        bool bCallDirect = ImplGetSVData()->mbIsTestTool;
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        if( ! bCallDirect )
-            Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
         Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
         if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
             pFocusWin->ImplGetWindowImpl()->mpCursor->ImplShow();
-        if( bCallDirect )
-            pWindow->ImplAsyncFocusHdl( NULL );
     }
 }
 
@@ -1892,19 +1888,15 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     // execute Focus-Events after a delay, such that SystemChildWindows
     // do not flicker when they receive focus
-    bool bCallDirect = ImplGetSVData()->mbIsTestTool;
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        if( ! bCallDirect )
-            Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
     }
 
     Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
-    if( bCallDirect )
-        pWindow->ImplAsyncFocusHdl( NULL );
 }
 
 // -----------------------------------------------------------------------

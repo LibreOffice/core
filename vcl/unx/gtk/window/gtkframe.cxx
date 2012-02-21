@@ -3228,17 +3228,6 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
-    if( ImplGetSVData()->mbIsTestTool )
-    {
-        /* #i76541# testtool needs the focus to be in a new document
-        *  however e.g. metacity does not necessarily put the focus into
-        *  a newly shown window. An extra little hint seems to help here.
-        *  however we don't want to interfere with the normal user experience
-        *  so this is done when running in testtool only
-        */
-        if( ! pThis->m_pParent && (pThis->m_nStyle & SAL_FRAME_STYLE_MOVEABLE) != 0 )
-            bSetFocus = true;
-    }
 
 #if !GTK_CHECK_VERSION(3,0,0)
     if( bSetFocus )

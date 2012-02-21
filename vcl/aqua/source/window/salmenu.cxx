@@ -542,7 +542,7 @@ sal_Bool AquaSalMenu::VisibleMenuBar()
 
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
 
-    if ( ImplGetSVData()->mbIsTestTool || (pExperimental && !strcasecmp(pExperimental, "FALSE")) )
+    if ( pExperimental && !strcasecmp(pExperimental, "FALSE") )
         return sal_False;
 
     // End of experimental code enable/disable part
