@@ -233,7 +233,7 @@ namespace canvas
         // in line with the problem of having sprite state available
         // for the frame before the last frame; plus, it avoids
         // frequent locks of the object mutices
-        SpriteComparator aSpriteComparator;
+        SpriteWeakOrder aSpriteComparator;
 
         // put all sprites that have changed content into update areas
         ListOfSprites::const_iterator       aCurrSprite( maSprites.begin() );

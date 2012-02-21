@@ -103,7 +103,7 @@ namespace canvas
 
     /** Functor providing a StrictWeakOrdering for sprite references
      */
-    struct SpriteComparator
+    struct SpriteWeakOrder
     {
         bool operator()( const Sprite::Reference& rLHS,
                          const Sprite::Reference& rRHS )
