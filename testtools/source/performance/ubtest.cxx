@@ -1121,7 +1121,6 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 aArgs[6].pData,
                 aArgs[7].pData,
                 aArgs[8].pData,
-                aArgs[9].pData,
             };
 
             out( "\n> executing: \"uno" );
