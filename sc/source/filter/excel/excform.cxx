@@ -895,7 +895,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     sal_uInt16          nUINT16;
     sal_uInt8           nByte;
     sal_Bool            bError = false;
-    sal_Bool            bArrayFormula = false;
     const sal_Bool      bRangeName = eFT == FT_RangeName;
     const sal_Bool      bSharedFormula = eFT == FT_SharedFormula;
     const sal_Bool      bRNorSF = bRangeName || bSharedFormula;
@@ -931,7 +930,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
                 nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
-                bArrayFormula = sal_True;
                 break;
             case 0x02: // Data Table                            [325 277]
                 nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
@@ -1302,8 +1300,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         eRet = ConvErrCount;
     else if( bExternName )
         eRet = ConvErrExternal;
-    else if( bArrayFormula )
-        eRet = ConvOK;
     else
         eRet = ConvOK;
 
