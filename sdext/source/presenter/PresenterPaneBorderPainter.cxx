@@ -877,8 +877,6 @@ RendererPaneStyle::RendererPaneStyle (
             meFontAnchor = AnchorLeft;
         else if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Right")))
             meFontAnchor = AnchorRight;
-        else if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Center")))
-            meFontAnchor = AnchorCenter;
         else
             meFontAnchor = AnchorCenter;
 
