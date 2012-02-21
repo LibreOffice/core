@@ -4745,10 +4745,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             clrPrevText = SetTextColor( pDI->hDC, GetSysColor( fSelected ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT ) );
 
         DWORD colBackground = GetSysColor( fSelected ? COLOR_HIGHLIGHT : COLOR_MENU );
-        if ( fSelected )
-            clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
-        else
-            clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
+        clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
 
         hbrOld = (HBRUSH)SelectObject( pDI->hDC, CreateSolidBrush( GetBkColor( pDI->hDC ) ) );
 
