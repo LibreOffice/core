@@ -594,8 +594,9 @@ void SwRTFParser::ReadListOverrideTable()
         std::map<sal_Int32,SwTxtFmtColl*>::const_iterator iterColl;
         sal_uInt16 nRulePos( USHRT_MAX );
         const SwNumRule *pNumRule = 0;
-        SvxRTFStyleTbl::iterator it = GetStyleTbl().begin();
-        do {
+        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin();
+            it != GetStyleTbl().end(); ++it)
+        {
             SvxRTFStyleType* pStyle = it->second;
             if ( MAXLEVEL > pStyle->nOutlineNo )
             {
@@ -635,9 +636,7 @@ void SwRTFParser::ReadListOverrideTable()
             }
 
             pStyle->aAttrSet.ClearItem( FN_PARAM_NUM_LEVEL );
-
-            ++it;
-        } while( it != GetStyleTbl().end() );
+        }
     }
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
