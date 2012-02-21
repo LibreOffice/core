@@ -4364,10 +4364,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     if (drawobj->u.freeform.npt > 2){
                               int n, i;
-                              if( bIsNatural == sal_True )
-                                  n = drawobj->u.freeform.npt;
-                              else
-                                  n = drawobj->u.freeform.npt ;
+                              n = drawobj->u.freeform.npt;
 
                               double *xarr = new double[n+1];
                               double *yarr = new double[n+1];
