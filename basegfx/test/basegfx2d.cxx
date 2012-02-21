@@ -49,6 +49,7 @@
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b1irange.hxx>
 #include <basegfx/range/b1ibox.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -285,6 +286,33 @@ public:
     CPPUNIT_TEST(impex);
     SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dsvgdimpex
+
+class b2drange : public CppUnit::TestFixture
+{
+private:
+public:
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+    void check()
+    {
+        CPPUNIT_ASSERT_MESSAGE("simple range rounding from double to integer",
+                               fround(B2DRange(1.2, 2.3, 3.5, 4.8)) == B2IRange(1, 2, 4, 5));
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    SAL_CPPUNIT_TEST_SUITE(b2drange);
+    CPPUNIT_TEST(check);
+    SAL_CPPUNIT_TEST_SUITE_END();
+};
 
 class b2dpolyrange : public CppUnit::TestFixture
 {
@@ -1361,6 +1389,7 @@ public:
 // -----------------------------------------------------------------------------
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2drange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolyrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dhommatrix);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpoint);
