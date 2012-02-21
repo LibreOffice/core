@@ -381,7 +381,7 @@ void _FrmFinit()
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
-            OSL_ENSURE( !pObj, "Wer hat sich nicht ausgetragen?"); // TOOD: translate?
+            OSL_ENSURE( !pObj, "Who didn't derregister?");
         }
 #endif
     delete SwRootFrm::pVout;
@@ -468,7 +468,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*  Description:
 |*      The RootFrm requests an own FrmFmt from the document, which it is
 |*      going to delete again in the dtor. The own FrmFmt is derived from
-|*      the passed-in FrmFmt.
+|*      the passed FrmFmt.
 |*
 |*************************************************************************/
 
