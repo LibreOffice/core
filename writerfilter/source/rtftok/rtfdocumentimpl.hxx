@@ -187,6 +187,7 @@ namespace writerfilter {
             public:
                 uno::Reference<drawing::XShape> xShape;
                 uno::Reference<beans::XPropertySet> xPropertySet;
+                std::vector<beans::PropertyValue> aPendingProperties;
         };
 
         /// Stores the properties of a picture.
