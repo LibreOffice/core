@@ -129,24 +129,4 @@ void SvxSelectionModeControl::DrawItemText_Impl()
     GetStatusBar().SetItemText( GetId(), sTxt );
 }
 
-sal_uIntPtr SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
-{
-    long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_STD));
-    long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ER));
-    long nWidth3 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ERG));
-    long nWidth4 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_BLK));
-
-    if(nWidth1<nWidth2)
-        nWidth1=nWidth2;
-
-    if(nWidth1<nWidth3)
-        nWidth1=nWidth3;
-
-    if(nWidth1<nWidth4)
-        nWidth1=nWidth4;
-
-    return nWidth1+PAINT_OFFSET;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

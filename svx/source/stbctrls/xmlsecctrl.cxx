@@ -170,9 +170,4 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetFillColor( aOldFillColor );
 }
 
-long XmlSecStatusBarControl::GetDefItemWidth( StatusBar& )
-{
-    return 16;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

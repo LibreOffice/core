@@ -89,10 +89,6 @@ public:
                                        const SwTxtFrm* pFrm,
                                        const long nXPos,
                                        const sal_Bool bRight );
-#ifdef DBG_UTIL
-    void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
-                      const Color& rClosedColor, const Color& rOpenColor );
-#endif
 };
 
 /*************************************************************************
@@ -189,10 +185,6 @@ public:
     {
         mbIgnoreObjsInHeaderFooter = _bNew;
     }
-
-#ifdef DBG_UTIL
-    void ShowContour( OutputDevice* pOut );
-#endif
 };
 
 // Wenn in das rRect (meist die aktuelle Zeile) kein freifliegender

@@ -53,7 +53,6 @@ public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
     virtual void    Command( const CommandEvent& rCEvt );
-    static long     GetDefItemWidth( StatusBar& _rStatusBar );
 };
 
 #endif

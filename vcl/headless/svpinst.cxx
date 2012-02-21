@@ -126,29 +126,6 @@ void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 
     Wakeup();
 }
 
-void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( m_aEventGuard ) )
-    {
-        if( ! m_aUserEvents.empty() )
-        {
-            std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-            do
-            {
-                if( it->m_pFrame    == pFrame   &&
-                    it->m_pData     == pData    &&
-                    it->m_nEvent    == nEvent )
-                {
-                    it = m_aUserEvents.erase( it );
-                }
-                else
-                    ++it;
-            } while( it != m_aUserEvents.end() );
-        }
-        osl_releaseMutex( m_aEventGuard );
-    }
-}
-
 void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 {
     m_aFrames.remove( pFrame );
