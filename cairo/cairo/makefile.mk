@@ -49,7 +49,8 @@ TARFILE_MD5=f101a9e88b783337b20b2e26dfd26d5f
 
 PATCH_FILES=\
     ..$/cairo-1.10.2.patch \
-    ..$/cairo.dlsym.lcdfilter.patch
+    ..$/cairo.dlsym.lcdfilter.patch \
+    ..$/cairo-1.10.2-oldfontconfig.patch
 
 .IF "$(OS)$(COM)" == "WNTMSC"
 PATCH_FILES+= ..$/$(TARFILE_NAME).wntmsc.patch
@@ -189,7 +190,7 @@ CONFIGURE_FLAGS+=--disable-valgrind
 .IF "$(OS)"=="IOS"
 CONFIGURE_FLAGS+=--disable-ft
 .ELSE
-CONFIGURE_FLAGS+=--enable-ft
+CONFIGURE_FLAGS+=--enable-ft --enable-fc
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
