@@ -1291,6 +1291,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             // This destination should be ignored by readers that support nested tables.
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
+        case RTF_DO:
+            m_aStates.top().nDestinationState = DESTINATION_DRAWINGOBJECT;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -1981,6 +1984,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXL: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left; break;
         case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
 
+        case RTF_DPLINE:
+                m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))), uno::UNO_QUERY);
+                m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -2627,6 +2634,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
                     NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
+        case RTF_DPX:
+            m_aStates.top().aDrawingObject.nLeft = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DPY:
+            m_aStates.top().aDrawingObject.nTop = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DPXSIZE:
+            m_aStates.top().aDrawingObject.nRight = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DPYSIZE:
+            m_aStates.top().aDrawingObject.nBottom = TWIP_TO_MM100(nParam);
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3177,6 +3196,22 @@ int RTFDocumentImpl::popState()
         aFrame = m_aStates.top().aFrame;
         bPopFrame = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT)
+    {
+        RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
+        uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
+        xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
+        xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
+        uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier( m_xDstDoc, uno::UNO_QUERY);
+        if ( xDrawSupplier.is() )
+        {
+            uno::Reference< drawing::XShapes > xShapes( xDrawSupplier->getDrawPage(), uno::UNO_QUERY );
+            if ( xShapes.is() )
+                xShapes->add( xShape );
+        }
+        Mapper().startShape(xShape);
+        Mapper().endShape();
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -3342,6 +3377,7 @@ RTFParserState::RTFParserState()
     aLevelNumbers(),
     aPicture(),
     aShape(),
+    aDrawingObject(),
     aFrame(),
     nCellX(0),
     nCells(0),

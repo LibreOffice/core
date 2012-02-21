@@ -108,7 +108,8 @@ namespace writerfilter {
             DESTINATION_ANNOTATIONDATE,
             DESTINATION_ANNOTATIONAUTHOR,
             DESTINATION_FALT,
-            DESTINATION_FLYMAINCONTENT
+            DESTINATION_FLYMAINCONTENT,
+            DESTINATION_DRAWINGOBJECT
         };
 
         enum RTFBorderState
@@ -178,6 +179,14 @@ namespace writerfilter {
                 int nTop;
                 int nRight;
                 int nBottom;
+        };
+
+        /// Stores the properties of a drawing object.
+        class RTFDrawingObject : public RTFShape
+        {
+            public:
+                uno::Reference<drawing::XShape> xShape;
+                uno::Reference<beans::XPropertySet> xPropertySet;
         };
 
         /// Stores the properties of a picture.
@@ -262,6 +271,7 @@ namespace writerfilter {
 
                 RTFPicture aPicture;
                 RTFShape aShape;
+                RTFDrawingObject aDrawingObject;
                 RTFFrame aFrame;
 
                 /// Current cellx value.
