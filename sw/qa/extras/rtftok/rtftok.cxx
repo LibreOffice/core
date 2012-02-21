@@ -25,10 +25,12 @@
  * instead of those above.
  */
 
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
@@ -182,14 +184,38 @@ void RtfModelTest::testN695479()
     aValue >>= nHeight;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), nHeight);
 
-    // Both frames should be anchored to the first paragraph.
-    for (int i = 0; i < 2; ++i)
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    bool bFrameFound = false, bDrawFound = false;
+    for (int i = 0; i < xDraws->getCount(); ++i)
     {
-        uno::Reference<text::XTextContent> xTextContent(xIndexAccess->getByIndex(i), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-        uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString(RTL_CONSTASCII_USTRINGPARAM("plain")), xText->getString());
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(i), uno::UNO_QUERY);
+        if (xServiceInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))))
+        {
+            // Both frames should be anchored to the first paragraph.
+            bFrameFound = true;
+            uno::Reference<text::XTextContent> xTextContent(xServiceInfo, uno::UNO_QUERY);
+            uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+            uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(OUString(RTL_CONSTASCII_USTRINGPARAM("plain")), xText->getString());
+        }
+        else if (xServiceInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))))
+        {
+            // The older "drawing objects" syntax should be recognized.
+            bDrawFound = true;
+            xPropertySet.set(xServiceInfo, uno::UNO_QUERY);
+            sal_Int16 nHori = 0;
+            aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")));
+            aValue >>= nHori;
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, nHori);
+            sal_Int16 nVert = 0;
+            aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")));
+            aValue >>= nVert;
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nVert);
+        }
     }
+    CPPUNIT_ASSERT(bFrameFound);
+    CPPUNIT_ASSERT(bDrawFound);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
