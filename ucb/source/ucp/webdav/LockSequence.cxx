@@ -298,7 +298,7 @@ extern "C" int LockSequence_endelement_callback(
             break;
 
         case STATE_ACTIVELOCK:
-            if ( !pCtx->hasLockType || !pCtx->hasLockType || !pCtx->hasDepth )
+            if ( !pCtx->hasLockType || !pCtx->hasDepth )
                 return 1; // abort
             break;
 
