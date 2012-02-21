@@ -32,10 +32,11 @@ $(eval $(call gb_Library_add_api,pdfimport,\
     udkapi \
 ))
 
-# FIXME: set PLATFORMID correctly
+include $(OUTDIR)/inc/rtlbootstrap.mk
+
 $(eval $(call gb_Library_add_defs,pdfimport,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(PLATFORMID)\" \
+    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(RTL_OS)-$(RTL_ARCH)\" \
 ))
 
 $(eval $(call gb_Library_add_package_headers,pdfimport,\
