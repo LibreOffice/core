@@ -49,22 +49,20 @@ HeadlessSalInstance::~HeadlessSalInstance()
 }
 
 class HeadlessSalSystem : public SvpSalSystem {
-#if 0
 public:
-    AndroidSalSystem() : SvpSalSystem() {}
-    virtual ~AndroidSalSystem() {}
+    HeadlessSalSystem() : SvpSalSystem() {}
+    virtual ~HeadlessSalSystem() {}
     virtual int ShowNativeDialog( const rtl::OUString& rTitle,
                                   const rtl::OUString& rMessage,
                                   const std::list< rtl::OUString >& rButtons,
                                   int nDefButton )
     {
         (void)rButtons; (void)nDefButton;
-        __android_log_print(ANDROID_LOG_INFO, "LibreOffice - dialog '%s': '%s'",
+        ::fprintf(stdout, "LibreOffice - dialog '%s': '%s'",
                             rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
                             rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         return 0;
     }
-#endif
 };
 
 SalSystem *HeadlessSalInstance::CreateSalSystem()
