@@ -343,8 +343,6 @@ bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
         return rxId1->compareTo(rxId2)<0;
     else if (rxId1.is())
         return true;
-    else if (rxId2.is())
-        return false;
     else
         return false;
 }
