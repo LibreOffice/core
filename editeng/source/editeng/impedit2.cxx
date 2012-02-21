@@ -133,6 +133,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bOwnerOfRefDev      = sal_False;
     bDowning            = sal_False;
     bIsInUndo           = sal_False;
+    bIsPasting          = sal_False; //#115580#
     bIsFormatting       = sal_False;
     bFormatted          = sal_False;
     bUpdate             = sal_True;
@@ -3701,6 +3702,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
 
     if ( rxDataObj.is() )
     {
+        bIsPasting = sal_True; //#115580#
         datatransfer::DataFlavor aFlavor;
         sal_Bool bDone = sal_False;
 
@@ -3791,6 +3793,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 }
             }
         }
+        bIsPasting = sal_False; //#115580#
     }
 
     return aNewSelection;

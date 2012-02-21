@@ -202,7 +202,9 @@ class CharAttribList
 {
 private:
     CharAttribArray aAttribs;
-    SvxFont         aDefFont;               // schneller, als jedesmal vom Pool!
+    SvxFont         aDefFont;           // schneller, als jedesmal vom Pool!
+    SvxFont         aDefFontCJK;            //#115580#
+    SvxFont         aDefFontCTL;
     sal_Bool            bHasEmptyAttribs;
 
                     CharAttribList( const CharAttribList& ) {;}
@@ -228,6 +230,8 @@ public:
     void            InsertAttrib( EditCharAttrib* pAttrib );
 
     SvxFont&        GetDefFont()            { return aDefFont; }
+    SvxFont&        GetDefFontCJK()         { return aDefFontCJK; } //#115580#
+    SvxFont&        GetDefFontCTL()         { return aDefFontCTL; }
 
     sal_Bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
     sal_Bool&           HasEmptyAttribs()       { return bHasEmptyAttribs; }

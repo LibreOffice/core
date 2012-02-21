@@ -1066,12 +1066,27 @@ void ContentNode::CreateDefFont()
 {
     // Erst alle Informationen aus dem Style verwenden...
     SfxStyleSheet* pS = aContentAttribs.GetStyleSheet();
-    if ( pS )
-        CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
+    /* if ( pS ) //#115580#
+    CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
 
     // ... dann die harte Absatzformatierung rueberbuegeln...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), pS == NULL );
+        GetContentAttribs().GetItems(), pS == NULL ); */
+
+    SvxFont& rFont = GetCharAttribs().GetDefFont();
+    SvxFont& rFontCJK = GetCharAttribs().GetDefFontCJK();
+    SvxFont& rFontCTL = GetCharAttribs().GetDefFontCTL();
+
+    if ( pS )
+    {
+        CreateFont( rFont, pS->GetItemSet(), sal_True, i18n::ScriptType::LATIN );
+        CreateFont( rFontCJK, pS->GetItemSet(), sal_True, i18n::ScriptType::ASIAN );
+        CreateFont( rFontCTL, pS->GetItemSet(), sal_True, i18n::ScriptType::COMPLEX );
+    }
+
+    CreateFont( rFont, GetContentAttribs().GetItems(), pS == NULL, i18n::ScriptType::LATIN );
+    CreateFont( rFontCJK, GetContentAttribs().GetItems(), pS == NULL, i18n::ScriptType::ASIAN );
+    CreateFont( rFontCTL, GetContentAttribs().GetItems(), pS == NULL, i18n::ScriptType::COMPLEX );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle )
@@ -1448,7 +1463,7 @@ sal_uLong EditDoc::GetTextLen() const
     {
         ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
-        // Felder k�nnen laenger sein als der Platzhalter im Node.
+        // Felder k???nnen laenger sein als der Platzhalter im Node.
         const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
         {
@@ -1560,6 +1575,9 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
 
     // Den Default-Font kopieren
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();
+    //#115580# start
+    pNode->GetCharAttribs().GetDefFontCJK() = aPaM.GetNode()->GetCharAttribs().GetDefFontCJK();
+    pNode->GetCharAttribs().GetDefFontCTL() = aPaM.GetNode()->GetCharAttribs().GetDefFontCTL();
     SfxStyleSheet* pStyle = aPaM.GetNode()->GetStyleSheet();
     if ( pStyle )
     {

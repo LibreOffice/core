@@ -108,7 +108,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
     EditPaM aStart2PaM = aCurSel.Min();
     // Sinnvoll oder nicht?:
     aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
-    AddRTFDefaultValues( aStart2PaM, aStart2PaM );
+    //AddRTFDefaultValues( aStart2PaM, aStart2PaM ); //#115580#
     EditPaM aEnd1PaM( pImpEditEngine->ImpInsertParaBreak( aCurSel.Max() ) );
     // aCurCel zeigt jetzt auf den Zwischenraum
 
@@ -136,6 +136,47 @@ SvParserState __EXPORT EditRTFParser::CallParser()
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
         aSel.Max() = EditPaM( pCurNode, 0 );
         aCurSel.Max() = pImpEditEngine->ImpDeleteSelection( aSel );
+        //#115580# added at 2011/11/28 start
+        sal_uInt16 nStart2 = pImpEditEngine->GetEditDoc().GetPos( aStart2PaM.GetNode() );
+        sal_uInt16 nEnd2 = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+        for ( sal_uInt16 n = nStart2; n <= nEnd2; n++ )
+        {
+            ContentNode* pTmpNode = pImpEditEngine->GetEditDoc().SaveGetObject( n );
+            if ( pTmpNode )
+            {
+                {//if ContentAttribs of node has no font info, add default font attribs into it.
+                    Size aSz( 12, 0 );
+                    MapMode aPntMode( MAP_POINT );
+                    MapMode _aEditMapMode( pImpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit() );
+                    aSz = pImpEditEngine->GetRefDevice()->LogicToLogic( aSz, &aPntMode, &_aEditMapMode );
+
+                    SfxItemSet& rSet = pTmpNode->GetContentAttribs().GetItems();
+                    SvxFont& rFont = pTmpNode->GetCharAttribs().GetDefFont();
+                    SvxFont& rFontCJK = pTmpNode->GetCharAttribs().GetDefFontCJK();
+                    SvxFont& rFontCTL = pTmpNode->GetCharAttribs().GetDefFontCTL();
+
+                    if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), XubString(),
+                                    rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+                    if ( rSet.GetItemState( EE_CHAR_FONTINFO_CJK ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontItem( rFontCJK.GetFamily(), rFontCJK.GetName(), XubString(),
+                                    rFontCJK.GetPitch(), rFontCJK.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
+                    if ( rSet.GetItemState( EE_CHAR_FONTINFO_CTL ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontItem( rFontCTL.GetFamily(), rFontCTL.GetName(), XubString(),
+                                    rFontCTL.GetPitch(), rFontCTL.GetCharSet(), EE_CHAR_FONTINFO_CTL ) );
+
+                    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT )  );
+                    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT_CJK )  );
+                    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) != SFX_ITEM_ON )
+                        rSet.Put( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT_CTL )  );
+                }
+
+                pImpEditEngine->AdjustParaAttribsByStyleSheet( pTmpNode );
+                pImpEditEngine->ParaAttribsToCharAttribs( pTmpNode );
+            }
+        }
     }
     EditPaM aEnd2PaM( aCurSel.Max() );
     //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
@@ -145,14 +186,16 @@ SvParserState __EXPORT EditRTFParser::CallParser()
     // => Zeichenattribute machen.
 
     sal_Bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
-    if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
-        pImpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
+    /* if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() ) //#115580#
+        pImpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() ); */
+    // end
     aCurSel.Min() = pImpEditEngine->ImpConnectParagraphs(
         aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
     bSpecialBackward = aEnd1PaM.GetNode()->Len() ? sal_True : sal_False;
     // wenn bOnlyOnePara, dann ist der Node beim Connect verschwunden.
-    if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )
-        pImpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );
+    /* if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )    //#115580#
+        pImpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() ); */
+    // end
     aCurSel.Max() = pImpEditEngine->ImpConnectParagraphs(
         ( bOnlyOnePara ? aStart1PaM.GetNode() : aEnd2PaM.GetNode() ),
             aEnd1PaM.GetNode(), bSpecialBackward );
