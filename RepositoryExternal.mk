@@ -1080,15 +1080,34 @@ endef
 
 else # !SYSTEM_POPPLER
 
-# FIXME: what are the libs created by xpdf?
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	poppler \
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	fofi \
+	Goo \
+	xpdf \
 ))
 
 define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-	poppler \
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/xpdf \
+	$$(INCLUDE) \
 )
+
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	fofi \
+	Goo \
+	xpdf \
+)
+
+ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	objc \
+)
+else ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	advapi32 \
+	gdi32 \
+)
+endif
 
 endef
 
