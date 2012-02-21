@@ -55,9 +55,10 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bUsedForHilite =
     bCompatible =
     bVBASupportOn =
-    bPrevLineExtentsComment = sal_False;
+    bInStatement =
+    bPrevLineExtentsComment = false;
     bHash    =
-    bErrors  = sal_True;
+    bErrors  = true;
 }
 
 SbiScanner::~SbiScanner()
