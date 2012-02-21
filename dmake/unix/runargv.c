@@ -125,9 +125,6 @@ _finished_child(pid, status) [unix/runargv] handles the finished child. If
 #endif
 
 #if __CYGWIN__ && ENABLE_SPAWN
-#if HAVE_CYGWIN_PROCESS_H
-#  include <cygwin/process.h>
-#else
 #  include <process.h>
 #endif
 
