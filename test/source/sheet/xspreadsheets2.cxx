@@ -64,6 +64,10 @@ XSpreadsheets2::XSpreadsheets2():
 {
 }
 
+XSpreadsheets2::~XSpreadsheets2()
+{
+}
+
 void XSpreadsheets2::testImportedSheetNameAndIndex()
 {
 /**
