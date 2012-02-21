@@ -309,10 +309,6 @@ sal_Int32 OTableStylesContext::GetIndex(const sal_Int16 nContextID)
                 GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nMasterPageNameIndex;
     }
-    else if ( nContextID == CTF_DB_ISVISIBLE )
-    {
-        return -1;
-    }
     else
         return -1;
 }
