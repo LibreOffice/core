@@ -3396,8 +3396,7 @@ void SwColumnFrm::PaintBreak( ) const
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
                 if ( !pGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
-                     !pGlobalShell->IsShowHeaderFooterSeparator( Footer ) &&
-                      pGlobalShell->GetViewOptions( )->IsLineBreak( ) )
+                     !pGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
                 {
                     SwRect aRect( pCnt->Prt() );
                     aRect.Pos() += pCnt->Frm().Pos();
