@@ -114,7 +114,7 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 |*  Description      notifies the background (all CntntFrms that currently
 |*       are overlapping. Additionally, the window is also directly
 |*       invalidated (especially where there are no overlapping CntntFrms)
-|*       This also takes into account the CntntFrms within other Flys.
+|*       This also takes CntntFrms within other Flys into account.
 |*
 |*************************************************************************/
 
@@ -290,10 +290,10 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 
 void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 {
-    // It's probably time now to take appropriate measures if the Fly
-    // doesn't fit into it's surrounding.
-    // First, the Fly gives up it's position. Then it's formatted first.
-    // Only if it still doesn't fit after giving up the position, the
+    // It's probably time now to take appropriate measures, if the Fly
+    // doesn't fit into its surrounding.
+    // First, the Fly gives up its position, then it's formatted.
+    // Only if it still doesn't fit after giving up its position, the
     // width or height are given up as well. The frame will be squeezed
     // as much as needed.
 
@@ -340,8 +340,6 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 const SwFmtHoriOrient &rH = GetFmt()->GetHoriOrient();
                 // Left-aligned ones may not be moved to the left when they
                 // are avoiding another one.
-                // TODO comment-translator: what left-aligned things are they
-                //                          talking about here?
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                     Frm().Pos().X() = nOld;
                 else
@@ -353,11 +351,11 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             bValidSize = sal_False;
         else
         {
-            // If we reach this place, the Frm protrudes into forbidden
+            // If we reach this branch, the Frm protrudes into forbidden
             // sections, and correcting the position is neither allowed
             // nor possible nor required.
 
-            // With Flys that have OLE objects as lower, we make sure that
+            // For Flys with OLE objects as lower, we make sure that
             // we always resize proportionally
             Size aOldSize( Frm().SSize() );
 
@@ -445,9 +443,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 }
             }
 
-            // Now change the Frm; with columns, put the new values into the
-            // attributes, because there may occur pretty bad oscillations
-            // otherwise.
+            // Now change the Frm; for columns, we put the new values into the attributes,
+            // otherwise we'll end up with unwanted side-effects
             const long nPrtHeightDiff = Frm().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
             Frm().Height( aFrmRect.Height() );
@@ -725,8 +722,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     // Don't delete collections just yet. This will happen at the end of the
     // action in the RemoveSuperfluous of the page, kicked off by a method of
     // the same name in the root.
-    // The FlyColl might be gone already, because the page's dtor is currently
-    // "running".
+    // The FlyColl might be gone already, because the page's dtor is being executed.
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( *pToRemove );
@@ -776,8 +772,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
                                   ->DisposeAccessibleFrm( pToMove, sal_True );
     }
 
-    // The FlyColl might be gone already, because the page's dtor is currently
-    // "running".
+    // The FlyColl might be gone already, because the page's dtor is being executed.
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( *pToMove );
@@ -946,7 +941,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
     }
     else
     {
-        // if we received a Fly, we use that one. Otherwise, create a new
+        // If we received a Fly, we use that one. Otherwise, create a new
         // one using the Format.
         if ( pFly )
             AppendFly( pFly );
@@ -966,15 +961,14 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 |*************************************************************************/
 // #i18732# - adjustments for following text flow or not
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
-// #i22305# - adjustment for following text flow
-// for to frame anchored objects
-// #i29778# - Because the calculation of the position of the
-// floating screen object (Writer fly frame or drawing object) doesn't perform
-// a calculation on its upper frames and its anchor frame, a calculation of
-// the upper frames in this method no longer sensible.
-// #i28701# - if document compatibility option 'Consider
-// wrapping style influence on object positioning' is ON, the clip area
-// corresponds to the one as the object doesn't follows the text flow.
+// #i22305# - adjustment for following text flow for to frame anchored objects
+// #i29778# - Because calculating the floating screen object's position
+// (Writer fly frame or drawing object) doesn't perform a calculation on its
+// upper frames and its anchor frame, a calculation of the upper frames in this
+// method is no longer sensible.
+// #i28701# - if document compatibility option 'Consider wrapping style influence
+// on object positioning' is ON, the clip area corresponds to the one as the
+// object doesn't follow the text flow.
 sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
 {
     sal_Bool bRet = sal_True;
