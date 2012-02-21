@@ -2255,14 +2255,15 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     // The following commands are available at the various modules
     switch( nSlotId )
     {
-        case SID_ATTR_CHAR_COLOR2 :
-        case SID_ATTR_CHAR_COLOR  :
+        case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             break;
 
-        case SID_ATTR_CHAR_COLOR_BACKGROUND :
-        case SID_BACKGROUND_COLOR :
+        case SID_BACKGROUND_COLOR:
+        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        default:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             break;
