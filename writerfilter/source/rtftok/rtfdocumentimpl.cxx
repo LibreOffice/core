@@ -1985,8 +1985,31 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
 
         case RTF_DPLINE:
-                m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))), uno::UNO_QUERY);
-                m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+                {
+                    m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))), uno::UNO_QUERY);
+                    m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+                    std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
+                    for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
+                        m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
+                }
+                break;
+        case RTF_DOBXMARGIN:
+        case RTF_DOBYMARGIN:
+                {
+                    beans::PropertyValue aPropertyValue;
+                    aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM((nKeyword == RTF_DOBXMARGIN ? "HoriOrientRelation" : "VertOrientRelation")));
+                    aPropertyValue.Value <<= text::RelOrientation::PAGE_PRINT_AREA;
+                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                }
+                break;
+        case RTF_DOBXPAGE:
+        case RTF_DOBYPAGE:
+                {
+                    beans::PropertyValue aPropertyValue;
+                    aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM((nKeyword == RTF_DOBXPAGE ? "HoriOrientRelation" : "VertOrientRelation")));
+                    aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
+                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                }
                 break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
