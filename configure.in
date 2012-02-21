@@ -7192,6 +7192,7 @@ AC_SUBST(NSS_LIBS)
 dnl ===================================================================
 dnl Check for system mozilla headers
 dnl ===================================================================
+HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=
 AC_MSG_CHECKING([which mozilla headers to use])
 if test "$with_system_mozilla_headers" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7206,12 +7207,31 @@ if test "$with_system_mozilla_headers" = "yes"; then
     if test "x$LOCATED" != "xyes"; then
         AC_MSG_ERROR([npapi.h header file not found])
     fi
+
+    AC_LANG_PUSH([C])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS $MOZILLA_HEADERS_CFLAGS"
+    AC_MSG_CHECKING([for NPP_GetMIMEDescription return type])
+    AC_COMPILE_IFELSE(
+        [AC_LANG_SOURCE([[
+            #define XP_UNIX
+            #include <npapi.h>
+            const char* NPP_GetMIMEDescription(void) { return "foo"; }
+            ]])],
+        [AC_MSG_RESULT([const char*])],
+        [
+        AC_MSG_RESULT([char*])
+        HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=TRUE
+        ])
+    CFLAGS=$save_CFLAGS
+    AC_LANG_POP([C])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA_HEADERS=NO
 fi
 AC_SUBST(MOZILLA_HEADERS_CFLAGS)
 AC_SUBST(SYSTEM_MOZILLA_HEADERS)
+AC_SUBST(HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION)
 
 dnl ===================================================================
 dnl Check for system sane

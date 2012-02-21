@@ -48,6 +48,12 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 	-DMOZ_X11 \
 ))
 
+ifeq ($(HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION),TRUE)
+$(eval $(call gb_Library_add_defs,npsoplugin,\
+	-DHAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=1 \
+))
+endif
+
 ifeq ($(filter-out LINUX FREEBSD NETBSD OPENBSD DRAGONFLY,$(OS)),)
 $(eval $(call gb_Library_add_defs,npsoplugin,\
 	-DNP_LINUX \
