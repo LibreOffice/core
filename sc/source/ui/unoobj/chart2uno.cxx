@@ -1560,7 +1560,7 @@ ScChart2DataProvider::createDataSource(
         }
         Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
             pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transfered!
-        if ( xChartSeries.is() )
+        if ( xChartSeries.is() && xChartSeries->getValues()->getData().getLength() )
         {
             aSeqs.push_back( xChartSeries );
         }
