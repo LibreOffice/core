@@ -81,7 +81,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbacharttitle \
         sc/source/ui/vba/vbacomment \
         sc/source/ui/vba/vbacomments \
-        sc/source/ui/vba/vbacommentshape \
         sc/source/ui/vba/vbacondition \
         sc/source/ui/vba/vbadialog \
         sc/source/ui/vba/vbadialogs \

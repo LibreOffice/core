@@ -50,7 +50,6 @@
 #include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
-#include "vbacommentshape.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
