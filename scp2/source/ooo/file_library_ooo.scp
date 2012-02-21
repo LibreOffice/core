@@ -548,7 +548,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 
-#ifndef HEADLESS
+#ifndef LIBO_HEADLESS
 
 #ifndef SYSTEM_CAIRO
 
@@ -934,7 +934,7 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-#if defined(UNX) && ! defined(QUARTZ) && ! defined(HEADLESS)
+#if defined(UNX) && ! defined(QUARTZ) && ! defined(LIBO_HEADLESS)
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
     LIB_FILE_BODY;
@@ -1160,7 +1160,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sot, sot )
 
-#if defined(UNX) && !defined(QUARTZ) && !defined(HEADLESS)
+#if defined(UNX) && !defined(QUARTZ) && !defined(LIBO_HEADLESS)
 
 File gid_File_Lib_Spa
     Name = LIBNAME(spa);
@@ -1178,11 +1178,11 @@ File gid_File_Lib_Spell
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-#if !defined HEADLESS
+#if !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
 #endif
 
-#if defined UNX && !defined MACOSX && !defined HEADLESS
+#if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
 
@@ -1703,7 +1703,7 @@ File gid_File_Lib_Libcroco
 End
 #endif
 
-#if ! defined HEADLESS
+#if ! defined LIBO_HEADLESS
 #if ! defined SYSTEM_PANGO
 File gid_File_Lib_Libpango
     LIB_FILE_BODY;

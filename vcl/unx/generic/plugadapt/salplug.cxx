@@ -53,7 +53,7 @@ static oslModule pCloseModule = NULL;
 static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     SalInstance* pInst = NULL;
-#if !defined(ANDROID) || !defined(HEADLESS)
+#if !defined(ANDROID) || !defined(LIBO_HEADLESS)
     // Disable gtk3 plugin load except in experimental mode for now.
     if( !bForce &&
         rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
@@ -129,7 +129,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
     return pInst;
 }
 
-#if !defined(ANDROID) || !defined(HEADLESS)
+#if !defined(ANDROID) || !defined(LIBO_HEADLESS)
 
 static DesktopType get_desktop_environment()
 {

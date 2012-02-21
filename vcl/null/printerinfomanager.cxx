@@ -60,7 +60,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
     m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ),
-#ifdef HEADLESS
+#ifdef LIBO_HEADLESS
     m_bDisableCUPS( true )
 #else
     m_bDisableCUPS( false )
