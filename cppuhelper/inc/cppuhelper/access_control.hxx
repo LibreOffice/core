@@ -61,7 +61,7 @@ public:
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
     /** Copy ctor.
 
-        @param another object
+        @param ac another object
     */
     AccessControl( ::cppu::AccessControl const & ac )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );

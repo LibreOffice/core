@@ -60,7 +60,7 @@ class Environment
 public:
     /** Returns the current Environment.
 
-        @param env_type   the optional type of the Environment, falls back to "uno" in case being empty,
+        @param typeName   the optional type of the Environment, falls back to "uno" in case being empty,
                           respectively to current C++ Environment.
         @since UDK 3.2.7
     */

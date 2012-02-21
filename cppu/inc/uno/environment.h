@@ -368,7 +368,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     that objects of that environment might be called.
 
     @param pEnv                    the environment
-    @param rtl_uString ** pReason  the reason, if it is not valid
+    @param pReason                 the reason, if it is not valid
     @return                        1 == valid, 0 == invalid
     @since UDK 3.2.7
 */

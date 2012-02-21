@@ -86,7 +86,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_any_assign(
 
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
-    @param pTypeDescr       type description of value; defaults (0) to void
+    @param pType            type description of value; defaults (0) to void
     @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
     @param release          function called each time an interface needs to be released;

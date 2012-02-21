@@ -126,7 +126,7 @@ public:
         { return * reinterpret_cast< const Type * >( &pType ); }
     /** Gets the type of the set value.
 
-        @return the UNacquired type description reference of the set value
+        @return the unacquired type description reference of the set value
      */
     inline typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const SAL_THROW(())
         { return pType; }
@@ -134,7 +134,7 @@ public:
     /** Gets the type description of the set value. Provides ownership of the type description!
         Call an explicit typelib_typedescription_release() to release afterwards.
 
-        @param a pointer to type description pointer
+        @param ppTypeDescr a pointer to type description pointer
     */
     inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const SAL_THROW(())
         { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, pType ); }

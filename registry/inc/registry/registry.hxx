@@ -493,7 +493,7 @@ public:
                         If keyName is an empty string, the value will be set for the key
                         specified by hKey.
         @param  valueType specifies the type of the value.
-        @param  pData points to a memory block containing the data for the value.
+        @param  pValue points to a memory block containing the data for the value.
         @param  valueSize specifies the size of pData in bytes
         @return REG_NO_ERROR if succeeds else an error code.
     */

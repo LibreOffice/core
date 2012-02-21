@@ -587,7 +587,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newUnion(
 
     @param ppRet inout enum type description
     @param pTypeName name of enum
-    @param nDefaultEnumValue default enum value
+    @param nDefaultValue default enum value
     @param nEnumValues number of enum values
     @param ppEnumNames names of enum values
     @param pEnumValues enum values
@@ -628,7 +628,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
     @param pType sequence, array: element type;
                  struct, Exception: base type;
     @param nMembers number of members if struct, exception
-    @param pMember array of members if struct, exception
+    @param pMembers array of members if struct, exception
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     typelib_TypeDescription ** ppRet,
@@ -645,7 +645,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     @param pTypeName name of type
     @param pType base type;
     @param nMembers number of members
-    @param pMember array of members
+    @param pMembers array of members
 
     @since UDK 3.2.0
 */
@@ -692,7 +692,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     @param nUik4 uik part
     @param nUik5 uik part
     @param nBaseInterfaces number of base interface types
-    @param ppBaseInterface base interface types
+    @param ppBaseInterfaces base interface types
     @param nMembers number of members
     @param ppMembers members; attributes or methods
 
@@ -713,7 +713,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     @param ppRet inout method type description
     @param nAbsolutePosition position of member including all members of base interfaces
     @param bOneWay determines whether method is declared oneway
-    @param pTypeName fully qualified name of method including interface name
+    @param pMethodName fully qualified name of method including interface name
     @param eReturnTypeClass type class of return type
     @param pReturnTypeName type name of the return type
     @param nParams number of parameters
@@ -1132,7 +1132,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
 
     @param ppRef pointer to type reference pointer
     @param pTypeName name of enum
-    @param nDefaultEnumValue default enum value
+    @param nDefaultValue default enum value
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,

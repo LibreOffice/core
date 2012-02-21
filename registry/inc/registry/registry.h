@@ -376,7 +376,7 @@ RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
 
 /** This function opens the root key of a registry.
 
-    @param  hReg identifies a currently open registry whose rootKey will be returned.
+    @param  hRegistry identifies a currently open registry whose rootKey will be returned.
     @param  phRootKey points to a handle of the open root key if the function succeeds otherwise NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */

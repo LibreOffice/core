@@ -163,7 +163,7 @@ public:
 
         @param index indicates the index of the method.
         @param name specifies the name.
-        @param typeName specifies the full qualified return typename.
+        @param returnTypeName specifies the full qualified return typename.
         @param mode specifies the method mode.
         @param paramCount specifies the number of parameters.
         @param excCount specifies the number of exceptions.

@@ -67,7 +67,7 @@ namespace cppu
     /** Maps an any from the current to the thread-safe Environment, fills the passed any.
 
         @param  any  the any to be mapped
-        @param       the target any
+        @param  res  the target any
         @since UDK 3.2.7
      */
     inline void shieldAny(cssu::Any const & any, cssu::Any * res)
@@ -79,7 +79,7 @@ namespace cppu
     /** Maps an any from the thread-safe Environment to the current one, fills the passed any.
 
         @param  any  the any to be mapped
-        @param       the target any
+        @param  res  the target any
         @since UDK 3.2.7
      */
     inline void unshieldAny(cssu::Any const & any, cssu::Any * res)

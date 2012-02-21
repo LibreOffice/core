@@ -115,7 +115,7 @@ public:
 
     /** Constructor: Creates a copy of given elements.
 
-        @param pElement an array of elements
+        @param pElements an array of elements
         @param len length of array
     */
     inline Sequence( const E * pElements, sal_Int32 len );
