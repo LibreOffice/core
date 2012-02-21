@@ -1271,11 +1271,7 @@ void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLin
         (*pCurEntry)[ m_sListLang ] = rText;
 
     if ( Export::isSourceLanguage( m_sListLang ) ) {
-        if( nList == LIST_PAIRED ){
-            (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
-        }
-        else
-            (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
+        (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
 
         pList->NewSourceLanguageListEntry();
     }
