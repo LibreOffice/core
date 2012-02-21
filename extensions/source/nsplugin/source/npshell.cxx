@@ -361,7 +361,10 @@ MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
 MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;" );
 
-const char*
+#ifndef HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION
+const
+#endif
+char*
 NPP_GetMIMEDescription(void)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Netscape Plugin,  NPP_GetMIMEDescription:%s.\n", pMimeTypes);
