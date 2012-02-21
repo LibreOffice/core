@@ -88,6 +88,7 @@ PATCH_FILES = \
     patches/nss-linux3.patch \
     patches/clang_add_nsCaseInsensitiveStringComparator_default_constructor.patch \
     patches/clang_missing_this_pointers.patch \
+    patches/seamonkey-1.1.14.source-typeof.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
