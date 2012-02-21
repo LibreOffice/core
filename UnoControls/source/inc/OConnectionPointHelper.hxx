@@ -49,9 +49,6 @@
 
 namespace unocontrols{
 
-#define CSS_UNO     ::com::sun::star::uno
-#define CSS_LANG    ::com::sun::star::lang
-
 //______________________________________________________________________________________________________________
 //  defines
 //______________________________________________________________________________________________________________
@@ -60,7 +57,7 @@ namespace unocontrols{
 //  class declaration OConnectionPointHelper
 //______________________________________________________________________________________________________________
 
-class OConnectionPointHelper    :   public  CSS_LANG::XConnectionPoint
+class OConnectionPointHelper    :   public  ::com::sun::star::lang::XConnectionPoint
                                 ,   public  ::cppu::OWeakObject
 {
 
@@ -89,7 +86,7 @@ public:
 
     OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
-                            CSS_UNO::Type                       aType                       );
+                            ::com::sun::star::uno::Type                       aType                       );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -123,8 +120,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -175,8 +172,8 @@ public:
         @onerror
     */
 
-    virtual CSS_UNO::Type SAL_CALL getConnectionType()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Type SAL_CALL getConnectionType()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -191,8 +188,8 @@ public:
         @onerror
     */
 
-    virtual CSS_UNO::Reference< CSS_LANG::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -208,11 +205,11 @@ public:
     */
 
     virtual void SAL_CALL advise(
-        const CSS_UNO::Reference< CSS_UNO::XInterface >& xListener
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener
     ) throw (
-        CSS_LANG::ListenerExistException,
-        CSS_LANG::InvalidListenerException ,
-        CSS_UNO::RuntimeException
+        ::com::sun::star::lang::ListenerExistException,
+        ::com::sun::star::lang::InvalidListenerException ,
+        ::com::sun::star::uno::RuntimeException
     );
 
     /**_________________________________________________________________________________________________________
@@ -228,8 +225,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL unadvise( const CSS_UNO::Reference< CSS_UNO::XInterface >& xListener )
-        throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL unadvise( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -244,8 +241,8 @@ public:
         @onerror
     */
 
-    virtual CSS_UNO::Sequence< CSS_UNO::Reference< CSS_UNO::XInterface > > SAL_CALL getConnections()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getConnections()
+        throw( ::com::sun::star::uno::RuntimeException );
 
 //______________________________________________________________________________________________________________
 //  private methods
@@ -290,17 +287,13 @@ private:
 private:
 
     ::osl::Mutex&                                                   m_aSharedMutex              ;
-    CSS_UNO::WeakReference< CSS_LANG::XConnectionPointContainer >   m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XConnectionPointContainer >   m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                m_pContainerImplementation  ;
-    CSS_UNO::Type                                                   m_aInterfaceType            ;
-    CSS_UNO::Reference< CSS_UNO::XInterface >                       m_xLock                     ;
+    ::com::sun::star::uno::Type                                                   m_aInterfaceType            ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xLock                     ;
 
 };  // class OConnectionPointHelper
-
-// The namespace aliases are only used in this header
-#undef CSS_UNO
-#undef CSS_LANG
 
 }   // namespace unocontrols
 

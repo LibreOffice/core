@@ -467,7 +467,7 @@ static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 void AnalysisAddIn::InitDefLocales( void )
 {
-    pDefLocales = new CSS::lang::Locale[ nNumOfLoc ];
+    pDefLocales = new ::com::sun::star::lang::Locale[ nNumOfLoc ];
 
     for( sal_uInt32 n = 0 ; n < nNumOfLoc ; n++ )
     {
@@ -477,7 +477,7 @@ void AnalysisAddIn::InitDefLocales( void )
 }
 
 
-inline const CSS::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
+inline const ::com::sun::star::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
 {
     if( !pDefLocales )
         InitDefLocales();
@@ -501,11 +501,11 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
 
     SEQofLocName                aRet( nCount );
 
-    CSS::sheet::LocalizedName*  pArray = aRet.getArray();
+    ::com::sun::star::sheet::LocalizedName*  pArray = aRet.getArray();
 
     for( sal_uInt32 n = 0 ; n < nCount ; n++ )
     {
-        pArray[ n ] = CSS::sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
+        pArray[ n ] = ::com::sun::star::sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
     }
 
     return aRet;
@@ -1184,7 +1184,7 @@ STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( ::com::sun::star::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
     ComplexList     z_list;
 

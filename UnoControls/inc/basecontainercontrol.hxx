@@ -56,18 +56,13 @@
 
 namespace unocontrols{
 
-#define CSS_UNO         ::com::sun::star::uno
-#define CSS_AWT         ::com::sun::star::awt
-#define CSS_LANG        ::com::sun::star::lang
-#define CSS_CONTAINER   ::com::sun::star::container
-
 //____________________________________________________________________________________________________________
 //  structs, types, forwards
 //____________________________________________________________________________________________________________
 
 struct IMPL_ControlInfo
 {
-    CSS_UNO::Reference< CSS_AWT::XControl > xControl ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl ;
     ::rtl::OUString                         sName    ;
 };
 
@@ -75,8 +70,8 @@ struct IMPL_ControlInfo
 //  classes
 //____________________________________________________________________________________________________________
 
-class BaseContainerControl  : public CSS_AWT::XControlModel
-                            , public CSS_AWT::XControlContainer
+class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
+                            , public ::com::sun::star::awt::XControlContainer
                             , public BaseControl
 {
 
@@ -103,7 +98,7 @@ public:
         @onerror    -
     */
 
-       BaseContainerControl( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
+       BaseContainerControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -137,9 +132,9 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual CSS_UNO::Any SAL_CALL queryInterface(
-        const CSS_UNO::Type& aType
-    ) throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XTypeProvider
@@ -158,8 +153,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XAggregation
@@ -178,9 +173,9 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Any SAL_CALL queryAggregation(
-        const CSS_UNO::Type& aType
-    ) throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
+        const ::com::sun::star::uno::Type& aType
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XControl
@@ -200,9 +195,9 @@ public:
     */
 
     virtual void SAL_CALL createPeer(
-        const CSS_UNO::Reference< CSS_AWT::XToolkit >&      xToolkit ,
-        const CSS_UNO::Reference< CSS_AWT::XWindowPeer >&   xParent
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -218,8 +213,8 @@ public:
     */
 
     virtual sal_Bool SAL_CALL setModel(
-        const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -234,8 +229,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XComponent
@@ -254,7 +249,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XEventListener
@@ -273,7 +268,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL disposing( const CSS_LANG::EventObject& rEvent ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XControlContainer
@@ -294,8 +289,8 @@ public:
 
     virtual void SAL_CALL addControl(
         const ::rtl::OUString&                            sName    ,
-        const CSS_UNO::Reference< CSS_AWT::XControl >&    xControl
-    ) throw( CSS_UNO::RuntimeException  );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >&    xControl
+    ) throw( ::com::sun::star::uno::RuntimeException  );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -311,8 +306,8 @@ public:
     */
 
     virtual void SAL_CALL addContainerListener(
-        const CSS_UNO::Reference< CSS_CONTAINER::XContainerListener >& xListener
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -328,8 +323,8 @@ public:
     */
 
     virtual void SAL_CALL removeControl(
-        const CSS_UNO::Reference< CSS_AWT::XControl >& xControl
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -345,8 +340,8 @@ public:
     */
 
     virtual void SAL_CALL removeContainerListener(
-        const CSS_UNO::Reference< CSS_CONTAINER::XContainerListener >& xListener
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -363,7 +358,7 @@ public:
 
     virtual void SAL_CALL setStatusText(
         const ::rtl::OUString& sStatusText
-    ) throw( CSS_UNO::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -378,9 +373,9 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Reference< CSS_AWT::XControl > SAL_CALL getControl(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
         const ::rtl::OUString& sName
-    ) throw( CSS_UNO::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -395,8 +390,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Sequence< CSS_UNO::Reference< CSS_AWT::XControl > > SAL_CALL getControls()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XUnoControlContainer
@@ -416,8 +411,8 @@ public:
     */
 
     virtual void SAL_CALL addTabController(
-        const CSS_UNO::Reference< CSS_AWT::XTabController >& xTabController
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& xTabController
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -433,8 +428,8 @@ public:
     */
 
     virtual void SAL_CALL removeTabController(
-        const CSS_UNO::Reference< CSS_AWT::XTabController >& xTabController
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& xTabController
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -450,8 +445,8 @@ public:
     */
 
     virtual void SAL_CALL setTabControllers(
-        const CSS_UNO::Sequence< CSS_UNO::Reference< CSS_AWT::XTabController > >& xTabControllers
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >& xTabControllers
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -466,8 +461,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Sequence< CSS_UNO::Reference< CSS_AWT::XTabController > > SAL_CALL getTabControllers()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > SAL_CALL getTabControllers()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XWindow
@@ -486,7 +481,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException );
 
 //____________________________________________________________________________________________________________
 //  protected methods
@@ -507,8 +502,8 @@ protected:
         @onerror
     */
 
-    virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
-        const CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParentPeer
+    virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
     );
 
     /**_______________________________________________________________________________________________________
@@ -527,7 +522,7 @@ protected:
     virtual void impl_paint(
         sal_Int32                                           nX ,
         sal_Int32                                           nY ,
-        const   CSS_UNO::Reference< CSS_AWT::XGraphics >&   xGraphics
+        const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&   xGraphics
     );
 
 //____________________________________________________________________________________________________________
@@ -575,17 +570,11 @@ private:
     ::std::vector< IMPL_ControlInfo* > maControlInfoList;
 
     // list of references of XTabController to hold tab-order in this container
-    CSS_UNO::Sequence< CSS_UNO::Reference< CSS_AWT::XTabController > >  m_xTabControllerList    ;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >  m_xTabControllerList    ;
 
     ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners            ;
 
 };  // class BaseContainerControl
-
-// The namespace aliases are only used in this header
-#undef CSS_UNO
-#undef CSS_AWT
-#undef CSS_LANG
-#undef CSS_CONTAINER
 
 }   // namespace unocontrols
 

@@ -51,19 +51,19 @@ class ConvertDataList;
 class ResMgr;
 
 
-REF( CSS::uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance( const REF( CSS::lang::XMultiServiceFactory )& );
+REF( ::com::sun::star::uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance( const REF( ::com::sun::star::lang::XMultiServiceFactory )& );
 
 
 class AnalysisAddIn : public cppu::WeakImplHelper5<
-                            CSS::sheet::XAddIn,
-                            CSS::sheet::XCompatibilityNames,
-                            CSS::sheet::addin::XAnalysis,
-                            CSS::lang::XServiceName,
-                            CSS::lang::XServiceInfo >
+                            ::com::sun::star::sheet::XAddIn,
+                            ::com::sun::star::sheet::XCompatibilityNames,
+                            ::com::sun::star::sheet::addin::XAnalysis,
+                            ::com::sun::star::lang::XServiceName,
+                            ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    CSS::lang::Locale           aFuncLoc;
-    CSS::lang::Locale*          pDefLocales;
+    ::com::sun::star::lang::Locale           aFuncLoc;
+    ::com::sun::star::lang::Locale*          pDefLocales;
     FuncDataList*               pFD;
     double*                     pFactDoubles;
     ConvertDataList*            pCDL;
@@ -75,18 +75,18 @@ private:
     STRING                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
     STRING                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
     void                        InitDefLocales( void );
-    inline const CSS::lang::Locale& GetLocale( sal_uInt32 nInd );
+    inline const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData( void );
 
                                 /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
     sal_Int32                   getDateMode(
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
-                                    const CSS::uno::Any& rAny )
-                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
+                                    const ::com::sun::star::uno::Any& rAny )
+                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
                                 AnalysisAddIn(
-                                    const CSS::uno::Reference< CSS::lang::XMultiServiceFactory >& xServiceFact );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFact );
     virtual                     ~AnalysisAddIn();
 
     double                      FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
@@ -107,8 +107,8 @@ public:
     virtual SEQofLocName SAL_CALL getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const CSS::lang::Locale& eLocale ) THROWDEF_RTE;
-    virtual CSS::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;
+    virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) THROWDEF_RTE;
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;
 
                                 // XServiceName
     virtual STRING SAL_CALL     getServiceName(  ) THROWDEF_RTE;

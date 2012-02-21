@@ -61,7 +61,7 @@ inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
-sal_Int32           GetNullDate( const REF( CSS::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
+sal_Int32           GetNullDate( const REF( ::com::sun::star::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
 sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
@@ -320,15 +320,15 @@ protected:
     void                        Insert( sal_Int32 nDay );
     void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
     void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     const ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Any& rHolAny,
+                                    const ::com::sun::star::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    sal_Bool bInsertOnWeekend ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
                                 SortedIndividualInt32List();
@@ -347,10 +347,10 @@ public:
                                     @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOptions,
-                                    const CSS::uno::Any& rHolAny,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const ::com::sun::star::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    sal_Bool bInsertOnWeekend ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
 
@@ -362,29 +362,29 @@ protected:
     inline void                 ListAppend( double fValue ) { MyList::Append( new double( fValue ) ); }
 
     using MyList::Append;
-    inline void                 Append( double fValue ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException )
+    inline void                 Append( double fValue ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException )
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Any& rAny,
-                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Any& rAny,
+                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Sequence< CSS::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Sequence< CSS::uno::Sequence< CSS::uno::Any > >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
     virtual                     ~ScaDoubleList();
@@ -396,21 +396,21 @@ public:
     inline const double*        First() { return static_cast< const double* >( MyList::First() ); }
     inline const double*        Next()  { return static_cast< const double* >( MyList::Next() ); }
 
-    void                        Append( const CSS::uno::Sequence< CSS::uno::Sequence< double > >& rValueArr )
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
-    void                        Append( const CSS::uno::Sequence< CSS::uno::Sequence< sal_Int32 > >& rValueArr )
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+    void                        Append( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& rValueArr )
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+    void                        Append( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& rValueArr )
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
-                                    const CSS::uno::Sequence< CSS::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOpt,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty = sal_True ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
 
@@ -421,7 +421,7 @@ class ScaDoubleListGT0 : public ScaDoubleList
 {
 public:
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
 
@@ -432,7 +432,7 @@ class ScaDoubleListGE0 : public ScaDoubleList
 {
 public:
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
 
@@ -945,7 +945,7 @@ private:
     sal_Int32                   getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
 
                                 /// Adds/subtracts the given count of years, does not adjust day.
-    void                        doAddYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException );
+    void                        doAddYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
 
 public:
                                 ScaDate();
@@ -967,17 +967,17 @@ public:
     inline sal_uInt16           getYear() const     { return nYear; };
 
                                 /// adds/subtracts the given count of months, adjusts day
-    void                        addMonths( sal_Int32 nMonthCount ) throw( CSS::lang::IllegalArgumentException );
+    void                        addMonths( sal_Int32 nMonthCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
 
                                 /// sets the given year, adjusts day
     inline void                 setYear( sal_uInt16 nNewYear );
                                 /// adds/subtracts the given count of years, adjusts day
-    inline void                 addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException );
+    inline void                 addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
 
                                 /// @return  the internal number of the current date
     sal_Int32                   getDate( sal_Int32 nNullDate ) const;
                                 /// @return  the number of days between the two dates
-    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( CSS::lang::IllegalArgumentException );
+    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( ::com::sun::star::lang::IllegalArgumentException );
 
     sal_Bool                    operator<( const ScaDate& rCmp ) const;
     inline sal_Bool             operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
@@ -1001,7 +1001,7 @@ inline void ScaDate::setYear( sal_uInt16 nNewYear )
     setDay();
 }
 
-inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException )
+inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException )
 {
     doAddYears( nYearCount );
     setDay();
@@ -1014,7 +1014,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalA
 class ScaAnyConverter
 {
 private:
-    CSS::uno::Reference< CSS::util::XNumberFormatter > xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > xFormatter;
     sal_Int32                   nDefaultFormat;
     sal_Bool                    bHasValidFormat;
 
@@ -1025,17 +1025,17 @@ private:
                                     @return  the converted double value. */
     double                      convertToDouble(
                                     const ::rtl::OUString& rString ) const
-                                throw( CSS::lang::IllegalArgumentException );
+                                throw( ::com::sun::star::lang::IllegalArgumentException );
 
 public:
                                 ScaAnyConverter(
-                                    const CSS::uno::Reference< CSS::lang::XMultiServiceFactory >& xServiceFact );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFact );
                                 ~ScaAnyConverter();
 
                                 /// Initializing with current language settings
     void                        init(
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet )
-                                throw( CSS::uno::RuntimeException );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet )
+                                throw( ::com::sun::star::uno::RuntimeException );
 
                                 /** Converts an Any to double (without initialization).
                                     The Any can be empty or contain a double or string.
@@ -1045,8 +1045,8 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getDouble(
                                     double& rfResult,
-                                    const CSS::uno::Any& rAny ) const
-                                throw( CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Any& rAny ) const
+                                throw( ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1056,9 +1056,9 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getDouble(
                                     double& rfResult,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
-                                    const CSS::uno::Any& rAny )
-                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
+                                    const ::com::sun::star::uno::Any& rAny )
+                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1066,10 +1066,10 @@ public:
                                         on other Any types or on invalid strings.
                                     @return  the value of the double or string or fDefault if the Any or string is empty */
     double                      getDouble(
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
-                                    const CSS::uno::Any& rAny,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
+                                    const ::com::sun::star::uno::Any& rAny,
                                     double fDefault )
-                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1079,9 +1079,9 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getInt32(
                                     sal_Int32& rnResult,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
-                                    const CSS::uno::Any& rAny )
-                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
+                                    const ::com::sun::star::uno::Any& rAny )
+                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1089,10 +1089,10 @@ public:
                                         on other Any types or on invalid values or strings.
                                     @return  the truncated value of the double or string or nDefault if the Any or string is empty */
     sal_Int32                   getInt32(
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xPropSet,
-                                    const CSS::uno::Any& rAny,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
+                                    const ::com::sun::star::uno::Any& rAny,
                                     sal_Int32 nDefault )
-                                throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
+                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
 
