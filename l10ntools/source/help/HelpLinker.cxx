@@ -539,7 +539,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
 
-        const std::string documentBaseId = streamTable.document_id;
         std::string documentPath = streamTable.document_path;
         if (documentPath.find("/") == 0)
             documentPath = documentPath.substr(1);
