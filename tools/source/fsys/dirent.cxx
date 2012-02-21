@@ -1694,7 +1694,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 
                 // das Dir selbst erzeugen
                 if ( pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
-                         pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
                          pNewDir->eFlag == FSYS_FLAG_VOLUME )
                         return sal_True;
                 else
