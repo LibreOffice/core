@@ -136,7 +136,7 @@ my %replaceable = (
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
-my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3' );
+my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3', 'pythonloader.uno', 'pyuno', 'libpyuno' );
 
 sub sniff_target($)
 {
