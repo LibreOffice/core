@@ -204,7 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ))
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-$(eval $(call gb_Library_use_external,svx,icuuc))
+$(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/fmcomp/dbaobjectex \
     svx/source/form/databaselocationinput \
     svx/source/form/dbcharsethelper \
