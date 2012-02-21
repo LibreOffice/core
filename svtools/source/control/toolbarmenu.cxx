@@ -1015,7 +1015,7 @@ void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
+void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool /*bMBDown*/ )
 {
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
@@ -1038,19 +1038,9 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
                 {
                     if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) )
                     {
-                        if( bMBDown )
+                        if( nEntry != mpImpl->mnHighlightedEntry )
                         {
-                            if( nEntry != mpImpl->mnHighlightedEntry )
-                            {
-                                implChangeHighlightEntry( nEntry );
-                            }
-                        }
-                        else
-                        {
-                            if ( nEntry != mpImpl->mnHighlightedEntry )
-                            {
-                                implChangeHighlightEntry( nEntry );
-                            }
+                            implChangeHighlightEntry( nEntry );
                         }
                         bHighlighted = true;
                     }
