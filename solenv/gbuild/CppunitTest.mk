@@ -178,8 +178,21 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 
 endef
 
+# Given a list of component files, filter out those corresponding
+# to libraries not built in this configuration.
+define gb_CppunitTest__filter_not_built_components
+$(filter-out \
+	$(if $(filter $(OS),IOS), \
+		basic/util/sb \
+	    sw/util/vbaswobj \
+	    scripting/source/basprov/basprov \
+	    scripting/util/scriptframe) \
+	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),, \
+	    dbaccess/util/dba),$(1))
+endef
+
 define gb_CppunitTest_add_components
-$(foreach component,$(2),$(call gb_CppunitTest_add_component,$(1),$(component)))
+$(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(call gb_CppunitTest_add_component,$(1),$(component)))
 
 endef
 

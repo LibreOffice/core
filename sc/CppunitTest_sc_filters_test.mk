@@ -87,15 +87,13 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
-    $(if $(filter-out $(OS),IOS), \
-	    basic/util/sb) \
+    basic/util/sb \
     chart2/source/controller/chartcontroller \
     chart2/source/tools/charttools \
     chart2/source/model/chartmodel \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    $(if $(filter-out $(OS),IOS), \
-	    dbaccess/util/dba) \
+    dbaccess/util/dba \
     eventattacher/source/evtatt \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \

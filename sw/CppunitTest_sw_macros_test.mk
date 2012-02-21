@@ -136,6 +136,6 @@ $(eval $(call gb_CppunitTest_set_args,sw_macros_test,\
 $(call gb_CppunitTest_get_target,sw_macros_test) : \
     $(call gb_Library_get_target,localedata_en) \
     $(call gb_Library_get_target,msword) \
-    $(call gb_Library_get_target,vbaswobj) \
+    $(if $(filter-out $(OS),IOS),$(call gb_Library_get_target,vbaswobj)) \
 
 # vim: set noet sw=4 ts=4:

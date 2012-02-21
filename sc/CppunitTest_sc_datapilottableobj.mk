@@ -90,12 +90,10 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_datapilottableobj,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_datapilottableobj,\
-    $(if $(filter-out $(OS),IOS), \
-	    basic/util/sb) \
+	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    $(if $(filter-out $(OS),IOS), \
-	    dbaccess/util/dba) \
+    dbaccess/util/dba \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
