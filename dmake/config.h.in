@@ -9,6 +9,9 @@
 /* Enables the use of spawn instead of fork/exec if it is supported. */
 #undef ENABLE_SPAWN
 
+/* Define to 1 if you have the <cygwin/process.h> header file. */
+#undef HAVE_CYGWIN_PROCESS_H
+
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H
