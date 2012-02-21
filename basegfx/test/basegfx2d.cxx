@@ -291,14 +291,6 @@ class b2drange : public CppUnit::TestFixture
 {
 private:
 public:
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     void check()
     {
         CPPUNIT_ASSERT_MESSAGE("simple range rounding from double to integer",
@@ -318,12 +310,6 @@ class b2dpolyrange : public CppUnit::TestFixture
 {
 private:
 public:
-    void setUp()
-    {}
-
-    void tearDown()
-    {}
-
     void check()
     {
         B2DPolyRange aRange;
@@ -734,15 +720,6 @@ public:
 class b2dpoint : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     // this is only demonstration code
     void EmptyMethod()
@@ -763,15 +740,6 @@ public:
 class b2dpolygon : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     void testBasics()
     {
@@ -838,15 +806,6 @@ public:
 class b2dpolygontools : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     // this is only demonstration code
     void testIsRectangle()
@@ -927,15 +886,6 @@ public:
 class b2dpolypolygon : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     void EmptyMethod()
     {
@@ -953,15 +903,6 @@ public:
 class b1Xrange : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     template<class Type> void implCheck()
     {
         // test interval axioms
@@ -1028,15 +969,6 @@ public:
 class b1ibox : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     void TestBox()
     {
         // test axioms - markedly different from proper mathematical
@@ -1096,15 +1028,6 @@ public:
 class b2Xrange : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     template<class Type> void implCheck()
     {
         // cohen sutherland clipping
@@ -1145,15 +1068,6 @@ public:
 class b2ibox : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     void TestBox()
     {
         // cohen sutherland clipping
@@ -1187,15 +1101,6 @@ public:
 class b2dtuple : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     // this is only demonstration code
     void EmptyMethod()
@@ -1234,16 +1139,6 @@ public:
         maMagenta(1,0,1),
         maCyan(0,1,1)
     {}
-
-
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
 
     // insert your test code here.
     void hslTest()
