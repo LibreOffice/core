@@ -299,7 +299,7 @@ public:
       the strings and return a value indicating their relationship.
       This function can't be used for language specific sorting.
 
-      @param    str         the object to be compared.
+      @param    rObj        the object to be compared.
       @param    maxLength   the maximum count of characters to be compared.
       @return   0 - if both strings are equal
                 < 0 - if this string is less than the string argument

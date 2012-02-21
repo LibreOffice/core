@@ -78,7 +78,7 @@ public:
                           is getCount() -1, than it must be an indexed acces to the property array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.
-       @param rAttributes is an out parameter filled with attributes of the property with the
+       @param pAttributes is an out parameter filled with attributes of the property with the
                               handle nHandle. May be NULL.
        @return True, if the handle exist, otherwise false.
      */
@@ -160,7 +160,7 @@ public:
                           Otherwise it is a linear search through the array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.
-       @param rAttributes is an out parameter filled with attributes of the property with the
+       @param pAttributes is an out parameter filled with attributes of the property with the
                               handle nHandle. May be NULL.
        @return True, if the handle exist, otherwise false.
      */
@@ -274,7 +274,7 @@ public:
     /**
       Insert an element in the container specified with the key. The position is not specified.
       @param rKey       the id of the container.
-      @param rxIFace    the added interface. It is allowed to insert null or
+      @param r          the added interface. It is allowed to insert null or
                          the same pointer more than once.
       @return the new count of elements in the container.
      */

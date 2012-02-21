@@ -404,7 +404,7 @@ public:
         The argument is appended to the contents of this string buffer.
         The length of this string buffer increases by <code>1</code>.
 
-        @param   ch   a <code>char</code>.
+        @param   c   a <code>char</code>.
         @return  this string buffer.
      */
     OStringBuffer & append(sal_Char c)
@@ -514,7 +514,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
+        @param      str      a character array.
         @return     this string buffer.
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
@@ -536,8 +536,8 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
-        @param       len     the number of characters to append.
+        @param      str      a character array.
+        @param      len      the number of characters to append.
         @return     this string buffer.
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
@@ -583,7 +583,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a <code>char</code>.
+        @param      c        a <code>char</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Char c)
@@ -605,7 +605,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        an <code>sal_Int32</code>.
+        @param      i        an <code>sal_Int32</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int32 i, sal_Int16 radix = 10 )
@@ -628,7 +628,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>long</code>.
+        @param      l        a <code>long</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int64 l, sal_Int16 radix = 10 )
@@ -651,7 +651,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>float</code>.
+        @param      f        a <code>float</code>.
         @return     this string buffer.
      */
     OStringBuffer insert(sal_Int32 offset, float f)
@@ -674,7 +674,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>double</code>.
+        @param      d        a <code>double</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, double d)

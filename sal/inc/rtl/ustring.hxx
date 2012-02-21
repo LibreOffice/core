@@ -1786,7 +1786,7 @@ inline OUString OStringToOUString( const OString & rStr,
     The lengths of the two strings may differ (e.g., for double-byte
     encodings, UTF-7, UTF-8).
 
-    @param rStr
+    @param rUnicode
     an OUString to convert.
 
     @param encoding

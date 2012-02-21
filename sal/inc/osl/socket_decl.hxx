@@ -142,7 +142,7 @@ namespace osl
         inline oslSocketAddr SAL_CALL getHandle() const;
 
         /** Get the hostname for the local interface.
-            @param after the call *pResult contains osl_Socket_Ok on success or
+            @param pResult after the call *pResult contains osl_Socket_Ok on success or
                    an error on failure.
             @return the hostname
         */
@@ -440,7 +440,7 @@ namespace osl
 
             @param pBuffer Pointer to a Buffer which contains the attribute-value.
 
-            @param BufferSize contains the length of the Buffer.
+            @param BufferLen contains the length of the Buffer.
 
             @param Level selects the level for which an option should be changed.
             Valid values are:
@@ -600,7 +600,7 @@ namespace osl
 
         /** Connects the socket to a (remote) host.
             @param TargetHost The address of the target.
-            @param pTimeOut The timeout for blocking. If 0, a default system dependent timeout
+            @param pTimeout The timeout for blocking. If 0, a default system dependent timeout
                             us used.
             @return <code> osl_Socket_Ok</code> if connected successfully,
             <code>osl_Socket_TimedOut</code> on timeout,
