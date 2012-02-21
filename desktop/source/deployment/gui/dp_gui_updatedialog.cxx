@@ -917,8 +917,6 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
                 dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
                 aItem[1] = aInfoset.getVersion();
             }
-            else if ( p->m_eKind == DISABLED_UPDATE )
-                continue;
             else
                 continue;
 
