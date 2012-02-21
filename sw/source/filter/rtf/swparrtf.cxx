@@ -2195,8 +2195,9 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             ((SwFmtCharFmt*)pCharFmt)->GetCharFmt() )
         {
             const String& rName = ((SwFmtCharFmt*)pCharFmt)->GetCharFmt()->GetName();
-            SvxRTFStyleType* pStyle = GetStyleTbl().First();
-            do {
+            for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
+            {
+                SvxRTFStyleType* pStyle = it->second;
                 if( pStyle->bIsCharFmt && pStyle->sName == rName )
                 {
                     // alle Attribute, die schon vom Style definiert sind, aus dem
@@ -2218,7 +2219,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     }
                     break;
                 }
-            } while( 0 != (pStyle = GetStyleTbl().Next()) );
+            }
 
             pDoc->InsertPoolItem(aPam, *pCharFmt, 0);
             rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
@@ -2734,7 +2735,7 @@ void SwRTFParser::ReadDocControls( int nToken )
 void SwRTFParser::MakeStyleTab()
 {
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections
-    if( GetStyleTbl().Count() )
+    if( !GetStyleTbl().empty() )
     {
         sal_uInt16 nValidOutlineLevels = 0;
         if( !IsNewDoc() )
@@ -2746,9 +2747,10 @@ void SwRTFParser::MakeStyleTab()
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
 
-        SvxRTFStyleType* pStyle = GetStyleTbl().First();
-        do {
-            sal_uInt16 nNo = sal_uInt16( GetStyleTbl().GetCurKey() );
+        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
+        {
+            sal_uInt16 nNo = it->first;
+            SvxRTFStyleType* pStyle = it->second;
             if( pStyle->bIsCharFmt )
             {
                 if(aCharFmtTbl.find( nNo ) == aCharFmtTbl.end())
@@ -2761,7 +2763,7 @@ void SwRTFParser::MakeStyleTab()
                 MakeStyle( nNo, *pStyle );
             }
 
-        } while( 0 != (pStyle = GetStyleTbl().Next()) );
+        }
         bStyleTabValid = sal_True;
     }
 }
@@ -3996,7 +3998,10 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     sal_uInt16 nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
-        SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
+        SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+        SvxRTFStyleType* pDerivedStyle = NULL;
+        if ( styleIter != GetStyleTbl().end() )
+            pDerivedStyle = styleIter->second;
 
         SwTxtFmtColl* pDerivedColl = NULL;
         std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(nStyleNo);
@@ -4041,10 +4046,11 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
         if( iter == aTxtCollTbl.end())            // noch nicht vorhanden, also anlegen
         {
             // ist die ueberhaupt als Style vorhanden ?
-            SvxRTFStyleType* pMkStyle = GetStyleTbl().Get( nStyleNo );
-            pNext = pMkStyle
-                    ? MakeStyle( nStyleNo, *pMkStyle )
-                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+            SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+            if ( styleIter != GetStyleTbl().end() )
+                pNext = MakeStyle( nStyleNo, *styleIter->second );
+            else
+                pNext = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
         else
             pNext = iter->second;
@@ -4067,7 +4073,11 @@ SwCharFmt* SwRTFParser::MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rS
     sal_uInt16 nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
-        SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
+        SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+        SvxRTFStyleType* pDerivedStyle = NULL;
+        if ( styleIter != GetStyleTbl().end() )
+            pDerivedStyle = styleIter->second;
+
         SwCharFmt* pDerivedFmt = NULL;
         std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find( nStyleNo );
 

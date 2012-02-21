@@ -585,7 +585,7 @@ void SwRTFParser::ReadListOverrideTable()
     }
 
     // search the outline numrule and set it into the doc
-    if( GetStyleTbl().Count() )
+    if( !GetStyleTbl().empty() )
     {
         if( !bStyleTabValid )
             MakeStyleTab();
@@ -594,11 +594,12 @@ void SwRTFParser::ReadListOverrideTable()
         std::map<sal_Int32,SwTxtFmtColl*>::const_iterator iterColl;
         sal_uInt16 nRulePos( USHRT_MAX );
         const SwNumRule *pNumRule = 0;
-        SvxRTFStyleType* pStyle = GetStyleTbl().First();
+        SvxRTFStyleTbl::iterator it = GetStyleTbl().begin();
         do {
+            SvxRTFStyleType* pStyle = it->second;
             if ( MAXLEVEL > pStyle->nOutlineNo )
             {
-                iterColl = aTxtCollTbl.find( (sal_uInt16)GetStyleTbl().GetCurKey() );
+                iterColl = aTxtCollTbl.find( it->first );
                 if ( iterColl != aTxtCollTbl.end() )
                 {
                     const SfxItemState eItemState =
@@ -635,7 +636,8 @@ void SwRTFParser::ReadListOverrideTable()
 
             pStyle->aAttrSet.ClearItem( FN_PARAM_NUM_LEVEL );
 
-        } while( 0 != (pStyle = GetStyleTbl().Next()) );
+            ++it;
+        } while( it != GetStyleTbl().end() );
     }
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
@@ -723,17 +725,15 @@ void SwRTFParser::RemoveUnusedNumRules()
 const Font* SwRTFParser::FindFontOfItem( const SvxFontItem& rItem ) const
 {
     SvxRTFFontTbl& rFntTbl = ((SwRTFParser*)this)->GetFontTbl();
-    const Font* pFnt = rFntTbl.First();
-    while( pFnt )
+    for (SvxRTFFontTbl::iterator it = rFntTbl.begin(); it != rFntTbl.end(); ++it)
     {
+        const Font* pFnt = it->second;
         if( pFnt->GetFamily() == rItem.GetFamily() &&
             pFnt->GetName() == rItem.GetFamilyName() &&
             pFnt->GetStyleName() == rItem.GetStyleName() &&
             pFnt->GetPitch() == rItem.GetPitch() &&
             pFnt->GetCharSet() == rItem.GetCharSet() )
             return pFnt;
-
-        pFnt = rFntTbl.Next();
     }
     return 0;
 }

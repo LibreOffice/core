@@ -371,10 +371,11 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
-        SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-        DBG_ASSERT( pS, "Template not defined in RTF!" );
-        if ( pS )
+        SvxRTFStyleTbl::iterator it = GetStyleTbl().find( rSet.StyleNo() );
+        DBG_ASSERT( it != GetStyleTbl().end(), "Template not defined in RTF!" );
+        if ( it != GetStyleTbl().end() )
         {
+            SvxRTFStyleType* pS = it->second;
             pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pS->sName, SFX_STYLE_FAMILY_ALL ) );
             nOutlLevel = pS->nOutlineNo;
         }
@@ -433,11 +434,17 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
 SvxRTFStyleType* EditRTFParser::FindStyleSheet( const XubString& rName )
 {
-    SvxRTFStyleType* pS = GetStyleTbl().First();
-    while ( pS && ( pS->sName != rName ) )
-        pS = GetStyleTbl().Next();
+    SvxRTFStyleTbl aTable = GetStyleTbl();
+    SvxRTFStyleTbl::iterator it = aTable.begin();
+    while ( it != aTable.end() )
+    {
+        SvxRTFStyleType* pS = it->second;
+        if ( pS->sName == rName )
+            return pS;
+        ++it;
+    }
 
-    return pS;
+    return NULL;
 }
 
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
@@ -451,9 +458,13 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     String aParent;
     if ( pRTFStyle->nBasedOn )
     {
-        SvxRTFStyleType* pS = GetStyleTbl().Get( pRTFStyle->nBasedOn );
-        if ( pS && ( pS !=pRTFStyle ) )
-            aParent = pS->sName;
+        SvxRTFStyleTbl::iterator it = GetStyleTbl().find( pRTFStyle->nBasedOn );
+        if ( it != GetStyleTbl().end())
+        {
+            SvxRTFStyleType* pS = it->second;
+            if ( pS && ( pS !=pRTFStyle ) )
+                aParent = pS->sName;
+        }
     }
 
     pStyle = (SfxStyleSheet*) &pImpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA );
@@ -484,12 +495,10 @@ void EditRTFParser::CreateStyleSheets()
     // the SvxRTFParser haa  now created the template...
     if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
-        SvxRTFStyleType* pRTFStyle = GetStyleTbl().First();
-        while ( pRTFStyle )
+        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
         {
+            SvxRTFStyleType* pRTFStyle = it->second;
             CreateStyleSheet( pRTFStyle );
-
-            pRTFStyle = GetStyleTbl().Next();
         }
     }
 }

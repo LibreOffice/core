@@ -29,7 +29,6 @@
 #ifndef _SVXRTF_HXX
 #define _SVXRTF_HXX
 
-#include <tools/table.hxx>
 #include <tools/string.hxx>
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
@@ -39,6 +38,8 @@
 #include <deque>
 #include <utility>
 #include <vector>
+#include "boost/ptr_container/ptr_map.hpp"
+
 class Font;
 class Color;
 class Graphic;
@@ -85,8 +86,8 @@ public:
 
 typedef Color* ColorPtr;
 typedef std::deque< ColorPtr > SvxRTFColorTbl;
-DECLARE_TABLE( SvxRTFFontTbl, Font* )
-DECLARE_TABLE( SvxRTFStyleTbl, SvxRTFStyleType* )
+typedef boost::ptr_map<short, Font> SvxRTFFontTbl;
+typedef boost::ptr_map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
 typedef SvxRTFItemStackType* SvxRTFItemStackTypePtr;
 SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1 )
 
