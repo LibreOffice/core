@@ -862,11 +862,12 @@ void fillAttnum2attnameMap(
 ::rtl::OString extractSingleTableFromSelect( const OStringVector &vec )
 {
     rtl::OString ret;
-    size_t token = 0;
 
     if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             vec[0].pData->buffer, vec[0].pData->length, "select" , 6 , 6 ) )
     {
+        size_t token = 0;
+
         for( token = 1; token < vec.size() ; token ++ )
         {
             if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
