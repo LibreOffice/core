@@ -1055,9 +1055,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( );
                     try
                     {
-#if DEBUG
-                        rtl::OUString sText( xTextRange->getString( ) );
-#endif
                         xObj->attach( xTextRange );
                     }
                     catch ( uno::RuntimeException& )
