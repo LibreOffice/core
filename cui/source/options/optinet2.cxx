@@ -284,7 +284,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         }
     }
 
-    catch (const container::NoSuchElementException) {
+    catch (const container::NoSuchElementException&) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
