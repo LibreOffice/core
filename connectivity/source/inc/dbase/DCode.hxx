@@ -50,7 +50,7 @@ namespace connectivity
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
         };
 
-        // Attribute aus einer Ergebniszeile
+        // Attributes from a result row
         class OFILEOperandAttr : public file::OOperandAttr
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xIndex;

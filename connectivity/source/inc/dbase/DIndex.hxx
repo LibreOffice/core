@@ -59,43 +59,42 @@ namespace connectivity
 
         public:
             //==================================================================
-            // Kopfsatz-Struktur, verbleibt im Speicher
+            // Header struct - stays in memory
             //==================================================================
             struct NDXHeader
             {
-                sal_uInt32  db_rootpage;                    /* Position der Rootpage        */
-                sal_uInt32  db_pagecount;                   /* Anzahl Pages                 */
-                sal_uInt8   db_frei[4];                     /* reserviert                   */
-                sal_uInt16  db_keylen;                      /* Laenge des Schluessels       */
-                sal_uInt16  db_maxkeys;                     /* Max. # keys pro Seite        */
-                sal_uInt16  db_keytype;                     /* Art des Schluessels
-                                                           (0-Text)
-                                                           (1-Numerisch)                */
-                sal_uInt16  db_keyrec;                      /* Laenge eines IndexSatzes
-                                                           SatzNr + keylen              */
-                sal_uInt8   db_frei1[3];                    /* reserviert                   */
-                sal_uInt8   db_unique;                      /* eindeutig                    */
-                char        db_name[488];                   /* index_name   (Feldname)      */
+                sal_uInt32  db_rootpage;                    /* Rootpage position                */
+                sal_uInt32  db_pagecount;                   /* Page count                       */
+                sal_uInt8   db_frei[4];                     /* Reserved                         */
+                sal_uInt16  db_keylen;                      /* Key length                       */
+                sal_uInt16  db_maxkeys;                     /* Maximum number of keys per page  */
+                sal_uInt16  db_keytype;                     /* Type of key:
+                                                               0 = Text
+                                                               1 = Numerical                    */
+                sal_uInt16  db_keyrec;                      /* Length of an index record
+                                                               RecordNumber + keylen            */
+                sal_uInt8   db_frei1[3];                    /* Reserved                         */
+                sal_uInt8   db_unique;                      /* Unique                           */
+                char        db_name[488];                   /* index_name (field name)          */
             };
 
         private:
-            SvStream*       m_pFileStream;                  // Stream zum Lesen/Schreiben des Index
+            SvStream*       m_pFileStream;                  // Stream to read/write the index
             NDXHeader       m_aHeader;
-            ONDXPageList    m_aCollector;                   // Pool von nicht mehr benoetigten Seiten
-            ONDXPagePtr     m_aRoot,                        // Wurzel des b+ Baums
-                            m_aCurLeaf;                 // aktuelles Blatt
-            sal_uInt16          m_nCurNode;                 // Position des aktuellen Knoten
+            ONDXPageList    m_aCollector;                   // Pool of obsolete pages
+            ONDXPagePtr     m_aRoot,                        // Root of the B+ tree
+                            m_aCurLeaf;                     // Current leaf
+            sal_uInt16      m_nCurNode;                     // Position of the current node
 
-            sal_uInt32          m_nPageCount,
+            sal_uInt32      m_nPageCount,
                             m_nRootPage;
 
             ODbaseTable*    m_pTable;
-            sal_Bool            m_bUseCollector : 1;                        // Verwenden des GarbageCollectors
+            sal_Bool        m_bUseCollector : 1;            // Use the Garbage Collector
 
             ::rtl::OUString getCompletePath();
             void closeImpl();
-            /* closes and kill the index file and throws an error.
-            */
+            // Closes and kills the index file and throws an error
             void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile);
         protected:
             virtual ~ODbaseIndex();
@@ -145,7 +144,7 @@ namespace connectivity
 
             sal_Bool isUnique() const { return m_IsUnique; }
             sal_Bool UseCollector() const {return m_bUseCollector;}
-            // Tree operationen
+            // Tree operations
             void Insert(ONDXPagePtr aCurPage, ONDXNode& rNode);
             void Release(sal_Bool bSave = sal_True);
             sal_Bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);

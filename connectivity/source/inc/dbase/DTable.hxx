@@ -47,13 +47,13 @@ namespace connectivity
 
         class ODbaseTable : public ODbaseTable_BASE
         {
-            // der Typ einer dBase datei wird mit dem ersten Byte bestimmt
+        // The first byte of a dBase file specifies its type
         public:
             enum DBFType  { dBaseIII         = 0x03,
                             dBaseIV          = 0x04,
                             dBaseV           = 0x05,
                             VisualFoxPro     = 0x30,
-                            VisualFoxProAuto = 0x31, // Visual FoxPro w. AutoIncrement field
+                            VisualFoxProAuto = 0x31, // Visual FoxPro with AutoIncrement field
                             dBaseFS          = 0x43,
                             dBaseFSMemo      = 0xB3,
                             dBaseIIIMemo     = 0x83,
@@ -67,32 +67,32 @@ namespace connectivity
                             };
 
         private:
-            struct DBFHeader {                       /* Kopfsatz-Struktur            */
-                                DBFType db_typ;                         /* Dateityp                     */
-                                sal_uInt8    db_aedat[3];                    /* Datum der letzen Aenderung   */
-                                                                        /* JJ MM TT                     */
-                                sal_uInt32   db_anz;                         /* Anzahl der Saetze            */
-                                sal_uInt16  db_kopf;                        /* laenge Kopfsatz-Struktur     */
-                                sal_uInt16  db_slng;                        /* laenge der Daten-Saetze      */
-                                sal_uInt8    db_frei[20];                    /* reserviert                   */
+            struct DBFHeader {                       /* Header struct */
+                                DBFType      db_typ;                        /* File type                    */
+                                sal_uInt8    db_aedat[3];                   /* Date of last change          */
+                                                                            /* JJ MM DD                     */
+                                sal_uInt32  db_anz;                         /* Data set count               */
+                                sal_uInt16  db_kopf;                        /* Header length                */
+                                sal_uInt16  db_slng;                        /* Data set length              */
+                                sal_uInt8   db_frei[20];                    /* Reserved                     */
                             };
-            struct DBFColumn {                       /* Feldbezeichner               */
-                                sal_uInt8    db_fnm[11];                     /* Feldname                     */
-                                sal_uInt8    db_typ;                         /* Feldtyp                      */
-                                sal_uInt32  db_adr;                         /* Feldadresse                  */
-                                sal_uInt8    db_flng;                        /* Feldlaenge                   */
-                                sal_uInt8    db_dez;                         /* Dezimalstellen fuer N        */
-                                sal_uInt8    db_frei2[14];                   /* reserviert                   */
+            struct DBFColumn {                       /* Column descriptors */
+                                sal_uInt8    db_fnm[11];                     /* Field name                  */
+                                sal_uInt8    db_typ;                         /* Field type                  */
+                                sal_uInt32   db_adr;                         /* Field address               */
+                                sal_uInt8    db_flng;                        /* Field length                */
+                                sal_uInt8    db_dez;                         /* Decimal places for N        */
+                                sal_uInt8    db_frei2[14];                   /* Reserved                    */
                             };
             struct DBFMemoHeader
                             {
-                                DBFMemoType db_typ;                     /* Dateityp                     */
-                                sal_uInt32  db_next;                        /* naechster freier Block       */
-                                sal_uInt16  db_size;                        /* Blockgroesse: dBase 3 fest   */
+                                DBFMemoType db_typ;                         /* File type                    */
+                                sal_uInt32  db_next;                        /* Next free block              */
+                                sal_uInt16  db_size;                        /* Block size: dBase 3 fixed    */
                             };
 
-            ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
+            ::std::vector<sal_Int32> m_aTypes;      // holds all types for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32> m_aPrecisions; // same as above
             ::std::vector<sal_Int32> m_aScales;
             ::std::vector<sal_Int32> m_aRealFieldLengths;
             DBFHeader       m_aHeader;
