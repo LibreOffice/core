@@ -58,7 +58,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.win32 \
     $(TARFILE_NAME).patch.rindex \
-    raptor-aix.patch
+    raptor-aix.patch \
+    $(TARFILE_NAME).entities.patch
 
 .IF "$(CROSS_COMPILING)"=="YES"
 OOO_PATCH_FILES += \
