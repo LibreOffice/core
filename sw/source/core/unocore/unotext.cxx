@@ -1720,12 +1720,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                         SwFmtAnchor aAnchor((*i)->GetAnchor());
                         aAnchor.SetAnchor(aMovePam.Start());
                         m_pImpl->m_pDoc->SetAttr(aAnchor, *(*i));
-
-                        // delete the old anchor
-                        SwSpzFrmFmts* pFrmFmts = m_pImpl->m_pDoc->GetSpzFrmFmts();
-                        // here we rely on that fact that this is a sorted list, where the last element is the newly created frame
-                        SwFrmFmt *pFrmFmt = (*pFrmFmts)[pFrmFmts->Count()-1];
-                        m_pImpl->m_pDoc->DelLayoutFmt(pFrmFmt);
                     }
                 }
             }

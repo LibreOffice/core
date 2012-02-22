@@ -840,8 +840,10 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 sal_Bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
+                bool const bOldRedlineMove(IsRedlineMove());
                 mbCopyIsMove = sal_True;
                 GetIDocumentUndoRedo().DoUndo(false);
+                SetRedlineMove(true);
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -850,6 +852,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                     }
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
+                SetRedlineMove(bOldRedlineMove);
                 mbCopyIsMove = bOldFlag;
                 GetIDocumentUndoRedo().DoUndo(bOldUndo);
 
