@@ -168,6 +168,65 @@ public:
     }
 
     /**
+      New string from an 8-Bit string literal that is expected to be in UTF-8
+      (or its subset, ASCII). All string literals in the codebase are
+      assumed to be only UTF-8/ASCII, so this constructor allows an efficient
+      and convenient way to create OUString instances from literals.
+
+      @param    value           the 8-bit string literal
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+    */
+    template< int N >
+    OUString( const char (&literal)[ N ] )
+    {
+        pData = 0;
+        rtl_string2UString( &pData, literal, N - 1, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
+        if (pData == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
+            throw std::bad_alloc();
+#endif
+        }
+    }
+
+    /**
+     * This overload exists only to avoid creating instances directly from (non-const) char[],
+     * which would otherwise be picked up by the optimized const char[] constructor.
+     * Since the non-const array cannot be guaranteed to contain characters in the expected
+     * UTF-8/ASCII encoding, this needs to be prevented.
+     *
+     * It is an error to try to call this overload.
+     *
+     * @internal
+     */
+    template< int N >
+    OUString( char (&value)[ N ] )
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) value; // unused
+        pData = 0; // for the unittest create an empty string
+        rtl_uString_new( &pData );
+    }
+#endif
+
+#ifdef RTL_STRING_UNITTEST
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUString( T )
+    {
+        pData = 0;
+        rtl_uString_new( &pData );
+    }
+#endif
+
+    /**
       New string from a 8-Bit character buffer array.
 
       @param    value           a 8-Bit character array.
@@ -1721,6 +1780,9 @@ public:
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
       127. The ASCII string must be NULL-terminated.
+
+      Note that for string literals it is simpler and more efficient
+      to directly use the OUString constructor.
 
       @param    value       the 8-Bit ASCII character string
       @return   a string with the string representation of the argument.

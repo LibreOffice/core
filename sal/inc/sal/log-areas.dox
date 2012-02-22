@@ -25,6 +25,10 @@ certain functionality.
 
 @li oox.xmlstream - XmlStream class
 
+@section SAL/RTL
+
+@li rtl.string - rtl::OString, rtl::OUString and related functionality
+
 @section VCL
 
 @li vcl.gdi - the GDI part of VCL: devices, bitmaps, etc.

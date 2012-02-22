@@ -1916,7 +1916,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             break;
 
         case ID_TREE_CLOSE_CONN:
-            openHelpAgent( HID_DSBROWSER_DISCONNECTING );
+            openHelpAgent( rtl::OString( HID_DSBROWSER_DISCONNECTING ));
             closeConnection( m_pTreeView->getListBox().GetRootLevelParent( m_pTreeView->getListBox().GetCurEntry() ) );
             break;
 

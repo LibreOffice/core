@@ -1001,13 +1001,13 @@ sal_Bool SfxLibraryContainer::init_Impl(
         INetURLObject aUserBasicInetObj( String(maLibraryPath).GetToken(1) );
         OUString aStandardStr( RTL_CONSTASCII_USTRINGPARAM("Standard") );
 
-        static char strPrevFolderName_1[] = "__basic_80";
-        static char strPrevFolderName_2[] = "__basic_80_2";
+        static char const strPrevFolderName_1[] = "__basic_80";
+        static char const strPrevFolderName_2[] = "__basic_80_2";
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
         aPrevUserBasicInetObj_1.removeSegment();
         INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
-        aPrevUserBasicInetObj_1.Append( strPrevFolderName_1 );
-        aPrevUserBasicInetObj_2.Append( strPrevFolderName_2 );
+        aPrevUserBasicInetObj_1.Append( rtl::OString( strPrevFolderName_1 ));
+        aPrevUserBasicInetObj_2.Append( rtl::OString( strPrevFolderName_2 ));
 
         // #i93163
         bool bCleanUp = false;
@@ -1072,7 +1072,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 String aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
                 aUserBasicTmpInetObj.removeSegment();
-                aUserBasicTmpInetObj.Append( "__basic_tmp" );
+                aUserBasicTmpInetObj.Append( rtl::OString( "__basic_tmp" ));
                 String aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 mxSFI->move( aFolderUserBasic, aFolderTmp );
@@ -1195,10 +1195,10 @@ sal_Bool SfxLibraryContainer::init_Impl(
         {
             SAL_WARN("basic", "Upgrade of Basic installation failed somehow");
 
-            static char strErrorSavFolderName[] = "__basic_80_err";
+            static const char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
-            aPrevUserBasicInetObj_Err.Append( strErrorSavFolderName );
+            aPrevUserBasicInetObj_Err.Append( rtl::OString( strErrorSavFolderName ));
             String aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
 
             bool bSaved = false;

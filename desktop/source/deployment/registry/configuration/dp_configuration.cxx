@@ -244,8 +244,8 @@ BackendImpl::BackendImpl(
             }
             catch (const Exception &e)
             {
-                rtl::OStringBuffer aStr( "Exception loading legacy package database: '" );
-                aStr.append( rtl::OUStringToOString( e.Message, osl_getThreadTextEncoding() ) );
+                rtl::OUStringBuffer aStr( "Exception loading legacy package database: '" );
+                aStr.append( e.Message );
                 aStr.append( "' - ignoring file, please remove it.\n" );
                 dp_misc::writeConsole( aStr.getStr() );
             }

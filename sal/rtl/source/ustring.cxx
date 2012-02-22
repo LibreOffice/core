@@ -45,6 +45,7 @@
 
 #include <string.h>
 #include <sal/alloca.h>
+#include <sal/log.hxx>
 
 #include "hash.hxx"
 #include "strimp.hxx"
@@ -600,7 +601,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             do
             {
                 /* Check ASCII range */
-                OSL_ENSURE( ((unsigned char)*pStr) <= 127,
+                SAL_WARN_IF( ((unsigned char)*pStr) > 127, "rtl.string",
                             "rtl_string2UString_status() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
 
                 *pBuffer = *pStr;
