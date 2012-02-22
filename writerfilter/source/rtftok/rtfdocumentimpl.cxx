@@ -732,6 +732,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     OStringBuffer aBuf;
 
     bool bUnicodeChecked = false;
+    bool bSkipped = false;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -746,7 +747,10 @@ int RTFDocumentImpl::resolveChars(char ch)
                 aBuf.append(ch);
             }
             else
+            {
+                bSkipped = true;
                 m_aStates.top().nCharsToSkip--;
+            }
         }
         // read a single char if we're in hex mode
         if (m_aStates.top().nInternalState == INTERNAL_HEX)
@@ -758,7 +762,8 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     if (m_aStates.top().nInternalState == INTERNAL_HEX)
     {
-        m_aHexBuffer.append(ch);
+        if (!bSkipped)
+            m_aHexBuffer.append(ch);
         return 0;
     }
 
