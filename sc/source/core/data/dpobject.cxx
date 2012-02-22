@@ -1993,7 +1993,6 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         if (!xDimName.is() || !xDimProp.is())
             continue;
 
-        bool bDuplicated = false;
         bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
         //! error checking -- is "IsDataLayoutDimension" property required??
@@ -2004,8 +2003,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
             aFieldName = xDimName->getName();
             uno::Any aOrigAny = xDimProp->getPropertyValue(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
-            if (aOrigAny >>= nOrigPos)
-                bDuplicated = nOrigPos >= 0;
+            aOrigAny >>= nOrigPos;
         }
         catch(uno::Exception&)
         {
