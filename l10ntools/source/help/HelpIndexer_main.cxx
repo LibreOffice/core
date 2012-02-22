@@ -97,8 +97,16 @@ int main(int argc, char **argv) {
         rtl::OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
         sDir, sDir);
 
-    if (!indexer.indexDocuments()) {
-        std::wcerr << indexer.getErrorMessage().getStr() << std::endl;
+    try
+    {
+        if (!indexer.indexDocuments()) {
+            std::cerr << rtl::OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
+            return 2;
+        }
+    }
+    catch (CLuceneError &e)
+    {
+        std::cerr << e.what() << std::endl;
         return 2;
     }
     return 0;

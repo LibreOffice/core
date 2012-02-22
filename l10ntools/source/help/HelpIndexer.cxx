@@ -74,6 +74,10 @@ bool HelpIndexer::indexDocuments() {
 
     rtl::OString indexDirStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
     lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer, true);
+    //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
+    //exception for ja help. Could alternative ignore the exception and get
+    //truncated results as per java-Lucene apparently
+    writer.setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
 
     // Index the identified help files
     Document doc;
