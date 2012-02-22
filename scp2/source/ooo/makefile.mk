@@ -328,6 +328,7 @@ PARFILES=                          \
         profile_ooo.par            \
         profileitem_ooo.par        \
         ure.par                    \
+        stdlib.par                 \
         ure_into_ooo.par           \
         ure_standalone.par         \
         common_brand.par           \
