@@ -76,6 +76,12 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "Delete C~ontents..." ;
         };
+        MenuItem
+        {
+            Identifier = FID_MERGE_ON ;
+            HelpId = CMD_FID_MERGE_ON ;
+            Text [ en-US ] = "~Merge Cells..." ;
+        };
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------

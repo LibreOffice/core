@@ -867,6 +867,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
                 if( pGraphic && ( pGraphic->GetType() != GRAPHIC_NONE ) )
                 {
+                    fprintf (stderr, "provider.cxx - write graphic: ! 0x%lx\n", (long)pGraphic->GetChecksum() );
                     ::Graphic aGraphic( *pGraphic );
                     ImplApplyFilterData( aGraphic, aFilterDataSeq );
 
@@ -884,6 +885,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );
                     pOStm->Write( aMemStrm.GetData(), aMemStrm.Tell() );
+
+                    fprintf (stderr, "provider.cxx - after write graphic: ! 0x%lx\n", (long)pGraphic->GetChecksum() );
                 }
             }
         }

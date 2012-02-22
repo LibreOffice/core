@@ -422,12 +422,17 @@ String GraphicObject::GetLink() const
 
 void GraphicObject::SetUserData()
 {
+    fprintf (stderr, "SetUserData to null from '%s'\n",
+             mpUserData ? rtl::OUStringToOString(*mpUserData, RTL_TEXTENCODING_UTF8).getStr() : "<null>");
     if( mpUserData )
         delete mpUserData, mpUserData = NULL;
 }
 
 void GraphicObject::SetUserData( const String& rUserData )
 {
+    fprintf (stderr, "SetUserData to '%s' from '%s'\n",
+             rtl::OUStringToOString(rUserData, RTL_TEXTENCODING_UTF8).getStr(),
+             mpUserData ? rtl::OUStringToOString(*mpUserData, RTL_TEXTENCODING_UTF8).getStr() : "<null>");
     delete mpUserData, mpUserData = new String( rUserData );
 }
 

@@ -63,6 +63,14 @@
 
 using namespace com::sun::star;
 
+static void dbg (SwGrfNode *pNode)
+{
+    fprintf (stderr, "SwGrfNode created: '%s' 0x%lx\n",
+             rtl::OUStringToOString(pNode->GetGrfObj().GetUserData(),
+                                    RTL_TEXTENCODING_UTF8).getStr(),
+             (long)pNode->GetGrf().GetChecksum());
+}
+
 // --------------------
 // SwGrfNode
 // --------------------
@@ -83,6 +91,7 @@ SwGrfNode::SwGrfNode(
 
     bGrafikArrived = sal_True;
     ReRead(rGrfName,rFltName, pGraphic, 0, sal_False);
+    dbg(this);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
@@ -100,6 +109,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel= bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
     bGrafikArrived = sal_True;
+    dbg(this);
 }
 
 // Konstruktor fuer den SW/G-Reader. Dieser ctor wird verwendet,
@@ -135,6 +145,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
             ((SwBaseLink*)&refLink)->Connect();
         }
     }
+    dbg(this);
 }
 
 sal_Bool SwGrfNode::ReRead(
@@ -387,6 +398,9 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
     const String aGraphicURL( aGrfObj.GetUserData() );
     if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, aGraphicURL, rStrm ) )
     {
+        fprintf (stderr, "Very curious set User Data of '%s' vs 0x%lx\n",
+                 rtl::OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8).getStr(),
+                 aGraphic.GetChecksum());
         aGrfObj.SetGraphic( aGraphic );
         aGrfObj.SetUserData( aGraphicURL );
         return sal_True;
@@ -499,6 +513,13 @@ short SwGrfNode::SwapOut()
             if( !HasStreamName() )
                 if( !aGrfObj.SwapOut() )
                     return 0;
+        }
+
+        if (HasStreamName() && aNewStrmName.Len() > 0 &&
+            aNewStrmName != aGrfObj.GetUserData())
+        {
+            fprintf (stderr, "not [!] swapping out stream with potentially bogus new name\n");
+            return 1;
         }
         // Geschriebene Grafiken oder Links werden jetzt weggeschmissen
         return (short) aGrfObj.SwapOut( NULL );
@@ -711,6 +732,8 @@ void SwGrfNode::DelStreamName()
 {
     if( HasStreamName() )
     {
+        fprintf (stderr, "FIXME: this method is -unutterably- broken - it takes no account of sharing images !\n\n\n");
+
         // Dann die Grafik im Storage loeschen
         uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
         if( xDocStg.is() )
@@ -798,6 +821,13 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             }
         }
 
+        fprintf( stderr, "look for '%s' %d\n",
+                 rtl::OUStringToOString( _aStrmName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                 _refPics->hasByName( _aStrmName ) );
+
+        fprintf( stderr, "look for [200004AD0000475F000033B381B9C98F.svm] %d\n",
+                 _refPics->hasByName( rtl::OUString::createFromAscii("200004AD0000475F000033B381B9C98F.svm" ) ) );
+
         // assure that graphic file exist in the storage.
         if ( _refPics->hasByName( _aStrmName ) &&
              _refPics->isStreamElement( _aStrmName ) )
@@ -827,6 +857,9 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     if( !aUserData.Len() )
         return;
 
+    fprintf (stderr, "UserData '%s' NewStrmName '%s'\n",
+             rtl::OUStringToOString(aUserData, RTL_TEXTENCODING_UTF8).getStr(),
+             rtl::OUStringToOString(aNewStrmName, RTL_TEXTENCODING_UTF8).getStr());
     if (aNewStrmName.Len()>0) {
         aUserData=aNewStrmName;
     }

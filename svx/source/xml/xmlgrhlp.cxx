@@ -621,6 +621,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
+                    fprintf (stderr, "xmlgrhlp.cxx - write meta-file ! 0x%lx\n",
+                             (long)aGraphic.GetChecksum() );
                     pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStream->SetCompressMode( COMPRESSMODE_ZBITMAP );
 
@@ -643,6 +645,9 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                         rMtf.Write( *pStream, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
 
                     bRet = ( pStream->GetError() == 0 );
+
+                    fprintf (stderr, "xmlgrhlp.cxx - done write meta-file ! 0x%lx\n",
+                             (long)aGraphic.GetChecksum() );
                 }
             }
             uno::Reference < embed::XTransactedObject > xStorage(
