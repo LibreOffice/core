@@ -1379,7 +1379,7 @@ sub remove_Files_Without_Sourcedirectory
                     push( @installer::globals::logfileinfo, $infoline);
 
                     push(@missingfiles, "ERROR: File not found: $filename\n");
-                    $error_occured = 1;
+                    $error_occurred = 1;
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
