@@ -33,6 +33,7 @@
 
       <zipfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
       <zipfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
+      <zipfileset file="main/README" fullpath="${release.dir.name}/README"/>
       <zipfileset dir="ext_libraries" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/ext_libraries"/>
       <zipfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
       <zipfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
@@ -48,6 +49,7 @@
     <tar destfile="${release.tar}" longfile="gnu">
       <tarfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
       <tarfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
+      <tarfileset file="main/README" fullpath="${release.dir.name}/README"/>
       <tarfileset dir="ext_libraries" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/ext_libraries"/>
       <tarfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
       <tarfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>

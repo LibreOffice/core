@@ -1,0 +1,68 @@
+﻿Apache OpenOffice (AOO)
+=======================
+
+    The Apache OpenOffice project provdes a full featured office productivity suite
+    based on open standards and is the continuation of the OpenOffice.org project.
+    
+    For detailed information about Apache OpenOffice please visit 
+    http://incubator.apache.org/openofficeorg/
+
+    Apache OpenOffice is a very large project with many components and mainly 
+    implemented in C++ but also in Java, Python and other languages.
+
+    Currently supported platforms include:
+
+        UNIX variants
+        Windows
+        Mac OS X
+        OS/2
+
+    OpenOffice is used by million of users worldwide and with more than 100 million
+    downloads it is one of the most successful open source projects.
+
+Getting the latest sources via Subverison
+=========================================
+
+    You can always checkout the latest source via subsversion using the following
+    command:
+
+    svn co https://svn.apache.org/repos/asf/incubator/ooo/trunk ooo
+
+    For further information visit http://incubator.apache.org/openofficeorg/source.html
+
+Building Apache OpenOffice
+===========================
+
+    Apache OpenOffice is a big project and depends on several other external libraries
+    and the list of prerquisites is varying for the differnet platforms. 
+
+    A comrephensive and complete building guide can be found in the project wiki under
+
+    http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide
+
+    Here you can a complete list of prerequisites
+
+    http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Build_Requirements
+
+    and platform specific guides for
+
+    Windows: 
+        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Windows
+    Linux: 
+        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Linux
+    Mac OS X: 
+        http://wiki.services.openoffice.org/wiki/MacOSXBuildInstructions
+    Solaris: 
+        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Solaris
+
+    With having all prerequisites in place you can simply run
+
+    cd main
+    ./configure <configure_switches>
+    ./bootstrap
+    cd instsetoo_native/util
+    ./build --all
+
+    The default build will produce a setup version (e.g. setup program on windows, dmg on Mac OS, 
+    rpm and deb packages on Linux, pkg packages on Solaris) and an archived version. The output
+    can be found in the <output> directory in instsetoo_native/<output_dir>/OpenOffice/...
