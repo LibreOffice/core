@@ -59,12 +59,13 @@ SHL1STDLIBS=                     \
     $(CPPULIB)               \
     $(COMPHELPERLIB)         \
     $(HELPLINKERLIB)         \
+    $(CLUCENELIB)            \
     $(SALLIB)                \
     $(EXPATASCII3RDLIB)      \
     $(UNOTOOLSLIB)           \
     $(UCBHELPERLIB)          \
-        $(BERKELEYLIB)           \
-        $(XSLTLIB)
+    $(BERKELEYLIB)           \
+    $(XSLTLIB)
 
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \

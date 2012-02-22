@@ -35,6 +35,8 @@
 
 #include <l10ntools/HelpSearch.hxx>
 
+#include <rtl/oustringostreaminserter.hxx>
+
 #include <algorithm>
 #include <set>
 
@@ -247,8 +249,13 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             aIndexFolderResultVectorVector.push_back( pIndexFolderHitItemVector );
             aIndexFolderResultVector.clear();
         }
-        catch( const Exception& )
+        catch (const Exception &e)
         {
+            SAL_WARN("xmlhelp", "Exception: " << e.Message);
+        }
+        catch (CLuceneError &e)
+        {
+            SAL_WARN("xmlhelp", "CLuceneError: " << e.what());
         }
 
         ++iDir;
