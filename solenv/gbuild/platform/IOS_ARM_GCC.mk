@@ -255,8 +255,8 @@ gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 
-gb_Executable_EXT :=
-gb_Executable_TARGETTYPEFLAGS := -dead_strip
+gb_Executable_EXT := .a
+gb_Executable_TARGETTYPEFLAGS := 
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
