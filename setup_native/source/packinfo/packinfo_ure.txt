@@ -50,3 +50,15 @@ description = "UNO Runtime Environment"
 destpath = "/opt"
 packageversion = "%UREPACKAGEVERSION"
 End
+
+Start
+module = "gid_Module_Optional_Stdlibs"
+solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
+packagename = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
+copyright = "2012 by LibreOffice"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "libstdc++ and libgcc_s for too old Linux systems"
+destpath = "/opt"
+packageversion = "%UREPACKAGEVERSION"
+End
