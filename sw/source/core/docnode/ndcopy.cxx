@@ -1431,7 +1431,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             bool bAdd = false;
             if( pAPos->nNode < rRg.aEnd )
                 bAdd = true;
-            if( !bAdd )
+            if (!bAdd && !IsRedlineMove()) // fdo#40599: not for redline move
             {
                 bool bEmptyNode = false;
                 bool bLastNode = false;
