@@ -207,7 +207,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
             String aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                CREATE_STRING( "JPG" ), nXOutFlags );
+                CREATE_STRING( "PNG" ), nXOutFlags );
             if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
             {
                 rLinkName = URIHelper::SmartRel2Abs(
