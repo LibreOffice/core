@@ -176,22 +176,6 @@ void GtkSalObject::Show( sal_Bool bVisible )
     }
 }
 
-void GtkSalObject::Enable( sal_Bool )
-{
-}
-
-void GtkSalObject::GrabFocus()
-{
-}
-
-void GtkSalObject::SetBackground()
-{
-}
-
-void GtkSalObject::SetBackground( SalColor )
-{
-}
-
 const SystemEnvData* GtkSalObject::GetSystemData() const
 {
     return &m_aSystemData;

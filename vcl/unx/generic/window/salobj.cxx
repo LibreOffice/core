@@ -412,14 +412,6 @@ X11SalObject::Show( sal_Bool bVisible )
     mbVisible = bVisible;
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalObject::Enable( sal_Bool )
-{
-}
-
-// -----------------------------------------------------------------------
-
 void X11SalObject::GrabFocus()
 {
     if( mbVisible )
@@ -427,18 +419,6 @@ void X11SalObject::GrabFocus()
                          maSystemChildData.aWindow,
                          RevertToNone,
                          CurrentTime );
-}
-
-// -----------------------------------------------------------------------
-
-void X11SalObject::SetBackground()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void X11SalObject::SetBackground( SalColor )
-{
 }
 
 // -----------------------------------------------------------------------

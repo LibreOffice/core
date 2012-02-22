@@ -815,20 +815,6 @@ void WinSalObject::GrabFocus()
         ::SetFocus( mhWndChild );
 }
 
-// -----------------------------------------------------------------------
-
-void WinSalObject::SetBackground()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void WinSalObject::SetBackground( SalColor )
-{
-}
-
-// -----------------------------------------------------------------------
-
 const SystemEnvData* WinSalObject::GetSystemData() const
 {
     return &maSysData;

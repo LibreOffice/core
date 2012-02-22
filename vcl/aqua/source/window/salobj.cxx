@@ -207,30 +207,6 @@ void AquaSalObject::Show( sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Enable( sal_Bool )
-{
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalObject::GrabFocus()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalObject::SetBackground()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalObject::SetBackground( SalColor )
-{
-}
-
-// -----------------------------------------------------------------------
-
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {
     return &maSysData;

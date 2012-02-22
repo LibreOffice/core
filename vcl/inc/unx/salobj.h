@@ -92,11 +92,7 @@ public:
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
     virtual void                    Show( sal_Bool bVisible );
-    virtual void                    Enable( sal_Bool nEnable );
     virtual void                    GrabFocus();
-
-    virtual void                    SetBackground();
-    virtual void                    SetBackground( SalColor nSalColor );
 
     virtual const SystemEnvData*    GetSystemData() const;
 
