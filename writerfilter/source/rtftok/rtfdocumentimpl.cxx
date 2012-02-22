@@ -146,7 +146,7 @@ static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 
 static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
-    if (aStates.top().nBorderState == BORDER_PARAGRAPH)
+    if (aStates.top().nBorderState == BORDER_PARAGRAPH_BOX)
         for (int i = 0; i < 4; i++)
         {
             RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(lcl_getParagraphBorder(i));
@@ -156,6 +156,12 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
                 rAttributes->push_back(make_pair(nId, pValue));
             }
         }
+    else if (aStates.top().nBorderState == BORDER_PARAGRAPH)
+    {
+        // Attributes of the last border type
+        RTFSprms& rAttributes = lcl_getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
+        rAttributes->push_back(make_pair(nId, pValue));
+    }
     else if (aStates.top().nBorderState == BORDER_CELL)
     {
         // Attributes of the last border type
@@ -1772,7 +1778,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcLeft, pValue));
                 m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcBottom, pValue));
                 m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcRight, pValue));
-                m_aStates.top().nBorderState = BORDER_PARAGRAPH;
+                m_aStates.top().nBorderState = BORDER_PARAGRAPH_BOX;
             }
             break;
         case RTF_LTRSECT:
@@ -1847,6 +1853,26 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 }
                 lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
                 m_aStates.top().nBorderState = BORDER_PAGE;
+            }
+            break;
+        case RTF_BRDRT:
+        case RTF_BRDRL:
+        case RTF_BRDRB:
+        case RTF_BRDRR:
+            {
+                RTFSprms aAttributes;
+                RTFSprms aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                switch (nKeyword)
+                {
+                    case RTF_BRDRT: nParam = lcl_getParagraphBorder(0); break;
+                    case RTF_BRDRL: nParam = lcl_getParagraphBorder(1); break;
+                    case RTF_BRDRB: nParam = lcl_getParagraphBorder(2); break;
+                    case RTF_BRDRR: nParam = lcl_getParagraphBorder(3); break;
+                    default: break;
+                }
+                lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr, nParam, pValue);
+                m_aStates.top().nBorderState = BORDER_PARAGRAPH;
             }
             break;
         case RTF_CLVMGF:
