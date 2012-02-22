@@ -1269,18 +1269,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 if ( $installer::globals::linuxlinkrpms =~ /\b$onepackagename\b/ )
                 {
-                    my $run = 0;
-
-                    if (( $installer::globals::makelinuxlinkrpm ) && ( ! $run ))
+                    if ( $installer::globals::makelinuxlinkrpm )
                     {
                         $filesinpackage = \@installer::globals::linuxpatchfiles;
                         $linksinpackage = \@installer::globals::linuxlinks;
                         $installer::globals::makelinuxlinkrpm = 0;
                         if ( $installer::globals::patch ) { $installer::globals::call_epm = 1; }     # enabling packing again
-                        $run = 1;
                     }
-
-                    if (( ! $installer::globals::makelinuxlinkrpm ) && ( ! $run ))
+                    else
                     {
                         $filesinpackage = installer::worker::prepare_linuxlinkfiles($filesinpackage);
                         $linksinpackage = installer::worker::prepare_forced_linuxlinkfiles($linksinpackage);
@@ -1288,7 +1284,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         $installer::globals::add_required_package = $packagename . "u";
                         if ( $installer::globals::patch ) { $installer::globals::call_epm = 0; }     # no packing of core module in patch
                         $shellscriptsfilename = ""; # shell scripts only need to be included into the link rpm
-                        $run = 1;
                     }
                 }
             }
