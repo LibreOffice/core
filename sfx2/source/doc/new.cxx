@@ -28,7 +28,6 @@
 
 #include <comphelper/string.hxx>
 #include <sfx2/new.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/morebtn.hxx>
 #include <svtools/svmedit.hxx>
@@ -41,24 +40,13 @@
 
 #include "new.hrc"
 #include "doc.hrc"
-#include <sfx2/sfx.hrc>
-#include "helpid.hrc"
-#include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
-#include "fltfnc.hxx"
-#include <sfx2/viewsh.hxx>
-#include "sfx2/viewfac.hxx"
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include "preview.hxx"
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/jobset.hxx>
-#include <svtools/accessibilityoptions.hxx>
 
 // Draw modes
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
