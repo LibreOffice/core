@@ -498,7 +498,13 @@ void SheetViewSettings::finalizeImport()
 
     // sheet selected (active sheet must be selected)
     bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
-
+    if ( bSelected )
+    {
+        // active tab/sheet cannot be hidden
+        // always force it to be displayed
+        PropertySet aPropSet( getSheet() );
+        aPropSet.setProperty( PROP_IsVisible, sal_True );
+    }
     // visible area and current cursor position (selection not supported via API)
     CellAddress aFirstPos = xModel->maFirstPos;
     const PaneSelectionModel* pPaneSel = xModel->getActiveSelection();
