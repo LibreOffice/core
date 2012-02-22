@@ -116,6 +116,7 @@ namespace writerfilter {
         {
             BORDER_NONE,
             BORDER_PARAGRAPH,
+            BORDER_PARAGRAPH_BOX,
             BORDER_CELL,
             BORDER_PAGE
         };
