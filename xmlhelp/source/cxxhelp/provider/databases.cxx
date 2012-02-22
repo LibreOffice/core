@@ -2109,8 +2109,9 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
 
                 m_xSFA->kill( aCreateTestFolder );
             }
-            catch (Exception &)
-            {}
+            catch (const Exception &)
+            {
+            }
 
             // TEST
             //bIsWriteAccess = false;
@@ -2138,8 +2139,9 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
                         {
                             m_xSFA->kill( aTempDirURL );
                         }
-                        catch (Exception &)
-                        {}
+                        catch (const Exception &)
+                        {
+                        }
                         m_xSFA->createFolder( aTempDirURL );
 
                         aZipDir = aTempDirURL;
@@ -2147,24 +2149,21 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
                     }
                 }
 
-                rtl::OUString aTargetDir;
-                osl::FileBase::getSystemPathFromFileURL( aZipDir, aTargetDir );
+		rtl::OUString aCaption = aLangURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/caption"));
+		rtl::OUString aContent = aLangURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/content"));
 
-                rtl::OUString aSourceDir;
-                osl::FileBase::getSystemPathFromFileURL( aLangURL, aSourceDir );
+		HelpIndexer aIndexer(aLang, aMod, aCaption, aContent, aZipDir);
 
-		rtl::OUString aCaption(RTL_CONSTASCII_USTRINGPARAM("/caption"));
-		rtl::OUString aContent(RTL_CONSTASCII_USTRINGPARAM("/content"));
-
-		HelpIndexer aIndexer(aLang, aMod, aSourceDir + aCaption, aSourceDir + aContent, aTargetDir);
+		aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
                     aIndexFolder = implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
                 else
                     aIndexFolder = aZipDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/help.idxl" ));
             }
-            catch (Exception &)
-            {}
+            catch (const Exception &)
+            {
+            }
         }
     }
 
@@ -2181,8 +2180,9 @@ void IndexFolderIterator::deleteTempIndexFolder( const rtl::OUString& aIndexFold
         {
             m_xSFA->kill( aTmpFolder );
         }
-        catch (Exception &)
-        {}
+        catch (const Exception &)
+        {
+        }
     }
 }
 

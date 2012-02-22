@@ -169,15 +169,13 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
                 // START Invoke CLucene HelpSearch
                 rtl::OUString aLang = m_aURLParameter.get_language();
-                rtl::OUString aSystemPath;
-                osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
                 const std::vector< rtl::OUString >& aListItem = queryList[i];
                 ::rtl::OUString aNewQueryStr = aListItem[0];
 
                 vector<float> aScoreVector;
                 vector<rtl::OUString> aPathVector;
 
-                HelpSearch searcher(aLang, aSystemPath);
+                HelpSearch searcher(aLang, idxDir);
                 searcher.query(aNewQueryStr, bCaptionsOnly, aPathVector, aScoreVector);
 
                 if( nQueryListSize > 1 )

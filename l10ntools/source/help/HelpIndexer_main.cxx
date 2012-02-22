@@ -1,71 +1,125 @@
-#include <l10ntools/HelpIndexer.hxx>
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Gert van Valkenhoef <g.h.m.van.valkenhoef@rug.nl>
+ *  (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
 
+#include <l10ntools/HelpIndexer.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <osl/thread.h>
 #include <string>
 #include <iostream>
 
 int main(int argc, char **argv) {
-	const std::string pLang("-lang");
-	const std::string pModule("-mod");
-	const std::string pOutDir("-zipdir");
-	const std::string pSrcDir("-srcdir");
+    const std::string pLang("-lang");
+    const std::string pModule("-mod");
+    const std::string pOutDir("-zipdir");
+    const std::string pSrcDir("-srcdir");
 
-	std::string lang;
-	std::string module;
-	std::string srcDir;
-	std::string outDir;
+    std::string lang;
+    std::string module;
+    std::string srcDir;
+    std::string outDir;
 
-	bool error = false;
-	for (int i = 1; i < argc; ++i) {
-		if (pLang.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				lang = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pModule.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				module = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pOutDir.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				outDir = argv[++i];
-			} else {
-				error = true;
-			}
-		} else if (pSrcDir.compare(argv[i]) == 0) {
-			if (i + 1 < argc) {
-				srcDir = argv[++i];
-			} else {
-				error = true;
-			}
-		} else {
-			error = true;
-		}
-	}
+    bool error = false;
+    for (int i = 1; i < argc; ++i) {
+        if (pLang.compare(argv[i]) == 0) {
+            if (i + 1 < argc) {
+                lang = argv[++i];
+            } else {
+                error = true;
+            }
+        } else if (pModule.compare(argv[i]) == 0) {
+            if (i + 1 < argc) {
+                module = argv[++i];
+            } else {
+                error = true;
+            }
+        } else if (pOutDir.compare(argv[i]) == 0) {
+            if (i + 1 < argc) {
+                outDir = argv[++i];
+            } else {
+                error = true;
+            }
+        } else if (pSrcDir.compare(argv[i]) == 0) {
+            if (i + 1 < argc) {
+                srcDir = argv[++i];
+            } else {
+                error = true;
+            }
+        } else {
+            error = true;
+        }
+    }
 
-	if (error) {
-		std::cerr << "Error parsing command-line arguments" << std::endl;
-	}
+    if (error) {
+        std::cerr << "Error parsing command-line arguments" << std::endl;
+    }
 
-	if (error || lang.empty() || module.empty() || srcDir.empty() || outDir.empty()) {
-		std::cerr << "Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -srcdir SourceDir -zipdir OutputDir" << std::endl;
-		return 1;
-	}
+    if (error || lang.empty() || module.empty() || srcDir.empty() || outDir.empty()) {
+        std::cerr << "Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -srcdir SourceDir -zipdir OutputDir" << std::endl;
+        return 1;
+    }
 
-	std::string captionDir(srcDir + "/caption");
-	std::string contentDir(srcDir + "/content");
-	std::string indexDir(outDir + "/" + module + ".idxl");
-	HelpIndexer indexer(
-		rtl::OUString::createFromAscii(lang.c_str()),
-		rtl::OUString::createFromAscii(module.c_str()),
-		rtl::OUString::createFromAscii(captionDir.c_str()),
-		rtl::OUString::createFromAscii(contentDir.c_str()),
-		rtl::OUString::createFromAscii(indexDir.c_str()));
-	if (!indexer.indexDocuments()) {
-		std::wcerr << indexer.getErrorMessage().getStr() << std::endl;
-		return 2;
-	}
-	return 0;
+    std::string captionDir(srcDir + SAL_PATHDELIMITER + "caption");
+    std::string contentDir(srcDir + SAL_PATHDELIMITER + "content");
+    std::string indexDir(outDir + SAL_PATHDELIMITER + module + ".idxl");
+
+    rtl::OUString sCaptionDir, sContentDir, sIndexDir;
+
+    osl::File::getFileURLFromSystemPath(
+        rtl::OUString(captionDir.c_str(), captionDir.size(), osl_getThreadTextEncoding()),
+        sCaptionDir);
+
+    osl::File::getFileURLFromSystemPath(
+        rtl::OUString(contentDir.c_str(), contentDir.size(), osl_getThreadTextEncoding()),
+        sContentDir);
+
+    osl::File::getFileURLFromSystemPath(
+        rtl::OUString(indexDir.c_str(), indexDir.size(), osl_getThreadTextEncoding()),
+        sIndexDir);
+
+    rtl::OUString cwd;
+    osl_getProcessWorkingDir(&cwd.pData);
+
+    osl::File::getAbsoluteFileURL(cwd, sCaptionDir, sCaptionDir);
+    osl::File::getAbsoluteFileURL(cwd, sContentDir, sContentDir);
+    osl::File::getAbsoluteFileURL(cwd, sIndexDir, sIndexDir);
+
+    HelpIndexer indexer(
+        rtl::OUString(lang.c_str(), lang.size(), osl_getThreadTextEncoding()),
+        rtl::OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
+        sCaptionDir, sContentDir, sIndexDir);
+
+    if (!indexer.indexDocuments()) {
+        std::wcerr << indexer.getErrorMessage().getStr() << std::endl;
+        return 2;
+    }
+    return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

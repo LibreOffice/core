@@ -12,7 +12,7 @@
 class L10N_DLLPUBLIC HelpSearch {
 	private:
 		rtl::OUString d_lang;
-		rtl::OUString d_indexDir;
+		rtl::OString d_indexDir;
 
 	public:
 

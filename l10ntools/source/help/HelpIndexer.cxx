@@ -1,117 +1,161 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Gert van Valkenhoef <g.h.m.van.valkenhoef@rug.nl>
+ *  (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
 #include <l10ntools/HelpIndexer.hxx>
 #include "LuceneHelper.hxx"
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
 #include <rtl/string.hxx>
+#include <rtl/uri.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 
 #include <algorithm>
 
 using namespace lucene::document;
 
 HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
-	rtl::OUString const &captionDir, rtl::OUString const &contentDir, rtl::OUString const &indexDir) :
+    rtl::OUString const &captionDir, rtl::OUString const &contentDir, rtl::OUString const &indexDir) :
 d_lang(lang), d_module(module), d_captionDir(captionDir), d_contentDir(contentDir), d_indexDir(indexDir),
-d_error(), d_files() {}
+d_error(), d_files()
+{
+}
 
 bool HelpIndexer::indexDocuments() {
-	if (!scanForFiles()) {
-		return false;
-	}
+    if (!scanForFiles()) {
+        return false;
+    }
 
-	rtl::OUString sLang = d_lang.getToken(0, '-');
-	bool bUseCJK =
-		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
-		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) ||
-		sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
+    rtl::OUString sLang = d_lang.getToken(0, '-');
+    bool bUseCJK =
+        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
+        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) ||
+        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
 
-	// Construct the analyzer appropriate for the given language
-	lucene::analysis::Analyzer *analyzer = (
-		bUseCJK ?
-		(lucene::analysis::Analyzer*)new lucene::analysis::LanguageBasedAnalyzer(L"cjk") :
-		(lucene::analysis::Analyzer*)new lucene::analysis::standard::StandardAnalyzer());
+    // Construct the analyzer appropriate for the given language
+    lucene::analysis::Analyzer *analyzer;
+    if (bUseCJK)
+        analyzer = new lucene::analysis::LanguageBasedAnalyzer(L"cjk");
+    else
+        analyzer = new lucene::analysis::standard::StandardAnalyzer();
 
-	rtl::OString indexDirStr;
-	d_indexDir.convertToString(&indexDirStr, RTL_TEXTENCODING_ASCII_US, 0);
-	lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer, true);
+    rtl::OUString ustrSystemPath;
+    osl::File::getSystemPathFromFileURL(d_indexDir, ustrSystemPath);
 
-	// Index the identified help files
-	Document doc;
-	for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
-		doc.clear();
-		if (!helpDocument(*i, &doc)) {
-			delete analyzer;
-			return false;
-		}
-		writer.addDocument(&doc);
-	}
+    rtl::OString indexDirStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+    lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer, true);
 
-	// Optimize the index
-	writer.optimize();
+    // Index the identified help files
+    Document doc;
+    for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
+        helpDocument(*i, &doc);
+        writer.addDocument(&doc);
+        doc.clear();
+    }
+    writer.optimize();
 
-	delete analyzer;
-	return true;
+    // Optimize the index
+    writer.optimize();
+
+    delete analyzer;
+    return true;
 }
 
 rtl::OUString const & HelpIndexer::getErrorMessage() {
-	return d_error;
+    return d_error;
 }
 
 bool HelpIndexer::scanForFiles() {
-	if (!scanForFiles(d_contentDir)) {
-		return false;
-	}
-	if (!scanForFiles(d_captionDir)) {
-		return false;
-	}
-	return true;
+    if (!scanForFiles(d_contentDir)) {
+        return false;
+    }
+    if (!scanForFiles(d_captionDir)) {
+        return false;
+    }
+    return true;
 }
 
 bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
-	osl::Directory dir(path);
-	if (osl::FileBase::E_None != dir.open()) {
-		d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path;
-		return true;
-	}
 
-	osl::DirectoryItem item;
-	osl::FileStatus fileStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type);
-	while (dir.getNextItem(item) == osl::FileBase::E_None) {
-		if (fileStatus.getFileType() == osl::FileStatus::Regular) {
-			d_files.insert(fileStatus.getFileName());
-		}
-	}
+    osl::Directory dir(path);
+    if (osl::FileBase::E_None != dir.open()) {
+        d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path;
+        return true;
+    }
 
-	return true;
+    osl::DirectoryItem item;
+    osl::FileStatus fileStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type);
+    while (dir.getNextItem(item) == osl::FileBase::E_None) {
+        item.getFileStatus(fileStatus);
+        if (fileStatus.getFileType() == osl::FileStatus::Regular) {
+            d_files.insert(fileStatus.getFileName());
+        }
+    }
+
+    return true;
 }
 
 bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
-	// Add the help path as an indexed, untokenized field.
-	rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#HLP#")) + d_module + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
-	std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
-	doc->add(*new Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+    // Add the help path as an indexed, untokenized field.
 
-	// Add the caption as a field.
-	rtl::OUString captionPath = d_captionDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
-	doc->add(*new Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
-	// FIXME: does the Document take responsibility for the FileReader or should I free it somewhere?
+    rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#HLP#")) +
+        d_module + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
+    std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
+    doc->add(*_CLNEW Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
-	// Add the content as a field.
-	rtl::OUString contentPath = d_contentDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
-	doc->add(*new Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
-	// FIXME: does the Document take responsibility for the FileReader or should I free it somewhere?
+    rtl::OUString sEscapedFileName =
+        rtl::Uri::encode(fileName,
+        rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
 
-	return true;
+    // Add the caption as a field.
+    rtl::OUString captionPath = d_captionDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEscapedFileName;
+    doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
+
+    // Add the content as a field.
+    rtl::OUString contentPath = d_contentDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEscapedFileName;
+    doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
+
+    return true;
 }
 
 lucene::util::Reader *HelpIndexer::helpFileReader(rtl::OUString const & path) {
-	osl::File file(path);
-	if (osl::FileBase::E_None == file.open(osl_File_OpenFlag_Read)) {
-		file.close();
-		rtl::OString pathStr;
-		path.convertToString(&pathStr, RTL_TEXTENCODING_ASCII_US, 0); // FIXME: path encoding?
-		return new lucene::util::FileReader(pathStr.getStr(), "UTF-8");
-	} else {
-		return new lucene::util::StringReader(L"");
-	}
+    osl::File file(path);
+    if (osl::FileBase::E_None == file.open(osl_File_OpenFlag_Read)) {
+        file.close();
+        rtl::OUString ustrSystemPath;
+        osl::File::getSystemPathFromFileURL(path, ustrSystemPath);
+        rtl::OString pathStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+        return _CLNEW lucene::util::FileReader(pathStr.getStr(), "UTF-8");
+    } else {
+        return _CLNEW lucene::util::StringReader(L"");
+    }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
