@@ -244,16 +244,6 @@
 			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="http://www.openoffice.org/access/">http://www.openoffice.org/access/</a></p>
 		</div>
 
-		<div id="Registration">
-			<h2 id="reg1" xml:lang="en-US">Registration </h2>
-			<p id="reg2" xml:lang="en-US">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at by choosing "Help - Registration" from the main menu.</p>
-		</div>
-
-		<div id="UserSurvey">
-			<h2 id="survey" xml:lang="en-US">User Survey</h2>
-			<p id="survey1" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help ${PRODUCTNAME} move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data.</p>
-		</div>
-
 		<div id="UserSupport">
 			<h2 id="support" xml:lang="en-US">User Support</h2>
 			<p id="support1" xml:lang="en-US">The main support page <a href="http://support.openoffice.org/">http://support.openoffice.org/</a> offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum at <a href="http://user.services.openoffice.org">http://user.services.openoffice.org</a> or search the archives of the 'users@openoffice.org' mailing list at <a href="http://www.openoffice.org/mail_list.html">http://www.openoffice.org/mail_list.html</a>. Alternatively, you can send in your questions to <a href="mailto:users@openoffice.org">users@openoffice.org</a>. How to subscribe to the list (to get an email response) is explained on this page: <a href="http://wiki.services.openoffice.org/wiki/Website/Content/help/mailinglists">http://wiki.services.openoffice.org/wiki/Website/Content/help/mailinglists</a>.</p>
@@ -268,32 +258,32 @@
 		<div id="GettingInvolved">
 			<h2 id="gettinginvolved1" xml:lang="en-US">Getting Involved</h2>
 			<p id="gettinginvolved2" xml:lang="en-US">The ${PRODUCTNAME} Community would very much benefit from your active participation in the development of this important open source project.</p>
-			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at <a href="http://www.openoffice.org">http://www.openoffice.org</a></p>
+			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at <a href="http://incubator.apache.org/openofficeorg/get-involved.html">http://incubator.apache.org/openofficeorg/get-involved.html</a></p>
 			<h3 id="howtostart" xml:lang="en-US">How to Start</h3>
 			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at <a href="http://development.openoffice.org/todo.html">http://development.openoffice.org/todo.html</a>.</p>
 			<h3 id="subscribe" xml:lang="en-US">Subscribe</h3>
-			<p id="subscribe1" xml:lang="en-US">Here are a few of the Project mailing lists to which you can subscribe at <a href="http://www.openoffice.org/mail_list.html">http://www.openoffice.org/mail_list.html</a></p>
+			<p id="subscribe1" xml:lang="en-US">Here are a few of the Project mailing lists to which you can subscribe at <a href="http://incubator.apache.org/openofficeorg/mailing-lists.html">http://incubator.apache.org/openofficeorg/mailing-lists.html</a></p>
 			<ul>
 				<li>
-					<p id="subscribelist1" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic)</p>
+					<p id="subscribelist1" xml:lang="en-US">News: ooo-announce@incubator.apache.org *recommended to all users* (light traffic)</p>
 				</li>
 
 				<li>
-					<p id="subscribelist2" xml:lang="en-US">Main user forum: user@openoffice.org *easy way to lurk on discussions* (heavy traffic)</p>
+					<p id="subscribelist2" xml:lang="en-US">Main user forum: ooo-users@incubator.apache.org *easy way to lurk on discussions* (heavy traffic)</p>
 				</li>
 
 				<li>
-					<p id="subscribelist3" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy)</p>
+					<p id="subscribelist3" xml:lang="en-US">Marketing project: ooo-marketing@incubator.apache.org *beyond development* (getting heavy)</p>
 				</li>
 
 				<li>
-					<p id="subscribelist4" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy)</p>
+					<p id="subscribelist4" xml:lang="en-US">General code contributor list: ooo-dev@incubator.apache.org (moderate/heavy)</p>
 				</li>
 			</ul>
-			<h3 xml:lang="en-US">Joining one or more Projects</h3>
+			<h3 xml:lang="en-US">Joining the Project</h3>
 			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
-			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://projects.openoffice.org/index.html">http://projects.openoffice.org/index.html</a> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
-			<p id="joining3" xml:lang="en-US">You can help by joining the Marketing Communications &amp; Information Network on <a href="http://marketing.openoffice.org/contacts.html">http://marketing.openoffice.org/contacts.html</a> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</p>
+			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://incubator.apache.org/openofficeorg/get-involved.html">http://incubator.apache.org/openofficeorg/get-involved.html</a> you will find a first overview where you can start with, ranging from Localization, QA, user support to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
+			<p id="joining3" xml:lang="en-US">You can help by joining the marktig mailig list ooo-marketing@incubator.apache.org or visit the Marketing Communications &amp; Information Network on <a href="http://marketing.openoffice.org">http://marketing.openoffice.org</a> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</p>
 		</div>
 
 		<div id="Credits">
@@ -303,7 +293,7 @@
 
 		<div id="ModifiedSourceCode">
 			<h2 id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</h2>
-			<p id="sdffd23red32efew">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</p>
+			<p id="sdffd23red32efew">For detailed information about used and or modified source code see the NOTICE file whihc is part of the installation.</p>
 		</div>
 	</body>
 </html>
