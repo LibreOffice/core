@@ -327,7 +327,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipe \
     juh \
     juhx \
-    jvmfwk \
     log_uno \
     reg \
     sal_textenc \
@@ -504,6 +503,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
+    jvmfwk \
     sal \
 ))
 
