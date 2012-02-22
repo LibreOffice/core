@@ -278,21 +278,19 @@ CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
 --with-external-tar=/Volumes/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
+--with-system-nss
 --without-help
 --without-helppack-integration
 --without-myspell-dicts
 
-And here for the iOS simulator:
-CXX=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+And here for the iOS simulator, using Xcode 4.2:
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
 --with-external-tar=/Volumes/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
+--with-system-nss
 --enable-debug
 --without-help
 --without-helppack-integration
@@ -301,6 +299,28 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 It seems that with the latest iOS SDK one has to do:
 sudo ln -s i686-apple-darwin10 /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk/usr/include/c++/4.2.1/i686-apple-darwin11
 or g++ won't find its headers like <bits/c++config.h>
+
+The --with-system-nss doesn't mean that any Mozilla NSS would be used,
+it's just a trick to bypass some tests in the configure script.
+
+For the iOS simulator, using Xcode 4.3:
+
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
+--enable-werror
+--with-distro=LibreOfficeiOS
+--with-external-tar=/Users/tml/lo/10.4/src
+--with-system-nss
+--without-help
+--without-helppack-integration
+--without-myspell-dicts
+
+Note that you will have to install autoconf and automake yourself
+before running autogen.sh. They are no longer included in Xcode 4.3
+(not even in the add-on "command line tools").
+
 
 Android
 -------
