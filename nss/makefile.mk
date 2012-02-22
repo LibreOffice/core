@@ -150,7 +150,7 @@ EXT_USE_STLPORT=TRUE
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
 NSS_BUILD_DIR= $(subst,\,/ $(PWD)/$(MISC)/build/$(TARFILE_ROOTDIR)/mozilla/security/nss)
-BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
+BUILD_ACTION= PATH="$(PATH):$(moz_build)/msys/bin:$(moz_build)/moztools/bin" && $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
     -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
 
 OUT2LIB= \
