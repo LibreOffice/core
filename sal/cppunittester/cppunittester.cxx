@@ -128,9 +128,17 @@ public:
     }
     bool run() const
     {
+#ifdef IOS
+        // For iOS cppunit plugins aren't really "plugins" (shared
+        // libraries), but just static archives. In the real main
+        // program of a cppunit app, which calls the lo_main() that
+        // the SAL_IMPLEMENT_MAIN() below expands to, we specifically
+        // call the initialize methods of the CppUnitTestPlugIns that
+        // we statically link to the app executable.
+#else
         CppUnit::PlugInManager manager;
         manager.load(testlib, args);
-
+#endif
         CppUnit::TestRunner runner;
         runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
 
@@ -198,10 +206,18 @@ SAL_IMPLEMENT_MAIN() {
         if (rtl_getAppCommandArgCount() - index < 3) {
             usageFailure();
         }
+#ifndef IOS
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
         modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
         oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
+#else
+        // The only "protector" we ever use is the unoexceptionprotector...
+        // Oh the joys of over-engineering.
+        rtl::OUString lib(RTL_CONSTASCII_USTRINGPARAM("<static>"));
+        rtl::OUString sym(RTL_CONSTASCII_USTRINGPARAM("unoexceptionprotector"));
+        oslGenericFunction fn = (oslGenericFunction) unoexceptionprotector;
+#endif
         throw_protector = fn == 0
             ? 0
             : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();

@@ -50,6 +50,10 @@ namespace cppunittester
     extern "C" typedef LibreOfficeProtector * SAL_CALL ProtectorFactory();
 }
 
+#ifdef IOS
+extern "C" CppUnit::Protector *unoexceptionprotector();
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
