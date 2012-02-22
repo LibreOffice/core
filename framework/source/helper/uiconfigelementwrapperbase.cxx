@@ -131,13 +131,6 @@ UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
 }
 
 // XComponent
-void SAL_CALL UIConfigElementWrapperBase::dispose() throw (::com::sun::star::uno::RuntimeException)
-{
-    // must be implemented by derived class
-    ResetableGuard aLock( m_aLock );
-    m_bDisposed = sal_True;
-}
-
 void SAL_CALL UIConfigElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
