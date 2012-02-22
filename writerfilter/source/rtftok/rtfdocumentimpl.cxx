@@ -146,6 +146,7 @@ static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 
 static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
+    RTFSprms* pAttributes = 0;
     if (aStates.top().nBorderState == BORDER_PARAGRAPH_BOX)
         for (int i = 0; i < 4; i++)
         {
@@ -156,24 +157,15 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
                 rAttributes->push_back(make_pair(nId, pValue));
             }
         }
+    // Attributes of the last border type
     else if (aStates.top().nBorderState == BORDER_PARAGRAPH)
-    {
-        // Attributes of the last border type
-        RTFSprms& rAttributes = lcl_getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
-        rAttributes->push_back(make_pair(nId, pValue));
-    }
+        pAttributes = &lcl_getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
     else if (aStates.top().nBorderState == BORDER_CELL)
-    {
-        // Attributes of the last border type
-        RTFSprms& rAttributes = lcl_getLastAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
-        rAttributes->push_back(make_pair(nId, pValue));
-    }
+        pAttributes = &lcl_getLastAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
     else if (aStates.top().nBorderState == BORDER_PAGE)
-    {
-        // Attributes of the last border type
-        RTFSprms& rAttributes = lcl_getLastAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
-        rAttributes->push_back(make_pair(nId, pValue));
-    }
+        pAttributes = &lcl_getLastAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
+    if (pAttributes)
+        (*pAttributes)->push_back(make_pair(nId, pValue));
 }
 
 // NEEDSWORK: DocxAttributeOutput's impl_AppendTwoDigits does the same.
