@@ -5938,7 +5938,7 @@ internal)
     AC_MSG_RESULT([internal])
     ;;
 system)
-    if test $_os = Darwin -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \); then
+    if test $_os = Darwin -a -z "$PYTHON" -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \); then
         AC_MSG_ERROR([Cannot use "system" Python, the Python in Mac OS X $with_macosx_version_min_required is incompatible with Python3-ified pyuno])
     fi
     AC_MSG_RESULT([system])
@@ -5963,13 +5963,29 @@ if test "$cross_compiling" = yes; then
         enable_python=system
     fi
 else
-    if test $enable_python = system; then
-        # This causes an error if no python command is found
-        # Note that this takes the system python called just "python",
-        # which isn't actually what we want on MacOSX when building
-        # against the 10.6 SDK. But that shouldn't matter, we
-        # select the correct python command manually below anyway.
-        AM_PATH_PYTHON([2.6])
+    if test $enable_python = system -a -z "$PYTHON"; then
+        if test $_os = Darwin; then
+            # We already have logic above to make sure the system Python
+            # is used only when building against SDK 10.6 or newer.
+
+            # Make sure we use the 2.6 Python when building against the
+            # 10.6 SDK.
+            case $with_macosx_sdk in
+            10.6)
+                python_version=2.6;;
+            10.7)
+                python_version=2.7;;
+            *)
+                # ???
+                python_version=2.7;;
+            esac
+            PYTHON=python$python_version
+            PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
+            PYTHON_LIBS="-framework Python"
+        else
+            # This causes an error if no python command is found
+            AM_PATH_PYTHON([2.6])
+        fi
     elif test $enable_python = auto; then
         dnl This allows lack of system Python
         AM_PATH_PYTHON([2.6],, [:])
@@ -5983,26 +5999,6 @@ else
 fi
 
 if test $enable_python = system; then
-    if test $_os = Darwin; then
-        # We already have logic above to make sure the system Python
-        # is used only when building against SDK 10.6 or newer.
-
-        # Make sure we use the 2.6 Python when building against the
-        # 10.6 SDK.
-        case $with_macosx_sdk in
-        10.6)
-            python_version=2.6;;
-        10.7)
-            python_version=2.7;;
-        *)
-            # ???
-            python_version=2.7;;
-        esac
-        PYTHON=python$python_version
-
-        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
-        PYTHON_LIBS="-framework Python"
-    fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
         # Fallback: Accept these in the environment, or as set above
         # for MacOSX.
@@ -6019,7 +6015,7 @@ if test $enable_python = system; then
             PYTHON_CFLAGS="-I$python_include"
             PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
         fi
-    elif test "$cross_compiling" = yes; then
+    else
         dnl How to find out the cross-compilation Python installation path?
         dnl Let's hardocode what we know for different distributions for now...
 
