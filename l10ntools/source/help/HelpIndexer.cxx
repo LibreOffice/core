@@ -42,10 +42,13 @@
 using namespace lucene::document;
 
 HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
-    rtl::OUString const &captionDir, rtl::OUString const &contentDir, rtl::OUString const &indexDir) :
-d_lang(lang), d_module(module), d_captionDir(captionDir), d_contentDir(contentDir), d_indexDir(indexDir),
-d_error(), d_files()
+    rtl::OUString const &srcDir, rtl::OUString const &outDir)
+    : d_lang(lang), d_module(module)
 {
+    d_indexDir = rtl::OUStringBuffer(outDir).append('/').
+        append(module).appendAscii(RTL_CONSTASCII_STRINGPARAM(".idxl")).toString();
+    d_captionDir = srcDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/caption"));
+    d_contentDir = srcDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/content"));
 }
 
 bool HelpIndexer::indexDocuments() {

@@ -340,7 +340,6 @@ Module gid_Module_Root_Files_5
 #if ! defined SYSTEM_CLUCENE
         gid_File_Lib_CLucene,
 #endif
-        gid_File_Lib_CLuceneHelpWrapper,
 	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Curl,
 	gid_Unixlink_File_Lib_Curl,

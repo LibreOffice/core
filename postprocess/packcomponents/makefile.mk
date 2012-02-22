@@ -174,7 +174,6 @@ my_components += \
     syssh \
     tvhlp1 \
     ucpchelp1 \
-    CLuceneHelpWrapper \
 
 .ENDIF
 

@@ -26,13 +26,11 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * @param lang Help files language.
 	 * @param module The module of the helpfiles.
-	 * @param captionDir The directory to scan for caption files.
-	 * @param contentDir The directory to scan for content files.
-	 * @param indexDir The directory to write the index to.
+	 * @param srcDir The help directory to index
+	 * @param outDir The directory to write the "module".idxl directory to
 	 */
 	HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
-		rtl::OUString const &captionDir, rtl::OUString const &contentDir,
-		rtl::OUString const &indexDir);
+		rtl::OUString const &srcDir, rtl::OUString const &outDir);
 
 	/**
 	 * Run the indexer.

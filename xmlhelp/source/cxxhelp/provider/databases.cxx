@@ -2149,11 +2149,7 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
                     }
                 }
 
-		rtl::OUString aCaption = aLangURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/caption"));
-		rtl::OUString aContent = aLangURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/content"));
-
-		HelpIndexer aIndexer(aLang, aMod, aCaption, aContent, aZipDir);
-
+		HelpIndexer aIndexer(aLang, aMod, aLangURL, aZipDir);
 		aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )

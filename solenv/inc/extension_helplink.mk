@@ -36,10 +36,6 @@ HELPLINKALLADDEDDEPS=$(foreach,i,$(aux_alllangiso) $(subst,LANGUAGE,$i $(LINKADD
 
 ALLTAR : $(HELPLINKALLTARGETS)
 
-.IF "$(SYSTEM_DB)" != "YES"
-JAVA_LIBRARY_PATH= -Djava.library.path=$(SOLARSHAREDBIN)
-.ENDIF
-
 XSL_DIR*:=$(SOLARBINDIR)
 XHPLINKSRC*:=$(XHPDEST)
 STY_SWITCH:= -sty $(XSL_DIR)/embed.xsl
@@ -53,12 +49,10 @@ $(HELPLINKALLTARGETS) : $(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/$$(@:b:s/_/./
     @echo Building help index for $(@:b:s/_/./:e:s/.//)
     $(COMMAND_ECHO)$(HELPLINKER) -mod $(LINKNAME) -extlangsrc $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} $(STY_SWITCH) -extlangdest $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -idxcaption $(XSL_DIR)/idxcaption.xsl -idxcontent $(XSL_DIR)/idxcontent.xsl $(LINKLINKFILES)
     $(COMMAND_ECHO)cd $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && zip -u -r $(LINKNAME).jar $(PACKAGE)/* $(CHECKZIPRESULT)
-.IF "$(SOLAR_JAVA)" == "TRUE"
 # cleanup index dir
     -$(RM) $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))}/$(LINKNAME).idxl/*
-    $(HELPINDEXER) -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -srcdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && $(TOUCH) $@
+    $(HELPINDEXER) -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -dir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && $(TOUCH) $@
     -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/content/*.*
     -$(RMDIR) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/content
     -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/caption/*.*
     -$(RMDIR) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/caption
-.ENDIF

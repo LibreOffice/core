@@ -43,6 +43,7 @@
 
 #if !defined(ANDROID) && !defined(IOS)
 #include <l10ntools/compilehelp.hxx>
+#include <l10ntools/HelpIndexer.hxx>
 #endif
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -61,29 +62,6 @@ namespace dp_registry {
 namespace backend {
 namespace help {
 namespace {
-
-// A current context that filters out java-vm.interaction-handler:
-class NonJavaCurrentContext: public cppu::WeakImplHelper1< XCurrentContext > {
-public:
-    NonJavaCurrentContext(Reference< XCurrentContext > const & parent):
-        parent_(parent) {}
-
-    virtual Any SAL_CALL getValueByName(rtl::OUString const & Name)
-        throw (RuntimeException);
-
-private:
-    Reference< XCurrentContext > parent_;
-};
-
-Any NonJavaCurrentContext::getValueByName(rtl::OUString const & Name)
-    throw (RuntimeException)
-{
-    return
-        (Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(JAVA_INTERACTION_HANDLER_NAME))
-         || !parent_.is())
-        ? Any() : parent_->getValueByName(Name);
-}
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -441,28 +419,6 @@ void BackendImpl::implProcessHelp(
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                 }
 
-                Reference<XComponentContext> const & xContext = getComponentContext();
-                Reference< script::XInvocation > xInvocation;
-                if( xContext.is() )
-                {
-                    // Ignore the missing JRE scenario on upgrade/first-start
-                    // without horrible end-user warnings that are ignorable,
-                    // and cause grief:
-                    ContextLayer l(
-                        new NonJavaCurrentContext(getCurrentContext()));
-                    try
-                    {
-                        xInvocation = Reference< script::XInvocation >(
-                            xContext->getServiceManager()->createInstanceWithContext(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.help.HelpIndexer" )), xContext ) , UNO_QUERY );
-                    }
-                    catch (const Exception &)
-                    {
-                        // i98680: Survive missing lucene
-                    }
-                }
-
                 // Scan languages
                 Sequence< rtl::OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
                 sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
@@ -542,33 +498,19 @@ void BackendImpl::implProcessHelp(
                             nXhpFileCount, pXhpFiles,
                             langFolderDestExpanded, aErrorInfo );
 
-                        if( bSuccess && xInvocation.is() )
+                        if( bSuccess )
                         {
-                            Sequence<uno::Any> aParamsSeq( 6 );
-
-                            aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" ) ));
-
                             rtl::OUString aLang;
                             sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
                             if( nLastSlash != -1 )
                                 aLang = aLangURL.copy( nLastSlash + 1 );
                             else
                                 aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
-                            aParamsSeq[1] = uno::makeAny( aLang );
 
-                            aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-mod" ) ));
-                            aParamsSeq[3] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "help" ) ));
+                            rtl::OUString aMod(RTL_CONSTASCII_USTRINGPARAM("help"));
 
-                            aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-zipdir" ) ));
-                            rtl::OUString aSystemPath;
-                            osl::FileBase::getSystemPathFromFileURL(
-                                langFolderDestExpanded, aSystemPath );
-                            aParamsSeq[5] = uno::makeAny( aSystemPath );
-
-                            Sequence< sal_Int16 > aOutParamIndex;
-                            Sequence< uno::Any > aOutParam;
-                            uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "createIndex" )),
-                                                                 aParamsSeq, aOutParamIndex, aOutParam );
+                            HelpIndexer aIndexer(aLang, aMod, langFolderDestExpanded, langFolderDestExpanded);
+                            aIndexer.indexDocuments();
                         }
 
                         if( !bSuccess )

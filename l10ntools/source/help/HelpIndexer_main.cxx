@@ -37,13 +37,11 @@
 int main(int argc, char **argv) {
     const std::string pLang("-lang");
     const std::string pModule("-mod");
-    const std::string pOutDir("-zipdir");
-    const std::string pSrcDir("-srcdir");
+    const std::string pDir("-dir");
 
     std::string lang;
     std::string module;
-    std::string srcDir;
-    std::string outDir;
+    std::string dir;
 
     bool error = false;
     for (int i = 1; i < argc; ++i) {
@@ -59,15 +57,9 @@ int main(int argc, char **argv) {
             } else {
                 error = true;
             }
-        } else if (pOutDir.compare(argv[i]) == 0) {
+        } else if (pDir.compare(argv[i]) == 0) {
             if (i + 1 < argc) {
-                outDir = argv[++i];
-            } else {
-                error = true;
-            }
-        } else if (pSrcDir.compare(argv[i]) == 0) {
-            if (i + 1 < argc) {
-                srcDir = argv[++i];
+                dir = argv[++i];
             } else {
                 error = true;
             }
@@ -80,40 +72,30 @@ int main(int argc, char **argv) {
         std::cerr << "Error parsing command-line arguments" << std::endl;
     }
 
-    if (error || lang.empty() || module.empty() || srcDir.empty() || outDir.empty()) {
-        std::cerr << "Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -srcdir SourceDir -zipdir OutputDir" << std::endl;
+    if (error || lang.empty() || module.empty() || dir.empty()) {
+        std::cerr << "Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -dir Dir" << std::endl;
         return 1;
     }
 
-    std::string captionDir(srcDir + SAL_PATHDELIMITER + "caption");
-    std::string contentDir(srcDir + SAL_PATHDELIMITER + "content");
-    std::string indexDir(outDir + SAL_PATHDELIMITER + module + ".idxl");
+    std::string captionDir(dir + SAL_PATHDELIMITER + "caption");
+    std::string contentDir(dir + SAL_PATHDELIMITER + "content");
+    std::string indexDir(dir + SAL_PATHDELIMITER + module + ".idxl");
 
-    rtl::OUString sCaptionDir, sContentDir, sIndexDir;
-
-    osl::File::getFileURLFromSystemPath(
-        rtl::OUString(captionDir.c_str(), captionDir.size(), osl_getThreadTextEncoding()),
-        sCaptionDir);
+    rtl::OUString sDir;
 
     osl::File::getFileURLFromSystemPath(
-        rtl::OUString(contentDir.c_str(), contentDir.size(), osl_getThreadTextEncoding()),
-        sContentDir);
-
-    osl::File::getFileURLFromSystemPath(
-        rtl::OUString(indexDir.c_str(), indexDir.size(), osl_getThreadTextEncoding()),
-        sIndexDir);
+        rtl::OUString(dir.c_str(), dir.size(), osl_getThreadTextEncoding()),
+        sDir);
 
     rtl::OUString cwd;
     osl_getProcessWorkingDir(&cwd.pData);
 
-    osl::File::getAbsoluteFileURL(cwd, sCaptionDir, sCaptionDir);
-    osl::File::getAbsoluteFileURL(cwd, sContentDir, sContentDir);
-    osl::File::getAbsoluteFileURL(cwd, sIndexDir, sIndexDir);
+    osl::File::getAbsoluteFileURL(cwd, sDir, sDir);
 
     HelpIndexer indexer(
         rtl::OUString(lang.c_str(), lang.size(), osl_getThreadTextEncoding()),
         rtl::OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
-        sCaptionDir, sContentDir, sIndexDir);
+        sDir, sDir);
 
     if (!indexer.indexDocuments()) {
         std::wcerr << indexer.getErrorMessage().getStr() << std::endl;
