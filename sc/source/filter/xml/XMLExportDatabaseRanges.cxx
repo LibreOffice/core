@@ -111,7 +111,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                             sal_Int32 nLength = aImportProperties.getLength();
                             sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
                             for (sal_Int32 j = 0; j < nLength; ++j)
-                                if (aImportProperties[j].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
+                                if (aImportProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SC_UNONAME_SRCTYPE)))
                                     aImportProperties[j].Value >>= nSourceType;
                             if (nSourceType != sheet::DataImportMode_NONE)
                             {

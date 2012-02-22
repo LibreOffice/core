@@ -89,7 +89,7 @@ bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRang
     bool bOk;
     if ( bCompile )
         pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
     {
         pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
         bOk = true;
@@ -209,7 +209,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     bool bUndo = pDoc->IsUndoEnabled();
 
     ScDBData* pData = NULL;
-    if (rtl::OUString(rNewData.GetName())==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (rNewData.GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
     {
         ScRange aRange;
         rNewData.GetArea(aRange);
