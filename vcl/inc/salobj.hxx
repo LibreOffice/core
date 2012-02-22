@@ -66,13 +66,13 @@ public:
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    Show( sal_Bool bVisible ) = 0;
-    virtual void                    Enable( sal_Bool ) {}
+    virtual void                    Enable( sal_Bool /* nEnable */ ) {}
     virtual void                    GrabFocus() {}
 
     virtual void                    SetBackground() {}
-    virtual void                    SetBackground( SalColor ) {}
+    virtual void                    SetBackground( SalColor /* nSalColor */ ) {}
 
-    virtual void                    SetForwardKey( sal_Bool /*bEnable*/ ) {}
+    virtual void                    SetForwardKey( sal_Bool /* bEnable */ ) {}
 
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
