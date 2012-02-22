@@ -174,7 +174,7 @@ static sal_Bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMe
     sal_Bool bError1 = pAgg1 && pAgg1->HasError();
     sal_Bool bError2 = pAgg2 && pAgg2->HasError();
     if ( bError1 )
-        return sal_False;       // equal
+        return sal_False;       // errors are always sorted at the end
     else if ( bError2 )
         return sal_True;            // errors are always sorted at the end
     else
