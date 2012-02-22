@@ -323,12 +323,17 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    affine_uno \
     jpipe \
     juh \
     juhx \
     jvmfwk \
+    log_uno \
+    reg \
     sal_textenc \
+    store \
     sunjavaplugin \
+    unsafe_uno \
     xmlreader \
 ))
 
@@ -341,7 +346,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    affine_uno \
     avmediagst \
     avmediawin \
     cached1 \
@@ -358,15 +362,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_es \
     localedata_euro \
     localedata_others \
-    log_uno \
     mcnttype \
     package2 \
-    reg \
     scriptframe \
     smoketest \
     sofficeapp \
     srtrs1 \
-    store \
     subsequenttest \
     test \
     textconv_dict \
@@ -379,7 +380,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     unoexceptionprotector \
     unopkgapp \
     unotest \
-    unsafe_uno \
     updchk \
     xmlsecurity \
     xsec_fw \
@@ -429,7 +429,6 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     basprov \
-    bootstrap \
     cairocanvas \
     canvasfactory \
     configmgr \
@@ -500,6 +499,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     binaryurp \
+    bootstrap \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
