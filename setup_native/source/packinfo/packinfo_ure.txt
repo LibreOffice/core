@@ -52,13 +52,13 @@ packageversion = "%UREPACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Stdlib"
-solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlib"
-packagename = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlib"
+module = "gid_Module_Optional_Stdlibs"
+solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
+packagename = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
 copyright = "2012 by LibreOffice"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "UNO Runtime Environment"
+description = "libstdc++ and libgcc_s for too old Linux systems"
 destpath = "/opt"
 packageversion = "%UREPACKAGEVERSION"
 End

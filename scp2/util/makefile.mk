@@ -106,6 +106,11 @@ SCP1FILES +=                               \
              module_font_accessories.par      \
              file_font_accessories.par
 .ENDIF
+.IF "$(SYSTEM_STDLIBS)" != "YES"
+SCP1FILES +=                               \
+             module_stdlibs.par            \
+             file_stdlibs.par
+.ENDIF
 SCP1FILES +=                               \
              ure_into_ooo.par              \
              ure.par                       \

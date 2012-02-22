@@ -20,10 +20,11 @@ cp    scp2\source\python          nmake    -    all    cp_python cp_langmacros c
 cp    scp2\source\quickstart      nmake    -    all    cp_quickstart cp_langmacros cp_langtemplates NULL
 cp    scp2\source\sdkoo           nmake    -    all    cp_sdkoo cp_langmacros cp_langtemplates NULL
 cp    scp2\source\smoketest       nmake    -    all    cp_smoketest cp_langmacros cp_langtemplates NULL
+cp    scp2\source\stdlibs         nmake    -    all    cp_stdlibs cp_langmacros cp_langtemplates NULL
 cp    scp2\source\writer          nmake    -    all    cp_writer cp_langmacros cp_langtemplates NULL
 cp    scp2\source\base            nmake    -    all    cp_base cp_langmacros cp_langtemplates NULL
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\winexplorerext  nmake    -    all    cp_winexplorerext cp_langmacros cp_langtemplates NULL
 cp    scp2\source\onlineupdate    nmake    -    all    cp_update cp_langmacros cp_langtemplates NULL
 cp    scp2\source\accessories     nmake    -    all    cp_accessories cp_langmacros NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_extensions cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_math cp_ooo cp_python cp_quickstart cp_smoketest cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update cp_accessories NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_extensions cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_math cp_ooo cp_python cp_quickstart cp_smoketest cp_stdlibs cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update cp_accessories NULL
