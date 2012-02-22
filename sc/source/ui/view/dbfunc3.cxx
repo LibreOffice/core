@@ -1437,7 +1437,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
 
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aData( *pDPObj->GetSaveData() );
-    sal_Bool bChange = false;
+    bool bChange = false;
 
     sal_uInt16 nOrient = DataPilotFieldOrientation_HIDDEN;
     long nField = pDPObj->GetHeaderDim( rPos, nOrient );
@@ -1461,7 +1461,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
                     ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aOldText );
                     pSaveDim->SetName( rString );
 
-                    bChange = sal_True;
+                    bChange = true;
                 }
                 else
                     nErrorId = STR_INVALIDNAME;
@@ -1675,10 +1675,8 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
     {
         // apply changes
         ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-        ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-        pNewObj->SetSaveData( aData );
-        aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-        delete pNewObj;
+        pDPObj->SetSaveData( aData );
+        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
     }
     else
     {
