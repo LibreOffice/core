@@ -58,6 +58,7 @@ public:
     void testN192129();
     void testFdo45543();
     void testN695479();
+    void testFdo42465();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -65,17 +66,40 @@ public:
     CPPUNIT_TEST(testN192129);
     CPPUNIT_TEST(testFdo45543);
     CPPUNIT_TEST(testN695479);
+    CPPUNIT_TEST(testFdo42465);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    /// Load an RTF file and make the document available via mxComponent.
     void load(const OUString& rURL);
+    /// Get the length of the whole document.
+    int getLength();
     uno::Reference<lang::XComponent> mxComponent;
 };
 
 void RtfModelTest::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtftok/data/") + rFilename);
+}
+
+int RtfModelTest::getLength()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    OUStringBuffer aBuf;
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+        while (xRangeEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+            aBuf.append(xRange->getString());
+        }
+    }
+    return aBuf.getLength();
 }
 
 void RtfModelTest::setUp()
@@ -150,22 +174,7 @@ void RtfModelTest::testN192129()
 void RtfModelTest::testFdo45543()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45543.rtf")));
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    OUStringBuffer aBuf;
-    while (xParaEnum->hasMoreElements())
-    {
-        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
-        while (xRangeEnum->hasMoreElements())
-        {
-            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
-            aBuf.append(xRange->getString());
-        }
-    }
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)5, aBuf.getLength());
+    CPPUNIT_ASSERT_EQUAL(5, getLength());
 }
 
 void RtfModelTest::testN695479()
@@ -227,6 +236,12 @@ void RtfModelTest::testN695479()
     }
     CPPUNIT_ASSERT(bFrameFound);
     CPPUNIT_ASSERT(bDrawFound);
+}
+
+void RtfModelTest::testFdo42465()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo42465.rtf")));
+    CPPUNIT_ASSERT_EQUAL(3, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
