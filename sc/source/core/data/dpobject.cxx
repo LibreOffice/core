@@ -2377,64 +2377,61 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     uno::Reference<sheet::XDimensionsSupplier> xRet = NULL;
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
-    uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
-    if ( xEnAc.is() )
+    uno::Reference<container::XContentEnumerationAccess> xEnAc(xManager, uno::UNO_QUERY);
+    if (!xEnAc.is())
+        return xRet;
+
+    uno::Reference<container::XEnumeration> xEnum =
+        xEnAc->createContentEnumeration(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCDPSOURCE_SERVICE)));
+    if (!xEnum.is())
+        return xRet;
+
+    while (xEnum->hasMoreElements() && !xRet.is())
     {
-        uno::Reference<container::XEnumeration> xEnum = xEnAc->createContentEnumeration(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDPSOURCE_SERVICE )) );
-        if ( xEnum.is() )
+        uno::Any aAddInAny = xEnum->nextElement();
+        uno::Reference<uno::XInterface> xIntFac;
+        aAddInAny >>= xIntFac;
+        if (!xIntFac.is())
+            continue;
+
+        uno::Reference<lang::XServiceInfo> xInfo(xIntFac, uno::UNO_QUERY);
+        if (!xInfo.is() || xInfo->getImplementationName() != aImplName)
+            continue;
+
+        try
         {
-            while ( xEnum->hasMoreElements() && !xRet.is() )
+            // #i113160# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
+            // passing the context to the component (see ScUnoAddInCollection::Initialize)
+
+            uno::Reference<uno::XInterface> xInterface;
+            uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+            uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
+            if (xCtx.is() && xCFac.is())
+                xInterface = xCFac->createInstanceWithContext(xCtx);
+
+            if (!xInterface.is())
             {
-                uno::Any aAddInAny = xEnum->nextElement();
-//              if ( aAddInAny.getReflection()->getTypeClass() == TypeClass_INTERFACE )
-                {
-                    uno::Reference<uno::XInterface> xIntFac;
-                    aAddInAny >>= xIntFac;
-                    if ( xIntFac.is() )
-                    {
-                        uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
-                        if ( xInfo.is() && xInfo->getImplementationName() == aImplName )
-                        {
-                            try
-                            {
-                                // #i113160# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
-                                // passing the context to the component (see ScUnoAddInCollection::Initialize)
-
-                                uno::Reference<uno::XInterface> xInterface;
-                                uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
-                                uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
-                                if (xCtx.is() && xCFac.is())
-                                    xInterface = xCFac->createInstanceWithContext(xCtx);
-
-                                if (!xInterface.is())
-                                {
-                                    uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
-                                    if ( xFac.is() )
-                                        xInterface = xFac->createInstance();
-                                }
-
-                                uno::Reference<lang::XInitialization> xInit( xInterface, uno::UNO_QUERY );
-                                if (xInit.is())
-                                {
-                                    //  initialize
-                                    uno::Sequence<uno::Any> aSeq(4);
-                                    uno::Any* pArray = aSeq.getArray();
-                                    pArray[0] <<= rtl::OUString( rDesc.aParSource );
-                                    pArray[1] <<= rtl::OUString( rDesc.aParName );
-                                    pArray[2] <<= rtl::OUString( rDesc.aParUser );
-                                    pArray[3] <<= rtl::OUString( rDesc.aParPass );
-                                    xInit->initialize( aSeq );
-                                }
-                                xRet = uno::Reference<sheet::XDimensionsSupplier>( xInterface, uno::UNO_QUERY );
-                            }
-                            catch(uno::Exception&)
-                            {
-                            }
-                        }
-                    }
-                }
+                uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
+                if ( xFac.is() )
+                    xInterface = xFac->createInstance();
             }
+
+            uno::Reference<lang::XInitialization> xInit( xInterface, uno::UNO_QUERY );
+            if (xInit.is())
+            {
+                //  initialize
+                uno::Sequence<uno::Any> aSeq(4);
+                uno::Any* pArray = aSeq.getArray();
+                pArray[0] <<= rtl::OUString( rDesc.aParSource );
+                pArray[1] <<= rtl::OUString( rDesc.aParName );
+                pArray[2] <<= rtl::OUString( rDesc.aParUser );
+                pArray[3] <<= rtl::OUString( rDesc.aParPass );
+                xInit->initialize( aSeq );
+            }
+            xRet = uno::Reference<sheet::XDimensionsSupplier>( xInterface, uno::UNO_QUERY );
+        }
+        catch(uno::Exception&)
+        {
         }
     }
 
