@@ -90,7 +90,7 @@ CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 
 .IF "$(OS)" == "MACOSX"
-PATCH_FILES+=Python-2.6.1-py8067.patch Python-2.6.1-dylib_dynload.patch
+PATCH_FILES+=Python-2.6.1-py8067.patch
 # don't build dual-arch version as OOo itself is not universal binary either
 PATCH_FILES+=Python-2.6.1-arch_$(eq,$(CPU),I i386 ppc).patch
 
