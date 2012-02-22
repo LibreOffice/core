@@ -161,7 +161,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 }
                 pQueryResultVector->reserve( hitCount );
 
-                // START Invoke CLucene HelpSearch
                 rtl::OUString aLang = m_aURLParameter.get_language();
                 const std::vector< rtl::OUString >& aListItem = queryList[i];
                 ::rtl::OUString aNewQueryStr = aListItem[0];
@@ -169,8 +168,15 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 vector<float> aScoreVector;
                 vector<rtl::OUString> aPathVector;
 
-                HelpSearch searcher(aLang, idxDir);
-                searcher.query(aNewQueryStr, bCaptionsOnly, aPathVector, aScoreVector);
+                try
+                {
+                    HelpSearch searcher(aLang, idxDir);
+                    searcher.query(aNewQueryStr, bCaptionsOnly, aPathVector, aScoreVector);
+                }
+                catch (CLuceneError &e)
+                {
+                    SAL_WARN("xmlhelp", "CLuceneError: " << e.what());
+                }
 
                 if( nQueryListSize > 1 )
                     aSet.clear();
@@ -180,7 +186,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                     if (nQueryListSize > 1)
                         aSet.insert(aPathVector[j]);
                 }
-                // END Invoke CLucene HelpSearch
 
                 // intersect
                 if( nQueryListSize > 1 )
@@ -252,10 +257,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         catch (const Exception &e)
         {
             SAL_WARN("xmlhelp", "Exception: " << e.Message);
-        }
-        catch (CLuceneError &e)
-        {
-            SAL_WARN("xmlhelp", "CLuceneError: " << e.what());
         }
 
         ++iDir;
