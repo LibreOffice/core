@@ -28,6 +28,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -198,6 +200,15 @@ void RtfModelTest::testN695479()
             uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
             uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(OUString(RTL_CONSTASCII_USTRINGPARAM("plain")), xText->getString());
+
+            if (i == 0)
+            {
+                // Additonally, the frist frame should have double border at the bottom.
+                aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BottomBorder")));
+                table::BorderLine2 aBorder;
+                aValue >>= aBorder;
+                CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::DOUBLE, aBorder.LineStyle);
+            }
         }
         else if (xServiceInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))))
         {
