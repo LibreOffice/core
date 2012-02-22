@@ -222,28 +222,24 @@ MQueryHelper::getByIndex( sal_uInt32 nRow )
     }
 
     do {
-        // Obtain the Mutex - don't use a guard as we want to be able to release
-        // and acquire again...
-        m_aMutex.acquire();
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
         if ( nRow > m_aResults.size() )
         {
             if ( m_bQueryComplete )
             {
                 m_bAtEnd = sal_True;
-                m_aMutex.release();
                 return( NULL );
             }
             else
             {
                 clearResultOrComplete();
-                m_aMutex.release();
+                aGuard.clear();
                 if ( !waitForResultOrComplete( ) )
                     return( NULL );
             }
         }
         else
         {
-            m_aMutex.release();
             return( m_aResults[ nRow -1 ] );
         }
     } while ( sal_True );
