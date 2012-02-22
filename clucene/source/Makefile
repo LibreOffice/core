@@ -40,6 +40,7 @@ done :
 	# FIXME: do not hardcode the path here
 	$(GNUTAR) -x --strip-component=1 -f $(FIXED_TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-internal-zlib.patch
+	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-warnings.patch
 	#FIXME ?, our rules expect .cxx
 	for i in `find . -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done
 ifneq ($(OS),WNT)
