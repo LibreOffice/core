@@ -6,7 +6,7 @@ TARGET=gcc3_specific
 .INCLUDE: settings.mk
 # ------------------------------------------------------------------
 
-.IF "$(COMID)"=="gcc3"
+.IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 
