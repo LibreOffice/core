@@ -35,14 +35,8 @@
 
 #include <l10ntools/HelpSearch.hxx>
 
-#ifndef INCLUDED_STL_ALGORITHM
 #include <algorithm>
-#define INCLUDED_STL_ALGORITHM
-#endif
-#ifndef INCLUDED_STL_SET
 #include <set>
-#define INCLUDED_STL_SET
-#endif
 
 #include <qe/Query.hxx>
 #include <qe/DocGenerator.hxx>
@@ -86,8 +80,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_pDatabases( pDatabases ),
       m_aURLParameter( aURLParameter )
 {
-    fprintf(stderr, "ResultSetForQuery::ResultSetForQuery\n");
-
     Reference< XTransliteration > xTrans(
         xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Transliteration" )) ),
         UNO_QUERY );
