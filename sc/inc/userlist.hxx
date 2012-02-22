@@ -92,9 +92,7 @@ public:
     bool            operator!=( const ScUserList& r ) const;
 
     iterator begin();
-    iterator end();
     const_iterator begin() const;
-    const_iterator end() const;
     void clear();
     size_t size() const;
     void push_back(ScUserListData* p);

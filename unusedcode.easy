@@ -108,8 +108,6 @@ ScRangeData::ScRangeData(unsigned short)
 ScSimpleRangeList::Range::contains(ScSimpleRangeList::Range const&) const
 ScStringCell::ScStringCell()
 ScTypedStrData::GetValue() const
-ScUserList::end()
-ScUserList::end() const
 ScValidationEntries_Impl::Insert(ScValidationData* const&, unsigned short&)
 ScValidationEntries_Impl::Insert(ScValidationData* const*, unsigned short)
 ScValidationEntries_Impl::Insert(ScValidationEntries_Impl const*, unsigned short, unsigned short)
