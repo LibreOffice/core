@@ -515,16 +515,15 @@ End
 #define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
+#define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
 #if defined _MSC_VER
-#define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #if defined _DEBUG_RUNTIME
 #define SCP2_STDLP_DEBUG "d"
 #else
 #define SCP2_STDLP_DEBUG ""
 #endif
 #else // GCC
-#define SCP2_URE_DL_UNO_COMID_VER(n, v) n STRING(COMID) ".dll"
 #define SCP2_STDLP_DEBUG ""
 #endif
 #else

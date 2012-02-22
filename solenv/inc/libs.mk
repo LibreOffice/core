@@ -34,6 +34,14 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
+# workaround for MinGW to get the same DLL names as with MSC
+# e.g., uno_salhelper3gcc3.dll (vs. uno_salhelpergcc3.dll)
+.IF "$(GUI)" == "WNT"
+COMID_WITH_VERSION = $(UDK_MAJOR)$(COMID)
+.ELSE
+COMID_WITH_VERSION = $(COMID)
+.ENDIF
+
 .IF "$(GUI)" == "WNT"
 ODMA_LIB_LIB=-lodma_lib
 .ENDIF
@@ -63,7 +71,7 @@ I18NUTILLIB=-li18nutil$(COMID)
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 I18NREGEXPLIB=-li18nregexp$(DLLPOSTFIX)
-SALHELPERLIB=-luno_salhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID_WITH_VERSION)
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp$(COMID)
 CONNECTIVITYLIB=-lconnectivity
@@ -72,7 +80,7 @@ TOOLSLIBST=-latools
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(DLLPOSTFIX)
 CPPULIB=-luno_cppu
-CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+CPPUHELPERLIB=-luno_cppuhelper$(COMID_WITH_VERSION)
 UCBHELPERLIB=-lucbhelper4$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -236,7 +244,7 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-JVMACCESSLIB = -ljvmaccess$(COMID)
+JVMACCESSLIB = -ljvmaccess$(COMID_WITH_VERSION)
 .IF "$(SYSTEM_CPPUNIT)"=="YES"
 CPPUNITLIB = $(CPPUNIT_LIBS)
 .ELSE

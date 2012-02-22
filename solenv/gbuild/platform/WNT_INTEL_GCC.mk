@@ -225,7 +225,7 @@ gb_Library_UDK_MAJORVER := 3
 gb_Library_PLAINEXT := .dll.a
 
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
-gb_Library_RTVEREXT := $(gb_Library_RTEXT)
+gb_Library_RTVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_PLAINEXT)
@@ -233,7 +233,7 @@ gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_PLAINEXT)
 gb_Library_DLLEXT := .dll
 
 gb_Library_RTDLLEXT := gcc3$(gb_Library_DLLEXT)
-gb_Library_RTVERDLLEXT := $(gb_Library_RTDLLEXT)
+gb_Library_RTVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTDLLEXT)
 gb_Library_OOODLLEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNODLLEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
@@ -292,7 +292,7 @@ gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTVEREXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -304,7 +304,7 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVERDLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVERDLLEXT)) \
