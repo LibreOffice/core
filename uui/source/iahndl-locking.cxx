@@ -84,8 +84,7 @@ handleLockedDocumentRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 
@@ -175,8 +174,7 @@ handleChangedByOthersRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 
@@ -214,8 +212,7 @@ handleLockFileIgnoreRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 

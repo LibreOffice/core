@@ -51,8 +51,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME svt
-
 // because the label of a listbox is
 // a control itself (static text) we
 // have defined a control id for this
@@ -128,7 +126,7 @@ public:
 
     CResourceProvider_Impl( )
     {
-        m_ResMgr = CREATEVERSIONRESMGR( RES_NAME );
+        m_ResMgr = ResMgr::CreateResMgr("svt");
     }
 
     //-------------------------------------

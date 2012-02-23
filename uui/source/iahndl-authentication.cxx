@@ -94,7 +94,7 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         UniString aRealm(rRealm);
         boost::scoped_ptr< LoginDialog > xDialog(
                 new LoginDialog( pParent, nFlags, rInfo.GetServer(), &aRealm, xManager.get()));
@@ -425,8 +425,7 @@ executeMasterPasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             boost::scoped_ptr< MasterPasswordCreateDialog > xDialog(
@@ -528,8 +527,7 @@ executePasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             if (bIsSimplePasswordRequest)

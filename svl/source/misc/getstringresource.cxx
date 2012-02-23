@@ -77,7 +77,7 @@ SimpleResMgr * ResMgrMap::get(css::lang::Locale const & locale) {
     Map::iterator i(map_.find(code));
     if (i == map_.end()) {
         boost::scoped_ptr< SimpleResMgr > mgr(
-            new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svl), locale));
+            new SimpleResMgr("svl", locale));
         i = map_.insert(Map::value_type(code, mgr.get())).first;
         mgr.reset();
     }

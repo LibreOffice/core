@@ -428,7 +428,7 @@ namespace
     {
         ResMgr * operator ()()
         {
-            return ResMgr::CreateResMgr (CREATEVERSIONRESMGR_NAME(fps_office));
+            return ResMgr::CreateResMgr ("fps_office");
         }
 
         static ResMgr * getOrCreate()

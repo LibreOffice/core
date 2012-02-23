@@ -141,7 +141,7 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<lang::XMultiServiceFactory>
           lang::XEventListener,
           lang::XServiceInfo>( _helperMutex ),
           m_xServiceMgr( xServiceMgr ),
-          _resMgr( CREATEVERSIONRESMGR( fps_office ) )
+          _resMgr( ResMgr::CreateResMgr("fps_office") )
 {
     _extraControls = new QWidget();
     _layout = new QGridLayout(_extraControls);

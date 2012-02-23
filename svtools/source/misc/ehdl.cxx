@@ -161,7 +161,7 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     if( ! pMgr )
     {
         com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        pFreeMgr = pMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+        pFreeMgr = pMgr = ResMgr::CreateResMgr("ofa", aLocale );
     }
 }
 
@@ -311,7 +311,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
 {
     sal_Bool bRet = sal_False;
     com::sun::star::lang::Locale aLocale( Application::GetSettings().GetUILocale() );
-    ResMgr* pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+    ResMgr* pResMgr = ResMgr::CreateResMgr("ofa", aLocale );
     if( pResMgr )
     {
         ResId aId(RID_ERRHDL, *pResMgr );
@@ -441,7 +441,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
     if( ! pMgr )
     {
         com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        pFreeMgr = pMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+        pFreeMgr = pMgr = ResMgr::CreateResMgr("ofa", aLocale );
     }
     if( pMgr )
     {

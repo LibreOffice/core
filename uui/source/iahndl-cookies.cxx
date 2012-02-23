@@ -50,8 +50,7 @@ executeCookieDialog(Window * pParent, CntHTTPCookieRequest & rRequest)
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         std::auto_ptr< CookiesDialog > xDialog(
             new CookiesDialog(pParent, &rRequest, xManager.get()));
         xDialog->Execute();

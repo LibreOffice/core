@@ -3675,7 +3675,7 @@ namespace svxform
         m_aFilePickerBtn.SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
         // load the filter name from fps_office resource
-        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *CREATEVERSIONRESMGR(fps_office) ) );
+        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office") ) );
     }
 
     AddInstanceDialog::~AddInstanceDialog()

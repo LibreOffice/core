@@ -623,7 +623,7 @@ ResMgr* implGetResMgr( void )
     if( !pResMgr )
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
+        pResMgr = ResMgr::CreateResMgr("sb", aLocale );
     }
     return pResMgr;
 }

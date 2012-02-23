@@ -356,7 +356,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
             pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
             RTL_TEXTENCODING_UTF8 );
 
-    pVCLResMgr = CREATEVERSIONRESMGR( vcl );
+    pVCLResMgr = ResMgr::CreateResMgr("vcl");
 
     GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_ID_OFFICE );
     pTrayIcon = gtk_status_icon_new_from_pixbuf(pPixbuf);

@@ -107,7 +107,7 @@ UnxFilePicker::UnxFilePicker( const uno::Reference<lang::XMultiServiceFactory>& 
           m_nFilePickerRead( -1 ),
           m_pNotifyThread( NULL ),
           m_pCommandThread( NULL ),
-          m_pResMgr( CREATEVERSIONRESMGR( fps_office ) )
+          m_pResMgr( ResMgr::CreateResMgr("fps_office") )
 {
 }
 

@@ -155,8 +155,7 @@ executeUnknownAuthDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< UnknownAuthDialog > xDialog(
             new UnknownAuthDialog( pParent,
                                    rXCert,
@@ -204,8 +203,7 @@ executeSSLWarnDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(
-           ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< SSLWarnDialog > xDialog(
            new SSLWarnDialog( pParent,
                               rXCert,

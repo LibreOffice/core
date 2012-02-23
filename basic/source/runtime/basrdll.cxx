@@ -46,7 +46,7 @@ BasicDLL::BasicDLL()
 {
     BASIC_DLL() = this;
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
+    pBasResMgr = ResMgr::CreateResMgr("sb", aLocale );
     bDebugMode = sal_False;
     bBreakEnabled = sal_True;
 }
