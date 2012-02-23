@@ -1625,16 +1625,16 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     pMsg->SetMultipartBoundary (aBoundary);
                 }
 
-                ByteString aPlainDelim (pMsg->GetMultipartBoundary());
-                ByteString aDelim = rtl::OStringBuffer(
+                rtl::OString aPlainDelim (pMsg->GetMultipartBoundary());
+                rtl::OString aDelim = rtl::OStringBuffer(
                     RTL_CONSTASCII_STRINGPARAM("--")).
                     append(aPlainDelim).
                     makeStringAndClear();
-                ByteString aPlainClose = rtl::OStringBuffer(
+                rtl::OString aPlainClose = rtl::OStringBuffer(
                     aPlainDelim).
                     append(RTL_CONSTASCII_STRINGPARAM("--")).
                     makeStringAndClear();
-                ByteString aClose = rtl::OStringBuffer(
+                rtl::OString aClose = rtl::OStringBuffer(
                     aDelim).
                     append(RTL_CONSTASCII_STRINGPARAM("--")).
                     makeStringAndClear();
@@ -1651,14 +1651,14 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     if( *pChar == '\r' || *pChar == '\n' )
                     {
                         int status;
-                        if( aDelim.CompareTo (pOldPos, aDelim.Len())
-                            != COMPARE_EQUAL &&
-                            aClose.CompareTo (pOldPos, aClose.Len())
-                            != COMPARE_EQUAL &&
-                            aPlainDelim.CompareTo (pOldPos, aPlainDelim.Len())
-                            != COMPARE_EQUAL &&
-                            aPlainClose.CompareTo(pOldPos, aPlainClose.Len())
-                            != COMPARE_EQUAL )
+                        if( aDelim.compareTo(pOldPos, aDelim.getLength())
+                            != -1 &&
+                            aClose.compareTo(pOldPos, aClose.getLength())
+                            != -1 &&
+                            aPlainDelim.compareTo(pOldPos, aPlainDelim.getLength())
+                            != -1 &&
+                            aPlainClose.compareTo(pOldPos, aPlainClose.getLength())
+                            != -1 )
                         {
                             if( nBufSize &&
                                 ( pChar[1] == '\r' || pChar[1] == '\n' ) )
@@ -1687,10 +1687,10 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                             pOldPos = pChar + 1;
                             DELETEZ( pChildStrm );
 
-                            if (aClose.CompareTo (pOldPos, aClose.Len())
-                                != COMPARE_EQUAL &&
-                                aPlainClose.CompareTo (pOldPos, aClose.Len())
-                                != COMPARE_EQUAL )
+                            if (aClose.compareTo(pOldPos, aClose.getLength())
+                                != -1 &&
+                                aPlainClose.compareTo(pOldPos, aClose.getLength())
+                                != -1 )
                             {
                                 // Encapsulated message.
                                 INetMIMEMessage* pNewMessage =
