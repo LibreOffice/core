@@ -31,15 +31,11 @@
 
 #include "sal/config.h"
 
-#include <cstddef>
-
-#include "boost/noncopyable.hpp"
-#include "osl/thread.hxx"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/thread.hxx"
 #include "typelib/typedescription.hxx"
 
 #include "readerstate.hxx"
@@ -52,25 +48,14 @@ namespace binaryurp {
 
 namespace binaryurp {
 
-class Reader:
-    public osl::Thread, public salhelper::SimpleReferenceObject,
-    private boost::noncopyable
-{
+class Reader: public salhelper::Thread {
 public:
-    static void * operator new(std::size_t size)
-    { return Thread::operator new(size); }
-
-    static void operator delete(void * pointer)
-    { Thread::operator delete(pointer); }
-
     explicit Reader(rtl::Reference< Bridge > const & bridge);
 
 private:
     virtual ~Reader();
 
-    virtual void SAL_CALL run();
-
-    virtual void SAL_CALL onTerminated();
+    virtual void execute();
 
     void readMessage(Unmarshal & unmarshal);
 

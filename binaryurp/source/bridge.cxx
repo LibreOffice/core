@@ -106,7 +106,7 @@ extern "C" void SAL_CALL freeProxyCallback(
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
-void joinThread(osl::Thread * thread) {
+void joinThread(salhelper::Thread * thread) {
     assert(thread != 0);
     if (thread->getIdentifier() != osl::Thread::getCurrentIdentifier()) {
         thread->join();
@@ -239,9 +239,9 @@ void Bridge::start() {
     threadPool_ = uno_threadpool_create();
     assert(threadPool_ != 0);
     writer_.set(new Writer(this));
-    writer_->create();
+    writer_->launch();
     reader_.set(new Reader(this));
-    reader_->create();
+    reader_->launch();
 }
 
 void Bridge::terminate() {

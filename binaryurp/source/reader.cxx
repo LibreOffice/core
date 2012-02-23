@@ -109,15 +109,15 @@ extern "C" void SAL_CALL request(void * pThreadSpecificData) {
 
 }
 
-Reader::Reader(rtl::Reference< Bridge > const & bridge): bridge_(bridge) {
+Reader::Reader(rtl::Reference< Bridge > const & bridge):
+    Thread("binaryurpReader"), bridge_(bridge)
+{
     assert(bridge.is());
-    acquire();
 }
 
 Reader::~Reader() {}
 
-void Reader::run() {
-    setName("binaryurpReader");
+void Reader::execute() {
     try {
         bridge_->sendRequestChangeRequest();
         css::uno::Reference< css::connection::XConnection > con(
@@ -151,10 +151,6 @@ void Reader::run() {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
     bridge_->terminate();
-}
-
-void Reader::onTerminated() {
-    release();
 }
 
 void Reader::readMessage(Unmarshal & unmarshal) {
