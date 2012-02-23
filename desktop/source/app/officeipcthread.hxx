@@ -34,10 +34,11 @@
 #include <osl/pipe.hxx>
 #include <osl/security.hxx>
 #include <osl/signal.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/conditn.hxx>
-#include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 #include "boost/optional.hpp"
 
 namespace desktop
@@ -70,10 +71,10 @@ struct ProcessDocumentsRequest
 };
 
 class DispatchWatcher;
-class OfficeIPCThread : public osl::Thread
+class OfficeIPCThread : public salhelper::Thread
 {
   private:
-    static OfficeIPCThread*     pGlobalOfficeIPCThread;
+    static rtl::Reference< OfficeIPCThread > pGlobalOfficeIPCThread;
 
     osl::Pipe                   maPipe;
     osl::StreamPipe             maStreamPipe;
@@ -101,9 +102,10 @@ class OfficeIPCThread : public osl::Thread
 
     OfficeIPCThread();
 
-  protected:
+    virtual ~OfficeIPCThread();
+
     /// Working method which should be overridden
-    virtual void SAL_CALL run();
+    virtual void execute();
 
   public:
     enum Status
@@ -112,8 +114,6 @@ class OfficeIPCThread : public osl::Thread
         IPC_STATUS_2ND_OFFICE,
         IPC_STATUS_BOOTSTRAP_ERROR
     };
-
-    virtual ~OfficeIPCThread();
 
     // controlling pipe communication during shutdown
     static void                 SetDowning();
@@ -126,7 +126,9 @@ class OfficeIPCThread : public osl::Thread
     static Status               EnableOfficeIPCThread();
     static void                 DisableOfficeIPCThread();
     // start dispatching events...
-    static void                 SetReady(OfficeIPCThread* pThread = NULL);
+    static void                 SetReady(
+        rtl::Reference< OfficeIPCThread > const & pThread =
+            rtl::Reference< OfficeIPCThread >());
 
     bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }
 };

@@ -220,7 +220,7 @@ bool addArgument(rtl::OStringBuffer &rArguments, char prefix,
 
 }
 
-OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
+rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
     namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
@@ -376,7 +376,7 @@ void OfficeIPCThread::SetDowning()
     // requests are executed anymore.
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if ( pGlobalOfficeIPCThread )
+    if ( pGlobalOfficeIPCThread.is() )
         pGlobalOfficeIPCThread->mbDowning = true;
 }
 
@@ -387,7 +387,7 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
     // switch between just queueing the requests and executing them
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if ( pGlobalOfficeIPCThread )
+    if ( pGlobalOfficeIPCThread.is() )
     {
         s_bInEnableRequests = true;
         pGlobalOfficeIPCThread->mbRequestsEnabled = i_bEnable;
@@ -406,7 +406,7 @@ sal_Bool OfficeIPCThread::AreRequestsPending()
 {
     // Give info about pending requests
     ::osl::MutexGuard   aGuard( GetMutex() );
-    if ( pGlobalOfficeIPCThread )
+    if ( pGlobalOfficeIPCThread.is() )
         return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
     else
         return sal_False;
@@ -416,7 +416,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 {
     // Remove nCount pending requests from our internal counter
     ::osl::MutexGuard   aGuard( GetMutex() );
-    if ( pGlobalOfficeIPCThread )
+    if ( pGlobalOfficeIPCThread.is() )
     {
         if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
             pGlobalOfficeIPCThread->mnPendingRequests -= nCount;
@@ -427,13 +427,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
 
-    if( pGlobalOfficeIPCThread )
+    if( pGlobalOfficeIPCThread.is() )
         return IPC_STATUS_OK;
 
     ::rtl::OUString aUserInstallPath;
     ::rtl::OUString aDummy;
 
-    OfficeIPCThread* pThread = new OfficeIPCThread;
+    rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
     pThread->maPipeIdent = OUString( RTL_CONSTASCII_USTRINGPARAM( "SingleOfficeIPC_" ) );
 
@@ -444,7 +444,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         aDummy = aUserInstallPath;
     else
     {
-        delete pThread;
         return IPC_STATUS_BOOTSTRAP_ERROR;
     }
 
@@ -530,7 +529,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     {
         // Seems we are the one and only, so start listening thread
         pGlobalOfficeIPCThread = pThread;
-        pThread->create(); // starts thread
+        pThread->launch();
     }
     else
     {
@@ -562,7 +561,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
         aReceiveBuffer[n]='\0';
 
-        delete pThread;
         if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
             // something went wrong
             delete[] aReceiveBuffer;
@@ -580,10 +578,11 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
-    if( pGlobalOfficeIPCThread )
+    if( pGlobalOfficeIPCThread.is() )
     {
-        OfficeIPCThread *pOfficeIPCThread = pGlobalOfficeIPCThread;
-        pGlobalOfficeIPCThread = 0;
+        rtl::Reference< OfficeIPCThread > pOfficeIPCThread(
+            pGlobalOfficeIPCThread);
+        pGlobalOfficeIPCThread.clear();
 
         // send thread a termination message
         // this is done so the subsequent join will not hang
@@ -605,13 +604,11 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 
         // exit gracefully and join
         pOfficeIPCThread->join();
-        delete pOfficeIPCThread;
-
-
     }
 }
 
 OfficeIPCThread::OfficeIPCThread() :
+    Thread( "OfficeIPCThread" ),
     mbDowning( false ),
     mbRequestsEnabled( false ),
     mnPendingRequests( 0 ),
@@ -627,7 +624,7 @@ OfficeIPCThread::~OfficeIPCThread()
         mpDispatchWatcher->release();
     maPipe.close();
     maStreamPipe.close();
-    pGlobalOfficeIPCThread = 0;
+    pGlobalOfficeIPCThread.clear();
 }
 
 static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStringList )
@@ -639,16 +636,18 @@ static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStrin
     aStringList = aStringListBuf.makeStringAndClear();
 }
 
-void OfficeIPCThread::SetReady(OfficeIPCThread* pThread)
+void OfficeIPCThread::SetReady(
+    rtl::Reference< OfficeIPCThread > const & pThread)
 {
-    if (pThread == NULL) pThread = pGlobalOfficeIPCThread;
-    if (pThread != NULL)
+    rtl::Reference< OfficeIPCThread > const & t(
+        pThread.is() ? pThread : pGlobalOfficeIPCThread);
+    if (t.is())
     {
-        pThread->cReady.set();
+        t->cReady.set();
     }
 }
 
-void SAL_CALL OfficeIPCThread::run()
+void OfficeIPCThread::execute()
 {
     do
     {
@@ -664,7 +663,7 @@ void SAL_CALL OfficeIPCThread::run()
             cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!pGlobalOfficeIPCThread) return;
+            if (!pGlobalOfficeIPCThread.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
@@ -894,7 +893,7 @@ void SAL_CALL OfficeIPCThread::run()
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
-            wait( tval );
+            osl::Thread::wait( tval );
         }
     } while( schedule() );
 }
@@ -997,7 +996,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut );
     sal_Bool bShutdown( sal_False );
 
-    if ( pGlobalOfficeIPCThread )
+    if ( pGlobalOfficeIPCThread.is() )
     {
         if( ! pGlobalOfficeIPCThread->AreRequestsEnabled() )
             return bShutdown;

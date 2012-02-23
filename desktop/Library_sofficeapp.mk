@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,sofficeapp,\
     deploymentmisc \
     i18nisolang1 \
     sal \
+    salhelper \
     sfx \
     svl \
     svt \
