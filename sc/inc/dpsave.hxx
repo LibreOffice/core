@@ -237,10 +237,13 @@ public:
 
 class ScDPSaveData
 {
+    typedef boost::unordered_map<rtl::OUString, size_t, rtl::OUStringHash> DupNameCountType;
 public:
     typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
+
 private:
     DimsType aDimList;
+    DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
     ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
@@ -281,8 +284,7 @@ public:
         com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
         std::vector<const ScDPSaveDimension*>& rDims) const;
 
-    void AddDimension(ScDPSaveDimension* pDim)
-        { aDimList.push_back(pDim); }
+    void AddDimension(ScDPSaveDimension* pDim);
 
     /**
      * Get a dimension object by its name.  <i>If one doesn't exist for the
@@ -351,6 +353,10 @@ public:
      * @param rDimName dimension name
      */
     SC_DLLPUBLIC bool HasInvisibleMember(const ::rtl::OUString& rDimName) const;
+
+private:
+    void CheckDuplicateName(ScDPSaveDimension& rDim);
+    void RemoveDuplicateNameCount(const rtl::OUString& rName);
 };
 
 #endif

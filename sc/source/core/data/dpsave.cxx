@@ -37,6 +37,7 @@
 #include "global.hxx"
 
 #include <sal/types.h>
+#include "comphelper/string.hxx"
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
@@ -845,6 +846,15 @@ void ScDPSaveData::GetAllDimensionsByOrientation(
     rDims.swap(aDims);
 }
 
+void ScDPSaveData::AddDimension(ScDPSaveDimension* pDim)
+{
+    if (!pDim)
+        return;
+
+    CheckDuplicateName(*pDim);
+    aDimList.push_back(pDim);
+}
+
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const ::rtl::OUString& rName)
 {
     boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
@@ -915,7 +925,7 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const ::rtl::OUString& rName
         return NULL;
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
-    pNew->SetDupFlag( true );
+    CheckDuplicateName(*pNew);
     aDimList.push_back(pNew);
     return pNew;
 }
@@ -925,18 +935,19 @@ void ScDPSaveData::RemoveDimensionByName(const ::rtl::OUString& rName)
     boost::ptr_vector<ScDPSaveDimension>::iterator iter;
     for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        if ( iter->GetName() == rName && !iter->IsDataLayout() )
-        {
-            aDimList.erase(iter);
-            break;
-        }
+        if (iter->GetName() != rName || iter->IsDataLayout())
+            continue;
+
+        aDimList.erase(iter);
+        RemoveDuplicateNameCount(rName);
+        return;
     }
 }
 
 ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rDim )
 {
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
-    pNew->SetDupFlag( true );
+    CheckDuplicateName(*pNew);
     aDimList.push_back(pNew);
     return *pNew;
 }
@@ -1113,6 +1124,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         for (long i = 0; iter != aDimList.end(); ++iter, ++i)
         {
             rtl::OUString aName = iter->GetName();
+            rtl::OUString aCoreName = comphelper::string::removeTrailingChars(aName, sal_Unicode('*'));
 
             OSL_TRACE( "%s", aName.getStr() );
 
@@ -1137,30 +1149,24 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                 else
                 {
                     uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
-                    if ( xDimName.is() && xDimName->getName() == aName )
+                    if (xDimName.is() && xDimName->getName() == aCoreName)
                         bFound = true;
                 }
 
-                if ( bFound )
+                if (bFound)
                 {
-                    if ( iter->GetDupFlag() )
+                    if (iter->GetDupFlag())
                     {
-                        OUStringBuffer aBuf(iter->GetName());
-
-                        // different name for each duplication of a (real) dimension...
-                        for (long j=0; j<=i; ++j) //! Test !!!!!!
-                            aBuf.append(sal_Unicode('*')); //! modify name at creation of SaveDimension
-
-                        uno::Reference<util::XCloneable> xCloneable( xIntDim, uno::UNO_QUERY );
-                        OSL_ENSURE( xCloneable.is(), "cannot clone dimension" );
+                        uno::Reference<util::XCloneable> xCloneable(xIntDim, uno::UNO_QUERY);
+                        OSL_ENSURE(xCloneable.is(), "cannot clone dimension");
                         if (xCloneable.is())
                         {
                             uno::Reference<util::XCloneable> xNew = xCloneable->createClone();
-                            uno::Reference<container::XNamed> xNewName( xNew, uno::UNO_QUERY );
+                            uno::Reference<container::XNamed> xNewName(xNew, uno::UNO_QUERY);
                             if (xNewName.is())
                             {
-                                xNewName->setName(aBuf.makeStringAndClear());
-                                iter->WriteToSource( xNew );
+                                xNewName->setName(aName);
+                                iter->WriteToSource(xNew);
                             }
                         }
                     }
@@ -1268,6 +1274,29 @@ bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
         return false;
 
     return pDim->HasInvisibleMember();
+}
+
+void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
+{
+    const rtl::OUString aName = comphelper::string::removeTrailingChars(rDim.GetName(), sal_Unicode('*'));
+    DupNameCountType::iterator it = maDupNameCounts.find(aName);
+    if (it != maDupNameCounts.end())
+    {
+        // This is a duplicate name.  Up the counter and append '*' to make the name unique.
+        rtl::OUStringBuffer aBuf(aName);
+        it->second = it->second + 1;
+        for (size_t i = 0, n = it->second; i < n; ++i)
+            aBuf.append(sal_Unicode('*'));
+        rDim.SetName(aBuf.makeStringAndClear());
+        rDim.SetDupFlag(true);
+    }
+    else
+        // New name.
+        maDupNameCounts.insert(DupNameCountType::value_type(aName, 0));
+}
+
+void ScDPSaveData::RemoveDuplicateNameCount(const rtl::OUString& rName)
+{
 }
 
 void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
