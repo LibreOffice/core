@@ -32,6 +32,7 @@
 #include "rtl/ustring.hxx"
 #include "osl/time.h"
 #include "osl/thread.hxx"
+#include "salhelper/thread.hxx"
 #include "NeonSession.hxx"
 #include "NeonLockStore.hxx"
 
@@ -39,7 +40,7 @@ using namespace webdav_ucp;
 
 namespace webdav_ucp {
 
-class TickerThread : public osl::Thread
+class TickerThread : public salhelper::Thread
 {
     bool m_bFinish;
     NeonLockStore & m_rLockStore;
@@ -47,19 +48,20 @@ class TickerThread : public osl::Thread
 public:
 
     TickerThread( NeonLockStore & rLockStore )
-    : osl::Thread(), m_bFinish( false ), m_rLockStore( rLockStore ) {}
+    : Thread( "NeonTickerThread" ), m_bFinish( false ),
+      m_rLockStore( rLockStore ) {}
 
     void finish() { m_bFinish = true; }
 
-protected:
+private:
 
-    virtual void SAL_CALL run();
+    virtual void execute();
 };
 
 } // namespace webdav_ucp
 
 // -------------------------------------------------------------------
-void TickerThread::run()
+void TickerThread::execute()
 {
     OSL_TRACE( "TickerThread: start." );
 
@@ -78,7 +80,7 @@ void TickerThread::run()
         TimeValue aTV;
         aTV.Seconds = 0;
         aTV.Nanosec = 1000000000 / nNth;
-        wait( aTV );
+        osl::Thread::wait( aTV );
     }
 
     OSL_TRACE( "TickerThread: stop." );
@@ -86,8 +88,7 @@ void TickerThread::run()
 
 // -------------------------------------------------------------------
 NeonLockStore::NeonLockStore()
-    : m_pNeonLockStore( ne_lockstore_create() ),
-      m_pTickerThread( 0 )
+    : m_pNeonLockStore( ne_lockstore_create() )
 {
     OSL_ENSURE( m_pNeonLockStore, "Unable to create neon lock store!" );
 }
@@ -122,10 +123,10 @@ void NeonLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pTickerThread )
+    if ( !m_pTickerThread.is() )
     {
         m_pTickerThread = new TickerThread( *this );
-        m_pTickerThread->create();
+        m_pTickerThread->launch();
     }
 }
 
@@ -134,12 +135,11 @@ void NeonLockStore::stopTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( m_pTickerThread )
+    if ( m_pTickerThread.is() )
     {
         m_pTickerThread->finish();
         m_pTickerThread->join();
-        delete m_pTickerThread;
-        m_pTickerThread = 0;
+        m_pTickerThread.clear();
     }
 }
 
