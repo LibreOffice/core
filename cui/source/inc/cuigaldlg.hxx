@@ -29,7 +29,9 @@
 #ifndef _CUI_GALDLG_HXX_
 #define _CUI_GALDLG_HXX_
 
-#include <osl/thread.hxx>
+#include "sal/config.h"
+
+#include <salhelper/thread.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
@@ -75,7 +77,7 @@ struct FilterEntry
 // - SearchThread -
 // ----------------
 
-class SearchThread : public ::osl::Thread
+class SearchThread: public salhelper::Thread
 {
 private:
 
@@ -87,15 +89,14 @@ private:
                                             const ::std::vector< String >& rFormats,
                                             sal_Bool bRecursive );
 
-    virtual void SAL_CALL       run();
-    virtual void SAL_CALL       onTerminated();
+    virtual                     ~SearchThread();
+    virtual void                execute();
 
 public:
 
                                 SearchThread( SearchProgress* pProgess,
                                               TPGalleryThemeProperties* pBrowser,
                                               const INetURLObject& rStartURL );
-    virtual                     ~SearchThread();
 };
 
 // ------------------
@@ -111,7 +112,9 @@ private:
     FixedText           aFtSearchType;
     FixedLine           aFLSearchType;
     CancelButton        aBtnCancel;
-    SearchThread        maSearchThread;
+    Window * parent_;
+    INetURLObject startUrl_;
+    rtl::Reference< SearchThread > maSearchThread;
 
                         DECL_LINK( ClickCancelBtn, void* );
     void                Terminate();
@@ -132,7 +135,7 @@ public:
 // - TakeThread -
 // --------------
 
-class TakeThread : public ::osl::Thread
+class TakeThread: public salhelper::Thread
 {
 private:
 
@@ -140,8 +143,8 @@ private:
     TPGalleryThemeProperties*   mpBrowser;
     TokenList_impl&             mrTakenList;
 
-    virtual void SAL_CALL       run();
-    virtual void SAL_CALL       onTerminated();
+    virtual                     ~TakeThread();
+    virtual void                execute();
 
 public:
 
@@ -150,7 +153,6 @@ public:
                                     TPGalleryThemeProperties* pBrowser,
                                     TokenList_impl& rTakenList
                                 );
-    virtual                     ~TakeThread();
 };
 
 // ----------------
@@ -164,7 +166,8 @@ private:
     FixedText           aFtTakeFile;
     FixedLine           aFLTakeProgress;
     CancelButton        aBtnCancel;
-    TakeThread          maTakeThread;
+    Window * window_;
+    rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
 
                         DECL_LINK( ClickCancelBtn, void* );

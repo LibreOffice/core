@@ -26,7 +26,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <algorithm>
+#include <cassert>
+
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -83,6 +87,7 @@ using namespace ::com::sun::star::uno;
 SearchThread::SearchThread( SearchProgress* pProgess,
                             TPGalleryThemeProperties* pBrowser,
                             const INetURLObject& rStartURL ) :
+        Thread      ( "cuiSearchThread" ),
         mpProgress  ( pProgess ),
         mpBrowser   ( pBrowser ),
         maStartURL  ( rStartURL )
@@ -97,7 +102,7 @@ SearchThread::~SearchThread()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL SearchThread::run()
+void SearchThread::execute()
 {
     const String aFileType( mpBrowser->aCbbFileType.GetText() );
 
@@ -120,12 +125,7 @@ void SAL_CALL SearchThread::run()
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
-}
 
-// ------------------------------------------------------------------------
-
-void SAL_CALL SearchThread::onTerminated()
-{
     Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ) );
 }
 
@@ -227,7 +227,7 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
     aFtSearchType   ( this, CUI_RES( FT_SEARCH_TYPE ) ),
     aFLSearchType  ( this, CUI_RES( FL_SEARCH_TYPE ) ),
     aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    maSearchThread  ( this, (TPGalleryThemeProperties*) pParent, rStartURL )
+    parent_(pParent), startUrl_(rStartURL)
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
@@ -237,7 +237,10 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
 
 void SearchProgress::Terminate()
 {
-    maSearchThread.terminate();
+    if (maSearchThread.is()) {
+        maSearchThread->terminate();
+        maSearchThread->join();
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -271,7 +274,10 @@ short SearchProgress::Execute()
 
 void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
-    maSearchThread.create();
+    assert(!maSearchThread.is());
+    maSearchThread = new SearchThread(
+        this, static_cast< TPGalleryThemeProperties * >(parent_), startUrl_);
+    maSearchThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
@@ -284,6 +290,7 @@ TakeThread::TakeThread(
     TPGalleryThemeProperties* pBrowser,
     TokenList_impl& rTakenList
 ) :
+    Thread      ( "cuiTakeThread" ),
     mpProgress  ( pProgess ),
     mpBrowser   ( pBrowser ),
     mrTakenList ( rTakenList )
@@ -298,7 +305,7 @@ TakeThread::~TakeThread()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL TakeThread::run()
+void TakeThread::execute()
 {
     String              aName;
     INetURLObject       aURL;
@@ -341,12 +348,7 @@ void SAL_CALL TakeThread::run()
         pThm->UnlockBroadcaster();
         delete pStatusProgress;
     }
-}
 
-// ------------------------------------------------------------------------
-
-void SAL_CALL TakeThread::onTerminated()
-{
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ) );
 }
 
@@ -359,8 +361,7 @@ TakeProgress::TakeProgress( Window* pWindow ) :
     aFtTakeFile     ( this, CUI_RES( FT_TAKE_FILE ) ),
     aFLTakeProgress( this, CUI_RES( FL_TAKE_PROGRESS ) ),
     aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList )
-
+    window_(pWindow)
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
@@ -371,7 +372,10 @@ TakeProgress::TakeProgress( Window* pWindow ) :
 
 void TakeProgress::Terminate()
 {
-    maTakeThread.terminate();
+    if (maTakeThread.is()) {
+        maTakeThread->terminate();
+        maTakeThread->join();
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -449,7 +453,10 @@ short TakeProgress::Execute()
 
 void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
-    maTakeThread.create();
+    assert(!maTakeThread.is());
+    maTakeThread = new TakeThread(
+        this, static_cast< TPGalleryThemeProperties * >(window_), maTakenList);
+    maTakeThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
