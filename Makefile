@@ -39,6 +39,7 @@ bean\
 binaryurp\
 canvas\
 chart2\
+clucene\
 comphelper\
 configmgr\
 cppcanvas\
