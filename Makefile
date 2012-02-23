@@ -379,6 +379,18 @@ bootstrap: $(WORKDIR_BOOTSTRAP)
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+ifeq ($(OS),IOS)
+# We must get the headers from basic and vbahelper "delivered" because
+# as we don't link to any libs from those they won't otherwise be, or
+# something. And we still do include those headers always even if the
+# libs aren't built for iOS. (Ifdefs for iOS will be added later as
+# necessary to take care of that.)
+	$(GNUMAKE) basic vbahelper
+endif
+ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
+# Ditto for dbconnectivity in the --disable-database-connectivity case
+	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
+endif
 	cd packimages && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 ifeq ($(OS_FOR_BUILD),WNT)
