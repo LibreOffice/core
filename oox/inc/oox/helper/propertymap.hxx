@@ -68,9 +68,6 @@ public:
     inline bool         hasProperty( sal_Int32 nPropId ) const
                             { return find( nPropId ) != end(); }
 
-    /** Returns the property value of the specified property, or 0 if not found. */
-    const ::com::sun::star::uno::Any* getProperty( sal_Int32 nPropId ) const;
-
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
     inline bool         setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue )
@@ -103,8 +100,6 @@ public:
                         makePropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 0
-  static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
-  void dump();
   static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dumpCode();
 #endif

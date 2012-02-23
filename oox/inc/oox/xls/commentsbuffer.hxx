@@ -71,8 +71,6 @@ public:
     void                importComment( const AttributeList& rAttribs );
     /** Imports a cell comment Properties from the passed attributes of the comment element. */
     void                importCommentPr( const AttributeList& rAttribs );
-    /** Imports the anchor points in CommentPr */
-    void                importAnchor( bool bFrom, sal_Int32 nWhich, const ::rtl::OUString &rChars );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( SequenceInputStream& rStrm );
     /** Imports a cell comment from the passed stream of a NOTE record. */

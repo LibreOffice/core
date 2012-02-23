@@ -572,11 +572,6 @@ SheetDataBuffer::XfIdRowRange::XfIdRowRange() :
 {
 }
 
-bool SheetDataBuffer::XfIdRowRange::intersects( const CellRangeAddress& rRange ) const
-{
-    return (rRange.StartRow <= maRowRange.mnLast) && (maRowRange.mnFirst <= rRange.EndRow);
-}
-
 void SheetDataBuffer::XfIdRowRange::set( sal_Int32 nRow, sal_Int32 nXfId )
 {
     maRowRange = ValueRange( nRow );
@@ -597,42 +592,6 @@ bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nRow, sal_Int32 nXfId )
             --maRowRange.mnFirst;
             return true;
         }
-    }
-    return false;
-}
-
-void SheetDataBuffer::XfIdRange::set( const CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId )
-{
-    maRange.Sheet = rCellAddr.Sheet;
-    maRange.StartColumn = maRange.EndColumn = rCellAddr.Column;
-    maRange.StartRow = maRange.EndRow = rCellAddr.Row;
-    mnXfId = nXfId;
-    mnNumFmtId = nNumFmtId;
-}
-
-bool SheetDataBuffer::XfIdRange::tryExpand( const CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId )
-{
-    if( (mnXfId == nXfId) && (mnNumFmtId == nNumFmtId) &&
-        (maRange.StartRow == rCellAddr.Row) &&
-        (maRange.EndRow == rCellAddr.Row) &&
-        (maRange.EndColumn + 1 == rCellAddr.Column) )
-    {
-        ++maRange.EndColumn;
-        return true;
-    }
-    return false;
-}
-
-bool SheetDataBuffer::XfIdRange::tryMerge( const XfIdRange& rXfIdRange )
-{
-    if( (mnXfId == rXfIdRange.mnXfId) &&
-        (mnNumFmtId == rXfIdRange.mnNumFmtId) &&
-        (maRange.EndRow + 1 == rXfIdRange.maRange.StartRow) &&
-        (maRange.StartColumn == rXfIdRange.maRange.StartColumn) &&
-        (maRange.EndColumn == rXfIdRange.maRange.EndColumn) )
-    {
-        maRange.EndRow = rXfIdRange.maRange.EndRow;
-        return true;
     }
     return false;
 }

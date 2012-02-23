@@ -2841,25 +2841,6 @@ ApiTokenSequence FormulaParser::convertNameToFormula( sal_Int32 nTokenIndex ) co
     return aTokens;
 }
 
-ApiTokenSequence FormulaParser::convertNumberToHyperlink( const OUString& rUrl, double fValue ) const
-{
-    OSL_ENSURE( !rUrl.isEmpty(), "FormulaParser::convertNumberToHyperlink - missing URL" );
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiffFuncId( BIFF_FUNC_HYPERLINK ) )
-    {
-        ApiTokenSequence aTokens( 6 );
-        aTokens[ 0 ].OpCode = pFuncInfo->mnApiOpCode;
-        aTokens[ 1 ].OpCode = OPCODE_OPEN;
-        aTokens[ 2 ].OpCode = OPCODE_PUSH;
-        aTokens[ 2 ].Data <<= rUrl;
-        aTokens[ 3 ].OpCode = OPCODE_SEP;
-        aTokens[ 4 ].OpCode = OPCODE_PUSH;
-        aTokens[ 4 ].Data <<= fValue;
-        aTokens[ 5 ].OpCode = OPCODE_CLOSE;
-        return aTokens;
-    }
-    return ApiTokenSequence();
-}
-
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
 {
     sal_Int32 nRefId = -1;
@@ -2885,14 +2866,6 @@ OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
             aTargetLink = mxImpl->resolveOleTarget( nRefId, true );
     }
     rStrm.seek( nFmlaEndPos );
-    return aTargetLink;
-}
-
-OUString FormulaParser::importOleTargetLink( BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
-{
-    OUString aTargetLink;
-    sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
-    rStrm.skip( nFmlaSize );
     return aTargetLink;
 }
 

@@ -283,15 +283,6 @@ Rectangle ShapeAnchor::calcAnchorRectHmm( const Size& rPageSizeHmm ) const
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-ShapeAnchor::getToCell() const
-{
-    CellAddress aAddress;
-    aAddress.Sheet = getSheetIndex();
-    aAddress.Row = maTo.mnRow;
-    aAddress.Column = maTo.mnCol;
-    return getCell( aAddress );
-}
-::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
 ShapeAnchor::getFromCell() const
 {
     CellAddress aAddress;

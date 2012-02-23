@@ -413,11 +413,6 @@ void Color::importColorId( SequenceInputStream& rStrm )
     setIndexed( rStrm.readInt32() );
 }
 
-void Color::importColorRgb( SequenceInputStream& rStrm )
-{
-    setRgb( lclReadRgbColor( rStrm ) );
-}
-
 void Color::importColorId( BiffInputStream& rStrm, bool b16Bit )
 {
     setIndexed( b16Bit ? rStrm.readuInt16() : rStrm.readuInt8() );
@@ -2484,13 +2479,6 @@ void Xf::finalizeImport()
 FontRef Xf::getFont() const
 {
     return getStyles().getFont( maModel.mnFontId );
-}
-
-bool Xf::hasAnyUsedFlags() const
-{
-    return
-        maModel.mbAlignUsed || maModel.mbProtUsed || maModel.mbFontUsed ||
-        maModel.mbNumFmtUsed || maModel.mbBorderUsed || maModel.mbAreaUsed;
 }
 
 void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const

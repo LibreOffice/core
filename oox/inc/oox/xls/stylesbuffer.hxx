@@ -116,8 +116,6 @@ public:
     void                importColor( SequenceInputStream& rStrm );
     /** Imports a 32-bit palette color identifier from the passed BIFF12 stream. */
     void                importColorId( SequenceInputStream& rStrm );
-    /** Imports a 32-bit RGBA color value from the passed BIFF12 stream. */
-    void                importColorRgb( SequenceInputStream& rStrm );
 
     /** Imports an 8-bit or 16-bit palette color identifier from the passed BIFF stream. */
     void                importColorId( BiffInputStream& rStrm, bool b16Bit = true );
@@ -788,8 +786,6 @@ public:
     inline const Alignment& getAlignment() const { return maAlignment; }
     /** Returns the cell protection data of this style. */
     inline const Protection& getProtection() const { return maProtection; }
-    /** Returns true, if any "attribute used" flags are ste in this XF. */
-    bool                hasAnyUsedFlags() const;
 
     /** Writes all formatting attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;

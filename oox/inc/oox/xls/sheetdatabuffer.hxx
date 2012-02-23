@@ -246,7 +246,6 @@ public:
 
 private:
     struct XfIdRowRange;
-    struct XfIdRange;
 
     /** Sets the passed formula token array into a cell. */
     void                setCellFormula(
@@ -300,23 +299,10 @@ private:
         sal_Int32           mnXfId;             /// XF identifier for the row range.
 
         explicit            XfIdRowRange();
-        bool                intersects( const ::com::sun::star::table::CellRangeAddress& rRange ) const;
         void                set( sal_Int32 nRow, sal_Int32 nXfId );
         bool                tryExpand( sal_Int32 nRow, sal_Int32 nXfId );
     };
 
-    /** Stores information about a range of cells with equal formatting. */
-    struct XfIdRange
-    {
-        ::com::sun::star::table::CellRangeAddress
-                            maRange;            /// The formatted cell range.
-        sal_Int32           mnXfId;             /// XF identifier for the range.
-        sal_Int32           mnNumFmtId;         /// Number format overriding the XF.
-
-        void                set( const ::com::sun::star::table::CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId );
-        bool                tryExpand( const ::com::sun::star::table::CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId );
-        bool                tryMerge( const XfIdRange& rXfIdRange );
-    };
     typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
     typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
 

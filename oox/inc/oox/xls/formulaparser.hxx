@@ -143,17 +143,11 @@ public:
     /** Converts the passed token index of a defined name to a formula calling that name. */
     ApiTokenSequence    convertNameToFormula( sal_Int32 nTokenIndex ) const;
 
-    /** Converts the passed number into a HYPERLINK formula with the passed URL. */
-    ApiTokenSequence    convertNumberToHyperlink( const ::rtl::OUString& rUrl, double fValue ) const;
-
     /** Converts the passed XML formula to an OLE link target. */
     ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
 
     /** Imports and converts an OLE link target from the passed stream. */
     ::rtl::OUString     importOleTargetLink( SequenceInputStream& rStrm );
-
-    /** Imports and converts an OLE link target from the passed stream. */
-    ::rtl::OUString     importOleTargetLink( BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 ) const;
 
     /** Converts the passed formula to a macro name for a drawing shape. */
     ::rtl::OUString     importMacroName( const ::rtl::OUString& rFormulaString );

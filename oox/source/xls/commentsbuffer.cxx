@@ -137,50 +137,6 @@ void Comment::importCommentPr( const AttributeList& rAttribs )
     maModel.mnTVA       = rAttribs.getToken( XML_textVAlign, XML_top );
 }
 
-void Comment::importAnchor( bool bFrom, sal_Int32 nWhich, const OUString &rChars )
-{
-    sal_Int32 nRow, nCol;
-    Point aPoint;
-    UnitConverter& rUnitConv = getUnitConverter();
-    if( bFrom )
-    {
-        nCol = maModel.maAnchor.X;
-        nRow = maModel.maAnchor.Y;
-    }
-    else
-    {
-        nCol = maModel.maAnchor.Width + maModel.maAnchor.X ;
-        nRow = maModel.maAnchor.Height + maModel.maAnchor.Y;
-    }
-    switch( nWhich )
-    {
-        case XDR_TOKEN( col ):
-            aPoint = getCellPosition( rChars.toInt32(), 1 );
-            nCol = aPoint.X;
-            break;
-        case XDR_TOKEN( colOff ):
-            nCol += rUnitConv.scaleToMm100( static_cast< double >( rChars.toInt32() ), UNIT_SCREENX );
-            break;
-        case XDR_TOKEN( row ):
-            aPoint = getCellPosition( 1, rChars.toInt32() );
-            nRow = aPoint.Y;
-            break;
-        case XDR_TOKEN( rowOff ):
-            nRow += rUnitConv.scaleToMm100( static_cast< double >( rChars.toInt32() ), UNIT_SCREENY );
-            break;
-    }
-    if( bFrom )
-    {
-        maModel.maAnchor.X = nCol;
-        maModel.maAnchor.Y = nRow;
-    }
-    else
-    {
-        maModel.maAnchor.Width  = nCol - maModel.maAnchor.X;
-        maModel.maAnchor.Height = nRow - maModel.maAnchor.Y;
-    }
-}
-
 void Comment::importComment( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;

@@ -1085,15 +1085,10 @@ ooo::vba::excel::getViewFrame(com::sun::star::uno::Reference<com::sun::star::fra
 ooo::vba::excel::isInPrintPreview(SfxViewFrame*)
 ooo::vba::extractBoolFromAny(com::sun::star::uno::Any const&, bool)
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&, int)
-oox::(anonymous namespace)::GenericPropertySet::GenericPropertySet()
-oox::AttributeList::getHyperHex(int, long) const
-oox::AttributeList::getUnsignedHex(int, unsigned int) const
 oox::BinaryInputStream::readNulCharArray()
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
-oox::PropertyMap::dump()
-oox::PropertyMap::getProperty(int) const
 oox::PropertySet::getProperties(com::sun::star::uno::Sequence<com::sun::star::uno::Any>&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
 oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::PowerPointExport::WriteTextStyles(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
@@ -1161,16 +1156,6 @@ oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange
 oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
 oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
 oox::xls::CellBlock::startNextRow()
-oox::xls::Color::importColorRgb(oox::SequenceInputStream&)
-oox::xls::Comment::importAnchor(bool, int, rtl::OUString const&)
-oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) const
-oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
-oox::xls::ShapeAnchor::getToCell() const
-oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress const&, int, int)
-oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
-oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRange const&)
-oox::xls::SheetDataBuffer::XfIdRowRange::intersects(com::sun::star::table::CellRangeAddress const&) const
-oox::xls::Xf::hasAnyUsedFlags() const
 pdfi::createOdfEmitter(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
 psp::GetCommandLineTokenCount(rtl::OString const&)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
