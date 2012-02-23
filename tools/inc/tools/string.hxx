@@ -156,6 +156,7 @@ private:
     void                Assign(int); // not implemented; to detect misuses of
                                      // Assign(sal_Char)
     ByteString&         Assign( const sal_Char* pCharStr, xub_StrLen nLen );  //not implemented, to detect use of removed methods without compiler making something to fit
+    ByteString&         Assign( const sal_Char* pCharStr ); //not implemented, to detect use of removed methods without compiler making something to fit
     ByteString&         operator =(const sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
 
     ByteString&         Assign(sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
@@ -187,7 +188,6 @@ public:
 
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
-    ByteString&         Assign( const sal_Char* pCharStr );
     ByteString&         operator =( const ByteString& rStr )
                             { return Assign( rStr ); }
     ByteString&         operator =( const rtl::OString& rStr )
@@ -220,16 +220,11 @@ public:
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool                Equals( const sal_Char* pCharStr ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pCharStr ) const;
 
     xub_StrLen          Search( sal_Char c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const ByteString& rStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const sal_Char* pCharStr, xub_StrLen nIndex = 0 ) const;
 
-    xub_StrLen          SearchAndReplace( const ByteString& rStr, const ByteString& rRepStr,
-                                          xub_StrLen nIndex = 0 );
-    xub_StrLen          SearchAndReplace( const sal_Char* pCharStr, const ByteString& rRepStr,
-                                          xub_StrLen nIndex = 0 );
     void                SearchAndReplaceAll( sal_Char c, sal_Char cRep );
 
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;

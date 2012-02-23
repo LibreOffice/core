@@ -83,19 +83,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 #include <strimp.cxx>
 #include <strcvt.cxx>
 
-xub_StrLen STRING::SearchAndReplace( const STRCODE* pCharStr, const STRING& rRepStr,
-                                     xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
-
-    xub_StrLen nSPos = Search( pCharStr, nIndex );
-    if ( nSPos != STRING_NOTFOUND )
-        Replace( nSPos, ImplStringLen( pCharStr ), rRepStr );
-
-    return nSPos;
-}
-
 static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2,
                                      xub_StrLen nCount )
 {

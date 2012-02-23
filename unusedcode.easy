@@ -1,8 +1,4 @@
 Button::ImplGetSymbolAlign() const
-ByteString::Assign(char const*)
-ByteString::EqualsIgnoreCaseAscii(char const*) const
-ByteString::SearchAndReplace(ByteString const&, ByteString const&, unsigned short)
-ByteString::SearchAndReplace(char const*, ByteString const&, unsigned short)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 CharPosArray::Insert(CharPosArray const*, unsigned short, unsigned short, unsigned short)
 CharPosArray::Replace(int const&, unsigned short)

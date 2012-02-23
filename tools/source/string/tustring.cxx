@@ -1119,4 +1119,90 @@ STRING& STRING::Assign( STRCODE c )
     return *this;
 }
 
+// -----------------------------------------------------------------------
+
+xub_StrLen STRING::SearchAndReplace( const STRING& rStr, const STRING& rRepStr,
+                                     xub_StrLen nIndex )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
+
+    xub_StrLen nSPos = Search( rStr, nIndex );
+    if ( nSPos != STRING_NOTFOUND )
+        Replace( nSPos, rStr.Len(), rRepStr );
+
+    return nSPos;
+}
+
+// -----------------------------------------------------------------------
+
+static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 )
+{
+    sal_Int32   nRet;
+    STRCODE     c1;
+    STRCODE     c2;
+    do
+    {
+        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        c1 = *pStr1;
+        c2 = *pStr2;
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = ((sal_Int32)((STRCODEU)c1))-((sal_Int32)((STRCODEU)c2));
+        if ( nRet != 0 )
+            break;
+
+        ++pStr1,
+        ++pStr2;
+    }
+    while ( c2 );
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    return (ImplStringICompare( mpData->maStr, pCharStr ) == 0);
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Assign( const STRCODE* pCharStr )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
+
+    // Stringlaenge ermitteln
+    xub_StrLen nLen = ImplStringLen( pCharStr );
+
+    if ( !nLen )
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+    else
+    {
+        // Wenn String genauso lang ist, wie der String, dann direkt kopieren
+        if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
+            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
+        else
+        {
+            // Alte Daten loeschen
+            STRING_RELEASE((STRING_TYPE *)mpData);
+
+            // Daten initialisieren und String kopieren
+            mpData = ImplAllocData( nLen );
+            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
+        }
+    }
+
+    return *this;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
