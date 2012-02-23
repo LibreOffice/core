@@ -81,7 +81,7 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(const Reference<XMultiServiceFactory>& msf){
+        OleHandler(const com::sun::star::uno::Reference<XMultiServiceFactory>& msf){
             m_msf =msf;
         }
         void SAL_CALL
@@ -90,9 +90,9 @@ namespace XSLT
         getByName(const OUString& streamName);
 
     private:
-        Reference<XMultiServiceFactory> m_msf;
-        Reference<XNameContainer> m_storage;
-        Reference<XStream> m_rootStream;
+        com::sun::star::uno::Reference<XMultiServiceFactory> m_msf;
+        com::sun::star::uno::Reference<XNameContainer> m_storage;
+        com::sun::star::uno::Reference<XStream> m_rootStream;
         void SAL_CALL
         ensureCreateRootStorage();
         OString SAL_CALL
@@ -101,7 +101,7 @@ namespace XSLT
         insertSubStorage(const OUString& streamName, const OString& content);
         void SAL_CALL
         initRootStorageFromBase64(const OString& content);
-        Reference<XStream> SAL_CALL
+        com::sun::star::uno::Reference<XStream> SAL_CALL
         createTempFile();
     };
 }

@@ -93,6 +93,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::task;
 
+namespace css = com::sun::star;
+
 namespace XSLT
 {
     /*
@@ -115,12 +117,12 @@ namespace XSLT
     private:
 
         // the UNO ServiceFactory
-        Reference<XMultiServiceFactory> m_rServiceFactory;
+        css::uno::Reference<XMultiServiceFactory> m_rServiceFactory;
 
         // DocumentHandler interface of the css::xml::sax::Writer service
-        Reference<XOutputStream> m_rOutputStream;
+        css::uno::Reference<XOutputStream> m_rOutputStream;
 
-        Reference<XActiveDataControl> m_tcontrol;
+        css::uno::Reference<XActiveDataControl> m_tcontrol;
 
         oslCondition m_cTransformed;
         sal_Bool m_bTerminated;
@@ -136,7 +138,7 @@ namespace XSLT
     public:
 
         // ctor...
-        XSLTFilter(const Reference<XMultiServiceFactory> &r);
+        XSLTFilter(const css::uno::Reference<XMultiServiceFactory> &r);
 
         // XStreamListener
         virtual void SAL_CALL
@@ -152,7 +154,7 @@ namespace XSLT
 
         // XImportFilter
         virtual sal_Bool SAL_CALL
-        importer(const Sequence<PropertyValue>& aSourceData, const Reference<
+        importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
                 const Sequence<OUString>& msUserData) throw (RuntimeException);
 
@@ -168,7 +170,7 @@ namespace XSLT
         endDocument() throw (SAXException, RuntimeException);
     };
 
-    XSLTFilter::XSLTFilter(const Reference<XMultiServiceFactory> &r):
+    XSLTFilter::XSLTFilter(const css::uno::Reference<XMultiServiceFactory> &r):
 m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     {
         m_cTransformed = osl_createCondition();
@@ -185,13 +187,13 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         ::rtl::OUString sExpandedUrl;
         try
             {
-                Reference<XComponentContext> xContext;
-                Reference<XPropertySet> xProps(m_rServiceFactory,
+                css::uno::Reference<XComponentContext> xContext;
+                css::uno::Reference<XPropertySet> xProps(m_rServiceFactory,
                         UNO_QUERY_THROW);
                 xContext.set(xProps->getPropertyValue(::rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
                         UNO_QUERY_THROW);
-                Reference<XMacroExpander>
+                css::uno::Reference<XMacroExpander>
                         xMacroExpander(
                                 xContext->getValueByName(
                                         ::rtl::OUString(
@@ -243,7 +245,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     XSLTFilter::rel2abs(const OUString& s)
     {
 
-        Reference<XStringSubstitution>
+        css::uno::Reference<XStringSubstitution>
                 subs(
                         m_rServiceFactory->createInstance(
                                 OUString(
@@ -261,7 +263,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
     sal_Bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
-            const Reference<XDocumentHandler>& xHandler, const Sequence<
+            const css::uno::Reference<XDocumentHandler>& xHandler, const Sequence<
                     OUString>& msUserData) throw (RuntimeException)
     {
         if (msUserData.getLength() < 5)
@@ -276,8 +278,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         // the sax parser that drives the supplied document handler
         sal_Int32 nLength = aSourceData.getLength();
         OUString aName, aFileName, aURL;
-        Reference<XInputStream> xInputStream;
-        Reference<XInteractionHandler> xInterActionHandler;
+        css::uno::Reference<XInputStream> xInputStream;
+        css::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
@@ -297,7 +299,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
         // create SAX parser that will read the document file
         // and provide events to xHandler passed to this call
-        Reference<XParser>
+        css::uno::Reference<XParser>
                 xSaxParser(
                         m_rServiceFactory->createInstance(
                                 OUString(
@@ -325,7 +327,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
-        m_tcontrol = Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
+        m_tcontrol = css::uno::Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
 
         OSL_ASSERT(xHandler.is());
         OSL_ASSERT(xInputStream.is());
@@ -335,24 +337,24 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 try
                     {
                         // we want to be notfied when the processing is done...
-                        m_tcontrol->addListener(Reference<XStreamListener> (
+                        m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
                                 this));
 
                         // connect input to transformer
-                        Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
+                        css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
                         tsink->setInputStream(xInputStream);
 
                         // create pipe
-                        Reference<XOutputStream>
+                        css::uno::Reference<XOutputStream>
                                 pipeout(
                                         m_rServiceFactory->createInstance(
                                                 OUString(
                                                         RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))),
                                         UNO_QUERY);
-                        Reference<XInputStream> pipein(pipeout, UNO_QUERY);
+                        css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                         //connect transformer to pipe
-                        Reference<XActiveDataSource> tsource(m_tcontrol,
+                        css::uno::Reference<XActiveDataSource> tsource(m_tcontrol,
                                 UNO_QUERY);
                         tsource->setOutputStream(pipeout);
 
@@ -381,7 +383,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                         Any r;
                                         r <<= exc;
                                         ::comphelper::OInteractionRequest* pRequest = new ::comphelper::OInteractionRequest(r);
-                                        Reference< XInteractionRequest > xRequest(pRequest);
+                                        css::uno::Reference< XInteractionRequest > xRequest(pRequest);
                                         ::comphelper::OInteractionRetry* pRetry = new ::comphelper::OInteractionRetry;
                                         ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort;
                                         pRequest->addContinuation(pRetry);
@@ -436,7 +438,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         sal_Bool bIndent = sal_False;
         OUString aDoctypePublic;
         OUString aDoctypeSystem;
-        // Reference<XOutputStream> rOutputStream;
+        // css::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
             {
@@ -456,7 +458,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (!getDelegate().is())
             {
                 // get the document writer
-                setDelegate(Reference<XExtendedDocumentHandler> (
+                setDelegate(css::uno::Reference<XExtendedDocumentHandler> (
                                 m_rServiceFactory->createInstance(
                                         OUString(
                                                 RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ))),
@@ -489,35 +491,35 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
-        m_tcontrol = Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
+        m_tcontrol = css::uno::Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
 
         OSL_ASSERT(m_rOutputStream.is());
         OSL_ASSERT(m_tcontrol.is());
         if (m_tcontrol.is() && m_rOutputStream.is())
             {
                 // we want to be notfied when the processing is done...
-                m_tcontrol->addListener(Reference<XStreamListener> (this));
+                m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
                 // create pipe
-                Reference<XOutputStream>
+                css::uno::Reference<XOutputStream>
                         pipeout(
                                 m_rServiceFactory->createInstance(
                                         OUString(
                                                 RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))),
                                 UNO_QUERY);
-                Reference<XInputStream> pipein(pipeout, UNO_QUERY);
+                css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                 // connect sax writer to pipe
-                Reference<XActiveDataSource> xmlsource(getDelegate(),
+                css::uno::Reference<XActiveDataSource> xmlsource(getDelegate(),
                         UNO_QUERY);
                 xmlsource->setOutputStream(pipeout);
 
                 // connect pipe to transformer
-                Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
+                css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
                 tsink->setInputStream(pipein);
 
                 // connect transformer to output
-                Reference<XActiveDataSource> tsource(m_tcontrol, UNO_QUERY);
+                css::uno::Reference<XActiveDataSource> tsource(m_tcontrol, UNO_QUERY);
                 tsource->setOutputStream(m_rOutputStream);
 
                 // we will start receiving events after returning 'true'.
@@ -568,16 +570,16 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 #define TRANSFORMER_SERVICE_NAME "com.sun.star.documentconversion.LibXSLTTransformer"
 #define TRANSFORMER_IMPL_NAME "com.sun.star.comp.documentconversion.LibXSLTTransformer"
 
-    static Reference<XInterface> SAL_CALL
-    CreateTransformerInstance(const Reference<XMultiServiceFactory> &r)
+    static css::uno::Reference<XInterface> SAL_CALL
+    CreateTransformerInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return Reference<XInterface> ((OWeakObject *) new LibXSLTTransformer(r));
+        return css::uno::Reference<XInterface> ((OWeakObject *) new LibXSLTTransformer(r));
     }
 
-    static Reference<XInterface> SAL_CALL
-    CreateFilterInstance(const Reference<XMultiServiceFactory> &r)
+    static css::uno::Reference<XInterface> SAL_CALL
+    CreateFilterInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return Reference<XInterface> ((OWeakObject *) new XSLTFilter(r));
+        return css::uno::Reference<XInterface> ((OWeakObject *) new XSLTFilter(r));
     }
 
 }
@@ -600,7 +602,7 @@ extern "C"
                                 = OUString(
                                         RTL_CONSTASCII_USTRINGPARAM( FILTER_SERVICE_NAME ));
 
-                        Reference<XSingleServiceFactory>
+                        css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(
                                                 reinterpret_cast<XMultiServiceFactory *> (pServiceManager),
@@ -621,7 +623,7 @@ extern "C"
                         serviceNames.getArray()[0]
                                 = OUString(
                                         RTL_CONSTASCII_USTRINGPARAM( TRANSFORMER_SERVICE_NAME ));
-                        Reference<XSingleServiceFactory>
+                        css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(
                                                 reinterpret_cast<XMultiServiceFactory *> (pServiceManager),

@@ -79,6 +79,8 @@ using ::std::list;
 using ::std::map;
 using ::std::pair;
 
+namespace css = com::sun::star;
+
 #define _INPUT_BUFFER_SIZE 4096
 #define _OUTPUT_BUFFER_SIZE 4096
 
@@ -228,8 +230,8 @@ namespace XSLT
     };
 
     Reader::Reader(LibXSLTTransformer* transformer) :
-        m_transformer(transformer), m_terminated(false), m_readBuf(
-                INPUT_BUFFER_SIZE), m_writeBuf(OUTPUT_BUFFER_SIZE)
+        Thread("LibXSLTTransformer"), m_transformer(transformer),
+        m_readBuf(INPUT_BUFFER_SIZE), m_writeBuf(OUTPUT_BUFFER_SIZE)
     {
         LIBXML_TEST_VERSION;
     }
@@ -242,7 +244,7 @@ namespace XSLT
         if (buffer == NULL || len < 0)
             return (-1);
         sal_Int32 n;
-        Reference<XInputStream> xis = this->m_transformer->getInputStream();
+        css::uno::Reference<XInputStream> xis = this->m_transformer->getInputStream();
         n = xis.get()->readBytes(m_readBuf, len);
         if (n > 0)
             {
@@ -258,7 +260,7 @@ namespace XSLT
             return -1;
         if (len > 0)
             {
-                Reference<XOutputStream> xos = m_transformer->getOutputStream();
+                css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
                 sal_Int32 writeLen = len;
                 sal_Int32 bufLen = ::std::min(writeLen,
                         this->OUTPUT_BUFFER_SIZE);
@@ -287,7 +289,7 @@ namespace XSLT
     int
     Reader::closeOutput()
     {
-        Reference<XOutputStream> xos = m_transformer->getOutputStream();
+        css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
         if (xos.is())
             {
                 xos.get()->flush();
@@ -298,7 +300,7 @@ namespace XSLT
     }
 
     void
-    Reader::run()
+    Reader::execute()
     {
         OSL_ASSERT(m_transformer != NULL);
         OSL_ASSERT(m_transformer->getInputStream().is());
@@ -363,11 +365,6 @@ namespace XSLT
     }
 
     void
-    Reader::onTerminated()
-    {
-        m_terminated = true;
-    }
-    void
     Reader::registerExtensionModule()
     {
         const xmlChar* oleModuleURI = (const xmlChar *) EXT_MODULE_OLE_URI;
@@ -388,20 +385,20 @@ namespace XSLT
     }
 
     LibXSLTTransformer::LibXSLTTransformer(
-            const Reference<XMultiServiceFactory> &r) :
-        m_rServiceFactory(r), m_Reader(NULL)
+            const css::uno::Reference<XMultiServiceFactory> &r) :
+        m_rServiceFactory(r)
     {
     }
 
     void
     LibXSLTTransformer::setInputStream(
-            const Reference<XInputStream>& inputStream)
+            const css::uno::Reference<XInputStream>& inputStream)
             throw (RuntimeException)
     {
         m_rInputStream = inputStream;
     }
 
-    Reference<XInputStream>
+    css::uno::Reference<XInputStream>
     LibXSLTTransformer::getInputStream() throw (RuntimeException)
     {
         return m_rInputStream;
@@ -409,20 +406,20 @@ namespace XSLT
 
     void
     LibXSLTTransformer::setOutputStream(
-            const Reference<XOutputStream>& outputStream)
+            const css::uno::Reference<XOutputStream>& outputStream)
             throw (RuntimeException)
     {
         m_rOutputStream = outputStream;
     }
 
-    Reference<XOutputStream>
+    css::uno::Reference<XOutputStream>
     LibXSLTTransformer::getOutputStream() throw (RuntimeException)
     {
         return m_rOutputStream;
     }
 
     void
-    LibXSLTTransformer::addListener(const Reference<XStreamListener>& listener)
+    LibXSLTTransformer::addListener(const css::uno::Reference<XStreamListener>& listener)
             throw (RuntimeException)
     {
         m_listeners.insert(m_listeners.begin(), listener);
@@ -430,7 +427,7 @@ namespace XSLT
 
     void
     LibXSLTTransformer::removeListener(
-            const Reference<XStreamListener>& listener)
+            const css::uno::Reference<XStreamListener>& listener)
             throw (RuntimeException)
     {
         m_listeners.remove(listener);
@@ -443,12 +440,12 @@ namespace XSLT
         ListenerList* l = &m_listeners;
         for (it = l->begin(); it != l->end(); ++it)
             {
-                Reference<XStreamListener> xl = *it;
+                css::uno::Reference<XStreamListener> xl = *it;
                 xl.get()->started();
             }
-        OSL_ENSURE(m_Reader == NULL, "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
+        OSL_ENSURE(!m_Reader.is(), "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
         m_Reader = new Reader(this);
-        m_Reader->create();
+        m_Reader->launch();
     }
 
     void
@@ -459,7 +456,7 @@ namespace XSLT
         arg <<= Exception(msg, *this);
         for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
             {
-                Reference<XStreamListener> xl = *it;
+                css::uno::Reference<XStreamListener> xl = *it;
                 if (xl.is())
                     {
                         xl.get()->error(arg);
@@ -473,7 +470,7 @@ namespace XSLT
         ListenerList* l = &m_listeners;
         for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
             {
-                Reference<XStreamListener> xl = *it;
+                css::uno::Reference<XStreamListener> xl = *it;
                 if (xl.is())
                     {
                         xl.get()->closed();
@@ -486,7 +483,7 @@ namespace XSLT
     {
         m_Reader->terminate();
         m_Reader->join();
-        delete(m_Reader);
+        m_Reader.clear();
         m_parameters.clear();
     }
 

@@ -45,7 +45,9 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/thread.hxx>
+#include <rtl/ref.hxx>
+
+#include <salhelper/thread.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -100,13 +102,13 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        Reference<XMultiServiceFactory> m_rServiceFactory;
+        com::sun::star::uno::Reference<XMultiServiceFactory> m_rServiceFactory;
 
-        Reference<XInputStream> m_rInputStream;
+        com::sun::star::uno::Reference<XInputStream> m_rInputStream;
 
-        Reference<XOutputStream> m_rOutputStream;
+        com::sun::star::uno::Reference<XOutputStream> m_rOutputStream;
 
-        typedef ::std::list<Reference<XStreamListener> > ListenerList;
+        typedef ::std::list<com::sun::star::uno::Reference<XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 
@@ -114,39 +116,39 @@ namespace XSLT
 
         ::std::map<const char *, OString> m_parameters;
 
-        osl::Thread* m_Reader;
+        rtl::Reference< salhelper::Thread > m_Reader;
 
     protected:
         virtual ~LibXSLTTransformer() {
-            if (m_Reader) {
+            if (m_Reader.is()) {
                     m_Reader->terminate();
+                    m_Reader->join();
             }
-            delete(m_Reader);
         }
 
     public:
 
         // ctor...
-        LibXSLTTransformer(const Reference<XMultiServiceFactory> &r);
+        LibXSLTTransformer(const com::sun::star::uno::Reference<XMultiServiceFactory> &r);
 
         // XActiveDataSink
         virtual void SAL_CALL
-        setInputStream(const Reference<XInputStream>& inputStream)
+        setInputStream(const com::sun::star::uno::Reference<XInputStream>& inputStream)
                 throw (RuntimeException);
-        virtual Reference<XInputStream> SAL_CALL
+        virtual com::sun::star::uno::Reference<XInputStream> SAL_CALL
         getInputStream() throw (RuntimeException);
         // XActiveDataSource
         virtual void SAL_CALL
-        setOutputStream(const Reference<XOutputStream>& outputStream)
+        setOutputStream(const com::sun::star::uno::Reference<XOutputStream>& outputStream)
                 throw (RuntimeException);
-        virtual Reference<XOutputStream> SAL_CALL
+        virtual com::sun::star::uno::Reference<XOutputStream> SAL_CALL
         getOutputStream() throw (RuntimeException);
         // XActiveDataControl
         virtual void SAL_CALL
-        addListener(const Reference<XStreamListener>& listener)
+        addListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
                 throw (RuntimeException);
         virtual void SAL_CALL
-        removeListener(const Reference<XStreamListener>& listener)
+        removeListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
                 throw (RuntimeException);
         virtual void SAL_CALL
         start() throw (RuntimeException);
@@ -167,7 +169,7 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters();
 
-        virtual Reference<XMultiServiceFactory> SAL_CALL
+        virtual com::sun::star::uno::Reference<XMultiServiceFactory> SAL_CALL
         getServiceFactory() {
             return m_rServiceFactory;
         }
@@ -179,7 +181,7 @@ namespace XSLT
      * It pipes the streams provided by a LibXSLTTransformer
      * instance through libxslt.
      */
-    class Reader : public osl::Thread
+    class Reader : public salhelper::Thread
     {
     public:
         Reader(LibXSLTTransformer* transformer);
@@ -192,22 +194,18 @@ namespace XSLT
         int SAL_CALL
         closeOutput();
 
-    protected:
+    private:
         virtual
         ~Reader();
 
-    private:
         static const sal_Int32 OUTPUT_BUFFER_SIZE;
         static const sal_Int32 INPUT_BUFFER_SIZE;
         LibXSLTTransformer* m_transformer;
-        sal_Bool m_terminated;
         Sequence<sal_Int8> m_readBuf;
         Sequence<sal_Int8> m_writeBuf;
 
-        virtual void SAL_CALL
-        run();
-        virtual void SAL_CALL
-        onTerminated();
+        virtual void
+        execute();
         void SAL_CALL
         registerExtensionModule();
     };

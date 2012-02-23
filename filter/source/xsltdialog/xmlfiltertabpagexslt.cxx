@@ -44,7 +44,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF ) :
+namespace css = com::sun::star;
+
+XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const css::uno::Reference< XMultiServiceFactory >& rxMSF ) :
     TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, rResMgr ) ),
 
     maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
@@ -80,7 +82,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
 
     try
     {
-        Reference< XConfigManager > xCfgMgr( rxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
+        css::uno::Reference< XConfigManager > xCfgMgr( rxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
         if( xCfgMgr.is() )
             sInstPath = xCfgMgr->substituteVariables( sInstPath );
     }
