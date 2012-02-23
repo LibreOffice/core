@@ -48,7 +48,6 @@
 #include "osl/conditn.hxx"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
-#include "osl/thread.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/logfile.h"
 #include "rtl/oustringostreaminserter.hxx"
@@ -59,7 +58,7 @@
 #include "rtl/instance.hxx"
 #include "sal/log.hxx"
 #include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/thread.hxx"
 
 #include "additions.hxx"
 #include "components.hxx"
@@ -154,16 +153,8 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
 
 }
 
-class Components::WriteThread:
-    public osl::Thread, public salhelper::SimpleReferenceObject
-{
+class Components::WriteThread: public salhelper::Thread {
 public:
-    static void * operator new(std::size_t size)
-    { return Thread::operator new(size); }
-
-    static void operator delete(void * pointer)
-    { Thread::operator delete(pointer); }
-
     WriteThread(
         rtl::Reference< WriteThread > * reference, Components & components,
         rtl::OUString const & url, Data const & data);
@@ -173,9 +164,7 @@ public:
 private:
     virtual ~WriteThread() {}
 
-    virtual void SAL_CALL run();
-
-    virtual void SAL_CALL onTerminated() { release(); }
+    virtual void execute();
 
     rtl::Reference< WriteThread > * reference_;
     Components & components_;
@@ -188,14 +177,14 @@ private:
 Components::WriteThread::WriteThread(
     rtl::Reference< WriteThread > * reference, Components & components,
     rtl::OUString const & url, Data const & data):
-    reference_(reference), components_(components), url_(url), data_(data)
+    Thread("configmgrWriter"), reference_(reference), components_(components),
+    url_(url), data_(data)
 {
     lock_ = lock();
     assert(reference != 0);
-    acquire();
 }
 
-void Components::WriteThread::run() {
+void Components::WriteThread::execute() {
     TimeValue t = { 1, 0 }; // 1 sec
     delay_.wait(&t); // must not throw; result_error is harmless and ignored
     osl::MutexGuard g(*lock_); // must not throw
@@ -310,7 +299,7 @@ void Components::writeModifications() {
     if (!writeThread_.is()) {
         writeThread_ = new WriteThread(
             &writeThread_, *this, modificationFileUrl_, data_);
-        writeThread_->create();
+        writeThread_->launch();
     }
 }
 
