@@ -346,6 +346,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Kyrgyz (China)" ; LANGUAGE_USER_KYRGYZ_CHINA ; > ;
         < "Komi-Zyrian" ; LANGUAGE_USER_KOMI_ZYRIAN ; > ;
         < "Komi-Permyak" ; LANGUAGE_USER_KOMI_PERMYAK ; > ;
+        < "Pitjantjatjara" ; LANGUAGE_USER_PITJANTJATJARA ; > ;
     };
 };
 
