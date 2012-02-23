@@ -54,12 +54,11 @@ INCPRE+=$(WPG_CFLAGS)
 INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpg
 .ENDIF
 
-TARFILE_NAME=libcdr-0.0.2
-TARFILE_MD5=bb94fe29a21444369307f19015d48b82
+TARFILE_NAME=libcdr-0.0.3
+TARFILE_MD5=e5f1ef00a113d2edfd88af616934f293
 
 PATCH_FILES=\
-    libcdr-0.0.2.patch \
-    libcdr-msvc.patch
+    libcdr-0.0.3.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib

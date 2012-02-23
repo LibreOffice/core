@@ -1,5 +1,5 @@
---- misc/libcdr-0.0.2/src/lib/libcdr_utils.h
-+++ misc/build/libcdr-0.0.2/src/lib/libcdr_utils.h
+--- misc/libcdr-0.0.3/src/lib/libcdr_utils.h
++++ misc/build/libcdr-0.0.3/src/lib/libcdr_utils.h
 @@ -41,17 +41,8 @@
  
  #else
@@ -18,8 +18,8 @@
  
  #endif
  
---- misc/libcdr-0.0.2/src/lib/makefile.mk
-+++ misc/build/libcdr-0.0.2/src/lib/makefile.mk
+--- misc/libcdr-0.0.3/src/lib/makefile.mk
++++ misc/build/libcdr-0.0.3/src/lib/makefile.mk
 @@ -28,6 +28,10 @@
  INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpg
  .ENDIF
