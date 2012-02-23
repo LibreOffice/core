@@ -1953,7 +1953,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case LINE_WIDTH:
             {
                 // Set the line width on all borders
-                long nWidth;
+                long nWidth(0);
                 rVal >>= nWidth;
                 if( bConvert )
                     nWidth = MM100_TO_TWIP( nWidth );
