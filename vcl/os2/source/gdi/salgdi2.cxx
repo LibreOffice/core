@@ -563,13 +563,13 @@ void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
     HPS         hPS = mhPS;
     IMAGEBUNDLE aBundle, aOldBundle;
     AREABUNDLE  aAreaBundle, aOldAreaBundle;
-    const ULONG    nColor = RGBCOLOR( SALCOLOR_RED( nMaskColor ),
+    const ULONG    nColor = MAKE_SALCOLOR( SALCOLOR_RED( nMaskColor ),
                                     SALCOLOR_GREEN( nMaskColor ),
                                     SALCOLOR_BLUE( nMaskColor ) );
 
     GpiQueryAttrs( hPS, PRIM_IMAGE, IBB_COLOR | IBB_BACK_COLOR, &aOldBundle );
-    aBundle.lColor = RGBCOLOR( 0, 0, 0 );
-    aBundle.lBackColor = RGBCOLOR( 0xFF, 0xFF, 0xFF );
+    aBundle.lColor = MAKE_SALCOLOR( 0, 0, 0 );
+    aBundle.lBackColor = MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF );
     Ft2SetAttrs( hPS, PRIM_IMAGE, IBB_COLOR | IBB_BACK_COLOR, 0, &aBundle );
 
     GpiQueryAttrs( hPS, PRIM_AREA, ABB_COLOR | ABB_BACK_COLOR | ABB_SYMBOL |
@@ -674,7 +674,7 @@ void Os2SalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
         GpiQueryAttrs( mhPS, PRIM_LINE, LBB_MIX_MODE | LBB_TYPE | LBB_COLOR, &oldLb );
 
         // set linetype to short dash
-        lb.lColor = RGBCOLOR( 255, 255, 255 );
+        lb.lColor = MAKE_SALCOLOR( 255, 255, 255 );
         lb.usMixMode = FM_XOR;
         lb.usType = LINETYPE_ALTERNATE;
         Ft2SetAttrs( mhPS, PRIM_LINE, LBB_MIX_MODE | LBB_TYPE | LBB_COLOR, 0, &lb );
@@ -705,7 +705,7 @@ void Os2SalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
         GpiQueryAttrs( mhPS, PRIM_AREA, ABB_COLOR | ABB_MIX_MODE | ABB_SYMBOL, &oldAb );
 
         // set fill color to black
-        ab.lColor = RGBCOLOR( 255, 255, 255 );
+        ab.lColor = MAKE_SALCOLOR( 255, 255, 255 );
         ab.usMixMode = FM_XOR;
         ab.usSymbol = (nFlags & SAL_INVERT_50) ? PATSYM_DENSE5 : PATSYM_SOLID;
         Ft2SetAttrs( mhPS, PRIM_AREA, ABB_COLOR | ABB_MIX_MODE | ABB_SYMBOL, 0, &ab );
@@ -740,7 +740,7 @@ void Os2SalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nF
         GpiQueryAttrs( mhPS, PRIM_LINE, LBB_MIX_MODE | LBB_TYPE | LBB_COLOR, &oldLb );
 
         // set linetype to short dash
-        lb.lColor = RGBCOLOR( 255, 255, 255 );
+        lb.lColor = MAKE_SALCOLOR( 255, 255, 255 );
         lb.usMixMode = FM_XOR;
         lb.usType = LINETYPE_ALTERNATE;
         Ft2SetAttrs( mhPS, PRIM_LINE, LBB_MIX_MODE | LBB_TYPE | LBB_COLOR, 0, &lb );
@@ -760,7 +760,7 @@ void Os2SalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nF
         GpiQueryAttrs( mhPS, PRIM_AREA, ABB_COLOR | ABB_MIX_MODE | ABB_SYMBOL, &oldAb );
 
         // set fill color to black
-        ab.lColor = RGBCOLOR( 255, 255, 255 );
+        ab.lColor = MAKE_SALCOLOR( 255, 255, 255 );
         ab.usMixMode = FM_XOR;
         ab.usSymbol = (nFlags & SAL_INVERT_50) ? PATSYM_DENSE5 : PATSYM_SOLID;
         Ft2SetAttrs( mhPS, PRIM_AREA, ABB_COLOR | ABB_MIX_MODE | ABB_SYMBOL, 0, &ab );

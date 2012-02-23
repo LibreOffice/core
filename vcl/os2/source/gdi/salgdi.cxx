@@ -295,7 +295,7 @@ void Os2SalGraphics::SetLineColor( SalColor nSalColor )
     LINEBUNDLE lb;
 
     // set color
-    lb.lColor = RGBCOLOR( SALCOLOR_RED( nSalColor ),
+    lb.lColor = MAKE_SALCOLOR( SALCOLOR_RED( nSalColor ),
                           SALCOLOR_GREEN( nSalColor ),
                           SALCOLOR_BLUE( nSalColor ) );
 
@@ -324,7 +324,7 @@ void Os2SalGraphics::SetFillColor( SalColor nSalColor )
     AREABUNDLE ab;
 
     // set color
-    ab.lColor = RGBCOLOR( SALCOLOR_RED( nSalColor ),
+    ab.lColor = MAKE_SALCOLOR( SALCOLOR_RED( nSalColor ),
                           SALCOLOR_GREEN( nSalColor ),
                           SALCOLOR_BLUE( nSalColor ) );
 
@@ -413,7 +413,7 @@ void Os2SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
     // set new color
     LINEBUNDLE lb;
-    lb.lColor = RGBCOLOR( SALCOLOR_RED( nSalColor ),
+    lb.lColor = MAKE_SALCOLOR( SALCOLOR_RED( nSalColor ),
                           SALCOLOR_GREEN( nSalColor ),
                           SALCOLOR_BLUE( nSalColor ) );
     Ft2SetAttrs( mhPS,

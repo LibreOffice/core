@@ -609,7 +609,7 @@ void Os2SalGraphics::SetTextColor( SalColor nSalColor )
 {
     CHARBUNDLE cb;
 
-    cb.lColor = RGBCOLOR( SALCOLOR_RED( nSalColor ),
+    cb.lColor = MAKE_SALCOLOR( SALCOLOR_RED( nSalColor ),
                           SALCOLOR_GREEN( nSalColor ),
                           SALCOLOR_BLUE( nSalColor ) );
 
@@ -1157,7 +1157,7 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
     {
         PFONTMETRICS pFontMetric = &pFontMetrics[i];
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL>2
         debug_printf("Os2SalGraphics::GetDevFontList #%d,'%s'\n", i, pFontMetric->szFacename);
 #endif
 

@@ -340,7 +340,6 @@ void ImplSalDeInitGraphics( Os2SalGraphics* mpData );
 // - Defines -
 // -----------
 
-#define RGBCOLOR(r,g,b)     ((ULONG)(((PM_BYTE)(b)|((USHORT)(g)<<8))|(((ULONG)(PM_BYTE)(r))<<16)))
 #define TY( y )             (mnHeight-(y)-1)
 
 // offset for lcid field, used for fallback font selection
