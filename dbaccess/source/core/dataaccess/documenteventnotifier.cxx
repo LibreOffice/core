@@ -166,7 +166,7 @@ namespace dbaccess
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
             m_pEventBroadcaster->join();
-            m_pEventBroadcaster = NULL;
+            m_pEventBroadcaster.clear();
         }
 
         lang::EventObject aEvent( m_rDocument );
@@ -190,7 +190,7 @@ namespace dbaccess
         m_bInitialized = true;
         if ( m_pEventBroadcaster.is() )
             // there are already pending asynchronous events
-            m_pEventBroadcaster->create();
+            m_pEventBroadcaster->launch();
     }
 
     void DocumentEventNotifier_Impl::impl_notifyEvent_nothrow( const DocumentEvent& _rEvent )
@@ -220,11 +220,12 @@ namespace dbaccess
     {
         if ( !m_pEventBroadcaster.is() )
         {
-            m_pEventBroadcaster.set( new ::comphelper::AsyncEventNotifier );
+            m_pEventBroadcaster.set(
+                new ::comphelper::AsyncEventNotifier("DocumentEventNotifier"));
             if ( m_bInitialized )
                 // start processing the events if and only if we (our document, respectively) are
                 // already initialized
-                m_pEventBroadcaster->create();
+                m_pEventBroadcaster->launch();
         }
         m_pEventBroadcaster->addEvent( new DocumentEventHolder( _rEvent ), this );
     }

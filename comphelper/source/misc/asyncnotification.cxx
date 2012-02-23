@@ -142,8 +142,8 @@ namespace comphelper
     //= AsyncEventNotifier
     //====================================================================
     //--------------------------------------------------------------------
-    AsyncEventNotifier::AsyncEventNotifier()
-        :m_pImpl( new EventNotifierImpl )
+    AsyncEventNotifier::AsyncEventNotifier(char const * name):
+        Thread(name), m_pImpl(new EventNotifierImpl)
     {
     }
 
@@ -191,13 +191,8 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void AsyncEventNotifier::run()
+    void AsyncEventNotifier::execute()
     {
-        acquire();
-
-        // keep us alive, in case we're terminated in the mid of the following
-        ::rtl::Reference< AsyncEventNotifier > xKeepAlive( this );
-
         do
         {
             AnyEventRef aNextEvent;
@@ -246,32 +241,6 @@ namespace comphelper
             m_pImpl->aPendingActions.wait();
         }
         while ( sal_True );
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL AsyncEventNotifier::onTerminated()
-    {
-        Thread::onTerminated();
-        // when we were started (->run), we aquired ourself. Release this now
-        // that we were finally terminated
-        release();
-    }
-
-    //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL AsyncEventNotifier::acquire()
-    {
-        return osl_incrementInterlockedCount( &m_pImpl->m_refCount );
-    }
-
-    //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL AsyncEventNotifier::release()
-    {
-        if ( 0 == osl_decrementInterlockedCount( &m_pImpl->m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_pImpl->m_refCount;
     }
 
 //........................................................................

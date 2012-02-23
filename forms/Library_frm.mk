@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     editeng \
     i18nisolang1 \
     sal \
+    salhelper \
     sfx \
     svl \
     svt \

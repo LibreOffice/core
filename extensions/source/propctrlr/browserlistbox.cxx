@@ -126,8 +126,13 @@ namespace pcr
         ::osl::MutexGuard aGuard( getMutex() );
         if ( !s_pNotifier.is() )
         {
-            s_pNotifier.set( new ::comphelper::AsyncEventNotifier );
-            s_pNotifier->create();
+            s_pNotifier.set(
+                new ::comphelper::AsyncEventNotifier("browserlistbox"));
+            s_pNotifier->launch();
+                //TODO: a protocol is missing how to join with the launched
+                // thread before exit(3), to ensure the thread is no longer
+                // relying on any infrastructure while that infrastructure is
+                // being shut down in atexit handlers
         }
         return s_pNotifier;
     }

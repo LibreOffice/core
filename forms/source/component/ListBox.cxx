@@ -1528,7 +1528,6 @@ namespace frm
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
         ,m_aChangeListeners( m_aMutex )
         ,m_aItemListeners( m_aMutex )
-        ,m_pItemBroadcaster( NULL )
     {
         DBG_CTOR(OListBoxControl,NULL);
 
@@ -1614,8 +1613,9 @@ namespace frm
             {
                 if ( !m_pItemBroadcaster.is() )
                 {
-                    m_pItemBroadcaster.set( new ::comphelper::AsyncEventNotifier );
-                    m_pItemBroadcaster->create();
+                    m_pItemBroadcaster.set(
+                        new ::comphelper::AsyncEventNotifier("ListBox"));
+                    m_pItemBroadcaster->launch();
                 }
                 m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ), this );
             }
@@ -1701,14 +1701,19 @@ namespace frm
         m_aChangeListeners.disposeAndClear( aEvent );
         m_aItemListeners.disposeAndClear( aEvent );
 
+        rtl::Reference< comphelper::AsyncEventNotifier > t;
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_pItemBroadcaster.is() )
             {
+                t = m_pItemBroadcaster;
                 m_pItemBroadcaster->removeEventsForProcessor( this );
                 m_pItemBroadcaster->terminate();
                 m_pItemBroadcaster = NULL;
             }
+        }
+        if (t.is()) {
+            t->join();
         }
 
         OBoundControl::disposing();
