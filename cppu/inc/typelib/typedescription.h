@@ -424,7 +424,7 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
         <code>nAllMembers</code>, <code>ppAllMembers</code> are also
         initialized; <code>aBase.bComplete</code> is still false.  This happens
         when an interface type description is created with
-        <code>typelib_typedescription_newMIInterface</cocde> or
+        <code>typelib_typedescription_newMIInterface</code> or
         <code>typelib_typedescription_newInterface</code>.</li>
 
         <li>At the final level, <code>pMapMemberIndexToFunctionIndex</code>,

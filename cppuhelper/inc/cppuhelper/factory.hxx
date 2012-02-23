@@ -182,9 +182,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
 
     @param rServiceManager      the service manager used by the implementation.
     @param rImplementationName  the implementation name. An empty string is possible.
-    @param ComponentInstantiation the function pointer to create an object.
-    @param rServiceNames            the service supported by the implementation.
-    @param pModCount             for future extension (library unloading concept).
+    @param pCreateFunction      the function pointer to create an object.
+    @param rServiceNames        the service supported by the implementation.
+    @param pModCount            for future extension (library unloading concept).
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 
@@ -224,9 +224,9 @@ createFactoryProxy(
 
     @param rServiceManager      the service manager used by the implementation.
     @param rImplementationName  the implementation name. An empty string is possible.
-    @param ComponentInstantiation the function pointer to create an object.
-    @param rServiceNames            the service supported by the implementation.
-    @param pModCount             for future extension (library unloading concept).
+    @param pCreateFunction      the function pointer to create an object.
+    @param rServiceNames        the service supported by the implementation.
+    @param pModCount            for future extension (library unloading concept).
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 
