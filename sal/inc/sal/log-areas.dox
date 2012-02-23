@@ -1,47 +1,52 @@
 /**
 @page sal_log_areas SAL debug areas
- 
-@short List and description of areas for the SAL debug macros
- 
-This is a list of areas that are used by the SAL_INFO family of macros.
-See @ref sal_log "basic log functionality" for details about this functionality.
 
-If you need use a debug area in some code, first check this list and use
-the appropriate area if it exists. This list is not definite, if you need
-a new area, use it and add it to the list in the proper section with an explanation.
+@short List and description of areas for the SAL debug macros
+
+This is a list of areas that are used by the SAL_INFO family of macros.  See
+@ref sal_log "basic log functionality" for details about this functionality.
+
+If you need a debug area in some code, first check this list and use the
+appropriate area if it exists.  This list is not definite, if you need a new
+area, use it and add it to an appropriate section with an explanation.
+Generally, use the name of the relevant code module as the first area segment.
+Please keep all entries sorted.
 
 This list should give you an overview of which areas to enable when debugging
 certain functionality.
 
+
 @section Calc
 
-@li sc.ui - Calc's UI
+@li @c sc.ui - Calc UI
+
 
 @section Filter
 
-@li filter.ms - escher export/import support
+@li @c filter.ms - escher import/export
+@li @c oox.xmlstream - XmlStream class
 
-@section oox
 
-@li oox.xmlstream - XmlStream class
+@section Math
 
-@section SAL/RTL
+@li @c starmath.ooxml - OOXML import/export
 
-@li rtl.string - rtl::OString, rtl::OUString and related functionality
+
+@section URE
+
+@li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
+
 
 @section VCL
 
-@li vcl.gdi - the GDI part of VCL: devices, bitmaps, etc.
-@li vcl.gtk - Gtk+ 2/3 plugin
+@li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
+@li @c vcl.gtk - Gtk+ 2/3 plugin
+
 
 @section Writer
 
-@li sw.uno - Writer's UNO interfaces
-@li sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
-@li sw.rtf - .rtf export filter
-
-@section StarMath
-
-@li starmath.ooxml - OOXML export/import support
+@li @c sw.rtf - .rtf export filter
+@li @c sw.uno - Writer UNO interfaces
+@li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 
 */
