@@ -242,7 +242,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             for( vector<rtl::OString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
             {
                 sHelpFile = *pos;
-                std::cout << ".\n";
 
                 HelpParser aParser( sHelpFile , bUTF8 , true );
                 hasNoError = aParser.Merge( sSDFFile , sOutputFileX , sOutputFileY , true , aLanguages , aMergeDataFile , bCreateDir );
