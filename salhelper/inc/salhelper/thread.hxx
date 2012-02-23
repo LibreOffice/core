@@ -73,6 +73,13 @@ public:
     using osl::Thread::schedule;
     using osl::Thread::terminate;
 
+    // While the below static member functions should arguably always be called
+    // with qualified (osl::Thread) names, at least MSVC still would complain
+    // that they are inaccessible from within derivations of salhelper::Thread:
+    using osl::Thread::getCurrentIdentifier;
+    using osl::Thread::wait;
+    using osl::Thread::yield;
+
     static inline void * operator new(std::size_t size)
     { return SimpleReferenceObject::operator new(size); }
 
