@@ -29,6 +29,6 @@
 +.ENDIF
 +
  SLOFILES= \
-         $(SLO)$/CDRDocument.obj \
- 		$(SLO)$/CDRInternalStream.obj \
+     $(SLO)$/CDRCollector.obj \
+     $(SLO)$/CDRDocument.obj \
 
