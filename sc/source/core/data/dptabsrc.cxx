@@ -750,220 +750,220 @@ void ScDPSource::FilterCacheTableByPageDimensions()
 
 void ScDPSource::CreateRes_Impl()
 {
-    if ( !pResData )
+    if (pResData)
+        return;
+
+    sal_uInt16 nDataOrient = GetDataLayoutOrientation();
+    if ( nDataDimCount > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
+                                nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
     {
-        sal_uInt16 nDataOrient = GetDataLayoutOrientation();
-        if ( nDataDimCount > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
-                                    nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
+        //  if more than one data dimension, data layout orientation must be set
+        SetOrientation( pData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW );
+        nDataOrient = sheet::DataPilotFieldOrientation_ROW;
+    }
+
+    // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
+    // eDataFunctions into a structure and use vector instead of static
+    // or pointer arrays.
+    vector<rtl::OUString> aDataNames;
+    sheet::DataPilotFieldReference* pDataRefValues = NULL;
+    ScSubTotalFunc eDataFunctions[SC_DP_MAX_FIELDS];
+    sal_uInt16 nDataRefOrient[SC_DP_MAX_FIELDS];
+    if (nDataDimCount)
+    {
+        aDataNames.resize(nDataDimCount);
+        pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
+    }
+
+    ScDPTableData::CalcInfo aInfo;
+
+
+    //  LateInit (initialize only those rows/children that are used) can be used unless
+    //  any data dimension needs reference values from column/row dimensions
+    bool bLateInit = true;
+
+    // Go through all data dimensions (i.e. fields) and build their meta data
+    // so that they can be passed on to ScDPResultData instance later.
+    // TODO: aggregate all of data dimension info into a structure.
+    long i;
+    for (i=0; i<nDataDimCount; i++)
+    {
+        // Get function for each data field.
+        long nDimIndex = nDataDims[i];
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
+        sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
+        if (eUser == sheet::GeneralFunction_AUTO)
         {
-            //  if more than one data dimension, data layout orientation must be set
-            SetOrientation( pData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW );
-            nDataOrient = sheet::DataPilotFieldOrientation_ROW;
+            //! test for numeric data
+            eUser = sheet::GeneralFunction_SUM;
         }
 
-        // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
-        // eDataFunctions into a structure and use vector instead of static
-        // or pointer arrays.
-        vector<rtl::OUString> aDataNames;
-        sheet::DataPilotFieldReference* pDataRefValues = NULL;
-        ScSubTotalFunc eDataFunctions[SC_DP_MAX_FIELDS];
-        sal_uInt16 nDataRefOrient[SC_DP_MAX_FIELDS];
-        if (nDataDimCount)
+        // Map UNO's enum to internal enum ScSubTotalFunc.
+        eDataFunctions[i] = ScDataUnoConversion::GeneralToSubTotal( eUser );
+
+        // Get reference field/item information.
+        pDataRefValues[i] = pDim->GetReferenceValue();
+        nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+        sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
+        if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
+             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
+             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
+             eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
         {
-            aDataNames.resize(nDataDimCount);
-            pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
-        }
-
-        ScDPTableData::CalcInfo aInfo;
-
-
-        //  LateInit (initialize only those rows/children that are used) can be used unless
-        //  any data dimension needs reference values from column/row dimensions
-        sal_Bool bLateInit = sal_True;
-
-        // Go through all data dimensions (i.e. fields) and build their meta data
-        // so that they can be passed on to ScDPResultData instance later.
-        // TODO: aggregate all of data dimension info into a structure.
-        long i;
-        for (i=0; i<nDataDimCount; i++)
-        {
-            // Get function for each data field.
-            long nDimIndex = nDataDims[i];
-            ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
-            sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
-            if (eUser == sheet::GeneralFunction_AUTO)
+            long nColumn = lcl_GetIndexFromName( pDataRefValues[i].ReferenceField,
+                                    GetDimensionsObject()->getElementNames() );
+            if ( nColumn >= 0 )
             {
-                //! test for numeric data
-                eUser = sheet::GeneralFunction_SUM;
+                nDataRefOrient[i] = GetOrientation( nColumn );
+                //  need fully initialized results to find reference values
+                //  (both in column or row dimensions), so updated values or
+                //  differences to 0 can be displayed even for empty results.
+                bLateInit = false;
             }
-
-            // Map UNO's enum to internal enum ScSubTotalFunc.
-            eDataFunctions[i] = ScDataUnoConversion::GeneralToSubTotal( eUser );
-
-            // Get reference field/item information.
-            pDataRefValues[i] = pDim->GetReferenceValue();
-            nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
-            sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
-            if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
-                 eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
-                 eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
-                 eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
-            {
-                long nColumn = lcl_GetIndexFromName( pDataRefValues[i].ReferenceField,
-                                        GetDimensionsObject()->getElementNames() );
-                if ( nColumn >= 0 )
-                {
-                    nDataRefOrient[i] = GetOrientation( nColumn );
-                    //  need fully initialized results to find reference values
-                    //  (both in column or row dimensions), so updated values or
-                    //  differences to 0 can be displayed even for empty results.
-                    bLateInit = false;
-                }
-            }
-
-            aDataNames[i] = pDim->getName();
-
-            //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
-            //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
-
-            aDataNames[i] = comphelper::string::removeTrailingChars(aDataNames[i], '*');
-
-            //! if the name is overridden by user, a flag must be set
-            //! so the user defined name replaces the function string and field name.
-
-            //! the complete name (function and field) must be stored at the dimension
-
-            long nSource = ((ScDPDimension*)pDim)->GetSourceDim();
-            if (nSource >= 0)
-                aInfo.aDataSrcCols.push_back(nSource);
-            else
-                aInfo.aDataSrcCols.push_back(nDimIndex);
         }
 
-        pResData = new ScDPResultData( this );
-        pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, aDataNames );
-        pResData->SetDataLayoutOrientation(nDataOrient);
-        pResData->SetLateInit( bLateInit );
+        aDataNames[i] = pDim->getName();
 
-        delete[] pDataRefValues;
+        //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
+        //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
-        bool bHasAutoShow = false;
+        aDataNames[i] = comphelper::string::removeTrailingChars(aDataNames[i], '*');
 
-        ScDPInitState aInitState;
+        //! if the name is overridden by user, a flag must be set
+        //! so the user defined name replaces the function string and field name.
 
-        // Page field selections restrict the members shown in related fields
-        // (both in column and row fields). aInitState is filled with the page
-        // field selections, they are kept across the data iterator loop.
+        //! the complete name (function and field) must be stored at the dimension
 
-        for (i=0; i<nPageDimCount; i++)
-        {
-            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
-            if ( pDim->HasSelectedPage() )
-                aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
-        }
-
-        pColResRoot = new ScDPResultMember( pResData, bColumnGrand );
-        pRowResRoot = new ScDPResultMember( pResData, bRowGrand );
-
-        FillCalcInfo(false, aInfo, bHasAutoShow);
-        long nColLevelCount = aInfo.aColLevels.size();
-
-        pColResRoot->InitFrom( aInfo.aColDims, aInfo.aColLevels, 0, aInitState );
-        pColResRoot->SetHasElements();
-
-        FillCalcInfo(true, aInfo, bHasAutoShow);
-        long nRowLevelCount = aInfo.aRowLevels.size();
-
-        if ( nRowLevelCount > 0 )
-        {
-            // disable layout flags for the innermost row field (level)
-            aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( false );
-        }
-
-        pRowResRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
-        pRowResRoot->SetHasElements();
-
-        // initialize members object also for all page dimensions (needed for numeric groups)
-        for (i=0; i<nPageDimCount; i++)
-        {
-            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
-            long nHierarchy = pDim->getUsedHierarchy();
-            if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
-                nHierarchy = 0;
-
-            ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
-            long nCount = pLevels->getCount();
-            for (long j=0; j<nCount; j++)
-                pLevels->getByIndex(j)->GetMembersObject();             // initialize for groups
-        }
-
-        //  pre-check: calculate minimum number of result columns / rows from
-        //  levels that have the "show all" flag set
-
-        long nMinColMembers = lcl_CountMinMembers( aInfo.aColDims, aInfo.aColLevels, nColLevelCount );
-        long nMinRowMembers = lcl_CountMinMembers( aInfo.aRowDims, aInfo.aRowLevels, nRowLevelCount );
-
-        if ( nMinColMembers > MAXCOLCOUNT/*SC_MINCOUNT_LIMIT*/ || nMinRowMembers > SC_MINCOUNT_LIMIT )
-        {
-            //  resulting table is too big -> abort before calculating
-            //  (this relies on late init, so no members are allocated in InitFrom above)
-
-            bResultOverflow = sal_True;
-        }
+        long nSource = ((ScDPDimension*)pDim)->GetSourceDim();
+        if (nSource >= 0)
+            aInfo.aDataSrcCols.push_back(nSource);
         else
+            aInfo.aDataSrcCols.push_back(nDimIndex);
+    }
+
+    pResData = new ScDPResultData( this );
+    pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, aDataNames );
+    pResData->SetDataLayoutOrientation(nDataOrient);
+    pResData->SetLateInit( bLateInit );
+
+    delete[] pDataRefValues;
+
+    bool bHasAutoShow = false;
+
+    ScDPInitState aInitState;
+
+    // Page field selections restrict the members shown in related fields
+    // (both in column and row fields). aInitState is filled with the page
+    // field selections, they are kept across the data iterator loop.
+
+    for (i=0; i<nPageDimCount; i++)
+    {
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+        if ( pDim->HasSelectedPage() )
+            aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
+    }
+
+    pColResRoot = new ScDPResultMember( pResData, bColumnGrand );
+    pRowResRoot = new ScDPResultMember( pResData, bRowGrand );
+
+    FillCalcInfo(false, aInfo, bHasAutoShow);
+    long nColLevelCount = aInfo.aColLevels.size();
+
+    pColResRoot->InitFrom( aInfo.aColDims, aInfo.aColLevels, 0, aInitState );
+    pColResRoot->SetHasElements();
+
+    FillCalcInfo(true, aInfo, bHasAutoShow);
+    long nRowLevelCount = aInfo.aRowLevels.size();
+
+    if ( nRowLevelCount > 0 )
+    {
+        // disable layout flags for the innermost row field (level)
+        aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( false );
+    }
+
+    pRowResRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
+    pRowResRoot->SetHasElements();
+
+    // initialize members object also for all page dimensions (needed for numeric groups)
+    for (i=0; i<nPageDimCount; i++)
+    {
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+        long nHierarchy = pDim->getUsedHierarchy();
+        if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
+            nHierarchy = 0;
+
+        ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
+        long nCount = pLevels->getCount();
+        for (long j=0; j<nCount; j++)
+            pLevels->getByIndex(j)->GetMembersObject();             // initialize for groups
+    }
+
+    //  pre-check: calculate minimum number of result columns / rows from
+    //  levels that have the "show all" flag set
+
+    long nMinColMembers = lcl_CountMinMembers( aInfo.aColDims, aInfo.aColLevels, nColLevelCount );
+    long nMinRowMembers = lcl_CountMinMembers( aInfo.aRowDims, aInfo.aRowLevels, nRowLevelCount );
+
+    if ( nMinColMembers > MAXCOLCOUNT/*SC_MINCOUNT_LIMIT*/ || nMinRowMembers > SC_MINCOUNT_LIMIT )
+    {
+        //  resulting table is too big -> abort before calculating
+        //  (this relies on late init, so no members are allocated in InitFrom above)
+
+        bResultOverflow = true;
+    }
+    else
+    {
+        FilterCacheTableByPageDimensions();
+
+        aInfo.aPageDims.reserve(nPageDimCount);
+        for (i = 0; i < nPageDimCount; ++i)
+            aInfo.aPageDims.push_back(nPageDims[i]);
+
+        aInfo.pInitState = &aInitState;
+        aInfo.pColRoot   = pColResRoot;
+        aInfo.pRowRoot   = pRowResRoot;
+        pData->CalcResults(aInfo, false);
+
+        pColResRoot->CheckShowEmpty();
+        pRowResRoot->CheckShowEmpty();
+        // ----------------------------------------------------------------
+        //  With all data processed, calculate the final results:
+
+        //  UpdateDataResults calculates all original results from the collected values,
+        //  and stores them as reference values if needed.
+        pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+
+        if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
         {
-            FilterCacheTableByPageDimensions();
+            //  Find the desired members and set bAutoHidden flag for the others
+            pRowResRoot->DoAutoShow( pColResRoot );
 
-            aInfo.aPageDims.reserve(nPageDimCount);
-            for (i = 0; i < nPageDimCount; ++i)
-                aInfo.aPageDims.push_back(nPageDims[i]);
+            //  Reset all results to empty, so they can be built again with data for the
+            //  desired members only.
+            pColResRoot->ResetResults( sal_True );
+            pRowResRoot->ResetResults( sal_True );
+            pData->CalcResults(aInfo, true);
 
-            aInfo.pInitState = &aInitState;
-            aInfo.pColRoot   = pColResRoot;
-            aInfo.pRowRoot   = pRowResRoot;
-            pData->CalcResults(aInfo, false);
-
-            pColResRoot->CheckShowEmpty();
-            pRowResRoot->CheckShowEmpty();
-            // ----------------------------------------------------------------
-            //  With all data processed, calculate the final results:
-
-            //  UpdateDataResults calculates all original results from the collected values,
-            //  and stores them as reference values if needed.
+            //  Call UpdateDataResults again, with the new (limited) values.
             pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
-
-            if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
-            {
-                //  Find the desired members and set bAutoHidden flag for the others
-                pRowResRoot->DoAutoShow( pColResRoot );
-
-                //  Reset all results to empty, so they can be built again with data for the
-                //  desired members only.
-                pColResRoot->ResetResults( sal_True );
-                pRowResRoot->ResetResults( sal_True );
-                pData->CalcResults(aInfo, true);
-
-                //  Call UpdateDataResults again, with the new (limited) values.
-                pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
-            }
-
-            //  SortMembers does the sorting by a result dimension, using the orginal results,
-            //  but not running totals etc.
-            pRowResRoot->SortMembers( pColResRoot );
-
-            //  UpdateRunningTotals calculates running totals along column/row dimensions,
-            //  differences from other members (named or relative), and column/row percentages
-            //  or index values.
-            //  Running totals and relative differences need to be done using the sorted values.
-            //  Column/row percentages and index values must be done after sorting, because the
-            //  results may no longer be in the right order (row total for percentage of row is
-            //  always 1).
-            ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
-            ScDPRowTotals aTotals;
-            pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
-
-            // ----------------------------------------------------------------
         }
+
+        //  SortMembers does the sorting by a result dimension, using the orginal results,
+        //  but not running totals etc.
+        pRowResRoot->SortMembers( pColResRoot );
+
+        //  UpdateRunningTotals calculates running totals along column/row dimensions,
+        //  differences from other members (named or relative), and column/row percentages
+        //  or index values.
+        //  Running totals and relative differences need to be done using the sorted values.
+        //  Column/row percentages and index values must be done after sorting, because the
+        //  results may no longer be in the right order (row total for percentage of row is
+        //  always 1).
+        ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
+        ScDPRowTotals aTotals;
+        pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
+
+        // ----------------------------------------------------------------
     }
 }
 
