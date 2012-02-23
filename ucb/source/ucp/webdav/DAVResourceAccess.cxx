@@ -35,7 +35,7 @@
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 //=========================================================================
@@ -168,48 +168,6 @@ DAVResourceAccess & DAVResourceAccess::operator=(
 
     return *this;
 }
-
-#if 0 // currently not used, but please don't remove code
-//=========================================================================
-void DAVResourceAccess::OPTIONS(
-    DAVCapabilities & rCapabilities,
-    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
-{
-    initialize();
-
-    bool bRetry;
-    int errorCount = 0;
-    do
-    {
-        bRetry = false;
-        try
-        {
-            DAVRequestHeaders aHeaders;
-            getUserRequestHeaders( xEnv,
-                                   getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "OPTIONS" ),
-                                   aHeaders );
-
-            m_xSession->OPTIONS( getRequestURI(),
-                                 rCapabilities,
-                                 DAVRequestEnvironment(
-                                     getRequestURI(),
-                                     new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                     aHeaders, xEnv) );
-        }
-        catch ( DAVException & e )
-        {
-            errorCount++;
-            bRetry = handleException( e, errorCount );
-            if ( !bRetry )
-                throw;
-        }
-    }
-    while ( bRetry );
-}
-#endif
 
 //=========================================================================
 void DAVResourceAccess::PROPFIND(
@@ -1056,7 +1014,7 @@ void DAVResourceAccess::initialize()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( m_aPath.getLength() == 0 )
     {
-        NeonUri aURI( m_aURL );
+        SerfUri aURI( m_aURL );
         rtl::OUString aPath( aURI.GetPath() );
 
         /* #134089# - Check URI */
@@ -1147,10 +1105,10 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    NeonUri aUri( rRedirectURL );
+    SerfUri aUri( rRedirectURL );
 
-    std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
-    std::vector< NeonUri >::const_iterator end = m_aRedirectURIs.end();
+    std::vector< SerfUri >::const_iterator it  = m_aRedirectURIs.begin();
+    std::vector< SerfUri >::const_iterator end = m_aRedirectURIs.end();
 
     while ( it != end )
     {
@@ -1169,9 +1127,9 @@ void DAVResourceAccess::resetUri()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( m_aRedirectURIs.size() > 0 )
     {
-        std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
+        std::vector< SerfUri >::const_iterator it  = m_aRedirectURIs.begin();
 
-        NeonUri aUri( (*it) );
+        SerfUri aUri( (*it) );
         m_aRedirectURIs.clear();
         setURL ( aUri.GetURI() );
         initialize();

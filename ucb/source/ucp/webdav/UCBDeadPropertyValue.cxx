@@ -25,12 +25,12 @@
 #include "precompiled_ucb.hxx"
 
 #include <string.h>
-#include <ne_xml.h>
+//#include <ne_xml.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "UCBDeadPropertyValue.hxx"
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,11 +78,12 @@ const rtl::OUString UCBDeadPropertyValue::aXMLEnd
 #define STATE_TYPE      (STATE_TOP + 1)
 #define STATE_VALUE     (STATE_TOP + 2)
 
+/*
 //////////////////////////////////////////////////////////////////////////
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
     int parent,
-    const char * /*nspace*/,
+    const char * nspace,
     const char *name,
     const char ** )
 {
@@ -166,6 +167,7 @@ extern "C" int UCBDeadPropertyValue_endelement_callback(
     }
     return 0; // zero to continue, non-zero to abort parsing
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////
 static rtl::OUString encodeValue( const rtl::OUString & rValue )
@@ -352,11 +354,12 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
-                                          uno::Any & rOutData )
+bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
+                                          uno::Any & /*rOutData*/ )
 {
     bool success = false;
 
+    /*
     ne_xml_parser * parser = ne_xml_create();
     if ( parser )
     {
@@ -431,7 +434,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 success = false;
         }
     }
-
+    */
     return success;
 }
 
@@ -529,11 +532,10 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     // Encode value! It must not contain XML reserved chars!
     aStringValue = encodeValue( aStringValue );
 
-        rOutData =  aXMLPre;
+    rOutData =  aXMLPre;
     rOutData += aStringType;
     rOutData += aXMLMid;
     rOutData += aStringValue;
     rOutData += aXMLEnd;
-
     return true;
 }

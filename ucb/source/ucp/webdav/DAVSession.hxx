@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     struct Lock;
 } } } }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 class DAVAuthListener;
@@ -68,10 +68,13 @@ public:
     // DAV methods
     //
 
+    // NOT USED
+    /*
     virtual void OPTIONS( const ::rtl::OUString & inPath,
                           DAVCapabilities & outCapabilities,
                           const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
+    */
 
     // allprop & named
     virtual void PROPFIND( const ::rtl::OUString & inPath,
@@ -210,6 +213,6 @@ private:
 #endif // WNT
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVSESSION_HXX_

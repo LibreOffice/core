@@ -41,7 +41,6 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/ucb/Link.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include "webdavcontent.hxx"
@@ -50,7 +49,7 @@
 #include "ContentProperties.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 //=========================================================================
 //
@@ -233,14 +232,6 @@ bool ContentProvider::getProperty(
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
-
-            m_pProps->insert(
-                beans::Property(
-                    DAVProperties::SOURCE,
-                    -1,
-                    getCppuType( static_cast<
-                                    const uno::Sequence< ucb::Link > * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND ) );
 
             m_pProps->insert(
                 beans::Property(

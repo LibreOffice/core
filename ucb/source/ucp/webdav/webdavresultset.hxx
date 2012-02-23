@@ -29,7 +29,7 @@
 #include "webdavcontent.hxx"
 #include "webdavdatasupplier.hxx"
 
-namespace webdav_ucp {
+namespace http_dav_ucp {
 
 class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {

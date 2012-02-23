@@ -59,7 +59,7 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
                 $(CPPULIB)          \
                 $(SALLIB)           \
                 $(TOOLSLIB)         \
-                $(COINMPLIB)
+                $(COINMPLIBS)
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def

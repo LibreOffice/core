@@ -350,7 +350,8 @@ MYTHESLIB=-lmythes
 MYTHESLIB=-lmythes-1.2
 .ENDIF
 PYUNOLIB=-lpyuno
-COINMPLIB=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
+COINMPLIBS=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
+SERFLIBS=-lapr-1 -laprutil-1 -lserf-1
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
@@ -524,7 +525,8 @@ HUNSPELLLIB=$(LIBPRE) libhunspell.lib
 .ENDIF
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
-COINMPLIB=CoinMP.lib
+COINMPLIBS=CoinMP.lib
+SERFLIBS=libapr-1.lib iapr-util.lib iserf.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib

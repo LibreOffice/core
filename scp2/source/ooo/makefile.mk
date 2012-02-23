@@ -240,6 +240,21 @@ SCPDEFS+=-DOPENSSL
 SCPDEFS+=-DDISABLE_ATL
 .ENDIF
 
+# Detect version numbers for apr, apr-util, serf.
+.INCLUDE : apr_version.mk
+.INCLUDE : aprutil_version.mk
+.INCLUDE : serf_version.mk
+SCPDEFS+=\
+    -DAPR_MAJOR=$(APR_MAJOR)		\
+    -DAPR_MINOR=$(APR_MINOR)		\
+    -DAPR_MICRO=$(APR_MICRO)		\
+    -DAPR_UTIL_MAJOR=$(APR_UTIL_MAJOR)	\
+    -DAPR_UTIL_MINOR=$(APR_UTIL_MINOR)	\
+    -DAPR_UTIL_MICRO=$(APR_UTIL_MICRO)	\
+    -DSERF_MAJOR=$(SERF_MAJOR)		\
+    -DSERF_MINOR=$(SERF_MINOR)		\
+    -DSERF_MICRO=$(SERF_MICRO)
+
 .IF "$(SYSTEM_PYTHON)" == "YES"
 SCPDEFS+=-DSYSTEM_PYTHON
 .ENDIF

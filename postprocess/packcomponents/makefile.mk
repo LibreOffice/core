@@ -153,6 +153,7 @@ my_components = \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \
+    ucpdav1 \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
@@ -213,10 +214,6 @@ my_components +=     wpft
 
 .IF "$(DISABLE_ATL)" == ""
 my_components += emboleobj
-.END
-
-.IF "$(SYSTEM_NEON)" == "YES"
-my_components += ucpdav1
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"

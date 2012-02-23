@@ -29,7 +29,7 @@
 #include "rtl/ustring.hxx"
 #include "com/sun/star/uno/Any.hxx"
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 struct DAVPropertyValue
@@ -58,6 +58,6 @@ struct DAVResourceInfo
     DAVResourceInfo( const ::rtl::OUString & inUri ) : uri( inUri ) {}
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVRESOURCE_HXX_

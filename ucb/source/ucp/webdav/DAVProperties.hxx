@@ -24,9 +24,9 @@
 #define _DAVPROPERTIES_HXX_
 
 #include <rtl/ustring.hxx>
-#include "NeonTypes.hxx"
+#include "SerfTypes.hxx"
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 struct DAVProperties
@@ -40,19 +40,18 @@ struct DAVProperties
     static const ::rtl::OUString GETLASTMODIFIED;
     static const ::rtl::OUString LOCKDISCOVERY;
     static const ::rtl::OUString RESOURCETYPE;
-    static const ::rtl::OUString SOURCE;
     static const ::rtl::OUString SUPPORTEDLOCK;
     static const ::rtl::OUString EXECUTABLE;
 
-    static void createNeonPropName( const rtl::OUString & rFullName,
-                                    NeonPropName & rName );
+    static void createSerfPropName( const rtl::OUString & rFullName,
+                                    SerfPropName & rName );
     static void createUCBPropName ( const char * nspace,
                                     const char * name,
                                     rtl::OUString & rFullName );
 
-    static bool isUCBDeadProperty( const NeonPropName & rName );
+    static bool isUCBDeadProperty( const SerfPropName & rName );
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVPROPERTIES_HXX_

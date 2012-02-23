@@ -34,7 +34,7 @@ namespace rtl {
     class OUString;
 }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 class DateTimeHelper
@@ -53,7 +53,7 @@ public:
         ::com::sun::star::util::DateTime& );
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif
 

@@ -31,7 +31,7 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <com/sun/star/util/DateTime.hpp>
-#include "NeonUri.hxx"
+#include "SerfUri.hxx"
 #include "DAVResource.hxx"
 #include "DAVProperties.hxx"
 #include "DateTimeHelper.hxx"
@@ -39,7 +39,7 @@
 #include "ContentProperties.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 /*
 =============================================================================
@@ -97,7 +97,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
     // Title
     try
     {
-        NeonUri aURI( rResource.uri );
+        SerfUri aURI( rResource.uri );
         m_aEscapedTitle = aURI.GetPathBaseName();
 
         (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
@@ -564,9 +564,6 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
                 ? rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE )
                 : rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE ) ), true );
     }
-    //  else if ( rName.equals( DAVProperties::SOURCE ) )
-    //  {
-    //  }
     //  else if ( rName.equals( DAVProperties::SUPPORTEDLOCK ) )
     //  {
     //  }

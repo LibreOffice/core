@@ -27,7 +27,7 @@
 #include <hash_set>
 #include <com/sun/star/beans/Property.hpp>
 
-namespace webdav_ucp {
+namespace http_dav_ucp {
 
 //=========================================================================
 

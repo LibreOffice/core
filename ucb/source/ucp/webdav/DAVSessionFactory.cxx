@@ -24,11 +24,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 #include "DAVSessionFactory.hxx"
-#include "NeonSession.hxx"
-#include "NeonUri.hxx"
+#include "SerfSession.hxx"
+#include "SerfUri.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 DAVSessionFactory::~DAVSessionFactory()
@@ -60,10 +60,10 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == aEnd )
     {
-        NeonUri aURI( inUri );
+        SerfUri aURI( inUri );
 
         std::auto_ptr< DAVSession > xElement(
-            new NeonSession( this, inUri, *m_xProxyDecider.get() ) );
+            new SerfSession( this, inUri, *m_xProxyDecider.get() ) );
 
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;
         aIt->second->m_aContainerIt = aIt;
@@ -84,9 +84,9 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // If URL scheme is different from http or https we definitely
         // have to use a proxy and therefore can optimize the getProxy
         // call a little:
-        NeonUri aURI( inUri );
+        SerfUri aURI( inUri );
 
-        aIt->second = new NeonSession( this, inUri, *m_xProxyDecider.get() );
+        aIt->second = new SerfSession( this, inUri, *m_xProxyDecider.get() );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }

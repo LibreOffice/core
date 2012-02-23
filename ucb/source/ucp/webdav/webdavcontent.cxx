@@ -81,11 +81,11 @@
 #include "webdavprovider.hxx"
 #include "webdavresultset.hxx"
 #include "ContentProperties.hxx"
-#include "NeonUri.hxx"
+#include "SerfUri.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 //=========================================================================
 //=========================================================================
@@ -117,7 +117,7 @@ Content::Content(
                 rSessionFactory,
                 Identifier->getContentIdentifier() ) );
 
-        NeonUri aURI( Identifier->getContentIdentifier() );
+        SerfUri aURI( Identifier->getContentIdentifier() );
         m_aEscapedTitle = aURI.GetPathBaseName();
     }
     catch ( DAVException const & )
@@ -803,7 +803,6 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
                     case DAV:
                         throw lang::IllegalArgumentException();
 
-                    case FTP:
                     case NON_DAV:
                         // Store property locally.
                         ContentImplHelper::addProperty( Name,
@@ -920,7 +919,6 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
                         case DAV:
                             throw beans::UnknownPropertyException();
 
-                        case FTP:
                         case NON_DAV:
                             // Try to remove property from local store.
                             ContentImplHelper::removeProperty( Name );
@@ -1038,7 +1036,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     // create the local content
     try
     {
-        return new ::webdav_ucp::Content( m_xSMgr,
+        return new ::http_dav_ucp::Content( m_xSMgr,
                                           m_pProvider,
                                           xId,
                                           m_xResAccess->getSessionFactory(),
@@ -1188,7 +1186,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aUnescapedTitle = NeonUri::unescape( m_aEscapedTitle );
+        aUnescapedTitle = SerfUri::unescape( m_aEscapedTitle );
         xSMgr.set( m_xSMgr );
         xIdentifier.set( m_xIdentifier );
         xProvider.set( m_xProvider.get() );
@@ -1381,7 +1379,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // might trigger HTTP redirect.
         // Therefore, title must be updated here.
-        NeonUri aUri( xResAccess->getURL() );
+        SerfUri aUri( xResAccess->getURL() );
         aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
         if ( rType == UNKNOWN )
@@ -1477,7 +1475,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             m_xCachedProps->addProperties( *xProps.get() );
 
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
-        m_aEscapedTitle = NeonUri::escapeSegment( aUnescapedTitle );
+        m_aEscapedTitle = SerfUri::escapeSegment( aUnescapedTitle );
     }
 
     return xResultRow;
@@ -1590,7 +1588,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 {
                     try
                     {
-                        NeonUri aURI( xIdentifier->getContentIdentifier() );
+                        SerfUri aURI( xIdentifier->getContentIdentifier() );
                         aOldTitle = aURI.GetPathBaseNameUnescaped();
 
                         if ( aNewValue != aOldTitle )
@@ -1829,7 +1827,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
             aNewURL += rtl::OUString::createFromAscii( "/" );
 
-        aNewURL += NeonUri::escapeSegment( aNewTitle );
+        aNewURL += SerfUri::escapeSegment( aNewTitle );
 
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( xSMgr, aNewURL );
@@ -1837,8 +1835,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         try
         {
-            NeonUri sourceURI( xOldId->getContentIdentifier() );
-            NeonUri targetURI( xNewId->getContentIdentifier() );
+            SerfUri sourceURI( xOldId->getContentIdentifier() );
+            SerfUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( sourceURI.GetScheme() );
 
             xResAccess->MOVE(
@@ -1892,7 +1890,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
 
-        m_aEscapedTitle     = NeonUri::escapeSegment( aNewTitle );
+        m_aEscapedTitle     = SerfUri::escapeSegment( aNewTitle );
 
         aChanges.getArray()[ nChanged ] = aEvent;
         nChanged++;
@@ -1938,17 +1936,8 @@ uno::Any Content::open(
             // Error: Not a folder!
 
             rtl::OUStringBuffer aMsg;
-            if ( getResourceType( xEnv ) == FTP )
-            {
-                // #114653#
-                aMsg.appendAscii( "FTP over HTTP proxy: resource cannot "
-                                  "be opened as folder! Wrong Open Mode!" );
-            }
-            else
-            {
-                aMsg.appendAscii( "Non-folder resource cannot be "
-                                  "opened as folder! Wrong Open Mode!" );
-            }
+            aMsg.appendAscii( "Non-folder resource cannot be "
+                              "opened as folder! Wrong Open Mode!" );
 
             ucbhelper::cancelCommandExecution(
                 uno::makeAny(
@@ -2217,8 +2206,8 @@ void Content::queryChildren( ContentRefList& rChildren )
             {
                 // No further slashes / only a final slash. It's a child!
                 rChildren.push_back(
-                    ::webdav_ucp::Content::ContentRef(
-                        static_cast< ::webdav_ucp::Content * >(
+                    ::http_dav_ucp::Content::ContentRef(
+                        static_cast< ::http_dav_ucp::Content * >(
                             xChild.get() ) ) );
             }
         }
@@ -2283,9 +2272,9 @@ void Content::insert(
         // ==> Complain on PUT, continue on MKCOL.
         if ( !bTransient || ( bTransient && !bCollection  ) )
         {
+#undef ERROR
             ucb::UnsupportedNameClashException aEx(
-                rtl::OUString::createFromAscii(
-                    "Unable to write without overwrite!" ),
+                rtl::OUString::createFromAscii( "Unable to write without overwrite!" ),
                 static_cast< cppu::OWeakObject * >( this ),
                 ucb::NameClash::ERROR );
 
@@ -2405,7 +2394,7 @@ void Content::insert(
                         rtl::OUString aTitle;
                         try
                         {
-                            NeonUri aURI( aURL );
+                            SerfUri aURI( aURL );
                             aTitle = aURI.GetPathBaseNameUnescaped();
                         }
                         catch ( DAVException const & )
@@ -2495,8 +2484,8 @@ void Content::transfer(
     rtl::OUString aTargetURI;
     try
     {
-        NeonUri sourceURI( rArgs.SourceURL );
-        NeonUri targetURI( xIdentifier->getContentIdentifier() );
+        SerfUri sourceURI( rArgs.SourceURL );
+        SerfUri targetURI( xIdentifier->getContentIdentifier() );
         aTargetURI = targetURI.GetPathBaseNameUnescaped();
 
         // Check source's and target's URL scheme
@@ -2675,7 +2664,7 @@ void Content::transfer(
         {
             switch ( rArgs.NameClash )
             {
-                case ucb::NameClash::ERROR:
+                case 0/*ucb::NameClash::ERROR*/:
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
@@ -2733,7 +2722,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 
     // Process instanciated children...
 
-    ::webdav_ucp::Content::ContentRefList aChildren;
+    ::http_dav_ucp::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
     ContentRefList::const_iterator it  = aChildren.begin();
@@ -3190,58 +3179,51 @@ const Content::ResourceType & Content::getResourceType(
         const rtl::OUString aScheme(
             rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
 
-        if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) ) )
+        try
         {
-            eResourceType = FTP;
-        }
-        else
-        {
-            try
+            // Try to fetch some frequently used property value, e.g. those
+            // used when loading documents... along with identifying whether
+            // this is a DAV resource.
+            std::vector< DAVResource > resources;
+            std::vector< rtl::OUString > aPropNames;
+            uno::Sequence< beans::Property > aProperties( 5 );
+            aProperties[ 0 ].Name
+                = rtl::OUString::createFromAscii( "IsFolder" );
+            aProperties[ 1 ].Name
+                = rtl::OUString::createFromAscii( "IsDocument" );
+            aProperties[ 2 ].Name
+                = rtl::OUString::createFromAscii( "IsReadOnly" );
+            aProperties[ 3 ].Name
+                = rtl::OUString::createFromAscii( "MediaType" );
+            aProperties[ 4 ].Name
+                = DAVProperties::SUPPORTEDLOCK;
+
+            ContentProperties::UCBNamesToDAVNames(
+                aProperties, aPropNames );
+
+            rResAccess->PROPFIND(
+                DAVZERO, aPropNames, resources, xEnv );
+
+            // TODO - is this really only one?
+            if ( resources.size() == 1 )
             {
-                // Try to fetch some frequently used property value, e.g. those
-                // used when loading documents... along with identifying whether
-                // this is a DAV resource.
-                std::vector< DAVResource > resources;
-                std::vector< rtl::OUString > aPropNames;
-                uno::Sequence< beans::Property > aProperties( 5 );
-                aProperties[ 0 ].Name
-                    = rtl::OUString::createFromAscii( "IsFolder" );
-                aProperties[ 1 ].Name
-                    = rtl::OUString::createFromAscii( "IsDocument" );
-                aProperties[ 2 ].Name
-                    = rtl::OUString::createFromAscii( "IsReadOnly" );
-                aProperties[ 3 ].Name
-                    = rtl::OUString::createFromAscii( "MediaType" );
-                aProperties[ 4 ].Name
-                    = DAVProperties::SUPPORTEDLOCK;
-
-                ContentProperties::UCBNamesToDAVNames(
-                    aProperties, aPropNames );
-
-                rResAccess->PROPFIND(
-                    DAVZERO, aPropNames, resources, xEnv );
-
-                if ( resources.size() == 1 )
-                {
-                    m_xCachedProps.reset(
-                        new CachableContentProperties( resources[ 0 ] ) );
-                    m_xCachedProps->containsAllNames(
-                        aProperties, m_aFailedPropNames );
-                }
-
-                eResourceType = DAV;
+                m_xCachedProps.reset(
+                    new CachableContentProperties( resources[ 0 ] ) );
+                m_xCachedProps->containsAllNames(
+                    aProperties, m_aFailedPropNames );
             }
-            catch ( DAVException const & e )
-            {
-                rResAccess->resetUri();
 
-                if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
-                {
-                    // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
-                    // resource is NON_DAV
-                    eResourceType = NON_DAV;
-                }
+            eResourceType = DAV;
+        }
+        catch ( DAVException const & e )
+        {
+            rResAccess->resetUri();
+
+            if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
+            {
+                // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
+                // resource is NON_DAV
+                eResourceType = NON_DAV;
             }
         }
         m_eResourceType = eResourceType;

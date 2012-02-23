@@ -27,7 +27,7 @@
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 class UCBDeadPropertyValue

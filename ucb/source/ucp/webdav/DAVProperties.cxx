@@ -27,7 +27,7 @@
 #include <string.h>
 #include "DAVProperties.hxx"
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 const ::rtl::OUString DAVProperties::CREATIONDATE =
                 ::rtl::OUString::createFromAscii( "DAV:creationdate" );
@@ -47,8 +47,6 @@ const ::rtl::OUString DAVProperties::LOCKDISCOVERY =
                 ::rtl::OUString::createFromAscii( "DAV:lockdiscovery" );
 const ::rtl::OUString DAVProperties::RESOURCETYPE =
                 ::rtl::OUString::createFromAscii( "DAV:resourcetype" );
-const ::rtl::OUString DAVProperties::SOURCE =
-                ::rtl::OUString::createFromAscii( "DAV:source" );
 const ::rtl::OUString DAVProperties::SUPPORTEDLOCK =
                 ::rtl::OUString::createFromAscii( "DAV:supportedlock" );
 
@@ -58,8 +56,8 @@ const ::rtl::OUString DAVProperties::EXECUTABLE =
 
 // -------------------------------------------------------------------
 // static
-void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
-                                        NeonPropName & rName )
+void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
+                                        SerfPropName & rName )
 {
     if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "DAV:" ) ) == 0 )
     {
@@ -145,9 +143,10 @@ void DAVProperties::createUCBPropName( const char * nspace,
              DAVProperties::GETCONTENTLENGTH.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETCONTENTTYPE.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::SOURCE.matchIgnoreAsciiCase( aName, 4 ) )
+             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) )
+        {
             aNameSpace = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DAV:" ) );
+        }
     }
 
     // Note: Concatenating strings BEFORE comparing against known namespaces
@@ -186,7 +185,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
 
 // -------------------------------------------------------------------
 // static
-bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
+bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
 {
     return ( rName.nspace &&
              ( rtl_str_compareIgnoreAsciiCase(

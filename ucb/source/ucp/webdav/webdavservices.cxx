@@ -52,10 +52,10 @@ extern "C" void * SAL_CALL component_getFactory(
     // WebDAV Content Provider.
     //////////////////////////////////////////////////////////////////////
 
-    if ( ::webdav_ucp::ContentProvider::getImplementationName_Static().
+    if ( ::http_dav_ucp::ContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = ::webdav_ucp::ContentProvider::createServiceFactory( xSMgr );
+        xFactory = ::http_dav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////

@@ -27,7 +27,7 @@
 #include "DAVAuthListener.hxx"
 
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 //=========================================================================

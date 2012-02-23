@@ -27,7 +27,7 @@
 #include <rtl/ref.hxx>
 #include "DAVAuthListener.hxx"
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
     typedef std::pair< rtl::OUString, rtl::OUString > DAVRequestHeader;
     typedef std::vector< DAVRequestHeader > DAVRequestHeaders;
@@ -53,6 +53,6 @@ DAVRequestEnvironment( const rtl::OUString & rRequestURI,
     DAVRequestEnvironment() {}
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVREQUESTENVIRONMENT_HXX_

@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     struct TransferInfo;
 } } } }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 //=========================================================================
@@ -72,7 +72,6 @@ class Content : public ::ucbhelper::ContentImplHelper,
     enum ResourceType
     {
         UNKNOWN,
-        FTP,
         NON_DAV,
         DAV
     };

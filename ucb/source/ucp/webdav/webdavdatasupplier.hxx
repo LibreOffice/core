@@ -28,7 +28,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
-namespace webdav_ucp {
+namespace http_dav_ucp {
 
 struct DataSupplier_Impl;
 class Content;

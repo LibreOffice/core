@@ -36,7 +36,7 @@
 #include "osl/mutex.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 //=========================================================================
 //=========================================================================
@@ -130,9 +130,7 @@ ContentProvider::queryContent(
          !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) &&
-          !aScheme.equalsAsciiL(
-             RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) )       )
+            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
         throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
@@ -211,7 +209,7 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::webdav_ucp::Content(
+        xContent = new ::http_dav_ucp::Content(
                         m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
         registerNewContent( xContent );
     }

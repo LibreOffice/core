@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 class DAVSession;
@@ -73,6 +73,6 @@ private:
     friend class DAVSession;
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVSESSIONFACTORY_HXX_

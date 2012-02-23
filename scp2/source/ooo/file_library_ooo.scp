@@ -1513,9 +1513,7 @@ File gid_File_Lib_Ucpchelp1
     Styles = (PACKED);
 End
 
-#ifdef SYSTEM_NEON
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
-#endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
 
@@ -1999,4 +1997,49 @@ File gid_File_Lib_Libpangowin32
 End
 #endif
 #endif
+
+File gid_File_Lib_Apr
+     #ifdef WNT
+        Name = SPECIAL_NAME(libapr-1);
+     #else
+	// Looks like the major version number is part of the name, not
+	// part of the suffix.  An error?
+	#ifdef MACOSX
+            Name = STRING(CONCAT6(libapr-1,.0.,APR_MINOR,.,APR_MICRO,UNXSUFFIX));
+        #else
+            Name = STRING(CONCAT6(libapr-1,UNXSUFFIX,.0.,APR_MINOR,.,APR_MICRO));
+        #endif
+     #endif
+     PACKED_LIB_FILE_BODY;
+End
+
+File gid_File_Lib_AprUtil
+    #ifdef WNT
+        Name = SPECIAL_NAME(apr-util);
+    #else
+	// Looks like the major version number is part of the name, not
+	// part of the suffix.  An error?
+	#ifdef MACOSX
+            Name = STRING(CONCAT6(libaprutil-1,.0.,APR_UTIL_MINOR,.,APR_UTIL_MICRO,UNXSUFFIX));
+	#else
+            Name = STRING(CONCAT6(libaprutil-1,UNXSUFFIX,.0.,APR_UTIL_MINOR,.,APR_UTIL_MICRO));
+	#endif
+    #endif
+    PACKED_LIB_FILE_BODY;
+End
+
+File gid_File_Lib_Serf
+    #ifdef WNT
+        Name = SPECIAL_NAME(serf);
+    #else
+	// Looks like the major version number is part of the name, not
+	// part of the suffix.  An error?
+	#ifdef MACOSX
+            Name = STRING(CONCAT6(libserf-1,.0.,SERF_MINOR,.,SERF_MICRO,UNXSUFFIX));
+	#else
+            Name = STRING(CONCAT6(libserf-1,UNXSUFFIX,.0.,SERF_MINOR,.,SERF_MICRO));
+	#endif
+    #endif
+    PACKED_LIB_FILE_BODY;
+End
 

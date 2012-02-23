@@ -37,9 +37,9 @@
 #include "DAVSession.hxx"
 #include "DAVResource.hxx"
 #include "DAVTypes.hxx"
-#include "NeonUri.hxx"
+#include "SerfUri.hxx"
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 class DAVSessionFactory;
@@ -53,7 +53,7 @@ class DAVResourceAccess
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
-    std::vector< NeonUri > m_aRedirectURIs;
+    std::vector< SerfUri > m_aRedirectURIs;
 
 public:
     DAVResourceAccess() : m_xSessionFactory( 0 ) {}
@@ -78,14 +78,6 @@ public:
 
     // DAV methods
     //
-
-#if 0 // currently not used, but please don't remove code
-    void
-    OPTIONS(  DAVCapabilities & rCapabilities,
-              const com::sun::star::uno::Reference<
-                  com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw ( DAVException );
-#endif
 
     // allprop & named
     void
@@ -242,6 +234,6 @@ private:
         throw ( DAVException );
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVRESOURCEACCESS_HXX_

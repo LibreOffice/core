@@ -32,7 +32,7 @@
 using namespace com::sun::star::util;
 using namespace rtl;
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     DateTime& dateTime)

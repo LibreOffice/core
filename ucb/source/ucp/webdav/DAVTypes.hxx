@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 /* RFC 2518
 
@@ -76,6 +76,6 @@ struct ProppatchValue
     : operation( o ), name( n ), value( v ) {}
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVTYPES_HXX_

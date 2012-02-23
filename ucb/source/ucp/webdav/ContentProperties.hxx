@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
 } } } }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 struct DAVResource;
@@ -218,6 +218,6 @@ public:
     operator const ContentProperties & () const { return m_aProps; }
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif /* !_WEBDAV_UCP_CONTENTPROPERTIES_HXX */

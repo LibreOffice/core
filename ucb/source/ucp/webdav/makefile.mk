@@ -1,25 +1,29 @@
-#**************************************************************
-#  
-#  Licensed to the Apache Software Foundation (ASF) under one
-#  or more contributor license agreements.  See the NOTICE file
-#  distributed with this work for additional information
-#  regarding copyright ownership.  The ASF licenses this file
-#  to you under the Apache License, Version 2.0 (the
-#  "License"); you may not use this file except in compliance
-#  with the License.  You may obtain a copy of the License at
-#  
-#    http://www.apache.org/licenses/LICENSE-2.0
-#  
-#  Unless required by applicable law or agreed to in writing,
-#  software distributed under the License is distributed on an
-#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-#  KIND, either express or implied.  See the License for the
-#  specific language governing permissions and limitations
-#  under the License.
-#  
-#**************************************************************
-
-
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
 
 # UCP Version - Increase, if UCP libraray becomes incompatible.
 UCP_VERSION=1
@@ -44,25 +48,45 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
-.IF "$(SYSTEM_NEON)" != "YES"
+APRINCDIR=apr
+APRUTILINCDIR=apr-util
+SERFINCDIR=serf
 
-@all:
-    @echo "no system neon is used...."
+#.IF "$(SYSTEM_APR)" != "YES"
+#.INCLUDE: $(SOLARINCDIR)$/$(APRINCDIR)$/version.mk
+#.ENDIF
+#.IF "$(SYSTEM_APRUTIL)" != "YES"
+#.INCLUDE: $(SOLARINCDIR)$/$(APRUTILINCDIR)$/version.mk
+#.ENDIF
+#.IF "$(SYSTEM_SERF)" != "YES"
+#.INCLUDE: $(SOLARINCDIR)$/$(SERFINCDIR)$/version.mk
+#.ENDIF
 
+#CFLAGS+= -DAPR_VERSION=0x$(APR_VERSION) -DAPRUTIL_VERSION=0x$(APRUTIL_VERSION) -DSERF_VERSION=0x$(SERF_VERSION)
+
+#
+# Extend the list of include paths depending on whether we use locally built
+# or system versions of libraries apr, apr-util, serf, libxml
+#
+# We have to use CFLAGS for this because PRJINC is too inflexible (it adds /inc to everyting.)
+#
+
+.IF "$(SYSTEM_APR)" == "YES"
+CFLAGS+= $(APR_CFLAGS)
 .ELSE
-
-NEONINCDIR=external$/neon
-
-.IF "$(SYSTEM_NEON)" != "YES"
-.INCLUDE: $(SOLARINCDIR)$/$(NEONINCDIR)$/version.mk
+CFLAGS+= -I$(SOLARINCDIR)$/$(APRINCDIR)
 .ENDIF
 
-CFLAGS+= -DNEON_VERSION=0x$(NEON_VERSION)
-
-.IF "$(SYSTEM_NEON)" == "YES"
-CFLAGS+= $(NEON_CFLAGS)
+.IF "$(SYSTEM_APRUTIL)" == "YES"
+CFLAGS+= $(APRUTIL_CFLAGS)
 .ELSE
-CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
+CFLAGS+= -I$(SOLARINCDIR)$/$(APRUTILINCDIR)
+.ENDIF
+
+.IF "$(SYSTEM_SERF)" == "YES"
+CFLAGS+= $(SERF_CFLAGS)
+.ELSE
+CFLAGS+= -I$(SOLARINCDIR)$/$(SERFINCDIR)
 .ENDIF
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
@@ -73,7 +97,7 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 .ENDIF
 
 .IF "$(SYSTEM_OPENSSL)" == "YES"
-CFLAGS+= $(OPENSSL_CFLAGS)
+CFLAGS+= -I$(OPENSSL_CFLAGS)
 .ENDIF
 
 # --- General -----------------------------------------------------
@@ -89,16 +113,26 @@ SLOFILES=\
     $(SLO)$/DAVProperties.obj \
     $(SLO)$/DAVSessionFactory.obj \
     $(SLO)$/DAVResourceAccess.obj \
-    $(SLO)$/NeonUri.obj \
-    $(SLO)$/NeonInputStream.obj \
-    $(SLO)$/NeonPropFindRequest.obj \
-    $(SLO)$/NeonHeadRequest.obj \
-    $(SLO)$/NeonSession.obj \
-    $(SLO)$/NeonLockStore.obj \
+    $(SLO)$/AprEnv.obj \
+    $(SLO)$/webdavresponseparser.obj \
+    $(SLO)$/SerfUri.obj \
+    $(SLO)$/SerfRequestProcessor.obj \
+    $(SLO)$/SerfRequestProcessorImpl.obj \
+    $(SLO)$/SerfRequestProcessorImplFac.obj \
+    $(SLO)$/SerfPropFindReqProcImpl.obj \
+    $(SLO)$/SerfPropPatchReqProcImpl.obj \
+    $(SLO)$/SerfGetReqProcImpl.obj \
+    $(SLO)$/SerfHeadReqProcImpl.obj \
+    $(SLO)$/SerfPutReqProcImpl.obj \
+    $(SLO)$/SerfPostReqProcImpl.obj \
+    $(SLO)$/SerfDeleteReqProcImpl.obj \
+    $(SLO)$/SerfMkColReqProcImpl.obj \
+    $(SLO)$/SerfCopyReqProcImpl.obj \
+    $(SLO)$/SerfMoveReqProcImpl.obj \
+    $(SLO)$/SerfSession.obj \
+    $(SLO)$/SerfCallbacks.obj \
+    $(SLO)$/SerfInputStream.obj \
     $(SLO)$/DateTimeHelper.obj \
-    $(SLO)$/LinkSequence.obj \
-    $(SLO)$/LockSequence.obj \
-    $(SLO)$/LockEntrySequence.obj \
     $(SLO)$/UCBDeadPropertyValue.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
@@ -118,7 +152,7 @@ SHL1STDLIBS=\
         $(SALHELPERLIB)  \
         $(UCBHELPERLIB)  \
         $(COMPHELPERLIB) \
-        $(NEON3RDLIB)    \
+        $(SERFLIBS)      \
         $(LIBXML2LIB)
 
 .IF "$(GUI)"=="WNT"
@@ -147,8 +181,6 @@ SHL1LIBS=$(LIB1TARGET)
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-
-.ENDIF #"$(DISABLE_NEON)" == "TRUE"
 
 .ENDIF # L10N_framework
 # --- Targets ----------------------------------------------------------

@@ -39,12 +39,12 @@
 #ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
 #endif
-#include "NeonUri.hxx"
+#include "SerfUri.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 //=========================================================================
@@ -399,7 +399,7 @@ sal_Bool DataSupplier::getData()
         {
             try
             {
-                NeonUri aURI(
+                SerfUri aURI(
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
                 rtl::OUString aPath = aURI.GetPath();
 
@@ -407,7 +407,7 @@ sal_Bool DataSupplier::getData()
                      == sal_Unicode( '/' ) )
                     aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
-                aPath = NeonUri::unescape( aPath );
+                aPath = SerfUri::unescape( aPath );
                 bool bFoundParent = false;
 
                 for ( sal_uInt32 n = 0; n < resources.size(); ++n )
@@ -420,7 +420,7 @@ sal_Bool DataSupplier::getData()
                     {
                         try
                         {
-                            NeonUri aCurrURI( rRes.uri );
+                            SerfUri aCurrURI( rRes.uri );
                             rtl::OUString aCurrPath = aCurrURI.GetPath();
                             if ( aCurrPath.getStr()[
                                      aCurrPath.getLength() - 1 ]
@@ -430,7 +430,7 @@ sal_Bool DataSupplier::getData()
                                         0,
                                         aCurrPath.getLength() - 1 );
 
-                            aCurrPath = NeonUri::unescape( aCurrPath );
+                            aCurrPath = SerfUri::unescape( aCurrPath );
                             if ( aPath == aCurrPath )
                             {
                                 bFoundParent = true;
