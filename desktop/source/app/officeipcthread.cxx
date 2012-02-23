@@ -669,21 +669,23 @@ void OfficeIPCThread::execute()
             // down during wait
             osl::ClearableMutexGuard aGuard( GetMutex() );
 
-            ByteString aArguments;
             // test byte by byte
             const int nBufSz = 2048;
             char pBuf[nBufSz];
             int nBytes = 0;
             int nResult = 0;
+            rtl::OStringBuffer aBuf;
             // read into pBuf until '\0' is read or read-error
             while ((nResult=maStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
                 nBytes += nResult;
                 if (pBuf[nBytes-1]=='\0') {
-                    aArguments += pBuf;
+                    aBuf.append(pBuf);
                     break;
                 }
             }
             // don't close pipe ...
+
+            ByteString aArguments = aBuf.makeStringAndClear();
 
             // Is this a lookup message from another application? if so, ignore
             if ( aArguments.Len() == 0 )
