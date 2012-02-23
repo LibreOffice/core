@@ -152,7 +152,7 @@ $(DESCRIPTION_SRC): description.xml
     $(XRMEX) -p $(PRJNAME) -i description.xml -o $@ -m $(LOCALIZESDF) -l all
     $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
     mv $@.new $@
-    @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
+    @@-$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
 .ELSE
     $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $< > $@
 .ENDIF
