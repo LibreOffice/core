@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_linked_libs,filterconfig,\
 	cppuhelper \
 	cppu \
 	sal \
+	salhelper \
 	$(gb_STDLIBS) \
 ))
 

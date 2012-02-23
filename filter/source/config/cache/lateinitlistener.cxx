@@ -26,13 +26,13 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
 
 #include "lateinitlistener.hxx"
 #include "lateinitthread.hxx"
-
-//_______________________________________________
-// includes
-#include <rtl/ustring.hxx>
 
 //_______________________________________________
 // namespace
@@ -110,8 +110,11 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
 
         if (!aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
         {
-            LateInitThread* pThread = new LateInitThread();
-            pThread->create();
+            rtl::Reference< LateInitThread >(new LateInitThread())->launch();
+                //TODO: a protocol is missing how to join with the launched
+                // thread before exit(3), to ensure the thread is no longer
+                // relying on any infrastructure while that infrastructure is
+                // being shut down in atexit handlers
         }
     }
 }
