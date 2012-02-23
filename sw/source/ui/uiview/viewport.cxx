@@ -1307,11 +1307,11 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
     {
-        sal_uInt16 nFact = pWrtShell->GetViewOptions()->GetZoom();
+        long nFact = pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = static_cast< sal_uInt16 >(Max( 20, basegfx::zoomtools::zoomOut( static_cast<int>(nFact) )));
+            nFact = Max( (long) 20, basegfx::zoomtools::zoomOut( nFact ));
         else
-            nFact = static_cast< sal_uInt16 >(Min( 600, basegfx::zoomtools::zoomIn( static_cast<int>(nFact) )));
+            nFact = Min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;

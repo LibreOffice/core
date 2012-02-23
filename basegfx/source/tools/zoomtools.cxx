@@ -129,27 +129,6 @@ long zoomOut(long nCurrent)
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
-
-/**
-* Increasing the zoom level.
-*
-* @param nCurrent current zoom factor
-*/
-int zoomIn(int nCurrent)
-{
-    return static_cast<int>( zoomIn( long( nCurrent ) ) );
-}
-
-/**
-* Decreasing the zoom level.
-*
-* @param nCurrent current zoom factor
-*/
-int zoomOut(int nCurrent)
-{
-    return static_cast<int>( zoomOut( long( nCurrent ) ) );
-}
-
 } // namespace zoomtools
 } // namespace basegfx
 
