@@ -146,7 +146,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 OUTDIR2INC=include$/libxml 
 
 .IF "$(OS)"=="MACOSX"
-EXTRPATH=LOADER
+EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
 OUT2BIN+=xml2-config
