@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <rtl/strbuf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -1054,7 +1055,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         ContentInfo* pC = GetContents().GetObject( nPara );
 
         // Text...
-        ByteString aText(rtl::OUStringToOString(pC->GetText(), eEncoding));
+        rtl::OStringBuffer aBuffer(rtl::OUStringToOString(pC->GetText(), eEncoding));
 
         // Symbols?
         sal_Bool bSymbolPara = sal_False;
@@ -1063,7 +1064,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                aText = rtl::OUStringToOString(pC->GetText(), RTL_TEXTENCODING_SYMBOL);
+                aBuffer = rtl::OStringBuffer(rtl::OUStringToOString(pC->GetText(), RTL_TEXTENCODING_SYMBOL));
                 bSymbolPara = sal_True;
             }
         }
@@ -1080,8 +1081,8 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                     // Not correctly converted
                     String aPart( pC->GetText(), pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart() );
                     rtl::OString aNew(rtl::OUStringToOString(aPart, rFontItem.GetCharSet()));
-                    aText.Erase( pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart() );
-                    aText.Insert( aNew, pAttr->GetStart() );
+                    aBuffer.remove(pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart());
+                    aBuffer.insert(pAttr->GetStart(), aNew);
                 }
 
                 // Convert StarSymbol back to StarBats
@@ -1095,7 +1096,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                         sal_Unicode cOld = pC->GetText().GetChar( nChar );
                         char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                         if ( cConv )
-                            aText.SetChar( nChar, cConv );
+                            aBuffer[nChar] = cConv;
                     }
 
                     DestroyFontToSubsFontConverter( hConv );
@@ -1120,7 +1121,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                     sal_Unicode cOld = pC->GetText().GetChar( nChar );
                     char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                     if ( cConv )
-                        aText.SetChar( nChar, cConv );
+                        aBuffer[nChar] = cConv;
                 }
             }
 
@@ -1130,7 +1131,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
 
 
         // Convert CH_FEATURE to CH_FEATURE_OLD
-        aText.SearchAndReplaceAll( cFeatureConverted, CH_FEATURE_OLD );
+        rtl::OString aText = aBuffer.makeStringAndClear().replace(cFeatureConverted, CH_FEATURE_OLD);
         write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, aText);
 
         // StyleName and Family...
