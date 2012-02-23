@@ -1622,6 +1622,7 @@ STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
 // RSVG and dependencies
+#if ENABLE_LIBRSVG
 #if ! defined (SYSTEM_GETTEXT)
 File gid_File_Lib_Intl
     LIB_FILE_BODY;
@@ -1687,8 +1688,6 @@ File gid_File_Lib_Gmodule
     #endif
 End
 #endif
-
-#if ENABLE_LIBRSVG
 
 #if ! defined SYSTEM_GDKPIXBUF
 File gid_File_Lib_Gdkpixbuf
@@ -1773,7 +1772,7 @@ File gid_File_Lib_Librsvg
 End
 #endif
 
-#endif
+#endif // #if ENABLE_LIBRSVG
 
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
