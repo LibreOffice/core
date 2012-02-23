@@ -37,6 +37,8 @@ public:
     static bool isDuplicateDimension(const rtl::OUString& rName);
 
     static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
+
+    static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
 };
 
 #endif

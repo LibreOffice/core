@@ -44,4 +44,16 @@ rtl::OUString ScDPUtil::getSourceDimensionName(const rtl::OUString& rName)
     return comphelper::string::removeTrailingChars(rName, sal_Unicode('*'));
 }
 
+rtl::OUString ScDPUtil::createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount)
+{
+    if (!nDupCount)
+        return rOriginal;
+
+    rtl::OUStringBuffer aBuf(rOriginal);
+    for (size_t i = 0; i < nDupCount; ++i)
+        aBuf.append(sal_Unicode('*'));
+
+    return aBuf.makeStringAndClear();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

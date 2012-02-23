@@ -1277,12 +1277,7 @@ void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
     DupNameCountType::iterator it = maDupNameCounts.find(aName);
     if (it != maDupNameCounts.end())
     {
-        it->second = it->second + 1;
-        // This is a duplicate name.  Up the counter and append '*' to make the name unique.
-        rtl::OUStringBuffer aBuf(aName);
-        for (size_t i = 0, n = it->second; i < n; ++i)
-            aBuf.append(sal_Unicode('*'));
-        rDim.SetName(aBuf.makeStringAndClear());
+        rDim.SetName(ScDPUtil::createDuplicateDimensionName(aName, ++it->second));
         rDim.SetDupFlag(true);
     }
     else
@@ -1292,6 +1287,22 @@ void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
 
 void ScDPSaveData::RemoveDuplicateNameCount(const rtl::OUString& rName)
 {
+    rtl::OUString aCoreName = rName;
+    if (ScDPUtil::isDuplicateDimension(rName))
+        aCoreName = ScDPUtil::getSourceDimensionName(rName);
+
+    DupNameCountType::iterator it = maDupNameCounts.find(aCoreName);
+    if (it == maDupNameCounts.end())
+        return;
+
+    if (!it->second)
+    {
+        maDupNameCounts.erase(it);
+        return;
+    }
+
+    --it->second;
+    return;
 }
 
 ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const rtl::OUString& rName, bool bDataLayout)
