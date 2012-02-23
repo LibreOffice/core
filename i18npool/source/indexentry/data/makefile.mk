@@ -57,5 +57,7 @@ $(MISC)$/%.cxx : %.txt
     $(AUGMENT_LIBRARY_PATH) $(BIN)$/genindex_data $< $@ $*
 
 # ugly - is this dependency really required here?
+.IF "$(GUI)" != "OS2"
 $(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data$(EXECPOST)
+.ENDIF
 

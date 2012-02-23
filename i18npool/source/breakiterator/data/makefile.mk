@@ -74,5 +74,7 @@ $(MISC)$/dict_%.cxx : %.dic
     $(AUGMENT_LIBRARY_PATH) $(BIN)$/gendict $< $@
 
 # ugly - is this dependency really required here?
+.IF "$(GUI)" != "OS2"
 $(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
+.ENDIF
 

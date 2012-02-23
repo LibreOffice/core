@@ -47,7 +47,11 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/textconversion.lib \
         $(SLB)$/ordinalsuffix.lib
 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET= i18npool
+.ELSE
 SHL1TARGET= $(TARGET)
+.ENDIF
 # WNT needs implib name even if there is none
 SHL1IMPLIB= i$(SHL1TARGET)
 

@@ -34,7 +34,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)" == "OS2"
+txtlist:=$(shell @cd data > $(NULLDEV) && ls *.txt)
+.ELSE
 txtlist:=$(shell @cd data >& $(NULLDEV) && ls *.txt)
+.ENDIF
 LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(txtlist) $(i:s/-/_/:s/_/ /:1)))
 rules_dependencies:=$(foreach,i,$(txtlist) data$/$i) $(INCCOM)$/lrl_include.hxx
 
@@ -65,5 +69,9 @@ $(rules_obj) : $(rules_dependencies)
 
 $(INCCOM)$/lrl_include.hxx: $(foreach,i,$(txtlist) data$/$i)
     @@$(RM) $@
+.IF "$(GUI)" == "OS2"
+    @echo $(EMQ)#define LOCAL_RULE_LANGS $(EMQ)"$(LOCAL_RULE_LANGS)$(EMQ)" > $@
+.ELSE
     @echo $(EMQ)#define LOCAL_RULE_LANGS $(EMQ)"$(LOCAL_RULE_LANGS)$(EMQ)" >& $@
+.ENDIF
 

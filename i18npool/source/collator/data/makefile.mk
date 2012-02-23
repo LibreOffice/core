@@ -54,5 +54,7 @@ $(MISC)$/collator_%.cxx : %.txt
     $(AUGMENT_LIBRARY_PATH) $(BIN)$/gencoll_rule $< $@ $*
 
 # ugly - is this dependency really required here?
+.IF "$(GUI)" != "OS2"
 $(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gencoll_rule$(EXECPOST)
+.ENDIF
 
