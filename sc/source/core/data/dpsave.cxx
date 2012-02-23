@@ -35,6 +35,8 @@
 #include "scerrors.hxx"
 #include "unonames.hxx"
 #include "global.hxx"
+#include "dptabsrc.hxx"
+#include "dputil.hxx"
 
 #include <sal/types.h>
 #include "comphelper/string.hxx"
@@ -52,7 +54,6 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include "dptabsrc.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
@@ -864,9 +865,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const ::rtl::OUString& rName
             return const_cast<ScDPSaveDimension*>(&(*iter));
     }
 
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
-    aDimList.push_back(pNew);
-    return pNew;
+    return AppendNewDimension(rName, false);
 }
 
 ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const ::rtl::OUString& rName) const
@@ -889,9 +888,7 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const ::rtl::OUString& rN
             return DuplicateDimension(rName);
     }
 
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
-    aDimList.push_back(pNew);
-    return pNew;
+    return AppendNewDimension(rName, false);
 }
 
 ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
@@ -900,9 +897,7 @@ ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
     if (pDim)
         return pDim;
 
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( ::rtl::OUString(), true );
-    aDimList.push_back(pNew);
-    return pNew;
+    return AppendNewDimension(rtl::OUString(), true);
 }
 
 ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
@@ -1124,7 +1119,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         for (long i = 0; iter != aDimList.end(); ++iter, ++i)
         {
             rtl::OUString aName = iter->GetName();
-            rtl::OUString aCoreName = comphelper::string::removeTrailingChars(aName, sal_Unicode('*'));
+            rtl::OUString aCoreName = ScDPUtil::getSourceDimensionName(aName);
 
             OSL_TRACE( "%s", aName.getStr() );
 
@@ -1278,13 +1273,13 @@ bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
 
 void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
 {
-    const rtl::OUString aName = comphelper::string::removeTrailingChars(rDim.GetName(), sal_Unicode('*'));
+    const rtl::OUString aName = ScDPUtil::getSourceDimensionName(rDim.GetName());
     DupNameCountType::iterator it = maDupNameCounts.find(aName);
     if (it != maDupNameCounts.end())
     {
+        it->second = it->second + 1;
         // This is a duplicate name.  Up the counter and append '*' to make the name unique.
         rtl::OUStringBuffer aBuf(aName);
-        it->second = it->second + 1;
         for (size_t i = 0, n = it->second; i < n; ++i)
             aBuf.append(sal_Unicode('*'));
         rDim.SetName(aBuf.makeStringAndClear());
@@ -1297,6 +1292,20 @@ void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
 
 void ScDPSaveData::RemoveDuplicateNameCount(const rtl::OUString& rName)
 {
+}
+
+ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const rtl::OUString& rName, bool bDataLayout)
+{
+    if (ScDPUtil::isDuplicateDimension(rName))
+        // This call is for original dimensions only.
+        return NULL;
+
+    ScDPSaveDimension* pNew = new ScDPSaveDimension(rName, bDataLayout);
+    aDimList.push_back(pNew);
+    if (!maDupNameCounts.count(rName))
+        maDupNameCounts.insert(DupNameCountType::value_type(rName, 0));
+
+    return pNew;
 }
 
 void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<

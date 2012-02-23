@@ -357,6 +357,19 @@ public:
 private:
     void CheckDuplicateName(ScDPSaveDimension& rDim);
     void RemoveDuplicateNameCount(const rtl::OUString& rName);
+
+    /**
+     * Append a new original dimension. Not to be called to insert a duplicate
+     * dimension.
+     *
+     * @param rName Dimension name. The name must be the original dimension
+     *              name; not a duplicate dimension name.
+     * @param bDataLayout true if this is a data layout dimension, false
+     *                    otherwise.
+     *
+     * @return pointer to the new dimension just inserted.
+     */
+    ScDPSaveDimension* AppendNewDimension(const rtl::OUString& rName, bool bDataLayout);
 };
 
 #endif

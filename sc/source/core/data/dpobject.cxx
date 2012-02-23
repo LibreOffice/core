@@ -2124,7 +2124,7 @@ bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
 
 namespace {
 
-String lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource, long nDim )
+rtl::OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource, long nDim )
 {
     rtl::OUString aName;
     if ( xSource.is() )
