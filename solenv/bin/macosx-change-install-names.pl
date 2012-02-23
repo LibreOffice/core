@@ -42,6 +42,7 @@ sub action($$$)
          'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OOO/OOO' => '@loader_path',
          'shl/LOADER/LOADER' => '@loader_path',
+         'shl/LOADER/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/OOO/NONE' => '@__VIA_LIBRARY_PATH__',
