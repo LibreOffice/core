@@ -35,7 +35,7 @@ $(eval $(call gb_CustomTarget_add_dependencies,clucene/source,\
 	clucene/configs/clucene-config-generic.h \
 ))
 
-ifeq ($(OS),WNT)
+ifeq ($(OS_FOR_BUILD),WNT)
 FIXED_TARFILE_LOCATION=$(shell cygpath -u $(TARFILE_LOCATION))
 else
 FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)

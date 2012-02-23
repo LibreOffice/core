@@ -29,7 +29,7 @@
 gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
-ifeq ($(OS),WNT)
+ifeq ($(OS_FOR_BUILD),WNT)
 FIXED_TARFILE_LOCATION=$(shell cygpath -u $(TARFILE_LOCATION))
 else
 FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
