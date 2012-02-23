@@ -29,6 +29,7 @@
 
 // include ---------------------------------------------------------------
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
@@ -1919,6 +1920,53 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case TOP_BORDER:
         case MID_TOP_BORDER:
             nLine = BOX_LINE_TOP;
+            break;
+        case LINE_STYLE:
+            {
+                drawing::LineStyle eDrawingStyle;
+                rVal >>= eDrawingStyle;
+                editeng::SvxBorderStyle eBorderStyle = editeng::NO_STYLE;
+                switch ( eDrawingStyle )
+                {
+                    default:
+                    case drawing::LineStyle_NONE:
+                        eBorderStyle = editeng::NO_STYLE;
+                        break;
+                    case drawing::LineStyle_SOLID:
+                        eBorderStyle = editeng::SOLID;
+                        break;
+                    case drawing::LineStyle_DASH:
+                        eBorderStyle = editeng::DASHED;
+                        break;
+                }
+
+                // Set the line style on all borders
+                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                {
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    pLine->SetStyle( eBorderStyle );
+                }
+                return sal_True;
+            }
+            break;
+        case LINE_WIDTH:
+            {
+                // Set the line width on all borders
+                long nWidth;
+                rVal >>= nWidth;
+                if( bConvert )
+                    nWidth = MM100_TO_TWIP( nWidth );
+
+                // Set the line Width on all borders
+                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                {
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    pLine->SetWidth( nWidth );
+                }
+            }
+            return sal_True;
             break;
     }
 

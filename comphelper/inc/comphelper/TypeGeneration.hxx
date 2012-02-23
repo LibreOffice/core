@@ -71,6 +71,7 @@ namespace comphelper
         CPPUTYPE_SEQDEPTXTFLD,      //getCppuType( (Sequence<Reference<XDependentTextField> >*)0 )
         CPPUTYPE_TXTCNTANCHOR,      //getCppuType( (text::TextContentAnchorType*)0 )
         CPPUTYPE_WRAPTXTMODE,       //getCppuType( (text::WrapTextMode*)0 )
+        CPPUTYPE_LINESTYLE,         //getCppuType( (drawing::LineStyle*)0 )
         CPPUTYPE_COLORMODE,         //getCppuType( (drawing::ColorMode*)0 )
         CPPUTYPE_PAGESTYLELAY,      //getCppuType( (style::PageStyleLayout*)0 )
         CPPUTYPE_VERTALIGN,         //getCppuType( (style::VerticalAlignment*)0 )

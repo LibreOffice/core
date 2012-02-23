@@ -385,8 +385,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER_DISTANCE,  pTopDistance);
     const ::uno::Any* pBottomDistance  = 0;
     GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE,   pBottomDistance);
+    const ::uno::Any* pLineStyle  = 0;
+    GetProperty(RES_BOX, LINE_STYLE,   pLineStyle);
+    const ::uno::Any* pLineWidth  = 0;
+    GetProperty(RES_BOX, LINE_WIDTH,   pLineWidth);
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
-        pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
+        pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance ||
+        pLineStyle || pLineWidth )
     {
         SvxBoxItem aBox ( static_cast < const :: SvxBoxItem & > ( rFromSet.Get ( RES_BOX ) ) );
         if( pLeft )
@@ -407,6 +412,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pTopDistance, CONVERT_TWIPS|TOP_BORDER_DISTANCE);
         if( pBottomDistance )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottomDistance, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE);
+        if( pLineStyle )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLineStyle, LINE_STYLE);
+        if( pLineWidth )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLineWidth, LINE_WIDTH|CONVERT_TWIPS);
         rToSet.Put(aBox);
     }
     {
@@ -2386,7 +2395,7 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
     throw aRuntime;
 }
 
-void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
+void SwXFrame::setPosition(const awt::Point& aPosition) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
