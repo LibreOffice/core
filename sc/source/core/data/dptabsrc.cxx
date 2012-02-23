@@ -910,61 +910,58 @@ void ScDPSource::CreateRes_Impl()
         //  (this relies on late init, so no members are allocated in InitFrom above)
 
         bResultOverflow = true;
+        return;
     }
-    else
+
+    FilterCacheTableByPageDimensions();
+
+    aInfo.aPageDims.reserve(nPageDimCount);
+    for (i = 0; i < nPageDimCount; ++i)
+        aInfo.aPageDims.push_back(nPageDims[i]);
+
+    aInfo.pInitState = &aInitState;
+    aInfo.pColRoot   = pColResRoot;
+    aInfo.pRowRoot   = pRowResRoot;
+    pData->CalcResults(aInfo, false);
+
+    pColResRoot->CheckShowEmpty();
+    pRowResRoot->CheckShowEmpty();
+    // ----------------------------------------------------------------
+    //  With all data processed, calculate the final results:
+
+    //  UpdateDataResults calculates all original results from the collected values,
+    //  and stores them as reference values if needed.
+    pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+
+    if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
     {
-        FilterCacheTableByPageDimensions();
+        //  Find the desired members and set bAutoHidden flag for the others
+        pRowResRoot->DoAutoShow( pColResRoot );
 
-        aInfo.aPageDims.reserve(nPageDimCount);
-        for (i = 0; i < nPageDimCount; ++i)
-            aInfo.aPageDims.push_back(nPageDims[i]);
+        //  Reset all results to empty, so they can be built again with data for the
+        //  desired members only.
+        pColResRoot->ResetResults( sal_True );
+        pRowResRoot->ResetResults( sal_True );
+        pData->CalcResults(aInfo, true);
 
-        aInfo.pInitState = &aInitState;
-        aInfo.pColRoot   = pColResRoot;
-        aInfo.pRowRoot   = pRowResRoot;
-        pData->CalcResults(aInfo, false);
-
-        pColResRoot->CheckShowEmpty();
-        pRowResRoot->CheckShowEmpty();
-        // ----------------------------------------------------------------
-        //  With all data processed, calculate the final results:
-
-        //  UpdateDataResults calculates all original results from the collected values,
-        //  and stores them as reference values if needed.
+        //  Call UpdateDataResults again, with the new (limited) values.
         pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
-
-        if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
-        {
-            //  Find the desired members and set bAutoHidden flag for the others
-            pRowResRoot->DoAutoShow( pColResRoot );
-
-            //  Reset all results to empty, so they can be built again with data for the
-            //  desired members only.
-            pColResRoot->ResetResults( sal_True );
-            pRowResRoot->ResetResults( sal_True );
-            pData->CalcResults(aInfo, true);
-
-            //  Call UpdateDataResults again, with the new (limited) values.
-            pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
-        }
-
-        //  SortMembers does the sorting by a result dimension, using the orginal results,
-        //  but not running totals etc.
-        pRowResRoot->SortMembers( pColResRoot );
-
-        //  UpdateRunningTotals calculates running totals along column/row dimensions,
-        //  differences from other members (named or relative), and column/row percentages
-        //  or index values.
-        //  Running totals and relative differences need to be done using the sorted values.
-        //  Column/row percentages and index values must be done after sorting, because the
-        //  results may no longer be in the right order (row total for percentage of row is
-        //  always 1).
-        ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
-        ScDPRowTotals aTotals;
-        pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
-
-        // ----------------------------------------------------------------
     }
+
+    //  SortMembers does the sorting by a result dimension, using the orginal results,
+    //  but not running totals etc.
+    pRowResRoot->SortMembers( pColResRoot );
+
+    //  UpdateRunningTotals calculates running totals along column/row dimensions,
+    //  differences from other members (named or relative), and column/row percentages
+    //  or index values.
+    //  Running totals and relative differences need to be done using the sorted values.
+    //  Column/row percentages and index values must be done after sorting, because the
+    //  results may no longer be in the right order (row total for percentage of row is
+    //  always 1).
+    ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
+    ScDPRowTotals aTotals;
+    pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
 }
 
 

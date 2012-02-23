@@ -129,7 +129,7 @@ private:
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
     std::vector<ScDPLevel*> aColLevelList;
     std::vector<ScDPLevel*> aRowLevelList;
-    sal_Bool                    bResultOverflow;
+    bool                    bResultOverflow;
     bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
