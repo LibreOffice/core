@@ -1865,10 +1865,10 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         if ( ::svt::SUCCESS == eResult )
         {
             implEnumerationSuccess();
-            m_pContentEnumerator = NULL;
+            m_pContentEnumerator.clear();
             return eSuccess;
         }
-        m_pContentEnumerator = NULL;
+        m_pContentEnumerator.clear();
         return eFailure;
     }
 
@@ -2126,7 +2126,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
     m_pContentEnumerator->cancel();
     m_bRunningAsyncAction = false;
 
-    m_pContentEnumerator = NULL;
+    m_pContentEnumerator.clear();
     if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
         m_pCancelAsyncTimer->stop();
     m_pCancelAsyncTimer = NULL;
@@ -2156,7 +2156,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
 
-    m_pContentEnumerator = NULL;
+    m_pContentEnumerator.clear();
     if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
         m_pCancelAsyncTimer->stop();
     m_pCancelAsyncTimer = NULL;
