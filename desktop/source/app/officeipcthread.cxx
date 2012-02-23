@@ -556,19 +556,21 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         aStreamPipe.write(aArguments.getStr(), aArguments.getLength());
         aStreamPipe.write("\0", 1);
 
-        ByteString aToken(sc_aConfirmationSequence);
-        char *aReceiveBuffer = new char[aToken.Len()+1];
-        int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
-        aReceiveBuffer[n]='\0';
+        rtl::OString aToken(sc_aConfirmationSequence);
+        char *pReceiveBuffer = new char[aToken.getLength()+1];
+        sal_Int32 n = aStreamPipe.read(pReceiveBuffer, aToken.getLength());
+        pReceiveBuffer[n]='\0';
 
-        if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
+        bool bIsConfirmationSequence = aToken.equals(pReceiveBuffer);
+        delete[] pReceiveBuffer;
+
+        if (!bIsConfirmationSequence)
+        {
             // something went wrong
-            delete[] aReceiveBuffer;
             return IPC_STATUS_BOOTSTRAP_ERROR;
-        } else {
-            delete[] aReceiveBuffer;
-            return IPC_STATUS_2ND_OFFICE;
         }
+
+        return IPC_STATUS_2ND_OFFICE;
     }
 
     return IPC_STATUS_OK;
@@ -685,19 +687,19 @@ void OfficeIPCThread::execute()
             }
             // don't close pipe ...
 
-            ByteString aArguments = aBuf.makeStringAndClear();
+            rtl::OString aArguments = aBuf.makeStringAndClear();
 
             // Is this a lookup message from another application? if so, ignore
-            if ( aArguments.Len() == 0 )
+            if (aArguments.isEmpty())
                 continue;
 
             // is this a termination message ? if so, terminate
-            if(( aArguments.CompareTo( sc_aTerminationSequence, sc_nTSeqLength ) == COMPARE_EQUAL ) ||
-                    mbDowning ) return;
+            if (aArguments.equalsL(sc_aTerminationSequence, sc_nTSeqLength) || mbDowning)
+                return;
             std::auto_ptr< CommandLineArgs > aCmdLineArgs;
             try
             {
-                Parser p( aArguments );
+                Parser p(aArguments);
                 aCmdLineArgs.reset( new CommandLineArgs( p ) );
             }
             catch ( const CommandLineArgs::Supplier::Exception & )
@@ -867,8 +869,8 @@ void OfficeIPCThread::execute()
                 delete pRequest;
                 pRequest = NULL;
             }
-            if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
-                aCmdLineArgs->IsEmpty() )
+            if (aArguments.equalsL(sc_aShowSequence, sc_nShSeqLength) ||
+                aCmdLineArgs->IsEmpty())
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
