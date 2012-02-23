@@ -92,6 +92,7 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(PYTHONLIB) \
         $(EXTRA_FRAMEWORK_FLAG)
 
