@@ -63,26 +63,23 @@ ScMyCellInfo::~ScMyCellInfo()
 
 ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
 {
-    if (pDoc)
+    if (!pCell && !sFormula.isEmpty() && !sFormulaAddress.isEmpty())
     {
-        if (!pCell && !sFormula.isEmpty() && !sFormulaAddress.isEmpty())
-        {
-            ScAddress aPos;
-            sal_Int32 nOffset(0);
-            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
-            pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
-            static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
-        }
+        ScAddress aPos;
+        sal_Int32 nOffset(0);
+        ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
+        pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
+        static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
+    }
 
-        if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
-        {
-            sal_uInt32 nFormat(0);
-            if (nType == NUMBERFORMAT_DATE)
-                nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-            else if (nType == NUMBERFORMAT_TIME)
-                nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_TIME, ScGlobal::eLnge );
-            pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
-        }
+    if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
+    {
+        sal_uInt32 nFormat(0);
+        if (nType == NUMBERFORMAT_DATE)
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+        else if (nType == NUMBERFORMAT_TIME)
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_TIME, ScGlobal::eLnge );
+        pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 
     return pCell ? pCell->CloneWithoutNote( *pDoc ) : 0;
