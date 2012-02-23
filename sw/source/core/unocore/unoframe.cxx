@@ -2395,7 +2395,7 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
     throw aRuntime;
 }
 
-void SwXFrame::setPosition(const awt::Point& aPosition) throw( uno::RuntimeException )
+void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
