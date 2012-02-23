@@ -3955,6 +3955,32 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
                     ValueOK(aUId, MethodString( nMethodId ),nNr1,CountWinByRT( pControl, WINDOW_FIXEDTEXT, sal_True ) );
             }
             break;
+        case M_HasFocus:
+            {
+                pRet->GenReturn ( RET_Value, aUId, pControl->HasFocus() );
+            break;
+            }
+        case M_GetScreenRectangle:
+            {
+                Rectangle aRect =  bBool1 ? pControl->GetClientWindowExtentsRelative(NULL) : pControl->GetWindowExtentsRelative( NULL );
+                pRet->GenReturn ( RET_Value, aUId,
+                    UniString::CreateFromInt32(aRect.Left()).
+                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.Top())).
+                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.GetWidth())).
+                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.GetHeight()))
+                    );
+            }
+            break;
+        case M_GetHelpText:
+            {
+                pRet->GenReturn ( RET_Value, aUId, pControl->GetHelpText());
+            }
+            break;
+        case M_GetQuickHelpText:
+            {
+                pRet->GenReturn ( RET_Value, aUId,pControl->GetQuickHelpText());
+            }
+            break;
         default:
             return sal_False;
         }
@@ -5422,6 +5448,24 @@ sal_Bool StatementControl::Execute()
                                             case 3:
                                                 pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemId(nItemPos));
                                                 break;
+                                            case 11:
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG) nItemPos + 1);
+                                                break;
+                                            case 12:
+                                                pRet->GenReturn ( RET_Value, aUId, Id2Str(pTB->GetHelpId())); // The toolbox's help id
+                                                break;
+                                            case 13:
+                                            {
+                                                Rectangle aRect = pTB->GetItemPosRect( nItemPos );
+                                                Rectangle aTBRect = pTB->GetWindowExtentsRelative( NULL );
+                                                pRet->GenReturn ( RET_Value, aUId,
+                                                UniString::CreateFromInt32(aRect.Left()+aTBRect.Left()).
+                                                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.Top()+aTBRect.Top())).
+                                                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.GetWidth())).
+                                                    AppendAscii(",").Append(UniString::CreateFromInt32(aRect.GetHeight()))
+                                                );
+                                                break;
+                                            }
                                             default:
                                                 ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
                                                 pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
@@ -5429,6 +5473,18 @@ sal_Bool StatementControl::Execute()
                                             }
                                     }
                                 }
+                                break;
+                            case M_GetItemHelpText :
+                                if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTB->GetItemCount() ))
+                                    pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetHelpText(pTB->GetItemId(nNr1-1)));
+                                break;
+                            case M_GetItemQuickHelpText :
+                                if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTB->GetItemCount() ))
+                                    pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetQuickHelpText(pTB->GetItemId(nNr1-1)));
+                                break;
+                            case M_GetItemText2:
+                                if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTB->GetItemCount() ))
+                                    pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetItemText(pTB->GetItemId(nNr1-1)));
                                 break;
                             case M_GetItemText :
                                 pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetItemText(nNr1));

@@ -288,6 +288,14 @@
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
 
+// Enhencement
+#define M_GetHelpText  ( M_WITH_RETURN |  90 )
+#define M_GetQuickHelpText  ( M_WITH_RETURN |  91 )
+#define M_GetScreenRectangle ( M_WITH_RETURN |  92 )
+#define M_HasFocus ( M_WITH_RETURN |  93 )
+#define M_GetItemHelpText ( M_WITH_RETURN |  94 )
+#define M_GetItemQuickHelpText ( M_WITH_RETURN |  95 )
+#define M_GetItemText2 ( M_WITH_RETURN |  96 )
 
 // RemoteCommands
 #define RC_AppAbort         ( M_SOFFICE | M_MOZILLA | 1 )

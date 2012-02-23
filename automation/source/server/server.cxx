@@ -187,7 +187,20 @@ sal_uLong RemoteControlCommunicationManager::GetPort()
                 break;
             }
         }
-
+    // Get port from command line
+    if (bAutomate)
+    {
+        for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+        {
+            if ( Application::GetCommandLineParam( i ).Copy(0,16).EqualsIgnoreCaseAscii("/automationport=")
+                || Application::GetCommandLineParam( i ).Copy(0,16).EqualsIgnoreCaseAscii("-automationport="))
+            {
+                        nPortIs = Application::GetCommandLineParam( i ).Copy(16).ToInt32();
+                        return nPortIs;
+            }
+            }
+    }
+    //
 // if started within Portal determin location of testtool.ini/rc by analysing the commandline
 // /userid:demo1[/export/home/user/demo1]
 // -userid:demo1[/export/home/user/demo1]
