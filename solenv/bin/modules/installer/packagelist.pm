@@ -214,7 +214,7 @@ sub remove_multiple_modules_packages
                 # modules will only be removed from packages, that have more modules
                 # than the compare package
 
-                if ( $packagecount <= $comparepackagecount ) { next; }  # nothing to do, take next package
+                if ( $packagecount < $comparepackagecount ) { next; }  # nothing to do, take next package
 
                 # iterating over all modules of this package
 
