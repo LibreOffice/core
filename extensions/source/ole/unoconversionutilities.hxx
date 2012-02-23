@@ -134,7 +134,7 @@ public:
     /** @exception com.sun.star.lang.IllegalArgumentException
         If rSeq does not contain a sequence then the exception is thrown.
     */
-    VARTYPE createUnoSequenceWrapper(const Any& rSeq, SAFEARRAY*& pOutArray );
+    SAFEARRAY*  createUnoSequenceWrapper(const Any& rSeq);
     /** @exception com.sun.star.lang.IllegalArgumentException
         If rSeq does not contain a sequence or elemtype has no proper value
         then the exception is thrown.
@@ -779,12 +779,11 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
         }
         case TypeClass_SEQUENCE:        // sequence ??? SafeArray descriptor
         {
-            SAFEARRAY* pOutArray = NULL;
-            VARTYPE eArrayType = createUnoSequenceWrapper(rAny, pOutArray );
-            if (pOutArray)
+            SAFEARRAY* pArray = createUnoSequenceWrapper(rAny);
+            if (pArray)
             {
-                V_VT(pVariant) = VT_ARRAY | eArrayType;
-                V_ARRAY(pVariant) = pOutArray;
+                V_VT(pVariant) = VT_ARRAY | VT_VARIANT;
+                V_ARRAY(pVariant) = pArray;
             }
             else
             {
@@ -1296,8 +1295,9 @@ void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const Any& rS
 
 
 template<class T>
-VARTYPE UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,  SAFEARRAY*& pArray)
+SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
 {
+    SAFEARRAY* pArray = NULL;
     sal_uInt32 n = 0;
 
     if( rSeq.getValueTypeClass() != TypeClass_SEQUENCE )
@@ -1361,7 +1361,7 @@ VARTYPE UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,  SA
 
     TYPELIB_DANGER_RELEASE( pSeqElementDesc);
 
-    return eTargetElementType;
+    return pArray;
 }
 
 /* The argument rObj can contain
