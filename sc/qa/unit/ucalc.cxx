@@ -2898,35 +2898,35 @@ void Test::testPostIts()
     m_pDoc->InsertTab(0, aTabName);
 
     ScAddress rAddr(2, 2, 0);
-    ScPostIt *pNote = m_pDoc->GetOrCreateNote(rAddr);
+    ScPostIt *pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
     pNote->SetAuthor(aJimBob);
 
-    ScPostIt *pGetNote = m_pDoc->GetNote(rAddr);
+    ScPostIt *pGetNote = m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr);
     CPPUNIT_ASSERT_MESSAGE("note should be itself", pGetNote == pNote );
 
     bool bInsertRow = m_pDoc->InsertRow( 0, 0, 100, 0, 1, 1 );
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncRow();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     bool bInsertCol = m_pDoc->InsertCol( 0, 0, 100, 0, 1, 1 );
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncCol();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->InsertTab(0, aTabName2);
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncTab();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
     rAddr.IncTab(-1);
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }

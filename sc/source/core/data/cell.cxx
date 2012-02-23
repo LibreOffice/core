@@ -80,7 +80,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 // ============================================================================
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
-    mpNote( 0 ),
     mpBroadcaster( 0 ),
     nTextWidth( TEXTWIDTH_DIRTY ),
     eCellType( sal::static_int_cast<sal_uInt8>(eNewType) ),
@@ -89,7 +88,6 @@ ScBaseCell::ScBaseCell( CellType eNewType ) :
 }
 
 ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
-    mpNote( 0 ),
     mpBroadcaster( 0 ),
     nTextWidth( rCell.nTextWidth ),
     eCellType( rCell.eCellType ),
@@ -99,7 +97,6 @@ ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
 
 ScBaseCell::~ScBaseCell()
 {
-    delete mpNote;
     delete mpBroadcaster;
     OSL_ENSURE( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
 }
@@ -246,19 +243,11 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress&
 ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
-    if( mpNote )
-    {
-        if( !pNewCell )
-            pNewCell = new ScNoteCell;
-        bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
-        pNewCell->TakeNote( mpNote->Clone( rOwnPos, rDestDoc, rDestPos, bCloneCaption ) );
-    }
     return pNewCell;
 }
 
 void ScBaseCell::Delete()
 {
-    DeleteNote();
     switch (eCellType)
     {
         case CELLTYPE_VALUE:
@@ -282,27 +271,9 @@ void ScBaseCell::Delete()
     }
 }
 
-bool ScBaseCell::IsBlank( bool bIgnoreNotes ) const
+bool ScBaseCell::IsBlank() const
 {
-    return (eCellType == CELLTYPE_NOTE) && (bIgnoreNotes || !mpNote);
-}
-
-void ScBaseCell::TakeNote( ScPostIt* pNote )
-{
-    delete mpNote;
-    mpNote = pNote;
-}
-
-ScPostIt* ScBaseCell::ReleaseNote()
-{
-    ScPostIt* pNote = mpNote;
-    mpNote = 0;
-    return pNote;
-}
-
-void ScBaseCell::DeleteNote()
-{
-    DELETEZ( mpNote );
+    return false;
 }
 
 void ScBaseCell::TakeBroadcaster( SvtBroadcaster* pBroadcaster )
@@ -659,13 +630,6 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 ScNoteCell::ScNoteCell( SvtBroadcaster* pBC ) :
     ScBaseCell( CELLTYPE_NOTE )
 {
-    TakeBroadcaster( pBC );
-}
-
-ScNoteCell::ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    TakeNote( pNote );
     TakeBroadcaster( pBC );
 }
 

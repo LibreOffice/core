@@ -346,7 +346,7 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
     //check notes import
     ScAddress aAddress(7, 2, 0);
-    ScPostIt* pNote = pDoc->GetNote(aAddress);
+    ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
     CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
     CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
     //add additional checks here

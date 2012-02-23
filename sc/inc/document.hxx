@@ -206,6 +206,9 @@ const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
 
+typedef std::pair<SCCOL, SCROW> ScAddress2D;
+typedef std::map<ScAddress2D, ScPostIt*> ScNoteMap;
+
 class ScDocument
 {
 friend class ScDocumentIterator;
@@ -804,16 +807,9 @@ public:
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    /** Returns the pointer to a cell note object at the passed cell address. */
-    SC_DLLPUBLIC ScPostIt*       GetNote( const ScAddress& rPos );
-    /** Sets the passed note at the cell with the passed cell address. */
-    void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
-    /** Returns and forgets the cell note object at the passed cell address. */
-    ScPostIt*       ReleaseNote( const ScAddress& rPos );
-    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
-    SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
-    /** Deletes the note at the passed cell address. */
-    void            DeleteNote( const ScAddress& rPos );
+    /** Returns a table notes container. */
+    SC_DLLPUBLIC ScNotes*       GetNotes(SCTAB nTab);
+
     /** Creates the captions of all uninitialized cell notes in the specified sheet.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );

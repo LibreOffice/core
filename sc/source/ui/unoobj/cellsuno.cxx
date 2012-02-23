@@ -3581,53 +3581,50 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
             while (pCell)
             {
                 sal_Bool bAdd = false;
-                if ( pCell->HasNote() && ( nContentFlags & sheet::CellFlags::ANNOTATION ) )
-                    bAdd = sal_True;
-                else
-                    switch ( pCell->GetCellType() )
-                    {
-                        case CELLTYPE_STRING:
-                            if ( nContentFlags & sheet::CellFlags::STRING )
-                                bAdd = sal_True;
-                            break;
-                        case CELLTYPE_EDIT:
-                            if ( (nContentFlags & sheet::CellFlags::STRING) || (nContentFlags & sheet::CellFlags::FORMATTED) )
-                                bAdd = sal_True;
-                            break;
-                        case CELLTYPE_FORMULA:
-                            if ( nContentFlags & sheet::CellFlags::FORMULA )
-                                bAdd = sal_True;
-                            break;
-                        case CELLTYPE_VALUE:
-                            if ( (nContentFlags & (sheet::CellFlags::VALUE|sheet::CellFlags::DATETIME))
-                                    == (sheet::CellFlags::VALUE|sheet::CellFlags::DATETIME) )
-                                bAdd = sal_True;
-                            else
-                            {
-                                //  Date/Time Erkennung
+                switch ( pCell->GetCellType() )
+                {
+                    case CELLTYPE_STRING:
+                        if ( nContentFlags & sheet::CellFlags::STRING )
+                            bAdd = sal_True;
+                        break;
+                    case CELLTYPE_EDIT:
+                        if ( (nContentFlags & sheet::CellFlags::STRING) || (nContentFlags & sheet::CellFlags::FORMATTED) )
+                            bAdd = sal_True;
+                        break;
+                    case CELLTYPE_FORMULA:
+                        if ( nContentFlags & sheet::CellFlags::FORMULA )
+                            bAdd = sal_True;
+                        break;
+                    case CELLTYPE_VALUE:
+                        if ( (nContentFlags & (sheet::CellFlags::VALUE|sheet::CellFlags::DATETIME))
+                                == (sheet::CellFlags::VALUE|sheet::CellFlags::DATETIME) )
+                            bAdd = sal_True;
+                        else
+                        {
+                            //  Date/Time Erkennung
 
-                                sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)pDoc->GetAttr(
+                            sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)pDoc->GetAttr(
                                         aIter.GetCol(), aIter.GetRow(), aIter.GetTab(),
                                         ATTR_VALUE_FORMAT ))->GetValue();
-                                short nTyp = pDoc->GetFormatTable()->GetType(nIndex);
-                                if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) ||
+                            short nTyp = pDoc->GetFormatTable()->GetType(nIndex);
+                            if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) ||
                                     (nTyp == NUMBERFORMAT_DATETIME))
-                                {
-                                    if ( nContentFlags & sheet::CellFlags::DATETIME )
-                                        bAdd = sal_True;
-                                }
-                                else
-                                {
-                                    if ( nContentFlags & sheet::CellFlags::VALUE )
-                                        bAdd = sal_True;
-                                }
+                            {
+                                if ( nContentFlags & sheet::CellFlags::DATETIME )
+                                    bAdd = sal_True;
                             }
-                            break;
-                        default:
+                            else
+                            {
+                                if ( nContentFlags & sheet::CellFlags::VALUE )
+                                    bAdd = sal_True;
+                            }
+                        }
+                        break;
+                    default:
                         {
                             // added to avoid warnings
                         }
-                    }
+                }
 
                 if (bAdd)
                     aMarkData.SetMultiMarkArea(
@@ -3636,6 +3633,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
 
                 pCell = aIter.GetNext();
             }
+
         }
 
         ScRangeList aNewRanges;

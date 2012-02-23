@@ -263,15 +263,11 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
     if ( nStates & HIDDENINFORMATION_NOTES )
     {
         SCTAB nTableCount = aDocument.GetTableCount();
-        SCTAB nTable = 0;
-        sal_Bool bFound(false);
-        while ( nTable < nTableCount && !bFound )
+        bool bFound = false;
+        for (SCTAB nTab = 0; nTab < nTableCount && !bFound; ++nTab)
         {
-            ScCellIterator aCellIter( &aDocument, 0,0, nTable, MAXCOL,MAXROW, nTable );
-            for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bFound; pCell = aCellIter.GetNext() )
-                if (pCell->HasNote())
-                    bFound = sal_True;
-            nTable++;
+            if (!aDocument.GetNotes(nTab)->empty())
+                bFound = true;
         }
 
         if (bFound)

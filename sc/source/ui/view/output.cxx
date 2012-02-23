@@ -2081,8 +2081,10 @@ void ScOutputData::DrawChangeTrack()
     }
 }
 
+//TODO: moggi Need to check if this can't be written simpler
 void ScOutputData::DrawNoteMarks()
 {
+
     sal_Bool bFirst = sal_True;
 
     long nInitPosX = nScrX;
@@ -2100,7 +2102,6 @@ void ScOutputData::DrawNoteMarks()
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                ScBaseCell* pCell = pInfo->pCell;
                 sal_Bool bIsMerged = false;
 
                 if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
@@ -2115,7 +2116,7 @@ void ScOutputData::DrawNoteMarks()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                if ( pDoc->GetNotes(nTab)->findByAddress(nX, pRowInfo[nArrY].nRowNo) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     if (bFirst)
@@ -2193,6 +2194,8 @@ void ScOutputData::AddPDFNotes()
                     // use origin's pCell for NotePtr test below
                 }
 
+                //TODO: moggi search for a better way with new note handling
+                /*
                 if ( pCell && pCell->HasNote() && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
@@ -2232,6 +2235,7 @@ void ScOutputData::AddPDFNotes()
                         pPDFData->CreateNote( aNoteRect, aNote );
                     }
                 }
+                */
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
             }

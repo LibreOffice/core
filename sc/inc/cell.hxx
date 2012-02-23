@@ -112,7 +112,7 @@ public:
 
     /** Returns true, if the cell is empty (neither value nor formula nor cell note).
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
-    bool            IsBlank( bool bIgnoreNotes = false ) const;
+    bool            IsBlank() const;
 
 // for idle-calculations
     inline sal_uInt16   GetTextWidth() const { return nTextWidth; }
@@ -120,19 +120,6 @@ public:
 
     inline sal_uInt8     GetScriptType() const { return nScriptType; }
     inline void     SetScriptType( sal_uInt8 nNew ) { nScriptType = nNew; }
-
-    /** Returns true, if the cell contains a note. */
-    inline bool     HasNote() const { return mpNote != 0; }
-    /** Returns the pointer to a cell note object (read-only). */
-    inline const ScPostIt* GetNote() const { return mpNote; }
-    /** Returns the pointer to a cell note object. */
-    inline ScPostIt* GetNote() { return mpNote; }
-    /** Takes ownership of the passed cell note object. */
-    void            TakeNote( ScPostIt* pNote );
-    /** Returns and forgets the own cell note object. Caller takes ownership! */
-    ScPostIt*       ReleaseNote();
-    /** Deletes the own cell note object. */
-    void            DeleteNote();
 
     /** Returns true, if the cell contains a broadcaster. */
     inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
@@ -169,7 +156,6 @@ private:
     ScBaseCell&     operator=( const ScBaseCell& );
 
 private:
-    ScPostIt*       mpNote;         /// The cell note. Cell takes ownership!
     SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
 
 protected:
@@ -189,8 +175,6 @@ public:
 
     /** Cell takes ownership of the passed broadcaster. */
     explicit        ScNoteCell( SvtBroadcaster* pBC = 0 );
-    /** Cell takes ownership of the passed note and broadcaster. */
-    explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
 
 #if OSL_DEBUG_LEVEL > 0
                     ~ScNoteCell();

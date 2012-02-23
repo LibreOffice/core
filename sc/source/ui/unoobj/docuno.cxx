@@ -3493,18 +3493,15 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
     {
         sal_Int32 nFound = 0;
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
+        const ScNotes* pNotes = pDoc->GetNotes(nTab);
+        for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
         {
-            if (pCell->HasNote())
+            if (nFound == nIndex)
             {
-                if (nFound == nIndex)
-                {
-                    rPos = ScAddress( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
-                    return true;
-                }
-                ++nFound;
+                rPos = ScAddress( itr->first.first, itr->first.second, nTab );
+                return true;
             }
+            ++nFound;
         }
     }
     return false;
@@ -3575,10 +3572,8 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     sal_uLong nCount = 0;
     if (pDocShell)
     {
-        ScCellIterator aCellIter( pDocShell->GetDocument(), 0,0, nTab, MAXCOL,MAXROW, nTab );
-        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
-            if (pCell->HasNote())
-                ++nCount;
+        ScDocument* pDoc = pDocShell->GetDocument();
+        nCount = pDoc->GetNotes(nTab)->size();
     }
     return nCount;
 }

@@ -1108,7 +1108,7 @@ sal_Bool ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
 bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 {
     ScDocument& rDoc = *rDocShell.GetDocument();
-    ScPostIt* pNote = rDoc.GetNote( rPos );
+    ScPostIt* pNote = rDoc.GetNotes( rPos.Tab() )->findByAddress( rPos );
     if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
 
     // move the caption to internal or hidden layer and create undo action
@@ -1141,7 +1141,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, sal_Boo
 
     String aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
 
-    if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote( rPos ) )
+    if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetNotes(rPos.Tab())->GetOrCreateNote( rPos ) : pDoc->GetNotes( rPos.Tab() )->findByAddress(rPos) )
         pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
@@ -1170,7 +1170,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
         ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
         ScNoteData aOldData;
-        ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
+        ScPostIt* pOldNote = rDoc.GetNotes(rPos.Tab())->ReleaseNote( rPos );
         if( pOldNote )
         {
             // ensure existing caption object before draw undo tracking starts
@@ -4406,7 +4406,7 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
             bool bHasNotes = false;
             for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
                 for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
-                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
+                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) != 0);
 
             if (!pUndoDoc)
             {

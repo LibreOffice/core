@@ -2195,13 +2195,13 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteIter != aNoteEnd)
             {
                 ScAddress aPos = aNoteIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
                     //! separate method AddStyleFromNote needed?
 
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes( nTable )->findByAddress(aPos);
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2243,11 +2243,11 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteParaIter != aNoteParaEnd)
             {
                 ScAddress aPos = aNoteParaIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2278,11 +2278,11 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteTextIter != aNoteTextEnd)
             {
                 ScAddress aPos = aNoteTextIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {

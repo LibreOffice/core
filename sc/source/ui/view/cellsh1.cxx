@@ -1885,7 +1885,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                if( ScPostIt* pNote = pDoc->GetNote( aPos ) )
+                if( ScPostIt* pNote = pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) )
                 {
                     bool bShow;
                     const SfxPoolItem* pItem;

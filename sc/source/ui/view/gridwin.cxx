@@ -370,7 +370,7 @@ void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, c
 
     ScDocument& rDoc = *pViewData->GetDocument();
     ScAddress aCellPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-    ScPostIt* pNote = rDoc.GetNote( aCellPos );
+    ScPostIt* pNote = rDoc.GetNotes( aCellPos.Tab() )->findByAddress( aCellPos );
     SdrObject* pObj = pNote ? pNote->GetCaption() : 0;
     if( pObj && pObj->GetLogicRect().IsInside( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {

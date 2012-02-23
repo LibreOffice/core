@@ -199,7 +199,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     }
 
     //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
-    const ScPostIt* pNote = pDoc->GetNote( aCellPos );
+    const ScPostIt* pNote = pDoc->GetNotes( aCellPos.Tab() )->findByAddress( aCellPos );
     if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
     {
         bool bNew = true;

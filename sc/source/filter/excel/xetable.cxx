@@ -2337,10 +2337,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         if( xCell )
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
-        // notes
-        const ScPostIt* pScNote = pScCell ? pScCell->GetNote() : 0;
-        if( pScNote || (aAddNoteText.Len() > 0) )
-            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
+        if ( aAddNoteText.Len()  )
+            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, NULL, aAddNoteText ) );
 
         // other sheet contents
         if( pPattern )

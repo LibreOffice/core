@@ -577,8 +577,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
-
-
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
@@ -606,9 +604,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_NOTETEXT:
                 {
                     //  always take cursor position, do not use top-left cell of selection
-                    ScAddress aPos( nPosX, nPosY, nTab );
                     String aNoteText;
-                    if ( const ScPostIt* pNote = pDoc->GetNote( aPos ) )
+                    if ( const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY) )
                         aNoteText = pNote->GetText();
                     rSet.Put( SfxStringItem( nWhich, aNoteText ) );
                 }
@@ -921,7 +918,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_NOTE_VISIBLE:
                 {
-                    const ScPostIt* pNote = pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
+                    const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY);
                     if ( pNote && pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
                         rSet.Put( SfxBoolItem( nWhich, pNote->IsCaptionShown() ) );
                     else
@@ -931,7 +928,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_DELETE_NOTE:
                 {
-                    sal_Bool bEnable = false;
+                    bool bEnable = false;
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
                         if ( pDoc->IsSelectionEditable( rMark ) )
@@ -942,17 +939,23 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             size_t nCount = aRanges.size();
                             for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
                             {
-                                ScCellIterator aCellIter(pDoc, *aRanges[nPos]);
-                                for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
-                                    if ( pCell->HasNote() )
-                                        bEnable = sal_True;             // note found
+                                ScNotes* pNotes = pDoc->GetNotes( aRanges[nPos]->aStart.Tab() );
+                                for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
+                                {
+                                    SCCOL nCol = itr->first.first;
+                                    SCROW nRow = itr->first.second;
+
+                                    if ( nCol <= aRanges[nPos]->aEnd.Col() && nRow <= aRanges[nPos]->aEnd.Row()
+                                            && nCol >= aRanges[nPos]->aStart.Col() && nRow >= aRanges[nPos]->aStart.Row() )
+                                        bEnable = true; //note found
+                                }
                             }
                         }
                     }
                     else
                     {
                         bEnable = pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
-                                  pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
+                                  pDoc->GetNotes(nTab)->findByAddress( nPosX, nPosY );
                     }
                     if ( !bEnable )
                         rSet.DisableItem( nWhich );

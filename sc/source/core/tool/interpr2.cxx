@@ -1613,25 +1613,15 @@ void ScInterpreter::ScBackSolver()
         {
             ScBaseCell* pVCell = GetCell( aValueAdr );
             // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
             ScBaseCell* pFCell = GetCell( aFormulaAdr );
 
-            if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE) || bTempCell)
+            if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE))
                 && pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
                 double fSaveVal; // Original value to be restored later if necessary
-                ScPostIt* pNote = 0;
 
-                if ( bTempCell )
-                {
-                    pNote = pVCell ? pVCell->ReleaseNote() : 0;
-                    fSaveVal = 0.0;
-                    pVCell = new ScValueCell( fSaveVal );
-                    pDok->PutCell( aValueAdr, pVCell );
-                }
-                else
-                    fSaveVal = GetCellValue( aValueAdr, pVCell );
+                fSaveVal = GetCellValue( aValueAdr, pVCell );
 
                 const sal_uInt16 nMaxIter = 100;
                 const double fEps = 1E-10;
@@ -1772,13 +1762,7 @@ void ScInterpreter::ScBackSolver()
                 {
                     nX = fBestX;
                 }
-                if ( bTempCell )
-                {
-                    pVCell = pNote ? new ScNoteCell( pNote ) : 0;
-                    pDok->PutCell( aValueAdr, pVCell );
-                }
-                else
-                    pValue->SetValue( fSaveVal );
+                pValue->SetValue( fSaveVal );
                 pDok->SetDirty( aVRange );
                 pFormula->Interpret();
                 if ( !bDoneIteration )

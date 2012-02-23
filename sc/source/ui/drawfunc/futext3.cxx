@@ -79,7 +79,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
     if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
     {
         aNotePos = pCaptData->maStart;
-        pNote = rDoc.GetNote( aNotePos );
+        pNote = rDoc.GetNotes( aNotePos.Tab() )->findByAddress( aNotePos );
         OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
     }
 
@@ -147,13 +147,13 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
                 // rescue note data before deletion
                 ScNoteData aNoteData( pNote->GetNoteData() );
                 // delete note from document (removes caption, but does not delete it)
-                rDoc.DeleteNote( aNotePos );
+                rDoc.GetNotes( aNotePos.Tab() )->erase( aNotePos );
                 // create undo action for removed note
                 pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
             }
             else
             {
-                rDoc.DeleteNote( aNotePos );
+                rDoc.GetNotes( aNotePos.Tab() )->erase( aNotePos );
             }
             // ScDocument::DeleteNote has deleted the note that pNote points to
             pNote = 0;

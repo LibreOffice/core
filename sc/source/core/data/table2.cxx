@@ -173,6 +173,22 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
         aCol[j].InsertRow( nStartRow, nSize );
+
+    ScNotes aNotes(pDocument);
+    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.second >= nStartRow)
+        {
+            aNotes.insert(itr->first.first, itr->first.second + nSize, itr->second);
+            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+        }
+    }
+    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+    {
+        maNotes.insert( itr->first.first, itr->first.second, itr->second);
+        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+    }
+
     DecRecalcLevel( false );
 
     InvalidatePageBreaks();
@@ -223,6 +239,21 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
             maRowManualBreaks.swap(aNewBreaks);
         }
+    }
+
+    ScNotes aNotes(pDocument);
+    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.second >= nStartRow)
+        {
+            aNotes.insert(itr->first.first, itr->first.second - nSize, itr->second);
+            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+        }
+    }
+    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+    {
+        maNotes.insert( itr->first.first, itr->first.second, itr->second);
+        aNotes.ReleaseNote(itr->first.first, itr->first.second);
     }
 
     {   // scope for bulk broadcast
@@ -307,6 +338,23 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
     }
 
+    ScNotes aNotes(pDocument);
+    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.first > nStartCol)
+        {
+            aNotes.insert(itr->first.first + nSize, itr->first.second, itr->second);
+            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+        }
+        else
+            aNotes.insert( itr->first.first, itr->first.second, itr->second);
+    }
+    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+    {
+        maNotes.insert( itr->first.first, itr->first.second, itr->second);
+        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+    }
+
     if (nStartCol>0)                        // copy old attributes
     {
         sal_uInt16 nWhichArray[2];
@@ -387,6 +435,24 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
+
+    ScNotes aNotes(pDocument);
+    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.first > nStartCol)
+        {
+            aNotes.insert(itr->first.first - nSize, itr->first.second, itr->second);
+            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+        }
+        else
+            aNotes.insert( itr->first.first, itr->first.second, itr->second);
+    }
+    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+    {
+        maNotes.insert( itr->first.first, itr->first.second, itr->second);
+        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+    }
+
     DecRecalcLevel();
 
     InvalidatePageBreaks();
@@ -467,6 +533,10 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         //local range names need to be copied first for formula cells
         if (!pTable->mpRangeName && mpRangeName)
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
+
+        // notes
+        pTable->maNotes = *maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab);
+
         SCCOL i;
 
         for ( i = nCol1; i <= nCol2; i++)
@@ -527,6 +597,14 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         IncRecalcLevel();
         for ( i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
+
+        bool bAddNotes = (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES);
+        if (bAddNotes)
+        {
+            bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
+            maNotes.CopyFromClip(pTable->maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, nDx, nDy, nTab, bCloneCaption);
+        }
+
 
         if ((nInsFlag & IDF_ATTRIB) != 0)
         {
@@ -1091,41 +1169,9 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula )
         rFormula = rtl::OUString();
 }
 
-
-ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
+ScNotes* ScTable::GetNotes()
 {
-    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].GetNote( nRow ) : 0;
-}
-
-
-void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
-{
-    if( ValidColRow( nCol, nRow ) )
-    {
-        aCol[ nCol ].TakeNote( nRow, rpNote );
-        if( rpNote && rpNote->GetNoteData().mxInitData.get() )
-        {
-            if( !mxUninitNotes.get() )
-                mxUninitNotes.reset( new ScAddress2DVec );
-            mxUninitNotes->push_back( ScAddress2D( nCol, nRow ) );
-        }
-        InvalidateTableArea();
-    }
-    else
-        DELETEZ( rpNote );
-}
-
-
-ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
-{
-    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].ReleaseNote( nRow ) : 0;
-}
-
-
-void ScTable::DeleteNote( SCCOL nCol, SCROW nRow )
-{
-    if( ValidColRow( nCol, nRow ) )
-        aCol[ nCol ].DeleteNote( nRow );
+    return &maNotes;
 }
 
 
@@ -1134,7 +1180,7 @@ void ScTable::InitializeNoteCaptions( bool bForced )
     if( mxUninitNotes.get() && (bForced || pDocument->IsUndoEnabled()) )
     {
         for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt )
-            if( ScPostIt* pNote = GetNote( aIt->first, aIt->second ) )
+            if( ScPostIt* pNote = maNotes.findByAddress( aIt->first, aIt->second ) )
                 pNote->GetOrCreateCaption( ScAddress( aIt->first, aIt->second, nTab ) );
         mxUninitNotes.reset();
     }
@@ -1422,7 +1468,10 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, 
     }
     bool bEmpty = true;
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
-        bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2, bIgnoreNotes );
+    {
+        //TODO:moggi
+        bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
+    }
     return bEmpty;
 }
 

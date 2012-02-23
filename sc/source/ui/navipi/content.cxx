@@ -850,7 +850,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
         }
     }
 
-    OSL_FAIL("Link nicht gefunden");
+    OSL_FAIL("link not found");
     return NULL;
 }
 
@@ -875,10 +875,12 @@ void ScContentTree::GetNoteStrings()
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
-        ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
-        for( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
-            if( const ScPostIt* pNote = pCell->GetNote() )
-                InsertContent( SC_CONTENT_NOTE, lcl_NoteString( *pNote ) );
+        ScNotes::iterator itr = pDoc->GetNotes(nTab)->begin();
+        ScNotes::iterator itrEnd = pDoc->GetNotes(nTab)->end();
+        for (; itr != itrEnd; ++itr)
+        {
+//TODO: moggi
+        }
     }
 }
 
@@ -892,21 +894,22 @@ ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
-        ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
-        ScBaseCell* pCell = aIter.GetFirst();
-        while (pCell)
+        ScNotes* pNotes = pDoc->GetNotes(nTab);
+        if (nFound + pNotes->size() >= nIndex)
         {
-            if( pCell->HasNote() )
+            for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
             {
                 if (nFound == nIndex)
-                    return ScAddress( aIter.GetCol(), aIter.GetRow(), nTab );   // gefunden
+                    return ScAddress( itr->first.first, itr->first.second, nTab );   // gefunden
+
                 ++nFound;
             }
-            pCell = aIter.GetNext();
         }
+        else
+            nFound += pNotes->size();
     }
 
-    OSL_FAIL("Notiz nicht gefunden");
+    OSL_FAIL("note not found");
     return ScAddress();
 }
 
@@ -922,15 +925,14 @@ sal_Bool ScContentTree::NoteStringsChanged()
 
     SvLBoxEntry* pEntry = FirstChild( pParent );
 
-    sal_Bool bEqual = sal_True;
+    bool bEqual = true;
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
     {
-        ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
-        ScBaseCell* pCell = aIter.GetFirst();
-        while (pCell && bEqual)
+        ScNotes* pNotes = pDoc->GetNotes(nTab);
+        for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
         {
-            if( const ScPostIt* pNote = pCell->GetNote() )
+            if( const ScPostIt* pNote = itr->second )
             {
                 if ( !pEntry )
                     bEqual = false;
@@ -942,7 +944,6 @@ sal_Bool ScContentTree::NoteStringsChanged()
                     pEntry = NextSibling( pEntry );
                 }
             }
-            pCell = aIter.GetNext();
         }
     }
 

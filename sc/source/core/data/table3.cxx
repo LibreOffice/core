@@ -580,6 +580,14 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             }
         }
     }
+    for (ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.first == nCol1 || itr->first.first == nCol2)
+        {
+            //only then we need to swap
+            //TODO: implement it
+        }
+    }
 }
 
 void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
@@ -609,6 +617,15 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         bool bRow2Filtered = RowFiltered(nRow2);
         SetRowFiltered(nRow1, nRow1, bRow2Filtered);
         SetRowFiltered(nRow2, nRow2, bRow1Filtered);
+    }
+
+    for (ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        if (itr->first.second == nRow1 || itr->first.second == nRow2)
+        {
+            //only then we need to swap
+            //TODO:implement it
+        }
     }
 }
 

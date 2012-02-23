@@ -3259,48 +3259,6 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 
-ScPostIt* ScDocument::GetNote( const ScAddress& rPos )
-{
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) ? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->GetNote( rPos.Col(), rPos.Row() ) : 0;
-}
-
-
-void ScDocument::TakeNote( const ScAddress& rPos, ScPostIt*& rpNote )
-{
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->TakeNote( rPos.Col(), rPos.Row(), rpNote );
-    else
-        DELETEZ( rpNote );
-}
-
-
-ScPostIt* ScDocument::ReleaseNote( const ScAddress& rPos )
-{
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size())? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->ReleaseNote( rPos.Col(), rPos.Row() ) : 0;
-}
-
-
-ScPostIt* ScDocument::GetOrCreateNote( const ScAddress& rPos )
-{
-    ScPostIt* pNote = GetNote( rPos );
-    if( !pNote )
-    {
-        pNote = new ScPostIt( *this, rPos, false );
-        TakeNote( rPos, pNote );
-    }
-    return pNote;
-}
-
-
-void ScDocument::DeleteNote( const ScAddress& rPos )
-{
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->DeleteNote( rPos.Col(), rPos.Row() );
-}
-
-
 void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
 {
     if( ValidTab( nTab ) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[ nTab ] )
@@ -5775,6 +5733,14 @@ bool ScDocument::IsInVBAMode() const
     catch (const lang::NotInitializedException&) {}
 
     return false;
+}
+
+ScNotes* ScDocument::GetNotes(SCTAB nTab)
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        return maTabs[nTab]->GetNotes();
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

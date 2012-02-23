@@ -932,12 +932,9 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 }
             }
 
-            // do not swap formula cells with equal formulas, but swap notes
+            // do not swap formula cells with equal formulas
             if (bEqual)
             {
-                ScPostIt* pNote1 = pCell1->ReleaseNote();
-                pCell1->TakeNote( pCell2->ReleaseNote() );
-                pCell2->TakeNote( pNote1 );
                 return;
             }
         }
@@ -947,7 +944,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         variable swapping above). Do not clone the note, but move pointer of
         old note to new cell. */
     ScBaseCell* pNew2 = pCell1->CloneWithoutNote( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
-    pNew2->TakeNote( pCell1->ReleaseNote() );
 
     /*  Create clone of pCell2 at position of pCell1. Do not clone the note,
         but move pointer of old note to new cell. */
@@ -955,7 +951,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     if ( pCell2 )
     {
         pNew1 = pCell2->CloneWithoutNote( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
-        pNew1->TakeNote( pCell2->ReleaseNote() );
     }
 
     // move old broadcasters new cells at the same old position

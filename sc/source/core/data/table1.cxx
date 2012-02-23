@@ -267,6 +267,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName
     nScenarioFlags( 0 ),
     pDBDataNoName(NULL),
     mpRangeName(NULL),
+    maNotes(pDoc),
     bScenario(false),
     bLayoutRTL(false),
     bLoadingRTL(false),
@@ -527,14 +528,25 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (!aCol[i].IsEmptyVisData(true))      // true = Notizen zaehlen auch
+        if (!aCol[i].IsEmptyVisData())
         {
             bFound = true;
             nMaxX = i;
-            SCROW nColY = aCol[i].GetLastVisDataPos(true);
+            SCROW nColY = aCol[i].GetLastVisDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
+
+    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+
+        if (nMaxX < nCol)
+            nMaxX = nCol;
+        if (nMaxY < nRow)
+            nMaxY = nRow;
+    }
 
     rEndCol = nMaxX;
     rEndRow = nMaxY;
@@ -564,15 +576,29 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     SCCOL i;
 
     for (i=0; i<=MAXCOL; i++)               // Daten testen
-        if (!aCol[i].IsEmptyVisData(bNotes))
+        if (!aCol[i].IsEmptyVisData())
         {
             bFound = true;
             if (i>nMaxX)
                 nMaxX = i;
-            SCROW nColY = aCol[i].GetLastVisDataPos(bNotes);
+            SCROW nColY = aCol[i].GetLastVisDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
+
+    if (bNotes)
+    {
+        for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+        {
+            SCCOL nCol = itr->first.first;
+            SCROW nRow = itr->first.second;
+
+            if (nMaxX < nCol)
+                nMaxX = nCol;
+            if (nMaxY < nRow)
+                nMaxY = nRow;
+        }
+    }
 
     SCCOL nMaxDataX = nMaxX;
 
@@ -683,13 +709,28 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     }
 
     for (i=nStartCol; i<=nEndCol; i++)              // Daten testen
-        if (!aCol[i].IsEmptyVisData(bNotes))
+        if (!aCol[i].IsEmptyVisData())
         {
             bFound = true;
-            SCROW nColY = aCol[i].GetLastVisDataPos(bNotes);
+            SCROW nColY = aCol[i].GetLastVisDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
+
+    if (bNotes)
+    {
+        for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+        {
+            SCCOL nCol = itr->first.first;
+            SCROW nRow = itr->first.second;
+
+            if (nStartCol > nCol || nEndCol < nCol)
+                continue;
+
+            if (nMaxY < nRow)
+                nMaxY = nRow;
+        }
+    }
 
     rEndRow = nMaxY;
     return bFound;
@@ -727,15 +768,27 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     bool bDatFound = false;
     for (i=0; i<=MAXCOL; i++)                   // Daten testen
-        if (!aCol[i].IsEmptyVisData(true))
+        if (!aCol[i].IsEmptyVisData())
         {
             if (!bDatFound && i<nMinX)
                 nMinX = i;
             bFound = bDatFound = true;
-            SCROW nColY = aCol[i].GetFirstVisDataPos(true);
+            SCROW nColY = aCol[i].GetFirstVisDataPos();
             if (nColY < nMinY)
                 nMinY = nColY;
         }
+
+    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        bFound = bDatFound = true;
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+
+        if (nMinX > nCol)
+            nMinX = nCol;
+        if (nMinY > nRow)
+            nMinY = nRow;
+    }
 
     rStartCol = nMinX;
     rStartRow = nMinY;

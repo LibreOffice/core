@@ -105,14 +105,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
                 break;
             case SVX_SEARCHIN_NOTE:
-                {
-                    if(const ScPostIt* pNote = pCell->GetNote())
-                    {
-                        aString = pNote->GetText();
-                        bMultiLine = pNote->HasMultiLineText();
-                    }
-                }
-                break;
+                break; // don't search this case here
             default:
                 break;
         }
@@ -219,14 +212,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
             }
             while (bRepeat);
-            if (rSearchItem.GetCellType() == SVX_SEARCHIN_NOTE)
-            {
-                // NB: rich text format is lost.
-                // This is also true of Cells.
-                if( ScPostIt* pNote = pCell->GetNote() )
-                    pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
-            }
-            else if ( cMatrixFlag != MM_NONE )
+
+            if ( cMatrixFlag != MM_NONE )
             {   // Matrix nicht zerreissen
                 if ( aString.Len() > 2 )
                 {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
