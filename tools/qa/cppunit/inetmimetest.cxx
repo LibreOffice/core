@@ -26,39 +26,44 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 #include <tools/inetmime.hxx>
 
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
+namespace
+{
 
-#include <cstdlib>
-#include <iostream>
+    class Test: public CppUnit::TestFixture
+    {
+        bool testDecode(char const * input, char const * expected);
+    public:
+        void test_decodeHeaderFieldBody();
 
-namespace {
+        CPPUNIT_TEST_SUITE(Test);
+        CPPUNIT_TEST(test_decodeHeaderFieldBody);
+        CPPUNIT_TEST_SUITE_END();
+    };
 
-bool testDecode(char const * input, char const * expected) {
-    rtl::OUString result = INetMIME::decodeHeaderFieldBody(
-        INetMIME::HEADER_FIELD_TEXT, input);
-    bool success = result.equalsAscii(expected);
-    if (!success) {
-        std::cout
-            << "FAILED: decodeHeaderFieldBody(\"" << input << "\"): \""
-            << rtl::OUStringToOString(
-                result, RTL_TEXTENCODING_ASCII_US).getStr()
-            << "\" != \"" << expected << "\"\n";
+    bool Test::testDecode(char const * input, char const * expected)
+    {
+        rtl::OUString result = INetMIME::decodeHeaderFieldBody(
+            INetMIME::HEADER_FIELD_TEXT, input);
+        return result.equalsAscii(expected);
     }
-    return success;
-}
 
-}
+    void Test::test_decodeHeaderFieldBody()
+    {
+        CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QQ==?=", "A"));
+        CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUI=?=", "AB"));
+        CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUJD?=", "ABC"));
+    }
 
-int SAL_CALL main() {
-    bool success = true;
-    success &= testDecode("=?iso-8859-1?B?QQ==?=", "A");
-    success &= testDecode("=?iso-8859-1?B?QUI=?=", "AB");
-    success &= testDecode("=?iso-8859-1?B?QUJD?=", "ABC");
-    return success ? EXIT_SUCCESS : EXIT_FAILURE;
+    CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
