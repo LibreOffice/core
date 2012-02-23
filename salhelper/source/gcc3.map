@@ -108,12 +108,10 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
         _ZN9salhelper6ThreadD1Ev; # salhelper::Thread::~Thread()
         _ZN9salhelper6ThreadD2Ev; # salhelper::Thread::~Thread()
         _ZTVN9salhelper6ThreadE; # vtable for salhelper::Thread
-         # non-virtual thunk to salhelper::Thread::onTerminated()
-        _ZThn16_N9salhelper6Thread12onTerminatedEv;
-	_ZThn8_N9salhelper6Thread12onTerminatedEv;
-        # non-virtual thunk to salhelper::Thread::run()
-	_ZThn8_N9salhelper6Thread3runEv;
-        _ZThn16_N9salhelper6Thread3runEv;
+        _ZThn*_N9salhelper6Thread12onTerminatedEv;
+            # non-virtual thunk to salhelper::Thread::onTerminated()
+        _ZThn*_N9salhelper6Thread3runEv;
+            # non-virtual thunk to salhelper::Thread::run()
 } UDK_3.1;
 
 # Unique libstdc++ symbols:
