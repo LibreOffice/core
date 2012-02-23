@@ -74,8 +74,10 @@ public:
     using osl::Thread::terminate;
 
     // While the below static member functions should arguably always be called
-    // with qualified (osl::Thread) names, at least MSVC still would complain
-    // that they are inaccessible from within derivations of salhelper::Thread:
+    // with qualified (osl::Thread) names, compilers would still complain that
+    // they are inaccessible from within derivations of salhelper::Thread (an
+    // alternative would be to force such derivations to use global names,
+    // prefixed with ::osl::Thread):
     using osl::Thread::getCurrentIdentifier;
     using osl::Thread::wait;
     using osl::Thread::yield;
