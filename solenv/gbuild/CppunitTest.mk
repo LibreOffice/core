@@ -188,7 +188,8 @@ $(filter-out \
 	    scripting/source/basprov/basprov \
 	    scripting/util/scriptframe) \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),, \
-	    dbaccess/util/dba),$(1))
+	    dbaccess/util/dba \
+		forms/util/frm),$(1))
 endef
 
 define gb_CppunitTest_add_components
