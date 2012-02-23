@@ -53,8 +53,12 @@ ifeq ($(COM),MSC)
 	cp $(SRCDIR)/clucene/configs/_clucene-config-MSVC.h src/shared/CLucene/_clucene-config.h
 	cp $(SRCDIR)/clucene/configs/clucene-config-MSVC.h src/shared/CLucene/clucene-config.h
 else
-	cp $(SRCDIR)/clucene/configs/_clucene-config-generic.h src/shared/CLucene/_clucene-config.h
 	cp $(SRCDIR)/clucene/configs/clucene-config-generic.h src/shared/CLucene/clucene-config.h
+ifeq ($(OS),LINUX)
+	cp $(SRCDIR)/clucene/configs/_clucene-config-LINUX.h src/shared/CLucene/_clucene-config.h
+else
+	cp $(SRCDIR)/clucene/configs/_clucene-config-generic.h src/shared/CLucene/_clucene-config.h
+endif
 endif
 
 .DEFAULT_GOAL := all
