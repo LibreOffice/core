@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_exception_objects,salhelper,\
     salhelper/source/condition \
     salhelper/source/dynload \
     salhelper/source/simplereferenceobject \
+    salhelper/source/thread \
     salhelper/source/timer \
 ))
 

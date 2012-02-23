@@ -38,6 +38,7 @@ $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/queue.hxx,queue.hx
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/refobj.hxx,refobj.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/simplereferenceobject.hxx,simplereferenceobject.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/singletonref.hxx,singletonref.hxx))
+$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/thread.hxx,thread.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/timer.hxx,timer.hxx))
 
 # vim: set noet sw=4 ts=4:

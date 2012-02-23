@@ -35,6 +35,7 @@ certain functionality.
 @section URE
 
 @li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
+@li @c salhelper.thread - ::salhelper::Thread class
 
 
 @section VCL

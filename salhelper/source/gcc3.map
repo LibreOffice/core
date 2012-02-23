@@ -96,6 +96,24 @@ UDK_3.1 {
 
 } UDK_3_0_0;
 
+LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
+    global:
+        _ZN9salhelper6Thread12onTerminatedEv;
+            # salhelper::Thread::onTerminated()
+        _ZN9salhelper6Thread3runEv; # salhelper::Thread::run()
+        _ZN9salhelper6Thread6launchEv; # salhelper::Thread::launch()
+        _ZN9salhelper6ThreadC1EPKc; # salhelper::Thread::Thread(char const*)
+        _ZN9salhelper6ThreadC2EPKc; # salhelper::Thread::Thread(char const*)
+        _ZN9salhelper6ThreadD0Ev; # salhelper::Thread::~Thread()
+        _ZN9salhelper6ThreadD1Ev; # salhelper::Thread::~Thread()
+        _ZN9salhelper6ThreadD2Ev; # salhelper::Thread::~Thread()
+        _ZTVN9salhelper6ThreadE; # vtable for salhelper::Thread
+        _ZThn16_N9salhelper6Thread12onTerminatedEv;
+            # non-virtual thunk to salhelper::Thread::onTerminated()
+        _ZThn16_N9salhelper6Thread3runEv;
+            # non-virtual thunk to salhelper::Thread::run()
+} UDK_3.1;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
 global:

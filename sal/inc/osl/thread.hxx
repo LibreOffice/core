@@ -49,6 +49,13 @@ namespace osl
 */
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
+/**
+   A thread abstraction.
+
+   @deprecated use ::salhelper::Thread instead.  Only the static member
+   functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait, and
+   ::osl::Thread::yield are not deprecated.
+ */
 class Thread
 {
     Thread( const Thread& );

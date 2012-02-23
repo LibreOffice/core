@@ -89,6 +89,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/thread.hxx"
 #include "svtools/svlbitm.hxx"
 #include "svtools/svlbox.hxx"
 #include <svtools/controldims.hrc>
@@ -117,7 +118,6 @@
 
 #include "dp_gui.h"
 #include "dp_gui.hrc"
-#include "dp_gui_thread.hxx"
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
@@ -210,7 +210,7 @@ UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, con
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-class UpdateDialog::Thread: public dp_gui::Thread {
+class UpdateDialog::Thread: public salhelper::Thread {
 public:
     Thread(
         uno::Reference< uno::XComponentContext > const & context,
@@ -220,9 +220,6 @@ public:
     void stop();
 
 private:
-    Thread(UpdateDialog::Thread &); // not defined
-    void operator =(UpdateDialog::Thread &); // not defined
-
     virtual ~Thread();
 
     virtual void execute();
@@ -264,6 +261,7 @@ UpdateDialog::Thread::Thread(
     uno::Reference< uno::XComponentContext > const & context,
     UpdateDialog & dialog,
     const std::vector< uno::Reference< deployment::XPackage > > &vExtensionList):
+    salhelper::Thread("dp_gui_updatedialog"),
     m_context(context),
     m_dialog(dialog),
     m_vExtensionList(vExtensionList),

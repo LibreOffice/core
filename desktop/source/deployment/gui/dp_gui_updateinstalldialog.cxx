@@ -73,12 +73,12 @@
 #include "dp_ucb.h"
 #include "dp_misc.h"
 #include "dp_version.hxx"
-#include "dp_gui_thread.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
 #include "osl/mutex.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
+#include "salhelper/thread.hxx"
 #include "com/sun/star/uno/Sequence.h"
 #include "comphelper/anytostring.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
@@ -95,7 +95,7 @@ using ::rtl::OUString;
 
 namespace dp_gui {
 
-class UpdateInstallDialog::Thread: public dp_gui::Thread {
+class UpdateInstallDialog::Thread: public salhelper::Thread {
     friend class UpdateCommandEnv;
 public:
     Thread(cssu::Reference< cssu::XComponentContext > ctx,
@@ -106,9 +106,6 @@ public:
 
 
 private:
-    Thread(Thread &); // not defined
-    void operator =(Thread &); // not defined
-
     virtual ~Thread();
 
     virtual void execute();
@@ -175,6 +172,7 @@ UpdateInstallDialog::Thread::Thread(
     cssu::Reference< cssu::XComponentContext> xCtx,
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
+    salhelper::Thread("dp_gui_updateinstalldialog"),
     m_dialog(dialog),
     m_xComponentContext(xCtx),
     m_aVecUpdateData(aVecUpdateData),
