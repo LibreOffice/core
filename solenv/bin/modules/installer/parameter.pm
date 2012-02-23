@@ -28,8 +28,6 @@
 package installer::parameter;
 
 use Cwd;
-use File::Spec::Functions qw(rel2abs);
-
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -196,6 +194,58 @@ sub control_fundamental_parameter
     }
 }
 
+##########################################################
+# The path parameters can be relative or absolute.
+# This function creates absolute paths.
+##########################################################
+
+sub make_path_absolute
+{
+    my ($pathref) = @_;
+
+    if ( $installer::globals::isunix )
+    {
+        if (!($$pathref =~ /^\s*\//))   # this is a relative unix path
+        {
+            $$pathref = cwd() . $installer::globals::separator . $$pathref;
+        }
+    }
+
+    if ( $installer::globals::iswin )
+    {
+        if ( $^O =~ /cygwin/i )
+        {
+            if ( $$pathref !~ /^\s*\// && $$pathref !~ /^\s*\w\:/ ) # not an absolute POSIX or DOS path
+            {
+                $$pathref = cwd() . $installer::globals::separator . $$pathref;
+            }
+            my $p = $$pathref;
+            chomp( $p );
+            my $q = '';
+            # Avoid the $(LANG) problem.
+            if ($p =~ /(\A.*)(\$\(.*\Z)/) {
+                $p = $1;
+                $q = $2;
+            }
+            $p =~ s/\\/\\\\/g;
+            chomp( $p = qx{cygpath -w "$p"} );
+            $$pathref = $p.$q;
+            # Use windows paths, but with '/'s.
+            $$pathref =~ s/\\/\//g;
+        }
+        else
+        {
+            if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path (no dos drive)
+            {
+                $$pathref = cwd() . $installer::globals::separator . $$pathref;
+
+                $$pathref =~ s/\//\\/g;
+            }
+        }
+    }
+    $$pathref =~ s/[\/\\]\s*$//;    # removing ending slashes
+}
+
 ##################################################
 # Setting some global parameters
 # This has to be expanded with furher platforms
@@ -337,7 +387,7 @@ sub setglobalvariables
 
     if (!($installer::globals::unpackpath eq ""))
     {
-        $installer::globals::unpackpath = rel2abs($installer::globals::unpackpath);
+        make_path_absolute(\$installer::globals::unpackpath);
     }
 
     $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;
@@ -427,7 +477,7 @@ sub control_required_parameter
 
         if (!($installer::globals::idttemplatepath eq ""))  # idttemplatepath set, relative or absolute?
         {
-            $installer::globals::idttemplatepath = rel2abs($installer::globals::idttemplatepath);
+            make_path_absolute(\$installer::globals::idttemplatepath);
         }
 
         installer::remover::remove_ending_pathseparator(\$installer::globals::idttemplatepath);
@@ -436,7 +486,7 @@ sub control_required_parameter
 
         if (!($installer::globals::idtlanguagepath eq ""))  # idtlanguagepath set, relative or absolute?
         {
-            $installer::globals::idtlanguagepath = rel2abs($installer::globals::idtlanguagepath);
+            make_path_absolute(\$installer::globals::idtlanguagepath);
         }
 
         installer::remover::remove_ending_pathseparator(\$installer::globals::idtlanguagepath);
@@ -476,7 +526,7 @@ sub control_required_parameter
 
     if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( $installer::globals::patchincludepath ))
     {
-        $installer::globals::patchincludepath = rel2abs($installer::globals::patchincludepath);
+        make_path_absolute(\$installer::globals::patchincludepath);
         $installer::globals::patchincludepath = installer::converter::make_path_conform($installer::globals::patchincludepath);
     }
 
