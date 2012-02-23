@@ -28,8 +28,8 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,salcpprt))
 
 $(eval $(call gb_StaticLibrary_add_package_headers,salcpprt,\
-        sal_generated \
-        sal_inc \
+	sal_generated \
+	sal_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,salcpprt, \

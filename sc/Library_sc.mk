@@ -27,17 +27,17 @@ $(eval $(call gb_Library_add_sdi_headers,sc,sc/sdi/scslots))
 $(eval $(call gb_Library_set_componentfile,sc,sc/util/sc))
 
 $(eval $(call gb_Library_set_include,sc,\
-        -I$(realpath $(SRCDIR)/sc/source/core/inc) \
-        -I$(realpath $(SRCDIR)/sc/source/filter/inc) \
-        -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-        -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(WORKDIR)/SdiTarget/sc/sdi \
-        $$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/sc/source/core/inc) \
+	-I$(realpath $(SRCDIR)/sc/source/filter/inc) \
+	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
+	-I$(realpath $(SRCDIR)/sc/inc) \
+	-I$(WORKDIR)/SdiTarget/sc/sdi \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,sc,\
-        -DSC_DLLIMPLEMENTATION \
-        -DSC_INFO_OSVERSION=\"$(OS)\" \
+	-DSC_DLLIMPLEMENTATION \
+	-DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
 $(eval $(call gb_Library_add_api,sc,\
@@ -46,34 +46,34 @@ $(eval $(call gb_Library_add_api,sc,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sc,\
-        avmedia \
-        basegfx \
-        comphelper \
-        cppu \
-        cppuhelper \
-        drawinglayer \
-        editeng \
-        for \
-        forui \
-        i18nisolang1 \
-        sal \
-        salhelper \
-        sax \
-        sb \
-        sfx \
-        sot \
-        svl \
-        svt \
-        svx \
-        svxcore \
-        tk \
-        tl \
-        ucbhelper \
-        utl \
-        vbahelper \
-        vcl \
-        xo \
-        $(gb_STDLIBS) \
+	avmedia \
+	basegfx \
+	comphelper \
+	cppu \
+	cppuhelper \
+	drawinglayer \
+	editeng \
+	for \
+	forui \
+	i18nisolang1 \
+	sal \
+	salhelper \
+	sax \
+	sb \
+	sfx \
+	sot \
+	svl \
+	svt \
+	svx \
+	svxcore \
+	tk \
+	tl \
+	ucbhelper \
+	utl \
+	vbahelper \
+	vcl \
+	xo \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
@@ -119,7 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/drawpage \
 	sc/source/core/data/drwlayer \
 	sc/source/core/data/fillinfo \
-        sc/source/core/data/funcdesc \
+    sc/source/core/data/funcdesc \
 	sc/source/core/data/global \
 	sc/source/core/data/global2 \
 	sc/source/core/data/globalx \
@@ -418,7 +418,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/undo/undodat \
 	sc/source/ui/undo/undodraw \
 	sc/source/ui/undo/undoolk \
-        sc/source/ui/undo/undorangename \
+    sc/source/ui/undo/undorangename \
 	sc/source/ui/undo/undostyl \
 	sc/source/ui/undo/undotab \
 	sc/source/ui/undo/undoutil \
@@ -554,9 +554,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
-        -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(realpath $(SRCDIR)/sc/sdi) \
-        $$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/sc/inc) \
+	-I$(realpath $(SRCDIR)/sc/sdi) \
+	$$(INCLUDE) \
 ))
 
 # vim: set noet sw=4 ts=4:
