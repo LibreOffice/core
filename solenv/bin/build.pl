@@ -78,14 +78,14 @@
 
     # This is to undo the EVIL in solenv/gbuild/BuildDirs.mk
     if ($ENV{OS_FOR_BUILD} eq 'WNT') {
-	$ENV{WORKDIR} = `cygpath -m '$ENV{WORKDIR}'`;
-	$ENV{OUTDIR} = `cygpath -m '$ENV{OUTDIR}'`;
-	$ENV{OUTDIR_FOR_BUILD} = `cygpath -m '$ENV{OUTDIR_FOR_BUILD}'`;
-	$ENV{SRCDIR} = `cygpath -m '$ENV{SRCDIR}'`;
-	chomp($ENV{WORKDIR});
-	chomp($ENV{OUTDIR});
-	chomp($ENV{OUTDIR_FOR_BUILD});
-	chomp($ENV{SRCDIR});
+        $ENV{WORKDIR} = `cygpath -m '$ENV{WORKDIR}'`;
+        $ENV{OUTDIR} = `cygpath -m '$ENV{OUTDIR}'`;
+        $ENV{OUTDIR_FOR_BUILD} = `cygpath -m '$ENV{OUTDIR_FOR_BUILD}'`;
+        $ENV{SRCDIR} = `cygpath -m '$ENV{SRCDIR}'`;
+        chomp($ENV{WORKDIR});
+        chomp($ENV{OUTDIR});
+        chomp($ENV{OUTDIR_FOR_BUILD});
+        chomp($ENV{SRCDIR});
     }
 
     my $modules_number++;
@@ -116,7 +116,7 @@
     my %alive_dependencies = ();
     my %global_deps_hash = (); # hash of dependencies of the all modules
     my %global_deps_hash_backup = (); # backup hash of external dependencies of the all modules
-    my %module_deps_hash_backup = (); # backup hash of internal dependencies for aech module
+    my %module_deps_hash_backup = (); # backup hash of internal dependencies for each module
     my @broken_modules_names = ();   # array of modules, which cannot be built further
     my @dmake_args = ();
     my %dead_parents = ();
@@ -479,13 +479,13 @@ sub get_build_list_path {
     my $possible_dir_path = $module_paths{$module}.'/prj/';
     if (-d $possible_dir_path)
     {
-	my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
-	if (-f $possible_build_list_path)
-	{
-	    $build_list_paths{$module} = $possible_build_list_path;
-	    return $possible_build_list_path;
-	};
-	print_error("There's no build.lst for $module");
+        my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
+        if (-f $possible_build_list_path)
+        {
+            $build_list_paths{$module} = $possible_build_list_path;
+            return $possible_build_list_path;
+        };
+        print_error("There's no build.lst for $module");
     };
     $dead_parents{$module}++;
     return $build_list_paths{$module};
@@ -748,10 +748,10 @@ sub store_build_list_content {
 
     if (open (BUILD_LST, $build_list_path))
     {
-	my @build_lst = <BUILD_LST>;
-	$build_lists_hash{$module} = \@build_lst;
-	close BUILD_LST;
-	return;
+        my @build_lst = <BUILD_LST>;
+        $build_lists_hash{$module} = \@build_lst;
+        close BUILD_LST;
+        return;
     };
     $dead_parents{$module}++;
 }
@@ -1148,16 +1148,16 @@ sub check_deps_hash {
                     $log_name = $module if ($log_name =~ /^\.+$/);
                     $log_name .= '.txt';
 
-		    if ( $source_config->is_gbuild($module) )
-		    {
-			$log_path = correct_path("$workdir/Logs/${module}_${log_name}");
-			$long_log_path = correct_path("$workdir/Logs/${module}_${log_name}");
-		    }
-		    else
-		    {
-			$log_path = '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
-			$long_log_path = correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
-		    }
+                    if ( $source_config->is_gbuild($module) )
+                    {
+                        $log_path = correct_path("$workdir/Logs/${module}_${log_name}");
+                        $long_log_path = correct_path("$workdir/Logs/${module}_${log_name}");
+                    }
+                    else
+                    {
+                        $log_path = '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
+                        $long_log_path = correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
+                    }
 
                     push(@possible_order, $key);
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
@@ -1165,7 +1165,7 @@ sub check_deps_hash {
                                             STATUS => 'waiting',
                                             LOG_PATH => $log_path,
                                             LONG_LOG_PATH => $long_log_path,
-					    MODULE => $module,
+                                            MODULE => $module,
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
                                             CLIENT => '-'
@@ -1825,14 +1825,14 @@ sub run_job {
 
     if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
     {
-	mkpath("$workdir/Logs");
+        mkpath("$workdir/Logs");
     }
     else
     {
-	if (!-d $log_dir)
-	{
-	    system("$perl $mkout");
-	};
+        if (!-d $log_dir)
+        {
+            system("$perl $mkout");
+        };
     }
 RETRY:
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
@@ -1845,9 +1845,9 @@ RETRY:
     {
         if ($ENV{GUI} eq 'WIN' && $retry_counter > 0)
         {
-	    $retry_counter -= 1;
+            $retry_counter -= 1;
             system('grep "Error 126\$"') && goto RETRY;
-	}
+        }
         system("echo \"log for $path\" >> $build_error_log");
         system("cat $log_file >> $build_error_log");
     }
