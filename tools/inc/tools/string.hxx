@@ -157,6 +157,7 @@ private:
                                      // Assign(sal_Char)
     ByteString&         Assign( const sal_Char* pCharStr, xub_StrLen nLen );  //not implemented, to detect use of removed methods without compiler making something to fit
     ByteString&         Assign( const sal_Char* pCharStr ); //not implemented, to detect use of removed methods without compiler making something to fit
+    ByteString&         operator =( const sal_Char* ); //not implemented, to detect use of removed methods without compiler making something to fit
     ByteString&         operator =(const sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
 
     ByteString&         Assign(sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
@@ -192,8 +193,6 @@ public:
                             { return Assign( rStr ); }
     ByteString&         operator =( const rtl::OString& rStr )
                             { return Assign( rStr ); }
-    ByteString&         operator =( const sal_Char* pCharStr )
-                            { return Assign( pCharStr ); }
 
     ByteString&         Append( const ByteString& rStr );
     ByteString&         Append( const sal_Char* pCharStr );
