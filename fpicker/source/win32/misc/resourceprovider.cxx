@@ -122,7 +122,7 @@ public:
         const SolarMutexGuard aGuard;
 
         com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
-        m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( fps_office ), aLoc );
+        m_ResMgr = new SimpleResMgr( OUString( "fps_office" ), aLoc );
     }
 
     //-------------------------------------
