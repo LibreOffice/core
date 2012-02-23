@@ -1100,9 +1100,9 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
                 aValue = String( aLine.copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
-                if (nTransPos+2 < aLine.getLength())
+                // after the second doublequote can follow a / and a translation
+                if (nTransPos < aLine.getLength() - 2)
                 {
-                    // after the second doublequote can follow a / and a translation
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+2 ), bIsGlobalizedLine );
                 }
                 // check for quoted value
