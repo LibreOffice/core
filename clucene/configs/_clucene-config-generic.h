@@ -56,12 +56,12 @@
 #define _ILONG(x) x ## L
 #define _ILONGLONG(x) x ## LL
 
-#define fileStat stat64
-#define cl_stat_t stat64
+#define fileStat stat
+#define cl_stat_t stat
 #define fileSize CL_NS(util)::Misc::filelength
-#define fileSeek lseek64
+#define fileSeek lseek
 #define fileTell(fhandle) fileSeek(fhandle, 0, SEEK_CUR)
-#define fileHandleStat fstat64
+#define fileHandleStat fstat
 #define _realpath realpath
 #define _rename rename
 #define _close close

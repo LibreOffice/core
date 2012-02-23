@@ -42,9 +42,10 @@ $(eval $(call gb_Library_set_include,clucene,\
 ))
 
 $(eval $(call gb_Library_add_defs,clucene,\
-    -Dclucene_shared_EXPORTS\
-    -Dclucene_core_EXPORTS\
-    -Dclucene_contribs_lib_EXPORTS\
+    -Dclucene_shared_EXPORTS \
+    -Dclucene_core_EXPORTS \
+    -Dclucene_contribs_lib_EXPORTS \
+    $(LFS_CFLAGS) \
 ))
 
 ifeq ($(SYSTEM_ZLIB),YES)
