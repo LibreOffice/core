@@ -168,6 +168,8 @@
 #define MID_RIGHT_BORDER            11
 #define MID_TOP_BORDER              12
 #define MID_BOTTOM_BORDER           13
+#define LINE_STYLE                  14
+#define LINE_WIDTH                  15
 
 //BrushItem
 #define MID_BACK_COLOR          0
