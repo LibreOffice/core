@@ -29,10 +29,7 @@
 #ifndef _TREEVIEW_TVREAD_HXX_
 #define _TREEVIEW_TVREAD_HXX_
 
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <ucbhelper/macros.hxx>

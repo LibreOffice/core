@@ -32,10 +32,7 @@
 #include "shell.hxx"
 #include "bc.hxx"
 #include <osl/file.hxx>
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>

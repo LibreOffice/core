@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_STL_STACK
 #include <stack>
-#define INCLUDED_STL_STACK
-#endif
-
 #include "osl/diagnose.h"
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
