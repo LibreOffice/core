@@ -1921,7 +1921,6 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_merge.mk
-.INCLUDE : tg_propmerge.mk
 .INCLUDE : tg_xmerge.mk
 
 wordcount:
