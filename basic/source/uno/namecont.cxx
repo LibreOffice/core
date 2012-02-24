@@ -768,13 +768,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             }
             catch(const Exception& )
             {
+                // Silently tolerate empty or missing files
                 xInput.clear();
-                if( nPass == 0 )
-                {
-                    SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-                    ErrorHandler::HandleError( nErrorCode );
-                }
             }
 
             // Old variant?
@@ -793,9 +788,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 catch(const Exception& )
                 {
                     xInput.clear();
-                    SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-                    ErrorHandler::HandleError( nErrorCode );
                 }
             }
 
@@ -956,11 +948,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 mbOldInfoFormat = sal_False;
 
             delete pLibArray;
-        }
-        // Only in the first pass it's an error when no index file is found
-        else if( nPass == 0 )
-        {
-            return;
         }
     }
 
