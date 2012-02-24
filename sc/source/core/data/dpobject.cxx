@@ -1971,7 +1971,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 {
     rParam.maLabelArray.clear();
 
-    ((ScDPObject*)this)->CreateObjects();
+    CreateObjects();
     if (!xSource.is())
         return false;
 
