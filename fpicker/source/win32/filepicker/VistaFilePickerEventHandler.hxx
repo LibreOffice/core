@@ -39,8 +39,8 @@
 
 #include <shobjidl.h>
 
-// Without IFileDialog we can't do this
-#ifdef __IFileDialog_INTERFACE_DEFINED__
+// Without IFileDialogCustomize we can't do this
+#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #include "comptr.hxx"
 #include "vistatypes.h"
@@ -226,7 +226,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 
 #undef css
 
-#endif // __IFileDialog_INTERFACE_DEFINED__
+#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #endif  // FPICKER_WIN32_VISTA_FILEPICKER_EVENTHANDLER_HXX
 

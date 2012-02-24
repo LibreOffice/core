@@ -65,7 +65,7 @@ static Reference< XInterface > SAL_CALL createInstance(
 {
     Reference< XInterface > xDlg;
 
-#ifdef __IFileDialog_INTERFACE_DEFINED__
+#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
     bool                    bVistaOrNewer = IsWindowsVistaOrNewer();
 
     if (bVistaOrNewer)
