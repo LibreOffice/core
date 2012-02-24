@@ -49,11 +49,7 @@ include $(GBUILDDIR)/BuildDirs.mk
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
-ifneq ($(strip $(product)),)
-gb_PRODUCT := $(true)
-else
 gb_PRODUCT := $(false)
-endif
 endif
 
 # These are useful, too, for stuff built in "custom" Makefiles

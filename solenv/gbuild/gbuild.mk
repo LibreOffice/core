@@ -78,11 +78,7 @@ include $(GBUILDDIR)/BuildDirs.mk
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
-ifneq ($(strip $(product)),)
-gb_PRODUCT := $(true)
-else
 gb_PRODUCT := $(false)
-endif
 endif
 
 ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
@@ -185,11 +181,7 @@ gb_GLOBALDEFS := \
 	$(gb_CPUDEFS) \
 
 
-ifeq ($(gb_PRODUCT),$(true))
-gb_GLOBALDEFS += \
-	-DPRODUCT \
-
-else
+ifeq ($(gb_PRODUCT),$(false))
 gb_GLOBALDEFS += \
 	-DDBG_UTIL \
 
