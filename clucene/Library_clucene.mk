@@ -54,8 +54,9 @@ $(eval $(call gb_Library_add_defs,clucene,\
 ))
 endif
 
+# clucene does not depend on sal nor needs uwinapi here
 $(eval $(call gb_Library_add_linked_libs,clucene,\
-    $(gb_STDLIBS) \
+    $(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
 
 ifeq ($(OS),LINUX)
