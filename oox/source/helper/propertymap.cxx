@@ -431,6 +431,30 @@ static void lclDumpAnyValue( Any value)
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
 }
 
+void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
+{
+    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
+    Sequence< Property > props = info->getProperties ();
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
+
+    for (int i=0; i < props.getLength (); i++) {
+        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+        fprintf (stderr,"%30s = ", name.getStr() );
+
+        try {
+            lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
+        } catch (const Exception&) {
+            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+        }
+    }
+}
+
+void PropertyMap::dump()
+{
+    dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
+}
+
 static void printLevel (int level)
 {
     for (int i=0; i<level; i++)
