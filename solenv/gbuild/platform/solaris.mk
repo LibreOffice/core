@@ -153,6 +153,11 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# Convert path to native notation
+define gb_Helper_native_path
+$(1)
+endef
+
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 
 # CObject class

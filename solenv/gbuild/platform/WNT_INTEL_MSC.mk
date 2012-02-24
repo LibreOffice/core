@@ -258,6 +258,11 @@ $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
 $(1)))))
 endef
 
+# Convert path to native notation
+define gb_Helper_native_path
+$(shell cygpath -m $(1))
+endef
+
 # YaccTarget class
 
 define gb_YaccTarget__command

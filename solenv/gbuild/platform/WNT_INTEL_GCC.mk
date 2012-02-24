@@ -109,6 +109,11 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# Convert path to native notation
+define gb_Helper_native_path
+$(1)
+endef
+
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).s
