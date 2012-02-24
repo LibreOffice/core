@@ -705,22 +705,6 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
     return UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_True );
 }
 
-sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
-                        uno::Sequence< beans::PropertyValue >& aMediaDescr )
-{
-    sal_Bool bResult = sal_False;
-
-    ::rtl::OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
-    if ( !aFilterName.isEmpty() )
-    {
-        sal_Int32 nFlags = GetFilterFlags( aFilterName );
-        // check the OWN flag
-        bResult = ( nFlags & SFX_FILTER_OWN );
-    }
-
-    return bResult;
-}
-
 //-----------------------------------------------------------
 ::rtl::OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const ::rtl::OUString& aServiceName, sal_Int32 nVersion )
 {

@@ -1008,31 +1008,6 @@ namespace basegfx
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        B2DPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rMask, const B2DPolygon& rCandidate)
-        {
-            if(rCandidate.count())
-            {
-                temporaryPointVector aTempPoints;
-                temporaryPointVector aTempPointsUnused;
-
-                for(sal_uInt32 a(0L); a < rMask.count(); a++)
-                {
-                    const B2DPolygon aPartMask(rMask.getB2DPolygon(a));
-
-                    findTouches(rCandidate, aPartMask, aTempPoints);
-                    findCuts(rCandidate, aPartMask, aTempPoints, aTempPointsUnused);
-                }
-
-                return mergeTemporaryPointsAndPolygon(rCandidate, aTempPoints);
-            }
-            else
-            {
-                return rCandidate;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd)
         {
             const sal_uInt32 nCount(rCandidate.count());
@@ -1161,22 +1136,6 @@ namespace basegfx
             }
 
             return rCandidate;
-        }
-
-        B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate)
-        {
-            if(rCandidate.count())
-            {
-                temporaryPointVector aTempPoints;
-
-                findCuts(rCandidate, aTempPoints);
-
-                return mergeTemporaryPointsAndPolygon(rCandidate, aTempPoints);
-            }
-            else
-            {
-                return rCandidate;
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////

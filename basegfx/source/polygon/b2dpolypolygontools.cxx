@@ -397,28 +397,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-                B2DPolyPolygon aRetval;
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-
-                    aRetval.append(setContinuity(aCandidate, eContinuity));
-                }
-
-                return aRetval;
-            }
-            else
-            {
-                return rCandidate;
-            }
-        }
-
         B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue)
         {
             if(0.0 != fValue)

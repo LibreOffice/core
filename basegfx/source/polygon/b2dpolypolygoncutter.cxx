@@ -657,14 +657,6 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
-        {
-            solver aSolver(rCandidate);
-            return aSolver.getB2DPolyPolygon();
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
         B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval;

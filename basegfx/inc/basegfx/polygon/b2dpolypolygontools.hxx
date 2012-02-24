@@ -179,9 +179,6 @@ namespace basegfx
         // vectors on the 1/3 resp. 2/3 distances on each segment.
         BASEGFX_DLLPUBLIC B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate);
 
-        // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity);
-
         /** Predicate whether a given poly-polygon is a rectangle.
 
             @param rPoly

@@ -476,30 +476,6 @@ namespace basegfx
             return true;
         }
 
-        B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-            B2DRange aRetval;
-
-            if(nPointCount)
-            {
-                const bool bControlPointsUsed(rCandidate.areControlPointsUsed());
-
-                for(sal_uInt32 a(0); a < nPointCount; a++)
-                {
-                    aRetval.expand(rCandidate.getB2DPoint(a));
-
-                    if(bControlPointsUsed)
-                    {
-                        aRetval.expand(rCandidate.getNextControlPoint(a));
-                        aRetval.expand(rCandidate.getPrevControlPoint(a));
-                    }
-                }
-            }
-
-            return aRetval;
-        }
-
         B2DRange getRange(const B2DPolygon& rCandidate)
         {
             // changed to use internally buffered version at B2DPolygon

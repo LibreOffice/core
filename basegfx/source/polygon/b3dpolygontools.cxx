@@ -88,27 +88,6 @@ namespace basegfx
             return rCandidate.getNormal();
         }
 
-        B2VectorOrientation getOrientation(const B3DPolygon& rCandidate)
-        {
-            B2VectorOrientation eRetval(ORIENTATION_NEUTRAL);
-
-            if(rCandidate.count() > 2L)
-            {
-                const double fSignedArea(getSignedArea(rCandidate));
-
-                if(fSignedArea > 0.0)
-                {
-                    eRetval = ORIENTATION_POSITIVE;
-                }
-                else if(fSignedArea < 0.0)
-                {
-                    eRetval = ORIENTATION_NEGATIVE;
-                }
-            }
-
-            return eRetval;
-        }
-
         double getSignedArea(const B3DPolygon& rCandidate)
         {
             double fRetval(0.0);
@@ -584,81 +563,6 @@ namespace basegfx
             }
 
             return aRetval;
-        }
-
-        bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance)
-        {
-            // build edge vector
-            const B3DVector aEdge(rEdgeEnd - rEdgeStart);
-            bool bDoDistanceTestStart(false);
-            bool bDoDistanceTestEnd(false);
-
-            if(aEdge.equalZero())
-            {
-                // no edge, just a point. Do one of the distance tests.
-                bDoDistanceTestStart = true;
-            }
-            else
-            {
-                // calculate fCut in aEdge
-                const B3DVector aTestEdge(rTestPosition - rEdgeStart);
-                const double fScalarTestEdge(aEdge.scalar(aTestEdge));
-                const double fScalarStartEdge(aEdge.scalar(rEdgeStart));
-                const double fScalarEdge(aEdge.scalar(aEdge));
-                const double fCut((fScalarTestEdge - fScalarStartEdge) / fScalarEdge);
-                const double fZero(0.0);
-                const double fOne(1.0);
-
-                if(fTools::less(fCut, fZero))
-                {
-                    // left of rEdgeStart
-                    bDoDistanceTestStart = true;
-                }
-                else if(fTools::more(fCut, fOne))
-                {
-                    // right of rEdgeEnd
-                    bDoDistanceTestEnd = true;
-                }
-                else
-                {
-                    // inside line [0.0 .. 1.0]
-                    const B3DPoint aCutPoint(interpolate(rEdgeStart, rEdgeEnd, fCut));
-                    const B3DVector aDelta(rTestPosition - aCutPoint);
-                    const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                    if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            if(bDoDistanceTestStart)
-            {
-                const B3DVector aDelta(rTestPosition - rEdgeStart);
-                const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                {
-                    return true;
-                }
-            }
-            else if(bDoDistanceTestEnd)
-            {
-                const B3DVector aDelta(rTestPosition - rEdgeEnd);
-                const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)

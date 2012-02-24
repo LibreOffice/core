@@ -50,8 +50,6 @@ namespace basegfx
         /// Transform from HSV to RGB
         BASEGFX_DLLPUBLIC BColor hsv2rgb(const BColor& rHSVColor);
 
-        /// Transform from CIE XYZ into Rec. 709 RGB (D65 white point)
-        BASEGFX_DLLPUBLIC BColor ciexyz2rgb( const BColor& rXYZColor );
         /// Transform from Rec. 709 RGB (D65 white point) into CIE XYZ
         BASEGFX_DLLPUBLIC BColor rgb2ciexyz( const BColor& rRGBColor );
 

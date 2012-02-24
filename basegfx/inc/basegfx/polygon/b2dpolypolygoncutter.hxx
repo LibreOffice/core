@@ -47,11 +47,6 @@ namespace basegfx
         // contained sub-polygons in a preparing step and to explicitly correct their orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
-        // Version for single polygons. This is for solving self-intersections. Result will be free of
-        // crossovers. When result contains multiple polygons, it may be necessary to rearrange their
-        // orientations since holes may have been created (use correctOrientations eventually).
-        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
-
         // Neutral polygons will be stripped. Neutral polygons are ones who's orientation is
         // neutral, so normally they have no volume -> just closed paths. A polygon with the same
         // positive and negative oriented volume is also neutral, so this may not be wanted. It is

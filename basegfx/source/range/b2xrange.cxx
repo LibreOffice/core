@@ -126,15 +126,6 @@ namespace basegfx
         return o_rResult;
     }
 
-    ::std::vector< B2IBox >& computeSetDifference( ::std::vector< B2IBox >& o_rResult,
-                                                   const B2IBox&            rFirst,
-                                                   const B2IBox&            rSecond )
-    {
-        doComputeSetDifference( o_rResult, rFirst, rSecond );
-
-        return o_rResult;
-    }
-
 } // end of namespace basegfx
 
 // eof

@@ -61,9 +61,6 @@ namespace basegfx
         // is none. Same for successor.
         BASEGFX_DLLPUBLIC sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const B3DPolygon& rCandidate);
 
-        // Get orientation of Polygon
-        BASEGFX_DLLPUBLIC B2VectorOrientation getOrientation(const B3DPolygon& rCandidate);
-
         // get size of polygon. Control vectors are included in that ranges.
         BASEGFX_DLLPUBLIC B3DRange getRange(const B3DPolygon& rCandidate);
 
@@ -119,12 +116,6 @@ namespace basegfx
             If bChangeY, y texture coordinate will be recalculated.
          */
         BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
-
-        // test if point is inside epsilon-range around an edge defined
-        // by the two given points. Can be used for HitTesting. The epsilon-range
-        // is defined to be the cylinder centered to the given edge, using radius
-        // fDistance, and the sphere around both points with radius fDistance.
-        BASEGFX_DLLPUBLIC bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance);
 
         // isInside tests for B3DPoint. On border is not inside as long as not true is given in bWithBorder flag.
         BASEGFX_DLLPUBLIC bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
