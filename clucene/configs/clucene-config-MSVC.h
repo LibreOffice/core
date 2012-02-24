@@ -1,26 +1,26 @@
 #ifndef _SRC_CLUCENE_CLUCENE_CONFIG_H
 #define _SRC_CLUCENE_CLUCENE_CONFIG_H 1
- 
-/* src/shared/CLucene/clucene-config.h. 
+
+/* src/shared/CLucene/clucene-config.h.
 *  Generated automatically at end of cmake.
 */
 
 /* CMake will look for these headers: */
 #define _CL_HAVE_STRING_H  1
-#define _CL_HAVE_MEMORY_H  1 
+#define _CL_HAVE_MEMORY_H  1
 /* #undef _CL_HAVE_UNISTD_H */
-#define _CL_HAVE_IO_H  1 
-#define _CL_HAVE_DIRECT_H  1 
+#define _CL_HAVE_IO_H  1
+#define _CL_HAVE_DIRECT_H  1
 /* #undef _CL_HAVE_DIRENT_H */
 /* #undef _CL_HAVE_SYS_DIR_H */
 /* #undef _CL_HAVE_SYS_NDIR_H */
-#define _CL_HAVE_ERRNO_H  1 
-#define _CL_HAVE_WCHAR_H  1 
-#define _CL_HAVE_WCTYPE_H   
-#define _CL_HAVE_CTYPE_H  1 
-#define _CL_HAVE_WINDOWS_H  1 
+#define _CL_HAVE_ERRNO_H  1
+#define _CL_HAVE_WCHAR_H  1
+#define _CL_HAVE_WCTYPE_H
+#define _CL_HAVE_CTYPE_H  1
+#define _CL_HAVE_WINDOWS_H  1
 /* #undef _CL_HAVE_WINDEF_H */
-#define _CL_HAVE_SYS_TYPES_H  1 
+#define _CL_HAVE_SYS_TYPES_H  1
 /* #undef _CL_HAVE_DLFCN_H */
 /* #undef _CL_HAVE_EXT_HASH_MAP */
 /* #undef _CL_HAVE_EXT_HASH_SET */
@@ -29,8 +29,8 @@
 /* #undef _CL_HAVE_HASH_MAP */
 /* #undef _CL_HAVE_HASH_SET */
 /* #undef _CL_HAVE_NDIR_H */
-#define _CL_HAVE_SYS_STAT_H  1 
-#define _CL_HAVE_SYS_TIMEB_H  1 
+#define _CL_HAVE_SYS_STAT_H  1
+#define _CL_HAVE_SYS_TIMEB_H  1
 /* #undef _CL_HAVE_SYS_TIME_H */
 #define _CL_HAVE_TCHAR_H 1
 /* #undef _CL_HAVE_SYS_MMAN_H */
@@ -64,7 +64,7 @@ typedef unsigned long _cl_dword_t;
 /* #undef _CL_HAVE_PTHREAD */
 
 /* Define if you have Win32 threads libraries and header files. */
-#define _CL_HAVE_WIN32_THREADS  1 
+#define _CL_HAVE_WIN32_THREADS  1
 
 /* Define if we have gcc atomic functions */
 /* #undef _CL_HAVE_GCC_ATOMIC_FUNCTIONS */
@@ -73,13 +73,13 @@ typedef unsigned long _cl_dword_t;
 /* #undef _FLT_EVAL_METHOD */
 
 /* If we use hashmaps, which namespace do we use: */
-#define CL_NS_HASHING(func) 
+#define CL_NS_HASHING(func)
 /* If we use hashmaps, which classes do we use: */
-#define _CL_HASH_MAP 
-#define _CL_HASH_SET 
+#define _CL_HASH_MAP
+#define _CL_HASH_SET
 
 /* define if the compiler implements namespaces */
-#define _CL_HAVE_NAMESPACES   
+#define _CL_HAVE_NAMESPACES
 
 /* Defined if the snprintf overflow test fails */
 /* #undef _CL_HAVE_SNPRINTF_BUG */
@@ -103,7 +103,7 @@ typedef unsigned long _cl_dword_t;
 //not actually used for anything...
 /* #undef _CL_TIME_WITH_SYS_TIME */
 
-/* Define that we will be using -fvisibility=hidden, and 
+/* Define that we will be using -fvisibility=hidden, and
  * make public classes visible using __attribute__ ((visibility("default")))
  */
 /* #undef _CL_HAVE_GCCVISIBILITYPATCH */
@@ -112,7 +112,7 @@ typedef unsigned long _cl_dword_t;
 /* Versions, etc */
 
 /* Name of package */
-#define _CL_PACKAGE  "clucene-core" 
+#define _CL_PACKAGE  "clucene-core"
 
 /* Version number of package */
 #define _CL_VERSION  "2.3.3.4"

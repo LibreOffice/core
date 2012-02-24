@@ -1,7 +1,7 @@
 #ifndef _SRC_CLUCENE_INTERNAL_CLUCENE_CONFIG_H
 #define _SRC_CLUCENE_INTERNAL_CLUCENE_CONFIG_H 1
- 
-/* src/shared/CLucene/_clucene-config.h. 
+
+/* src/shared/CLucene/_clucene-config.h.
 *  Generated automatically at end of cmake.
 *  These are internal definitions, and this file does not need to be distributed
 */
@@ -10,16 +10,16 @@
 #define _CL_HAVE_FUNCTION__VSNWPRINTF
 #define _CL_HAVE_FUNCTION__SNWPRINTF
 /* #undef _CL_HAVE_FUNCTION_WCSCASECMP */
-#define _CL_HAVE_FUNCTION_WCSCAT  1 
-#define _CL_HAVE_FUNCTION_WCSCHR  1 
-#define _CL_HAVE_FUNCTION_WCSCMP  1 
-#define _CL_HAVE_FUNCTION_WCSCPY  1 
-#define _CL_HAVE_FUNCTION_WCSCSPN  1 
+#define _CL_HAVE_FUNCTION_WCSCAT  1
+#define _CL_HAVE_FUNCTION_WCSCHR  1
+#define _CL_HAVE_FUNCTION_WCSCMP  1
+#define _CL_HAVE_FUNCTION_WCSCPY  1
+#define _CL_HAVE_FUNCTION_WCSCSPN  1
 #define _CL_HAVE_FUNCTION_WCSICMP
-#define _CL_HAVE_FUNCTION_WCSLEN  1 
-#define _CL_HAVE_FUNCTION_WCSNCMP  1 
-#define _CL_HAVE_FUNCTION_WCSNCPY  1 
-#define _CL_HAVE_FUNCTION_WCSSTR  1 
+#define _CL_HAVE_FUNCTION_WCSLEN  1
+#define _CL_HAVE_FUNCTION_WCSNCMP  1
+#define _CL_HAVE_FUNCTION_WCSNCPY  1
+#define _CL_HAVE_FUNCTION_WCSSTR  1
 #define _CL_HAVE_FUNCTION_WCSTOD 1
 #define _CL_HAVE_FUNCTION_WCSDUP 1
 /* #undef _CL_HAVE_FUNCTION_WCSTOLL */
@@ -29,7 +29,7 @@
 
 /* #undef _CL_HAVE_FUNCTION_LLTOA */
 /* #undef _CL_HAVE_FUNCTION_LLTOW */
-#define _CL_HAVE_FUNCTION_PRINTF  1 
+#define _CL_HAVE_FUNCTION_PRINTF  1
 /* #undef _CL_HAVE_FUNCTION_SNPRINTF */
 /* #undef _CL_HAVE_FUNCTION_MMAP */
 #define _CL_HAVE_FUNCTION_STRLWR 1

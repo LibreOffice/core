@@ -1,36 +1,36 @@
 #ifndef _SRC_CLUCENE_CLUCENE_CONFIG_H
 #define _SRC_CLUCENE_CLUCENE_CONFIG_H 1
- 
-/* src/shared/CLucene/clucene-config.h. 
+
+/* src/shared/CLucene/clucene-config.h.
 *  Generated automatically at end of cmake.
 */
 
 /* CMake will look for these headers: */
 #define _CL_HAVE_STRING_H  1
-#define _CL_HAVE_MEMORY_H  1 
-#define _CL_HAVE_UNISTD_H  1 
+#define _CL_HAVE_MEMORY_H  1
+#define _CL_HAVE_UNISTD_H  1
 /* #undef _CL_HAVE_IO_H */
 /* #undef _CL_HAVE_DIRECT_H */
-#define _CL_HAVE_DIRENT_H  1 
+#define _CL_HAVE_DIRENT_H  1
 #define _CL_HAVE_SYS_DIR_H
 /* #undef _CL_HAVE_SYS_NDIR_H */
-#define _CL_HAVE_ERRNO_H  1 
-#define _CL_HAVE_WCHAR_H  1 
-#define _CL_HAVE_WCTYPE_H   
-#define _CL_HAVE_CTYPE_H  1 
+#define _CL_HAVE_ERRNO_H  1
+#define _CL_HAVE_WCHAR_H  1
+#define _CL_HAVE_WCTYPE_H
+#define _CL_HAVE_CTYPE_H  1
 /* #undef _CL_HAVE_WINDOWS_H */
 /* #undef _CL_HAVE_WINDEF_H */
-#define _CL_HAVE_SYS_TYPES_H  1 
+#define _CL_HAVE_SYS_TYPES_H  1
 /* #undef _CL_HAVE_DLFCN_H */
-#define _CL_HAVE_EXT_HASH_MAP  1 
+#define _CL_HAVE_EXT_HASH_MAP  1
 /* #undef _CL_HAVE_EXT_HASH_SET */
-#define _CL_HAVE_TR1_UNORDERED_MAP 1 
-#define _CL_HAVE_TR1_UNORDERED_SET  1 
+#define _CL_HAVE_TR1_UNORDERED_MAP 1
+#define _CL_HAVE_TR1_UNORDERED_SET  1
 #define _CL_HAVE_HASH_MAP
 #define _CL_HAVE_HASH_SET
 /* #undef _CL_HAVE_NDIR_H */
-#define _CL_HAVE_SYS_STAT_H  1 
-#define _CL_HAVE_SYS_TIMEB_H  1 
+#define _CL_HAVE_SYS_STAT_H  1
+#define _CL_HAVE_SYS_TIMEB_H  1
 #define _CL_HAVE_SYS_TIME_H 1
 /* #undef _CL_HAVE_TCHAR_H */
 #define _CL_HAVE_SYS_MMAN_H 1
@@ -61,7 +61,7 @@ typedef  wchar_t TCHAR;
 /* #undef LUCENE_DISABLE_HASHING */
 
 /* Define if you have POSIX threads libraries and header files. */
-#define _CL_HAVE_PTHREAD  1 
+#define _CL_HAVE_PTHREAD  1
 
 /* Define if you have Win32 threads libraries and header files. */
 /* #undef _CL_HAVE_WIN32_THREADS */
@@ -79,7 +79,7 @@ typedef  wchar_t TCHAR;
 #define _CL_HASH_SET unordered_set
 
 /* define if the compiler implements namespaces */
-#define _CL_HAVE_NAMESPACES   
+#define _CL_HAVE_NAMESPACES
 
 /* Defined if the snprintf overflow test fails */
 /* #undef _CL_HAVE_SNPRINTF_BUG */
@@ -101,9 +101,9 @@ typedef  wchar_t TCHAR;
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 //not actually used for anything...
-//#define _CL_TIME_WITH_SYS_TIME  1 
+//#define _CL_TIME_WITH_SYS_TIME  1
 
-/* Define that we will be using -fvisibility=hidden, and 
+/* Define that we will be using -fvisibility=hidden, and
  * make public classes visible using __attribute__ ((visibility("default")))
  */
 #define _CL_HAVE_GCCVISIBILITYPATCH 1
@@ -112,7 +112,7 @@ typedef  wchar_t TCHAR;
 /* Versions, etc */
 
 /* Name of package */
-#define _CL_PACKAGE  "clucene-core" 
+#define _CL_PACKAGE  "clucene-core"
 
 /* Version number of package */
 #define _CL_VERSION  "2.3.3.4"
