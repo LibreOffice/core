@@ -77,8 +77,26 @@ gb_SYMBOL := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
+include $(GBUILDDIR)/Tempfile.mk
 
 # Include platform/cpu/compiler specific config/definitions
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
+
+ifeq ($(SYSTEM_PYTHON),YES)
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
+else ifeq ($(OS),MACOSX)
+#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
+#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
+#dirs for in-tree internal python
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
+else ifeq ($(DISABLE_PYTHON),TRUE)
+# Build-time python
+gb_PYTHON := python
+else
+gb_PYTHONTARGET := $(OUTDIR)/bin/python
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+endif
 
 # vim: set noet sw=4 ts=4:
