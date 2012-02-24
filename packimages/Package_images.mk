@@ -29,11 +29,9 @@ $(eval $(call gb_Package_Package,packimages_images,$(WORKDIR)/CustomTarget/packi
 
 $(eval $(call gb_Package_add_customtarget,packimages_images,packimages/pack))
 
-# hack to rerun custom target's makefile every time
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,packimages/pack,\
-	packimages_rerun \
+	$(gb_Helper_PHONY) \
 ))
-packimages_rerun:
 
 $(eval $(call gb_Package_add_file,packimages_images,bin/images.zip,images.zip))
 
