@@ -82,6 +82,7 @@ gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_Extension_get_target = $(WORKDIR)/Extension/$(1).oxt
+gb_Extension_get_rootdir = $(WORKDIR)/Extension/$(1)/root
 gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExternalLib_get_workdir = $(WORKDIR)/ExternalLib/$(1)
 gb_ExternalLib_get_builddir = $(WORKDIR)/ExternalLib/$(1)/build

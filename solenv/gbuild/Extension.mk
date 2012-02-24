@@ -45,6 +45,17 @@ gb_Extension_HELPEXCOMMAND := \
 # does not contain en-US because it is special cased in gb_Extension_Extension
 gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 
+# Substitute platform or copy if no platform has been set
+define gb_Extension__subst_platform
+$(if $(PLATFORM),\
+	sed \
+		-e 's/@PLATFORM@/$(PLATFORM)/' \
+		-e 's/@EXEC_EXTENSION@/$(gb_Executable_EXT)/' \
+		-e 's/@SHARED_EXTENSION@/$(gb_Library_DLLEXT)/' \
+		$(1) > $(2),\
+	cp -f $(1) $(2))
+endef
+
 # remove extension directory in workdir and oxt file in workdir and outdir
 $(call gb_Extension_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),OXT,3)
@@ -78,11 +89,12 @@ $(call gb_Extension_get_target,%) : \
 		$(call gb_Extension_get_workdir,%)/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
-		mkdir -p $(call gb_Extension_get_workdir,$*)/META-INF \
-			$(call gb_Extension_get_workdir,$*)/registration && \
-		cp -f $(MANIFEST) $(call gb_Extension_get_workdir,$*)/META-INF && \
-		cp -f $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) $(call gb_Extension_get_workdir,$*)/registration && \
-		cd $(call gb_Extension_get_workdir,$*) && \
+		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
+			$(call gb_Extension_get_rootdir,$*)/registration && \
+		$(call gb_Extension__subst_platform,$(call gb_Extension_get_workdir,$*)/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \
+		$(call gb_Extension__subst_platform,$(MANIFEST),$(call gb_Extension_get_rootdir,$*)/META-INF/manifest.xml) && \
+		cp -f $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) $(call gb_Extension_get_rootdir,$*)/registration && \
+		cd $(call gb_Extension_get_rootdir,$*) && \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync \
 			$(call gb_Extension_get_target,$*) \
 			$(FILES) \
@@ -100,6 +112,7 @@ $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml registr
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_Extension_get_target,$(1)) : MANIFEST := $(SRCDIR)/$(2)/manifest.xml
 $(call gb_Extension_get_target,$(1)) : $$(MANIFEST)
+$(call gb_Extension_get_target,$(1)) : PLATFORM :=
 $(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_Extension_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
@@ -119,12 +132,20 @@ $(call gb_Extension_get_target,$(1)) : MANIFEST := $(2)
 
 endef
 
+# Set platform.
+#
+# Only use this if the extension is platform-dependent.
+define gb_Extension_set_platform
+$(call gb_Extension_get_target,$(1)) : PLATFORM := $(2)
+
+endef
+
 # adding a file creates a dependency to it
 # file is copied to $(WORKDIR)
 define gb_Extension_add_file
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
-$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
-$(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
+$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
 
@@ -149,8 +170,8 @@ $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_
 $(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_SDFLOCATION)/$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_target,$(1)) : $$(SDF2)
 endif
-$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
-$(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
+$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
@@ -172,8 +193,8 @@ endif
 endef
 
 define gb_Extension_localize_help_onelang
-$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
-$(call gb_Extension_get_workdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
+$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@)
 	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF3)
