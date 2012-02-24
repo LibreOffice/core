@@ -71,14 +71,18 @@
 //
 
 #ifdef GRLAYOUT_DEBUG
-static FILE * grLogFile = NULL;
 static FILE * grLog()
 {
 #ifdef WNT
-    std::string logFileName(getenv("TEMP"));
-    logFileName.append("/graphitelayout.log");
-    if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
-    else fflush(grLogFile);
+    static FILE * grLogFile = NULL;
+    if (grLogFile == NULL)
+    {
+        std::string logFileName(getenv("TEMP"));
+        logFileName.append("/graphitelayout.log");
+        grLogFile = fopen(logFileName.c_str(),"w");
+    }
+    else
+        fflush(grLogFile);
     return grLogFile;
 #else
     fflush(stdout);
@@ -399,7 +403,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             mvGlyphs[i].maLinearPos.X() -= nXOffset;
     }
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(), "fillFrom %d glyphs offset %ld width %d\n", mvGlyphs.size(), nXOffset, mnWidth);
+    fprintf(grLog(), "fillFrom %" SAL_PRI_SIZET " glyphs offset %ld width %ld\n", mvGlyphs.size(), nXOffset, mnWidth);
 #endif
 }
 
