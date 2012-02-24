@@ -6145,7 +6145,7 @@
 								<xsl:with-param name="rows" select="ss:Table/ss:Rows[@ss:Span]"/>
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:value-of select="count(ss:Table/ss:Row + number($spannedRows))"/>
+						<xsl:value-of select="count(ss:Table/ss:Row) + number($spannedRows)"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="count(ss:Table/ss:Row)"/>
