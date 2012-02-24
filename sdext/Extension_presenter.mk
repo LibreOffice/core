@@ -25,7 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
+
 $(eval $(call gb_Extension_Extension,presenter-screen,sdext/source/presenter))
+
+$(eval $(call gb_Extension_set_platform,presenter-screen,$(sdext_PLATFORM)))
 
 $(eval $(call gb_Extension_set_manifest,presenter-screen,$(WORKDIR)/CustomTarget/sdext/source/presenter/manifest.xml))
 
