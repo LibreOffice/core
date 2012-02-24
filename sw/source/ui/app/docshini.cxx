@@ -401,7 +401,6 @@ void SwDocShell::InitDefaultFontAttr( SwDoc* pDoc )
     };
 
     SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
-    SfxPrinter* pPrt = pDoc->getPrinter( false );
     String sEntry;
 
     for(sal_uInt8 i = 0; i < 3; i++)
