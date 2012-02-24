@@ -478,6 +478,8 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
         ScDPLabelData* p = GetLabelData(fData.mnCol);
         OUString aStr = p->maLayoutName;
         sal_uInt16 nMask = fData.mnFuncMask;
+        if (nMask == PIVOT_FUNC_NONE)
+            nMask = PIVOT_FUNC_SUM; // Use SUM by default.
         if (aStr.isEmpty())
         {
             aStr = GetFuncString(nMask);
