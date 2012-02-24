@@ -2118,8 +2118,9 @@ XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
         XclImpChDataFormatMap::iterator itr = maPointFmts.lower_bound(nPointIdx);
         if (itr == maPointFmts.end() || maPointFmts.key_comp()(nPointIdx, itr->first))
         {
-            // No object exists at this point index position.  Insert a new one.
-            XclImpChDataFormatRef p(new XclImpChDataFormat(GetChRoot()));
+            // No object exists at this point index position.  Insert a new
+            // placeholder.
+            XclImpChDataFormatRef p;
             itr = maPointFmts.insert(itr, XclImpChDataFormatMap::value_type(nPointIdx, p));
         }
         return &itr->second;
