@@ -83,8 +83,6 @@ struct XclTracerDetails
 
 // ============================================================================
 
-class MSFilterTracer;
-
 /** This class wraps an MSFilterTracer to create trace logs for import/export filters. */
 class XclTracer
 {
@@ -129,12 +127,7 @@ public:
     void                        TraceObjectNotPrintable();
     void                        TraceDVType(bool bType);
 
-    /** Returns the SVX filter tracer for usage in external code (i.e. Escher). */
-    inline MSFilterTracer&      GetBaseTracer() { return *mpTracer; }
-
 private:
-    typedef ::std::auto_ptr< MSFilterTracer > MSFilterTracerPtr;
-    MSFilterTracerPtr           mpTracer;
     bool                        mbEnabled;
     typedef ::std::vector< bool >     BoolVec;
     /** array of flags corresponding to each entry in the XclTracerDetails table. */

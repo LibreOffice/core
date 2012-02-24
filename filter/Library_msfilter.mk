@@ -64,7 +64,6 @@ $(eval $(call gb_Library_add_exception_objects,msfilter,\
 	filter/source/msfilter/eschesdo \
 	filter/source/msfilter/mscodec \
 	filter/source/msfilter/msdffimp \
-	filter/source/msfilter/msfiltertracer \
 	filter/source/msfilter/msocximex \
 	filter/source/msfilter/msoleexp \
 	filter/source/msfilter/mstoolbar \

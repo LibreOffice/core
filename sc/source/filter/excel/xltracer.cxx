@@ -29,7 +29,7 @@
 
 // ============================================================================
 #include "xltracer.hxx"
-#include <filter/msfilter/msfiltertracer.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include "address.hxx"
 
 using ::rtl::OUString;
@@ -83,29 +83,18 @@ XclTracer::XclTracer( const String& rDocUrl, const OUString& rConfigPath ) :
     Sequence< PropertyValue > aConfigData( 1 );
     aConfigData[ 0 ].Name = CREATE_OUSTRING( "DocumentURL" );
     aConfigData[ 0 ].Value <<= OUString( rDocUrl );
-    mpTracer.reset( new MSFilterTracer( rConfigPath, &aConfigData ) );
-    mpTracer->StartTracing();
-    mbEnabled = mpTracer->IsEnabled();
 }
 
 XclTracer::~XclTracer()
 {
-    mpTracer->EndTracing();
 }
 
 void XclTracer::AddAttribute( const OUString& rName, const OUString& rValue )
 {
-    if( mbEnabled )
-        mpTracer->AddAttribute( rName, rValue );
 }
 
 void XclTracer::Trace( const OUString& rElementID, const OUString& rMessage )
 {
-    if( mbEnabled )
-    {
-        mpTracer->Trace( rElementID, rMessage );
-        mpTracer->ClearAttributes();
-    }
 }
 
 void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )

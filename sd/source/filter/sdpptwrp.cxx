@@ -39,7 +39,6 @@
 #include "ppt/pptin.hxx"
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
-#include <filter/msfilter/msfiltertracer.hxx>
 
 // --------------
 // - Namespaces -

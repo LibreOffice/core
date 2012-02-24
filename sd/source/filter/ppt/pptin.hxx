@@ -33,7 +33,6 @@
 #include <svx/msdffdef.hxx>
 #include <diadef.h>
 #include <svx/svdtypes.hxx>
-#include <filter/msfilter/msfiltertracer.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <boost/shared_ptr.hpp>
 
@@ -97,7 +96,7 @@ class SdPPTImport
 
     public:
 
-        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed, MSFilterTracer* pTracer = NULL );
+        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
         ~SdPPTImport();
 
         sal_Bool Import();

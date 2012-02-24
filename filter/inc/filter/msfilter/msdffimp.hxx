@@ -37,7 +37,6 @@
 #include <tools/gen.hxx>
 #include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
-#include <filter/msfilter/msfiltertracer.hxx>
 #include <vcl/graph.hxx>
 #include <string.h>
 #include <map>
@@ -576,7 +575,6 @@ public:
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
 
-    MSFilterTracer*     mpTracer;
     sal_Bool            mbTracing;
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
@@ -619,12 +617,11 @@ public:
                      long      nApplicationScale    =  0,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
                      sal_uLong     nDefaultFontHeight_  = 24,
-                     SvStream* pStData2_            =  0,
-                     MSFilterTracer* pTracer        = NULL );
+                     SvStream* pStData2_            =  0 );
 
     // in PPT werden die Parameter DGGContainerOffset und PicStream
     // mit Hilfe einer Init Routine Uebergeben.
-    SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL, MSFilterTracer* pTracer );
+    SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL );
     void InitSvxMSDffManager(sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags);
     void SetDgContainer( SvStream& rSt );
 

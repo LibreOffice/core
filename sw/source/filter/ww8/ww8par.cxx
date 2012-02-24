@@ -310,8 +310,7 @@ Sttb::getStringAtIndex( sal_uInt32 index )
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
-        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm,
-        rRdr.maTracer.GetTrace()),
+        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm),
     rReader(rRdr), pFallbackStream(0)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );

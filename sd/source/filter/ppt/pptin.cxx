@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*	 -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +112,7 @@ lcl_getUnoCtx()
     return aCtx.getUNOContext();
 }
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {
 
     sal_uInt32 nImportFlags = 0;
@@ -144,7 +144,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     delete pSummaryInformation;
 #endif
 
-    PowerPointImportParam aParam( rDocStream, nImportFlags, pTracer );
+    PowerPointImportParam aParam( rDocStream, nImportFlags );
     SvStream* pCurrentUserStream = rStorage.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
@@ -761,9 +761,6 @@ sal_Bool ImplSdPPTImport::Import()
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
                 {
-                    if ( mbTracing )
-                        mpTracer->AddAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
-
                     while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
                         DffRecordHeader aHd;
@@ -839,8 +836,6 @@ sal_Bool ImplSdPPTImport::Import()
                         }
                         aHd.SeekToEndOfRecord( rStCtrl );
                     }
-                    if ( mbTracing )
-                        mpTracer->RemoveAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )) );
                 }
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
@@ -2728,13 +2723,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT( const ::rtl::OUStri
 {
     sal_Bool bRet = sal_False;
 
-    MSFilterTracer aTracer( rConfigPath, pConfigData );
-    aTracer.StartTracing();
-
-    SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium, &aTracer );
+    SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium );
     bRet = pImport->Import();
 
-    aTracer.EndTracing();
     delete pImport;
 
     return bRet;

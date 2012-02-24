@@ -31,7 +31,6 @@
 
 #include <rtl/ustring.hxx>      //rtl::OUString
 
-class MSFilterTracer;
 class SfxMedium;
 
 namespace sw
@@ -71,12 +70,10 @@ namespace sw
         class Tracer
         {
         private:
-            MSFilterTracer *mpTrace;
             rtl::OUString GetContext(Environment eContext) const;
             rtl::OUString GetDetails(Environment eContext) const;
         public:
             Tracer(const SfxMedium &rMedium);
-            MSFilterTracer *GetTrace() const { return mpTrace; }
             void EnterEnvironment(Environment eContext);
             void EnterEnvironment(Environment eContext,
                 const rtl::OUString &rDetails);

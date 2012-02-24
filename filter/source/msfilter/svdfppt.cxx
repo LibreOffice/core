@@ -165,10 +165,9 @@ using namespace drawing             ;
 using namespace container           ;
 using namespace table               ;
 
-PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags, MSFilterTracer* pT ) :
+PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags ) :
     rDocStream      ( rDocStrm ),
-    nImportFlags    ( nFlags ),
-    pTracer         ( pT )
+    nImportFlags    ( nFlags )
 {
 }
 
@@ -520,7 +519,7 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 };
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
-    SvxMSDffManager         ( rParam.rDocStream, rBaseURL, rParam.pTracer ),
+    SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
@@ -2146,9 +2145,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetPitch( pFont->ePitch );
                 aFont.SetHeight( 100 );
 
-                if ( mbTracing && !pFont->bAvailable )
-                    mpTracer->Trace( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sd1000" )), pFont->aName );
-
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset
                 if ( pFont->aName.EqualsIgnoreCaseAscii( "Wingdings" ) ||
@@ -2740,12 +2736,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
     {
-        if ( mbTracing )
-            mpTracer->AddAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
-                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )),
-                                    rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
-
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
         ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
@@ -2935,10 +2925,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
-        if ( mbTracing )
-            mpTracer->RemoveAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                        ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
-                                        : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )) );
     }
     rStCtrl.Seek( nMerk );
 }

@@ -4493,11 +4493,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if( pShapeId )
         *pShapeId = aObjData.nShapeId;
 
-    if ( mbTracing )
-        mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
-                                ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
-                                : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )),
-                                rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
     aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bOpt )
     {
@@ -5056,10 +5051,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
     }
 
-    if ( mbTracing )
-        mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
-                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
-                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )) );
     return pRet;
 }
 
@@ -5786,8 +5777,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  long      nApplicationScale,
                                  ColorData mnDefaultColor_,
                                  sal_uLong     nDefaultFontHeight_,
-                                 SvStream* pStData2_,
-                                 MSFilterTracer* pTracer )
+                                 SvStream* pStData2_ )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
      pBLIPInfos( new SvxMSDffBLIPInfos  ),
@@ -5807,14 +5797,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
      mnDefaultColor( mnDefaultColor_),
-     mpTracer( pTracer ),
      mbTracing( sal_False )
 {
-    if ( mpTracer )
-    {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
-        aAny >>= mbTracing;
-    }
     SetModel( pSdrModel_, nApplicationScale );
 
     // FilePos des/der Stream(s) merken
@@ -5840,7 +5824,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
         pStData->Seek( nOldPosData );
 }
 
-SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MSFilterTracer* pTracer )
+SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
@@ -5858,14 +5842,8 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
      mnDefaultColor( COL_DEFAULT ),
-     mpTracer( pTracer ),
      mbTracing( sal_False )
 {
-    if ( mpTracer )
-    {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
-        aAny >>= mbTracing;
-    }
     SetModel( NULL, 0 );
 }
 
