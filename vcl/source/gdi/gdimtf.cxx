@@ -1778,25 +1778,10 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_FLOATTRANSPARENT_ACTION ):
         {
             MetaFloatTransparentAction* pAct = (MetaFloatTransparentAction*) pAction;
-            GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
-            // get the bound rect of the contained metafile
-            Rectangle aRect( aTransMtf.GetBoundRect( i_rReference ) );
-            // scale the rect now on the assumption that the correct top left of the metafile
-            // (not its bounds !) is (0,0)
-            Size aPSize( aTransMtf.GetPrefSize() );
-            aPSize = aMapVDev.LogicToLogic( aPSize, aTransMtf.GetPrefMapMode(), aMapVDev.GetMapMode() );
-            Size aActSize( pAct->GetSize() );
-            double fX = double(aActSize.Width())/double(aPSize.Width());
-            double fY = double(aActSize.Height())/double(aPSize.Height());
-            aRect.Left()   = long(double(aRect.Left())*fX);
-            aRect.Right()  = long(double(aRect.Right())*fX);
-            aRect.Top()    = long(double(aRect.Top())*fY);
-            aRect.Bottom() = long(double(aRect.Bottom())*fY);
-
-            // transform the rect to current VDev state
-            aRect = aMapVDev.LogicToLogic( aRect, aTransMtf.GetPrefMapMode(), aMapVDev.GetMapMode() );
-
-            ImplActionBounds( aBound, aRect, aClipStack, 0 );
+            // MetaFloatTransparentAction is defined limiting it's content Metafile
+            // to it's geometry definition(Point, Size), so use these directly
+            const Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
