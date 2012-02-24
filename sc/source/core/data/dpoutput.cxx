@@ -54,6 +54,7 @@
 #include "unonames.hxx"
 #include "sc.hrc"
 #include "stringutil.hxx"
+#include "dputil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
@@ -1481,7 +1482,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
 //  helper functions for ScDPOutput::GetPivotData
 //
 
-bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const String& rSourceName, const String& rGivenName )
+bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const rtl::OUString& rSourceName, const rtl::OUString& rGivenName )
 {
     // match one of the names, ignoring case
     return ScGlobal::GetpTransliteration()->isEqual( rTarget.maFieldName, rSourceName ) ||
@@ -1740,13 +1741,10 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                 {
                     // Asterisks are added in ScDPSaveData::WriteToSource to create unique names.
                     //! preserve original name there?
-                    String aSourceName( aResultEntry.Name );
-                    aSourceName.EraseTrailingChars( '*' );
+                    rtl::OUString aSourceName = ScDPUtil::getSourceDimensionName(aResultEntry.Name);
 
-                    String aGivenName( aResultEntry.Caption );  //! Should use a stored name when available
-                    aGivenName.EraseLeadingChars( '\'' );
-
-                    rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                    rResult[j] = lcl_IsNamedDataField(
+                        rTarget, aSourceName, aResultEntry.Caption);
                 }
             }
             else if ( bHasFilter )

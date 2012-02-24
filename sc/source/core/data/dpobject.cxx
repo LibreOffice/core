@@ -52,6 +52,7 @@
 #include "dpglobal.hxx"
 #include "globstr.hrc"
 #include "queryentry.hxx"
+#include "dputil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -2016,7 +2017,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
             xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FIELD_SUBTOTALNAME)), OUString());
 
         bool bIsValue = true;                               //! check
-        aFieldName = comphelper::string::stripEnd(aFieldName, sal_Unicode('*'));
+        aFieldName = ScDPUtil::getSourceDimensionName(aFieldName);
 
         std::auto_ptr<ScDPLabelData> pNewLabel(
             new ScDPLabelData(aFieldName, static_cast<SCCOL>(nDim), bIsValue));

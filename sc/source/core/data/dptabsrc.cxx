@@ -58,6 +58,7 @@
 #include "miscuno.hxx"
 #include "unonames.hxx"
 #include "dpitemdata.hxx"
+#include "dputil.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -824,10 +825,9 @@ void ScDPSource::CreateRes_Impl()
 
         aDataNames[i] = pDim->getName();
 
-        //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
         //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
-        aDataNames[i] = comphelper::string::removeTrailingChars(aDataNames[i], '*');
+        aDataNames[i] = ScDPUtil::getSourceDimensionName(aDataNames[i]);
 
         //! if the name is overridden by user, a flag must be set
         //! so the user defined name replaces the function string and field name.
