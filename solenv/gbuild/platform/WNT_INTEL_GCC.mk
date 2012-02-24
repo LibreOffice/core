@@ -102,14 +102,6 @@ gb_STDLIBS := \
 
 # Helper class
 
-# For LibreOffice, MinGW is always cross-compilation, so the "native"
-# platform for the BUILD *is* Unix. No Cygwin/Win32 stuff needed.
-
-gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
-gb_Helper_WORKDIR_NATIVE := $(WORKDIR)
-gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
-gb_Helper_REPODIR_NATIVE := $(REPODIR)
-
 # Convert parameters filesystem root to native notation
 # does some real work only on Windows, and this file is for
 # cross-compilation.
@@ -440,7 +432,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_WinResTarget_get_dep_target,$(1)))
 endef
 else

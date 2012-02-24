@@ -30,7 +30,7 @@
 define gb_CustomTarget__command
 +$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
-	O='$(OUTDIR)' R='$(REPODIR)' S='$(SRCDIR)' W='$(WORKDIR)' gb_AWK='$(gb_AWK)' \
+	O='$(OUTDIR)' S='$(SRCDIR)' W='$(WORKDIR)' gb_AWK='$(gb_AWK)' \
 	gb_XSLTPROC='$(gb_XSLTPROC)' GBUILDDIR='$(GBUILDDIR)' SRCDIR='$(SRCDIR)' \
 	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
 	touch $(1))

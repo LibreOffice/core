@@ -41,10 +41,9 @@ $(gb_Helper_MISCDUMMY) :
 	@mkdir -p $(dir $@) && touch $@
 
 define gb_Helper_abbreviate_dirs
-R=$(REPODIR) && \
-$(subst $(REPODIR)/,$$R/,S=$(SRCDIR) && \
+S=$(SRCDIR) && \
 $(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1)))))
+$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 
 define gb_Helper_abbreviate_dirs_native

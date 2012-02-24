@@ -53,6 +53,4 @@ override OUTDIR_FOR_BUILD := $(shell cygpath -u $(OUTDIR_FOR_BUILD))
 override SRCDIR := $(shell cygpath -u $(SRCDIR))
 endif
 
-REPODIR := $(patsubst %/,%,$(dir $(SRCDIR)))
-
 # vim: set noet sw=4:

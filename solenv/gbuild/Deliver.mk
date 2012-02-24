@@ -40,7 +40,7 @@ gb_Deliver_DELIVERABLES_INDEX :=
 endef
 
 define gb_Deliver_register_deliverable
-gb_Deliver_DELIVERABLES_$(notdir $(3)) += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
+gb_Deliver_DELIVERABLES_$(notdir $(3)) += $(2):$(1)
 gb_Deliver_DELIVERABLES_INDEX := $(sort $(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
 $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 
@@ -49,7 +49,7 @@ endef
 define gb_Deliver_add_deliverable
 $$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
 ifeq ($(MAKECMDGOALS),showdeliverables)
-$(call gb_Deliver_register_deliverable,$(OUTDIR)/$(1),$(2),$(3))
+$(call gb_Deliver_register_deliverable,$(1),$(2),$(3))
 endif
 
 endef
@@ -71,13 +71,13 @@ $(if $(1),$(call gb_Deliver__deliver,$(1),$(2)),\
 endef
 
 define gb_Deliver_print_deliverable
-$(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
+$(info $(1) $(2))
 endef
 
 showdeliverables :
 	$(eval MAKEFLAGS := s)
 	$(foreach deliverable,$(sort $(foreach list,$(gb_Deliver_DELIVERABLES_INDEX),$(gb_Deliver_DELIVERABLES_$(list)))),\
-			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
+			$(call gb_Deliver_print_deliverable,$(firstword $(subst :, ,$(deliverable))),$(lastword $(subst :, ,$(deliverable)))))
 	true
 
 # vim: set noet sw=4:

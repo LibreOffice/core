@@ -393,7 +393,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 

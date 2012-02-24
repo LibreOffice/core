@@ -244,7 +244,6 @@ endif
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }' | sed -e 's,\:/$$,:,')
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
@@ -253,11 +252,10 @@ gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
 $(strip \
-$(subst $(REPODIR),$(gb_Helper_REPODIR_NATIVE), \
 $(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
 $(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
 $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
-$(1))))))
+$(1)))))
 endef
 
 # YaccTarget class
@@ -657,7 +655,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 else
@@ -696,7 +693,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_WinResTarget_get_dep_target,$(1)))
 endef
 else

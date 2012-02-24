@@ -31,7 +31,6 @@
 #     -v OUTDIR=outdir \
 #     -v SRCDIR=srcdir \
 #     -v WORKDIR=workdir \
-#     -v REPODIR=repodir \
 #     -v OBJECTFILE=objectfile
 # called like this the script will read from stdin
 # and write to stdout. It will:
@@ -40,7 +39,6 @@
 #  - replace the string given as WORKDIR with $(WORKDIR)/
 #  - replace the string given as OUTDIR with $(OUTDIR)/
 #  - replace the string given as SRCDIR with $(SRCDIR)/
-#  - replace the string given as REPODIR with $(REPODIR)/
 #  - translates absolute mixed windows paths to cygwin paths by
 #    substituting a path starting with X:... to /cygdrive/X/...
 
@@ -51,7 +49,6 @@ function mangle_path(path) {
     gsub(WORKDIR, "$(WORKDIR)/", path);
     gsub(OUTDIR, "$(OUTDIR)/", path);
     gsub(SRCDIR, "$(SRCDIR)/", path);
-    gsub(REPODIR, "$(REPODIR)/", path);
     if( path ~ /^[a-zA-Z]:/ )
         path = "/cygdrive/" tolower(substr(path,0,1)) substr(path,3);
     return path;
@@ -61,11 +58,9 @@ BEGIN {
    WORKDIR = tolower(substr(WORKDIR,0,1)) substr(WORKDIR,2); 
    OUTDIR = tolower(substr(OUTDIR,0,1)) substr(OUTDIR,2); 
    SRCDIR = tolower(substr(SRCDIR,0,1)) substr(SRCDIR,2); 
-   REPODIR = tolower(substr(REPODIR,0,1)) substr(REPODIR,2); 
 #   print "# WORKDIR=" WORKDIR;
 #   print "# OUTDIR=" OUTDIR;
 #   print "# SRCDIR=" SRCDIR;
-#   print "# REPODIR=" REPODIR;
    print mangle_path(OBJECTFILE) ": \\";
 }
 
