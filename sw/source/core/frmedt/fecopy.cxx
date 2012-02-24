@@ -1298,9 +1298,9 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
             }
         }
         else if( SOT_FORMAT_GDIMETAFILE == nFmt )
-            rGrf = Imp()->GetDrawView()->GetAllMarkedMetaFile();
+            rGrf = Imp()->GetDrawView()->GetMarkedObjMetaFile();
         else if( SOT_FORMAT_BITMAP == nFmt )
-            rGrf = Imp()->GetDrawView()->GetAllMarkedBitmap();
+            rGrf = Imp()->GetDrawView()->GetMarkedObjBitmapEx();
     }
     return bConvert;
 }

@@ -752,7 +752,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     aRect.Justify();
     Size aSize(aRect.GetSize());
 
-    GDIMetaFile aMtf( pView->GetAllMarkedMetaFile() );
+    GDIMetaFile aMtf( pView->GetMarkedObjMetaFile() );
     if( bMetaFile )
     {
         SvMemoryStream aDestStrm( 65535, 65535 );

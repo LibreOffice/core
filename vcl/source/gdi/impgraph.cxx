@@ -559,41 +559,60 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
-        // use corner points of graphic to determine the pixel
-        // extent of the graphic (rounding errors are possible else)
-        VirtualDevice   aVDev;
-        const Point     aNullPt;
-        const Point     aTLPix( aVDev.LogicToPixel( aNullPt, maMetaFile.GetPrefMapMode() ) );
-        const Point     aBRPix( aVDev.LogicToPixel( Point( maMetaFile.GetPrefSize().Width() - 1, maMetaFile.GetPrefSize().Height() - 1 ), maMetaFile.GetPrefMapMode() ) );
-        Size            aDrawSize( aVDev.LogicToPixel( maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode() ) );
-        Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
+        // calculate size
+        VirtualDevice aVDev;
+        Size aDrawSize(aVDev.LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
 
         if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
         {
-            aDrawSize.Width() = FRound((double)rParameters.getSizePixel().Width() *
-                (double)aDrawSize.Width() / (double)aSizePix.Width());
-            aDrawSize.Height() = FRound((double)rParameters.getSizePixel().Height() *
-                (double)aDrawSize.Height() / (double)aSizePix.Height());
-
-            aSizePix = rParameters.getSizePixel();
+            // apply given size if exists
+            aDrawSize = rParameters.getSizePixel();
         }
 
-        if( aSizePix.Width() && aSizePix.Height() && !rParameters.getUnlimitedSize()
-            && (aSizePix.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aSizePix.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
+        if(aDrawSize.Width() && aDrawSize.Height() && !rParameters.getUnlimitedSize()
+            && (aDrawSize.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aDrawSize.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
         {
-            const Size  aOldSizePix( aSizePix );
-            double      fWH = (double) aSizePix.Width() / aSizePix.Height();
+            // limit bitmap size to a maximum of GRAPHIC_MTFTOBMP_MAXEXT x GRAPHIC_MTFTOBMP_MAXEXT
+            double fWH((double)aDrawSize.Width() / (double)aDrawSize.Height());
 
-            if( fWH <= 1.0 )
-                aSizePix.Width() = FRound( GRAPHIC_MTFTOBMP_MAXEXT * fWH ), aSizePix.Height() = GRAPHIC_MTFTOBMP_MAXEXT;
+            if(fWH <= 1.0)
+            {
+                aDrawSize.setWidth(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT * fWH));
+                aDrawSize.setHeight(GRAPHIC_MTFTOBMP_MAXEXT);
+            }
             else
-                aSizePix.Width() = GRAPHIC_MTFTOBMP_MAXEXT, aSizePix.Height() = FRound(  GRAPHIC_MTFTOBMP_MAXEXT / fWH );
-
-            aDrawSize.Width() = FRound( ( (double) aDrawSize.Width() * aSizePix.Width() ) / aOldSizePix.Width() );
-            aDrawSize.Height() = FRound( ( (double) aDrawSize.Height() * aSizePix.Height() ) / aOldSizePix.Height() );
+            {
+                aDrawSize.setWidth(GRAPHIC_MTFTOBMP_MAXEXT);
+                aDrawSize.setHeight(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT / fWH));
+            }
         }
 
-        if( aVDev.SetOutputSizePixel( aSizePix ) )
+        // calculate pixel size. Normally, it's the same as aDrawSize, but may
+        // need to be extended when hairlines are on the right or bottom edge
+        Size aPixelSize(aDrawSize);
+
+        if(GRAPHIC_GDIMETAFILE == ImplGetType())
+        {
+            // get hairline and full bound rect
+            Rectangle aHairlineRect;
+            const Rectangle aRect(maMetaFile.GetBoundRect(aVDev, &aHairlineRect));
+
+            if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
+            {
+                // expand if needed to allow bottom and right hairlines to be added
+                if(aRect.Right() == aHairlineRect.Right())
+                {
+                    aPixelSize.setWidth(aPixelSize.getWidth() + 1);
+                }
+
+                if(aRect.Bottom() == aHairlineRect.Bottom())
+                {
+                    aPixelSize.setHeight(aPixelSize.getHeight() + 1);
+                }
+            }
+        }
+
+        if(aVDev.SetOutputSizePixel(aPixelSize))
         {
             if(rParameters.getAntiAliase())
             {
@@ -605,8 +624,8 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
                 aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
             }
 
-            ImplDraw( &aVDev, aNullPt, aDrawSize );
-            aRetBmp =  aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() );
+            ImplDraw( &aVDev, Point(), aDrawSize );
+            aRetBmp =  aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
         }
     }
 

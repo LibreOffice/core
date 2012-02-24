@@ -167,7 +167,7 @@ public:
      * - coordinates of actions will be transformed to preferred mapmode
      * - the returned rectangle is relative to the preferred mapmode of the metafile
     */
-    Rectangle       GetBoundRect( OutputDevice& i_rReference );
+    Rectangle       GetBoundRect( OutputDevice& i_rReference, Rectangle* pHairline = 0 ) const;
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0, short nChannelGPercent = 0,

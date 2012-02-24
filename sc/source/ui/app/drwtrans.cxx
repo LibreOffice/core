@@ -435,9 +435,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
             DBG_ASSERT( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
-                bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( sal_True ), rFlavor );
+                bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true), rFlavor );
             else
-                bOK = SetBitmap( aView.GetAllMarkedBitmap( sal_True ), rFlavor );
+                bOK = SetBitmap( aView.GetMarkedObjBitmapEx(true).GetBitmap(), rFlavor );
         }
         else if ( nFormat == SOT_FORMATSTR_ID_SVXB )
         {

@@ -529,7 +529,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BitmapEx SdrExchangeView::GetMarkedObjBitmap( bool bNoVDevIfOneBmpMarked ) const
+BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 {
     BitmapEx aBmp;
 
@@ -560,7 +560,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmap( bool bNoVDevIfOneBmpMarked ) const
 
         if( !aBmp )
         {
-            const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
+            const Graphic aGraphic(GetMarkedObjMetaFile(bNoVDevIfOneBmpMarked));
 
             // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
             // rasterconverted to a bitmap
@@ -580,7 +580,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmap( bool bNoVDevIfOneBmpMarked ) const
 
 // -----------------------------------------------------------------------------
 
-GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarked ) const
+GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) const
 {
     GDIMetaFile aMtf;
 
@@ -659,7 +659,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
         else
-            aRet = GetMarkedObjMetaFile( sal_False );
+            aRet = GetMarkedObjMetaFile(false);
     }
 
     return aRet;

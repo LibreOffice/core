@@ -6759,7 +6759,7 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
         SdrView *pView = new SdrView( pMod );
         SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
         pView->MarkObj( pObj, pPgView );
-        aRet = pView->GetMarkedObjBitmap();
+        aRet = pView->GetMarkedObjBitmapEx();
         pView->HideSdrPage();
         delete pView;
     }

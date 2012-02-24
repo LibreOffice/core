@@ -1476,7 +1476,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
 
 static void ImplActionBounds( Rectangle& o_rOutBounds,
                               const Rectangle& i_rInBounds,
-                              const std::vector<Rectangle>& i_rClipStack )
+                              const std::vector<Rectangle>& i_rClipStack,
+                              Rectangle* o_pHairline )
 {
     Rectangle aBounds( i_rInBounds );
     if( ! i_rInBounds.IsEmpty() && ! i_rClipStack.empty() && ! i_rClipStack.back().IsEmpty() )
@@ -1487,10 +1488,18 @@ static void ImplActionBounds( Rectangle& o_rOutBounds,
             o_rOutBounds.Union( aBounds );
         else
             o_rOutBounds = aBounds;
+
+        if(o_pHairline)
+        {
+            if( ! o_pHairline->IsEmpty() )
+                o_pHairline->Union( aBounds );
+            else
+                *o_pHairline = aBounds;
+        }
     }
 }
 
-Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
+Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHairline ) const
 {
     GDIMetaFile     aMtf;
     VirtualDevice   aMapVDev( i_rReference );
@@ -1503,9 +1512,18 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
 
     Rectangle aBound;
 
-    for( MetaAction* pAction = (MetaAction*) First(); pAction; pAction = (MetaAction*) Next() )
+    if(pHairline)
     {
+        *pHairline = Rectangle();
+    }
+
+    const sal_uLong nCount(GetActionCount());
+
+    for(sal_uLong a(0); a < nCount; a++)
+    {
+        MetaAction* pAction = GetAction(a);
         const sal_uInt16 nActionType = pAction->GetType();
+        Rectangle* pUseHairline = (pHairline && aMapVDev.IsLineColor()) ? pHairline : 0;
 
         switch( nActionType )
         {
@@ -1515,7 +1533,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             ImplActionBounds( aBound,
                              Rectangle( aMapVDev.LogicToLogic( pAct->GetPoint(), aMapVDev.GetMapMode(), GetPrefMapMode() ),
                                        aMapVDev.PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
-                             aClipStack );
+                             aClipStack, pUseHairline );
         }
         break;
 
@@ -1525,7 +1543,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             ImplActionBounds( aBound,
                              Rectangle( aMapVDev.LogicToLogic( pAct->GetPoint(), aMapVDev.GetMapMode(), GetPrefMapMode() ),
                                        aMapVDev.PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
-                             aClipStack );
+                             aClipStack, pUseHairline );
         }
         break;
 
@@ -1535,28 +1553,39 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             Point aP1( pAct->GetStartPoint() ), aP2( pAct->GetEndPoint() );
             Rectangle aRect( aP1, aP2 );
             aRect.Justify();
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+
+            if(pUseHairline)
+            {
+                const LineInfo& rLineInfo = pAct->GetLineInfo();
+
+                if(0 != rLineInfo.GetWidth())
+                {
+                    pUseHairline = 0;
+                }
+            }
+
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
         case( META_RECT_ACTION ):
         {
             MetaRectAction* pAct = (MetaRectAction*) pAction;
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
         case( META_ROUNDRECT_ACTION ):
         {
             MetaRoundRectAction*    pAct = (MetaRoundRectAction*) pAction;
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
         case( META_ELLIPSE_ACTION ):
         {
             MetaEllipseAction*      pAct = (MetaEllipseAction*) pAction;
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1565,7 +1594,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             MetaArcAction*  pAct = (MetaArcAction*) pAction;
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1574,7 +1603,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             MetaPieAction*  pAct = (MetaPieAction*) pAction;
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1583,7 +1612,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             MetaChordAction*    pAct = (MetaChordAction*) pAction;
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1591,7 +1620,18 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
             Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+
+            if(pUseHairline)
+            {
+                const LineInfo& rLineInfo = pAct->GetLineInfo();
+
+                if(0 != rLineInfo.GetWidth())
+                {
+                    pUseHairline = 0;
+                }
+            }
+
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1599,7 +1639,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaPolygonAction* pAct = (MetaPolygonAction*) pAction;
             Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1607,7 +1647,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaPolyPolygonAction* pAct = (MetaPolyPolygonAction*) pAction;
             Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
@@ -1619,7 +1659,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1632,7 +1672,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
                                        0, pAct->GetDXArray() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1645,7 +1685,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
                                        pAct->GetWidth(), NULL );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1661,7 +1701,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             Point aPt( pAct->GetStartPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             aRect.Right() = aRect.Left() + pAct->GetWidth();
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1669,7 +1709,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpScaleAction* pAct = (MetaBmpScaleAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1677,7 +1717,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpScalePartAction* pAct = (MetaBmpScalePartAction*) pAction;
             Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1685,7 +1725,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpExScaleAction*   pAct = (MetaBmpExScaleAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1693,7 +1733,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpExScalePartAction*   pAct = (MetaBmpExScalePartAction*) pAction;
             Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1701,7 +1741,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaGradientAction* pAct = (MetaGradientAction*) pAction;
             Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1709,7 +1749,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaGradientExAction* pAct = (MetaGradientExAction*) pAction;
             Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1723,7 +1763,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaHatchAction*    pAct = (MetaHatchAction*) pAction;
             Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1731,7 +1771,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaTransparentAction* pAct = (MetaTransparentAction*) pAction;
             Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1756,7 +1796,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             // transform the rect to current VDev state
             aRect = aMapVDev.LogicToLogic( aRect, aTransMtf.GetPrefMapMode(), aMapVDev.GetMapMode() );
 
-            ImplActionBounds( aBound, aRect, aClipStack );
+            ImplActionBounds( aBound, aRect, aClipStack, 0 );
         }
         break;
 
@@ -1764,7 +1804,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaEPSAction*  pAct = (MetaEPSAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1804,7 +1844,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpAction* pAct = (MetaBmpAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1812,7 +1852,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaBmpExAction* pAct = (MetaBmpExAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmapEx().GetSizePixel() ) );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1820,7 +1860,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaMaskAction* pAct = (MetaMaskAction*) pAction;
             Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1828,7 +1868,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaMaskScalePartAction* pAct = (MetaMaskScalePartAction*) pAction;
             Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1836,7 +1876,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaMaskScalePartAction* pAct = (MetaMaskScalePartAction*) pAction;
             Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1844,7 +1884,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaWallpaperAction* pAct = (MetaWallpaperAction*) pAction;
             Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 
@@ -1852,7 +1892,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         {
             MetaTextRectAction* pAct = (MetaTextRectAction*) pAction;
             Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
         break;
 

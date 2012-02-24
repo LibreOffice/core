@@ -705,7 +705,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     case SID_CONVERT_TO_METAFILE:
                     {
-                        GDIMetaFile aMetaFile(mpDrawView->GetAllMarkedMetaFile ());
+                        GDIMetaFile aMetaFile(mpDrawView->GetMarkedObjMetaFile());
                         aGraphic = Graphic(aMetaFile);
                     }
                     break;
@@ -713,9 +713,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         bool bDone(false);
 
-                        // I have to get the image here directly since GetAllMarkedBitmap works
+                        // I have to get the image here directly since GetMarkedObjBitmapEx works
                         // based on Bitmaps, but not on BitmapEx, thus throwing away the alpha
-                        // channel. Argh! GetAllMarkedBitmap itself is too widely used to safely
+                        // channel. Argh! GetMarkedObjBitmapEx itself is too widely used to safely
                         // change that, e.g. in the exchange formats. For now I can only add this
                         // exception to get good results for Svgs. This is how the code gets more
                         // and more crowded, at last I made a remark for myself to change this
@@ -733,8 +733,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         if(!bDone)
                         {
-                            Bitmap aBitmap (mpDrawView->GetAllMarkedBitmap ());
-                            aGraphic = Graphic(aBitmap);
+                            aGraphic = Graphic(mpDrawView->GetMarkedObjBitmapEx());
                         }
                     }
                     break;

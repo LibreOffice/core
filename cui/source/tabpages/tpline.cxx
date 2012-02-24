@@ -1042,7 +1042,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                     {
                         pObj->SetMergedItemSet(rOutAttrs);
                     }
-                    GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+                    GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
 
                     aSymbolGraphic=Graphic(aMeta);
                     aSymbolSize=pObj->GetSnapRect().GetSize();
@@ -1764,8 +1764,8 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
                 pObj->SetMergedItemSet(rOutAttrs);
             }
 
-            Bitmap aBitmap(pView->GetAllMarkedBitmap());
-            GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+            BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
+            GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
             pView->UnmarkAll();
             pObj=pPage->RemoveObject(0);
             SdrObject::Free(pObj);
@@ -1778,16 +1778,16 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
             aGrfBrushItems.Insert(pInfo, nNumMenuGalleryItems + i);
 
-            Size aSize(aBitmap.GetSizePixel());
+            Size aSize(aBitmapEx.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
                 sal_Bool bWidth = aSize.Width() > aSize.Height();
                 double nScale = bWidth ?
                                     (double)MAX_BMP_WIDTH / (double)aSize.Width():
                                     (double)MAX_BMP_HEIGHT / (double)aSize.Height();
-                aBitmap.Scale(nScale, nScale);
+                aBitmapEx.Scale(nScale, nScale);
             }
-            Image aImage(aBitmap);
+            Image aImage(aBitmapEx);
             pPopup->InsertItem(pInfo->nItemId,*pStr,aImage);
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
