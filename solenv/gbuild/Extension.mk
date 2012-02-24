@@ -159,15 +159,15 @@ define gb_Extension_localize_properties
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
-$(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_SDFLOCATION)/$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
-$(call gb_Extension_get_target,$(1)) : $$(SDF2)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $$(SDF)
 endif
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@) && \
 	cp -f $$< $$@ \
-	$(if $(strip $(gb_WITH_LANG)),&& $(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2))
+	$(if $(strip $(gb_WITH_LANG)),&& $(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF))
 
 endef
 
@@ -175,8 +175,6 @@ endef
 define gb_Extension_localize_help
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(gb_Extension_LANGS),$(subst lang,$(lang),$(2)))
-$(call gb_Extension_get_target,$(1)) : SDF3 := $(gb_SDFLOCATION)/$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
-$(call gb_Extension_get_target,$(1)) : $$(SDF3)
 $(foreach lang,$(gb_Extension_LANGS),$(call gb_Extension_localize_help_onelang,$(1),$(subst lang,$(lang),$(2)),$(3),$(lang)))
 endif
 
@@ -184,10 +182,13 @@ endef
 
 define gb_Extension_localize_help_onelang
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
-$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $$(SDF)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(gb_Extension_HELPEXTARGET)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@) && \
-	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF3)
+	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF)
 
 endef
 
