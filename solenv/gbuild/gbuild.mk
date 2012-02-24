@@ -33,7 +33,6 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 # DEBUG
 # INPATH
 # JAVA_HOME
-# JDKINCS
 # LIBXML_CFLAGS
 # OS
 # PRODUCT
@@ -71,7 +70,7 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
-# BuildDirs uses the Output functions already
+# BuildDirs overrides *DIR variables for Windows
 include $(GBUILDDIR)/BuildDirs.mk
 
 

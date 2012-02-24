@@ -34,7 +34,7 @@ COMMA :=,
 
 include $(GBUILDDIR)/Output.mk
 
-# BuildDirs uses the Output functions already
+# BuildDirs overrides *DIR variables for Windows
 include $(GBUILDDIR)/BuildDirs.mk
 
 # Presumably the common parts in gbuild.mk and gbuild_simple.mk should

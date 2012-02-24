@@ -26,15 +26,6 @@
 #
 #*************************************************************************
 
-# extend for JDK include (seems only needed in setsolar env?)
-SOLARINC += $(JDKINCS)
-
-OUTDIR := $(SOLARVERSION)/$(INPATH)
-OUTDIR_FOR_BUILD := $(SOLARVERSION)/$(INPATH_FOR_BUILD)
-ifeq ($(strip $(SOLARENV)),)
-$(error SOLARENV variable is empty, no environment set, aborting)
-endif
-
 # The entire gbuild operates in unix paths, and then when calling the
 # native tools, converts them back to the Windows native paths.
 #

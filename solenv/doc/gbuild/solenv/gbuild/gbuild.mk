@@ -13,7 +13,6 @@ static Path WORKDIR;
 
 // Expected from configure/environment
 static const Integer OSL_DEBUG_LEVEL;
-static const List<Path> JDKINCS;
 static const List<Path> SOLARINC;
 static const List<Path> SOLARLIB;
 static const Path GBUILDDIR;
