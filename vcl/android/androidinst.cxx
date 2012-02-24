@@ -309,8 +309,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
                 pFrame->PostPaint(true);
                 BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
             }
-            else // Sucky the frame is invisible - why !?
-                fprintf (stderr, "invisible frame\n");
         }
     }
     else
@@ -435,12 +433,26 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         SalKeyEvent aEvent;
         int64_t nNsTime = AKeyEvent_getEventTime(event);
 
+        // FIXME: really we need a Java wrapper app as Mozilla has that does
+        // key event translation for us, and provides -much- cleaner events.
         nEvent = (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_UP ?
                   SALEVENT_KEYUP : SALEVENT_KEYINPUT);
+        sal_uInt16 nCode = KeyToCode(event);
+        sal_uInt16 nMetaState = KeyMetaStateToCode(event);
+        if (nCode >= KEY_0 && nCode <= KEY_9)
+            aEvent.mnCharCode = '0' + nCode - KEY_0;
+        else if (nCode >= KEY_A && nCode <= KEY_Z)
+            aEvent.mnCharCode = (nMetaState & KEY_SHIFT ? 'A' : 'a') + nCode - KEY_A;
+        else if (nCode == KEY_SPACE)
+            aEvent.mnCharCode = ' ';
+        else if (nCode == KEY_COMMA)
+            aEvent.mnCharCode = ',';
+        else if (nCode == KEY_POINT)
+            aEvent.mnCharCode = '.';
+        else
+            aEvent.mnCharCode = 0;
         aEvent.mnTime = nNsTime / (1000 * 1000);
-        aEvent.mnCode = KeyToCode(event);
-        aEvent.mnCode |= KeyMetaStateToCode(event);
-        aEvent.mnCharCode = 'a'; // the unicode of it all ...
+        aEvent.mnCode = nMetaState | nCode;
         aEvent.mnRepeat = AKeyEvent_getRepeatCount(event);
 
         SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
