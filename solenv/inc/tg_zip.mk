@@ -75,7 +75,6 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP$(TNR)TARGET).dpzz : $(ZIP$(TNR)TARGETN)
 ZIP$(TNR)HELPVAR=$(BIN)/$(ZIP$(TNR)TARGET)
 
 $(ZIP$(TNR)DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP$(TNR)DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP$(TNR)DIR)
     $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP$(TNR)DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP$(TNR)EXT)/)) $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP$(TNR)TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
@@ -86,7 +85,7 @@ $(ZIP$(TNR)DEPFILE) :
 
 
 $(ZIP$(TNR)TARGETN) : delzip $(ZIP$(TNR)DEPS)
-    @echo "[ZIP]" $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
 .IF "$(ZIP$(TNR)DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).$(ZIP$(TNR)TARGET){$(subst,$(ZIP$(TNR)HELPVAR),_ $(@:db))}$(ZIP$(TNR)EXT)

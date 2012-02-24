@@ -702,7 +702,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::path fsAdditionalFileName( additionalFileName, fs::native );
                 std::string aNativeStr = fsAdditionalFileName.native_file_string();
                 const char* pStr = aNativeStr.c_str();
-                std::cerr << pStr;
+                HCDBG(std::cerr << pStr << std::endl);
 
             fs::path fsTargetName( indexDirParentName / additionalFileKey );
 
