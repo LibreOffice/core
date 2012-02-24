@@ -76,6 +76,12 @@ Partial::Partial(
     std::set< rtl::OUString > const & includedPaths,
     std::set< rtl::OUString > const & excludedPaths)
 {
+    // The Partial::Node tree built up here encodes the following information:
+    // * Inner node, startInclude: an include starts here that contains excluded
+    //   sub-trees
+    // * Inner node, !startInclude: contains in-/excluded sub-trees
+    // * Leaf node, startInclude: an include starts here
+    // * Leaf node, !startInclude: an exclude starts here
     for (std::set< rtl::OUString >::const_iterator i(includedPaths.begin());
          i != includedPaths.end(); ++i)
     {
@@ -119,12 +125,19 @@ Partial::~Partial() {}
 Partial::Containment Partial::contains(Path const & path) const {
     //TODO: For set elements, the segment names recorded in the node tree need
     // not match the corresponding path segments, so this function can fail.
+
+    // * If path ends at a leaf node or goes past a leaf node:
+    // ** If that leaf node is startInclude: => CONTAINS_NODE
+    // ** If that leaf node is !startInclude: => CONTAINS_NOT
+    // * If path ends at inner node:
+    // ** If there is some startInclude along its trace: => CONTAINS_NODE
+    // ** If there is no startInclude along its trace: => CONTAINS_SUBNODES
     Node const * p = &root_;
     bool includes = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
         Node::Children::const_iterator j(p->children.find(*i));
         if (j == p->children.end()) {
-            break;
+            return p->startInclude ? CONTAINS_NODE : CONTAINS_NOT;
         }
         p = &j->second;
         includes |= p->startInclude;
