@@ -65,4 +65,9 @@ $(eval $(call gb_Library_add_generated_cxxobjects,fps_kde4,\
 	CustomTarget/fpicker/source/unx/kde4/KDE4FilePicker.moc \
 ))
 
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,fps_kde4,\
+        -Wno-shadow \
+))
+
 # vim: set noet sw=4 ts=4:

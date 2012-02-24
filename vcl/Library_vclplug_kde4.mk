@@ -94,6 +94,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/VCLKDEApplication \
 ))
 
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,fps_kde4,\
+        -Wno-shadow \
+))
+
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     dl \

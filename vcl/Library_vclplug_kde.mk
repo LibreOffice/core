@@ -85,6 +85,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
     vcl/unx/kde/salnativewidgets-kde \
 ))
 
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde,\
+        -Wno-shadow \
+))
+
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     dl \

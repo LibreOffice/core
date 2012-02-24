@@ -58,4 +58,9 @@ $(eval $(call gb_Executable_add_generated_cxxobjects,kdefilepicker,\
 
 $(eval $(call gb_Executable_set_warnings_not_errors,kdefilepicker))
 
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Executable_add_cxxflags,kdefilepicker,\
+	-Wno-shadow \
+))
+
 # vim: set noet sw=4 ts=4:
