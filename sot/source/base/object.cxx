@@ -146,18 +146,6 @@ void SotObject::OwnerLock
     }
 }
 
-void SotObject::RemoveOwnerLock()
-{
-    if ( nOwnerLockCount )
-    {
-        --nOwnerLockCount;
-        ReleaseRef();
-    }
-    else {
-        OSL_FAIL("OwnerLockCount underflow!");
-    }
-}
-
 //=========================================================================
 sal_Bool SotObject::DoClose()
 {

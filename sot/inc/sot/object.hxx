@@ -313,7 +313,6 @@ public:
     sal_uInt16              GetStrongLockCount() const { return nStrongLockCount; }
 
     void                OwnerLock( sal_Bool bLock );
-    void                RemoveOwnerLock();
     sal_Bool                DoClose();
     sal_Bool                IsInClose() const { return bInClose; }
 

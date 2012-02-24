@@ -165,7 +165,6 @@ SortedPositions_SAR::Replace(unsigned int const&, unsigned short)
 SortedPositions_SAR::Replace(unsigned int const*, unsigned short, unsigned short)
 SortedPositions_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned int const&, void*), void*)
 SotExchange::GetExchangeAction(com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> const&, unsigned short, unsigned short, unsigned short, unsigned long&, unsigned short&, unsigned long)
-SotObject::RemoveOwnerLock()
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
 SpanStyleManager::get(WPXString const&) const
 SpinButton::SpinButton(Window*, ResId const&)
