@@ -5,7 +5,7 @@ ifeq ($(SOLARENV),)
 ifeq ($(gb_Side),)
 gb_Side:=host
 endif
-include $(module_directory)/../config_$(gb_Side).mk
+include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../../config_$(gb_Side).mk
 endif
 
 include $(SOLARENV)/gbuild/gbuild.mk
