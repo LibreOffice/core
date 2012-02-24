@@ -56,4 +56,6 @@ $(eval $(call gb_Executable_add_generated_cxxobjects,kdefilepicker,\
 	CustomTarget/fpicker/source/unx/kde/kdefilepicker.moc \
 ))
 
+$(eval $(call gb_Executable_set_warnings_not_errors,kdefilepicker))
+
 # vim: set noet sw=4 ts=4:
