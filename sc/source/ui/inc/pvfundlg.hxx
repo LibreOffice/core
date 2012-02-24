@@ -53,13 +53,13 @@ class ScDPObject;
 
 // ============================================================================
 
-class ScDPFunctionListBox : public MultiListBox
+class ScDPFunctionListBox : public ListBox
 {
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
     void                SetSelection( sal_uInt16 nFuncMask );
-    sal_uInt16              GetSelection() const;
+    sal_uInt16          GetSelection() const;
 
 private:
     void                FillFunctionNames();

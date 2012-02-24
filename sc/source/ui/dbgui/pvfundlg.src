@@ -62,15 +62,14 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         Size = MAP_APPFONT ( 152 , 8 ) ;
         Text [ en-US ] = "~Function" ;
     };
-    MultiListBox LB_FUNC
+    ListBox LB_FUNC
     {
-        HelpID = "sc:MultiListBox:RID_SCDLG_DPDATAFIELD:LB_FUNC";
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_FUNC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 65 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
-        SimpleMode = TRUE ;
     };
     FixedText FT_NAMELABEL
     {

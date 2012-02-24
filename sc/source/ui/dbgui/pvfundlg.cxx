@@ -166,7 +166,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 // ============================================================================
 
 ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId ) :
-    MultiListBox( pParent, rResId )
+    ListBox( pParent, rResId )
 {
     FillFunctionNames();
 }
