@@ -121,7 +121,7 @@ copy-stuff: buildrcs
 		  freetype \
 		  fsstorage.uno \
 		  gcc3_uno \
-		  hypenlo \
+		  hyphenlo \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
 		  i18npool.uno \
@@ -134,7 +134,7 @@ copy-stuff: buildrcs
 		  jvmfwk \
 		  lnglo \
 		  introspection.uno \
-		  lnth \
+		  lnthlo \
 		  localebe1.uno \
 		  localedata_en \
 		  localedata_es \
@@ -170,6 +170,7 @@ copy-stuff: buildrcs
 		  xstor \
 		  \
 		  swlo \
+		  swuilo \
 		  swdlo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
