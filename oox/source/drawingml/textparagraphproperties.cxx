@@ -467,7 +467,7 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 }
 
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 
 void TextParagraphProperties::dump() const
 {

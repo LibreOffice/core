@@ -178,7 +178,7 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     return false;
 }
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 void PropertySet::dump()
 {
     PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );

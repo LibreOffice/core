@@ -66,7 +66,7 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
     applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
 }
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 void TextListStyle::dump() const
 {
     for ( int i = 0; i < 9; i++ )
