@@ -8,4 +8,4 @@ en-US  = "The same version of this product is already installed."
 en-US = "An older version of [ProductName] was found. To install a newer version, the older version needs to be removed first."
 
 [OOO_CUSTOMACTION_4]
-en-US = "Please exit [DEFINEDPRODUCT] [DEFINEDVERSION] and the [DEFINEDPRODUCT] [DEFINEDVERSION] Quickstarter before you continue. If you are using a multi-user system, also make sure that no other user has [DEFINEDPRODUCT] [DEFINEDVERSION] open."
+en-US = "Setup detected a running soffice.bin process. Before you restart the installation, please exit the application that owns soffice.bin. It can be LibreOffice, OpenOffice.org, Lotus Symphony, etc. Also check for the running Quickstarter on Windows taskbar. If you are using a multi-user system, also make sure that no other user has this application open."
