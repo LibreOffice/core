@@ -1225,7 +1225,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-
+        aReplaceTLB.SetUpdateMode(sal_False);
         for(sal_uInt16 i = 0; i < pWordList->Count(); i++)
         {
             SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i);
@@ -1248,7 +1248,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         }
         aNewReplacePB.Enable(sal_False);
         aDeleteReplacePB.Enable(sal_False);
-
+        aReplaceTLB.SetUpdateMode(sal_True);
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
