@@ -37,106 +37,6 @@
 /*************************************************************************
 *************************************************************************/
 
-#define TEST_INVARIANT
-#ifdef TEST_INVARIANT
-#define SO2_DECL_INVARIANT()                                            \
-        virtual void TestObjRef();                                      \
-        void         TestMemberObjRef();                                \
-        virtual void TestInvariant();                                   \
-        void         TestMemberInvariant();
-
-#define SO2_IMPL_INVARIANT(ClassName)                                   \
-void ClassName::TestObjRef()                                            \
-{                                                                       \
-    TestMemberObjRef();                                                 \
-}                                                                       \
-void ClassName::TestInvariant()                                         \
-{                                                                       \
-    TestMemberInvariant();                                              \
-}
-
-#define SO2_IMPL_INVARIANT1(ClassName,Super1)                           \
-void ClassName::TestObjRef()                                            \
-{                                                                       \
-    TestMemberObjRef();                                                 \
-    Super1::TestObjRef();                                               \
-}                                                                       \
-void ClassName::TestInvariant()                                         \
-{                                                                       \
-    TestMemberInvariant();                                              \
-    Super1::TestInvariant();                                            \
-}
-
-#define SO2_IMPL_INVARIANT2(ClassName,Super1,Super2)                    \
-void ClassName::TestObjRef()                                            \
-{                                                                       \
-    TestMemberObjRef();                                                 \
-    Super1::TestObjRef();                                               \
-    Super2::TestObjRef();                                               \
-}                                                                       \
-void ClassName::TestInvariant()                                         \
-{                                                                       \
-    TestMemberInvariant();                                              \
-    Super1::TestInvariant();                                            \
-    Super2::TestInvariant();                                            \
-}
-
-#define SO2_IMPL_INVARIANT3(ClassName,Super1,Super2,Super3)             \
-void ClassName::TestObjRef()                                            \
-{                                                                       \
-    TestMemberObjRef();                                                 \
-    Super1::TestObjRef();                                               \
-    Super2::TestObjRef();                                               \
-    Super3::TestObjRef();                                               \
-}                                                                       \
-void ClassName::TestInvariant()                                         \
-{                                                                       \
-    TestMemberInvariant();                                              \
-    Super1::TestInvariant();                                            \
-    Super2::TestInvariant();                                            \
-    Super3::TestInvariant();                                            \
-}
-
-#define SO2_IMPL_INVARIANT4(ClassName,Super1,Super2,Super3,Super4)      \
-void ClassName::TestObjRef()                                            \
-{                                                                       \
-    TestMemberObjRef();                                                 \
-    Super1::TestObjRef();                                               \
-    Super2::TestObjRef();                                               \
-    Super3::TestObjRef();                                               \
-    Super4::TestObjRef();                                               \
-}                                                                       \
-void ClassName::TestInvariant()                                         \
-{                                                                       \
-    TestMemberInvariant();                                              \
-    Super1::TestInvariant();                                            \
-    Super2::TestInvariant();                                            \
-    Super3::TestInvariant();                                            \
-    Super4::TestInvariant();                                            \
-}
-
-#ifdef DBG_UTIL
-#define CALL_TEST_INVARIANT() SotFactory::TestInvariant()
-#else
-#define CALL_TEST_INVARIANT()
-#endif  // DBG_UTIL
-
-#else   // TEST_INVARIANT
-
-#define SO2_DECL_INVARIANT()
-
-#define SO2_IMPL_INVARIANT(ClassName)
-#define SO2_IMPL_INVARIANT1(ClassName,Super1)
-#define SO2_IMPL_INVARIANT2(ClassName,Super1,Super2)
-#define SO2_IMPL_INVARIANT3(ClassName,Super1,Super2,Super3)
-#define SO2_IMPL_INVARIANT4(ClassName,Super1,Super2,Super3,Super4)
-
-#define CALL_TEST_INVARIANT()
-
-#endif  // TEST_INVARIANT
-
-/**************************************************************************
-**************************************************************************/
 #define SO2_DECL_BASIC_CLASS_DLL(ClassName,FacName)                       \
 private:                                                                  \
     static SotFactory **       GetFactoryAdress()                          \
@@ -400,7 +300,6 @@ protected:
 public:
                         SotObject();
                         SO2_DECL_BASIC_CLASS_DLL(SotObject,SOTDATA())
-                        SO2_DECL_INVARIANT()
 
                         // Nur damit die Makros in So3 nicht ganz ausufern
     virtual IUnknown *  GetInterface( const SvGlobalName & );

@@ -49,23 +49,6 @@ TYPEINIT1(SotObjectFactory,SotFactory);
 SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,
                     SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
                             0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
-SO2_IMPL_INVARIANT(SotObject)
-
-/*************************************************************************
-|*  SotObject::TestMemberObjRef()
-|*
-|*  Beschreibung:
-*************************************************************************/
-void SotObject::TestMemberObjRef() {}
-
-/*************************************************************************
-|*  SotObject::TestMemberObjRef()
-|*
-|*  Beschreibung:
-*************************************************************************/
-#ifdef TEST_INVARIANT
-void SotObject::TestMemberInvariant() {}
-#endif
 
 /*************************************************************************
 |*    SotObject::SotObject()

@@ -189,23 +189,6 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
     }
 }
 
-
-/*************************************************************************
-|*    SotFactory::TestInvariant()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotFactory::TestInvariant()
-{
-#ifdef TEST_INVARIANT
-    SotData_Impl * pSotData = SOTDATA();
-
-    std::list<SotObject*>::iterator it;
-    for( it = pSotData->aObjectList.begin(); it != pSotData->aObjectList.end(); ++it )
-        (*it)->TestInvariant();
-#endif
-}
-
 /*************************************************************************
 |*    SotFactory::CreateInstance()
 |*
