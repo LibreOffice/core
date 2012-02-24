@@ -4333,9 +4333,9 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports -std=c++0x without Language Defect 757])
+    AC_MSG_CHECKING([whether $CC supports -std=gnu++0x without Language Defect 757])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -std=c++0x"
+    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
     AC_LANG_PUSH([C++])
 
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
@@ -6702,7 +6702,7 @@ if test "$with_system_mdds" = "yes"; then
     dnl ===================================================================
     AC_MSG_CHECKING([which hash container mdds shall use])
     if test "x$HAVE_CXX0X" = "xTRUE"; then
-        MDDS_CPPFLAGS="-std=c++0x"
+        MDDS_CPPFLAGS="-std=gnu++0x"
         AC_MSG_RESULT([std::unordered_map])
     else
         MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
