@@ -121,6 +121,7 @@ copy-stuff: buildrcs
 		  freetype \
 		  fsstorage.uno \
 		  gcc3_uno \
+		  hypenlo \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
 		  i18npool.uno \
@@ -132,6 +133,8 @@ copy-stuff: buildrcs
 		  jvmaccessgcc3 \
 		  jvmfwk \
 		  lnglo \
+		  introspection.uno \
+		  lnth \
 		  localebe1.uno \
 		  localedata_en \
 		  localedata_es \
@@ -146,6 +149,7 @@ copy-stuff: buildrcs
 		  sclo \
 		  scfiltlo \
 		  sotlo \
+		  spelllo \
 		  stocservices.uno \
 		  store \
 		  svllo \
