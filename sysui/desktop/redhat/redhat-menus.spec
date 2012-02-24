@@ -4,8 +4,8 @@ Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-redhat-menus
 Group: Office
-License: LGPL
-Vendor: OpenOffice.org
+License: ALv2
+Vendor: Apache Software Foundation
 AutoReqProv: no
 BuildArch: noarch
 Requires: redhat-release
@@ -162,7 +162,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# Apache OpenOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s

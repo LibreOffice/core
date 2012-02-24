@@ -116,7 +116,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# Apache OpenOffice
 application/vnd.oasis.opendocument.text; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-template; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-web; %PREFIX -view %s

@@ -1454,7 +1454,7 @@ sub set_autoprovreq_in_specfile
 
 #####################################################################
 # Replacing Copyright with License in the spec file
-# Syntax: License: LGPL, SISSL
+# Syntax: License: ALv2 (older usages were LGPL, SISSL)
 #####################################################################
 
 sub set_license_in_specfile

@@ -10,7 +10,7 @@ Globals
 			URELAYERVERSION 1
 			BASISROOTNAME OpenOffice.org
 			UNIXBASISROOTNAME openoffice.org
-			SERVICETAG_PRODUCTNAME OpenOffice.org 3.4 
+			SERVICETAG_PRODUCTNAME OpenOffice.org 3.4
 			SERVICETAG_PRODUCTVERSION 3.4
 			SERVICETAG_PARENTNAME OpenOffice.org 3.4 
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
@@ -76,7 +76,7 @@ OpenOffice
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
+			LICENSENAME ALv2
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -139,7 +139,7 @@ OpenOffice_wJRE
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
+			LICENSENAME ALv2
 			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -209,7 +209,7 @@ OpenOffice_Dev
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
+			LICENSENAME ALv2
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -261,7 +261,7 @@ URE
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
-            LICENSENAME LGPL
+            LICENSENAME ALv2
             SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -308,9 +308,9 @@ OpenOffice_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg33sdk
+            DATABASENAME openofficeorg34sdk
             NO_README_IN_ROOTDIR 1
-            LICENSENAME LGPL
+            LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
@@ -361,9 +361,9 @@ OpenOffice_Dev_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg33devsdk
+            DATABASENAME openofficeorg34devsdk
             NO_README_IN_ROOTDIR 1
-            LICENSENAME LGPL
+            LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1

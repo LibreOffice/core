@@ -1,7 +1,7 @@
 # needs to be 11 lines - variables replaced by the makefile...
        |-----handy-ruler------------------------------------------------------|
 PKGNAME: PRODUCTNAME Desktop-Integration for Slackware
-PKGNAME: Version: PKGVERSION, License: LGPL
+PKGNAME: Version: PKGVERSION, License: ALv2
 PKGNAME:
 PKGNAME: Note that this package is non-functional without the main packages of
 PKGNAME: LONGPRODUCTNAME
@@ -10,4 +10,4 @@ PKGNAME: default, make sure to adapt the link
 PKGNAME:          /etc/UNIXFILENAME
 PKGNAME: accordingly to point to the correct location.
 PKGNAME:
-PKGNAME: This package is provided by OpenOffice.org
+PKGNAME: This package is provided by Apache Software Foundation

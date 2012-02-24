@@ -39,11 +39,18 @@ RPMMACROS= \
 PKGDIR=$(BIN)
 .ENDIF
 
+# CAUTION! here the parsing result from openoffice.lst is NOT available, so this is hardcoded
+# but should not be. When replacing with $(UNIXBASISROOTNAME) it will be empty (!)
 PRODUCTLIST = openoffice.org
 
-# default values to minimize maintainance effort 
+# default values to minimize maintainance effort
+
+# CAUTION! $(OOOBASEVERSION) from openoffice.lst NOT available (!)
 PRODUCTVERSION = 3.4
+
+# CAUTION! $(BRANDPACKAGEVERSION) from openoffice.lst NOT available (!)
 PRODUCTVERSIONSHORT = 3
+
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
@@ -57,7 +64,9 @@ ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 # which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
 UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
 
+# CAUTION! $(UNIXBASISROOTNAME) from openoffice.lst NOT available (!)
 PRODUCTNAME.openoffice.org = OpenOffice.org
+
 PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
 PKGVERSION.openoffice.org = $(PKGVERSION)

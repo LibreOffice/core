@@ -4,7 +4,7 @@ Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-mandriva-menus
 Group: Office
-License: LGPL
+License: ALv2
 AutoReqProv: no
 BuildArch: noarch
 #
@@ -123,7 +123,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# Apache OpenOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s

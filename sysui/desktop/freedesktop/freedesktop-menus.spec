@@ -6,7 +6,7 @@ Name: %pkgprefix-freedesktop-menus
 #BuildRequires: sed
 #BuildRequires: perl
 Group: Office
-License: LGPL
+License: ALv2
 Provides: openoffice.org3-desktop-integration
 Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
@@ -203,7 +203,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# Apache OpenOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s
