@@ -4014,73 +4014,6 @@ rtl::OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
     return sBuf.EraseTrailingChars( 0 );
 }
 
-SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, Rectangle& rBoundRect ) const
-{
-    SdrObject*  pRet = NULL;
-    String      aObjectText;
-    String      aFontName;
-    sal_Bool        bTextRotate = sal_False;
-
-    ((SvxMSDffManager*)this)->mnFix16Angle = 0; // we don't want to use this property in future
-    if ( SeekToContent( DFF_Prop_gtextUNICODE, rStCt ) )
-        aObjectText = MSDFFReadZString( rStCt, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
-    if ( SeekToContent( DFF_Prop_gtextFont, rStCt ) )
-        aFontName = MSDFFReadZString( rStCt, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
-    if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 )
-    {
-        // Text ist senkrecht formatiert, Box Kippen
-        sal_Int32 nHalfWidth = ( rBoundRect.GetWidth() + 1) >> 1;
-        sal_Int32 nHalfHeight = ( rBoundRect.GetHeight() + 1) >> 1;
-        Point aTopLeft( rBoundRect.Left() + nHalfWidth - nHalfHeight,
-                rBoundRect.Top() + nHalfHeight - nHalfWidth);
-        Size aNewSize( rBoundRect.GetHeight(), rBoundRect.GetWidth() );
-        Rectangle aNewRect( aTopLeft, aNewSize );
-        rBoundRect = aNewRect;
-
-        String aSrcText( aObjectText );
-        aObjectText.Erase();
-        for( sal_uInt16 a = 0; a < aSrcText.Len(); a++ )
-        {
-            aObjectText += aSrcText.GetChar( a );
-            aObjectText += '\n';
-        }
-        rSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
-        bTextRotate = sal_True;
-    }
-    if ( aObjectText.Len() )
-    {   // FontWork-Objekt Mit dem Text in aObjectText erzeugen
-        SdrObject* pNewObj = new SdrRectObj( OBJ_TEXT, rBoundRect );
-        if( pNewObj )
-        {
-            pNewObj->SetModel( pSdrModel );
-            ((SdrRectObj*)pNewObj)->SetText( aObjectText );
-            SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
-            rSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
-            rSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
-            rSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(),
-                            PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
-
-            pNewObj->SetMergedItemSet(rSet);
-
-            pRet = pNewObj->ConvertToPolyObj( sal_False, sal_False );
-            if( !pRet )
-                pRet = pNewObj;
-            else
-            {
-                pRet->NbcSetSnapRect( rBoundRect );
-                SdrObject::Free( pNewObj );
-            }
-            if( bTextRotate )
-            {
-                double a = 9000 * nPi180;
-                pRet->NbcRotate( rBoundRect.Center(), 9000, sin( a ), cos( a ) );
-            }
-        }
-    }
-    return pRet;
-}
-
 static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
 {
     MapMode aPrefMapMode(rGraf.GetPrefMapMode());
@@ -7577,20 +7510,6 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             }
         }
     }
-
-    return pRet;
-}
-
-SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
-{
-    SdrObject* pRet = NULL;
-
-    if(120 >= sal_uInt16(eTyp))
-    {
-        pRet = new SdrRectObj();
-    }
-
-    DBG_ASSERT(pRet, "SvxMSDffManager::GetAutoForm -> UNKNOWN AUTOFORM");
 
     return pRet;
 }

@@ -519,7 +519,6 @@ protected :
                                 const unsigned long nDrawingContainerId );
 
     bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
-    SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
@@ -530,7 +529,6 @@ protected :
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,

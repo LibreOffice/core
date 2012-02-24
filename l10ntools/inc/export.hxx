@@ -310,11 +310,6 @@ public:
 
     static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
 
-    static void DumpExportList(const rtl::OString& rListName,
-        ExportList& aList);
-    static void DumpMap(const rtl::OString& rMapName,
-        OStringHashMap& aMap);
-
 private:
     static std::vector<rtl::OString> aLanguages;
     static std::vector<rtl::OString> aForcedLanguages;

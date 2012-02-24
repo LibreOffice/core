@@ -235,7 +235,6 @@ public:
     sal_Bool   IsOrtho () const { return sal_False ; }
 
     sal_Bool IsConsistent() const  { return nActColumn < aColumns.size(); }
-    long   GetVisibleRight() const;// right visible edge of the current column
 };
 
 // class SvxObjectItem ---------------------------------------------------

@@ -91,37 +91,6 @@ rtl::OString Export::sLanguages;
 rtl::OString Export::sForcedLanguages;
 /*****************************************************************************/
 
-void Export::DumpExportList(const rtl::OString& rListName, ExportList& aList)
-{
-    printf( "%s\n", rListName.getStr() );
-    rtl::OString l;
-    ExportListEntry* aEntry;
-    for( unsigned int x = 0; x < aList.size() ; ++x )
-    {
-        aEntry = (ExportListEntry*) aList[ x ];
-        Export::DumpMap( l , *aEntry );
-    }
-    printf("\n");
-}
-
-void Export::DumpMap(const rtl::OString& rMapName,
-    OStringHashMap& aMap)
-{
-    if( rMapName.getLength() )
-        printf("MapName %s\n", rMapName.getStr());
-    if( aMap.size() < 1 )
-        return;
-    for(OStringHashMap::const_iterator idbg = aMap.begin(); idbg != aMap.end(); ++idbg)
-    {
-        rtl::OString a( idbg->first );
-        rtl::OString b( idbg->second );
-        printf("[%s]= %s",a.getStr(),b.getStr());
-        printf("\n");
-    }
-    printf("\n");
-    return;
-}
-
 /*****************************************************************************/
 void Export::SetLanguages( std::vector<rtl::OString> val ){
 /*****************************************************************************/

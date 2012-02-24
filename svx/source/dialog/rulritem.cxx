@@ -549,18 +549,6 @@ sal_Bool SvxColumnItem::CalcOrtho() const
 
 //------------------------------------------------------------------------
 
-long SvxColumnItem::GetVisibleRight() const
-{
-    sal_uInt16 nIdx = 0;
-
-    for ( sal_uInt16 i = 0; i < nActColumn; ++i )
-    {
-        if ( (*this)[i].bVisible )
-            ++nIdx;
-    }
-    return (*this)[nIdx].nEnd;
-}
-
 bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;

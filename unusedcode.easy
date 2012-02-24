@@ -212,7 +212,6 @@ SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUSt
 SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 SvXMLImportContexts_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SvXMLImportPropertyMapper::importXML(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int) const
-SvXMLNumFormatContext::AddCondition(int, rtl::OUString const&, LocaleDataWrapper const&)
 SvXMLStyleIndices_Impl::GetPos(SvXMLStyleIndex_Impl const*) const
 SvXMLStyleIndices_Impl::Remove(SvXMLStyleIndex_Impl*)
 SvXMLTokenMap_Impl::Insert(SvXMLTokenMapEntry_Impl* const&, unsigned short&)
@@ -245,17 +244,13 @@ SvxAutocorrWordList::Remove(unsigned short, unsigned short)
 SvxChartDataDescrItem::SvxChartDataDescrItem(SvxChartDataDescr, unsigned short)
 SvxChartTextOrientItem::SvxChartTextOrientItem(SvxChartTextOrient, unsigned short)
 SvxColorValueSet::SvxColorValueSet(Window*, long)
-SvxColumnItem::GetVisibleRight() const
 SvxDoCapitals::Do(String const&, unsigned short, unsigned short, unsigned char)
-SvxDrawOutlinerViewForwarder::SetShapePos(Point const&)
 SvxDrawPage::SvxDrawPage()
 SvxEditSourceHelper::UserSpaceToEE(Rectangle const&, Size const&, bool)
 SvxFrameDirectionItem::SvxFrameDirectionItem(unsigned short)
 SvxIMapDlg::GetTargetList() const
 SvxJustifyMethodItem::SvxJustifyMethodItem(unsigned short)
 SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
-SvxMSDffManager::GetAutoForm(MSO_SPT) const
-SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
 SvxMSDffManager::Scale(PolyPolygon&) const
 SvxMSDffManager::Scale(Rectangle&) const
 SvxMSDffShapeInfos::Insert(SvxMSDffShapeInfo* const&, unsigned short&)

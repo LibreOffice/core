@@ -163,9 +163,4 @@ sal_Bool SvxDrawOutlinerViewForwarder::Paste()
     return sal_True;
 }
 
-void SvxDrawOutlinerViewForwarder::SetShapePos( const Point& rShapePosTopLeft )
-{
-    maTextShapeTopLeft = rShapePosTopLeft;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

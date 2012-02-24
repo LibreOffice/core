@@ -59,10 +59,6 @@ public:
     virtual sal_Bool    Copy();
     virtual sal_Bool    Cut();
     virtual sal_Bool    Paste();
-
-    /// Set the top, left position of the underlying draw shape, to
-    /// allow EditEngine offset calculations
-    void SetShapePos( const Point& rShapePosTopLeft );
 };
 
 #endif

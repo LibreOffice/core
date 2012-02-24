@@ -213,7 +213,6 @@ public:
     void AddNfKeyword( sal_uInt16 nIndex );
     sal_Bool ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew );
     void AddCondition( const sal_Int32 nIndex );
-    void AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData );
     void AddCondition( const rtl::OUString& rCondition, const rtl::OUString& rApplyName );
     void AddColor( sal_uInt32 const nColor );
 
