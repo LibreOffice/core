@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_minimizer \
     Extension_minimizer \
     Library_minimizer \
-    Package_minimizer_manifest \
     Zip_minimizer \
 ))
 endif
@@ -45,7 +44,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Extension_pdfimport \
     Library_pdfimport \
     Package_pdfimport_keywords \
-    Package_pdfimport_manifest \
 ))
 endif
 
@@ -55,7 +53,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Extension_presenter \
     Library_presenter \
     Package_presenter_help \
-    Package_presenter_manifest \
     Zip_presenter \
 ))
 endif

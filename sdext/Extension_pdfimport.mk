@@ -31,11 +31,8 @@ $(eval $(call gb_Extension_Extension,pdfimport,sdext/source/pdfimport))
 
 $(eval $(call gb_Extension_set_platform,pdfimport,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_set_manifest,pdfimport,$(WORKDIR)/CustomTarget/sdext/source/pdfimport/config/manifest.xml))
-
 $(eval $(call gb_Extension_add_package_dependencies,pdfimport,\
     sdext_pdfimport_keywords \
-    sdext_pdfimport_manifest \
 ))
 
 $(eval $(call gb_Extension_add_files,pdfimport,.,\

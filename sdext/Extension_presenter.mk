@@ -31,11 +31,8 @@ $(eval $(call gb_Extension_Extension,presenter-screen,sdext/source/presenter))
 
 $(eval $(call gb_Extension_set_platform,presenter-screen,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_set_manifest,presenter-screen,$(WORKDIR)/CustomTarget/sdext/source/presenter/manifest.xml))
-
 $(eval $(call gb_Extension_add_package_dependencies,presenter-screen,\
     sdext_presenter_help \
-    sdext_presenter_manifest \
 ))
 
 $(eval $(call gb_Extension_add_files,presenter-screen,,\

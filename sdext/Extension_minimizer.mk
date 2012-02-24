@@ -31,10 +31,6 @@ $(eval $(call gb_Extension_Extension,presentation-minimizer,sdext/source/minimiz
 
 $(eval $(call gb_Extension_set_platform,presentation-minimizer,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_add_package_dependencies,presentation-minimizer,\
-    sdext_minimizer_manifest \
-))
-
 $(eval $(call gb_Extension_add_file,presentation-minimizer,$(call gb_Library_get_dllname,SunPresentationMinimizer),$(call gb_Library_get_target,SunPresentationMinimizer)))
 
 $(eval $(call gb_Extension_add_files,presentation-minimizer,bitmaps,\
