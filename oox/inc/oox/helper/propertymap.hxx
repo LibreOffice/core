@@ -100,8 +100,10 @@ public:
                         makePropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
   static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dump();
+#endif
   static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dumpCode();
 #endif

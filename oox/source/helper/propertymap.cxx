@@ -431,6 +431,7 @@ static void lclDumpAnyValue( Any value)
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
 }
 
+#ifdef DBG_UTIL
 void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
@@ -454,6 +455,7 @@ void PropertyMap::dump()
 {
     dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
 }
+#endif
 
 static void printLevel (int level)
 {
