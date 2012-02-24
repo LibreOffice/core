@@ -817,9 +817,9 @@ public:
     virtual void        ReadSubRecord( XclImpStream& rStrm );
 
     /** Sets a data point or series format (CHDATAFORMAT group) for this series. */
-    void                SetDataFormat( XclImpChDataFormatRef xDataFmt );
+    void                SetDataFormat( const XclImpChDataFormatRef& xDataFmt );
     /** Sets a label text (CHTEXT group) attached  to a series or data point. */
-    void                SetDataLabel( XclImpChTextRef xLabel );
+    void                SetDataLabel( const XclImpChTextRef& xLabel );
     /** Adds error bar settings from the passed series to the own series. */
     void                AddChildSeries( const XclImpChSeries& rSeries );
     /** Updates missing series formatting by using default formatting from axes sets. */
@@ -866,10 +866,6 @@ private:
 
     /** Creates a new CHDATAFORMAT group with the specified point index. */
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
-    /** Returns the pointer to a CHDATAFORMAT group reference or 0 for invalid pointer index. */
-    XclImpChDataFormatRef* GetDataFormatRef( sal_uInt16 nPointIdx );
-    /** Returns the pointer to a CHTEXT group reference or 0 for invalid pointer index. */
-    XclImpChTextRef*    GetDataLabelRef( sal_uInt16 nPointIdx );
 
     /** Converts all trend lines and inserts them into the passed API data series object. */
     void                ConvertTrendLines( XDataSeriesRef xDataSeries ) const;
