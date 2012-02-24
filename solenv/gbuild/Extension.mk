@@ -92,7 +92,7 @@ $(call gb_Extension_get_target,%) : \
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(call gb_Extension_get_rootdir,$*)/registration && \
 		$(call gb_Extension__subst_platform,$(call gb_Extension_get_workdir,$*)/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \
-		$(call gb_Extension__subst_platform,$(MANIFEST),$(call gb_Extension_get_rootdir,$*)/META-INF/manifest.xml) && \
+		$(call gb_Extension__subst_platform,$(LOCATION)/manifest.xml,$(call gb_Extension_get_rootdir,$*)/META-INF/manifest.xml) && \
 		cp -f $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) $(call gb_Extension_get_rootdir,$*)/registration && \
 		cd $(call gb_Extension_get_rootdir,$*) && \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync \
@@ -110,8 +110,6 @@ $(call gb_Extension_get_target,%) : \
 define gb_Extension_Extension
 $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml registration
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
-$(call gb_Extension_get_target,$(1)) : MANIFEST := $(SRCDIR)/$(2)/manifest.xml
-$(call gb_Extension_get_target,$(1)) : $$(MANIFEST)
 $(call gb_Extension_get_target,$(1)) : PLATFORM :=
 $(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_Extension_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
@@ -123,12 +121,6 @@ $(call gb_Extension_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/descripti
 $(eval $(call gb_Module_register_target,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_target,$(1)),$(1))
 $(call gb_Extension_get_outdir_target,$(1)) : $(call gb_Extension_get_target,$(1))
-
-endef
-
-# Set custom manifest
-define gb_Extension_set_manifest
-$(call gb_Extension_get_target,$(1)) : MANIFEST := $(2)
 
 endef
 
