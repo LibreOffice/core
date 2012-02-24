@@ -28,10 +28,10 @@
 PARTIAL_BUILD := T
 SOURCEDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-include $(OUTDIR)/inc/rtlbootstrap.mk
+include $(SRCDIR)/sdext/platform.mk
 
 presenter.xhp :
-	sed "s/PLATFORMID/$(RTL_OS)_$(RTL_ARCH)/" < $(SOURCEDIR)/presenter.xhp > $@
+	sed "s/PLATFORMID/$(sdext_PLATFORM)/" < $(SOURCEDIR)/presenter.xhp > $@
 
 .DEFAULT_GOAL := all
 .PHONY : all
