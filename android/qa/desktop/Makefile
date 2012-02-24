@@ -205,6 +205,13 @@ copy-stuff: buildrcs
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
+# persuade Basic to be happy
+	mkdir -p assets/presets/basic/Standard
+	cp $(SRC_ROOT)/wizards/source/config/dialog.xlc assets/presets/basic/
+	cp $(SRC_ROOT)/wizards/source/config/script.xlc assets/presets/basic/
+	cp $(SRC_ROOT)/wizards/source/standard/Module1.xba assets/presets/basic/Standard/
+	cp $(SRC_ROOT)/wizards/source/standard/dialog.xlb assets/presets/basic/Standard/
+	cp $(SRC_ROOT)/wizards/source/standard/script.xlb assets/presets/basic/Standard/
 # shell / splash images
 	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # Then assets that are unpacked at run-time into the app's data directory.
