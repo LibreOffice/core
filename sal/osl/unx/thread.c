@@ -133,13 +133,10 @@ static Thread_Impl* osl_thread_construct_Impl (void);
 static void         osl_thread_destruct_Impl (Thread_Impl ** ppImpl);
 
 static void* osl_thread_start_Impl (void * pData);
-static void  osl_thread_cleanup_Impl (void * pData);
+static void  osl_thread_cleanup_Impl (Thread_Impl * pImpl);
 
 static oslThread osl_thread_create_Impl (
     oslWorkerFunction pWorker, void * pThreadData, short nFlags);
-
-static void osl_thread_join_cleanup_Impl (void * opaque);
-static void osl_thread_wait_cleanup_Impl (void * opaque);
 
 /* @@@ see TODO @@@ */
 static sal_uInt16 insertThreadId (pthread_t hThread);
@@ -153,24 +150,6 @@ static void osl_thread_init_Impl (void)
 {
     osl_thread_priority_init_Impl();
     osl_thread_textencoding_init_Impl();
-}
-
-/*****************************************************************************/
-/* osl_thread_join_cleanup_Impl */
-/*****************************************************************************/
-static void osl_thread_join_cleanup_Impl (void * opaque)
-{
-    pthread_t hThread = (pthread_t)(opaque);
-    pthread_detach (hThread);
-}
-
-/*****************************************************************************/
-/* osl_thread_wait_cleanup_Impl */
-/*****************************************************************************/
-static void osl_thread_wait_cleanup_Impl (void * opaque)
-{
-    pthread_mutex_t * pMutex = (pthread_mutex_t*)(opaque);
-    pthread_mutex_unlock (pMutex);
 }
 
 /*****************************************************************************/
@@ -208,12 +187,11 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
 /*****************************************************************************/
 /* osl_thread_cleanup_Impl */
 /*****************************************************************************/
-static void osl_thread_cleanup_Impl (void* pData)
+static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
 {
     pthread_t thread;
     int attached;
     int destroyed;
-    Thread_Impl* pImpl= (Thread_Impl*)pData;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -241,14 +219,6 @@ static void osl_thread_cleanup_Impl (void* pData)
 /*****************************************************************************/
 /* osl_thread_start_Impl */
 /*****************************************************************************/
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic push
-#endif
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-#endif
 static void* osl_thread_start_Impl (void* pData)
 {
     int terminate;
@@ -257,9 +227,6 @@ static void* osl_thread_start_Impl (void* pData)
     OSL_ASSERT(pImpl);
 
     pthread_mutex_lock (&(pImpl->m_Lock));
-
-    /* install cleanup handler */
-    pthread_cleanup_push (osl_thread_cleanup_Impl, pData);
 
     /* request oslThreadIdentifier @@@ see TODO @@@ */
     pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
@@ -272,17 +239,8 @@ static void* osl_thread_start_Impl (void* pData)
     /* Check if thread is started in SUSPENDED state */
     while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
-#ifdef ANDROID
-/* Avoid compiler warning: declaration of '__cleanup' shadows a previous local */
-#define __cleanup __cleanup_2
-#endif
         /* wait until SUSPENDED flag is cleared */
-        pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
-        pthread_cleanup_pop (0);
-#ifdef ANDROID
-#undef __cleanup
-#endif
     }
 
     /* check for SUSPENDED to TERMINATE state change */
@@ -310,15 +268,9 @@ static void* osl_thread_start_Impl (void* pData)
 #endif
     }
 
-    /* call cleanup handler and leave */
-    pthread_cleanup_pop (1);
+    osl_thread_cleanup_Impl (pImpl);
     return (0);
 }
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic pop
-#endif
-#endif
 
 /*****************************************************************************/
 /* osl_thread_create_Impl */
@@ -381,9 +333,7 @@ static oslThread osl_thread_create_Impl (
     while (pImpl->m_Flags & THREADIMPL_FLAGS_STARTUP)
     {
         /* wait until STARTUP flag is cleared */
-        pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
-        pthread_cleanup_pop (0);
     }
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
@@ -480,9 +430,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
         while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
         {
             /* wait until SUSPENDED flag is cleared */
-            pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
             pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
-            pthread_cleanup_pop (0);
         }
     }
 
@@ -536,15 +484,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 
     if (attached)
     {
-        /* install cleanup handler to ensure consistent flags and state */
-        pthread_cleanup_push (
-            osl_thread_join_cleanup_Impl, (void*)thread);
-
-        /* join */
         pthread_join (thread, NULL);
-
-        /* remove cleanup handler */
-        pthread_cleanup_pop (0);
     }
 }
 
@@ -589,21 +529,17 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     if (!(pthread_equal (pthread_self(), pImpl->m_hThread)))
         return sal_False; /* EINVAL */
 
-    pthread_testcancel();
     pthread_mutex_lock (&(pImpl->m_Lock));
 
     while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
         /* wait until SUSPENDED flag is cleared */
-        pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
-        pthread_cleanup_pop (0);
     }
 
     terminate = ((pImpl->m_Flags & THREADIMPL_FLAGS_TERMINATE) > 0);
 
     pthread_mutex_unlock(&(pImpl->m_Lock));
-    pthread_testcancel();
 
     return (terminate == 0);
 }
