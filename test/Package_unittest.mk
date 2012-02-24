@@ -28,8 +28,6 @@
 $(eval $(call gb_Package_Package,test_unittest,$(SRCDIR)/test/user-template))
 
 $(eval $(call gb_Package_add_file,test_unittest,unittest/registry/modifications.xcd,registry/modifications.xcd))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/basic/dialog.xlc,user/basic/dialog.xlc))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/basic/script.xlc,user/basic/script.xlc))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/sl.dic,user/wordbook/sl.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/en-US.dic,user/wordbook/en-US.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/technical.dic,user/wordbook/technical.dic))
