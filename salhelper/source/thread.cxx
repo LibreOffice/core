@@ -29,6 +29,9 @@
 
 #include "sal/config.h"
 
+#include <stdexcept>
+#include <string>
+
 #include "sal/log.hxx"
 #include "salhelper/thread.hxx"
 
@@ -36,11 +39,13 @@ salhelper::Thread::Thread(char const * name): name_(name) {}
 
 void salhelper::Thread::launch() {
     SAL_INFO("salhelper.thread", "launch " << name_);
-    // Assumption is that osl::Thread::create returns normally iff it causes
-    // osl::Thread::run to start executing:
+    // Assumption is that osl::Thread::create returns normally with a true
+    // return value iff it causes osl::Thread::run to start executing:
     acquire();
     try {
-        create();
+        if (!create()) {
+            throw std::runtime_error("osl::Thread::create failed");
+        }
     } catch (...) {
         release();
         throw;
