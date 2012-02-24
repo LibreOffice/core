@@ -88,7 +88,7 @@ CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+=-fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 .IF "$(HAVE_CXX0X)" == "TRUE"
-CFLAGSCXX+=-std=c++0x
+CFLAGSCXX+=-std=gnu++0x
 .IF "$(GCCNUMVER)" <= "000400059999"
 CFLAGSCXX+=-Wno-deprecated-declarations
 .ENDIF
