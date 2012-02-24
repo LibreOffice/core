@@ -1802,12 +1802,6 @@ int Desktop::Main()
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
-#ifdef ANDROID
-                // For some reason we're not getting a desktop frame or component [odd]
-                ErrorBox aKickStartVCL( NULL, WB_OK, rtl::OUString::createFromAscii("My very own title!") );
-                aKickStartVCL.SetText( rtl::OUString::createFromAscii("Delphic Utterance") );
-                aKickStartVCL.Show(); // don't execute - just leave it lying around ....
-#endif
                 Execute();
             }
         }
