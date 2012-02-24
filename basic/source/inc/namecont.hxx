@@ -348,8 +348,8 @@ protected:
     BasicManager* getBasicManager( void );
     ::rtl::OUString createAppLibraryFolder( SfxLibrary* pLib, const ::rtl::OUString& aName );
 
-    sal_Bool init( const ::rtl::OUString& rInitialDocumentURL,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+    void init( const ::rtl::OUString& rInitialDocumentURL,
+               const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const = 0;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const = 0;
@@ -383,8 +383,8 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    sal_Bool init_Impl( const ::rtl::OUString& rInitialDocumentURL,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+    void init_Impl( const ::rtl::OUString& rInitialDocumentURL,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions( void );
 
 public:

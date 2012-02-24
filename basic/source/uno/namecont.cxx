@@ -586,20 +586,18 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     rStr += OUString(RTL_CONSTASCII_USTRINGPARAM(".xlb/"));
 }
 
-sal_Bool SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
+void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
 {
     // this might be called from within the ctor, and the impl_init might (indirectly) create
     // an UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
     osl_incrementInterlockedCount( &m_refCount );
-    sal_Bool bSuccess = init_Impl( rInitialDocumentURL, rxInitialStorage );
+    init_Impl( rInitialDocumentURL, rxInitialStorage );
     osl_decrementInterlockedCount( &m_refCount );
-
-    return bSuccess;
 }
 
-sal_Bool SfxLibraryContainer::init_Impl(
-    const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
+void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
+                                     const uno::Reference< embed::XStorage >& rxInitialStorage )
 {
     uno::Reference< embed::XStorage > xStorage = rxInitialStorage;
 
@@ -632,8 +630,8 @@ sal_Bool SfxLibraryContainer::init_Impl(
             meInitMode = LIBRARY_INIT_FILE;
             uno::Reference< embed::XStorage > xDummyStor;
             ::xmlscript::LibDescriptor aLibDesc;
-            sal_Bool bReadIndexFile = implLoadLibraryIndexFile( NULL, aLibDesc, xDummyStor, aInitFileName );
-               return bReadIndexFile;
+            implLoadLibraryIndexFile( NULL, aLibDesc, xDummyStor, aInitFileName );
+            return;
         }
         else
         {
@@ -643,7 +641,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {
                 meInitMode = OLD_BASIC_STORAGE;
                 importFromOldStorage( aInitFileName );
-                return sal_True;
+                return;
             }
             else
             {
@@ -670,7 +668,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     if( !xParser.is() )
     {
         SAL_WARN("basic", "couldn't create sax parser component");
-        return sal_False;
+        return;
     }
 
     uno::Reference< io::XInputStream > xInput;
@@ -821,12 +819,12 @@ sal_Bool SfxLibraryContainer::init_Impl(
             catch ( const xml::sax::SAXException& e )
             {
                 SAL_WARN("basic", e.Message);
-                return sal_False;
+                return;
             }
             catch ( const io::IOException& e )
             {
                 SAL_WARN("basic", e.Message);
-                return sal_False;
+                return;
             }
 
             sal_Int32 nLibCount = pLibArray->mnLibCount;
@@ -962,7 +960,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         // Only in the first pass it's an error when no index file is found
         else if( nPass == 0 )
         {
-            return sal_False;
+            return;
         }
     }
 
@@ -1225,8 +1223,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {}
         }
     }
-
-    return sal_True;
 }
 
 void SfxLibraryContainer::implScanExtensions( void )
