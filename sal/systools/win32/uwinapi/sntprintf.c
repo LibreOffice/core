@@ -40,6 +40,8 @@ static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
 }
 #endif
 
+#if !defined(__MINGW32__) || defined (__NO_ISOCEXT)
+
 /*  This function retrieves the pointer to the last character of a buffer.
     That is the pointer to the last character of the buffer that fits
     completly into that buffer or the position of the terminating zero.
@@ -121,5 +123,7 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
