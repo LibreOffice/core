@@ -26,6 +26,12 @@ PRJNAME=extensions
 TARGET=updchk
 PACKAGE=org.openoffice.Office
 
+
+.IF "$(ENABLE_ONLINE_UPDATE)" != "YES"
+@all:
+    @echo "Online Update disabled."
+.ELSE
+
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
@@ -140,3 +146,5 @@ $(MISC)/updchk.uno.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt updchk.uno.component
+
+.ENDIF # "$(ENABLE_ONLINE_UPDATE)" == "YES"

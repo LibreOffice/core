@@ -1716,6 +1716,7 @@ ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 ToFile( "CUSTOM_PACK_LIST",  "@CUSTOM_PACK_LIST@",  "e" );
 ToFile( "USE_PACKAGER",      "@USE_PACKAGER@",      "e" );
+ToFile( "ENABLE_ONLINE_UPDATE", "@ENABLE_ONLINE_UPDATE@", "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )

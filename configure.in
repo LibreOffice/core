@@ -46,6 +46,9 @@ AC_ARG_ENABLE(graphite,
 AC_ARG_WITH(system-graphite,
 [  --with-system-graphite    use graphite library already installed on system
 ],,)
+AC_ARG_ENABLE(online-update,
+[  --disable-online-update Disables the Online Update feature.
+],,enable_online_update=yes)
 AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
@@ -1341,6 +1344,20 @@ else
 fi
 
 # gstreamer is used only via pre-installed libraries: not a problem
+
+dnl ===================================================================
+dnl Online Update
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable the Online Update support])
+if test "$enable_online_update" = "yes" -o "$enable_online_update" = "TRUE"; then
+   ENABLE_ONLINE_UPDATE="YES"
+   SCPDEFS="$SCPDEFS -DENABLE_ONLINE_UPDATE"
+   AC_MSG_RESULT([yes])
+else
+   ENABLE_ONLINE_UPDATE=""
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_ONLINE_UPDATE)
 
 
 AC_MSG_CHECKING([whether to enable native CUPS support])

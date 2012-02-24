@@ -42,7 +42,6 @@ MY_XCDS = \
     $(MISC)/lingucomponent.xcd \
     $(MISC)/main.xcd \
     $(MISC)/math.xcd \
-    $(MISC)/onlineupdate.xcd \
     $(MISC)/oooimprovement.xcd \
     $(MISC)/palm.xcd \
     $(MISC)/pocketexcel.xcd \
@@ -51,6 +50,10 @@ MY_XCDS = \
     $(MISC)/w4w.xcd \
     $(MISC)/writer.xcd \
     $(MISC)/xsltfilter.xcd
+.IF "$(ENABLE_ONLINE_UPDATE)" == "YES"
+MY_XCDS += \
+    $(MISC)/onlineupdate.xcd
+.END
 
 MY_DEPS_base = main
 MY_FILES_base = \

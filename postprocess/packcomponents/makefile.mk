@@ -163,7 +163,6 @@ my_components = \
     ucptdoc1 \
     updatefeed \
     updchk \
-    updchk.uno \
     utl \
     uui \
     vbaevents \
@@ -186,6 +185,10 @@ my_components += component/vcl/vcl.windows
 my_components += component/vcl/vcl.unx
 .ENDIF
 .ENDIF
+
+.IF "$(ENABLE_ONLINE_UPDATE)"=="YES"
+my_components += updchk.uno
+.END
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
