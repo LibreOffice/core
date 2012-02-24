@@ -132,7 +132,6 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
             // add PropPatch xml trailer at end
             aBodyText += rtl::OUString::createFromAscii( PROPPATCH_TRAILER );
 
-            const char* pTestValue = rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 );
             body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
                                                   pSerfBucketAlloc );
         }

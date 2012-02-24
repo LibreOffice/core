@@ -92,12 +92,9 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // body bucket - certain properties OR all properties OR only property names
     serf_bucket_t* body_bkt = 0;
-    sal_Int32 nDataLen = 0;
+    rtl::OUString aBodyText;
     {
         // create and fill body bucket with requested properties
-        body_bkt = serf_bucket_aggregate_create( pSerfBucketAlloc );
-
-        serf_bucket_t* tmp = 0;
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
                                ? mpPropNames->size()
                                : 0;
@@ -111,72 +108,34 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    thePropName );
 
                 /* <*propname* xmlns="*propns*" /> */
-                tmp = SERF_BUCKET_SIMPLE_STRING_LEN("<", 1, pSerfBucketAlloc );
-                serf_bucket_aggregate_append( body_bkt, tmp );
-                nDataLen += 1;
-
-                tmp = SERF_BUCKET_SIMPLE_STRING( thePropName.name, pSerfBucketAlloc );
-                serf_bucket_aggregate_append( body_bkt, tmp );
-                nDataLen += strlen(thePropName.name);
-
-                tmp = SERF_BUCKET_SIMPLE_STRING_LEN( " xmlns=\"",
-                                                     sizeof(" xmlns=\"")-1,
-                                                     pSerfBucketAlloc );
-                serf_bucket_aggregate_append( body_bkt, tmp );
-                nDataLen += sizeof(" xmlns=\"")-1;
-
-                tmp = SERF_BUCKET_SIMPLE_STRING( thePropName.nspace, pSerfBucketAlloc );
-                serf_bucket_aggregate_append( body_bkt, tmp );
-                nDataLen += strlen(thePropName.nspace);
-
-                tmp = SERF_BUCKET_SIMPLE_STRING_LEN( "\"/>", sizeof("\"/>")-1,
-                                                     pSerfBucketAlloc );
-                serf_bucket_aggregate_append( body_bkt, tmp );
-                nDataLen += sizeof("\"/>")-1;
+                aBodyText += rtl::OUString::createFromAscii( "<" );
+                aBodyText += rtl::OUString::createFromAscii( thePropName.name );
+                aBodyText += rtl::OUString::createFromAscii( " xmlnx=\"" );
+                aBodyText += rtl::OUString::createFromAscii( thePropName.nspace );
+                aBodyText += rtl::OUString::createFromAscii( "\"/>" );
             }
 
-            tmp = SERF_BUCKET_SIMPLE_STRING_LEN("<prop>",
-                                                sizeof("<prop>")-1,
-                                                pSerfBucketAlloc );
-            serf_bucket_aggregate_prepend(body_bkt, tmp);
-            nDataLen += sizeof("<prop>")-1;
-
-            tmp = SERF_BUCKET_SIMPLE_STRING_LEN("</prop>",
-                                                sizeof("</prop>")-1,
-                                                pSerfBucketAlloc );
-            serf_bucket_aggregate_append(body_bkt, tmp);
-            nDataLen += sizeof("</prop>")-1;
+            aBodyText = rtl::OUString::createFromAscii( "<prop>" ) +
+                        aBodyText +
+                        rtl::OUString::createFromAscii( "</prop>" );
         }
         else
         {
             if ( mbOnlyPropertyNames )
             {
-                tmp = SERF_BUCKET_SIMPLE_STRING_LEN( "<propname/>",
-                                                     sizeof("<propname/>")-1,
-                                                     pSerfBucketAlloc );
-                nDataLen += sizeof("<propname/>")-1;
+                aBodyText = rtl::OUString::createFromAscii( "<propname/>" );
             }
             else
             {
-                tmp = SERF_BUCKET_SIMPLE_STRING_LEN( "<allprop/>",
-                                                     sizeof("<allprop/>")-1,
-                                                     pSerfBucketAlloc );
-                nDataLen += sizeof("<allprop/>")-1;
+                aBodyText = rtl::OUString::createFromAscii( "<allprop/>" );
             }
-            serf_bucket_aggregate_append( body_bkt, tmp );
         }
 
-        tmp = SERF_BUCKET_SIMPLE_STRING_LEN( PROPFIND_HEADER,
-                                             sizeof(PROPFIND_HEADER)-1,
-                                             pSerfBucketAlloc );
-        serf_bucket_aggregate_prepend(body_bkt, tmp);
-        nDataLen += sizeof(PROPFIND_HEADER)-1;
-
-        tmp = SERF_BUCKET_SIMPLE_STRING_LEN(PROPFIND_TRAILER,
-                                            sizeof(PROPFIND_TRAILER)-1,
-                                            pSerfBucketAlloc );
-        serf_bucket_aggregate_append(body_bkt, tmp);
-        nDataLen += sizeof(PROPFIND_TRAILER)-1;
+        aBodyText = rtl::OUString::createFromAscii( PROPFIND_HEADER ) +
+                    aBodyText +
+                    rtl::OUString::createFromAscii( PROPFIND_TRAILER );
+        body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
+                                                pSerfBucketAlloc );
     }
 
     // create serf request
@@ -193,10 +152,14 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
 
     // request specific header fields
+    // request specific header fields
     serf_bucket_headers_setn( hdrs_bkt, "Depth", mDepthStr );
-    serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
-    serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
-                              rtl::OUStringToOString( rtl::OUString::valueOf( nDataLen ), RTL_TEXTENCODING_UTF8 ) );
+    if ( body_bkt != 0 && aBodyText.getLength() > 0 )
+    {
+        serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
+        serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
+                                  rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
+    }
 
     return req_bkt;
 }
