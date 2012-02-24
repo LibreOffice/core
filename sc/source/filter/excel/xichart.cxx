@@ -2135,8 +2135,9 @@ XclImpChTextRef* XclImpChSeries::GetDataLabelRef( sal_uInt16 nPointIdx )
         XclImpChTextMap::iterator itr = maLabels.lower_bound(nPointIdx);
         if (itr == maLabels.end() || maLabels.key_comp()(nPointIdx, itr->first))
         {
-            // No object exists at this point index position.  Insert a new one.
-            XclImpChTextRef p(new XclImpChText(GetChRoot()));
+            // No object exists at this point index position.  Insert a new
+            // placeholder.
+            XclImpChTextRef p;
             itr = maLabels.insert(itr, XclImpChTextMap::value_type(nPointIdx, p));
         }
         return &itr->second;
