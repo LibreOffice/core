@@ -1088,7 +1088,7 @@ void ImportExcel::TableOp( void )
     else
     {
         bTabTruncated = sal_True;
-        GetTracer().TraceInvalidRow(GetCurrScTab(), nLastRow, MAXROW);
+        GetTracer().TraceInvalidRow(nLastRow, MAXROW);
     }
 }
 

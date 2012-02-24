@@ -87,30 +87,17 @@ struct XclTracerDetails
 class XclTracer
 {
 public:
-    explicit                    XclTracer( const String& rDocUrl, const ::rtl::OUString& rConfigPath );
+    explicit                    XclTracer( const String& rDocUrl );
     virtual                     ~XclTracer();
 
     /** Returns true, if tracing is enabled. */
     inline bool                 IsEnabled() const { return mbEnabled; }
 
-    /** Adds an attribute to be traced with the next Trace() call. */
-    void                        AddAttribute( const ::rtl::OUString& rName, const ::rtl::OUString& rValue );
-
-    /** Creates an element including all attributes set up to this call.
-        @descr  Removes all attributes after the element is traced. */
-    void                        Trace( const ::rtl::OUString& rElementID, const ::rtl::OUString& rMessage );
-
-    /** Calls Trace() with a known document properties problem. */
-    void                        TraceLog( XclTracerId eProblem, sal_Int32 nValue = 0 );
-
-    /** Calls AddAttribute() to create the Context & Detail for known problems. */
-    void                        Context( XclTracerId eProblem, SCTAB nTab = 0 );
-
     /** Ensure that particular traces are logged once per document. */
-    void                        ProcessTraceOnce(XclTracerId eProblem, SCTAB nTab = 0);
+    void                        ProcessTraceOnce(XclTracerId eProblem);
 
     void                        TraceInvalidAddress(const ScAddress& rPos, const ScAddress& rMaxPos);
-    void                        TraceInvalidRow( SCTAB nTab,  sal_uInt32 nRow, sal_uInt32 nMaxrow );
+    void                        TraceInvalidRow( sal_uInt32 nRow, sal_uInt32 nMaxrow );
     void                        TraceInvalidTab( SCTAB nTab, SCTAB nMaxTab);
     void                        TracePrintRange();
     void                        TraceDates(sal_uInt16 nNumFmt);
