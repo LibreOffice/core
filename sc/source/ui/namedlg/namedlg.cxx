@@ -263,10 +263,28 @@ void ScNameDlg::SetActive()
 
 void ScNameDlg::UpdateChecks(ScRangeData* pData)
 {
+    // remove handlers, we only want the handlers to process
+    // user input and not when we are syncing the controls  with our internal
+    // model ( also UpdateChecks is called already from some other event
+    // handlers, triggering handlers while already processing a handler can
+    // ( and does in this case ) corrupt the internal data
+
+    maBtnCriteria.SetToggleHdl( Link() );
+    maBtnPrintArea.SetToggleHdl( Link() );
+    maBtnColHeader.SetToggleHdl( Link() );
+    maBtnRowHeader.SetToggleHdl( Link() );
+
     maBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
     maBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
     maBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
     maBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
+
+    // Restore handlers so user input is processed again
+    Link aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
+    maBtnCriteria.SetToggleHdl( aToggleHandler );
+    maBtnPrintArea.SetToggleHdl( aToggleHandler );
+    maBtnColHeader.SetToggleHdl( aToggleHandler );
+    maBtnRowHeader.SetToggleHdl( aToggleHandler );
 }
 
 bool ScNameDlg::IsNameValid()
