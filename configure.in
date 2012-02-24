@@ -751,12 +751,6 @@ AC_ARG_ENABLE(binfilter,
 ,enable_binfilter=no
 )
 
-AC_ARG_ENABLE(ugly,
-    AS_HELP_STRING([--enable-ugly],
-        [Enables ugly pieces of functionality.]),
-,enable_ugly=no
-)
-
 AC_ARG_ENABLE(rpath,
     AS_HELP_STRING([--disable-rpath],
         [Disable the use of relative paths in shared libraries.]),
@@ -3438,17 +3432,6 @@ if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
 else
     AC_MSG_RESULT([no])
 fi
-
-dnl Enable ugly pieces of code we're better off without
-dnl ===================================================================
-if test "$enable_ugly" = "yes"; then
-    BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
-    SCPDEFS="$SCPDEFS -DWITH_UGLY"
-    ENABLE_UGLY=YES
-else
-    ENABLE_UGLY=NO
-fi
-AC_SUBST(ENABLE_UGLY)
 
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
