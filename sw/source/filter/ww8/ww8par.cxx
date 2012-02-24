@@ -1484,7 +1484,6 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
 void SwWW8ImplReader::ImportDop()
 {
-    maTracer.EnterEnvironment(sw::log::eDocumentProperties);
     // correct the LastPrinted date in DocumentInfo
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -1615,8 +1614,6 @@ void SwWW8ImplReader::ImportDop()
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
         rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
-
-    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -2025,7 +2022,6 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
             }
         }
     }
-    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
@@ -3442,13 +3438,6 @@ void SwWW8ImplReader::CloseAttrEnds()
 
 bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 {
-    sw::log::Environment eContext = sw::log::eMainText;
-    if (nType == MAN_MAINTEXT)
-        eContext = sw::log::eMainText;
-    else
-        eContext = sw::log::eSubDoc;
-    maTracer.EnterEnvironment(eContext);
-
     bool bJoined=false;
 
     bool bStartLine = true;
@@ -3618,7 +3607,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     CloseAttrEnds();
 
     delete pPlcxMan, pPlcxMan = 0;
-    maTracer.LeaveEnvironment(eContext);
     return bJoined;
 }
 
@@ -4615,7 +4603,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         if (mbNewDoc && pStg && !pGloss) /*meaningless for a glossary, cmc*/
         {
             mpDocShell->SetIsTemplate( pWwFib->fDot ); // point at tgc record
-            maTracer.EnterEnvironment(sw::log::eMacros);
             uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
@@ -4653,8 +4640,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             }
 
             StoreMacroCmds();
-
-            maTracer.LeaveEnvironment(sw::log::eMacros);
         }
         ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
 

@@ -112,19 +112,6 @@ namespace sw
             }
             return sDetails;
         }
-
-        void Tracer::EnterEnvironment(Environment eContext)
-        {
-        }
-
-        void Tracer::EnterEnvironment(Environment eContext,
-            const rtl::OUString &rDetails)
-        {
-        }
-
-        void Tracer::LeaveEnvironment(Environment eContext)
-        {
-        }
     }
 }
 

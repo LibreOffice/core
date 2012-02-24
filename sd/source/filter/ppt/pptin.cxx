@@ -2717,8 +2717,7 @@ ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Ref
 // - exported function -
 // ---------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT( const ::rtl::OUString& rConfigPath,
-        uno::Sequence< beans::PropertyValue >* pConfigData,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
         SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {
     sal_Bool bRet = sal_False;

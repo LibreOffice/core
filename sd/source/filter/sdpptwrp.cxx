@@ -54,8 +54,7 @@ typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::st
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
-typedef sal_Bool ( SAL_CALL *ImportPPT )( const ::rtl::OUString&, Sequence< PropertyValue >*,
-                                          SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+typedef sal_Bool ( SAL_CALL *ImportPPT )( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
 typedef sal_Bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
 
@@ -99,13 +98,6 @@ sal_Bool SdPPTFilter::Import()
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            String aTraceConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Tracing/Import/PowerPoint" ) );
-            Sequence< PropertyValue > aConfigData( 1 );
-            PropertyValue aPropValue;
-            aPropValue.Value <<= rtl::OUString( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-            aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" ) );
-            aConfigData[ 0 ] = aPropValue;
-
             if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
                 mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
@@ -115,7 +107,7 @@ sal_Bool SdPPTFilter::Import()
                 {
                     ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImportPPT" ) ) ) );
                     if ( PPTImport )
-                        bRet = PPTImport( aTraceConfigPath, &aConfigData, &mrDocument, *pDocStream, *pStorage, mrMedium );
+                        bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
                     if ( !bRet )
                         mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );

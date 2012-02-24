@@ -3508,13 +3508,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     delete pTableWFlyPara;
     delete pTableSFlyPara;
 
-    bool bSuccess = (0 != pTableDesc);
-    if (bSuccess)
-    {
-        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
-            static_cast<sal_Int32>(maTableStack.size())));
-    }
-    return bSuccess;
+    return 0 != pTableDesc;
 }
 
 void SwWW8ImplReader::TabCellEnd()
@@ -3558,8 +3552,6 @@ void SwWW8ImplReader::PopTableDesc()
 
 void SwWW8ImplReader::StopTable()
 {
-    maTracer.LeaveEnvironment(sw::log::eTable);
-
     OSL_ENSURE(pTableDesc, "Panic, stop table with no table!");
     if (!pTableDesc)
         return;
@@ -3570,12 +3562,6 @@ void SwWW8ImplReader::StopTable()
 
     pTableDesc->FinishSwTable();
     PopTableDesc();
-
-    if (!maTableStack.empty())
-    {
-        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
-            static_cast<sal_Int32>(maTableStack.size())));
-    }
 
     bReadTable = true;
     // #i101116# - Keep PaM on table end only for nested tables

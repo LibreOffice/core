@@ -74,11 +74,7 @@ namespace sw
             rtl::OUString GetDetails(Environment eContext) const;
         public:
             Tracer(const SfxMedium &rMedium);
-            void EnterEnvironment(Environment eContext);
-            void EnterEnvironment(Environment eContext,
-                const rtl::OUString &rDetails);
             void Log(Problem eProblem);
-            void LeaveEnvironment(Environment eContext);
             ~Tracer();
         };
     }
