@@ -109,9 +109,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sw \
     swext \
     test \
-    twain \
     toolkit \
     tools \
+    translations \
+    twain \
     ucb \
     ucbhelper \
     udkapi \

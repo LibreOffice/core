@@ -42,7 +42,6 @@ gb_Extension_PROPMERGECOMMAND := \
 gb_Extension_HELPEXTARGET := $(call gb_Executable_get_target,helpex)
 gb_Extension_HELPEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_Extension_HELPEXTARGET)
-gb_Extension_SDFLOCATION := $(L10N_MODULE)/$(INPATH)/misc/sdf/
 # does not contain en-US because it is special cased in gb_Extension_Extension
 gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 
@@ -113,7 +112,7 @@ $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_Extension_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_Extension_get_target,$(1)) : SDF := $(gb_Extension_SDFLOCATION)$(2)/localize.sdf
+$(call gb_Extension_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
 $(call gb_Extension_get_workdir,$(1))/description.xml : $$(SDF)
 endif
 $(call gb_Extension_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
@@ -140,7 +139,7 @@ define gb_Extension_localize_properties
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
-$(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_SDFLOCATION)/$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_target,$(1)) : $$(SDF2)
 endif
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
@@ -158,7 +157,7 @@ endef
 define gb_Extension_localize_help
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(gb_Extension_LANGS),$(subst lang,$(lang),$(2)))
-$(call gb_Extension_get_target,$(1)) : SDF3 := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_target,$(1)) : SDF3 := $(gb_SDFLOCATION)/$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_target,$(1)) : $$(SDF3)
 $(foreach lang,$(gb_Extension_LANGS),$(call gb_Extension_localize_help_onelang,$(1),$(subst lang,$(lang),$(2)),$(3),$(lang)))
 endif

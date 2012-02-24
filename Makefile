@@ -110,6 +110,7 @@ tail_build\
 test\
 toolkit\
 tools\
+translations\
 twain\
 ucb\
 ucbhelper\
@@ -231,7 +232,6 @@ store\
 sysui\
 testtools\
 tomcat\
-translations\
 udm\
 unodevtools\
 vigra\

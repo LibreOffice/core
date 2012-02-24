@@ -742,12 +742,12 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 .EXPORT : SOLARBINDIR
 
 .IF "$(WITH_LANG)"!=""
-.INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
+.INCLUDE .IGNORE: $(WORKDIR)$/CustomTarget$/translations$/localization_present.mk
 
 # if the l10n module exists, use split localize.sdf directly from there
 .IF "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # still check for existence as there may be no localization yet
-TRYSDF:=$(L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+TRYSDF:=$(WORKDIR)$/CustomTarget$/translations$/translate$/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI)))
 .ENDIF			# "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # else use localize.sdf from local output tree if localization .zip exists

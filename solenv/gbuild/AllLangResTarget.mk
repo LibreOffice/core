@@ -50,7 +50,6 @@
 gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target_for_build,transex3)
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
@@ -113,7 +112,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 endif
 
 endef
@@ -126,7 +125,7 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(SDF)
 endif
 

@@ -241,4 +241,8 @@ gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
+# static variables declared here because they are used globally
+
+gb_SDFLOCATION := $(WORKDIR)/CustomTarget/translations/translate/sdf
+
 # vim: set noet sw=4:
