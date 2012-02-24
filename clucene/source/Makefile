@@ -51,9 +51,13 @@ ifneq ($(OS),WNT)
 	mv src/shared/CLucene/util/dirent.h inc/internal/CLucene/util
 endif
 	#To generate these, run cmake for each sufficiently different platform, customize and stick into configs
-ifeq ($(COM),MSC)
+ifeq ($(OS),WNT)
 	cp $(SRCDIR)/clucene/configs/_clucene-config-MSVC.h src/shared/CLucene/_clucene-config.h
+ifeq ($(COM),MSC)
 	cp $(SRCDIR)/clucene/configs/clucene-config-MSVC.h src/shared/CLucene/clucene-config.h
+else
+	cp $(SRCDIR)/clucene/configs/clucene-config-MINGW.h src/shared/CLucene/clucene-config.h
+endif
 else
 	cp $(SRCDIR)/clucene/configs/clucene-config-generic.h src/shared/CLucene/clucene-config.h
 ifeq ($(OS),LINUX)
