@@ -106,15 +106,6 @@ void WriterHelper::writeFormatAttribute( const char* attribute, const char* form
 
 }
 
-void SwDoc::dumpAsXml( xmlTextWriterPtr w )
-{
-    WriterHelper writer( w );
-    writer.startElement( "doc" );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-    m_pNodes->dumpAsXml( writer );
-    writer.endElement();
-}
-
 void SwNodes::dumpAsXml( xmlTextWriterPtr w )
 {
     WriterHelper writer( w );

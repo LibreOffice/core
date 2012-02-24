@@ -161,47 +161,20 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/acmplwrd \
     sw/source/core/doc/dbgoutsw \
     sw/source/core/doc/doc \
-    sw/source/core/doc/docbasic \
-    sw/source/core/doc/docbm \
-    sw/source/core/doc/docchart \
-    sw/source/core/doc/doccomp \
-    sw/source/core/doc/doccorr \
-    sw/source/core/doc/docdde \
-    sw/source/core/doc/docdesc \
     sw/source/core/doc/docdraw \
-    sw/source/core/doc/docedt \
-    sw/source/core/doc/docfld \
-    sw/source/core/doc/docfly \
-    sw/source/core/doc/docfmt \
-    sw/source/core/doc/docftn \
-    sw/source/core/doc/docglbl \
-    sw/source/core/doc/docglos \
-    sw/source/core/doc/doclay \
-    sw/source/core/doc/docnew \
-    sw/source/core/doc/docnum \
-    sw/source/core/doc/docredln \
-    sw/source/core/doc/docruby \
-    sw/source/core/doc/docsort \
-    sw/source/core/doc/docstat \
-    sw/source/core/doc/doctxm \
-    sw/source/core/doc/docxforms \
-    sw/source/core/doc/extinput \
     sw/source/core/doc/fmtcol \
     sw/source/core/doc/ftnidx \
     sw/source/core/doc/gctable \
     sw/source/core/doc/htmltbl \
-    sw/source/core/doc/lineinfo \
     sw/source/core/doc/list \
     sw/source/core/doc/notxtfrm \
     sw/source/core/doc/number \
-    sw/source/core/doc/poolfmt \
     sw/source/core/doc/sortopt \
     sw/source/core/doc/swserv \
     sw/source/core/doc/swstylemanager \
     sw/source/core/doc/tblafmt \
     sw/source/core/doc/tblcpy \
     sw/source/core/doc/tblrwcl \
-    sw/source/core/doc/visiturl \
     sw/source/core/docnode/cancellablejob \
     sw/source/core/docnode/finalthreadmanager \
     sw/source/core/docnode/ndcopy \
