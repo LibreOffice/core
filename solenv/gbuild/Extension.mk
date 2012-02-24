@@ -62,25 +62,14 @@ $(call gb_Extension_get_workdir,%)/description.xml :
 else
 $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
-ifeq ($(OS_FOR_BUILD),WNT)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		$(gb_Extension_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
-			-i $(shell cygpath -m $(filter %.xml,$^)) \
-			-o $(shell cygpath -m $@) \
+			-i $(call gb_Helper_native_path,$(filter %.xml,$^)) \
+			-o $(call gb_Helper_native_path,$@) \
 			-m $(SDF) \
 			-l all)
-else
-	$(call gb_Helper_abbreviate_dirs_native,\
-		mkdir -p $(call gb_Extension_get_workdir,$*) && \
-		$(gb_Extension_XRMEXCOMMAND) \
-			-p $(PRJNAME) \
-			-i $(filter %.xml,$^) \
-			-o $@ \
-			-m $(SDF) \
-			-l all)
-endif
 endif
 
 # rule to create oxt package in workdir
@@ -187,11 +176,7 @@ $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2
 $(call gb_Extension_get_workdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@)
-ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Extension_HELPEXCOMMAND) -i $$(shell cygpath -m $$<) -o $$(shell cygpath -m $$@) -l $(4) -m $$(SDF3)
-else
-	$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$(SDF3)
-endif
+	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF3)
 
 endef
 
