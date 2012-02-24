@@ -138,7 +138,7 @@ define gb_Extension_add_file
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
-	mkdir -p $$(dir $$@)
+	mkdir -p $$(dir $$@) && \
 	cp -f $$< $$@
 
 endef
@@ -165,11 +165,9 @@ endif
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
-	mkdir -p $$(dir $$@)
-	cp -f $$< $$@
-ifneq ($(strip $(gb_WITH_LANG)),)
-	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
-endif
+	mkdir -p $$(dir $$@) && \
+	cp -f $$< $$@ \
+	$(if $(strip $(gb_WITH_LANG)),&& $(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2))
 
 endef
 
@@ -188,7 +186,7 @@ define gb_Extension_localize_help_onelang
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
 	$(call gb_Output_announce,$(2),$(true),XHP,3)
-	mkdir -p $$(dir $$@)
+	mkdir -p $$(dir $$@) && \
 	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF3)
 
 endef
