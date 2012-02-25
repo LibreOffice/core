@@ -57,11 +57,11 @@ struct ScDPOutLevelData;
 
 struct ScDPGetPivotDataField
 {
-    String maFieldName;
+    rtl::OUString maFieldName;
     com::sun::star::sheet::GeneralFunction meFunction;
 
     bool   mbValIsStr;
-    String maValStr;
+    rtl::OUString maValStr;
     double mnValNum;
 
         ScDPGetPivotDataField() :
@@ -74,10 +74,9 @@ struct ScDPGetPivotDataField
 
 
 
-class ScDPOutput            //! name???
+class ScDPOutput
 {
 private:
-    //! use impl-object?
     ScDocument*             pDoc;
     com::sun::star::uno::Reference<
         com::sun::star::sheet::XDimensionsSupplier> xSource;
@@ -94,7 +93,7 @@ private:
             com::sun::star::sheet::DataResult> > aData;
     bool                    bResultsError;
     bool                    mbHasDataLayout;
-    String                  aDataDescription;
+    rtl::OUString           aDataDescription;
 
     // Number format related parameters
     sal_uInt32*                 pColNumFmt;
@@ -167,9 +166,10 @@ public:
     void            SetHeaderLayout(bool bUseGrid);
     bool            GetHeaderLayout() const;
 
-    static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
-                                           const com::sun::star::uno::Reference<
-                                               com::sun::star::uno::XInterface>& xDim );
+    static void GetDataDimensionNames(
+        rtl::OUString& rSourceName, rtl::OUString& rGivenName,
+        const com::sun::star::uno::Reference<
+            com::sun::star::uno::XInterface>& xDim );
 };
 
 

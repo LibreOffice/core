@@ -305,7 +305,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
         return;
     }
 
-    String aStyleName = ScGlobal::GetRscString( nStrId );
+    rtl::OUString aStyleName = ScGlobal::GetRscString( nStrId );
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     ScStyleSheet* pStyle = (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if (!pStyle)
@@ -363,7 +363,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         //  get names/formats for all data dimensions
         //! merge this with the loop to collect ScDPOutLevelData?
 
-        String aDataNames[SC_DPOUT_MAXLEVELS];
+        rtl::OUString aDataNames[SC_DPOUT_MAXLEVELS];
         sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
         long nDataCount = 0;
         sal_Bool bAnySet = false;
@@ -383,7 +383,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
                 {
-                    aDataNames[nDataCount] = String( xDimName->getName() );
+                    aDataNames[nDataCount] = xDimName->getName();
                     long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                             xDimProp,
                                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)) );
@@ -399,7 +399,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         {
             const sheet::MemberResult* pArray = aResult.getConstArray();
 
-            String aName;
+            rtl::OUString aName;
             sal_uInt32* pNumFmt = new sal_uInt32[nSize];
             if (nDataCount == 1)
             {
@@ -415,7 +415,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                     //  if CONTINUE bit is set, keep previous name
                     //! keep number format instead!
                     if ( !(pArray[nPos].Flags & sheet::MemberResultFlags::CONTINUE) )
-                        aName = String( pArray[nPos].Name );
+                        aName = pArray[nPos].Name;
 
                     sal_uInt32 nFormat = 0;
                     for (long i=0; i<nDataCount; i++)
@@ -716,7 +716,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_DATADESC)) );
             rtl::OUString aUStr;
             aAny >>= aUStr;
-            aDataDescription = String( aUStr );
+            aDataDescription = aUStr;
         }
         catch(uno::Exception&)
         {
@@ -998,11 +998,11 @@ void ScDPOutput::Output()
         FieldCell(nHdrCol, nHdrRow, nTab, pPageFields[nField], false);
         SCCOL nFldCol = nHdrCol + 1;
 
-        String aPageValue;
+        rtl::OUString aPageValue;
         if ( pPageFields[nField].aResult.getLength() == 1 )
             aPageValue = pPageFields[nField].aResult[0].Caption;
         else
-            aPageValue = String( ScResId( SCSTR_ALL ) );        //! separate string?
+            aPageValue = ScResId::toString(ScResId(SCSTR_ALL));        //! separate string?
 
         pDoc->SetString( nFldCol, nHdrRow, nTab, aPageValue );
 
@@ -1014,12 +1014,11 @@ void ScDPOutput::Output()
     //  data description
     //  (may get overwritten by first row field)
 
-    String aDesc = aDataDescription;
-    if ( !aDesc.Len() )
+    if (aDataDescription.isEmpty())
     {
         //! use default string ("result") ?
     }
-    pDoc->SetString( nTabStartCol, nTabStartRow, nTab, aDesc );
+    pDoc->SetString(nTabStartCol, nTabStartRow, nTab, aDataDescription);
 
     //  set STR_PIVOT_STYLE_INNER for whole data area (subtotals are overwritten)
 
@@ -1217,9 +1216,9 @@ bool ScDPOutput::GetHeaderLayout() const
 namespace {
 
 void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, sal_Int32& rDataLayoutIndex,
-                             std::vector<String>& rDataNames, std::vector<String>& rGivenNames,
-                             sheet::DataPilotFieldOrientation& rDataOrient,
-                             const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+                       std::vector<rtl::OUString>& rDataNames, std::vector<rtl::OUString>& rGivenNames,
+                       sheet::DataPilotFieldOrientation& rDataOrient,
+                       const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     rDataLayoutIndex = -1;  // invalid
     rGrandTotalCols = 0;
@@ -1264,8 +1263,8 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                 }
                 if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
                 {
-                    String aSourceName;
-                    String aGivenName;
+                    rtl::OUString aSourceName;
+                    rtl::OUString aGivenName;
                     ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
                     rDataNames.push_back( aSourceName );
                     rGivenNames.push_back( aGivenName );
@@ -1408,8 +1407,8 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     sal_Int32 nGrandTotalCols;
     sal_Int32 nGrandTotalRows;
     sal_Int32 nDataLayoutIndex;
-    std::vector<String> aDataNames;
-    std::vector<String> aGivenNames;
+    std::vector<rtl::OUString> aDataNames;
+    std::vector<rtl::OUString> aGivenNames;
     sheet::DataPilotFieldOrientation eDataOrient;
     lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 
@@ -1481,6 +1480,8 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
 
     return true;
 }
+
+namespace {
 
 //
 //  helper functions for ScDPOutput::GetPivotData
@@ -1596,7 +1597,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                         std::vector< sal_Bool >& rFilterUsed,
                         bool& rBeforeDataLayout,
                         sal_Int32 nGrandTotals, sal_Int32 nDataLayoutIndex,
-                        const std::vector<String>& rDataNames, const std::vector<String>& rGivenNames,
+                        const std::vector<rtl::OUString>& rDataNames, const std::vector<rtl::OUString>& rGivenNames,
                         const ScDPGetPivotDataField& rTarget, const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     // returns true if a filter was given for the field
@@ -1664,8 +1665,8 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                     // grand total is always automatic
                     sal_Int32 nDataPos = j - ( nSize - nGrandTotals );
                     OSL_ENSURE( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
-                    String aSourceName( rDataNames[nDataPos] );     // vector contains source names
-                    String aGivenName( rGivenNames[nDataPos] );
+                    rtl::OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
+                    rtl::OUString aGivenName( rGivenNames[nDataPos] );
 
                     rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
                 }
@@ -1700,8 +1701,8 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                         sal_Int32 nFuncPos = nSubTotalCount / nDataCount;       // outer order: subtotal functions
                         sal_Int32 nDataPos = nSubTotalCount % nDataCount;       // inner order: data fields
 
-                        String aSourceName( rDataNames[nDataPos] );             // vector contains source names
-                        String aGivenName( rGivenNames[nDataPos] );
+                        rtl::OUString aSourceName( rDataNames[nDataPos] );             // vector contains source names
+                        rtl::OUString aGivenName( rGivenNames[nDataPos] );
 
                         OSL_ENSURE( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
                         rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
@@ -1720,8 +1721,8 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                     if ( rBeforeDataLayout )
                     {
                         OSL_ENSURE( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
-                        String aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
-                        String aGivenName( rGivenNames[nSubTotalCount] );
+                        rtl::OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
+                        rtl::OUString aGivenName( rGivenNames[nSubTotalCount] );
 
                         rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
                     }
@@ -1784,7 +1785,7 @@ void lcl_StripSubTotals( std::vector< sal_Bool >& rResult, const std::vector< sa
         }
 }
 
-String lcl_GetDataFieldName( const String& rSourceName, sheet::GeneralFunction eFunc )
+rtl::OUString lcl_GetDataFieldName( const rtl::OUString& rSourceName, sheet::GeneralFunction eFunc )
 {
     sal_uInt16 nStrId = 0;
     switch ( eFunc )
@@ -1808,16 +1809,18 @@ String lcl_GetDataFieldName( const String& rSourceName, sheet::GeneralFunction e
         }
     }
     if ( !nStrId )
-        return String();
+        return rtl::OUString();
 
-    String aRet( ScGlobal::GetRscString( nStrId ) );
-    aRet.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
-    aRet.Append( rSourceName );
-    return aRet;
+    rtl::OUStringBuffer aRet( ScGlobal::GetRscString( nStrId ) );
+    aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aRet.append(rSourceName);
+    return aRet.makeStringAndClear();
 }
 
-void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
-                                        const uno::Reference<uno::XInterface>& xDim )
+}
+
+void ScDPOutput::GetDataDimensionNames(
+    rtl::OUString& rSourceName, rtl::OUString& rGivenName, const uno::Reference<uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
@@ -1825,8 +1828,7 @@ void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
     {
         // Asterisks are added in ScDPSaveData::WriteToSource to create unique names.
         //! preserve original name there?
-        rSourceName = xDimName->getName();
-        rSourceName.EraseTrailingChars( '*' );
+        rSourceName = ScDPUtil::getSourceDimensionName(xDimName->getName());
 
         // Generate "given name" the same way as in dptabres.
         //! Should use a stored name when available
@@ -1849,8 +1851,8 @@ sal_Bool ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
     sal_Int32 nGrandTotalCols;
     sal_Int32 nGrandTotalRows;
     sal_Int32 nDataLayoutIndex;
-    std::vector<String> aDataNames;
-    std::vector<String> aGivenNames;
+    std::vector<rtl::OUString> aDataNames;
+    std::vector<rtl::OUString> aGivenNames;
     sheet::DataPilotFieldOrientation eDataOrient;
     lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 

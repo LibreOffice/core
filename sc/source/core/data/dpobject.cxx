@@ -1353,8 +1353,8 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
         {
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
-                String aSourceName;
-                String aGivenName;
+                rtl::OUString aSourceName;
+                rtl::OUString aGivenName;
                 ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xIntDim );
                 aDataNames.push_back( aSourceName );
                 aGivenNames.push_back( aGivenName );
