@@ -863,8 +863,15 @@ void ScDPSource::CreateRes_Impl()
             aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
     }
 
-    pColResRoot = new ScDPResultMember( pResData, bColumnGrand );
-    pRowResRoot = new ScDPResultMember( pResData, bRowGrand );
+    // Show grand total columns only when the option is set *and* there is at
+    // least one column field.  Same for the grand total rows.
+    sal_uInt16 nDataLayoutOrient = GetDataLayoutOrientation();
+    long nColDimCount2 = nColDimCount - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_COLUMN ? 1 : 0);
+    long nRowDimCount2 = nRowDimCount - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
+    bool bShowColGrand = bColumnGrand && nColDimCount2 > 0;
+    bool bShowRowGrand = bRowGrand && nRowDimCount2 > 0;
+    pColResRoot = new ScDPResultMember(pResData, bShowColGrand);
+    pRowResRoot = new ScDPResultMember(pResData, bShowRowGrand);
 
     FillCalcInfo(false, aInfo, bHasAutoShow);
     long nColLevelCount = aInfo.aColLevels.size();

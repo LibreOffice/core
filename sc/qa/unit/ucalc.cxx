@@ -1662,9 +1662,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "8" },
-            { "Sum - Val2", "80" },
-            { "Total Sum - Val1", "8" },
-            { "Total Sum - Val2", "80" }
+            { "Sum - Val2", "80" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
@@ -1676,7 +1674,7 @@ void Test::testPivotTableFilters()
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B8")));
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B6")));
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
@@ -1698,9 +1696,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "4" },
-            { "Sum - Val2", "40" },
-            { "Total Sum - Val1", "4" },
-            { "Total Sum - Val2", "40" }
+            { "Sum - Val2", "40" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
@@ -1730,9 +1726,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "2" },
-            { "Sum - Val2", "20" },
-            { "Total Sum - Val1", "2" },
-            { "Total Sum - Val2", "20" }
+            { "Sum - Val2", "20" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
