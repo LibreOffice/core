@@ -31,6 +31,7 @@
 #include <tools/link.hxx>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
@@ -93,13 +94,13 @@ class SwRetrievedInputStreamDataManager
 
     private:
 
-        static SwRetrievedInputStreamDataManager* mpManager;
         static tDataKey mnNextKeyValue;
-        static osl::Mutex maGetManagerMutex;
 
         osl::Mutex maMutex;
 
         std::map< tDataKey, tData > maInputStreamData;
+
+        template<typename T, typename Unique> friend class rtl::Static;
 
         SwRetrievedInputStreamDataManager()
         {

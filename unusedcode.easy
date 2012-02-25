@@ -1162,9 +1162,6 @@ sdr::table::SdrTableObj::getColumnCount() const
 sdr::table::SdrTableObj::getRowCount() const
 sfx2::TaskPaneWrapper::GetChildWindowId()
 slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
-std::__cxx1998::map<rtl::OUString, OutputStorageWrapper_Impl*, OUStringLess, std::allocator<std::pair<rtl::OUString const, OutputStorageWrapper_Impl*> > >::~map()
-std::__cxx1998::map<rtl::OUString, binfilter::OutputStorageWrapper_Impl*, binfilter::OUStringLess, std::allocator<std::pair<rtl::OUString const, binfilter::OutputStorageWrapper_Impl*> > >::~map()
-std::__cxx1998::map<unsigned long, SwRetrievedInputStreamDataManager::tData, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, SwRetrievedInputStreamDataManager::tData> > >::~map()
 std::__cxx1998::multimap<_xmlNode*, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener>, std::less<_xmlNode*>, std::allocator<std::pair<_xmlNode* const, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener> > > >::~multimap()
 std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector()
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()

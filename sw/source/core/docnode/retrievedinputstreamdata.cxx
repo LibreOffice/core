@@ -33,20 +33,19 @@
 
     #i73788#
 */
-SwRetrievedInputStreamDataManager* SwRetrievedInputStreamDataManager::mpManager = 0;
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::mnNextKeyValue = 1;
-osl::Mutex SwRetrievedInputStreamDataManager::maGetManagerMutex;
+
+namespace
+{
+    class theSwRetrievedInputStreamDataManager :
+        public rtl::Static< SwRetrievedInputStreamDataManager, theSwRetrievedInputStreamDataManager>
+    {
+    };
+}
 
 SwRetrievedInputStreamDataManager& SwRetrievedInputStreamDataManager::GetManager()
 {
-    osl::MutexGuard aGuard(maGetManagerMutex);
-
-    if ( mpManager == 0 )
-    {
-        mpManager = new SwRetrievedInputStreamDataManager();
-    }
-
-    return *mpManager;
+    return theSwRetrievedInputStreamDataManager::get();
 }
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::ReserveData(
