@@ -45,6 +45,10 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Library_pdfimport \
     Package_pdfimport_keywords \
 ))
+
+$(eval $(call gb_Module_add_check_targets,sdext,\
+    CppunitTest_pdfimport \
+))
 endif
 
 ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
