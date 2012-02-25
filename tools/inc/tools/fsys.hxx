@@ -267,7 +267,10 @@ public:
     void                SetExtension( const String& rExt, char cSep = '.' );
     String              GetExtension( char cSep = '.' ) const;
     void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
+    const String        GetNameDirect() const
+    {
+        return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
+    }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
     String              CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     String              GetBase(char cSep = '.' ) const;

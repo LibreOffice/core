@@ -45,14 +45,13 @@ void UniString::InitStringRes( const char* pUTF8Str, sal_Int32 nLen )
 
 // =======================================================================
 
-UniString::UniString( const ByteString& rByteStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
+UniString::UniString( const rtl::OString& rByteStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
     DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_CHKOBJ( &rByteStr, ByteString, DbgCheckByteString );
 
     mpData = NULL;
     rtl_string2UString( (rtl_uString **)(&mpData),
-                        rByteStr.mpData->maStr, rByteStr.mpData->mnLen,
+                        rByteStr.getStr(), rByteStr.getLength(),
                         eTextEncoding, nCvtFlags );
 }
 

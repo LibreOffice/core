@@ -45,7 +45,6 @@
 // =======================================================================
 
 DBG_NAME( UniString )
-DBG_NAMEEX( ByteString )
 
 // -----------------------------------------------------------------------
 
@@ -1203,6 +1202,26 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
     }
 
     return *this;
+}
+
+// -----------------------------------------------------------------------
+
+xub_StrLen ImplStringLen( const sal_Char* pStr )
+{
+    const sal_Char* pTempStr = pStr;
+    while( *pTempStr )
+        ++pTempStr;
+    return (xub_StrLen)(pTempStr-pStr);
+}
+
+// -----------------------------------------------------------------------
+
+xub_StrLen ImplStringLen( const sal_Unicode* pStr )
+{
+    const sal_Unicode* pTempStr = pStr;
+    while( *pTempStr )
+        ++pTempStr;
+    return (xub_StrLen)(pTempStr-pStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

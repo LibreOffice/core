@@ -54,7 +54,6 @@
 
 class ResId;
 class String;
-class ByteString;
 class UniString;
 
 // -----------------------------------------------------------------------
@@ -111,172 +110,6 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 // Nur fuer Debug-Zwecke (darf nie direkt einem String zugewiesen werden)
 
 #ifdef SAL_W32
-#pragma pack(push, 8)
-#endif
-
-typedef struct _ByteStringData
-{
-    sal_Int32               mnRefCount;     // Referenz counter
-    sal_Int32               mnLen;          // Length of the String
-    sal_Char                maStr[1];       // CharArray (String)
-} ByteStringData;
-
-#ifdef SAL_W32
-#pragma pack(pop)
-#endif
-
-// --------------
-// - ByteString -
-// --------------
-
-class TOOLS_DLLPUBLIC ByteString
-{
-    friend              class UniString;
-
-private:
-    ByteStringData*     mpData;
-
-    TOOLS_DLLPRIVATE inline void ImplCopyData();
-    TOOLS_DLLPRIVATE inline char * ImplCopyStringData(char *);
-
-                        ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
-                        ByteString(int); // not implemented; to detect misuses
-                                         // of ByteString(sal_Char);
-                        ByteString( sal_Char c ); //not implemented
-                        ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nLen,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making something to fit
-                        ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making something to fit
-                        ByteString( const UniString& rUniStr,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making something to fit
-                        ByteString( const sal_Char* pCharStr, xub_StrLen nLen ); //not implemented, to detect use of removed methods without compiler making something to fit
-    void                Assign(int); // not implemented; to detect misuses of
-                                     // Assign(sal_Char)
-    ByteString&         Assign( const sal_Char* pCharStr, xub_StrLen nLen );  //not implemented, to detect use of removed methods without compiler making something to fit
-    ByteString&         Assign( const sal_Char* pCharStr ); //not implemented, to detect use of removed methods without compiler making something to fit
-    ByteString&         operator =( const sal_Char* ); //not implemented, to detect use of removed methods without compiler making something to fit
-    ByteString&         operator =(const sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
-
-    ByteString&         Assign(sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
-    void                operator =(int); // not implemented; to detect misuses
-                                         // of operator =(sal_Char)
-    void                Append(int); // not implemented; to detect misuses of
-                                     // Append(char)
-    ByteString&         Append( const sal_Char* pCharStr, xub_StrLen nLen ); // not implemented, to detect use of removed methods without compiler making something to fit
-    ByteString&         operator +=(sal_Char); //not implemented, to detect use of removed methods without compiler making something to fit
-    ByteString&         Append( char c ); //not implemented, to detect use of removed methods without compiler making something to fit
-    void                operator +=(int); // not implemented; to detect misuses
-                                          // of operator +=(sal_Char)
-
-    friend sal_Bool         operator == ( const ByteString& rStr1,  const ByteString& rStr2 ); //not implemented, to detect use of removed methods without compiler making something to fit
-    friend sal_Bool         operator <  ( const ByteString& rStr1,  const ByteString& rStr2 ); //not implemented, to detect use of removed methods without compiler making something to fit
-    friend sal_Bool         operator >  ( const ByteString& rStr1,  const ByteString& rStr2 ); //not implemented, to detect use of removed methods without compiler making something to fit
-public:
-                        ByteString();
-                        ByteString( const ByteString& rStr );
-                        ByteString( const ByteString& rStr, xub_StrLen nPos, xub_StrLen nLen );
-                        ByteString( const rtl::OString& rStr );
-                        ByteString( const sal_Char* pCharStr );
-                        ~ByteString();
-
-    operator rtl::OString () const
-    {
-        return rtl::OString (reinterpret_cast<rtl_String*>(mpData));
-    }
-
-    ByteString&         Assign( const ByteString& rStr );
-    ByteString&         Assign( const rtl::OString& rStr );
-    ByteString&         operator =( const ByteString& rStr )
-                            { return Assign( rStr ); }
-    ByteString&         operator =( const rtl::OString& rStr )
-                            { return Assign( rStr ); }
-
-    ByteString&         Append( const ByteString& rStr );
-    ByteString&         Append( const sal_Char* pCharStr );
-    ByteString&         operator +=( const ByteString& rStr )
-                            { return Append( rStr ); }
-    ByteString&         operator +=( const sal_Char* pCharStr )
-                            { return Append( pCharStr ); }
-
-    void                SetChar( xub_StrLen nIndex, sal_Char c );
-    sal_Char            GetChar( xub_StrLen nIndex ) const
-                            { return mpData->maStr[nIndex]; }
-
-    xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
-
-    ByteString&         Insert( const ByteString& rStr, xub_StrLen nIndex = STRING_LEN );
-    ByteString&         Replace( xub_StrLen nIndex, xub_StrLen nCount, const ByteString& rStr );
-    ByteString&         Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
-    ByteString          Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
-
-    ByteString&         ToLowerAscii();
-
-    StringCompare       CompareTo( const sal_Char* pCharStr,
-                                   xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
-    sal_Bool                Equals( const sal_Char* pCharStr ) const;
-
-    xub_StrLen          Search( sal_Char c, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          Search( const ByteString& rStr, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          Search( const sal_Char* pCharStr, xub_StrLen nIndex = 0 ) const;
-
-    void                SearchAndReplaceAll( sal_Char c, sal_Char cRep );
-
-    ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
-
-    const sal_Char*     GetBuffer() const { return mpData->maStr; }
-
-    friend sal_Bool         operator == ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return rStr.Equals( pCharStr ); }
-    friend sal_Bool         operator == ( const sal_Char* pCharStr, const ByteString& rStr )
-                            { return rStr.Equals( pCharStr ); }
-    friend sal_Bool         operator != ( const ByteString& rStr1,  const ByteString& rStr2 )
-                            { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool         operator != ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return !(operator == ( rStr, pCharStr )); }
-    friend sal_Bool         operator != ( const sal_Char* pCharStr, const ByteString& rStr )
-                            { return !(operator == ( pCharStr, rStr )); }
-    friend sal_Bool         operator <  ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return (rStr.CompareTo( pCharStr ) == COMPARE_LESS); }
-    friend sal_Bool         operator <  ( const sal_Char* pCharStr, const ByteString& rStr )
-                            { return (rStr.CompareTo( pCharStr ) >= COMPARE_EQUAL); }
-    friend sal_Bool         operator >  ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return (rStr.CompareTo( pCharStr ) == COMPARE_GREATER); }
-    friend sal_Bool         operator >  ( const sal_Char* pCharStr, const ByteString& rStr )
-                            { return (rStr.CompareTo( pCharStr ) <= COMPARE_EQUAL); }
-    friend sal_Bool         operator <= ( const ByteString& rStr1,  const ByteString& rStr2 )
-                            { return !(operator > ( rStr1, rStr2 )); }
-    friend sal_Bool         operator <= ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return !(operator > ( rStr, pCharStr )); }
-    friend sal_Bool         operator <= ( const sal_Char* pCharStr,     const ByteString& rStr )
-                            { return !(operator > ( pCharStr, rStr )); }
-    friend sal_Bool         operator >= ( const ByteString& rStr1,  const ByteString& rStr2 )
-                            { return !(operator < ( rStr1, rStr2 )); }
-    friend sal_Bool         operator >= ( const ByteString& rStr,   const sal_Char* pCharStr )
-                            { return !(operator < ( rStr, pCharStr )); }
-    friend sal_Bool         operator >= ( const sal_Char* pCharStr,     const ByteString& rStr )
-                            { return !(operator < ( pCharStr, rStr )); }
-};
-
-inline ByteString ByteString::Copy( xub_StrLen nIndex, xub_StrLen nCount ) const
-{
-    return ByteString( *this, nIndex, nCount );
-}
-
-// -----------------------------------------------------------------------
-
-// ------------------------
-// - Interne String-Daten -
-// ------------------------
-
-// Daten vom String, mit denen der String verwaltet wird
-// Nur fuer Debug-Zwecke (darf nie direkt einem String zugewiesen werden)
-
-#ifdef SAL_W32
 #pragma pack(push, 4)
 #endif
 
@@ -297,8 +130,6 @@ typedef struct _UniStringData
 
 class TOOLS_DLLPUBLIC UniString
 {
-    friend              class ByteString;
-
     TOOLS_DLLPRIVATE void InitStringRes( const sal_Char* pUTF8Str, sal_Int32 nLen );
 
 private:
@@ -318,9 +149,6 @@ private:
                                      // Append(sal_Unicode)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Unicode)
-                        UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS ); //not implemented, removed
 
     //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
     TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
@@ -334,7 +162,7 @@ public:
                         UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
                         UniString( sal_Unicode c );
                         UniString(char c); // ...but allow "UniString('a')"
-                        UniString( const ByteString& rByteStr,
+                        UniString( const rtl::OString& rByteStr,
                                    rtl_TextEncoding eTextEncoding,
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
                         UniString( const sal_Char* pByteStr,
