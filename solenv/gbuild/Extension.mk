@@ -147,9 +147,10 @@ endef
 #
 # This function avoids the need to specify each file's name twice. The
 # files are added directly under specified path in the extension,
-# without any subpath.
+# without any subpath. If no path is specified, they are added directly
+# to the root dir of the extension.
 define gb_Extension_add_files
-$(foreach file,$(3),$(call gb_Extension_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
+$(foreach file,$(3),$(call gb_Extension_add_file,$(1),$(if $(strip $(2)),$(strip $(2))/)$(notdir $(file)),$(file)))
 
 endef
 
