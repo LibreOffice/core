@@ -123,16 +123,10 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxColorExtToolBoxControl, SvxColorItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
-
-SfxToolBoxControl* SvxReloadControllerItem::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
-{
-    return new SvxReloadControllerItem( nSlotId, nId, rTbx );
-}
 
 //========================================================================
 // class SvxStyleBox_Impl -----------------------------------------------------
@@ -2559,59 +2553,6 @@ void SvxFrameLineColorToolBoxControl::StateChanged(
             mLastColor = pItem->GetValue();
         }
     }
-}
-
-// class SvxReloadControllerItem_Impl ------------------------------------
-
-class SvxReloadControllerItem_Impl
-{
-public:
-    Image* pNormalImage;
-    Image* pSpecialImage;
-
-    SvxReloadControllerItem_Impl() :
-        pNormalImage( new Image( SVX_RES( RID_SVX_RELOAD_NORMAL ) ) ), pSpecialImage( 0 ) {}
-    ~SvxReloadControllerItem_Impl() { delete pNormalImage; delete pSpecialImage; }
-
-    Image& GetNormalImage() { return *pNormalImage; }
-    Image& GetSpecialImage()
-        {
-            if ( !pSpecialImage )
-                pSpecialImage = new Image( SVX_RES( RID_SVX_RELOAD_SPECIAL ) );
-            return *pSpecialImage;
-        }
-};
-
-// -----------------------------------------------------------------------
-
-SvxReloadControllerItem::SvxReloadControllerItem( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-:   SfxToolBoxControl( nSlotId, nId, rTbx )
-,   pImpl( new SvxReloadControllerItem_Impl )
-{
-    rTbx.SetItemImage( nId, pImpl->GetNormalImage() );
-}
-
-// -----------------------------------------------------------------------
-
-SvxReloadControllerItem::~SvxReloadControllerItem()
-{
-    delete pImpl;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxReloadControllerItem::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-{
-    SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
-    ToolBox& rBox = GetToolBox();
-    if( pItem )
-    {
-        rBox.SetItemImage( GetId(),
-                pItem->GetValue() ? pImpl->GetSpecialImage() :
-                pImpl->GetNormalImage() );
-    }
-    rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 }
 
 //========================================================================

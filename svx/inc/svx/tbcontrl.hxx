@@ -344,7 +344,6 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     Color                               mLastColor;
 
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxColorToolBoxControl();
 
@@ -416,27 +415,6 @@ public:
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-};
-
-
-
-class SvxReloadControllerItem_Impl;
-class SvxReloadControllerItem : public SfxToolBoxControl
-{
-private:
-    SvxReloadControllerItem_Impl* pImpl;
-
-public:
-    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
-
-    SvxReloadControllerItem( sal_uInt16 nSlotId,
-                             sal_uInt16 nId,
-                             ToolBox& rTbx );
-    ~SvxReloadControllerItem();
-
-protected:
-    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState );
 };
 
 class SVX_DLLPUBLIC SvxSimpleUndoRedoController : public SfxToolBoxControl

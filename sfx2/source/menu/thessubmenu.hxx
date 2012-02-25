@@ -42,25 +42,6 @@ class Menu;
 
 namespace css = ::com::sun::star;
 
-class SfxThesSubMenuControl : public SfxMenuControl
-{
-    PopupMenu*          pMenu;
-    Menu&               rParent;
-
-private:
-    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
-    DECL_LINK( MenuSelect, Menu * );
-
-public:
-    SfxThesSubMenuControl(sal_uInt16, Menu&, SfxBindings&);
-    ~SfxThesSubMenuControl();
-
-    virtual PopupMenu*  GetPopup() const;
-
-    static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
-};
-
-
 class SfxThesSubMenuHelper
 {
     css::uno::Reference< css::linguistic2::XLinguServiceManager >   m_xLngMgr;

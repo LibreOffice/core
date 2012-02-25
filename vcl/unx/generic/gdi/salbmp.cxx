@@ -912,45 +912,6 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
     }
 }
 
-// -----------------------------------------------------------------------------------------
-// create from XImage
-
-ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, SalX11Screen nXScreen, XImage* pImage)
-    : mnXScreen( nXScreen )
-{
-    maPixmap = XCreatePixmap (pDisplay, hWindow, pImage->width, pImage->height, pImage->depth);
-    if (maPixmap != 0)
-    {
-        XGCValues   aValues;
-        GC          aGC;
-        int         nValues = GCFunction;
-
-        aValues.function = GXcopy;
-
-        if (pImage->depth == 1)
-        {
-            nValues |= ( GCForeground | GCBackground );
-            aValues.foreground = 1;
-            aValues.background = 0;
-        }
-
-        aGC = XCreateGC (pDisplay, maPixmap, nValues, &aValues);
-        XPutImage (pDisplay, maPixmap, aGC, pImage, 0, 0, 0, 0, pImage->width, pImage->height);
-        XFreeGC (pDisplay, aGC);
-
-        maTwoRect.mnSrcX       = 0;
-        maTwoRect.mnSrcY       = 0;
-        maTwoRect.mnDestX      = 0;
-        maTwoRect.mnDestY      = 0;
-        maTwoRect.mnSrcWidth   = pImage->width;
-        maTwoRect.mnDestWidth  = pImage->width;
-        maTwoRect.mnSrcHeight  = pImage->height;
-        maTwoRect.mnDestHeight = pImage->height;
-
-        mnDepth = pImage->depth;
-    }
-}
-
 // -----------------------------------------------------------------------------
 
 ImplSalDDB::ImplSalDDB(

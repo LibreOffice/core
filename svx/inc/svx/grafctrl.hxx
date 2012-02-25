@@ -73,8 +73,6 @@ public:
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:
-    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
-
     SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxGrafToolBoxControl();
 

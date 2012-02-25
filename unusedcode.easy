@@ -1,3 +1,4 @@
+(anonymous namespace)::writeU8(WPXBinaryData&, int)
 Button::ImplGetSymbolAlign() const
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 CharPosArray::Insert(CharPosArray const*, unsigned short, unsigned short, unsigned short)
@@ -50,7 +51,6 @@ SalGraphics::drawPolyLine(basegfx::B2DPolygon const&, double, basegfx::B2DVector
 SalGraphics::drawPolyPolygon(basegfx::B2DPolyPolygon const&, double)
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-SbxDecimal::getByte(unsigned char&)
 SbxDecimal::getInt(int&)
 SbxDecimal::getUInt(unsigned int&)
 ScAddInAsyncs::Insert(ScAddInAsync* const&, unsigned short&)
@@ -81,6 +81,7 @@ ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
+ScDPFieldControlBase::GetDupCount(unsigned long) const
 ScDPSaveDimension::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&, std::__debug::list<rtl::OUString, std::allocator<rtl::OUString> > const&)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
@@ -1008,6 +1009,8 @@ dbtools::StatementComposer::getDisposeComposer() const
 dbtools::getComposedRowSetStatement(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, unsigned char, unsigned char)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
+dp_misc::TRACE(rtl::OString const&)
+dp_misc::writeConsoleError(rtl::OString const&)
 drawinglayer::attribute::SdrFillTextAttribute::isDefault() const
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrTextAttribute::getPropertiesVersion() const
@@ -1020,12 +1023,6 @@ formula::FormulaTokenIterator::First()
 framework::TabWindow::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)
-jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
-libcdr::CDRDocument::generateSVG(WPXInputStream*, WPXString&)
-libcmis::SessionFactory::getRepositories(std::__debug::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
-libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
-libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
-libwpg::WPGraphics::parse(unsigned char const*, unsigned long, libwpg::WPGPaintInterface*, libwpg::WPGFileFormat)
 nullcanvas::CanvasFont::getFontMatrix() const
 nullcanvas::CanvasHelper::flush() const
 nullcanvas::CanvasHelper::getPalette()

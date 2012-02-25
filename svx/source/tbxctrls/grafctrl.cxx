@@ -546,11 +546,6 @@ SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
 // - SvxGrafToolBoxControl -
 // -------------------------
 
-SfxToolBoxControl* SvxGrafToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
-{
-    return new SvxGrafToolBoxControl( nSlotId, nId, rTbx );
-}
-
 // -----------------------------------------------------------------------------
 
 SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :

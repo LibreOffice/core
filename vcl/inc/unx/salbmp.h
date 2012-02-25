@@ -207,13 +207,6 @@ public:
                         long nHeight
                     );
 
-                    ImplSalDDB(
-                        Display* pDisplay,
-                        XLIB_Window hWindow,
-                        SalX11Screen nXScreen,
-                        XImage* pImage
-                    );
-
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
