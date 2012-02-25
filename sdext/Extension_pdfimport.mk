@@ -35,7 +35,7 @@ $(eval $(call gb_Extension_add_package_dependencies,pdfimport,\
     sdext_pdfimport_keywords \
 ))
 
-$(eval $(call gb_Extension_add_files,pdfimport,.,\
+$(eval $(call gb_Extension_add_files,pdfimport,,\
     $(call gb_Executable_get_target,xpdfimport) \
     $(call gb_Library_get_target,pdfimport) \
     $(SRCDIR)/sdext/source/pdfimport/config/pdf_import_filter.xcu \

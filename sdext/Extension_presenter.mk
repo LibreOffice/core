@@ -36,7 +36,7 @@ $(eval $(call gb_Extension_add_package_dependencies,presenter-screen,\
 ))
 
 $(eval $(call gb_Extension_add_files,presenter-screen,,\
-    $(call gb_Library_get_target,presenter-screen) \
+    $(call gb_Library_get_target,PresenterScreen) \
 ))
 
 $(eval $(call gb_Extension_add_files,presenter-screen,bitmaps,\

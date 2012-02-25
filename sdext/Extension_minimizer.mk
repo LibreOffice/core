@@ -31,7 +31,9 @@ $(eval $(call gb_Extension_Extension,presentation-minimizer,sdext/source/minimiz
 
 $(eval $(call gb_Extension_set_platform,presentation-minimizer,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_add_file,presentation-minimizer,$(call gb_Library_get_dllname,SunPresentationMinimizer),$(call gb_Library_get_target,SunPresentationMinimizer)))
+$(eval $(call gb_Extension_add_files,presentation-minimizer,,\
+    $(call gb_Library_get_target,SunPresentationMinimizer) \
+))
 
 $(eval $(call gb_Extension_add_files,presentation-minimizer,bitmaps,\
     $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
