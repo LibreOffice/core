@@ -35,6 +35,7 @@
 #include <osl/detail/android-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
+#include <basebmp/scanlineformats.hxx>
 
 extern void VCL_DLLPUBLIC plasma_now(const char *msg);
 
@@ -203,7 +204,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const ARect &rSrcRect,
                                     int nDestX, int nDestY)
 {
-    fprintf (stderr, "Blit frame #2 src %d,%d->%d,%d to position %d, %d\n",
+    fprintf (stderr, "Blit frame src %d,%d->%d,%d to position %d, %d\n",
              rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
 
@@ -215,11 +216,10 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
     // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
     ARect aSrcRect = rSrcRect;
 
-    // FIXME: we have WINDOW_FORMAT_RGB_565            = 4 ...
-
+    // FIXME: by default we have WINDOW_FORMAT_RGB_565 = 4 ...
     for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
     {
-        unsigned char *sp = ( pSrc + nStride * (aSrcRect.bottom - aSrcRect.top - y - 1) +
+        unsigned char *sp = ( pSrc + nStride * (aSrcRect.top + y) +
                               aSrcRect.left * 3 /* src pixel size */ );
 
         switch (pOutBuffer->format) {
@@ -258,7 +258,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             break;
         }
     }
-    fprintf (stderr, "done blit!\n");
 }
 
 void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
@@ -288,7 +287,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     if (aOutBuffer.bits != NULL)
     {
 
-#if 1 // pre-'clean' the buffer with cruft:
+#if 0   // pre-'clean' the buffer with cruft:
         // hard-code / guess at a format ...
         int32_t *p = (int32_t *)aOutBuffer.bits;
         for (int32_t y = 0; y < aOutBuffer.height; y++)
@@ -296,18 +295,42 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
             for (int32_t x = 0; x < aOutBuffer.stride; x++)
                 *p++ = (y << 24) + (x << 10) + 0xff ;
         }
-#endif
 
+#endif
+        int i = 0;
         std::list< SalFrame* >::const_iterator it;
-        for ( it = getFrames().begin(); it != getFrames().end(); it++ )
+        for ( it = getFrames().begin(); it != getFrames().end(); i++, it++ )
         {
             SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
 
             if (pFrame->IsVisible())
             {
-                // FIXME: force a re-draw - this appears not to happen much otherwis
-                pFrame->PostPaint(true);
+                fprintf( stderr, "render visible frame %d\n", i );
+#ifndef REGION_RE_RENDER
                 BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
+#else
+                // Sadly it seems that due to double buffering, we don't
+                // get back in our buffer what we had there last time - so we cannot
+                // do incremental rendering. Presumably this will require us to
+                // render to a bitmap, and keep that updated instead in future.
+
+                // Intersect re-rendering region with this frame
+                Region aClipped( maRedrawRegion );
+                basegfx::B2IVector aDevSize = pFrame->getDevice()->getSize();
+                aClipped.Intersect( Rectangle( 0, 0, aDevSize.getX(), aDevSize.getY() ) );
+
+                Rectangle aSubRect;
+                RegionHandle aHdl = aClipped.BeginEnumRects();
+                while( aClipped.GetNextEnumRect( aHdl, aSubRect ) )
+                {
+                    ARect aASubRect = { aSubRect.Left(), aSubRect.Top(),
+                                        aSubRect.Right(), aSubRect.Bottom() };
+                    BlitFrameRegionToWindow(&aOutBuffer, pFrame->getDevice(),
+                                            aASubRect,
+                                            aSubRect.Left(), aSubRect.Top());
+                }
+                aClipped.EndEnumRects( aHdl );
+#endif
             }
         }
     }
@@ -316,7 +339,15 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     ANativeWindow_unlockAndPost(pWindow);
 
     fprintf (stderr, "done render!\n");
+    maRedrawRegion.SetEmpty();
     mbQueueReDraw = false;
+}
+
+void AndroidSalInstance::damaged(AndroidSalFrame */* frame */, const Rectangle &rRect)
+{
+    // FIXME: translate rRect to the frame's offset ...
+    maRedrawRegion.Union( rRect );
+    mbQueueReDraw = true;
 }
 
 static const char *app_cmd_name(int cmd)
@@ -374,6 +405,9 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             fprintf (stderr, "we have an app window ! %p %dx%x (%d) set %d\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow), nRet);
+            maRedrawRegion = Region( Rectangle( 0, 0, ANativeWindow_getWidth(pWindow),
+                                                ANativeWindow_getHeight(pWindow) ) );
+            mbQueueReDraw = true;
             break;
         }
         case APP_CMD_WINDOW_RESIZED:
@@ -390,6 +424,8 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
             fprintf (stderr, "redraw needed\n");
+            maRedrawRegion = Region( Rectangle( 0, 0, ANativeWindow_getWidth(pWindow),
+                                                ANativeWindow_getHeight(pWindow) ) );
             mbQueueReDraw = true;
             break;
         }
@@ -462,9 +498,6 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
             fprintf (stderr, "no focused frame to emit event on\n");
 
         fprintf( stderr, "bHandled == %s\n", bHandled? "true": "false" );
-
-        // FIXME: queueing full re-draw on key events ...
-        mbQueueReDraw = true;
         break;
     }
     case AINPUT_EVENT_TYPE_MOTION:
@@ -634,13 +667,41 @@ public:
                      SalFrame           *pParent,
                      sal_uLong           nSalFrameStyle,
                      SystemParentData   *pSysParent )
-        : SvpSalFrame( pInstance, pParent, nSalFrameStyle, pSysParent )
+        : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
+                       true, basebmp::Format::TWENTYFOUR_BIT_TC_MASK,
+                       pSysParent )
     {
+        enableDamageTracker();
     }
 
     virtual void GetWorkArea( Rectangle& rRect )
     {
         AndroidSalInstance::getInstance()->GetWorkArea( rRect );
+    }
+
+    virtual void damaged( const basegfx::B2IBox& rDamageRect)
+    {
+        long long area = rDamageRect.getWidth() * rDamageRect.getHeight();
+//        if( area > 32 * 1024 )
+        fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld\n",
+                 (int) rDamageRect.getMinX(),
+                 (int) rDamageRect.getMinY(),
+                 (int) rDamageRect.getWidth(),
+                 (int) rDamageRect.getHeight(),
+                 area );
+        if (rDamageRect.getWidth() <= 0 ||
+            rDamageRect.getHeight() <= 0)
+        {
+            fprintf (stderr, "ERROR: damage region has tiny / negative size\n");
+            return;
+        }
+        Rectangle aRect( std::max((long) 0, (long) rDamageRect.getMinX() ),
+                         std::max((long) 0, (long) rDamageRect.getMinY() ),
+                         std::max((long) 0, (long) ( rDamageRect.getMinX() +
+                                                     rDamageRect.getWidth() ) ),
+                         std::max((long) 0, (long) ( rDamageRect.getMinY() +
+                                                     rDamageRect.getHeight() ) ) );
+        AndroidSalInstance::getInstance()->damaged( this, aRect );
     }
 
     virtual void UpdateSettings( AllSettings &rSettings )

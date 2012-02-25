@@ -44,6 +44,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <generic/gendata.hxx>
+#include <basebmp/scanlineformats.hxx>
 #include <vcl/solarmutex.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
@@ -182,12 +183,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
 {
-    return new SvpSalFrame( this, NULL, nStyle, pParent );
+    return new SvpSalFrame( this, NULL, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
-    return new SvpSalFrame( this, pParent, nStyle );
+    return new SvpSalFrame( this, pParent, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT );
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )

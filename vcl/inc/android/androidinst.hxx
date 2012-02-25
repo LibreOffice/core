@@ -38,6 +38,7 @@
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
 
+class AndroidSalFrame;
 class AndroidSalInstance : public SvpSalInstance
 {
     void BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
@@ -64,10 +65,12 @@ public:
     void      RedrawWindows(ANativeWindow *pWindow);
     SalFrame *getFocusFrame() const;
 
+    void      damaged(AndroidSalFrame *frame, const Rectangle &rRect);
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
     struct android_app *mpApp;
-    bool mbQueueReDraw;
+    Region maRedrawRegion;
+    bool   mbQueueReDraw;
 
 private:
     EGLDisplay mxDisplay;

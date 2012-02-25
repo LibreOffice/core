@@ -29,6 +29,7 @@
 #ifndef _SVP_SVPFRAME_HXX
 
 #include <vcl/sysdata.hxx>
+#include <basegfx/range/b2ibox.hxx>
 
 #include <salframe.hxx>
 #include "svpelement.hxx"
@@ -45,6 +46,9 @@ class SvpSalFrame : public SalFrame, public SvpElement
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
     sal_uLong                           m_nStyle;
     bool                                m_bVisible;
+    bool                                m_bDamageTracking;
+    bool                                m_bTopDown;
+    sal_Int32                           m_nScanlineFormat;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
     long                                m_nMaxWidth;
@@ -60,12 +64,15 @@ public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
                  sal_uLong nSalFrameStyle,
+                 bool      bTopDown,
+                 sal_Int32 nScanlineFormat,
                  SystemParentData* pSystemParent = NULL );
     virtual ~SvpSalFrame();
 
     void GetFocus();
     void LoseFocus();
     void PostPaint(bool bImmediate) const;
+    void AllocateFrame();
 
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
@@ -120,6 +127,10 @@ public:
     virtual void                BeginSetClipRegion( sal_uLong nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
+
+    // If enabled we can get damage notifications for regions immediately rendered to ...
+    virtual void                enableDamageTracker( bool bOn = true );
+    virtual void                damaged( const basegfx::B2IBox& /* rDamageRect */) {}
 
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }

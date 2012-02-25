@@ -31,6 +31,7 @@
 #include "headless/svpinst.hxx"
 #include "headless/svpgdi.hxx"
 
+#include <basebmp/bitmapdevice.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
@@ -39,14 +40,47 @@ using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
+namespace {
+    /// Decouple SalFrame lifetime from damagetracker lifetime
+    struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
+    {
+        DamageTracker( SvpSalFrame& rFrame ) : m_rFrame( rFrame ) {}
+        virtual void damaged( const basegfx::B2IBox& rDamageRect ) const
+        {
+            m_rFrame.damaged( rDamageRect );
+        }
+        SvpSalFrame& m_rFrame;
+    };
+}
+
+void SvpSalFrame::enableDamageTracker( bool bOn )
+{
+    if( m_bDamageTracking == bOn )
+        return;
+    if( m_aFrame.get() )
+    {
+        if( m_bDamageTracking )
+            m_aFrame->setDamageTracker( basebmp::IBitmapDeviceDamageTrackerSharedPtr() );
+        else
+            m_aFrame->setDamageTracker(
+                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker( *this ) ) );
+    }
+    m_bDamageTracking = bOn;
+}
+
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           sal_uLong nSalFrameStyle,
+                          bool      bTopDown,
+                          sal_Int32 nScanlineFormat,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
+    m_bDamageTracking( false ),
+    m_bTopDown( bTopDown ),
+    m_nScanlineFormat( nScanlineFormat ),
     m_nMinWidth( 0 ),
     m_nMinHeight( 0 ),
     m_nMaxWidth( 0 ),
@@ -242,7 +276,10 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        m_aFrame = createBitmapDevice( aFrameSize, false, SVP_DEFAULT_BITMAP_FORMAT );
+        m_aFrame = createBitmapDevice( aFrameSize, m_bTopDown, m_nScanlineFormat );
+        if (m_bDamageTracking)
+            m_aFrame->setDamageTracker(
+                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker( *this ) ) );
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )

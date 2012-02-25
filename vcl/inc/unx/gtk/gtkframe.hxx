@@ -432,7 +432,7 @@ public:
 
     static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
 
-    virtual void damaged (const basegfx::B2IBox& rDamageRect);
+    virtual void                    damaged (const basegfx::B2IBox& rDamageRect);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

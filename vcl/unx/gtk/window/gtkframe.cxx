@@ -345,6 +345,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 static int debugQueuePureRedraw = 0;
 static int debugRedboxRedraws = 0;
 
+namespace {
 /// Decouple SalFrame lifetime from damagetracker lifetime
 struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 {
@@ -357,6 +358,7 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 
     GtkSalFrame& m_rFrame;
 };
+}
 #endif
 
 void GtkSalFrame::doKeyCallback( guint state,
@@ -1572,6 +1574,8 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
+// FIXME: we should really be an SvpSalFrame sub-class, and
+// share their AllocateFrame !
 void GtkSalFrame::AllocateFrame()
 {
 #if GTK_CHECK_VERSION(3,0,0)
