@@ -71,7 +71,7 @@ handleCookiesRequest_(
         rContinuations)
     SAL_THROW((uno::RuntimeException))
 {
-    CntHTTPCookieList_impl* pCookies = new CntHTTPCookieList_impl();
+    CntHTTPCookieList_impl aCookies;
     for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
     {
         try
@@ -109,7 +109,7 @@ handleCookiesRequest_(
                 OSL_ASSERT(false);
                 break;
             }
-            pCookies->push_back( xCookie.get() );
+            aCookies.push_back( xCookie.get() );
             xCookie.release();
         }
         catch (std::bad_alloc const &)
@@ -123,7 +123,7 @@ handleCookiesRequest_(
 
     CntHTTPCookieRequest
     aRequest(rRequest.URL,
-                 *pCookies,
+                 aCookies,
                  rRequest.Request == ucb::CookieRequest_RECEIVE
                      ? CNTHTTP_COOKIE_REQUEST_RECV
                      : CNTHTTP_COOKIE_REQUEST_SEND);
@@ -154,7 +154,7 @@ handleCookiesRequest_(
             for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
                 if (rRequest.Cookies[j].Policy
                     == ucb::CookiePolicy_CONFIRM)
-                    switch ( (*pCookies)[ j ]->m_nPolicy )
+                    switch ( (aCookies)[ j ]->m_nPolicy )
                     {
                     case CNTHTTP_COOKIE_POLICY_ACCEPTED:
                         xCookieHandling->
