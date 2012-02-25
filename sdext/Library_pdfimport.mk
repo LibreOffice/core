@@ -32,11 +32,11 @@ $(eval $(call gb_Library_add_api,pdfimport,\
     udkapi \
 ))
 
-include $(OUTDIR)/inc/rtlbootstrap.mk
+include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
 
 $(eval $(call gb_Library_add_defs,pdfimport,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(RTL_OS)-$(RTL_ARCH)\" \
+    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(sdext_PLATFORM)\" \
 ))
 
 $(eval $(call gb_Library_add_package_headers,pdfimport,\
