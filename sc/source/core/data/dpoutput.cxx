@@ -1214,6 +1214,8 @@ bool ScDPOutput::GetHeaderLayout() const
     return mbHeaderLayout;
 }
 
+namespace {
+
 void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, sal_Int32& rDataLayoutIndex,
                              std::vector<String>& rDataNames, std::vector<String>& rGivenNames,
                              sheet::DataPilotFieldOrientation& rDataOrient,
@@ -1278,6 +1280,8 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
         else if ( ( rDataOrient == sheet::DataPilotFieldOrientation_ROW ) && bRowGrand )
             rGrandTotalRows = nDataCount;
     }
+}
+
 }
 
 void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
