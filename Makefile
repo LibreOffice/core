@@ -456,8 +456,16 @@ findunusedcode:
               | grep -v ^Atom \
               | grep -v ^boost:: \
               | grep -v ^CIcc \
+              | grep -v ^CLuceneError:: \
               | grep -v ^cppu:: \
               | grep -v ^Dde \
+              | grep -v ^graphite2:: \
+              | grep -v ^jvmaccess:: \
+              | grep -v ^libcdr:: \
+              | grep -v ^libcmis:: \
+              | grep -v ^libvisio:: \
+              | grep -v ^libwpg:: \
+              | grep -v ^lucene:: \
               | grep -v ^salhelper:: \
               > unusedcode.easy
 
