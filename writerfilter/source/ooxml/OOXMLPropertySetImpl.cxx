@@ -435,7 +435,7 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
         else
         {
             debug_logger->startElement("error");
-            debug_logger->chars("zero-property");
+            debug_logger->chars(std::string("zero-property"));
             debug_logger->endElement();
         }
 #endif
