@@ -120,6 +120,10 @@ public:
     ::rtl::OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
+#ifdef WNT
+    sal_Bool AddFilterNameCheckOwnFile(
+                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
+#endif
 
     ::rtl::OUString GetDefaultFilterFromServiceName( const ::rtl::OUString& aServName, sal_Int32 nVersion );
 
