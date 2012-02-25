@@ -171,7 +171,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
         return 0;
     }
 
-    if ( m_sFileName == ::rtl::OUString() )
+    if ( m_sFileName.isEmpty() )
     {
         return 1;
     }
