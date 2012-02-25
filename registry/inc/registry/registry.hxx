@@ -600,7 +600,7 @@ public:
 
     /** used to create a link.
 
-        @obsolete Links are no longer supported.
+        @deprecated Links are no longer supported.
 
         @return REG_INVALID_LINK
      */
@@ -609,7 +609,7 @@ public:
 
     /** used to delete a link.
 
-        @obsolete Links are no longer supported.
+        @deprecated Links are no longer supported.
 
         @return REG_INVALID_LINK
      */
@@ -626,7 +626,7 @@ public:
 
     /** used to return the target of a link.
 
-        @obsolete Links are no longer supported.
+        @deprecated Links are no longer supported.
 
         @return REG_INVALID_LINK
      */

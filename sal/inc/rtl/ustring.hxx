@@ -173,7 +173,7 @@ public:
       assumed to be only UTF-8/ASCII, so this constructor allows an efficient
       and convenient way to create OUString instances from literals.
 
-      @param    value           the 8-bit string literal
+      @param    literal         the 8-bit string literal
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */

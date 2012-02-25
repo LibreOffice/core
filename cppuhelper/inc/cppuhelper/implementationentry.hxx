@@ -74,7 +74,7 @@ struct ImplementationEntry
 
 /** Helper function for implementation of the component_writeInfo()-function.
 
-    @obsolete component_writeInfo should no longer be used in new components
+    @deprecated component_writeInfo should no longer be used in new components
 
     @param pServiceManager The first parameter passed to component_writeInfo()-function
                            (This is an instance of the service manager, that creates the factory).
