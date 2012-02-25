@@ -55,7 +55,7 @@ CONFIGURE_DIR=
 my_libxml2_cflags=$(LIBXML_CFLAGS)
 my_libxml2_libs=$(LIBXML_LIBS)
 .ELSE
-my_libxml2_cflags=-I$(SOLARINCDIR)/external/libxml
+my_libxml2_cflags=-I$(SOLARINCDIR)/external/libxml -DCROCO_HAVE_LIBXML2=1
 my_libxml2_libs=-L$(SOLARLIBDIR) -lxml2
 .ENDIF
 CONFIGURE_ACTION=./configure --prefix=/@.__________________________________________________$(EXTRPATH) \
