@@ -25,14 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
+
 $(eval $(call gb_Library_Library,pdfimport))
 
 $(eval $(call gb_Library_add_api,pdfimport,\
     offapi \
     udkapi \
 ))
-
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
 
 $(eval $(call gb_Library_add_defs,pdfimport,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
