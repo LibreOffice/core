@@ -91,6 +91,24 @@ public:
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
+    void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
+    ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
+
+    void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
+    bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
+
+    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
+    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
+
+    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
+    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
+
+    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
+    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+
+    void ResetFormulaSeparators();
+
+    static const LocaleDataWrapper& GetLocaleDataWrapper();
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
@@ -114,6 +132,12 @@ private:
     sal_Int32       nDefaultObjectSizeHeight;
     sal_Bool        mbShowSharedDocumentWarning;
     ScOptionsUtil::KeyBindingType meKeyBindingType;
+    bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
+    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
+
+    ::rtl::OUString aFormulaSepArg;
+    ::rtl::OUString aFormulaSepArrayRow;
+    ::rtl::OUString aFormulaSepArrayCol;
 };
 
 
@@ -133,6 +157,7 @@ class ScAppCfg : public ScAppOptions
     ScLinkConfigItem    aSortListItem;
     ScLinkConfigItem    aMiscItem;
     ScLinkConfigItem    aCompatItem;
+    ScLinkConfigItem    aFormulaItem;
 
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( InputCommitHdl, void* );
@@ -141,6 +166,7 @@ class ScAppCfg : public ScAppOptions
     DECL_LINK( SortListCommitHdl, void* );
     DECL_LINK( MiscCommitHdl, void* );
     DECL_LINK( CompatCommitHdl, void* );
+    DECL_LINK( FormulaCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetInputPropertyNames();
@@ -149,6 +175,7 @@ class ScAppCfg : public ScAppOptions
     com::sun::star::uno::Sequence<rtl::OUString> GetSortListPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetMiscPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
 
 public:
             ScAppCfg();

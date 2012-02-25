@@ -47,7 +47,7 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "tablink.hxx"
-#include "docoptio.hxx"
+#include "appoptio.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
 
@@ -495,19 +495,18 @@ void ScDocShell::CheckConfigOptions()
     OUString aDecSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
 
     ScModule* pScMod = SC_MOD();
-    const ScDocOptions& rOpt = pScMod->GetDocOptions();
-    OUString aSepArg = rOpt.GetFormulaSepArg();
-    OUString aSepArrRow = rOpt.GetFormulaSepArrayRow();
-    OUString aSepArrCol = rOpt.GetFormulaSepArrayCol();
+    const ScAppOptions& rAppOpt=pScMod->GetAppOptions();
+    OUString aSepArg = rAppOpt.GetFormulaSepArg();
+    OUString aSepArrRow = rAppOpt.GetFormulaSepArrayRow();
+    OUString aSepArrCol = rAppOpt.GetFormulaSepArrayCol();
 
     if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
     {
         // One of arg separators conflicts with the current decimal
         // separator.  Reset them to default.
-        ScDocOptions aNew = rOpt;
+        ScAppOptions aNew = rAppOpt;
         aNew.ResetFormulaSeparators();
-        aDocument.SetDocOptions(aNew);
-        pScMod->SetDocOptions(aNew);
+        pScMod->SetAppOptions(aNew);
 
         // Launch a nice warning dialog to let the users know of this change.
         ScTabViewShell* pViewShell = GetBestViewShell();

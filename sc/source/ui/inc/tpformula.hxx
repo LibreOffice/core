@@ -37,7 +37,9 @@
 
 #include <memory>
 
-class ScDocOptions;
+#include <boost/shared_ptr.hpp>
+
+class ScAppOptions;
 class SfxItemSet;
 class Window;
 
@@ -57,7 +59,6 @@ private:
     explicit ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpFormulaOptions();
 
-    void Init();
     void ResetSeparators();
     void OnFocusSeparatorInput(Edit* pEdit);
 
@@ -83,10 +84,7 @@ private:
     Edit       maEdSepArrayRow;
     PushButton maBtnSepReset;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDocOptions> mpOldOptions;
-    ::std::auto_ptr<ScDocOptions> mpNewOptions;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::boost::shared_ptr<ScAppOptions> mpOptions;
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */

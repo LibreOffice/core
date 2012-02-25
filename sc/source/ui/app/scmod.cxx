@@ -987,6 +987,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     sal_Bool                    bCalcAll            = false;
     sal_Bool                    bSaveAppOptions     = false;
     sal_Bool                    bSaveInputOptions   = false;
+    sal_Bool                    bUpdateDocFormat    = false;
 
     //--------------------------------------------------------------------------
 
@@ -1024,6 +1025,77 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bSaveAppOptions = true;
             pDocSh->ResetKeyBindings(eNew);
         }
+    }
+
+    //============================================
+    // FormulaOptions
+    //============================================
+
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, &pItem))
+    {
+        pAppCfg->SetUseEnglishFuncName( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_GRAMMAR, &pItem))
+    {
+        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        ::formula::FormulaGrammar::Grammar eOld = pAppCfg->GetFormulaSyntax();
+        ::formula::FormulaGrammar::Grammar eNew;
+
+        switch (nVal)
+        {
+        case 0:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
+            break;
+        case 1:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
+            break;
+        case 2:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+            break;
+        }
+
+        if (eOld != eNew)
+        {
+            pAppCfg->SetFormulaSyntax(eNew);
+            bSaveAppOptions = true;
+            bUpdateDocFormat = true;
+        }
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARG, &pItem))
+    {
+        pAppCfg->SetFormulaSepArg( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, &pItem))
+    {
+        pAppCfg->SetFormulaSepArrayRow( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_COL, &pItem))
+    {
+        pAppCfg->SetFormulaSepArrayCol( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    // Do all the format updates on open documents in one go
+    if ( bUpdateDocFormat && pDoc )
+    {
+        const ScDocOptions& rOpt = pDoc->GetDocOptions(); // Temporary fix to keep
+                                                          // SettDocOption call as is
+
+                                                          // Needs update.
+        pDoc->SetDocOptions( rOpt );
+        pDocSh->SetDocumentModified();
     }
 
     //============================================
@@ -1924,7 +1996,15 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
                             // TP_COMPATIBILITY
                             SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
+                            // TP_FORMULA
+                            SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
+                            SID_SC_OPT_FORMULA_GRAMMAR, SID_SC_OPT_FORMULA_GRAMMAR,
+                            SID_SC_OPT_FORMULA_SEP_ARG, SID_SC_OPT_FORMULA_SEP_ARG,
+                            SID_SC_OPT_FORMULA_SEP_ARRAY_COL, SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
+                            SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
                             0 );
+
+        const ScAppOptions& rAppOpt = GetAppOptions();
 
         ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
                                             SfxObjectShell::Current());
@@ -1944,7 +2024,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         //  SFX_APP()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
-                        sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
+                        sal::static_int_cast<sal_uInt16>(rAppOpt.GetAppMetric()) ) );
 
         // TP_CALC
         pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP,
@@ -1953,7 +2033,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 
         // TP_VIEW
         pRet->Put( ScTpViewItem( SID_SCVIEWOPTIONS, aViewOpt ) );
-        pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, GetAppOptions().GetSynchronizeZoom() ) );
+        pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, rAppOpt.GetSynchronizeZoom() ) );
 
         // TP_INPUT
         const ScInputOptions& rInpOpt = GetInputOptions();
@@ -1989,10 +2069,22 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
             aULItem.SetUserList( *pUL );
 
         // TP_COMPATIBILITY
-        pRet->Put(
-            SfxUInt16Item(
-                SID_SC_OPT_KEY_BINDING_COMPAT, GetAppOptions().GetKeyBindingType()));
+        pRet->Put( SfxUInt16Item( SID_SC_OPT_KEY_BINDING_COMPAT,
+                                   rAppOpt.GetKeyBindingType() ) );
 
+        // TP_FORMULA
+        pRet->Put( SfxBoolItem( SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
+                                rAppOpt.GetUseEnglishFuncName() ) );
+        pRet->Put( SfxUInt16Item( SID_SC_OPT_FORMULA_GRAMMAR,
+                                  rAppOpt.GetFormulaSyntax() ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARG,
+                                  rAppOpt.GetFormulaSepArg() ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
+                                  rAppOpt.GetFormulaSepArrayCol() ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
+                                  rAppOpt.GetFormulaSepArrayRow() ) );
+
+//
         pRet->Put( aULItem );
 
     }

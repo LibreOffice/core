@@ -55,6 +55,7 @@
 #include "compiler.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
+#include "appoptio.hxx"
 #include "viewopti.hxx"
 #include "scextopt.hxx"
 #include "brdcst.hxx"
@@ -1937,20 +1938,22 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
+    ScAppOptions rAppOpt=SC_MOD()->GetAppOptions();
+
     OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
-    bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
+    //    bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
 
     *pDocOptions = rOpt;
 
     xPoolHelper->SetFormTableOpt(rOpt);
 
-    SetGrammar( rOpt.GetFormulaSyntax() );
+    SetGrammar( rAppOpt.GetFormulaSyntax() );
 
-    if (bUpdateFuncNames)
+    //if (bUpdateFuncNames)
     {
         // This needs to be called first since it may re-initialize the entire
         // opcode map.
-        if (rOpt.GetUseEnglishFuncName())
+        if (rAppOpt.GetUseEnglishFuncName())
         {
             // switch native symbols to English.
             ScCompiler aComp(NULL, ScAddress());
@@ -1967,7 +1970,7 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 
     // Update the separators.
     ScCompiler::UpdateSeparatorsNative(
-        rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
+        rAppOpt.GetFormulaSepArg(), rAppOpt.GetFormulaSepArrayCol(), rAppOpt.GetFormulaSepArrayRow());
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

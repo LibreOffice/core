@@ -57,13 +57,6 @@ class SC_DLLPUBLIC ScDocOptions
     sal_Bool   bDoAutoSpell;            // auto-spelling
     sal_Bool   bLookUpColRowNames;      // determine column-/row titles automagically
     sal_Bool   bFormulaRegexEnabled;    // regular expressions in formulas enabled
-    bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
-    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
-
-    ::rtl::OUString aFormulaSepArg;
-    ::rtl::OUString aFormulaSepArrayRow;
-    ::rtl::OUString aFormulaSepArrayCol;
-
 public:
                 ScDocOptions();
                 ScDocOptions( const ScDocOptions& rCpy );
@@ -113,23 +106,6 @@ public:
     void    SetFormulaRegexEnabled( sal_Bool bVal ) { bFormulaRegexEnabled = bVal; }
     sal_Bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 
-    void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
-    ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
-
-    void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
-    bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
-
-    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
-    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
-
-    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
-    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
-
-    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
-    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
-
-    void ResetFormulaSeparators();
-    static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
@@ -151,11 +127,6 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
-    bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
-    eFormulaGrammar     = rCpy.eFormulaGrammar;
-    aFormulaSepArg      = rCpy.aFormulaSepArg;
-    aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
-    aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
 
     return *this;
 }
@@ -180,11 +151,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
-            &&  rOpt.bUseEnglishFuncName    == bUseEnglishFuncName
-            &&  rOpt.eFormulaGrammar        == eFormulaGrammar
-            &&  rOpt.aFormulaSepArg         == aFormulaSepArg
-            &&  rOpt.aFormulaSepArrayRow    == aFormulaSepArrayRow
-            &&  rOpt.aFormulaSepArrayCol    == aFormulaSepArrayCol
             );
 }
 
@@ -223,17 +189,14 @@ private:
 class ScDocCfg : public ScDocOptions
 {
     ScLinkConfigItem    aCalcItem;
-    ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
     ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
-    DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
