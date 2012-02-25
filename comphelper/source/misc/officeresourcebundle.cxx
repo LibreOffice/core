@@ -202,14 +202,6 @@ namespace comphelper
     //= OfficeResourceBundle
     //====================================================================
     //--------------------------------------------------------------------
-    OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const ::rtl::OUString& _bundleBaseName )
-        :m_pImpl( new ResourceBundle_Impl( _context, _bundleBaseName ) )
-    {
-        if ( !_context.is() )
-            throw NullPointerException();
-    }
-
-    //--------------------------------------------------------------------
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
         :m_pImpl( new ResourceBundle_Impl( _context, ::rtl::OUString::createFromAscii( _bundleBaseAsciiName ) ) )
     {

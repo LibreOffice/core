@@ -129,11 +129,6 @@ namespace comphelper
                         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
                     ) SAL_THROW( ( ) );
 
-        /** retrieves the set of listeners registered for a given client
-        */
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
-                        getEventListeners( const TClientId _nClient ) SAL_THROW( ( ) );
-
         /** adds an event, which is to be braodcasted, to the queue
 
             @param _nClient

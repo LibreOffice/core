@@ -97,8 +97,6 @@ namespace comphelper
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
         // locking the multiplexer
-        void        lock();
-        void        unlock();
         sal_Int32   locked() const { return m_nLockCount; }
 
         /// dispose the object. No multiplexing anymore

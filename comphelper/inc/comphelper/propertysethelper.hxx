@@ -62,11 +62,7 @@ protected:
     virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(::com::sun::star::beans::UnknownPropertyException );
     virtual ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
-    // allow setting of properties after construction
-    void setInfo( comphelper::PropertySetInfo* pInfo ) throw();
-
 public:
-    PropertySetHelper( );
     PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw();
     PropertySetHelper( comphelper::PropertySetInfo* pInfo, __sal_NoAcquire ) throw();
     virtual ~PropertySetHelper() throw();

@@ -182,11 +182,6 @@ void PropertySetInfo::add( PropertyMapEntry* pMap ) throw()
     mpMap->add( pMap );
 }
 
-void PropertySetInfo::add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw()
-{
-    mpMap->add( pMap, nCount );
-}
-
 void PropertySetInfo::remove( const rtl::OUString& aName ) throw()
 {
     mpMap->remove( aName );

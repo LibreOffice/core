@@ -127,18 +127,6 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------
-    void OContainerListenerAdapter::lock()
-    {
-        ++m_nLockCount;
-    }
-
-    //------------------------------------------------------------------
-    void OContainerListenerAdapter::unlock()
-    {
-        --m_nLockCount;
-    }
-
-    //------------------------------------------------------------------
     void OContainerListenerAdapter::dispose()
     {
         if (m_xContainer.is())

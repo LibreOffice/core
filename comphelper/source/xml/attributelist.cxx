@@ -131,31 +131,6 @@ void AttributeList::AddAttribute(   const OUString &sName ,
     m_pImpl->vecAttribute.push_back( TagAttribute_Impl( sName , sType , sValue ) );
 }
 
-void AttributeList::Clear()
-{
-    m_pImpl->vecAttribute.clear();
-
-    OSL_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
-}
-
-void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
-{
-    OSL_ENSURE( r.is(), "r isn't!" );
-
-    sal_Int32 nMax = r->getLength();
-    sal_Int32 nTotalSize = m_pImpl->vecAttribute.size() + nMax;
-    m_pImpl->vecAttribute.reserve( nTotalSize );
-
-    for( sal_Int16 i = 0 ; i < nMax ; i ++ ) {
-        m_pImpl->vecAttribute.push_back( TagAttribute_Impl(
-            r->getNameByIndex( i ) ,
-            r->getTypeByIndex( i ) ,
-            r->getValueByIndex( i )));
-    }
-
-    OSL_ENSURE( nTotalSize == getLength(), "nTotalSize != getLength()");
-}
-
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

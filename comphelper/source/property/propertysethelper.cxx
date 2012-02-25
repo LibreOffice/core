@@ -66,13 +66,6 @@ PropertyMapEntry* PropertySetHelperImpl::find( const OUString& aName ) const thr
 
 ///////////////////////////////////////////////////////////////////////
 
-PropertySetHelper::PropertySetHelper( )
-{
-    mp = new PropertySetHelperImpl;
-    mp->mpInfo = new PropertySetInfo;
-    mp->mpInfo->acquire();
-}
-
 PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
 {
     mp = new PropertySetHelperImpl;
@@ -90,16 +83,6 @@ PropertySetHelper::~PropertySetHelper() throw()
 {
     mp->mpInfo->release();
     delete mp;
-}
-
-void PropertySetHelper::setInfo( comphelper::PropertySetInfo* pInfo ) throw()
-{
-    OSL_ENSURE( pInfo != NULL, "need pInfo" );
-    OSL_ENSURE( mp->mpInfo != NULL, "where's the old pInfo?" );
-
-    mp->mpInfo->release();
-    mp->mpInfo = pInfo;
-    mp->mpInfo->acquire();
 }
 
 // XPropertySet

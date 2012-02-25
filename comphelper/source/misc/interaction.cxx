@@ -74,12 +74,6 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    void OInteractionRequest::clearContinuations()
-    {
-        m_aContinuations.realloc(0);
-    }
-
-    //-------------------------------------------------------------------------
     Any SAL_CALL OInteractionRequest::getRequest(  ) throw(RuntimeException)
     {
         return m_aRequest;

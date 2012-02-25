@@ -78,10 +78,6 @@ public:
         If constructed for reading, any remaining bytes 'til the end of the section will be skipped.
     */
     ~OStreamSection();
-    /**
-        return the number of bytes which are still available
-    */
-    sal_Int32 available();
 };
 
 }   // namespace comphelper

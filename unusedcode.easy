@@ -948,34 +948,14 @@ canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const
 canvas::tools::ElapsedTime::getTimeBase() const
 canvas::tools::calcRectToRectTransform(basegfx::B2DHomMatrix&, basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
-canvas::tools::verifyInput(com::sun::star::geometry::RealSize2D const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
-canvas::tools::verifyInput(com::sun::star::rendering::FloatingPointBitmapLayout const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
-comphelper::AccessibleEventNotifier::getEventListeners(unsigned int)
-comphelper::AttributeList::AppendAttributeList(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&)
-comphelper::AttributeList::Clear()
-comphelper::EventLogger::addLogHandler(com::sun::star::uno::Reference<com::sun::star::logging::XLogHandler> const&)
-comphelper::EventLogger::getLogLevel() const
-comphelper::EventLogger::getName() const
-comphelper::EventLogger::removeLogHandler(com::sun::star::uno::Reference<com::sun::star::logging::XLogHandler> const&)
-comphelper::EventLogger::setLogLevel(int) const
 comphelper::FastPropertySetInfo::FastPropertySetInfo()
 comphelper::FastPropertySetInfo::addProperty(com::sun::star::beans::Property const&)
 comphelper::OAccessibleSelectionHelper::OAccessibleSelectionHelper()
 comphelper::OAccessibleTextHelper::OAccessibleTextHelper()
-comphelper::OContainerListenerAdapter::lock()
-comphelper::OContainerListenerAdapter::unlock()
-comphelper::OInteractionRequest::clearContinuations()
 comphelper::OPropertyContainerHelper::modifyAttributes(int, int, int)
 comphelper::OSelectionChangeListener::disposeAdapter()
-comphelper::OStreamSection::available()
-comphelper::OfficeResourceBundle::OfficeResourceBundle(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&)
-comphelper::PropertySetHelper::PropertySetHelper()
-comphelper::PropertySetHelper::setInfo(comphelper::PropertySetInfo*)
-comphelper::PropertySetInfo::add(comphelper::PropertyMapEntry*, int)
-comphelper::ResourceBasedEventLogger::ResourceBasedEventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&, rtl::OUString const&)
-comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const

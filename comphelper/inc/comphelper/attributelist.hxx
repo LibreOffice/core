@@ -51,8 +51,6 @@ public:
 
     // methods that are not contained in any interface
     void AddAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
-    void Clear();
-    void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
 
     // ::com::sun::star::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength(void)
