@@ -196,6 +196,7 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
                 aIter->second = 0;
             }
         }
+        delete mpStreamMap;
     }
 }
 
