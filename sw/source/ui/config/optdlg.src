@@ -171,7 +171,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_POSTIT
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT";
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
     };
