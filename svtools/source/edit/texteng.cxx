@@ -64,6 +64,8 @@
 
 #include <unicode/ubidi.h>
 
+#include <set>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -71,9 +73,6 @@ using namespace ::rtl;
 typedef TextView* TextViewPtr;
 SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
 // SV_IMPL_PTRARR( TextViews, TextViewPtr );
-
-SV_DECL_VARARR_SORT( TESortedPositions, sal_uLong, 16 )
-SV_IMPL_VARARR_SORT( TESortedPositions, sal_uLong )
 
 #define RESDIFF     10
 #define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
@@ -1822,25 +1821,23 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     TextNode* pNode = pTEParaPortion->GetNode();
     DBG_ASSERT( pNode->GetText().Len(), "CreateTextPortions sollte nicht fuer leere Absaetze verwendet werden!" );
 
-    TESortedPositions aPositions;
-    sal_uLong nZero = 0;
-    aPositions.Insert( nZero );
+    std::set<sal_uInt16> aPositions;
+    std::set<sal_uInt16>::iterator aPositionsIt;
+    aPositions.insert(0);
 
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
 
-        // Start und Ende in das Array eintragen...
-        // Die InsertMethode laesst keine doppelten Werte zu....
-        aPositions.Insert( pAttrib->GetStart() );
-        aPositions.Insert( pAttrib->GetEnd() );
+        aPositions.insert( pAttrib->GetStart() );
+        aPositions.insert( pAttrib->GetEnd() );
     }
-    aPositions.Insert( pNode->GetText().Len() );
+    aPositions.insert( pNode->GetText().Len() );
 
     const TEWritingDirectionInfos& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
     for ( sal_uInt16 nD = 0; nD < rWritingDirections.Count(); nD++ )
-        aPositions.Insert( rWritingDirections[nD].nStartPos );
+        aPositions.insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
@@ -1849,7 +1846,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )
             {
-                aPositions.Insert( mpIMEInfos->aPos.GetIndex() + n );
+                aPositions.insert( mpIMEInfos->aPos.GetIndex() + n );
                 nLastAttr = mpIMEInfos->pAttribs[n];
             }
         }
@@ -1858,8 +1855,8 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     sal_uInt16 nTabPos = pNode->GetText().Search( '\t', 0 );
     while ( nTabPos != STRING_NOTFOUND )
     {
-        aPositions.Insert( nTabPos );
-        aPositions.Insert( nTabPos + 1 );
+        aPositions.insert( nTabPos );
+        aPositions.insert( nTabPos + 1 );
         nTabPos = pNode->GetText().Search( '\t', nTabPos+1 );
     }
 
@@ -1892,21 +1889,21 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     pTEParaPortion->GetTextPortions().DeleteFromPortion( nInvPortion );
 
     // Eine Portion kann auch durch einen Zeilenumbruch entstanden sein:
-    aPositions.Insert( nPortionStart );
+    aPositions.insert( nPortionStart );
 
-    sal_uInt16 nInvPos;
-    #ifdef DBG_UTIL
-    sal_Bool bFound =
-    #endif
-        aPositions.Seek_Entry( nPortionStart, &nInvPos );
-    DBG_ASSERT( bFound && ( nInvPos < (aPositions.Count()-1) ), "InvPos ?!" );
-    for ( sal_uInt16 i = nInvPos+1; i < aPositions.Count(); i++ )
+    aPositionsIt = aPositions.find( nPortionStart );
+    DBG_ASSERT( aPositionsIt != aPositions.end(), "nPortionStart not found" );
+
+    if ( aPositionsIt != aPositions.end() )
     {
-        TETextPortion* pNew = new TETextPortion( (sal_uInt16)aPositions[i] - (sal_uInt16)aPositions[i-1] );
-        pTEParaPortion->GetTextPortions().Insert( pNew, pTEParaPortion->GetTextPortions().Count());
+        std::set<sal_uInt16>::iterator nextIt = aPositionsIt;
+        for ( ++nextIt; nextIt != aPositions.end(); ++aPositionsIt, ++nextIt )
+        {
+            TETextPortion* pNew = new TETextPortion( *nextIt - *aPositionsIt );
+            pTEParaPortion->GetTextPortions().Insert( pNew, pTEParaPortion->GetTextPortions().Count());
+        }
     }
-
-    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine Portions?!" );
+    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "No Portions?!" );
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
