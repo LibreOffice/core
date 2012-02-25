@@ -813,23 +813,6 @@ void ImpEditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) 
     }
 }
 
-void ImpEditEngine::AdjustParaAttribsByStyleSheet( ContentNode* pNode ) //#115580#
-{
-    if ( !pNode )
-        return;
-
-    SfxStyleSheet* pStyle = pNode->GetStyleSheet();
-    for ( sal_uInt16 nWhich = EE_PARA_START; nWhich < EE_CHAR_START && pStyle; nWhich++ )
-    {
-        if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON   )
-        {
-            const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
-            if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
-                pNode->GetContentAttribs().GetItems().ClearItem( nWhich );
-        }
-    }
-}
-
 void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 {
     pNode->GetCharAttribs().DeleteEmptyAttribs( GetEditDoc().GetItemPool() );
@@ -858,8 +841,6 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
     }
     bFormatted = sal_False;
     // Portion braucht hier nicht invalidiert werden, geschieht woanders.
-    if ( bIsPasting )   //#115580#
-        pNode->GetContentAttribs().GetItems().ClearItem();
 }
 
 IdleFormattter::IdleFormattter()

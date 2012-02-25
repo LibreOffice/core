@@ -147,8 +147,6 @@ public:
 
     static rtl::OUString GetEventName( sal_Int32 nId );
 
-    static void InitDefaultFontAttr( SwDoc* pDoc ); //#115580# added at 2011/11/28
-
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
     SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
     SwDocShell( const sal_uInt64 i_nSfxCreationFlags );

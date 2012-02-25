@@ -838,8 +838,6 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        SwDocShell::InitDefaultFontAttr( pTmpDoc ); //#115580#
-
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
