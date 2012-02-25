@@ -143,8 +143,12 @@ $(eval $(call gb_Extension_add_files,presenter-screen,registry/data/org/openoffi
     $(call gb_XcuDataTarget_get_target,sdext/source/presenter/registry/data/org/openoffice/Office/ProtocolHandler.xcu) \
 ))
 
+$(eval $(call gb_Extension_add_files,presenter-screen,help/en-US/com.sun.PresenterScreen-$(sdext_PLATFORM),\
+    $(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp \
+))
+
 $(eval $(call gb_Extension_localize_help,presenter-screen,\
-    help/lang/com.sun.presenter-screen/presenter.xhp,\
-    $(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.presenter-screen/presenter.xhp))
+    help/lang/com.sun.PresenterScreen-$(sdext_PLATFORM)/presenter.xhp,\
+    $(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
