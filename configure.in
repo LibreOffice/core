@@ -2167,7 +2167,11 @@ GCC_HOME_SET="true"
 AC_MSG_CHECKING([gcc home])
 if test -z "$with_gcc_home"; then
     if test "$enable_icecream" = "yes" ; then
-        GCC_HOME="/opt/icecream"
+        if test -d "/usr/lib/icecc/" ; then
+            GCC_HOME="/usr/lib/icecc/"
+        else
+            GCC_HOME="/opt/icecream/"
+        fi
     else
         GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
         GCC_HOME_SET="false"
