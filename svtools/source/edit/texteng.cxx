@@ -65,6 +65,7 @@
 #include <unicode/ubidi.h>
 
 #include <set>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1835,9 +1836,9 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     }
     aPositions.insert( pNode->GetText().Len() );
 
-    const TEWritingDirectionInfos& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
-    for ( sal_uInt16 nD = 0; nD < rWritingDirections.Count(); nD++ )
-        aPositions.insert( rWritingDirections[nD].nStartPos );
+    const std::vector<TEWritingDirectionInfo>& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
+    for ( std::vector<TEWritingDirectionInfo>::const_iterator it = rWritingDirections.begin(); it != rWritingDirections.end(); ++it )
+        aPositions.insert( (*it).nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
@@ -2252,10 +2253,10 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
     sal_Bool bQuickFormat = sal_False;
 
-    if ( !pTEParaPortion->GetWritingDirectionInfos().Count() )
+    if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
         ImpInitWritingDirections( nPara );
 
-    if ( pTEParaPortion->GetWritingDirectionInfos().Count() == 1 )
+    if ( pTEParaPortion->GetWritingDirectionInfos().size() == 1 )
     {
         if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
         {
@@ -3015,8 +3016,8 @@ void TextEngine::SetRightToLeft( sal_Bool bR2L )
 void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
 {
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
-    TEWritingDirectionInfos& rInfos = pParaPortion->GetWritingDirectionInfos();
-    rInfos.Remove( 0, rInfos.Count() );
+    std::vector<TEWritingDirectionInfo>& rInfos = pParaPortion->GetWritingDirectionInfos();
+    rInfos.clear();
 
     if ( pParaPortion->GetNode()->GetText().Len() )
     {
@@ -3042,7 +3043,7 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         for ( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.Insert( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ), rInfos.Count() );
+            rInfos.push_back( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
             nStart = nEnd;
         }
 
@@ -3050,8 +3051,8 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
     }
 
     // No infos mean no CTL and default dir is L2R...
-    if ( !rInfos.Count() )
-        rInfos.Insert( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().Len() ), rInfos.Count() );
+    if ( rInfos.empty() )
+        rInfos.push_back( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().Len() ) );
 
 }
 
@@ -3063,19 +3064,19 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_u
     if ( pNode && pNode->GetText().Len() )
     {
         TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
-        if ( !pParaPortion->GetWritingDirectionInfos().Count() )
+        if ( pParaPortion->GetWritingDirectionInfos().empty() )
             ImpInitWritingDirections( nPara );
 
-        TEWritingDirectionInfos& rDirInfos = pParaPortion->GetWritingDirectionInfos();
-        for ( sal_uInt16 n = 0; n < rDirInfos.Count(); n++ )
+        std::vector<TEWritingDirectionInfo>& rDirInfos = pParaPortion->GetWritingDirectionInfos();
+        for ( std::vector<TEWritingDirectionInfo>::const_iterator rDirInfosIt = rDirInfos.begin(); rDirInfosIt != rDirInfos.end(); ++rDirInfosIt )
         {
-            if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
+            if ( ( (*rDirInfosIt).nStartPos <= nPos ) && ( (*rDirInfosIt).nEndPos >= nPos ) )
                {
-                nRightToLeft = rDirInfos[n].nType;
+                nRightToLeft = (*rDirInfosIt).nType;
                 if ( pStart )
-                    *pStart = rDirInfos[n].nStartPos;
+                    *pStart = (*rDirInfosIt).nStartPos;
                 if ( pEnd )
-                    *pEnd = rDirInfos[n].nEndPos;
+                    *pEnd = (*rDirInfosIt).nEndPos;
                 break;
             }
         }

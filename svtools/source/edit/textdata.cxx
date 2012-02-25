@@ -33,7 +33,6 @@
 #include <tools/debug.hxx>
 
 SV_IMPL_PTRARR( TextLines, TextLinePtr );
-SV_IMPL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo );
 
 
 // -------------------------------------------------------------------------
@@ -173,7 +172,7 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
         }
     }
 
-    maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
+    maWritingDirectionInfos.clear();
 
     mbInvalid = sal_True;
 }
@@ -191,7 +190,7 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
 //      nInvalidPosEnd = pNode->Len();
     }
 
-    maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
+    maWritingDirectionInfos.clear();
 
     mnInvalidDiff = 0;
     mbInvalid = sal_True;

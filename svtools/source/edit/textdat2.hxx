@@ -35,6 +35,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
 
+#include <vector>
+
 class TextNode;
 class TextView;
 
@@ -116,8 +118,6 @@ struct TEWritingDirectionInfo
         nEndPos = _End;
     }
 };
-
-SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0 )
 
 class TextLine
 {
@@ -202,7 +202,7 @@ private:
 
     TextLines               maLines;
     TETextPortionList       maTextPortions;
-    TEWritingDirectionInfos maWritingDirectionInfos;
+    std::vector<TEWritingDirectionInfo> maWritingDirectionInfos;
 
 
     sal_uInt16              mnInvalidPosStart;
@@ -233,7 +233,7 @@ public:
     TextNode*           GetNode() const             { return mpNode; }
     TextLines&          GetLines()                  { return maLines; }
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
-    TEWritingDirectionInfos& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
+    std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
 
     sal_uInt16              GetLineNumber( sal_uInt16 nIndex, sal_Bool bInclEnd );
