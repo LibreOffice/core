@@ -342,11 +342,14 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 # restart since autogen can have changed
 # config_host.k which is included in this
 # Makefile
-Makefile: config_host.mk
+Makefile: $(SRCDIR)/config_host.mk
 	touch $@
 
-config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
+$(SRCDIR)/config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
 	./autogen.sh
+
+autogen.lastrun:
+	@true
 
 #
 # Fetch
