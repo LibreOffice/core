@@ -3059,8 +3059,6 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
     {
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
-        if (aColor.GetColor() == 0x00333333)
-            pIo->maTracer.Log(sw::log::eAutoColorBg);
         pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aColor, RES_BACKGROUND));
         bFound = true;
     }
@@ -3433,7 +3431,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             {
                 // <WW8SwFlyPara> constructor has changed - new 4th parameter
                 // containing WW8 page top margin.
-                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
+                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *pTableWFlyPara,
                     maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);

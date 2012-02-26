@@ -1514,12 +1514,10 @@ void SwWW8ImplReader::ImportDop()
     // Abst. des ersten und oberem Abst. des zweiten
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true );
-    maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
     rDoc.set(IDocumentSettingAccess::TAB_COMPAT, true);
     // #i24363# tab stops relative to indent
     rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
-    maTracer.Log(sw::log::eTabStopDistance);
     // #i18732# - adjust default of option 'FollowTextFlow'
     rDoc.SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
@@ -1533,12 +1531,6 @@ void SwWW8ImplReader::ImportDop()
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
-
-    if (!pWDop->fUsePrinterMetrics)
-        maTracer.Log(sw::log::ePrinterMetrics);
-
-    if (!pWDop->fNoLeading)
-        maTracer.Log(sw::log::eExtraLeading);
 
     rDoc.set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
     rDoc.set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
@@ -1576,9 +1568,6 @@ void SwWW8ImplReader::ImportDop()
     //
     // COMPATIBILITY FLAGS END
     //
-
-    if (!pWDop->fNoLeading)
-        maTracer.Log(sw::log::eExtraLeading);
 
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
@@ -3617,7 +3606,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc) :
     mpDocShell(rD.GetDocShell()),
-    maTracer(*(mpDocShell->GetMedium())),
     pStg(pStorage),
     pStrm(pSt),
     pTableStream(0),
@@ -4129,8 +4117,6 @@ void SwWW8ImplReader::StoreMacroCmds()
 {
     if (pWwFib->lcbCmds)
     {
-        maTracer.Log(sw::log::eContainsWordBasic);
-
         pTableStream->Seek(pWwFib->fcCmds);
 
         uno::Reference < embed::XStorage > xRoot(mpDocShell->GetStorage());
@@ -4634,10 +4620,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             aCustomisations.Import( mpDocShell );
 
             if( bRet )
-            {
-                maTracer.Log(sw::log::eContainsVisualBasic);
                 rDoc.SetContainsMSVBasic(true);
-            }
 
             StoreMacroCmds();
         }

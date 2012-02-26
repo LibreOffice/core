@@ -40,7 +40,6 @@
 #include <map>
 #include <utility>
 
-#include "tracer.hxx"
 #include "ww8struc.hxx"     // WW8_BRC
 #include "ww8scan.hxx"  // WW8Fib
 #include "ww8glsy.hxx"
@@ -969,11 +968,6 @@ friend class SwWW8FltControlStack;
 friend class WW8FormulaControl;
 friend class wwSectionManager;
 
-public:
-    /*
-    To log unimplemented features
-    */
-    sw::log::Tracer maTracer;
 private:
 
     SvStorage* pStg;                // Input-Storage

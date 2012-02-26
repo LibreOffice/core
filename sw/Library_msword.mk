@@ -96,7 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/WW8TableInfo \
     sw/source/filter/ww8/fields \
     sw/source/filter/ww8/styles \
-    sw/source/filter/ww8/tracer \
     sw/source/filter/ww8/writerhelper \
     sw/source/filter/ww8/writerwordglue \
     sw/source/filter/ww8/wrtw8esh \

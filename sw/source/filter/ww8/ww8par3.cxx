@@ -547,8 +547,6 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     sal_uInt8 ixchFollow(0);
     rSt >> ixchFollow;
-    if (ixchFollow == 0)
-        rReader.maTracer.Log(sw::log::eTabInNumbering);
     rSt >> aLVL.nV6DxaSpace;
     rSt >> aLVL.nV6Indent;
     rSt >> aLVL.nLenGrpprlChpx;
