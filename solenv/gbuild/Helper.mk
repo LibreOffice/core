@@ -30,10 +30,10 @@ gb_Helper_NULLFILE := /dev/null
 
 gb_Helper_MISC := $(WORKDIR)/Misc
 
-# general propose phony target
+# general purpose phony target
 gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 
-# general propose empty dummy target
+# general purpose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 
 .PHONY : $(WORKDIR)/Misc/PHONY
