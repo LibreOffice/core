@@ -1038,11 +1038,11 @@ void AnalogBitmapPainter::LoadBitmap (
     if (rValues.size() == 3)
     {
         BitmapDescriptor* pDescriptor = NULL;
-        if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("Face")))
+        if (rsKey.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Face")))
             pDescriptor = &maFace;
-        else if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("HourHand")))
+        else if (rsKey.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HourHand")))
             pDescriptor = &maHourHand;
-        else if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("MinuteHand")))
+        else if (rsKey.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinuteHand")))
             pDescriptor = &maMinuteHand;
 
         if (pDescriptor == NULL)

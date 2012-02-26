@@ -119,42 +119,42 @@ SmFilterDetect::~SmFilterDetect()
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TypeName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FilterName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ReadOnly")) )
             nIndexOfReadOnlyFlag = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UCBContent")) )
             nIndexOfContent = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AsTemplate")) )
         {
             lDescriptor[nProperty].Value >>= bOpenAsTemplate;
             nIndexOfTemplateFlag = nProperty;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RepairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DocumentTitle")) )
             nIndexOfDocumentTitle = nProperty;
     }
 
