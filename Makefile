@@ -461,10 +461,10 @@ findunusedcode:
 check: subsequentcheck
 
 subsequentcheck: dev-install
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile $@
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 debugrun:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f post.Makefile $@
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 endif # not clean or distclean
 
