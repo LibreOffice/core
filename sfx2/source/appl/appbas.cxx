@@ -85,7 +85,7 @@
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
-#ifdef LIBO_MERGELIBS
+#if defined(LIBO_MERGELIBS) || defined(IOS)
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
 #define aSfxBoolItem_Impl sfx2_source_appl_appbas_aSfxBoolItem_Impl
 #define aSfxStringItem_Impl sfx2_source_appl_appbas_aSfxStringItem_Impl
@@ -98,7 +98,7 @@
 #define Selection
 #include "sfxslots.hxx"
 
-#ifdef LIBO_MERGELIBS
+#if defined(LIBO_MERGELIBS) || defined(IOS)
 #undef aSfxBoolItem_Impl
 #undef aSfxStringItem_Impl
 #undef aSfxUInt16Item_Impl
