@@ -1469,16 +1469,11 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
     if ( ! aTabCols.Count() )
         return;
 
-    const sal_uInt8 nTmp = (sal_uInt8)Max( sal_uInt16(255), sal_uInt16(aTabCols.Count() + 1) );
-    std::vector<sal_uInt16> aWish( nTmp, nTmp ),
-              aMins( nTmp, nTmp );
+    std::vector<sal_uInt16> aWish(aTabCols.Count() + 1);
+    std::vector<sal_uInt16> aMins(aTabCols.Count() + 1);
+
     sal_uInt16 i;
 
-    for ( i = 0; i <= aTabCols.Count(); ++i )
-    {
-        aWish.push_back( 0 );
-        aMins.push_back( 0 );
-    }
     ::lcl_CalcColValues( aWish, aTabCols, pStart, pEnd, sal_True  );
 
     //Es ist Robuster wenn wir die Min-Werte fuer die ganze Tabelle berechnen.
