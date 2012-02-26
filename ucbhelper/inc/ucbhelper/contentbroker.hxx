@@ -29,6 +29,7 @@
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #define _UCBHELPER_CONTENTBROKER_HXX
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -58,16 +59,13 @@ class ContentBroker_Impl;
   * be used to initialize and deinitialize the Broker and to access its
   * interfaces directly.
   */
-class UCBHELPER_DLLPUBLIC ContentBroker
+class UCBHELPER_DLLPUBLIC ContentBroker : private boost::noncopyable
 {
     ContentBroker_Impl*     m_pImpl;
     // The "one and only" Broker.
     static ContentBroker*   m_pTheBroker;
 
 private:
-    UCBHELPER_DLLPRIVATE ContentBroker( const ContentBroker& );                 // n.i.
-    UCBHELPER_DLLPRIVATE ContentBroker& operator=( const ContentBroker& );  // n.i.
-
     /** Constructor.
       *
       * @param rxSMgr is a Service Manager.
@@ -82,16 +80,6 @@ private:
                      ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
                    const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
-
-    /** Constructor.
-      *
-      * @param rxSMgr is a Service Manager.
-      * @param rData are the data for the for the content providers for
-      *        the new UCB.
-      */
-    UCBHELPER_DLLPRIVATE ContentBroker( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
-                   const ContentProviderDataList & rData );
 
 protected:
     /**

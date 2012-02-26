@@ -128,13 +128,6 @@ ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
 }
 
 //=========================================================================
-ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
-                              const ContentProviderDataList & rData )
-{
-    m_pImpl = new ContentBroker_Impl( rSMgr, rData );
-}
-
-//=========================================================================
 ContentBroker::~ContentBroker()
 {
     delete m_pImpl;
