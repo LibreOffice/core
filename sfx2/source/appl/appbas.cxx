@@ -88,6 +88,7 @@
 #if defined(LIBO_MERGELIBS) || defined(IOS)
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
 #define aSfxBoolItem_Impl sfx2_source_appl_appbas_aSfxBoolItem_Impl
+#define aSfxInt16Item_Impl sfx2_source_appl_appbas_aSfxInt16Item_Impl
 #define aSfxStringItem_Impl sfx2_source_appl_appbas_aSfxStringItem_Impl
 #define aSfxUInt16Item_Impl sfx2_source_appl_appbas_aSfxUInt16Item_Impl
 #define aSfxUInt32Item_Impl sfx2_source_appl_appbas_aSfxUInt32Item_Impl
@@ -100,6 +101,7 @@
 
 #if defined(LIBO_MERGELIBS) || defined(IOS)
 #undef aSfxBoolItem_Impl
+#undef aSfxInt16Item_Impl
 #undef aSfxStringItem_Impl
 #undef aSfxUInt16Item_Impl
 #undef aSfxUInt32Item_Impl
