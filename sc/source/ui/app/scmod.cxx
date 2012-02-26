@@ -1088,13 +1088,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     // Do all the format updates on open documents in one go
-    if ( bUpdateDocFormat && pDoc )
+    if ( bUpdateDocFormat && pDocSh )
     {
-        const ScDocOptions& rOpt = pDoc->GetDocOptions(); // Temporary fix to keep
-                                                          // SettDocOption call as is
-
-                                                          // Needs update.
-        pDoc->SetDocOptions( rOpt );
+        pDocSh->SetFormulaOptions( *pAppCfg );
         pDocSh->SetDocumentModified();
     }
 

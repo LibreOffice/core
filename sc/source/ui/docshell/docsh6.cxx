@@ -47,9 +47,9 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "tablink.hxx"
-#include "appoptio.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
+#include "compiler.hxx"
 
 #include "formula/FormulaCompiler.hxx"
 #include "comphelper/processfactory.hxx"
@@ -486,6 +486,31 @@ sal_Bool ScDocShell::ReloadTabLinks()
     return sal_True;        //! Fehler erkennen
 }
 
+void ScDocShell::SetFormulaOptions(const ScAppOptions& rAppOpt )
+{
+    aDocument.SetGrammar( rAppOpt.GetFormulaSyntax() );
+
+    // This needs to be called first since it may re-initialize the entire
+    // opcode map.
+    if (rAppOpt.GetUseEnglishFuncName())
+    {
+        // switch native symbols to English.
+        ScCompiler aComp(NULL, ScAddress());
+        ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
+        ScCompiler::SetNativeSymbols(xMap);
+    }
+    else
+        // re-initialize native symbols with localized function names.
+        ScCompiler::ResetNativeSymbols();
+
+    // Force re-population of function names for the function wizard, function tip etc.
+    ScGlobal::ResetFunctionList();
+
+    // Update the separators.
+    ScCompiler::UpdateSeparatorsNative(
+        rAppOpt.GetFormulaSepArg(), rAppOpt.GetFormulaSepArrayCol(), rAppOpt.GetFormulaSepArrayRow());
+}
+
 void ScDocShell::CheckConfigOptions()
 {
     if (IsConfigOptionsChecked())
@@ -506,6 +531,7 @@ void ScDocShell::CheckConfigOptions()
         // separator.  Reset them to default.
         ScAppOptions aNew = rAppOpt;
         aNew.ResetFormulaSeparators();
+        SetFormulaOptions(aNew);
         pScMod->SetAppOptions(aNew);
 
         // Launch a nice warning dialog to let the users know of this change.

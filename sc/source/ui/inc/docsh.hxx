@@ -39,6 +39,7 @@
 #include "scdllapi.h"
 #include "scdll.hxx"
 #include "document.hxx"
+#include "appoptio.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
 #include "optutil.hxx"
@@ -320,6 +321,7 @@ public:
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     sal_Bool            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
 
+    void            SetFormulaOptions(const ScAppOptions& rAppOpt );
     virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );

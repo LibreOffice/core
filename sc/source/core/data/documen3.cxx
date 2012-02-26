@@ -52,10 +52,8 @@
 #include "rangelst.hxx"
 #include "chartarr.hxx"
 #include "chartlock.hxx"
-#include "compiler.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
-#include "appoptio.hxx"
 #include "viewopti.hxx"
 #include "scextopt.hxx"
 #include "brdcst.hxx"
@@ -67,7 +65,6 @@
 #include "dociter.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"
-#include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "chartlis.hxx"
 #include "sc.hrc"           // SID_LINK
@@ -1938,39 +1935,10 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    ScAppOptions rAppOpt=SC_MOD()->GetAppOptions();
-
     OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
-    //    bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
 
     *pDocOptions = rOpt;
-
     xPoolHelper->SetFormTableOpt(rOpt);
-
-    SetGrammar( rAppOpt.GetFormulaSyntax() );
-
-    //if (bUpdateFuncNames)
-    {
-        // This needs to be called first since it may re-initialize the entire
-        // opcode map.
-        if (rAppOpt.GetUseEnglishFuncName())
-        {
-            // switch native symbols to English.
-            ScCompiler aComp(NULL, ScAddress());
-            ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
-            ScCompiler::SetNativeSymbols(xMap);
-        }
-        else
-            // re-initialize native symbols with localized function names.
-            ScCompiler::ResetNativeSymbols();
-
-        // Force re-population of function names for the function wizard, function tip etc.
-        ScGlobal::ResetFunctionList();
-    }
-
-    // Update the separators.
-    ScCompiler::UpdateSeparatorsNative(
-        rAppOpt.GetFormulaSepArg(), rAppOpt.GetFormulaSepArrayCol(), rAppOpt.GetFormulaSepArrayRow());
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const
