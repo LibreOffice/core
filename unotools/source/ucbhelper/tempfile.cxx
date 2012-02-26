@@ -209,7 +209,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     {
         u %= nMax;
         String aTmp( aName );
-        aTmp += String::CreateFromInt64( static_cast<sal_Int64>(u), nRadix );
+        aTmp += rtl::OUString::valueOf(static_cast<sal_Int64>(u), nRadix);
         aTmp += String::CreateFromAscii( ".tmp" );
 
         if ( bDir )

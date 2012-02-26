@@ -1175,39 +1175,38 @@ void SwRTFParser::ReadShpRslt()
 
 void SwRTFParser::ReadShpTxt(String& s)
 {
-  int nToken;
-  int level=1;
-  s.AppendAscii("{\\rtf");
-  while (level>0 && IsParserWorking())
+    int nToken;
+    int level=1;
+    s.AppendAscii("{\\rtf");
+    while (level>0 && IsParserWorking())
     {
-      nToken = GetNextToken();
-      switch(nToken)
-    {
-    case RTF_SN:
-    case RTF_SV:
-      SkipGroup();
-      break;
-    case RTF_TEXTTOKEN:
-      s.Append(aToken);
-      break;
-    case '{':
-      level++;
-      s.Append(String::CreateFromAscii("{"));
-      break;
-    case '}':
-      level--;
-      s.Append(String::CreateFromAscii("}"));
-      break;
-    default:
-      s.Append(aToken);
-      if (bTokenHasValue) {
-        s.Append(String::CreateFromInt64(nTokenValue));
-      }
-      s.Append(String::CreateFromAscii(" "));
-      break;
+        nToken = GetNextToken();
+        switch(nToken)
+        {
+            case RTF_SN:
+            case RTF_SV:
+                SkipGroup();
+                break;
+            case RTF_TEXTTOKEN:
+                s.Append(aToken);
+                break;
+            case '{':
+                level++;
+                s.Append(String::CreateFromAscii("{"));
+                break;
+            case '}':
+                level--;
+                s.Append(String::CreateFromAscii("}"));
+                break;
+            default:
+                s.Append(aToken);
+                if (bTokenHasValue)
+                    s.Append(rtl::OUString::valueOf(static_cast<sal_Int64>(nTokenValue)));
+                s.Append(String::CreateFromAscii(" "));
+                break;
+        }
     }
-    }
-  SkipToken(-1);
+    SkipToken(-1);
 }
 
 /*

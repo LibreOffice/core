@@ -80,9 +80,9 @@ SfxItemPresentation SfxXRangeItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    rText = UniString::CreateFromInt64(nFrom);
+    rText = rtl::OUString::valueOf(static_cast<sal_Int64>(nFrom));
     rText += ':';
-    rText += UniString::CreateFromInt64(nTo);
+    rText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTo));
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

@@ -79,17 +79,6 @@ UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-UniString UniString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
-{
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFINT64 <= STRING_MAXLEN);
-    return UniString(
-        aBuf,
-        static_cast< xub_StrLen >(rtl_ustr_valueOfInt64( aBuf, n, nRadix )) );
-}
-
-// -----------------------------------------------------------------------
-
 namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
 const UniString& UniString::EmptyString()
 {

@@ -423,7 +423,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, *pLastBox )) )
-            rNewStr += String::CreateFromInt64( (sal_PtrDiff)pRelBox );
+            rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
         else
             rNewStr += '0';
         rNewStr += ':';
@@ -431,7 +431,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     }
 
     if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, rFirstBox )) )
-        rNewStr += String::CreateFromInt64( (sal_PtrDiff)pRelBox );
+        rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
     else
         rNewStr += '0';
 
@@ -518,13 +518,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         pBox = rTbl.GetTblBox( *pLastBox );
-        rNewStr += String::CreateFromInt64( (sal_PtrDiff)pBox );
+        rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
         rNewStr += ':';
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
     pBox = rTbl.GetTblBox( rFirstBox );
-    rNewStr += String::CreateFromInt64( (sal_PtrDiff)pBox );
+    rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
 
     // Kennung fuer Box erhalten
     rNewStr += rFirstBox.GetChar( rFirstBox.Len() - 1 );
@@ -1194,8 +1194,8 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     }
 
     if( pLastBox )
-        ( rNewStr += String::CreateFromInt64((sal_PtrDiff)pEndBox)) += ':';
-    ( rNewStr += String::CreateFromInt64((sal_PtrDiff)pSttBox))
+        ( rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pEndBox)) ) += ':';
+    ( rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pSttBox)) )
               += rFirstBox.GetChar( rFirstBox.Len() - 1 );
 }
 
