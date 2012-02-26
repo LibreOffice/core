@@ -313,7 +313,7 @@ void handleDirectory(
 {
     osl::Directory dir(url);
     if (dir.open() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot open directory\n";
+        std::cerr << "Error: Cannot open directory: " << OUStringToOString(url, RTL_TEXTENCODING_ASCII_US).getStr() << std::endl;
         throw false; //TODO
     }
     for (;;) {
@@ -430,7 +430,7 @@ void handleProjects(char const * root) {
     }
     osl::Directory dir(rootUrl);
     if (dir.open() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot open directory\n";
+        std::cerr << "Error: Cannot open directory: " << OUStringToOString(rootUrl, RTL_TEXTENCODING_ASCII_US).getStr() << std::endl;
         throw false; //TODO
     }
     for (;;) {
