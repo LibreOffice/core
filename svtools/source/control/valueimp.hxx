@@ -70,13 +70,13 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&           mrParent;
-    sal_uInt16              mnId;
-    ValueSetItemType    meType;
+    sal_uInt16          mnId;
+    sal_uInt8           meType;
+    bool                mbVisible;
     Image               maImage;
     Color               maColor;
     XubString           maText;
     void*               mpData;
-    Rectangle           maRect;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ValueSetItem( ValueSet& rParent );

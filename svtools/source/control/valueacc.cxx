@@ -1108,7 +1108,7 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->maRect );
+        Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
         Point       aOrigin;
         Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
@@ -1147,7 +1147,8 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
 
     if( mpParent )
     {
-        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( mpParent->maRect.TopLeft() ) );
+        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( aPos ) );
 
         aRet.X = aScreenPos.X();
         aRet.Y = aScreenPos.Y();

@@ -217,6 +217,10 @@ private:
     ValueItemList   mItemList;
     ValueSetItem*   mpNoneItem;
     ScrollBar*      mpScrBar;
+    Rectangle       maNoneItemRect;
+    Rectangle       maItemListRect;
+    long            mnItemWidth;
+    long            mnItemHeight;
     long            mnTextOffset;
     long            mnVisLines;
     long            mnLines;
@@ -241,6 +245,7 @@ private:
     bool            mbScroll : 1;
     bool            mbFullMode : 1;
     bool            mbIsTransientChildrenDisabled : 1;
+    bool            mbHasVisibleItems : 1;
     Color           maColor;
     Link            maDoubleClickHdl;
     Link            maSelectHdl;
@@ -255,7 +260,7 @@ private:
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem );
+    SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem, Rectangle aRect );
     SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
     SVT_DLLPRIVATE void         ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel );
     SVT_DLLPRIVATE void         ImplDrawSelect();
@@ -270,6 +275,7 @@ private:
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SVT_DLLPRIVATE void         ImplInsertItem( ValueSetItem *const pItem, const size_t nPos );
+    SVT_DLLPRIVATE Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
