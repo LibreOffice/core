@@ -62,9 +62,6 @@ namespace basegfx
         // version for Polygons
         BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnOrthogonalPlane(const B3DPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke);
 
-        // versions for B2DRange, clips only against X,Y
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnRange(const B3DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
-
     } // end of namespace tools
 } // end of namespace basegfx
 
