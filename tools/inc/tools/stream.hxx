@@ -641,7 +641,6 @@ private:
     sal_Bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
     sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
     sal_Bool LockFile();
-    sal_Bool UnlockFile();
 
 protected:
 

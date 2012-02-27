@@ -176,7 +176,6 @@ StgCache::Pos2Page(int)
 StgHeader::SetClassId(ClsId const&)
 StorageStream::ValidateMode(unsigned short, StgDirEntry*) const
 SvBorder::SvBorder(Rectangle const&, Rectangle const&)
-SvFileStream::UnlockFile()
 SvI18NMap_Impl::Insert(SvI18NMapEntry_Impl* const&, unsigned short&)
 SvI18NMap_Impl::Insert(SvI18NMapEntry_Impl* const*, unsigned short)
 SvI18NMap_Impl::Insert(SvI18NMap_Impl const*, unsigned short, unsigned short)
