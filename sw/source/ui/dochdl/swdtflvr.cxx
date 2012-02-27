@@ -379,7 +379,7 @@ namespace
 
         //It would probably make most sense here to only insert the styles used
         //by the selection, e.g. apply SwDoc::IsUsed on styles ?
-        rDest.ReplaceStyles(rSrc);
+        rDest.ReplaceStyles(rSrc, false);
 
         rSrcWrtShell.Copy(&rDest);
     }

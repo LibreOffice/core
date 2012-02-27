@@ -1286,7 +1286,7 @@ public:
     SwGrfFmtColl* CopyGrfColl( const SwGrfFmtColl& rColl );
 
     // Replace all styles with those from rSource.
-    void ReplaceStyles( const SwDoc& rSource );
+    void ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles = true );
 
     // Replace all property defaults with those from rSource.
     void ReplaceDefaults( const SwDoc& rSource );
