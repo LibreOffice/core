@@ -71,10 +71,15 @@ SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
 |*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
 |*
 |*************************************************************************/
-SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib ) :
-    SwLayoutFrm( rSect.GetFmt(), pSib ),
-    SwFlowFrm( (SwFrm&)*this ),
-    pSection( &rSect )
+SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
+    : SwLayoutFrm( rSect.GetFmt(), pSib )
+    , SwFlowFrm( static_cast<SwFrm&>(*this) )
+    , pSection( &rSect )
+    , bFtnAtEnd(false)
+    , bEndnAtEnd(false)
+    , bCntntLock(false)
+    , bOwnFtnNum(false)
+    , bFtnLock(false)
 {
     nType = FRMC_SECTION;
 
