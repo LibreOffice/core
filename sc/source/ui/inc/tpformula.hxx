@@ -84,8 +84,6 @@ private:
     Edit       maEdSepArrayRow;
     PushButton maBtnSepReset;
 
-    ::boost::shared_ptr<ScAppOptions> mpOptions;
-
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
     ::rtl::OUString maOldSepValue;

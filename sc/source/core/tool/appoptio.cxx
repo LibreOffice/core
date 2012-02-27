@@ -130,10 +130,16 @@ void ScAppOptions::SetDefaults()
 
 void ScAppOptions::ResetFormulaSeparators()
 {
+    GetDefaultFormulaSeparators(aFormulaSepArg, aFormulaSepArrayCol, aFormulaSepArrayRow);
+}
+
+void ScAppOptions::GetDefaultFormulaSeparators(
+    rtl::OUString& rSepArg, rtl::OUString& rSepArrayCol, rtl::OUString& rSepArrayRow)
+{
     // Defaults to the old separator values.
-    aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
+    rSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+    rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+    rSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
@@ -166,18 +172,18 @@ void ScAppOptions::ResetFormulaSeparators()
 
     // by default, the parameter separator equals the locale-specific
     // list separator.
-    aFormulaSepArg = OUString(cListSep);
+    rSepArg = OUString(cListSep);
 
     if (cDecSep == cListSep && cDecSep != sal_Unicode(';'))
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        rSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+    rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
     if (cDecSep == sal_Unicode(','))
-        aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+    rSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 }
 
 const LocaleDataWrapper& ScAppOptions::GetLocaleDataWrapper()

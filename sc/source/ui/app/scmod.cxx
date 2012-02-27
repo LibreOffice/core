@@ -1043,7 +1043,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     {
         sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         ::formula::FormulaGrammar::Grammar eOld = pAppCfg->GetFormulaSyntax();
-        ::formula::FormulaGrammar::Grammar eNew;
+        ::formula::FormulaGrammar::Grammar eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
 
         switch (nVal)
         {
@@ -1056,6 +1056,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         case 2:
             eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
             break;
+        default:
+            ;
         }
 
         if (eOld != eNew)
@@ -2071,8 +2073,23 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         // TP_FORMULA
         pRet->Put( SfxBoolItem( SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
                                 rAppOpt.GetUseEnglishFuncName() ) );
-        pRet->Put( SfxUInt16Item( SID_SC_OPT_FORMULA_GRAMMAR,
-                                  rAppOpt.GetFormulaSyntax() ) );
+
+        sal_uInt16 nVal = 0;
+        switch (rAppOpt.GetFormulaSyntax())
+        {
+            case formula::FormulaGrammar::GRAM_NATIVE:
+                nVal = 0;
+            break;
+            case formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
+                nVal = 1;
+            break;
+            case formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
+                nVal = 2;
+            break;
+            default:
+                ;
+        }
+        pRet->Put( SfxUInt16Item( SID_SC_OPT_FORMULA_GRAMMAR, nVal ) );
         pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARG,
                                   rAppOpt.GetFormulaSepArg() ) );
         pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
@@ -2080,7 +2097,6 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
                                   rAppOpt.GetFormulaSepArrayRow() ) );
 
-//
         pRet->Put( aULItem );
 
     }

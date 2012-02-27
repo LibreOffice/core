@@ -108,6 +108,7 @@ public:
 
     void ResetFormulaSeparators();
 
+    static void GetDefaultFormulaSeparators(rtl::OUString& rSepArg, rtl::OUString& rSepArrayCol, rtl::OUString& rSepArrayRow);
     static const LocaleDataWrapper& GetLocaleDataWrapper();
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
