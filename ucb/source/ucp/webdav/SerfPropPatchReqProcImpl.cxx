@@ -78,7 +78,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                 if ( rProperty.operation != lastOp )
                 {
                     // </prop></*last operation code*><*operation code><prop>
-                    aBodyText += rtl::OUString::createFromAscii( "</prop></"
+                    aBodyText += rtl::OUString::createFromAscii( "</prop></" );
                     aBodyText += rtl::OUString::createFromAscii( OpCodes[lastOp] );
                     aBodyText += rtl::OUString::createFromAscii( "><" );
                     aBodyText += rtl::OUString::createFromAscii( OpCodes[rProperty.operation] );
