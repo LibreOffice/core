@@ -109,7 +109,7 @@ rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
 static NSString* getStandardString( int nButtonId )
 {
     rtl::OUString aText( Button::GetStandardText( nButtonId ) );
-    if( ! aText.getLength() ) // this is for bad cases, we might be missing the vcl resource
+    if( aText.isEmpty() ) // this is for bad cases, we might be missing the vcl resource
     {
         switch( nButtonId )
         {
@@ -121,7 +121,7 @@ static NSString* getStandardString( int nButtonId )
         case BUTTON_NO :        aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No" ) );break;
         }
     }
-    return aText.getLength() ? CreateNSString( aText) : nil;
+    return aText.isEmpty() ? nil : CreateNSString( aText);
 }
 
 int AquaSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,

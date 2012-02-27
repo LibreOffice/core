@@ -1336,7 +1336,7 @@ void PrinterController::setValue( const beans::PropertyValue& i_rValue )
 
 void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
 {
-    DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
+    DBG_ASSERT( mpImplData->maUIOptions.isEmpty(), "setUIOptions called twice !" );
 
     mpImplData->maUIOptions = i_rOptions;
 

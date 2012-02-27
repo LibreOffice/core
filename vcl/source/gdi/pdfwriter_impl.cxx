@@ -6698,11 +6698,10 @@ PDFStreamIf::~PDFStreamIf()
 
 void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw()
 {
-    if( m_bWrite )
+    if( m_bWrite && aData.getLength() )
     {
         sal_Int32 nBytes = aData.getLength();
-        if( nBytes > 0 )
-            m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
+        m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
     }
 }
 

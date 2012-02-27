@@ -997,7 +997,7 @@ rtl::OUString AquaSalInstance::GetDefaultPrinter()
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( ! maDefaultPrinter.getLength() )
+    if( maDefaultPrinter.isEmpty() )
     {
         NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
         DBG_ASSERT( pPI, "no print info" );
@@ -1138,10 +1138,10 @@ void AquaSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, con
 {
     // Convert file URL for external use (see above)
     rtl::OUString externalUrl = translateToExternalUrl(rFileUrl);
-    if( 0 == externalUrl.getLength() )
+    if( externalUrl.isEmpty() )
         externalUrl = rFileUrl;
 
-    if( externalUrl.getLength() && !isDangerousUrl( externalUrl ) )
+    if( !externalUrl.isEmpty() && !isDangerousUrl( externalUrl ) )
     {
         NSString* pString = CreateNSString( externalUrl );
         NSURL* pURL = [NSURL URLWithString: pString];
