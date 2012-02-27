@@ -291,11 +291,6 @@ sal_Int64 BiffInputStream::tellBase() const
     return maRecBuffer.getBaseStream().tell();
 }
 
-sal_Int64 BiffInputStream::sizeBase() const
-{
-    return maRecBuffer.getBaseStream().size();
-}
-
 // BinaryInputStream interface (stream read access) ---------------------------
 
 sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
@@ -368,11 +363,6 @@ OUString BiffInputStream::readByteStringUC( bool b16BitLen, rtl_TextEncoding eTe
     return OStringToOUString( readByteString( b16BitLen, bAllowNulChars ), eTextEnc );
 }
 
-void BiffInputStream::skipByteString( bool b16BitLen )
-{
-    skip( b16BitLen ? readuInt16() : readuInt8() );
-}
-
 // Unicode strings ------------------------------------------------------------
 
 OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars )
@@ -416,36 +406,6 @@ OUString BiffInputStream::readUniStringBody( sal_uInt16 nChars, bool bAllowNulCh
 OUString BiffInputStream::readUniString( bool bAllowNulChars )
 {
     return readUniStringBody( readuInt16(), bAllowNulChars );
-}
-
-void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16BitChars )
-{
-    sal_Int32 nCharsLeft = nChars;
-    while( !mbEof && (nCharsLeft > 0) )
-    {
-        // skip the character array
-        sal_Int32 nSkipSize = b16BitChars ? getMaxRawReadSize( 2 * nCharsLeft, 2 ) : getMaxRawReadSize( nCharsLeft, 1 );
-        skip( nSkipSize );
-
-        // prepare for next CONTINUE record
-        nCharsLeft -= (b16BitChars ? (nSkipSize / 2) : nSkipSize);
-        if( nCharsLeft > 0 )
-            jumpToNextStringContinue( b16BitChars );
-    }
-}
-
-void BiffInputStream::skipUniStringBody( sal_uInt16 nChars )
-{
-    bool b16BitChars;
-    sal_Int32 nAddSize;
-    readUniStringHeader( b16BitChars, nAddSize );
-    skipUniStringChars( nChars, b16BitChars );
-    skip( nAddSize );
-}
-
-void BiffInputStream::skipUniString()
-{
-    skipUniStringBody( readuInt16() );
 }
 
 // private --------------------------------------------------------------------

@@ -254,8 +254,6 @@ public:
 
     /** Returns the absolute position in the wrapped binary stream. */
     sal_Int64           tellBase() const;
-    /** Returns the total size of the wrapped binary stream. */
-    sal_Int64           sizeBase() const;
 
     // BinaryInputStream interface (stream read access) -----------------------
 
@@ -295,13 +293,6 @@ public:
      */
     ::rtl::OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
-    /** Ignores 8/16 bit string length and character array.
-        @param b16BitLen
-            True = Read 16-bit string length field before the character array.
-            False = Read 8-bit string length field before the character array.
-     */
-    void                skipByteString( bool b16BitLen );
-
     // Unicode strings --------------------------------------------------------
 
     /** Reads nChars characters of a BIFF8 string, and returns the string.
@@ -331,25 +322,6 @@ public:
             False = NUL characters are replaced by question marks (default).
      */
     ::rtl::OUString     readUniString( bool bAllowNulChars = false );
-
-    /** Ignores nChars characters of a BIFF8 string.
-        @param nChars  Number of characters to skip in the stream.
-        @param b16BitChars
-            True = The character array contains 16-bit characters.
-            False = The character array contains truncated 8-bit characters.
-     */
-    void                skipUniStringChars( sal_uInt16 nChars, bool b16BitChars );
-
-    /** Ignores 8-bit flags, extended header, nChar characters, extended data
-        of a BIFF8 string.
-        @param nChars  Number of characters to skip in the stream.
-     */
-    void                skipUniStringBody( sal_uInt16 nChars );
-
-    /** Ignores 16-bit character count, 8-bit flags, extended header, character
-        array, extended data of a BIFF8 string.
-     */
-    void                skipUniString();
 
     // ------------------------------------------------------------------------
 private:
