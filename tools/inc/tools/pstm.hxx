@@ -202,10 +202,6 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     virtual sal_uIntPtr       SeekPos( sal_uIntPtr nPos );
     virtual void        FlushData();
 protected:
-    sal_uIntPtr               GetCurMaxIndex( const SvPersistUIdx & ) const;
-    sal_uIntPtr               GetCurMaxIndex() const
-                        { return GetCurMaxIndex( aPUIdx ); }
-
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
     sal_uInt32              ReadObj( SvPersistBase * & rpObj,
                                 sal_Bool bRegister );

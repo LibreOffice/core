@@ -93,8 +93,6 @@ public:
                                     const OUString& _rText,
                                     const uno::Reference< i18n::XBreakIterator >& _xBreakIter );
 
-                                /** Returns the previously set text. */
-    const OUString&             GetText() const;
                                 /** Returns a size struct containing the width and height of the text in the current output device. */
     const Size&                 GetTextSize() const;
 
@@ -277,11 +275,6 @@ void SvtScriptedTextHelper_Impl::SetText( const OUString& _rText, const uno::Ref
 {
     maText = _rText;
     CalculateBreaks( _xBreakIter );
-}
-
-const OUString& SvtScriptedTextHelper_Impl::GetText() const
-{
-    return maText;
 }
 
 const Size& SvtScriptedTextHelper_Impl::GetTextSize() const

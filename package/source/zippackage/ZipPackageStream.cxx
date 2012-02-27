@@ -228,12 +228,6 @@ sal_Int32 ZipPackageStream::GetBlockSize() const
 }
 
 //--------------------------------------------------------------------------
-void ZipPackageStream::SetBaseEncryptionData( const ::rtl::Reference< BaseEncryptionData >& xData )
-{
-    m_xBaseEncryptionData = xData;
-}
-
-//--------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
 {
     uno::Sequence< sal_Int8 > aResult;

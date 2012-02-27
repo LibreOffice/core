@@ -311,23 +311,6 @@ void SvPersistStream::FlushData()
 }
 
 /*************************************************************************
-|*    SvPersistStream::GetCurMaxIndex()
-*************************************************************************/
-sal_uIntPtr SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
-{
-    // const  bekomme ich nicht den hoechsten Index
-    SvPersistUIdx * p = (SvPersistUIdx *)&rIdx;
-    // alten merken
-    sal_uIntPtr nCurIdx = p->GetCurIndex();
-    p->Last();
-    // Bereiche nicht ueberschneiden, deshalb nur groessere Indexe
-    sal_uIntPtr nMaxIdx = p->GetCurIndex();
-    // wieder herstellen
-    p->Seek( nCurIdx );
-    return nMaxIdx;
-}
-
-/*************************************************************************
 |*    SvPersistStream::GetIndex()
 *************************************************************************/
 sal_uIntPtr SvPersistStream::GetIndex( SvPersistBase * pObj ) const

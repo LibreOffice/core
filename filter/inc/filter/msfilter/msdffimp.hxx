@@ -641,7 +641,6 @@ public:
     void Scale(sal_Int32& rVal) const;
     void Scale(Point& rPos) const;
     void Scale(Size& rSiz) const;
-    void Scale(Polygon& rPoly) const;
     void ScaleEmu(sal_Int32& rVal) const;
     sal_uInt32 ScalePt( sal_uInt32 nPt ) const;
     sal_Int32 ScalePoint( sal_Int32 nVal ) const;

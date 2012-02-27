@@ -65,7 +65,6 @@ public:
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
-    SAL_DLLPRIVATE SymbolAlign      ImplGetSymbolAlign() const;
     SAL_DLLPRIVATE void             ImplSetSmallSymbol( sal_Bool bSmall = sal_True );
     SAL_DLLPRIVATE const Rectangle& ImplGetSymbolRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);

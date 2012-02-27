@@ -3265,15 +3265,6 @@ void SvxMSDffManager::Scale( Size& rSiz ) const
     }
 }
 
-void SvxMSDffManager::Scale( Polygon& rPoly ) const
-{
-    if ( !bNeedMap )
-        return;
-    sal_uInt16 nPointAnz = rPoly.GetSize();
-    for ( sal_uInt16 nPointNum = 0; nPointNum < nPointAnz; nPointNum++ )
-        Scale( rPoly[ nPointNum ] );
-}
-
 void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 {
     rVal = BigMulDiv( rVal, nEmuMul, nEmuDiv );

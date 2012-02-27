@@ -589,12 +589,6 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
 }
 
 // -----------------------------------------------------------------------
-SymbolAlign Button::ImplGetSymbolAlign() const
-{
-    return mpButtonData->meSymbolAlign;
-}
-
-// -----------------------------------------------------------------------
 void Button::ImplSetSmallSymbol( sal_Bool bSmall )
 {
     mpButtonData->mbSmallSymbol = bSmall;
