@@ -3106,14 +3106,20 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
 class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if ( GetObjectShell() )
+    SvGlobalName aName( aIdentifier );
+    if ((aName == SvGlobalName( SO3_GLOBAL_CLASSID )) ||
+        (aName == SvGlobalName( SFX_GLOBAL_CLASSID )))
     {
-        SvGlobalName aName( aIdentifier );
-        if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
-             return (sal_Int64)(sal_IntPtr)(SvObject*)GetObjectShell();
-        else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
-             return (sal_Int64)(sal_IntPtr)(SfxObjectShell*)GetObjectShell();
+        SolarMutexGuard aGuard;
+        SfxObjectShell *const pObjectShell(GetObjectShell());
+        if (pObjectShell)
+        {
+            // SO3_GLOBAL_CLASSID is apparently used by binfilter :(
+            if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
+                 return (sal_Int64)(sal_IntPtr)(SvObject*) pObjectShell;
+            else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
+                 return (sal_Int64)(sal_IntPtr)(SfxObjectShell*) pObjectShell;
+        }
     }
 
     return 0;
