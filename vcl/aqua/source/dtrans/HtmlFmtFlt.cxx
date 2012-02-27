@@ -65,9 +65,9 @@ const std::string TAG_END_BODY = std::string("</BODY");
 
 Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
 {
-    OSL_ASSERT(!aTextHtml.isEmpty());
+    OSL_ASSERT(aTextHtml.getLength() > 0);
 
-    if (aTextHtml.isEmpty())
+    if (!(aTextHtml.getLength() > 0))
         return Sequence<sal_Int8>();
 
     // fill the buffer with dummy values to calc the exact length

@@ -161,7 +161,7 @@ bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict,
             {
                 aBmp.realloc( [pOut length] );
                 [pOut getBytes: aBmp.getArray() length: aBmp.getLength()];
-                bResult = (!aBmp.isEmpty());
+                bResult = (aBmp.getLength() != 0);
             }
         }
     }
@@ -190,7 +190,7 @@ bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp,
             {
                 aPict.realloc( [pOut length] );
                 [pOut getBytes: aPict.getArray() length: aPict.getLength()];
-                bResult = (!aPict.isEmpty());
+                bResult = (aPict.getLength() != 0);
             }
         }
     }
