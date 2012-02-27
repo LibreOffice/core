@@ -1103,8 +1103,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Uuresolver,
             gid_File_Dl_Libxml2,
             gid_File_Dl_Stlport,
-            gid_File_Dl_GccS,
-            gid_File_Dl_Stdcpp,
             gid_File_Lib_Mingw_GccS_Ure,
             gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Dl_Unicows,
