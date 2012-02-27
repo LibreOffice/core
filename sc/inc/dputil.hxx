@@ -30,13 +30,14 @@
 #define __SC_DPUTIL_HXX__
 
 #include "rtl/ustring.hxx"
+#include "scdllapi.h"
 
 class ScDPUtil
 {
 public:
     static bool isDuplicateDimension(const rtl::OUString& rName);
 
-    static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
+    SC_DLLPUBLIC static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
 
     static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
 };

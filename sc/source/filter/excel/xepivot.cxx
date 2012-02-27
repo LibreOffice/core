@@ -49,6 +49,7 @@
 #include "fapihelper.hxx"
 #include "xestring.hxx"
 #include "xelink.hxx"
+#include "dputil.hxx"
 
 using namespace ::oox;
 
@@ -1294,7 +1295,7 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
                 maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
             boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
-            const boost::ptr_vector<ScDPSaveDimension>& rDimList = pSaveData->GetDimensions();
+            const ScDPSaveData::DimsType& rDimList = pSaveData->GetDimensions();
 
             /*  2)  First process all data dimensions, they are needed for extended
                     settings of row/column/page fields (sorting/auto show). */
@@ -1524,8 +1525,8 @@ XclExpPTField* XclExpPivotTable::GetFieldAcc( const ScDPSaveDimension& rSaveDim 
         return &maDataOrientField;
 
     // a real dimension
-    String aFieldName( rSaveDim.GetName() );
-    return aFieldName.Len() ? GetFieldAcc( aFieldName ) : 0;
+    rtl::OUString aFieldName = ScDPUtil::getSourceDimensionName(rSaveDim.GetName());
+    return aFieldName.isEmpty() ? NULL : GetFieldAcc(aFieldName);
 }
 
 // fill data --------------------------------------------------------------
