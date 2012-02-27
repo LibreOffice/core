@@ -2390,14 +2390,9 @@ sal_Bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStre
                 sal_uInt32  i = rContentHd.nRecLen >> 1;
                 if ( i > n )
                 {
-                    String aPre, aSuf;
-                    sal_Unicode *pTmp = aPre.AllocBuffer( n );
-                    while ( n-- )
-                        rSt >> *pTmp++;
+                    String aPre = read_uInt16s_ToOUString(rSt, n);
                     n = (sal_uInt16)( i - 6 );
-                    pTmp = aSuf.AllocBuffer( n );
-                    while ( n-- )
-                        rSt >> *pTmp++;
+                    String aSuf = read_uInt16s_ToOUString(rSt, n);
                     sal_Int32 nV = aSuf.ToInt32();
                     if ( ( nV == nVersion ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
                     {
