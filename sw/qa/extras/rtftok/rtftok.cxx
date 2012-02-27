@@ -59,6 +59,7 @@ public:
     void testFdo45543();
     void testN695479();
     void testFdo42465();
+    void testFdo45187();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testFdo45543);
     CPPUNIT_TEST(testN695479);
     CPPUNIT_TEST(testFdo42465);
+    CPPUNIT_TEST(testFdo45187);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -242,6 +244,26 @@ void RtfModelTest::testFdo42465()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo42465.rtf")));
     CPPUNIT_ASSERT_EQUAL(3, getLength());
+}
+
+void RtfModelTest::testFdo45187()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45187.rtf")));
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // There should be two shapes.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    // They should be anchored to different paragraphs.
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
+    awt::Point aFirstPoint;
+    aValue >>= aFirstPoint;
+    xPropertySet.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
+    awt::Point aSecondPoint;
+    aValue >>= aSecondPoint;
+    CPPUNIT_ASSERT(aFirstPoint.Y != aSecondPoint.Y);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
