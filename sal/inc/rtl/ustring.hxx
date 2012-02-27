@@ -178,6 +178,7 @@ public:
       @param    literal         the 8-bit ASCII string literal
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      @since 3.6
     */
     template< int N >
     OUString( const char (&literal)[ N ] )
@@ -202,6 +203,7 @@ public:
      * It is an error to try to call this overload.
      *
      * @internal
+     * @since 3.6
      */
     template< int N >
     OUString( char (&value)[ N ] )
