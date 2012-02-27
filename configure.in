@@ -6366,7 +6366,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         ;;
     WINNT)
         if test "$with_krb5" = "yes" -o "$with_gssapi" = "yes"; then
-            AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
+            AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Windows.])
         fi
         ;;
     Linux|GNU|*BSD|DragonFly)
