@@ -130,7 +130,7 @@ endif # ifeq ($(COM),GCC)
 
 endif # ifeq ($(OS),WNT)
 
-ifeq ($(OS),IOS)
+ifeq (,$(filter INTERPRETERS,$(BUILD_TYPE)))
 
 gb_Library_FILENAMES := $(patsubst sb:libsb%,,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:libvbahelper%,,$(gb_Library_FILENAMES))

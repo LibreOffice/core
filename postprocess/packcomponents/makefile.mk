@@ -177,7 +177,7 @@ my_components += \
 
 .ENDIF
 
-.IF "$(OS)" != "IOS"
+.IF "$(DISABLE_INTERPRETERS)" != "TRUE"
 
 my_components += \
     component/basctl/util/basctl \

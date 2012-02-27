@@ -382,12 +382,12 @@ bootstrap: $(WORKDIR_BOOTSTRAP)
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-ifeq ($(OS),IOS)
+ifeq ($(DISABLE_INTERPRETERS),TRUE)
 # We must get the headers from basic and vbahelper "delivered" because
 # as we don't link to any libs from those they won't otherwise be, or
 # something. And we still do include those headers always even if the
-# libs aren't built for iOS. (Ifdefs for iOS will be added later as
-# necessary to take care of that.)
+# libs aren't built in the --disable-interpreters case. (Ifdefs for
+# DISABLE_INTERPRETERS will be added to the code later as necessary.)
 	$(GNUMAKE) basic vbahelper
 endif
 ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)

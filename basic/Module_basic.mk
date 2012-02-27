@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Module_Module,basic))
 
-ifneq (IOS,$(OS))
+ifneq ($(DISABLE_INTERPRETERS),TRUE)
 
 $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \

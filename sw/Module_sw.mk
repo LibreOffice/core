@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,sw,\
     Package_xml \
 ))
 
-ifneq (IOS,$(OS))
+ifneq ($(DISABLE_INTERPRETERS),TRUE)
 
 $(eval $(call gb_Module_add_targets,sw,\
     Library_vbaswobj \
