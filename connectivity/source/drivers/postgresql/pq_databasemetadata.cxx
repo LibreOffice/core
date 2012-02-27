@@ -2071,7 +2071,8 @@ void DatabaseMetaData::init_getPrivs_stmt ()
 {
     rtl::OUStringBuffer sSQL(300);
     sSQL.append( ASCII_STR(
-            " SELECT * FROM ("
+            " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.privilege, dp.is_grantable "
+            " FROM ("
             "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
             "  FROM information_schema.table_privileges") );
@@ -2093,14 +2094,15 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
             "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
     sSQL.append( ASCII_STR(
-            " ) s"
-            " WHERE table_schem LIKE ? AND table_name LIKE ? "
+            " ) dp,"
+            " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? AND pg_has_role(pr.oid, dp.grantee, 'USAGE')"
             " ORDER BY table_schem, table_name, privilege" ) );
 
     m_getTablePrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 
     sSQL.append( ASCII_STR(
-            " SELECT * FROM ("
+            " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.COLUMN_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.PRIVILEGE, dp.IS_GRANTABLE FROM ("
             "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name, column_name,"
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
             "  FROM information_schema.column_privileges") );
@@ -2122,8 +2124,9 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
             "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid AND a.attrelid = c.oid AND a.attnum > 0") );
     sSQL.append( ASCII_STR(
-            " ) s"
-            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? "
+            " ) dp,"
+            " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
+            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? AND pg_has_role(pr.oid, dp.grantee, 'USAGE')"
             " ORDER BY column_name, privilege" ) );
 
     m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
