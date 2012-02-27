@@ -5748,6 +5748,9 @@ if test "$with_system_libvisio" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBVISIO=YES
     PKG_CHECK_MODULES( VISIO, libvisio-0.0 )
+elif test $_os = iOS; then
+    # libvisio depends on libwpd and libwpg and those are LGPL
+    AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBVISIO=NO
