@@ -209,7 +209,7 @@ sal_Bool SdStyleSheet::SetParent(const String& rParentName)
         {
             if( rParentName.Len() )
             {
-                SfxStyleSheetBase* pStyle = rPool.Find(rParentName, nFamily);
+                SfxStyleSheetBase* pStyle = pPool->Find(rParentName, nFamily);
                 if (pStyle)
                 {
                     bResult = sal_True;
@@ -402,7 +402,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     String aRealStyle;
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
     SdStyleSheet* pRealStyle = NULL;
-    SdDrawDocument* pDoc = ((SdStyleSheetPool&) rPool).GetDoc();
+    SdDrawDocument* pDoc = ((SdStyleSheetPool*)pPool)->GetDoc();
 
     ::sd::DrawViewShell* pDrawViewShell = 0;
 
@@ -433,7 +433,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         {
             // Noch keine Seite vorhanden
             // Dieses kann beim Aktualisieren vonDokumentvorlagen vorkommen
-            SfxStyleSheetIterator aIter(&rPool, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
             SfxStyleSheetBase* pSheet = aIter.First();
             if( pSheet )
                 aRealStyle = pSheet->GetName();
@@ -479,12 +479,12 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     }
 
     aRealStyle += aInternalName;
-    pRealStyle = static_cast< SdStyleSheet* >( rPool.Find(aRealStyle, SD_STYLE_FAMILY_MASTERPAGE) );
+    pRealStyle = static_cast< SdStyleSheet* >( pPool->Find(aRealStyle, SD_STYLE_FAMILY_MASTERPAGE) );
 
 #ifdef DBG_UTIL
     if( !pRealStyle )
     {
-        SfxStyleSheetIterator aIter(&rPool, SD_STYLE_FAMILY_MASTERPAGE);
+        SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
         if( aIter.Count() > 0 )
             // StyleSheet not found, but pool already loaded
             DBG_ASSERT(pRealStyle, "Internal StyleSheet not found");
@@ -540,7 +540,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         }
     }
 
-    pPseudoStyle = static_cast<SdStyleSheet*>(rPool.Find(aStyleName, SD_STYLE_FAMILY_PSEUDO));
+    pPseudoStyle = static_cast<SdStyleSheet*>(pPool->Find(aStyleName, SD_STYLE_FAMILY_PSEUDO));
     DBG_ASSERT(pPseudoStyle, "PseudoStyleSheet nicht gefunden");
 
     return pPseudoStyle;

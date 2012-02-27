@@ -386,7 +386,7 @@ void SwPoolFmtList::Erase()
 
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
                                     const String&           rName,
-                                    SwDocStyleSheetPool&    _rPool,
+                                    SwDocStyleSheetPool*    _rPool,
                                     SfxStyleFamily          eFam,
                                     sal_uInt16                  _nMask) :
 
@@ -612,7 +612,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                     {
                         String aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             rPool.GetPool().GetPresentation(
+                             pPool->GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                                 eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
@@ -660,7 +660,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                     {
                         String aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             rPool.GetPool().GetPresentation(
+                             pPool->GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                                 eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
@@ -868,8 +868,8 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
 
     if( bChg )
     {
-        rPool.First();  // internal list has to be updated
-        rPool.Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
+        pPool->First();  // internal list has to be updated
+        pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -924,7 +924,7 @@ sal_Bool   SwDocStyleSheet::SetParent( const String& rStr)
         if( bRet )
         {
             aParent = rStr;
-            rPool.Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED,
+            pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED,
                             *this ) );
         }
     }
@@ -2019,7 +2019,7 @@ void  SwDocStyleSheet::SetHelpId( const String& r, sal_uLong nId )
 
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, sal_Bool bOrg )
 : SfxStyleSheetBasePool( rDocument.GetAttrPool() )
-, mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyStr, *this, SFX_STYLE_FAMILY_CHAR, 0 ) )
+, mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyStr, this, SFX_STYLE_FAMILY_CHAR, 0 ) )
 , rDoc( rDocument )
 {
     bOrganizer = bOrg;
@@ -2378,8 +2378,8 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                                 SfxStyleFamily eFam, sal_uInt16 n )
     : SfxStyleSheetIterator( pBase, eFam, n ),
-    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
-    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
+    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
+    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
 {
     bFirstCalled = sal_False;
     nLastPos = 0;

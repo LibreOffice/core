@@ -119,10 +119,10 @@ sal_Bool ScStyleSheet::SetParent( const String& rParentName )
 {
     sal_Bool bResult = false;
     String aEffName = rParentName;
-    SfxStyleSheetBase* pStyle = rPool.Find( aEffName, nFamily );
+    SfxStyleSheetBase* pStyle = pPool->Find( aEffName, nFamily );
     if (!pStyle)
     {
-        SfxStyleSheetIterator* pIter = rPool.CreateIterator( nFamily, SFXSTYLEBIT_ALL );
+        SfxStyleSheetIterator* pIter = pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
         pStyle = pIter->First();
         if (pStyle)
             aEffName = pStyle->GetName();
@@ -275,7 +275,7 @@ sal_Bool ScStyleSheet::IsUsed() const
     {
         // Always query the document to let it decide if a rescan is necessary,
         // and store the state.
-        ScDocument* pDoc = ((ScStyleSheetPool&)rPool).GetDocument();
+        ScDocument* pDoc = ((ScStyleSheetPool*)pPool)->GetDocument();
         if ( pDoc && pDoc->IsStyleSheetUsed( *this, sal_True ) )
             eUsage = USED;
         else
@@ -303,7 +303,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 const String& ScStyleSheet::GetName() const
 {
     const String& rBase = SfxStyleSheet::GetName();
-    const String* pForceStdName = ((ScStyleSheetPool&)rPool).GetForceStdName();
+    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
@@ -313,7 +313,7 @@ const String& ScStyleSheet::GetName() const
 const String& ScStyleSheet::GetParent() const
 {
     const String& rBase = SfxStyleSheet::GetParent();
-    const String* pForceStdName = ((ScStyleSheetPool&)rPool).GetForceStdName();
+    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
@@ -323,7 +323,7 @@ const String& ScStyleSheet::GetParent() const
 const String& ScStyleSheet::GetFollow() const
 {
     const String& rBase = SfxStyleSheet::GetFollow();
-    const String* pForceStdName = ((ScStyleSheetPool&)rPool).GetForceStdName();
+    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
