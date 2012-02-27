@@ -994,46 +994,35 @@ void ValueSet::ImplDraw()
 
 bool ValueSet::ImplScroll( const Point& rPos )
 {
-    Size aOutSize = GetOutputSizePixel();
-    long nScrBarWidth;
-
-    if ( mpScrBar )
-        nScrBarWidth = mpScrBar->GetSizePixel().Width();
-    else
-        nScrBarWidth = 0;
-
-    if ( !mbScroll || (rPos.X() < 0) || (rPos.X() > aOutSize.Width()-nScrBarWidth) )
+    if ( !mbScroll || !maItemListRect.IsInside(rPos) )
         return false;
 
-    long             nScrollOffset;
-    sal_uInt16           nOldLine = mnFirstLine;
-    const Rectangle aTopRect = ImplGetItemRect( mnFirstLine*mnCols );
-    if ( aTopRect.GetHeight() <= 16 )
-        nScrollOffset = SCROLL_OFFSET/2;
-    else
-        nScrollOffset = SCROLL_OFFSET;
-    if ( (mnFirstLine > 0) && (rPos.Y() >= 0) )
+    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET/2 : SCROLL_OFFSET;
+    bool bScroll = false;
+
+    if ( rPos.Y() <= maItemListRect.Top()+nScrollOffset )
     {
-        long nTopPos = aTopRect.Top();
-        if ( (rPos.Y() >= nTopPos) && (rPos.Y() <= nTopPos+nScrollOffset) )
-            mnFirstLine--;
+        if ( mnFirstLine > 0 )
+        {
+            --mnFirstLine;
+            bScroll = true;
+        }
     }
-    if ( (mnFirstLine == nOldLine) &&
-         (mnFirstLine < (sal_uInt16)(mnLines-mnVisLines)) && (rPos.Y() < aOutSize.Height()) )
+    else if ( rPos.Y() >= maItemListRect.Bottom()-nScrollOffset )
     {
-        const long nBottomPos = ImplGetItemRect((mnFirstLine+mnVisLines-1)*mnCols).Bottom();
-        if ( (rPos.Y() >= nBottomPos-nScrollOffset) && (rPos.Y() <= nBottomPos) )
-            mnFirstLine++;
+        if ( mnFirstLine < static_cast<sal_uInt16>(mnLines-mnVisLines) )
+        {
+            ++mnFirstLine;
+            bScroll = true;
+        }
     }
 
-    if ( mnFirstLine != nOldLine )
-    {
-        mbFormat = true;
-        ImplDraw();
-        return true;
-    }
-    else
+    if ( !bScroll )
         return false;
+
+    mbFormat = true;
+    ImplDraw();
+    return true;
 }
 
 // -----------------------------------------------------------------------
