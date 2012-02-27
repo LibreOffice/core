@@ -627,8 +627,15 @@ SwRootFrm::~SwRootFrm()
         (*pCurrShells)[i]->pRoot = 0;
 
     delete pCurrShells;
+    pCurrShells = 0;
 
-    OSL_ENSURE( 0==nAccessibleShells, "Some accessible shells are left" );
+    // Some accessible shells are left => problems on second SwFrm::Destroy call
+    assert(0 == nAccessibleShells);
+
+    // manually call base classes Destroy because it could call stuff
+    // that accesses members of this
+    SwLayoutFrm::Destroy();
+    SwFrm::Destroy();
 }
 
 /*************************************************************************

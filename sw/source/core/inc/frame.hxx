@@ -408,6 +408,8 @@ protected:
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
 
+    void Destroy(); // for ~SwRootFrm
+
     // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
 

@@ -362,7 +362,7 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 |*
 |*************************************************************************/
 
-SwFrm::~SwFrm()
+void SwFrm::Destroy()
 {
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
@@ -401,6 +401,15 @@ SwFrm::~SwFrm()
             }
         }
         delete pDrawObjs;
+        pDrawObjs = 0;
+    }
+}
+
+SwFrm::~SwFrm()
+{
+    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
+    {
+        Destroy();
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -555,8 +564,7 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
 |*
 |*************************************************************************/
 
-
-SwLayoutFrm::~SwLayoutFrm()
+void SwLayoutFrm::Destroy()
 {
     SwFrm *pFrm = pLower;
 
@@ -635,6 +643,14 @@ SwLayoutFrm::~SwLayoutFrm()
             delete pFrm;
             pFrm = pNxt;
         }
+    }
+}
+
+SwLayoutFrm::~SwLayoutFrm()
+{
+    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
+    {
+        Destroy();
     }
 }
 

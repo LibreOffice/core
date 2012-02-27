@@ -178,7 +178,7 @@ public:
     static sal_Bool HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, ViewShell* );
-    ~SwRootFrm();
+    virtual ~SwRootFrm();
     void Init(SwFrmFmt*);
 
     ViewShell *GetCurrShell() const { return pCurrShell; }
