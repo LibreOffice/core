@@ -1365,6 +1365,7 @@ void SwFrm::SetInfFlags()
     if( IsFtnContFrm() )
         bInfFtn = sal_True;
     do
+    {
         // bInfBody is only set in the page body, but not in the column body
         if ( pFrm->IsBodyFrm() && !bInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )

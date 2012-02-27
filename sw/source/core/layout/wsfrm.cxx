@@ -741,6 +741,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pBehind->pPrev = pLast;
         }
         else
+        {
             //Insert at the end, or ... the first node in the subtree
             pPrev = pUpper->Lower();
             if ( pPrev )
@@ -931,6 +932,7 @@ void SwCntntFrm::Cut()
     }
 
     if( 0 != (pFrm = GetIndNext()) )
+    {
         //The old follower may calculated a gap to the predecessor which now
         //becomes obsolete or different respectively as it becomes the first
         //one itself.

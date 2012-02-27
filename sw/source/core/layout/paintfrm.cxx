@@ -6189,6 +6189,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
           aP2( rP2 );
 
     while ( aP1.*pDirPt < aP2.*pDirPt )
+    {
         //If the starting point lies in a fly, it is directly set behind the
         //fly.
         //The end point moves to the start if the end point lies in a fly or we

@@ -937,6 +937,7 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
+                {
                     //This one is the nearer one
                     nDistance = nNearest = nDiff;
                     rpCnt = pNearest = pCnt;
