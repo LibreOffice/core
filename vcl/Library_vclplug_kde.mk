@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_kde,\
         -Wno-shadow \
 ))
 
+$(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
