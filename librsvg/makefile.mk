@@ -57,14 +57,24 @@ PATCH_FILES=librsvg-2.32.1.patch
 LIBXML_LIBS=-lxml2
 .ENDIF
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+my_libxml2_cflags=$(LIBXML_CFLAGS)
+my_libxml2_libs=$(LIBXML_LIBS)
+my_dylib_file=
+.ELSE
+my_libxml2_cflags=-I$(SOLARINCDIR)/external/libxml
+my_libxml2_libs=-L$(SOLARLIBDIR) -lxml2
+my_dylib_file="-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(SOLARLIBDIR)/libxml2.2.dylib"
+.ENDIF
+
 CONFIGURE_LDFLAGS=-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure \
                  --prefix=/@.__________________________________________________$(EXTRPATH)
 CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  --disable-pixbuf-loader --disable-dependency-tracking $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules) \
-                 LIBRSVG_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/gdk-pixbuf-2.0 -I$(SOLARINCDIR)/external/pango-1.0 -I$(SOLARINCDIR)/cairo $(LIBXML_CFLAGS)" \
-                 LIBRSVG_LIBS="-L$(SOLARLIBDIR) -lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(LIBXML_LIBS) -lcairo -lintl" \
+                 LIBRSVG_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/gdk-pixbuf-2.0 -I$(SOLARINCDIR)/external/pango-1.0 -I$(SOLARINCDIR)/cairo $(my_libxml2_cflags)" \
+                 LIBRSVG_LIBS="-L$(SOLARLIBDIR) -lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(my_libxml2_libs) -lcairo -lintl" \
                  GDK_PIXBUF_CFLAGS="-I$(SOLARINCDIR)/external/gdk-pixbuf-2.0" \
                  GDK_PIXBUF_LIBS=-lgdk_pixbuf-2.0 \
                  GTHREAD_CFLAGS=-I$(SOLARINCDIR)/external/glib-2.0 \
@@ -72,7 +82,7 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  LIBCROCO_CFLAGS="-I$(SOLARINCDIR)/external/libcroco-0.6" \
                  LIBCROCO_LIBS=-lcroco-0.6 \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/gdk-pixbuf-2.0 -I$(SOLARINCDIR)/external/pango-1.0 -I$(SOLARINCDIR)/cairo" \
-                 LDFLAGS="$(CONFIGURE_LDFLAGS)"
+                 LDFLAGS="$(CONFIGURE_LDFLAGS) $(my_dylib_file)"
 
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 
