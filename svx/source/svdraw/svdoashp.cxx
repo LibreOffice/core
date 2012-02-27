@@ -556,7 +556,7 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
-        if ( aR.Width || aR.Height )
+        if ( aR.Width > 1 && aR.Height > 1 )
         {
             rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
             bRet = sal_True;

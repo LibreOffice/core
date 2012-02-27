@@ -1193,6 +1193,8 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
     }
     Rectangle aRect( aTopLeft, aBottomRight );
     OSL_TRACE("EnhancedCustomShape2d::GetTextRect: %d x %d", aRect.GetWidth(), aRect.GetHeight());
+    if( aRect.GetWidth() <= 1 || aRect.GetHeight() <= 1 )
+        return aLogicRect;
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
     aRect.Justify();
     return aRect;
