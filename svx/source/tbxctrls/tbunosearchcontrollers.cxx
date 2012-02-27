@@ -133,6 +133,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
+            sal_Bool bMod1 = pKeyEvent->GetKeyCode().IsMod1();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
             if ( KEY_ESCAPE == nCode )
@@ -156,7 +157,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 }
             }
 
-            if ( KEY_RETURN == nCode )
+            if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) )
             {
                 Remember_Impl(GetText());
 
