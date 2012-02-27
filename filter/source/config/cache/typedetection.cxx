@@ -949,8 +949,6 @@ namespace
     return ::rtl::OUString();
 }
 
-
-
 void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
 {
     // try to seek to 0 ...
@@ -965,14 +963,15 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
         {
             xSeek->seek(0);
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw; }
+        catch(const css::uno::RuntimeException&)
+        {
+            throw;
+        }
         catch(const css::uno::Exception&)
-            {}
+        {
+        }
     }
 }
-
-
 
 ::rtl::OUString TypeDetection::impl_askDetectService(const ::rtl::OUString&               sDetectService,
                                                            ::comphelper::MediaDescriptor& rDescriptor   )
