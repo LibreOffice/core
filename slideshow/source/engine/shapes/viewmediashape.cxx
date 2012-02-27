@@ -449,7 +449,6 @@ namespace slideshow
 
                             mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new
                                                 SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
-                            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
                             mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
