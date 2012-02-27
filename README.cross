@@ -387,7 +387,7 @@ The activity used for these apps is in android/Bootstrap. See
 README.Android.
 
 To build the complex unit test (for Calc functionality; invokes the
-"ucalc" unit test code from sc) source the environment (. Env.Host.sh)
+"ucalc" unit test code from sc) setup your environment (make cmd cmd=bash)
 and cd to android/qa/sc and run a "make". The Makefile here is
 completely manually written, this stuff is so experimental it doesn't
 make sense yet to try to integrate with the normal gbuild
