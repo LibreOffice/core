@@ -520,7 +520,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             TimeValue aTimeValue;
             aTimeValue.Seconds = 0;
             aTimeValue.Nanosec = 10000000; // 10ms
-            osl::Thread::wait( aTimeValue );
+            salhelper::Thread::wait( aTimeValue );
         }
 
     } while ( nPipeMode == PIPEMODE_DONTKNOW );
@@ -897,7 +897,7 @@ void OfficeIPCThread::execute()
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
-            osl::Thread::wait( tval );
+            salhelper::Thread::wait( tval );
         }
     } while( schedule() );
 }
