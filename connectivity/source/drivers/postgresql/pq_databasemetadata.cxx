@@ -1732,7 +1732,8 @@ static void columnMetaData2DatabaseTypeDescription(
 
     rtl::OUStringBuffer sSQL(260);
     sSQL.append( ASCII_STR(
-            " SELECT * FROM ("
+            " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.privilege, dp.is_grantable "
+            " FROM ("
             "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
             "  FROM information_schema.table_privileges") );
@@ -1754,8 +1755,9 @@ static void columnMetaData2DatabaseTypeDescription(
             "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
             "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
     sSQL.append( ASCII_STR(
-            " ) s"
-            " WHERE table_schem LIKE ? AND table_name LIKE ? "
+            " ) dp,"
+            " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
             " ORDER BY table_schem, table_name, privilege" ) );
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement( sSQL.makeStringAndClear() );
