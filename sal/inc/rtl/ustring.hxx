@@ -168,12 +168,14 @@ public:
     }
 
     /**
-      New string from an 8-Bit string literal that is expected to be in UTF-8
-      (or its subset, ASCII). All string literals in the codebase are
-      assumed to be only UTF-8/ASCII, so this constructor allows an efficient
-      and convenient way to create OUString instances from literals.
+      New string from an 8-Bit string literal that is expected to contain only
+      characters in the ASCII set (i.e. first 128 characters). This constructor
+      allows an efficient and convenient way to create OUString
+      instances from ASCII literals. When creating strings from data that
+      is not pure ASCII, it needs to be converted to OUString by explicitly
+      providing the encoding to use for the conversion.
 
-      @param    literal         the 8-bit string literal
+      @param    literal         the 8-bit ASCII string literal
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
@@ -181,7 +183,7 @@ public:
     OUString( const char (&literal)[ N ] )
     {
         pData = 0;
-        rtl_string2UString( &pData, literal, N - 1, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
+        rtl_string2UString( &pData, literal, N - 1, RTL_TEXTENCODING_ASCII_US, 0 );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
             SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
@@ -195,7 +197,7 @@ public:
      * This overload exists only to avoid creating instances directly from (non-const) char[],
      * which would otherwise be picked up by the optimized const char[] constructor.
      * Since the non-const array cannot be guaranteed to contain characters in the expected
-     * UTF-8/ASCII encoding, this needs to be prevented.
+     * ASCII encoding, this needs to be prevented.
      *
      * It is an error to try to call this overload.
      *
