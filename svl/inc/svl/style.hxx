@@ -80,8 +80,6 @@ SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
    SfxStyleSheetBasePool::Clear()
 */
 
-#define VIRTUAL510 virtual
-
 class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
 private:
