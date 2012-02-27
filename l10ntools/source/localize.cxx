@@ -282,76 +282,6 @@ void handleFile(
     }
 }
 
-bool includeDirectory(rtl::OUString const & directory) {
-    // Cf. OUTPATH=* in configure.in:
-    static AsciiString const excluded[] = {
-        { RTL_CONSTASCII_STRINGPARAM("unxaig") },
-        { RTL_CONSTASCII_STRINGPARAM("unxand") },
-        { RTL_CONSTASCII_STRINGPARAM("unxdfly") },
-        { RTL_CONSTASCII_STRINGPARAM("unxfbsd") },
-        { RTL_CONSTASCII_STRINGPARAM("unxios") },
-        { RTL_CONSTASCII_STRINGPARAM("unxkfg") },
-        { RTL_CONSTASCII_STRINGPARAM("unxlng") },
-        { RTL_CONSTASCII_STRINGPARAM("unxmac") },
-        { RTL_CONSTASCII_STRINGPARAM("unxnbsd") },
-        { RTL_CONSTASCII_STRINGPARAM("unxobsd") },
-        { RTL_CONSTASCII_STRINGPARAM("unxsog") },
-        { RTL_CONSTASCII_STRINGPARAM("unxsol") },
-        { RTL_CONSTASCII_STRINGPARAM("unxubt") },
-        { RTL_CONSTASCII_STRINGPARAM("wntmsc") } };
-    for (std::size_t i = 0; i != SAL_N_ELEMENTS(excluded); ++i) {
-        if (directory.matchAsciiL(excluded[i].string, excluded[i].length)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void handleDirectory(
-    rtl::OUString const & project, rtl::OUString const & projectRoot,
-    rtl::OUString const & url)
-{
-    osl::Directory dir(url);
-    if (dir.open() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot open directory: " << OUStringToOString(url, RTL_TEXTENCODING_ASCII_US).getStr() << std::endl;
-        throw false; //TODO
-    }
-    for (;;) {
-        osl::DirectoryItem item;
-        osl::FileBase::RC e = dir.getNextItem(item);
-        if (e == osl::FileBase::E_NOENT) {
-            break;
-        }
-        if (e != osl::FileBase::E_None) {
-            std::cerr << "Error: Cannot read directory\n";
-            throw false; //TODO
-        }
-        osl::FileStatus stat(
-            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName
-            | osl_FileStatus_Mask_FileURL);
-        if (item.getFileStatus(stat) != osl::FileBase::E_None) {
-            std::cerr << "Error: Cannot get file status\n";
-            throw false; //TODO
-        }
-        if (stat.getFileType() == osl::FileStatus::Directory) {
-            if (includeDirectory(stat.getFileName())) {
-                rtl::OUString pr(projectRoot);
-                if (!pr.isEmpty()) {
-                    pr += rtl::OUString('/');
-                }
-                pr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
-                handleDirectory(project, pr, stat.getFileURL());
-            }
-        } else {
-            handleFile(project, projectRoot, stat.getFileURL());
-        }
-    }
-    if (dir.close() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot close directory\n";
-        throw false; //TODO
-    }
-}
-
 bool includeProject(rtl::OUString const & project) {
     static char const * projects[] = {
         "accessibility",
@@ -409,6 +339,120 @@ bool includeProject(rtl::OUString const & project) {
     return false;
 }
 
+bool excludeDirectory(rtl::OUString const & directory) {
+    // Cf. OUTPATH=* in configure.in:
+    static AsciiString const excluded[] = {
+        { RTL_CONSTASCII_STRINGPARAM("unxaig") },
+        { RTL_CONSTASCII_STRINGPARAM("unxand") },
+        { RTL_CONSTASCII_STRINGPARAM("unxdfly") },
+        { RTL_CONSTASCII_STRINGPARAM("unxfbsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxios") },
+        { RTL_CONSTASCII_STRINGPARAM("unxkfg") },
+        { RTL_CONSTASCII_STRINGPARAM("unxlng") },
+        { RTL_CONSTASCII_STRINGPARAM("unxmac") },
+        { RTL_CONSTASCII_STRINGPARAM("unxnbsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxobsd") },
+        { RTL_CONSTASCII_STRINGPARAM("unxsog") },
+        { RTL_CONSTASCII_STRINGPARAM("unxsol") },
+        { RTL_CONSTASCII_STRINGPARAM("unxubt") },
+        { RTL_CONSTASCII_STRINGPARAM("wntmsc") } };
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(excluded); ++i) {
+        if (directory.matchAsciiL(excluded[i].string, excluded[i].length)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/// Handle one directory in the hierarchy.
+///
+/// Ignores symlinks and instead explicitly descends into clone/*, as the
+/// Cygwin symlinks are not supported by osl::Directory on Windows.
+///
+/// @param url the absolute file URL of this directory
+///
+/// @param level 0 if this is either the root directory that contains the
+/// projects or one of the clone/* directories that contain the additional
+/// projects; -1 if this is the clone directory; 1 if this is a project
+/// directory; 2 if this is a directory inside a project
+///
+/// @param project the name of the project (empty and ignored if level <= 0)
+///
+/// @param the relative path back to the project root (empty and ignored if
+/// level <= 0)
+void handleDirectory(
+    rtl::OUString const & url, int level, rtl::OUString const & project,
+    rtl::OUString const & projectRoot)
+{
+    osl::Directory dir(url);
+    if (dir.open() != osl::FileBase::E_None) {
+        std::cerr
+            << "Error: Cannot open directory: "
+            << rtl::OUStringToOString(url, osl_getThreadTextEncoding()).getStr()
+            << '\n';
+        throw false; //TODO
+    }
+    for (;;) {
+        osl::DirectoryItem item;
+        osl::FileBase::RC e = dir.getNextItem(item);
+        if (e == osl::FileBase::E_NOENT) {
+            break;
+        }
+        if (e != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot read directory\n";
+            throw false; //TODO
+        }
+        osl::FileStatus stat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName
+            | osl_FileStatus_Mask_FileURL);
+        if (item.getFileStatus(stat) != osl::FileBase::E_None) {
+            std::cerr << "Error: Cannot get file status\n";
+            throw false; //TODO
+        }
+        switch (level) {
+        case -1: // the clone directory
+            if (stat.getFileType() == osl::FileStatus::Directory) {
+                handleDirectory(
+                    stat.getFileURL(), 0, rtl::OUString(), rtl::OUString());
+            }
+            break;
+        case 0: // a root directory
+            if (stat.getFileType() == osl::FileStatus::Directory) {
+                if (includeProject(stat.getFileName())) {
+                    handleDirectory(
+                        stat.getFileURL(), 1, stat.getFileName(),
+                        rtl::OUString());
+                } else if (stat.getFileName().equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("clone")))
+                {
+                    handleDirectory(
+                        stat.getFileURL(), -1, rtl::OUString(),
+                        rtl::OUString());
+                }
+            }
+            break;
+        default:
+            if (stat.getFileType() == osl::FileStatus::Directory) {
+                if (level == 2 || !excludeDirectory(stat.getFileName())) {
+                    rtl::OUString pr(projectRoot);
+                    if (!pr.isEmpty()) {
+                        pr += rtl::OUString('/');
+                    }
+                    pr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
+                    handleDirectory(stat.getFileURL(), 2, project, pr);
+                }
+            } else {
+                handleFile(project, projectRoot, stat.getFileURL());
+            }
+            break;
+        }
+    }
+    if (dir.close() != osl::FileBase::E_None) {
+        std::cerr << "Error: Cannot close directory\n";
+        throw false; //TODO
+    }
+}
+
 void handleProjects(char const * root) {
     rtl::OUString root16;
     if (!rtl_convertStringToUString(
@@ -428,36 +472,7 @@ void handleProjects(char const * root) {
         std::cerr << "Error: Cannot convert pathname to URL\n";
         throw false; //TODO
     }
-    osl::Directory dir(rootUrl);
-    if (dir.open() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot open directory: " << OUStringToOString(rootUrl, RTL_TEXTENCODING_ASCII_US).getStr() << std::endl;
-        throw false; //TODO
-    }
-    for (;;) {
-        osl::DirectoryItem item;
-        osl::FileBase::RC e = dir.getNextItem(item);
-        if (e == osl::FileBase::E_NOENT) {
-            break;
-        }
-        if (e != osl::FileBase::E_None) {
-            std::cerr << "Error: Cannot read directory\n";
-            throw false; //TODO
-        }
-        osl::FileStatus stat(
-            osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
-        if (item.getFileStatus(stat) != osl::FileBase::E_None) {
-            std::cerr << "Error: Cannot get file status\n";
-            throw false; //TODO
-        }
-        rtl::OUString prj(stat.getFileName());
-        if (includeProject(prj)) {
-            handleDirectory(prj, rtl::OUString(), stat.getFileURL());
-        }
-    }
-    if (dir.close() != osl::FileBase::E_None) {
-        std::cerr << "Error: Cannot close directory\n";
-        throw false; //TODO
-    }
+    handleDirectory(rootUrl, 0, rtl::OUString(), rtl::OUString());
 }
 
 }
