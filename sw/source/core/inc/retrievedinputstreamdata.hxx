@@ -77,10 +77,6 @@ class SwRetrievedInputStreamDataManager
 
         static SwRetrievedInputStreamDataManager& GetManager();
 
-        ~SwRetrievedInputStreamDataManager()
-        {
-        };
-
         tDataKey ReserveData( boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer );
 
         void PushData( const tDataKey nDataKey,
@@ -99,12 +95,6 @@ class SwRetrievedInputStreamDataManager
         osl::Mutex maMutex;
 
         std::map< tDataKey, tData > maInputStreamData;
-
-        template<typename T, typename Unique> friend class rtl::Static;
-
-        SwRetrievedInputStreamDataManager()
-        {
-        };
 };
 #endif
 
