@@ -44,7 +44,7 @@ using namespace ::svxform;
     {
         xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
     }
-    else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")) ) )
+    else if ( ServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape")) )
     {
         SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
@@ -96,37 +96,5 @@ using namespace ::svxform;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
     return concatServiceNames( aParentSeq, aSeq );
 }
-
-/*
-// XServiceManager
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvxFmDrawModel::createInstance(const ::rtl::OUString& ServiceName)
-            const throw( ::com::sun::star::lang::ServiceNotRegisteredException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-    sal_uInt16 nTokenCount = ServiceName.getTokenCount('.');
-    if (nTokenCount == 5 &&
-        ServiceName.getToken( 0, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv")) &&
-        ServiceName.getToken( 1, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("one")) &&
-        ServiceName.getToken( 2, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("form")) &&
-        ServiceName.getToken( 3, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("component")) )
-    {
-        xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceName);
-    }
-    else
-    if (nTokenCount == 4 &&
-        ServiceName.getToken( 0, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv")) &&
-        ServiceName.getToken( 1, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("one")) &&
-        ServiceName.getToken( 2, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drawing")) &&
-        ServiceName.getToken( 3, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlShape")) )
-    {
-        SdrObject* pObj = new FmFormObj();
-        xRet = *new SvxShapeControl(pObj);
-    }
-    if (!xRet.is())
-        xRet = SvxUnoDrawModel::createInstance(ServiceName);
-    return xRet;
-}
-*/
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

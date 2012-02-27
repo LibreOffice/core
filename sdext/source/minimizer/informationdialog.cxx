@@ -336,11 +336,11 @@ void InformationDialog::InitDialog()
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("aboutimage")) ), ImpGetStandardImage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:standardimage/query")) ), 5, 5, 25, 25 );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext")) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
+    InsertImage( *this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("aboutimage")), ImpGetStandardImage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:standardimage/query")) ), 5, 5, 25, 25 );
+    InsertFixedText( *this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext")), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+    InsertButton( *this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
@@ -398,7 +398,7 @@ sal_Bool InformationDialog::execute()
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    if ( rEvent.ActionCommand == rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")) ) )
+    if ( rEvent.ActionCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("button")) )
     {
         mrInformationDialog.endExecute( sal_True );
     }

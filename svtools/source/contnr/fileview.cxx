@@ -96,7 +96,7 @@ using ::rtl::OUString;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-#define aSeparatorStr  "----------------------------------"
+#define SEPARATOR_STR  "----------------------------------"
 
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
@@ -2329,7 +2329,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         pEntry->maDisplayText = aDisplayText;
 
         // detect the image
-        if( aValue != rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr) ) )
+        if( !aValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SEPARATOR_STR)) )
         {
             INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
             pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );

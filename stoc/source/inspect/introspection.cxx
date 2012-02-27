@@ -2346,7 +2346,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             }
                             else
                             {
-                                if( aMethName != OUString( RTL_CONSTASCII_USTRINGPARAM("queryInterface")) )
+                                if( !aMethName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("queryInterface")) )
                                 {
                                     rMethodConcept_i |= MethodConcept::DANGEROUS;
                                     continue;

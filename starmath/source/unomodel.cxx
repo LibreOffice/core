@@ -1033,7 +1033,7 @@ void SAL_CALL SmModel::render(
     uno::Reference< awt::XDevice >  xRenderDevice;
     for (sal_Int32 i = 0, nCount = rxOptions.getLength();  i < nCount;  ++i)
     {
-        if( rxOptions[i].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+        if( rxOptions[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RenderDevice")) )
             rxOptions[i].Value >>= xRenderDevice;
     }
 

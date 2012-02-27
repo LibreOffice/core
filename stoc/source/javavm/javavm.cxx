@@ -1347,7 +1347,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
                     rtl::OUString sName( jcharName);
                     jboolean bIsSandbox;
-                    if (sName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lib.sandbox.SandboxSecurity")))
+                    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.lib.sandbox.SandboxSecurity")))
                         bIsSandbox= JNI_TRUE;
                     else
                         bIsSandbox= JNI_FALSE;

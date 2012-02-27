@@ -873,9 +873,9 @@ RendererPaneStyle::RendererPaneStyle (
             mnFontYOffset = mpFont->mnYOffset;
         }
 
-        if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Left")))
+        if (sAnchor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Left")))
             meFontAnchor = AnchorLeft;
-        else if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Right")))
+        else if (sAnchor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Right")))
             meFontAnchor = AnchorRight;
         else
             meFontAnchor = AnchorCenter;
