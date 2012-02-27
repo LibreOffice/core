@@ -2096,7 +2096,7 @@ void DatabaseMetaData::init_getPrivs_stmt ()
     sSQL.append( ASCII_STR(
             " ) dp,"
             " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
-            " WHERE table_schem LIKE ? AND table_name LIKE ? AND pg_has_role(pr.oid, dp.grantee, 'USAGE')"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
             " ORDER BY table_schem, table_name, privilege" ) );
 
     m_getTablePrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
@@ -2126,7 +2126,7 @@ void DatabaseMetaData::init_getPrivs_stmt ()
     sSQL.append( ASCII_STR(
             " ) dp,"
             " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
-            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? AND pg_has_role(pr.oid, dp.grantee, 'USAGE')"
+            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
             " ORDER BY column_name, privilege" ) );
 
     m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
