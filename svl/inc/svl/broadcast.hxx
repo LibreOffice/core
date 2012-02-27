@@ -47,8 +47,6 @@ friend class SvtListenerIter;
     const SvtBroadcaster&   operator=(const SvtBroadcaster &); // verboten
 
 protected:
-    void                    Forward( SvtBroadcaster& rBC,
-                                     const SfxHint& rHint );
     virtual void            ListenersGone();
 
 public:

@@ -155,14 +155,6 @@ public:
            sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
            sal_uInt16 nFlags = 0 ) const;
 
-    /** fills the given attribute list with the representation of one item */
-    void exportXML(
-           SvXMLAttributeList& rAttrList,
-           const XMLPropertyState& rProperty,
-           const SvXMLUnitConverter& rUnitConverter,
-           const SvXMLNamespaceMap& rNamespaceMap,
-           sal_uInt16 nFlags = 0 ) const;
-
     void exportXML(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,

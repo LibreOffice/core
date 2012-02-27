@@ -94,14 +94,6 @@ SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 |*
 *************************************************************************/
 
-SvxChartDataDescrItem::SvxChartDataDescrItem(SvxChartDataDescr eDataDescr,
-                                             sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eDataDescr)
-{
-}
-
-// -----------------------------------------------------------------------
-
 SvxChartDataDescrItem::SvxChartDataDescrItem(SvStream& rIn, sal_uInt16 nId) :
     SfxEnumItem(nId, rIn)
 {
@@ -220,14 +212,6 @@ bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, sa
 |*  SvxChartTextOrientItem
 |*
 *************************************************************************/
-
-SvxChartTextOrientItem::SvxChartTextOrientItem(SvxChartTextOrient eOrient,
-                                               sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eOrient)
-{
-}
-
-// -----------------------------------------------------------------------
 
 SvxChartTextOrientItem::SvxChartTextOrientItem(SvStream& rIn, sal_uInt16 nId) :
     SfxEnumItem(nId, rIn)

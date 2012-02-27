@@ -4126,11 +4126,6 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 }
 // class SvxFrameDirectionItem ----------------------------------------------
 
-SvxFrameDirectionItem::SvxFrameDirectionItem( sal_uInt16 _nWhich )
-    : SfxUInt16Item( _nWhich, (sal_uInt16)FRMDIR_HORI_LEFT_TOP )
-{
-}
-
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)nValue )

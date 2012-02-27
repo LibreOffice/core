@@ -790,19 +790,6 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 }
 */
 
-
-void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
-        const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 nFlags ) const
-{
-    if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
-                MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
-        _exportXML( rAttrList, rProperty, rUnitConverter, rNamespaceMap,
-                    nFlags );
-}
-
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,

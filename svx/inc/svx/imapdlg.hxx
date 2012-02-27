@@ -173,7 +173,6 @@ public:
     const ImageMap&     GetImageMap() const;
 
     void                SetTargetList( const TargetList& rTargetList );
-    const TargetList&   GetTargetList() const;
 
     void                Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );

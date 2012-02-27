@@ -273,7 +273,6 @@ protected:
 public:
 
                         SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
-                        SvtIconChoiceCtrl( Window* pParent, const ResId& rResId );
     virtual             ~SvtIconChoiceCtrl();
 
     void                SetStyle( WinBits nWinStyle );

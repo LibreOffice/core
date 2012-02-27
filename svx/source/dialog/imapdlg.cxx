@@ -306,11 +306,6 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
         maCbbTarget.InsertEntry( *aNewList[ i ] );
 }
 
-const TargetList& SvxIMapDlg::GetTargetList() const
-{
-    return pIMapWnd->GetTargetList();
-}
-
 void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
                          const TargetList* pTargetList, void* pEditingObj )
 {

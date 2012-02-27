@@ -216,8 +216,6 @@ public:
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          sal_uInt32 nStartIdx = 1 );
-                        SvPersistStream( SvClassManager &, SvStream * pStream,
-                                         const SvPersistStream & rPersStm );
                         ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
@@ -246,8 +244,6 @@ public:
                         // gespeichert werden.
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
     friend SvStream& operator << ( SvStream &, SvPersistStream & );
-    sal_uIntPtr             InsertObj( SvPersistBase * );
-    sal_uIntPtr             RemoveObj( SvPersistBase * );
 };
 
 #endif // _PSTM_HXX

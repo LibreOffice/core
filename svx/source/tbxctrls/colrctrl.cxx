@@ -105,20 +105,6 @@ sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, 
 |*
 \************************************************************************/
 
-SvxColorValueSet::SvxColorValueSet( Window* _pParent, WinBits nWinStyle ) :
-    ValueSet( _pParent, nWinStyle ),
-    DragSourceHelper( this ),
-    bLeft (sal_True)
-{
-    SetAccessibleName(String( SVX_RES( STR_COLORTABLE ) ) );
-}
-
-/*************************************************************************
-|*
-|* SvxColorValueSet: Ctor
-|*
-\************************************************************************/
-
 SvxColorValueSet::SvxColorValueSet( Window* _pParent, const ResId& rResId ) :
     ValueSet( _pParent, rResId ),
     DragSourceHelper( this ),

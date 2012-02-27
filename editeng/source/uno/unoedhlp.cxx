@@ -166,10 +166,4 @@ Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size
                                     EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
 }
 
-Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
-{
-    return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
-                                    UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

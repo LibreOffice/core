@@ -120,7 +120,6 @@ class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
     void TrySelection(Point aPosPixel);
 
 public:
-    Svx3DLightControl(Window* pParent, const ResId& rResId);
     Svx3DLightControl(Window* pParent, WinBits nStyle = 0);
     ~Svx3DLightControl();
 

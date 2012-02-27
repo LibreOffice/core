@@ -459,12 +459,6 @@ String SvtIconWindow_Impl::GetSelectedIconURL() const
     return aURL;
 }
 
-String SvtIconWindow_Impl::GetSelectedIconText() const
-{
-    sal_uLong nPos;
-    return MnemonicGenerator::EraseAllMnemonicChars( aIconCtrl.GetSelectedEntry( nPos )->GetText() );
-}
-
 String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
 {
     String aText;

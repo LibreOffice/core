@@ -89,7 +89,6 @@ public:
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
-    void                        StartSelection();
     inline ListBox &            GetListBox()    { return *pListBox; }
 
     sal_Bool                        IsUserSelected() const          { return bUserSel; }
@@ -147,12 +146,6 @@ void SvxPopupWindowListBox::StateChanged(
 {
     rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SFX_ITEM_DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
-}
-
-
-void SvxPopupWindowListBox::StartSelection()
-{
-    rToolBox.StartSelection();
 }
 
 Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()

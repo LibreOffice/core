@@ -152,12 +152,6 @@ void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUSt
 {
 }
 
-void SvtTabAppearanceCfg::SetDragMode  ( sal_uInt16 nSet )
-{
-    nDragMode = nSet;
-    SetModified();
-}
-
 void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
 {
     nScaleFactor = nSet;

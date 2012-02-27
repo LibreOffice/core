@@ -354,21 +354,6 @@ void SvtScriptedTextHelper::SetText( const OUString& _rText, const uno::Referenc
     mpImpl->SetText( _rText, _xBreakIter );
 }
 
-const OUString& SvtScriptedTextHelper::GetText() const
-{
-    return mpImpl->GetText();
-}
-
-sal_Int32 SvtScriptedTextHelper::GetTextWidth() const
-{
-    return mpImpl->GetTextSize().Width();
-}
-
-sal_Int32 SvtScriptedTextHelper::GetTextHeight() const
-{
-    return mpImpl->GetTextSize().Height();
-}
-
 const Size& SvtScriptedTextHelper::GetTextSize() const
 {
     return mpImpl->GetTextSize();

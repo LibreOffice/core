@@ -117,20 +117,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::get
     return theSvUnoAttributeContainerUnoTunnelId::get().getSeq();
 }
 
-SvUnoAttributeContainer* SvUnoAttributeContainer::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
-    if( xUT.is() )
-    {
-        return
-            reinterpret_cast<SvUnoAttributeContainer*>(
-                sal::static_int_cast<sal_IntPtr>(
-                    xUT->getSomething( SvUnoAttributeContainer::getUnoTunnelId())));
-    }
-    else
-        return NULL;
-}
-
 sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),

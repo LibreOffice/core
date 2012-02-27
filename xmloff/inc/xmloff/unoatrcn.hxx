@@ -59,7 +59,6 @@ public:
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer; }
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvUnoAttributeContainer* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt ) throw();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::container::XElementAccess

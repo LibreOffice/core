@@ -91,7 +91,6 @@ public:
     inline void         SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
 
     String              GetSelectedIconURL() const;
-    String              GetSelectedIconText() const;
     String              GetCursorPosIconURL() const;
     String              GetIconText( const String& rURL ) const;
     void                InvalidateIconControl();

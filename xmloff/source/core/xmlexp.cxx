@@ -550,46 +550,6 @@ SvXMLExport::SvXMLExport(
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
-SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    const OUString &rFileName,
-    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-    const Reference< XModel >& rModel,
-    const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
-    sal_Int16 const eDefaultFieldUnit)
-:   mpImpl( new SvXMLExport_Impl ),
-    mxServiceFactory(xServiceFactory),
-    mxModel( rModel ),
-    mxHandler( rHandler ),
-    mxExtHandler( rHandler, uno::UNO_QUERY ),
-    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    mxGraphicResolver( rEmbeddedGraphicObjects ),
-    mpAttrList( new SvXMLAttributeList ),
-    msOrigFileName( rFileName ),
-    mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
-                util::MeasureUnit::MM_100TH,
-                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
-    mpNumExport(0L),
-    mpProgressBarHelper( NULL ),
-    mpEventExport( NULL ),
-    mpImageMapExport( NULL ),
-    mpXMLErrors( NULL ),
-    mbExtended( sal_False ),
-    meClass( XML_TOKEN_INVALID ),
-    mnExportFlags( 0 ),
-    mnErrorFlags( ERROR_NO ),
-    msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(sal_True)
-{
-    mpImpl->SetSchemeOf( msOrigFileName );
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
-    _InitCtor();
-
-    if (mxNumberFormatsSupplier.is())
-        mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
-}
-
 SvXMLExport::~SvXMLExport()
 {
     delete mpXMLErrors;
@@ -2622,37 +2582,6 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
     bDoSomething( sal_True )
 {
     StartElement( rExp, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
-}
-
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_Bool bDoSth,
-                                        sal_uInt16 nPrefixKey,
-                                        const sal_Char *pLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( bDoSth )
-{
-    if( bDoSomething )
-    {
-        OUString sLName( OUString::createFromAscii(pLName) );
-        StartElement( rExp, nPrefixKey, sLName, bIWSOutside );
-    }
-}
-
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_Bool bDoSth,
-                                        sal_uInt16 nPrefixKey,
-                                        const OUString& rLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( bDoSth )
-{
-    if( bDoSomething )
-        StartElement( rExp, nPrefixKey, rLName, bIWSOutside );
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,

@@ -68,7 +68,6 @@ protected:
                     DECL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*);
 
 public:
-                    SvxColorValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
                     SvxColorValueSet( Window* pParent, const ResId& rResId );
 
     sal_Bool            IsLeftButton() const { return bLeft; }

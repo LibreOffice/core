@@ -163,26 +163,6 @@ public:
      */
     static Rectangle EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical );
 
-    /** Convert rect from user to edit engine coordinate space
-
-        As the edit engine internally keeps vertical text unrotated,
-        all internal edit engine methods return their stuff unrotated,
-        too. This method rotates and shifts given rect appropriately,
-        if vertical writing is on.
-
-        @param rRect
-        Rectangle to transform
-
-        @param rEESize
-        Paper size of the edit engine
-
-        @param  bIsVertical
-        Whether output text is vertical or not
-
-        @return the possibly transformed rect
-     */
-    static Rectangle UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical );
-
 };
 
 #endif

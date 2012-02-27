@@ -120,9 +120,6 @@ public:
     void AreInBullet( sal_Bool bInBullet = sal_True ) { mbInBullet = bInBullet; }
     sal_Bool InBullet() const { return mbInBullet; }
 
-    /// returns false if the current index contains non-editable text (e.g. bullets)
-    sal_Bool IsEditable() const;
-
     /// returns false if the given range is non-editable (e.g. contains bullets or _parts_ of fields)
     sal_Bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
 
@@ -293,14 +290,6 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
             break;
         }
     }
-}
-
-sal_Bool SvxAccessibleTextIndex::IsEditable() const
-{
-    if( InBullet() || InField() )
-        return sal_False;
-
-    return sal_True;
 }
 
 sal_Bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const

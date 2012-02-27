@@ -257,31 +257,6 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 #define NO_LIGHT_SELECTED           (0xffffffff)
 #define MAX_NUMBER_LIGHTS              (8)
 
-Svx3DLightControl::Svx3DLightControl(Window* pParent, const ResId& rResId)
-:   Svx3DPreviewControl(pParent, rResId),
-    maUserInteractiveChangeCallback(),
-    maUserSelectionChangeCallback(),
-    maChangeCallback(),
-    maSelectionChangeCallback(),
-    maSelectedLight(NO_LIGHT_SELECTED),
-    mpExpansionObject(0),
-    mpLampBottomObject(0),
-    mpLampShaftObject(0),
-    maLightObjects(MAX_NUMBER_LIGHTS, (E3dObject*)0),
-    mfRotateX(-20.0),
-    mfRotateY(45.0),
-    mfRotateZ(0.0),
-    maActionStartPoint(),
-    mnInteractionStartDistance(5 * 5 * 2),
-    mfSaveActionStartHor(0.0),
-    mfSaveActionStartVer(0.0),
-    mfSaveActionStartRotZ(0.0),
-    mbMouseMoved(false),
-    mbGeometrySelected(false)
-{
-    Construct2();
-}
-
 Svx3DLightControl::Svx3DLightControl(Window* pParent, WinBits nStyle)
 :   Svx3DPreviewControl(pParent, nStyle),
     maUserInteractiveChangeCallback(),

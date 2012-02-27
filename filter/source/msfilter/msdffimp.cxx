@@ -3265,18 +3265,6 @@ void SvxMSDffManager::Scale( Size& rSiz ) const
     }
 }
 
-void SvxMSDffManager::Scale( Rectangle& rRect ) const
-{
-    rRect.Move( nMapXOfs, nMapYOfs );
-    if ( bNeedMap )
-    {
-        rRect.Left()  =BigMulDiv( rRect.Left()  , nMapMul, nMapDiv );
-        rRect.Top()   =BigMulDiv( rRect.Top()   , nMapMul, nMapDiv );
-        rRect.Right() =BigMulDiv( rRect.Right() , nMapMul, nMapDiv );
-        rRect.Bottom()=BigMulDiv( rRect.Bottom(), nMapMul, nMapDiv );
-    }
-}
-
 void SvxMSDffManager::Scale( Polygon& rPoly ) const
 {
     if ( !bNeedMap )
@@ -3284,15 +3272,6 @@ void SvxMSDffManager::Scale( Polygon& rPoly ) const
     sal_uInt16 nPointAnz = rPoly.GetSize();
     for ( sal_uInt16 nPointNum = 0; nPointNum < nPointAnz; nPointNum++ )
         Scale( rPoly[ nPointNum ] );
-}
-
-void SvxMSDffManager::Scale( PolyPolygon& rPoly ) const
-{
-    if ( !bNeedMap )
-        return;
-    sal_uInt16 nPolyAnz = rPoly.Count();
-    for ( sal_uInt16 nPolyNum = 0; nPolyNum < nPolyAnz; nPolyNum++ )
-        Scale( rPoly[ nPolyNum ] );
 }
 
 void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const

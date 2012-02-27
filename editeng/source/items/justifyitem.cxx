@@ -353,12 +353,6 @@ sal_uInt16 SvxVerJustifyItem::GetValueCount() const
 }
 
 
-
-SvxJustifyMethodItem::SvxJustifyMethodItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)SVX_JUSTIFY_METHOD_AUTO )
-{
-}
-
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
                                       const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)eJustify )

@@ -89,21 +89,6 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
     _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
 }
 
-SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, const ResId& rResId ) :
-
-    Control( pParent, rResId ),
-
-    _pCurKeyEvent   ( NULL ),
-    _pImp           ( new SvxIconChoiceCtrl_Impl( this, WB_BORDER ) ),
-    _bAutoFontColor ( sal_False )
-
-{
-    SetLineColor();
-    _pImp->SetGrid( Size( 100, 70 ) );
-    _pImp->InitSettings();
-    _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
-}
-
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 {
     _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );

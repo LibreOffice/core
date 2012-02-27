@@ -197,44 +197,6 @@ SvPersistStream::SvPersistStream
 }
 
 //=========================================================================
-SvPersistStream::SvPersistStream
-(
-    SvClassManager & rMgr,  /* Alle Factorys, deren Objekt geladen und
-                               gespeichert werdn k"onnen */
-    SvStream * pStream,     /* Dieser Stream wird als Medium genommen, auf
-                               dem der PersistStream arbeitet */
-    const SvPersistStream & rPersStm
-                            /* Wenn PersistStream's verschachtelt werden,
-                               dann ist dies der Parent-Stream. */
-)
-    : rClassMgr( rMgr )
-    , pStm( pStream )
-    // Bereiche nicht ueberschneiden, deshalb nur groessere Indexe
-    , aPUIdx( rPersStm.GetCurMaxIndex() +1 )
-    , nStartIdx( rPersStm.GetCurMaxIndex() +1 )
-    , pRefStm( &rPersStm )
-    , nFlags( 0 )
-/*  [Beschreibung]
-
-    Der Konstruktor der Klasse SvPersistStream. Die Objekte rMgr und
-    pStream d"urfen nicht ver"andert werden, solange sie in einem
-    SvPersistStream eingesetzt sind. Eine Aussnahme gibt es f"ur
-    pStream (siehe <SvPersistStream::SetStream>).
-    Durch diesen Konstruktor wird eine Hierarchiebildung unterst"utzt.
-    Alle Objekte aus einer Hierarchie m"ussen erst geladen werden,
-    wenn das erste aus dieser Hierarchie benutzt werden soll.
-*/
-{
-    bIsWritable = sal_True;
-    if( pStm )
-    {
-        SetVersion( pStm->GetVersion() );
-        SetError( pStm->GetError() );
-        SyncSvStream( pStm->Tell() );
-    }
-}
-
-//=========================================================================
 SvPersistStream::~SvPersistStream()
 /*  [Beschreibung]
 
@@ -898,23 +860,6 @@ SvStream& operator >>
 
     rThis.SetStream( pOldStm );
     return rStm;
-}
-
-//=========================================================================
-sal_uIntPtr SvPersistStream::InsertObj( SvPersistBase * pObj )
-{
-    sal_uIntPtr nId = aPUIdx.Insert( pObj );
-    aPTable.Insert( (sal_uIntPtr)pObj, (void *)nId );
-    return nId;
-}
-
-//=========================================================================
-sal_uIntPtr SvPersistStream::RemoveObj( SvPersistBase * pObj )
-{
-    sal_uIntPtr nIdx = GetIndex( pObj );
-    aPUIdx.Remove( nIdx );
-    aPTable.Remove( (sal_uIntPtr)pObj );
-    return nIdx;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

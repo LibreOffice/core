@@ -113,32 +113,4 @@ void SvtBroadcaster::ListenersGone()
 {
 }
 
-//--------------------------------------------------------------------
-
-// forward a notification to all registered listeners
-
-void SvtBroadcaster::Forward( SvtBroadcaster& rBC, const SfxHint& rHint )
-{
-    // is anybody to notify?
-    if( rBC.HasListeners() /* && !IsModifyLocked()*/ )
-    {
-//      LockModify();
-//      bInModify = sal_True;
-
-        SvtListenerIter aIter( rBC );
-        SvtListener* pLast = aIter.GoStart();
-        if( pLast )
-            do {
-                pLast->Notify( rBC, rHint );
-                if( !rBC.HasListeners() )       // all gone ??
-                    break;
-            } while( 0 != ( pLast = aIter.GoNext() ));
-
-//      bInModify = sal_False;
-//      UnlockModify();
-    }
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

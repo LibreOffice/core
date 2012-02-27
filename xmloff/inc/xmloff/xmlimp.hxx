@@ -371,13 +371,6 @@ public:
     void SetError( sal_Int32 nId, const rtl::OUString& rMsg1 );
     void SetError( sal_Int32 nId, const rtl::OUString& rMsg1,
                                   const rtl::OUString& rMsg2 );
-    void SetError( sal_Int32 nId, const rtl::OUString& rMsg1,
-                                  const rtl::OUString& rMsg2,
-                                  const rtl::OUString& rMsg3 );
-    void SetError( sal_Int32 nId, const rtl::OUString& rMsg1,
-                                  const rtl::OUString& rMsg2,
-                                  const rtl::OUString& rMsg3,
-                                  const rtl::OUString& rMsg4 );
 
     /** return current error flags */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }

@@ -95,18 +95,6 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 }
 
 //----------------------------------------------------------------------
-// Ctor fuer SvxDrawPage_NewInstance()
-//----------------------------------------------------------------------
-SvxDrawPage::SvxDrawPage() throw()
-: mrBHelper( getMutex() )
-, mpPage( NULL )
-, mpModel( NULL )
-, mpView( NULL )
-{
-    DBG_CTOR(SvxDrawPage,NULL);
-}
-
-//----------------------------------------------------------------------
 SvxDrawPage::~SvxDrawPage() throw()
 {
     DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );

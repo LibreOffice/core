@@ -536,14 +536,6 @@ const Size& SvLBoxItem::GetSize( SvLBox* pView,SvLBoxEntry* pEntry )
     return pViewData->aSize;
 }
 
-const Size& SvLBoxItem::GetSize( SvLBoxEntry* pEntry, SvViewDataEntry* pViewData)
-{
-    DBG_CHKTHIS(SvLBoxItem,0);
-    sal_uInt16 nItemPos = pEntry->GetPos( this );
-    SvViewDataItem* pItemData = pViewData->pItemData+nItemPos;
-    return pItemData->aSize;
-}
-
 DBG_NAME(SvViewDataItem);
 
 SvViewDataItem::SvViewDataItem()

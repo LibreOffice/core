@@ -152,7 +152,6 @@ public:
     virtual             ~SvLBoxItem();
     virtual sal_uInt16      IsA() = 0;
     const Size&         GetSize( SvLBox* pView, SvLBoxEntry* pEntry );
-    const Size&         GetSize( SvLBoxEntry*, SvViewDataEntry* );
     const Size&         GetSize( SvViewDataEntry* pData, sal_uInt16 nItemPos )
                         {
                             SvViewDataItem* pIData=pData->pItemData+nItemPos;
