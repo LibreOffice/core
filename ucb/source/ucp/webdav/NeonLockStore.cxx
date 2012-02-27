@@ -80,7 +80,7 @@ void TickerThread::execute()
         TimeValue aTV;
         aTV.Seconds = 0;
         aTV.Nanosec = 1000000000 / nNth;
-        osl::Thread::wait( aTV );
+        salhelper::Thread::wait( aTV );
     }
 
     OSL_TRACE( "TickerThread: stop." );
