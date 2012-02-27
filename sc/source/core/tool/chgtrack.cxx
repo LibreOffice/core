@@ -1727,10 +1727,10 @@ void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
             }
             break;
             case CELLTYPE_STRING :
-                ((ScStringCell*)pCell)->GetString( rStr );
+                rStr = ((ScStringCell*)pCell)->GetString();
             break;
             case CELLTYPE_EDIT :
-                ((ScEditCell*)pCell)->GetString( rStr );
+                rStr = ((ScEditCell*)pCell)->GetString();
             break;
             case CELLTYPE_FORMULA :
                 ((ScFormulaCell*)pCell)->GetFormula( rStr );
@@ -1863,10 +1863,10 @@ void ScChangeActionContent::GetValueString(
             switch ( pCell->GetCellType() )
             {
                 case CELLTYPE_STRING :
-                    ((ScStringCell*)pCell)->GetString( rStr );
+                    rStr = ((ScStringCell*)pCell)->GetString();
                 break;
                 case CELLTYPE_EDIT :
-                    ((ScEditCell*)pCell)->GetString( rStr );
+                    rStr = ((ScEditCell*)pCell)->GetString();
                 break;
                 case CELLTYPE_VALUE :   // ist immer in rValue
                     rStr = rValue;

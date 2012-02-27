@@ -859,14 +859,14 @@ void XclExpChTrCellContent::GetCellData(
             if( pScCell->GetCellType() == CELLTYPE_STRING )
             {
                 const ScStringCell* pStrCell = static_cast< const ScStringCell* >( pScCell );
-                pStrCell->GetString( sCellStr );
+                sCellStr = pStrCell->GetString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString( rRoot,
                         *pStrCell, NULL );
             }
             else
             {
                 const ScEditCell* pEditCell = static_cast< const ScEditCell* >( pScCell );
-                pEditCell->GetString( sCellStr );
+                sCellStr = pEditCell->GetString();
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString( rRoot,
                         *pEditCell, NULL, aLinkHelper );

@@ -351,7 +351,7 @@ void ScTabViewShell::MakeNumberInfoItem( ScDocument*         pDoc,
 
             case CELLTYPE_STRING:
                 {
-                    ((ScStringCell*)pCell)->GetString( aCellString );
+                    aCellString = ((ScStringCell*)pCell)->GetString();
                     eValType = SVX_VALUE_TYPE_STRING;
                 }
                 break;

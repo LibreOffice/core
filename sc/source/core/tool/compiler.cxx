@@ -3049,13 +3049,13 @@ bool ScCompiler::IsColRowName( const String& rName )
                         switch ( eType )
                         {
                             case CELLTYPE_STRING:
-                                ((ScStringCell*)pCell)->GetString( aStr );
+                                aStr = ((ScStringCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_FORMULA:
-                                ((ScFormulaCell*)pCell)->GetString( aStr );
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_EDIT:
-                                ((ScEditCell*)pCell)->GetString( aStr );
+                                aStr = ((ScEditCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_NONE:
                             case CELLTYPE_VALUE:
@@ -3178,13 +3178,13 @@ bool ScCompiler::IsColRowName( const String& rName )
                     switch ( eType )
                     {
                         case CELLTYPE_STRING:
-                            ((ScStringCell*)pCell)->GetString( aStr );
+                            aStr = ((ScStringCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_FORMULA:
-                            ((ScFormulaCell*)pCell)->GetString( aStr );
+                            aStr = ((ScFormulaCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_EDIT:
-                            ((ScEditCell*)pCell)->GetString( aStr );
+                            aStr = ((ScEditCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_NONE:
                         case CELLTYPE_VALUE:

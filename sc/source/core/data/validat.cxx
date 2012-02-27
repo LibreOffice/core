@@ -212,7 +212,7 @@ sal_Bool ScValidationData::DoScript( const ScAddress& rPos, const String& rInput
         if ( bIsValue )
             nValue  = pCell->GetValue();
         else
-            pCell->GetString( aValStr );
+            aValStr = pCell->GetString();
     }
     if ( bIsValue )
         aParams[0] = ::com::sun::star::uno::makeAny( nValue );
@@ -334,7 +334,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             if ( bIsValue )
                 nValue  = pCell->GetValue();
             else
-                pCell->GetString( aValStr );
+                aValStr = pCell->GetString();
         }
         if ( bIsValue )
             refPar->Get(1)->PutDouble( nValue );
@@ -478,11 +478,11 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
             nVal = ((ScValueCell*)pCell)->GetValue();
             break;
         case CELLTYPE_STRING:
-            ((ScStringCell*)pCell)->GetString( aString );
+            aString = ((ScStringCell*)pCell)->GetString();
             bIsVal = false;
             break;
         case CELLTYPE_EDIT:
-            ((ScEditCell*)pCell)->GetString( aString );
+            aString = ((ScEditCell*)pCell)->GetString();
             bIsVal = false;
             break;
         case CELLTYPE_FORMULA:
@@ -492,7 +492,7 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
                 if ( bIsVal )
                     nVal  = pFCell->GetValue();
                 else
-                    pFCell->GetString( aString );
+                    aString = pFCell->GetString();
             }
             break;
         default:                        // Notizen, Broadcaster
@@ -654,8 +654,7 @@ bool ScValidationData::GetSelectionFromFormula(
             xMatRef->PutDouble( aValidationSrc.GetValue(), 0);
         else
         {
-            String aStr;
-            aValidationSrc.GetString( aStr);
+            String aStr = aValidationSrc.GetString();
             xMatRef->PutString( aStr, 0);
         }
 

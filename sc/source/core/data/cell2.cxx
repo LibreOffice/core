@@ -122,29 +122,24 @@ void ScEditCell::GetData( const EditTextObject*& rpObject ) const
     rpObject = pData;
 }
 
-void ScEditCell::GetString( String& rString ) const
+rtl::OUString ScEditCell::GetString() const
 {
     if ( pString )
-        rString = *pString;
-    else if ( pData )
+        return *pString;
+
+    if ( pData )
     {
         // auch Text von URL-Feldern, Doc-Engine ist eine ScFieldEditEngine
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
-        rString = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+        rtl::OUString sRet = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
         // cache short strings for formulas
-        if ( rString.Len() < 256 )
-            ((ScEditCell*)this)->pString = new String( rString );   //! non-const
+        if ( sRet.getLength() < 256 )
+            pString = new rtl::OUString(sRet);   //! non-const
+        return sRet;
     }
-    else
-        rString.Erase();
-}
 
-void ScEditCell::GetString( rtl::OUString& rString ) const
-{
-    String aTmp;
-    GetString(aTmp);
-    rString = aTmp;
+    return rtl::OUString();
 }
 
 void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
@@ -524,21 +519,13 @@ double ScFormulaCell::GetValueAlways()
     return aResult.GetDouble();
 }
 
-void ScFormulaCell::GetString( String& rString )
+rtl::OUString ScFormulaCell::GetString()
 {
     MaybeInterpret();
     if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
             !aResult.GetResultError())
-        rString = aResult.GetString();
-    else
-        rString.Erase();
-}
-
-void ScFormulaCell::GetString( rtl::OUString& rString )
-{
-    String aTmp;
-    GetString(aTmp);
-    rString = aTmp;
+        return aResult.GetString();
+    return rtl::OUString();
 }
 
 const ScMatrix* ScFormulaCell::GetMatrix()

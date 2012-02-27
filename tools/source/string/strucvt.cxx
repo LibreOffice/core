@@ -132,16 +132,6 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
     return *this;
 }
 
-UniString UniString::intern() const
-{
-    UniString aStr;
-
-    rtl_uString_intern( reinterpret_cast<rtl_uString **>(&aStr.mpData),
-                        (rtl_uString *)(mpData) );
-
-    return aStr;
-}
-
 // =======================================================================
 
 #include <tools/rc.hxx>

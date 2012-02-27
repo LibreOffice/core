@@ -228,26 +228,24 @@ public:
 #endif
 
                     ScStringCell();
-    explicit        ScStringCell( const String& rString );
+    explicit        ScStringCell(const rtl::OUString& rString);
 
 #if OSL_DEBUG_LEVEL > 0
                     ~ScStringCell();
 #endif
 
-    inline void     SetString( const String& rString ) { maString = rString; }
-    inline void     GetString( String& rString ) const { rString = maString; }
-    inline void     GetString( rtl::OUString& rString ) const { rString = maString; }
-    inline const String& GetString() const { return maString; }
+    inline void     SetString( const rtl::OUString& rString ) { maString = rString; }
+    inline const    rtl::OUString& GetString() const { return maString; }
 
 private:
-    String          maString;
+    rtl::OUString   maString;
 };
 
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
-    String*             pString;        // for faster access to formulas
+    mutable rtl::OUString* pString;        // for faster access to formulas
     ScDocument*         pDoc;           // for EditEngine access with Pool
 
     void            SetTextObject( const EditTextObject* pObject,
@@ -273,8 +271,7 @@ public:
     void            SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
     void            GetData( const EditTextObject*& rpObject ) const;
-    void            GetString( String& rString ) const;
-    void            GetString( rtl::OUString& rString ) const;
+    rtl::OUString   GetString() const;
 
     const EditTextObject* GetData() const   { return pData; }
 
@@ -464,8 +461,7 @@ public:
     bool            IsValue();      // also true if formula::svEmptyCell
     double          GetValue();
     double          GetValueAlways();   // ignore errors
-    void            GetString( String& rString );
-    void            GetString( rtl::OUString& rString );
+    rtl::OUString   GetString();
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );

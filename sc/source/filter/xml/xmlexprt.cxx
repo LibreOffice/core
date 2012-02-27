@@ -205,7 +205,7 @@ OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
         {
             CellType eType = pCell->GetCellType();
             if ( eType == CELLTYPE_STRING )
-                static_cast<ScStringCell*>(pCell)->GetString(aVal);     // string cell: content
+                aVal = static_cast<ScStringCell*>(pCell)->GetString();     // string cell: content
             else if ( eType == CELLTYPE_EDIT )
             {
                 // edit cell: text with line breaks

@@ -196,7 +196,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         aOS.appendAscii("\nV\n");
                         break;
                     case CELLTYPE_EDIT:
-                        static_cast<ScEditCell*>(pAkt)->GetString(aString);
+                        aString = static_cast<ScEditCell*>(pAkt)->GetString();
                         bWriteStringData = true;
                         break;
                     case CELLTYPE_STRING:
@@ -225,7 +225,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         }
                         else if( pAkt->HasStringData() )
                         {
-                            static_cast<ScFormulaCell*>(pAkt)->GetString(aString);
+                            aString = static_cast<ScFormulaCell*>(pAkt)->GetString();
                             bWriteStringData = true;
                         }
                         else

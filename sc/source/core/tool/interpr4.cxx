@@ -456,8 +456,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     }
                     else
                     {
-                        String aStr;
-                        pFCell->GetString( aStr );
+                        String aStr = pFCell->GetString();
                         fValue = ConvertStringToValue( aStr );
                     }
                 }
@@ -484,9 +483,9 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                 // it ... #i5658#
                 String aStr;
                 if ( eType == CELLTYPE_STRING )
-                    ((ScStringCell*)pCell)->GetString( aStr );
+                    aStr = ((ScStringCell*)pCell)->GetString();
                 else
-                    ((ScEditCell*)pCell)->GetString( aStr );
+                    aStr = ((ScEditCell*)pCell)->GetString();
                 fValue = ConvertStringToValue( aStr );
             }
             break;
@@ -518,10 +517,10 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-                ((ScStringCell*) pCell)->GetString(rStr);
+                rStr = ((ScStringCell*) pCell)->GetString();
             break;
             case CELLTYPE_EDIT:
-                ((ScEditCell*) pCell)->GetString(rStr);
+                rStr = ((ScEditCell*) pCell)->GetString();
             break;
             case CELLTYPE_FORMULA:
             {
@@ -536,7 +535,7 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
                     pFormatter->GetInputLineString(fVal, nIndex, rStr);
                 }
                 else
-                    pFCell->GetString(rStr);
+                    rStr = pFCell->GetString();
             }
             break;
             case CELLTYPE_VALUE:
@@ -687,16 +686,16 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
-                            ((ScStringCell*)pCell)->GetString(aStr);
+                            aStr = ((ScStringCell*)pCell)->GetString();
                             break;
                         case CELLTYPE_EDIT :
-                            ((ScEditCell*)pCell)->GetString(aStr);
+                            aStr = ((ScEditCell*)pCell)->GetString();
                             break;
                         case CELLTYPE_FORMULA :
                             if (!((ScFormulaCell*)pCell)->IsValue())
                             {
                                 nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                                ((ScFormulaCell*)pCell)->GetString(aStr);
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             }
                             else
                                 bOk = false;
@@ -793,11 +792,11 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
-                            ((ScStringCell*)pCell)->GetString(aStr);
+                            aStr = ((ScStringCell*)pCell)->GetString();
                             nType = 1;
                             break;
                         case CELLTYPE_EDIT :
-                            ((ScEditCell*)pCell)->GetString(aStr);
+                            aStr = ((ScEditCell*)pCell)->GetString();
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
@@ -808,7 +807,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             if (((ScFormulaCell*)pCell)->IsValue())
                                 nVal = ((ScFormulaCell*)pCell)->GetValue();
                             else
-                                ((ScFormulaCell*)pCell)->GetString(aStr);
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             break;
                         default :
                             bOk = false;
@@ -3369,15 +3368,13 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                 break;
             case CELLTYPE_STRING :
             {
-                String aVal;
-                ((ScStringCell*)pCell)->GetString( aVal );
+                rtl::OUString aVal = ((ScStringCell*)pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
             case CELLTYPE_EDIT :
             {
-                String aVal;
-                ((ScEditCell*) pCell)->GetString( aVal );
+                rtl::OUString aVal = ((ScEditCell*) pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
@@ -3392,8 +3389,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                     }
                     else
                     {
-                        String aVal;
-                        ((ScFormulaCell*)pCell)->GetString( aVal );
+                        rtl::OUString aVal = ((ScFormulaCell*)pCell)->GetString();
                         pVar->PutString( aVal );
                     }
                 }

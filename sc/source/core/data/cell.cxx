@@ -564,13 +564,13 @@ String ScBaseCell::GetStringData() const
     switch ( eCellType )
     {
         case CELLTYPE_STRING:
-            ((const ScStringCell*)this)->GetString( aStr );
+            aStr = ((const ScStringCell*)this)->GetString();
             break;
         case CELLTYPE_EDIT:
-            ((const ScEditCell*)this)->GetString( aStr );
+            aStr = ((const ScEditCell*)this)->GetString();
             break;
         case CELLTYPE_FORMULA:
-            ((ScFormulaCell*)this)->GetString( aStr );      // an der Formelzelle nicht-const
+            aStr = ((ScFormulaCell*)this)->GetString();      // an der Formelzelle nicht-const
             break;
     }
     return aStr;
@@ -610,14 +610,14 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
             {
                 String aText1;
                 if ( pCell1->GetCellType() == CELLTYPE_STRING )
-                    ((const ScStringCell*)pCell1)->GetString(aText1);
+                    aText1 = ((const ScStringCell*)pCell1)->GetString();
                 else
-                    ((const ScEditCell*)pCell1)->GetString(aText1);
+                    aText1 = ((const ScEditCell*)pCell1)->GetString();
                 String aText2;
                 if ( pCell2->GetCellType() == CELLTYPE_STRING )
-                    ((const ScStringCell*)pCell2)->GetString(aText2);
+                    aText2 = ((const ScStringCell*)pCell2)->GetString();
                 else
-                    ((const ScEditCell*)pCell2)->GetString(aText2);
+                    aText2 = ((const ScEditCell*)pCell2)->GetString();
                 return ( aText1 == aText2 );
             }
         case CELLTYPE_FORMULA:
@@ -704,7 +704,7 @@ ScStringCell::ScStringCell() :
 {
 }
 
-ScStringCell::ScStringCell( const String& rString ) :
+ScStringCell::ScStringCell( const rtl::OUString& rString ) :
     ScBaseCell( CELLTYPE_STRING ),
     maString( rString.intern() )
 {
@@ -1980,7 +1980,7 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
     }
     else
     {
-        GetString( aCellString );
+        aCellString = GetString();
         pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
     ScConstMatrixRef xMat( aResult.GetMatrix());

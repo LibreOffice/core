@@ -803,8 +803,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
-            String aResult;
-            mrScFmlaCell.GetString( aResult );
+            String aResult = mrScFmlaCell.GetString();
             bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
@@ -949,8 +948,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
         case NUMBERFORMAT_TEXT:
         {
-            String aResult;
-            mrScFmlaCell.GetString( aResult );
+            String aResult = mrScFmlaCell.GetString();
             if( aResult.Len() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
             {
                 rStrm << EXC_FORMULA_RES_STRING;

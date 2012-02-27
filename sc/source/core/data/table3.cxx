@@ -411,11 +411,11 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                 rtl::OUString aStr1;
                 rtl::OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell1)->GetString(aStr1);
+                    aStr1 = ((ScStringCell*)pCell1)->GetString();
                 else
                     GetString(nCell1Col, nCell1Row, aStr1);
                 if (eType2 == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell2)->GetString(aStr2);
+                    aStr2 = ((ScStringCell*)pCell2)->GetString();
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
 

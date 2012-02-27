@@ -3273,8 +3273,7 @@ void ScInterpreter::ScMatRef()
                 PushDouble( pCell->GetValue() );
             else
             {
-                String aVal;
-                pCell->GetString( aVal );
+                rtl::OUString aVal = pCell->GetString();
                 PushString( aVal );
             }
             pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );

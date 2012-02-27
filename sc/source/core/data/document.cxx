@@ -3023,10 +3023,10 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-                static_cast<ScStringCell*>(pCell)->GetString(aStr);
+                aStr = static_cast<ScStringCell*>(pCell)->GetString();
             break;
             case CELLTYPE_EDIT:
-                static_cast<ScEditCell*>(pCell)->GetString(aStr);
+                aStr = static_cast<ScEditCell*>(pCell)->GetString();
             break;
             case CELLTYPE_FORMULA:
             {
@@ -3041,7 +3041,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
                     pFormatter->GetInputLineString(fVal, nIndex, aStr);
                 }
                 else
-                    pFCell->GetString(aStr);
+                    aStr = pFCell->GetString();
             }
             break;
             case CELLTYPE_VALUE:

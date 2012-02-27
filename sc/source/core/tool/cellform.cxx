@@ -64,15 +64,13 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
     {
         case CELLTYPE_STRING:
             {
-                String aCellString;
-                ((ScStringCell*)pCell)->GetString( aCellString );
+                String aCellString = ((ScStringCell*)pCell)->GetString();
                 rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
             }
             break;
         case CELLTYPE_EDIT:
             {
-                String aCellString;
-                ((ScEditCell*)pCell)->GetString( aCellString );
+                String aCellString = ((ScEditCell*)pCell)->GetString();
                 rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
             }
             break;
@@ -141,8 +139,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                         }
                         else
                         {
-                            String aCellString;
-                            pFCell->GetString( aCellString );
+                            String aCellString = pFCell->GetString();
                             rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
                         }
                     }
@@ -171,12 +168,12 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OU
     {
         case CELLTYPE_STRING:
             {
-                ((ScStringCell*)pCell)->GetString( aString );
+                aString = ((ScStringCell*)pCell)->GetString();
             }
             break;
         case CELLTYPE_EDIT:
             {
-                ((ScEditCell*)pCell)->GetString( aString );
+                aString = ((ScEditCell*)pCell)->GetString();
             }
             break;
         case CELLTYPE_VALUE:
@@ -198,7 +195,7 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OU
                 }
                 else
                 {
-                    ((ScFormulaCell*)pCell)->GetString( aString );
+                    aString = ((ScFormulaCell*)pCell)->GetString();
                 }
 
                 sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();

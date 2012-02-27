@@ -1883,7 +1883,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                             ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
                         }
                         else
-                            ((ScFormulaCell*)pCell)->GetString( aString );
+                            aString = ((ScFormulaCell*)pCell)->GetString();
                         bString = true;
                     }
                 }
@@ -1897,7 +1897,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
                 }
                 else
-                    ((ScStringCell*)pCell)->GetString( aString );
+                    aString = ((ScStringCell*)pCell)->GetString();
                 bString = true;
                 break;
             case CELLTYPE_EDIT :

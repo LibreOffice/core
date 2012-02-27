@@ -573,8 +573,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
         const XclExpRoot& rRoot, const ScStringCell& rStringCell, const ScPatternAttr* pCellAttr,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    String aCellText;
-    rStringCell.GetString( aCellText );
+    rtl::OUString aCellText = rStringCell.GetString();
     return lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
 }
 
@@ -602,8 +601,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     else
     {
         // unformatted cell
-        String aCellText;
-        rEditCell.GetString( aCellText );
+        String aCellText = rEditCell.GetString();
         xString = lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
     }
     return xString;

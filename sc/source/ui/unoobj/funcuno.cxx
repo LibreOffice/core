@@ -708,9 +708,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
             else
             {
                 // string result
-                String aStrVal;
-                pFormula->GetString( aStrVal );
-                aRet <<= rtl::OUString( aStrVal );
+                rtl::OUString aStrVal = pFormula->GetString();
+                aRet <<= aStrVal;
             }
         }
         else if ( nErrCode == NOTAVAILABLE )

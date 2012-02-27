@@ -1350,9 +1350,7 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
             }
             else
             {
-                String aStr;
-
-                pCell->GetString( aStr );
+                String aStr = pCell->GetString();
                 sal_uLong nFormat = aFormatter.GetStandardFormat(
                                 pCell->GetFormatType(), ScGlobal::eLnge);
                 aFormatter.GetOutputString( aStr, nFormat,

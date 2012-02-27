@@ -898,8 +898,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
                 }
                 else if (bCloneString)
                 {
-                    String aString;
-                    rForm.GetString( aString );
+                    String aString = rForm.GetString();
                     // do not clone empty string
                     if (aString.Len() > 0)
                     {
@@ -1342,7 +1341,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                         switch ( pCell->GetCellType() )
                         {
                             case CELLTYPE_STRING :
-                                ((ScStringCell*)pCell)->GetString( aStr );
+                                aStr = ((ScStringCell*)pCell)->GetString();
                                 if ( rString == aStr )
                                     bIsText = true;
                             break;
@@ -1628,9 +1627,9 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<ScTypedStrData>& rString
             if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
             {
                 if (eType == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell)->GetString(aString);
+                    aString = ((ScStringCell*)pCell)->GetString();
                 else
-                    ((ScEditCell*)pCell)->GetString(aString);
+                    aString = ((ScEditCell*)pCell)->GetString();
 
                 bool bInserted = rStrings.insert(ScTypedStrData(aString)).second;
                 if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
@@ -1651,9 +1650,9 @@ bool ScColumn::GetDataEntries(SCROW nStartRow, std::set<ScTypedStrData>& rString
             if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
             {
                 if (eType == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell)->GetString(aString);
+                    aString = ((ScStringCell*)pCell)->GetString();
                 else
-                    ((ScEditCell*)pCell)->GetString(aString);
+                    aString = ((ScEditCell*)pCell)->GetString();
 
                 bool bInserted = rStrings.insert(ScTypedStrData(aString)).second;
                 if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
@@ -1702,8 +1701,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
                     }
                     else
                     {
-                        String aString;
-                        pFormula->GetString(aString);
+                        String aString = pFormula->GetString();
                         maItems[nIndex].pCell = new ScStringCell( aString );
                     }
                     delete pFormula;

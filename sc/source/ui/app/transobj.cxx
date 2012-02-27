@@ -825,8 +825,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 }
                 else
                 {
-                    String aStr;
-                    pFCell->GetString(aStr);
+                    String aStr = pFCell->GetString();
                     if ( pFCell->IsMultilineResult() )
                         pNew = new ScEditCell( aStr, pDestDoc );
                     else

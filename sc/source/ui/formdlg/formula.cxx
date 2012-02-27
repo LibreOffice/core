@@ -370,9 +370,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         }
         else
         {
-            String aStr;
-
-            pFCell->GetString( aStr );
+            String aStr = pFCell->GetString();
             sal_uLong nFormat = aFormatter.GetStandardFormat(
                             pFCell->GetFormatType(), ScGlobal::eLnge);
             aFormatter.GetOutputString( aStr, nFormat,

@@ -178,8 +178,6 @@ public:
         return rtl::OUString (reinterpret_cast<rtl_uString*>(mpData));
     }
 
-    UniString           intern() const;
-
     static UniString    CreateFromAscii( const sal_Char* pAsciiStr );
     static UniString    CreateFromAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
 

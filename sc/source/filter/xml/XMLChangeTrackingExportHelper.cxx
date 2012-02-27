@@ -300,9 +300,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
     const ScStringCell* pStringCell = static_cast<const ScStringCell*>(pCell);
     if (pStringCell)
     {
-        String sString;
-        pStringCell->GetString(sString);
-        rtl::OUString sOUString(sString);
+        rtl::OUString sOUString = pStringCell->GetString();
         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
         if (!sOUString.isEmpty())
@@ -319,8 +317,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
     const ScEditCell* pEditCell = static_cast<const ScEditCell*>(pCell);
     if (pEditCell)
     {
-        String sString;
-        pEditCell->GetString(sString);
+        String sString = pEditCell->GetString();
         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
         if (sString.Len())
@@ -388,8 +385,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
         else
         {
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-            String sCellValue;
-            pFormulaCell->GetString(sCellValue);
+            String sCellValue = pFormulaCell->GetString();
             rtl::OUString sOUValue(sCellValue);
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
             if (!sOUValue.isEmpty())

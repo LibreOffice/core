@@ -386,9 +386,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
                             if ( eType == CELLTYPE_STRING )
-                                ((ScStringCell*)pCell)->GetString( aStr );
+                                aStr = ((ScStringCell*)pCell)->GetString();
                             else
-                                ((ScEditCell*)pCell)->GetString( aStr );
+                                aStr = ((ScEditCell*)pCell)->GetString();
                             aString = aStr;
                             nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
                             aStr = aString;
@@ -748,9 +748,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             case CELLTYPE_STRING:
                             case CELLTYPE_EDIT:
                                 if ( eCellType == CELLTYPE_STRING )
-                                    ((ScStringCell*)pSrcCell)->GetString( aValue );
+                                    aValue = ((ScStringCell*)pSrcCell)->GetString();
                                 else
-                                    ((ScEditCell*)pSrcCell)->GetString( aValue );
+                                    aValue = ((ScEditCell*)pSrcCell)->GetString();
                                 if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                                 {
                                     nCellDigits = 0;    // look at each source cell individually
@@ -1012,9 +1012,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     case CELLTYPE_EDIT:
                     {
                         if ( eType == CELLTYPE_STRING )
-                            ((ScStringCell*)pCell)->GetString( aValue );
+                            aValue = ((ScStringCell*)pCell)->GetString();
                         else
-                            ((ScEditCell*)pCell)->GetString( aValue );
+                            aValue = ((ScEditCell*)pCell)->GetString();
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
                         {
                             sal_Int32 nVal;
@@ -1069,9 +1069,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     case CELLTYPE_EDIT:
                     {
                         if ( eType == CELLTYPE_STRING )
-                            ((ScStringCell*)pCell)->GetString( aValue );
+                            aValue = ((ScStringCell*)pCell)->GetString();
                         else
-                            ((ScEditCell*)pCell)->GetString( aValue );
+                            aValue = ((ScEditCell*)pCell)->GetString();
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = (double)nVal;
@@ -1465,9 +1465,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 String aValue;
                 if (eCellType == CELLTYPE_STRING)
-                    ((ScStringCell*)pSrcCell)->GetString( aValue );
+                    aValue = ((ScStringCell*)pSrcCell)->GetString();
                 else
-                    ((ScEditCell*)pSrcCell)->GetString( aValue );
+                    aValue = ((ScEditCell*)pSrcCell)->GetString();
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
