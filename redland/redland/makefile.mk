@@ -118,6 +118,10 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 
 .IF "$(OS)"=="MACOSX"
 LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
+.IF "$(SYSTEM_LIBXML)" != "YES"
+LDFLAGS+:=-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(SOLARLIBDIR)/libxml2.2.dylib
+.ENDIF
+
 .ENDIF
 
 CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)

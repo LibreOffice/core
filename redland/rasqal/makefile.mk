@@ -116,6 +116,10 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 
+.IF "$(OS)"=="MACOSX" && "$(SYSTEM_LIBXML)" != "YES"
+LDFLAGS+:=-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(SOLARLIBDIR)/libxml2.2.dylib
+.ENDIF
+
 CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
 XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
