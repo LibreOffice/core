@@ -53,6 +53,6 @@ $(eval $(call gb_Library_add_cxxflags,fps_kde,\
 	-Wno-shadow \
 ))
 
-$(eval $(call gb_LIbrary_set_warnings_not_errors,fps_kde))
+$(eval $(call gb_Library_set_warnings_not_errors,fps_kde))
 
 # vim: set noet sw=4 ts=4:
