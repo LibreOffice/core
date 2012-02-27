@@ -1060,7 +1060,6 @@ oox::xls::BiffHelper::calcRkFromDouble(int&, double)
 oox::xls::BiffInputStream::sizeBase() const
 oox::xls::BiffInputStream::skipByteString(bool)
 oox::xls::BiffInputStream::skipUniString()
-oox::xls::BiffObjLineModel::isVisible() const
 oox::xls::BiffOutputStream::BiffOutputStream(oox::BinaryOutputStream&, unsigned short)
 oox::xls::BiffOutputStream::endRecord()
 oox::xls::BiffOutputStream::fill(unsigned char, int, unsigned long)

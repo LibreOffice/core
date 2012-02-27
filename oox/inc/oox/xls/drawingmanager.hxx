@@ -59,9 +59,6 @@ struct BiffObjLineModel
     bool                mbAuto;             /// True = automatic line format.
 
     explicit            BiffObjLineModel();
-
-    /** Returns true, if the line formatting is visible (automatic or explicit). */
-    bool                isVisible() const;
 };
 
 // ============================================================================

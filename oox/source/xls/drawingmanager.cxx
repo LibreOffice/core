@@ -191,11 +191,6 @@ BiffObjLineModel::BiffObjLineModel() :
 {
 }
 
-bool BiffObjLineModel::isVisible() const
-{
-    return mbAuto || (mnStyle != BIFF_OBJ_LINE_NONE);
-}
-
 BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
 {
     sal_uInt8 nFlags;
