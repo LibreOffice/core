@@ -247,12 +247,6 @@ public:
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript,
                             XclExpColorType eColorType, bool bAppFont = false );
-    /** Inserts the font contained in rPattern into the buffer if not present.
-        @param nScript  The script type of the font properties to be used.
-        @param bAppFont  true = Sets the application font; false = Inserts a new font.
-        @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const ScPatternAttr& rPattern, sal_Int16 nScript,
-                            XclExpColorType eColorType, bool bAppFont = false );
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );

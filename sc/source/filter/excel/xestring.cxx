@@ -184,23 +184,6 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 
 // formatting runs ------------------------------------------------------------
 
-void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
-{
-    maFormats = rFormats;
-#if OSL_DEBUG_LEVEL > 0
-    if( IsRich() )
-    {
-        XclFormatRunVec::const_iterator aCurr = maFormats.begin();
-        XclFormatRunVec::const_iterator aPrev = aCurr;
-        XclFormatRunVec::const_iterator aEnd = maFormats.end();
-        for( ++aCurr; aCurr != aEnd; ++aCurr, ++aPrev )
-            OSL_ENSURE( aPrev->mnChar < aCurr->mnChar, "XclExpString::SetFormats - invalid char order" );
-        OSL_ENSURE( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
-    }
-#endif
-    LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
-}
-
 void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate )
 {
     OSL_ENSURE( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );

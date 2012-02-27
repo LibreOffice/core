@@ -1751,11 +1751,6 @@ void XclXFBase::SetAllUsedFlags( bool bUsed )
     mbProtUsed = mbFontUsed = mbFmtUsed = mbAlignUsed = mbBorderUsed = mbAreaUsed = bUsed;
 }
 
-bool XclXFBase::HasUsedFlags() const
-{
-    return mbProtUsed || mbFontUsed || mbFmtUsed || mbAlignUsed || mbBorderUsed || mbAreaUsed;
-}
-
 bool XclXFBase::Equals( const XclXFBase& rCmp ) const
 {
     return
