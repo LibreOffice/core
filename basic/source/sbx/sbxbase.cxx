@@ -36,10 +36,9 @@
 #include <rtl/instance.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <sal/log.hxx>
+#include <boost/foreach.hpp>
 
 // AppData-Structure for SBX:
-
-SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
 TYPEINIT0(SbxBase)
 
@@ -147,28 +146,27 @@ void SbxBase::ResetError()
 void SbxBase::AddFactory( SbxFactory* pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
-    const SbxFactory* pTemp = pFac;
 
     // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = r.aFacs.Count(); // Insert position
+    sal_uInt16 nPos = r.aFacs.size(); // Insert position
     if( !pFac->IsHandleLast() )         // Only if not self HandleLast
     {
         // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
-                (static_cast<SbxFactory*>(r.aFacs.GetObject( nPos-1 )))->IsHandleLast() )
+                r.aFacs[ nPos-1 ].IsHandleLast() )
             nPos--;
     }
-    r.aFacs.Insert( pTemp, nPos );
+    r.aFacs.insert( r.aFacs.begin() + nPos, pFac );
 }
 
 void SbxBase::RemoveFactory( SbxFactory* pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
-    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
+    for(SbxFacs::iterator it = r.aFacs.begin(); it != r.aFacs.end(); ++it)
     {
-        if( r.aFacs.GetObject( i ) == pFac )
+        if( &(*it) == pFac )
         {
-            r.aFacs.Remove( i, 1 ); break;
+            r.aFacs.release( it ).release(); break;
         }
     }
 }
@@ -200,10 +198,9 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();
     SbxBase* pNew = NULL;
-    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
+    BOOST_FOREACH(SbxFactory& rFac, r.aFacs)
     {
-        SbxFactory* pFac = r.aFacs.GetObject( i );
-        pNew = pFac->Create( nSbxId, nCreator );
+        pNew = rFac.Create( nSbxId, nCreator );
         if( pNew )
             break;
     }
@@ -215,9 +212,9 @@ SbxObject* SbxBase::CreateObject( const rtl::OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
-    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
+    BOOST_FOREACH(SbxFactory& rFac, r.aFacs)
     {
-        pNew = r.aFacs.GetObject( i )->CreateObject( rClass );
+        pNew = rFac.CreateObject( rClass );
         if( pNew )
             break;
     }
