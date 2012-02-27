@@ -327,11 +327,6 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
         return;
     }
 
-    // DEBUG INFO
-    const char* SerfErrorStr = serf_error_string( inStatus );
-    char AprErrorStr[256];
-    apr_strerror( inStatus, AprErrorStr, sizeof( AprErrorStr ) );
-
     switch ( inStatus )
     {
     case APR_EGENERAL:

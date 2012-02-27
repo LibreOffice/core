@@ -40,8 +40,6 @@ SerfMkColReqProcImpl::~SerfMkColReqProcImpl()
 
 serf_bucket_t * SerfMkColReqProcImpl::createSerfRequestBucket( serf_request_t * inSerfRequest )
 {
-    serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
-
     // create serf request
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "MKCOL",

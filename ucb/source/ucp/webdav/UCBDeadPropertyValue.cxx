@@ -205,6 +205,7 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
     return rtl::OUString( aResult );
 }
 
+/*
 //////////////////////////////////////////////////////////////////////////
 static rtl::OUString decodeValue( const rtl::OUString & rValue )
 {
@@ -323,6 +324,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
     return rtl::OUString( aResult );
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////
 // static

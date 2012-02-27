@@ -143,7 +143,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                                  "PROPFIND",
                                                                  getPathStr(),
                                                                  body_bkt,
-                                                                 serf_request_get_alloc( inSerfRequest ) );
+                                                                 pSerfBucketAlloc );
 
     // TODO - correct header data
     // set request header fields
