@@ -173,7 +173,7 @@ void SwLabPreview::Paint(const Rectangle &)
 
     // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
-    SetFillColor( Color( 0xE0, 0xE0, 0xFF ) );
+    SetFillColor( COL_LIGHTGRAYBLUE );
     for (sal_uInt16 nRow = 0; nRow < Min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
         for (sal_uInt16 nCol = 0; nCol < Min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
             DrawRect(Rectangle(
