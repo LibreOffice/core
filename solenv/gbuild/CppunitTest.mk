@@ -182,7 +182,7 @@ endef
 # to libraries not built in this configuration.
 define gb_CppunitTest__filter_not_built_components
 $(filter-out \
-	$(if $(filter INTERPRETERS,$(BUILD_TYPE)),, \
+	$(if $(filter SCRIPTING,$(BUILD_TYPE)),, \
 		basic/util/sb \
 	    sw/util/vbaswobj \
 	    scripting/source/basprov/basprov \

@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Package_xml \
 ))
 
-ifneq ($(DISABLE_INTERPRETERS),TRUE)
+ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_vbaobj \

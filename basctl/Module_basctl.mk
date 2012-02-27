@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Module_Module,basctl))
 
-ifneq ($(DISABLE_INTERPRETERS),TRUE)
+ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,basctl,\
 	AllLangResTarget_basctl \
