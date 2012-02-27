@@ -46,6 +46,7 @@
 #include <svtools/sfxecode.hxx>
 
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/string.hxx>
 #include <hintids.hxx>
 
 #include <editeng/tstpitem.hxx>
@@ -2628,10 +2629,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     const CharSet eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
         RTL_TEXTENCODING_MS_1252;
 
-    // (re)alloc UniString data
-    String sPlainCharsBuf;
-
-    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer(nStrLen);
+    // allocate UniString data
+    rtl_uString *pStr = comphelper::string::rtl_uString_alloc(nStrLen);
+    sal_Unicode* pBuffer = pStr->buffer;
     sal_Unicode* pWork = pBuffer;
 
     sal_Char* p8Bits = NULL;
@@ -2666,7 +2666,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         if (pStrm->GetError())
         {
             rPos = WW8_CP_MAX-10;     // -> eof or other error
-            sPlainCharsBuf.ReleaseBufferAccess( 0 );
+            rtl_freeMemory(pStr);
             delete [] p8Bits;
             return true;
         }
@@ -2714,9 +2714,10 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
             if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
 
-        sPlainCharsBuf.ReleaseBufferAccess( nEndUsed );
+        pStr->buffer[nEndUsed] = 0;
+        pStr->length = nEndUsed;
 
-        emulateMSWordAddTextToParagraph(sPlainCharsBuf);
+        emulateMSWordAddTextToParagraph(rtl::OUString(pStr, SAL_NO_ACQUIRE));
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
             bWasParaEnd = false;            //kein CR
