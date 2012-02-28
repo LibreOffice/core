@@ -7388,7 +7388,9 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
 
         bool bValid = nSize <= nLen;
 
-        SAL_WARN_IF(!bValid, "sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+        SAL_WARN_IF(!bValid, "sw.ww8",
+            "sprm 0x" << std::hex << nAktId << std::dec << " longer than remaining bytes, " <<
+            nSize << " vs " << nLen << "doc or parser is wrong");
 
         if (nAktId == nId && bValid) // Sprm found
             return pSprms + DistanceToData(nId);
