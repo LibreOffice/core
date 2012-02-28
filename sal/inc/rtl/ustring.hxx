@@ -323,6 +323,40 @@ public:
     }
 
     /**
+      Assign a new string from an 8-Bit string literal that is expected to contain only
+      characters in the ASCII set (i.e. first 128 characters). This operator
+      allows an efficient and convenient way to assign OUString
+      instances from ASCII literals. When assigning strings from data that
+      is not pure ASCII, it needs to be converted to OUString by explicitly
+      providing the encoding to use for the conversion.
+
+      @param    literal         the 8-bit ASCII string literal
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      @since 3.6
+    */
+    template< int N >
+    OUString& operator=( const char (&literal)[ N ] )
+    {
+        rtl_string2UString( &pData, literal, N - 1, RTL_TEXTENCODING_ASCII_US, 0 );
+        if (pData == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
+            throw std::bad_alloc();
+#endif
+        }
+        return *this;
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * @internal
+     */
+    template< int N >
+    OUString& operator=( char (&value)[ N ] ); // intentionally not implemented
+
+    /**
       Append a string to this string.
 
       @param    str         a OUString.
@@ -868,6 +902,79 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend sal_Bool     operator >= ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since 3.6
+     */
+    template< int N >
+    friend inline bool operator==( const OUString& string, const char (&literal)[ N ] )
+    {
+        return string.equalsAsciiL( literal, N - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since 3.6
+     */
+    template< int N >
+    friend inline bool operator==( const char (&literal)[ N ], const OUString& string )
+    {
+        return string.equalsAsciiL( literal, N - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since 3.6
+     */
+    template< int N >
+    friend inline bool operator!=( const OUString& string, const char (&literal)[ N ] )
+    {
+        return !string.equalsAsciiL( literal, N - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since 3.6
+     */
+    template< int N >
+    friend inline bool operator!=( const char (&literal)[ N ], const OUString& string )
+    {
+        return !string.equalsAsciiL( literal, N - 1 );
+    }
+    /**
+     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * @internal
+     */
+    template< int N >
+    friend inline bool operator==( const OUString& string, char (&literal)[ N ] ); // not implemented
+    /**
+     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * @internal
+     */
+    template< int N >
+    friend inline bool operator==( char (&literal)[ N ], const OUString& string ); // not implemented
+    /**
+     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * @internal
+     */
+    template< int N >
+    friend inline bool operator!=( const OUString& string, char (&literal)[ N ] ); // not implemented
+    /**
+     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * @internal
+     */
+    template< int N >
+    friend inline bool operator!=( char (&literal)[ N ], const OUString& string ); // not implemented
 
     /**
       Returns a hashcode for this string.
