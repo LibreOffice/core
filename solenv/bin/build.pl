@@ -1514,7 +1514,11 @@ sub cancel_build {
     print STDERR "-----------------------------------------------------------------------\n";
     print STDERR "To rebuild a specific module:\n";
     print STDERR "\n";
-    print STDERR "$ENV{GNUMAKE} $module.clean #optional\n";
+    if ($module eq 'tail_build') {
+	print STDERR "$ENV{GNUMAKE} $module.clean # not recommended, this will re-build almost everything\n";
+    } else {
+	print STDERR "$ENV{GNUMAKE} $module.clean # optional\n";
+    }
     print STDERR "$ENV{GNUMAKE} $module\n";
     print STDERR "\n";
     print STDERR "when the problem is isolated and fixed, re-run '$ENV{GNUMAKE}'\n";

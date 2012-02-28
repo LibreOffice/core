@@ -15,3 +15,7 @@ To migrate a module <foo> under tail_build, one should:
 * remove the module <foo> from postprocess/prj/build.lst dependencies
 * remove the module <foo> from tail_build/prj/build.lst dependencies
 * add the module name in Module_tail_build.mk at the root of bootstrap
+
+This module of course, takes a lot of thought, and dependency work /
+statting until it has finished it's business, knows exactly what to
+re-build, and can start building just that.
