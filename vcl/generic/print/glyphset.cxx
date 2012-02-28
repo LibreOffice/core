@@ -479,7 +479,8 @@ void GlyphSet::DrawGlyphs(
                           const sal_uInt32* pGlyphIds,
                           const sal_Unicode* pUnicodes,
                           sal_Int16 nLen,
-                          const sal_Int32* pDeltaArray )
+                          const sal_Int32* pDeltaArray,
+                          const sal_Bool bUseGlyphs)
 {
     sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
@@ -488,7 +489,10 @@ void GlyphSet::DrawGlyphs(
     // convert unicode to font glyph id and font subset
     for (int nChar = 0; nChar < nLen; nChar++)
     {
-        GetGlyphID (pGlyphIds[nChar], pUnicodes[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
+        if (bUseGlyphs)
+            GetGlyphID (pGlyphIds[nChar], pUnicodes[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
+        else
+            GetCharID (pUnicodes[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
         aGlyphSet.insert (pGlyphSetID[nChar]);
     }
 
@@ -536,7 +540,12 @@ void GlyphSet::DrawGlyphs(
         // show the text using the PrinterGfx text api
         aPoint.Move (nOffset, 0);
 
-        OString aGlyphSetName(GetGlyphSetName(*aSet));
+        OString aGlyphSetName;
+        if (bUseGlyphs)
+            aGlyphSetName = GetGlyphSetName(*aSet);
+        else
+            aGlyphSetName = GetCharSetName(*aSet);
+
         rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
         rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
@@ -614,66 +623,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         return;
     }
 
-    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
-    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
-    std::set< sal_Int32 > aGlyphSet;
-
-    // convert unicode to font glyph id and font subset
-    for (int nChar = 0; nChar < nLen; nChar++)
-    {
-        GetCharID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
-        aGlyphSet.insert (pGlyphSetID[nChar]);
-    }
-
-    // loop over all glyph sets to detect substrings that can be xshown together
-    // without changing the postscript font
-    sal_Int32 *pDeltaSubset = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
-    sal_uChar *pGlyphSubset = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
-
-    std::set< sal_Int32 >::iterator aSet;
-    for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
-    {
-        Point     aPoint  = rPoint;
-        sal_Int32 nOffset = 0;
-        sal_Int32 nGlyphs = 0;
-        sal_Int32 nChar;
-
-        // get offset to first glyph
-        for (nChar = 0; (nChar < nLen) && (pGlyphSetID[nChar] != *aSet); nChar++)
-        {
-            nOffset = pDeltaArray [nChar];
-        }
-
-        // loop over all chars to extract those that share the current glyph set
-        for (nChar = 0; nChar < nLen; nChar++)
-        {
-            if (pGlyphSetID[nChar] == *aSet)
-            {
-                pGlyphSubset [nGlyphs] = pGlyphID [nChar];
-                // the offset to the next glyph is determined by the glyph in
-                // front of the next glyph with the same glyphset id
-                // most often, this will be the current glyph
-                while ((nChar + 1) < nLen)
-                {
-                    if (pGlyphSetID[nChar + 1] == *aSet)
-                        break;
-                    else
-                        nChar += 1;
-                }
-                pDeltaSubset [nGlyphs] = pDeltaArray[nChar] - nOffset;
-
-                nGlyphs += 1;
-            }
-        }
-
-        // show the text using the PrinterGfx text api
-        aPoint.Move (nOffset, 0);
-
-        OString aGlyphSetName(GetCharSetName(*aSet));
-        rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
-        rGfx.PSMoveTo   (aPoint);
-        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
-    }
+    DrawGlyphs( rGfx, rPoint, NULL, pStr, nLen, pDeltaArray, sal_False);
 }
 
 sal_Bool
