@@ -177,8 +177,9 @@ TabPage  RID_PDF_TAB_GENER
     };
     FixedText FT_ADDSTREAMDESCRIPTION
     {
-        Pos = MAP_APPFONT( 206 , 27 ) ;
-        Size = MAP_APPFONT( 140, 8 ) ;
+        Pos = MAP_APPFONT( 206 , 23 ) ;
+        Size = MAP_APPFONT( 140, 16 ) ;
+        Wordbreak = TRUE ;
         Text[ en-US ] = "Makes this PDF easily editable in %PRODUCTNAME" ;
     };
     CheckBox CB_PDFA_1B_SELECT
