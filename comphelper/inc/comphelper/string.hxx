@@ -46,22 +46,6 @@
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
-namespace detail
-{
-    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
-    {
-        //Clearly this is somewhat cosy with the sal implmentation
-
-        //rtl_[u]String contains U buffer[1], so an input of nLen
-        //allocates a buffer of nLen + 1 and we'll ensure a null termination
-        T *newStr = (T*)rtl_allocateMemory(sizeof(T) + sizeof(U) * nLen);
-        newStr->refCount = 1;
-        newStr->length = nLen;
-        newStr->buffer[nLen]=0;
-        return newStr;
-    }
-}
-
 /** Allocate a new string containing space for a given number of characters.
 
     The reference count of the new string will be 1. The length of the string
@@ -82,10 +66,7 @@ namespace detail
     @param len
     the number of characters.
  */
-COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
-{
-    return detail::string_alloc<rtl_uString, sal_Unicode>(nLen);
-}
+COMPHELPER_DLLPUBLIC rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen);
 
 /** Allocate a new string containing space for a given number of characters.
 
@@ -107,10 +88,7 @@ COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 n
     @param len
     the number of characters.
  */
-COMPHELPER_DLLPUBLIC inline rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
-{
-    return detail::string_alloc<rtl_String, sal_Char>(nLen);
-}
+COMPHELPER_DLLPUBLIC rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen);
 
 /** Removes all occurrences of a character from within the source string
 
