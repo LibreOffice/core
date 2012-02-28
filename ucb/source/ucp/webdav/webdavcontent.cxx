@@ -3225,6 +3225,11 @@ const Content::ResourceType & Content::getResourceType(
                 // resource is NON_DAV
                 eResourceType = NON_DAV;
             }
+            // cancel command execution is case that no user authentication data has been provided.
+            if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
+            {
+                cancelCommandExecution( e, uno::Reference< ucb::XCommandEnvironment >() );
+            }
         }
         m_eResourceType = eResourceType;
     }

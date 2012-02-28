@@ -53,7 +53,8 @@ int DAVAuthListener_Impl::authenticate(
     const ::rtl::OUString & inHostName,
     ::rtl::OUString & inoutUserName,
     ::rtl::OUString & outPassWord,
-    sal_Bool bCanUseSystemCredentials )
+    sal_Bool bCanUseSystemCredentials,
+    sal_Bool bUsePreviousCredentials )
 {
     if ( m_xEnv.is() )
     {
@@ -62,12 +63,14 @@ int DAVAuthListener_Impl::authenticate(
 
         if ( xIH.is() )
         {
+            // Providing previously retrieved credentials will cause the password
+            // container to reject these. Thus, the credential input dialog will be shown again.
             // #102871# - Supply username and password from previous try.
             // Password container service depends on this!
-            if ( inoutUserName.getLength() == 0 )
+            if ( inoutUserName.getLength() == 0 && bUsePreviousCredentials )
                 inoutUserName = m_aPrevUsername;
 
-            if ( outPassWord.getLength() == 0 )
+            if ( outPassWord.getLength() == 0 && bUsePreviousCredentials )
                 outPassWord = m_aPrevPassword;
 
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest

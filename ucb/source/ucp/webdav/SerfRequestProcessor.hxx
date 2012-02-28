@@ -168,6 +168,8 @@ public:
     rtl::OUString mHTTPStatusCodeText;
     rtl::OUString mRedirectLocation;
 
+    sal_uInt8 mnSuccessfulCredentialAttempts;
+    bool mbInputOfCredentialsAborted;
     bool mbSetupSerfRequestCalled;
     bool mbAcceptSerfResponseCalled;
     bool mbHandleSerfResponseCalled;

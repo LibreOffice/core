@@ -44,6 +44,8 @@ SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
     , mnHTTPStatusCode( SC_NONE )
     , mHTTPStatusCodeText()
     , mRedirectLocation()
+    , mnSuccessfulCredentialAttempts( 0 )
+    , mbInputOfCredentialsAborted( false )
     , mbSetupSerfRequestCalled( false )
     , mbAcceptSerfResponseCalled( false )
     , mbHandleSerfResponseCalled( false )
@@ -66,6 +68,8 @@ void SerfRequestProcessor::prepareProcessor()
     mHTTPStatusCodeText = rtl::OUString();
     mRedirectLocation = rtl::OUString();
 
+    mnSuccessfulCredentialAttempts = 0;
+    mbInputOfCredentialsAborted = false;
     mbSetupSerfRequestCalled = false;
     mbAcceptSerfResponseCalled = false;
     mbHandleSerfResponseCalled = false;
@@ -330,41 +334,21 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
     switch ( inStatus )
     {
     case APR_EGENERAL:
+    case SERF_ERROR_AUTHN_FAILED:
         // general error; <mnHTTPStatusCode> provides more information
         {
-            // TODO: reactivate special handling copied from neon!?
-            /*
-            if ( mnHTTPStatusCode == SC_LOCKED )
-            {
-                if ( m_aSerfLockStore.findByUri(
-                         makeAbsoluteURL( inPath ) ) == 0 )
-                {
-                    // locked by 3rd party
-                    throw DAVException( DAVException::DAV_LOCKED );
-                }
-                else
-                {
-                    // locked by ourself
-                    throw DAVException( DAVException::DAV_LOCKED_SELF );
-                }
-            }
-
-            // Special handling for 400 and 412 status codes, which may indicate
-            // that a lock previously obtained by us has been released meanwhile
-            // by the server. Unfortunately, RFC is not clear at this point,
-            // thus server implementations behave different...
-            else if ( mnHTTPStatusCode == SC_BAD_REQUEST || mnHTTPStatusCode == SC_PRECONDITION_FAILED )
-            {
-                if ( removeExpiredLocktoken( makeAbsoluteURL( inPath ), rEnv ) )
-                    throw DAVException( DAVException::DAV_LOCK_EXPIRED );
-            }
-            */
             switch ( mnHTTPStatusCode )
             {
             case SC_NONE:
                 if ( !mbSetupSerfRequestCalled )
                 {
                     mpDAVException = new DAVException( DAVException::DAV_HTTP_LOOKUP,
+                                                       SerfUri::makeConnectionEndPointString( mrSerfSession.getHostName(),
+                                                                                              mrSerfSession.getPort() ) );
+                }
+                else if ( mbInputOfCredentialsAborted )
+                {
+                    mpDAVException = new DAVException( DAVException::DAV_HTTP_NOAUTH,
                                                        SerfUri::makeConnectionEndPointString( mrSerfSession.getHostName(),
                                                                                               mrSerfSession.getPort() ) );
                 }
@@ -399,20 +383,44 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
 }
 
 apr_status_t SerfRequestProcessor::provideSerfCredentials( char ** outUsername,
-                                         char ** outPassword,
-                                         serf_request_t * inRequest,
-                                         int inCode,
-                                         const char *inAuthProtocol,
-                                         const char *inRealm,
-                                         apr_pool_t *inAprPool )
+                                                           char ** outPassword,
+                                                           serf_request_t * inRequest,
+                                                           int inCode,
+                                                           const char *inAuthProtocol,
+                                                           const char *inRealm,
+                                                           apr_pool_t *inAprPool )
 {
-    return mrSerfSession.provideSerfCredentials( outUsername,
-                                                 outPassword,
-                                                 inRequest,
-                                                 inCode,
-                                                 inAuthProtocol,
-                                                 inRealm,
-                                                 inAprPool );
+    // as each successful provided credentials are tried twice - see below - the
+    // number of real attempts is half of the value of <mnSuccessfulCredentialAttempts>
+    if ( (mnSuccessfulCredentialAttempts / 2) >= 5 ||
+         mbInputOfCredentialsAborted )
+    {
+        mbInputOfCredentialsAborted = true;
+        return SERF_ERROR_AUTHN_FAILED;
+    }
+
+    // because serf keeps credentials only for a connection in case of digest authentication
+    // we give each successful provided credentials a second try in order to workaround the
+    // situation that the connection for which the credentials have been provided has been closed
+    // before the provided credentials could be applied for the request.
+    apr_status_t status = mrSerfSession.provideSerfCredentials( (mnSuccessfulCredentialAttempts % 2) == 1,
+                                                                outUsername,
+                                                                outPassword,
+                                                                inRequest,
+                                                                inCode,
+                                                                inAuthProtocol,
+                                                                inRealm,
+                                                                inAprPool );
+    if ( status != APR_SUCCESS )
+    {
+        mbInputOfCredentialsAborted = true;
+    }
+    else
+    {
+        ++mnSuccessfulCredentialAttempts;
+    }
+
+    return status;
 }
 
 apr_status_t SerfRequestProcessor::setupSerfRequest( serf_request_t * inSerfRequest,

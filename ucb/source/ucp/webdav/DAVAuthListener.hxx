@@ -40,7 +40,8 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             const ::rtl::OUString & inHostName,
             ::rtl::OUString & inoutUserName,
             ::rtl::OUString & outPassWord,
-            sal_Bool bCanUseSystemCredentials ) = 0;
+            sal_Bool bCanUseSystemCredentials,
+            sal_Bool bUsePreviousCredentials = sal_True ) = 0;
 };
 
 } // namespace http_dav_ucp

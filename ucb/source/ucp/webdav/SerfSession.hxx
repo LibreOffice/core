@@ -85,7 +85,8 @@ public:
                                       serf_bucket_t **outSerfOutputBucket,
                                       apr_pool_t* inAprPool );
 
-    apr_status_t provideSerfCredentials( char ** outUsername,
+    apr_status_t provideSerfCredentials( bool bGiveProvidedCredentialsASecondTry,
+                                         char ** outUsername,
                                          char ** outPassword,
                                          serf_request_t * inRequest,
                                          int inCode,

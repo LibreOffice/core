@@ -285,7 +285,8 @@ apr_status_t SerfSession::setupSerfConnection( apr_socket_t * inAprSocket,
     return APR_SUCCESS;
 }
 
-apr_status_t SerfSession::provideSerfCredentials( char ** outUsername,
+apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsASecondTry,
+                                                  char ** outUsername,
                                                   char ** outPassword,
                                                   serf_request_t * /*inRequest*/,
                                                   int /*inCode*/,
@@ -333,7 +334,8 @@ apr_status_t SerfSession::provideSerfCredentials( char ** outUsername,
                                              getHostName(),
                                              theUserName,
                                              thePassWord,
-                                             bCanUseSystemCreds );
+                                             bCanUseSystemCreds,
+                                             bGiveProvidedCredentialsASecondTry ? sal_False : sal_True );
 
     if ( theRetVal == 0 )
     {

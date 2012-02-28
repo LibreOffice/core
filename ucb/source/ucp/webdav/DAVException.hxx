@@ -106,6 +106,8 @@ class DAVException
                                 // mStatusCode = HTTP status code
             DAV_HTTP_LOOKUP,    // Name lookup failed,
                                 // mData = server[:port]
+            DAV_HTTP_NOAUTH,    // No User authentication data provided - e.g., user aborts corresponding dialog
+                                // mData = server[:port]
             DAV_HTTP_AUTH,      // User authentication failed on server,
                                 // mData = server[:port]
             DAV_HTTP_AUTHPROXY, // User authentication failed on proxy,

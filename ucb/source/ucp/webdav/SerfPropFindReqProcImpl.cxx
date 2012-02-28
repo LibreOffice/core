@@ -135,7 +135,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                     aBodyText +
                     rtl::OUString::createFromAscii( PROPFIND_TRAILER );
         body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
-                                                pSerfBucketAlloc );
+                                              pSerfBucketAlloc );
     }
 
     // create serf request
