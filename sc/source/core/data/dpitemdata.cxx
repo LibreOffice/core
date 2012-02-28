@@ -51,7 +51,7 @@ ScDPItemData::ScDPItemData(const rtl::OUString& rS, double fV, bool bHV, const s
 {
 }
 
-ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel) :
+ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab) :
     mnNumFormat( 0 ), mfValue(0.0), mbFlag( 0 )
 {
     rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nDocTab);
@@ -78,22 +78,8 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocT
         mnNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
         isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
     }
-    else if (bLabel || pDoc->HasData(nCol, nRow, nDocTab))
+    else if (pDoc->HasData(nCol, nRow, nDocTab))
     {
-        if (bLabel && aDocStr.isEmpty())
-        {
-            // Replace an empty label string with column name.
-            rtl::OUStringBuffer aBuf;
-            aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
-            aBuf.append(sal_Unicode(' '));
-
-            ScAddress aColAddr(nCol, 0, 0);
-            rtl::OUString aColStr;
-            aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
-            aBuf.append(aColStr);
-            aDocStr = aBuf.makeStringAndClear();
-        }
-
         SetString(aDocStr);
     }
 }

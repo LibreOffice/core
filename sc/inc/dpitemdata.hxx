@@ -72,7 +72,7 @@ public:
     ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF);
     ScDPItemData(const rtl::OUString& rS, double fV = 0.0, bool bHV = false,
                  const sal_uLong nNumFormat = 0, bool bData = true);
-    ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel);
+    ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab);
 
     void SetString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;

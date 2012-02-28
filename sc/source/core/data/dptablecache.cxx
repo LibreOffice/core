@@ -276,6 +276,25 @@ private:
     ScDocument* mpDoc;
 };
 
+rtl::OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    if (aDocStr.isEmpty())
+    {
+        // Replace an empty label string with column name.
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+        aBuf.append(sal_Unicode(' '));
+
+        ScAddress aColAddr(nCol, 0, 0);
+        rtl::OUString aColStr;
+        aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
+        aBuf.append(aColStr);
+        aDocStr = aBuf.makeStringAndClear();
+    }
+    return aDocStr;
+}
+
 }
 
 bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
@@ -316,9 +335,9 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        AddLabel(ScDPItemData(pDoc, nCol, nStartRow, nDocTab, true).GetString());
+        AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
-            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nCol, nRow, nDocTab, false));
+            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nCol, nRow, nDocTab));
     }
     return true;
 }
