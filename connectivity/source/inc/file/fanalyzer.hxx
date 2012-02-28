@@ -65,8 +65,8 @@ namespace connectivity
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
-            void describeParam(::rtl::Reference<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
-            ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
+            void describeParam(::rtl::Reference<OSQLColumns> rParameterColumns); // More detailed description of parameters
+            ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow); // Bind an evaluation row to the restriction
             /** bind the select columns if they contain a function which needs a row value
                 @param  _pRow   the result row
             */

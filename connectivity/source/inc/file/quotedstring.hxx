@@ -35,8 +35,8 @@
 namespace connectivity
 {
     //==================================================================
-    // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
-    // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
+    // Derived from String, overriding GetToken/GetTokenCount methods
+    // Especially true for the flat file format: Strings can be quoted
     //==================================================================
     class OOO_DLLPUBLIC_FILE QuotedTokenizedString
     {
