@@ -97,7 +97,12 @@ bool HelpParser::CreateSDF(
 
     if(file.get() == NULL)
     {
-        printf("%s\n", rtl::OUStringToOString(aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+        printf(
+            "%s: %s\n",
+            sHelpFile.getStr(),
+            (rtl::OUStringToOString(
+                aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).
+             getStr()));
         exit(-1);
     }
     file->Extract();
