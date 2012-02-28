@@ -5627,11 +5627,6 @@
 							<desc>Industrial</desc>
 						</info>
 					</enumeration>
-					<enumeration oor:value="crystal">
-						<info>
-							<desc>Crystal - the KDE default theme</desc>
-						</info>
-					</enumeration>
 					<enumeration oor:value="tango">
 						<info>
 							<desc>Tango - the Gnome default theme</desc>
