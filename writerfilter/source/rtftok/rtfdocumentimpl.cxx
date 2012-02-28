@@ -3496,7 +3496,7 @@ RTFSprms RTFFrame::getSprms()
         NS_ooxml::LN_CT_FramePr_lines
     };
 
-    for ( int i = 0, len = sizeof( pNames ) / sizeof( Id ); i < len; ++i )
+    for ( int i = 0, len = SAL_N_ELEMENTS(pNames); i < len; ++i )
     {
         Id aId = pNames[i];
         RTFValue::Pointer_t pValue;
