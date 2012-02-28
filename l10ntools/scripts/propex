@@ -41,7 +41,8 @@ getopts("ep:r:i:o:l:", \%options);
 
 unless ( $options{i} =~ m/en_US/ ) {exit 0;}
 
-my ($unsued1, $dir, $unused2) = File::Basename::fileparse($options{i});
+$options{i} =~ s|\\|/|g; # fix path on Windows, Perl expects / separator
+my ($unused1, $dir, $unused2) = File::Basename::fileparse($options{i});
 my $file = substr ( Cwd::abs_path($options{i}), length(Cwd::abs_path($dir . $options{r})) + 1 );
 $file =~ s|/|\\|g;
 
