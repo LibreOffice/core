@@ -1037,23 +1037,23 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 {
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::ConvertDataField - no data field" );
     OSL_ENSURE( !maDataInfoList.empty(), "XclImpPTField::ConvertDataField - no data field info" );
-    if( !maDataInfoList.empty() )
+    if (maDataInfoList.empty())
+        return;
+
+    rtl::OUString aFieldName = GetFieldName();
+    if (aFieldName.isEmpty())
+        return;
+
+    XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
+
+    ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName(aFieldName);
+    ConvertDataField( rSaveDim, *aIt );
+
+    // multiple data fields -> clone dimension
+    for( ++aIt; aIt != aEnd; ++aIt )
     {
-        const String& rFieldName = GetFieldName();
-        if( rFieldName.Len() > 0 )
-        {
-            XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
-
-            ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
-            ConvertDataField( rSaveDim, *aIt );
-
-            // multiple data fields -> clone dimension
-            for( ++aIt; aIt != aEnd; ++aIt )
-            {
-                ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( rSaveDim );
-                ConvertDataFieldInfo( rDupDim, *aIt );
-            }
-        }
+        ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( rSaveDim );
+        ConvertDataFieldInfo( rDupDim, *aIt );
     }
 }
 
@@ -1163,31 +1163,31 @@ void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDa
 void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
 {
     // visible name
-    if (const rtl::OUString* pVisName = rDataInfo.GetVisName())
-        if (!pVisName->isEmpty())
-            rSaveDim.SetLayoutName( *pVisName );
+    const rtl::OUString* pVisName = rDataInfo.GetVisName();
+    if (pVisName && !pVisName->isEmpty())
+        rSaveDim.SetLayoutName(*pVisName);
 
     // aggregation function
     rSaveDim.SetFunction( static_cast< sal_uInt16 >( rDataInfo.GetApiAggFunc() ) );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
-    if( nRefType != ::com::sun::star::sheet::DataPilotFieldReferenceType::NONE )
+    DataPilotFieldReference aFieldRef;
+    aFieldRef.ReferenceType = nRefType;
+    const XclImpPTField* pRefField = mrPTable.GetField(rDataInfo.mnRefField);
+    if (pRefField)
     {
-        DataPilotFieldReference aFieldRef;
-        aFieldRef.ReferenceType = nRefType;
-
-        if( const XclImpPTField* pRefField = mrPTable.GetField( rDataInfo.mnRefField ) )
+        aFieldRef.ReferenceField = pRefField->GetFieldName();
+        aFieldRef.ReferenceItemType = rDataInfo.GetApiRefItemType();
+        if (aFieldRef.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::NAMED)
         {
-            aFieldRef.ReferenceField = pRefField->GetFieldName();
-            aFieldRef.ReferenceItemType = rDataInfo.GetApiRefItemType();
-            if( aFieldRef.ReferenceItemType == ::com::sun::star::sheet::DataPilotFieldReferenceItemType::NAMED )
-                if (const rtl::OUString* pRefItemName = pRefField->GetItemName(rDataInfo.mnRefItem))
-                    aFieldRef.ReferenceItemName = *pRefItemName;
+            const rtl::OUString* pRefItemName = pRefField->GetItemName(rDataInfo.mnRefItem);
+            if (pRefItemName)
+                aFieldRef.ReferenceItemName = *pRefItemName;
         }
-
-        rSaveDim.SetReferenceValue( &aFieldRef );
     }
+
+    rSaveDim.SetReferenceValue(&aFieldRef);
 }
 
 void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
