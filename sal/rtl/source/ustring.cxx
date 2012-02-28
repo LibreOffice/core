@@ -471,6 +471,14 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
     else
         nLen = 0;
 
+    rtl_uString_newFromAscii_WithLength( ppThis, pCharStr, nLen );
+}
+
+void SAL_CALL rtl_uString_newFromAscii_WithLength( rtl_uString** ppThis,
+                                        const sal_Char* pCharStr,
+                                        sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
+{
     if ( !nLen )
     {
         IMPL_RTL_STRINGNAME( new )( ppThis );
@@ -489,7 +497,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
         {
             /* Check ASCII range */
             SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
-                        "rtl_uString_newFromAscii - Found char > 127" );
+                        "rtl_uString_newFromAscii_WithLength - Found char > 127" );
 
             *pBuffer = *pCharStr;
             pBuffer++;

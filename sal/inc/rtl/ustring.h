@@ -1243,6 +1243,16 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromAscii(
         rtl_uString ** newStr, const sal_Char * value ) SAL_THROW_EXTERN_C();
 
+/** Allocate a new string that contains a copy of a character array.
+
+    This is equivalent to rtl_uString_newFromAscii(), except that
+    length of the character array is explicitly passed to the function.
+
+    @since 3.6
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromAscii_WithLength(
+        rtl_uString ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+
 /** Allocate a new string from an array of Unicode code points.
 
     @param newString
