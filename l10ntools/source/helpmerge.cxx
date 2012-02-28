@@ -244,7 +244,6 @@ bool HelpParser::Merge(
     //TODO: explicit BOM handling?
 
     XMLFile* xmlfile = aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) );
-    xmlfile->Extract();
 
     if( xmlfile == NULL)
     {
@@ -252,6 +251,7 @@ bool HelpParser::Merge(
         exit(-1);
     }
 
+    xmlfile->Extract();
 
     rtl::OString sCur;
     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
