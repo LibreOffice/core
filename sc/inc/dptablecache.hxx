@@ -141,7 +141,7 @@ public:
     ~ScDPCache();
 
 private:
-    void AddLabel( ScDPItemData* pData);
+    void AddLabel(const rtl::OUString& rLabel);
     bool AddData(long nDim, ScDPItemData* pData);
 };
 

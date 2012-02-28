@@ -316,7 +316,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        AddLabel(new ScDPItemData(pDoc, nCol, nStartRow, nDocTab, true));
+        AddLabel(ScDPItemData(pDoc, nCol, nStartRow, nDocTab, true).GetString());
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
             AddData(nCol - nStartCol, new ScDPItemData(pDoc, nCol, nRow, nDocTab, false));
     }
@@ -363,9 +363,9 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
-            String aColTitle = xMeta->getColumnLabel(nCol+1);
+            rtl::OUString aColTitle = xMeta->getColumnLabel(nCol+1);
             aColTypes[nCol]  = xMeta->getColumnType(nCol+1);
-            AddLabel( new ScDPItemData( aColTitle) );
+            AddLabel(aColTitle);
         }
 
         // Now get the data rows.
@@ -653,9 +653,8 @@ public:
 
 }
 
-void ScDPCache::AddLabel(ScDPItemData *pData)
+void ScDPCache::AddLabel(const rtl::OUString& rLabel)
 {
-    std::auto_ptr<ScDPItemData> p(pData);
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
 
     if ( maLabelNames.empty() )
@@ -665,7 +664,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
     LabelSet aExistingNames;
     std::for_each(maLabelNames.begin(), maLabelNames.end(), InsertLabel(aExistingNames));
     sal_Int32 nSuffix = 1;
-    rtl::OUString aNewName = p->GetString();
+    rtl::OUString aNewName = rLabel;
     while (true)
     {
         if (!aExistingNames.count(aNewName))
@@ -676,7 +675,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
         }
 
         // Name already exists.
-        rtl::OUStringBuffer aBuf(p->GetString());
+        rtl::OUStringBuffer aBuf(rLabel);
         aBuf.append(++nSuffix);
         aNewName = aBuf.makeStringAndClear();
     }
