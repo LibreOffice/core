@@ -162,7 +162,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     rLangItems.clear();
 
     //1--add current language
-    if( rCurLang != OUString() &&
+    if( !rCurLang.isEmpty() &&
         LANGUAGE_DONTKNOW != rLanguageTable.GetType( rCurLang ))
         rLangItems.insert( rCurLang );
 
@@ -195,7 +195,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 
     //5--keyboard language
-    if( rKeyboardLang != OUString())
+    if( !rKeyboardLang.isEmpty() )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rLanguageTable.GetType( rKeyboardLang )))
             rLangItems.insert( rKeyboardLang );

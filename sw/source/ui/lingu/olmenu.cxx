@@ -225,7 +225,7 @@ void SwSpellPopup::fillLangPopupMenu(
     OUString    aKeyboardLang( aSeq[2] );
     OUString    aGuessedTextLang( aSeq[3] );
 
-    if (aCurLang != OUString() &&
+    if (!aCurLang.isEmpty() &&
         LANGUAGE_DONTKNOW != aLanguageTable.GetType( aCurLang ))
         aLangItems.insert( aCurLang );
 

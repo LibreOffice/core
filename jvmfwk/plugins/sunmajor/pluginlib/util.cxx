@@ -1188,7 +1188,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
             {
                 OUString usDir2(usDir1 + arCollectDirs[j]);
                 // prevent that we scan the whole /usr, /usr/lib, etc directories
-                if (arCollectDirs[j] != OUString())
+                if (!arCollectDirs[j].isEmpty())
                 {
                     //usr/java/xxx
                     //Examin every subdirectory
