@@ -42,7 +42,7 @@ namespace dbaui
     {
     private:
         OFieldDescription*      m_pActFieldDescr;
-        long                    m_nPos;
+        sal_Int32               m_nPos;
         bool                    m_bReadOnly;
         bool                    m_bOwnsDescriptions;
 
@@ -65,7 +65,7 @@ namespace dbaui
             @return
                 the current position in the table
         */
-        inline long GetPos() const { return m_nPos; }
+        inline sal_Int32 GetPos() const { return m_nPos; }
         inline void SetPos(sal_Int32 _nPos) { m_nPos = _nPos; }
 
         /** set the row readonly

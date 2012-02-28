@@ -771,10 +771,10 @@ sal_uLong OS2METReader::ReadLittleEndian3BytesLong()
 
 long OS2METReader::ReadCoord(sal_Bool b32)
 {
-    long l;
+    sal_Int32 l;
 
     if (b32) *pOS2MET >> l;
-    else  { short s;*pOS2MET >> s; l=(long)s; }
+    else  { short s;*pOS2MET >> s; l=(sal_Int32)s; }
     return l;
 }
 
@@ -1116,7 +1116,7 @@ void OS2METReader::ReadFullArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
 void OS2METReader::ReadPartialArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aP0, aCenter,aPStart,aPEnd;
-    long nP,nQ,nR,nS,nStart, nSweep;
+    sal_Int32 nP,nQ,nR,nS,nStart, nSweep;
     Rectangle aRect;
     sal_uInt32 nMul; sal_uInt16 nMulS;
     double fStart, fEnd;
@@ -1145,10 +1145,10 @@ void OS2METReader::ReadPartialArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
     *pOS2MET >> nStart >> nSweep;
     fStart=((double)nStart)/65536.0/180.0*3.14159265359;
     fEnd=fStart+((double)nSweep)/65536.0/180.0*3.14159265359;
-    aPStart=Point(aCenter.X()+(long)( cos(fStart)*nP),
-                  aCenter.Y()+(long)(-sin(fStart)*nQ));
-    aPEnd=  Point(aCenter.X()+(long)( cos(fEnd)*nP),
-                  aCenter.Y()+(long)(-sin(fEnd)*nQ));
+    aPStart=Point(aCenter.X()+(sal_Int32)( cos(fStart)*nP),
+                  aCenter.Y()+(sal_Int32)(-sin(fStart)*nQ));
+    aPEnd=  Point(aCenter.X()+(sal_Int32)( cos(fEnd)*nP),
+                  aCenter.Y()+(sal_Int32)(-sin(fEnd)*nQ));
 
     aRect=Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
                     aCenter.X()+nP,aCenter.Y()+nQ);

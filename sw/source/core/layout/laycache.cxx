@@ -153,7 +153,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
             aIo.OpenFlagRec();
             aIo.CloseFlagRec();
-            long nX, nY, nW, nH;
+            sal_Int32 nX, nY, nW, nH;
             sal_uInt16 nPgNum;
             aIo.GetStream() >> nPgNum >> nIndex
                     >> nX >> nY >> nW >> nH;
@@ -329,8 +329,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 sal_Int32 nX = rRct.Left() - pPage->Frm().Left();
                                 sal_Int32 nY = rRct.Top() - pPage->Frm().Top();
                                 aIo.GetStream() << nPageNum << nOrdNum
-                                                << nX << nY << rRct.Width()
-                                                << rRct.Height();
+                                                << nX << nY
+                                                << static_cast<sal_Int32>(rRct.Width())
+                                                << static_cast<sal_Int32>(rRct.Height());
                                 /* Close Fly Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
                             }

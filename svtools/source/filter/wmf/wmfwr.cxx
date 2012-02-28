@@ -616,8 +616,8 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
 
                     SvMemoryStream aMemoryStream( nStrmLen );
                     Point aPt( pVirDev->LogicToLogic( rPoint, aSrcMapMode, aTargetMapMode ) );
-                    aMemoryStream << aPt.X()
-                                  << aPt.Y()
+                    aMemoryStream << static_cast<sal_Int32>(aPt.X())
+                                  << static_cast<sal_Int32>(aPt.Y())
                                   << nStringLen;
                     for ( i = 0; i < nStringLen; i++ )
                         aMemoryStream << rUniStr.GetChar( (sal_uInt16)i );
@@ -901,9 +901,9 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     // erzeugt, schreiben wir zuerst die Bitmap an die richtige Position
     // Und ueberschreiben hinterher den FILEHEADER mit den Parametern.
     nPosAnf=pWMF->Tell(); // Position merken, wo Parameter hin sollen
-    *pWMF << (long)0 << (long)0; // 8 bytes auffuellen (diese 8 bytes +
-                                 // 14 bytes ueberfluessigen FILEHEADER
-                                 // = 22 bytes Parameter)
+    *pWMF << (sal_Int32)0 << (sal_Int32)0; // 8 bytes auffuellen (diese 8 bytes +
+                                           // 14 bytes ueberfluessigen FILEHEADER
+                                           // = 22 bytes Parameter)
     *pWMF << rBitmap; // Bitmap schreiben
 
     // Parameter schreiben:

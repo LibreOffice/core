@@ -686,8 +686,8 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
 
         if( 0x80 & nAutoFirst )
         {
-            rStrm << nLeftMargin;
-            rStrm << nRightMargin;
+            rStrm << static_cast<sal_Int32>(nLeftMargin);
+            rStrm << static_cast<sal_Int32>(nRightMargin);
         }
     }
 

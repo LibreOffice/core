@@ -1223,7 +1223,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
 
     (*m_pFileStream) << (sal_uInt8) aDate.GetMonth();
     (*m_pFileStream) << (sal_uInt8) aDate.GetDay();
-    (*m_pFileStream) << 0L;                                             // number of data records
+    (*m_pFileStream) << (sal_uInt32)0;                                             // number of data records
     (*m_pFileStream) << (sal_uInt16)((m_pColumns->getCount()+1) * 32 + 1);  // header information,
                                                                         // pColumns contains always an additional column
     (*m_pFileStream) << (sal_uInt16) 0;                                     // record length will be determined later
@@ -1425,7 +1425,7 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->SetStreamSize(512);
 
     m_pMemoStream->Seek(0L);
-    (*m_pMemoStream) << long(1);                  // pointer to the first free block
+    (*m_pMemoStream) << sal_uInt32(1);                  // pointer to the first free block
 
     m_pMemoStream->Flush();
     delete m_pMemoStream;

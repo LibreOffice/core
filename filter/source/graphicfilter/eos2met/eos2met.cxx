@@ -226,7 +226,7 @@ private:
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                double fStartAngle, double fSweepAngle);
     void METChrStr(Point aPt, String aStr);
-    void METSetArcParams(long nP, long nQ, long nR, long nS);
+    void METSetArcParams(sal_Int32 nP, sal_Int32 nQ, sal_Int32 nR, sal_Int32 nS);
     void METSetColor(Color aColor);
     void METSetBackgroundColor(Color aColor);
     void METSetMix(RasterOp eROP);
@@ -352,8 +352,8 @@ void METWriter::WritePoint(Point aPt)
 {
     Point aNewPt = pCompDev->LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
 
-    *pMET << (long) ( aNewPt.X() - aPictureRect.Left() )
-          << (long) ( aPictureRect.Bottom() - aNewPt.Y() );
+    *pMET << (sal_Int32) ( aNewPt.X() - aPictureRect.Left() )
+          << (sal_Int32) ( aPictureRect.Bottom() - aNewPt.Y() );
 }
 
 
@@ -1359,7 +1359,7 @@ void METWriter::METFullArc(Point aCenter, double fMultiplier)
     WillWriteOrder(14);
     *pMET << (sal_uInt8)0xc7 << (sal_uInt8)12;
     WritePoint(aCenter);
-    *pMET << (long)(fMultiplier*65536.0+0.5);
+    *pMET << (sal_Int32)(fMultiplier*65536.0+0.5);
 }
 
 
@@ -1375,9 +1375,9 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
     WillWriteOrder(22);
     *pMET << (sal_uInt8)0xa3 << (sal_uInt8)20;
     WritePoint(aCenter);
-    *pMET << (long)(fMultiplier*65536.0+0.5);
-    *pMET << (long)(fStartAngle*65536.0+0.5);
-    *pMET << (long)(fSweepAngle*65536.0+0.5);
+    *pMET << (sal_Int32)(fMultiplier*65536.0+0.5);
+    *pMET << (sal_Int32)(fStartAngle*65536.0+0.5);
+    *pMET << (sal_Int32)(fSweepAngle*65536.0+0.5);
 }
 
 
@@ -1395,7 +1395,7 @@ void METWriter::METChrStr( Point aPt, String aUniStr )
 }
 
 
-void METWriter::METSetArcParams(long nP, long nQ, long nR, long nS)
+void METWriter::METSetArcParams(sal_Int32 nP, sal_Int32 nQ, sal_Int32 nR, sal_Int32 nS)
 {
     WillWriteOrder(18);
     *pMET << (sal_uInt8)0x22 << (sal_uInt8)16 << nP << nQ << nR << nS;
@@ -1456,13 +1456,13 @@ void METWriter::METSetChrCellSize(Size aSize)
     aMETChrCellSize=aSize;
     WillWriteOrder(10);
     if (aSize.Width()==0) aSize.Width()=aSize.Height();
-    *pMET << (sal_uInt8)0x33 << (sal_uInt8)8 << (long)aSize.Width() << (long)aSize.Height();
+    *pMET << (sal_uInt8)0x33 << (sal_uInt8)8 << (sal_Int32)aSize.Width() << (sal_Int32)aSize.Height();
 }
 
 
 void METWriter::METSetChrAngle(short nAngle)
 {
-    long nax,nay;
+    sal_Int32 nax, nay;
 
     if (nMETChrAngle==nAngle) return;
     nMETChrAngle=nAngle;

@@ -360,7 +360,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         if ( (nEnd-_nStart) > 0xFF00 )
             rStrm.Seek( _nStart );
     }
-    rStrm << nWidth;
+    rStrm << static_cast<sal_Int32>(nWidth);
     rStrm << nStart;
     rStrm << nJustify;
     rStrm << rtl::OUStringToOString(rtl::OUString(cSymbol), aFont.GetCharSet()).toChar();

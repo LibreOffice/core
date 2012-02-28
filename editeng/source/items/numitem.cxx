@@ -259,9 +259,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream << ( sal_uInt16 ) mePositionAndSpaceMode;
     rStream << ( sal_uInt16 ) meLabelFollowedBy;
-    rStream << ( long ) mnListtabPos;
-    rStream << ( long ) mnFirstLineIndent;
-    rStream << ( long ) mnIndentAt;
+    rStream << ( sal_Int32 ) mnListtabPos;
+    rStream << ( sal_Int32 ) mnFirstLineIndent;
+    rStream << ( sal_Int32 ) mnIndentAt;
 
     return rStream;
 }
