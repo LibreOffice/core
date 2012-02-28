@@ -47,12 +47,29 @@
 
 namespace common {
 
-inline rtl::OString pathnameToken(char const * pathname, char const * root) {
+inline rtl::OUString pathnameToAbsoluteUrl(rtl::OUString const & pathname) {
+    rtl::OUString url;
+    if (osl::FileBase::getFileURLFromSystemPath(pathname, url)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input pathname to URL\n";
+        std::exit(EXIT_FAILURE);
+    }
     rtl::OUString cwd;
     if (osl_getProcessWorkingDir(&cwd.pData) != osl_Process_E_None) {
         std::cerr << "Error: Cannot determine cwd\n";
         std::exit(EXIT_FAILURE);
     }
+    if (osl::FileBase::getAbsoluteFileURL(cwd, url, url)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input URL to absolute URL\n";
+        std::exit(EXIT_FAILURE);
+    }
+    return url;
+}
+
+inline rtl::OString pathnameToken(char const * pathname, char const * root) {
     rtl::OUString full;
     if (!rtl_convertStringToUString(
             &full.pData, pathname, rtl_str_getLength(pathname),
@@ -64,18 +81,7 @@ inline rtl::OString pathnameToken(char const * pathname, char const * root) {
         std::cerr << "Error: Cannot convert input pathname to UTF-16\n";
         std::exit(EXIT_FAILURE);
     }
-    if (osl::FileBase::getFileURLFromSystemPath(full, full)
-        != osl::FileBase::E_None)
-    {
-        std::cerr << "Error: Cannot convert input pathname to URL\n";
-        std::exit(EXIT_FAILURE);
-    }
-    if (osl::FileBase::getAbsoluteFileURL(cwd, full, full)
-        != osl::FileBase::E_None)
-    {
-        std::cerr << "Error: Cannot convert input URL to absolute URL\n";
-        std::exit(EXIT_FAILURE);
-    }
+    full = pathnameToAbsoluteUrl(full);
     if (root == 0) {
         std::cerr << "Error: No project root argument\n";
         std::exit(EXIT_FAILURE);

@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <sal/alloca.h>
 
+#include "common.hxx"
 #include "xmlparse.hxx"
 #include <fstream>
 #include <iostream>
@@ -1123,12 +1124,7 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
         RTL_CONSTASCII_USTRINGPARAM("ERROR: Unable to open file "));
     aErrorInformation.sMessage += rFileName;
 
-    rtl::OUString aFileURL;
-    if (osl::File::getFileURLFromSystemPath(rFileName, aFileURL)
-        != osl::File::E_None)
-    {
-        return 0;
-    }
+    rtl::OUString aFileURL(common::pathnameToAbsoluteUrl(rFileName));
 
     oslFileHandle h;
     if (osl_openFile(aFileURL.pData, &h, osl_File_OpenFlag_Read)
