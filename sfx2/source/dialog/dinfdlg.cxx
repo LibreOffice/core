@@ -828,46 +828,71 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     bHandleDelete       ( sal_False )
 
 {
-    aNameED.SetAccessibleName(String(SfxResId(EDIT_FILE_NAME)));
+    aNameED.SetAccessibleName( String( SfxResId( EDIT_FILE_NAME ) ) );
     FreeResource();
-
     ImplUpdateSignatures();
     ImplCheckPasswordState();
-    aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
-    aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
     aChangePassBtn.SetClickHdl( LINK( this, SfxDocumentPage, ChangePassHdl ) );
+    aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
 
-    // if the button text is too wide, then broaden it
-    const long nOffset = 12;
-    String sText = aSignatureBtn.GetText();
-    long nTxtW = aSignatureBtn.GetTextWidth( sText );
-    if ( sText.Search( '~' ) == STRING_NOTFOUND )
-        nTxtW += nOffset;
-    long nBtnW = aSignatureBtn.GetSizePixel().Width();
-    if ( nTxtW >= nBtnW )
+    // Get the max size needed for the 'Change Password', 'Signature' and 'Delete' buttons
+    // and set their size according to this max size to get perfect aligment
+    long nTxtW = ( aChangePassBtn.GetTextWidth( aChangePassBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH );
+    nTxtW = Max( ( aSignatureBtn.GetTextWidth( aSignatureBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH ), nTxtW);
+    nTxtW = Max( ( aDeleteBtn.GetTextWidth( aDeleteBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH ), nTxtW);
+
+    // New size and position for the 'Change Password' button
+    Size aNewSize = aChangePassBtn.GetSizePixel();
+    long nDelta = nTxtW - aNewSize.Width();
+    aNewSize.Width() = nTxtW;
+    aChangePassBtn.SetSizePixel( aNewSize );
+    Point aNewPos = aChangePassBtn.GetPosPixel();
+    aNewPos.X() -= nDelta;
+    aChangePassBtn.SetPosPixel( aNewPos );
+
+    // Calculate the space between the bmp image and the 'Change password' button
+    nDelta = aNewPos.X() - IMPL_EXTRA_BUTTON_WIDTH / 2 \
+             - ( aBmp1.GetPosPixel().X() + aBmp1.GetSizePixel().Width() );
+
+    // Reduces the filename field size if space size is not large enough
+    aNewSize = aNameED.GetSizePixel();
+    if ( nDelta - aNewSize.Width() < IMPL_EXTRA_BUTTON_WIDTH )
     {
-        long nDelta = Max( nTxtW - nBtnW, nOffset/3 );
-        Size aNewSize = aSignatureBtn.GetSizePixel();
-        aNewSize.Width() += nDelta;
-        aSignatureBtn.SetSizePixel( aNewSize );
-        aDeleteBtn.SetSizePixel( aNewSize );
-        // and give them a new position
-        Point aNewPos = aSignatureBtn.GetPosPixel();
-        aNewPos.X() -= nDelta;
-        aSignatureBtn.SetPosPixel( aNewPos );
-        aNewPos = aDeleteBtn.GetPosPixel();
-        aNewPos.X() -= nDelta;
-        aDeleteBtn.SetPosPixel( aNewPos );
-
-        aNewSize = aSignedValFt.GetSizePixel();
-        aNewSize.Width() -= nDelta;
-        aSignedValFt.SetSizePixel( aNewSize );
-        aNewSize = aUseUserDataCB.GetSizePixel();
-        aNewSize.Width() -= nDelta;
-        aUseUserDataCB.SetSizePixel( aNewSize );
+        aNewSize.Width() -= IMPL_EXTRA_BUTTON_WIDTH - ( nDelta - aNewSize.Width() );
+        aNameED.SetSizePixel( aNewSize );
     }
-    // See i96288
-    // Check if the document signature command is enabled
+
+    // Centers the filename field in the space
+    aNewPos = aNameED.GetPosPixel();
+    nDelta -= aNewSize.Width();
+    aNewPos.X() = aBmp1.GetPosPixel().X() + aBmp1.GetSizePixel().Width() + nDelta / 2;
+    aNameED.SetPosPixel( aNewPos );
+
+    // New size and position for the 'Signature' button
+    aNewSize = aSignatureBtn.GetSizePixel();
+    nDelta = nTxtW - aNewSize.Width();
+    aNewSize.Width() = nTxtW;
+    aSignatureBtn.SetSizePixel( aNewSize );
+    aNewPos = aSignatureBtn.GetPosPixel();
+    aNewPos.X() -= nDelta;
+    aSignatureBtn.SetPosPixel( aNewPos );
+
+    // New size for the signature field
+    aNewSize = aSignedValFt.GetSizePixel();
+    aNewSize.Width() -= nDelta;
+    aSignedValFt.SetSizePixel( aNewSize );
+
+    // New size and position for the 'Delete' button
+    aNewSize = aDeleteBtn.GetSizePixel();
+    nDelta = nTxtW - aNewSize.Width();
+    aNewSize.Width() = nTxtW;
+    aDeleteBtn.SetSizePixel( aNewSize );
+    aNewPos = aDeleteBtn.GetPosPixel();
+    aNewPos.X() -= nDelta;
+    aDeleteBtn.SetPosPixel( aNewPos );
+
+    // [i96288] Check if the document signature command is enabled
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
     if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
