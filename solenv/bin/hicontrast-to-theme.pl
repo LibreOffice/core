@@ -108,6 +108,9 @@ sub copy_normalized {
             @from_stat = stat($file);
             @to_stat = stat($copy);
             if ( $from_stat[9] > $to_stat[9] ) {
+                if ( $^O eq 'os2' ) {
+                    $rc = unlink($copy);
+                }
                 copy( $file, $copy ) || die $!;
                 utime( $from_stat[9], $from_stat[9], $copy );
             }

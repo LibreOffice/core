@@ -66,11 +66,7 @@ $(COMMONBIN)$/images_brand.zip:
 
 # generate the HiContrast icon set
 $(MISC)$/hicontrast.flag .PHONY :
-.IF "$(GUI)"=="OS2"
-    touch $(MISC)$/hicontrast.flag
-.ELSE
     $(PERL) $(SOLARENV)$/bin$/hicontrast-to-theme.pl $(SOLARSRC)$/default_images $(MISC)$/hicontrast && $(TOUCH) $@
-.ENDIF
 
 # unpack the classic icon set
 $(MISC)$/classic.flag : $(CLASSIC_TARBALL)

@@ -198,7 +198,9 @@ MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
     MRESULT     nRet = 0;
     int         bDef = TRUE;
 
+#if OSL_DEBUG_LEVEL>0
     debug_printf( "SalSysObjChildWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
+#endif
 
     switch( nMsg )
     {
@@ -233,7 +235,9 @@ MRESULT EXPENTRY SalSysObjClipWndProc( HWND hWnd, ULONG nMsg,
     MRESULT     nRet = 0;
     int         bDef = TRUE;
 
+#if OSL_DEBUG_LEVEL>0
     debug_printf( "SalSysObjClipWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
+#endif
 
     switch( nMsg )
     {
@@ -360,8 +364,10 @@ SalObject* ImplSalCreateObject( Os2SalInstance* pInst, Os2SalFrame* pParent )
 
         if ( hWnd )
         {
+#if OSL_DEBUG_LEVEL>0
         debug_printf("ImplSalCreateObject hWndChild %x\n", hWndChild);
         debug_printf("ImplSalCreateObject hWnd %x\n", hWnd);
+#endif
             pObject->mhWnd = hWnd;
             pObject->mhWndChild = hWndChild;
             pObject->maSysData.hWnd = hWndChild;
@@ -474,7 +480,9 @@ void Os2SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
                                      nX, mnHeight-(nY+nHeight), nWidth, nHeight,
                                      mhWnd, mhLastClipWnd,
                                      0, NULL, NULL );
+#if OSL_DEBUG_LEVEL>0
         debug_printf("Os2SalObject::UnionClipRegion hClipWnd %x\n", hClipWnd);
+#endif
     mhLastClipWnd = hClipWnd;
 }
 

@@ -144,6 +144,7 @@ LS=ls
 ECHON=echo -n
 ECHONL=echo
 .ELIF "$(GUI)"=="OS2"
+GPERF*=gperf
 SED*=sed
 SORT*=sort
 PERL*=perl
