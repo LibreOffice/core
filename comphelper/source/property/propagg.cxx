@@ -146,12 +146,12 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     m_aProperties.realloc( nMergedProps );
     pMergedProps = m_aProperties.getArray();    // reset, needed again below
 
-    // sortieren der Properties nach Namen
+    // sort the properties by name
     ::std::sort( pMergedProps, pMergedProps+nMergedProps, PropertyCompareByName());
 
     pMergedProps = m_aProperties.getArray();
 
-    // Positionen in der Map abgleichen
+    // sync the map positions
     for ( nMPLoop = 0; nMPLoop < nMergedProps; ++nMPLoop, ++pMergedProps )
         m_aPropertyAccessors[ pMergedProps->Handle ].nPos = nMPLoop;
 }
@@ -292,7 +292,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
 
     for( sal_Int32 i = 0; i < nReqLen; ++i )
     {
-        // Logarithmus ermitteln
+        // determine the logarithm
         sal_uInt32 n = (sal_uInt32)(pEnd - pCur);
         sal_Int32 nLog = 0;
         while( n )
@@ -301,8 +301,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
             n = n >> 1;
         }
 
-        // Anzahl der noch zu suchenden Properties * dem Log2 der verbleibenden
-        // zu dursuchenden Properties.
+        // Number of the searched properties * the Log2 of the reamining properties
         if( (nReqLen - i) * nLog >= pEnd - pCur )
         {
             // linear search is better
@@ -485,7 +484,7 @@ void OPropertySetAggregationHelper::disposing()
 
     if ( m_xAggregateSet.is() && m_bListening )
     {
-        // als einziger Listener anmelden
+        // register as a single listener
         m_xAggregateMultiSet->removePropertiesChangeListener(this);
         m_xAggregateSet->removeVetoableChangeListener(::rtl::OUString(), this);
         m_bListening = sal_False;
@@ -595,7 +594,7 @@ void OPropertySetAggregationHelper::startListening()
 
     if (!m_bListening && m_xAggregateSet.is())
     {
-        // als einziger Listener anmelden
+        // register as a single listener
          ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertyNames;
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
         m_xAggregateSet->addVetoableChangeListener(::rtl::OUString(), this);

@@ -51,9 +51,9 @@ IndexAccessIterator::~IndexAccessIterator() {}
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
 {
     sal_Bool bCheckingStartingPoint = !m_xCurrentObject.is();
-        // ist die aktuelle Node der Anfangspunkt ?
+        // Is the current node the starting point?
     sal_Bool bAlreadyCheckedCurrent = m_xCurrentObject.is();
-        // habe ich die aktuelle Node schon mal mittels ShouldHandleElement testen ?
+        // Have I already tested the current node through ShouldHandleElement?
     if (!m_xCurrentObject.is())
         m_xCurrentObject = m_xStartingPoint;
 
@@ -62,7 +62,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
     sal_Bool bFoundSomething = sal_False;
     while (!bFoundSomething && bHasMoreToSearch)
     {
-        // pre-order-traversierung
+        // Priming loop
         if (!bAlreadyCheckedCurrent && ShouldHandleElement(xSearchLoop))
         {
             m_xCurrentObject = xSearchLoop;
@@ -70,10 +70,10 @@ IndexAccessIterator::~IndexAccessIterator() {}
         }
         else
         {
-            // zuerst absteigen, wenn moeglich
+            // First, check to see if there's a match below
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainerAccess(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
-            {   // zum ersten Child
+            {
                 ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
                 xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue();
                 bCheckingStartingPoint = sal_False;
@@ -81,10 +81,9 @@ IndexAccessIterator::~IndexAccessIterator() {}
                 m_arrChildIndizies.push_back((sal_Int32)0);
             }
             else
-            {
-                // dann nach oben und nach rechts, wenn moeglich
+            {   // otherwise, look above and to the right, if possible
                 while (m_arrChildIndizies.size() > 0)
-                {   // (mein Stack ist nich leer, also kann ich noch nach oben gehen)
+                {   // If the list isn't empty and there's nothing above
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
 
@@ -92,36 +91,35 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
-                    // den Index, den SearchLoop in diesem Parent hatte, von meinem 'Stack'
+                    // Update the search loop index
                     sal_Int32 nOldSearchChildIndex = m_arrChildIndizies[m_arrChildIndizies.size() - 1];
                     m_arrChildIndizies.pop_back();
 
                     if (nOldSearchChildIndex < xContainerAccess->getCount() - 1)
-                    {   // auf dieser Ebene geht es noch nach rechts
+                    {   // Move to the right in this row
                         ++nOldSearchChildIndex;
-                        // also das naechste Child
+                        // and check the nex child
                         ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
                         xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aElement.getValue();
                         bCheckingStartingPoint = sal_False;
-                        // und dessen Position auf den 'Stack'
+                        // and update is position in the list.
                         m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);
 
                         break;
                     }
-                    // hierher komme ich, wenn es auf der aktuellen Ebene nicht nach rechts geht, dann mache ich eine darueber weiter
+                    // Finally, if there's nothing more to do in this row (to the right), we'll move on to the next row.
                     xSearchLoop = xParent;
                     bCheckingStartingPoint = sal_False;
                 }
 
                 if (m_arrChildIndizies.empty() && !bCheckingStartingPoint)
-                {   // das ist genau dann der Fall, wenn ich keinen rechten Nachbarn fuer irgendeinen der direkten Vorfahren des
-                    // urspruenglichen xSearchLoop gefunden habe
+                {   //This is the case if there is nothing to the right in the original search loop
                     bHasMoreToSearch = sal_False;
                 }
             }
 
             if (bHasMoreToSearch)
-            {   // ich habe in xSearchLoop jetzt ein Interface eines 'Knotens' meines 'Baumes', den ich noch abtesten kann
+            {   // If there is still a node in the tree which can be tested
                 if (ShouldHandleElement(xSearchLoop))
                 {
                     m_xCurrentObject = xSearchLoop;
@@ -129,7 +127,6 @@ IndexAccessIterator::~IndexAccessIterator() {}
                 }
                 else
                     if (bCheckingStartingPoint)
-                        // ich bin noch am Anfang, konnte nicht absteigen, und habe an diesem Anfang nix gefunden -> nix mehr zu tun
                         bHasMoreToSearch = sal_False;
                 bAlreadyCheckedCurrent = sal_True;
             }
