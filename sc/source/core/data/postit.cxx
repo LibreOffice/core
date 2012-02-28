@@ -1085,10 +1085,25 @@ void ScNotes::CopyFromClip(const ScNotes& rNotes, ScDocument* pDoc, SCCOL nCol1,
     {
         SCCOL nCol = itr->first.first;
         SCROW nRow = itr->first.second;
-        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
+        if (nCol+nDx >= nCol1 && nCol+nDx <= nCol2 && nRow+nDy >= nRow1 && nRow+nDy <= nRow2)
         {
             erase(nCol+nDx, nRow+nDy);
             insert(nCol+nDx, nRow+nDy, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol, nRow, nTab), bCloneCaption ));
+        }
+    }
+}
+
+void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    ScNotes::iterator itr = maNoteMap.begin();
+    while(itr != maNoteMap.end())
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ++itr;
+        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
+        {
+            erase(nCol, nRow);
         }
     }
 }

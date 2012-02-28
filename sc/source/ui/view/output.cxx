@@ -2112,7 +2112,6 @@ void ScOutputData::DrawNoteMarks()
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 

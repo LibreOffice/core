@@ -598,7 +598,11 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         for ( i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
-        bool bAddNotes = (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES);
+        //remove old notes
+        if (nInsFlag & IDF_CONTENTS)
+            maNotes.erase(nCol1, nRow1, nCol2, nRow2);
+
+        bool bAddNotes = nInsFlag & (IDF_NOTE | IDF_ADDNOTES);
         if (bAddNotes)
         {
             bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;

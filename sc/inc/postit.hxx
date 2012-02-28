@@ -311,6 +311,8 @@ public:
     ScNotes* clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab);
     void CopyFromClip(const ScNotes& maNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption);
 
+    void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+
 
 };
 
