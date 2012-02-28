@@ -630,7 +630,7 @@ rtl::OUString ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 
     if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
-        return maLabelNames[nColumn+1].maString;
+        return maLabelNames[nColumn+1];
     }
     else
         return rtl::OUString();
@@ -655,28 +655,28 @@ public:
 
 void ScDPCache::AddLabel(ScDPItemData *pData)
 {
+    std::auto_ptr<ScDPItemData> p(pData);
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
 
     if ( maLabelNames.empty() )
-        maLabelNames.push_back( new ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_DATA)) );
+        maLabelNames.push_back(ScGlobal::GetRscString(STR_PIVOT_DATA));
 
     //reset name if needed
     LabelSet aExistingNames;
     std::for_each(maLabelNames.begin(), maLabelNames.end(), InsertLabel(aExistingNames));
     sal_Int32 nSuffix = 1;
-    rtl::OUString aNewName = pData->GetString();
+    rtl::OUString aNewName = p->GetString();
     while (true)
     {
         if (!aExistingNames.count(aNewName))
         {
             // unique name found!
-            pData->maString = aNewName;
-            maLabelNames.push_back(pData);
+            maLabelNames.push_back(aNewName);
             return;
         }
 
         // Name already exists.
-        rtl::OUStringBuffer aBuf(pData->GetString());
+        rtl::OUStringBuffer aBuf(p->GetString());
         aBuf.append(++nSuffix);
         aNewName = aBuf.makeStringAndClear();
     }
@@ -777,7 +777,7 @@ SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
 {
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
-        if (maLabelNames[i].GetString().equals(sName))
+        if (maLabelNames[i].equals(sName))
             return (SCCOL)(i-1);
     }
     return -1;

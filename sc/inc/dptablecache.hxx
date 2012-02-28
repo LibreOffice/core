@@ -57,6 +57,7 @@ class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
     typedef std::set<ScDPObject*> ObjectSetType;
+    typedef std::vector<rtl::OUString> LabelsType;
 private:
     typedef ::boost::ptr_vector<DataListType>           DataGridType;
     typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
@@ -94,7 +95,7 @@ private:
      */
     mutable RowGridType maIndexOrder;
 
-    DataListType maLabelNames;    // Stores dimension names.
+    LabelsType maLabelNames;    // Stores dimension names.
     std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
 
     boost::scoped_ptr<ScDPItemDataPool> mpAdditionalData;
