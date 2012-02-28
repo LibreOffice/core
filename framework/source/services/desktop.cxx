@@ -401,6 +401,36 @@ sal_Bool SAL_CALL Desktop::terminate()
     return bTerminate;
 }
 
+namespace
+{
+    class QuickstartSuppressor
+    {
+        Desktop* const m_pDesktop;
+        css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
+        public:
+            QuickstartSuppressor(Desktop* const pDesktop, css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher)
+                : m_pDesktop(pDesktop)
+                , m_xQuickLauncher(xQuickLauncher)
+            {
+                SAL_INFO("fwk.desktop", "temporary removing Quickstarter");
+                if(m_xQuickLauncher.is())
+                    m_pDesktop->removeTerminateListener(m_xQuickLauncher);
+            }
+            ~QuickstartSuppressor()
+            {
+                SAL_INFO("fwk.desktop", "readding Quickstarter");
+                if(m_xQuickLauncher.is())
+                    m_pDesktop->addTerminateListener(m_xQuickLauncher);
+            }
+    };
+}
+
+bool SAL_CALL Desktop::terminateQuickstarterToo()
+    throw( css::uno::RuntimeException )
+{
+    QuickstartSuppressor(this, m_xQuickLauncher);
+    return terminate();
+}
 
 //=============================================================================
 void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )

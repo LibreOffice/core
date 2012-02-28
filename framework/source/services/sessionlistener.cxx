@@ -30,6 +30,7 @@
 // my own includes
 
 #include <services/sessionlistener.hxx>
+#include <services/desktop.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <protocols.h>
@@ -326,7 +327,19 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             StoreSession( sal_False );
 
             css::uno::Reference< css::frame::XDesktop > xDesktop( m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-            m_bTerminated = xDesktop->terminate();
+            // honestly: how many implementations of XDesktop will we ever have?
+            // so casting this directly to the implementation
+            Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));
+            if(pDesktop)
+            {
+                SAL_INFO("fwk.session", "XDesktop is a framework::Desktop -- good.");
+                m_bTerminated = pDesktop->terminateQuickstarterToo();
+            }
+            else
+            {
+                SAL_WARN("fwk.session", "XDesktop is not a framework::Desktop -- this should never happen.");
+                m_bTerminated = xDesktop->terminate();
+            }
 
             if ( m_rSessionManager.is() )
             {
