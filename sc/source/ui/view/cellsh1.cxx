@@ -988,9 +988,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
                 {
                     ScDPNumGroupInfo aNumInfo;
-                    aNumInfo.Enable    = sal_True;
-                    aNumInfo.AutoStart = sal_True;
-                    aNumInfo.AutoEnd   = sal_True;
+                    aNumInfo.mbEnable    = true;
+                    aNumInfo.mbAutoStart = true;
+                    aNumInfo.mbAutoEnd   = true;
                     sal_Int32 nParts = 0;
                     if ( pTabViewShell->HasSelectionForDateGroup( aNumInfo, nParts ) )
                     {

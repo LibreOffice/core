@@ -177,9 +177,9 @@ ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo
 {
     FreeResource();
 
-    maStartHelper.SetValue( rInfo.AutoStart, rInfo.Start );
-    maEndHelper.SetValue( rInfo.AutoEnd, rInfo.End );
-    maEdBy.SetValue( (rInfo.Step <= 0.0) ? 1.0 : rInfo.Step );
+    maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
+    maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
+    maEdBy.SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
@@ -194,19 +194,19 @@ ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo
 ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.Enable = sal_True;
-    aInfo.DateValues = false;
-    aInfo.AutoStart = maStartHelper.IsAuto();
-    aInfo.AutoEnd = maEndHelper.IsAuto();
+    aInfo.mbEnable = sal_True;
+    aInfo.mbDateValues = false;
+    aInfo.mbAutoStart = maStartHelper.IsAuto();
+    aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
     // get values and silently auto-correct them, if they are not valid
     // TODO: error messages in OK event?
-    aInfo.Start = maStartHelper.GetValue();
-    aInfo.End = maEndHelper.GetValue();
-    if( !maEdBy.GetValue( aInfo.Step ) || (aInfo.Step <= 0.0) )
-        aInfo.Step = 1.0;
-    if( aInfo.End <= aInfo.Start )
-        aInfo.End = aInfo.Start + aInfo.Step;
+    aInfo.mfStart = maStartHelper.GetValue();
+    aInfo.mfEnd = maEndHelper.GetValue();
+    if( !maEdBy.GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
+        aInfo.mfStep = 1.0;
+    if( aInfo.mfEnd <= aInfo.mfStart )
+        aInfo.mfEnd = aInfo.mfStart + aInfo.mfStep;
 
     return aInfo;
 }
@@ -245,20 +245,20 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maEdStart.SetShowDateCentury( sal_True );
     maEdEnd.SetShowDateCentury( sal_True );
 
-    maStartHelper.SetValue( rInfo.AutoStart, rInfo.Start );
-    maEndHelper.SetValue( rInfo.AutoEnd, rInfo.End );
+    maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
+    maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
     if( nDatePart == 0 )
         nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
     for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
         maLbUnits.CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
-    if( rInfo.DateValues )
+    if( rInfo.mbDateValues )
     {
         maRbNumDays.Check();
         ClickHdl( &maRbNumDays );
 
-        double fNumDays = rInfo.Step;
+        double fNumDays = rInfo.mfStep;
         if( fNumDays < 1.0 )
             fNumDays = 1.0;
         else if( fNumDays > 32767.0 )
@@ -290,19 +290,19 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.Enable = sal_True;
-    aInfo.DateValues = maRbNumDays.IsChecked();
-    aInfo.AutoStart = maStartHelper.IsAuto();
-    aInfo.AutoEnd = maEndHelper.IsAuto();
+    aInfo.mbEnable = sal_True;
+    aInfo.mbDateValues = maRbNumDays.IsChecked();
+    aInfo.mbAutoStart = maStartHelper.IsAuto();
+    aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
     // get values and silently auto-correct them, if they are not valid
     // TODO: error messages in OK event?
-    aInfo.Start = maStartHelper.GetValue();
-    aInfo.End = maEndHelper.GetValue();
+    aInfo.mfStart = maStartHelper.GetValue();
+    aInfo.mfEnd = maEndHelper.GetValue();
     sal_Int64 nNumDays = maEdNumDays.GetValue();
-    aInfo.Step = static_cast<double>( aInfo.DateValues ? nNumDays : 0L );
-    if( aInfo.End <= aInfo.Start )
-        aInfo.End = aInfo.Start + nNumDays;
+    aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0L );
+    if( aInfo.mfEnd <= aInfo.mfStart )
+        aInfo.mfEnd = aInfo.mfStart + nNumDays;
 
     return aInfo;
 }

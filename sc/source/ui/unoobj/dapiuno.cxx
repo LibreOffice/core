@@ -246,12 +246,12 @@ sal_uInt16 ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
 
 void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const ScDPNumGroupInfo& rGroupInfo )
 {
-    rInfo.HasDateValues = rGroupInfo.DateValues;
-    rInfo.HasAutoStart  = rGroupInfo.AutoStart;
-    rInfo.Start         = rGroupInfo.Start;
-    rInfo.HasAutoEnd    = rGroupInfo.AutoEnd;
-    rInfo.End           = rGroupInfo.End;
-    rInfo.Step          = rGroupInfo.Step;
+    rInfo.HasDateValues = rGroupInfo.mbDateValues;
+    rInfo.HasAutoStart  = rGroupInfo.mbAutoStart;
+    rInfo.Start         = rGroupInfo.mfStart;
+    rInfo.HasAutoEnd    = rGroupInfo.mbAutoEnd;
+    rInfo.End           = rGroupInfo.mfEnd;
+    rInfo.Step          = rGroupInfo.mfStep;
 }
 
 //------------------------------------------------------------------------
@@ -2464,13 +2464,13 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
         if( pInfo && lclCheckMinMaxStep( *pInfo ) )
         {
             ScDPNumGroupInfo aInfo;
-            aInfo.Enable = sal_True;
-            aInfo.DateValues = pInfo->HasDateValues;
-            aInfo.AutoStart = pInfo->HasAutoStart;
-            aInfo.AutoEnd = pInfo->HasAutoEnd;
-            aInfo.Start = pInfo->Start;
-            aInfo.End = pInfo->End;
-            aInfo.Step = pInfo->Step;
+            aInfo.mbEnable = sal_True;
+            aInfo.mbDateValues = pInfo->HasDateValues;
+            aInfo.mbAutoStart = pInfo->HasAutoStart;
+            aInfo.mbAutoEnd = pInfo->HasAutoEnd;
+            aInfo.mfStart = pInfo->Start;
+            aInfo.mfEnd = pInfo->End;
+            aInfo.mfStep = pInfo->Step;
             Reference< XNamed > xNamed( pInfo->SourceField, UNO_QUERY );
             if( xNamed.is() )
             {
@@ -2746,13 +2746,13 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         ScDPNumGroupInfo aInfo;
-        aInfo.Enable = sal_True;
-        aInfo.DateValues = (rInfo.GroupBy == DAYS) && (rInfo.Step >= 1.0);
-        aInfo.AutoStart = rInfo.HasAutoStart;
-        aInfo.AutoEnd = rInfo.HasAutoEnd;
-        aInfo.Start = rInfo.Start;
-        aInfo.End = rInfo.End;
-        aInfo.Step = static_cast< sal_Int32 >( rInfo.Step );
+        aInfo.mbEnable = true;
+        aInfo.mbDateValues = (rInfo.GroupBy == DAYS) && (rInfo.Step >= 1.0);
+        aInfo.mbAutoStart = rInfo.HasAutoStart;
+        aInfo.mbAutoEnd = rInfo.HasAutoEnd;
+        aInfo.mfStart = rInfo.Start;
+        aInfo.mfEnd = rInfo.End;
+        aInfo.mfStep = static_cast< sal_Int32 >( rInfo.Step );
 
         // create a local copy of the entire save data (will be written back below)
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
@@ -2769,12 +2769,12 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         const ScDPSaveNumGroupDimension* pNumGroupDim = rDimData.GetNumGroupDim( aSrcDimName );
 
         // do not group by dates, if named groups or numeric grouping is present
-        bool bHasNamedGrouping = pGroupDim && !pGroupDim->GetDateInfo().Enable;
-        bool bHasNumGrouping = pNumGroupDim && pNumGroupDim->GetInfo().Enable && !pNumGroupDim->GetInfo().DateValues && !pNumGroupDim->GetDateInfo().Enable;
+        bool bHasNamedGrouping = pGroupDim && !pGroupDim->GetDateInfo().mbEnable;
+        bool bHasNumGrouping = pNumGroupDim && pNumGroupDim->GetInfo().mbEnable && !pNumGroupDim->GetInfo().mbDateValues && !pNumGroupDim->GetDateInfo().mbEnable;
         if( bHasNamedGrouping || bHasNumGrouping )
             throw IllegalArgumentException();
 
-        if( aInfo.DateValues )  // create day ranges grouping
+        if( aInfo.mbDateValues )  // create day ranges grouping
         {
             // first remove all named group dimensions
             while( pGroupDim )

@@ -73,6 +73,10 @@ const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calc
 const sal_Int32 SC_DP_DATE_FIRST = -1;
 const sal_Int32 SC_DP_DATE_LAST = 10000;
 
+ScDPNumGroupInfo::ScDPNumGroupInfo() :
+    mbEnable(false), mbDateValues(false), mbAutoStart(false), mbAutoEnd(false),
+    mfStart(0.0), mfEnd(0.0), mfStep(0.0) {}
+
 namespace {
 
 sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
@@ -161,9 +165,9 @@ String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
 {
     OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
 
-    double fStep = rInfo.Step;
+    double fStep = rInfo.mfStep;
     double fEndValue = fStartValue + fStep;
-    if ( !bHasNonInteger && ( rInfo.DateValues || !rtl::math::approxEqual( fEndValue, rInfo.End ) ) )
+    if ( !bHasNonInteger && ( rInfo.mbDateValues || !rtl::math::approxEqual( fEndValue, rInfo.mfEnd ) ) )
     {
         //  The second number of the group label is
         //  (first number + size - 1) if there are only integer numbers,
@@ -174,15 +178,15 @@ String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
         fEndValue -= 1.0;
     }
 
-    if ( fEndValue > rInfo.End && !rInfo.AutoEnd )
+    if ( fEndValue > rInfo.mfEnd && !rInfo.mbAutoEnd )
     {
         // limit the last group to the end value
 
-        fEndValue = rInfo.End;
+        fEndValue = rInfo.mfEnd;
     }
 
     rtl::OUStringBuffer aBuffer;
-    if ( rInfo.DateValues )
+    if ( rInfo.mbDateValues )
     {
         lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
         aBuffer.appendAscii( " - " );   // with spaces
@@ -225,26 +229,26 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
 {
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
-    if ( fValue < rInfo.Start && !rtl::math::approxEqual( fValue, rInfo.Start ) )
+    if ( fValue < rInfo.mfStart && !rtl::math::approxEqual( fValue, rInfo.mfStart ) )
     {
-        rGroupValue = rInfo.Start - rInfo.Step;
-        return lcl_GetSpecialNumGroupName( rInfo.Start, true, cDecSeparator, rInfo.DateValues, pFormatter );
+        rGroupValue = rInfo.mfStart - rInfo.mfStep;
+        return lcl_GetSpecialNumGroupName( rInfo.mfStart, true, cDecSeparator, rInfo.mbDateValues, pFormatter );
     }
 
-    if ( fValue > rInfo.End && !rtl::math::approxEqual( fValue, rInfo.End ) )
+    if ( fValue > rInfo.mfEnd && !rtl::math::approxEqual( fValue, rInfo.mfEnd ) )
     {
-        rGroupValue = rInfo.End + rInfo.Step;
-        return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
+        rGroupValue = rInfo.mfEnd + rInfo.mfStep;
+        return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSeparator, rInfo.mbDateValues, pFormatter );
     }
 
-    double fDiff = fValue - rInfo.Start;
-    double fDiv = rtl::math::approxFloor( fDiff / rInfo.Step );
-    double fGroupStart = rInfo.Start + fDiv * rInfo.Step;
+    double fDiff = fValue - rInfo.mfStart;
+    double fDiv = rtl::math::approxFloor( fDiff / rInfo.mfStep );
+    double fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
 
-    if ( rtl::math::approxEqual( fGroupStart, rInfo.End ) &&
-        !rtl::math::approxEqual( fGroupStart, rInfo.Start ) )
+    if ( rtl::math::approxEqual( fGroupStart, rInfo.mfEnd ) &&
+        !rtl::math::approxEqual( fGroupStart, rInfo.mfStart ) )
     {
-        if ( !rInfo.DateValues )
+        if ( !rInfo.mbDateValues )
         {
             //  A group that would consist only of the end value is not created,
             //  instead the value is included in the last group before. So the
@@ -252,15 +256,15 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
             //  selected end value.
 
             fDiv -= 1.0;
-            fGroupStart = rInfo.Start + fDiv * rInfo.Step;
+            fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
         }
         else
         {
             //  For date values, the end value is instead treated as above the limit
             //  if it would be a group of its own.
 
-            rGroupValue = rInfo.End + rInfo.Step;
-            return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
+            rGroupValue = rInfo.mfEnd + rInfo.mfStep;
+            return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSeparator, rInfo.mbDateValues, pFormatter );
         }
     }
 
@@ -314,10 +318,10 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
     // Start and end dates are inclusive.  (An end date without a time value
     // is included, while an end date with a time value is not.)
 
-    if ( rCellData.GetValue() < mpNumInfo->Start && !approxEqual(rCellData.GetValue(), mpNumInfo->Start) )
+    if ( rCellData.GetValue() < mpNumInfo->mfStart && !approxEqual(rCellData.GetValue(), mpNumInfo->mfStart) )
         return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_FIRST;
 
-    if ( rCellData.GetValue() > mpNumInfo->End && !approxEqual(rCellData.GetValue(), mpNumInfo->End) )
+    if ( rCellData.GetValue() > mpNumInfo->mfEnd && !approxEqual(rCellData.GetValue(), mpNumInfo->mfEnd) )
         return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_LAST;
 
     if (mnDatePart == DataPilotFieldGroupBy::HOURS || mnDatePart == DataPilotFieldGroupBy::MINUTES ||
@@ -466,9 +470,9 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 
     if ( pNumInfo )
     {
-        if ( fValue < pNumInfo->Start && !rtl::math::approxEqual( fValue, pNumInfo->Start ) )
+        if ( fValue < pNumInfo->mfStart && !rtl::math::approxEqual( fValue, pNumInfo->mfStart ) )
             return SC_DP_DATE_FIRST;
-        if ( fValue > pNumInfo->End && !rtl::math::approxEqual( fValue, pNumInfo->End ) )
+        if ( fValue > pNumInfo->mfEnd && !rtl::math::approxEqual( fValue, pNumInfo->mfEnd ) )
             return SC_DP_DATE_LAST;
     }
 
@@ -633,10 +637,10 @@ void ScDPDateGroupHelper::FillColumnEntries(
 
     // For the start/end values, use the same date rounding as in ScDPNumGroupDimension::GetNumEntries
     // (but not for the list of available years):
-    if ( aNumInfo.AutoStart )
-        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.Start = rtl::math::approxFloor( fSourceMin );
-    if ( aNumInfo.AutoEnd )
-        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.End = rtl::math::approxFloor( fSourceMax ) + 1;
+    if ( aNumInfo.mbAutoStart )
+        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.mfStart = rtl::math::approxFloor( fSourceMin );
+    if ( aNumInfo.mbAutoEnd )
+        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.mfEnd = rtl::math::approxFloor( fSourceMax ) + 1;
 
     //! if not automatic, limit fSourceMin/fSourceMax for list of year values?
     SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
@@ -667,10 +671,10 @@ void ScDPDateGroupHelper::FillColumnEntries(
     }
 
     // add first/last entry (min/max)
-    String aFirstName = lcl_GetSpecialDateName( aNumInfo.Start, true, pFormatter );
+    String aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
     lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aFirstName, SC_DP_DATE_FIRST, nDatePart );
 
-    String aLastName = lcl_GetSpecialDateName( aNumInfo.End, false, pFormatter );
+    String aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
     lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aLastName, SC_DP_DATE_LAST, nDatePart );
 }
 
@@ -894,7 +898,7 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_I
     delete pDateHelper;
     pDateHelper = new ScDPDateGroupHelper( rInfo, nPart );
 
-    aGroupInfo.Enable = sal_True;   //! or query both?
+    aGroupInfo.mbEnable = sal_True;   //! or query both?
 }
 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
@@ -917,9 +921,9 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
             cDecSeparator = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
 
             // non-integer GroupInfo values count, too
-            bHasNonInteger = ( !aGroupInfo.AutoStart && !IsInteger( aGroupInfo.Start ) ) ||
-                             ( !aGroupInfo.AutoEnd   && !IsInteger( aGroupInfo.End   ) ) ||
-                             !IsInteger( aGroupInfo.Step );
+            bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
+                             ( !aGroupInfo.mbAutoEnd   && !IsInteger( aGroupInfo.mfEnd   ) ) ||
+                             !IsInteger( aGroupInfo.mfStep );
             double fSourceMin = 0.0;
             double fSourceMax = 0.0;
             bool bFirst = true;
@@ -957,7 +961,7 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
                }
             }
 
-            if ( aGroupInfo.DateValues )
+            if ( aGroupInfo.mbDateValues )
             {
                 // special handling for dates: always integer, round down limits
                 bHasNonInteger = false;
@@ -965,15 +969,15 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
                 fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
             }
 
-            if ( aGroupInfo.AutoStart )
-                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.Start = fSourceMin;
-            if ( aGroupInfo.AutoEnd )
-                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.End = fSourceMax;
+            if ( aGroupInfo.mbAutoStart )
+                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfStart = fSourceMin;
+            if ( aGroupInfo.mbAutoEnd )
+                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfEnd = fSourceMax;
 
             //! limit number of entries?
 
             long nLoopCount = 0;
-            double fLoop = aGroupInfo.Start;
+            double fLoop = aGroupInfo.mfStart;
 
             // Use "less than" instead of "less or equal" for the loop - don't create a group
             // that consists only of the end value. Instead, the end value is then included
@@ -981,24 +985,24 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
             // The first group has to be created nonetheless. GetNumGroupForValue has corresponding logic.
 
             bool bFirstGroup = true;
-            while ( bFirstGroup || ( fLoop < aGroupInfo.End && !rtl::math::approxEqual( fLoop, aGroupInfo.End ) ) )
+            while ( bFirstGroup || ( fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual( fLoop, aGroupInfo.mfEnd ) ) )
             {
                 String aName = lcl_GetNumGroupName( fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter );
                 // create a numerical entry to ensure proper sorting
                 // (in FillMemberResults this needs special handling)
                 lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aName, fLoop );
                 ++nLoopCount;
-                fLoop = aGroupInfo.Start + nLoopCount * aGroupInfo.Step;
+                fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
                 bFirstGroup = false;
 
                 // ScDPItemData values are compared with approxEqual
             }
 
-            String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.Start, true, cDecSeparator, aGroupInfo.DateValues, pFormatter );
-            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.Start - aGroupInfo.Step );
+            String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
+            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.mfStart - aGroupInfo.mfStep );
 
-            String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.End, false, cDecSeparator, aGroupInfo.DateValues, pFormatter );
-            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.End + aGroupInfo.Step );
+            String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
+            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.mfEnd + aGroupInfo.mfStep );
         }
     }
     return maMemberEntries;
@@ -1054,7 +1058,7 @@ long ScDPGroupTableData::GetColumnCount()
 
 bool ScDPGroupTableData::IsNumGroupDimension( long nDimension ) const
 {
-    return ( nDimension < nSourceCount && pNumGroups[nDimension].GetInfo().Enable );
+    return ( nDimension < nSourceCount && pNumGroups[nDimension].GetInfo().mbEnable );
 }
 
 void ScDPGroupTableData::GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
@@ -1420,7 +1424,7 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 
     if ( nDimension < nSourceCount )
     {
-        return pNumGroups[nDimension].GetInfo().Enable ||
+        return pNumGroups[nDimension].GetInfo().mbEnable ||
                pNumGroups[nDimension].GetDateHelper();
     }
 

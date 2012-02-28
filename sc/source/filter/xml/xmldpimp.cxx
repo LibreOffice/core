@@ -1073,13 +1073,13 @@ void ScXMLDataPilotFieldContext::EndElement()
         if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;
-            aInfo.Enable = sal_True;
-            aInfo.DateValues = bDateValue;
-            aInfo.AutoStart = bAutoStart;
-            aInfo.AutoEnd = bAutoEnd;
-            aInfo.Start = fStart;
-            aInfo.End = fEnd;
-            aInfo.Step = fStep;
+            aInfo.mbEnable = true;
+            aInfo.mbDateValues = bDateValue;
+            aInfo.mbAutoStart = bAutoStart;
+            aInfo.mbAutoEnd = bAutoEnd;
+            aInfo.mfStart = fStart;
+            aInfo.mfEnd = fEnd;
+            aInfo.mfStep = fStep;
             if (!sGroupSource.isEmpty())
             {
                 ScDPSaveGroupDimension aGroupDim(sGroupSource, sName);

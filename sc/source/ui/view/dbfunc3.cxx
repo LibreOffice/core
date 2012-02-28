@@ -836,7 +836,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         rOldInfo = pNumGroupDim->GetDateInfo();
                         bFound = sal_True;
                     }
-                    else if ( pNumGroupDim->GetInfo().DateValues )
+                    else if ( pNumGroupDim->GetInfo().mbDateValues )
                     {
                         //  Numerical grouping with DateValues flag is used for grouping
                         //  of days with a "Number of days" value.
@@ -890,10 +890,10 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         {
                             bFound = sal_True;
                             // use currently selected value for automatic limits
-                            if( rOldInfo.AutoStart )
-                                rOldInfo.Start = pDoc->GetValue( aSelRange.aStart );
-                            if( rOldInfo.AutoEnd )
-                                rOldInfo.End = pDoc->GetValue( aSelRange.aStart );
+                            if( rOldInfo.mbAutoStart )
+                                rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
+                            if( rOldInfo.mbAutoEnd )
+                                rOldInfo.mfEnd = pDoc->GetValue( aSelRange.aStart );
                         }
                     }
                 }
@@ -959,10 +959,10 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                     {
                         bFound = sal_True;
                         // use currently selected value for automatic limits
-                        if( rOldInfo.AutoStart )
-                            rOldInfo.Start = pDoc->GetValue( aSelRange.aStart );
-                        if( rOldInfo.AutoEnd )
-                            rOldInfo.End = pDoc->GetValue( aSelRange.aStart );
+                        if( rOldInfo.mbAutoStart )
+                            rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
+                        if( rOldInfo.mbAutoEnd )
+                            rOldInfo.mfEnd = pDoc->GetValue( aSelRange.aStart );
                     }
                 }
             }
@@ -1047,13 +1047,13 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                             // innermost part: create NumGroupDimension (replacing original values)
                             // Dimension name is left unchanged
 
-                            if ( (nParts == sheet::DataPilotFieldGroupBy::DAYS) && (rInfo.Step >= 1.0) )
+                            if ( (nParts == sheet::DataPilotFieldGroupBy::DAYS) && (rInfo.mfStep >= 1.0) )
                             {
                                 // only days, and a step value specified: use numerical grouping
                                 // with DateValues flag, not date grouping
 
                                 ScDPNumGroupInfo aNumInfo( rInfo );
-                                aNumInfo.DateValues = sal_True;
+                                aNumInfo.mbDateValues = true;
 
                                 ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, aNumInfo );
                                 pDimData->AddNumGroupDimension( aNumGroupDim );

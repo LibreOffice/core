@@ -40,19 +40,17 @@
 class ScDocument;
 class SvNumberFormatter;
 
-//! API struct?
 struct ScDPNumGroupInfo
 {
-    sal_Bool Enable;
-    sal_Bool DateValues;
-    sal_Bool AutoStart;
-    sal_Bool AutoEnd;
-    double   Start;
-    double   End;
-    double   Step;
+    bool mbEnable:1;
+    bool mbDateValues:1;
+    bool mbAutoStart:1;
+    bool mbAutoEnd:1;
+    double mfStart;
+    double mfEnd;
+    double mfStep;
 
-    ScDPNumGroupInfo() : Enable(false), DateValues(false), AutoStart(false), AutoEnd(false),
-                         Start(0.0), End(0.0), Step(0.0) {}
+    SC_DLLPUBLIC ScDPNumGroupInfo();
 };
 
 //  ScDPDateGroupHelper is used as part of ScDPGroupDimension (additional dim.)

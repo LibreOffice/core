@@ -229,12 +229,12 @@ XclExpPCField::XclExpPCField(
             {
                 const ScDPNumGroupInfo& rNumInfo = pNumGroupDim->GetInfo();
                 const ScDPNumGroupInfo& rDateInfo = pNumGroupDim->GetDateInfo();
-                OSL_ENSURE( !rNumInfo.Enable || !rDateInfo.Enable,
+                OSL_ENSURE( !rNumInfo.mbEnable || !rDateInfo.mbEnable,
                     "XclExpPCField::XclExpPCField - numeric and date grouping enabled" );
 
-                if( rNumInfo.Enable )
+                if( rNumInfo.mbEnable )
                     InitNumGroupField( rDPObj, rNumInfo );
-                else if( rDateInfo.Enable )
+                else if( rDateInfo.mbEnable )
                     InitDateGroupField( rDPObj, rDateInfo, pNumGroupDim->GetDatePart() );
             }
         }
@@ -261,7 +261,7 @@ XclExpPCField::XclExpPCField(
 
     // add standard group info or date group info
     const ScDPNumGroupInfo& rDateInfo = rGroupDim.GetDateInfo();
-    if( rDateInfo.Enable && (rGroupDim.GetDatePart() != 0) )
+    if( rDateInfo.mbEnable && (rGroupDim.GetDatePart() != 0) )
         InitDateGroupField( rDPObj, rDateInfo, rGroupDim.GetDatePart() );
     else
         InitStdGroupField( rBaseField, rGroupDim );
@@ -429,10 +429,10 @@ void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const Sc
 void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo )
 {
     OSL_ENSURE( IsStandardField(), "XclExpPCField::InitNumGroupField - only for standard fields" );
-    OSL_ENSURE( rNumInfo.Enable, "XclExpPCField::InitNumGroupField - numeric grouping not enabled" );
+    OSL_ENSURE( rNumInfo.mbEnable, "XclExpPCField::InitNumGroupField - numeric grouping not enabled" );
 
     // new field type, date type, limit settings (min/max/step/auto)
-    if( rNumInfo.DateValues )
+    if( rNumInfo.mbDateValues )
     {
         // special case: group by days with step count
         meFieldType = EXC_PCFIELD_DATEGROUP;
@@ -453,7 +453,7 @@ void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGr
 void XclExpPCField::InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nDatePart )
 {
     OSL_ENSURE( IsStandardField() || IsStdGroupField(), "XclExpPCField::InitDateGroupField - only for standard fields" );
-    OSL_ENSURE( rDateInfo.Enable, "XclExpPCField::InitDateGroupField - date grouping not enabled" );
+    OSL_ENSURE( rDateInfo.mbEnable, "XclExpPCField::InitDateGroupField - date grouping not enabled" );
 
     // new field type
     meFieldType = IsStandardField() ? EXC_PCFIELD_DATEGROUP : EXC_PCFIELD_DATECHILD;
@@ -561,20 +561,20 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
 
 void XclExpPCField::SetNumGroupLimit( const ScDPNumGroupInfo& rNumInfo )
 {
-    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rNumInfo.AutoStart );
-    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rNumInfo.AutoEnd );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Start ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.End ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Step ) );
+    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rNumInfo.mbAutoStart );
+    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rNumInfo.mbAutoEnd );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.mfStart ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.mfEnd ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.mfStep ) );
 }
 
 void XclExpPCField::SetDateGroupLimit( const ScDPNumGroupInfo& rDateInfo, bool bUseStep )
 {
-    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rDateInfo.AutoStart );
-    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rDateInfo.AutoEnd );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.Start ) ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.End ) ) );
-    sal_Int16 nStep = bUseStep ? limit_cast< sal_Int16 >( rDateInfo.Step, 1, SAL_MAX_INT16 ) : 1;
+    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rDateInfo.mbAutoStart );
+    ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rDateInfo.mbAutoEnd );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.mfStart ) ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.mfEnd ) ) );
+    sal_Int16 nStep = bUseStep ? limit_cast< sal_Int16 >( rDateInfo.mfStep, 1, SAL_MAX_INT16 ) : 1;
     maNumGroupLimits.AppendNewRecord( new XclExpPCItem( nStep ) );
 }
 

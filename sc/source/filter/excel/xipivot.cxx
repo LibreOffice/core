@@ -459,7 +459,7 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
     {
         case EXC_PCFIELD_DATEGROUP:
         {
-            if( aDateInfo.DateValues )
+            if( aDateInfo.mbDateValues )
             {
                 // special case for days only with step value - create numeric grouping
                 ScDPSaveNumGroupDimension aNumGroupDim( GetFieldName( rVisNames ), aDateInfo );
@@ -497,23 +497,23 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
 ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 {
     ScDPNumGroupInfo aNumInfo;
-    aNumInfo.Enable = sal_True;
-    aNumInfo.DateValues = false;
-    aNumInfo.AutoStart = sal_True;
-    aNumInfo.AutoEnd = sal_True;
+    aNumInfo.mbEnable = sal_True;
+    aNumInfo.mbDateValues = false;
+    aNumInfo.mbAutoStart = sal_True;
+    aNumInfo.mbAutoEnd = sal_True;
 
     if( const double* pfMinValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
-        aNumInfo.Start = *pfMinValue;
-        aNumInfo.AutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
+        aNumInfo.mfStart = *pfMinValue;
+        aNumInfo.mbAutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
     }
     if( const double* pfMaxValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_MAX ) )
     {
-        aNumInfo.End = *pfMaxValue;
-        aNumInfo.AutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
+        aNumInfo.mfEnd = *pfMaxValue;
+        aNumInfo.mbAutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
     }
     if( const double* pfStepValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_STEP ) )
-        aNumInfo.Step = *pfStepValue;
+        aNumInfo.mfStep = *pfStepValue;
 
     return aNumInfo;
 }
@@ -521,26 +521,26 @@ ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
 {
     ScDPNumGroupInfo aDateInfo;
-    aDateInfo.Enable = sal_True;
-    aDateInfo.DateValues = false;
-    aDateInfo.AutoStart = sal_True;
-    aDateInfo.AutoEnd = sal_True;
+    aDateInfo.mbEnable = sal_True;
+    aDateInfo.mbDateValues = false;
+    aDateInfo.mbAutoStart = sal_True;
+    aDateInfo.mbAutoEnd = sal_True;
 
     if( const DateTime* pMinDate = GetDateGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
-        aDateInfo.Start = GetDoubleFromDateTime( *pMinDate );
-        aDateInfo.AutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
+        aDateInfo.mfStart = GetDoubleFromDateTime( *pMinDate );
+        aDateInfo.mbAutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
     }
     if( const DateTime* pMaxDate = GetDateGroupLimit( EXC_SXFIELD_INDEX_MAX ) )
     {
-        aDateInfo.End = GetDoubleFromDateTime( *pMaxDate );
-        aDateInfo.AutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
+        aDateInfo.mfEnd = GetDoubleFromDateTime( *pMaxDate );
+        aDateInfo.mbAutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
     }
     // GetDateGroupStep() returns a value for date type "day" in single date groups only
     if( const sal_Int16* pnStepValue = GetDateGroupStep() )
     {
-        aDateInfo.Step = *pnStepValue;
-        aDateInfo.DateValues = sal_True;
+        aDateInfo.mfStep = *pnStepValue;
+        aDateInfo.mbDateValues = sal_True;
     }
 
     return aDateInfo;
