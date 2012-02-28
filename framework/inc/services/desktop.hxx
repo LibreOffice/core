@@ -339,6 +339,10 @@ class Desktop   :   // interfaces
         virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
             throw (css::uno::RuntimeException);
 
+        // we need this wrapped terminate()-call to terminate even the QuickStarter
+        // non-virtual and non-UNO for now
+        bool SAL_CALL terminateQuickstarterToo()
+            throw( css::uno::RuntimeException );
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
